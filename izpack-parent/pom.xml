@@ -74,6 +74,11 @@
             </dependency>
             <!-- Internal -->
             <dependency>
+                <artifactId>izpack-utils</artifactId>
+                <groupId>${groupId}</groupId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
                 <artifactId>izpack-events</artifactId>
                 <groupId>org.codehaus.izpack.event</groupId>
                 <version>${version}</version>
