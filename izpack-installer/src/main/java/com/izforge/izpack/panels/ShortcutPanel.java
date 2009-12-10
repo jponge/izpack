@@ -28,6 +28,7 @@ import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.installer.UninstallData;
+import com.izforge.izpack.installer.base.GuiId;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -1595,6 +1596,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         createShortcuts = new JCheckBox(StringTool.replace(installData.getLangpack()
                 .getString("ShortcutPanel.regular.create"), "StartMenu", menuKind), true);
+        createShortcuts.setName(GuiId.SHORTCUT_CREATE_CHECK_BOX.id);
         createShortcuts.addActionListener(this);
         constraints.gridx = col;
         constraints.gridy = line + 1;

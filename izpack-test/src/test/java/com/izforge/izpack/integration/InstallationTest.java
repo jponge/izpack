@@ -146,6 +146,8 @@ public class InstallationTest extends AbstractInstallationTest {
         }
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Shortcut
+        // Deselect shortcut creation
+        installerFrameFixture.checkBox(GuiId.SHORTCUT_CREATE_CHECK_BOX.id).click();
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Finish
 
