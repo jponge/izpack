@@ -31,7 +31,7 @@ public class LanguageSelectionTest extends AbstractInstallationTest {
 
     @Test
     public void langpackEngShouldBeSet() throws Exception {
-        compileAndUnzip("engInstaller.xml", getWorkingDirectory("langpack"));
+        compileAndUnzip("engInstaller.xml", getWorkingDirectory("samples"));
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         installerContainer.getComponent(LanguageDialog.class).initLangPack();
         ResourceManager resourceManager = applicationContainer.getComponent(ResourceManager.class);
@@ -40,7 +40,7 @@ public class LanguageSelectionTest extends AbstractInstallationTest {
 
     @Test
     public void langpackFraShouldBeSet() throws Exception {
-        compileAndUnzip("fraInstaller.xml", getWorkingDirectory("langpack"));
+        compileAndUnzip("fraInstaller.xml", getWorkingDirectory("samples"));
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         installerContainer.getComponent(LanguageDialog.class).initLangPack();
         ResourceManager resourceManager = applicationContainer.getComponent(ResourceManager.class);
