@@ -21,16 +21,9 @@
 
 package com.izforge.izpack.installer.base;
 
-import com.izforge.izpack.data.*;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.InstallerRequirementDisplay;
-import com.izforge.izpack.installer.ResourceNotFoundException;
-import com.izforge.izpack.rules.Condition;
-import com.izforge.izpack.rules.RulesEngineImpl;
-import com.izforge.izpack.util.*;
-
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.util.*;
+import com.izforge.izpack.util.Debug;
 
 /**
  * Common utility functions for the GUI and text installers. (Do not import swing/awt classes to
@@ -51,35 +44,6 @@ public abstract class InstallerBase implements InstallerRequirementDisplay {
      */
     protected InstallerBase(ResourceManager resourceManager) {
         this.resourceManager = resourceManager;
-    }
-
-
-    /**
-     * Gets the stream to a resource.
-     *
-     * @param res The resource id.
-     * @return The resource value, null if not found
-     * @throws Exception
-     */
-    public InputStream getResource(String res) throws Exception {
-        InputStream result;
-        String basePath = "";
-        ResourceManager rm;
-        try {
-            rm = ResourceManager.getInstance();
-            basePath = rm.getResourceBasePath();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        result = this.getClass().getResourceAsStream(basePath + res);
-
-        if (result == null) {
-            throw new ResourceNotFoundException("Warning: Resource not found: "
-                    + res);
-        }
-        return result;
     }
 
     public void showMissingRequirementMessage(String message) {
