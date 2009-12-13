@@ -27,6 +27,7 @@ public class InstallerContainer extends AbstractChildContainer {
     public void initBindings() throws ClassNotFoundException {
         pico
                 .addComponent(IInstallerContainer.class, this)
+                .addComponent(CustomDataContainer.class)
                 .addComponent(PanelManager.class);
         addVariablerComponent();
     }
