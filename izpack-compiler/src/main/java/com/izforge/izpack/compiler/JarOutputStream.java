@@ -63,7 +63,7 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream {
      * @param out the actual output stream
      * @throws IOException if an I/O error has occurred
      */
-    public JarOutputStream(OutputStream out) throws IOException {
+    public JarOutputStream(OutputStream out) {
         super(out);
     }
 
@@ -190,6 +190,7 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream {
      * Returns true if specified byte array contains the
      * jar magic extra field id.
      */
+
     private static boolean hasMagic(byte[] edata) {
 
         try {
@@ -211,6 +212,7 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream {
      * Fetches unsigned 16-bit value from byte array at specified offset.
      * The bytes are assumed to be in Intel (little-endian) byte order.
      */
+
     private static int get16(byte[] b, int off) {
         return (b[off] & 0xff) | ((b[off + 1] & 0xff) << 8);
     }
@@ -219,6 +221,7 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream {
      * Sets 16-bit value at specified offset. The bytes are assumed to
      * be in Intel (little-endian) byte order.
      */
+
     private static void set16(byte[] b, int off, int value) {
         b[off] = (byte) value;
         b[off + 1] = (byte) (value >> 8);

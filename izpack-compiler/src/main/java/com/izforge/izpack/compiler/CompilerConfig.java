@@ -1921,7 +1921,7 @@ public class CompilerConfig extends Thread {
      * @throws CompilerException For problems with the installation file
      * @throws IOException       for errors reading the installation file
      */
-    protected IXMLElement getXMLTree() throws CompilerException, IOException {
+    protected IXMLElement getXMLTree() throws IOException {
         IXMLParser parser = new XMLParser();
         IXMLElement data = null;
         if (filename != null) {

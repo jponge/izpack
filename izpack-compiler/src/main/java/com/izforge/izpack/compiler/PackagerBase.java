@@ -234,7 +234,7 @@ public abstract class PackagerBase implements IPackager {
      * @see com.izforge.izpack.compiler.IPackager#addNativeLibrary(java.lang.String, java.net.URL)
      */
 
-    public void addNativeLibrary(String name, URL url) throws Exception {
+    public void addNativeLibrary(String name, URL url) {
         sendMsg("Adding native library: " + name, PackagerListener.MSG_VERBOSE);
         installerResourceURLMap.put("native/" + name, url);
     }
@@ -333,7 +333,7 @@ public abstract class PackagerBase implements IPackager {
      * @see com.izforge.izpack.compiler.IPackager#setInfo(com.izforge.izpack.Info)
      */
 
-    public void setInfo(Info info) throws Exception {
+    public void setInfo(Info info) {
         sendMsg("Setting the installer information", PackagerListener.MSG_VERBOSE);
         this.info = info;
         if (!getCompressor().useStandardCompression() &&

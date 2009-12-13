@@ -58,7 +58,7 @@ public class MultiVolumePackager extends PackagerBase {
      * @throws CompilerException
      */
     public MultiVolumePackager() throws CompilerException {
-        this("default");
+        initPackCompressor("default", -1);
     }
 
     /**
@@ -67,9 +67,9 @@ public class MultiVolumePackager extends PackagerBase {
      * @param compr_format Compression format to be used for packs compression format (if supported)
      * @throws CompilerException
      */
-    public MultiVolumePackager(String compr_format) throws CompilerException {
-        this(compr_format, -1);
-    }
+//    public MultiVolumePackager(String compr_format) throws CompilerException {
+//        this(compr_format, -1);
+//    }
 
     /**
      * Extended constructor.
@@ -79,9 +79,9 @@ public class MultiVolumePackager extends PackagerBase {
      *                     supported)
      * @throws CompilerException
      */
-    public MultiVolumePackager(String compr_format, int compr_level) throws CompilerException {
-        initPackCompressor(compr_format, compr_level);
-    }
+//    public MultiVolumePackager(String compr_format, int compr_level) throws CompilerException {
+//        initPackCompressor(compr_format, compr_level);
+//    }
 
     /**
      * Create the installer, beginning with the specified jar. If the name specified does not end in

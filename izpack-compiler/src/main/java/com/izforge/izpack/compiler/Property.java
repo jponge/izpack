@@ -231,7 +231,7 @@ public class Property {
      * @param name  name of property
      * @param value value to set
      */
-    protected void addProperty(String name, String value) throws CompilerException {
+    protected void addProperty(String name, String value) {
         value = compiler.replaceProperties(value);
 
         compiler.addProperty(name, value);

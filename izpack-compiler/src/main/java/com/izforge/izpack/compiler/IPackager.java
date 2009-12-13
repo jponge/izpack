@@ -18,10 +18,9 @@
  */
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.data.*;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
-import com.izforge.izpack.data.InstallerRequirement;
+import com.izforge.izpack.data.*;
 import com.izforge.izpack.rules.Condition;
 
 import java.io.File;
@@ -66,7 +65,7 @@ public interface IPackager {
      * @param info The info section.
      * @throws Exception Description of the Exception
      */
-    public abstract void setInfo(Info info) throws Exception;
+    public abstract void setInfo(Info info);
 
     /**
      * Sets the GUI preferences.
@@ -135,7 +134,7 @@ public interface IPackager {
      * @param url  The url to get the data from.
      * @throws Exception Description of the Exception
      */
-    public abstract void addNativeLibrary(String name, URL url) throws Exception;
+    public abstract void addNativeLibrary(String name, URL url);
 
     /**
      * Adds a jar file content to the installer. Package structure is maintained. Need mechanism to

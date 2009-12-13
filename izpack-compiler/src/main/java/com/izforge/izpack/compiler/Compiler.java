@@ -88,31 +88,6 @@ public class Compiler extends Thread {
     /**
      * The constructor.
      *
-     * @param basedir The base directory.
-     * @param kind    The installer kind.
-     * @param output  The installer filename.
-     * @throws CompilerException
-     */
-    public Compiler(String basedir, String kind, String output) throws CompilerException {
-        this(basedir, kind, output, "default");
-    }
-
-    /**
-     * The constructor.
-     *
-     * @param basedir      The base directory.
-     * @param kind         The installer kind.
-     * @param output       The installer filename.
-     * @param compr_format The format which should be used for the packs.
-     * @throws CompilerException
-     */
-    public Compiler(String basedir, String kind, String output, String compr_format) throws CompilerException {
-        this(basedir, kind, output, compr_format, -1);
-    }
-
-    /**
-     * The constructor.
-     *
      * @param basedir      The base directory.
      * @param kind         The installer kind.
      * @param output       The installer filename.
@@ -678,9 +653,9 @@ public class Compiler extends Thread {
      *
      * @param args The arguments passed on the command-line.
      */
-    public static void main(String[] args) {
-        CompilerConfig.main(args);
-    }
+//    public static void main(String[] args) {
+//        CompilerConfig.main(args);
+//    }
 
     // -------------------------------------------------------------------------
     // ------------- Listener stuff ------------------------- START ------------
