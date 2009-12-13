@@ -58,12 +58,12 @@ public class Compiler extends Thread {
     /**
      * The installer kind.
      */
-    protected String kind;
+    private String kind;
 
     /**
      * The output jar filename.
      */
-    protected String output;
+    private String output;
 
     /**
      * Collects and packs files into installation jars, as told.
@@ -187,13 +187,6 @@ public class Compiler extends Thread {
     }
 
     /**
-     * Compiles.
-     */
-    public void compile() {
-        start();
-    }
-
-    /**
      * The run() method.
      */
     public void run() {
@@ -272,7 +265,7 @@ public class Compiler extends Thread {
      * @param info Info object to be set
      * @throws Exception
      */
-    public void setInfo(Info info) throws Exception {
+    public void setInfo(Info info) {
         packager.setInfo(info);
     }
 
@@ -381,7 +374,7 @@ public class Compiler extends Thread {
      * @param url
      * @throws Exception
      */
-    public void addNativeLibrary(String name, URL url) throws Exception {
+    public void addNativeLibrary(String name, URL url) {
         packager.addNativeLibrary(name, url);
     }
 
@@ -707,7 +700,7 @@ public class Compiler extends Thread {
      */
     private List<String> getContainedFilePaths(URL url) throws Exception {
         JarInputStream jis = new JarInputStream(url.openStream());
-        ZipEntry zentry = null;
+        ZipEntry zentry;
         ArrayList<String> fullNames = new ArrayList<String>();
         while ((zentry = jis.getNextEntry()) != null) {
             String name = zentry.getName();
@@ -731,7 +724,7 @@ public class Compiler extends Thread {
      */
     private String getFullClassName(URL url, String className) throws Exception {
         JarInputStream jis = new JarInputStream(url.openStream());
-        ZipEntry zentry = null;
+        ZipEntry zentry;
         while ((zentry = jis.getNextEntry()) != null) {
             String name = zentry.getName();
             int lastPos = name.lastIndexOf(".class");
@@ -739,7 +732,7 @@ public class Compiler extends Thread {
                 continue; // No class file.
             }
             name = name.replace('/', '.');
-            int pos = -1;
+            int pos;
             if (className != null) {
                 pos = name.indexOf(className);
                 if (pos >= 0 && name.length() == pos + className.length() + 6) // "Main" class
