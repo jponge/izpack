@@ -9,7 +9,6 @@ import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.provider.GUIInstallDataProvider;
 import com.izforge.izpack.installer.provider.IconsProvider;
 import com.izforge.izpack.installer.provider.RulesProvider;
-import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 import org.picocontainer.injectors.ConstructorInjection;
 import org.picocontainer.injectors.ProviderAdapter;
@@ -18,9 +17,7 @@ import org.picocontainer.injectors.ProviderAdapter;
  * Application Component. <br />
  * Encapsulate the pico provider for application level component.
  */
-public class ApplicationContainer implements IApplicationContainer {
-
-    private MutablePicoContainer pico;
+public class ApplicationContainer extends AbstractContainer implements IApplicationContainer {
 
     public void initBindings() {
         pico = new PicoBuilder(new ConstructorInjection())
@@ -42,18 +39,5 @@ public class ApplicationContainer implements IApplicationContainer {
                 .addComponent(AutomatedInstaller.class)
                 .addComponent(IApplicationContainer.class, this);
     }
-
-    public void dispose() {
-        pico.dispose();
-    }
-
-    public <T> T getComponent(Class<T> componentType) {
-        return pico.getComponent(componentType);
-    }
-
-    public MutablePicoContainer makeChildContainer() {
-        return pico.makeChildContainer();
-    }
-
 
 }

@@ -34,5 +34,9 @@
             <groupId>bsf</groupId>
             <artifactId>bsf</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.picocontainer</groupId>
+            <artifactId>picocontainer</artifactId>
+        </dependency>
     </dependencies>
 </project>
