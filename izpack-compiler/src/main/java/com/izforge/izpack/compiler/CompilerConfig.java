@@ -2594,8 +2594,8 @@ public class CompilerConfig extends Thread {
                 addCompilerListener((CompilerListener) listener[0]);
             }
             String[] typeNames = new String[]{"installer", "uninstaller"};
-            int[] types = new int[]{CustomData.INSTALLER_LISTENER,
-                    CustomData.UNINSTALLER_LISTENER};
+            int[] types = new int[]{CustomData.INSTALLER_LISTENER, CustomData.UNINSTALLER_LISTENER};
+
             for (int i = 0; i < typeNames.length; ++i) {
                 String className = ixmlElement.getAttribute(typeNames[i]);
                 if (className != null) {
