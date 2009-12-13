@@ -6,7 +6,6 @@ import com.izforge.izpack.installer.base.ConditionCheck;
 import com.izforge.izpack.installer.base.ConsoleInstaller;
 import com.izforge.izpack.installer.base.GUIInstaller;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
-import com.izforge.izpack.installer.provider.AutomatedInstallDataProvider;
 import com.izforge.izpack.installer.provider.GUIInstallDataProvider;
 import com.izforge.izpack.installer.provider.IconsProvider;
 import com.izforge.izpack.installer.provider.RulesProvider;
@@ -28,13 +27,14 @@ public class ApplicationContainer implements IApplicationContainer {
                 .withCaching()
                 .build();
         pico
-                .addAdapter(new ProviderAdapter(new AutomatedInstallDataProvider()))
+//                .addAdapter(new ProviderAdapter(new AutomatedInstallDataProvider()))
                 .addAdapter(new ProviderAdapter(new GUIInstallDataProvider()))
                 .addAdapter(new ProviderAdapter(new IconsProvider()))
                 .addAdapter(new ProviderAdapter(new RulesProvider()));
         pico
                 .addComponent(IInstallerContainer.class, InstallerContainer.class)
                 .addComponent(ConditionCheck.class)
+                .addComponent(CustomDataContainer.class)
                 .addComponent(GUIInstaller.class)
                 .addComponent(ResourceManager.class)
                 .addComponent(ConsoleInstaller.class)
