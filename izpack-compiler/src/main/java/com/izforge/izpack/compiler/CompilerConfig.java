@@ -163,64 +163,7 @@ public class CompilerConfig extends Thread {
      */
     public CompilerConfig(String filename, String basedir, String kind, String output)
             throws CompilerException {
-        this(filename, basedir, kind, output, null);
-    }
-
-    /**
-     * The constructor.
-     *
-     * @param filename The XML filename.
-     * @param basedir  The base directory.
-     * @param kind     The installer kind.
-     * @param output   The installer filename.
-     * @param listener The PackagerListener.
-     * @throws CompilerException
-     */
-    public CompilerConfig(String filename, String basedir, String kind, String output,
-                          PackagerListener listener) throws CompilerException {
-        this(filename, basedir, kind, output, "default", listener);
-    }
-
-    /**
-     * @param filename     The XML filename.
-     * @param kind         The installer kind.
-     * @param output       The installer filename.
-     * @param compr_format The compression format to be used for packs.
-     * @param listener     The PackagerListener.
-     * @throws CompilerException
-     */
-    public CompilerConfig(String filename, String base, String kind, String output,
-                          String compr_format, PackagerListener listener) throws CompilerException {
-        this(filename, base, kind, output, compr_format, listener, null);
-    }
-
-    /**
-     * @param basedir     The base directory.
-     * @param kind        The installer kind.
-     * @param output      The installer filename.
-     * @param listener    The PackagerListener.
-     * @param installText The install xml configuration text
-     * @throws CompilerException
-     */
-    public CompilerConfig(String basedir, String kind, String output, PackagerListener listener,
-                          String installText) throws CompilerException {
-        this(null, basedir, kind, output, "default", listener, installText);
-    }
-
-    /**
-     * @param filename     The XML filename.
-     * @param basedir      The base directory.
-     * @param kind         The installer kind.
-     * @param output       The installer filename.
-     * @param compr_format The compression format to be used for packs.
-     * @param listener     The PackagerListener.
-     * @param installText  The install xml configuration text
-     * @throws CompilerException
-     */
-    public CompilerConfig(String filename, String basedir, String kind, String output,
-                          String compr_format, PackagerListener listener, String installText)
-            throws CompilerException {
-        this(filename, basedir, kind, output, compr_format, -1, listener, installText);
+        this(filename, basedir, kind, output, "default", -1, null, null);
     }
 
     /**
@@ -1589,7 +1532,7 @@ public class CompilerConfig extends Thread {
         if (webDirURL != null) {
             info.setWebDirURL(requireURLContent(webDirURL).toString());
         }
-        String kind = compilerData.getKind();
+        String kind = compiler.getKind();
         if (kind != null) {
             if (kind.equalsIgnoreCase(WEB) && webDirURL == null) {
                 parseError(root, "<webdir> required when \"WEB\" installer requested");

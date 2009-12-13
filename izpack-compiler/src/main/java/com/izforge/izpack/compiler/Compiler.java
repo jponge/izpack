@@ -55,6 +55,10 @@ import java.util.zip.ZipEntry;
  */
 public class Compiler extends Thread {
 
+    /**
+     * The installer kind.
+     */
+    protected String kind;
 
     /**
      * The output jar filename.
@@ -98,6 +102,7 @@ public class Compiler extends Thread {
     public Compiler(String basedir, String kind, String output,
                     String compr_format, int compr_level) throws CompilerException {
         // Default initialisation
+        this.kind = kind;
         this.output = output;
 
         // initialize backed by system properties
@@ -161,6 +166,15 @@ public class Compiler extends Thread {
         } else {
             this.packagerlistener = listener;
         }
+    }
+
+    /**
+     * Access the installation kind.
+     *
+     * @return the installation kind.
+     */
+    public String getKind() {
+        return kind;
     }
 
     /**
