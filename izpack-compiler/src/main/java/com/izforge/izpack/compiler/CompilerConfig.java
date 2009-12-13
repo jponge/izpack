@@ -419,29 +419,26 @@ public class CompilerConfig extends Thread {
 
             // Look and feel mappings
             for (IXMLElement lafNode : gp.getChildrenNamed("laf")) {
-                IXMLElement laf = lafNode;
-                String lafName = requireAttribute(laf, "name");
-                requireChildNamed(laf, "os");
+                String lafName = requireAttribute(lafNode, "name");
+                requireChildNamed(lafNode, "os");
 
-                for (IXMLElement osNode : laf.getChildrenNamed("os")) {
+                for (IXMLElement osNode : lafNode.getChildrenNamed("os")) {
                     String osName = requireAttribute(osNode, "family");
                     prefs.lookAndFeelMapping.put(osName, lafName);
                 }
 
                 Map<String, String> params = new TreeMap<String, String>();
-                for (IXMLElement parameterNode : laf.getChildrenNamed("param")) {
-                    IXMLElement param = parameterNode;
-                    String name = requireAttribute(param, "name");
-                    String value = requireAttribute(param, "value");
+                for (IXMLElement parameterNode : lafNode.getChildrenNamed("param")) {
+                    String name = requireAttribute(parameterNode, "name");
+                    String value = requireAttribute(parameterNode, "value");
                     params.put(name, value);
                 }
                 prefs.lookAndFeelParams.put(lafName, params);
             }
             // Load modifier
             for (IXMLElement ixmlElement : gp.getChildrenNamed("modifier")) {
-                IXMLElement curentModifier = ixmlElement;
-                String key = requireAttribute(curentModifier, "key");
-                String value = requireAttribute(curentModifier, "value");
+                String key = requireAttribute(ixmlElement, "key");
+                String value = requireAttribute(ixmlElement, "value");
                 prefs.modifier.put(key, value);
 
             }
@@ -484,9 +481,8 @@ public class CompilerConfig extends Thread {
     protected void addJars(IXMLElement data) throws Exception {
         notifyCompilerListener("addJars", CompilerListener.BEGIN, data);
         for (IXMLElement ixmlElement : data.getChildrenNamed("jar")) {
-            IXMLElement el = ixmlElement;
-            String src = requireAttribute(el, "src");
-            URL url = findProjectResource(src, "Jar file", el);
+            String src = requireAttribute(ixmlElement, "src");
+            URL url = findProjectResource(src, "Jar file", ixmlElement);
             compiler.addJarContent(url);
             // Additionals for mark a jar file also used in the uninstaller.
             // The contained files will be copied from the installer into the
@@ -496,7 +492,7 @@ public class CompilerConfig extends Thread {
             // they are used only from the uninstaller. This is the reason why
             // the stage
             // wiil be only observed for the uninstaller.
-            String stage = el.getAttribute("stage");
+            String stage = ixmlElement.getAttribute("stage");
             if (stage != null
                     && ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage))) {
                 CustomData ca = new CustomData(null, getContainedFilePaths(url), null,
@@ -516,14 +512,13 @@ public class CompilerConfig extends Thread {
         boolean needAddOns = false;
         notifyCompilerListener("addNativeLibraries", CompilerListener.BEGIN, data);
         for (IXMLElement ixmlElement : data.getChildrenNamed("native")) {
-            IXMLElement el = ixmlElement;
-            String type = requireAttribute(el, "type");
-            String name = requireAttribute(el, "name");
-            String path = el.getAttribute("src");
+            String type = requireAttribute(ixmlElement, "type");
+            String name = requireAttribute(ixmlElement, "name");
+            String path = ixmlElement.getAttribute("src");
             if (path == null) {
                 path = "bin/native/" + type + "/" + name;
             }
-            URL url = findIzPackResource(path, "Native Library", el);
+            URL url = findIzPackResource(path, "Native Library", ixmlElement);
             compiler.addNativeLibrary(name, url);
             // Additionals for mark a native lib also used in the uninstaller
             // The lib will be copied from the installer into the uninstaller if
@@ -533,8 +528,8 @@ public class CompilerConfig extends Thread {
             // the uninstaller. This is the reason why the stage wiil be only
             // observed
             // for the uninstaller.
-            String stage = el.getAttribute("stage");
-            List<OsConstraint> constraints = OsConstraint.getOsList(el);
+            String stage = ixmlElement.getAttribute("stage");
+            List<OsConstraint> constraints = OsConstraint.getOsList(ixmlElement);
             if (stage != null
                     && ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage))) {
                 ArrayList<String> al = new ArrayList<String>();
@@ -600,33 +595,32 @@ public class CompilerConfig extends Thread {
         File baseDir = new File(basedir);
 
         for (IXMLElement packElement : packElements) {
-            IXMLElement el = packElement;
 
             // Trivial initialisations
-            String name = requireAttribute(el, "name");
-            String id = el.getAttribute("id");
-            String packImgId = el.getAttribute("packImgId");
+            String name = requireAttribute(packElement, "name");
+            String id = packElement.getAttribute("id");
+            String packImgId = packElement.getAttribute("packImgId");
 
-            boolean loose = "true".equalsIgnoreCase(el.getAttribute("loose", "false"));
-            String description = requireChildNamed(el, "description").getContent();
-            boolean required = requireYesNoAttribute(el, "required");
-            String group = el.getAttribute("group");
-            String installGroups = el.getAttribute("installGroups");
-            String excludeGroup = el.getAttribute("excludeGroup");
-            boolean uninstall = "yes".equalsIgnoreCase(el.getAttribute("uninstall", "yes"));
-            String parent = el.getAttribute("parent");
-            boolean hidden = "true".equalsIgnoreCase(el.getAttribute("hidden", "false"));
+            boolean loose = "true".equalsIgnoreCase(packElement.getAttribute("loose", "false"));
+            String description = requireChildNamed(packElement, "description").getContent();
+            boolean required = requireYesNoAttribute(packElement, "required");
+            String group = packElement.getAttribute("group");
+            String installGroups = packElement.getAttribute("installGroups");
+            String excludeGroup = packElement.getAttribute("excludeGroup");
+            boolean uninstall = "yes".equalsIgnoreCase(packElement.getAttribute("uninstall", "yes"));
+            String parent = packElement.getAttribute("parent");
+            boolean hidden = "true".equalsIgnoreCase(packElement.getAttribute("hidden", "false"));
 
-            String conditionid = el.getAttribute("condition");
+            String conditionid = packElement.getAttribute("condition");
 
             if (required && excludeGroup != null) {
-                parseError(el, "Pack, which has excludeGroup can not be required.", new Exception(
+                parseError(packElement, "Pack, which has excludeGroup can not be required.", new Exception(
                         "Pack, which has excludeGroup can not be required."));
             }
 
             PackInfo pack = new PackInfo(name, id, description, required, loose, excludeGroup,
                     uninstall);
-            pack.setOsConstraints(OsConstraint.getOsList(el)); // TODO:
+            pack.setOsConstraints(OsConstraint.getOsList(packElement)); // TODO:
             pack.setParent(parent);
             pack.setCondition(conditionid);
             pack.setHidden(hidden);
@@ -635,9 +629,9 @@ public class CompilerConfig extends Thread {
             // unverified
             // if the pack belongs to an excludeGroup it's not preselected by default
             if (excludeGroup == null) {
-                pack.setPreselected(validateYesNoAttribute(el, "preselected", YES));
+                pack.setPreselected(validateYesNoAttribute(packElement, "preselected", YES));
             } else {
-                pack.setPreselected(validateYesNoAttribute(el, "preselected", NO));
+                pack.setPreselected(validateYesNoAttribute(packElement, "preselected", NO));
             }
 
             // Set the pack group if specified
@@ -659,7 +653,7 @@ public class CompilerConfig extends Thread {
             }
 
             // We get the parsables list
-            for (IXMLElement parsableNode : el.getChildrenNamed("parsable")) {
+            for (IXMLElement parsableNode : packElement.getChildrenNamed("parsable")) {
                 String target = requireAttribute(parsableNode, "targetfile");
                 String type = parsableNode.getAttribute("type", "plain");
                 String encoding = parsableNode.getAttribute("encoding", null);
@@ -671,7 +665,7 @@ public class CompilerConfig extends Thread {
             }
 
             // We get the executables list
-            for (IXMLElement executableNode : el.getChildrenNamed("executable")) {
+            for (IXMLElement executableNode : packElement.getChildrenNamed("executable")) {
                 ExecutableFile executable = new ExecutableFile();
                 String val; // temp value
                 String condition = executableNode.getAttribute("condition");
@@ -712,8 +706,7 @@ public class CompilerConfig extends Thread {
                 IXMLElement args = executableNode.getFirstChildNamed("args");
                 if (null != args) {
                     for (IXMLElement ixmlElement : args.getChildrenNamed("arg")) {
-                        IXMLElement arg = ixmlElement;
-                        executable.argList.add(requireAttribute(arg, "value"));
+                        executable.argList.add(requireAttribute(ixmlElement, "value"));
                     }
                 }
 
@@ -724,7 +717,7 @@ public class CompilerConfig extends Thread {
             }
 
             // We get the files list
-            for (IXMLElement fileNode : el.getChildrenNamed("file")) {
+            for (IXMLElement fileNode : packElement.getChildrenNamed("file")) {
                 String src = requireAttribute(fileNode, "src");
                 String targetdir = requireAttribute(fileNode, "targetdir");
                 List<OsConstraint> osList = OsConstraint.getOsList(fileNode); // TODO: unverified
@@ -761,7 +754,7 @@ public class CompilerConfig extends Thread {
             }
 
             // We get the singlefiles list
-            for (IXMLElement singleFileNode : el.getChildrenNamed("singlefile")) {
+            for (IXMLElement singleFileNode : packElement.getChildrenNamed("singlefile")) {
                 String src = requireAttribute(singleFileNode, "src");
                 String target = requireAttribute(singleFileNode, "target");
                 List<OsConstraint> osList = OsConstraint.getOsList(singleFileNode); // TODO: unverified
@@ -789,7 +782,7 @@ public class CompilerConfig extends Thread {
             }
 
             // We get the fileset list
-            for (IXMLElement fileSetNode : el.getChildrenNamed("fileset")) {
+            for (IXMLElement fileSetNode : packElement.getChildrenNamed("fileset")) {
                 String dir_attr = requireAttribute(fileSetNode, "dir");
 
                 File dir = new File(dir_attr);
@@ -910,7 +903,7 @@ public class CompilerConfig extends Thread {
             }
 
             // get the updatechecks list
-            for (IXMLElement updateNode : el.getChildrenNamed("updatecheck")) {
+            for (IXMLElement updateNode : packElement.getChildrenNamed("updatecheck")) {
 
                 String casesensitive = updateNode.getAttribute("casesensitive");
 
@@ -920,25 +913,23 @@ public class CompilerConfig extends Thread {
 
                 // get includes and excludes
                 for (IXMLElement ixmlElement1 : updateNode.getChildrenNamed("include")) {
-                    IXMLElement inc_el = ixmlElement1;
-                    includesList.add(requireAttribute(inc_el, "name"));
+                    includesList.add(requireAttribute(ixmlElement1, "name"));
                 }
 
                 for (IXMLElement ixmlElement : updateNode.getChildrenNamed("exclude")) {
-                    IXMLElement excl_el = ixmlElement;
-                    excludesList.add(requireAttribute(excl_el, "name"));
+                    excludesList.add(requireAttribute(ixmlElement, "name"));
                 }
 
                 pack.addUpdateCheck(new UpdateCheck(includesList, excludesList, casesensitive));
             }
             // We get the dependencies
-            for (IXMLElement dependsNode : el.getChildrenNamed("depends")) {
+            for (IXMLElement dependsNode : packElement.getChildrenNamed("depends")) {
                 String depName = requireAttribute(dependsNode, "packname");
                 pack.addDependency(depName);
 
             }
 
-            for (IXMLElement validatorNode : el.getChildrenNamed("validator")) {
+            for (IXMLElement validatorNode : packElement.getChildrenNamed("validator")) {
                 pack.addValidator(requireContent(validatorNode));
             }
 
@@ -947,11 +938,10 @@ public class CompilerConfig extends Thread {
         }
 
         for (IXMLElement refPackElement : refPackElements) {
-            IXMLElement el = refPackElement;
 
             // get the name of reference xml file
-            String refFileName = requireAttribute(el, "file");
-            String selfcontained = el.getAttribute("selfcontained");
+            String refFileName = requireAttribute(refPackElement, "file");
+            String selfcontained = refPackElement.getAttribute("selfcontained");
             boolean isselfcontained = Boolean.valueOf(selfcontained);
 
             // parsing ref-pack-set file
@@ -963,10 +953,9 @@ public class CompilerConfig extends Thread {
         }
 
         for (IXMLElement refPackSet : refPackSets) {
-            IXMLElement el = refPackSet;
 
             // the directory to scan
-            String dir_attr = this.requireAttribute(el, "dir");
+            String dir_attr = this.requireAttribute(refPackSet, "dir");
 
             File dir = new File(dir_attr);
             if (!dir.isAbsolute()) {
@@ -974,11 +963,11 @@ public class CompilerConfig extends Thread {
             }
             if (!dir.isDirectory()) // also tests '.exists()'
             {
-                parseError(el, "Invalid refpackset directory 'dir': " + dir_attr);
+                parseError(refPackSet, "Invalid refpackset directory 'dir': " + dir_attr);
             }
 
             // include pattern
-            String includeString = this.requireAttribute(el, "includes");
+            String includeString = this.requireAttribute(refPackSet, "includes");
             String[] includes = includeString.split(", ");
 
             // scan for refpack files
@@ -1356,8 +1345,7 @@ public class CompilerConfig extends Thread {
 
                     URL originalUrl = findProjectResource(help
                             .getAttribute(AutomatedInstallData.SRC_ATTRIBUTE), "Help", help);
-                    URL helpUrl = originalUrl;
-                    compiler.addResource(resourceId, helpUrl);
+                    compiler.addResource(resourceId, originalUrl);
                 }
             }
             // adding actions
@@ -1383,21 +1371,20 @@ public class CompilerConfig extends Thread {
 
         // We process each res markup
         for (IXMLElement resNode : root.getChildrenNamed("res")) {
-            IXMLElement res = resNode;
-            String id = requireAttribute(res, "id");
-            String src = requireAttribute(res, "src");
+            String id = requireAttribute(resNode, "id");
+            String src = requireAttribute(resNode, "src");
             // the parse attribute causes substitution to occur
-            boolean substitute = validateYesNoAttribute(res, "parse", NO);
+            boolean substitute = validateYesNoAttribute(resNode, "parse", NO);
             // the parsexml attribute causes the xml document to be parsed
-            boolean parsexml = validateYesNoAttribute(res, "parsexml", NO);
+            boolean parsexml = validateYesNoAttribute(resNode, "parsexml", NO);
 
-            String encoding = res.getAttribute("encoding");
+            String encoding = resNode.getAttribute("encoding");
             if (encoding == null) {
                 encoding = "";
             }
 
             // basedir is not prepended if src is already an absolute path
-            URL originalUrl = findProjectResource(src, "Resource", res);
+            URL originalUrl = findProjectResource(src, "Resource", resNode);
             URL url = originalUrl;
 
             InputStream is = null;
@@ -1460,9 +1447,9 @@ public class CompilerConfig extends Thread {
                     if (compiler.getVariables().isEmpty()) {
                         // reset url to original.
                         url = originalUrl;
-                        parseWarn(res, "No variables defined. " + url.getPath() + " not parsed.");
+                        parseWarn(resNode, "No variables defined. " + url.getPath() + " not parsed.");
                     } else {
-                        String type = res.getAttribute("type");
+                        String type = resNode.getAttribute("type");
 
                         // if the xml parser did not open the url
                         // ('parsexml' was not enabled)
@@ -1476,7 +1463,7 @@ public class CompilerConfig extends Thread {
 
             }
             catch (Exception e) {
-                parseError(res, e.getMessage(), e);
+                parseError(resNode, e.getMessage(), e);
             }
             finally {
                 if (null != os) {
@@ -1579,9 +1566,8 @@ public class CompilerConfig extends Thread {
         IXMLElement authors = root.getFirstChildNamed("authors");
         if (authors != null) {
             for (IXMLElement authorNode : authors.getChildrenNamed("author")) {
-                IXMLElement author = authorNode;
-                String name = requireAttribute(author, "name");
-                String email = requireAttribute(author, "email");
+                String name = requireAttribute(authorNode, "name");
+                String email = requireAttribute(authorNode, "email");
                 info.addAuthor(new Info.Author(name, email));
             }
         }
@@ -1999,8 +1985,7 @@ public class CompilerConfig extends Thread {
         if (blockable != PackFile.BLOCKABLE_NONE) {
             boolean found = false;
             for (OsConstraint anOsList : osList) {
-                OsConstraint constraint = anOsList;
-                if ("windows".equals(constraint.getFamily())) {
+                if ("windows".equals(anOsList.getFamily())) {
                     found = true;
                 }
             }
