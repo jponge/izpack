@@ -118,6 +118,11 @@ public class CompilerConfig extends Thread {
     private Compiler compiler;
 
     /**
+     * Installer data
+     */
+    private CompilerData compilerData;
+
+    /**
      * Compiler helper
      */
     private CompilerHelper compilerHelper = new CompilerHelper();
@@ -413,23 +418,19 @@ public class CompilerConfig extends Thread {
             prefs.height = requireIntAttribute(gp, "height");
 
             // Look and feel mappings
-            Iterator<IXMLElement> it = gp.getChildrenNamed("laf").iterator();
-            while (it.hasNext()) {
-                IXMLElement laf = it.next();
+            for (IXMLElement lafNode : gp.getChildrenNamed("laf")) {
+                IXMLElement laf = lafNode;
                 String lafName = requireAttribute(laf, "name");
                 requireChildNamed(laf, "os");
 
-                Iterator<IXMLElement> oit = laf.getChildrenNamed("os").iterator();
-                while (oit.hasNext()) {
-                    IXMLElement os = oit.next();
-                    String osName = requireAttribute(os, "family");
+                for (IXMLElement osNode : laf.getChildrenNamed("os")) {
+                    String osName = requireAttribute(osNode, "family");
                     prefs.lookAndFeelMapping.put(osName, lafName);
                 }
 
-                Iterator<IXMLElement> pit = laf.getChildrenNamed("param").iterator();
                 Map<String, String> params = new TreeMap<String, String>();
-                while (pit.hasNext()) {
-                    IXMLElement param = pit.next();
+                for (IXMLElement parameterNode : laf.getChildrenNamed("param")) {
+                    IXMLElement param = parameterNode;
                     String name = requireAttribute(param, "name");
                     String value = requireAttribute(param, "value");
                     params.put(name, value);
@@ -437,9 +438,8 @@ public class CompilerConfig extends Thread {
                 prefs.lookAndFeelParams.put(lafName, params);
             }
             // Load modifier
-            it = gp.getChildrenNamed("modifier").iterator();
-            while (it.hasNext()) {
-                IXMLElement curentModifier = it.next();
+            for (IXMLElement ixmlElement : gp.getChildrenNamed("modifier")) {
+                IXMLElement curentModifier = ixmlElement;
                 String key = requireAttribute(curentModifier, "key");
                 String value = requireAttribute(curentModifier, "value");
                 prefs.modifier.put(key, value);
@@ -460,9 +460,8 @@ public class CompilerConfig extends Thread {
             // the /last/ lnf for an os which is used, so can't add during
             // initial
             // loop
-            Iterator<String> kit = prefs.lookAndFeelMapping.keySet().iterator();
-            while (kit.hasNext()) {
-                String lafName = prefs.lookAndFeelMapping.get(kit.next());
+            for (String s : prefs.lookAndFeelMapping.keySet()) {
+                String lafName = prefs.lookAndFeelMapping.get(s);
                 String lafJarName = lafMap.get(lafName);
                 if (lafJarName == null) {
                     parseError(gp, "Unrecognized Look and Feel: " + lafName);
@@ -484,9 +483,8 @@ public class CompilerConfig extends Thread {
      */
     protected void addJars(IXMLElement data) throws Exception {
         notifyCompilerListener("addJars", CompilerListener.BEGIN, data);
-        Iterator<IXMLElement> iter = data.getChildrenNamed("jar").iterator();
-        while (iter.hasNext()) {
-            IXMLElement el = iter.next();
+        for (IXMLElement ixmlElement : data.getChildrenNamed("jar")) {
+            IXMLElement el = ixmlElement;
             String src = requireAttribute(el, "src");
             URL url = findProjectResource(src, "Jar file", el);
             compiler.addJarContent(url);
@@ -517,9 +515,8 @@ public class CompilerConfig extends Thread {
     protected void addNativeLibraries(IXMLElement data) throws Exception {
         boolean needAddOns = false;
         notifyCompilerListener("addNativeLibraries", CompilerListener.BEGIN, data);
-        Iterator<IXMLElement> iter = data.getChildrenNamed("native").iterator();
-        while (iter.hasNext()) {
-            IXMLElement el = iter.next();
+        for (IXMLElement ixmlElement : data.getChildrenNamed("native")) {
+            IXMLElement el = ixmlElement;
             String type = requireAttribute(el, "type");
             String name = requireAttribute(el, "name");
             String path = el.getAttribute("src");
@@ -602,9 +599,8 @@ public class CompilerConfig extends Thread {
 
         File baseDir = new File(basedir);
 
-        Iterator<IXMLElement> packIter = packElements.iterator();
-        while (packIter.hasNext()) {
-            IXMLElement el = packIter.next();
+        for (IXMLElement packElement : packElements) {
+            IXMLElement el = packElement;
 
             // Trivial initialisations
             String name = requireAttribute(el, "name");
@@ -663,31 +659,27 @@ public class CompilerConfig extends Thread {
             }
 
             // We get the parsables list
-            Iterator<IXMLElement> iter = el.getChildrenNamed("parsable").iterator();
-            while (iter.hasNext()) {
-                IXMLElement p = iter.next();
-                String target = requireAttribute(p, "targetfile");
-                String type = p.getAttribute("type", "plain");
-                String encoding = p.getAttribute("encoding", null);
-                List<OsConstraint> osList = OsConstraint.getOsList(p); // TODO: unverified
-                String condition = p.getAttribute("condition");
+            for (IXMLElement parsableNode : el.getChildrenNamed("parsable")) {
+                String target = requireAttribute(parsableNode, "targetfile");
+                String type = parsableNode.getAttribute("type", "plain");
+                String encoding = parsableNode.getAttribute("encoding", null);
+                List<OsConstraint> osList = OsConstraint.getOsList(parsableNode); // TODO: unverified
+                String condition = parsableNode.getAttribute("condition");
                 ParsableFile parsable = new ParsableFile(target, type, encoding, osList);
                 parsable.setCondition(condition);
                 pack.addParsable(parsable);
             }
 
             // We get the executables list
-            iter = el.getChildrenNamed("executable").iterator();
-            while (iter.hasNext()) {
-                IXMLElement e = iter.next();
+            for (IXMLElement executableNode : el.getChildrenNamed("executable")) {
                 ExecutableFile executable = new ExecutableFile();
                 String val; // temp value
-                String condition = e.getAttribute("condition");
+                String condition = executableNode.getAttribute("condition");
                 executable.setCondition(condition);
-                executable.path = requireAttribute(e, "targetfile");
+                executable.path = requireAttribute(executableNode, "targetfile");
 
                 // when to execute this executable
-                val = e.getAttribute("stage", "never");
+                val = executableNode.getAttribute("stage", "never");
                 if ("postinstall".equalsIgnoreCase(val)) {
                     executable.executionStage = ExecutableFile.POSTINSTALL;
                 } else if ("uninstall".equalsIgnoreCase(val)) {
@@ -695,15 +687,15 @@ public class CompilerConfig extends Thread {
                 }
 
                 // type of this executable
-                val = e.getAttribute("type", "bin");
+                val = executableNode.getAttribute("type", "bin");
                 if ("jar".equalsIgnoreCase(val)) {
                     executable.type = ExecutableFile.JAR;
-                    executable.mainClass = e.getAttribute("class"); // executable
+                    executable.mainClass = executableNode.getAttribute("class"); // executable
                     // class
                 }
 
                 // what to do if execution fails
-                val = e.getAttribute("failure", "ask");
+                val = executableNode.getAttribute("failure", "ask");
                 if ("abort".equalsIgnoreCase(val)) {
                     executable.onFailure = ExecutableFile.ABORT;
                 } else if ("warn".equalsIgnoreCase(val)) {
@@ -713,37 +705,34 @@ public class CompilerConfig extends Thread {
                 }
 
                 // whether to keep the executable after executing it
-                val = e.getAttribute("keep");
+                val = executableNode.getAttribute("keep");
                 executable.keepFile = "true".equalsIgnoreCase(val);
 
                 // get arguments for this executable
-                IXMLElement args = e.getFirstChildNamed("args");
+                IXMLElement args = executableNode.getFirstChildNamed("args");
                 if (null != args) {
-                    Iterator<IXMLElement> argIterator = args.getChildrenNamed("arg").iterator();
-                    while (argIterator.hasNext()) {
-                        IXMLElement arg = argIterator.next();
+                    for (IXMLElement ixmlElement : args.getChildrenNamed("arg")) {
+                        IXMLElement arg = ixmlElement;
                         executable.argList.add(requireAttribute(arg, "value"));
                     }
                 }
 
-                executable.osList = OsConstraint.getOsList(e); // TODO:
+                executable.osList = OsConstraint.getOsList(executableNode); // TODO:
                 // unverified
 
                 pack.addExecutable(executable);
             }
 
             // We get the files list
-            iter = el.getChildrenNamed("file").iterator();
-            while (iter.hasNext()) {
-                IXMLElement f = iter.next();
-                String src = requireAttribute(f, "src");
-                String targetdir = requireAttribute(f, "targetdir");
-                List<OsConstraint> osList = OsConstraint.getOsList(f); // TODO: unverified
-                int override = getOverrideValue(f);
-                int blockable = getBlockableValue(f, osList);
-                Map additionals = getAdditionals(f);
-                boolean unpack = "true".equalsIgnoreCase(f.getAttribute("unpack"));
-                String condition = f.getAttribute("condition");
+            for (IXMLElement fileNode : el.getChildrenNamed("file")) {
+                String src = requireAttribute(fileNode, "src");
+                String targetdir = requireAttribute(fileNode, "targetdir");
+                List<OsConstraint> osList = OsConstraint.getOsList(fileNode); // TODO: unverified
+                int override = getOverrideValue(fileNode);
+                int blockable = getBlockableValue(fileNode, osList);
+                Map additionals = getAdditionals(fileNode);
+                boolean unpack = "true".equalsIgnoreCase(fileNode.getAttribute("unpack"));
+                String condition = fileNode.getAttribute("condition");
 
                 File file = new File(src);
 
@@ -767,21 +756,19 @@ public class CompilerConfig extends Thread {
                     }
                 }
                 catch (Exception x) {
-                    parseError(f, x.getMessage(), x);
+                    parseError(fileNode, x.getMessage(), x);
                 }
             }
 
             // We get the singlefiles list
-            iter = el.getChildrenNamed("singlefile").iterator();
-            while (iter.hasNext()) {
-                IXMLElement f = iter.next();
-                String src = requireAttribute(f, "src");
-                String target = requireAttribute(f, "target");
-                List<OsConstraint> osList = OsConstraint.getOsList(f); // TODO: unverified
-                int override = getOverrideValue(f);
-                int blockable = getBlockableValue(f, osList);
-                Map additionals = getAdditionals(f);
-                String condition = f.getAttribute("condition");
+            for (IXMLElement singleFileNode : el.getChildrenNamed("singlefile")) {
+                String src = requireAttribute(singleFileNode, "src");
+                String target = requireAttribute(singleFileNode, "target");
+                List<OsConstraint> osList = OsConstraint.getOsList(singleFileNode); // TODO: unverified
+                int override = getOverrideValue(singleFileNode);
+                int blockable = getBlockableValue(singleFileNode, osList);
+                Map additionals = getAdditionals(singleFileNode);
+                String condition = singleFileNode.getAttribute("condition");
                 File file = new File(src);
                 if (!file.isAbsolute()) {
                     file = new File(basedir, src);
@@ -797,15 +784,13 @@ public class CompilerConfig extends Thread {
                     pack.addFile(baseDir, file, target, osList, override, blockable, additionals, condition);
                 }
                 catch (FileNotFoundException x) {
-                    parseError(f, x.getMessage(), x);
+                    parseError(singleFileNode, x.getMessage(), x);
                 }
             }
 
             // We get the fileset list
-            iter = el.getChildrenNamed("fileset").iterator();
-            while (iter.hasNext()) {
-                IXMLElement f = iter.next();
-                String dir_attr = requireAttribute(f, "dir");
+            for (IXMLElement fileSetNode : el.getChildrenNamed("fileset")) {
+                String dir_attr = requireAttribute(fileSetNode, "dir");
 
                 File dir = new File(dir_attr);
                 if (!dir.isAbsolute()) {
@@ -813,22 +798,22 @@ public class CompilerConfig extends Thread {
                 }
                 if (!dir.isDirectory()) // also tests '.exists()'
                 {
-                    parseError(f, "Invalid directory 'dir': " + dir_attr);
+                    parseError(fileSetNode, "Invalid directory 'dir': " + dir_attr);
                 }
 
-                boolean casesensitive = validateYesNoAttribute(f, "casesensitive", YES);
-                boolean defexcludes = validateYesNoAttribute(f, "defaultexcludes", YES);
-                String targetdir = requireAttribute(f, "targetdir");
-                List<OsConstraint> osList = OsConstraint.getOsList(f); // TODO: unverified
-                int override = getOverrideValue(f);
-                int blockable = getBlockableValue(f, osList);
-                Map additionals = getAdditionals(f);
-                String condition = f.getAttribute("condition");
+                boolean casesensitive = validateYesNoAttribute(fileSetNode, "casesensitive", YES);
+                boolean defexcludes = validateYesNoAttribute(fileSetNode, "defaultexcludes", YES);
+                String targetdir = requireAttribute(fileSetNode, "targetdir");
+                List<OsConstraint> osList = OsConstraint.getOsList(fileSetNode); // TODO: unverified
+                int override = getOverrideValue(fileSetNode);
+                int blockable = getBlockableValue(fileSetNode, osList);
+                Map additionals = getAdditionals(fileSetNode);
+                String condition = fileSetNode.getAttribute("condition");
 
                 // get includes and excludes
                 Vector<IXMLElement> xcludesList = null;
                 String[] includes = null;
-                xcludesList = f.getChildrenNamed("include");
+                xcludesList = fileSetNode.getChildrenNamed("include");
                 if (!xcludesList.isEmpty()) {
                     includes = new String[xcludesList.size()];
                     for (int j = 0; j < xcludesList.size(); j++) {
@@ -837,7 +822,7 @@ public class CompilerConfig extends Thread {
                     }
                 }
                 String[] excludes = null;
-                xcludesList = f.getChildrenNamed("exclude");
+                xcludesList = fileSetNode.getChildrenNamed("exclude");
                 if (!xcludesList.isEmpty()) {
                     excludes = new String[xcludesList.size()];
                     for (int j = 0; j < xcludesList.size(); j++) {
@@ -852,7 +837,7 @@ public class CompilerConfig extends Thread {
                 // and add the includes and excludes to it
                 String[][] containers = new String[][]{includes, excludes};
                 for (int j = 0; j < toDo.length; ++j) {
-                    String inex = f.getAttribute(toDo[j]);
+                    String inex = fileSetNode.getAttribute(toDo[j]);
                     if (inex != null && inex.length() > 0) { // This is the same "splitting" as ant PatternSet do ...
                         StringTokenizer tok = new StringTokenizer(inex, ", ", false);
                         int newSize = tok.countTokens();
@@ -909,7 +894,7 @@ public class CompilerConfig extends Thread {
                                 blockable, additionals, condition);
                     }
                     catch (FileNotFoundException x) {
-                        parseError(f, x.getMessage(), x);
+                        parseError(fileSetNode, x.getMessage(), x);
                     }
                 }
                 for (String dir1 : dirs) {
@@ -919,59 +904,50 @@ public class CompilerConfig extends Thread {
                                 blockable, additionals, condition);
                     }
                     catch (FileNotFoundException x) {
-                        parseError(f, x.getMessage(), x);
+                        parseError(fileSetNode, x.getMessage(), x);
                     }
                 }
             }
 
             // get the updatechecks list
-            iter = el.getChildrenNamed("updatecheck").iterator();
-            while (iter.hasNext()) {
-                IXMLElement f = iter.next();
+            for (IXMLElement updateNode : el.getChildrenNamed("updatecheck")) {
 
-                String casesensitive = f.getAttribute("casesensitive");
+                String casesensitive = updateNode.getAttribute("casesensitive");
 
                 // get includes and excludes
                 ArrayList<String> includesList = new ArrayList<String>();
                 ArrayList<String> excludesList = new ArrayList<String>();
 
                 // get includes and excludes
-                Iterator<IXMLElement> include_it = f.getChildrenNamed("include").iterator();
-                while (include_it.hasNext()) {
-                    IXMLElement inc_el = include_it.next();
+                for (IXMLElement ixmlElement1 : updateNode.getChildrenNamed("include")) {
+                    IXMLElement inc_el = ixmlElement1;
                     includesList.add(requireAttribute(inc_el, "name"));
                 }
 
-                Iterator<IXMLElement> exclude_it = f.getChildrenNamed("exclude").iterator();
-                while (exclude_it.hasNext()) {
-                    IXMLElement excl_el = exclude_it.next();
+                for (IXMLElement ixmlElement : updateNode.getChildrenNamed("exclude")) {
+                    IXMLElement excl_el = ixmlElement;
                     excludesList.add(requireAttribute(excl_el, "name"));
                 }
 
                 pack.addUpdateCheck(new UpdateCheck(includesList, excludesList, casesensitive));
             }
             // We get the dependencies
-            iter = el.getChildrenNamed("depends").iterator();
-            while (iter.hasNext()) {
-                IXMLElement dep = iter.next();
-                String depName = requireAttribute(dep, "packname");
+            for (IXMLElement dependsNode : el.getChildrenNamed("depends")) {
+                String depName = requireAttribute(dependsNode, "packname");
                 pack.addDependency(depName);
 
             }
 
-            iter = el.getChildrenNamed("validator").iterator();
-            while (iter.hasNext()) {
-                IXMLElement validator = iter.next();
-                pack.addValidator(requireContent(validator));
+            for (IXMLElement validatorNode : el.getChildrenNamed("validator")) {
+                pack.addValidator(requireContent(validatorNode));
             }
 
             // We add the pack
             compiler.addPack(pack);
         }
 
-        Iterator<IXMLElement> refPackIter = refPackElements.iterator();
-        while (refPackIter.hasNext()) {
-            IXMLElement el = refPackIter.next();
+        for (IXMLElement refPackElement : refPackElements) {
+            IXMLElement el = refPackElement;
 
             // get the name of reference xml file
             String refFileName = requireAttribute(el, "file");
@@ -986,9 +962,8 @@ public class CompilerConfig extends Thread {
             addPacksSingle(refXMLData);
         }
 
-        Iterator<IXMLElement> refPackSetIter = refPackSets.iterator();
-        while (refPackSetIter.hasNext()) {
-            IXMLElement el = refPackSetIter.next();
+        for (IXMLElement refPackSet : refPackSets) {
+            IXMLElement el = refPackSet;
 
             // the directory to scan
             String dir_attr = this.requireAttribute(el, "dir");
@@ -1293,26 +1268,24 @@ public class CompilerConfig extends Thread {
         }
 
         // We process each panel markup
-        Iterator<IXMLElement> iter = panels.iterator();
         // We need a panel counter to build unique panel dependet resource names
         int panelCounter = 0;
-        while (iter.hasNext()) {
-            IXMLElement xmlPanel = iter.next();
+        for (IXMLElement panel1 : panels) {
             panelCounter++;
 
             // create the serialized Panel data
             Panel panel = new Panel();
-            panel.osConstraints = OsConstraint.getOsList(xmlPanel);
-            String className = xmlPanel.getAttribute("classname");
+            panel.osConstraints = OsConstraint.getOsList(panel1);
+            String className = panel1.getAttribute("classname");
             // add an id
-            String panelid = xmlPanel.getAttribute("id");
+            String panelid = panel1.getAttribute("id");
             panel.setPanelid(panelid);
-            String condition = xmlPanel.getAttribute("condition");
+            String condition = panel1.getAttribute("condition");
             panel.setCondition(condition);
 
             // Panel files come in jars packaged w/ IzPack, or they can be
             // specified via a jar attribute on the panel element
-            String jarPath = xmlPanel.getAttribute("jar");
+            String jarPath = panel1.getAttribute("jar");
             if (jarPath == null) {
                 jarPath = "bin/panels/" + className + ".jar";
             }
@@ -1320,7 +1293,7 @@ public class CompilerConfig extends Thread {
             // jar="" may be used to suppress the warning message ("Panel jar
             // file not found")
             if (!jarPath.equals("")) {
-                url = findIzPackResource(jarPath, "Panel jar file", xmlPanel, true);
+                url = findIzPackResource(jarPath, "Panel jar file", panel1, true);
             }
 
             // when the expected panel jar file is not found, it is assumed that
@@ -1342,7 +1315,7 @@ public class CompilerConfig extends Thread {
             } else {
                 panel.className = className;
             }
-            IXMLElement configurationElement = xmlPanel.getFirstChildNamed("configuration");
+            IXMLElement configurationElement = panel1.getFirstChildNamed("configuration");
             if (configurationElement != null) {
                 Debug.trace("found a configuration for this panel.");
                 Vector<IXMLElement> params = configurationElement.getChildrenNamed("param");
@@ -1358,7 +1331,7 @@ public class CompilerConfig extends Thread {
             }
 
             // adding validator
-            IXMLElement validatorElement = xmlPanel
+            IXMLElement validatorElement = panel1
                     .getFirstChildNamed(DataValidator.DATA_VALIDATOR_TAG);
             if (validatorElement != null) {
                 String validator = validatorElement
@@ -1368,7 +1341,7 @@ public class CompilerConfig extends Thread {
                 }
             }
             // adding helps
-            Vector helps = xmlPanel.getChildrenNamed(AutomatedInstallData.HELP_TAG);
+            Vector helps = panel1.getChildrenNamed(AutomatedInstallData.HELP_TAG);
             if (helps != null) {
                 for (int helpIndex = 0; helpIndex < helps.size(); helpIndex++) {
                     IXMLElement help = (IXMLElement) helps.get(helpIndex);
@@ -1388,7 +1361,7 @@ public class CompilerConfig extends Thread {
                 }
             }
             // adding actions
-            addPanelActions(xmlPanel, panel);
+            addPanelActions(panel1, panel);
             // insert into the packager
             compiler.addPanelJar(panel, url);
         }
@@ -1409,9 +1382,8 @@ public class CompilerConfig extends Thread {
         }
 
         // We process each res markup
-        Iterator<IXMLElement> iter = root.getChildrenNamed("res").iterator();
-        while (iter.hasNext()) {
-            IXMLElement res = iter.next();
+        for (IXMLElement resNode : root.getChildrenNamed("res")) {
+            IXMLElement res = resNode;
             String id = requireAttribute(res, "id");
             String src = requireAttribute(res, "src");
             // the parse attribute causes substitution to occur
@@ -1561,17 +1533,15 @@ public class CompilerConfig extends Thread {
         }
 
         // We process each langpack markup
-        Iterator<IXMLElement> iter = locals.iterator();
-        while (iter.hasNext()) {
-            IXMLElement el = iter.next();
-            String iso3 = requireAttribute(el, "iso3");
+        for (IXMLElement localNode : locals) {
+            String iso3 = requireAttribute(localNode, "iso3");
             String path;
 
             path = "bin/langpacks/installer/" + iso3 + ".xml";
-            URL iso3xmlURL = findIzPackResource(path, "ISO3 file", el);
+            URL iso3xmlURL = findIzPackResource(path, "ISO3 file", localNode);
 
             path = "bin/langpacks/flags/" + iso3 + ".gif";
-            URL iso3FlagURL = findIzPackResource(path, "ISO3 flag image", el);
+            URL iso3FlagURL = findIzPackResource(path, "ISO3 flag image", localNode);
 
             compiler.addLangPack(iso3, iso3xmlURL, iso3FlagURL);
         }
@@ -1608,9 +1578,8 @@ public class CompilerConfig extends Thread {
         // We get the authors list
         IXMLElement authors = root.getFirstChildNamed("authors");
         if (authors != null) {
-            Iterator<IXMLElement> iter = authors.getChildrenNamed("author").iterator();
-            while (iter.hasNext()) {
-                IXMLElement author = iter.next();
+            for (IXMLElement authorNode : authors.getChildrenNamed("author")) {
+                IXMLElement author = authorNode;
                 String name = requireAttribute(author, "name");
                 String email = requireAttribute(author, "email");
                 info.addAuthor(new Info.Author(name, email));
@@ -1634,7 +1603,7 @@ public class CompilerConfig extends Thread {
         if (webDirURL != null) {
             info.setWebDirURL(requireURLContent(webDirURL).toString());
         }
-        String kind = compiler.getKind();
+        String kind = compilerData.getKind();
         if (kind != null) {
             if (kind.equalsIgnoreCase(WEB) && webDirURL == null) {
                 parseError(root, "<webdir> required when \"WEB\" installer requested");
@@ -1757,13 +1726,11 @@ public class CompilerConfig extends Thread {
 
         Properties variables = compiler.getVariables();
 
-        Iterator<IXMLElement> iter = root.getChildrenNamed("variable").iterator();
-        while (iter.hasNext()) {
-            IXMLElement var = iter.next();
-            String name = requireAttribute(var, "name");
-            String value = requireAttribute(var, "value");
+        for (IXMLElement variableNode : root.getChildrenNamed("variable")) {
+            String name = requireAttribute(variableNode, "name");
+            String value = requireAttribute(variableNode, "value");
             if (variables.contains(name)) {
-                parseWarn(var, "Variable '" + name + "' being overwritten");
+                parseWarn(variableNode, "Variable '" + name + "' being overwritten");
             }
             variables.setProperty(name, value);
         }
@@ -1780,13 +1747,11 @@ public class CompilerConfig extends Thread {
 
         Map<String, List<DynamicVariable>> dynamicvariables = compiler.getDynamicVariables();
 
-        Iterator<IXMLElement> iter = root.getChildrenNamed("variable").iterator();
-        while (iter.hasNext()) {
-            IXMLElement var = iter.next();
-            String name = requireAttribute(var, "name");
-            String value = var.getAttribute("value");
+        for (IXMLElement variableNode : root.getChildrenNamed("variable")) {
+            String name = requireAttribute(variableNode, "name");
+            String value = variableNode.getAttribute("value");
             if (value == null) {
-                IXMLElement valueElement = var.getFirstChildNamed("value");
+                IXMLElement valueElement = variableNode.getFirstChildNamed("value");
                 if (valueElement != null) {
                     value = valueElement.getContent();
                     if (value == null) {
@@ -1796,7 +1761,7 @@ public class CompilerConfig extends Thread {
                     parseError("A dynamic variable needs either a value attribute or a value element. Variable name: " + name);
                 }
             }
-            String conditionid = var.getAttribute("condition");
+            String conditionid = variableNode.getAttribute("condition");
 
             List<DynamicVariable> dynamicValues = new ArrayList<DynamicVariable>();
             if (dynamicvariables.containsKey(name)) {
@@ -1810,7 +1775,7 @@ public class CompilerConfig extends Thread {
             dynamicVariable.setValue(value);
             dynamicVariable.setConditionid(conditionid);
             if (dynamicValues.remove(dynamicVariable)) {
-                parseWarn(var, "Dynamic Variable '" + name + "' will be overwritten");
+                parseWarn(variableNode, "Dynamic Variable '" + name + "' will be overwritten");
             }
             dynamicValues.add(dynamicVariable);
         }
@@ -1829,20 +1794,18 @@ public class CompilerConfig extends Thread {
         IXMLElement root = data.getFirstChildNamed("conditions");
         Map<String, Condition> conditions = compiler.getConditions();
         if (root != null) {
-            Iterator<IXMLElement> iter = root.getChildrenNamed("condition").iterator();
-            while (iter.hasNext()) {
-                IXMLElement conditionel = iter.next();
-                Condition condition = RulesEngineImpl.analyzeCondition(conditionel);
+            for (IXMLElement conditionNode : root.getChildrenNamed("condition")) {
+                Condition condition = RulesEngineImpl.analyzeCondition(conditionNode);
                 if (condition != null) {
                     String conditionid = condition.getId();
                     if (conditions.containsKey(conditionid)) {
-                        parseWarn(conditionel, "Condition with id '" + conditionid
+                        parseWarn(conditionNode, "Condition with id '" + conditionid
                                 + "' will be overwritten");
                     }
                     conditions.put(conditionid, condition);
 
                 } else {
-                    parseWarn(conditionel, "Condition couldn't be instantiated.");
+                    parseWarn(conditionNode, "Condition couldn't be instantiated.");
                 }
             }
         }
@@ -1882,10 +1845,8 @@ public class CompilerConfig extends Thread {
         IXMLElement root = data.getFirstChildNamed("properties");
         if (root != null) {
             // add individual properties
-            Iterator<IXMLElement> iter = root.getChildrenNamed("property").iterator();
-            while (iter.hasNext()) {
-                IXMLElement prop = iter.next();
-                Property property = new Property(prop, this);
+            for (IXMLElement propertyNode : root.getChildrenNamed("property")) {
+                Property property = new Property(propertyNode, this);
                 property.execute();
             }
         }
@@ -2036,13 +1997,11 @@ public class CompilerConfig extends Thread {
         }
 
         if (blockable != PackFile.BLOCKABLE_NONE) {
-            Iterator<OsConstraint> it = osList.iterator();
             boolean found = false;
-            while (it.hasNext()) {
-                OsConstraint constraint = it.next();
+            for (OsConstraint anOsList : osList) {
+                OsConstraint constraint = anOsList;
                 if ("windows".equals(constraint.getFamily())) {
                     found = true;
-                    continue;
                 }
             }
 
@@ -2785,11 +2744,9 @@ public class CompilerConfig extends Thread {
      */
     private void notifyCompilerListener(String callerName, int state, IXMLElement data)
             throws CompilerException {
-        Iterator<CompilerListener> i = compilerListeners.iterator();
         IPackager packager = compiler.getPackager();
-        while (i != null && i.hasNext()) {
-            CompilerListener listener = i.next();
-            listener.notify(callerName, state, data, packager);
+        for (CompilerListener compilerListener : compilerListeners) {
+            compilerListener.notify(callerName, state, data, packager);
         }
 
     }
@@ -2801,11 +2758,10 @@ public class CompilerConfig extends Thread {
      * @return a map with the additional attributes
      */
     private Map getAdditionals(IXMLElement f) throws CompilerException {
-        Iterator<CompilerListener> i = compilerListeners.iterator();
         Map retval = null;
         try {
-            while (i != null && i.hasNext()) {
-                retval = (i.next()).reviseAdditionalDataMap(retval, f);
+            for (CompilerListener compilerListener : compilerListeners) {
+                retval = (compilerListener).reviseAdditionalDataMap(retval, f);
             }
         }
         catch (CompilerException ce) {
