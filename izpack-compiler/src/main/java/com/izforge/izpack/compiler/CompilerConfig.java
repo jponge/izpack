@@ -144,15 +144,6 @@ public class CompilerConfig extends Thread {
     private String packagerClassname = "com.izforge.izpack.compiler.Packager";
 
     /**
-     * Set the IzPack home directory
-     *
-     * @param izHome - the izpack home directory
-     */
-    public static void setIzpackHome(String izHome) {
-        CompilerData.setIzpackHome(izHome);
-    }
-
-    /**
      * The constructor.
      *
      * @param filename The XML filename.
@@ -2670,8 +2661,7 @@ public class CompilerConfig extends Thread {
      * @param data       current install data
      * @throws CompilerException
      */
-    private void notifyCompilerListener(String callerName, int state, IXMLElement data)
-            throws CompilerException {
+    private void notifyCompilerListener(String callerName, int state, IXMLElement data) {
         IPackager packager = compiler.getPackager();
         for (CompilerListener compilerListener : compilerListeners) {
             compilerListener.notify(callerName, state, data, packager);

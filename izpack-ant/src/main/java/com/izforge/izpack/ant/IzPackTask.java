@@ -25,6 +25,7 @@ package com.izforge.izpack.ant;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.CompilerException;
 import com.izforge.izpack.compiler.PackagerListener;
+import com.izforge.izpack.compiler.data.CompilerData;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
@@ -220,7 +221,7 @@ public class IzPackTask extends Task implements PackagerListener {
         catch (CompilerException e1) {
             throw new BuildException(e1);
         }
-        CompilerConfig.setIzpackHome(izPackDir);
+        CompilerData.setIzpackHome(izPackDir);
 
         if (properties != null) {
             Enumeration e = properties.keys();
