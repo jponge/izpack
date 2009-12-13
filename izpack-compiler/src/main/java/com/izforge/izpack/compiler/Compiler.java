@@ -286,15 +286,6 @@ public class Compiler extends Thread {
     }
 
     /**
-     * Returns the properties currently known to the compileer.
-     *
-     * @return the properties currently known to the compileer
-     */
-    public Properties getProperties() {
-        return properties;
-    }
-
-    /**
      * Get the value of a property currerntly known to izpack.
      *
      * @param name the name of the property
