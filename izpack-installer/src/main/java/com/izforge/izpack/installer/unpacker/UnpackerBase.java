@@ -473,12 +473,10 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
             // element of custom action array.
             i = retval.length - 1; // Should be so, but safe is safe ...
             retval[i] = new ArrayList();
-            Iterator iter = retval[AutomatedInstallData.INSTALLER_LISTENER_INDEX]
-                    .iterator();
-            while (iter.hasNext()) {
+            for (Object o : retval[AutomatedInstallData.INSTALLER_LISTENER_INDEX]) {
                 // If we get a class cast exception many is wrong and
                 // we must fix it.
-                InstallerListener li = (InstallerListener) iter.next();
+                InstallerListener li = (InstallerListener) o;
                 if (li.isFileListener()) {
                     retval[i].add(li);
                 }
@@ -786,7 +784,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
         Debug.trace("writing installation information");
         String installdir = idata.getInstallPath();
 
-        List installedpacks = new ArrayList(idata.getSelectedPacks());
+        List<Pack> installedpacks = new ArrayList<Pack>(idata.getSelectedPacks());
 
         File installationinfo = new File(installdir + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION);
         if (!installationinfo.exists()) {
