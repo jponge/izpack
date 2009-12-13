@@ -1,5 +1,6 @@
 package com.izforge.izpack.installer.provider;
 
+import com.izforge.izpack.container.CustomDataContainer;
 import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
@@ -25,11 +26,14 @@ import java.util.TreeMap;
  */
 public class GUIInstallDataProvider extends AbstractInstallDataProvider {
 
-    public GUIInstallData provide(ResourceManager resourceManager) throws Exception {
+    public GUIInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer) throws Exception {
         this.resourceManager = resourceManager;
         final GUIInstallData guiInstallData = new GUIInstallData();
         // Loads the installation data
         loadInstallData(guiInstallData);
+        // Load custom action data.
+        loadCustomData(guiInstallData, customDataContainer);
+
         loadGUIInstallData(guiInstallData);
         loadInstallerRequirements(guiInstallData);
         loadDynamicVariables(guiInstallData);

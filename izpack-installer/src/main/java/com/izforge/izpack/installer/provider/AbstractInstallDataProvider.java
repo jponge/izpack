@@ -1,5 +1,6 @@
 package com.izforge.izpack.installer.provider;
 
+import com.izforge.izpack.container.CustomDataContainer;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.PrivilegedRunner;
@@ -120,7 +121,6 @@ public class AbstractInstallDataProvider implements Provider {
             IPAddress = "";
         }
 
-
         installdata.setVariable("APPLICATIONS_DEFAULT_ROOT", dir);
         dir += File.separator;
         installdata.setVariable(ScriptParserConstant.JAVA_HOME, System.getProperty("java.home"));
@@ -165,8 +165,6 @@ public class AbstractInstallDataProvider implements Provider {
             }
         }
 
-        // Load custom action data.
-        loadCustomData(installdata);
     }
 
     /**
@@ -190,10 +188,11 @@ public class AbstractInstallDataProvider implements Provider {
     /**
      * Loads custom data like listener and lib references if exist and fills the installdata.
      *
-     * @param installdata installdata into which the custom action data should be stored
+     * @param installdata         installdata into which the custom action data should be stored
+     * @param customDataContainer
      * @throws Exception
      */
-    private void loadCustomData(AutomatedInstallData installdata) throws IOException, InstallerException, ClassNotFoundException {
+    protected void loadCustomData(AutomatedInstallData installdata, CustomDataContainer customDataContainer) throws IOException, InstallerException, ClassNotFoundException {
         // Usefull variables
         InputStream in;
         ObjectInputStream objIn;
@@ -212,7 +211,6 @@ public class AbstractInstallDataProvider implements Provider {
             Iterator keys = ((List) listeners).iterator();
             while (keys != null && keys.hasNext()) {
                 CustomData ca = (CustomData) keys.next();
-
                 if (ca.osConstraints != null
                         && !OsConstraint.oneMatchesCurrentSystem(ca.osConstraints)) { // OS constraint defined, but not matched; therefore ignore
                     // it.
@@ -223,11 +221,11 @@ public class AbstractInstallDataProvider implements Provider {
                         Class clazz;
                         try {
                             clazz = Class.forName(ca.listenerName);
+                            customDataContainer.addComponent(clazz);
                         } catch (ClassNotFoundException e) {
                             Debug.trace("Warning, class" + ca.listenerName + " not found.");
                             continue;
                         }
-
 //                        out[ca.type].add(clazz.newInstance());
                         break;
                     case CustomData.UNINSTALLER_LISTENER:
@@ -269,7 +267,6 @@ public class AbstractInstallDataProvider implements Provider {
     private void checkForPrivilegedExecution(Info info) {
         if (PrivilegedRunner.isPrivilegedMode()) {
             // We have been launched through a privileged execution, so stop the checkings here!
-            return;
         } else if (info.isPrivilegedExecutionRequired()) {
             boolean shouldElevate = true;
             final String conditionId = info.getPrivilegedExecutionConditionID();

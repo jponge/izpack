@@ -1,5 +1,6 @@
 package com.izforge.izpack.installer.provider;
 
+import com.izforge.izpack.container.CustomDataContainer;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.ResourceManager;
 
@@ -8,12 +9,14 @@ import com.izforge.izpack.data.ResourceManager;
  */
 public class AutomatedInstallDataProvider extends AbstractInstallDataProvider {
 
-    public AutomatedInstallData provide(ResourceManager resourceManager) {
+    public AutomatedInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer) {
         try {
             this.resourceManager = resourceManager;
             final AutomatedInstallData automatedInstallData = new AutomatedInstallData();
             // Loads the installation data
             loadInstallData(automatedInstallData);
+            // Load custom action data.
+            loadCustomData(automatedInstallData, customDataContainer);
 
             // Load custom langpack if exist.
             addCustomLangpack(automatedInstallData);
