@@ -207,13 +207,6 @@ public class CompilerConfig extends Thread {
     }
 
     /**
-     * Compile the installation
-     */
-    public void compile() {
-        start();
-    }
-
-    /**
      * The run() method.
      */
     public void run() {
@@ -738,7 +731,7 @@ public class CompilerConfig extends Thread {
                 String condition = fileSetNode.getAttribute("condition");
 
                 // get includes and excludes
-                Vector<IXMLElement> xcludesList = null;
+                Vector<IXMLElement> xcludesList;
                 String[] includes = null;
                 xcludesList = fileSetNode.getChildrenNamed("include");
                 if (!xcludesList.isEmpty()) {
@@ -913,8 +906,8 @@ public class CompilerConfig extends Thread {
 
             // loop through all found fils and handle them as normal refpack files
             String[] files = ds.getIncludedFiles();
-            for (int i = 0; i < files.length; i++) {
-                String refFileName = new File(dir, files[i]).toString();
+            for (String file : files) {
+                String refFileName = new File(dir, file).toString();
 
                 // parsing ref-pack-set file
                 IXMLElement refXMLData = this.readRefPackData(refFileName, false);
@@ -937,7 +930,7 @@ public class CompilerConfig extends Thread {
             throw new CompilerException("Invalid file: " + refXMLFile);
         }
 
-        InputStream specin = null;
+        InputStream specin;
 
         if (isselfcontained) {
             if (!refXMLFile.getAbsolutePath().endsWith(".zip")) {
@@ -992,106 +985,6 @@ public class CompilerConfig extends Thread {
         }
 
         return refXMLData;
-    }
-
-    /**
-     * Checks whether the dependencies stated in the configuration file are correct. Specifically it
-     * checks that no pack point to a non existent pack and also that there are no circular
-     * dependencies in the packs.
-     */
-    public void checkDependencies(List<PackInfo> packs) throws CompilerException {
-        // Because we use package names in the configuration file we assosiate
-        // the names with the objects
-        Map<String, PackInfo> names = new HashMap<String, PackInfo>();
-        for (PackInfo pack : packs) {
-            names.put(pack.getPack().name, pack);
-        }
-        int result = dfs(packs, names);
-        // @todo More informative messages to include the source of the error
-        if (result == -2) {
-            parseError("Circular dependency detected");
-        } else if (result == -1) {
-            parseError("A dependency doesn't exist");
-        }
-    }
-
-    /**
-     * We use the dfs graph search algorithm to check whether the graph is acyclic as described in:
-     * Thomas H. Cormen, Charles Leiserson, Ronald Rivest and Clifford Stein. Introduction to
-     * algorithms 2nd Edition 540-549,MIT Press, 2001
-     *
-     * @param packs The graph
-     * @param names The name map
-     */
-    private int dfs(List<PackInfo> packs, Map<String, PackInfo> names) {
-        Map<Edge, PackColor> edges = new HashMap<Edge, PackColor>();
-        for (PackInfo pack : packs) {
-            if (pack.colour == PackColor.WHITE) {
-                if (dfsVisit(pack, names, edges) != 0) {
-                    return -1;
-                }
-            }
-
-        }
-        return checkBackEdges(edges);
-    }
-
-    /**
-     * This function checks for the existence of back edges.
-     */
-    private int checkBackEdges(Map<Edge, PackColor> edges) {
-        Set<Edge> keys = edges.keySet();
-        for (final Edge key : keys) {
-            PackColor color = edges.get(key);
-            if (color == PackColor.GREY) {
-                return -2;
-            }
-        }
-        return 0;
-
-    }
-
-    /**
-     * This class is used for the classification of the edges
-     */
-    private class Edge {
-
-        PackInfo u;
-
-        PackInfo v;
-
-        Edge(PackInfo u, PackInfo v) {
-            this.u = u;
-            this.v = v;
-        }
-    }
-
-    private int dfsVisit(PackInfo u, Map<String, PackInfo> names, Map<Edge, PackColor> edges) {
-        u.colour = PackColor.GREY;
-        List<String> deps = u.getDependencies();
-        if (deps != null) {
-            for (String name : deps) {
-                PackInfo v = names.get(name);
-                if (v == null) {
-                    System.out.println("Failed to find dependency: " + name);
-                    return -1;
-                }
-                Edge edge = new Edge(u, v);
-                if (edges.get(edge) == null) {
-                    edges.put(edge, v.colour);
-                }
-
-                if (v.colour == PackColor.WHITE) {
-
-                    final int result = dfsVisit(v, names, edges);
-                    if (result != 0) {
-                        return result;
-                    }
-                }
-            }
-        }
-        u.colour = PackColor.BLACK;
-        return 0;
     }
 
     /**
@@ -1266,8 +1159,8 @@ public class CompilerConfig extends Thread {
             // adding helps
             Vector helps = panel1.getChildrenNamed(AutomatedInstallData.HELP_TAG);
             if (helps != null) {
-                for (int helpIndex = 0; helpIndex < helps.size(); helpIndex++) {
-                    IXMLElement help = (IXMLElement) helps.get(helpIndex);
+                for (Object help1 : helps) {
+                    IXMLElement help = (IXMLElement) help1;
                     String iso3 = help.getAttribute(AutomatedInstallData.ISO3_ATTRIBUTE);
                     String resourceId;
                     if (panelid == null) {
@@ -1333,7 +1226,7 @@ public class CompilerConfig extends Thread {
                             new FileOutputStream(recodedFile), "UTF-8");
 
                     char[] buffer = new char[1024];
-                    int read = 0;
+                    int read;
                     while ((read = reader.read(buffer)) != -1) {
                         writer.write(buffer, 0, read);
                     }
@@ -1423,7 +1316,7 @@ public class CompilerConfig extends Thread {
 
             // remembering references to all added packsLang.xml files
             if (id.startsWith("packsLang.xml")) {
-                List<URL> packsLangURLs = null;
+                List<URL> packsLangURLs;
                 if (packsLangUrlMap.containsKey(id)) {
                     packsLangURLs = packsLangUrlMap.get(id);
                 } else {
@@ -1843,7 +1736,7 @@ public class CompilerConfig extends Thread {
      */
     protected IXMLElement getXMLTree() throws IOException {
         IXMLParser parser = new XMLParser();
-        IXMLElement data = null;
+        IXMLElement data;
         if (filename != null) {
             File file = new File(filename).getAbsoluteFile();
             assertIsNormalReadableFile(file, "Configuration file");
@@ -2107,7 +2000,7 @@ public class CompilerConfig extends Thread {
     }
 
     protected boolean validateYesNo(String value) {
-        boolean result = false;
+        boolean result;
         if ("yes".equalsIgnoreCase(value)) {
             result = true;
         } else if ("no".equalsIgnoreCase(value)) {
@@ -2430,7 +2323,7 @@ public class CompilerConfig extends Thread {
             }
             np = np.substring(0, np.length() - 1);
         }
-        File root = null;
+        File root;
         if (URI.create(np).isAbsolute()) {
             root = new File(URI.create(np));
         } else {
@@ -2505,7 +2398,7 @@ public class CompilerConfig extends Thread {
      */
     private List<String> getContainedFilePaths(URL url) throws Exception {
         JarInputStream jis = new JarInputStream(url.openStream());
-        ZipEntry zentry = null;
+        ZipEntry zentry;
         ArrayList<String> fullNames = new ArrayList<String>();
         while ((zentry = jis.getNextEntry()) != null) {
             String name = zentry.getName();
@@ -2531,7 +2424,7 @@ public class CompilerConfig extends Thread {
     // Exception
     {
         JarInputStream jis = new JarInputStream(url.openStream());
-        ZipEntry zentry = null;
+        ZipEntry zentry;
         while ((zentry = jis.getNextEntry()) != null) {
             String name = zentry.getName();
             int lastPos = name.lastIndexOf(".class");
@@ -2715,7 +2608,7 @@ public class CompilerConfig extends Thread {
 
             // loop through all packsLang resources, e.g. packsLang.xml_eng, packsLang.xml_deu, ...
             for (String id : packsLangUrlMap.keySet()) {
-                URL mergedPackLangFileURL = null;
+                URL mergedPackLangFileURL;
 
                 List<URL> packsLangURLs = packsLangUrlMap.get(id);
                 if (packsLangURLs.size() == 0) continue; // should not occure
