@@ -33,6 +33,7 @@ import com.izforge.izpack.adaptator.IXMLWriter;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
 import com.izforge.izpack.compiler.Compiler.CmdlinePackagerListener;
+import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.data.PanelAction.ActionStage;
@@ -143,7 +144,7 @@ public class CompilerConfig extends Thread {
      * @param izHome - the izpack home directory
      */
     public static void setIzpackHome(String izHome) {
-        Compiler.setIzpackHome(izHome);
+        CompilerData.setIzpackHome(izHome);
     }
 
     /**
@@ -2114,7 +2115,7 @@ public class CompilerConfig extends Thread {
             File resource = new File(path);
 
             if (!resource.isAbsolute()) {
-                resource = new File(Compiler.IZPACK_HOME, path);
+                resource = new File(CompilerData.IZPACK_HOME, path);
             }
 
             if (resource.exists()) {
@@ -2342,7 +2343,7 @@ public class CompilerConfig extends Thread {
     public static void main(String[] args) {
         // Outputs some informations
         System.out.println("");
-        System.out.println(".::  IzPack - Version " + Compiler.IZPACK_VERSION + " ::.");
+        System.out.println(".::  IzPack - Version " + CompilerData.IZPACK_VERSION + " ::.");
         System.out.println("");
         System.out.println("< compiler specifications version: " + VERSION + " >");
         System.out.println("");
@@ -2495,7 +2496,7 @@ public class CompilerConfig extends Thread {
                 System.out.println("-> IzPack home : " + home);
                 System.out.println("");
 
-                Compiler.setIzpackHome(home);
+                CompilerData.setIzpackHome(home);
 
                 // Calls the compiler
                 CmdlinePackagerListener listener = new CmdlinePackagerListener();

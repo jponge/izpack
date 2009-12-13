@@ -26,8 +26,8 @@
 package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.compiler.compressor.PackCompressor;
+import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.data.*;
-import com.izforge.izpack.data.InstallerRequirement;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
@@ -54,20 +54,6 @@ import java.util.zip.ZipEntry;
  * @see CompilerConfig
  */
 public class Compiler extends Thread {
-    /**
-     * The IzPack version.
-     */
-    public final static String IZPACK_VERSION = "4.3.2";
-
-    /**
-     * The IzPack home directory.
-     */
-    public static String IZPACK_HOME = ".";
-
-    /**
-     * The base directory.
-     */
-    protected String basedir;
 
     /**
      * The installer kind.
@@ -102,15 +88,6 @@ public class Compiler extends Thread {
     private String compr_format;
     private int compr_level;
     private PackagerListener packagerlistener;
-
-    /**
-     * Set the IzPack home directory
-     *
-     * @param izHome - the izpack home directory
-     */
-    public static void setIzpackHome(String izHome) {
-        IZPACK_HOME = izHome;
-    }
 
     /**
      * The constructor.
@@ -150,7 +127,6 @@ public class Compiler extends Thread {
     public Compiler(String basedir, String kind, String output,
                     String compr_format, int compr_level) throws CompilerException {
         // Default initialisation
-        this.basedir = basedir;
         this.kind = kind;
         this.output = output;
 
@@ -164,7 +140,7 @@ public class Compiler extends Thread {
         propertySubstitutor = new VariableSubstitutorImpl(properties);
 
         // add izpack built in property
-        setProperty("izpack.version", IZPACK_VERSION);
+        setProperty("izpack.version", CompilerData.IZPACK_VERSION);
         setProperty("basedir", basedir);
 
         this.compr_format = compr_format;
@@ -659,7 +635,7 @@ public class Compiler extends Thread {
         if (url == null) {
             File resource = new File(path);
             if (!resource.isAbsolute()) {
-                resource = new File(IZPACK_HOME, path);
+                resource = new File(CompilerData.IZPACK_HOME, path);
             }
 
             if (!resource.exists()) {

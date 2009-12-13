@@ -20,10 +20,11 @@
 
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.data.PackFile;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.data.PackFile;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.util.FileUtil;
 
@@ -89,6 +90,7 @@ public class Packager extends PackagerBase {
     /* (non-Javadoc)
     * @see com.izforge.izpack.compiler.IPackager#createInstaller(java.io.File)
     */
+
     public void createInstaller(File primaryFile) throws Exception {
         // preliminary work
         String baseName = primaryFile.getName();
@@ -132,7 +134,7 @@ public class Packager extends PackagerBase {
 
         InputStream is = Packager.class.getResourceAsStream("/" + getSkeletonSubpath());
         if (is == null) {
-            File skeleton = new File(Compiler.IZPACK_HOME, getSkeletonSubpath());
+            File skeleton = new File(CompilerData.IZPACK_HOME, getSkeletonSubpath());
             is = new FileInputStream(skeleton);
         }
         ZipInputStream inJarStream = new ZipInputStream(is);
@@ -143,7 +145,7 @@ public class Packager extends PackagerBase {
      * Write an arbitrary object to primary jar.
      */
     protected void writeInstallerObject(String entryName, Object object) throws IOException {
-        primaryJarStream.putNextEntry(new org.apache.tools.zip.ZipEntry(RESOURCES_PATH +entryName));
+        primaryJarStream.putNextEntry(new org.apache.tools.zip.ZipEntry(RESOURCES_PATH + entryName));
         ObjectOutputStream out = new ObjectOutputStream(primaryJarStream);
         out.writeObject(object);
         out.flush();
@@ -160,7 +162,7 @@ public class Packager extends PackagerBase {
             URL url = stringURLEntry.getValue();
             InputStream in = url.openStream();
 
-            org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(RESOURCES_PATH+stringURLEntry.getKey());
+            org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(RESOURCES_PATH + stringURLEntry.getKey());
             long dateTime = FileUtil.getFileDateTime(url);
             if (dateTime != -1) {
                 newEntry.setTime(dateTime);
@@ -230,7 +232,7 @@ public class Packager extends PackagerBase {
             sendMsg("Writing Pack " + packNumber + ": " + pack.name, PackagerListener.MSG_VERBOSE);
 
             // Retrieve the correct output stream
-            org.apache.tools.zip.ZipEntry entry = new org.apache.tools.zip.ZipEntry(RESOURCES_PATH+"packs/pack-" + pack.id);
+            org.apache.tools.zip.ZipEntry entry = new org.apache.tools.zip.ZipEntry(RESOURCES_PATH + "packs/pack-" + pack.id);
             if (!compressor.useStandardCompression()) {
                 entry.setMethod(ZipEntry.STORED);
                 entry.setComment(compressor.getCompressionFormatSymbols()[0]);
@@ -353,7 +355,7 @@ public class Packager extends PackagerBase {
         }
 
         // Now that we know sizes, write pack metadata to primary jar.
-        primaryJarStream.putNextEntry(new org.apache.tools.zip.ZipEntry(RESOURCES_PATH+"packs.info"));
+        primaryJarStream.putNextEntry(new org.apache.tools.zip.ZipEntry(RESOURCES_PATH + "packs.info"));
         ObjectOutputStream out = new ObjectOutputStream(primaryJarStream);
         out.writeInt(packsList.size());
 
@@ -369,7 +371,7 @@ public class Packager extends PackagerBase {
         Pack200.Packer packer = createAgressivePack200Packer();
         for (Integer key : pack200Map.keySet()) {
             File file = pack200Map.get(key);
-            primaryJarStream.putNextEntry(new org.apache.tools.zip.ZipEntry(RESOURCES_PATH+"packs/pack200-" + key));
+            primaryJarStream.putNextEntry(new org.apache.tools.zip.ZipEntry(RESOURCES_PATH + "packs/pack200-" + key));
             JarFile jar = new JarFile(file);
             packer.pack(jar, primaryJarStream);
             jar.close();
@@ -499,6 +501,7 @@ public class Packager extends PackagerBase {
     /* (non-Javadoc)
     * @see com.izforge.izpack.compiler.IPackager#addConfigurationInformation(com.izforge.izpack.adaptator.IXMLElement)
     */
+
     public void addConfigurationInformation(IXMLElement data) {
         // TODO Auto-generated method stub
 

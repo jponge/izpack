@@ -17,11 +17,12 @@
  */
 package com.izforge.izpack.compiler;
 
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.data.PackFile;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.data.XPackFile;
-import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.io.FileSpanningOutputStream;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileUtil;
@@ -165,7 +166,7 @@ public class MultiVolumePackager extends PackagerBase {
 
         InputStream is = MultiVolumePackager.class.getResourceAsStream("/" + getSkeletonSubpath());
         if (is == null) {
-            File skeleton = new File(Compiler.IZPACK_HOME, getSkeletonSubpath());
+            File skeleton = new File(CompilerData.IZPACK_HOME, getSkeletonSubpath());
             is = new FileInputStream(skeleton);
         }
         ZipInputStream inJarStream = new ZipInputStream(is);
@@ -179,7 +180,7 @@ public class MultiVolumePackager extends PackagerBase {
         // reopen Stream
         is = MultiVolumePackager.class.getResourceAsStream("/" + getSkeletonSubpath());
         if (is == null) {
-            File skeleton = new File(Compiler.IZPACK_HOME, getSkeletonSubpath());
+            File skeleton = new File(CompilerData.IZPACK_HOME, getSkeletonSubpath());
             is = new FileInputStream(skeleton);
         }
         inJarStream = new ZipInputStream(is);
@@ -223,7 +224,7 @@ public class MultiVolumePackager extends PackagerBase {
             }
         }
 
-        primaryJarStream.putNextEntry(new ZipEntry(RESOURCES_PATH+"META-INF/MANIFEST.MF"));
+        primaryJarStream.putNextEntry(new ZipEntry(RESOURCES_PATH + "META-INF/MANIFEST.MF"));
         primaryJarStream.write(modifiedmanifest.getBytes());
         primaryJarStream.closeEntry();
     }
@@ -317,7 +318,7 @@ public class MultiVolumePackager extends PackagerBase {
 
             sendMsg("Writing Pack " + packNumber + ": " + pack.name, PackagerListener.MSG_VERBOSE);
             Debug.trace("Writing Pack " + packNumber + ": " + pack.name);
-            ZipEntry entry = new ZipEntry(RESOURCES_PATH+"packs/pack" + packNumber);
+            ZipEntry entry = new ZipEntry(RESOURCES_PATH + "packs/pack" + packNumber);
             // write the metadata as uncompressed object stream to primaryJarStream
             // first write a packs entry
 
@@ -417,7 +418,7 @@ public class MultiVolumePackager extends PackagerBase {
         fout.flush();
         fout.close();
 
-        primaryJarStream.putNextEntry(new ZipEntry(RESOURCES_PATH+"volumes.info"));
+        primaryJarStream.putNextEntry(new ZipEntry(RESOURCES_PATH + "volumes.info"));
         ObjectOutputStream out = new ObjectOutputStream(primaryJarStream);
         out.writeInt(volumes);
         out.writeUTF(volumename);
@@ -425,7 +426,7 @@ public class MultiVolumePackager extends PackagerBase {
         primaryJarStream.closeEntry();
 
         // Now that we know sizes, write pack metadata to primary jar.
-        primaryJarStream.putNextEntry(new ZipEntry(RESOURCES_PATH+"packs.info"));
+        primaryJarStream.putNextEntry(new ZipEntry(RESOURCES_PATH + "packs.info"));
         out = new ObjectOutputStream(primaryJarStream);
         out.writeInt(packsList.size());
 
@@ -600,6 +601,7 @@ public class MultiVolumePackager extends PackagerBase {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#addConfigurationInformation(com.izforge.izpack.adaptator.IXMLElement)
      */
+
     public void addConfigurationInformation(IXMLElement data) {
         this.configdata = data;
     }
@@ -607,6 +609,7 @@ public class MultiVolumePackager extends PackagerBase {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.PackagerBase#writePacks()
      */
+
     protected void writePacks() throws Exception {
         // TODO Auto-generated method stub
 
