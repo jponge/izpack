@@ -210,7 +210,7 @@
 
     <property file="src/ant.properties"/>
     <property name="ver" value="4.3"/>
-    <property name="rel" value="2"/>
+    <property name="rel" value="3"/>
     <property name="build.number" value="${ver}.${rel}"/>
 
     <property name="src.dir" value="${basedir}/src/lib"/>
@@ -223,7 +223,7 @@
 
     <property name="build.subdir" value="_build"/>
     <property name="build.dir" value="${basedir}/${build.subdir}"/>
-
+                                          
     <property name="dist.subdir" value="_dist"/>
     <property name="dist.dir" value="${basedir}/${dist.subdir}"/>
     <property name="dist-files.dir" value="${basedir}/src/dist-files"/>
@@ -364,6 +364,14 @@
                 <include name="lib/*.jar"/>
 				<exclude name="lib/standalone-compiler.jar"/>
             </fileset>
+             <fileset dir="${src.dir}">
+                <include name="com/izforge/izpack/installer/*.xml"/>
+                <include name="com/izforge/izpack/installer/*.properties"/>
+                <include name="com/izforge/izpack/installer/run-with-privileges-on-osx"/>
+                <include name="com/izforge/izpack/installer/elevate.js"/>
+            	<include name="com/izforge/izpack/util/**/*.sh"/>
+            	<include name="com/izforge/izpack/adaptator/styleSheet.xsl"/>
+            </fileset>
         </jar>
     </target>
 
@@ -491,6 +499,7 @@
                 <include name="com/izforge/izpack/installer/run-with-privileges-on-osx"/>
                 <include name="com/izforge/izpack/installer/elevate.js"/>
             	<include name="com/izforge/izpack/adaptator/styleSheet.xsl"/>
+                <include name="com/izforge/izpack/util/**/*.sh"/>
             </fileset>
             <fileset dir="${build.dir}">
                 <include name="com/izforge/izpack/util/**/*.class"/>
