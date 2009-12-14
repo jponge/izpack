@@ -51,7 +51,6 @@
 package com.izforge.izpack.util.os;
 
 import com.izforge.izpack.installer.AutomatedInstallData;
-import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.util.Debug;
@@ -128,7 +127,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
     private static ShellScript uninstallScript = null;
 
-    private static ArrayList users = UnixUsers.getUsersWithValidShellsExistingHomesAndDesktops();
+    private List users;
 
     // private static ArrayList tempfiles = new ArrayList();
 
@@ -709,7 +708,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     private void installDesktopFileToAllUsersDesktop(File writtenDesktopFile)
     {
-        for (Object user1 : users)
+        for (Object user1 : getUsers())
         {
             UnixUser user = ((UnixUser) user1);
 
@@ -768,7 +767,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         // su marc.eppelmann -c "/bin/cp /home/marc.eppelmann/backup.job.out.txt
         // /home/marc.eppelmann/backup.job.out2.txt"
 
-        for (Object user1 : users)
+        for (Object user1 : getUsers())
         {
             UnixUser user = ((UnixUser) user1);
 
@@ -983,7 +982,6 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      * @param targetPath The Path in which the files should be written.
      * @param shortcutName The Name for the File
      * @param shortcutDef The Shortcut FileContent
-     * @param replaceSpaces Replaces Spaces in the Filename if true was given
      * @return The written File
      */
     private File writeAppShortcutWithSimpleSpacehandling(String targetPath, String shortcutName,
@@ -1427,5 +1425,12 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     {
         return ShortcutType;
         // return Shortcut.DESKTOP;
+    }
+
+    private List getUsers() {
+        if (users == null) {
+            users = UnixUsers.getUsersWithValidShellsExistingHomesAndDesktops();    
+        }
+        return users;
     }
 }
