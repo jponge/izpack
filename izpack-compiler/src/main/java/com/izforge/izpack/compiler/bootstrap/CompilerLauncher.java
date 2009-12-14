@@ -26,6 +26,7 @@ public class CompilerLauncher {
      * @param args The arguments passed on the command-line.
      */
     public static void main(String[] args) {
+
         // Outputs some informations
         System.out.println("");
         System.out.println(".::  IzPack - Version " + CompilerData.IZPACK_VERSION + " ::.");
@@ -55,151 +56,22 @@ public class CompilerLauncher {
 
         // We analyse the command line parameters
         try {
-            // Our arguments
-            String filename;
-            String base = ".";
-            String kind = "standard";
-            String output;
-            String compr_format = "default";
-            int compr_level = -1;
+            // Calls the compiler
+            CmdlinePackagerListener listener = new CmdlinePackagerListener();
+//            CompilerConfig compiler = new CompilerConfig(filename, base, kind, output,compr_format, compr_level, listener, null);
+            CompilerConfig compiler = null;
+            compiler.executeCompiler();
 
-            // First check
-            int nArgs = args.length;
-            if (nArgs < 1) {
-                throw new Exception("no arguments given");
+            // Waits
+            while (compiler.isAlive()) {
+                Thread.sleep(100);
             }
 
-            // The users wants to know the command line parameters
-            if ("-?".equalsIgnoreCase(args[0])) {
-                System.out.println("-> Command line parameters are : (xml file) [args]");
-                System.out.println("   (xml file): the xml file describing the installation");
-                System.out
-                        .println("   -h (IzPack home) : the root path of IzPack. This will be needed");
-                System.out
-                        .println("               if the compiler is not called in the root directory  of IzPack.");
-                System.out
-                        .println("               Do not forget quotations if there are blanks in the path.");
-                System.out
-                        .println("   -b (base) : indicates the base path that the compiler will use for filenames");
-                System.out
-                        .println("               of sources. Default is the current path. Attend to -h.");
-                System.out.println("   -k (kind) : indicates the kind of installer to generate");
-                System.out.println("               default is standard");
-                System.out.println("   -o (out)  : indicates the output file name");
-                System.out.println("               default is the xml file name\n");
-                System.out
-                        .println("   -c (compression)  : indicates the compression format to be used for packs");
-                System.out.println("               default is the internal deflate compression\n");
-                System.out
-                        .println("   -l (compression-level)  : indicates the level for the used compression format");
-                System.out.println("                if supported. Only integer are valid\n");
-
-                System.out
-                        .println("   When using vm option -DSTACKTRACE=true there is all kind of debug info ");
-                System.out.println("");
+            if (compiler.wasSuccessful()) {
                 exitCode = 0;
-            } else {
-                // We can parse the other parameters & try to compile the
-                // installation
-
-                // We get the input file name and we initialize the output file
-                // name
-                filename = args[0];
-                // default jar files names are based on input file name
-                output = filename.substring(0, filename.length() - 3) + "jar";
-
-                // We parse the other ones
-                int pos = 1;
-                while (pos < nArgs) {
-                    if ((args[pos].startsWith("-")) && (args[pos].length() == 2)) {
-                        switch (args[pos].toLowerCase().charAt(1)) {
-                            case 'b':
-                                if ((pos + 1) < nArgs) {
-                                    pos++;
-                                    base = args[pos];
-                                } else {
-                                    throw new Exception("base argument missing");
-                                }
-                                break;
-                            case 'k':
-                                if ((pos + 1) < nArgs) {
-                                    pos++;
-                                    kind = args[pos];
-                                } else {
-                                    throw new Exception("kind argument missing");
-                                }
-                                break;
-                            case 'o':
-                                if ((pos + 1) < nArgs) {
-                                    pos++;
-                                    output = args[pos];
-                                } else {
-                                    throw new Exception("output argument missing");
-                                }
-                                break;
-                            case 'c':
-                                if ((pos + 1) < nArgs) {
-                                    pos++;
-                                    compr_format = args[pos];
-                                } else {
-                                    throw new Exception("compression format argument missing");
-                                }
-                                break;
-                            case 'l':
-                                if ((pos + 1) < nArgs) {
-                                    pos++;
-                                    compr_level = Integer.parseInt(args[pos]);
-                                } else {
-                                    throw new Exception("compression level argument missing");
-                                }
-                                break;
-                            case 'h':
-                                if ((pos + 1) < nArgs) {
-                                    pos++;
-                                    home = args[pos];
-                                } else {
-                                    throw new Exception("IzPack home path argument missing");
-                                }
-                                break;
-                            default:
-                                throw new Exception("unknown argument");
-                        }
-                        pos++;
-                    } else {
-                        throw new Exception("bad argument");
-                    }
-                }
-
-                home = resolveIzPackHome(home);
-                // Outputs what we are going to do
-                System.out.println("-> Processing  : " + filename);
-                System.out.println("-> Output      : " + output);
-                System.out.println("-> Base path   : " + base);
-                System.out.println("-> Kind        : " + kind);
-                System.out.println("-> Compression : " + compr_format);
-                System.out.println("-> Compr. level: " + compr_level);
-                System.out.println("-> IzPack home : " + home);
-                System.out.println("");
-
-                CompilerData.setIzpackHome(home);
-
-                // Calls the compiler
-                CmdlinePackagerListener listener = new CmdlinePackagerListener();
-                CompilerConfig compiler = new CompilerConfig(filename, base, kind, output,
-                        compr_format, compr_level, listener, null);
-                compiler.executeCompiler();
-
-                // Waits
-                while (compiler.isAlive()) {
-                    Thread.sleep(100);
-                }
-
-                if (compiler.wasSuccessful()) {
-                    exitCode = 0;
-                }
-
-                System.out.println("Build time: " + new Date());
             }
+
+            System.out.println("Build time: " + new Date());
         }
         catch (Exception err) {
             // Something bad has happened
