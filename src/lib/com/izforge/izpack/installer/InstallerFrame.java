@@ -135,7 +135,7 @@ public class InstallerFrame extends JFrame {
      * Registered GUICreationListener.
      */
     protected ArrayList<GUIListener> guiListener;
-       
+
     /**
      * Heading major text.
      */
@@ -211,13 +211,13 @@ public class InstallerFrame extends JFrame {
         // Builds the GUI
         loadIcons();
         loadCustomIcons();
-        loadPanels();               
+        loadPanels();
         buildGUI();
 
         // We show the frame
         showFrame();
         switchPanel(0);
-    }   
+    }
 
     public Debugger getDebugger() {
         return this.debugger;
@@ -283,7 +283,7 @@ public class InstallerFrame extends JFrame {
             }
 
             panel.setHelps(p.getHelpsMap());
-            
+
             List<String> preActivateActions = p.getPreActivationActions();
             if (preActivateActions != null)
             {
@@ -510,9 +510,9 @@ public class InstallerFrame extends JFrame {
         debugger = new Debugger(installdata, icons, rules);
         // this needed to fully initialize the debugger.
         JPanel debugpanel = debugger.getDebugPanel();
-        
+
         // create a debug panel if TRACE is enabled
-        if (Debug.isTRACE()) {                       
+        if (Debug.isTRACE()) {
             if (installdata.guiPrefs.modifier.containsKey("showDebugWindow")
                     && Boolean.valueOf(installdata.guiPrefs.modifier.get("showDebugWindow"))) {
                 JFrame debugframe = new JFrame("Debug information");
@@ -731,7 +731,7 @@ public class InstallerFrame extends JFrame {
             IzPanel panel = installdata.panels.get(installdata.curPanelNumber);
             IzPanel l_panel = installdata.panels.get(last);
             showHelpButton(panel.canShowHelp());
-            if (Debug.isTRACE()) {                
+            if (Debug.isTRACE()) {
                 debugger.switchPanel(panel.getMetadata(), l_panel.getMetadata());
             }
             Log.getInstance().addDebugMessage(
@@ -1433,7 +1433,7 @@ public class InstallerFrame extends JFrame {
             panel.executePreValidationActions();
             boolean isValid = doValidation ? panel.panelValidated() : true;
             panel.executePostValidationActions();
-            
+
             // check if we can display the next panel or if there was an error during actions that
             // disables the next button
             if (!nextButton.isEnabled()) { return; }
@@ -1548,12 +1548,33 @@ public class InstallerFrame extends JFrame {
      */
     class NavigationHandler implements ActionListener {
 
-        /**
-         * Actions handler.
-         *
-         * @param e The event.
-         */
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(final ActionEvent e) {
+            /*
+                Some panels activation may be slow, hence we
+                block the GUI, spin a thread to handle navigation then
+                release the GUI.
+             */
+            new Thread(new Runnable() {
+                public void run() {
+
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            blockGUI();
+                        }
+                    });
+
+                    navigate(e);
+
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            releaseGUI();
+                        }
+                    });
+                }
+            }).start();
+        }
+
+        private void navigate(ActionEvent e) {
             Object source = e.getSource();
             if (source == prevButton) {
                 navigatePrevious();
@@ -1562,7 +1583,6 @@ public class InstallerFrame extends JFrame {
             } else if (source == quitButton) {
                 exit();
             }
-
         }
     }
 
