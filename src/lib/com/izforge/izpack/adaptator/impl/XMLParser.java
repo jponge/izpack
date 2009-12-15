@@ -27,11 +27,17 @@ import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.XMLException;
 import org.w3c.dom.Node;
-import org.xml.sax.*;
+import org.xml.sax.InputSource;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.*;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
@@ -48,7 +54,10 @@ import java.nio.charset.Charset;
 public class XMLParser implements IXMLParser
 {
 
-    
+    // the path of the xsl style sheet, relatively to the IXMLParser class
+    private static final String XSL_FILE_NAME = "styleSheet.xsl";
+
+
     public class ByteBufferInputStream extends InputStream
     {
         private final ByteBuffer buf;
@@ -125,7 +134,11 @@ public class XMLParser implements IXMLParser
             result = new DOMResult();
             SAXSource source = new SAXSource(inputSource);
             source.setXMLReader(filter);
-            Source xsltSource = new StreamSource(IXMLParser.class.getResource("styleSheet.xsl").openStream());
+            URL xslResourceUrl = IXMLParser.class.getResource(XSL_FILE_NAME);
+            if(xslResourceUrl == null) {
+                throw new XMLException("Can't find IzPack internal file \"" + XSL_FILE_NAME + "\"");
+            }
+            Source xsltSource = new StreamSource(xslResourceUrl.openStream());
             Transformer xformer = TransformerFactory.newInstance().newTransformer(xsltSource);
             xformer.transform(source, result);
             filter.applyLN(result);
