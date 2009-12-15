@@ -362,12 +362,8 @@
 				<exclude name="lib/standalone-compiler.jar"/>
             </fileset>
              <fileset dir="${src.dir}">
-                <include name="com/izforge/izpack/installer/*.xml"/>
-                <include name="com/izforge/izpack/installer/*.properties"/>
-                <include name="com/izforge/izpack/installer/run-with-privileges-on-osx"/>
-                <include name="com/izforge/izpack/installer/elevate.js"/>
-            	<include name="com/izforge/izpack/util/**/*.sh"/>
-            	<include name="com/izforge/izpack/adaptator/styleSheet.xsl"/>
+                <include name="**/*"/>
+                <exclude name="**/*.java"/> 
             </fileset>
         </jar>
     </target>
