@@ -31,8 +31,8 @@ public class CompilerData {
      */
     private String output;
 
-    private int compr_level;
-    private String compr_format = "default";
+    private int comprLevel = -1;
+    private String comprFormat = "default";
     /**
      * The IzPack version.
      */
@@ -52,7 +52,6 @@ public class CompilerData {
         IZPACK_HOME = izHome;
     }
 
-
     /**
      * Access the installation kind.
      *
@@ -60,6 +59,10 @@ public class CompilerData {
      */
     public String getKind() {
         return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
     public String getFilename() {
@@ -94,19 +97,21 @@ public class CompilerData {
         this.output = output;
     }
 
-    public String getCompr_format() {
-        return compr_format;
+    public String getComprFormat() {
+        return comprFormat;
     }
 
-    public void setCompr_format(String compr_format) {
-        this.compr_format = compr_format;
+    public void setComprFormat(String comprFormat) {
+        this.comprFormat = comprFormat;
     }
 
-    public int getCompr_level() {
-        return compr_level;
+    public int getComprLevel() {
+        return comprLevel;
     }
 
-    public void setCompr_level(int compr_level) {
-        this.compr_level = compr_level;
+    public void setComprLevel(int comprLevel) {
+        this.comprLevel = comprLevel;
     }
+
+
 }
