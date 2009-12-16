@@ -19,6 +19,7 @@ public class CliAnalyzer {
     private static final String ARG_COMPRESSION_FORMAT = "c";
     private static final String ARG_COMPRESSION_LEVEL = "l";
 
+
     /**
      * Get options for the command line parser
      *
@@ -156,6 +157,7 @@ public class CliAnalyzer {
      */
     private void validateCommandLine(CommandLine commandLine) {
         if (commandLine.getArgList().size() == 0) {
+            printHelp();
             throw new RuntimeException("no arguments given");
         }
     }

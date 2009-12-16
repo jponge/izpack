@@ -6,9 +6,30 @@ package com.izforge.izpack.compiler.data;
 public class CompilerData {
 
     /**
+     * The IzPack home directory.
+     */
+    public static String IZPACK_HOME = ".";
+    /**
+     * The compiler version.
+     */
+    public final static String VERSION = "1.0";
+
+    /**
+     * Standard installer.
+     */
+    public final static String STANDARD = "standard";
+    /**
+     * Web installer.
+     */
+    public final static String WEB = "web";
+
+
+    private String comprFormat = "default";
+
+    /**
      * The installer kind.
      */
-    private String kind = "standard";
+    private String kind = STANDARD;
 
     /**
      * The xml install file
@@ -20,40 +41,22 @@ public class CompilerData {
      */
     private String installText;
 
+
     /**
      * The base directory.
      */
     protected String basedir;
 
-
     /**
      * The output jar filename.
      */
     private String output;
-
     private int comprLevel = -1;
-    private String comprFormat = "default";
+
     /**
      * The IzPack version.
      */
     public final static String IZPACK_VERSION = "4.3.2";
-
-    /**
-     * The IzPack home directory.
-     */
-    public static String IZPACK_HOME = ".";
-    /**
-     * The compiler version.
-     */
-    public final static String VERSION = "1.0";
-    /**
-     * Standard installer.
-     */
-    public final static String STANDARD = "standard";
-    /**
-     * Web installer.
-     */
-    public final static String WEB = "web";
 
     /**
      * Set the IzPack home directory
