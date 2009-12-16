@@ -382,7 +382,7 @@ public class IzPackTask extends Task implements PackagerListener {
     public static class InstallerType extends EnumeratedAttribute {
 
         public String[] getValues() {
-            return new String[]{CompilerConfig.STANDARD, CompilerConfig.WEB};
+            return new String[]{CompilerData.STANDARD, CompilerData.WEB};
         }
     }
 }

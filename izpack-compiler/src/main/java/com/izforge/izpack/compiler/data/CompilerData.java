@@ -42,6 +42,18 @@ public class CompilerData {
      * The IzPack home directory.
      */
     public static String IZPACK_HOME = ".";
+    /**
+     * The compiler version.
+     */
+    public final static String VERSION = "1.0";
+    /**
+     * Standard installer.
+     */
+    public final static String STANDARD = "standard";
+    /**
+     * Web installer.
+     */
+    public final static String WEB = "web";
 
     /**
      * Set the IzPack home directory

@@ -66,21 +66,6 @@ import java.util.zip.ZipInputStream;
 public class CompilerConfig extends Thread {
 
     /**
-     * The compiler version.
-     */
-    public final static String VERSION = "1.0";
-
-    /**
-     * Standard installer.
-     */
-    public final static String STANDARD = "standard";
-
-    /**
-     * Web installer.
-     */
-    public final static String WEB = "web";
-
-    /**
      * Constant for checking attributes.
      */
     private static boolean YES = true;
@@ -960,7 +945,7 @@ public class CompilerConfig extends Thread {
         if (!"installation".equalsIgnoreCase(refXMLData.getName())) {
             parseError(refXMLData, "this is not an IzPack XML installation file");
         }
-        if (!VERSION.equalsIgnoreCase(requireAttribute(refXMLData, "version"))) {
+        if (!CompilerData.VERSION.equalsIgnoreCase(requireAttribute(refXMLData, "version"))) {
             parseError(refXMLData, "the file version is different from the compiler version");
         }
 
@@ -1412,9 +1397,9 @@ public class CompilerConfig extends Thread {
         }
         String kind = compiler.getKind();
         if (kind != null) {
-            if (kind.equalsIgnoreCase(WEB) && webDirURL == null) {
+            if (kind.equalsIgnoreCase(CompilerData.WEB) && webDirURL == null) {
                 parseError(root, "<webdir> required when \"WEB\" installer requested");
-            } else if (kind.equalsIgnoreCase(STANDARD) && webDirURL != null) {
+            } else if (kind.equalsIgnoreCase(CompilerData.STANDARD) && webDirURL != null) {
                 // Need a Warning? parseWarn(webDirURL, "Not creating web
                 // installer.");
                 info.setWebDirURL(null);
@@ -1746,7 +1731,7 @@ public class CompilerConfig extends Thread {
         if (!"installation".equalsIgnoreCase(data.getName())) {
             parseError(data, "this is not an IzPack XML installation file");
         }
-        if (!VERSION.equalsIgnoreCase(requireAttribute(data, "version"))) {
+        if (!CompilerData.VERSION.equalsIgnoreCase(requireAttribute(data, "version"))) {
             parseError(data, "the file version is different from the compiler version");
         }
 

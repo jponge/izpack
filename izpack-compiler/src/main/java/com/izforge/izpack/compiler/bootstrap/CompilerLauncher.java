@@ -3,7 +3,6 @@ package com.izforge.izpack.compiler.bootstrap;
 import com.izforge.izpack.compiler.Compiler;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.PackagerListener;
-import com.izforge.izpack.compiler.data.CompilerData;
 
 import java.io.File;
 import java.net.URI;
@@ -27,17 +26,6 @@ public class CompilerLauncher {
      */
     public static void main(String[] args) {
 
-        // Outputs some informations
-        System.out.println("");
-        System.out.println(".::  IzPack - Version " + CompilerData.IZPACK_VERSION + " ::.");
-        System.out.println("");
-        System.out.println("< compiler specifications version: " + CompilerConfig.VERSION + " >");
-        System.out.println("");
-        System.out.println("- Copyright (c) 2001-2008 Julien Ponge");
-        System.out.println("- Visit http://izpack.org/ for the latest releases");
-        System.out
-                .println("- Released under the terms of the Apache Software License version 2.0.");
-        System.out.println("");
 
         // exit code 1 means: error
         int exitCode = 1;

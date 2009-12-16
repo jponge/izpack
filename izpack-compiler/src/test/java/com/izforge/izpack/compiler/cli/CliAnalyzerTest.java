@@ -9,6 +9,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Test cli analyzer
+ *
+ * @author Anthonin Bonnefoy
  */
 public class CliAnalyzerTest {
     private CliAnalyzer analyzer;

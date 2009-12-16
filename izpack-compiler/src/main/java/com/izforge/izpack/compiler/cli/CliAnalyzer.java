@@ -8,6 +8,8 @@ import java.util.List;
 
 /**
  * Parse and analyze cli
+ *
+ * @author Anthonin Bonnefoy
  */
 public class CliAnalyzer {
     private static final String ARG_IZPACK_HOME = "h";
@@ -46,10 +48,24 @@ public class CliAnalyzer {
      * @return Compile data with informations
      */
     public CompilerData printAndParseArgs(String[] args) {
-        printHelp();
+        printHeader();
         CompilerData result = parseArgs(args);
         printTail(result);
         return result;
+    }
+
+    private void printHeader() {
+        // Outputs some informations
+        System.out.println("");
+        System.out.println(".::  IzPack - Version " + CompilerData.IZPACK_VERSION + " ::.");
+        System.out.println("");
+        System.out.println("< compiler specifications version: " + CompilerData.VERSION + " >");
+        System.out.println("");
+        System.out.println("- Copyright (c) 2001-2008 Julien Ponge");
+        System.out.println("- Visit http://izpack.org/ for the latest releases");
+        System.out
+                .println("- Released under the terms of the Apache Software License version 2.0.");
+        System.out.println("");
     }
 
     /**
