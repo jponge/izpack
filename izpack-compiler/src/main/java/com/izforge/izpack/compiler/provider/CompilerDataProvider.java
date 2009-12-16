@@ -17,7 +17,9 @@ public class CompilerDataProvider implements Provider {
     }
 
     public CompilerData provide(CliAnalyzer cliAnalyzer) {
-        return cliAnalyzer.printAndParseArgs(args);
+        CompilerData compilerData = cliAnalyzer.printAndParseArgs(args);
+        compilerData.resolveIzpackHome();
+        return compilerData;
     }
 
 }

@@ -161,4 +161,5 @@ public class CliAnalyzer {
             throw new RuntimeException("no arguments given");
         }
     }
+
 }

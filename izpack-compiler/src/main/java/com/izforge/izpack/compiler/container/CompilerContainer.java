@@ -14,13 +14,20 @@ import org.picocontainer.injectors.ProviderAdapter;
  */
 public class CompilerContainer extends AbstractContainer {
 
+    /**
+     * Init component bindings
+     */
     public void initBindings() {
         pico = new PicoBuilder().withConstructorInjection().withCaching().build();
         pico.addComponent(CliAnalyzer.class);
         pico.addComponent(CmdlinePackagerListener.class);
     }
 
-
+    /**
+     * Add CompilerDataComponent by processing command line args
+     *
+     * @param args command line args passed to the main
+     */
     public void processCompileDataFromArgs(String[] args) {
         pico.addAdapter(new ProviderAdapter(new CompilerDataProvider(args)));
     }
