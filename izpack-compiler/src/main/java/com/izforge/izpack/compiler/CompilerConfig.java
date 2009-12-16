@@ -122,6 +122,16 @@ public class CompilerConfig extends Thread {
     private String unpackerClassname = "com.izforge.izpack.installer.unpacker.Unpacker";
     private String packagerClassname = "com.izforge.izpack.compiler.Packager";
 
+
+    /**
+     * Constructor
+     *
+     * @param compilerData Object containing all informations found in command line
+     */
+    public CompilerConfig(CompilerData compilerData) {
+        this.compilerData = compilerData;
+    }
+
     /**
      * The constructor.
      *
@@ -131,10 +141,10 @@ public class CompilerConfig extends Thread {
      * @param output   The installer filename.
      * @throws CompilerException
      */
-    public CompilerConfig(String filename, String basedir, String kind, String output)
-            throws CompilerException {
-        this(filename, basedir, kind, output, "default", -1, null, null);
-    }
+//    public CompilerConfig(String filename, String basedir, String kind, String output)
+//            throws CompilerException {
+//        this(filename, basedir, kind, output, "default", -1, null, null);
+//    }
 
     /**
      * @param filename     The XML filename.
@@ -147,15 +157,15 @@ public class CompilerConfig extends Thread {
      * @param installText  The install xml configuration text
      * @throws CompilerException
      */
-    public CompilerConfig(String filename, String basedir, String kind, String output,
-                          String compr_format, int compr_level, PackagerListener listener, String installText)
-            throws CompilerException {
-        this.filename = filename;
-        this.installText = installText;
-        this.basedir = basedir;
-        this.compiler = new Compiler(basedir, kind, output, compr_format, compr_level);
-        compiler.setPackagerListener(listener);
-    }
+//    public CompilerConfig(String filename, String basedir, String kind, String output,
+//                          String compr_format, int compr_level, PackagerListener listener, String installText)
+//            throws CompilerException {
+//        this.filename = filename;
+//        this.installText = installText;
+//        this.basedir = basedir;
+//        this.compiler = new Compiler(basedir, kind, output, compr_format, compr_level);
+//        compiler.setPackagerListener(listener);
+//    }
 
     /**
      * Add a name value pair to the project property set. It is <i>not</i> replaced it is already

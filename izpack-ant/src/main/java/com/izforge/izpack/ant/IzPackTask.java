@@ -23,7 +23,6 @@
 package com.izforge.izpack.ant;
 
 import com.izforge.izpack.compiler.CompilerConfig;
-import com.izforge.izpack.compiler.CompilerException;
 import com.izforge.izpack.compiler.PackagerListener;
 import com.izforge.izpack.compiler.data.CompilerData;
 import org.apache.tools.ant.BuildException;
@@ -213,14 +212,10 @@ public class IzPackTask extends Task implements PackagerListener {
             configText = config.getText();
             input = null;
         }
-        try {
-            // else use external configuration referenced by the input attribute
-            c = new CompilerConfig(input, basedir, kind, output,
-                    compression, compressionLevel, this, configText);
-        }
-        catch (CompilerException e1) {
-            throw new BuildException(e1);
-        }
+        // else use external configuration referenced by the input attribute
+        CompilerData compilerData = new CompilerData(compression, kind, null, configText, basedir, output, compressionLevel);
+        // REFACTOR Create compiler here
+        c = new CompilerConfig(compilerData);
         CompilerData.setIzpackHome(izPackDir);
 
         if (properties != null) {

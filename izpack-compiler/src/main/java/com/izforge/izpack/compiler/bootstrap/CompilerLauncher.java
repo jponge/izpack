@@ -23,23 +23,9 @@ public class CompilerLauncher {
         compilerContainer.initBindings();
         compilerContainer.processCompileDataFromArgs(args);
 
-
         // exit code 1 means: error
         int exitCode = 1;
-        String home = ".";
 
-        // We get the IzPack home directory
-        String izHome = System.getProperty("izpack.home");
-        if (izHome != null) {
-            home = izHome;
-        } else {
-            izHome = System.getenv("IZPACK_HOME");
-            if (izHome != null) {
-                home = izHome;
-            }
-        }
-
-        // We analyse the command line parameters
         try {
 //            CompilerConfig compiler = new CompilerConfig(filename, base, kind, output,compr_format, compr_level, listener, null);
             CompilerConfig compiler = compilerContainer.getComponent(CompilerConfig.class);

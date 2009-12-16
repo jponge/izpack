@@ -65,6 +65,30 @@ public class CompilerData {
     private final static String IZ_TEST_SUBDIR = "bin" + File.separator + "native" + File.separator
             + "izpack";
 
+    public CompilerData() {
+        // We get the IzPack home directory
+        String izHome = System.getProperty("izpack.home");
+        if (izHome != null) {
+            IZPACK_HOME = izHome;
+        } else {
+            izHome = System.getenv("IZPACK_HOME");
+            if (izHome != null) {
+                IZPACK_HOME = izHome;
+            }
+        }
+    }
+
+    public CompilerData(String comprFormat, String kind, String filename, String installText, String basedir, String output, int comprLevel) {
+        super();
+        this.comprFormat = comprFormat;
+        this.kind = kind;
+        this.filename = filename;
+        this.installText = installText;
+        this.basedir = basedir;
+        this.output = output;
+        this.comprLevel = comprLevel;
+    }
+
     /**
      * Set the IzPack home directory
      *

@@ -238,7 +238,13 @@ public class IzPackMojo
             String config = this.interpolateDescriptorFile().getAbsolutePath();
             String basedir = izpackBasedir.getAbsolutePath();
 
-            CompilerConfig c = new CompilerConfig(config, basedir, kind, installerFile.getAbsolutePath());
+            CompilerData compilerData = new CompilerData();
+            compilerData.setFilename(config);
+            compilerData.setBasedir(basedir);
+            compilerData.setKind(kind);
+            compilerData.setOutput(installerFile.getAbsolutePath());
+            // REFACTOR Check if it still works
+            CompilerConfig c = new CompilerConfig(compilerData);
             CompilerData.setIzpackHome(basedir);
 
             c.executeCompiler();
