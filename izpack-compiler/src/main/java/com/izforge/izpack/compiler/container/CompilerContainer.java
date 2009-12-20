@@ -1,5 +1,6 @@
 package com.izforge.izpack.compiler.container;
 
+import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.cli.CliAnalyzer;
 import com.izforge.izpack.compiler.listener.CmdlinePackagerListener;
 import com.izforge.izpack.compiler.provider.CompilerDataProvider;
@@ -21,6 +22,8 @@ public class CompilerContainer extends AbstractContainer {
         pico = new PicoBuilder().withConstructorInjection().withCaching().build();
         pico.addComponent(CliAnalyzer.class);
         pico.addComponent(CmdlinePackagerListener.class);
+        pico.addComponent(Compiler.class);
+        pico.addComponent(CompilerConfig.class);
     }
 
     /**

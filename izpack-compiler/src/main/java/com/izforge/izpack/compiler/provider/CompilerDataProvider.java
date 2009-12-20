@@ -18,7 +18,8 @@ public class CompilerDataProvider implements Provider {
 
     public CompilerData provide(CliAnalyzer cliAnalyzer) {
         CompilerData compilerData = cliAnalyzer.printAndParseArgs(args);
-        compilerData.resolveIzpackHome();
+        // REFACTOR : find a way to test with a fake home 
+        // compilerData.resolveIzpackHome();
         return compilerData;
     }
 
