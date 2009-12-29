@@ -32,10 +32,8 @@ import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
-import com.izforge.izpack.util.VariableSubstitutorImpl;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -100,19 +98,11 @@ public class Compiler extends Thread {
      * @throws CompilerException
      */
     public Compiler(String basedir, String kind, String output,
-                    String compr_format, int compr_level) throws CompilerException {
+                    String compr_format, int compr_level, VariableSubstitutor variableSubstitutor) throws CompilerException {
         // Default initialisation
         this.kind = kind;
         this.output = output;
-
-        // initialize backed by system properties
-        properties = new Properties(System.getProperties());
-        try {
-            properties.load(getClass().getResourceAsStream("path.properties"));
-        } catch (IOException e) {
-            throw new CompilerException("Can't load path.properties");
-        }
-        propertySubstitutor = new VariableSubstitutorImpl(properties);
+        this.propertySubstitutor = variableSubstitutor;
 
         // add izpack built in property
         setProperty("izpack.version", CompilerData.IZPACK_VERSION);
