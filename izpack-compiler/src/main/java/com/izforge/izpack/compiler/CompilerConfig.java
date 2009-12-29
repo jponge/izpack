@@ -133,41 +133,6 @@ public class CompilerConfig extends Thread {
     }
 
     /**
-     * The constructor.
-     *
-     * @param filename The XML filename.
-     * @param basedir  The base directory.
-     * @param kind     The installer kind.
-     * @param output   The installer filename.
-     * @throws CompilerException
-     */
-//    public CompilerConfig(String filename, String basedir, String kind, String output)
-//            throws CompilerException {
-//        this(filename, basedir, kind, output, "default", -1, null, null);
-//    }
-
-    /**
-     * @param filename     The XML filename.
-     * @param basedir      The base directory.
-     * @param kind         The installer kind.
-     * @param output       The installer filename.
-     * @param compr_format The compression format to be used for packs.
-     * @param compr_level  Compression level to be used if supported.
-     * @param listener     The PackagerListener.
-     * @param installText  The install xml configuration text
-     * @throws CompilerException
-     */
-//    public CompilerConfig(String filename, String basedir, String kind, String output,
-//                          String compr_format, int compr_level, PackagerListener listener, String installText)
-//            throws CompilerException {
-//        this.filename = filename;
-//        this.installText = installText;
-//        this.basedir = basedir;
-//        this.compiler = new Compiler(basedir, kind, output, compr_format, compr_level);
-//        compiler.setPackagerListener(listener);
-//    }
-
-    /**
      * Add a name value pair to the project property set. It is <i>not</i> replaced it is already
      * in the set of properties.
      *

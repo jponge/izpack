@@ -1,5 +1,6 @@
 package com.izforge.izpack.compiler.container;
 
+import com.izforge.izpack.compiler.Compiler;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.cli.CliAnalyzer;
 import com.izforge.izpack.compiler.listener.CmdlinePackagerListener;
