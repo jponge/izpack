@@ -33,8 +33,8 @@ import com.izforge.izpack.installer.debugger.Debugger;
 import com.izforge.izpack.installer.web.WebAccessor;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.VariableSubstitutor;
-import com.izforge.izpack.util.VariableSubstitutorImpl;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;

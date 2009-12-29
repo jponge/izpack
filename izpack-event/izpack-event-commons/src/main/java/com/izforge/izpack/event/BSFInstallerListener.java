@@ -32,7 +32,7 @@ import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
-import com.izforge.izpack.util.VariableSubstitutorImpl;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

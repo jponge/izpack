@@ -36,7 +36,13 @@ import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.rules.VariableExistenceCondition;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.HyperlinkHandler;
+import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.substitutor.SubstitutionType;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -3352,7 +3358,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             // generated vector
             this.pathComboBox.removeAllItems();
             for (String item : items) {
-                String res = vs.substitute(item, "plain");
+                String res = vs.substitute(item, SubstitutionType.TYPE_PLAIN);
                 // System.out.println ("substitution " + item + ", result " + res);
                 this.pathComboBox.addItem(res);
             }

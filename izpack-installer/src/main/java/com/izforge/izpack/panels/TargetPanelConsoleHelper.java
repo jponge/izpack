@@ -23,8 +23,8 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.PanelConsoleHelper;
-import com.izforge.izpack.util.VariableSubstitutor;
-import com.izforge.izpack.util.VariableSubstitutorImpl;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.BufferedReader;
 import java.io.IOException;

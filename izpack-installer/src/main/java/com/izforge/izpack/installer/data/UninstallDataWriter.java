@@ -7,7 +7,7 @@ import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.VariableSubstitutorImpl;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.*;
 import java.util.*;
@@ -21,10 +21,11 @@ public class UninstallDataWriter {
 
     /**
      * Write uninstall data.
+     *
      * @param installdata The install data to use.
      * @return true if the infos were successfuly written, false otherwise.
      */
-     public boolean write(AutomatedInstallData installdata) {
+    public boolean write(AutomatedInstallData installdata) {
 
 
         BufferedWriter extLogWriter = getExternLogFile(installdata);
@@ -69,6 +70,7 @@ public class UninstallDataWriter {
     }
 
     // Show whether a separated logfile should be also written or not.
+
     private BufferedWriter getExternLogFile(AutomatedInstallData installdata) {
         String logfile = installdata.getVariable(LOGFILE_PATH);
         BufferedWriter extLogWriter = null;
@@ -99,6 +101,7 @@ public class UninstallDataWriter {
     }
 
     // We write the files log
+
     private void writeFilesLog(AutomatedInstallData installdata, BufferedWriter extLogWriter, List<String> files, ZipOutputStream outJar) throws IOException {
         outJar.putNextEntry(new ZipEntry("install.log"));
         BufferedWriter logWriter = new BufferedWriter(new OutputStreamWriter(outJar));
@@ -119,8 +122,7 @@ public class UninstallDataWriter {
             logWriter.flush();
             extLogWriter.flush();
             extLogWriter.close();
-        }
-        else {
+        } else {
             while (iter.hasNext()) {
                 String txt = iter.next();
                 logWriter.write(txt);
@@ -135,6 +137,7 @@ public class UninstallDataWriter {
 
 
     // Write out executables to execute on uninstall
+
     private void writeExecutables(UninstallData udata, ZipOutputStream outJar) throws IOException {
         outJar.putNextEntry(new ZipEntry("executables"));
         ObjectOutputStream execStream = new ObjectOutputStream(outJar);
@@ -147,6 +150,7 @@ public class UninstallDataWriter {
     }
 
     // We write the uninstaller jar file log
+
     private void writeUninstallerJarFileLog(UninstallData udata, ZipOutputStream outJar) throws IOException {
         BufferedWriter logWriter;
         outJar.putNextEntry(new ZipEntry("jarlocation.log"));
@@ -160,6 +164,7 @@ public class UninstallDataWriter {
 
     // write the script files, which will
     // perform several complement and unindependend uninstall actions
+
     private void writeScriptFiles(UninstallData udata, ZipOutputStream outJar) throws IOException {
 
         ArrayList<String> unInstallScripts = udata.getUninstallScripts();
@@ -179,6 +184,7 @@ public class UninstallDataWriter {
     // Do not "kill" the installation if there is a problem
     // with custom uninstall data. Therefore log it to Debug,
     // but do not throw.
+
     private void writeAdditionalUninstallData(UninstallData udata, ZipOutputStream outJar) throws IOException {
         Map<String, Object> additionalData = udata.getAdditionalData();
         if (additionalData != null && !additionalData.isEmpty()) {
@@ -203,8 +209,7 @@ public class UninstallDataWriter {
                         }
                         outJar.closeEntry();
                     }
-                }
-                else if ("uninstallerListeners".equals(key) || "uninstallerJars".equals(key)) {
+                } else if ("uninstallerListeners".equals(key) || "uninstallerJars".equals(key)) {
                     // It is a ArrayList of ArrayLists which contains the full
                     // package paths of all needed class files.
                     // First we create a new ArrayList which contains only
@@ -246,8 +251,7 @@ public class UninstallDataWriter {
                                     outJar.write(buffer, 0, bytesInBuffer);
                                     bytesCopied += bytesInBuffer;
                                 }
-                            }
-                            else {
+                            } else {
                                 Debug.trace("custom data not found: " + content);
                             }
                             outJar.closeEntry();
@@ -262,13 +266,11 @@ public class UninstallDataWriter {
                     objOut.flush();
                     outJar.closeEntry();
 
-                }
-                else {
+                } else {
                     outJar.putNextEntry(new ZipEntry(key));
                     if (contents instanceof ByteArrayOutputStream) {
                         ((ByteArrayOutputStream) contents).writeTo(outJar);
-                    }
-                    else {
+                    } else {
                         ObjectOutputStream objOut = new ObjectOutputStream(outJar);
                         objOut.writeObject(contents);
                         objOut.flush();

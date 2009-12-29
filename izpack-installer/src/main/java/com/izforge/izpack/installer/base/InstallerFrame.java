@@ -43,6 +43,8 @@ import com.izforge.izpack.installer.unpacker.Unpacker;
 import com.izforge.izpack.panels.PanelManager;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

@@ -22,7 +22,7 @@ package com.izforge.izpack.data;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import java.io.Serializable;
 import java.util.*;

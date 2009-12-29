@@ -5,7 +5,11 @@ import com.izforge.izpack.data.*;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.PrivilegedRunner;
 import com.izforge.izpack.rules.RulesEngineImpl;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.picocontainer.injectors.Provider;
 
 import javax.swing.*;

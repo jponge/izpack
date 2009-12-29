@@ -21,6 +21,9 @@
 
 package com.izforge.izpack.util;
 
+import com.izforge.izpack.util.substitutor.SubstitutionType;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+
 import java.io.*;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -136,7 +139,7 @@ public class IoHelper {
      * @throws IOException if an I/O error occurs
      */
     public static void copyFile(File inFile, File outFile, String permissions,
-                                VariableSubstitutor vs, String type) throws IOException {
+                                VariableSubstitutor vs, SubstitutionType type) throws IOException {
         FileOutputStream out = new FileOutputStream(outFile);
         FileInputStream in = new FileInputStream(inFile);
         copyStream(in, out, vs, type);
@@ -156,7 +159,7 @@ public class IoHelper {
      * @param type file type for the substitutor
      * @throws IOException if an I/O error occurs
      */
-    public static void copyStream(InputStream in, OutputStream out, VariableSubstitutor vs, String type) throws IOException {
+    public static void copyStream(InputStream in, OutputStream out, VariableSubstitutor vs, SubstitutionType type) throws IOException {
         if (vs == null) {
             byte[] buffer = new byte[5120];
             long bytesCopied = 0;

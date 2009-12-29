@@ -22,15 +22,16 @@
 package com.izforge.izpack.installer.web;
 
 import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.data.PackInfo;
-import com.izforge.izpack.data.ParsableFile;
-import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.data.PackInfo;
+import com.izforge.izpack.data.ParsableFile;
+import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.substitutor.SubstitutionType;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -321,7 +322,7 @@ public class WebRepositoryAccessor {
             while (iter.hasNext()) {
                 IXMLElement p = iter.next();
                 String target = requireAttribute(p, "targetfile");
-                String type = p.getAttribute("type", "plain");
+                SubstitutionType type = SubstitutionType.lookup(p.getAttribute("type", "plain"));
                 String encoding = p.getAttribute("encoding", null);
                 List<OsConstraint> osList = OsConstraint.getOsList(p); // TODO: unverified
 

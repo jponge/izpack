@@ -22,6 +22,7 @@
 package com.izforge.izpack.data;
 
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.substitutor.SubstitutionType;
 
 import java.io.Serializable;
 import java.util.List;
@@ -44,7 +45,7 @@ public class ParsableFile implements Serializable {
     /**
      * The file type (or null for default)
      */
-    public String type = null;
+    public SubstitutionType type;
 
     /**
      * The file encoding (or null for default)
@@ -69,7 +70,7 @@ public class ParsableFile implements Serializable {
      * @param encoding      the file encoding (or null for default)
      * @param osConstraints the OS constraint (or null for any OS)
      */
-    public ParsableFile(String path, String type, String encoding, List<OsConstraint> osConstraints) {
+    public ParsableFile(String path, SubstitutionType type, String encoding, List<OsConstraint> osConstraints) {
         this.path = path;
         this.type = type;
         this.encoding = encoding;

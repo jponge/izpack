@@ -30,6 +30,9 @@ import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.substitutor.SubstitutionType;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -376,16 +379,16 @@ public class ProcessPanelWorker implements Runnable {
 
             List<String> params = new ArrayList<String>(this.arguments.size() + 1);
 
-            params.add(vs.substitute(this.filename, "plain"));
+            params.add(vs.substitute(this.filename, SubstitutionType.TYPE_PLAIN));
 
             for (String argument : this.arguments) {
-                params.add(vs.substitute(argument, "plain"));
+                params.add(vs.substitute(argument, SubstitutionType.TYPE_PLAIN));
             }
 
             ProcessBuilder pb = new ProcessBuilder(params);
             Map<String, String> environment = pb.environment();
             for (String envvar : envvariables) {
-                String ev = vs.substitute(envvar, "plain");
+                String ev = vs.substitute(envvar, SubstitutionType.TYPE_PLAIN);
                 int i = ev.indexOf("=");
                 if (i > 0) {
                     environment.put(ev.substring(0, i), ev.substring(i + 1));
@@ -540,7 +543,7 @@ public class ProcessPanelWorker implements Runnable {
 
             int i = 0;
             for (String myArgument : myArguments) {
-                params[i++] = varSubstitutor.substitute(myArgument, "plain");
+                params[i++] = varSubstitutor.substitute(myArgument, SubstitutionType.TYPE_PLAIN);
             }
 
             try {

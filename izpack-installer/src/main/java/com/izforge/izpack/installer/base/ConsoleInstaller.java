@@ -28,7 +28,11 @@ import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.bootstrap.Installer;
 import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -54,10 +58,10 @@ public class ConsoleInstaller extends InstallerBase {
     private RulesEngine rules;
     private ConditionCheck checkCondition;
 
-    public ConsoleInstaller(AutomatedInstallData installdata, RulesEngine rules, ResourceManager resourceManager,ConditionCheck checkCondition) throws Exception {
+    public ConsoleInstaller(AutomatedInstallData installdata, RulesEngine rules, ResourceManager resourceManager, ConditionCheck checkCondition) throws Exception {
         super(resourceManager);
 //        super(resourceManager);
-        this.checkCondition=checkCondition;
+        this.checkCondition = checkCondition;
         this.installdata = installdata;
         this.rules = rules;
         // Fallback: choose the first listed language pack if not specified via commandline

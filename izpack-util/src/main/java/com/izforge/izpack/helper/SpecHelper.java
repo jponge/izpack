@@ -26,7 +26,7 @@ import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.InstallerException;
-import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import java.io.File;
 import java.io.FileInputStream;

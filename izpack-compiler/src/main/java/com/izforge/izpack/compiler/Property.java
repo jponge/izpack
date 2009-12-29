@@ -22,8 +22,9 @@
 package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.util.VariableSubstitutor;
-import com.izforge.izpack.util.VariableSubstitutorImpl;
+import com.izforge.izpack.util.substitutor.SubstitutionType;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.apache.tools.ant.taskdefs.Execute;
 
 import java.io.*;
@@ -274,7 +275,7 @@ public class Property {
                 StringWriter write = new StringWriter();
 
                 try {
-                    mods = subs.substitute(read, write, "at");
+                    mods = subs.substitute(read, write, SubstitutionType.TYPE_AT);
                     // TODO: check for circular references. We need to know
                     // which
                     // variables were substituted to do that

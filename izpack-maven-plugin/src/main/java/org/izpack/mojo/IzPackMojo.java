@@ -239,7 +239,7 @@ public class IzPackMojo
             String basedir = izpackBasedir.getAbsolutePath();
 
             CompilerData compilerData = new CompilerData();
-            compilerData.setFilename(config);
+            compilerData.setInstallFile(config);
             compilerData.setBasedir(basedir);
             compilerData.setKind(kind);
             compilerData.setOutput(installerFile.getAbsolutePath());

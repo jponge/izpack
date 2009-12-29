@@ -31,7 +31,8 @@ import com.izforge.izpack.data.*;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.SubstitutionType;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -237,7 +238,7 @@ public class Compiler extends Thread {
      * @return the substituted string
      */
     public String replaceProperties(String value) {
-        return propertySubstitutor.substitute(value, "at");
+        return propertySubstitutor.substitute(value, SubstitutionType.TYPE_AT);
     }
 
     /**

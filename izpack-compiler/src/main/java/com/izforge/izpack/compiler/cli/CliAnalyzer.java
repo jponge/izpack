@@ -76,7 +76,7 @@ public class CliAnalyzer {
      */
     private void printTail(CompilerData result) {
         // Outputs what we are going to do
-        System.out.println("-> Processing  : " + result.getFilename());
+        System.out.println("-> Processing  : " + result.getInstallFile());
         System.out.println("-> Output      : " + result.getOutput());
         System.out.println("-> Base path   : " + result.getBasedir());
         System.out.println("-> Kind        : " + result.getKind());
@@ -126,7 +126,7 @@ public class CliAnalyzer {
         }
         List argList = commandLine.getArgList();
         if (argList.size() == 1) {
-            compilerData.setFilename((String) argList.get(0));
+            compilerData.setInstallFile((String) argList.get(0));
         }
 
         if (commandLine.hasOption(ARG_BASEDIR)) {

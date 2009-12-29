@@ -28,7 +28,11 @@ import com.izforge.izpack.installer.DataValidator;
 import com.izforge.izpack.installer.HelpWindow;
 import com.izforge.izpack.installer.ISummarisable;
 import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.MultiLineLabel;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;

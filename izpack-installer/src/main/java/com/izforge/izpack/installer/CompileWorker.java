@@ -21,14 +21,19 @@
 
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
+import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.data.ResourceManager;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.substitutor.SubstitutionType;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -267,6 +272,7 @@ public class CompileWorker implements Runnable {
     }
 
     // helper function
+
     private void readChoices(IXMLElement element, ArrayList<String> choiceList) {
         Vector<IXMLElement> choices = element.getChildrenNamed("choice");
 
@@ -300,7 +306,7 @@ public class CompileWorker implements Runnable {
                             // ignore, just don't add it as a choice
                         }
                     } else {
-                        choiceList.add(this.vs.substitute(value, "plain"));
+                        choiceList.add(this.vs.substitute(value, SubstitutionType.TYPE_PLAIN));
                     }
                 }
             }
@@ -396,7 +402,7 @@ public class CompileWorker implements Runnable {
 
                 if (name != null) {
                     // substitute variables
-                    String finalname = this.vs.substitute(name, "plain");
+                    String finalname = this.vs.substitute(name, SubstitutionType.TYPE_PLAIN);
 
                     files.addAll(scanDirectory(new File(finalname)));
                 }
@@ -406,7 +412,7 @@ public class CompileWorker implements Runnable {
 
                 if (name != null) {
                     // substitute variables
-                    String finalname = this.vs.substitute(name, "plain");
+                    String finalname = this.vs.substitute(name, SubstitutionType.TYPE_PLAIN);
 
                     files.add(new File(finalname));
                 }
@@ -455,14 +461,14 @@ public class CompileWorker implements Runnable {
     private void changeClassPath(ArrayList classpath, IXMLElement child) throws Exception {
         String add = child.getAttribute("add");
         if (add != null) {
-            add = this.vs.substitute(add, "plain");
+            add = this.vs.substitute(add, SubstitutionType.TYPE_PLAIN);
             if (!new File(add).exists()) {
                 if (!this.handler.emitWarning("Invalid classpath", "The path " + add
                         + " could not be found.\nCompilation may fail.")) {
                     throw new Exception("Classpath " + add + " does not exist.");
                 }
             } else {
-                classpath.add(this.vs.substitute(add, "plain"));
+                classpath.add(this.vs.substitute(add, SubstitutionType.TYPE_PLAIN));
             }
 
         }
@@ -470,7 +476,7 @@ public class CompileWorker implements Runnable {
         String sub = child.getAttribute("sub");
         if (sub != null) {
             int cpidx = -1;
-            sub = this.vs.substitute(sub, "plain");
+            sub = this.vs.substitute(sub, SubstitutionType.TYPE_PLAIN);
 
             do {
                 cpidx = classpath.indexOf(sub);

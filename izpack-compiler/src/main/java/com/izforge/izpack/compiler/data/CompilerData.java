@@ -38,7 +38,7 @@ public class CompilerData {
     /**
      * The xml install file
      */
-    private String filename;
+    private String installFile;
 
     /**
      * The xml install configuration text
@@ -76,11 +76,18 @@ public class CompilerData {
         }
     }
 
-    public CompilerData(String comprFormat, String kind, String filename, String installText, String basedir, String output, int comprLevel) {
-        super();
+    public CompilerData(String installFile, String basedir, String output) {
+        this();
+        this.installFile = installFile;
+        this.basedir = basedir;
+        this.output = output;
+    }
+
+    public CompilerData(String comprFormat, String kind, String installFile, String installText, String basedir, String output, int comprLevel) {
+        this();
         this.comprFormat = comprFormat;
         this.kind = kind;
-        this.filename = filename;
+        this.installFile = installFile;
         this.installText = installText;
         this.basedir = basedir;
         this.output = output;
@@ -109,12 +116,12 @@ public class CompilerData {
         this.kind = kind;
     }
 
-    public String getFilename() {
-        return filename;
+    public String getInstallFile() {
+        return installFile;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
+    public void setInstallFile(String installFile) {
+        this.installFile = installFile;
     }
 
     public String getInstallText() {

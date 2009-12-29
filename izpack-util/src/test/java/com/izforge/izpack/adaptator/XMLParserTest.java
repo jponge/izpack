@@ -23,8 +23,9 @@
 package com.izforge.izpack.adaptator;
 
 import com.izforge.izpack.adaptator.impl.XMLParser;
-import com.izforge.izpack.util.VariableSubstitutor;
-import com.izforge.izpack.util.VariableSubstitutorImpl;
+import com.izforge.izpack.util.substitutor.SubstitutionType;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.SAXException;
@@ -71,7 +72,7 @@ public class XMLParserTest {
         IXMLElement spec;
         input = XMLParserTest.class.getResourceAsStream(filename);
         VariableSubstitutor substitutor = new VariableSubstitutorImpl(new Properties(System.getProperties()));
-        String substitutedSpec = substitutor.substitute(input, "xml");
+        String substitutedSpec = substitutor.substitute(input, SubstitutionType.TYPE_XML);
 
         IXMLParser parser = new XMLParser();
         spec = parser.parse(substitutedSpec);

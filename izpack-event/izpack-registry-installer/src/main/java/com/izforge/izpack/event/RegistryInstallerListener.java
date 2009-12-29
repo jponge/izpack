@@ -29,10 +29,15 @@ import com.izforge.izpack.helper.SpecHelper;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.installer.unpacker.IDiscardInterruptable;
 import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.util.CleanupClient;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.os.RegistryDefaultHandler;
 import com.izforge.izpack.util.os.RegistryHandler;
 import com.izforge.izpack.util.os.WrappedNativeLibException;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.util.Iterator;
 import java.util.List;

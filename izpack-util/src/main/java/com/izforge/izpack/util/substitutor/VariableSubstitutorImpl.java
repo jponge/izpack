@@ -19,11 +19,11 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util;
+package com.izforge.izpack.util.substitutor;
+
+import com.izforge.izpack.util.IoHelper;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -56,61 +56,9 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
     protected boolean bracesRequired = false;
 
     /**
-     * A constant for file type. Plain file.
-     */
-    protected final static int TYPE_PLAIN = 0;
-
-    /**
-     * A constant for file type. Java properties file.
-     */
-    protected final static int TYPE_JAVA_PROPERTIES = 1;
-
-    /**
-     * A constant for file type. XML file.
-     */
-    protected final static int TYPE_XML = 2;
-
-    /**
-     * A constant for file type. Shell file.
-     */
-    protected final static int TYPE_SHELL = 3;
-
-    /**
-     * A constant for file type. Plain file with '@' start char.
-     */
-    protected final static int TYPE_AT = 4;
-
-    /**
-     * A constant for file type. Java file, where \ have to be escaped.
-     */
-    protected final static int TYPE_JAVA = 5;
-
-    /**
-     * A constant for file type. Plain file with ANT-like variable markers, ie @param@
-     */
-    protected final static int TYPE_ANT = 6;
-
-    /**
      * PLAIN = "plain"
      */
     public final static String PLAIN = "plain";
-
-    /**
-     * A mapping of file type names to corresponding integer constants.
-     */
-    protected final static Map<String, Integer> typeNameToConstantMap;
-
-    // Initialize the file type map
-    static {
-        typeNameToConstantMap = new HashMap<String, Integer>();
-        typeNameToConstantMap.put("plain", TYPE_PLAIN);
-        typeNameToConstantMap.put("javaprop", TYPE_JAVA_PROPERTIES);
-        typeNameToConstantMap.put("java", TYPE_JAVA);
-        typeNameToConstantMap.put("xml", TYPE_XML);
-        typeNameToConstantMap.put("shell", TYPE_SHELL);
-        typeNameToConstantMap.put("at", TYPE_AT);
-        typeNameToConstantMap.put("ant", TYPE_ANT);
-    }
 
     /**
      * Constructs a new substitutor using the specified variable value mappings. The environment
@@ -145,7 +93,7 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
      * @return the string with substituted variables
      * @throws IllegalArgumentException if unknown escaping type specified
      */
-    public String substitute(String str, String type) throws IllegalArgumentException {
+    public String substitute(String str, SubstitutionType type) throws IllegalArgumentException {
         if (str == null) {
             return null;
         }
@@ -180,12 +128,11 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
      * @throws UnsupportedEncodingException if encoding not supported
      * @throws IOException                  if an I/O error occurs
      */
-    public int substitute(InputStream in, OutputStream out, String type, String encoding)
-            throws IllegalArgumentException, UnsupportedEncodingException, IOException {
+    public int substitute(InputStream in, OutputStream out, SubstitutionType type, String encoding)
+            throws IllegalArgumentException, IOException {
         // Check if file type specific default encoding known
         if (encoding == null) {
-            int t = getTypeConstant(type);
-            switch (t) {
+            switch (type) {
                 case TYPE_JAVA_PROPERTIES:
                     encoding = "ISO-8859-1";
                     break;
@@ -220,16 +167,12 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
      * @throws UnsupportedEncodingException If the file comes with a wrong Encoding
      * @throws IOException                  If an I/O Error occurs.
      */
-    public String substitute(InputStream in, String type
-    )
-            throws IllegalArgumentException, UnsupportedEncodingException,
-            IOException {
+    public String substitute(InputStream in, SubstitutionType type)
+            throws IllegalArgumentException, IOException {
         // Check if file type specific default encoding known
         String encoding = PLAIN;
         {
-            int t = getTypeConstant(type);
-
-            switch (t) {
+            switch (type) {
                 case TYPE_JAVA_PROPERTIES:
                     encoding = "ISO-8859-1";
 
@@ -269,21 +212,22 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
      * @throws IllegalArgumentException if unknown file type specified
      * @throws IOException              if an I/O error occurs
      */
-    public int substitute(Reader reader, Writer writer, String type)
+    public int substitute(Reader reader, Writer writer, SubstitutionType type)
             throws IllegalArgumentException, IOException {
-        // Check the file type
-        int t = getTypeConstant(type);
 
         // determine character which starts (and ends) a variable
         char variable_start = '$';
         char variable_end = '\0';
-        if (t == TYPE_SHELL) {
-            variable_start = '%';
-        } else if (t == TYPE_AT) {
-            variable_start = '@';
-        } else if (t == TYPE_ANT) {
-            variable_start = '@';
-            variable_end = '@';
+        switch (type) {
+            case TYPE_SHELL:
+                variable_start = '%';
+                break;
+            case TYPE_AT:
+                variable_start = '@';
+                break;
+            case TYPE_ANT:
+                variable_start = '@';
+                variable_end = '@';
         }
 
 
@@ -347,7 +291,7 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
 
             // Substitute the variable...
             if (varvalue != null) {
-                writer.write(escapeSpecialChars(varvalue, t));
+                writer.write(escapeSpecialChars(varvalue, type));
                 if (braces || variable_end != '\0') {
                     c = reader.read();
                 }
@@ -364,31 +308,13 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
     }
 
     /**
-     * Returns the internal constant for the specified file type.
-     *
-     * @param type the type name or null for plain
-     * @return the file type constant
-     */
-    protected int getTypeConstant(String type) {
-        if (type == null) {
-            return TYPE_PLAIN;
-        }
-        Integer integer = typeNameToConstantMap.get(type);
-        if (integer == null) {
-            throw new IllegalArgumentException("Unknown file type " + type);
-        } else {
-            return integer;
-        }
-    }
-
-    /**
      * Escapes the special characters in the specified string using file type specific rules.
      *
      * @param str  the string to check for special characters
      * @param type the target file type (one of TYPE_xxx)
      * @return the string with the special characters properly escaped
      */
-    protected String escapeSpecialChars(String str, int type) {
+    protected String escapeSpecialChars(String str, SubstitutionType type) {
         StringBuffer buffer;
         int len;
         int i;
@@ -407,7 +333,7 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
                 for (i = 0; i < len; i++) {
                     // Check for control characters
                     char c = buffer.charAt(i);
-                    if (type == TYPE_JAVA_PROPERTIES) {
+                    if (type == SubstitutionType.TYPE_JAVA_PROPERTIES) {
                         if (c == '\t' || c == '\n' || c == '\r') {
                             char tag;
                             if (c == '\t') {

@@ -29,7 +29,12 @@ import com.izforge.izpack.installer.*;
 import com.izforge.izpack.installer.DataValidator.Status;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -80,7 +85,7 @@ public class AutomatedInstaller extends InstallerBase {
      * @param resourceManager
      * @throws Exception Description of the Exception
      */
-    public AutomatedInstaller(ResourceManager resourceManager,ConditionCheck checkCondition, UninstallDataWriter uninstallDataWriter) {
+    public AutomatedInstaller(ResourceManager resourceManager, ConditionCheck checkCondition, UninstallDataWriter uninstallDataWriter) {
         super(resourceManager);
         this.checkCondition = checkCondition;
         this.uninstallDataWriter = uninstallDataWriter;
@@ -90,7 +95,8 @@ public class AutomatedInstaller extends InstallerBase {
 
     /**
      * Initialize the automated installer.
-     * @param inputFilename   Name of the file containing the installation data.
+     *
+     * @param inputFilename Name of the file containing the installation data.
      * @throws Exception
      */
     public void init(String inputFilename) throws Exception {

@@ -25,8 +25,8 @@ import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.helper.SummaryProcessor;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.VariableSubstitutor;
-import com.izforge.izpack.util.VariableSubstitutorImpl;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.File;
 import java.io.FileOutputStream;

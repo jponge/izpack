@@ -24,7 +24,13 @@ import com.izforge.izpack.data.*;
 import com.izforge.izpack.event.InstallerListener;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.substitutor.SubstitutionType;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.apache.regexp.RE;
 import org.apache.regexp.RECompiler;
 import org.apache.regexp.RESyntaxException;
@@ -288,7 +294,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
         for (String element : list) {
             if ((element != null) && (element.length() > 0)) {
                 // substitute variables in the pattern
-                element = this.vs.substitute(element, "plain");
+                element = this.vs.substitute(element, SubstitutionType.TYPE_PLAIN);
 
                 // check whether the pattern is absolute or relative
                 File f = new File(element);

@@ -23,7 +23,7 @@ package com.izforge.izpack.installer.unpacker;
 
 import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import java.io.*;
 import java.util.Collection;

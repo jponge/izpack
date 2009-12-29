@@ -35,6 +35,9 @@ import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.Shortcut;
 import com.izforge.izpack.util.os.unix.UnixHelper;
+import com.izforge.izpack.util.substitutor.SubstitutionType;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.util.xml.XMLHelper;
 
 import javax.swing.*;
@@ -949,7 +952,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         VariableSubstitutor substitutor = new VariableSubstitutorImpl(this.installData.getVariables());
 
         // input.
-        String substitutedSpec = substitutor.substitute(input, "xml");
+        String substitutedSpec = substitutor.substitute(input, SubstitutionType.TYPE_XML);
         /*
          * TODO: internal flag mapped if( installData.isDebug() ) { System.out.println( "SUBSTITUDED
          * SHORTCUT SPEC" ); System.out.println(

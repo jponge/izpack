@@ -2,6 +2,7 @@ package com.izforge.izpack.integration;
 
 import com.izforge.izpack.AssertionHelper;
 import com.izforge.izpack.compiler.CompilerConfig;
+import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.container.ApplicationContainer;
 import com.izforge.izpack.container.IApplicationContainer;
 import com.izforge.izpack.container.IInstallerContainer;
@@ -103,7 +104,9 @@ public class AbstractInstallationTest {
      * @throws Exception
      */
     private void compileAndUnzip(File installerFile, File workingDirectory, File out) throws Exception {
-        CompilerConfig c = new CompilerConfig(installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), "default", out.getAbsolutePath());
+//        installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), "default", out.getAbsolutePath()
+        CompilerData data = new CompilerData(installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), out.getAbsolutePath());
+        CompilerConfig c = new CompilerConfig(data);
         c.executeCompiler();
         File extractedDir = new File(workingDirectory, "temp");
         // Clean before use

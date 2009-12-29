@@ -41,8 +41,9 @@ import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.VariableSubstitutor;
-import com.izforge.izpack.util.VariableSubstitutorImpl;
+import com.izforge.izpack.util.substitutor.SubstitutionType;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.io.*;
@@ -536,7 +537,7 @@ public class CompilerConfig extends Thread {
             // We get the parsables list
             for (IXMLElement parsableNode : packElement.getChildrenNamed("parsable")) {
                 String target = requireAttribute(parsableNode, "targetfile");
-                String type = parsableNode.getAttribute("type", "plain");
+                SubstitutionType type = SubstitutionType.lookup(parsableNode.getAttribute("type", "plain"));
                 String encoding = parsableNode.getAttribute("encoding", null);
                 List<OsConstraint> osList = OsConstraint.getOsList(parsableNode); // TODO: unverified
                 String condition = parsableNode.getAttribute("condition");
@@ -1230,7 +1231,7 @@ public class CompilerConfig extends Thread {
                         url = originalUrl;
                         parseWarn(resNode, "No variables defined. " + url.getPath() + " not parsed.");
                     } else {
-                        String type = resNode.getAttribute("type");
+                        SubstitutionType type = SubstitutionType.lookup(resNode.getAttribute("type"));
 
                         // if the xml parser did not open the url
                         // ('parsexml' was not enabled)
