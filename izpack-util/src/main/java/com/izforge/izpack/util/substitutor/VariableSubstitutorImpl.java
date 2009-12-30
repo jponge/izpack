@@ -70,29 +70,14 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
         this.variables = variables;
     }
 
-    /**
-     * Get whether this substitutor requires braces.
-     */
     public boolean areBracesRequired() {
         return bracesRequired;
     }
 
-    /**
-     * Specify whether this substitutor requires braces.
-     */
     public void setBracesRequired(boolean braces) {
         bracesRequired = braces;
     }
 
-    /**
-     * Substitutes the variables found in the specified string. Escapes special characters using
-     * file type specific escaping if necessary.
-     *
-     * @param str  the string to check for variables
-     * @param type the escaping type or null for plain
-     * @return the string with substituted variables
-     * @throws IllegalArgumentException if unknown escaping type specified
-     */
     public String substitute(String str, SubstitutionType type) throws IllegalArgumentException {
         if (str == null) {
             return null;
@@ -115,19 +100,6 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
         return writer.getBuffer().toString();
     }
 
-    /**
-     * Substitutes the variables found in the specified input stream. Escapes special characters
-     * using file type specific escaping if necessary.
-     *
-     * @param in       the input stream to read
-     * @param out      the output stream to write
-     * @param type     the file type or null for plain
-     * @param encoding the character encoding or null for default
-     * @return the number of substitutions made
-     * @throws IllegalArgumentException     if unknown file type specified
-     * @throws UnsupportedEncodingException if encoding not supported
-     * @throws IOException                  if an I/O error occurs
-     */
     public int substitute(InputStream in, OutputStream out, SubstitutionType type, String encoding)
             throws IllegalArgumentException, IOException {
         // Check if file type specific default encoding known
@@ -157,16 +129,6 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
         return subs;
     }
 
-    /**
-     * Substitute method Variant that gets An Input Stream and returns A String
-     *
-     * @param in   The Input Stream, with Placeholders
-     * @param type The used FormatType
-     * @return the substituted result as string
-     * @throws IllegalArgumentException     If a wrong input was given.
-     * @throws UnsupportedEncodingException If the file comes with a wrong Encoding
-     * @throws IOException                  If an I/O Error occurs.
-     */
     public String substitute(InputStream in, SubstitutionType type)
             throws IllegalArgumentException, IOException {
         // Check if file type specific default encoding known
@@ -201,17 +163,6 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
     }
 
 
-    /**
-     * Substitutes the variables found in the data read from the specified reader. Escapes special
-     * characters using file type specific escaping if necessary.
-     *
-     * @param reader the reader to read
-     * @param writer the writer used to write data out
-     * @param type   the file type or null for plain
-     * @return the number of substitutions made
-     * @throws IllegalArgumentException if unknown file type specified
-     * @throws IOException              if an I/O error occurs
-     */
     public int substitute(Reader reader, Writer writer, SubstitutionType type)
             throws IllegalArgumentException, IOException {
 
