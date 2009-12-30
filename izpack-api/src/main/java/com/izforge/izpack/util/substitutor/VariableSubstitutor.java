@@ -18,11 +18,6 @@ import java.io.*;
 public interface VariableSubstitutor extends Serializable {
 
     /**
-     * Get whether this substitutor requires braces.
-     */
-    boolean areBracesRequired();
-
-    /**
      * Specify whether this substitutor requires braces.
      */
     void setBracesRequired(boolean braces);

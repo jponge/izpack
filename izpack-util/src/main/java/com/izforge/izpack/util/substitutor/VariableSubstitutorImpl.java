@@ -58,10 +58,6 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
         this.variables = variables;
     }
 
-    public boolean areBracesRequired() {
-        return bracesRequired;
-    }
-
     public void setBracesRequired(boolean braces) {
         bracesRequired = braces;
     }
