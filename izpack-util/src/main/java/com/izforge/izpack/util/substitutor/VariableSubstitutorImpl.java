@@ -27,22 +27,10 @@ import java.io.*;
 import java.util.Properties;
 
 /**
- * Substitutes variables occurring in an input stream or a string. This implementation supports a
- * generic variable value mapping and escapes the possible special characters occurring in the
- * substituted values. The file types specifically supported are plain text files (no escaping),
- * Java properties files, and XML files. A valid variable name matches the regular expression
- * [a-zA-Z][a-zA-Z0-9_]* and names are case sensitive. Variables are referenced either by $NAME or
- * ${NAME} (the latter syntax being useful in situations like ${NAME}NOTPARTOFNAME). If a referenced
- * variable is undefined then it is not substituted but the corresponding part of the stream is
- * copied as is.
- *
- * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
+ * Implementation of variable substitutor
  */
 public class VariableSubstitutorImpl implements VariableSubstitutor {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 3907213762447685687L;
 
     /**
