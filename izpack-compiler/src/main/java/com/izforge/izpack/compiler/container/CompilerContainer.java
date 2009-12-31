@@ -2,6 +2,8 @@ package com.izforge.izpack.compiler.container;
 
 import com.izforge.izpack.compiler.Compiler;
 import com.izforge.izpack.compiler.CompilerConfig;
+import com.izforge.izpack.compiler.IPackager;
+import com.izforge.izpack.compiler.Packager;
 import com.izforge.izpack.compiler.cli.CliAnalyzer;
 import com.izforge.izpack.compiler.listener.CmdlinePackagerListener;
 import com.izforge.izpack.compiler.provider.CompilerDataProvider;
@@ -24,11 +26,14 @@ public class CompilerContainer extends AbstractContainer {
      */
     public void initBindings() {
         pico = new PicoBuilder().withConstructorInjection().withCaching().build();
+        pico.addComponent(CompilerContainer.class, this);
         pico.addComponent(CliAnalyzer.class);
         pico.addComponent(CmdlinePackagerListener.class);
         pico.addComponent(Compiler.class);
         pico.addComponent(CompilerConfig.class);
         pico.addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class);
+
+        pico.addComponent(IPackager.class, Packager.class);
 
         pico.addAdapter(new ProviderAdapter(new PropertiesProvider()));
     }

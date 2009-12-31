@@ -57,7 +57,8 @@ public class MultiVolumePackager extends PackagerBase {
      *
      * @throws CompilerException
      */
-    public MultiVolumePackager() throws CompilerException {
+    public MultiVolumePackager(Properties properties) throws CompilerException {
+        super(properties);
         initPackCompressor("default", -1);
     }
 

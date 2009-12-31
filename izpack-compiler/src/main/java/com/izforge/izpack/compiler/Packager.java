@@ -59,38 +59,15 @@ public class Packager extends PackagerBase {
      *
      * @throws CompilerException
      */
-    public Packager() throws CompilerException {
-//        this("default", -1);
+    public Packager(Properties properties) throws CompilerException {
+        super(properties);
         initPackCompressor("default", -1);
     }
-
-    /**
-     * Extended constructor.
-     *
-     * @param compr_format Compression format to be used for packs
-     *                     compression format (if supported)
-     * @throws CompilerException
-     */
-//    public Packager(String compr_format) throws CompilerException {
-//        this(compr_format, -1);
-//    }
-
-    /**
-     * Extended constructor.
-     *
-     * @param compr_format Compression format to be used for packs
-     * @param compr_level  Compression level to be used with the chosen
-     *                     compression format (if supported)
-     * @throws CompilerException
-     */
-//    public Packager(String compr_format, int compr_level) throws CompilerException {
-//        initPackCompressor(compr_format, compr_level);
-//    }
-
 
     /* (non-Javadoc)
     * @see com.izforge.izpack.compiler.IPackager#createInstaller(java.io.File)
     */
+
     public void createInstaller(File primaryFile) throws Exception {
         // preliminary work
         String baseName = primaryFile.getName();

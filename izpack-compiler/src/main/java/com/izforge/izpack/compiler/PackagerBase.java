@@ -53,15 +53,14 @@ public abstract class PackagerBase implements IPackager {
      * Path to resources in jar
      */
     public static final String RESOURCES_PATH = "resources/";
+    private Properties properties;
+
+    public PackagerBase(Properties properties) {
+        this.properties = properties;
+    }
 
     public String getSkeletonSubpath() {
         if (SKELETON_SUBPATH == null) {
-            Properties properties = new Properties();
-            try {
-                properties.load(Compiler.class.getResourceAsStream("path.properties"));
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
             SKELETON_SUBPATH = properties.getProperty("installer");
         }
         return SKELETON_SUBPATH;

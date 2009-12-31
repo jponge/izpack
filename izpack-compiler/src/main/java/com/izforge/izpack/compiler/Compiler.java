@@ -26,6 +26,7 @@
 package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.compiler.compressor.PackCompressor;
+import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.rules.Condition;
@@ -67,6 +68,7 @@ public class Compiler extends Thread {
      * Key/values which are substituted at compile time in the install data
      */
     private Properties properties;
+    private CompilerContainer compilerContainer;
 
     private CompilerData compilerData;
     /**
@@ -81,11 +83,12 @@ public class Compiler extends Thread {
      *
      * @throws CompilerException
      */
-    public Compiler(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Properties properties) throws CompilerException {
+    public Compiler(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Properties properties, CompilerContainer compilerContainer) throws CompilerException {
         this.compilerData = compilerData;
 
         this.propertySubstitutor = variableSubstitutor;
         this.properties = properties;
+        this.compilerContainer = compilerContainer;
 
         // add izpack built in property
         setProperty("izpack.version", CompilerData.IZPACK_VERSION);
@@ -100,7 +103,8 @@ public class Compiler extends Thread {
      */
     public void initPackager(String classname) throws CompilerException {
         try {
-            packager = PackagerFactory.getPackager(classname);
+            //REFACTOR : Differenciate pacakgers depending on the classname
+            packager = compilerContainer.getComponent(IPackager.class);
             packager.initPackCompressor(compilerData.getComprFormat(), compilerData.getComprLevel());
             PackCompressor compressor = packager.getCompressor();
             if (compressor != null) {

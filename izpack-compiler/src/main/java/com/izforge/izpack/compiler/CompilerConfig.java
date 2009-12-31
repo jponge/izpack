@@ -112,9 +112,10 @@ public class CompilerConfig extends Thread {
      *
      * @param compilerData Object containing all informations found in command line
      */
-    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor) {
+    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler) {
         this.compilerData = compilerData;
         this.variableSubstitutor = variableSubstitutor;
+        this.compiler = compiler;
     }
 
     /**
