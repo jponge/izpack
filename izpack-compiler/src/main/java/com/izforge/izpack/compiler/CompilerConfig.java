@@ -34,6 +34,7 @@ import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
+import com.izforge.izpack.compiler.helper.impl.XmlCompilerHelper;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.data.PanelAction.ActionStage;
 import com.izforge.izpack.installer.DataValidator;
@@ -88,7 +89,7 @@ public class CompilerConfig extends Thread {
     /**
      * Compiler helper
      */
-    private CompilerHelper compilerHelper = new CompilerHelper();
+    private CompilerHelper compilerHelper;
 
     /**
      * List of CompilerListeners which should be called at packaging
@@ -106,16 +107,19 @@ public class CompilerConfig extends Thread {
     private String unpackerClassname = "com.izforge.izpack.installer.unpacker.Unpacker";
     private String packagerClassname = "com.izforge.izpack.compiler.Packager";
     private VariableSubstitutor variableSubstitutor;
+    private XmlCompilerHelper xmlCompilerHelper;
 
     /**
      * Constructor
      *
      * @param compilerData Object containing all informations found in command line
      */
-    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler) {
+    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper) {
         this.compilerData = compilerData;
         this.variableSubstitutor = variableSubstitutor;
         this.compiler = compiler;
+        this.compilerHelper = compilerHelper;
+        this.xmlCompilerHelper = xmlCompilerHelper;
     }
 
     /**
