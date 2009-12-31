@@ -340,7 +340,7 @@ public class UserPathInputPanel extends IzPanel implements ActionListener {
                     }
                     _defaultDir = line;
                     VariableSubstitutor vs = new VariableSubstitutorImpl(installData.getVariables());
-                    _defaultDir = vs.substitute(_defaultDir, null);
+                    _defaultDir = vs.substitute(_defaultDir);
                 }
             }
             catch (Exception e) {

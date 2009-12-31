@@ -318,7 +318,7 @@ public class AutomatedInstallData implements Serializable {
                         refresh = true;
                     }
                     if (refresh) {
-                        String newvalue = substitutor.substitute(dynvar.getValue(), null);
+                        String newvalue = substitutor.substitute(dynvar.getValue());
 //                        Debug.log("newvalue: " + newvalue);
                         getVariables().setProperty(dynvar.getName(), newvalue);
                     }

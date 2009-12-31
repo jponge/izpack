@@ -71,7 +71,7 @@ public class DefaultTargetPanelAutomationHelper implements PanelAutomation {
         // Allow for variable substitution of the installpath value
         VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
         String path = ipath.getContent();
-        path = vs.substitute(path, null);
+        path = vs.substitute(path);
 
         idata.setInstallPath(path);
     }

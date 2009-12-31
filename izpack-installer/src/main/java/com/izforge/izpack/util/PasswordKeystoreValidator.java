@@ -160,7 +160,7 @@ public class PasswordKeystoreValidator implements Validator {
                 while (keys.hasNext()) {
                     String key = keys.next();
                     // Feed parameter values through vs
-                    String value = vs.substitute(params.get(key), null);
+                    String value = vs.substitute(params.get(key));
                     // System.out.println("Adding local parameter: "+key+"="+value);
                     returnValue.put(key, value);
                 }

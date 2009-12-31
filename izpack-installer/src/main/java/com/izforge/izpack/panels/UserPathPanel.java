@@ -96,7 +96,7 @@ public class UserPathPanel extends UserPathInputPanel {
         super.panelActivate();
         // Set the default or old value to the path selection panel.
         VariableSubstitutor vs = new VariableSubstitutorImpl(installData.getVariables());
-        String expandedPath = vs.substitute(installData.getVariable(pathVariableName), null);
+        String expandedPath = vs.substitute(installData.getVariable(pathVariableName));
         _pathSelectionPanel.setPath(expandedPath);
     }
 

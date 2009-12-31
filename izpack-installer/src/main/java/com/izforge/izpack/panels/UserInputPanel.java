@@ -529,7 +529,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             } else {
                 if (set != null && !"".equals(set)) {
                     VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-                    set = vs.substitute(set, null);
+                    set = vs.substitute(set);
 
                     this.installData.setVariable(variable, set);
                 }
@@ -620,7 +620,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             } else {
                 if (set != null && !"".equals(set)) {
                     VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-                    set = vs.substitute(set, null);
+                    set = vs.substitute(set);
                 }
             }
 
@@ -733,7 +733,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             } else {
                 if (set != null && !"".equals(set)) {
                     VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-                    set = vs.substitute(set, null);
+                    set = vs.substitute(set);
                     this.installData.setVariable(variable, set);
                 }
             }
@@ -819,7 +819,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     if (value == null) {
                         value = textf.getText();
                     }
-                    textf.setText(vs.substitute(value, null));
+                    textf.setText(vs.substitute(value));
                 } else if (element.getType() == UIElementType.PASSWORD) {
                     // update PasswordField
                     JTextComponent textf = (JTextComponent) element.getComponent();
@@ -827,7 +827,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     if (value == null) {
                         value = textf.getText();
                     }
-                    textf.setText(vs.substitute(value, null));
+                    textf.setText(vs.substitute(value));
                 } else if (element.getType() == UIElementType.RULE) {
 
                     RuleInputField rulef = (RuleInputField) element.getComponent();
@@ -1476,7 +1476,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             } else {
                 if (set != null && !"".equals(set)) {
                     VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-                    set = vs.substitute(set, null);
+                    set = vs.substitute(set);
                 }
             }
 
@@ -1695,7 +1695,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     }
                     if (set != null && !"".equals(set)) {
                         VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-                        set = vs.substitute(set, null);
+                        set = vs.substitute(set);
                     }
 
                     StringTokenizer tokenizer = new StringTokenizer(choiceValues, ":");
@@ -1728,7 +1728,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                             if (set != null && !"".equals(set)) {
                                 VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData
                                         .getVariables());
-                                set = vs.substitute(set, null);
+                                set = vs.substitute(set);
                             }
                             if (set.equals(TRUE)) {
                                 field.setSelectedIndex(i);
@@ -1903,7 +1903,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 if (set != null) {
                     if (set != null && !"".equals(set)) {
                         VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-                        set = vs.substitute(set, null);
+                        set = vs.substitute(set);
                     }
                     if (set.equals(TRUE)) {
                         choice.setSelected(true);
@@ -2060,7 +2060,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 String set = fieldSpec.getAttribute(SET);
                 if (set != null && !"".equals(set)) {
                     VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-                    set = vs.substitute(set, null);
+                    set = vs.substitute(set);
                 }
                 JLabel label = new JLabel(getText(fieldSpec));
                 try {
@@ -2221,7 +2221,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         if (set != null) {
             if (set != null && !"".equals(set)) {
                 VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-                set = vs.substitute(set, null);
+                set = vs.substitute(set);
             }
             if (set.equals(FALSE)) {
                 checkbox.setSelected(false);
@@ -2411,7 +2411,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 if (set != null) {
                     if (set != null && !"".equals(set)) {
                         VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-                        set = vs.substitute(set, null);
+                        set = vs.substitute(set);
                     }
                     if (set.equals(TRUE)) {
                         combobox.setSelectedIndex(i);
@@ -2858,7 +2858,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // try to parse the text, and substitute any variable it finds
         VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
 
-        return (vs.substitute(text, null));
+        return (vs.substitute(text));
     }
 
     /*--------------------------------------------------------------------------*/
@@ -3329,7 +3329,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             // /usr/lib/*/lib/tools.jar
             VariableSubstitutor vs = new VariableSubstitutorImpl(installData.getVariables());
             for (int i = 0; i < this.pathComboBox.getItemCount(); ++i) {
-                String path = vs.substitute((String) this.pathComboBox.getItemAt(i), null);
+                String path = vs.substitute((String) this.pathComboBox.getItemAt(i));
                 // System.out.println ("autodetecting " + path);
 
                 if (path.endsWith("*")) {
@@ -3507,10 +3507,10 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     // vname is given
                     if (vvalue != null) {
                         // try to substitute variables in value field
-                        vvalue = vs.substitute(vvalue, null);
+                        vvalue = vs.substitute(vvalue);
                         // to cut out circular references
                         this.installData.setVariable(vname, "");
-                        vvalue = vs.substitute(vvalue, null);
+                        vvalue = vs.substitute(vvalue);
                     }
                     // try to set variable
                     this.installData.setVariable(vname, vvalue);

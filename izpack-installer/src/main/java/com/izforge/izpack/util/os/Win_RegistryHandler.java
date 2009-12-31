@@ -71,7 +71,7 @@ public class Win_RegistryHandler extends RegistryHandler {
                 Properties props = new Properties();
                 props.put("OLD_KEY_VALUE", ob);
                 VariableSubstitutor vs = new VariableSubstitutorImpl(props);
-                contents = vs.substitute(contents, null);
+                contents = vs.substitute(contents);
             }
         }
         regWorker.setValue(key, value, contents);

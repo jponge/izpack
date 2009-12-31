@@ -173,7 +173,7 @@ public class IoHelper {
         } else {
             BufferedInputStream bin = new BufferedInputStream(in, 5120);
             BufferedOutputStream bout = new BufferedOutputStream(out, 5120);
-            vs.substitute(bin, bout, type, null);
+            vs.substitute(bin, bout, type);
             bin.close();
             bout.close();
         }
@@ -503,7 +503,7 @@ public class IoHelper {
      */
     public static String translatePath(String destination, VariableSubstitutor vs) {
         // Parse for variables
-        destination = vs.substitute(destination, null);
+        destination = vs.substitute(destination);
 
         // Convert the file separator characters
 

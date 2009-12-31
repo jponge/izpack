@@ -524,7 +524,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
                         process = true;
                     }
                     VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
-                    val = vs.substitute(val, null);
+                    val = vs.substitute(val);
                     vals[i] = val;
                     i++;
                     ((JTextField) inputFields.elementAt(index)).setText(val);

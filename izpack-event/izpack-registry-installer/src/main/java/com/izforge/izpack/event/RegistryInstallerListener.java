@@ -273,9 +273,9 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             throws Exception {
         SpecHelper specHelper = getSpecHelper();
         String name = specHelper.getRequiredAttribute(regEntry, REG_BASENAME);
-        name = substitutor.substitute(name, null);
+        name = substitutor.substitute\($1\);
         String keypath = specHelper.getRequiredAttribute(regEntry, REG_KEYPATH);
-        keypath = substitutor.substitute(keypath, null);
+        keypath = substitutor.substitute\($1\);
         String root = specHelper.getRequiredAttribute(regEntry, REG_ROOT);
         int rootId = resolveRoot(regEntry, root, substitutor);
 
@@ -301,13 +301,13 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
 
         String value = regEntry.getAttribute(REG_DWORD);
         if (value != null) { // Value type is DWord; placeholder possible.
-            value = substitutor.substitute(value, null);
+            value = substitutor.substitute(value);
             rh.setValue(keypath, name, Long.parseLong(value));
             return;
         }
         value = regEntry.getAttribute(REG_STRING);
         if (value != null) { // Value type is string; placeholder possible.
-            value = substitutor.substitute(value, null);
+            value = substitutor.substitute(value);
             rh.setValue(keypath, name, value);
             return;
         }
@@ -318,7 +318,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             for (int i = 0; multiIter.hasNext(); ++i) {
                 IXMLElement element = multiIter.next();
                 multiString[i] = specHelper.getRequiredAttribute(element, REG_DATA);
-                multiString[i] = substitutor.substitute(multiString[i], null);
+                multiString[i] = substitutor.substitute(multiString[i]);
             }
             rh.setValue(keypath, name, multiString);
             return;
@@ -337,7 +337,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
                     buf.append(",");
                 }
             }
-            byte[] bytes = extractBytes(regEntry, substitutor.substitute(buf.toString(), null));
+            byte[] bytes = extractBytes(regEntry, substitutor.substitute(buf.toString()));
             rh.setValue(keypath, name, bytes);
             return;
         }
@@ -382,7 +382,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
     private void performKeySetting(IXMLElement regEntry, VariableSubstitutor substitutor)
             throws Exception {
         String keypath = getSpecHelper().getRequiredAttribute(regEntry, REG_KEYPATH);
-        keypath = substitutor.substitute(keypath, null);
+        keypath = substitutor.substitute(keypath);
         String root = getSpecHelper().getRequiredAttribute(regEntry, REG_ROOT);
         int rootId = resolveRoot(regEntry, root, substitutor);
         RegistryHandler rh = RegistryDefaultHandler.getInstance();
@@ -397,7 +397,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
 
     private int resolveRoot(IXMLElement regEntry, String root, VariableSubstitutor substitutor)
             throws Exception {
-        String root1 = substitutor.substitute(root, null);
+        String root1 = substitutor.substitute(root);
         Integer tmp = RegistryHandler.ROOT_KEY_MAP.get(root1);
         if (tmp != null) {
             return (tmp);

@@ -80,7 +80,7 @@ public class InstallerContainer extends AbstractChildContainer {
         } else { // Attention! The alternate message has to contain the whole message including
             // $APP_NAME and may be $APP_VER.
             VariableSubstitutor vs = new VariableSubstitutorImpl(automatedInstallData.getVariables());
-            return vs.substitute(message, null);
+            return vs.substitute(message);
         }
     }
 

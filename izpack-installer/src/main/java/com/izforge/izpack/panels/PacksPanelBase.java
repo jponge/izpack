@@ -322,7 +322,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 desc = pack.description;
             }
             VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-            desc = vs.substitute(desc, null);
+            desc = vs.substitute(desc);
             descriptionArea.setText(desc);
         }
         // Operation for the dependency listing

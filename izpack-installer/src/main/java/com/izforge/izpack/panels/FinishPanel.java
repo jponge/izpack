@@ -162,7 +162,7 @@ public class FinishPanel extends IzPanel implements ActionListener {
      */
     protected String translatePath(String destination) {
         // Parse for variables
-        destination = vs.substitute(destination, null);
+        destination = vs.substitute(destination);
 
         // Convert the file separator characters
         return destination.replace('/', File.separatorChar);

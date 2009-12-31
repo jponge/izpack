@@ -611,7 +611,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
             if ("".equals(desc) || key.equals(desc)) {
                 desc = pack.description;
             }
-            desc = vs.substitute(desc, null);
+            desc = vs.substitute(desc);
             descriptionArea.setText(desc);
         }
     }

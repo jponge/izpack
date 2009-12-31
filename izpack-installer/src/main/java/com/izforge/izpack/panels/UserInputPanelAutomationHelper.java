@@ -146,7 +146,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation {
             // Substitute variable used in the 'value' field
             VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
             value = dataElement.getAttribute(AUTO_ATTRIBUTE_VALUE);
-            value = vs.substitute(value, null);
+            value = vs.substitute(value);
 
             Debug.trace("UserInputPanel: setting variable " + variable + " to " + value);
             idata.setVariable(variable, value);

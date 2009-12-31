@@ -576,7 +576,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         }
         if (retval != null && retval.indexOf('$') > -1) {
             VariableSubstitutor substitutor = new VariableSubstitutorImpl(this.installData.getVariables());
-            retval = substitutor.substitute(retval, null);
+            retval = substitutor.substitute(retval);
         }
         return (retval);
     }
@@ -996,7 +996,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
                         String warningMessage = installData.getLangpack().getString(this.validationService
                                 .getWarningMessageId());
                         if (this.emitWarning(getString("data.validation.warning.title"), vs
-                                .substitute(warningMessage, null))) {
+                                .substitute(warningMessage))) {
                             returnValue = true;
                             Debug.trace("... but user decided to go on!");
                         }
@@ -1027,7 +1027,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
 
             // Parses the info text
-            string_to_parse = vs.substitute(string_to_parse, null);
+            string_to_parse = vs.substitute(string_to_parse);
         }
         catch (Exception err) {
             err.printStackTrace();

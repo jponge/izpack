@@ -58,7 +58,7 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
             return false;
         } else {
             VariableSubstitutor vs = new VariableSubstitutorImpl(installData.getVariables());
-            strTargetPath = vs.substitute(strTargetPath, null);
+            strTargetPath = vs.substitute(strTargetPath);
             installData.setInstallPath(strTargetPath);
             return true;
         }

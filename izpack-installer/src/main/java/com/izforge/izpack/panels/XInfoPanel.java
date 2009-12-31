@@ -117,7 +117,7 @@ public class XInfoPanel extends IzPanel {
             VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
 
             // Parses the info text
-            info = vs.substitute(info, null);
+            info = vs.substitute(info);
         }
         catch (Exception err) {
             err.printStackTrace();
