@@ -22,6 +22,7 @@
 package com.izforge.izpack.installer;
 
 
+import com.izforge.izpack.util.substitutor.SubstitutionType;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import junit.framework.TestCase;
@@ -73,7 +74,7 @@ public class SubstitutorTest extends TestCase {
      * Tests return value of substitute for string containing umlaut characters.
      */
     public void testUmlautString() {
-        String returnStr = subst.substitute(umlautString, null);
+        String returnStr = subst.substitute(umlautString, SubstitutionType.TYPE_PLAIN);
         assertEquals(umlautString, returnStr);
     }
 
@@ -81,7 +82,7 @@ public class SubstitutorTest extends TestCase {
      * Tests return value of substitute for Cyrillic string.
      */
     public void testCyrillicString() {
-        String returnStr = subst.substitute(cyrillicString, null);
+        String returnStr = subst.substitute(cyrillicString, SubstitutionType.TYPE_PLAIN);
         assertEquals(cyrillicString, returnStr);
     }
 
@@ -89,7 +90,7 @@ public class SubstitutorTest extends TestCase {
      * Tests return value of substitute for Japanese string.
      */
     public void testJapaneseString() {
-        String returnStr = subst.substitute(japanesString, null);
+        String returnStr = subst.substitute(japanesString, SubstitutionType.TYPE_PLAIN);
         assertEquals(japanesString, returnStr);
     }
 }
