@@ -402,7 +402,7 @@ public class CompileWorker implements Runnable {
 
                 if (name != null) {
                     // substitute variables
-                    String finalname = this.vs.substitute(name, SubstitutionType.TYPE_PLAIN);
+                    String finalname = this.vs.substitute(name);
 
                     files.addAll(scanDirectory(new File(finalname)));
                 }
@@ -412,7 +412,7 @@ public class CompileWorker implements Runnable {
 
                 if (name != null) {
                     // substitute variables
-                    String finalname = this.vs.substitute(name, SubstitutionType.TYPE_PLAIN);
+                    String finalname = this.vs.substitute(name);
 
                     files.add(new File(finalname));
                 }

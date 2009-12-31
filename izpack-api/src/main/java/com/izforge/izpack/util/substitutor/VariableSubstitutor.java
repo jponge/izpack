@@ -22,13 +22,23 @@ public interface VariableSubstitutor extends Serializable {
      */
     void setBracesRequired(boolean braces);
 
+    /**
+     * Substitutes the variables found in the specified string. Escapes special characters using
+     * file type specific escaping if necessary.<br />
+     * The escaped type will be plain.
+     *
+     * @param str the string to check for variables
+     * @return the string with substituted variables
+     * @throws IllegalArgumentException if unknown escaping type specified
+     */
+    String substitute(String str) throws IllegalArgumentException;
 
     /**
      * Substitutes the variables found in the specified string. Escapes special characters using
      * file type specific escaping if necessary.
      *
      * @param str  the string to check for variables
-     * @param type the escaping type or null for plain
+     * @param type the escaping type
      * @return the string with substituted variables
      * @throws IllegalArgumentException if unknown escaping type specified
      */
