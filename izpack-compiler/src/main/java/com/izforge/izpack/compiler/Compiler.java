@@ -53,17 +53,6 @@ import java.util.zip.ZipEntry;
  * @see CompilerConfig
  */
 public class Compiler extends Thread {
-
-    /**
-     * The installer kind.
-     */
-    private String kind;
-
-    /**
-     * The output jar filename.
-     */
-    private String output;
-
     /**
      * Collects and packs files into installation jars, as told.
      */
@@ -79,38 +68,28 @@ public class Compiler extends Thread {
      */
     private Properties properties;
 
+    private CompilerData compilerData;
     /**
      * Replaces the properties in the install.xml file prior to compiling
      */
     private VariableSubstitutor propertySubstitutor;
 
-    private String compr_format;
-    private int compr_level;
     private PackagerListener packagerlistener;
 
     /**
      * The constructor.
      *
-     * @param basedir      The base directory.
-     * @param kind         The installer kind.
-     * @param output       The installer filename.
-     * @param compr_format The format which should be used for the packs.
-     * @param compr_level  Compression level to be used if supported.
      * @throws CompilerException
      */
-    public Compiler(String basedir, String kind, String output,
-                    String compr_format, int compr_level, VariableSubstitutor variableSubstitutor) throws CompilerException {
-        // Default initialisation
-        this.kind = kind;
-        this.output = output;
+    public Compiler(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Properties properties) throws CompilerException {
+        this.compilerData = compilerData;
+
         this.propertySubstitutor = variableSubstitutor;
+        this.properties = properties;
 
         // add izpack built in property
         setProperty("izpack.version", CompilerData.IZPACK_VERSION);
-        setProperty("basedir", basedir);
-
-        this.compr_format = compr_format;
-        this.compr_level = compr_level;
+        setProperty("basedir", compilerData.getBasedir());
     }
 
     /**
@@ -122,7 +101,7 @@ public class Compiler extends Thread {
     public void initPackager(String classname) throws CompilerException {
         try {
             packager = PackagerFactory.getPackager(classname);
-            packager.initPackCompressor(this.compr_format, this.compr_level);
+            packager.initPackCompressor(compilerData.getComprFormat(), compilerData.getComprLevel());
             PackCompressor compressor = packager.getCompressor();
             if (compressor != null) {
                 compressor.setCompiler(this);
@@ -157,15 +136,6 @@ public class Compiler extends Thread {
         } else {
             this.packagerlistener = listener;
         }
-    }
-
-    /**
-     * Access the installation kind.
-     *
-     * @return the installation kind.
-     */
-    public String getKind() {
-        return kind;
     }
 
     /**
@@ -218,7 +188,7 @@ public class Compiler extends Thread {
             }
         }
         // We ask the packager to create the installer
-        packager.createInstaller(new File(output));
+        packager.createInstaller(new File(compilerData.getOutput()));
         this.compileFailed = false;
     }
 

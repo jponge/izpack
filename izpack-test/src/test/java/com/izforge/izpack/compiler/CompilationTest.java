@@ -1,6 +1,7 @@
 package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.AssertionHelper;
+import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import org.hamcrest.core.Is;
 import org.junit.Before;
@@ -22,6 +23,8 @@ public class CompilationTest {
     private File installerFile = new File(getClass().getClassLoader().getResource("samples/helloAndFinish.xml").getFile());
     private File out = new File(baseDir, "out.jar");
 
+    private CompilerContainer compilerContainer;
+
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
     private CompilerData data;
@@ -31,25 +34,28 @@ public class CompilationTest {
         assertThat(baseDir.exists(), Is.is(true));
         out.delete();
         data = new CompilerData(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), out.getAbsolutePath());
+        compilerContainer = new CompilerContainer();
+        compilerContainer.initBindings();
+        compilerContainer.addComponent(CompilerData.class, data);
     }
 
     @Test
     public void compilerShouldCompile() throws Exception {
-        CompilerConfig c = new CompilerConfig(data);
+        CompilerConfig c = compilerContainer.getComponent(CompilerConfig.class);
         c.executeCompiler();
         assertThat(c.wasSuccessful(), Is.is(true));
     }
 
     @Test
     public void installerShouldContainInstallerClass() throws Exception {
-        CompilerConfig c = new CompilerConfig(data);
+        CompilerConfig c = compilerContainer.getComponent(CompilerConfig.class);
         c.executeCompiler();
         AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("Installer.class"));
     }
 
     @Test
     public void installerShouldContainClasses() throws Exception {
-        CompilerConfig c = new CompilerConfig(data);
+        CompilerConfig c = compilerContainer.getComponent(CompilerConfig.class);
         c.executeCompiler();
         AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("Debug.class"));
         AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("ComponentFactory.class"));
@@ -57,7 +63,7 @@ public class CompilationTest {
 
     @Test
     public void installerShouldContainImages() throws Exception {
-        CompilerConfig c = new CompilerConfig(data);
+        CompilerConfig c = compilerContainer.getComponent(CompilerConfig.class);
         c.executeCompiler();
         AssertionHelper.assertZipContainsMatch(out, Is.is("img/JFrameIcon.png"));
     }

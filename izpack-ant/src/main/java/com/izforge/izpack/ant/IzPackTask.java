@@ -24,6 +24,7 @@ package com.izforge.izpack.ant;
 
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.PackagerListener;
+import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -92,6 +93,8 @@ public class IzPackTask extends Task implements PackagerListener {
      */
     private boolean inheritAll = false;
 
+    private CompilerContainer compilerContainer;
+
     /**
      * Creates new IZPackTask
      */
@@ -104,6 +107,8 @@ public class IzPackTask extends Task implements PackagerListener {
         izPackDir = null;
         compression = "default";
         compressionLevel = -1;
+        compilerContainer = new CompilerContainer();
+        compilerContainer.initBindings();
     }
 
     /**
@@ -214,8 +219,9 @@ public class IzPackTask extends Task implements PackagerListener {
         }
         // else use external configuration referenced by the input attribute
         CompilerData compilerData = new CompilerData(compression, kind, null, configText, basedir, output, compressionLevel);
+        compilerContainer.addComponent(CompilerData.class, compilerData);
         // REFACTOR Create compiler here
-        c = new CompilerConfig(compilerData);
+        c = compilerContainer.getComponent(CompilerConfig.class);
         CompilerData.setIzpackHome(izPackDir);
 
         if (properties != null) {

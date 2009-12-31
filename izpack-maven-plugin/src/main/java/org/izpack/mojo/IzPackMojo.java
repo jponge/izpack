@@ -15,6 +15,7 @@ package org.izpack.mojo;
  */
 
 import com.izforge.izpack.compiler.CompilerConfig;
+import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.MavenSession;
@@ -159,6 +160,11 @@ public class IzPackMojo
      */
     private File installerFile;
 
+    /**
+     * Compiler container
+     */
+    private CompilerContainer compilerContainer;
+
     public void execute()
             throws MojoExecutionException, MojoFailureException {
         init();
@@ -169,6 +175,8 @@ public class IzPackMojo
     private void init()
             throws MojoFailureException {
         classifier = this.kind;
+        compilerContainer = new CompilerContainer();
+        compilerContainer.initBindings();
 
         if (installerFile == null) {
             installerFile = new File(project.getBuild().getDirectory(), project.getBuild().getFinalName() + "-"
@@ -243,8 +251,9 @@ public class IzPackMojo
             compilerData.setBasedir(basedir);
             compilerData.setKind(kind);
             compilerData.setOutput(installerFile.getAbsolutePath());
+            compilerContainer.addComponent(CompilerData.class, compilerData);
             // REFACTOR Check if it still works
-            CompilerConfig c = new CompilerConfig(compilerData);
+            CompilerConfig c = compilerContainer.getComponent(CompilerConfig.class);
             CompilerData.setIzpackHome(basedir);
 
             c.executeCompiler();

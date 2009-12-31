@@ -2,6 +2,7 @@ package com.izforge.izpack.integration;
 
 import com.izforge.izpack.AssertionHelper;
 import com.izforge.izpack.compiler.CompilerConfig;
+import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.container.ApplicationContainer;
 import com.izforge.izpack.container.IApplicationContainer;
@@ -34,6 +35,7 @@ public class AbstractInstallationTest {
     public MethodRule globalTimeout = new Timeout(60000);
     protected IApplicationContainer applicationContainer;
     protected IInstallerContainer installerContainer;
+    protected CompilerContainer compilerContainer;
 
     protected FrameFixture installerFrameFixture;
     protected DialogFixture dialogFrameFixture;
@@ -42,6 +44,8 @@ public class AbstractInstallationTest {
     public void initBinding() throws Throwable {
         applicationContainer = new ApplicationContainer();
         applicationContainer.initBindings();
+        compilerContainer = new CompilerContainer();
+        compilerContainer.initBindings();
     }
 
     @Before
@@ -104,10 +108,10 @@ public class AbstractInstallationTest {
      * @throws Exception
      */
     private void compileAndUnzip(File installerFile, File workingDirectory, File out) throws Exception {
-//        installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), "default", out.getAbsolutePath()
         CompilerData data = new CompilerData(installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), out.getAbsolutePath());
-        CompilerConfig c = new CompilerConfig(data);
-        c.executeCompiler();
+        compilerContainer.addComponent(CompilerData.class, data);
+        CompilerConfig compilerConfig = compilerContainer.getComponent(CompilerConfig.class);
+        compilerConfig.executeCompiler();
         File extractedDir = new File(workingDirectory, "temp");
         // Clean before use
         FileUtils.deleteDirectory(extractedDir);

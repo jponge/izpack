@@ -75,22 +75,6 @@ public class CompilerConfig extends Thread {
      */
     private static boolean NO = false;
 
-
-    /**
-     * The xml install file
-     */
-    private String filename;
-
-    /**
-     * The xml install configuration text
-     */
-    private String installText;
-
-    /**
-     * The base directory.
-     */
-    protected String basedir;
-
     /**
      * The installer packager compiler
      */
@@ -122,7 +106,6 @@ public class CompilerConfig extends Thread {
     private String unpackerClassname = "com.izforge.izpack.installer.unpacker.Unpacker";
     private String packagerClassname = "com.izforge.izpack.compiler.Packager";
     private VariableSubstitutor variableSubstitutor;
-
 
     /**
      * Constructor
@@ -189,7 +172,7 @@ public class CompilerConfig extends Thread {
     public void executeCompiler() throws Exception {
         // normalize and test: TODO: may allow failure if we require write
         // access
-        File base = new File(basedir).getAbsoluteFile();
+        File base = new File(compilerData.getBasedir()).getAbsoluteFile();
         if (!base.canRead() || !base.isDirectory()) {
             throw new CompilerException(
                     "Invalid base directory: " + base);
@@ -475,7 +458,7 @@ public class CompilerConfig extends Thread {
             parseError(root, "<packs> requires a <pack>, <refpack> or <refpackset>");
         }
 
-        File baseDir = new File(basedir);
+        File baseDir = new File(compilerData.getBasedir());
 
         for (IXMLElement packElement : packElements) {
 
@@ -619,7 +602,7 @@ public class CompilerConfig extends Thread {
                 }
 
                 if (!file.isAbsolute()) {
-                    file = new File(basedir, file.getPath());
+                    file = new File(compilerData.getBasedir(), file.getPath());
                 }
 
                 try {
@@ -647,7 +630,7 @@ public class CompilerConfig extends Thread {
                 String condition = singleFileNode.getAttribute("condition");
                 File file = new File(src);
                 if (!file.isAbsolute()) {
-                    file = new File(basedir, src);
+                    file = new File(compilerData.getBasedir(), src);
                 }
 
                 // if the path does not exist, maybe it contains variables
@@ -670,7 +653,7 @@ public class CompilerConfig extends Thread {
 
                 File dir = new File(dir_attr);
                 if (!dir.isAbsolute()) {
-                    dir = new File(basedir, dir_attr);
+                    dir = new File(compilerData.getBasedir(), dir_attr);
                 }
                 if (!dir.isDirectory()) // also tests '.exists()'
                 {
@@ -842,7 +825,7 @@ public class CompilerConfig extends Thread {
 
             File dir = new File(dir_attr);
             if (!dir.isAbsolute()) {
-                dir = new File(basedir, dir_attr);
+                dir = new File(compilerData.getBasedir(), dir_attr);
             }
             if (!dir.isDirectory()) // also tests '.exists()'
             {
@@ -880,7 +863,7 @@ public class CompilerConfig extends Thread {
             throws CompilerException {
         File refXMLFile = new File(refFileName);
         if (!refXMLFile.isAbsolute()) {
-            refXMLFile = new File(basedir, refFileName);
+            refXMLFile = new File(compilerData.getBasedir(), refFileName);
         }
         if (!refXMLFile.canRead()) {
             throw new CompilerException("Invalid file: " + refXMLFile);
@@ -1372,7 +1355,7 @@ public class CompilerConfig extends Thread {
         if (webDirURL != null) {
             info.setWebDirURL(requireURLContent(webDirURL).toString());
         }
-        String kind = compiler.getKind();
+        String kind = compilerData.getKind();
         if (kind != null) {
             if (kind.equalsIgnoreCase(CompilerData.WEB) && webDirURL == null) {
                 parseError(root, "<webdir> required when \"WEB\" installer requested");
@@ -1693,14 +1676,14 @@ public class CompilerConfig extends Thread {
     protected IXMLElement getXMLTree() throws IOException {
         IXMLParser parser = new XMLParser();
         IXMLElement data;
-        if (filename != null) {
-            File file = new File(filename).getAbsoluteFile();
+        if (compilerData.getInstallFile() != null) {
+            File file = new File(compilerData.getInstallFile()).getAbsoluteFile();
             assertIsNormalReadableFile(file, "Configuration file");
-            data = parser.parse(new FileInputStream(filename), file.getAbsolutePath());
+            data = parser.parse(new FileInputStream(compilerData.getInstallFile()), file.getAbsolutePath());
             // add izpack built in property
             compiler.setProperty("izpack.file", file.toString());
-        } else if (installText != null) {
-            data = parser.parse(installText);
+        } else if (compilerData.getInstallText() != null) {
+            data = parser.parse(compilerData.getInstallText());
         } else {
             throw new CompilerException("Neither install file nor text specified");
         }
@@ -1800,7 +1783,7 @@ public class CompilerConfig extends Thread {
         URL url = null;
         File resource = new File(path);
         if (!resource.isAbsolute()) {
-            resource = new File(basedir, path);
+            resource = new File(compilerData.getBasedir(), path);
         }
 
         if (!resource.exists()) // fatal
@@ -1872,7 +1855,7 @@ public class CompilerConfig extends Thread {
      * @param message Brief message explaining error
      */
     protected void parseError(String message) throws CompilerException {
-        throw new CompilerException(filename + ":" + message);
+        throw new CompilerException(compilerData.getInstallFile() + ":" + message);
     }
 
     /**
@@ -1883,7 +1866,7 @@ public class CompilerConfig extends Thread {
      * @param message Brief message explaining error
      */
     protected void parseError(IXMLElement parent, String message) throws CompilerException {
-        throw new CompilerException(filename + ":" + parent.getLineNr() + ": " + message);
+        throw new CompilerException(compilerData.getInstallFile() + ":" + parent.getLineNr() + ": " + message);
     }
 
     /**
@@ -1895,7 +1878,7 @@ public class CompilerConfig extends Thread {
      */
     protected void parseError(IXMLElement parent, String message, Throwable cause)
             throws CompilerException {
-        throw new CompilerException(filename + ":" + parent.getLineNr() + ": " + message, cause);
+        throw new CompilerException(compilerData.getInstallFile() + ":" + parent.getLineNr() + ": " + message, cause);
     }
 
     /**
@@ -1906,7 +1889,7 @@ public class CompilerConfig extends Thread {
      * @param message Warning message
      */
     protected void parseWarn(IXMLElement parent, String message) {
-        System.out.println("Warning: " + filename + ":" + parent.getLineNr() + ": " + message);
+        System.out.println("Warning: " + compilerData.getInstallFile() + ":" + parent.getLineNr() + ": " + message);
     }
 
     /**

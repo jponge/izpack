@@ -5,8 +5,10 @@ import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.cli.CliAnalyzer;
 import com.izforge.izpack.compiler.listener.CmdlinePackagerListener;
 import com.izforge.izpack.compiler.provider.CompilerDataProvider;
-import com.izforge.izpack.compiler.provider.VariableSubstitutorProvider;
+import com.izforge.izpack.compiler.provider.PropertiesProvider;
 import com.izforge.izpack.container.AbstractContainer;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.picocontainer.PicoBuilder;
 import org.picocontainer.injectors.ProviderAdapter;
 
@@ -26,8 +28,9 @@ public class CompilerContainer extends AbstractContainer {
         pico.addComponent(CmdlinePackagerListener.class);
         pico.addComponent(Compiler.class);
         pico.addComponent(CompilerConfig.class);
+        pico.addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class);
 
-        pico.addAdapter(new ProviderAdapter(new VariableSubstitutorProvider()));
+        pico.addAdapter(new ProviderAdapter(new PropertiesProvider()));
     }
 
     /**
