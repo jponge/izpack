@@ -636,7 +636,7 @@ public class CompilerConfig extends Thread {
 
                 // if the path does not exist, maybe it contains variables
                 if (!file.exists()) {
-                    file = new File(variableSubstitutor.substitute(file.getAbsolutePath));
+                    file = new File(variableSubstitutor.substitute(file.getAbsolutePath()));
                     // next existance checking appears in pack.addFile
                 }
 

@@ -173,7 +173,7 @@ public class IoHelper {
         } else {
             BufferedInputStream bin = new BufferedInputStream(in, 5120);
             BufferedOutputStream bout = new BufferedOutputStream(out, 5120);
-            vs.substitute(bin, bout, type);
+            vs.substitute(bin, bout, type, null);
             bin.close();
             bout.close();
         }

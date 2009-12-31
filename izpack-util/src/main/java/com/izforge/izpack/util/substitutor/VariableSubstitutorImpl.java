@@ -62,6 +62,10 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
         bracesRequired = braces;
     }
 
+    public String substitute(String str) throws IllegalArgumentException {
+        return substitute(str, SubstitutionType.TYPE_PLAIN);
+    }
+
     public String substitute(String str, SubstitutionType type) throws IllegalArgumentException {
         if (str == null) {
             return null;

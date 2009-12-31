@@ -273,9 +273,9 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             throws Exception {
         SpecHelper specHelper = getSpecHelper();
         String name = specHelper.getRequiredAttribute(regEntry, REG_BASENAME);
-        name = substitutor.substitute\($1\);
+        name = substitutor.substitute(name);
         String keypath = specHelper.getRequiredAttribute(regEntry, REG_KEYPATH);
-        keypath = substitutor.substitute\($1\);
+        keypath = substitutor.substitute(keypath);
         String root = specHelper.getRequiredAttribute(regEntry, REG_ROOT);
         int rootId = resolveRoot(regEntry, root, substitutor);
 
