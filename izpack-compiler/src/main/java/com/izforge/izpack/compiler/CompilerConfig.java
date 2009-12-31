@@ -43,7 +43,6 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.substitutor.SubstitutionType;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.io.*;
@@ -122,6 +121,7 @@ public class CompilerConfig extends Thread {
     private HashMap<String, List<URL>> packsLangUrlMap = new HashMap<String, List<URL>>();
     private String unpackerClassname = "com.izforge.izpack.installer.unpacker.Unpacker";
     private String packagerClassname = "com.izforge.izpack.compiler.Packager";
+    private VariableSubstitutor variableSubstitutor;
 
 
     /**
@@ -129,8 +129,9 @@ public class CompilerConfig extends Thread {
      *
      * @param compilerData Object containing all informations found in command line
      */
-    public CompilerConfig(CompilerData compilerData) {
+    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor) {
         this.compilerData = compilerData;
+        this.variableSubstitutor = variableSubstitutor;
     }
 
     /**
@@ -506,7 +507,7 @@ public class CompilerConfig extends Thread {
             pack.setParent(parent);
             pack.setCondition(conditionid);
             pack.setHidden(hidden);
-            VariableSubstitutor varsubst = new VariableSubstitutorImpl(compiler.getVariables());
+//            VariableSubstitutor varsubst = new VariableSubstitutorImpl(compiler.getVariables());
 
             // unverified
             // if the pack belongs to an excludeGroup it's not preselected by default
@@ -613,7 +614,7 @@ public class CompilerConfig extends Thread {
 
                 // if the path does not exist, maybe it contains variables
                 if (!file.exists()) {
-                    file = new File(varsubst.substitute(src, null));
+                    file = new File(variableSubstitutor.substitute(src, null));
                     // next existence check appears in pack.addFile
                 }
 
@@ -651,7 +652,7 @@ public class CompilerConfig extends Thread {
 
                 // if the path does not exist, maybe it contains variables
                 if (!file.exists()) {
-                    file = new File(varsubst.substitute(file.getAbsolutePath(), null));
+                    file = new File(variableSubstitutor.substitute(file.getAbsolutePath(), null));
                     // next existance checking appears in pack.addFile
                 }
 
@@ -1238,8 +1239,8 @@ public class CompilerConfig extends Thread {
                         if (null == is) {
                             is = new BufferedInputStream(originalUrl.openStream());
                         }
-                        VariableSubstitutor vs = new VariableSubstitutorImpl(compiler.getVariables());
-                        vs.substitute(is, os, type, "UTF-8");
+//                        VariableSubstitutor vs = new VariableSubstitutorImpl(compiler.getVariables());
+                        variableSubstitutor.substitute(is, os, type, "UTF-8");
                     }
                 }
 
