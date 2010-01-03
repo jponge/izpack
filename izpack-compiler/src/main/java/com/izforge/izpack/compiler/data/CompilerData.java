@@ -63,7 +63,7 @@ public class CompilerData {
     private final static String IZ_TEST_FILE = "ShellLink.dll";
     private final static String IZ_TEST_SUBDIR = "bin" + File.separator + "native" + File.separator + "izpack";
 
-    public CompilerData() {
+    private CompilerData() {
         // We get the IzPack home directory
         String izHome = System.getProperty("izpack.home");
         if (izHome != null) {

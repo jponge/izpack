@@ -48,7 +48,7 @@ public class CliAnalyzer {
      * @param args Command line arguments
      * @return Compile data with informations
      */
-    public CompilerData printAndParseArgs(String[] args) {
+    public CompilerData printAndParseArgs(String[] args) throws ParseException {
         printHeader();
         CompilerData result = parseArgs(args);
         printTail(result);
@@ -87,16 +87,10 @@ public class CliAnalyzer {
     }
 
 
-    public CompilerData parseArgs(String[] args) {
+    public CompilerData parseArgs(String[] args) throws ParseException {
         CommandLineParser parser = new PosixParser();
-        CompilerData compilerData = new CompilerData();
-        try {
-            CommandLine commandLine = parser.parse(getOptions(), args);
-            return analyzeCommandLine(commandLine);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return compilerData;
+        CommandLine commandLine = parser.parse(getOptions(), args);
+        return analyzeCommandLine(commandLine);
     }
 
     /**
@@ -118,20 +112,25 @@ public class CliAnalyzer {
      */
     private CompilerData analyzeCommandLine(CommandLine commandLine) {
         validateCommandLine(commandLine);
-        CompilerData compilerData = new CompilerData();
+        String installFile;
+        String baseDir = ".";
+        String output = "install.jar";
 
         if (commandLine.hasOption("?")) {
             printHelp();
             throw new RuntimeException("Helped requested, compiler stop");
         }
         List argList = commandLine.getArgList();
-        if (argList.size() == 1) {
-            compilerData.setInstallFile((String) argList.get(0));
-        }
-
+        installFile = (String) argList.get(0);
         if (commandLine.hasOption(ARG_BASEDIR)) {
-            compilerData.setBasedir(commandLine.getOptionValue(ARG_BASEDIR).trim());
+            baseDir = commandLine.getOptionValue(ARG_BASEDIR).trim();
         }
+        if (commandLine.hasOption(ARG_OUTPUT)) {
+            output = commandLine.getOptionValue(ARG_OUTPUT).trim();
+        }
+        CompilerData compilerData = new CompilerData(installFile, baseDir, output);
+
+
         if (commandLine.hasOption(ARG_COMPRESSION_FORMAT)) {
             compilerData.setComprFormat(commandLine.getOptionValue(ARG_COMPRESSION_FORMAT).trim());
         }
@@ -144,9 +143,7 @@ public class CliAnalyzer {
         if (commandLine.hasOption(ARG_KIND)) {
             compilerData.setKind(commandLine.getOptionValue(ARG_KIND).trim());
         }
-        if (commandLine.hasOption(ARG_OUTPUT)) {
-            compilerData.setOutput(commandLine.getOptionValue(ARG_OUTPUT).trim());
-        }
+
         return compilerData;
     }
 
