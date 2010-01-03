@@ -23,6 +23,7 @@ package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.util.substitutor.SubstitutionType;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
@@ -143,17 +144,17 @@ public class Property {
     public void execute() throws CompilerException {
         if (name != null) {
             if (value == null) {
-                config.parseError(xmlProp, "You must specify a value with the name attribute", compilerData.getInstallFile());
+                AssertionHelper.parseError(xmlProp, "You must specify a value with the name attribute", compilerData.getInstallFile());
             }
         } else {
             if (file == null && env == null) {
-                config.parseError(xmlProp,
+                AssertionHelper.parseError(xmlProp,
                         "You must specify file, or environment when not using the name attribute", compilerData.getInstallFile());
             }
         }
 
         if (file == null && prefix != null) {
-            config.parseError(xmlProp, "Prefix is only valid when loading from a file ", compilerData.getInstallFile());
+            AssertionHelper.parseError(xmlProp, "Prefix is only valid when loading from a file ", compilerData.getInstallFile());
         }
 
         if ((name != null) && (value != null)) {
@@ -181,9 +182,7 @@ public class Property {
                     props.load(fis);
                 }
                 finally {
-                    if (fis != null) {
-                        fis.close();
-                    }
+                    fis.close();
                 }
                 addProperties(props);
             } else {
@@ -193,7 +192,7 @@ public class Property {
             }
         }
         catch (IOException ex) {
-            config.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(), ex, compilerData.getInstallFile());
+            AssertionHelper.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(), ex, compilerData.getInstallFile());
         }
     }
 
@@ -276,7 +275,7 @@ public class Property {
                     props.put(name, value);
                 }
                 catch (IOException ex) {
-                    config.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(),
+                    AssertionHelper.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(),
                             ex, compilerData.getInstallFile());
                 }
             }
