@@ -22,6 +22,7 @@
 package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.util.substitutor.SubstitutionType;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
@@ -84,23 +85,24 @@ import java.util.Vector;
  */
 public class Property {
 
-    protected String name;
+    private String name;
 
-    protected String value;
+    private String value;
 
-    protected File file;
+    private File file;
 
     // protected String resource;
     // protected Path classpath;
-    protected String env;
+    private String env;
 
     // protected Reference ref;
-    protected String prefix;
+    private String prefix;
 
-    protected IXMLElement xmlProp;
+    private IXMLElement xmlProp;
 
-    protected CompilerConfig config;
-    protected Compiler compiler;
+    private CompilerConfig config;
+    private Compiler compiler;
+    private CompilerData compilerData;
 
     public Property(IXMLElement xmlProp, CompilerConfig config) {
         this.xmlProp = xmlProp;
