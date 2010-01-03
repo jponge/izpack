@@ -206,16 +206,6 @@ public class Compiler extends Thread {
     }
 
     /**
-     * Replaces placeholder in the given string with the associated strings.
-     *
-     * @param value to be substituted
-     * @return the substituted string
-     */
-    public String replaceProperties(String value) {
-        return propertySubstitutor.substitute(value, SubstitutionType.TYPE_AT);
-    }
-
-    /**
      * Sets GUI preferences to the packager.
      *
      * @param prefs preferences to be set
@@ -636,7 +626,7 @@ public class Compiler extends Thread {
      * @throws Exception Thrown in case an error occurs.
      */
     public void addCustomListener(int type, String className, String jarPath, List<OsConstraint> constraints) throws Exception {
-        jarPath = replaceProperties(jarPath);
+        jarPath = propertySubstitutor.substitute(jarPath, SubstitutionType.TYPE_AT);
         String fullClassName = className;
         List<String> filePaths = null;
 

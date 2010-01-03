@@ -1604,7 +1604,7 @@ public class CompilerConfig extends Thread {
         if (root != null) {
             // add individual properties
             for (IXMLElement propertyNode : root.getChildrenNamed("property")) {
-                Property property = new Property(propertyNode, this, compilerData);
+                Property property = new Property(propertyNode, this, compilerData, variableSubstitutor);
                 property.execute();
             }
         }
@@ -1632,13 +1632,13 @@ public class CompilerConfig extends Thread {
         Enumeration attributes = element.enumerateAttributeNames();
         while (attributes.hasMoreElements()) {
             String name = (String) attributes.nextElement();
-            String value = compiler.replaceProperties(element.getAttribute(name));
+            String value = variableSubstitutor.substitute(element.getAttribute(name), SubstitutionType.TYPE_AT);
             element.setAttribute(name, value);
         }
 
         String content = element.getContent();
         if (content != null) {
-            element.setContent(compiler.replaceProperties(content));
+            element.setContent(variableSubstitutor.substitute(content, SubstitutionType.TYPE_AT));
         }
 
         for (int i = 0; i < element.getChildren().size(); i++) {
@@ -1874,7 +1874,7 @@ public class CompilerConfig extends Thread {
                 if (className != null) {
                     // Check for a jar attribute on the listener
                     String jarPath = ixmlElement.getAttribute("jar");
-                    jarPath = compiler.replaceProperties(jarPath);
+                    jarPath = variableSubstitutor.substitute(jarPath, SubstitutionType.TYPE_AT);
                     if (jarPath == null) {
                         jarPath = "bin/customActions/" + className + ".jar";
                         if (!new File(jarPath).exists()) {
@@ -1978,7 +1978,7 @@ public class CompilerConfig extends Thread {
         // CustomAction files come in jars packaged IzPack, or they can be
         // specified via a jar attribute on the listener
         String jarPath = var.getAttribute("jar");
-        jarPath = compiler.replaceProperties(jarPath);
+        jarPath = variableSubstitutor.substitute(jarPath, SubstitutionType.TYPE_AT);
         if (jarPath == null) {
             jarPath = "bin/customActions/" + className + ".jar";
         }

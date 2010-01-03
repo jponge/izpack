@@ -104,12 +104,14 @@ public class Property {
     private CompilerConfig config;
     private Compiler compiler;
     private CompilerData compilerData;
+    private VariableSubstitutor variableSubstitutor;
 
-    public Property(IXMLElement xmlProp, CompilerConfig config, CompilerData compilerData) {
+    public Property(IXMLElement xmlProp, CompilerConfig config, CompilerData compilerData, VariableSubstitutor variableSubstitutor) {
         this.xmlProp = xmlProp;
         this.config = config;
         this.compilerData = compilerData;
         this.compiler = config.getCompiler();
+        this.variableSubstitutor = variableSubstitutor;
         name = xmlProp.getAttribute("name");
         value = xmlProp.getAttribute("value");
         env = xmlProp.getAttribute("environment");
@@ -226,7 +228,7 @@ public class Property {
      * @param value value to set
      */
     protected void addProperty(String name, String value) {
-        value = compiler.replaceProperties(value);
+        value = variableSubstitutor.substitute(value, SubstitutionType.TYPE_AT);
 
         compiler.addProperty(name, value);
     }
