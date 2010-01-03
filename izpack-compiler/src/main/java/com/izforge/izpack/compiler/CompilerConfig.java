@@ -332,7 +332,7 @@ public class CompilerConfig extends Thread {
                 String lafName = prefs.lookAndFeelMapping.get(s);
                 String lafJarName = lafMap.get(lafName);
                 if (lafJarName == null) {
-                    parseError(gp, "Unrecognized Look and Feel: " + lafName);
+                    parseError(gp, "Unrecognized Look and Feel: " + lafName, compilerData.getInstallFile());
                 }
 
                 URL lafJarURL = findIzPackResource("lib/" + lafJarName, "Look and Feel Jar file",
@@ -460,7 +460,7 @@ public class CompilerConfig extends Thread {
         Vector<IXMLElement> refPackElements = root.getChildrenNamed("refpack");
         Vector<IXMLElement> refPackSets = root.getChildrenNamed("refpackset");
         if (packElements.isEmpty() && refPackElements.isEmpty() && refPackSets.isEmpty()) {
-            parseError(root, "<packs> requires a <pack>, <refpack> or <refpackset>");
+            parseError(root, "<packs> requires a <pack>, <refpack> or <refpackset>", compilerData.getInstallFile());
         }
 
         File baseDir = new File(compilerData.getBasedir());
@@ -486,7 +486,7 @@ public class CompilerConfig extends Thread {
 
             if (required && excludeGroup != null) {
                 parseError(packElement, "Pack, which has excludeGroup can not be required.", new Exception(
-                        "Pack, which has excludeGroup can not be required."));
+                        "Pack, which has excludeGroup can not be required."), compilerData.getInstallFile());
             }
 
             PackInfo pack = new PackInfo(name, id, description, required, loose, excludeGroup,
@@ -620,7 +620,7 @@ public class CompilerConfig extends Thread {
                     }
                 }
                 catch (Exception x) {
-                    parseError(fileNode, x.getMessage(), x);
+                    parseError(fileNode, x.getMessage(), x, compilerData.getInstallFile());
                 }
             }
 
@@ -648,7 +648,7 @@ public class CompilerConfig extends Thread {
                     pack.addFile(baseDir, file, target, osList, override, blockable, additionals, condition);
                 }
                 catch (FileNotFoundException x) {
-                    parseError(singleFileNode, x.getMessage(), x);
+                    parseError(singleFileNode, x.getMessage(), x, compilerData.getInstallFile());
                 }
             }
 
@@ -662,7 +662,7 @@ public class CompilerConfig extends Thread {
                 }
                 if (!dir.isDirectory()) // also tests '.exists()'
                 {
-                    parseError(fileSetNode, "Invalid directory 'dir': " + dir_attr);
+                    parseError(fileSetNode, "Invalid directory 'dir': " + dir_attr, compilerData.getInstallFile());
                 }
 
                 boolean casesensitive = validateYesNoAttribute(fileSetNode, "casesensitive", YES);
@@ -758,7 +758,7 @@ public class CompilerConfig extends Thread {
                                 blockable, additionals, condition);
                     }
                     catch (FileNotFoundException x) {
-                        parseError(fileSetNode, x.getMessage(), x);
+                        parseError(fileSetNode, x.getMessage(), x, compilerData.getInstallFile());
                     }
                 }
                 for (String dir1 : dirs) {
@@ -768,7 +768,7 @@ public class CompilerConfig extends Thread {
                                 blockable, additionals, condition);
                     }
                     catch (FileNotFoundException x) {
-                        parseError(fileSetNode, x.getMessage(), x);
+                        parseError(fileSetNode, x.getMessage(), x, compilerData.getInstallFile());
                     }
                 }
             }
@@ -834,7 +834,7 @@ public class CompilerConfig extends Thread {
             }
             if (!dir.isDirectory()) // also tests '.exists()'
             {
-                parseError(refPackSet, "Invalid refpackset directory 'dir': " + dir_attr);
+                parseError(refPackSet, "Invalid refpackset directory 'dir': " + dir_attr, compilerData.getInstallFile());
             }
 
             // include pattern
@@ -908,10 +908,10 @@ public class CompilerConfig extends Thread {
         // Now checked the loaded XML file for basic syntax
         // We check it
         if (!"installation".equalsIgnoreCase(refXMLData.getName())) {
-            parseError(refXMLData, "this is not an IzPack XML installation file");
+            parseError(refXMLData, "this is not an IzPack XML installation file", compilerData.getInstallFile());
         }
         if (!CompilerData.VERSION.equalsIgnoreCase(requireAttribute(refXMLData, "version"))) {
-            parseError(refXMLData, "the file version is different from the compiler version");
+            parseError(refXMLData, "the file version is different from the compiler version", compilerData.getInstallFile());
         }
 
         // Read the properties and perform replacement on the rest of the tree
@@ -1024,7 +1024,7 @@ public class CompilerConfig extends Thread {
         // at least one panel is required
         Vector<IXMLElement> panels = root.getChildrenNamed("panel");
         if (panels.isEmpty()) {
-            parseError(root, "<panels> requires a <panel>");
+            parseError(root, "<panels> requires a <panel>", compilerData.getInstallFile());
         }
 
         // We process each panel markup
@@ -1218,7 +1218,7 @@ public class CompilerConfig extends Thread {
                     if (compiler.getVariables().isEmpty()) {
                         // reset url to original.
                         url = originalUrl;
-                        parseWarn(resNode, "No variables defined. " + url.getPath() + " not parsed.");
+                        parseWarn(resNode, "No variables defined. " + url.getPath() + " not parsed.", compilerData.getInstallFile());
                     } else {
                         SubstitutionType type = SubstitutionType.lookup(resNode.getAttribute("type"));
 
@@ -1234,7 +1234,7 @@ public class CompilerConfig extends Thread {
 
             }
             catch (Exception e) {
-                parseError(resNode, e.getMessage(), e);
+                parseError(resNode, e.getMessage(), e, compilerData.getInstallFile());
             }
             finally {
                 if (null != os) {
@@ -1287,7 +1287,7 @@ public class CompilerConfig extends Thread {
         // at least one langpack is required
         Vector<IXMLElement> locals = root.getChildrenNamed("langpack");
         if (locals.isEmpty()) {
-            parseError(root, "<locale> requires a <langpack>");
+            parseError(root, "<locale> requires a <langpack>", compilerData.getInstallFile());
         }
 
         // We process each langpack markup
@@ -1363,7 +1363,7 @@ public class CompilerConfig extends Thread {
         String kind = compilerData.getKind();
         if (kind != null) {
             if (kind.equalsIgnoreCase(CompilerData.WEB) && webDirURL == null) {
-                parseError(root, "<webdir> required when \"WEB\" installer requested");
+                parseError(root, "<webdir> required when \"WEB\" installer requested", compilerData.getInstallFile());
             } else if (kind.equalsIgnoreCase(CompilerData.STANDARD) && webDirURL != null) {
                 // Need a Warning? parseWarn(webDirURL, "Not creating web
                 // installer.");
@@ -1487,7 +1487,7 @@ public class CompilerConfig extends Thread {
             String name = requireAttribute(variableNode, "name");
             String value = requireAttribute(variableNode, "value");
             if (variables.contains(name)) {
-                parseWarn(variableNode, "Variable '" + name + "' being overwritten");
+                parseWarn(variableNode, "Variable '" + name + "' being overwritten", compilerData.getInstallFile());
             }
             variables.setProperty(name, value);
         }
@@ -1512,10 +1512,10 @@ public class CompilerConfig extends Thread {
                 if (valueElement != null) {
                     value = valueElement.getContent();
                     if (value == null) {
-                        parseError("A dynamic variable needs either a value attribute or a value element.");
+                        parseError("A dynamic variable needs either a value attribute or a value element.", compilerData.getInstallFile());
                     }
                 } else {
-                    parseError("A dynamic variable needs either a value attribute or a value element. Variable name: " + name);
+                    parseError("A dynamic variable needs either a value attribute or a value element. Variable name: " + name, compilerData.getInstallFile());
                 }
             }
             String conditionid = variableNode.getAttribute("condition");
@@ -1532,7 +1532,7 @@ public class CompilerConfig extends Thread {
             dynamicVariable.setValue(value);
             dynamicVariable.setConditionid(conditionid);
             if (dynamicValues.remove(dynamicVariable)) {
-                parseWarn(variableNode, "Dynamic Variable '" + name + "' will be overwritten");
+                parseWarn(variableNode, "Dynamic Variable '" + name + "' will be overwritten", compilerData.getInstallFile());
             }
             dynamicValues.add(dynamicVariable);
         }
@@ -1557,12 +1557,12 @@ public class CompilerConfig extends Thread {
                     String conditionid = condition.getId();
                     if (conditions.containsKey(conditionid)) {
                         parseWarn(conditionNode, "Condition with id '" + conditionid
-                                + "' will be overwritten");
+                                + "' will be overwritten", compilerData.getInstallFile());
                     }
                     conditions.put(conditionid, condition);
 
                 } else {
-                    parseWarn(conditionNode, "Condition couldn't be instantiated.");
+                    parseWarn(conditionNode, "Condition couldn't be instantiated.", compilerData.getInstallFile());
                 }
             }
         }
@@ -1603,7 +1603,7 @@ public class CompilerConfig extends Thread {
         if (root != null) {
             // add individual properties
             for (IXMLElement propertyNode : root.getChildrenNamed("property")) {
-                Property property = new Property(propertyNode, this);
+                Property property = new Property(propertyNode, this, compilerData);
                 property.execute();
             }
         }
@@ -1694,10 +1694,10 @@ public class CompilerConfig extends Thread {
         }
         // We check it
         if (!"installation".equalsIgnoreCase(data.getName())) {
-            parseError(data, "this is not an IzPack XML installation file");
+            parseError(data, "this is not an IzPack XML installation file", compilerData.getInstallFile());
         }
         if (!CompilerData.VERSION.equalsIgnoreCase(requireAttribute(data, "version"))) {
-            parseError(data, "the file version is different from the compiler version");
+            parseError(data, "the file version is different from the compiler version", compilerData.getInstallFile());
         }
 
         // We finally return the tree
@@ -1720,7 +1720,7 @@ public class CompilerConfig extends Thread {
             } else if ("update".equalsIgnoreCase(override_val)) {
                 override = PackFile.OVERRIDE_UPDATE;
             } else {
-                parseError(f, "invalid value for attribute \"override\"");
+                parseError(f, "invalid value for attribute \"override\"", compilerData.getInstallFile());
             }
         }
 
@@ -1749,7 +1749,7 @@ public class CompilerConfig extends Thread {
             } else if ("force".equalsIgnoreCase(blockable_val)) {
                 blockable = PackFile.BLOCKABLE_FORCE;
             } else {
-                parseError(f, "invalid value for attribute \"blockable\"");
+                parseError(f, "invalid value for attribute \"blockable\"", compilerData.getInstallFile());
             }
         }
 
@@ -1766,7 +1766,7 @@ public class CompilerConfig extends Thread {
                 // the copied files might be multi-platform.
                 // Print out a warning to inform the user about this fact.
                 //osList.add(new OsConstraint("windows", null, null, null));
-                parseWarn(f, "'blockable' will implicitely apply only on Windows target systems");
+                parseWarn(f, "'blockable' will implicitely apply only on Windows target systems", compilerData.getInstallFile());
             }
         }
 
@@ -1793,14 +1793,14 @@ public class CompilerConfig extends Thread {
 
         if (!resource.exists()) // fatal
         {
-            parseError(parent, desc + " not found: " + resource);
+            parseError(parent, desc + " not found: " + resource, compilerData.getInstallFile());
         }
 
         try {
             url = resource.toURL();
         }
         catch (MalformedURLException how) {
-            parseError(parent, desc + "(" + resource + ")", how);
+            parseError(parent, desc + "(" + resource + ")", how, compilerData.getInstallFile());
         }
 
         return url;
@@ -1838,13 +1838,13 @@ public class CompilerConfig extends Thread {
                     url = resource.toURL();
                 }
                 catch (MalformedURLException how) {
-                    parseError(parent, desc + "(" + resource + ")", how);
+                    parseError(parent, desc + "(" + resource + ")", how, compilerData.getInstallFile());
                 }
             } else {
                 if (ignoreWhenNotFound) {
-                    parseWarn(parent, desc + " not found: " + resource);
+                    parseWarn(parent, desc + " not found: " + resource, compilerData.getInstallFile());
                 } else {
-                    parseError(parent, desc + " not found: " + resource);
+                    parseError(parent, desc + " not found: " + resource, compilerData.getInstallFile());
                 }
             }
 
@@ -1857,44 +1857,48 @@ public class CompilerConfig extends Thread {
      * Create parse error with consistent messages. Includes file name. For use When parent is
      * unknown.
      *
-     * @param message Brief message explaining error
+     * @param message     Brief message explaining error
+     * @param installFile
      */
-    protected void parseError(String message) throws CompilerException {
-        throw new CompilerException(compilerData.getInstallFile() + ":" + message);
+    protected static void parseError(String message, String installFile) throws CompilerException {
+        throw new CompilerException(installFile + ":" + message);
     }
 
     /**
      * Create parse error with consistent messages. Includes file name and line # of parent. It is
      * an error for 'parent' to be null.
      *
-     * @param parent  The element in which the error occured
-     * @param message Brief message explaining error
+     * @param parent      The element in which the error occured
+     * @param message     Brief message explaining error
+     * @param installFile
      */
-    protected void parseError(IXMLElement parent, String message) throws CompilerException {
-        throw new CompilerException(compilerData.getInstallFile() + ":" + parent.getLineNr() + ": " + message);
+    protected void parseError(IXMLElement parent, String message, String installFile) throws CompilerException {
+        throw new CompilerException(installFile + ":" + parent.getLineNr() + ": " + message);
     }
 
     /**
      * Create a chained parse error with consistent messages. Includes file name and line # of
      * parent. It is an error for 'parent' to be null.
      *
-     * @param parent  The element in which the error occured
-     * @param message Brief message explaining error
+     * @param installFile
+     * @param parent      The element in which the error occured
+     * @param message     Brief message explaining error
      */
-    protected void parseError(IXMLElement parent, String message, Throwable cause)
+    protected static void parseError(IXMLElement parent, String message, Throwable cause, String installFile)
             throws CompilerException {
-        throw new CompilerException(compilerData.getInstallFile() + ":" + parent.getLineNr() + ": " + message, cause);
+        throw new CompilerException(installFile + ":" + parent.getLineNr() + ": " + message, cause);
     }
 
     /**
      * Create a parse warning with consistent messages. Includes file name and line # of parent. It
      * is an error for 'parent' to be null.
      *
-     * @param parent  The element in which the warning occured
-     * @param message Warning message
+     * @param parent      The element in which the warning occured
+     * @param message     Warning message
+     * @param installFile
      */
-    protected void parseWarn(IXMLElement parent, String message) {
-        System.out.println("Warning: " + compilerData.getInstallFile() + ":" + parent.getLineNr() + ": " + message);
+    protected static void parseWarn(IXMLElement parent, String message, String installFile) {
+        System.out.println("Warning: " + installFile + ":" + parent.getLineNr() + ": " + message);
     }
 
     /**
@@ -1907,7 +1911,7 @@ public class CompilerConfig extends Thread {
     protected IXMLElement requireChildNamed(IXMLElement parent, String name) throws CompilerException {
         IXMLElement child = parent.getFirstChildNamed(name);
         if (child == null) {
-            parseError(parent, "<" + parent.getName() + "> requires child <" + name + ">");
+            parseError(parent, "<" + parent.getName() + "> requires child <" + name + ">", compilerData.getInstallFile());
         }
         return child;
     }
@@ -1924,7 +1928,7 @@ public class CompilerConfig extends Thread {
             url = new URL(requireContent(element));
         }
         catch (MalformedURLException x) {
-            parseError(element, "<" + element.getName() + "> requires valid URL", x);
+            parseError(element, "<" + element.getName() + "> requires valid URL", x, compilerData.getInstallFile());
         }
         return url;
     }
@@ -1938,7 +1942,7 @@ public class CompilerConfig extends Thread {
     protected String requireContent(IXMLElement element) throws CompilerException {
         String content = element.getContent();
         if (content == null || content.length() == 0) {
-            parseError(element, "<" + element.getName() + "> requires content");
+            parseError(element, "<" + element.getName() + "> requires content", compilerData.getInstallFile());
         }
         return content;
     }
@@ -1968,7 +1972,7 @@ public class CompilerConfig extends Thread {
         String value = element.getAttribute(attribute);
         if (value == null) {
             parseError(element, "<" + element.getName() + "> requires attribute '" + attribute
-                    + "'");
+                    + "'", compilerData.getInstallFile());
         }
         return value;
     }
@@ -1986,13 +1990,13 @@ public class CompilerConfig extends Thread {
         String value = element.getAttribute(attribute);
         if (value == null || value.length() == 0) {
             parseError(element, "<" + element.getName() + "> requires attribute '" + attribute
-                    + "'");
+                    + "'", compilerData.getInstallFile());
         }
         try {
             return Integer.parseInt(value);
         }
         catch (NumberFormatException x) {
-            parseError(element, "'" + attribute + "' must be an integer");
+            parseError(element, "'" + attribute + "' must be an integer", compilerData.getInstallFile());
         }
         return 0; // never happens
     }
@@ -2015,7 +2019,7 @@ public class CompilerConfig extends Thread {
         }
 
         parseError(element, "<" + element.getName() + "> invalid attribute '" + attribute
-                + "': Expected (yes|no)");
+                + "': Expected (yes|no)", compilerData.getInstallFile());
 
         return false; // never happens
     }
@@ -2045,7 +2049,7 @@ public class CompilerConfig extends Thread {
         // TODO: should this be an error if it's present but "none of the
         // above"?
         parseWarn(element, "<" + element.getName() + "> invalid attribute '" + attribute
-                + "': Expected (yes|no) if present");
+                + "': Expected (yes|no) if present", compilerData.getInstallFile());
 
         return defaultValue;
     }
@@ -2235,11 +2239,11 @@ public class CompilerConfig extends Thread {
         if (listener != null) {
             instance = listener.newInstance();
         } else {
-            parseError(var, "Cannot find defined compiler listener " + className);
+            parseError(var, "Cannot find defined compiler listener " + className, compilerData.getInstallFile());
         }
         if (!CompilerListener.class.isInstance(instance)) {
             parseError(var, "'" + className + "' must be implemented "
-                    + CompilerListener.class.toString());
+                    + CompilerListener.class.toString(), compilerData.getInstallFile());
         }
         List<OsConstraint> constraints = OsConstraint.getOsList(var);
         return (new Object[]{instance, className, constraints});
@@ -2285,7 +2289,7 @@ public class CompilerConfig extends Thread {
             }
         }
         catch (CompilerException ce) {
-            parseError(f, ce.getMessage());
+            parseError(f, ce.getMessage(), compilerData.getInstallFile());
         }
         return (retval);
     }
@@ -2427,12 +2431,12 @@ public class CompilerConfig extends Thread {
                     }
                     catch (IllegalArgumentException e) {
                         parseError(action, "Invalid value [" + stage + "] for attribute : "
-                                + PanelAction.PANEL_ACTION_STAGE_TAG);
+                                + PanelAction.PANEL_ACTION_STAGE_TAG, compilerData.getInstallFile());
                     }
                 }
             } else {
                 parseError(xmlActions, "<" + PanelAction.PANEL_ACTIONS_TAG + "> requires a <"
-                        + PanelAction.PANEL_ACTION_TAG + ">");
+                        + PanelAction.PANEL_ACTION_TAG + ">", compilerData.getInstallFile());
             }
         }
     }

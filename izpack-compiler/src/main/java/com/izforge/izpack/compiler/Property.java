@@ -104,9 +104,10 @@ public class Property {
     private Compiler compiler;
     private CompilerData compilerData;
 
-    public Property(IXMLElement xmlProp, CompilerConfig config) {
+    public Property(IXMLElement xmlProp, CompilerConfig config, CompilerData compilerData) {
         this.xmlProp = xmlProp;
         this.config = config;
+        this.compilerData = compilerData;
         this.compiler = config.getCompiler();
         name = xmlProp.getAttribute("name");
         value = xmlProp.getAttribute("value");
@@ -131,15 +132,6 @@ public class Property {
      *
      * @return the current value or the empty string
      */
-    public String getValue() {
-        return toString();
-    }
-
-    /**
-     * get the value of this property
-     *
-     * @return the current value or the empty string
-     */
     public String toString() {
         return value == null ? "" : value;
     }
@@ -151,17 +143,17 @@ public class Property {
     public void execute() throws CompilerException {
         if (name != null) {
             if (value == null) {
-                config.parseError(xmlProp, "You must specify a value with the name attribute");
+                config.parseError(xmlProp, "You must specify a value with the name attribute", compilerData.getInstallFile());
             }
         } else {
             if (file == null && env == null) {
                 config.parseError(xmlProp,
-                        "You must specify file, or environment when not using the name attribute");
+                        "You must specify file, or environment when not using the name attribute", compilerData.getInstallFile());
             }
         }
 
         if (file == null && prefix != null) {
-            config.parseError(xmlProp, "Prefix is only valid when loading from a file ");
+            config.parseError(xmlProp, "Prefix is only valid when loading from a file ", compilerData.getInstallFile());
         }
 
         if ((name != null) && (value != null)) {
@@ -201,7 +193,7 @@ public class Property {
             }
         }
         catch (IOException ex) {
-            config.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(), ex);
+            config.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(), ex, compilerData.getInstallFile());
         }
     }
 
@@ -285,7 +277,7 @@ public class Property {
                 }
                 catch (IOException ex) {
                     config.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(),
-                            ex);
+                            ex, compilerData.getInstallFile());
                 }
             }
             while (mods != 0);
