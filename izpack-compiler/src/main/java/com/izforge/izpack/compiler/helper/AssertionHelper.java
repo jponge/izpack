@@ -3,6 +3,8 @@ package com.izforge.izpack.compiler.helper;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.compiler.CompilerException;
 
+import java.io.File;
+
 /**
  * Created by IntelliJ IDEA.
  *
@@ -57,4 +59,31 @@ public class AssertionHelper {
     public static void parseWarn(IXMLElement parent, String message, String installFile) {
         System.out.println("Warning: " + installFile + ":" + parent.getLineNr() + ": " + message);
     }
+
+    /**
+     * Checks whether a File instance is a regular file, exists and is readable. Throws appropriate
+     * CompilerException to report violations of these conditions.
+     *
+     * @throws com.izforge.izpack.compiler.CompilerException
+     *          if the file is either not existing, not a regular file or not
+     *          readable.
+     */
+    public static void assertIsNormalReadableFile(File fileToCheck, String fileDescription)
+            throws CompilerException {
+        if (fileToCheck != null) {
+            if (!fileToCheck.exists()) {
+                throw new CompilerException(fileDescription
+                        + " does not exist: " + fileToCheck);
+            }
+            if (!fileToCheck.isFile()) {
+                throw new CompilerException(fileDescription
+                        + " is not a regular file: " + fileToCheck);
+            }
+            if (!fileToCheck.canRead()) {
+                throw new CompilerException(fileDescription
+                        + " is not readable by application: " + fileToCheck);
+            }
+        }
+    }
+
 }
