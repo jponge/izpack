@@ -21,6 +21,8 @@
  */
 package com.izforge.izpack.compiler.compressor;
 
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+
 import java.io.OutputStream;
 
 
@@ -46,8 +48,8 @@ public class BZip2PackCompressor extends PackCompressorBase {
     /**
      *
      */
-    public BZip2PackCompressor() {
-        super();
+    public BZip2PackCompressor(VariableSubstitutor variableSubstitutor) {
+        super(variableSubstitutor);
         formatNames = THIS_FORMAT_NAMES;
         containerPaths = THIS_CONTAINER_PATH;
         decoderMapper = THIS_DECODER_MAPPER;
@@ -58,6 +60,7 @@ public class BZip2PackCompressor extends PackCompressorBase {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compressor.PackCompressor#getOutputStream(java.io.OutputStream)
      */
+
     public OutputStream getOutputStream(OutputStream os) throws Exception {
         // TODO Auto-generated method stub
 

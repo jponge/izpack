@@ -18,6 +18,7 @@
 package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.data.PackFile;
@@ -57,8 +58,8 @@ public class MultiVolumePackager extends PackagerBase {
      *
      * @throws CompilerException
      */
-    public MultiVolumePackager(Properties properties) throws CompilerException {
-        super(properties);
+    public MultiVolumePackager(Properties properties, CompilerContainer compilerContainer) throws CompilerException {
+        super(properties, compilerContainer);
         initPackCompressor("default", -1);
     }
 

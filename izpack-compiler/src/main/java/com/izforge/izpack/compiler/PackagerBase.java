@@ -23,7 +23,7 @@
 package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.compiler.compressor.PackCompressor;
-import com.izforge.izpack.compiler.compressor.PackCompressorFactory;
+import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.rules.Condition;
 
@@ -55,8 +55,11 @@ public abstract class PackagerBase implements IPackager {
     public static final String RESOURCES_PATH = "resources/";
     private Properties properties;
 
-    public PackagerBase(Properties properties) {
+    private CompilerContainer compilerContainer;
+
+    public PackagerBase(Properties properties, CompilerContainer compilerContainer) {
         this.properties = properties;
+        this.compilerContainer = compilerContainer;
     }
 
     public String getSkeletonSubpath() {
@@ -315,7 +318,8 @@ public abstract class PackagerBase implements IPackager {
      */
 
     public void initPackCompressor(String compr_format, int compr_level) throws CompilerException {
-        compressor = PackCompressorFactory.get(compr_format);
+        compressor = (PackCompressor) compilerContainer.getComponent(compr_format);
+//        compressor = PackCompressorFactory.get(compr_format);
         compressor.setCompressionLevel(compr_level);
     }
 

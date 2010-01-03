@@ -21,6 +21,8 @@
  */
 package com.izforge.izpack.compiler.compressor;
 
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+
 import java.io.BufferedOutputStream;
 import java.io.OutputStream;
 
@@ -37,14 +39,15 @@ public class RawPackCompressor extends PackCompressorBase {
     /**
      *
      */
-    public RawPackCompressor() {
-        super();
+    public RawPackCompressor(VariableSubstitutor variableSubstitutor) {
+        super(variableSubstitutor);
         formatNames = THIS_FORMAT_NAMES;
     }
 
     /* (non-Javadoc)
      * @see com.izforge.izpack.compressor.PackCompressor#getOutputStream(java.io.OutputStream)
      */
+
     public OutputStream getOutputStream(OutputStream os) {
         // In this pack compressor we must not use reflection because
         // the neede class will be always present (a base class of the VM).

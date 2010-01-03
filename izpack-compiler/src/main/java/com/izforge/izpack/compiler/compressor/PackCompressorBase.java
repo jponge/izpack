@@ -22,6 +22,8 @@
 package com.izforge.izpack.compiler.compressor;
 
 import com.izforge.izpack.compiler.Compiler;
+import com.izforge.izpack.util.substitutor.SubstitutionType;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -61,16 +63,20 @@ public abstract class PackCompressorBase implements PackCompressor {
     private Constructor<Object> constructor;
     private int level = -1;
 
+    protected VariableSubstitutor variableSubstitutor;
+
     /**
-     *
+     * @param variableSubstitutor
      */
-    public PackCompressorBase() {
+    public PackCompressorBase(VariableSubstitutor variableSubstitutor) {
         super();
+        this.variableSubstitutor = variableSubstitutor;
     }
 
     /* (non-Javadoc)
      * @see com.izforge.izpack.compressor.PackCompressor#getContainerPath()
      */
+
     public String[] getContainerPaths() {
         return (containerPaths);
     }
@@ -78,6 +84,7 @@ public abstract class PackCompressorBase implements PackCompressor {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compressor.PackCompressor#getEncoderClassName()
      */
+
     public String getEncoderClassName() {
         return (encoderClassName);
     }
@@ -85,6 +92,7 @@ public abstract class PackCompressorBase implements PackCompressor {
     /* (non-Javadoc)
     * @see com.izforge.izpack.compressor.PackCompressor#getDecoderClassNames()
     */
+
     public String[][] getDecoderClassNames() {
         return (decoderClassNames);
     }
@@ -92,6 +100,7 @@ public abstract class PackCompressorBase implements PackCompressor {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compressor.PackCompressor#useStandardCompression()
      */
+
     public boolean useStandardCompression() {
         return (false);
     }
@@ -99,6 +108,7 @@ public abstract class PackCompressorBase implements PackCompressor {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compressor.PackCompressor#getCompressionFormatSymbols()
      */
+
     public String[] getCompressionFormatSymbols() {
         return (formatNames);
     }
@@ -106,6 +116,7 @@ public abstract class PackCompressorBase implements PackCompressor {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compressor.PackCompressor#getDecoderMapperName()
      */
+
     public String getDecoderMapperName() {
         return (decoderMapper);
     }
@@ -113,6 +124,7 @@ public abstract class PackCompressorBase implements PackCompressor {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compressor.PackCompressor#setCompiler(com.izforge.izpack.compiler.Compiler)
      */
+
     public void setCompiler(Compiler compiler) {
         this.compiler = compiler;
     }
@@ -120,6 +132,7 @@ public abstract class PackCompressorBase implements PackCompressor {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compressor.PackCompressor#setCompressionLevel(int)
      */
+
     public void setCompressionLevel(int level) {
         this.level = level;
     }
@@ -127,6 +140,7 @@ public abstract class PackCompressorBase implements PackCompressor {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compressor.PackCompressor#getCompressionLevel()
      */
+
     public int getCompressionLevel() {
         return (level);
     }
@@ -134,6 +148,7 @@ public abstract class PackCompressorBase implements PackCompressor {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compressor.PackCompressor#needsBufferedOutputStream()
      */
+
     public boolean needsBufferedOutputStream() {
         return (true);
     }
@@ -156,7 +171,6 @@ public abstract class PackCompressorBase implements PackCompressor {
         if (encoder == null) {
             String[] rawPaths = getContainerPaths();
             URL[] uRLs = new URL[rawPaths.length];
-            Object instance = null;
             int i;
             int j = 0;
 
@@ -164,7 +178,7 @@ public abstract class PackCompressorBase implements PackCompressor {
                 if (rawPaths[i] == null) {
                     continue;
                 }
-                String jarPath = compiler.replaceProperties(rawPaths[i]);
+                String jarPath = variableSubstitutor.substitute(rawPaths[i], SubstitutionType.TYPE_AT);
                 URL url = compiler.findIzPackResource(jarPath, "Pack compressor jar file");
                 if (url != null) {
                     uRLs[j++] = url;

@@ -21,6 +21,8 @@
  */
 package com.izforge.izpack.compiler.compressor;
 
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+
 import java.io.OutputStream;
 
 
@@ -45,8 +47,8 @@ public class DefaultPackCompressor extends PackCompressorBase {
     /**
      *
      */
-    public DefaultPackCompressor() {
-        super();
+    public DefaultPackCompressor(VariableSubstitutor variableSubstitutor) {
+        super(variableSubstitutor);
         formatNames = THIS_FORMAT_NAMES;
         containerPaths = THIS_CONTAINER_PATH;
         decoderMapper = THIS_DECODER_MAPPER;
@@ -57,6 +59,7 @@ public class DefaultPackCompressor extends PackCompressorBase {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compressor.PackCompressor#getOutputStream(java.io.OutputStream)
      */
+
     public OutputStream getOutputStream(OutputStream os) {
         // This will crash the packager if implementation is wrong :-)
         return (null);
@@ -65,6 +68,7 @@ public class DefaultPackCompressor extends PackCompressorBase {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compressor.PackCompressor#useStandardCompression()
      */
+
     public boolean useStandardCompression() {
         return (true);
     }
@@ -72,6 +76,7 @@ public class DefaultPackCompressor extends PackCompressorBase {
     /* (non-Javadoc)
     * @see com.izforge.izpack.compressor.PackCompressor#needsBufferedOutputStream()
     */
+
     public boolean needsBufferedOutputStream() {
         return (false);
     }
