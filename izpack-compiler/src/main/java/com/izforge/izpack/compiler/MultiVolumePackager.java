@@ -58,8 +58,8 @@ public class MultiVolumePackager extends PackagerBase {
      *
      * @throws CompilerException
      */
-    public MultiVolumePackager(Properties properties, CompilerContainer compilerContainer) throws CompilerException {
-        super(properties, compilerContainer);
+    public MultiVolumePackager(Properties properties, CompilerContainer compilerContainer, PackagerListener listener) throws CompilerException {
+        super(properties, compilerContainer, listener);
         initPackCompressor("default", -1);
     }
 

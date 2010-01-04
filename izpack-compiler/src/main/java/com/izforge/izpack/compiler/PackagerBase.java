@@ -57,9 +57,10 @@ public abstract class PackagerBase implements IPackager {
 
     private CompilerContainer compilerContainer;
 
-    public PackagerBase(Properties properties, CompilerContainer compilerContainer) {
+    public PackagerBase(Properties properties, CompilerContainer compilerContainer, PackagerListener listener) {
         this.properties = properties;
         this.compilerContainer = compilerContainer;
+        this.listener = listener;
     }
 
     public String getSkeletonSubpath() {
@@ -290,14 +291,6 @@ public abstract class PackagerBase implements IPackager {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#getPackagerListener()
-     */
-
-    public PackagerListener getPackagerListener() {
-        return listener;
-    }
-
-    /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#getPacksList()
      */
 
@@ -344,15 +337,6 @@ public abstract class PackagerBase implements IPackager {
             this.info.setPackDecoderClassName(getCompressor().getDecoderMapperName());
         }
     }
-
-    /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#setPackagerListener(com.izforge.izpack.compiler.PackagerListener)
-     */
-
-    public void setPackagerListener(PackagerListener listener) {
-        this.listener = listener;
-    }
-
 
     /**
      * @return the rules

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Override type for files
+ * Override type for pack
  *
  * @author Anthonin Bonnefoy
  */

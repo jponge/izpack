@@ -28,6 +28,7 @@ package com.izforge.izpack.compiler;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.util.Debug;
@@ -64,10 +65,6 @@ public class Compiler extends Thread {
      */
     private boolean compileFailed = true;
 
-    /**
-     * Key/values which are substituted at compile time in the install data
-     */
-    private Properties properties;
     private CompilerContainer compilerContainer;
 
     private CompilerData compilerData;
@@ -77,22 +74,22 @@ public class Compiler extends Thread {
     private VariableSubstitutor propertySubstitutor;
 
     private PackagerListener packagerlistener;
+    public PropertyManager propertyManager;
 
     /**
      * The constructor.
      *
      * @throws CompilerException
      */
-    public Compiler(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Properties properties, CompilerContainer compilerContainer) throws CompilerException {
+    public Compiler(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Properties properties, CompilerContainer compilerContainer, PropertyManager propertyManager) throws CompilerException {
         this.compilerData = compilerData;
-
+        this.propertyManager = propertyManager;
         this.propertySubstitutor = variableSubstitutor;
-        this.properties = properties;
         this.compilerContainer = compilerContainer;
 
         // add izpack built in property
-        setProperty("izpack.version", CompilerData.IZPACK_VERSION);
-        setProperty("basedir", compilerData.getBasedir());
+        propertyManager.setProperty("izpack.version", CompilerData.IZPACK_VERSION);
+        propertyManager.setProperty("basedir", compilerData.getBasedir());
     }
 
     /**
@@ -110,35 +107,10 @@ public class Compiler extends Thread {
             if (compressor != null) {
                 compressor.setCompiler(this);
             }
-            if (this.packagerlistener != null) {
-                packager.setPackagerListener(this.packagerlistener);
-            }
         }
         catch (Exception e) {
             Debug.trace(e);
             throw new CompilerException("Error loading packager class: " + classname);
-        }
-    }
-
-    /**
-     * Returns the packager listener.
-     *
-     * @return the packager listener
-     */
-    public PackagerListener getPackagerListener() {
-        return packager.getPackagerListener();
-    }
-
-    /**
-     * Sets the packager listener.
-     *
-     * @param listener The listener.
-     */
-    public void setPackagerListener(PackagerListener listener) {
-        if (packager != null) {
-            packager.setPackagerListener(listener);
-        } else {
-            this.packagerlistener = listener;
         }
     }
 
@@ -231,48 +203,6 @@ public class Compiler extends Thread {
      */
     public IPackager getPackager() {
         return packager;
-    }
-
-    /**
-     * Get the value of a property currerntly known to izpack.
-     *
-     * @param name the name of the property
-     * @return the value of the property, or null
-     */
-    public String getProperty(String name) {
-        return properties.getProperty(name);
-    }
-
-    /**
-     * Add a name value pair to the project property set. Overwriting any existing value except system properties.
-     *
-     * @param name  the name of the property
-     * @param value the value to set
-     * @return an indicator if the name value pair was added.
-     */
-    public boolean setProperty(String name, String value) {
-        if (System.getProperties().containsKey(name)) {
-            return false;
-        }
-        properties.put(name, value);
-        return true;
-    }
-
-    /**
-     * Add a name value pair to the project property set. It is <i>not</i> replaced it is already
-     * in the set of properties.
-     *
-     * @param name  the name of the property
-     * @param value the value to set
-     * @return true if the property was not already set
-     */
-    public boolean addProperty(String name, String value) {
-        String old = properties.getProperty(name);
-        if (old == null) {
-            properties.put(name, value);
-            return true;
-        }
-        return false;
     }
 
     /**

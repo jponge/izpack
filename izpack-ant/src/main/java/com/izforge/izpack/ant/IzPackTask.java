@@ -26,6 +26,7 @@ import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.PackagerListener;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.compiler.data.PropertyManager;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
@@ -211,7 +212,7 @@ public class IzPackTask extends Task implements PackagerListener {
 
         String kind = (installerType == null ? null : installerType.getValue());
 
-        CompilerConfig c = null;
+        CompilerConfig compilerConfig = null;
         String configText = null;
         if (config != null) {// Pass in the embedded configuration
             configText = config.getText();
@@ -221,7 +222,9 @@ public class IzPackTask extends Task implements PackagerListener {
         CompilerData compilerData = new CompilerData(compression, kind, null, configText, basedir, output, compressionLevel);
         compilerContainer.addComponent(CompilerData.class, compilerData);
         // REFACTOR Create compiler here
-        c = compilerContainer.getComponent(CompilerConfig.class);
+        compilerConfig = compilerContainer.getComponent(CompilerConfig.class);
+        PropertyManager propertyManager = compilerContainer.getComponent(PropertyManager.class);
+        compilerContainer.getComponent(Properties.class);
         CompilerData.setIzpackHome(izPackDir);
 
         if (properties != null) {
@@ -230,7 +233,7 @@ public class IzPackTask extends Task implements PackagerListener {
                 String name = (String) e.nextElement();
                 String value = properties.getProperty(name);
                 value = fixPathString(value);
-                c.addProperty(name, value);
+                propertyManager.addProperty(name, value);
             }
         }
 
@@ -241,12 +244,12 @@ public class IzPackTask extends Task implements PackagerListener {
                 String name = (String) e.nextElement();
                 String value = (String) projectProps.get(name);
                 value = fixPathString(value);
-                c.addProperty(name, value);
+                propertyManager.addProperty(name, value);
             }
         }
 
         try {
-            c.executeCompiler();
+            compilerConfig.executeCompiler();
         }
         catch (Exception e) {
             throw new BuildException(e);// Throw an exception if compilation

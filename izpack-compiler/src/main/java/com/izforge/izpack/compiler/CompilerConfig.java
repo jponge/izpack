@@ -33,6 +33,7 @@ import com.izforge.izpack.adaptator.IXMLWriter;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
 import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.helper.impl.XmlCompilerHelper;
@@ -109,18 +110,20 @@ public class CompilerConfig extends Thread {
     private String packagerClassname = "com.izforge.izpack.compiler.Packager";
     private VariableSubstitutor variableSubstitutor;
     private XmlCompilerHelper xmlCompilerHelper;
+    private PropertyManager propertyManager;
 
     /**
      * Constructor
      *
      * @param compilerData Object containing all informations found in command line
      */
-    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper) {
+    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager) {
         this.compilerData = compilerData;
         this.variableSubstitutor = variableSubstitutor;
         this.compiler = compiler;
         this.compilerHelper = compilerHelper;
         this.xmlCompilerHelper = xmlCompilerHelper;
+        this.propertyManager = propertyManager;
     }
 
     /**
@@ -132,7 +135,7 @@ public class CompilerConfig extends Thread {
      * @return true if the property was not already set
      */
     public boolean addProperty(String name, String value) {
-        return compiler.addProperty(name, value);
+        return propertyManager.addProperty(name, value);
     }
 
     /**
@@ -142,13 +145,6 @@ public class CompilerConfig extends Thread {
      */
     public Compiler getCompiler() {
         return compiler;
-    }
-
-    /**
-     * Retrieves the packager listener
-     */
-    public PackagerListener getPackagerListener() {
-        return compiler.getPackagerListener();
     }
 
     /**
@@ -185,7 +181,7 @@ public class CompilerConfig extends Thread {
         }
 
         // add izpack built in property
-        compiler.setProperty("basedir", base.toString());
+        propertyManager.setProperty("basedir", base.toString());
 
         // We get the XML data tree
         IXMLElement data = getXMLTree();
@@ -265,7 +261,7 @@ public class CompilerConfig extends Thread {
                 compiler.getPackager().addConfigurationInformation(options);
             }
         }
-        compiler.addProperty("UNPACKER_CLASS", unpackerClassname);
+        propertyManager.addProperty("UNPACKER_CLASS", unpackerClassname);
         notifyCompilerListener("loadPackager", CompilerListener.END, data);
     }
 
@@ -417,7 +413,7 @@ public class CompilerConfig extends Thread {
             IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "info", this);
             IXMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
             if (XmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", YES, compilerData.getInstallFile())) {
-                URL url = findIzPackResource(compiler.getProperty("uninstaller-ext"), "Uninstaller extensions",
+                URL url = findIzPackResource(propertyManager.getProperty("uninstaller-ext", compiler), "Uninstaller extensions",
                         root);
                 compiler.addResource("IzPack.uninstaller-ext", url);
             }
@@ -1406,7 +1402,7 @@ public class CompilerConfig extends Thread {
         // Add the uninstaller as a resource if specified
         IXMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
         if (XmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", YES, compilerData.getInstallFile())) {
-            URL url = findIzPackResource(compiler.getProperty("uninstaller"), "Uninstaller", root);
+            URL url = findIzPackResource(propertyManager.getProperty("uninstaller", compiler), "Uninstaller", root);
             compiler.addResource("IzPack.uninstaller", url);
 
             if (privileged != null) {
@@ -1445,7 +1441,7 @@ public class CompilerConfig extends Thread {
         }
 
         // look for an unpacker class
-        String unpackerclass = compiler.getProperty("UNPACKER_CLASS");
+        String unpackerclass = propertyManager.getProperty("UNPACKER_CLASS", compiler);
         info.setUnpackerClassName(unpackerclass);
         compiler.setInfo(info);
         notifyCompilerListener("addInfo", CompilerListener.END, data);
@@ -1604,8 +1600,7 @@ public class CompilerConfig extends Thread {
         if (root != null) {
             // add individual properties
             for (IXMLElement propertyNode : root.getChildrenNamed("property")) {
-                Property property = new Property(propertyNode, this, compilerData, variableSubstitutor);
-                property.execute();
+                propertyManager.execute(propertyNode);
             }
         }
 
@@ -1662,7 +1657,7 @@ public class CompilerConfig extends Thread {
             AssertionHelper.assertIsNormalReadableFile(file, "Configuration file");
             data = parser.parse(new FileInputStream(compilerData.getInstallFile()), file.getAbsolutePath());
             // add izpack built in property
-            compiler.setProperty("izpack.file", file.toString());
+            propertyManager.setProperty("izpack.file", file.toString());
         } else if (compilerData.getInstallText() != null) {
             data = parser.parse(compilerData.getInstallText());
         } else {

@@ -46,20 +46,6 @@ public interface IPackager {
     public abstract void createInstaller(File primaryFile) throws Exception;
 
     /**
-     * Get the PackagerListener.
-     *
-     * @return the current PackagerListener
-     */
-    public abstract PackagerListener getPackagerListener();
-
-    /**
-     * Adds a listener.
-     *
-     * @param listener The listener.
-     */
-    public abstract void setPackagerListener(PackagerListener listener);
-
-    /**
      * Sets the informations related to this installation.
      *
      * @param info The info section.

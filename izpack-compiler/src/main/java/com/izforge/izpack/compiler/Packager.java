@@ -60,8 +60,8 @@ public class Packager extends PackagerBase {
      *
      * @throws CompilerException
      */
-    public Packager(Properties properties, CompilerContainer compilerContainer) throws CompilerException {
-        super(properties, compilerContainer);
+    public Packager(Properties properties, CompilerContainer compilerContainer, PackagerListener listener) throws CompilerException {
+        super(properties, compilerContainer, listener);
         initPackCompressor("default", -1);
     }
 
