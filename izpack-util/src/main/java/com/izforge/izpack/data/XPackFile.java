@@ -40,7 +40,7 @@ public class XPackFile extends PackFile implements Comparable<XPackFile> {
      * @param override
      * @throws FileNotFoundException
      */
-    public XPackFile(File baseDir, File src, String target, List<OsConstraint> osList, int override, Blockable blockable)
+    public XPackFile(File baseDir, File src, String target, List<OsConstraint> osList, OverrideType override, Blockable blockable)
             throws FileNotFoundException {
         super(baseDir, src, target, osList, override, blockable);
         this.archivefileposition = 0;
@@ -54,7 +54,7 @@ public class XPackFile extends PackFile implements Comparable<XPackFile> {
      * @param additionals
      * @throws FileNotFoundException
      */
-    public XPackFile(File baseDir, File src, String target, List<OsConstraint> osList, int override, Blockable blockable, Map additionals)
+    public XPackFile(File baseDir, File src, String target, List<OsConstraint> osList, OverrideType override, Blockable blockable, Map additionals)
             throws FileNotFoundException {
         super(baseDir, src, target, osList, override, blockable, additionals);
         this.archivefileposition = 0;

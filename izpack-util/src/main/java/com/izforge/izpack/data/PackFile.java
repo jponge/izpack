@@ -39,15 +39,9 @@ public class PackFile implements Serializable {
 
     static final long serialVersionUID = -834377078706854909L;
 
-    public static final int OVERRIDE_FALSE = 0;
-
-    public static final int OVERRIDE_TRUE = 1;
-
-    public static final int OVERRIDE_ASK_FALSE = 2;
-
-    public static final int OVERRIDE_ASK_TRUE = 3;
-
-    public static final int OVERRIDE_UPDATE = 4;
+    public enum OverrideType {
+        OVERRIDE_FALSE, OVERRIDE_TRUE, OVERRIDE_ASK_FALSE, OVERRIDE_ASK_TRUE, OVERRIDE_UPDATE;
+    }
 
     /**
      * Only available when compiling. Makes no sense when installing, use relativePath instead.
@@ -92,7 +86,7 @@ public class PackFile implements Serializable {
     /**
      * Whether or not this file is going to override any existing ones
      */
-    private int override = OVERRIDE_FALSE;
+    private OverrideType override;
 
     /**
      * Whether or not this file might be blocked by the operating system
@@ -128,7 +122,7 @@ public class PackFile implements Serializable {
      * @param override what to do when the file already exists
      * @throws FileNotFoundException if the specified file does not exist.
      */
-    public PackFile(File baseDir, File src, String target, List<OsConstraint> osList, int override, Blockable blockable)
+    public PackFile(File baseDir, File src, String target, List<OsConstraint> osList, OverrideType override, Blockable blockable)
             throws FileNotFoundException {
         this(src, computeRelativePathFrom(baseDir, src), target, osList, override, blockable, null);
     }
@@ -144,7 +138,7 @@ public class PackFile implements Serializable {
      * @param additionals        additional attributes
      * @throws FileNotFoundException if the specified file does not exist.
      */
-    public PackFile(File src, String relativeSourcePath, String target, List<OsConstraint> osList, int override, Blockable blockable, Map additionals)
+    public PackFile(File src, String relativeSourcePath, String target, List<OsConstraint> osList, OverrideType override, Blockable blockable, Map additionals)
             throws FileNotFoundException {
         if (!src.exists()) // allows cleaner client co
         {
@@ -189,7 +183,7 @@ public class PackFile implements Serializable {
      * @param additionals additional attributes
      * @throws FileNotFoundException if the specified file does not exist.
      */
-    public PackFile(File baseDir, File src, String target, List<OsConstraint> osList, int override, Blockable blockable, Map additionals)
+    public PackFile(File baseDir, File src, String target, List<OsConstraint> osList, OverrideType override, Blockable blockable, Map additionals)
             throws FileNotFoundException {
         this(src, computeRelativePathFrom(baseDir, src), target, osList, override, blockable, additionals);
     }
@@ -257,7 +251,7 @@ public class PackFile implements Serializable {
     /**
      * Whether or not this file is going to override any existing ones
      */
-    public final int override() {
+    public final OverrideType override() {
         return override;
     }
 

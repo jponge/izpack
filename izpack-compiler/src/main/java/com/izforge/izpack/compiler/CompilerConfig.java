@@ -593,7 +593,7 @@ public class CompilerConfig extends Thread {
                 String src = XmlCompilerHelper.requireAttribute(fileNode, "src", compilerData.getInstallFile());
                 String targetdir = XmlCompilerHelper.requireAttribute(fileNode, "targetdir", compilerData.getInstallFile());
                 List<OsConstraint> osList = OsConstraint.getOsList(fileNode); // TODO: unverified
-                int override = getOverrideValue(fileNode);
+                PackFile.OverrideType override = getOverrideValue(fileNode);
                 Blockable blockable = getBlockableValue(fileNode, osList);
                 Map additionals = getAdditionals(fileNode);
                 boolean unpack = "true".equalsIgnoreCase(fileNode.getAttribute("unpack"));
@@ -630,7 +630,7 @@ public class CompilerConfig extends Thread {
                 String src = XmlCompilerHelper.requireAttribute(singleFileNode, "src", compilerData.getInstallFile());
                 String target = XmlCompilerHelper.requireAttribute(singleFileNode, "target", compilerData.getInstallFile());
                 List<OsConstraint> osList = OsConstraint.getOsList(singleFileNode); // TODO: unverified
-                int override = getOverrideValue(singleFileNode);
+                PackFile.OverrideType override = getOverrideValue(singleFileNode);
                 Blockable blockable = getBlockableValue(singleFileNode, osList);
                 Map additionals = getAdditionals(singleFileNode);
                 String condition = singleFileNode.getAttribute("condition");
@@ -670,7 +670,7 @@ public class CompilerConfig extends Thread {
                 boolean defexcludes = XmlCompilerHelper.validateYesNoAttribute(fileSetNode, "defaultexcludes", YES, compilerData.getInstallFile());
                 String targetdir = XmlCompilerHelper.requireAttribute(fileSetNode, "targetdir", compilerData.getInstallFile());
                 List<OsConstraint> osList = OsConstraint.getOsList(fileSetNode); // TODO: unverified
-                int override = getOverrideValue(fileSetNode);
+                PackFile.OverrideType override = getOverrideValue(fileSetNode);
                 Blockable blockable = getBlockableValue(fileSetNode, osList);
                 Map additionals = getAdditionals(fileSetNode);
                 String condition = fileSetNode.getAttribute("condition");
@@ -944,7 +944,7 @@ public class CompilerConfig extends Thread {
      * @param condition
      */
     protected void addArchiveContent(File baseDir, File archive, String targetdir,
-                                     List<OsConstraint> osList, int override, Blockable blockable,
+                                     List<OsConstraint> osList, PackFile.OverrideType override, Blockable blockable,
                                      PackInfo pack, Map additionals,
                                      String condition) throws IOException {
 
@@ -992,7 +992,7 @@ public class CompilerConfig extends Thread {
      * @throws FileNotFoundException if the file does not exist
      */
     protected void addRecursively(File baseDir, File file, String targetdir,
-                                  List<OsConstraint> osList, int override, Blockable blockable,
+                                  List<OsConstraint> osList, PackFile.OverrideType override, Blockable blockable,
                                   PackInfo pack, Map additionals, String condition) throws IOException {
         String targetfile = targetdir + "/" + file.getName();
         if (!file.isDirectory()) {
@@ -1680,21 +1680,21 @@ public class CompilerConfig extends Thread {
         return data;
     }
 
-    protected int getOverrideValue(IXMLElement f) throws CompilerException {
-        int override = PackFile.OVERRIDE_UPDATE;
+    protected PackFile.OverrideType getOverrideValue(IXMLElement f) throws CompilerException {
+        PackFile.OverrideType override = PackFile.OverrideType.OVERRIDE_UPDATE;
 
         String override_val = f.getAttribute("override");
         if (override_val != null) {
             if ("true".equalsIgnoreCase(override_val)) {
-                override = PackFile.OVERRIDE_TRUE;
+                override = PackFile.OverrideType.OVERRIDE_TRUE;
             } else if ("false".equalsIgnoreCase(override_val)) {
-                override = PackFile.OVERRIDE_FALSE;
+                override = PackFile.OverrideType.OVERRIDE_FALSE;
             } else if ("asktrue".equalsIgnoreCase(override_val)) {
-                override = PackFile.OVERRIDE_ASK_TRUE;
+                override = PackFile.OverrideType.OVERRIDE_ASK_TRUE;
             } else if ("askfalse".equalsIgnoreCase(override_val)) {
-                override = PackFile.OVERRIDE_ASK_FALSE;
+                override = PackFile.OverrideType.OVERRIDE_ASK_FALSE;
             } else if ("update".equalsIgnoreCase(override_val)) {
-                override = PackFile.OVERRIDE_UPDATE;
+                override = PackFile.OverrideType.OVERRIDE_UPDATE;
             } else {
                 AssertionHelper.parseError(f, "invalid value for attribute \"override\"", compilerData.getInstallFile());
             }
