@@ -11,7 +11,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Created by IntelliJ IDEA.
+ * Helper methods for compiler
  *
  * @author Anthonin Bonnefoy
  */

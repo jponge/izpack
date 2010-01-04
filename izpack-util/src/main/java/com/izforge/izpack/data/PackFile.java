@@ -49,10 +49,6 @@ public class PackFile implements Serializable {
 
     public static final int OVERRIDE_UPDATE = 4;
 
-    public enum Blockable {
-        BLOCKABLE_NONE, BLOCKABLE_AUTO, BLOCKABLE_FORCE
-    }
-
     /**
      * Only available when compiling. Makes no sense when installing, use relativePath instead.
      */

@@ -215,7 +215,7 @@ public class PackInfo implements Serializable {
      * until the {@link Packager#createInstaller} is invoked, thus a FileNotFoundEception will occur
      * then, if the file is deleted in between.
      */
-    public void addFile(File baseDir, File file, String targetfile, List<OsConstraint> osList, int override, PackFile.Blockable blockable, Map additionals, String condition)
+    public void addFile(File baseDir, File file, String targetfile, List<OsConstraint> osList, int override, Blockable blockable, Map additionals, String condition)
             throws FileNotFoundException {
         if (!file.exists()) {
             throw new FileNotFoundException(file.toString());
