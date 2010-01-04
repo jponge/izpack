@@ -39,10 +39,6 @@ public class PackFile implements Serializable {
 
     static final long serialVersionUID = -834377078706854909L;
 
-    public enum OverrideType {
-        OVERRIDE_FALSE, OVERRIDE_TRUE, OVERRIDE_ASK_FALSE, OVERRIDE_ASK_TRUE, OVERRIDE_UPDATE;
-    }
-
     /**
      * Only available when compiling. Makes no sense when installing, use relativePath instead.
      */

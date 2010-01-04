@@ -219,14 +219,14 @@ public class MultiVolumeUnpacker extends UnpackerBase {
                         // if this file exists and should not be overwritten,
                         // check
                         // what to do
-                        if ((pathFile.exists()) && (pf.override() != PackFile.OverrideType.OVERRIDE_TRUE)) {
+                        if ((pathFile.exists()) && (pf.override() != OverrideType.OVERRIDE_TRUE)) {
                             boolean overwritefile = false;
 
                             // don't overwrite file if the user said so
-                            if (pf.override() != PackFile.OverrideType.OVERRIDE_FALSE) {
-                                if (pf.override() == PackFile.OverrideType.OVERRIDE_TRUE) {
+                            if (pf.override() != OverrideType.OVERRIDE_FALSE) {
+                                if (pf.override() == OverrideType.OVERRIDE_TRUE) {
                                     overwritefile = true;
-                                } else if (pf.override() == PackFile.OverrideType.OVERRIDE_UPDATE) {
+                                } else if (pf.override() == OverrideType.OVERRIDE_UPDATE) {
                                     // check mtime of involved files
                                     // (this is not 100% perfect, because the
                                     // already existing file might
@@ -239,10 +239,10 @@ public class MultiVolumeUnpacker extends UnpackerBase {
                                 } else {
                                     int def_choice = -1;
 
-                                    if (pf.override() == PackFile.OverrideType.OVERRIDE_ASK_FALSE) {
+                                    if (pf.override() == OverrideType.OVERRIDE_ASK_FALSE) {
                                         def_choice = AbstractUIHandler.ANSWER_NO;
                                     }
-                                    if (pf.override() == PackFile.OverrideType.OVERRIDE_ASK_TRUE) {
+                                    if (pf.override() == OverrideType.OVERRIDE_ASK_TRUE) {
                                         def_choice = AbstractUIHandler.ANSWER_YES;
                                     }
 
