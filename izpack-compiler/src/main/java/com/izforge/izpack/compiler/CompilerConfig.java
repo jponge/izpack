@@ -1065,7 +1065,7 @@ public class CompilerConfig extends Thread {
                 fullClassName = className;
             } else {
                 try {
-                    fullClassName = getFullClassName(url, className);
+                    fullClassName = compilerHelper.getFullClassName(url, className);
                 }
                 catch (IOException e) {
                 }
@@ -1913,51 +1913,6 @@ public class CompilerConfig extends Thread {
     }
 
     /**
-     * Returns the qualified class name for the given class. This method expects as the url param a
-     * jar file which contains the given class. It scans the zip entries of the jar file.
-     *
-     * @param url       url of the jar file which contains the class
-     * @param className short name of the class for which the full name should be resolved
-     * @return full qualified class name
-     * @throws IOException
-     */
-    private String getFullClassName(URL url, String className) throws IOException // throws
-    // Exception
-    {
-        JarInputStream jis = new JarInputStream(url.openStream());
-        ZipEntry zentry;
-        while ((zentry = jis.getNextEntry()) != null) {
-            String name = zentry.getName();
-            int lastPos = name.lastIndexOf(".class");
-            if (lastPos < 0) {
-                continue; // No class file.
-            }
-            name = name.replace('/', '.');
-            int pos = -1;
-            int nonCasePos = -1;
-            if (className != null) {
-                pos = name.indexOf(className);
-                nonCasePos = name.toLowerCase().indexOf(className.toLowerCase());
-            }
-            if (pos != -1 && name.length() == pos + className.length() + 6) // "Main" class found
-            {
-                jis.close();
-                return (name.substring(0, lastPos));
-            }
-
-            if (nonCasePos != -1 && name.length() == nonCasePos + className.length() + 6)
-            // "Main" class with different case found
-            {
-                throw new IllegalArgumentException(
-                        "Fatal error! The declared panel name in the xml file (" + className
-                                + ") differs in case to the founded class file (" + name + ").");
-            }
-        }
-        jis.close();
-        return (null);
-    }
-
-    /**
      * Returns the compiler listener which is defined in the xml element. As xml element a "listner"
      * node will be expected. Additional it is expected, that either "findIzPackResource" returns an
      * url based on "bin/customActions/[className].jar", or that the listener element has a jar
@@ -1983,7 +1938,7 @@ public class CompilerConfig extends Thread {
             jarPath = "bin/customActions/" + className + ".jar";
         }
         URL url = findIzPackResource(jarPath, "CustomAction jar file", var);
-        String fullName = getFullClassName(url, className);
+        String fullName = compilerHelper.getFullClassName(url, className);
         if (fullName == null) {
             // class not found
             return null;
