@@ -49,9 +49,9 @@ public class PackFile implements Serializable {
 
     public static final int OVERRIDE_UPDATE = 4;
 
-    public static final int BLOCKABLE_NONE = 0;
-    public static final int BLOCKABLE_AUTO = 1;
-    public static final int BLOCKABLE_FORCE = 2;
+    public enum Blockable {
+        BLOCKABLE_NONE, BLOCKABLE_AUTO, BLOCKABLE_FORCE
+    }
 
     /**
      * Only available when compiling. Makes no sense when installing, use relativePath instead.
@@ -101,7 +101,7 @@ public class PackFile implements Serializable {
     /**
      * Whether or not this file might be blocked by the operating system
      */
-    private int blockable = BLOCKABLE_NONE;
+    private Blockable blockable = Blockable.BLOCKABLE_NONE;
 
     /**
      * Additional attributes or any else for customisation
@@ -132,7 +132,7 @@ public class PackFile implements Serializable {
      * @param override what to do when the file already exists
      * @throws FileNotFoundException if the specified file does not exist.
      */
-    public PackFile(File baseDir, File src, String target, List<OsConstraint> osList, int override, int blockable)
+    public PackFile(File baseDir, File src, String target, List<OsConstraint> osList, int override, Blockable blockable)
             throws FileNotFoundException {
         this(src, computeRelativePathFrom(baseDir, src), target, osList, override, blockable, null);
     }
@@ -148,7 +148,7 @@ public class PackFile implements Serializable {
      * @param additionals        additional attributes
      * @throws FileNotFoundException if the specified file does not exist.
      */
-    public PackFile(File src, String relativeSourcePath, String target, List<OsConstraint> osList, int override, int blockable, Map additionals)
+    public PackFile(File src, String relativeSourcePath, String target, List<OsConstraint> osList, int override, Blockable blockable, Map additionals)
             throws FileNotFoundException {
         if (!src.exists()) // allows cleaner client co
         {
@@ -193,7 +193,7 @@ public class PackFile implements Serializable {
      * @param additionals additional attributes
      * @throws FileNotFoundException if the specified file does not exist.
      */
-    public PackFile(File baseDir, File src, String target, List<OsConstraint> osList, int override, int blockable, Map additionals)
+    public PackFile(File baseDir, File src, String target, List<OsConstraint> osList, int override, Blockable blockable, Map additionals)
             throws FileNotFoundException {
         this(src, computeRelativePathFrom(baseDir, src), target, osList, override, blockable, additionals);
     }
@@ -268,7 +268,7 @@ public class PackFile implements Serializable {
     /**
      * Whether or not this file might be blocked during installation/uninstallation
      */
-    public final int blockable() {
+    public final Blockable blockable() {
         return blockable;
     }
 

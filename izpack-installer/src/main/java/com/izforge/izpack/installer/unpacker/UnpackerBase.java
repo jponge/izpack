@@ -845,7 +845,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
 
     protected boolean blockableForCurrentOs(PackFile pf) {
         return
-                (pf.blockable() != PackFile.BLOCKABLE_NONE)
+                (pf.blockable() != PackFile.Blockable.BLOCKABLE_NONE)
                         && (OsVersion.IS_WINDOWS);
     }
 }

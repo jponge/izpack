@@ -594,7 +594,7 @@ public class CompilerConfig extends Thread {
                 String targetdir = XmlCompilerHelper.requireAttribute(fileNode, "targetdir", compilerData.getInstallFile());
                 List<OsConstraint> osList = OsConstraint.getOsList(fileNode); // TODO: unverified
                 int override = getOverrideValue(fileNode);
-                int blockable = getBlockableValue(fileNode, osList);
+                PackFile.Blockable blockable = getBlockableValue(fileNode, osList);
                 Map additionals = getAdditionals(fileNode);
                 boolean unpack = "true".equalsIgnoreCase(fileNode.getAttribute("unpack"));
                 String condition = fileNode.getAttribute("condition");
@@ -631,7 +631,7 @@ public class CompilerConfig extends Thread {
                 String target = XmlCompilerHelper.requireAttribute(singleFileNode, "target", compilerData.getInstallFile());
                 List<OsConstraint> osList = OsConstraint.getOsList(singleFileNode); // TODO: unverified
                 int override = getOverrideValue(singleFileNode);
-                int blockable = getBlockableValue(singleFileNode, osList);
+                PackFile.Blockable blockable = getBlockableValue(singleFileNode, osList);
                 Map additionals = getAdditionals(singleFileNode);
                 String condition = singleFileNode.getAttribute("condition");
                 File file = new File(src);
@@ -671,7 +671,7 @@ public class CompilerConfig extends Thread {
                 String targetdir = XmlCompilerHelper.requireAttribute(fileSetNode, "targetdir", compilerData.getInstallFile());
                 List<OsConstraint> osList = OsConstraint.getOsList(fileSetNode); // TODO: unverified
                 int override = getOverrideValue(fileSetNode);
-                int blockable = getBlockableValue(fileSetNode, osList);
+                PackFile.Blockable blockable = getBlockableValue(fileSetNode, osList);
                 Map additionals = getAdditionals(fileSetNode);
                 String condition = fileSetNode.getAttribute("condition");
 
@@ -944,7 +944,7 @@ public class CompilerConfig extends Thread {
      * @param condition
      */
     protected void addArchiveContent(File baseDir, File archive, String targetdir,
-                                     List<OsConstraint> osList, int override, int blockable,
+                                     List<OsConstraint> osList, int override, PackFile.Blockable blockable,
                                      PackInfo pack, Map additionals,
                                      String condition) throws IOException {
 
@@ -992,7 +992,7 @@ public class CompilerConfig extends Thread {
      * @throws FileNotFoundException if the file does not exist
      */
     protected void addRecursively(File baseDir, File file, String targetdir,
-                                  List<OsConstraint> osList, int override, int blockable,
+                                  List<OsConstraint> osList, int override, PackFile.Blockable blockable,
                                   PackInfo pack, Map additionals, String condition) throws IOException {
         String targetfile = targetdir + "/" + file.getName();
         if (!file.isDirectory()) {
@@ -1713,23 +1713,23 @@ public class CompilerConfig extends Thread {
      * @return blockable level
      * @throws CompilerException
      */
-    protected int getBlockableValue(IXMLElement f, List<OsConstraint> osList) throws CompilerException {
-        int blockable = PackFile.BLOCKABLE_NONE;
+    protected PackFile.Blockable getBlockableValue(IXMLElement f, List<OsConstraint> osList) throws CompilerException {
+        PackFile.Blockable blockable = PackFile.Blockable.BLOCKABLE_NONE;
 
         String blockable_val = f.getAttribute("blockable");
         if (blockable_val != null) {
             if ("none".equalsIgnoreCase(blockable_val)) {
-                blockable = PackFile.BLOCKABLE_NONE;
+                blockable = PackFile.Blockable.BLOCKABLE_NONE;
             } else if ("auto".equalsIgnoreCase(blockable_val)) {
-                blockable = PackFile.BLOCKABLE_AUTO;
+                blockable = PackFile.Blockable.BLOCKABLE_AUTO;
             } else if ("force".equalsIgnoreCase(blockable_val)) {
-                blockable = PackFile.BLOCKABLE_FORCE;
+                blockable = PackFile.Blockable.BLOCKABLE_FORCE;
             } else {
                 AssertionHelper.parseError(f, "invalid value for attribute \"blockable\"", compilerData.getInstallFile());
             }
         }
 
-        if (blockable != PackFile.BLOCKABLE_NONE) {
+        if (blockable != PackFile.Blockable.BLOCKABLE_NONE) {
             boolean found = false;
             for (OsConstraint anOsList : osList) {
                 if ("windows".equals(anOsList.getFamily())) {
