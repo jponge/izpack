@@ -5,7 +5,7 @@
     <parent>
         <artifactId>izpack-parent</artifactId>
         <groupId>org.codehaus.izpack</groupId>
-        <version>4.3.0-SNAPSHOT</version>
+        <version>5.0.0-SNAPSHOT</version>
         <relativePath>../izpack-parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,6 +13,13 @@
     <artifactId>izpack-test-scala</artifactId>
 
     <dependencies>
+
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-dist</artifactId>
+            <version>${version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest</artifactId>
