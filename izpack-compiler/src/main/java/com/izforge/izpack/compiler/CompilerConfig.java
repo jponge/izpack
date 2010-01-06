@@ -413,7 +413,7 @@ public class CompilerConfig extends Thread {
             IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "info", this);
             IXMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
             if (XmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", YES, compilerData.getInstallFile())) {
-                URL url = findIzPackResource(propertyManager.getProperty("uninstaller-ext", compiler), "Uninstaller extensions",
+                URL url = findIzPackResource(propertyManager.getProperty("uninstaller-ext"), "Uninstaller extensions",
                         root);
                 compiler.addResource("IzPack.uninstaller-ext", url);
             }
@@ -1402,7 +1402,7 @@ public class CompilerConfig extends Thread {
         // Add the uninstaller as a resource if specified
         IXMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
         if (XmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", YES, compilerData.getInstallFile())) {
-            URL url = findIzPackResource(propertyManager.getProperty("uninstaller", compiler), "Uninstaller", root);
+            URL url = findIzPackResource(propertyManager.getProperty("uninstaller"), "Uninstaller", root);
             compiler.addResource("IzPack.uninstaller", url);
 
             if (privileged != null) {
@@ -1441,7 +1441,7 @@ public class CompilerConfig extends Thread {
         }
 
         // look for an unpacker class
-        String unpackerclass = propertyManager.getProperty("UNPACKER_CLASS", compiler);
+        String unpackerclass = propertyManager.getProperty("UNPACKER_CLASS");
         info.setUnpackerClassName(unpackerclass);
         compiler.setInfo(info);
         notifyCompilerListener("addInfo", CompilerListener.END, data);
