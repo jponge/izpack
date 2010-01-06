@@ -1,7 +1,6 @@
 package com.izforge.izpack.compiler.data;
 
 import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.compiler.Compiler;
 import com.izforge.izpack.compiler.CompilerException;
 import com.izforge.izpack.compiler.PackagerListener;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
@@ -91,12 +90,11 @@ public class PropertyManager {
      * @return true if the property was not already set
      */
     public boolean addProperty(String name, String value) {
-        String old = properties.getProperty(name);
-        if (old == null) {
-            properties.put(name, value);
-            return true;
+        if (properties.containsKey(name)) {
+            return false;
         }
-        return false;
+        addPropertySubstitute(name, value);
+        return true;
     }
 
     /**
@@ -110,18 +108,17 @@ public class PropertyManager {
         if (System.getProperties().containsKey(name)) {
             return false;
         }
-        properties.put(name, value);
+        addPropertySubstitute(name, value);
         return true;
     }
 
     /**
      * Get the value of a property currerntly known to izpack.
      *
-     * @param name     the name of the property
-     * @param compiler
+     * @param name the name of the property
      * @return the value of the property, or null
      */
-    public String getProperty(String name, Compiler compiler) {
+    public String getProperty(String name) {
         return properties.getProperty(name);
     }
 
@@ -181,7 +178,7 @@ public class PropertyManager {
      * @param xmlProp
      * @param prefix
      */
-    protected void loadFile(File file, IXMLElement xmlProp, String prefix) throws CompilerException {
+    private void loadFile(File file, IXMLElement xmlProp, String prefix) throws CompilerException {
         Properties props = new Properties();
         packagerListener.packagerMsg("Loading " + file.getAbsolutePath(),
                 PackagerListener.MSG_VERBOSE);
@@ -239,7 +236,7 @@ public class PropertyManager {
      * @param file
      * @param prefix
      */
-    protected void addProperties(Properties props, IXMLElement xmlProp, File file, String prefix) throws CompilerException {
+    public void addProperties(Properties props, IXMLElement xmlProp, File file, String prefix) throws CompilerException {
         resolveAllProperties(props, xmlProp, file);
         Enumeration e = props.keys();
         while (e.hasMoreElements()) {
@@ -249,7 +246,6 @@ public class PropertyManager {
             if (prefix != null) {
                 name = prefix + name;
             }
-
             addPropertySubstitute(name, value);
         }
     }
@@ -260,9 +256,9 @@ public class PropertyManager {
      * @param name  name of property
      * @param value value to set
      */
-    protected void addPropertySubstitute(String name, String value) {
+    private void addPropertySubstitute(String name, String value) {
         value = variableSubstitutor.substitute(value, SubstitutionType.TYPE_AT);
-        addProperty(name, value);
+        properties.put(name, value);
     }
 
     /**
