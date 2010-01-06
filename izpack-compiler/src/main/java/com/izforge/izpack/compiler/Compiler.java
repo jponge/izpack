@@ -81,7 +81,7 @@ public class Compiler extends Thread {
      *
      * @throws CompilerException
      */
-    public Compiler(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Properties properties, CompilerContainer compilerContainer, PropertyManager propertyManager) throws CompilerException {
+    public Compiler(CompilerData compilerData, VariableSubstitutor variableSubstitutor, CompilerContainer compilerContainer, PropertyManager propertyManager) throws CompilerException {
         this.compilerData = compilerData;
         this.propertyManager = propertyManager;
         this.propertySubstitutor = variableSubstitutor;
