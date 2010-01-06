@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<!DOCTYPE installation SYSTEM "installation.dtd">
 
 <!-- 
     A sample installation file.
@@ -24,6 +25,15 @@
         </authors>
         <url>http://www.anotherworld-inspace-website.net/</url>
     </info>
+
+    <variables>
+        <variable name="scriptFile" value="script.bat"/>
+    </variables>
+    <dynamicvariables>
+        <variables>
+            <variable name="myPath" value="$INSTALLPATH/test"/>
+        </variables>
+    </dynamicvariables>
 
     <!-- 
         The gui preferences indication.
@@ -72,8 +82,8 @@
             <description>The base files</description>
             <file src="Readme.txt" targetdir="$INSTALL_PATH"/>
             <file src="Licence.txt" targetdir="$INSTALL_PATH"/>
-            <file src="script.bat" targetdir="$INSTALL_PATH"/>
-            <parsable targetfile="$INSTALL_PATH/script.bat"/>
+            <file src="script.bat" targetdir="$myPath"/>
+            <parsable targetfile="$INSTALL_PATH/$scriptFile"/>
             <!-- The file will be parsed -->
         </pack>
         <pack name="Docs" required="no">
