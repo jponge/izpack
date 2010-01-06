@@ -7,6 +7,9 @@ import data.{PropertyManager, CompilerData}
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.fixture.{FixtureFlatSpec}
+import com.izforge.izpack.adaptator.impl.XMLParser
+import org.mockito.Mockito
+import java.util.Properties
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,7 +27,7 @@ class CompilerConfigScalaTest extends FixtureFlatSpec with ShouldMatchers with M
   var compilerHelper = mock[CompilerHelper]
   var xmlCompilerHerlper = mock[XmlCompilerHelper]
   var propertyManager = mock[PropertyManager]
-
+  val xmlParser = new XMLParser
   // 2. define the withFixture method
   def withFixture(test: OneArgTest) {
     val compilerConfig = new CompilerConfig(data, variableSubstitutor, compiler, compilerHelper, xmlCompilerHerlper, propertyManager)
@@ -33,7 +36,17 @@ class CompilerConfigScalaTest extends FixtureFlatSpec with ShouldMatchers with M
 
   "The compilerConfig" should "add variables" in {
     compilerConfig: CompilerConfig =>
+      val xmlData = xmlParser.parse(<root>
+        <variables>
+            <variable name="scriptFile" value="script.bat"/>
+        </variables>
+      </root> + "")
+      val variable = mock[Properties]
+      Mockito.when(compiler.getVariables).thenReturn(variable)
 
+      compilerConfig.addVariables(xmlData)
+
+      Mockito.verify(variable).setProperty("scriptFile", "script.bat")
   }
 
 
