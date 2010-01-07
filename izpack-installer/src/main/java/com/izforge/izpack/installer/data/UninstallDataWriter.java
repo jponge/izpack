@@ -7,7 +7,7 @@ import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import java.io.*;
 import java.util.*;
@@ -18,6 +18,11 @@ import java.util.zip.ZipOutputStream;
 public class UninstallDataWriter {
     private static final String UNINSTALLER_CONDITION = "UNINSTALLER_CONDITION";
     private static final String LOGFILE_PATH = "InstallerFrame.logfilePath";
+    private VariableSubstitutor variableSubstitutor;
+
+    public UninstallDataWriter(VariableSubstitutor variableSubstitutor) {
+        this.variableSubstitutor = variableSubstitutor;
+    }
 
     /**
      * Write uninstall data.
@@ -78,8 +83,7 @@ public class UninstallDataWriter {
             if (logfile.toLowerCase().startsWith("default")) {
                 logfile = installdata.getInfo().getUninstallerPath() + "/install.log";
             }
-            logfile = IoHelper.translatePath(logfile, new VariableSubstitutorImpl(installdata
-                    .getVariables()));
+            logfile = IoHelper.translatePath(logfile, variableSubstitutor);
             File outFile = new File(logfile);
             if (!outFile.getParentFile().exists()) {
                 outFile.getParentFile().mkdirs();
