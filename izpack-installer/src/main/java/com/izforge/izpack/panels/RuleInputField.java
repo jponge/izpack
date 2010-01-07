@@ -151,6 +151,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
      * Holds an instance of the <code>Processor</code> if one was specified and available
      */
     private Processor encryptionService;
+    private VariableSubstitutor variableSubstitutor;
 
     /*--------------------------------------------------------------------------*/
     // javadoc inherited
@@ -278,6 +279,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
         // ----------------------------------------------------
         activeField = (RuleTextField) inputFields.elementAt(0);
         activeField.grabFocus();
+        variableSubstitutor = new VariableSubstitutorImpl(this.idata.getVariables());
     }
 
     /*--------------------------------------------------------------------------*/
@@ -523,8 +525,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
                     if (!"".equals(className) && !process) {
                         process = true;
                     }
-                    VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
-                    val = vs.substitute(val);
+                    val = variableSubstitutor.substitute(val);
                     vals[i] = val;
                     i++;
                     ((JTextField) inputFields.elementAt(index)).setText(val);
