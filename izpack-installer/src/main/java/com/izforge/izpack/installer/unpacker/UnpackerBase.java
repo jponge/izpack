@@ -30,7 +30,6 @@ import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.substitutor.SubstitutionType;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.apache.regexp.RE;
 import org.apache.regexp.RECompiler;
 import org.apache.regexp.RESyntaxException;
@@ -62,11 +61,6 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
      * The uninstallation data.
      */
     protected UninstallData udata;
-
-    /**
-     * The variables substitutor.
-     */
-    protected VariableSubstitutor vs;
 
     /**
      * The absolute path of the installation. (NOT the canonical!)
@@ -112,21 +106,23 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
     protected RulesEngine rules;
 
     protected ResourceManager resourceManager;
+    protected VariableSubstitutor variableSubstitutor;
 
     /**
      * The constructor.
      *
-     * @param idata   The installation data.
-     * @param handler The installation progress handler.
+     * @param idata               The installation data.
+     * @param handler             The installation progress handler.
      * @param rules
+     * @param variableSubstitutor
      */
-    public UnpackerBase(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules) {
+    public UnpackerBase(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor) {
         this.idata = idata;
         this.handler = handler;
         this.resourceManager = resourceManager;
         this.rules = rules;
         // Initialize the variable substitutor
-        vs = new VariableSubstitutorImpl(idata.getVariables());
+        this.variableSubstitutor = variableSubstitutor;
     }
 
     public void setRules(RulesEngine rules) {
@@ -294,7 +290,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
         for (String element : list) {
             if ((element != null) && (element.length() > 0)) {
                 // substitute variables in the pattern
-                element = this.vs.substitute(element, SubstitutionType.TYPE_PLAIN);
+                element = variableSubstitutor.substitute(element, SubstitutionType.TYPE_PLAIN);
 
                 // check whether the pattern is absolute or relative
                 File f = new File(element);
@@ -593,7 +589,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
         in[1] = resourceManager.getInputStream("IzPack.uninstaller-ext", null);
 
         // Me make the .uninstaller directory
-        String dest = IoHelper.translatePath(idata.getInfo().getUninstallerPath(), vs);
+        String dest = IoHelper.translatePath(idata.getInfo().getUninstallerPath(), variableSubstitutor);
         String jar = dest + File.separator + idata.getInfo().getUninstallerName();
         File pathMaker = new File(dest);
         pathMaker.mkdirs();

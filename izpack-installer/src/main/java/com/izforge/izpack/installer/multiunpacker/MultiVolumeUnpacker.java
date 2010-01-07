@@ -33,6 +33,7 @@ import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.FileQueue;
 import com.izforge.izpack.util.os.FileQueueMove;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -49,8 +50,8 @@ import java.util.Properties;
 public class MultiVolumeUnpacker extends UnpackerBase {
     protected IMultiVolumeUnpackerHelper helper;
 
-    public MultiVolumeUnpacker(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules) {
-        super(idata, handler, resourceManager, rules);
+    public MultiVolumeUnpacker(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor) {
+        super(idata, handler, resourceManager, rules, variableSubstitutor);
         if (handler instanceof PanelAutomation) {
             Debug.trace("running in auto installation mode.");
             helper = new MultiVolumeUnpackerAutomationHelper();
@@ -177,7 +178,7 @@ public class MultiVolumeUnpacker extends UnpackerBase {
                     }
                     if (OsConstraint.oneMatchesCurrentSystem(pf.osConstraints())) {
                         // We translate & build the path
-                        String path = IoHelper.translatePath(pf.getTargetPath(), vs);
+                        String path = IoHelper.translatePath(pf.getTargetPath(), variableSubstitutor);
                         File pathFile = new File(path);
                         File dest = pathFile;
                         if (!pf.isDirectory()) {
@@ -422,7 +423,7 @@ public class MultiVolumeUnpacker extends UnpackerBase {
                             continue;
                         }
                     }
-                    pf.path = IoHelper.translatePath(pf.path, vs);
+                    pf.path = IoHelper.translatePath(pf.path, variableSubstitutor);
                     Debug.trace("Found parsable: " + pf.path);
                     parsables.add(pf);
                 }
@@ -438,12 +439,12 @@ public class MultiVolumeUnpacker extends UnpackerBase {
                             continue;
                         }
                     }
-                    ef.path = IoHelper.translatePath(ef.path, vs);
+                    ef.path = IoHelper.translatePath(ef.path, variableSubstitutor);
                     if (null != ef.argList && !ef.argList.isEmpty()) {
                         String arg = null;
                         for (int j = 0; j < ef.argList.size(); j++) {
                             arg = ef.argList.get(j);
-                            arg = IoHelper.translatePath(arg, vs);
+                            arg = IoHelper.translatePath(arg, variableSubstitutor);
                             ef.argList.set(j, arg);
                         }
                     }
@@ -477,7 +478,7 @@ public class MultiVolumeUnpacker extends UnpackerBase {
             }
             Debug.trace("Trying to parse files");
             // We use the scripts parser
-            ScriptParser parser = new ScriptParser(parsables, vs);
+            ScriptParser parser = new ScriptParser(parsables, variableSubstitutor);
             parser.parseFiles();
             Debug.trace("parsed files");
             if (performInterrupted()) { // Interrupt was initiated; perform it.

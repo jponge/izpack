@@ -33,6 +33,7 @@ import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.FileQueue;
 import com.izforge.izpack.util.os.FileQueueMove;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -56,11 +57,12 @@ public class Unpacker extends UnpackerBase {
     /**
      * The constructor.
      *
+     * @param variableSubstitutor
      * @param idata                     The installation data.
      * @param abstractUIProgressHandler The installation progress abstractUIProgressHandler.
      */
-    public Unpacker(AutomatedInstallData idata, ResourceManager resourceManager, AbstractUIProgressHandler abstractUIProgressHandler, RulesEngine rules) {
-        super(idata, abstractUIProgressHandler, resourceManager, rules);
+    public Unpacker(AutomatedInstallData idata, ResourceManager resourceManager, AbstractUIProgressHandler abstractUIProgressHandler, RulesEngine rules, VariableSubstitutor variableSubstitutor) {
+        super(idata, abstractUIProgressHandler, resourceManager, rules, variableSubstitutor);
     }
 
     /* (non-Javadoc)
@@ -146,7 +148,7 @@ public class Unpacker extends UnpackerBase {
                     }
                     if (OsConstraint.oneMatchesCurrentSystem(pf.osConstraints())) {
                         // We translate & build the path
-                        String path = IoHelper.translatePath(pf.getTargetPath(), vs);
+                        String path = IoHelper.translatePath(pf.getTargetPath(), variableSubstitutor);
                         File pathFile = new File(path);
                         File dest = pathFile;
                         if (!pf.isDirectory()) {
@@ -379,7 +381,7 @@ public class Unpacker extends UnpackerBase {
                             continue;
                         }
                     }
-                    pf.path = IoHelper.translatePath(pf.path, vs);
+                    pf.path = IoHelper.translatePath(pf.path, variableSubstitutor);
                     parsables.add(pf);
                 }
 
@@ -393,12 +395,12 @@ public class Unpacker extends UnpackerBase {
                             continue;
                         }
                     }
-                    ef.path = IoHelper.translatePath(ef.path, vs);
+                    ef.path = IoHelper.translatePath(ef.path, variableSubstitutor);
                     if (null != ef.argList && !ef.argList.isEmpty()) {
                         String arg = null;
                         for (int j = 0; j < ef.argList.size(); j++) {
                             arg = ef.argList.get(j);
-                            arg = IoHelper.translatePath(arg, vs);
+                            arg = IoHelper.translatePath(arg, variableSubstitutor);
                             ef.argList.set(j, arg);
                         }
                     }
@@ -438,7 +440,7 @@ public class Unpacker extends UnpackerBase {
             }
 
             // We use the scripts parser
-            ScriptParser parser = new ScriptParser(parsables, vs);
+            ScriptParser parser = new ScriptParser(parsables, variableSubstitutor);
             parser.parseFiles();
             if (performInterrupted()) { // Interrupt was initiated; perform it.
                 return;
@@ -532,7 +534,7 @@ public class Unpacker extends UnpackerBase {
             // See compiler.Packager#getJarOutputStream for the counterpart
             String baseName = idata.getInfo().getInstallerBase();
             String packURL = webDirURL + "/" + baseName + ".pack" + packid + ".jar";
-            String tf = IoHelper.translatePath(idata.getInfo().getUninstallerPath() + Unpacker.tempSubPath, vs);
+            String tf = IoHelper.translatePath(idata.getInfo().getUninstallerPath() + Unpacker.tempSubPath, variableSubstitutor);
             String tempfile;
             try {
                 tempfile = WebRepositoryAccessor.getCachedUrl(packURL, tf);
