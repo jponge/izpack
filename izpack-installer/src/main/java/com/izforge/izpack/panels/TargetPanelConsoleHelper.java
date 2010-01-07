@@ -24,7 +24,6 @@ import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.PanelConsoleHelper;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,6 +37,11 @@ import java.util.Properties;
  * @author Mounir El Hajj
  */
 public class TargetPanelConsoleHelper extends PanelConsoleHelper implements PanelConsole {
+    private VariableSubstitutor variableSubstitutor;
+
+    public TargetPanelConsoleHelper(VariableSubstitutor variableSubstitutor) {
+        this.variableSubstitutor = variableSubstitutor;
+    }
 
     public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter) {
         printWriter.println(AutomatedInstallData.INSTALL_PATH + "=");
@@ -50,8 +54,7 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
             System.err.println("Missing mandatory target path!");
             return false;
         } else {
-            VariableSubstitutor vs = new VariableSubstitutorImpl(installData.getVariables());
-            strTargetPath = vs.substitute(strTargetPath);
+            strTargetPath = variableSubstitutor.substitute(strTargetPath);
             installData.setInstallPath(strTargetPath);
             return true;
         }
@@ -79,9 +82,7 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
             e.printStackTrace();
         }
 
-        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
-
-        strTargetPath = vs.substitute(strTargetPath);
+        strTargetPath = variableSubstitutor.substitute(strTargetPath);
 
         idata.setInstallPath(strTargetPath);
         int i = askEndOfConsolePanel();

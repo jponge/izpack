@@ -113,7 +113,7 @@ public class TargetPanel extends PathInputPanel {
      * @param panelRoot The tree to put the installDataGUI in.
      */
     public void makeXMLData(IXMLElement panelRoot) {
-        new TargetPanelAutomationHelper().makeXMLData(this.installData, panelRoot);
+        new TargetPanelAutomationHelper(variableSubstitutor).makeXMLData(this.installData, panelRoot);
     }
 
     /*

@@ -41,8 +41,6 @@ import com.izforge.izpack.util.HyperlinkHandler;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.substitutor.SubstitutionType;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -528,8 +526,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 }
             } else {
                 if (set != null && !"".equals(set)) {
-                    VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-                    set = vs.substitute(set);
+                    set = variableSubstitutor.substitute(set);
 
                     this.installData.setVariable(variable, set);
                 }
@@ -619,8 +616,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 }
             } else {
                 if (set != null && !"".equals(set)) {
-                    VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-                    set = vs.substitute(set);
+                    set = variableSubstitutor.substitute(set);
                 }
             }
 
@@ -732,8 +728,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 }
             } else {
                 if (set != null && !"".equals(set)) {
-                    VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-                    set = vs.substitute(set);
+                    set = variableSubstitutor.substitute(set);
                     this.installData.setVariable(variable, set);
                 }
             }
@@ -793,7 +788,6 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
     protected void updateUIElements() {
         boolean updated = false;
-        VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
 
         for (UIElement element : elements) {
             if (element.hasVariableAssignment()) {
@@ -819,7 +813,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     if (value == null) {
                         value = textf.getText();
                     }
-                    textf.setText(vs.substitute(value));
+                    textf.setText(variableSubstitutor.substitute(value));
                 } else if (element.getType() == UIElementType.PASSWORD) {
                     // update PasswordField
                     JTextComponent textf = (JTextComponent) element.getComponent();
@@ -827,7 +821,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     if (value == null) {
                         value = textf.getText();
                     }
-                    textf.setText(vs.substitute(value));
+                    textf.setText(variableSubstitutor.substitute(value));
                 } else if (element.getType() == UIElementType.RULE) {
 
                     RuleInputField rulef = (RuleInputField) element.getComponent();
@@ -1475,8 +1469,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 }
             } else {
                 if (set != null && !"".equals(set)) {
-                    VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-                    set = vs.substitute(set);
+                    set = variableSubstitutor.substitute(set);
                 }
             }
 
@@ -1694,8 +1687,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                         set = "";
                     }
                     if (set != null && !"".equals(set)) {
-                        VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-                        set = vs.substitute(set);
+                        set = variableSubstitutor.substitute(set);
                     }
 
                     StringTokenizer tokenizer = new StringTokenizer(choiceValues, ":");
@@ -1726,9 +1718,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                         String set = (choices.elementAt(i)).getAttribute(SET);
                         if (set != null) {
                             if (set != null && !"".equals(set)) {
-                                VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData
-                                        .getVariables());
-                                set = vs.substitute(set);
+                                set = variableSubstitutor.substitute(set);
                             }
                             if (set.equals(TRUE)) {
                                 field.setSelectedIndex(i);
@@ -1902,8 +1892,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 }
                 if (set != null) {
                     if (set != null && !"".equals(set)) {
-                        VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-                        set = vs.substitute(set);
+                        set = variableSubstitutor.substitute(set);
                     }
                     if (set.equals(TRUE)) {
                         choice.setSelected(true);
@@ -2059,8 +2048,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 fieldSpec = inputs.elementAt(i);
                 String set = fieldSpec.getAttribute(SET);
                 if (set != null && !"".equals(set)) {
-                    VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-                    set = vs.substitute(set);
+                    set = variableSubstitutor.substitute(set);
                 }
                 JLabel label = new JLabel(getText(fieldSpec));
                 try {
@@ -2220,8 +2208,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
         if (set != null) {
             if (set != null && !"".equals(set)) {
-                VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-                set = vs.substitute(set);
+                set = variableSubstitutor.substitute(set);
             }
             if (set.equals(FALSE)) {
                 checkbox.setSelected(false);
@@ -2410,8 +2397,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 String set = (choices.elementAt(i)).getAttribute(SET);
                 if (set != null) {
                     if (set != null && !"".equals(set)) {
-                        VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-                        set = vs.substitute(set);
+                        set = variableSubstitutor.substitute(set);
                     }
                     if (set.equals(TRUE)) {
                         combobox.setSelectedIndex(i);
@@ -2856,9 +2842,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
 
         // try to parse the text, and substitute any variable it finds
-        VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
 
-        return (vs.substitute(text));
+        return (variableSubstitutor.substitute(text));
     }
 
     /*--------------------------------------------------------------------------*/
@@ -3327,9 +3312,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             // and resolve the pathes automatically:
             // /usr/lib/* searches all folders in usr/lib to find
             // /usr/lib/*/lib/tools.jar
-            VariableSubstitutor vs = new VariableSubstitutorImpl(installData.getVariables());
             for (int i = 0; i < this.pathComboBox.getItemCount(); ++i) {
-                String path = vs.substitute((String) this.pathComboBox.getItemAt(i));
+                String path = variableSubstitutor.substitute((String) this.pathComboBox.getItemAt(i));
                 // System.out.println ("autodetecting " + path);
 
                 if (path.endsWith("*")) {
@@ -3358,7 +3342,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             // generated vector
             this.pathComboBox.removeAllItems();
             for (String item : items) {
-                String res = vs.substitute(item, SubstitutionType.TYPE_PLAIN);
+                String res = variableSubstitutor.substitute(item, SubstitutionType.TYPE_PLAIN);
                 // System.out.println ("substitution " + item + ", result " + res);
                 this.pathComboBox.addItem(res);
             }
@@ -3479,7 +3463,6 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         Vector<IXMLElement> variables = spec.getChildrenNamed(VARIABLE_NODE);
         RulesEngine rules = parent.getRules();
 
-        VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
         for (int i = 0; i < variables.size(); i++) {
             IXMLElement variable = variables.elementAt(i);
             String vname = variable.getAttribute(ATTRIBUTE_VARIABLE_NAME);
@@ -3507,10 +3490,10 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     // vname is given
                     if (vvalue != null) {
                         // try to substitute variables in value field
-                        vvalue = vs.substitute(vvalue);
+                        vvalue = variableSubstitutor.substitute(vvalue);
                         // to cut out circular references
                         this.installData.setVariable(vname, "");
-                        vvalue = vs.substitute(vvalue);
+                        vvalue = variableSubstitutor.substitute(vvalue);
                     }
                     // try to set variable
                     this.installData.setVariable(vname, vvalue);

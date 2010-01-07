@@ -31,7 +31,6 @@ import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -149,7 +148,7 @@ public class SudoPanel extends IzPanel implements ActionListener {
             ArrayList<ParsableFile> plist = new ArrayList<ParsableFile>();
             ParsableFile pf = new ParsableFile(file.getAbsolutePath(), null, null, oses);
             plist.add(pf);
-            ScriptParser sp = new ScriptParser(plist, new VariableSubstitutorImpl(vars));
+            ScriptParser sp = new ScriptParser(plist, variableSubstitutor);
             sp.parseFiles();
 
             ArrayList<ExecutableFile> elist = new ArrayList<ExecutableFile>();
