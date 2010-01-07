@@ -36,8 +36,6 @@ import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.debugger.Debugger;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -321,8 +319,8 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             if ("".equals(desc) || key.equals(desc)) {
                 desc = pack.description;
             }
-            VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-            desc = vs.substitute(desc);
+
+            desc = variableSubstitutor.substitute(desc);
             descriptionArea.setText(desc);
         }
         // Operation for the dependency listing
