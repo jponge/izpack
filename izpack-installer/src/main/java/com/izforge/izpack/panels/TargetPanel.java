@@ -47,7 +47,7 @@ public class TargetPanel extends PathInputPanel {
     public TargetPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
         super(parent, idata, resourceManager);
         // load the default directory info (if present)
-        loadDefaultInstallDir(parent, idata);
+        loadDefaultInstallDir(parent);
         if (getDefaultInstallDir() != null) {
             // override the system default that uses app name (which is set in
             // the Installer class)
@@ -70,7 +70,7 @@ public class TargetPanel extends PathInputPanel {
      * current parent as installer frame.
      */
     public void loadDefaultDir() {
-        super.loadDefaultInstallDir(parent, this.installData);
+        super.loadDefaultInstallDir(parent);
     }
 
     /**

@@ -32,8 +32,6 @@ import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -286,7 +284,7 @@ public class PathInputPanel extends IzPanel implements ActionListener {
      * As with all IzPack resources, each the above ids should be associated with a separate
      * filename, which is set in the install.xml file at compile time.
      */
-    public static void loadDefaultInstallDir(InstallerFrame parentFrame, GUIInstallData idata) {
+    public void loadDefaultInstallDir(InstallerFrame parentFrame) {
         // Load only once ...
         if (getDefaultInstallDir() != null) {
             return;
@@ -332,7 +330,7 @@ public class PathInputPanel extends IzPanel implements ActionListener {
                 try {
                     in = parentFrame.getResource("TargetPanel.dir");
                 }
-                catch (ResourceNotFoundException eee) {
+                catch (ResourceNotFoundException ignored) {
                 }
             }
 
@@ -349,8 +347,8 @@ public class PathInputPanel extends IzPanel implements ActionListener {
                     }
                 }
                 defaultInstallDir = line;
-                VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
-                defaultInstallDir = vs.substitute(defaultInstallDir);
+
+                defaultInstallDir = variableSubstitutor.substitute(defaultInstallDir);
             }
         }
         catch (Exception e) {
