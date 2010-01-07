@@ -78,6 +78,7 @@ public class AutomatedInstaller extends InstallerBase {
      * Manager for writing uninstall data
      */
     private UninstallDataWriter uninstallDataWriter;
+    private VariableSubstitutor variableSubstitutor;
 
     /**
      * Constructing an instance triggers the install.
@@ -91,6 +92,7 @@ public class AutomatedInstaller extends InstallerBase {
         this.uninstallDataWriter = uninstallDataWriter;
 
         this.panelInstanceCount = new TreeMap<String, Integer>();
+        variableSubstitutor = new VariableSubstitutorImpl(this.idata.getVariables());
     }
 
     /**
@@ -137,7 +139,6 @@ public class AutomatedInstaller extends InstallerBase {
         try {
             // assume that installation will succeed
             this.result = true;
-            VariableSubstitutor substitutor = new VariableSubstitutorImpl(this.idata.getVariables());
 
             // walk the panels in order
             for (Panel p : this.idata.getPanelsOrder()) {
@@ -171,7 +172,7 @@ public class AutomatedInstaller extends InstallerBase {
 
                 // execute the installation logic for the current panel
                 installPanel(p, automationHelper, panelRoot);
-                idata.refreshDynamicVariables(substitutor);
+                idata.refreshDynamicVariables(variableSubstitutor);
             }
 
             // this does nothing if the uninstaller was not included
