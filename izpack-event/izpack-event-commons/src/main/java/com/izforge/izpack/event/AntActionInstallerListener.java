@@ -31,7 +31,7 @@ import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -64,12 +64,14 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
     private HashMap<String, HashMap<Object, ArrayList<AntAction>>> actions = null;
 
     private ArrayList<AntAction> uninstActions = null;
+    private VariableSubstitutor variableSubstitutor;
 
     /**
      * Default constructor
      */
-    public AntActionInstallerListener() {
+    public AntActionInstallerListener(VariableSubstitutor variableSubstitutor) {
         super(true);
+        this.variableSubstitutor = variableSubstitutor;
         actions = new HashMap<String, HashMap<Object, ArrayList<AntAction>>>();
         uninstActions = new ArrayList<AntAction>();
     }
@@ -94,7 +96,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
                             AbstractUIProgressHandler handler) throws Exception {
         super.beforePacks(idata, npacks, handler);
 
-        getSpecHelper().readSpec(SPEC_FILE_NAME, new VariableSubstitutorImpl(idata.getVariables()));
+        getSpecHelper().readSpec(SPEC_FILE_NAME, variableSubstitutor);
 
         if (getSpecHelper().getSpec() == null) {
             return;
