@@ -7,13 +7,11 @@ import com.izforge.izpack.installer.base.LanguageDialog;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.panels.PanelManager;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.picocontainer.parameters.ComponentParameter;
 import org.picocontainer.parameters.ConstantParameter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Properties;
 
 /**
  * Container for panel level component
@@ -28,9 +26,8 @@ public class InstallerContainer extends AbstractChildContainer {
     public void initBindings() throws ClassNotFoundException {
         pico
                 .addComponent(IInstallerContainer.class, this)
-                .addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
                 .addComponent(PanelManager.class)
-                .addComponent(Properties.class);
+                ;
         addVariablerComponent();
     }
 
@@ -43,6 +40,7 @@ public class InstallerContainer extends AbstractChildContainer {
                 .addComponent(IUnpacker.class, unpackerclass)
                 .addComponent(InstallerFrame.class, InstallerFrame.class,
                         new ConstantParameter(getTitle(installdata, substitutor)),
+                        new ComponentParameter(),
                         new ComponentParameter(),
                         new ComponentParameter(),
                         new ComponentParameter(),

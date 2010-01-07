@@ -9,9 +9,13 @@ import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.provider.GUIInstallDataProvider;
 import com.izforge.izpack.installer.provider.IconsProvider;
 import com.izforge.izpack.installer.provider.RulesProvider;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.picocontainer.PicoBuilder;
 import org.picocontainer.injectors.ConstructorInjection;
 import org.picocontainer.injectors.ProviderAdapter;
+
+import java.util.Properties;
 
 /**
  * Application Component. <br />
@@ -32,6 +36,8 @@ public class ApplicationContainer extends AbstractContainer implements IApplicat
                 .addComponent(IInstallerContainer.class, InstallerContainer.class)
                 .addComponent(ConditionCheck.class)
                 .addComponent(CustomDataContainer.class)
+                .addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
+                .addComponent(Properties.class)
                 .addComponent(GUIInstaller.class)
                 .addComponent(ResourceManager.class)
                 .addComponent(ConsoleInstaller.class)
