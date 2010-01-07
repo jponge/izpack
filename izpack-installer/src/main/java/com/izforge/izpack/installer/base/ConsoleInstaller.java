@@ -57,6 +57,7 @@ public class ConsoleInstaller extends InstallerBase {
     private PrintWriter printWriter;
     private RulesEngine rules;
     private ConditionCheck checkCondition;
+    private VariableSubstitutor variableSubstitutor;
 
     public ConsoleInstaller(AutomatedInstallData installdata, RulesEngine rules, ResourceManager resourceManager, ConditionCheck checkCondition) throws Exception {
         super(resourceManager);
@@ -78,6 +79,7 @@ public class ConsoleInstaller extends InstallerBase {
             Debug.log("not all installerconditions are fulfilled.");
             return;
         }
+        variableSubstitutor = new VariableSubstitutorImpl(this.installdata.getVariables());
     }
 
     protected void iterateAndPerformAction(String strAction) throws Exception {
@@ -91,9 +93,8 @@ public class ConsoleInstaller extends InstallerBase {
             this.result = true;
             Iterator<Panel> panelsIterator = this.installdata.getPanelsOrder().iterator();
             this.installdata.setCurPanelNumber(-1);
-            VariableSubstitutor substitutor = new VariableSubstitutorImpl(this.installdata.getVariables());
             while (panelsIterator.hasNext()) {
-                Panel p = (Panel) panelsIterator.next();
+                Panel p = panelsIterator.next();
                 this.installdata.setCurPanelNumber(this.installdata.getCurPanelNumber() + 1);
                 String praefix = "com.izforge.izpack.panels.";
                 if (p.className.compareTo(".") > -1) {
@@ -121,7 +122,7 @@ public class ConsoleInstaller extends InstallerBase {
                 if (consoleHelperClass != null) {
                     try {
                         Debug.log("Instantiate :" + consoleHelperClassName);
-                        installdata.refreshDynamicVariables(substitutor);
+                        installdata.refreshDynamicVariables(variableSubstitutor);
                         consoleHelperInstance = consoleHelperClass.newInstance();
                     }
                     catch (Exception e) {
