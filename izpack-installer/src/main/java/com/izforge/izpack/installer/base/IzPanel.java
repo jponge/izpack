@@ -161,7 +161,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * The resource manager
      */
     protected ResourceManager resourceManager;
-    private VariableSubstitutor variableSubstitutor;
+    protected VariableSubstitutor variableSubstitutor;
 
     /**
      * The constructor.

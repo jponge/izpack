@@ -23,6 +23,7 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
 
@@ -35,14 +36,17 @@ import com.izforge.izpack.installer.data.GUIInstallData;
 public class DefaultTargetPanel extends PathInputPanel {
 
     private static final long serialVersionUID = 3256443616359329170L;
+    private PanelAutomation defaultTargetPanelAutomationHelper;
 
     /**
      * The constructor.
      *
+     * @param defaultTargetPanelAutomationHelper
+     *
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public DefaultTargetPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public DefaultTargetPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, DefaultTargetPanelAutomationHelper defaultTargetPanelAutomationHelper) {
         super(parent, idata, resourceManager);
         // load the default directory info (if present)
         loadDefaultInstallDir(parent, idata);
@@ -51,6 +55,7 @@ public class DefaultTargetPanel extends PathInputPanel {
             // the Installer class)
             idata.setInstallPath(getDefaultInstallDir());
         }
+        this.defaultTargetPanelAutomationHelper = defaultTargetPanelAutomationHelper;
     }
 
     /**
@@ -110,7 +115,7 @@ public class DefaultTargetPanel extends PathInputPanel {
      * @param panelRoot The tree to put the installDataGUI in.
      */
     public void makeXMLData(IXMLElement panelRoot) {
-        new DefaultTargetPanelAutomationHelper().makeXMLData(this.installData, panelRoot);
+        defaultTargetPanelAutomationHelper.makeXMLData(this.installData, panelRoot);
     }
 
     /*

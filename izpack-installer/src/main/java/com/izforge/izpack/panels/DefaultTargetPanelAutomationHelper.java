@@ -26,7 +26,6 @@ import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 /**
  * Functions to support automated usage of the TargetPanel
@@ -35,6 +34,11 @@ import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
  * @author Julien Ponge
  */
 public class DefaultTargetPanelAutomationHelper implements PanelAutomation {
+    private VariableSubstitutor variableSubstitutor;
+
+    public DefaultTargetPanelAutomationHelper(VariableSubstitutor variableSubstitutor) {
+        this.variableSubstitutor = variableSubstitutor;
+    }
 
     /**
      * Asks to make the XML panel installDataGUI.
@@ -69,9 +73,8 @@ public class DefaultTargetPanelAutomationHelper implements PanelAutomation {
         IXMLElement ipath = panelRoot.getFirstChildNamed("installpath");
 
         // Allow for variable substitution of the installpath value
-        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
         String path = ipath.getContent();
-        path = vs.substitute(path);
+        path = variableSubstitutor.substitute(path);
 
         idata.setInstallPath(path);
     }
