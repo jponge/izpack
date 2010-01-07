@@ -37,7 +37,6 @@ import com.izforge.izpack.util.os.RegistryDefaultHandler;
 import com.izforge.izpack.util.os.RegistryHandler;
 import com.izforge.izpack.util.os.WrappedNativeLibException;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.util.Iterator;
 import java.util.List;
@@ -89,12 +88,14 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
     private List registryModificationLog;
 
     private IDiscardInterruptable unpacker;
+    private VariableSubstitutor variableSubstitutor;
 
     /**
      * Default constructor.
      */
-    public RegistryInstallerListener(IDiscardInterruptable unpacker) {
+    public RegistryInstallerListener(IDiscardInterruptable unpacker, VariableSubstitutor variableSubstitutor) {
         super(true);
+        this.variableSubstitutor = variableSubstitutor;
         this.unpacker = unpacker;
     }
 
@@ -136,18 +137,17 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             rh.activateLogging();
 
             if (getSpecHelper().getSpec() != null) {
-                VariableSubstitutor substitutor = new VariableSubstitutorImpl(idata.getVariables());
                 Iterator iter = idata.getSelectedPacks().iterator();
                 // Get the special pack "UninstallStuff" which contains values
                 // for the uninstaller entry.
                 uninstallerPack = getSpecHelper().getPackForName("UninstallStuff");
-                performPack(uninstallerPack, substitutor);
+                performPack(uninstallerPack, variableSubstitutor);
 
                 // Now perform the selected packs.
                 while (iter != null && iter.hasNext()) {
                     // Resolve data for current pack.
                     IXMLElement pack = getSpecHelper().getPackForName(((Pack) iter.next()).name);
-                    performPack(pack, substitutor);
+                    performPack(pack, variableSubstitutor);
 
                 }
             }

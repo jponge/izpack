@@ -38,12 +38,14 @@ import java.io.FileOutputStream;
  * @author Klaus Bartz
  */
 public class SummaryLoggerInstallerListener extends SimpleInstallerListener {
+    private VariableSubstitutor variableSubstitutor;
 
     /**
      * Default constructor.
      */
     public SummaryLoggerInstallerListener() {
         super(false);
+        variableSubstitutor = new VariableSubstitutorImpl(getInstalldata().getVariables());
     }
 
     /*
@@ -67,8 +69,7 @@ public class SummaryLoggerInstallerListener extends SimpleInstallerListener {
         if (path == null) {
             return;
         }
-        VariableSubstitutor vs = new VariableSubstitutorImpl(getInstalldata().getVariables());
-        path = IoHelper.translatePath(path, vs);
+        path = IoHelper.translatePath(path, variableSubstitutor);
         File parent = new File(path).getParentFile();
 
         if (!parent.exists()) {
