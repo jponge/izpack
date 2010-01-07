@@ -29,8 +29,6 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Log;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -54,11 +52,6 @@ public class FinishPanel extends IzPanel implements ActionListener {
     protected JButton autoButton;
 
     /**
-     * The variables substitutor.
-     */
-    protected VariableSubstitutor vs;
-
-    /**
      * The constructor.
      *
      * @param parent The parent.
@@ -66,8 +59,6 @@ public class FinishPanel extends IzPanel implements ActionListener {
      */
     public FinishPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
         super(parent, idata, new IzPanelLayout(), resourceManager);
-
-        vs = new VariableSubstitutorImpl(idata.getVariables());
     }
 
     /**
@@ -162,7 +153,7 @@ public class FinishPanel extends IzPanel implements ActionListener {
      */
     protected String translatePath(String destination) {
         // Parse for variables
-        destination = vs.substitute(destination);
+        destination = variableSubstitutor.substitute(destination);
 
         // Convert the file separator characters
         return destination.replace('/', File.separatorChar);
