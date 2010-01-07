@@ -6,7 +6,6 @@ import com.izforge.izpack.compiler.PackagerListener;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.util.substitutor.SubstitutionType;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.apache.tools.ant.taskdefs.Execute;
 
 import java.io.*;
@@ -269,8 +268,7 @@ public class PropertyManager {
      * @param file
      */
     private void resolveAllProperties(Properties props, IXMLElement xmlProp, File file) throws CompilerException {
-        VariableSubstitutor subs = new VariableSubstitutorImpl(props);
-        subs.setBracesRequired(true);
+        variableSubstitutor.setBracesRequired(true);
 
         for (Enumeration e = props.keys(); e.hasMoreElements();) {
             String name = (String) e.nextElement();
@@ -282,7 +280,7 @@ public class PropertyManager {
                 StringWriter write = new StringWriter();
 
                 try {
-                    mods = subs.substitute(read, write, SubstitutionType.TYPE_AT);
+                    mods = variableSubstitutor.substitute(read, write, SubstitutionType.TYPE_AT);
                     // TODO: check for circular references. We need to know
                     // which
                     // variables were substituted to do that
