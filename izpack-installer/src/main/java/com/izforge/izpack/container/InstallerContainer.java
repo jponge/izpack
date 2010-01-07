@@ -13,6 +13,7 @@ import org.picocontainer.parameters.ConstantParameter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Properties;
 
 /**
  * Container for panel level component
@@ -28,7 +29,8 @@ public class InstallerContainer extends AbstractChildContainer {
         pico
                 .addComponent(IInstallerContainer.class, this)
                 .addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
-                .addComponent(PanelManager.class);
+                .addComponent(PanelManager.class)
+                .addComponent(Properties.class);
         addVariablerComponent();
     }
 
