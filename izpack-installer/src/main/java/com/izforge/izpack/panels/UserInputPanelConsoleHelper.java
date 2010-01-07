@@ -31,7 +31,6 @@ import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -127,8 +126,10 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     private static Input DIVIDER_INPUT_FIELD = new Input(DIVIDER, null, null, DIVIDER, "------------------------------------------", 0);
 
     public List<Input> listInputs;
+    private VariableSubstitutor variableSubstitutor;
 
-    public UserInputPanelConsoleHelper() {
+    public UserInputPanelConsoleHelper(VariableSubstitutor substitutor) {
+        variableSubstitutor = substitutor;
         instanceNumber = instanceCount++;
         listInputs = new ArrayList<Input>();
 
@@ -275,8 +276,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     }
 
     boolean processSimpleField(Input input, AutomatedInstallData idata) {
-        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
-        System.out.println(vs.substitute(input.strText));
+        System.out.println(variableSubstitutor.substitute(input.strText));
         return true;
     }
 
@@ -316,8 +316,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         }
 
         if (set != null && !"".equals(set)) {
-            VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
-            set = vs.substitute(set);
+            set = variableSubstitutor.substitute(set);
         }
 
         fieldText = input.listChoices.get(0).strText;
@@ -373,8 +372,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 String set = choice.strSet;
                 if (set != null) {
                     if (set != null && !"".equals(set)) {
-                        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
-                        set = vs.substitute(set);
+                        set = variableSubstitutor.substitute(set);
                     }
                     if (set.equals(TRUE)) {
                         input.iSelectedChoice = i;
@@ -442,8 +440,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 String set = input.strDefaultValue;
                 if (set != null) {
                     if (set != null && !"".equals(set)) {
-                        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
-                        set = vs.substitute(set);
+                        set = variableSubstitutor.substitute(set);
                     }
                     if (set.equals(TRUE)) {
                         input.iSelectedChoice = 1;
@@ -608,8 +605,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                         set = "";
                     }
                     if (set != null && !"".equals(set)) {
-                        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
-                        set = vs.substitute(set);
+                        set = variableSubstitutor.substitute(set);
                     }
 
                     StringTokenizer tokenizer = new StringTokenizer(choiceValues, ":");
@@ -635,9 +631,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     String set = choice.getAttribute(SET);
                     if (set != null) {
                         if (set != null && !"".equals(set)) {
-                            VariableSubstitutor vs = new VariableSubstitutorImpl(idata
-                                    .getVariables());
-                            set = vs.substitute(set);
+                            set = variableSubstitutor.substitute(set);
                         }
                         if (set.equalsIgnoreCase(TRUE)) {
                             selection = i;
