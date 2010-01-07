@@ -9,7 +9,7 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 import org.picocontainer.injectors.Provider;
 
 import javax.swing.*;
@@ -23,13 +23,15 @@ import java.util.*;
 /**
  * Abstract class sharing commons instanciation methods beetween installData
  */
-public class AbstractInstallDataProvider implements Provider {
+public abstract class AbstractInstallDataProvider implements Provider {
     /**
      * The base name of the XML file that specifies the custom langpack. Searched is for the file
      * with the name expanded by _ISO3.
      */
     protected static final String LANG_FILE_NAME = "CustomLangpack.xml";
     protected ResourceManager resourceManager;
+    protected VariableSubstitutor variableSubstitutor;
+
 
     /**
      * Loads the installation data. Also sets environment variables to <code>installdata</code>.
@@ -80,7 +82,7 @@ public class AbstractInstallDataProvider implements Provider {
         String installPath = dir + inf.getAppName();
         if (inf.getInstallationSubPath() != null) { // A subpath was defined, use it.
             installPath = IoHelper.translatePath(dir + inf.getInstallationSubPath(),
-                    new VariableSubstitutorImpl(installdata.getVariables()));
+                    variableSubstitutor);
         }
         installdata.setInstallPath(installPath);
 

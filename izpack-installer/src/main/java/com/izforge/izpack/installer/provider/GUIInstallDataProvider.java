@@ -8,6 +8,7 @@ import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -26,8 +27,9 @@ import java.util.TreeMap;
  */
 public class GUIInstallDataProvider extends AbstractInstallDataProvider {
 
-    public GUIInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer) throws Exception {
+    public GUIInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer, VariableSubstitutor variableSubstitutor) throws Exception {
         this.resourceManager = resourceManager;
+        this.variableSubstitutor = variableSubstitutor;
         final GUIInstallData guiInstallData = new GUIInstallData();
         // Loads the installation data
         loadInstallData(guiInstallData);
