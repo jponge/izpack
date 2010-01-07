@@ -30,7 +30,6 @@ import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.os.RegistryDefaultHandler;
 import com.izforge.izpack.util.os.RegistryHandler;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.*;
 import java.util.*;
@@ -45,6 +44,11 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
     private String maxVersion;
     private String variableName;
     private String detectedVersion;
+    private VariableSubstitutor variableSubstitutor;
+
+    public JDKPathPanelConsoleHelper(VariableSubstitutor variableSubstitutor) {
+        this.variableSubstitutor = variableSubstitutor;
+    }
 
     public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter) {
         printWriter.println(AutomatedInstallData.INSTALL_PATH + "=");
@@ -57,8 +61,7 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
             System.err.println("Missing mandatory target path!");
             return false;
         } else {
-            VariableSubstitutor vs = new VariableSubstitutorImpl(installData.getVariables());
-            strTargetPath = vs.substitute(strTargetPath);
+            strTargetPath = variableSubstitutor.substitute(strTargetPath);
             installData.setInstallPath(strTargetPath);
             return true;
         }
