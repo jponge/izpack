@@ -29,8 +29,6 @@ import com.izforge.izpack.installer.PanelAutomationHelper;
 import com.izforge.izpack.installer.ProcessPanelWorker;
 import com.izforge.izpack.util.AbstractUIProcessHandler;
 
-import java.io.IOException;
-
 /**
  * Functions to support automated usage of the CompilePanel
  *
@@ -43,6 +41,11 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
     private int noOfJobs = 0;
 
     private int currentJob = 0;
+    private ProcessPanelWorker processPanelWorker;
+
+    public ProcessPanelAutomationHelper(ProcessPanelWorker processPanelWorker) {
+        this.processPanelWorker = processPanelWorker;
+    }
 
     /**
      * Save installDataGUI for running automated.
@@ -61,20 +64,10 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
      * @param panelRoot The panel XML tree root.
      */
     public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException {
-        try {
-            ProcessPanelWorker worker = new ProcessPanelWorker(idata, this);
-
-            worker.run();
-
-            if (!worker.getResult()) {
-                throw new InstallerException("The work done by the ProcessPanel (line " + panelRoot.getLineNr() + ") failed");
-            }
+        processPanelWorker.run();
+        if (!processPanelWorker.getResult()) {
+            throw new InstallerException("The work done by the ProcessPanel (line " + panelRoot.getLineNr() + ") failed");
         }
-        catch (IOException e) {
-            e.printStackTrace();
-            throw new InstallerException("The work done by the ProcessPanel (line " + panelRoot.getLineNr() + ") failed", e);
-        }
-
     }
 
     public void logOutput(String message, boolean stderr) {

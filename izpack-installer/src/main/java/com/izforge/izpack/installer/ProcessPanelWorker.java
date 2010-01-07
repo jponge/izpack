@@ -77,14 +77,15 @@ public class ProcessPanelWorker implements Runnable {
     /**
      * The constructor.
      *
-     * @param idata   The installation data.
-     * @param handler The handler to notify of progress.
+     * @param idata               The installation data.
+     * @param handler             The handler to notify of progress.
+     * @param variableSubstitutor
      */
-    public ProcessPanelWorker(AutomatedInstallData idata, AbstractUIProcessHandler handler)
+    public ProcessPanelWorker(AutomatedInstallData idata, AbstractUIProcessHandler handler, VariableSubstitutor variableSubstitutor)
             throws IOException {
         this.handler = handler;
         this.idata = idata;
-        this.vs = new VariableSubstitutorImpl(idata.getVariables());
+        this.vs = variableSubstitutor;
 
         // Removed this test in order to move out of the CTOR (ExecuteForPack
         // Patch)

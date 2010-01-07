@@ -87,13 +87,14 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
     /**
      * The constructor.
      *
-     * @param parent The parent window.
-     * @param idata  The installation installDataGUI.
+     * @param processPanelWorker
+     * @param parent             The parent window.
+     * @param idata              The installation installDataGUI.
      */
-    public ProcessPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) throws IOException {
+    public ProcessPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, ProcessPanelWorker processPanelWorker) throws IOException {
         super(parent, idata, resourceManager);
 
-        this.worker = new ProcessPanelWorker(idata, this);
+        this.worker = processPanelWorker;
 
         JLabel heading = new JLabel();
         Font font = heading.getFont();
