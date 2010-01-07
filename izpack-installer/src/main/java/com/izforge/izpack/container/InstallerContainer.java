@@ -27,18 +27,20 @@ public class InstallerContainer extends AbstractChildContainer {
     public void initBindings() throws ClassNotFoundException {
         pico
                 .addComponent(IInstallerContainer.class, this)
+                .addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
                 .addComponent(PanelManager.class);
         addVariablerComponent();
     }
 
     private void addVariablerComponent() throws ClassNotFoundException {
         AutomatedInstallData installdata = pico.getComponent(AutomatedInstallData.class);
+        VariableSubstitutor substitutor = pico.getComponent(VariableSubstitutor.class);
         String unpackerclassname = installdata.getInfo().getUnpackerClassName();
         Class<IUnpacker> unpackerclass = (Class<IUnpacker>) Class.forName(unpackerclassname);
         pico
                 .addComponent(IUnpacker.class, unpackerclass)
                 .addComponent(InstallerFrame.class, InstallerFrame.class,
-                        new ConstantParameter(getTitle(installdata)),
+                        new ConstantParameter(getTitle(installdata, substitutor)),
                         new ComponentParameter(),
                         new ComponentParameter(),
                         new ComponentParameter(),
@@ -69,7 +71,7 @@ public class InstallerContainer extends AbstractChildContainer {
         return frame;
     }
 
-    private String getTitle(AutomatedInstallData automatedInstallData) {
+    private String getTitle(AutomatedInstallData automatedInstallData, VariableSubstitutor vs) {
         // Use a alternate message if defined.
         final String key = "installer.reversetitle";
         String message = automatedInstallData.getLangpack().getString(key);
@@ -79,7 +81,6 @@ public class InstallerContainer extends AbstractChildContainer {
                     + automatedInstallData.getInfo().getAppName();
         } else { // Attention! The alternate message has to contain the whole message including
             // $APP_NAME and may be $APP_VER.
-            VariableSubstitutor vs = new VariableSubstitutorImpl(automatedInstallData.getVariables());
             return vs.substitute(message);
         }
     }
