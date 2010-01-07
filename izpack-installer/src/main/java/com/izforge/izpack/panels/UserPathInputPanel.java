@@ -30,8 +30,6 @@ import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -339,8 +337,7 @@ public class UserPathInputPanel extends IzPanel implements ActionListener {
                         }
                     }
                     _defaultDir = line;
-                    VariableSubstitutor vs = new VariableSubstitutorImpl(installData.getVariables());
-                    _defaultDir = vs.substitute(_defaultDir);
+                    _defaultDir = variableSubstitutor.substitute(_defaultDir);
                 }
             }
             catch (Exception e) {

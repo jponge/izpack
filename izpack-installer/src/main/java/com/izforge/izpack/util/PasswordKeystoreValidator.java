@@ -25,12 +25,10 @@ import com.izforge.izpack.panels.PasswordGroup;
 import com.izforge.izpack.panels.ProcessingClient;
 import com.izforge.izpack.panels.Validator;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.FileInputStream;
 import java.security.KeyStore;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 
@@ -44,6 +42,11 @@ import java.util.Map;
  * @author Jeff Gordon
  */
 public class PasswordKeystoreValidator implements Validator {
+    private VariableSubstitutor variableSubstitutor;
+
+    public PasswordKeystoreValidator(VariableSubstitutor variableSubstitutor) {
+        this.variableSubstitutor = variableSubstitutor;
+    }
 
     /**
      * PasswordKeystoreValidator
@@ -150,17 +153,14 @@ public class PasswordKeystoreValidator implements Validator {
         Map<String, String> returnValue = null;
         PasswordGroup group = null;
         GUIInstallData idata = getIdata(client);
-        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
         try {
             group = (PasswordGroup) client;
             if (group.hasParams()) {
                 Map<String, String> params = group.getValidatorParams();
                 returnValue = new HashMap<String, String>();
-                Iterator<String> keys = params.keySet().iterator();
-                while (keys.hasNext()) {
-                    String key = keys.next();
+                for (String key : params.keySet()) {
                     // Feed parameter values through vs
-                    String value = vs.substitute(params.get(key));
+                    String value = variableSubstitutor.substitute(params.get(key));
                     // System.out.println("Adding local parameter: "+key+"="+value);
                     returnValue.put(key, value);
                 }

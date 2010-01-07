@@ -25,7 +25,6 @@ import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 /**
  * Functions to support automated usage of the UserPathPanel
@@ -35,6 +34,11 @@ import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
  * @author Jeff Gordon
  */
 public class UserPathPanelAutomationHelper implements PanelAutomation {
+    private VariableSubstitutor variableSubstitutor;
+
+    public UserPathPanelAutomationHelper(VariableSubstitutor variableSubstitutor) {
+        this.variableSubstitutor = variableSubstitutor;
+    }
 
     /**
      * Asks to make the XML panel installDataGUI.
@@ -68,9 +72,8 @@ public class UserPathPanelAutomationHelper implements PanelAutomation {
         IXMLElement ipath = panelRoot.getFirstChildNamed(UserPathPanel.pathElementName);
 
         // Allow for variable substitution of the installpath value
-        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
         String path = ipath.getContent();
-        path = vs.substitute(path);
+        path = variableSubstitutor.substitute(path);
         idata.setVariable(UserPathPanel.pathVariableName, path);
     }
 }
