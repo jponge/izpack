@@ -33,7 +33,6 @@ import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.substitutor.SubstitutionType;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -93,14 +92,15 @@ public class CompileWorker implements Runnable {
     /**
      * The constructor.
      *
-     * @param idata   The installation data.
-     * @param handler The handler to notify of progress.
+     * @param idata               The installation data.
+     * @param handler             The handler to notify of progress.
+     * @param variableSubstitutor
      * @throws IOException
      */
-    public CompileWorker(AutomatedInstallData idata, CompileHandler handler) throws IOException {
+    public CompileWorker(AutomatedInstallData idata, CompileHandler handler, VariableSubstitutor variableSubstitutor) throws IOException {
         this.idata = idata;
         this.handler = handler;
-        this.vs = new VariableSubstitutorImpl(idata.getVariables());
+        this.vs = variableSubstitutor;
         if (!readSpec()) {
             throw new IOException("Error reading compilation specification");
         }

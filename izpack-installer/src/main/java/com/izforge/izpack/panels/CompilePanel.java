@@ -31,6 +31,7 @@ import com.izforge.izpack.installer.CompileWorker;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -120,14 +121,15 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
     /**
      * The constructor.
      *
-     * @param parent The parent window.
-     * @param idata  The installation installDataGUI.
+     * @param variableSubstitutor
+     * @param parent              The parent window.
+     * @param idata               The installation installDataGUI.
      * @throws IOException
      */
-    public CompilePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) throws IOException {
+    public CompilePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, VariableSubstitutorImpl variableSubstitutor) throws IOException {
         super(parent, idata, resourceManager);
 
-        this.worker = new CompileWorker(idata, this);
+        this.worker = new CompileWorker(idata, this, variableSubstitutor);
 
         GridBagConstraints gridBagConstraints;
 

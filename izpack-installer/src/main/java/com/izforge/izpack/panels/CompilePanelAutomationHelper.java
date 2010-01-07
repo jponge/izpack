@@ -25,6 +25,7 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.*;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -49,6 +50,11 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
     // when using the eclipse compiler, we're capturing System.out and System.err...
     private PrintStream stdout;
     private PrintStream stderr;
+    private VariableSubstitutor variableSubstitutor;
+
+    public CompilePanelAutomationHelper(VariableSubstitutor variableSubstitutor) {
+        this.variableSubstitutor = variableSubstitutor;
+    }
 
     /**
      * Save installDataGUI for running automated.
@@ -93,7 +99,8 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
         }
 
         try {
-            this.worker = new CompileWorker(idata, this);
+
+            this.worker = new CompileWorker(idata, this, variableSubstitutor);
             this.worker.setCompiler(compiler);
             this.worker.setCompilerArguments(args);
 
