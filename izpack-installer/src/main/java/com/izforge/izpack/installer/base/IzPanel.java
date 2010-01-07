@@ -161,6 +161,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * The resource manager
      */
     protected ResourceManager resourceManager;
+    private VariableSubstitutor variableSubstitutor;
 
     /**
      * The constructor.
@@ -189,6 +190,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         if (lm != null) {
             getLayoutHelper().startLayout(lm);
         }
+        variableSubstitutor = new VariableSubstitutorImpl(this.installData.getVariables());
     }
 
     /**
@@ -575,8 +577,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             retval = installData.getLangpack().getString(buf.toString());
         }
         if (retval != null && retval.indexOf('$') > -1) {
-            VariableSubstitutor substitutor = new VariableSubstitutorImpl(this.installData.getVariables());
-            retval = substitutor.substitute(retval);
+            retval = variableSubstitutor.substitute(retval);
         }
         return (retval);
     }
@@ -989,13 +990,12 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
                 } else {
                     Debug.trace("Validation did not pass!");
                     // try to parse the text, and substitute any variable it finds
-                    VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
                     if (this.validationService.getWarningMessageId() != null
                             && returnStatus == DataValidator.Status.WARNING) {
 
                         String warningMessage = installData.getLangpack().getString(this.validationService
                                 .getWarningMessageId());
-                        if (this.emitWarning(getString("data.validation.warning.title"), vs
+                        if (this.emitWarning(getString("data.validation.warning.title"), variableSubstitutor
                                 .substitute(warningMessage))) {
                             returnValue = true;
                             Debug.trace("... but user decided to go on!");
@@ -1003,7 +1003,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
                     } else {
                         String errorMessage = installData.getLangpack().getString(this.validationService
                                 .getErrorMessageId());
-                        this.emitError(getString("data.validation.error.title"), vs.substitute(
+                        this.emitError(getString("data.validation.error.title"), variableSubstitutor.substitute(
                                 errorMessage, null));
 
                     }
@@ -1023,11 +1023,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     protected String parseText(String string_to_parse) {
         try {
-            // Initialize the variable substitutor
-            VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
-
             // Parses the info text
-            string_to_parse = vs.substitute(string_to_parse);
+            string_to_parse = variableSubstitutor.substitute(string_to_parse);
         }
         catch (Exception err) {
             err.printStackTrace();
