@@ -23,11 +23,13 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Properties;
+
 public class AutomatedInstallDataTest {
     @Ignore
     @Test
     public void testContruction() {
-        AutomatedInstallData auto = new AutomatedInstallData();
+        AutomatedInstallData auto = new AutomatedInstallData(new Properties());
         IXMLElement xmlElement = auto.getXmlData();
         Assert.assertEquals("AutomatedInstallation", xmlElement.getName());
     }

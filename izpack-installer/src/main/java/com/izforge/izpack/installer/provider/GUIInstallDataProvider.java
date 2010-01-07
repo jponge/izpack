@@ -19,6 +19,7 @@ import java.io.ObjectInputStream;
 import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.TreeMap;
 
 /**
@@ -27,10 +28,10 @@ import java.util.TreeMap;
  */
 public class GUIInstallDataProvider extends AbstractInstallDataProvider {
 
-    public GUIInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer, VariableSubstitutor variableSubstitutor) throws Exception {
+    public GUIInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer, VariableSubstitutor variableSubstitutor, Properties variables) throws Exception {
         this.resourceManager = resourceManager;
         this.variableSubstitutor = variableSubstitutor;
-        final GUIInstallData guiInstallData = new GUIInstallData();
+        final GUIInstallData guiInstallData = new GUIInstallData(variables);
         // Loads the installation data
         loadInstallData(guiInstallData);
         // Load custom action data.

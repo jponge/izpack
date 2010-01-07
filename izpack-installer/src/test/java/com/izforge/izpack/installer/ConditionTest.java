@@ -25,6 +25,8 @@ import com.izforge.izpack.rules.RulesEngineImpl;
 import junit.framework.TestCase;
 import org.w3c.dom.Document;
 
+import java.util.Properties;
+
 
 /**
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
@@ -35,7 +37,7 @@ public class ConditionTest extends TestCase {
 
     public final static String RDE_VCS_NAME = "$Name:  $";
 
-    protected static GUIInstallData idata = new GUIInstallData();
+    protected static GUIInstallData idata = new GUIInstallData(new Properties());
 
     protected RulesEngine rules;
 

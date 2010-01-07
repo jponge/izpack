@@ -5,16 +5,18 @@ import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
+import java.util.Properties;
+
 /**
  * Install data loader
  */
 public class AutomatedInstallDataProvider extends AbstractInstallDataProvider {
 
-    public AutomatedInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer, VariableSubstitutor variableSubstitutor) {
+    public AutomatedInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer, VariableSubstitutor variableSubstitutor, Properties variables) {
         try {
             this.resourceManager = resourceManager;
             this.variableSubstitutor = variableSubstitutor;
-            final AutomatedInstallData automatedInstallData = new AutomatedInstallData();
+            final AutomatedInstallData automatedInstallData = new AutomatedInstallData(variables);
             // Loads the installation data
             loadInstallData(automatedInstallData);
             // Load custom action data.

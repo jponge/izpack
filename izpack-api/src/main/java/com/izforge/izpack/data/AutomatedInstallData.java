@@ -193,19 +193,18 @@ public class AutomatedInstallData implements Serializable {
      * Constructs a new instance of this class.
      * Only one should be possible, at a scound call a RuntimeException
      * will be raised.
+     *
+     * @param variables
      */
-    public AutomatedInstallData() {
+    public AutomatedInstallData(Properties variables) {
         setAvailablePacks(new ArrayList<Pack>());
         setSelectedPacks(new ArrayList<Pack>());
         setPanels(new ArrayList());
         setPanelsOrder(new ArrayList<Panel>());
         setXmlData(new XMLElementImpl("AutomatedInstallation"));
-        setVariables(new Properties());
+        setVariables(variables);
         setAttributes(new HashMap<String, Object>());
         setCustomData(new HashMap<String, List>());
-//        if (self != null) {
-//            throw new RuntimeException("Panic!! second call of the InstallData Ctor!!");
-//        }
         self = this;
     }
 

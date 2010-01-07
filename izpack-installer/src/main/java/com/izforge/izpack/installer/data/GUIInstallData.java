@@ -26,6 +26,7 @@ import com.izforge.izpack.data.Panel;
 import javax.swing.*;
 import java.awt.*;
 import java.io.Serializable;
+import java.util.Properties;
 
 /**
  * Encloses information about the install process. This class is implemented as a singleton which
@@ -55,6 +56,10 @@ public class GUIInstallData extends AutomatedInstallData implements Serializable
      * The buttons highlighting color.
      */
     public Color buttonsHColor = new Color(230, 230, 230);
+
+    public GUIInstallData(Properties variables) {
+        super(variables);
+    }
 
     public void configureGuiButtons() {
         UIManager.put("OptionPane.yesButtonText", getLangpack().getString("installer.yes"));
