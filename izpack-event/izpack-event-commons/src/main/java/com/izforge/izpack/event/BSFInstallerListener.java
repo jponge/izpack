@@ -32,7 +32,7 @@ import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -50,9 +50,11 @@ public class BSFInstallerListener extends SimpleInstallerListener {
     private ArrayList<BSFAction> uninstActions = null;
     private String currentPack = null;
     private AutomatedInstallData installdata = null;
+    private VariableSubstitutor variableSubstitutor;
 
-    public BSFInstallerListener() {
+    public BSFInstallerListener(VariableSubstitutor variableSubstitutor) {
         super(true);
+        this.variableSubstitutor = variableSubstitutor;
         actions = new HashMap<String, ArrayList<BSFAction>>();
         uninstActions = new ArrayList<BSFAction>();
     }
@@ -63,7 +65,7 @@ public class BSFInstallerListener extends SimpleInstallerListener {
         }
         super.beforePacks(idata, npacks, handler);
 
-        getSpecHelper().readSpec(SPEC_FILE_NAME, new VariableSubstitutorImpl(idata.getVariables()));
+        getSpecHelper().readSpec(SPEC_FILE_NAME, variableSubstitutor);
 
         if (getSpecHelper().getSpec() == null) {
             return;
@@ -229,7 +231,7 @@ public class BSFInstallerListener extends SimpleInstallerListener {
                 byte buf[] = new byte[10 * 1024];
                 int read = 0;
                 is = ResourceManager.getInstance().getInputStream(src);
-                subis = new SpecHelper().substituteVariables(is, new VariableSubstitutorImpl(idata.getVariables()));
+                subis = new SpecHelper().substituteVariables(is, variableSubstitutor);
 
                 while ((read = subis.read(buf, 0, 10 * 1024)) != -1) {
                     baos.write(buf, 0, read);
