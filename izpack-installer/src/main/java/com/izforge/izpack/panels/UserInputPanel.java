@@ -949,7 +949,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             entryMap.put(key, this.installData.getVariable(key));
         }
 
-        new UserInputPanelAutomationHelper(entryMap).makeXMLData(this.installData, panelRoot);
+        new UserInputPanelAutomationHelper(entryMap, variableSubstitutor).makeXMLData(this.installData, panelRoot);
     }
 
     /*--------------------------------------------------------------------------*/

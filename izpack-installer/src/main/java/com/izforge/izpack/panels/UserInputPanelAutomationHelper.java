@@ -29,7 +29,6 @@ import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -61,19 +60,25 @@ public class UserInputPanelAutomationHelper implements PanelAutomation {
     // String-String key-value pairs
     // ------------------------------------------------------
     private Map<String, String> entries;
+    private VariableSubstitutor variableSubstitutor;
 
     /**
      * Default constructor, used during automated installation.
+     *
+     * @param variableSubstitutor
      */
-    public UserInputPanelAutomationHelper() {
+    public UserInputPanelAutomationHelper(VariableSubstitutor variableSubstitutor) {
+        this.variableSubstitutor = variableSubstitutor;
         this.entries = null;
     }
 
     /**
-     * @param entries String-String key-value pairs representing the state of the Panel
+     * @param entries             String-String key-value pairs representing the state of the Panel
+     * @param variableSubstitutor
      */
-    public UserInputPanelAutomationHelper(Map<String, String> entries) {
+    public UserInputPanelAutomationHelper(Map<String, String> entries, VariableSubstitutor variableSubstitutor) {
         this.entries = entries;
+        this.variableSubstitutor = variableSubstitutor;
     }
 
     /**
@@ -144,9 +149,8 @@ public class UserInputPanelAutomationHelper implements PanelAutomation {
             variable = dataElement.getAttribute(AUTO_ATTRIBUTE_KEY);
 
             // Substitute variable used in the 'value' field
-            VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
             value = dataElement.getAttribute(AUTO_ATTRIBUTE_VALUE);
-            value = vs.substitute(value);
+            value = variableSubstitutor.substitute(value);
 
             Debug.trace("UserInputPanel: setting variable " + variable + " to " + value);
             idata.setVariable(variable, value);
