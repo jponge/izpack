@@ -73,6 +73,7 @@ public class ProcessPanelWorker implements Runnable {
     protected AutomatedInstallData idata;
 
     private Map<Boolean, List<ButtonConfig>> buttonConfigs = new Hashtable<Boolean, List<ButtonConfig>>();
+    private VariableSubstitutor variableSubstitutor;
 
     /**
      * The constructor.
@@ -91,6 +92,8 @@ public class ProcessPanelWorker implements Runnable {
         // Patch)
         // if (!readSpec())
         // throw new IOException("Error reading processing specification");
+        this.variableSubstitutor = new VariableSubstitutorImpl(this.idata
+                .getVariables());
     }
 
     private boolean readSpec() throws IOException {
@@ -240,8 +243,7 @@ public class ProcessPanelWorker implements Runnable {
         // Create logfile if needed. Do it at this point because
         // variable substitution needs selected install path.
         if (logfiledir != null) {
-            logfiledir = IoHelper.translatePath(logfiledir, new VariableSubstitutorImpl(idata
-                    .getVariables()));
+            logfiledir = IoHelper.translatePath(logfiledir, variableSubstitutor);
 
             File lf;
 
