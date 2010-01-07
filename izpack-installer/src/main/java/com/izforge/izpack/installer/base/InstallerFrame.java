@@ -198,6 +198,7 @@ public class InstallerFrame extends JFrame {
      * Manager for writing uninstall data
      */
     private UninstallDataWriter uninstallDataWriter;
+    private VariableSubstitutor variableSubstitutor;
 
     /**
      * The constructor (normal mode).
@@ -222,6 +223,7 @@ public class InstallerFrame extends JFrame {
         // Sets the window events handler
         addWindowListener(new WindowHandler());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        this.variableSubstitutor = new VariableSubstitutorImpl(this.installdata.getVariables());
     }
 
     public void sizeFrame() {
@@ -759,15 +761,14 @@ public class InstallerFrame extends JFrame {
             boolean reboot = false;
             if (installdata.isRebootNecessary()) {
                 String message, title;
-                VariableSubstitutor vs = new VariableSubstitutorImpl(installdata.getVariables());
                 System.out.println("[ There are file operations pending after reboot ]");
                 switch (installdata.getInfo().getRebootAction()) {
                     case Info.REBOOT_ACTION_ALWAYS:
                         reboot = true;
                         break;
                     case Info.REBOOT_ACTION_ASK:
-                        message = vs.substitute(langpack.getString("installer.reboot.ask.message"));
-                        title = vs.substitute(langpack.getString("installer.reboot.ask.title"));
+                        message = variableSubstitutor.substitute(langpack.getString("installer.reboot.ask.message"));
+                        title = variableSubstitutor.substitute(langpack.getString("installer.reboot.ask.title"));
                         int res = JOptionPane
                                 .showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION);
                         if (res == JOptionPane.YES_OPTION) {
@@ -775,8 +776,8 @@ public class InstallerFrame extends JFrame {
                         }
                         break;
                     case Info.REBOOT_ACTION_NOTICE:
-                        message = vs.substitute(langpack.getString("installer.reboot.notice.message"));
-                        title = vs.substitute(langpack.getString("installer.reboot.notice.title"));
+                        message = variableSubstitutor.substitute(langpack.getString("installer.reboot.notice.message"));
+                        title = variableSubstitutor.substitute(langpack.getString("installer.reboot.notice.title"));
                         JOptionPane.showConfirmDialog(this, message, title, JOptionPane.OK_OPTION);
                         break;
                 }
@@ -805,7 +806,7 @@ public class InstallerFrame extends JFrame {
                 title = langpack.getString("installer.quit.title");
             }
             // Now replace variables in message or title.
-            VariableSubstitutor vs = new VariableSubstitutorImpl(installdata.getVariables());
+            VariableSubstitutor vs = variableSubstitutor;
             message = vs.substitute(message);
             title = vs.substitute(title);
             int res = JOptionPane
