@@ -179,6 +179,7 @@ public class AutomatedInstallData implements Serializable {
     public final static String HELP_TAG = "help";
     public final static String ISO3_ATTRIBUTE = "iso3";
     public final static String SRC_ATTRIBUTE = "src";
+    private VariableSubstitutor variableSubstitutor;
 
     /**
      * Returns the one possible object of this class.
@@ -195,8 +196,10 @@ public class AutomatedInstallData implements Serializable {
      * will be raised.
      *
      * @param variables
+     * @param variableSubstitutor
      */
-    public AutomatedInstallData(Properties variables) {
+    public AutomatedInstallData(Properties variables, VariableSubstitutor variableSubstitutor) {
+        this.variableSubstitutor = variableSubstitutor;
         setAvailablePacks(new ArrayList<Pack>());
         setSelectedPacks(new ArrayList<Pack>());
         setPanels(new ArrayList());
@@ -296,7 +299,7 @@ public class AutomatedInstallData implements Serializable {
     /**
      * Refreshes Dynamic Variables.
      */
-    public void refreshDynamicVariables(VariableSubstitutor substitutor) {
+    public void refreshDynamicVariables() {
 //        Debug.log("refreshing dyamic variables.");
         if (dynamicvariables != null) {
             for (String dynvarname : dynamicvariables.keySet()) {
@@ -317,7 +320,7 @@ public class AutomatedInstallData implements Serializable {
                         refresh = true;
                     }
                     if (refresh) {
-                        String newvalue = substitutor.substitute(dynvar.getValue());
+                        String newvalue = variableSubstitutor.substitute(dynvar.getValue());
 //                        Debug.log("newvalue: " + newvalue);
                         getVariables().setProperty(dynvar.getName(), newvalue);
                     }

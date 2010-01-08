@@ -122,7 +122,7 @@ public class ConsoleInstaller extends InstallerBase {
                 if (consoleHelperClass != null) {
                     try {
                         Debug.log("Instantiate :" + consoleHelperClassName);
-                        installdata.refreshDynamicVariables(variableSubstitutor);
+                        installdata.refreshDynamicVariables();
                         consoleHelperInstance = consoleHelperClass.newInstance();
                     }
                     catch (Exception e) {

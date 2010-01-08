@@ -22,6 +22,7 @@ package com.izforge.izpack.installer.data;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.Panel;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -57,8 +58,8 @@ public class GUIInstallData extends AutomatedInstallData implements Serializable
      */
     public Color buttonsHColor = new Color(230, 230, 230);
 
-    public GUIInstallData(Properties variables) {
-        super(variables);
+    public GUIInstallData(Properties variables, VariableSubstitutor variableSubstitutor) {
+        super(variables, variableSubstitutor);
     }
 
     public void configureGuiButtons() {

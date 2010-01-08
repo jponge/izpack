@@ -543,7 +543,7 @@ public class InstallerFrame extends JFrame {
      */
     protected void switchPanel(int last) {
         // refresh dynamic variables every time, a panel switch is done
-        installdata.refreshDynamicVariables(substitutor);
+        installdata.refreshDynamicVariables();
         try {
             if (installdata.getCurPanelNumber() < last) {
                 isBack = true;

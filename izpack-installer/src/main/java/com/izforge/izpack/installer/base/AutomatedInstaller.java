@@ -172,7 +172,7 @@ public class AutomatedInstaller extends InstallerBase {
 
                 // execute the installation logic for the current panel
                 installPanel(p, automationHelper, panelRoot);
-                idata.refreshDynamicVariables(variableSubstitutor);
+                idata.refreshDynamicVariables();
             }
 
             // this does nothing if the uninstaller was not included

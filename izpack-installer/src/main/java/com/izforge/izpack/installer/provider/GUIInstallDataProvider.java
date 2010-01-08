@@ -31,7 +31,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider {
     public GUIInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer, VariableSubstitutor variableSubstitutor, Properties variables) throws Exception {
         this.resourceManager = resourceManager;
         this.variableSubstitutor = variableSubstitutor;
-        final GUIInstallData guiInstallData = new GUIInstallData(variables);
+        final GUIInstallData guiInstallData = new GUIInstallData(variables, variableSubstitutor);
         // Loads the installation data
         loadInstallData(guiInstallData);
         // Load custom action data.

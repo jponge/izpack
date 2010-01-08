@@ -98,7 +98,7 @@ public abstract class AbstractInstallDataProvider implements Provider {
         in = resourceManager.getInputStream("packs.info");
         objIn = new ObjectInputStream(in);
         size = objIn.readInt();
-        ArrayList availablePacks = new ArrayList();
+        ArrayList<Pack> availablePacks = new ArrayList<Pack>();
         ArrayList<Pack> allPacks = new ArrayList<Pack>();
         for (i = 0; i < size; i++) {
             Pack pk = (Pack) objIn.readObject();
@@ -163,9 +163,9 @@ public abstract class AbstractInstallDataProvider implements Provider {
         installdata.setAllPacks(allPacks);
 
         // get list of preselected packs
-        Iterator pack_it = availablePacks.iterator();
+        Iterator<Pack> pack_it = availablePacks.iterator();
         while (pack_it.hasNext()) {
-            Pack pack = (Pack) pack_it.next();
+            Pack pack = pack_it.next();
             if (pack.preselected) {
                 installdata.getSelectedPacks().add(pack);
             }

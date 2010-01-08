@@ -16,7 +16,7 @@ public class AutomatedInstallDataProvider extends AbstractInstallDataProvider {
         try {
             this.resourceManager = resourceManager;
             this.variableSubstitutor = variableSubstitutor;
-            final AutomatedInstallData automatedInstallData = new AutomatedInstallData(variables);
+            final AutomatedInstallData automatedInstallData = new AutomatedInstallData(variables, variableSubstitutor);
             // Loads the installation data
             loadInstallData(automatedInstallData);
             // Load custom action data.

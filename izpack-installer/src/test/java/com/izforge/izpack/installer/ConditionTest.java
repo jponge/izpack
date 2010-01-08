@@ -22,6 +22,7 @@ import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.rules.RulesEngineImpl;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import junit.framework.TestCase;
 import org.w3c.dom.Document;
 
@@ -37,7 +38,7 @@ public class ConditionTest extends TestCase {
 
     public final static String RDE_VCS_NAME = "$Name:  $";
 
-    protected static GUIInstallData idata = new GUIInstallData(new Properties());
+    protected static GUIInstallData idata = new GUIInstallData(new Properties(), new VariableSubstitutorImpl(new Properties()));
 
     protected RulesEngine rules;
 

@@ -58,7 +58,8 @@ public class InstallationTest extends AbstractInstallationTest {
     public void testBasicInstall() throws Exception {
         compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
-
+        installData.refreshDynamicVariables();
+        assertThat(installData.getVariable("myPath"), Is.is(""));
         File installPath = prepareInstallation(installData);
         // Lang picker
         clickDefaultLang();
