@@ -86,6 +86,7 @@ public class InstallationTest extends AbstractInstallationTest {
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Finish panel
         installerFrameFixture.button(GuiId.FINISH_PANEL_AUTO_BUTTON.id).click();
+        Thread.sleep(100);
         installerFrameFixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).fileNameTextBox().enterText("auto.xml");
         installerFrameFixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).approve();
         assertThat(new File(installPath, "auto.xml").exists(), Is.is(true));
@@ -137,6 +138,7 @@ public class InstallationTest extends AbstractInstallationTest {
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Shortcut
         // Deselect shortcut creation
+        Thread.sleep(100);
         installerFrameFixture.checkBox(GuiId.SHORTCUT_CREATE_CHECK_BOX.id).click();
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Finish

@@ -52,6 +52,7 @@ public class AbstractInstallationTest {
     public void deleteLock() {
         File file = new File(System.getProperty("java.io.tmpdir"), "iz-" + LanguageSelectionTest.APPNAME + ".tmp");
         file.delete();
+
     }
 
     /**

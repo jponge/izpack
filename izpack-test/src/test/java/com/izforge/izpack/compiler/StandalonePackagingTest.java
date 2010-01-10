@@ -5,6 +5,7 @@ import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.hamcrest.text.StringContains;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -36,6 +37,7 @@ public class StandalonePackagingTest {
     }
 
     @Test
+    @Ignore
     public void standaloneCompilerShouldContainJarResources() throws IOException {
         AssertionHelper.assertZipContainsMatch(standaloneCompiler, StringContains.containsString(pathProperties.getProperty("installer")));
         AssertionHelper.assertZipContainsMatch(standaloneCompiler, StringContains.containsString(pathProperties.getProperty("uninstaller")));
@@ -43,6 +45,7 @@ public class StandalonePackagingTest {
     }
 
     @Test
+    @Ignore
     public void skeletonInstallerShouldContainClasses() throws Exception {
         AssertionHelper.assertZipContainsMatch(skeletonInstallerFile, "Debug.class");
     }
