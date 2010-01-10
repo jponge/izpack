@@ -1502,7 +1502,7 @@ public class CompilerConfig extends Thread {
         Map<String, List<DynamicVariable>> dynamicvariables = compiler.getDynamicVariables();
 
         for (IXMLElement variableNode : root.getChildrenNamed("variable")) {
-            String name = XmlCompilerHelper.requireAttribute(variableNode, "name", compilerData.getInstallFile());
+            String name = xmlCompilerHelper.requireAttribute(variableNode, "name", compilerData.getInstallFile());
             String value = variableNode.getAttribute("value");
             if (value == null) {
                 IXMLElement valueElement = variableNode.getFirstChildNamed("value");

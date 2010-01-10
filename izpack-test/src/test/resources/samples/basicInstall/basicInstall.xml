@@ -30,9 +30,7 @@
         <variable name="scriptFile" value="script.bat"/>
     </variables>
     <dynamicvariables>
-        <variables>
-            <variable name="myPath" value="$INSTALLPATH/test"/>
-        </variables>
+        <variable name="myPath" value="$INSTALL_PATH/test"/>
     </dynamicvariables>
 
     <!-- 
@@ -83,7 +81,7 @@
             <file src="Readme.txt" targetdir="$INSTALL_PATH"/>
             <file src="Licence.txt" targetdir="$INSTALL_PATH"/>
             <file src="script.bat" targetdir="$myPath"/>
-            <parsable targetfile="$INSTALL_PATH/$scriptFile"/>
+            <parsable targetfile="$INSTALL_PATH/test/$scriptFile"/>
             <!-- The file will be parsed -->
         </pack>
         <pack name="Docs" required="no">
