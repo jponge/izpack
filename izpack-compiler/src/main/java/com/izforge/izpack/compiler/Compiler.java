@@ -56,6 +56,31 @@ import java.util.zip.ZipEntry;
  */
 public class Compiler extends Thread {
     /**
+     * The IzPack version.
+     */
+    public final static String IZPACK_VERSION = "4.3.2";
+
+    /**
+     * The IzPack home directory.
+     */
+    public static String IZPACK_HOME = ".";
+
+    /**
+     * The base directory.
+     */
+    protected String basedir;
+
+    /**
+     * The installer kind.
+     */
+    protected String kind;
+
+    /**
+     * The output jar filename.
+     */
+    protected String output;
+
+    /**
      * Collects and packs files into installation jars, as told.
      */
     private IPackager packager = null;

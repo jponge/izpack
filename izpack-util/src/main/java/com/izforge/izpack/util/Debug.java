@@ -20,7 +20,11 @@
  */
 package com.izforge.izpack.util;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -47,7 +51,8 @@ import java.util.Properties;
  * @author Julien Ponge, Klaus Bartz, Marc Eppelmann
  * @version $Revision$ ($Id$)
  */
-public class Debug {
+public class Debug
+{
 
     // ~ Static fields/initializers *********************************************************
 
@@ -126,17 +131,20 @@ public class Debug {
             + LOGFILE_EXTENSION;
 
     public static boolean LOG_TRACE_STATEMENTS = false;
-
+    
     /**
      * The log initializion bloc.
      */
-    static {
+    static
+    {
         boolean st = false;
 
-        try {
+        try
+        {
             st = Boolean.getBoolean(DSTACKTRACE);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             // ignore
         }
 
@@ -144,10 +152,12 @@ public class Debug {
 
         boolean log = false;
 
-        try {
+        try
+        {
             log = Boolean.getBoolean(DLOG);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             // ignore
         }
 
@@ -155,24 +165,30 @@ public class Debug {
 
         boolean t = false;
 
-        try {
-            if (STACKTRACE) {
+        try
+        {
+            if (STACKTRACE)
+            {
                 t = true;
-            } else {
+            }
+            else
+            {
                 t = Boolean.getBoolean(DTRACE);
             }
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             // ignore
         }
 
         TRACE = t;
 
-        if (LOG) {
+        if (LOG)
+        {
             System.out.println(DLOG + " enabled.");
             PrintWriter logfile = createLogFile();
 
-            Debug.log("Installer LogFile created at ");
+            Debug.log("IzPack LogFile created at ");
 
             // ** write some runtime system properties into the logfile **
             Debug.log("System.Properties:", LOG_WITH_TIME_STAMP);
@@ -181,21 +197,24 @@ public class Debug {
 
             Enumeration spe = sysProps.keys();
 
-            while (spe.hasMoreElements()) {
+            while (spe.hasMoreElements())
+            {
                 String aKey = (String) spe.nextElement();
                 Debug.log(aKey + "  =  " + sysProps.getProperty(aKey), LOG_WITHOUT_DATE);
             }
             Debug.log("\n==========================================\n", LOG_WITHOUT_DATE);
-            Debug.log("\n Instraller installs on: \n", LOG_WITHOUT_DATE);
+            Debug.log("\n IzPack runs on: \n", LOG_WITHOUT_DATE);
             Debug.log(OsVersion.getOsDetails(), LOG_WITHOUT_DATE);
             Debug.log("\n==========================================\n", LOG_WITHOUT_DATE);
         }
 
-        if (TRACE) {
+        if (TRACE)
+        {
             System.out.println(DTRACE + " enabled.");
         }
 
-        if (STACKTRACE) {
+        if (STACKTRACE)
+        {
             System.out.println(DSTACKTRACE + " enabled.");
         }
     }
@@ -207,15 +226,18 @@ public class Debug {
      *
      * @param s
      */
-    public static void trace(Object s) {
-        if (TRACE) {
+    public static void trace(Object s)
+    {
+        if (TRACE)
+        {
             // console.println(s.toString());
-            if (LOG_TRACE_STATEMENTS) {
+            if (LOG_TRACE_STATEMENTS){
                 log(s);
             }
             System.out.println(s);
 
-            if (STACKTRACE && (s instanceof Throwable)) {
+            if (STACKTRACE && (s instanceof Throwable))
+            {
                 // StringWriter sw = new StringWriter();
                 // PrintWriter pw = new PrintWriter(sw);
                 // ((Throwable)s).printStackTrace(pw);
@@ -232,7 +254,8 @@ public class Debug {
      *
      * @param s
      */
-    public static void error(Object s) {
+    public static void error(Object s)
+    {
         trace(s);
         System.err.println(s);
         System.err.flush();
@@ -245,7 +268,8 @@ public class Debug {
      *
      * @param o The Object to log, can be also an exception.
      */
-    public static void log(Object o) {
+    public static void log(Object o)
+    {
         log(o, LOG_WITH_TIME_AND_DATE);
     }
 
@@ -256,26 +280,33 @@ public class Debug {
      * @param o              The Object to log
      * @param withWhatFormat if the given MASK is greater than 0, Log with Date/Timestamp
      */
-    public static void log(Object o, int withWhatFormat) {
+    public static void log(Object o, int withWhatFormat)
+    {
         // if LOG was given
-        if (LOG) {
+        if (LOG)
+        {
             PrintWriter logfile;
-            if ((logfile = getLogFile()) == null) {
+            if ((logfile = getLogFile()) == null)
+            {
                 logfile = createLogFile();
             }
 
-            if (logfile != null) {
-                if (o == null) {
+            if (logfile != null)
+            {
+                if (o == null)
+                {
                     o = "null";
                 }
 
                 StringBuffer entry = new StringBuffer();
-                if (logWithTimeStamp(withWhatFormat)) {
+                if (logWithTimeStamp(withWhatFormat))
+                {
                     entry.append(System.currentTimeMillis());
                     entry.append(';');
                     entry.append(' ');
                 }
-                if (logWithDate(withWhatFormat)) {
+                if (logWithDate(withWhatFormat))
+                {
                     entry.append(new Date());
                     entry.append(';');
                     entry.append(' ');
@@ -285,7 +316,8 @@ public class Debug {
 
                 logfile.println(entry.toString());
 
-                if (o instanceof Throwable) {
+                if (o instanceof Throwable)
+                {
                     ((Throwable) o).printStackTrace(logfile);
                 }
 
@@ -293,7 +325,9 @@ public class Debug {
 
                 // logfile.close();
                 // logFile = null;
-            } else {
+            }
+            else
+            {
                 System.err.println("Cannot write into logfile: (" + logfile + ") <- '" + o + "'");
             }
         }
@@ -305,7 +339,8 @@ public class Debug {
      * @param withWhatFormat The whished Format
      * @return true if to log with Date
      */
-    private static boolean logWithDate(int withWhatFormat) {
+    private static boolean logWithDate(int withWhatFormat)
+    {
 
         return (withWhatFormat & LOG_WITH_DATE) == LOG_WITH_DATE;
     }
@@ -316,7 +351,8 @@ public class Debug {
      * @param withWhatFormat The whished Format
      * @return true if to log with Timestamp
      */
-    private static boolean logWithTimeStamp(int withWhatFormat) {
+    private static boolean logWithTimeStamp(int withWhatFormat)
+    {
 
         return (withWhatFormat & LOG_WITH_DATE) == LOG_WITH_DATE;
     }
@@ -326,15 +362,18 @@ public class Debug {
      *
      * @return The writer object instance
      */
-    private static PrintWriter createLogFile() {
+    private static PrintWriter createLogFile()
+    {
         String tempDir = System.getProperty("java.io.tmpdir");
 
         File tempDirFile = new File(tempDir);
 
-        try {
+        try
+        {
             tempDirFile.mkdirs();
         }
-        catch (RuntimeException e1) {
+        catch (RuntimeException e1)
+        {
             e1.printStackTrace();
         }
 
@@ -344,17 +383,22 @@ public class Debug {
         File out = new File(tempDir, logfilename);
 
         PrintWriter logfile;
-        if (tempDirFile.canWrite()) {
-            try {
+        if (tempDirFile.canWrite())
+        {
+            try
+            {
                 BufferedWriter fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
                         out), "UTF-8"));
                 logfile = setLogFile(new PrintWriter(fw));
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 logfile = null;
                 e.printStackTrace();
             }
-        } else {
+        }
+        else
+        {
             logfile = null;
             System.err.println("Fatal: cannot write File: '" + logfilename + "' into: "
                     + tempDirFile);
@@ -368,7 +412,8 @@ public class Debug {
      *
      * @return true if tracing otherwise false
      */
-    public static boolean tracing() {
+    public static boolean tracing()
+    {
         return TRACE;
     }
 
@@ -377,7 +422,8 @@ public class Debug {
      *
      * @return true if stacktracing otherwise false
      */
-    public static boolean stackTracing() {
+    public static boolean stackTracing()
+    {
         return STACKTRACE;
     }
 
@@ -386,7 +432,8 @@ public class Debug {
      *
      * @return Returns the LOG flag.
      */
-    public static boolean isLOG() {
+    public static boolean isLOG()
+    {
         return LOG;
     }
 
@@ -395,7 +442,8 @@ public class Debug {
      *
      * @param aFlag The LOG status to set to or not.
      */
-    public static void setLOG(boolean aFlag) {
+    public static void setLOG(boolean aFlag)
+    {
         System.out.println(DLOG + " = " + aFlag);
         LOG = aFlag;
     }
@@ -405,7 +453,8 @@ public class Debug {
      *
      * @return Returns the STACKTRACE.
      */
-    public static boolean isSTACKTRACE() {
+    public static boolean isSTACKTRACE()
+    {
         return STACKTRACE;
     }
 
@@ -414,7 +463,8 @@ public class Debug {
      *
      * @param aFlag The STACKTRACE to set / unset.
      */
-    public static void setSTACKTRACE(boolean aFlag) {
+    public static void setSTACKTRACE(boolean aFlag)
+    {
         System.out.println(DSTACKTRACE + " = " + aFlag);
         STACKTRACE = aFlag;
     }
@@ -424,7 +474,8 @@ public class Debug {
      *
      * @return Returns the TRACE.
      */
-    public static boolean isTRACE() {
+    public static boolean isTRACE()
+    {
         return TRACE;
     }
 
@@ -433,7 +484,8 @@ public class Debug {
      *
      * @param aFlag The TRACE to set / unset.
      */
-    public static void setTRACE(boolean aFlag) {
+    public static void setTRACE(boolean aFlag)
+    {
         System.out.println(DTRACE + " = " + aFlag);
         TRACE = aFlag;
     }
@@ -443,7 +495,8 @@ public class Debug {
      *
      * @return Returns the logFile.
      */
-    public static PrintWriter getLogFile() {
+    public static PrintWriter getLogFile()
+    {
         PrintWriter logfile = (PrintWriter) System.getProperties().get(IZPACK_LOGFILE);
 
         return logfile;
@@ -455,12 +508,14 @@ public class Debug {
      * @param aLogFile The logFile to set. *
      * @return The logfile to write into
      */
-    public static synchronized PrintWriter setLogFile(PrintWriter aLogFile) {
+    public static synchronized PrintWriter setLogFile(PrintWriter aLogFile)
+    {
         System.getProperties().put(IZPACK_LOGFILE, aLogFile);
 
         PrintWriter logfile = (PrintWriter) System.getProperties().get(IZPACK_LOGFILE);
 
-        if (logfile == null) {
+        if (logfile == null)
+        {
             System.err.println("Set::logfile == null");
         }
 

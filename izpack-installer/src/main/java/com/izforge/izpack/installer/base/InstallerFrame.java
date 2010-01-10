@@ -1190,12 +1190,33 @@ public class InstallerFrame extends JFrame {
      */
     class NavigationHandler implements ActionListener {
 
-        /**
-         * Actions handler.
-         *
-         * @param e The event.
-         */
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(final ActionEvent e) {
+            /*
+                Some panels activation may be slow, hence we
+                block the GUI, spin a thread to handle navigation then
+                release the GUI.
+             */
+            new Thread(new Runnable() {
+                public void run() {
+
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            blockGUI();
+                        }
+                    });
+
+                    navigate(e);
+
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            releaseGUI();
+                        }
+                    });
+                }
+            }).start();
+        }
+
+        private void navigate(ActionEvent e) {
             Object source = e.getSource();
             if (source == prevButton) {
                 navigatePrevious();
@@ -1204,7 +1225,6 @@ public class InstallerFrame extends JFrame {
             } else if (source == quitButton) {
                 exit();
             }
-
         }
     }
 
