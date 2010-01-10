@@ -26,8 +26,7 @@ import java.util.Properties;
  * @author Anthonin Bonnefoy
  */
 @RunWith(MockitoJUnitRunner.class)
-public class
-        CompilerConfigTest {
+public class CompilerConfigTest {
     private XMLParser xmlParser;
     private CompilerConfig compilerConfig;
     @Mock
@@ -42,6 +41,8 @@ public class
     private PropertyManager propertyManager;
     @Mock
     private XmlCompilerHelper xmlCompilerHerlper;
+    @Mock
+    private Map<String, List<DynamicVariable>> mapStringListDyn;
 
     @Before
     public void setUp() {
@@ -51,8 +52,6 @@ public class
 
     @Test
     public void testAddTwoVariables() throws Exception {
-        Map<String, List<DynamicVariable>> mapStringListDyn = Mockito.mock((Map.class));
-
         Mockito.when(mapStringListDyn.containsKey("myPath")).thenReturn(false);
         Mockito.when(compiler.getDynamicVariables()).thenReturn(mapStringListDyn);
         Properties variable = new Properties();
@@ -63,30 +62,27 @@ public class
         element = xmlParser.parse("<root><variables><variable name=\"INSTALLPATH\" value=\"thePath\"/></variables></root>");
         compilerConfig.addVariables(element);
 
-        DynamicVariable dyn = new DynamicVariable();
-        dyn.setName("myPath");
-        dyn.setValue("thePath/test");
-        ArrayList<DynamicVariable> list = new ArrayList<DynamicVariable>();
-        list.add(dyn);
-        Mockito.verify(mapStringListDyn).put("myPath", list);
+        verifyCallToMap(mapStringListDyn, "myPath", "thePath/test");
     }
 
     @Test
     public void testAddDynamicVariable() throws CompilerException {
-        Map<String, List<DynamicVariable>> mapStringListDyn = Mockito.mock((Map.class));
-
         Mockito.when(mapStringListDyn.containsKey("myPath")).thenReturn(false);
         Mockito.when(compiler.getDynamicVariables()).thenReturn(mapStringListDyn);
 
         IXMLElement element = xmlParser.parse("<root><dynamicvariables><variable name=\"myPath\" value=\"$INSTALLPATH / test\"/></dynamicvariables></root>");
         compilerConfig.addDynamicVariables(element);
 
+        verifyCallToMap(mapStringListDyn, "myPath", "$INSTALLPATH/test");
+    }
+
+    private void verifyCallToMap(Map<String, List<DynamicVariable>> mapStringListDyn, String name, String value) {
         DynamicVariable dyn = new DynamicVariable();
-        dyn.setName("myPath");
-        dyn.setValue("$INSTALLPATH/test");
+        dyn.setName(name);
+        dyn.setValue(value);
         ArrayList<DynamicVariable> list = new ArrayList<DynamicVariable>();
         list.add(dyn);
-        Mockito.verify(mapStringListDyn).put("myPath", list);
+        Mockito.verify(mapStringListDyn).put(name, list);
     }
 
 }
