@@ -57,22 +57,6 @@ import java.util.zip.ZipEntry;
  * @see CompilerConfig
  */
 public class Compiler extends Thread {
-
-    /**
-     * The base directory.
-     */
-    protected String basedir;
-
-    /**
-     * The installer kind.
-     */
-    protected String kind;
-
-    /**
-     * The output jar filename.
-     */
-    protected String output;
-
     /**
      * Collects and packs files into installation jars, as told.
      */

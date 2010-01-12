@@ -8,6 +8,7 @@ import com.izforge.izpack.compiler.compressor.DefaultPackCompressor;
 import com.izforge.izpack.compiler.compressor.RawPackCompressor;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
+import com.izforge.izpack.compiler.helper.CompilerResourceManager;
 import com.izforge.izpack.compiler.helper.IXmlCompilerHelper;
 import com.izforge.izpack.compiler.helper.impl.XmlCompilerHelper;
 import com.izforge.izpack.compiler.listener.CmdlinePackagerListener;
@@ -41,7 +42,7 @@ public class CompilerContainer extends AbstractContainer {
         pico.addComponent(CompilerConfig.class);
         pico.addComponent(CompilerHelper.class);
         pico.addComponent(PropertyManager.class);
-        pico.addComponent(CompilerResourceManagers.class);
+        pico.addComponent(CompilerResourceManager.class);
         pico.addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class);
 
         pico.addComponent(IPackager.class, Packager.class);
