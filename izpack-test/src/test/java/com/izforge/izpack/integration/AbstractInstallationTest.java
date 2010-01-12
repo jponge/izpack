@@ -52,7 +52,6 @@ public class AbstractInstallationTest {
     public void deleteLock() {
         File file = new File(System.getProperty("java.io.tmpdir"), "iz-" + LanguageSelectionTest.APPNAME + ".tmp");
         file.delete();
-
     }
 
     /**
@@ -91,7 +90,19 @@ public class AbstractInstallationTest {
     protected void compileAndUnzip(String installationFile, File workingDirectory) throws Exception {
         File installerFile = new File(workingDirectory, installationFile);
         File out = new File(workingDirectory, "out.jar");
-        compileAndUnzip(installerFile, workingDirectory, out);
+        compileAndUnzip(workingDirectory, out, new CompilerData(installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), out.getAbsolutePath()));
+    }
+
+    /**
+     * Compile an installer and unzip the created jar.
+     *
+     * @param workingDirectory
+     * @param compilerData
+     * @throws Exception
+     */
+    protected void compileAndUnzip(File workingDirectory, CompilerData compilerData) throws Exception {
+        File out = new File(workingDirectory, "out.jar");
+        compileAndUnzip(workingDirectory, out, compilerData);
     }
 
     protected File getWorkingDirectory(String workingDirectoryName) {
@@ -103,13 +114,13 @@ public class AbstractInstallationTest {
     /**
      * Compile an installer and unzip it.
      *
-     * @param installerFile    The izpack installer file
      * @param workingDirectory The directory containing the installer file
      * @param out              The output of the compiler
+     * @param compilerData
      * @throws Exception
      */
-    private void compileAndUnzip(File installerFile, File workingDirectory, File out) throws Exception {
-        CompilerData data = new CompilerData(installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), out.getAbsolutePath());
+    private void compileAndUnzip(File workingDirectory, File out, CompilerData compilerData) throws Exception {
+        CompilerData data = compilerData;
         compilerContainer.addComponent(CompilerData.class, data);
         CompilerConfig compilerConfig = compilerContainer.getComponent(CompilerConfig.class);
         compilerConfig.executeCompiler();

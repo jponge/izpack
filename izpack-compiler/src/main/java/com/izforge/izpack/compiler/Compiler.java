@@ -112,7 +112,7 @@ public class Compiler extends Thread {
         }
         catch (Exception e) {
             Debug.trace(e);
-            throw new CompilerException("Error loading packager class: " + classname);
+            throw new CompilerException("Error loading packager class: " + classname, e);
         }
     }
 

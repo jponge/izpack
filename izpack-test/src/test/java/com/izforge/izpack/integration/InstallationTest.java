@@ -1,5 +1,6 @@
 package com.izforge.izpack.integration;
 
+import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.container.IInstallerContainer;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.installer.base.GuiId;
@@ -42,6 +43,26 @@ public class InstallationTest extends AbstractInstallationTest {
     @Test
     public void testHelloAndFinishPanels() throws Exception {
         compileAndUnzip("helloAndFinish.xml", getWorkingDirectory("samples"));
+        installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
+        installerContainer.getComponent(LanguageDialog.class).initLangPack();
+        installerFrameFixture = prepareFrameFixture();
+
+        // Hello panel
+        installerFrameFixture.requireSize(new Dimension(640, 480));
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        installerFrameFixture.requireVisible();
+        // Finish panel
+    }
+
+    @Test
+    public void testHelloAndFinishPanelsCompressed() throws Exception {
+        File workingDirectory = getWorkingDirectory("samples");
+        File out = new File("out.jar");
+        File installerFile = new File(workingDirectory, "helloAndFinish.xml");
+        CompilerData data = new CompilerData(installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), out.getAbsolutePath());
+        data.setComprFormat("bzip2");
+        data.setComprLevel(9);
+        compileAndUnzip(workingDirectory, data);
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         installerContainer.getComponent(LanguageDialog.class).initLangPack();
         installerFrameFixture = prepareFrameFixture();
@@ -107,6 +128,7 @@ public class InstallationTest extends AbstractInstallationTest {
         assertThat(installPath.exists(), Is.is(false));
         return installPath;
     }
+
 
     @Test
     public void testIzpackInstallation() throws Exception {
