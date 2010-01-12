@@ -31,7 +31,6 @@ import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.packager.IPackager;
-import com.izforge.izpack.compiler.packager.PackagerListener;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.util.Debug;
@@ -58,15 +57,6 @@ import java.util.zip.ZipEntry;
  * @see CompilerConfig
  */
 public class Compiler extends Thread {
-    /**
-     * The IzPack version.
-     */
-    public final static String IZPACK_VERSION = "4.3.2";
-
-    /**
-     * The IzPack home directory.
-     */
-    public static String IZPACK_HOME = ".";
 
     /**
      * The base directory.
@@ -102,7 +92,6 @@ public class Compiler extends Thread {
      */
     private VariableSubstitutor propertySubstitutor;
 
-    private PackagerListener packagerlistener;
     public PropertyManager propertyManager;
 
     /**
@@ -134,7 +123,7 @@ public class Compiler extends Thread {
             packager.initPackCompressor(compilerData.getComprFormat(), compilerData.getComprLevel());
             PackCompressor compressor = packager.getCompressor();
             if (compressor != null) {
-                compressor.setCompiler(this);
+//                compressor.setCompiler(this);
             }
         }
         catch (Exception e) {
@@ -485,8 +474,7 @@ public class Compiler extends Thread {
         return 0;
     }
 
-    public URL findIzPackResource(String path, String desc)
-            throws CompilerException {
+    public URL findIzPackResource(String path, String desc) throws CompilerException {
         return findIzPackResource(path, desc, false);
     }
 

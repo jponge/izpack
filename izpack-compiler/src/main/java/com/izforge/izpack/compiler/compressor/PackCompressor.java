@@ -21,7 +21,6 @@
  */
 package com.izforge.izpack.compiler.compressor;
 
-import com.izforge.izpack.compiler.Compiler;
 
 import java.io.OutputStream;
 
@@ -107,14 +106,6 @@ public interface PackCompressor {
      * @return whether the standard comression should be used or not
      */
     boolean useStandardCompression();
-
-    /**
-     * Receives the current used compiler.
-     * Needed at loading encoder classes and error handling.
-     *
-     * @param compiler current active compiler
-     */
-    void setCompiler(Compiler compiler);
 
     /**
      * Returns whether a buffered output stream should be used

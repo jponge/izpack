@@ -110,7 +110,7 @@ public abstract class PackCompressorBase implements PackCompressor {
      */
 
     public String[] getCompressionFormatSymbols() {
-        return (formatNames);
+        return formatNames;
     }
 
     /* (non-Javadoc)
@@ -119,14 +119,6 @@ public abstract class PackCompressorBase implements PackCompressor {
 
     public String getDecoderMapperName() {
         return (decoderMapper);
-    }
-
-    /* (non-Javadoc)
-     * @see com.izforge.izpack.compressor.PackCompressor#setCompiler(com.izforge.izpack.compiler.Compiler)
-     */
-
-    public void setCompiler(Compiler compiler) {
-        this.compiler = compiler;
     }
 
     /* (non-Javadoc)

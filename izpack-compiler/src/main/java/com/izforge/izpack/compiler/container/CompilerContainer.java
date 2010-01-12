@@ -41,6 +41,7 @@ public class CompilerContainer extends AbstractContainer {
         pico.addComponent(CompilerConfig.class);
         pico.addComponent(CompilerHelper.class);
         pico.addComponent(PropertyManager.class);
+        pico.addComponent(CompilerResourceManagers.class);
         pico.addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class);
 
         pico.addComponent(IPackager.class, Packager.class);
