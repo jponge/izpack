@@ -37,6 +37,8 @@ import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.helper.impl.XmlCompilerHelper;
+import com.izforge.izpack.compiler.listener.CompilerListener;
+import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.compiler.packager.PackagerHelper;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.data.PanelAction.ActionStage;

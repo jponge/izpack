@@ -16,9 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.compiler;
+package com.izforge.izpack.compiler.packager;
 
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.compiler.CompilerException;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.rules.Condition;

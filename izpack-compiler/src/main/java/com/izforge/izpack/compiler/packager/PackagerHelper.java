@@ -22,7 +22,7 @@
 
 package com.izforge.izpack.compiler.packager;
 
-import com.izforge.izpack.compiler.JarOutputStream;
+import com.izforge.izpack.compiler.stream.JarOutputStream;
 
 import java.io.*;
 import java.util.HashMap;

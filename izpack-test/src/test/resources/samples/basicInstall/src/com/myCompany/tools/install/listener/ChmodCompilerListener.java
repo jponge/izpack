@@ -23,7 +23,7 @@ package com.myCompany.tools.install.listener;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.compiler.CompilerException;
-import com.izforge.izpack.compiler.SimpleCompilerListener;
+import com.izforge.izpack.compiler.listener.SimpleCompilerListener;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,8 +40,9 @@ public class ChmodCompilerListener extends SimpleCompilerListener {
 
 
     /* (non-Javadoc)
-    * @see com.izforge.izpack.compiler.CompilerListener#reviseAdditionalDataMap(java.util.Map, net.n3.nanoxml.XMLElement)
+    * @see com.izforge.izpack.compiler.listener.CompilerListener#reviseAdditionalDataMap(java.util.Map, net.n3.nanoxml.XMLElement)
     */
+
     public Map reviseAdditionalDataMap(Map existentDataMap, IXMLElement element)
             throws CompilerException {
         Map retval = existentDataMap != null ?

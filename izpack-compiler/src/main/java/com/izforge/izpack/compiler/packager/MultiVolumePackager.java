@@ -19,9 +19,9 @@ package com.izforge.izpack.compiler.packager;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.compiler.CompilerException;
-import com.izforge.izpack.compiler.JarOutputStream;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.compiler.stream.JarOutputStream;
 import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.data.PackFile;
 import com.izforge.izpack.data.PackInfo;
@@ -487,7 +487,7 @@ public class MultiVolumePackager extends PackagerBase {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#addConfigurationInformation(com.izforge.izpack.adaptator.IXMLElement)
+     * @see com.izforge.izpack.compiler.packager.IPackager#addConfigurationInformation(com.izforge.izpack.adaptator.IXMLElement)
      */
 
     public void addConfigurationInformation(IXMLElement data) {

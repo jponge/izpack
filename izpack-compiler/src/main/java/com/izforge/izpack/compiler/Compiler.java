@@ -30,6 +30,7 @@ import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
+import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.compiler.packager.PackagerListener;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.rules.Condition;

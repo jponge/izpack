@@ -23,7 +23,6 @@
 package com.izforge.izpack.compiler.packager;
 
 import com.izforge.izpack.compiler.CompilerException;
-import com.izforge.izpack.compiler.IPackager;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.data.*;
@@ -194,7 +193,7 @@ public abstract class PackagerBase implements IPackager {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#addCustomJar(com.izforge.izpack.CustomData, java.net.URL)
+     * @see com.izforge.izpack.compiler.packager.IPackager#addCustomJar(com.izforge.izpack.CustomData, java.net.URL)
      */
 
     public void addCustomJar(CustomData ca, URL url) {
@@ -205,7 +204,7 @@ public abstract class PackagerBase implements IPackager {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#addJarContent(java.net.URL)
+     * @see com.izforge.izpack.compiler.packager.IPackager#addJarContent(java.net.URL)
      */
 
     public void addJarContent(URL jarURL) {
@@ -213,7 +212,7 @@ public abstract class PackagerBase implements IPackager {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#addJarContent(java.net.URL, java.util.List)
+     * @see com.izforge.izpack.compiler.packager.IPackager#addJarContent(java.net.URL, java.util.List)
      */
 
     public void addJarContent(URL jarURL, List<String> files) {
@@ -223,7 +222,7 @@ public abstract class PackagerBase implements IPackager {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#addLangPack(java.lang.String, java.net.URL, java.net.URL)
+     * @see com.izforge.izpack.compiler.packager.IPackager#addLangPack(java.lang.String, java.net.URL, java.net.URL)
      */
 
     public void addLangPack(String iso3, URL xmlURL, URL flagURL) {
@@ -236,7 +235,7 @@ public abstract class PackagerBase implements IPackager {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#addNativeLibrary(java.lang.String, java.net.URL)
+     * @see com.izforge.izpack.compiler.packager.IPackager#addNativeLibrary(java.lang.String, java.net.URL)
      */
 
     public void addNativeLibrary(String name, URL url) {
@@ -246,7 +245,7 @@ public abstract class PackagerBase implements IPackager {
 
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#addNativeUninstallerLibrary(com.izforge.izpack.CustomData)
+     * @see com.izforge.izpack.compiler.packager.IPackager#addNativeUninstallerLibrary(com.izforge.izpack.CustomData)
      */
 
     public void addNativeUninstallerLibrary(CustomData data) {
@@ -256,7 +255,7 @@ public abstract class PackagerBase implements IPackager {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#addPack(com.izforge.izpack.compiler.PackInfo)
+     * @see com.izforge.izpack.compiler.packager.IPackager#addPack(com.izforge.izpack.compiler.PackInfo)
      */
 
     public void addPack(PackInfo pack) {
@@ -264,7 +263,7 @@ public abstract class PackagerBase implements IPackager {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#addPanelJar(com.izforge.izpack.Panel, java.net.URL)
+     * @see com.izforge.izpack.compiler.packager.IPackager#addPanelJar(com.izforge.izpack.Panel, java.net.URL)
      */
 
     public void addPanelJar(Panel panel, URL jarURL) {
@@ -276,7 +275,7 @@ public abstract class PackagerBase implements IPackager {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#addResource(java.lang.String, java.net.URL)
+     * @see com.izforge.izpack.compiler.packager.IPackager#addResource(java.lang.String, java.net.URL)
      */
 
     public void addResource(String resId, URL url) {
@@ -285,7 +284,7 @@ public abstract class PackagerBase implements IPackager {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#getCompressor()
+     * @see com.izforge.izpack.compiler.packager.IPackager#getCompressor()
      */
 
     public PackCompressor getCompressor() {
@@ -293,7 +292,7 @@ public abstract class PackagerBase implements IPackager {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#getPacksList()
+     * @see com.izforge.izpack.compiler.packager.IPackager#getPacksList()
      */
 
     public List<PackInfo> getPacksList() {
@@ -301,7 +300,7 @@ public abstract class PackagerBase implements IPackager {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#getVariables()
+     * @see com.izforge.izpack.compiler.packager.IPackager#getVariables()
      */
 
     public Properties getVariables() {
@@ -309,7 +308,7 @@ public abstract class PackagerBase implements IPackager {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#initPackCompressor(java.lang.String, int)
+     * @see com.izforge.izpack.compiler.packager.IPackager#initPackCompressor(java.lang.String, int)
      */
 
     public void initPackCompressor(String compr_format, int compr_level) throws CompilerException {
@@ -319,7 +318,7 @@ public abstract class PackagerBase implements IPackager {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#setGUIPrefs(com.izforge.izpack.GUIPrefs)
+     * @see com.izforge.izpack.compiler.packager.IPackager#setGUIPrefs(com.izforge.izpack.GUIPrefs)
      */
 
     public void setGUIPrefs(GUIPrefs prefs) {
@@ -328,7 +327,7 @@ public abstract class PackagerBase implements IPackager {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#setInfo(com.izforge.izpack.Info)
+     * @see com.izforge.izpack.compiler.packager.IPackager#setInfo(com.izforge.izpack.Info)
      */
 
     public void setInfo(Info info) {

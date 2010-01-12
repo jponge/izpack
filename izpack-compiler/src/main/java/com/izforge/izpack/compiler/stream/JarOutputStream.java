@@ -20,7 +20,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.compiler;
+package com.izforge.izpack.compiler.stream;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

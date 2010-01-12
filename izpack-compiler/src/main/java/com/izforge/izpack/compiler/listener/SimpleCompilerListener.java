@@ -19,9 +19,11 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.compiler;
+package com.izforge.izpack.compiler.listener;
 
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.PackInfo;
 
 import java.util.Map;
@@ -46,7 +48,7 @@ public class SimpleCompilerListener implements CompilerListener {
     /*
      * (non-Javadoc)
      * 
-     * @see com.izforge.izpack.compiler.CompilerListener#reviseAttributSetFile(java.util.Map,
+     * @see com.izforge.izpack.compiler.listener.CompilerListener#reviseAttributSetFile(java.util.Map,
      * com.izforge.izpack.adaptator.IXMLElement)
      */
 
@@ -58,7 +60,7 @@ public class SimpleCompilerListener implements CompilerListener {
     /*
      * (non-Javadoc)
      *
-     * @see com.izforge.izpack.compiler.CompilerListener#AfterPack(com.izforge.izpack.compiler.Compiler.Pack,
+     * @see com.izforge.izpack.compiler.listener.CompilerListener#AfterPack(com.izforge.izpack.compiler.Compiler.Pack,
      * int, com.izforge.izpack.compiler.packager.Packager)
      */
 
@@ -68,7 +70,7 @@ public class SimpleCompilerListener implements CompilerListener {
     /*
      * (non-Javadoc)
      *
-     * @see com.izforge.izpack.compiler.CompilerListener#BeforePack(com.izforge.izpack.compiler.Compiler.Pack,
+     * @see com.izforge.izpack.compiler.listener.CompilerListener#BeforePack(com.izforge.izpack.compiler.Compiler.Pack,
      * int, com.izforge.izpack.compiler.packager.Packager)
      */
 
@@ -78,7 +80,7 @@ public class SimpleCompilerListener implements CompilerListener {
     /*
      * (non-Javadoc)
      *
-     * @see com.izforge.izpack.compiler.CompilerListener#notify(java.lang.String, int,
+     * @see com.izforge.izpack.compiler.listener.CompilerListener#notify(java.lang.String, int,
      * com.izforge.izpack.adaptator.IXMLElement, com.izforge.izpack.compiler.packager.Packager)
      */
 
