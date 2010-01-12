@@ -603,29 +603,6 @@ public class Compiler extends Thread {
     }
 
     /**
-     * Returns a list which contains the pathes of all files which are included in the given url.
-     * This method expects as the url param a jar.
-     *
-     * @param url url of the jar file
-     * @return full qualified paths of the contained files
-     * @throws Exception
-     */
-    private List<String> getContainedFilePaths(URL url) throws Exception {
-        JarInputStream jis = new JarInputStream(url.openStream());
-        ZipEntry zentry;
-        ArrayList<String> fullNames = new ArrayList<String>();
-        while ((zentry = jis.getNextEntry()) != null) {
-            String name = zentry.getName();
-            // Add only files, no directory entries.
-            if (!zentry.isDirectory()) {
-                fullNames.add(name);
-            }
-        }
-        jis.close();
-        return (fullNames);
-    }
-
-    /**
      * Returns the qualified class name for the given class. This method expects as the url param a
      * jar file which contains the given class. It scans the zip entries of the jar file.
      *

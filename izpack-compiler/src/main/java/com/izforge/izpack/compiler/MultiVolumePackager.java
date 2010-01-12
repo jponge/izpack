@@ -259,7 +259,7 @@ public class MultiVolumePackager extends PackagerBase {
             }
             primaryJarStream.putNextEntry(newEntry);
 
-            copyStream(in, primaryJarStream);
+            PackagerHelper.copyStream(in, primaryJarStream);
             primaryJarStream.closeEntry();
             in.close();
         }
@@ -355,7 +355,7 @@ public class MultiVolumePackager extends PackagerBase {
                     int volumecountbeforewrite = fout.getVolumeCount();
 
                     FileInputStream inStream = new FileInputStream(file);
-                    long bytesWritten = copyStream(inStream, fout);
+                    long bytesWritten = PackagerHelper.copyStream(inStream, fout);
                     fout.flush();
 
                     long posafterwrite = fout.getFilepointer();
@@ -466,8 +466,6 @@ public class MultiVolumePackager extends PackagerBase {
      * <p/>
      * TODO: it would be useful to be able to keep signature information from signed jar files, can
      * we combine manifests and still have their content signed?
-     *
-     * @see #copyStream(InputStream, OutputStream)
      */
     private void copyZip(ZipInputStream zin, ZipOutputStream out, List<String> files) throws IOException {
         java.util.zip.ZipEntry zentry;
@@ -507,7 +505,7 @@ public class MultiVolumePackager extends PackagerBase {
                 }
                 out.putNextEntry(newEntry);
 
-                copyStream(zin, out);
+                PackagerHelper.copyStream(zin, out);
                 out.closeEntry();
                 zin.closeEntry();
                 currentSet.add(currentName);
@@ -526,8 +524,6 @@ public class MultiVolumePackager extends PackagerBase {
      * <p/>
      * TODO: it would be useful to be able to keep signature information from signed jar files, can
      * we combine manifests and still have their content signed?
-     *
-     * @see #copyStream(InputStream, OutputStream)
      */
     private void copyZipWithoutExcludes(ZipInputStream zin, ZipOutputStream out, List<String> excludes) throws IOException {
         java.util.zip.ZipEntry zentry;
@@ -568,7 +564,7 @@ public class MultiVolumePackager extends PackagerBase {
                 }
                 out.putNextEntry(newEntry);
 
-                copyStream(zin, out);
+                PackagerHelper.copyStream(zin, out);
                 out.closeEntry();
                 zin.closeEntry();
                 currentSet.add(currentName);
@@ -579,25 +575,6 @@ public class MultiVolumePackager extends PackagerBase {
                 // unfortunately this do not work with the apache ZipOutputStream...
             }
         }
-    }
-
-    /**
-     * Copies all the data from the specified input stream to the specified output stream.
-     *
-     * @param in  the input stream to read
-     * @param out the output stream to write
-     * @return the total number of bytes copied
-     * @throws IOException if an I/O error occurs
-     */
-    private long copyStream(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[5120];
-        long bytesCopied = 0;
-        int bytesInBuffer;
-        while ((bytesInBuffer = in.read(buffer)) != -1) {
-            out.write(buffer, 0, bytesInBuffer);
-            bytesCopied += bytesInBuffer;
-        }
-        return bytesCopied;
     }
 
     /* (non-Javadoc)

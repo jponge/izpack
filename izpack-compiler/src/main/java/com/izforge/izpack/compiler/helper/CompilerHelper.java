@@ -4,6 +4,8 @@ import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
@@ -85,4 +87,26 @@ public class CompilerHelper {
         return (null);
     }
 
+    /**
+     * Returns a list which contains the pathes of all files which are included in the given url.
+     * This method expects as the url param a jar.
+     *
+     * @param url url of the jar file
+     * @return full qualified paths of the contained files
+     * @throws Exception
+     */
+    public List<String> getContainedFilePaths(URL url) throws Exception {
+        JarInputStream jis = new JarInputStream(url.openStream());
+        ZipEntry zentry;
+        ArrayList<String> fullNames = new ArrayList<String>();
+        while ((zentry = jis.getNextEntry()) != null) {
+            String name = zentry.getName();
+            // Add only files, no directory entries.
+            if (!zentry.isDirectory()) {
+                fullNames.add(name);
+            }
+        }
+        jis.close();
+        return (fullNames);
+    }
 }
