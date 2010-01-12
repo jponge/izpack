@@ -29,6 +29,7 @@ import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
+import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.util.Debug;
@@ -93,6 +94,7 @@ public class Compiler extends Thread {
     private CompilerContainer compilerContainer;
 
     private CompilerData compilerData;
+    private CompilerHelper compilerHelper;
     /**
      * Replaces the properties in the install.xml file prior to compiling
      */
@@ -106,12 +108,12 @@ public class Compiler extends Thread {
      *
      * @throws CompilerException
      */
-    public Compiler(CompilerData compilerData, VariableSubstitutor variableSubstitutor, CompilerContainer compilerContainer, PropertyManager propertyManager) throws CompilerException {
+    public Compiler(CompilerData compilerData, VariableSubstitutor variableSubstitutor, CompilerContainer compilerContainer, PropertyManager propertyManager, CompilerHelper compilerHelper) throws CompilerException {
         this.compilerData = compilerData;
         this.propertyManager = propertyManager;
         this.propertySubstitutor = variableSubstitutor;
         this.compilerContainer = compilerContainer;
-
+        this.compilerHelper = compilerHelper;
         // add izpack built in property
         propertyManager.setProperty("izpack.version", CompilerData.IZPACK_VERSION);
         propertyManager.setProperty("basedir", compilerData.getBasedir());
@@ -593,7 +595,7 @@ public class Compiler extends Thread {
                 throw new CompilerException("CustomListener class '" + className + "' not found in '"
                         + url + "'. The class and listener name must match");
             }
-            filePaths = getContainedFilePaths(url);
+            filePaths = compilerHelper.getContainedFilePaths(url);
         }
 
         CustomData ca = new CustomData(fullClassName, filePaths, constraints, type);

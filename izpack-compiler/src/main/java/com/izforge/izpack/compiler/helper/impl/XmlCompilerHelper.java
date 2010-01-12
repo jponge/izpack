@@ -81,7 +81,7 @@ public class XmlCompilerHelper implements IXmlCompilerHelper {
      * @param attribute   The name of the attribute to get
      * @param installFile
      */
-    public static int requireIntAttribute(IXMLElement element, String attribute, String installFile)
+    public int requireIntAttribute(IXMLElement element, String attribute, String installFile)
             throws CompilerException {
         String value = element.getAttribute(attribute);
         if (value == null || value.length() == 0) {
@@ -130,8 +130,8 @@ public class XmlCompilerHelper implements IXmlCompilerHelper {
      * @param defaultValue Value returned if attribute not present or invalid
      * @param installFile
      */
-    public static boolean validateYesNoAttribute(IXMLElement element, String attribute,
-                                                 boolean defaultValue, String installFile) {
+    public boolean validateYesNoAttribute(IXMLElement element, String attribute,
+                                          boolean defaultValue, String installFile) {
         if (element == null) {
             return defaultValue;
         }
@@ -160,7 +160,7 @@ public class XmlCompilerHelper implements IXmlCompilerHelper {
      * @param attribute   The name of the attribute to get
      * @param installFile
      */
-    public static String requireAttribute(IXMLElement element, String attribute, String installFile)
+    public String requireAttribute(IXMLElement element, String attribute, String installFile)
             throws CompilerException {
         String value = element.getAttribute(attribute);
         if (value == null) {
