@@ -27,11 +27,13 @@ import com.izforge.izpack.data.XPackFile;
 import com.izforge.izpack.io.FileSpanningOutputStream;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileUtil;
+import org.apache.tools.zip.ZipEntry;
 
 import java.io.*;
 import java.net.URL;
 import java.util.*;
-import java.util.zip.*;
+import java.util.zip.ZipException;
+import java.util.zip.ZipInputStream;
 
 /**
  * The packager class. The packager is used by the compiler to put files into an installer, and
@@ -48,7 +50,7 @@ public class MultiVolumePackager extends PackagerBase {
     /**
      * Executable zipped output stream. First to open, last to close.
      */
-    private ZipOutputStream primaryJarStream;
+    private JarOutputStream primaryJarStream;
 
 
     private IXMLElement configdata = null;
@@ -62,28 +64,6 @@ public class MultiVolumePackager extends PackagerBase {
         super(properties, compilerContainer, listener);
         initPackCompressor("default", -1);
     }
-
-    /**
-     * Extended constructor.
-     *
-     * @param compr_format Compression format to be used for packs compression format (if supported)
-     * @throws CompilerException
-     */
-//    public MultiVolumePackager(String compr_format) throws CompilerException {
-//        this(compr_format, -1);
-//    }
-
-    /**
-     * Extended constructor.
-     *
-     * @param compr_format Compression format to be used for packs
-     * @param compr_level  Compression level to be used with the chosen compression format (if
-     *                     supported)
-     * @throws CompilerException
-     */
-//    public MultiVolumePackager(String compr_format, int compr_level) throws CompilerException {
-//        initPackCompressor(compr_format, compr_level);
-//    }
 
     /**
      * Create the installer, beginning with the specified jar. If the name specified does not end in
@@ -109,7 +89,7 @@ public class MultiVolumePackager extends PackagerBase {
         packJarsSeparate = (info.getWebDirURL() != null);
 
         // primary (possibly only) jar. -1 indicates primary
-        primaryJarStream = getJarOutputStream(baseFile.getName() + ".jar");
+        primaryJarStream = PackagerHelper.getJarOutputStream(baseFile.getName() + ".jar", baseFile.getParentFile());
 
         sendStart();
 
@@ -187,7 +167,7 @@ public class MultiVolumePackager extends PackagerBase {
         }
         inJarStream = new ZipInputStream(is);
         boolean found = false;
-        ZipEntry ze = null;
+        java.util.zip.ZipEntry ze;
         String modifiedmanifest = null;
         while (((ze = inJarStream.getNextEntry()) != null) && !found) {
             if ("META-INF/MANIFEST.MF".equals(ze.getName())) {
@@ -275,7 +255,7 @@ public class MultiVolumePackager extends PackagerBase {
             Object[] current = includedJarURL;
             InputStream is = ((URL) current[0]).openStream();
             ZipInputStream inJarStream = new ZipInputStream(is);
-            copyZip(inJarStream, primaryJarStream, (List<String>) current[1]);
+            PackagerHelper.copyZip(inJarStream, primaryJarStream, (List<String>) current[1], alreadyWrittenFiles);
         }
     }
 
@@ -445,87 +425,13 @@ public class MultiVolumePackager extends PackagerBase {
      **********************************************************************************************/
 
     /**
-     * Return a stream for the next jar.
-     */
-    private ZipOutputStream getJarOutputStream(String name) throws IOException {
-        File file = new File(baseFile.getParentFile(), name);
-        sendMsg("Building installer jar: " + file.getAbsolutePath());
-        Debug.trace("Building installer jar: " + file.getAbsolutePath());
-        ZipOutputStream jar = new ZipOutputStream(new FileOutputStream(file));
-        jar.setLevel(Deflater.BEST_COMPRESSION);
-        // jar.setPreventClose(true); // Needed at using FilterOutputStreams which
-        // calls close
-        // of the slave at finalizing.
-
-        return jar;
-    }
-
-    /**
-     * Copies specified contents of one jar to another.
-     * <p/>
-     * <p/>
-     * TODO: it would be useful to be able to keep signature information from signed jar files, can
-     * we combine manifests and still have their content signed?
-     */
-    private void copyZip(ZipInputStream zin, ZipOutputStream out, List<String> files) throws IOException {
-        java.util.zip.ZipEntry zentry;
-        if (!alreadyWrittenFiles.containsKey(out)) {
-            alreadyWrittenFiles.put(out, new HashSet<String>());
-        }
-        HashSet<String> currentSet = alreadyWrittenFiles.get(out);
-        while ((zentry = zin.getNextEntry()) != null) {
-            String currentName = zentry.getName();
-            String testName = currentName.replace('/', '.');
-            testName = testName.replace('\\', '.');
-            if (files != null) {
-                Iterator<String> i = files.iterator();
-                boolean founded = false;
-                while (i.hasNext()) { // Make "includes" self to support regex.
-                    String doInclude = i.next();
-                    if (testName.matches(doInclude)) {
-                        founded = true;
-                        break;
-                    }
-                }
-                if (!founded) {
-                    continue;
-                }
-            }
-            if (currentSet.contains(currentName)) {
-                continue;
-            }
-            try {
-                // Create new entry for zip file.
-                ZipEntry newEntry = new ZipEntry(currentName);
-                // Get input file date and time.
-                long fileTime = zentry.getTime();
-                // Make sure there is date and time set.
-                if (fileTime != -1) {
-                    newEntry.setTime(fileTime); // If found set it into output file.
-                }
-                out.putNextEntry(newEntry);
-
-                PackagerHelper.copyStream(zin, out);
-                out.closeEntry();
-                zin.closeEntry();
-                currentSet.add(currentName);
-            }
-            catch (ZipException x) {
-                // This avoids any problem that can occur with duplicate
-                // directories. for instance all META-INF data in jars
-                // unfortunately this do not work with the apache ZipOutputStream...
-            }
-        }
-    }
-
-    /**
      * Copies specified contents of one jar to another without the specified files
      * <p/>
      * <p/>
      * TODO: it would be useful to be able to keep signature information from signed jar files, can
      * we combine manifests and still have their content signed?
      */
-    private void copyZipWithoutExcludes(ZipInputStream zin, ZipOutputStream out, List<String> excludes) throws IOException {
+    private void copyZipWithoutExcludes(ZipInputStream zin, JarOutputStream out, List<String> excludes) throws IOException {
         java.util.zip.ZipEntry zentry;
         if (!alreadyWrittenFiles.containsKey(out)) {
             alreadyWrittenFiles.put(out, new HashSet<String>());

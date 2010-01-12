@@ -22,9 +22,15 @@
 
 package com.izforge.izpack.compiler;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.zip.Deflater;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipInputStream;
 
 /**
  * Helper class for packager classes
@@ -49,5 +55,78 @@ public class PackagerHelper {
             bytesCopied += bytesInBuffer;
         }
         return bytesCopied;
+    }
+
+    /**
+     * Copies specified contents of one jar to another.
+     * <p/>
+     * <p/>
+     * TODO: it would be useful to be able to keep signature information from signed jar files, can
+     * we combine manifests and still have their content signed?
+     */
+    static void copyZip(ZipInputStream zin, org.apache.tools.zip.ZipOutputStream out,
+                        List<String> files, HashMap<FilterOutputStream, HashSet<String>> alreadyWrittenFiles)
+            throws IOException {
+        ZipEntry zentry;
+        if (!alreadyWrittenFiles.containsKey(out)) {
+            alreadyWrittenFiles.put(out, new HashSet<String>());
+        }
+        HashSet<String> currentSet = alreadyWrittenFiles.get(out);
+        while ((zentry = zin.getNextEntry()) != null) {
+            String currentName = zentry.getName();
+            String testName = currentName.replace('/', '.');
+            testName = testName.replace('\\', '.');
+            if (files != null) {
+                Iterator<String> i = files.iterator();
+                boolean founded = false;
+                while (i.hasNext()) {   // Make "includes" self to support regex.
+                    String doInclude = i.next();
+                    if (testName.matches(doInclude)) {
+                        founded = true;
+                        break;
+                    }
+                }
+                if (!founded) {
+                    continue;
+                }
+            }
+            if (currentSet.contains(currentName)) {
+                continue;
+            }
+            try {
+                // Create new entry for zip file.
+                org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(currentName);
+                // Get input file date and time.
+                long fileTime = zentry.getTime();
+                // Make sure there is date and time set.
+                if (fileTime != -1) {
+                    newEntry.setTime(fileTime); // If found set it into output file.
+                }
+                out.putNextEntry(newEntry);
+
+                copyStream(zin, out);
+                out.closeEntry();
+                zin.closeEntry();
+                currentSet.add(currentName);
+            }
+            catch (ZipException x) {
+                // This avoids any problem that can occur with duplicate
+                // directories. for instance all META-INF data in jars
+                // unfortunately this do not work with the apache ZipOutputStream...
+            }
+        }
+    }
+
+    /**
+     * Return a stream for the next jar.
+     */
+    static JarOutputStream getJarOutputStream(String name, File parentFile) throws IOException {
+        File file = new File(parentFile, name);
+        JarOutputStream jar = new JarOutputStream(file);
+        jar.setLevel(Deflater.BEST_COMPRESSION);
+        jar.setPreventClose(true); // Needed at using FilterOutputStreams which calls close
+        // of the slave at finalizing.
+
+        return jar;
     }
 }
