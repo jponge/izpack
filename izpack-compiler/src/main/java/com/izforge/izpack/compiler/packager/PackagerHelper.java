@@ -20,7 +20,9 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.compiler;
+package com.izforge.izpack.compiler.packager;
+
+import com.izforge.izpack.compiler.JarOutputStream;
 
 import java.io.*;
 import java.util.HashMap;

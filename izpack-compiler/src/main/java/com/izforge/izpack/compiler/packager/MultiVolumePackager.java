@@ -15,9 +15,11 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.izforge.izpack.compiler;
+package com.izforge.izpack.compiler.packager;
 
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.compiler.JarOutputStream;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.data.Pack;
@@ -58,7 +60,8 @@ public class MultiVolumePackager extends PackagerBase {
     /**
      * The constructor.
      *
-     * @throws CompilerException
+     * @throws com.izforge.izpack.compiler.CompilerException
+     *
      */
     public MultiVolumePackager(Properties properties, CompilerContainer compilerContainer, PackagerListener listener) throws CompilerException {
         super(properties, compilerContainer, listener);
@@ -492,7 +495,7 @@ public class MultiVolumePackager extends PackagerBase {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.PackagerBase#writePacks()
+     * @see com.izforge.izpack.compiler.packager.PackagerBase#writePacks()
      */
 
     protected void writePacks() throws Exception {

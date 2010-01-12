@@ -1,6 +1,6 @@
 package com.izforge.izpack.compiler.listener;
 
-import com.izforge.izpack.compiler.PackagerListener;
+import com.izforge.izpack.compiler.packager.PackagerListener;
 
 /**
  * Used to handle the packager messages in the command-line mode.

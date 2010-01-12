@@ -23,10 +23,10 @@
 package com.izforge.izpack.ant;
 
 import com.izforge.izpack.compiler.CompilerConfig;
-import com.izforge.izpack.compiler.PackagerListener;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
+import com.izforge.izpack.compiler.packager.PackagerListener;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.compiler;
+package com.izforge.izpack.compiler.packager;
 
 /**
  * An interface for classes that want to listen to a packager events.

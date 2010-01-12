@@ -5,6 +5,7 @@ import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.mock.MockitoSugar
 import java.util.Properties
 import org.scalatest.{Spec}
+import packager.{PackagerListener, Packager}
 
 /**
  * Created by IntelliJ IDEA.

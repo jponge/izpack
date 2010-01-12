@@ -20,8 +20,10 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.compiler;
+package com.izforge.izpack.compiler.packager;
 
+import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.compiler.IPackager;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.data.*;

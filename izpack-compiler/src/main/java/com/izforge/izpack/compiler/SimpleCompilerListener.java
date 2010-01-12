@@ -59,7 +59,7 @@ public class SimpleCompilerListener implements CompilerListener {
      * (non-Javadoc)
      *
      * @see com.izforge.izpack.compiler.CompilerListener#AfterPack(com.izforge.izpack.compiler.Compiler.Pack,
-     * int, com.izforge.izpack.compiler.Packager)
+     * int, com.izforge.izpack.compiler.packager.Packager)
      */
 
     public void afterPack(PackInfo pack, int packNumber, IPackager packager) {
@@ -69,7 +69,7 @@ public class SimpleCompilerListener implements CompilerListener {
      * (non-Javadoc)
      *
      * @see com.izforge.izpack.compiler.CompilerListener#BeforePack(com.izforge.izpack.compiler.Compiler.Pack,
-     * int, com.izforge.izpack.compiler.Packager)
+     * int, com.izforge.izpack.compiler.packager.Packager)
      */
 
     public void beforePack(PackInfo pack, int packNumber, IPackager packager) {
@@ -79,7 +79,7 @@ public class SimpleCompilerListener implements CompilerListener {
      * (non-Javadoc)
      *
      * @see com.izforge.izpack.compiler.CompilerListener#notify(java.lang.String, int,
-     * com.izforge.izpack.adaptator.IXMLElement, com.izforge.izpack.compiler.Packager)
+     * com.izforge.izpack.adaptator.IXMLElement, com.izforge.izpack.compiler.packager.Packager)
      */
 
     public void notify(String position, int state, IXMLElement data, IPackager packager) {

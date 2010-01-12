@@ -18,10 +18,13 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.compiler;
+package com.izforge.izpack.compiler.packager;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.compiler.ByteCountingOutputStream;
+import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.compiler.JarOutputStream;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.data.Pack;
@@ -56,7 +59,8 @@ public class Packager extends PackagerBase {
     /**
      * The constructor.
      *
-     * @throws CompilerException
+     * @throws com.izforge.izpack.compiler.CompilerException
+     *
      */
     public Packager(Properties properties, CompilerContainer compilerContainer, PackagerListener listener) throws CompilerException {
         super(properties, compilerContainer, listener);

@@ -37,6 +37,7 @@ import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.helper.impl.XmlCompilerHelper;
+import com.izforge.izpack.compiler.packager.PackagerHelper;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.data.PanelAction.ActionStage;
 import com.izforge.izpack.installer.DataValidator;
@@ -106,7 +107,7 @@ public class CompilerConfig extends Thread {
      */
     private HashMap<String, List<URL>> packsLangUrlMap = new HashMap<String, List<URL>>();
     private String unpackerClassname = "com.izforge.izpack.installer.unpacker.Unpacker";
-    private String packagerClassname = "com.izforge.izpack.compiler.Packager";
+    private String packagerClassname = "com.izforge.izpack.compiler.packager.Packager";
     private VariableSubstitutor variableSubstitutor;
     private XmlCompilerHelper xmlCompilerHelper;
     private PropertyManager propertyManager;

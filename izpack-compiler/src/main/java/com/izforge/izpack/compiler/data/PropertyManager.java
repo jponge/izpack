@@ -2,8 +2,8 @@ package com.izforge.izpack.compiler.data;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.compiler.CompilerException;
-import com.izforge.izpack.compiler.PackagerListener;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
+import com.izforge.izpack.compiler.packager.PackagerListener;
 import com.izforge.izpack.util.substitutor.SubstitutionType;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 import org.apache.tools.ant.taskdefs.Execute;
