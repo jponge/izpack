@@ -122,7 +122,7 @@ public class PackagerHelper {
     /**
      * Return a stream for the next jar.
      */
-    static JarOutputStream getJarOutputStream(String name, File parentFile) throws IOException {
+    public static JarOutputStream getJarOutputStream(String name, File parentFile) throws IOException {
         File file = new File(parentFile, name);
         JarOutputStream jar = new JarOutputStream(file);
         jar.setLevel(Deflater.BEST_COMPRESSION);
@@ -130,5 +130,16 @@ public class PackagerHelper {
         // of the slave at finalizing.
 
         return jar;
+    }
+
+
+    public static List<File> getClassesFileInClasspath(String packageName) {
+        return null;
+    }
+
+    public static File getClasseFile(String className) {
+        File classFile = new File("");
+
+        return classFile;
     }
 }
