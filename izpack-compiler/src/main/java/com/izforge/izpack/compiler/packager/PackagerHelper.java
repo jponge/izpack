@@ -25,10 +25,11 @@ package com.izforge.izpack.compiler.packager;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
@@ -79,10 +80,10 @@ public class PackagerHelper {
             String testName = currentName.replace('/', '.');
             testName = testName.replace('\\', '.');
             if (files != null) {
-                Iterator<String> i = files.iterator();
+                Iterator<String> iterator = files.iterator();
                 boolean founded = false;
-                while (i.hasNext()) {   // Make "includes" self to support regex.
-                    String doInclude = i.next();
+                while (iterator.hasNext()) {   // Make "includes" self to support regex.
+                    String doInclude = iterator.next();
                     if (testName.matches(doInclude)) {
                         founded = true;
                         break;
@@ -128,13 +129,50 @@ public class PackagerHelper {
         jar.setLevel(Deflater.BEST_COMPRESSION);
         jar.setPreventClose(true); // Needed at using FilterOutputStreams which calls close
         // of the slave at finalizing.
-
         return jar;
     }
 
 
-    public static List<File> getClassesFileInClasspath(String packageName) {
-        return null;
+    public static List<File> getClassesFileInClasspath(String packageName) throws IOException, URISyntaxException {
+        String regexp = "([a-z0-9]+/)*[a-z0-9]+";
+        if (!packageName.matches(regexp)) {
+            throw new IllegalArgumentException("Invalid package name format, it should respect the regexp " + regexp);
+        }
+        URL resource = ClassLoader.getSystemClassLoader().getResource(packageName);
+        if (isJar(resource)) {
+            return getAllClassesFilesFromJar(resource);
+        } else {
+            return getAllClassesFiles(resource);
+        }
+    }
+
+    private static List<File> getAllClassesFilesFromJar(URL resource) {
+        File directory = new File(resource.getFile());
+        return null;  //To change body of created methods use File | Settings | File Templates.
+    }
+
+    private static List<File> getAllClassesFiles(URL resource) {
+        File directory = new File(resource.getFile());
+        if (!directory.isDirectory()) {
+            throw new IllegalArgumentException(resource.getFile() + " is not a directory");
+        }
+        ArrayList<File> res = new ArrayList<File>();
+        addDirectoryContent(directory, res);
+        return res;
+    }
+
+    private static void addDirectoryContent(File directory, ArrayList<File> res) {
+        for (File file : directory.listFiles()) {
+            if (file.isDirectory()) {
+                addDirectoryContent(file, res);
+            } else {
+                res.add(file);
+            }
+        }
+    }
+
+    private static boolean isJar(URL resource) {
+        return resource.toString().contains("jar:file");
     }
 
     public static File getClasseFile(String className) {
@@ -142,4 +180,50 @@ public class PackagerHelper {
 
         return classFile;
     }
+
+
+    private static List<Class<?>> getClassesFromJARFile(String jar, String packageName) throws Error, IOException {
+        final List<Class<?>> classes = new ArrayList<Class<?>>();
+        JarInputStream jarFile = null;
+        try {
+            jarFile = new JarInputStream(new FileInputStream(jar));
+            JarEntry jarEntry;
+            do {
+                try {
+                    jarEntry = jarFile.getNextJarEntry();
+                }
+                catch (IOException ioe) {
+//                    throw new CCException.Error("Unable to get next jar entry from jar file '" + jar + "'", ioe);
+                    throw new RuntimeException("F");
+                }
+                if (jarEntry != null) {
+                    extractClassFromJar(packageName, classes, jarEntry);
+                }
+            } while (jarEntry != null);
+            jarFile.close();
+        }
+        catch (IOException ioe) {
+//            throw new CCException.Error("Unable to get Jar input stream from '" + jar + "'", ioe);
+            throw new RuntimeException("F");
+        }
+        finally {
+            jarFile.close();
+        }
+        return classes;
+    }
+
+    private static void extractClassFromJar(final String packageName, final List<Class<?>> classes, JarEntry jarEntry) throws Error {
+        String className = jarEntry.getName();
+        if (className.endsWith(".class")) {
+            className = className.substring(0, className.length() - ".class".length());
+            if (className.startsWith(packageName)) {
+                try {
+                    classes.add(Class.forName(className.replace('/', '.')));
+                } catch (ClassNotFoundException cnfe) {
+                    throw new RuntimeException("F");
+                }
+            }
+        }
+    }
+
 }
