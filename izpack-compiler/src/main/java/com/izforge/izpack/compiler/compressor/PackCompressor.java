@@ -21,10 +21,6 @@
  */
 package com.izforge.izpack.compiler.compressor;
 
-
-import java.io.OutputStream;
-
-
 /**
  * IzPack will be able to support different compression methods for the
  * packs included in the installation jar file.
@@ -49,7 +45,7 @@ public interface PackCompressor {
      * @return a newly created encoding output stream
      * @throws Exception
      */
-    OutputStream getOutputStream(OutputStream os) throws Exception;
+//    OutputStream getOutputStream(OutputStream os) throws Exception;
 
     /**
      * Returns all symbolic names which are used for this compressor.
@@ -57,25 +53,6 @@ public interface PackCompressor {
      * @return all symbolic names which are used for this compressor
      */
     String[] getCompressionFormatSymbols();
-
-    /**
-     * Returns the path where the compiler can find the classes;
-     * normaly this is a path to a jar file.
-     * If no additional classes are needed, this method should return null.
-     *
-     * @return the path where the compiler can find the classes
-     */
-    String[] getContainerPaths();
-
-    /**
-     * Returns the qualified names of all needed classes for decoding.
-     * All class files should be placed in the container which will
-     * be referred by the method getContainerPath.
-     * If no additional classes are needed, this method should return null.
-     *
-     * @return qualified names of all needed classes for decoding
-     */
-    String[][] getDecoderClassNames();
 
     /**
      * Returns the qualified name of the encoding output stream.
@@ -106,17 +83,6 @@ public interface PackCompressor {
      * @return whether the standard comression should be used or not
      */
     boolean useStandardCompression();
-
-    /**
-     * Returns whether a buffered output stream should be used
-     * intermediate between the output stream of this compressor
-     * and the destination.
-     *
-     * @return wether a buffered output stream should be used
-     *         intermediate between the output stream of this compressor
-     *         and the destination.
-     */
-    boolean needsBufferedOutputStream();
 
     /**
      * Receives the compression level to be used.

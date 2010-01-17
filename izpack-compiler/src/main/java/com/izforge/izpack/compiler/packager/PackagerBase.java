@@ -22,7 +22,6 @@
 
 package com.izforge.izpack.compiler.packager;
 
-import com.izforge.izpack.compiler.CompilerException;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.data.*;
@@ -56,7 +55,7 @@ public abstract class PackagerBase implements IPackager {
     public static final String RESOURCES_PATH = "resources/";
     private Properties properties;
 
-    private CompilerContainer compilerContainer;
+    protected CompilerContainer compilerContainer;
 
     public PackagerBase(Properties properties, CompilerContainer compilerContainer, PackagerListener listener) {
         this.properties = properties;
@@ -306,16 +305,20 @@ public abstract class PackagerBase implements IPackager {
     public Properties getVariables() {
         return variables;
     }
-
-    /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.packager.IPackager#initPackCompressor(java.lang.String, int)
-     */
-
-    public void initPackCompressor(String compr_format, int compr_level) throws CompilerException {
-        compressor = (PackCompressor) compilerContainer.getComponent(compr_format);
-//        compressor = PackCompressorFactory.get(compr_format);
-        compressor.setCompressionLevel(compr_level);
-    }
+//
+//    /* (non-Javadoc)
+//     * @see com.izforge.izpack.compiler.packager.IPackager#initPackCompressor(java.lang.String, int)
+//     */
+//
+//    public void initPackCompressor(String compr_format, int compr_level) throws CompilerException {
+//        try {
+//            compressor = (PackCompressor) compilerContainer.getComponent(compr_format);
+//            compressor.setCompressionLevel(compr_level);
+//            compilerContainer.addComponent("compressedStream",Class.forName(compressor.getEncoderClassName()));
+//        } catch (ClassNotFoundException e) {
+//            throw new CompilerException("Invalid class name", e);
+//        }
+//    }
 
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.packager.IPackager#setGUIPrefs(com.izforge.izpack.GUIPrefs)
@@ -396,13 +399,6 @@ public abstract class PackagerBase implements IPackager {
         return this.dynamicvariables;
     }
 
-
-    /**
-     * @param dynamicvariables the dynamicvariables to set
-     */
-    public void setDynamicVariables(Map<String, List<DynamicVariable>> dynamicvariables) {
-        this.dynamicvariables = dynamicvariables;
-    }
 
     public void addInstallerRequirements(List<InstallerRequirement> conditions) {
         this.installerrequirements = conditions;

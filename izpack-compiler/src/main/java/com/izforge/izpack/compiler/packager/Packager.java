@@ -118,7 +118,7 @@ public class Packager extends PackagerBase {
             is = new FileInputStream(skeleton);
         }
         ZipInputStream inJarStream = new ZipInputStream(is);
-        copyZip(inJarStream, primaryJarStream);
+        PackagerHelper.copyZip(inJarStream, primaryJarStream, null, alreadyWrittenFiles);
     }
 
     /**
@@ -192,8 +192,7 @@ public class Packager extends PackagerBase {
         Iterator<PackInfo> packIter = packsList.iterator();
         IXMLElement root = new XMLElementImpl("packs");
 
-        while (packIter.hasNext()) {
-            PackInfo packInfo = packIter.next();
+        for (PackInfo packInfo : packsList) {
             Pack pack = packInfo.getPack();
             pack.nbytes = 0;
             if ((pack.id == null) || (pack.id.length() == 0)) {
@@ -220,7 +219,10 @@ public class Packager extends PackagerBase {
                 // because some writes initialize data (e.g. bzip2).
                 packStream.putNextEntry(entry);
                 packStream.flush(); // flush before we start counting
-                comprStream = compressor.getOutputStream(packStream);
+                compilerContainer.addComponent(OutputStream.class, packStream);
+                comprStream = (OutputStream) compilerContainer.getComponent("compressedStream");
+//                compilerContainer.getComponent(PackCompressor.class);
+//                comprStream = compressor.getOutputStream(packStream);
             } else {
                 int level = compressor.getCompressionLevel();
                 if (level >= 0 && level < 10) {
@@ -339,9 +341,8 @@ public class Packager extends PackagerBase {
         ObjectOutputStream out = new ObjectOutputStream(primaryJarStream);
         out.writeInt(packsList.size());
 
-        Iterator<PackInfo> i = packsList.iterator();
-        while (i.hasNext()) {
-            PackInfo pack = i.next();
+        for (PackInfo aPacksList : packsList) {
+            PackInfo pack = aPacksList;
             out.writeObject(pack.getPack());
         }
         out.flush();
@@ -387,25 +388,15 @@ public class Packager extends PackagerBase {
         return true;
     }
 
-    /***********************************************************************************************
-     * Stream utilites for creation of the installer.
-     **********************************************************************************************/
-
     /**
-     * Copies contents of one jar to another.
-     * <p/>
-     * <p/>
-     * TODO: it would be useful to be able to keep signature information from signed jar files, can
-     * we combine manifests and still have their content signed?
+     * ********************************************************************************************
+     * Stream utilites for creation of the installer.
+     * ********************************************************************************************
      */
-    private void copyZip(ZipInputStream zin, org.apache.tools.zip.ZipOutputStream out) throws IOException {
-        PackagerHelper.copyZip(zin, out, null, alreadyWrittenFiles);
-    }
 
     /* (non-Javadoc)
     * @see com.izforge.izpack.compiler.packager.IPackager#addConfigurationInformation(com.izforge.izpack.adaptator.IXMLElement)
     */
-
     public void addConfigurationInformation(IXMLElement data) {
         // TODO Auto-generated method stub
 

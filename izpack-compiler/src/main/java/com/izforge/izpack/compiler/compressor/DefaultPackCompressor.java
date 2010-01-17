@@ -38,9 +38,7 @@ import java.io.OutputStream;
 public class DefaultPackCompressor extends PackCompressorBase {
     private static final String[] THIS_FORMAT_NAMES =
             {"default", "deflate", "zip", "lz77"};
-    private static final String[] THIS_CONTAINER_PATH = null;
     private static final String THIS_DECODER_MAPPER = null;
-    private static final String[][] THIS_DECODER_CLASS_NAMES = null;
     private static final String THIS_ENCODER_CLASS_NAME = null;
 
 
@@ -50,10 +48,8 @@ public class DefaultPackCompressor extends PackCompressorBase {
     public DefaultPackCompressor(VariableSubstitutor variableSubstitutor) {
         super(variableSubstitutor);
         formatNames = THIS_FORMAT_NAMES;
-        containerPaths = THIS_CONTAINER_PATH;
         decoderMapper = THIS_DECODER_MAPPER;
         encoderClassName = THIS_ENCODER_CLASS_NAME;
-        decoderClassNames = THIS_DECODER_CLASS_NAMES;
     }
 
     /* (non-Javadoc)

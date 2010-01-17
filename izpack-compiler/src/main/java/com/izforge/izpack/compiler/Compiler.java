@@ -25,11 +25,11 @@
 
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
+import com.izforge.izpack.compiler.merge.MergeManager;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.rules.Condition;
@@ -78,42 +78,23 @@ public class Compiler extends Thread {
 
     public PropertyManager propertyManager;
 
+    private MergeManager mergeManager;
+
     /**
      * The constructor.
      *
      * @throws CompilerException
      */
-    public Compiler(CompilerData compilerData, VariableSubstitutor variableSubstitutor, CompilerContainer compilerContainer, PropertyManager propertyManager, CompilerHelper compilerHelper) throws CompilerException {
+    public Compiler(CompilerData compilerData, VariableSubstitutor variableSubstitutor, CompilerContainer compilerContainer, PropertyManager propertyManager, CompilerHelper compilerHelper, MergeManager mergeManager) throws CompilerException {
         this.compilerData = compilerData;
         this.propertyManager = propertyManager;
         this.propertySubstitutor = variableSubstitutor;
         this.compilerContainer = compilerContainer;
         this.compilerHelper = compilerHelper;
+        this.mergeManager = mergeManager;
         // add izpack built in property
         propertyManager.setProperty("izpack.version", CompilerData.IZPACK_VERSION);
         propertyManager.setProperty("basedir", compilerData.getBasedir());
-    }
-
-    /**
-     * Initializes the given packager class
-     *
-     * @param classname
-     * @throws CompilerException
-     */
-    public void initPackager(String classname) throws CompilerException {
-        try {
-            //REFACTOR : Differenciate pacakgers depending on the classname
-            packager = compilerContainer.getComponent(IPackager.class);
-            packager.initPackCompressor(compilerData.getComprFormat(), compilerData.getComprLevel());
-            PackCompressor compressor = packager.getCompressor();
-            if (compressor != null) {
-//                compressor.setCompiler(this);
-            }
-        }
-        catch (Exception e) {
-            Debug.trace(e);
-            throw new CompilerException("Error loading packager class: " + classname, e);
-        }
     }
 
     /**
@@ -151,20 +132,6 @@ public class Compiler extends Thread {
      * @throws Exception Description of the Exception
      */
     public void createInstaller() throws Exception {
-        // Add the class files from the chosen compressor.
-        if (packager.getCompressor().getContainerPaths() != null) {
-            String[] containerPaths = packager.getCompressor().getContainerPaths();
-            String[][] decoderClassNames = packager.getCompressor().getDecoderClassNames();
-            for (int i = 0; i < containerPaths.length; ++i) {
-                URL compressorURL = null;
-                if (containerPaths[i] != null) {
-                    compressorURL = findIzPackResource(containerPaths[i], "pack compression Jar file");
-                }
-                if (decoderClassNames[i] != null && decoderClassNames[i].length > 0) {
-                    addJarContent(compressorURL, Arrays.asList(decoderClassNames[i]));
-                }
-            }
-        }
         // We ask the packager to create the installer
         packager.createInstaller(new File(compilerData.getOutput()));
         this.compileFailed = false;

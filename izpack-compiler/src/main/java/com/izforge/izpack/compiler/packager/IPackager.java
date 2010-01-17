@@ -19,8 +19,6 @@
 package com.izforge.izpack.compiler.packager;
 
 import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.compiler.CompilerException;
-import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.rules.Condition;
 
@@ -153,21 +151,6 @@ public interface IPackager {
     public abstract void addInstallerRequirements(List<InstallerRequirement> conditions);
 
     /**
-     * Returns the current pack compressor
-     *
-     * @return Returns the current pack compressor.
-     */
-    public abstract PackCompressor getCompressor();
-
-    /**
-     * Initializes a pack compressor if supported by the packager
-     *
-     * @param compr_format
-     * @param compr_level
-     */
-    public abstract void initPackCompressor(String compr_format, int compr_level) throws CompilerException;
-
-    /**
      * Adds configuration information to the packager.
      *
      * @param data - the xml-element packaging from the install.xml
@@ -191,8 +174,4 @@ public interface IPackager {
      */
     public abstract Map<String, List<DynamicVariable>> getDynamicVariables();
 
-    /**
-     * @param dynamicvariables
-     */
-    public abstract void setDynamicVariables(Map<String, List<DynamicVariable>> dynamicvariables);
 }

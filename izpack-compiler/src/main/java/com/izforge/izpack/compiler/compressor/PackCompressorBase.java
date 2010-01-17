@@ -21,14 +21,9 @@
  */
 package com.izforge.izpack.compiler.compressor;
 
-import com.izforge.izpack.compiler.Compiler;
-import com.izforge.izpack.util.substitutor.SubstitutionType;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
-import java.io.*;
-import java.lang.reflect.Constructor;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.io.OutputStream;
 
 
 /**
@@ -43,24 +38,11 @@ import java.net.URLClassLoader;
 public abstract class PackCompressorBase implements PackCompressor {
 
     protected String[] formatNames = null;
-    protected String[] containerPaths = null;
     protected String decoderMapper = null;
-    /**
-     * Should contain all full qualified (use dots, not slashes)
-     * names of the class files. Regex will be suported in the
-     * manner of <code>String.match</code>. <br>
-     * Example:
-     * <pre>"org.apache.tools.bzip2.CBZip2InputStream.*"</pre>
-     * Do not forget the dot before the asterix.
-     * For an other example see class BZip2PackCompressor.
-     */
-    protected String[][] decoderClassNames = null;
     protected String encoderClassName = null;
 
     protected Class[] paramsClasses = null;
 
-    private Compiler compiler;
-    private Constructor<Object> constructor;
     private int level = -1;
 
     protected VariableSubstitutor variableSubstitutor;
@@ -74,27 +56,11 @@ public abstract class PackCompressorBase implements PackCompressor {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compressor.PackCompressor#getContainerPath()
-     */
-
-    public String[] getContainerPaths() {
-        return (containerPaths);
-    }
-
-    /* (non-Javadoc)
      * @see com.izforge.izpack.compressor.PackCompressor#getEncoderClassName()
      */
 
     public String getEncoderClassName() {
         return (encoderClassName);
-    }
-
-    /* (non-Javadoc)
-    * @see com.izforge.izpack.compressor.PackCompressor#getDecoderClassNames()
-    */
-
-    public String[][] getDecoderClassNames() {
-        return (decoderClassNames);
     }
 
     /* (non-Javadoc)
@@ -145,91 +111,6 @@ public abstract class PackCompressorBase implements PackCompressor {
         return (true);
     }
 
-
-    /**
-     * Loads the given class from the previos setted container paths.
-     *
-     * @param className full qualified name of the class to be loaded
-     * @throws Exception
-     */
-    public void loadClass(String className) throws Exception {
-        if (getEncoderClassName() == null) {
-            return;
-        }
-        Class<Object> encoder = null;
-        if (getContainerPaths() == null) {   // May be class files are in the compiler.jar.
-            encoder = (Class<Object>) Class.forName(className);
-        }
-        if (encoder == null) {
-            String[] rawPaths = getContainerPaths();
-            URL[] uRLs = new URL[rawPaths.length];
-            int i;
-            int j = 0;
-
-            for (i = 0; i < rawPaths.length; ++i) {
-                if (rawPaths[i] == null) {
-                    continue;
-                }
-                String jarPath = variableSubstitutor.substitute(rawPaths[i], SubstitutionType.TYPE_AT);
-                URL url = compiler.findIzPackResource(jarPath, "Pack compressor jar file");
-                if (url != null) {
-                    uRLs[j++] = url;
-                    if (getClass().getResource("/" + jarPath) != null) { // Oops, standalone, URLClassLoader will not work ...
-                        // Write the jar to a temp file.
-                        InputStream in = null;
-                        FileOutputStream outFile = null;
-                        byte[] buffer = new byte[5120];
-                        File tf = null;
-                        try {
-                            tf = File.createTempFile("izpj", ".jar");
-                            tf.deleteOnExit();
-                            outFile = new FileOutputStream(tf);
-                            in = getClass().getResourceAsStream("/" + jarPath);
-                            long bytesCopied = 0;
-                            int bytesInBuffer;
-                            while ((bytesInBuffer = in.read(buffer)) != -1) {
-                                outFile.write(buffer, 0, bytesInBuffer);
-                                bytesCopied += bytesInBuffer;
-                            }
-                        }
-                        finally {
-                            if (in != null) {
-                                in.close();
-                            }
-                            if (outFile != null) {
-                                outFile.close();
-                            }
-                        }
-                        url = tf.toURL();
-
-                    }
-                }
-            }
-            if (j > 0) {
-                if (j < uRLs.length) {
-                    URL[] nurl = new URL[j];
-                    for (i = 0; i < j; ++i) {
-                        nurl[i] = uRLs[i];
-                    }
-                    uRLs = nurl;
-                }
-                // Use the class loader of the interface as parent, else
-                // compile will fail at using it via an Ant task.
-                URLClassLoader ucl = new URLClassLoader(uRLs, PackCompressor.class
-                        .getClassLoader());
-                encoder = (Class<Object>) ucl.loadClass(className);
-            }
-        }
-
-        if (encoder != null) {
-            // Be aware, paramsClasses should be defined earlier! For
-            // default in the constructor of this class.
-            constructor = encoder.getDeclaredConstructor(paramsClasses);
-        } else {
-            compiler.parseError("Cannot find defined compressor " + className);
-        }
-    }
-
     /**
      * Returns a newly created instance of the output stream which should be
      * used by this pack compressor. This method do not declare the
@@ -243,27 +124,26 @@ public abstract class PackCompressorBase implements PackCompressor {
      *         used by this pack compressor
      * @throws Exception
      */
-    protected OutputStream getOutputInstance(OutputStream slave)
-            throws Exception {
-        if (needsBufferedOutputStream()) {
-            slave = new BufferedOutputStream(slave);
-        }
-        Object[] params = resolveConstructorParams(slave);
-        if (constructor == null) {
-            loadClass(getEncoderClassName());
-        }
-        if (constructor == null) {
-            return (null);
-        }
-        Object instance = null;
-        instance = constructor.newInstance(params);
-        if (!OutputStream.class.isInstance(instance)) {
-            compiler.parseError("'" + getEncoderClassName() + "' must be derived from "
-                    + OutputStream.class.toString());
-        }
-        return ((OutputStream) instance);
-
-    }
+//    protected OutputStream getOutputInstance(OutputStream slave)
+//            throws Exception {
+//        if (needsBufferedOutputStream()) {
+//            slave = new BufferedOutputStream(slave);
+//        }
+//        Object[] params = resolveConstructorParams(slave);
+//        if (constructor == null) {
+//            loadClass(getEncoderClassName());
+//        }
+//        if (constructor == null) {
+//            return (null);
+//        }
+//        Object instance;
+//        instance = constructor.newInstance(params);
+//        if (!OutputStream.class.isInstance(instance)) {
+//            compiler.parseError("'" + getEncoderClassName() + "' must be derived from "
+//                    + OutputStream.class.toString());
+//        }
+//        return ((OutputStream) instance);
+//    }
 
     /**
      * This method will be used to support different constructor signatures.

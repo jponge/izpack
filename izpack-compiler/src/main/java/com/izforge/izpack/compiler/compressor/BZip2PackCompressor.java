@@ -21,9 +21,8 @@
  */
 package com.izforge.izpack.compiler.compressor;
 
+import com.izforge.izpack.compiler.merge.MergeManager;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
-
-import java.io.OutputStream;
 
 
 /**
@@ -36,35 +35,20 @@ import java.io.OutputStream;
 public class BZip2PackCompressor extends PackCompressorBase {
 
     private static final String[] THIS_FORMAT_NAMES = {"bzip2"};
-    private static final String[] THIS_CONTAINER_PATH = {"lib/ant-1.6.5.jar"};
     private static final String THIS_DECODER_MAPPER = "org.apache.tools.bzip2.CBZip2InputStream";
-    private static final String[][] THIS_DECODER_CLASS_NAMES =
-            {{"org.apache.tools.bzip2.BZip2Constants.*",
-                    "org.apache.tools.bzip2.CBZip2InputStream.*",
-                    "org.apache.tools.bzip2.CRC.*"
-            }};
     private static final String THIS_ENCODER_CLASS_NAME = "org.apache.tools.bzip2.CBZip2OutputStream";
 
     /**
      *
      */
-    public BZip2PackCompressor(VariableSubstitutor variableSubstitutor) {
+    public BZip2PackCompressor(VariableSubstitutor variableSubstitutor, MergeManager mergeManager) {
         super(variableSubstitutor);
+        mergeManager.addResourceToMerge("org.apache.tools.bzip2.BZip2Constants");
+        mergeManager.addResourceToMerge("org.apache.tools.bzip2");
         formatNames = THIS_FORMAT_NAMES;
-        containerPaths = THIS_CONTAINER_PATH;
         decoderMapper = THIS_DECODER_MAPPER;
-        decoderClassNames = THIS_DECODER_CLASS_NAMES;
         encoderClassName = THIS_ENCODER_CLASS_NAME;
     }
 
-    /* (non-Javadoc)
-     * @see com.izforge.izpack.compressor.PackCompressor#getOutputStream(java.io.OutputStream)
-     */
-
-    public OutputStream getOutputStream(OutputStream os) throws Exception {
-        // TODO Auto-generated method stub
-
-        return (getOutputInstance(os));
-    }
 
 }
