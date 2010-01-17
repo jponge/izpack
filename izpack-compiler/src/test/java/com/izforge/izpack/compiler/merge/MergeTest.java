@@ -46,19 +46,35 @@ public class MergeTest {
 
     @Test
     public void testMergeDirectory() throws Exception {
-        File file = new File(getClass().getResource("FileMerge.class").getFile()).getParentFile();
+        File file = new File(getClass().getResource("MergeTest.class").getFile()).getParentFile();
         assertThat(file.exists(), Is.is(true));
         FileMerge fileMerge = new FileMerge(file);
 
         doMerge(fileMerge);
 
+        ArrayList<String> arrayList = getFileNameInZip(zip);
+        assertThat(arrayList, IsCollectionContaining.hasItems("MergeTest.class", "test/.placeholder"));
+    }
+
+    @Test
+    public void testMergeDirectoryWithDestination() throws Exception {
+        File file = new File(getClass().getResource("MergeTest.class").getFile()).getParentFile();
+        FileMerge fileMerge = new FileMerge(file, "my/dest/path/");
+
+        doMerge(fileMerge);
+
+        ArrayList<String> arrayList = getFileNameInZip(zip);
+        assertThat(arrayList, IsCollectionContaining.hasItems("my/dest/path/MergeTest.class", "my/dest/path/test/.placeholder"));
+    }
+
+    private ArrayList<String> getFileNameInZip(File zip) throws IOException {
         ZipInputStream inputStream = new ZipInputStream(new FileInputStream(zip));
         ArrayList<String> arrayList = new ArrayList<String>();
         ZipEntry zipEntry;
         while ((zipEntry = inputStream.getNextEntry()) != null) {
             arrayList.add(zipEntry.getName());
         }
-        assertThat(arrayList, IsCollectionContaining.hasItems("FileMerge.class", "MergeManager.class"));
+        return arrayList;
     }
 
     private void doMerge(Mergeable fileMerge) throws IOException {

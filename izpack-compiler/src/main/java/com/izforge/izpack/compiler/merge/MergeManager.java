@@ -1,9 +1,11 @@
 package com.izforge.izpack.compiler.merge;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.tools.zip.ZipOutputStream;
 
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 
 /**
  * A mergeable file allow to chose files to merge in the installer.<br />
@@ -11,7 +13,9 @@ import java.net.URL;
  *
  * @author Anthonin Bonnefoy
  */
-public class MergeManager {
+public class MergeManager implements Mergeable {
+
+    private List<Mergeable> mergeableList;
 
     private static TypeFile resolvePath(String sourcePath) {
         URL resource = ClassLoader.getSystemClassLoader().getResource(sourcePath);
@@ -39,6 +43,10 @@ public class MergeManager {
         return null;
     }
 
+    public void addResourceToMerge(String resourcePath) {
+        mergeableList.add(getMergeableFromPath(resourcePath));
+    }
+
     /**
      * Get the path to jar containing the given resource.
      *
@@ -54,5 +62,9 @@ public class MergeManager {
         return StringUtils.substringBefore(res, "!");
     }
 
-
+    public void merge(ZipOutputStream outputStream) {
+        for (Mergeable mergeable : mergeableList) {
+            mergeable.merge(outputStream);
+        }
+    }
 }

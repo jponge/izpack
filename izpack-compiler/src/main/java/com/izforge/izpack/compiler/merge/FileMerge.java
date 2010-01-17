@@ -16,8 +16,15 @@ public class FileMerge implements Mergeable {
 
     private File fileToCopy;
 
+    private String destination;
+
     public FileMerge(File fileToCopy) {
+        this(fileToCopy, "");
+    }
+
+    public FileMerge(File fileToCopy, String destination) {
         this.fileToCopy = fileToCopy;
+        this.destination = destination;
     }
 
     public void merge(ZipOutputStream outputStream) {
@@ -34,8 +41,22 @@ public class FileMerge implements Mergeable {
                 copyFileToJar(file, outputStream);
             }
         } else {
+            String entryName = resolveName(fileToCopy, this.fileToCopy, this.destination);
             FileInputStream inputStream = new FileInputStream(fileToCopy);
-            PackagerHelper.copyStreamToJar(inputStream, outputStream, fileToCopy.getName(), fileToCopy.lastModified());
+            PackagerHelper.copyStreamToJar(inputStream, outputStream, entryName, fileToCopy.lastModified());
         }
+    }
+
+    private String resolveName(File fileToCopy, File basePath, String destination) {
+        String path;
+        path = basePath.getPath();
+        if (!basePath.isDirectory()) {
+            path = basePath.getParent();
+        }
+        path = path + "/";
+        StringBuilder builder = new StringBuilder();
+        builder.append(destination);
+        builder.append(fileToCopy.getAbsolutePath().replaceAll(path, ""));
+        return builder.toString();
     }
 }
