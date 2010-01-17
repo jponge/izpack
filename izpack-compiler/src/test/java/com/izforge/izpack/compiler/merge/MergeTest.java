@@ -62,6 +62,20 @@ public class MergeTest {
     }
 
     @Test
+    public void testMergePackageFromJar() throws Exception {
+        Mergeable jarMerge = MergeManager.getMergeableFromPath("junit/framework/");
+        assertThat(jarMerge, Is.is(JarMerge.class));
+
+        doMerge(jarMerge);
+
+        ZipInputStream inputStream = new ZipInputStream(new FileInputStream(zip));
+        ZipEntry zipEntry = inputStream.getNextEntry();
+        assertThat(zipEntry.getName(), Is.is("junit/framework/Assert.class"));
+        zipEntry = inputStream.getNextEntry();
+        assertThat(zipEntry.getName(), Is.is("junit/framework/AssertionFailedError.class"));
+    }
+
+    @Test
     public void testGetJarPath() throws Exception {
         String jarPath = MergeManager.getJarAbsolutePath("junit/framework/Assert.class");
         assertThat(jarPath, StringEndsWith.endsWith("junit-4.7.jar"));
@@ -70,7 +84,7 @@ public class MergeTest {
 
     @Test
     public void testGetJarFromPackage() throws Exception {
-        String jarPath = MergeManager.getJarAbsolutePath("junit/framework/");
+        String jarPath = MergeManager.getJarAbsolutePath("junit/framework");
         assertThat(jarPath, StringEndsWith.endsWith("junit-4.7.jar"));
         assertThat(new File(jarPath).exists(), Is.is(true));
     }

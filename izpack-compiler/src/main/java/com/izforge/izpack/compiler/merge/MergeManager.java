@@ -153,7 +153,7 @@ public class MergeManager implements Mergeable {
      * Get the path to jar containing the given resource.
      *
      * @param resourcePath Resource inside a jar in the classPath.<br />
-     *                     You might give class files like "junit/framework/Assert.class" to get path of the junit jar.
+     *                     You might give class files like "junit/framework/Assert.class" or a package "junit/framework/" to get path of the junit jar.
      * @return Absolute path of the jar.
      */
     public static String getJarAbsolutePath(String resourcePath) {
@@ -163,4 +163,6 @@ public class MergeManager implements Mergeable {
         res = StringUtils.substringAfter(res, "file:");
         return StringUtils.substringBefore(res, "!");
     }
+
+
 }
