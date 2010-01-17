@@ -31,9 +31,8 @@ public class MergeManager {
     public static Mergeable getMergeableFromPath(String path) {
         switch (resolvePath(path)) {
             case DIRECTORY:
-                return null;
             case FILE:
-                return null;
+                return new FileMerge(new File(path));
             case JAR_CONTENT:
                 return new JarMerge(path);
         }

@@ -15,7 +15,6 @@ import java.util.zip.ZipEntry;
  * @author Anthonin Bonnefoy
  */
 public class JarMerge implements Mergeable {
-    private JarInputStream jarInputStream;
     private String jarPath;
 
     private String regexp = ".*";
@@ -33,7 +32,7 @@ public class JarMerge implements Mergeable {
     public void merge(ZipOutputStream outputStream) {
         ZipEntry zentry;
         try {
-            jarInputStream = new JarInputStream(new FileInputStream(new File(jarPath)));
+            JarInputStream jarInputStream = new JarInputStream(new FileInputStream(new File(jarPath)));
             while ((zentry = jarInputStream.getNextEntry()) != null) {
                 if (zentry.isDirectory()) {
                     continue;
