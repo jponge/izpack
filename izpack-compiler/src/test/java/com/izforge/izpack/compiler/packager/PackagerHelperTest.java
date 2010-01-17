@@ -1,8 +1,10 @@
 package com.izforge.izpack.compiler.packager;
 
+import com.izforge.izpack.compiler.merge.MergeManager;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.hamcrest.number.IsGreaterThan;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -16,23 +18,30 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * @author Anthonin Bonnefoy
  */
 public class PackagerHelperTest {
+    private MergeManager mergeManager;
+
+    @Before
+    public void setUp() {
+    }
+
     @Test
     public void testGetPackagesFileFromJar() throws Exception {
-        List<File> listBzipClasses = PackagerHelper.getClassesFileInClasspath("org/apache/tools/bzip2");
+        mergeManager = new MergeManager("org/apache/tools/bzip2");
+        List<File> listBzipClasses = mergeManager.getClassesFileInClasspath("org/apache/tools/bzip2");
         assertThat(listBzipClasses, IsNull.<Object>notNullValue());
         assertThat(listBzipClasses.size(), Is.is(3));
     }
 
     @Test
     public void testGetPackagesFileFromTarget() throws Exception {
-        List<File> listBzipClasses = PackagerHelper.getClassesFileInClasspath("com/izforge");
+        List<File> listBzipClasses = mergeManager.getClassesFileInClasspath("com/izforge");
         assertThat(listBzipClasses, IsNull.<Object>notNullValue());
         assertThat(listBzipClasses.size(), new IsGreaterThan<Integer>(2));
     }
 
     @Test
     public void testGetClasseFile() throws Exception {
-        File classeFile = PackagerHelper.getClasseFile("org/apache/tools/bzip2/CRC.class");
+        File classeFile = mergeManager.getClasseFile("org/apache/tools/bzip2/CRC.class");
         assertThat(classeFile, IsNull.<Object>notNullValue());
     }
 }
