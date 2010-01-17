@@ -22,7 +22,7 @@ public class JarMerge implements Mergeable {
 
     public JarMerge(String path) {
         jarPath = MergeManager.getJarAbsolutePath(path);
-        regexp = path + ".*";
+        regexp = new StringBuilder().append(path).append(".*").toString();
     }
 
     public JarMerge(String jarPath, String regexp) {

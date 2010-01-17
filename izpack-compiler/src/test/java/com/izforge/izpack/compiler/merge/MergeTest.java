@@ -1,6 +1,7 @@
 package com.izforge.izpack.compiler.merge;
 
 import org.apache.tools.zip.ZipOutputStream;
+import org.hamcrest.collection.IsCollectionContaining;
 import org.hamcrest.core.Is;
 import org.hamcrest.text.StringEndsWith;
 import org.junit.Before;
@@ -9,6 +10,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -30,16 +32,33 @@ public class MergeTest {
 
     @Test
     public void testMergeSingleFile() throws Exception {
-        File file = new File(getClass().getResource("SingleFileMerge.class").getFile());
+        File file = new File(getClass().getResource("FileMerge.class").getFile());
         assertThat(file.exists(), Is.is(true));
-        SingleFileMerge singleFileMerge = new SingleFileMerge(file);
+        FileMerge fileMerge = new FileMerge(file);
 
-        doMerge(singleFileMerge);
+        doMerge(fileMerge);
 
         ZipInputStream inputStream = new ZipInputStream(new FileInputStream(zip));
         assertThat(inputStream.available(), Is.is(1));
         ZipEntry zipEntry = inputStream.getNextEntry();
-        assertThat(zipEntry.getName(), Is.is("SingleFileMerge.class"));
+        assertThat(zipEntry.getName(), Is.is("FileMerge.class"));
+    }
+
+    @Test
+    public void testMergeDirectory() throws Exception {
+        File file = new File(getClass().getResource("FileMerge.class").getFile()).getParentFile();
+        assertThat(file.exists(), Is.is(true));
+        FileMerge fileMerge = new FileMerge(file);
+
+        doMerge(fileMerge);
+
+        ZipInputStream inputStream = new ZipInputStream(new FileInputStream(zip));
+        ArrayList<String> arrayList = new ArrayList<String>();
+        ZipEntry zipEntry;
+        while ((zipEntry = inputStream.getNextEntry()) != null) {
+            arrayList.add(zipEntry.getName());
+        }
+        assertThat(arrayList, IsCollectionContaining.hasItems("FileMerge.class", "MergeManager.class"));
     }
 
     private void doMerge(Mergeable fileMerge) throws IOException {
@@ -47,6 +66,7 @@ public class MergeTest {
         fileMerge.merge(outputStream);
         outputStream.close();
     }
+
 
     @Test
     public void testMergeJarFile() throws Exception {
