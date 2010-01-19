@@ -43,8 +43,7 @@ public class BZip2PackCompressor extends PackCompressorBase {
      */
     public BZip2PackCompressor(VariableSubstitutor variableSubstitutor, MergeManager mergeManager) {
         super(variableSubstitutor);
-        mergeManager.addResourceToMerge("org.apache.tools.bzip2.BZip2Constants");
-        mergeManager.addResourceToMerge("org.apache.tools.bzip2");
+        mergeManager.addResourceToMerge("org/apache/tools/bzip2");
         formatNames = THIS_FORMAT_NAMES;
         decoderMapper = THIS_DECODER_MAPPER;
         encoderClassName = THIS_ENCODER_CLASS_NAME;

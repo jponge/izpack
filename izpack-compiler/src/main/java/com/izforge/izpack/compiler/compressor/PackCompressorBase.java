@@ -23,8 +23,6 @@ package com.izforge.izpack.compiler.compressor;
 
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
-import java.io.OutputStream;
-
 
 /**
  * IzPack will be able to support different compression methods for the
@@ -110,68 +108,4 @@ public abstract class PackCompressorBase implements PackCompressor {
     public boolean needsBufferedOutputStream() {
         return (true);
     }
-
-    /**
-     * Returns a newly created instance of the output stream which should be
-     * used by this pack compressor. This method do not declare the
-     * return value as FilterOutputStream although there must be an constructor
-     * with a slave output stream as argument. This is done in this way because
-     * some encoding streams from third party are only implemented as
-     * "normal" output stream.
-     *
-     * @param slave output stream to be used as slave
-     * @return a newly created instance of the output stream which should be
-     *         used by this pack compressor
-     * @throws Exception
-     */
-//    protected OutputStream getOutputInstance(OutputStream slave)
-//            throws Exception {
-//        if (needsBufferedOutputStream()) {
-//            slave = new BufferedOutputStream(slave);
-//        }
-//        Object[] params = resolveConstructorParams(slave);
-//        if (constructor == null) {
-//            loadClass(getEncoderClassName());
-//        }
-//        if (constructor == null) {
-//            return (null);
-//        }
-//        Object instance;
-//        instance = constructor.newInstance(params);
-//        if (!OutputStream.class.isInstance(instance)) {
-//            compiler.parseError("'" + getEncoderClassName() + "' must be derived from "
-//                    + OutputStream.class.toString());
-//        }
-//        return ((OutputStream) instance);
-//    }
-
-    /**
-     * This method will be used to support different constructor signatures.
-     * The default is
-     * <pre>XXXOutputStream( OutputStream slave )</pre>
-     * if level is -1 or
-     * <pre>XXXOutputStream( OutputStream slave, int level )</pre>
-     * if level is other than -1.<br>
-     * If the signature of the used output stream will be other, overload
-     * this method in the derived pack compressor class.
-     *
-     * @param slave output stream to be used as slave
-     * @return the constructor params as Object [] to be used as construction
-     *         of the constructor via reflection
-     * @throws Exception
-     */
-    protected Object[] resolveConstructorParams(OutputStream slave) throws Exception {
-        if (level == -1) {
-            paramsClasses = new Class[1];
-            paramsClasses[0] = Class.forName("java.io.OutputStream");
-            Object[] params = {slave};
-            return (params);
-        }
-        paramsClasses = new Class[2];
-        paramsClasses[0] = Class.forName("java.io.OutputStream");
-        paramsClasses[1] = java.lang.Integer.TYPE;
-        Object[] params = {slave, level};
-        return (params);
-    }
-
 }
