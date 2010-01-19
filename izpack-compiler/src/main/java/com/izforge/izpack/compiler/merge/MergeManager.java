@@ -5,6 +5,7 @@ import org.apache.tools.zip.ZipOutputStream;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,19 +18,27 @@ public class MergeManager implements Mergeable {
 
     private List<Mergeable> mergeableList;
 
+    public MergeManager() {
+        mergeableList = new ArrayList<Mergeable>();
+    }
+
     private static TypeFile resolvePath(String sourcePath) {
         URL resource = ClassLoader.getSystemClassLoader().getResource(sourcePath);
         if (resource != null && resource.toString().contains("jar:file")) {
             return TypeFile.JAR_CONTENT;
         }
         File file = new File(sourcePath);
-        if (!file.exists()) {
-            throw new IllegalArgumentException("Invalid source path : " + sourcePath);
+        if (file.exists()) {
+            if (file.isDirectory()) {
+                return TypeFile.DIRECTORY;
+            }
+            return TypeFile.FILE;
         }
-        if (file.isDirectory()) {
-            return TypeFile.DIRECTORY;
+        resource = ClassLoader.getSystemClassLoader().getResource(sourcePath.replaceAll(".", "/"));
+        if (resource != null && resource.toString().contains("jar:file")) {
+            return TypeFile.JAR_CONTENT;
         }
-        return TypeFile.FILE;
+        throw new IllegalArgumentException("Invalid source path : " + sourcePath);
     }
 
     public static Mergeable getMergeableFromPath(String path) {

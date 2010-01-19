@@ -54,6 +54,10 @@ public class CompilerData {
      * The output jar filename.
      */
     private String output;
+
+    /**
+     * Compression level
+     */
     private int comprLevel = -1;
 
     /**
