@@ -3,9 +3,6 @@ package com.izforge.izpack.compiler.container;
 import com.izforge.izpack.compiler.Compiler;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.cli.CliAnalyzer;
-import com.izforge.izpack.compiler.compressor.BZip2PackCompressor;
-import com.izforge.izpack.compiler.compressor.DefaultPackCompressor;
-import com.izforge.izpack.compiler.compressor.RawPackCompressor;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.helper.CompilerResourceManager;
@@ -16,6 +13,8 @@ import com.izforge.izpack.compiler.merge.MergeManager;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.compiler.packager.Packager;
 import com.izforge.izpack.compiler.provider.CompilerDataProvider;
+import com.izforge.izpack.compiler.provider.OutputStreamProvider;
+import com.izforge.izpack.compiler.provider.PackCompressorProvider;
 import com.izforge.izpack.compiler.provider.PropertiesProvider;
 import com.izforge.izpack.container.AbstractContainer;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
@@ -48,13 +47,9 @@ public class CompilerContainer extends AbstractContainer {
         pico.addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class);
 
         pico.addComponent(IPackager.class, Packager.class);
-
-        // Compressors
-        pico.addComponent("raw", RawPackCompressor.class);
-        pico.addComponent("default", DefaultPackCompressor.class);
-        pico.addComponent("bzip2", BZip2PackCompressor.class);
-
+        pico.addAdapter(new ProviderAdapter(new OutputStreamProvider()));
         pico.addAdapter(new ProviderAdapter(new PropertiesProvider()));
+        pico.addAdapter(new ProviderAdapter(new PackCompressorProvider()));
     }
 
     /**

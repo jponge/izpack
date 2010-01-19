@@ -1,0 +1,27 @@
+package com.izforge.izpack.compiler.provider;
+
+import com.izforge.izpack.compiler.compressor.BZip2PackCompressor;
+import com.izforge.izpack.compiler.compressor.DefaultPackCompressor;
+import com.izforge.izpack.compiler.compressor.PackCompressor;
+import com.izforge.izpack.compiler.compressor.RawPackCompressor;
+import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.compiler.merge.MergeManager;
+import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import org.picocontainer.injectors.Provider;
+
+/**
+ * Created by IntelliJ IDEA.
+ *
+ * @author Anthonin Bonnefoy
+ */
+public class PackCompressorProvider implements Provider {
+    public PackCompressor provide(CompilerData compilerData, MergeManager mergeManager, VariableSubstitutor variableSubstitutor) {
+        String format = compilerData.getComprFormat();
+        if (format.equals("bzip2")) {
+            return new BZip2PackCompressor(variableSubstitutor, mergeManager);
+        } else if (format.equals("raw")) {
+            return new RawPackCompressor(variableSubstitutor);
+        }
+        return new DefaultPackCompressor(variableSubstitutor);
+    }
+}
