@@ -60,7 +60,7 @@ public class Compiler extends Thread {
     /**
      * Collects and packs files into installation jars, as told.
      */
-    private IPackager packager = null;
+    private IPackager packager;
 
     /**
      * Error code, set to true if compilation succeeded.
@@ -85,13 +85,14 @@ public class Compiler extends Thread {
      *
      * @throws CompilerException
      */
-    public Compiler(CompilerData compilerData, VariableSubstitutor variableSubstitutor, CompilerContainer compilerContainer, PropertyManager propertyManager, CompilerHelper compilerHelper, MergeManager mergeManager) throws CompilerException {
+    public Compiler(CompilerData compilerData, VariableSubstitutor variableSubstitutor, CompilerContainer compilerContainer, PropertyManager propertyManager, CompilerHelper compilerHelper, MergeManager mergeManager, IPackager packager) throws CompilerException {
         this.compilerData = compilerData;
         this.propertyManager = propertyManager;
         this.propertySubstitutor = variableSubstitutor;
         this.compilerContainer = compilerContainer;
         this.compilerHelper = compilerHelper;
         this.mergeManager = mergeManager;
+        this.packager = packager;
         // add izpack built in property
         propertyManager.setProperty("izpack.version", CompilerData.IZPACK_VERSION);
         propertyManager.setProperty("basedir", compilerData.getBasedir());
@@ -133,7 +134,7 @@ public class Compiler extends Thread {
      */
     public void createInstaller() throws Exception {
         // We ask the packager to create the installer
-        packager.createInstaller(new File(compilerData.getOutput()));
+        packager.createInstaller();
         this.compileFailed = false;
     }
 
