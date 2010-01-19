@@ -256,7 +256,6 @@ public class CompilerConfig extends Thread {
                 unpackerClassname = xmlCompilerHelper.requireAttribute(unpacker, "class", compilerData.getInstallFile());
             }
         }
-        compiler.initPackager(packagerClassname);
         if (packager != null) {
             IXMLElement options = packager.getFirstChildNamed("options");
             if (options != null) {

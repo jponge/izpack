@@ -22,7 +22,6 @@ import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.rules.Condition;
 
-import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +41,7 @@ public interface IPackager {
      * ".pack#" (where '#' is the pack number) ".jar" suffix: e.g. "foo.pack1.jar". If any file
      * exists, it is overwritten.
      */
-    public abstract void createInstaller(File primaryFile) throws Exception;
+    public abstract void createInstaller() throws Exception;
 
     /**
      * Sets the informations related to this installation.

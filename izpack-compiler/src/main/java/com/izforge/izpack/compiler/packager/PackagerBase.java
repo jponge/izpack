@@ -27,7 +27,6 @@ import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.rules.Condition;
 
-import java.io.File;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -69,11 +68,6 @@ public abstract class PackagerBase implements IPackager {
         }
         return SKELETON_SUBPATH;
     }
-
-    /**
-     * Base file name of all jar files. This has no ".jar" suffix.
-     */
-    protected File baseFile = null;
 
     /**
      * Basic installer info.
@@ -336,8 +330,8 @@ public abstract class PackagerBase implements IPackager {
     public void setInfo(Info info) {
         sendMsg("Setting the installer information", PackagerListener.MSG_VERBOSE);
         this.info = info;
-        if (!getCompressor().useStandardCompression() &&
-                getCompressor().getDecoderMapperName() != null) {
+
+        if (!getCompressor().useStandardCompression() && getCompressor().getDecoderMapperName() != null) {
             this.info.setPackDecoderClassName(getCompressor().getDecoderMapperName());
         }
     }

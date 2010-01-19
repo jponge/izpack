@@ -23,6 +23,7 @@ package com.izforge.izpack.compiler.packager;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.stream.ByteCountingOutputStream;
@@ -56,36 +57,32 @@ public class Packager extends PackagerBase {
      */
     private JarOutputStream primaryJarStream;
 
+    private CompilerData compilerData;
+
     /**
      * The constructor.
      *
      * @throws com.izforge.izpack.compiler.CompilerException
      *
      */
-    public Packager(Properties properties, CompilerContainer compilerContainer, PackagerListener listener) throws CompilerException {
+    public Packager(Properties properties, CompilerData compilerData, CompilerContainer compilerContainer, PackagerListener listener, JarOutputStream outputStream, PackCompressor packCompressor) throws CompilerException {
         super(properties, compilerContainer, listener);
-        initPackCompressor("default", -1);
+        this.compilerData = compilerData;
+        this.primaryJarStream = outputStream;
+        this.compressor = packCompressor;
     }
 
     /* (non-Javadoc)
     * @see com.izforge.izpack.compiler.packager.IPackager#createInstaller(java.io.File)
     */
 
-    public void createInstaller(File primaryFile) throws Exception {
+    public void createInstaller() throws Exception {
         // preliminary work
-        String baseName = primaryFile.getName();
-        if (baseName.endsWith(".jar")) {
-            baseName = baseName.substring(0, baseName.length() - 4);
-            baseFile = new File(primaryFile.getParentFile(), baseName);
-        } else {
-            baseFile = primaryFile;
-        }
+        info.setInstallerBase(compilerData.getOutput().replaceAll(".jar", ""));
 
-        info.setInstallerBase(baseFile.getName());
         packJarsSeparate = (info.getWebDirURL() != null);
 
         // primary (possibly only) jar. -1 indicates primary
-        primaryJarStream = PackagerHelper.getJarOutputStream(baseFile.getName() + ".jar", baseFile.getParentFile());
 
         sendStart();
 
@@ -189,7 +186,6 @@ public class Packager extends PackagerBase {
         // while counting bytes.
 
         int packNumber = 0;
-        Iterator<PackInfo> packIter = packsList.iterator();
         IXMLElement root = new XMLElementImpl("packs");
 
         for (PackInfo packInfo : packsList) {
@@ -201,11 +197,14 @@ public class Packager extends PackagerBase {
 
             // create a pack specific jar if required
             JarOutputStream packStream = primaryJarStream;
-            if (packJarsSeparate) {
-                // See installer.Unpacker#getPackAsStream for the counterpart
-                String name = baseFile.getName() + ".pack-" + pack.id + ".jar";
-                packStream = PackagerHelper.getJarOutputStream(name, baseFile.getParentFile());
-            }
+            // REFACTOR : Repare web installer
+            // REFACTOR : Use a mergeManager for each packages that will be added to the main merger
+
+//            if (packJarsSeparate) {
+            // See installer.Unpacker#getPackAsStream for the counterpart
+//                String name = baseFile.getName() + ".pack-" + pack.id + ".jar";
+//                packStream = PackagerHelper.getJarOutputStream(name, baseFile.getParentFile());
+//            }
             OutputStream comprStream = packStream;
 
             sendMsg("Writing Pack " + packNumber + ": " + pack.name, PackagerListener.MSG_VERBOSE);

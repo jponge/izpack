@@ -56,6 +56,7 @@ public class MultiVolumePackager extends PackagerBase {
 
 
     private IXMLElement configdata = null;
+    private CompilerData compilerData;
 
     /**
      * The constructor.
@@ -63,9 +64,9 @@ public class MultiVolumePackager extends PackagerBase {
      * @throws com.izforge.izpack.compiler.CompilerException
      *
      */
-    public MultiVolumePackager(Properties properties, CompilerContainer compilerContainer, PackagerListener listener) throws CompilerException {
+    public MultiVolumePackager(Properties properties, CompilerContainer compilerContainer, PackagerListener listener, CompilerData compilerData) throws CompilerException {
         super(properties, compilerContainer, listener);
-        initPackCompressor("default", -1);
+        this.compilerData = compilerData;
     }
 
     /**
@@ -75,31 +76,19 @@ public class MultiVolumePackager extends PackagerBase {
      * ".pack#" (where '#' is the pack number) ".jar" suffix: e.g. "foo.pack1.jar". If any file
      * exists, it is overwritten.
      */
-    public void createInstaller(File primaryFile) throws Exception {
+    public void createInstaller() throws Exception {
         // first analyze the configuration
         this.analyzeConfigurationInformation();
 
-        // preliminary work
-        String baseName = primaryFile.getName();
-        if (baseName.endsWith(".jar")) {
-            baseName = baseName.substring(0, baseName.length() - 4);
-            baseFile = new File(primaryFile.getParentFile(), baseName);
-        } else {
-            baseFile = primaryFile;
-        }
-
-        info.setInstallerBase(baseFile.getName());
         packJarsSeparate = (info.getWebDirURL() != null);
-
-        // primary (possibly only) jar. -1 indicates primary
-        primaryJarStream = PackagerHelper.getJarOutputStream(baseFile.getName() + ".jar", baseFile.getParentFile());
 
         sendStart();
 
         writeInstaller();
 
         // Pack File Data may be written to separate jars
-        String packfile = baseFile.getParent() + File.separator + INSTALLER_PAK_NAME;
+
+        String packfile = compilerData.getOutput() + File.separator + INSTALLER_PAK_NAME;
         writePacks(new File(packfile));
 
         // Finish up. closeAlways is a hack for pack compressions other than
@@ -485,10 +474,6 @@ public class MultiVolumePackager extends PackagerBase {
             }
         }
     }
-
-    /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.packager.IPackager#addConfigurationInformation(com.izforge.izpack.adaptator.IXMLElement)
-     */
 
     public void addConfigurationInformation(IXMLElement data) {
         this.configdata = data;
