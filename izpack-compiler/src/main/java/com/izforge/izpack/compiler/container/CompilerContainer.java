@@ -12,10 +12,7 @@ import com.izforge.izpack.compiler.listener.CmdlinePackagerListener;
 import com.izforge.izpack.compiler.merge.MergeManager;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.compiler.packager.Packager;
-import com.izforge.izpack.compiler.provider.CompilerDataProvider;
-import com.izforge.izpack.compiler.provider.OutputStreamProvider;
-import com.izforge.izpack.compiler.provider.PackCompressorProvider;
-import com.izforge.izpack.compiler.provider.PropertiesProvider;
+import com.izforge.izpack.compiler.provider.*;
 import com.izforge.izpack.container.AbstractContainer;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
@@ -47,7 +44,8 @@ public class CompilerContainer extends AbstractContainer {
         pico.addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class);
 
         pico.addComponent(IPackager.class, Packager.class);
-        pico.addAdapter(new ProviderAdapter(new OutputStreamProvider()));
+        pico.addAdapter(new ProviderAdapter(new JarOutputStreamProvider()));
+        pico.addAdapter(new ProviderAdapter(new CompressedOutputStreamProvider()));
         pico.addAdapter(new ProviderAdapter(new PropertiesProvider()));
         pico.addAdapter(new ProviderAdapter(new PackCompressorProvider()));
     }

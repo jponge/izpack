@@ -2,12 +2,11 @@ package com.izforge.izpack.compiler.provider;
 
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
-import org.apache.tools.bzip2.CBZip2OutputStream;
+import org.apache.commons.compress.compressors.CompressorException;
 import org.picocontainer.injectors.Provider;
 
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.zip.Deflater;
 
 /**
@@ -15,20 +14,17 @@ import java.util.zip.Deflater;
  *
  * @author Anthonin Bonnefoy
  */
-public class OutputStreamProvider implements Provider {
+public class JarOutputStreamProvider implements Provider {
 
-    public JarOutputStream provide(CompilerData compilerData) throws IOException {
+    public JarOutputStream provide(CompilerData compilerData) throws IOException, CompressorException {
         JarOutputStream jarOutputStream;
-        OutputStream outputStream = new FileOutputStream(compilerData.getOutput());
-
-        String comprFormat = compilerData.getComprFormat();
-        if (comprFormat.equals("bzip2")) {
-            outputStream = new CBZip2OutputStream(outputStream);
-        }
-        jarOutputStream = new JarOutputStream(outputStream);
+        jarOutputStream = new JarOutputStream(new File(compilerData.getOutput()));
+        int level = compilerData.getComprLevel();
         jarOutputStream.setLevel(Deflater.BEST_COMPRESSION);
+        if (level >= 0 && level < 10) {
+            jarOutputStream.setLevel(level);
+        }
         jarOutputStream.setPreventClose(true); // Needed at using FilterOutputStreams which calls close
-
         return jarOutputStream;
     }
 }
