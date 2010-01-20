@@ -20,6 +20,7 @@
 
 package com.izforge.izpack.compiler.packager;
 
+import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.compiler.CompilerException;
@@ -28,9 +29,7 @@ import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.stream.ByteCountingOutputStream;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
-import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.data.PackFile;
-import com.izforge.izpack.data.PackInfo;
+import com.izforge.izpack.data.*;
 import com.izforge.izpack.util.FileUtil;
 
 import java.io.*;
@@ -225,15 +224,13 @@ public class Packager extends PackagerBase {
             // We write the actual pack files
             objOut.writeInt(packInfo.getPackFiles().size());
 
-            Iterator iter = packInfo.getPackFiles().iterator();
-            while (iter.hasNext()) {
+            for (PackFile packFile : packInfo.getPackFiles()) {
                 boolean addFile = !pack.loose;
                 boolean pack200 = false;
-                PackFile pf = (PackFile) iter.next();
-                File file = packInfo.getFile(pf);
+                File file = packInfo.getFile(packFile);
 
                 if (file.getName().toLowerCase().endsWith(".jar") && info.isPack200Compression() && isNotSignedJar(file)) {
-                    pf.setPack200Jar(true);
+                    packFile.setPack200Jar(true);
                     pack200 = true;
                 }
 
@@ -241,13 +238,13 @@ public class Packager extends PackagerBase {
                 // same jar
                 Object[] info = storedFiles.get(file);
                 if (info != null && !packJarsSeparate) {
-                    pf.setPreviousPackFileRef((String) info[0], (Long) info[1]);
+                    packFile.setPreviousPackFileRef((String) info[0], (Long) info[1]);
                     addFile = false;
                 }
 
-                objOut.writeObject(pf); // base info
+                objOut.writeObject(packFile); // base info
 
-                if (addFile && !pf.isDirectory()) {
+                if (addFile && !packFile.isDirectory()) {
                     long pos = dos.getByteCount(); // get the position
 
                     if (pack200) {
@@ -266,7 +263,7 @@ public class Packager extends PackagerBase {
                         FileInputStream inStream = new FileInputStream(file);
                         long bytesWritten = PackagerHelper.copyStream(inStream, objOut);
                         inStream.close();
-                        if (bytesWritten != pf.length()) {
+                        if (bytesWritten != packFile.length()) {
                             throw new IOException("File size mismatch when reading " + file);
                         }
                     }
@@ -275,28 +272,26 @@ public class Packager extends PackagerBase {
                 }
 
                 // even if not written, it counts towards pack size
-                pack.nbytes += pf.size();
+                pack.nbytes += packFile.size();
             }
 
             // Write out information about parsable files
             objOut.writeInt(packInfo.getParsables().size());
-            iter = packInfo.getParsables().iterator();
-            while (iter.hasNext()) {
-                objOut.writeObject(iter.next());
+
+            for (ParsableFile parsableFile : packInfo.getParsables()) {
+                objOut.writeObject(parsableFile);
             }
 
             // Write out information about executable files
             objOut.writeInt(packInfo.getExecutables().size());
-            iter = packInfo.getExecutables().iterator();
-            while (iter.hasNext()) {
-                objOut.writeObject(iter.next());
+            for (ExecutableFile executableFile : packInfo.getExecutables()) {
+                objOut.writeObject(executableFile);
             }
 
             // Write out information about updatecheck files
             objOut.writeInt(packInfo.getUpdateChecks().size());
-            iter = packInfo.getUpdateChecks().iterator();
-            while (iter.hasNext()) {
-                objOut.writeObject(iter.next());
+            for (UpdateCheck updateCheck : packInfo.getUpdateChecks()) {
+                objOut.writeObject(updateCheck);
             }
 
             // Cleanup
@@ -328,9 +323,8 @@ public class Packager extends PackagerBase {
         ObjectOutputStream out = new ObjectOutputStream(primaryJarStream);
         out.writeInt(packsList.size());
 
-        for (PackInfo aPacksList : packsList) {
-            PackInfo pack = aPacksList;
-            out.writeObject(pack.getPack());
+        for (PackInfo packInfo : packsList) {
+            out.writeObject(packInfo.getPack());
         }
         out.flush();
         primaryJarStream.closeEntry();

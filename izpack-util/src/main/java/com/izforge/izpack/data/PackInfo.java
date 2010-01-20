@@ -55,22 +55,22 @@ public class PackInfo implements Serializable {
     /**
      * Files of the Pack.
      */
-    private Map files = new HashMap();
+    private Map<PackFile, File> files = new HashMap<PackFile, File>();
 
     /**
      * Parsables files in this Pack.
      */
-    private List parsables = new ArrayList();
+    private List<ParsableFile> parsables = new ArrayList<ParsableFile>();
 
     /**
      * Executable files in this Pack.
      */
-    private List executables = new ArrayList();
+    private List<ExecutableFile> executables = new ArrayList<ExecutableFile>();
 
     /**
      * Update check specifications in this Pack.
      */
-    private List updateChecks = new ArrayList();
+    private List<UpdateCheck> updateChecks = new ArrayList<UpdateCheck>();
 
     /**
      * Constructor with required info.
@@ -230,7 +230,7 @@ public class PackInfo implements Serializable {
     /**
      * Set of PackFile objects for this Pack.
      */
-    public Set getPackFiles() {
+    public Set<PackFile> getPackFiles() {
         return files.keySet();
     }
 
@@ -239,7 +239,7 @@ public class PackInfo implements Serializable {
      * come from the set returned by {@link #getPackFiles()}.
      */
     public File getFile(PackFile packFile) {
-        return (File) files.get(packFile);
+        return files.get(packFile);
     }
 
     /**
@@ -252,7 +252,7 @@ public class PackInfo implements Serializable {
     /**
      * List of parsables for this Pack.
      */
-    public List getParsables() {
+    public List<ParsableFile> getParsables() {
         return parsables;
     }
 
@@ -267,7 +267,7 @@ public class PackInfo implements Serializable {
     /**
      * List of parsables for this Pack.
      */
-    public List getExecutables() {
+    public List<ExecutableFile> getExecutables() {
         return executables;
     }
 
@@ -282,7 +282,7 @@ public class PackInfo implements Serializable {
     /**
      * List of update checks for this Pack.
      */
-    public List getUpdateChecks() {
+    public List<UpdateCheck> getUpdateChecks() {
         return updateChecks;
     }
 
