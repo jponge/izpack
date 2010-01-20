@@ -39,7 +39,6 @@ import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.Pack200;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /**
@@ -60,16 +59,23 @@ public class Packager extends PackagerBase {
     private CompilerData compilerData;
 
     /**
+     * Decoration of the primary jar stream.
+     * May be compressed or not depending on the compiler data.
+     */
+    private OutputStream outputStream;
+
+    /**
      * The constructor.
      *
      * @throws com.izforge.izpack.compiler.CompilerException
      *
      */
-    public Packager(Properties properties, CompilerData compilerData, CompilerContainer compilerContainer, PackagerListener listener, JarOutputStream outputStream, PackCompressor packCompressor) throws CompilerException {
+    public Packager(Properties properties, CompilerData compilerData, CompilerContainer compilerContainer, PackagerListener listener, JarOutputStream jarOutputStream, PackCompressor packCompressor, OutputStream outputStream) throws CompilerException {
         super(properties, compilerContainer, listener);
         this.compilerData = compilerData;
-        this.primaryJarStream = outputStream;
+        this.primaryJarStream = jarOutputStream;
         this.compressor = packCompressor;
+        this.outputStream = outputStream;
     }
 
     /* (non-Javadoc)
@@ -196,7 +202,6 @@ public class Packager extends PackagerBase {
             }
 
             // create a pack specific jar if required
-            JarOutputStream packStream = primaryJarStream;
             // REFACTOR : Repare web installer
             // REFACTOR : Use a mergeManager for each packages that will be added to the main merger
 
@@ -205,33 +210,16 @@ public class Packager extends PackagerBase {
 //                String name = baseFile.getName() + ".pack-" + pack.id + ".jar";
 //                packStream = PackagerHelper.getJarOutputStream(name, baseFile.getParentFile());
 //            }
-            OutputStream comprStream = packStream;
 
             sendMsg("Writing Pack " + packNumber + ": " + pack.name, PackagerListener.MSG_VERBOSE);
 
             // Retrieve the correct output stream
             org.apache.tools.zip.ZipEntry entry = new org.apache.tools.zip.ZipEntry(RESOURCES_PATH + "packs/pack-" + pack.id);
-            if (!compressor.useStandardCompression()) {
-                entry.setMethod(ZipEntry.STORED);
-                entry.setComment(compressor.getCompressionFormatSymbols()[0]);
-                // We must set the entry before we get the compressed stream
-                // because some writes initialize data (e.g. bzip2).
-                packStream.putNextEntry(entry);
-                packStream.flush(); // flush before we start counting
-                compilerContainer.addComponent(OutputStream.class, packStream);
-                comprStream = (OutputStream) compilerContainer.getComponent("compressedStream");
-//                compilerContainer.getComponent(PackCompressor.class);
-//                comprStream = compressor.getOutputStream(packStream);
-            } else {
-                int level = compressor.getCompressionLevel();
-                if (level >= 0 && level < 10) {
-                    packStream.setLevel(level);
-                }
-                packStream.putNextEntry(entry);
-                packStream.flush(); // flush before we start counting
-            }
+            primaryJarStream.putNextEntry(entry);
+            primaryJarStream.flush(); // flush before we start counting
 
-            ByteCountingOutputStream dos = new ByteCountingOutputStream(comprStream);
+
+            ByteCountingOutputStream dos = new ByteCountingOutputStream(outputStream);
             ObjectOutputStream objOut = new ObjectOutputStream(dos);
 
             // We write the actual pack files
@@ -314,14 +302,14 @@ public class Packager extends PackagerBase {
             // Cleanup
             objOut.flush();
             if (!compressor.useStandardCompression()) {
-                comprStream.close();
+                outputStream.close();
             }
 
-            packStream.closeEntry();
+            primaryJarStream.closeEntry();
 
             // close pack specific jar if required
             if (packJarsSeparate) {
-                packStream.closeAlways();
+                primaryJarStream.closeAlways();
             }
 
             IXMLElement child = new XMLElementImpl("pack", root);
