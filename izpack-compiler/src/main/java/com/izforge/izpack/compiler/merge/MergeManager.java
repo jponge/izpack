@@ -22,21 +22,36 @@ public class MergeManager implements Mergeable {
         mergeableList = new ArrayList<Mergeable>();
     }
 
+    public static File getFileFromPath(String path) {
+        URL resource = ClassLoader.getSystemClassLoader().getResource(path);
+        if (resource != null) {
+            File file = new File(resource.getFile());
+            if (file.exists()) {
+                return file;
+            }
+        }
+        File file = new File(path);
+        if (file.exists()) {
+            return file;
+        }
+        return null;
+    }
+
     private static TypeFile resolvePath(String sourcePath) {
         URL resource = ClassLoader.getSystemClassLoader().getResource(sourcePath);
-        if (resource != null && resource.toString().contains("jar:file")) {
-            return TypeFile.JAR_CONTENT;
-        }
-        File file = new File(sourcePath);
-        if (file.exists()) {
-            if (file.isDirectory()) {
-                return TypeFile.DIRECTORY;
+        if (resource != null) {
+            if (resource.toString().contains("jar:file")) {
+                return TypeFile.JAR_CONTENT;
             }
-            return TypeFile.FILE;
         }
-        resource = ClassLoader.getSystemClassLoader().getResource(sourcePath.replaceAll(".", "/"));
-        if (resource != null && resource.toString().contains("jar:file")) {
-            return TypeFile.JAR_CONTENT;
+
+        File path = getFileFromPath(sourcePath);
+        if (path != null) {
+            if (path.isDirectory()) {
+                return TypeFile.DIRECTORY;
+            } else {
+                return TypeFile.FILE;
+            }
         }
         throw new IllegalArgumentException("Invalid source path : " + sourcePath);
     }
@@ -45,7 +60,7 @@ public class MergeManager implements Mergeable {
         switch (resolvePath(path)) {
             case DIRECTORY:
             case FILE:
-                return new FileMerge(new File(path));
+                return new FileMerge(getFileFromPath(path));
             case JAR_CONTENT:
                 return new JarMerge(path);
         }
@@ -75,5 +90,6 @@ public class MergeManager implements Mergeable {
         for (Mergeable mergeable : mergeableList) {
             mergeable.merge(outputStream);
         }
+        mergeableList.clear();
     }
 }
