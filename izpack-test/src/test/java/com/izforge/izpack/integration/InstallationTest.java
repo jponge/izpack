@@ -61,7 +61,7 @@ public class InstallationTest extends AbstractInstallationTest {
         File installerFile = new File(workingDirectory, "helloAndFinish.xml");
         CompilerData data = new CompilerData(installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), out.getAbsolutePath());
         data.setComprFormat("bzip2");
-        data.setComprLevel(9);
+        data.setComprLevel(2);
         compileAndUnzip(workingDirectory, data);
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         installerContainer.getComponent(LanguageDialog.class).initLangPack();
@@ -160,7 +160,7 @@ public class InstallationTest extends AbstractInstallationTest {
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Shortcut
         // Deselect shortcut creation
-        Thread.sleep(200);
+        Thread.sleep(400);
         installerFrameFixture.checkBox(GuiId.SHORTCUT_CREATE_CHECK_BOX.id).click();
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Finish
