@@ -193,8 +193,8 @@ public abstract class BaseXIncludeTestCase {
      *
      * @throws Exception
      */
-	@Test
-	public void testMultipleIncludes() throws Exception {
-		doTest("multiple-include");
+    @Test
+    public void testMultipleIncludes() throws Exception {
+        doTest("multiple-include");
 	}
 }

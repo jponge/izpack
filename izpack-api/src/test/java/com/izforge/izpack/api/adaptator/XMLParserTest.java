@@ -23,19 +23,17 @@
 package com.izforge.izpack.api.adaptator;
 
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
-import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Properties;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -68,12 +66,8 @@ public class XMLParserTest {
 
     @Test
     public void testParseString() throws Exception {
-        InputStream input;
         IXMLElement spec;
-        input = XMLParserTest.class.getResourceAsStream(filename);
-        VariableSubstitutor substitutor = new VariableSubstitutorImpl(new Properties(System.getProperties()));
-        String substitutedSpec = substitutor.substitute(input, SubstitutionType.TYPE_XML);
-
+        String substitutedSpec = FileUtils.readFileToString(new File(XMLParserTest.class.getResource(filename).getFile()));
         IXMLParser parser = new XMLParser();
         spec = parser.parse(substitutedSpec);
         Assert.assertEquals("shortcuts", spec.getName());
