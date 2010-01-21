@@ -20,7 +20,6 @@
 
 package com.izforge.izpack.compiler.packager;
 
-import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.Pack;
@@ -31,10 +30,7 @@ import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.merge.MergeManager;
 import com.izforge.izpack.compiler.stream.ByteCountingOutputStream;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
-import com.izforge.izpack.data.PackFile;
-import com.izforge.izpack.data.PackInfo;
-import com.izforge.izpack.data.ParsableFile;
-import com.izforge.izpack.data.UpdateCheck;
+import com.izforge.izpack.data.*;
 import com.izforge.izpack.util.FileUtil;
 
 import java.io.*;

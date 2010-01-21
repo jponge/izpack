@@ -1,9 +1,9 @@
 package com.izforge.izpack.installer.data;
 
-import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.data.CustomData;
+import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.Debug;

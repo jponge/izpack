@@ -19,7 +19,7 @@
 
 package com.izforge.izpack.uninstaller;
 
-import com.izforge.izpack.ExecutableFile;
+import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.event.UninstallerListener;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
@@ -152,6 +152,7 @@ public class Destroyer extends Thread {
     // path.deleteOnExit();
     // inst.deleteOnExit();
     // }
+
     /**
      * Returns an ArrayList of the files to delete.
      *

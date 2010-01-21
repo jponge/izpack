@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.helper;
+package com.izforge.izpack.util.helper;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;

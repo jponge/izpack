@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.helper;
+package com.izforge.izpack.util.helper;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.installer.ISummarisable;

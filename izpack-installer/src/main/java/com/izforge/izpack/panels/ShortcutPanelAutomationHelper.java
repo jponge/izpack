@@ -21,9 +21,9 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.*;

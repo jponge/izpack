@@ -19,7 +19,7 @@
 
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.ExecutableFile;
+import com.izforge.izpack.data.ExecutableFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;

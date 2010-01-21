@@ -23,9 +23,9 @@ package com.izforge.izpack.event;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.helper.SummaryProcessor;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.helper.SummaryProcessor;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.File;

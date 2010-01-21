@@ -26,7 +26,6 @@
 
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.IXMLWriter;

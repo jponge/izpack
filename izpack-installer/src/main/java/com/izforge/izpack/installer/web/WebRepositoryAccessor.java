@@ -21,13 +21,13 @@
 
 package com.izforge.izpack.installer.web;
 
-import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
+import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.data.UpdateCheck;

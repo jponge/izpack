@@ -29,12 +29,12 @@ import com.izforge.izpack.api.exception.WrappedNativeLibException;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.api.unpacker.IDiscardInterruptable;
-import com.izforge.izpack.helper.SpecHelper;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.CleanupClient;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.helper.SpecHelper;
 import com.izforge.izpack.util.os.RegistryDefaultHandler;
 import com.izforge.izpack.util.os.RegistryHandler;
 

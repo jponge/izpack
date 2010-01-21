@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.ExecutableFile;
+import com.izforge.izpack.data.ExecutableFile;
 
 import java.io.*;
 import java.util.ArrayList;
