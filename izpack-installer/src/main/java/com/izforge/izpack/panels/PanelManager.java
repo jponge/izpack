@@ -15,6 +15,9 @@ import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.OsConstraint;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +26,8 @@ import java.util.List;
  */
 public class PanelManager {
 
-    public static String CLASSNAME_PREFIX = "com.izforge.izpack.panels.";
+    public static String CLASSNAME_PREFIX = "com.izforge.izpack.installer.panels";
+    public static String BASE_CLASSNAME_PATH = "com/izforge/izpack/installer/panels";
 
     private GUIInstallData installdata;
     private IInstallerContainer installerContainer;
@@ -40,14 +44,52 @@ public class PanelManager {
         visiblePanelMapping = new ArrayList<Integer>();
     }
 
-    public Class<? extends IzPanel> resolveClassName(String className) throws ClassNotFoundException {
+    public Class<? extends IzPanel> resolveClassName(final String className) throws ClassNotFoundException {
         Class<?> aClass;
-        if (!className.contains(".")) {
-            aClass = Class.forName(CLASSNAME_PREFIX + className);
+        URL resource = ClassLoader.getSystemClassLoader().getResource(BASE_CLASSNAME_PATH);
+        File panelDirectory = new File(resource.getFile());
+        FileFilter fileFilter = new FileFilter() {
+            public boolean accept(File pathname) {
+                return pathname.isDirectory() || pathname.getName().contains(className);
+            }
+        };
+        File classFile = searchForFile(fileFilter, panelDirectory);
+        return resolveClass(panelDirectory, classFile);
+//        System.out.println(classFile.getAbsolutePath());
+//        if (!className.contains(".")) {
+//            aClass = Class.forName(CLASSNAME_PREFIX + className);
+//        } else {
+//            aClass = Class.forName(className);
+//        }
+
+//        return (Class<? extends IzPanel>) aClass;
+    }
+
+    private Class resolveClass(File panelDirectory, File classFile) throws ClassNotFoundException {
+        String result = classFile.getAbsolutePath().replaceAll(panelDirectory.getAbsolutePath(), "");
+        result = CLASSNAME_PREFIX + result.replaceAll("/", ".").replaceAll(".class", "");
+        return Class.forName(result);
+    }
+
+    /**
+     * Recursively search a file matching the fileFilter
+     *
+     * @param fileFilter  Filter accepting directory and file matching a classname pattern
+     * @param currentFile Current directory
+     * @return the first found file or null
+     */
+    private File searchForFile(FileFilter fileFilter, File currentFile) {
+        if (currentFile.isDirectory()) {
+            for (File files : currentFile.listFiles(fileFilter)) {
+                File file = searchForFile(fileFilter, files);
+                if (file != null) {
+                    return file;
+                }
+            }
         } else {
-            aClass = Class.forName(className);
+            return currentFile;
         }
-        return (Class<? extends IzPanel>) aClass;
+        return null;
     }
 
     /**
