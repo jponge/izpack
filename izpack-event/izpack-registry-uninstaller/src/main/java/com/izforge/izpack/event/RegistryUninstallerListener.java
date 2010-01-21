@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.event;
 
-import com.coi.tools.os.win.NativeLibException;
+import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.TargetFactory;
 import com.izforge.izpack.util.os.RegistryHandler;

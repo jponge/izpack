@@ -17,7 +17,7 @@
  */
 package com.izforge.izpack.installer.panels;
 
-import com.izforge.izpack.data.LocaleDatabase;
+import com.izforge.izpack.api.data.LocaleDatabase;
 
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
@@ -37,6 +37,7 @@ public class NextMediaFileFilter extends FileFilter {
     /* (non-Javadoc)
     * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
     */
+
     public boolean accept(File f) {
         if (f.isDirectory()) {
             return true;
@@ -48,6 +49,7 @@ public class NextMediaFileFilter extends FileFilter {
     /* (non-Javadoc)
     * @see javax.swing.filechooser.FileFilter#getDescription()
     */
+
     public String getDescription() {
         return this.langpack.getString("nextmedia.filedesc");
     }

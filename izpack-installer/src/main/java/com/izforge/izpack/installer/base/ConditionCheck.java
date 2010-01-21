@@ -1,7 +1,7 @@
 package com.izforge.izpack.installer.base;
 
-import com.izforge.izpack.data.InstallerRequirement;
-import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.api.data.InstallerRequirement;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.rules.Condition;

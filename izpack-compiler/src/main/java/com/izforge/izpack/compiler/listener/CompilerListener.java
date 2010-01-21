@@ -22,7 +22,7 @@
 package com.izforge.izpack.compiler.listener;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.compiler.packager.IPackager;
 
 import java.util.Map;
@@ -53,7 +53,7 @@ public interface CompilerListener {
      * @param element         current file related XML node
      * @return the given or a new attribute set. If no attribute set is given and no attribute was
      *         added, null returns
-     * @throws com.izforge.izpack.compiler.CompilerException
+     * @throws com.izforge.izpack.api.exception.CompilerException
      *
      */
     Map reviseAdditionalDataMap(Map existentDataMap, IXMLElement element) throws CompilerException;

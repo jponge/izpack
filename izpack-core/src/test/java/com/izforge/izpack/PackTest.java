@@ -19,7 +19,7 @@
 
 package com.izforge.izpack;
 
-import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.api.data.Pack;
 import junit.framework.TestCase;
 
 public class PackTest extends TestCase {

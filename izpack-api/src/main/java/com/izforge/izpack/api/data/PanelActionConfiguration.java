@@ -15,7 +15,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.izforge.izpack.data;
+package com.izforge.izpack.api.data;
 
 import java.io.Serializable;
 import java.util.HashMap;

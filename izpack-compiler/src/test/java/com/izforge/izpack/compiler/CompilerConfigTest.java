@@ -2,11 +2,12 @@ package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
+import com.izforge.izpack.api.data.DynamicVariable;
+import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.helper.impl.XmlCompilerHelper;
-import com.izforge.izpack.data.DynamicVariable;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 import org.junit.Before;
 import org.junit.Test;

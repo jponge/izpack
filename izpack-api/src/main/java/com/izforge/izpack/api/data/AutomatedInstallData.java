@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.data;
+package com.izforge.izpack.api.data;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;

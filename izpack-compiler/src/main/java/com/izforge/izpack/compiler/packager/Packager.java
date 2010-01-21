@@ -23,14 +23,18 @@ package com.izforge.izpack.compiler.packager;
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.merge.MergeManager;
 import com.izforge.izpack.compiler.stream.ByteCountingOutputStream;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
-import com.izforge.izpack.data.*;
+import com.izforge.izpack.data.PackFile;
+import com.izforge.izpack.data.PackInfo;
+import com.izforge.izpack.data.ParsableFile;
+import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.util.FileUtil;
 
 import java.io.*;
@@ -68,7 +72,7 @@ public class Packager extends PackagerBase {
     /**
      * The constructor.
      *
-     * @throws com.izforge.izpack.compiler.CompilerException
+     * @throws com.izforge.izpack.api.exception.CompilerException
      *
      */
     public Packager(Properties properties, CompilerData compilerData, CompilerContainer compilerContainer, PackagerListener listener, JarOutputStream jarOutputStream, PackCompressor packCompressor, OutputStream outputStream, MergeManager mergeManager) throws CompilerException {

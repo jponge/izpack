@@ -20,8 +20,9 @@
 package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.data.PanelAction;
-import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
 import com.izforge.izpack.installer.DataValidator;
@@ -155,7 +156,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * Information about the panel
      */
-    public com.izforge.izpack.data.Panel metadata;
+    public com.izforge.izpack.api.data.Panel metadata;
 
     /**
      * The resource manager
@@ -946,14 +947,14 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * @return the metadata
      */
-    public com.izforge.izpack.data.Panel getMetadata() {
+    public Panel getMetadata() {
         return this.metadata;
     }
 
     /**
      * @param p the metadata to set
      */
-    public void setMetadata(com.izforge.izpack.data.Panel p) {
+    public void setMetadata(Panel p) {
         this.metadata = p;
     }
 

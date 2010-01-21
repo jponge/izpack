@@ -22,7 +22,7 @@
 package com.izforge.izpack.compiler.listener;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.PackInfo;
 

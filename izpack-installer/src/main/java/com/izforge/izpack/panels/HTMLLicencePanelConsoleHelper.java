@@ -20,10 +20,10 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.PanelConsoleHelper;
-import com.izforge.izpack.data.ResourceManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;

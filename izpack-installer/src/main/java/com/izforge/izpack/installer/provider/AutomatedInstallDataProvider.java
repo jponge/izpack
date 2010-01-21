@@ -1,8 +1,8 @@
 package com.izforge.izpack.installer.provider;
 
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.container.CustomDataContainer;
-import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import java.util.Properties;

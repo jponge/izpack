@@ -23,8 +23,8 @@
 package com.izforge.izpack.panels;
 
 import com.coi.tools.os.win.MSWinConstants;
-import com.coi.tools.os.win.NativeLibException;
-import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.AbstractUIHandler;

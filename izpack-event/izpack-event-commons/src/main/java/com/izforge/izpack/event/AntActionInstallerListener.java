@@ -23,8 +23,8 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.helper.SpecHelper;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.UninstallData;

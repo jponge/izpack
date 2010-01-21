@@ -1,7 +1,7 @@
 package com.izforge.izpack.compiler.data;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.packager.PackagerListener;
 import com.izforge.izpack.util.substitutor.SubstitutionType;

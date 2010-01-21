@@ -1,7 +1,7 @@
 package com.izforge.izpack.compiler.helper;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.api.exception.CompilerException;
 
 import java.io.File;
 
@@ -64,7 +64,7 @@ public class AssertionHelper {
      * Checks whether a File instance is a regular file, exists and is readable. Throws appropriate
      * CompilerException to report violations of these conditions.
      *
-     * @throws com.izforge.izpack.compiler.CompilerException
+     * @throws com.izforge.izpack.api.exception.CompilerException
      *          if the file is either not existing, not a regular file or not
      *          readable.
      */

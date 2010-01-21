@@ -18,11 +18,11 @@
 package com.izforge.izpack.compiler.packager;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
-import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.data.PackFile;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.data.XPackFile;
@@ -61,7 +61,7 @@ public class MultiVolumePackager extends PackagerBase {
     /**
      * The constructor.
      *
-     * @throws com.izforge.izpack.compiler.CompilerException
+     * @throws com.izforge.izpack.api.exception.CompilerException
      *
      */
     public MultiVolumePackager(Properties properties, CompilerContainer compilerContainer, PackagerListener listener, CompilerData compilerData) throws CompilerException {

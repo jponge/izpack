@@ -3,7 +3,7 @@ package com.izforge.izpack.installer.provider;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
-import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.util.Debug;

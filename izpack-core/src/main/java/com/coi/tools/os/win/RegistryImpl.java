@@ -21,6 +21,8 @@
 
 package com.coi.tools.os.win;
 
+import com.izforge.izpack.api.exception.NativeLibException;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

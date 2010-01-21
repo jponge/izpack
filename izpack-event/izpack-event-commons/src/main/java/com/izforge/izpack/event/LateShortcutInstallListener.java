@@ -22,7 +22,7 @@
 
 package com.izforge.izpack.event;
 
-import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.panels.IShortcuPanel;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 

@@ -23,8 +23,8 @@
 package com.izforge.izpack.util.os;
 
 import com.coi.tools.os.izpack.Registry;
-import com.coi.tools.os.win.NativeLibException;
 import com.coi.tools.os.win.RegDataContainer;
+import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
@@ -263,7 +263,8 @@ public class Win_RegistryHandler extends RegistryHandler {
      *
      * @param key   key of the value which should be deleted
      * @param value value name to be deleted
-     * @throws NativeLibException
+     * @throws com.izforge.izpack.api.exception.NativeLibException
+     *
      */
     public void deleteValue(String key, String value) throws NativeLibException {
         if (!good()) {

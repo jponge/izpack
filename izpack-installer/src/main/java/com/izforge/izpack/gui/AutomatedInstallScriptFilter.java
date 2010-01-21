@@ -21,8 +21,8 @@
 
 package com.izforge.izpack.gui;
 
-import com.izforge.izpack.data.LocaleDatabase;
-import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.util.Debug;
 
 import javax.swing.filechooser.FileFilter;
@@ -62,6 +62,7 @@ public class AutomatedInstallScriptFilter extends FileFilter {
       *
       * @see java.io.FileFilter#accept(java.io.File)
       */
+
     public boolean accept(File pathname) {
         /*
            * Return true only if the file is a directory or ends with ".xml"

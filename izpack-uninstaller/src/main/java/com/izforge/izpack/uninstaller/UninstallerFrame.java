@@ -19,7 +19,7 @@
 
 package com.izforge.izpack.uninstaller;
 
-import com.izforge.izpack.data.LocaleDatabase;
+import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.util.AbstractUIHandler;

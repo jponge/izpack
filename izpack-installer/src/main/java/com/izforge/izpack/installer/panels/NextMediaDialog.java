@@ -17,8 +17,8 @@
  */
 package com.izforge.izpack.installer.panels;
 
-import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.data.LocaleDatabase;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.gui.LabelFactory;

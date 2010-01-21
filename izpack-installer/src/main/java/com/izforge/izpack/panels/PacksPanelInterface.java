@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.data.LocaleDatabase;
+import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.installer.debugger.Debugger;
 
 /**

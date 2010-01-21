@@ -22,7 +22,7 @@
 
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.AutomatedInstallData;
 
 import javax.swing.*;
 import java.io.File;
@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * This class handles informing the user about unusual events during the installation process and
  * therefore about the possibility that the installation may not have succeeded at all or may have
@@ -217,6 +218,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     private boolean dumpChannels = false;
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This class is installed as singleton. Therefore the constructor is declared private. Use
      * <code>getInstance()</code> to get an instance.
@@ -260,6 +262,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the only instance of <code>Log</code>
      *
@@ -275,6 +278,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method records general installation message
      *
@@ -290,6 +294,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method records a general installation message, using a custom text template. It allows
      * cusom code to insert message text that is not defined in IzPack. IzPack internal code should
@@ -306,6 +311,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method records a warning message to the list of messages
      *
@@ -325,6 +331,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method records a warning message, using a custom text template. It allows cusom code to
      * insert message text that is not defined in IzPack. IzPack internal code should use the
@@ -343,6 +350,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method records an error message to the list of messages
      *
@@ -363,6 +371,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method records an error message, using a custom text template. It allows cusom code to
      * insert message text that is not defined in IzPack. IzPack internal code should use the
@@ -381,6 +390,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method provides a channel for debugging messages in IzPack development. Note that debug
      * messages are used solely for this purpose. Adding debug messages does not trigger user
@@ -421,6 +431,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Reports if any messages have been recorded.
      *
@@ -432,6 +443,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Reports if any warnings have been recorded.
      *
@@ -443,6 +455,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Reports if any errors have been recorded.
      *
@@ -454,6 +467,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Displays a dialog that informs the user about the fact that one or more unusual events have
      * occurred during installation. If nothing has been recorded, this method returns immediately.
@@ -494,6 +508,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Presents the user with a dialog to select a file and location for the installation report and
      * writes a report contianing all messages to the user selected file.
@@ -513,6 +528,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Writes a report contianing all messages to the indicated file.
      *
@@ -545,6 +561,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Prepares an installation report from the recorded information
      *
@@ -673,6 +690,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Builds a general installation message from the information contained in the indicated record
      *
@@ -703,6 +721,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Builds a warning message from the information contained in the indicated warning record
      *
@@ -742,6 +761,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Builds an error message from the information contained in the indicated error record
      *
@@ -779,6 +799,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Builds a debug message from the information contained in the indicated debug record
      *
@@ -792,6 +813,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Builds a debug message from the information contained in a specific debug record
      *
@@ -826,6 +848,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Dumps the list of debug channels to stdout that have recorded messages
      */
@@ -849,6 +872,7 @@ public class Log implements LogError, LogWarning, LogMessage {
     // --------------------------------------------------------------------------
     // class definition to handle individual entries
     // --------------------------------------------------------------------------
+
     private class Record {
 
         String channel;
@@ -864,6 +888,7 @@ public class Log implements LogError, LogWarning, LogMessage {
         // ----------------------------------------------------
         // Constructors
         // ----------------------------------------------------
+
         Record(int message, String[] variables) {
             this.message = message;
             this.variables = variables;

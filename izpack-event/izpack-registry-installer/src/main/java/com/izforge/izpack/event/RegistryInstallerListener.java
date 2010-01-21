@@ -21,10 +21,10 @@
 
 package com.izforge.izpack.event;
 
-import com.coi.tools.os.win.NativeLibException;
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.helper.SpecHelper;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.rules.RulesEngine;

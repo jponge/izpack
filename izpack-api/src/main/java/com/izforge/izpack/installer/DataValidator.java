@@ -20,7 +20,7 @@
  */
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.AutomatedInstallData;
 
 public interface DataValidator {
 

@@ -25,10 +25,9 @@ package com.izforge.izpack.installer.base;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLWriter;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
-import com.izforge.izpack.data.Info;
-import com.izforge.izpack.data.LocaleDatabase;
-import com.izforge.izpack.data.Panel;
-import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;
@@ -660,7 +659,7 @@ public class InstallerFrame extends JFrame {
             panel.executePreActivationActions();
             panel.panelActivate();
             panelsContainer.setVisible(true);
-            Panel metadata = panel.getMetadata();
+            com.izforge.izpack.api.data.Panel metadata = panel.getMetadata();
             if ((metadata != null) && (!"UNKNOWN".equals(metadata.getPanelid()))) {
                 loadAndShowImage(panelManager.getPanelVisibilityNumber(installdata.getCurPanelNumber()), metadata
                         .getPanelid());
@@ -1013,7 +1012,7 @@ public class InstallerFrame extends JFrame {
      */
     public boolean canShow(int panelnumber) {
         IzPanel panel = (IzPanel) installdata.getPanels().get(panelnumber);
-        Panel panelmetadata = panel.getMetadata();
+        com.izforge.izpack.api.data.Panel panelmetadata = panel.getMetadata();
         String panelid = panelmetadata.getPanelid();
         Debug.trace("Current Panel: " + panelid);
 

@@ -18,7 +18,13 @@
 package com.izforge.izpack.installer.multiunpacker;
 
 import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.data.*;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.data.OverrideType;
+import com.izforge.izpack.data.ParsableFile;
+import com.izforge.izpack.data.UpdateCheck;
+import com.izforge.izpack.data.XPackFile;
 import com.izforge.izpack.event.InstallerListener;
 import com.izforge.izpack.installer.IMultiVolumeUnpackerHelper;
 import com.izforge.izpack.installer.PanelAutomation;

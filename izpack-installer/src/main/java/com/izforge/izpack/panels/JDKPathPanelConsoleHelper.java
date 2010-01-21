@@ -21,8 +21,8 @@
 package com.izforge.izpack.panels;
 
 import com.coi.tools.os.win.MSWinConstants;
-import com.coi.tools.os.win.NativeLibException;
-import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.PanelConsoleHelper;
 import com.izforge.izpack.util.FileExecutor;

@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.uninstaller;
 
-import com.izforge.izpack.data.LocaleDatabase;
+import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.util.AbstractUIHandler;
 
 import java.io.BufferedReader;

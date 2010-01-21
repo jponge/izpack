@@ -22,9 +22,15 @@
 
 package com.izforge.izpack.compiler.packager;
 
+import com.izforge.izpack.api.data.DynamicVariable;
+import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.data.InstallerRequirement;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
-import com.izforge.izpack.data.*;
+import com.izforge.izpack.data.CustomData;
+import com.izforge.izpack.data.GUIPrefs;
+import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.rules.Condition;
 
 import java.io.FilterOutputStream;

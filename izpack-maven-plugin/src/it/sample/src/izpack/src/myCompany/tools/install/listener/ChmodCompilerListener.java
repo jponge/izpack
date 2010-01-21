@@ -21,7 +21,7 @@
 
 package com.myCompany.tools.install.listener;
 
-import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.compiler.listener.SimpleCompilerListener;
 import net.n3.nanoxml.XMLElement;
 

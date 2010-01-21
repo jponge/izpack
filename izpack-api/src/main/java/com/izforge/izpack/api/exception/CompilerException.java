@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.compiler;
+package com.izforge.izpack.api.exception;
 
 /**
  * Indicates a Failure to compile.

@@ -20,7 +20,7 @@
  */
 package com.izforge.izpack.installer.base;
 
-import com.izforge.izpack.data.*;
+import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.installer.DataValidator;
 import com.izforge.izpack.installer.DataValidator.Status;
 import com.izforge.izpack.installer.DataValidatorFactory;

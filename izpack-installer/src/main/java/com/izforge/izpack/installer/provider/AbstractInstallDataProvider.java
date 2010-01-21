@@ -1,7 +1,8 @@
 package com.izforge.izpack.installer.provider;
 
+import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.container.CustomDataContainer;
-import com.izforge.izpack.data.*;
+import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.PrivilegedRunner;
 import com.izforge.izpack.rules.RulesEngineImpl;

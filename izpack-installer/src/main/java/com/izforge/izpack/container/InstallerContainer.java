@@ -1,7 +1,7 @@
 package com.izforge.izpack.container;
 
-import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.LanguageDialog;
 import com.izforge.izpack.installer.unpacker.IUnpacker;

@@ -25,13 +25,17 @@
 
 package com.izforge.izpack.compiler;
 
+import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.merge.MergeManager;
 import com.izforge.izpack.compiler.packager.IPackager;
-import com.izforge.izpack.data.*;
+import com.izforge.izpack.data.CustomData;
+import com.izforge.izpack.data.GUIPrefs;
+import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;

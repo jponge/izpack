@@ -22,8 +22,8 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.ExecutableFile;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.data.ParsableFile;
-import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;

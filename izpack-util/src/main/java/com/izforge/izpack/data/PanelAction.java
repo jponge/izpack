@@ -7,8 +7,8 @@
  */
 package com.izforge.izpack.data;
 
-import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.data.PanelActionConfiguration;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.PanelActionConfiguration;
 import com.izforge.izpack.util.AbstractUIHandler;
 
 /*
@@ -29,6 +29,7 @@ import com.izforge.izpack.util.AbstractUIHandler;
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 public interface PanelAction {
 
     /**

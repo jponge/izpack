@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.coi.tools.os.win;
+package com.izforge.izpack.api.exception;
 
 import java.util.*;
 

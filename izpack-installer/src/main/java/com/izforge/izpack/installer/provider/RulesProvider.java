@@ -2,7 +2,7 @@ package com.izforge.izpack.installer.provider;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
-import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.rules.RulesEngineImpl;

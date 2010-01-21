@@ -20,8 +20,10 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.installer.*;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.installer.PanelConsole;
+import com.izforge.izpack.installer.PanelConsoleHelper;
+import com.izforge.izpack.installer.UnpackerFactory;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.AbstractUIHandler;
@@ -54,7 +56,7 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
         IUnpacker unpacker = UnpackerFactory.getUnpacker(idata.getInfo().getUnpackerClassName(), idata,
                 this);
         Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
-        unpacker.setRules((RulesEngine)idata.getRules());
+        unpacker.setRules((RulesEngine) idata.getRules());
         unpackerthread.start();
         boolean done = false;
         while (!done && unpackerthread.isAlive()) {

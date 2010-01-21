@@ -1,6 +1,6 @@
 package com.izforge.izpack.container;
 
-import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.AutomatedInstaller;
 import com.izforge.izpack.installer.base.ConditionCheck;
 import com.izforge.izpack.installer.base.ConsoleInstaller;

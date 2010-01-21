@@ -20,8 +20,8 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.data.Info;
-import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.PanelConsoleHelper;
 

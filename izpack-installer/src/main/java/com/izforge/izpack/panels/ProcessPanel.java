@@ -22,7 +22,7 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.ProcessPanelWorker;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
