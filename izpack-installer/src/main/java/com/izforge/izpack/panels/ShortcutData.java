@@ -25,7 +25,7 @@ package com.izforge.izpack.panels;
 
 /**
  * This class serves as a installDataGUI structure in
- * <code>{@link com.izforge.izpack.panels.ShortcutPanel}</code>
+ * <code>{@link com.izforge.izpack.installer.panels.shortcut.ShortcutPanel}</code>
  *
  * @author Elmar Grom
  * @version 0.0.1 / 4/1/02

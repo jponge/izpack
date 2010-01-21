@@ -4,8 +4,6 @@
  * http://izpack.org/
  * http://izpack.codehaus.org/
  * 
- * Copyright 2002 Jan Blok
- * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,7 +17,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.htmllicence;
 
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
@@ -30,26 +28,28 @@ import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 
 import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 /**
- * The license panel.
+ * The IzPack HTML license panel.
  *
  * @author Julien Ponge
  */
-public class
-        LicencePanel extends IzPanel implements ActionListener {
+public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, ActionListener {
 
     /**
      *
      */
-    private static final long serialVersionUID = 3691043187997552948L;
+    private static final long serialVersionUID = 3256728385458746416L;
 
     /**
-     * The license text.
+     * The text area.
      */
-    private String licence;
+    private JEditorPane textArea;
 
     /**
      * The radio buttons.
@@ -60,10 +60,10 @@ public class
     /**
      * The constructor.
      *
-     * @param parent The parent window.
      * @param idata  The installation installDataGUI.
+     * @param parent Description of the Parameter
      */
-    public LicencePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public HTMLLicencePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
         super(parent, idata, new IzPanelLayout(), resourceManager);
         // We load the licence
         loadLicence();
@@ -72,15 +72,17 @@ public class
 
         add(LabelFactory.create(installData.getLangpack().getString("LicencePanel.info"),
                 parent.icons.getImageIcon("history"), LEADING), NEXT_LINE);
-        JTextArea textArea = new JTextArea(licence);
-        textArea.setName(GuiId.LICENCE_TEXT_AREA.id);
-        textArea.setCaretPosition(0);
-        textArea.setEditable(false);
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        JScrollPane scroller = new JScrollPane(textArea);
-        scroller.setAlignmentX(LEFT_ALIGNMENT);
-        add(scroller, NEXT_LINE);
+        try {
+            textArea = new JEditorPane();
+            textArea.setEditable(false);
+            textArea.addHyperlinkListener(this);
+            JScrollPane scroller = new JScrollPane(textArea);
+            textArea.setPage(loadLicence());
+            add(scroller, NEXT_LINE);
+        }
+        catch (Exception err) {
+            err.printStackTrace();
+        }
 
         ButtonGroup group = new ButtonGroup();
 
@@ -95,27 +97,28 @@ public class
         group.add(noRadio);
         add(noRadio, NEXT_LINE);
         noRadio.addActionListener(this);
-
-        setInitialFocus(noRadio);
+        setInitialFocus(textArea);
         getLayoutHelper().completeLayout();
     }
 
     /**
-     * Loads the licence text.
+     * Loads the license text.
+     *
+     * @return The license text URL.
      */
-    private void loadLicence() {
+    private URL loadLicence() {
+        String resNamePrifix = "HTMLLicencePanel.licence";
         try {
-            // We read it
-            String resNamePrifix = "LicencePanel.licence";
-            licence = resourceManager.getTextResource(resNamePrifix);
+            return resourceManager.getURL(resNamePrifix);
         }
-        catch (Exception err) {
-            licence = "Error : could not load the licence text !";
+        catch (Exception ex) {
+            ex.printStackTrace();
         }
+        return null;
     }
 
     /**
-     * Actions-handling method (here it allows the installation).
+     * Actions-handling method (here it launches the installation).
      *
      * @param e The event.
      */
@@ -130,7 +133,7 @@ public class
     /**
      * Indicates wether the panel has been validated or not.
      *
-     * @return true if the user has agreed.
+     * @return true if the user agrees with the license, false otherwise.
      */
     public boolean isValidated() {
         if (noRadio.isSelected()) {
@@ -138,6 +141,22 @@ public class
             return false;
         }
         return (yesRadio.isSelected());
+    }
+
+    /**
+     * Hyperlink events handler.
+     *
+     * @param e The event.
+     */
+    public void hyperlinkUpdate(HyperlinkEvent e) {
+        try {
+            if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                textArea.setPage(e.getURL());
+            }
+        }
+        catch (Exception err) {
+            // TODO: Extend exception handling.
+        }
     }
 
     /**

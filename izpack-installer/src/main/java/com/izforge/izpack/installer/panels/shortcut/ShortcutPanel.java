@@ -15,7 +15,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.shortcut;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
@@ -34,6 +34,7 @@ import com.izforge.izpack.installer.base.GuiId;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.panels.ShortcutData;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.Shortcut;
 import com.izforge.izpack.util.os.unix.UnixHelper;

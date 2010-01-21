@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.packs;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;

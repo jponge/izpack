@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.installer.panels.imgpacks;
 
-import com.izforge.izpack.panels.PacksPanelAutomationHelper;
+import com.izforge.izpack.installer.panels.packs.PacksPanelAutomationHelper;
 
 
 /**

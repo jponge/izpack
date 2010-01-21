@@ -18,14 +18,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.installationgroup;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.installer.PanelAutomation;
-import com.izforge.izpack.panels.InstallationGroupPanel.GroupData;
+import com.izforge.izpack.installer.panels.installationgroup.InstallationGroupPanel.GroupData;
 import com.izforge.izpack.util.Debug;
 
 import java.util.HashMap;

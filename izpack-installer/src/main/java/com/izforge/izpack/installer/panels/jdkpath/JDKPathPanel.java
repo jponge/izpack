@@ -20,13 +20,14 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.jdkpath;
 
 import com.coi.tools.os.win.MSWinConstants;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.panels.PathInputPanel;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;

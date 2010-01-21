@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.installationgroup;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.Pack;
