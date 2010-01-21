@@ -24,7 +24,7 @@ import com.coi.tools.os.win.RegDataContainer;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.panels.HelloPanel;
+import com.izforge.izpack.installer.panels.hello.HelloPanel;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.os.RegistryDefaultHandler;
 import com.izforge.izpack.util.os.RegistryHandler;

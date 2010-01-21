@@ -17,11 +17,12 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.htmlhello;
 
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.panels.htmlinfo.HTMLInfoPanel;
 
 /**
  * Class HTMLHelloPanel is a version of the hello panel that displays

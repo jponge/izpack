@@ -19,7 +19,9 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.imgpacks;
+
+import com.izforge.izpack.panels.PacksPanelAutomationHelper;
 
 
 /**

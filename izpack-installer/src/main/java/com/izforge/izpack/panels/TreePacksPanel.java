@@ -30,6 +30,7 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.debugger.Debugger;
+import com.izforge.izpack.installer.panels.imgpacks.ImgPacksPanelAutomationHelper;
 import com.izforge.izpack.installer.web.WebAccessor;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;

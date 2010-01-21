@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.hello;
 
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.ResourceManager;

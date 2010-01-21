@@ -21,12 +21,13 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.imgpacks;
 
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.panels.PacksPanelBase;
 import com.izforge.izpack.util.IoHelper;
 
 import javax.swing.*;

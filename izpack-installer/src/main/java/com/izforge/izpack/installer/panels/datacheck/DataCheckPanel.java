@@ -26,7 +26,7 @@
  * miraodb@hotmail.com
  */
 
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.datacheck;
 
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;

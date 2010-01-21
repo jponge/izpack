@@ -31,15 +31,15 @@ public class PanelManagerTest {
     @Test
     public void resolveClassNameShouldAddDefaultPrefix() throws Exception {
         Class<?> aClass = panelManager.resolveClassName("HelloPanel");
-        assertThat(aClass.getName(), Is.is("com.izforge.izpack.panels.HelloPanel"));
+        assertThat(aClass.getName(), Is.is("com.izforge.izpack.installer.panels.hello.HelloPanel"));
         aClass = panelManager.resolveClassName("FinishPanel");
-        assertThat(aClass.getName(), Is.is("com.izforge.izpack.panels.FinishPanel"));
+        assertThat(aClass.getName(), Is.is("com.izforge.izpack.installer.panels.finish.FinishPanel"));
     }
 
     @Test
     public void resolveClassNameShouldNotAddPrefixWithCompleteClass() throws Exception {
-        Class<?> aClass = panelManager.resolveClassName("com.izforge.izpack.panels.HelloPanel");
-        assertThat(aClass.getName(), Is.is("com.izforge.izpack.panels.HelloPanel"));
+        Class<?> aClass = panelManager.resolveClassName("com.izforge.izpack.installer.panels.hello.HelloPanel");
+        assertThat(aClass.getName(), Is.is("com.izforge.izpack.installer.panels.hello.HelloPanel"));
         aClass = panelManager.resolveClassName("com.izforge.izpack.installer.container.InstallerContainer");
         assertThat(aClass.getName(), Is.is("com.izforge.izpack.installer.container.InstallerContainer"));
     }
