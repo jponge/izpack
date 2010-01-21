@@ -22,7 +22,7 @@
 
 package com.izforge.izpack.event;
 
-import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.helper.SpecHelper;

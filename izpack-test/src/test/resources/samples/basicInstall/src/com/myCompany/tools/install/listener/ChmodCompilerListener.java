@@ -21,7 +21,7 @@
 
 package com.myCompany.tools.install.listener;
 
-import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.compiler.CompilerException;
 import com.izforge.izpack.compiler.listener.SimpleCompilerListener;
 

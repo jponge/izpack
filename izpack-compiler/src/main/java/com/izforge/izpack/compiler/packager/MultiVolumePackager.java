@@ -17,7 +17,7 @@
  */
 package com.izforge.izpack.compiler.packager;
 
-import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.compiler.CompilerException;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;

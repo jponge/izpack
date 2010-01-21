@@ -1,4 +1,4 @@
-package com.izforge.izpack.installer.unpacker;
+package com.izforge.izpack.unpacker;
 
 /**
  * Interface for registryInstallerListener to interrupt unpacker

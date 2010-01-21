@@ -19,7 +19,7 @@
  */
 package com.izforge.izpack.installer.base;
 
-import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;

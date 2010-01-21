@@ -67,6 +67,17 @@ public class MergeTest {
         assertThat(arrayList, IsCollectionContaining.hasItems("my/dest/path/MergeTest.class", "my/dest/path/test/.placeholder"));
     }
 
+    @Test
+    public void testMergeInstaller() throws Exception {
+        File file = new File(ClassLoader.getSystemClassLoader().getResource("com/izforge/izpack/installer/").getFile());
+        FileMerge fileMerge = new FileMerge(file);
+
+        doMerge(fileMerge);
+
+        ArrayList<String> arrayList = getFileNameInZip(zip);
+        assertThat(arrayList, IsCollectionContaining.hasItems("com/izforge/izpack/installer/bootstrap/Installer.class"));
+    }
+
     private ArrayList<String> getFileNameInZip(File zip) throws IOException {
         ZipInputStream inputStream = new ZipInputStream(new FileInputStream(zip));
         ArrayList<String> arrayList = new ArrayList<String>();
@@ -85,7 +96,7 @@ public class MergeTest {
 
 
     @Test
-    public void testMergeJarFile() throws Exception {
+    public void testMergeClassFromJarFile() throws Exception {
         Mergeable jarMerge = MergeManager.getMergeableFromPath("junit/framework/Assert.class");
         assertThat(jarMerge, Is.is(JarMerge.class));
 

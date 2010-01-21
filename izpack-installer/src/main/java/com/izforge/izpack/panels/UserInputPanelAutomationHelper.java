@@ -22,8 +22,8 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.PanelAutomation;

@@ -20,8 +20,8 @@
  */
 package com.izforge.izpack.rules;
 
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.util.Debug;
 
 import java.util.HashMap;
@@ -75,8 +75,9 @@ public class VariableCondition extends Condition {
     /*
      * (non-Javadoc)
      * 
-     * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.adaptator.IXMLElement)
+     * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.api.adaptator.IXMLElement)
      */
+
     public void readFromXML(IXMLElement xmlcondition) {
         try {
             this.variablename = xmlcondition.getFirstChildNamed("name").getContent();
@@ -104,6 +105,7 @@ public class VariableCondition extends Condition {
     /* (non-Javadoc)
      * @see com.izforge.izpack.rules.Condition#getDependenciesDetails()
      */
+
     public String getDependenciesDetails() {
         StringBuffer details = new StringBuffer();
         details.append(this.id);

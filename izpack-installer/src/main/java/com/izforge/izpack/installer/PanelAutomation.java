@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.data.AutomatedInstallData;
 
 /**

@@ -1,4 +1,4 @@
-package com.izforge.izpack.adaptator.impl;
+package com.izforge.izpack.api.adaptator.impl;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

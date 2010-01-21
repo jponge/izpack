@@ -21,7 +21,7 @@
 package com.izforge.izpack.util;
 
 
-import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLElement;
 
 import java.util.ArrayList;
 import java.util.Iterator;

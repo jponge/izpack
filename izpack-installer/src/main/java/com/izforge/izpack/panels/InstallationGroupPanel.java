@@ -18,7 +18,7 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -199,7 +199,7 @@ public class InstallationGroupPanel extends IzPanel
     }
 
     /* Add the installation group to pack mappings
-	 * @see com.izforge.izpack.installer.IzPanel#makeXMLData(com.izforge.izpack.adaptator.IXMLElement)
+	 * @see com.izforge.izpack.installer.IzPanel#makeXMLData(com.izforge.izpack.api.adaptator.IXMLElement)
 	 */
 
     public void makeXMLData(IXMLElement panelRoot) {

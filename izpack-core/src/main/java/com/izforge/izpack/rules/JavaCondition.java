@@ -20,8 +20,8 @@
  */
 package com.izforge.izpack.rules;
 
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.util.Debug;
 
 import java.lang.reflect.Field;
@@ -169,6 +169,7 @@ public class JavaCondition extends Condition {
     /* (non-Javadoc)
      * @see com.izforge.izpack.rules.Condition#getDependenciesDetails()
      */
+
     public String getDependenciesDetails() {
         StringBuffer details = new StringBuffer();
         details.append(this.id);

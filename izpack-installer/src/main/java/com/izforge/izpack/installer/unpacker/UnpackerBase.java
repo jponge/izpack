@@ -24,6 +24,7 @@ import com.izforge.izpack.data.*;
 import com.izforge.izpack.event.InstallerListener;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.rules.RulesEngine;
+import com.izforge.izpack.unpacker.IDiscardInterruptable;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;

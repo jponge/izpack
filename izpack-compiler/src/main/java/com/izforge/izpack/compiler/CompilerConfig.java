@@ -27,11 +27,11 @@
 package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.IXMLParser;
-import com.izforge.izpack.adaptator.IXMLWriter;
-import com.izforge.izpack.adaptator.impl.XMLParser;
-import com.izforge.izpack.adaptator.impl.XMLWriter;
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLParser;
+import com.izforge.izpack.api.adaptator.IXMLWriter;
+import com.izforge.izpack.api.adaptator.impl.XMLParser;
+import com.izforge.izpack.api.adaptator.impl.XMLWriter;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.AssertionHelper;

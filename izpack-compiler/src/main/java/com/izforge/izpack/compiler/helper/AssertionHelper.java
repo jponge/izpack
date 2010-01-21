@@ -1,6 +1,6 @@
 package com.izforge.izpack.compiler.helper;
 
-import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.compiler.CompilerException;
 
 import java.io.File;

@@ -20,9 +20,9 @@
 * limitations under the License.
 */
 
-package com.izforge.izpack.adaptator.impl;
+package com.izforge.izpack.api.adaptator.impl;
 
-import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLElement;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;

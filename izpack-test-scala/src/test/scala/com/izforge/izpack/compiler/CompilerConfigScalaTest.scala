@@ -7,10 +7,10 @@ import data.{PropertyManager, CompilerData}
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.fixture.{FixtureFlatSpec}
-import com.izforge.izpack.adaptator.impl.XMLParser
 import org.mockito.Mockito
 import com.izforge.izpack.data.DynamicVariable
 import java.util.{ArrayList, HashMap, Properties}
+import com.izforge.izpack.api.adaptator.impl.{XMLParser}
 
 /**
  * Created by IntelliJ IDEA.

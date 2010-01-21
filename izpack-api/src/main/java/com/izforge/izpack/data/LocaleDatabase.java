@@ -19,9 +19,9 @@
 
 package com.izforge.izpack.data;
 
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.IXMLParser;
-import com.izforge.izpack.adaptator.impl.XMLParser;
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLParser;
+import com.izforge.izpack.api.adaptator.impl.XMLParser;
 
 import java.io.InputStream;
 import java.text.MessageFormat;

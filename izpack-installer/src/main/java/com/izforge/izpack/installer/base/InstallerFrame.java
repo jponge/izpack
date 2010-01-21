@@ -22,9 +22,9 @@
 
 package com.izforge.izpack.installer.base;
 
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.IXMLWriter;
-import com.izforge.izpack.adaptator.impl.XMLWriter;
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLWriter;
+import com.izforge.izpack.api.adaptator.impl.XMLWriter;
 import com.izforge.izpack.data.Info;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Panel;

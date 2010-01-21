@@ -10,7 +10,7 @@ import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
 /**
- * Jar files merger
+ * Jar files merger.
  *
  * @author Anthonin Bonnefoy
  */

@@ -17,8 +17,8 @@
  */
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.rules.RulesEngineImpl;

@@ -22,13 +22,13 @@
 package com.izforge.izpack.event;
 
 import com.coi.tools.os.win.NativeLibException;
-import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.helper.SpecHelper;
 import com.izforge.izpack.installer.UninstallData;
-import com.izforge.izpack.installer.unpacker.IDiscardInterruptable;
 import com.izforge.izpack.rules.RulesEngine;
+import com.izforge.izpack.unpacker.IDiscardInterruptable;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.CleanupClient;
 import com.izforge.izpack.util.Debug;

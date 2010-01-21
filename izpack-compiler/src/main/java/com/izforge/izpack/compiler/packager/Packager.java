@@ -21,12 +21,13 @@
 package com.izforge.izpack.compiler.packager;
 
 import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.compiler.CompilerException;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.compiler.merge.MergeManager;
 import com.izforge.izpack.compiler.stream.ByteCountingOutputStream;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
 import com.izforge.izpack.data.*;
@@ -62,6 +63,7 @@ public class Packager extends PackagerBase {
      * May be compressed or not depending on the compiler data.
      */
     private OutputStream outputStream;
+    private MergeManager mergeManager;
 
     /**
      * The constructor.
@@ -69,12 +71,13 @@ public class Packager extends PackagerBase {
      * @throws com.izforge.izpack.compiler.CompilerException
      *
      */
-    public Packager(Properties properties, CompilerData compilerData, CompilerContainer compilerContainer, PackagerListener listener, JarOutputStream jarOutputStream, PackCompressor packCompressor, OutputStream outputStream) throws CompilerException {
+    public Packager(Properties properties, CompilerData compilerData, CompilerContainer compilerContainer, PackagerListener listener, JarOutputStream jarOutputStream, PackCompressor packCompressor, OutputStream outputStream, MergeManager mergeManager) throws CompilerException {
         super(properties, compilerContainer, listener);
         this.compilerData = compilerData;
         this.primaryJarStream = jarOutputStream;
         this.compressor = packCompressor;
         this.outputStream = outputStream;
+        this.mergeManager = mergeManager;
     }
 
     /* (non-Javadoc)
@@ -113,14 +116,15 @@ public class Packager extends PackagerBase {
      */
     protected void writeSkeletonInstaller() throws IOException {
         sendMsg("Copying the skeleton installer", PackagerListener.MSG_VERBOSE);
-
-        InputStream is = Packager.class.getResourceAsStream("/" + getSkeletonSubpath());
-        if (is == null) {
-            File skeleton = new File(CompilerData.IZPACK_HOME, getSkeletonSubpath());
-            is = new FileInputStream(skeleton);
-        }
-        ZipInputStream inJarStream = new ZipInputStream(is);
-        PackagerHelper.copyZip(inJarStream, primaryJarStream, null, alreadyWrittenFiles);
+        mergeManager.addResourceToMerge("com/izforge/izpack/installer/base/IzPanel.class");
+//        InputStream is = Packager.class.getResourceAsStream("/" + getSkeletonSubpath());
+//        if (is == null) {
+//            File skeleton = new File(CompilerData.IZPACK_HOME, getSkeletonSubpath());
+//            is = new FileInputStream(skeleton);
+//        }
+//        ZipInputStream inJarStream = new ZipInputStream(is);
+//        PackagerHelper.copyZip(inJarStream, primaryJarStream, null, alreadyWrittenFiles);
+        mergeManager.merge(primaryJarStream);
     }
 
     /**
@@ -376,7 +380,7 @@ public class Packager extends PackagerBase {
      */
 
     /* (non-Javadoc)
-    * @see com.izforge.izpack.compiler.packager.IPackager#addConfigurationInformation(com.izforge.izpack.adaptator.IXMLElement)
+    * @see com.izforge.izpack.compiler.packager.IPackager#addConfigurationInformation(com.izforge.izpack.api.adaptator.IXMLElement)
     */
     public void addConfigurationInformation(IXMLElement data) {
         // TODO Auto-generated method stub

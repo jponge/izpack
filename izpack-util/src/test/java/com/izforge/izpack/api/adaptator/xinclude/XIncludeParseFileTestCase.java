@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.adaptator.xinclude;
+package com.izforge.izpack.api.adaptator.xinclude;
 
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.IXMLParser;
-import com.izforge.izpack.adaptator.impl.XMLParser;
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLParser;
+import com.izforge.izpack.api.adaptator.impl.XMLParser;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -20,12 +20,12 @@
  */
 package com.izforge.izpack.rules;
 
-import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.XMLException;
-import com.izforge.izpack.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.adaptator.impl.XMLWriter;
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.XMLException;
+import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.adaptator.impl.XMLWriter;
 import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.util.Debug;
 
 import java.io.OutputStream;

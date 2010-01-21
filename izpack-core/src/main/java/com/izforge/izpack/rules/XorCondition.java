@@ -20,7 +20,7 @@
  */
 package com.izforge.izpack.rules;
 
-import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.util.Debug;
 
 /**
@@ -54,6 +54,7 @@ public class XorCondition extends OrCondition {
      * 
      * @see de.reddot.installer.rules.Condition#readFromXML(net.n3.nanoxml.XMLElement)
      */
+
     public void readFromXML(IXMLElement xmlcondition) {
         try {
             if (xmlcondition.getChildrenCount() != 2) {
@@ -91,6 +92,7 @@ public class XorCondition extends OrCondition {
      * 
      * @see com.izforge.izpack.rules.OrCondition#getDependenciesDetails()
      */
+
     public String getDependenciesDetails() {
         StringBuffer details = new StringBuffer();
         details.append(this.id);

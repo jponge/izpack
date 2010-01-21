@@ -20,9 +20,9 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.IXMLParser;
-import com.izforge.izpack.adaptator.impl.XMLParser;
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLParser;
+import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.data.ResourceManager;

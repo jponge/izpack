@@ -18,7 +18,7 @@
  */
 package com.izforge.izpack.compiler.packager;
 
-import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.rules.Condition;
 

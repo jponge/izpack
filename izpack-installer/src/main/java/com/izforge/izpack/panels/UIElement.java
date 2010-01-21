@@ -18,7 +18,7 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLElement;
 
 import javax.swing.*;
 import java.util.Vector;

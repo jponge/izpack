@@ -20,7 +20,7 @@
  */
 package com.izforge.izpack.rules;
 
-import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.util.Debug;
 
 /**
@@ -64,8 +64,9 @@ public class OrCondition extends Condition {
     /*
      * (non-Javadoc)
      * 
-     * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.adaptator.IXMLElement)
+     * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.api.adaptator.IXMLElement)
      */
+
     public void readFromXML(IXMLElement xmlcondition) {
         try {
             if (xmlcondition.getChildrenCount() != 2) {
@@ -85,6 +86,7 @@ public class OrCondition extends Condition {
      * this.leftoperand.isTrue(variables, selectedpacks) || this.rightoperand.isTrue(variables,
      * selectedpacks); }
      */
+
     public boolean isTrue() {
         if ((this.leftoperand == null) || (this.rightoperand == null)) {
             Debug.trace("Operands of condition " + this.id + " not initialized correctly.");
@@ -98,6 +100,7 @@ public class OrCondition extends Condition {
     /* (non-Javadoc)
      * @see com.izforge.izpack.rules.Condition#getDependenciesDetails()
      */
+
     public String getDependenciesDetails() {
         StringBuffer details = new StringBuffer();
         details.append(this.id);

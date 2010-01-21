@@ -20,10 +20,10 @@
 * limitations under the License.
 */
 
-package com.izforge.izpack.adaptator;
+package com.izforge.izpack.api.adaptator;
 
-import com.izforge.izpack.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.adaptator.impl.XMLParser;
+import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

@@ -19,8 +19,8 @@
 
 package com.izforge.izpack.data;
 
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 

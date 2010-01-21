@@ -20,7 +20,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.adaptator;
+package com.izforge.izpack.api.adaptator;
 
 import java.io.InputStream;
 import java.net.URL;

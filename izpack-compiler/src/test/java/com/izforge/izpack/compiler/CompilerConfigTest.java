@@ -1,7 +1,7 @@
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.impl.XMLParser;
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.CompilerHelper;

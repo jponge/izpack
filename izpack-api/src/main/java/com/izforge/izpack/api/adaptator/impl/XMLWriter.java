@@ -20,11 +20,11 @@
 * limitations under the License.
 */
 
-package com.izforge.izpack.adaptator.impl;
+package com.izforge.izpack.api.adaptator.impl;
 
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.IXMLWriter;
-import com.izforge.izpack.adaptator.XMLException;
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLWriter;
+import com.izforge.izpack.api.adaptator.XMLException;
 
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;

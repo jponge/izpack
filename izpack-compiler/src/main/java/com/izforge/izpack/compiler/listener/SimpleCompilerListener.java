@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.compiler.listener;
 
-import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.compiler.CompilerException;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.PackInfo;
@@ -49,7 +49,7 @@ public class SimpleCompilerListener implements CompilerListener {
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.listener.CompilerListener#reviseAttributSetFile(java.util.Map,
-     * com.izforge.izpack.adaptator.IXMLElement)
+     * com.izforge.izpack.api.adaptator.IXMLElement)
      */
 
     public Map reviseAdditionalDataMap(Map existentDataMap, IXMLElement element)
@@ -81,7 +81,7 @@ public class SimpleCompilerListener implements CompilerListener {
      * (non-Javadoc)
      *
      * @see com.izforge.izpack.compiler.listener.CompilerListener#notify(java.lang.String, int,
-     * com.izforge.izpack.adaptator.IXMLElement, com.izforge.izpack.compiler.packager.Packager)
+     * com.izforge.izpack.api.adaptator.IXMLElement, com.izforge.izpack.compiler.packager.Packager)
      */
 
     public void notify(String position, int state, IXMLElement data, IPackager packager) {
