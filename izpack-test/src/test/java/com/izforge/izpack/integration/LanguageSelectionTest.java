@@ -1,9 +1,9 @@
 package com.izforge.izpack.integration;
 
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.container.IInstallerContainer;
 import com.izforge.izpack.installer.base.GuiId;
 import com.izforge.izpack.installer.base.LanguageDialog;
+import com.izforge.izpack.installer.container.IInstallerContainer;
 import org.fest.swing.exception.ScreenLockException;
 import org.hamcrest.core.Is;
 import org.junit.After;

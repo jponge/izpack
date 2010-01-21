@@ -1,4 +1,4 @@
-package com.izforge.izpack.container;
+package com.izforge.izpack.installer.container;
 
 /**
  * Interface for panel level component

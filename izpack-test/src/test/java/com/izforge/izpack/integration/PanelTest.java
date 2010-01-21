@@ -1,7 +1,7 @@
 package com.izforge.izpack.integration;
 
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.container.IInstallerContainer;
+import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.PanelManager;
 import com.izforge.izpack.panels.TargetPanel;

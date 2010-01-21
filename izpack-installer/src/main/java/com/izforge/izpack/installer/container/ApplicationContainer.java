@@ -1,7 +1,8 @@
-package com.izforge.izpack.container;
+package com.izforge.izpack.installer.container;
 
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.container.AbstractContainer;
 import com.izforge.izpack.installer.base.AutomatedInstaller;
 import com.izforge.izpack.installer.base.ConditionCheck;
 import com.izforge.izpack.installer.base.ConsoleInstaller;

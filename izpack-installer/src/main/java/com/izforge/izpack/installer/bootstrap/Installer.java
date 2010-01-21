@@ -21,12 +21,12 @@
 
 package com.izforge.izpack.installer.bootstrap;
 
-import com.izforge.izpack.container.ApplicationContainer;
-import com.izforge.izpack.container.IInstallerContainer;
 import com.izforge.izpack.installer.base.AutomatedInstaller;
 import com.izforge.izpack.installer.base.ConsoleInstaller;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.LanguageDialog;
+import com.izforge.izpack.installer.container.ApplicationContainer;
+import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.StringTool;
 

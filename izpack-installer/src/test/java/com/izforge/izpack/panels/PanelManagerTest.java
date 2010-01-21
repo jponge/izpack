@@ -1,6 +1,6 @@
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.container.IInstallerContainer;
+import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import org.hamcrest.core.Is;
 import org.junit.Before;
@@ -38,8 +38,8 @@ public class PanelManagerTest {
     public void resolveClassNameShouldNotAddPrefixWithCompleteClass() throws Exception {
         Class<?> aClass = panelManager.resolveClassName("com.izforge.izpack.panels.HelloPanel");
         assertThat(aClass.getName(), Is.is("com.izforge.izpack.panels.HelloPanel"));
-        aClass = panelManager.resolveClassName("com.izforge.izpack.container.InstallerContainer");
-        assertThat(aClass.getName(), Is.is("com.izforge.izpack.container.InstallerContainer"));
+        aClass = panelManager.resolveClassName("com.izforge.izpack.installer.container.InstallerContainer");
+        assertThat(aClass.getName(), Is.is("com.izforge.izpack.installer.container.InstallerContainer"));
     }
 
     @Test(expected = ClassNotFoundException.class)

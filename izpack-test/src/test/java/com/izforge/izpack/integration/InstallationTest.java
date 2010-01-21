@@ -1,10 +1,10 @@
 package com.izforge.izpack.integration;
 
 import com.izforge.izpack.compiler.data.CompilerData;
-import com.izforge.izpack.container.IInstallerContainer;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.installer.base.GuiId;
 import com.izforge.izpack.installer.base.LanguageDialog;
+import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.exception.ScreenLockException;

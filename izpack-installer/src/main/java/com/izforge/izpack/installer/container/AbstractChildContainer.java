@@ -1,4 +1,6 @@
-package com.izforge.izpack.container;
+package com.izforge.izpack.installer.container;
+
+import com.izforge.izpack.container.AbstractContainer;
 
 /**
  * Abstract container for child of application container

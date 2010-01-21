@@ -1,6 +1,6 @@
 package com.izforge.izpack.integration;
 
-import com.izforge.izpack.container.IInstallerContainer;
+import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.panels.PanelManager;
 import org.hamcrest.core.IsNull;
