@@ -21,8 +21,8 @@ package com.izforge.izpack.api.data;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
 import java.io.Serializable;
 import java.util.*;

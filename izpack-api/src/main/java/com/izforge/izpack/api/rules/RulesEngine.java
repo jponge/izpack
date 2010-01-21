@@ -1,4 +1,4 @@
-package com.izforge.izpack.rules;
+package com.izforge.izpack.api.rules;
 
 import java.io.OutputStream;
 import java.io.Serializable;

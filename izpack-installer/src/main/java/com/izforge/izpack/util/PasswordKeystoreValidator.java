@@ -20,11 +20,11 @@
  */
 package com.izforge.izpack.util;
 
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.PasswordGroup;
 import com.izforge.izpack.panels.ProcessingClient;
 import com.izforge.izpack.panels.Validator;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import java.io.FileInputStream;
 import java.security.KeyStore;

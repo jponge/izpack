@@ -852,11 +852,11 @@ Here's a sample :
 
 This validation is done, when going on for the next panel. It is also done in case
 of an automatic installation. The class must implement the interface
-com.izforge.izpack.installer.DataValidator.
+com.izforge.izpack.api.installer.DataValidator.
 
 The ``<validator>`` takes the following attributes :
 
--   ``classname``: The class implementing com.izforge.izpack.installer.DataValidator
+-   ``classname``: The class implementing com.izforge.izpack.api.installer.DataValidator
 
 Here's a sample :
 

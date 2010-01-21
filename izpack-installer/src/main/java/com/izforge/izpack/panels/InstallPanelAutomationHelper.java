@@ -23,12 +23,12 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.installer.InstallerException;
+import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.installer.PanelAutomationHelper;
 import com.izforge.izpack.installer.UnpackerFactory;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
-import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 
 /**

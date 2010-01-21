@@ -21,17 +21,17 @@
 package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.api.data.*;
-import com.izforge.izpack.installer.DataValidator;
-import com.izforge.izpack.installer.DataValidator.Status;
+import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.installer.DataValidator;
+import com.izforge.izpack.api.installer.DataValidator.Status;
+import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.DataValidatorFactory;
-import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.bootstrap.Installer;
-import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.FileInputStream;
@@ -270,7 +270,7 @@ public class ConsoleInstaller extends InstallerBase {
      * Validate a panel.
      *
      * @param p The panel to validate
-     * @throws com.izforge.izpack.installer.InstallerException
+     * @throws com.izforge.izpack.api.exception.InstallerException
      *          thrown if the validation fails.
      */
     private boolean validatePanel(final Panel p) throws InstallerException {

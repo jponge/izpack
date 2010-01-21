@@ -20,7 +20,7 @@
  */
 package com.izforge.izpack.installer.unpacker;
 
-import com.izforge.izpack.rules.RulesEngine;
+import com.izforge.izpack.api.rules.RulesEngine;
 
 public interface IUnpacker extends Runnable {
     /**

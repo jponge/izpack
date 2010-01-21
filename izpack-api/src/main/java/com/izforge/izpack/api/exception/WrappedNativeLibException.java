@@ -19,10 +19,9 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.os;
+package com.izforge.izpack.api.exception;
 
 import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.api.exception.NativeLibException;
 
 /**
  * This class allows it to define error messages for <code>NativeLibException</code> s in the

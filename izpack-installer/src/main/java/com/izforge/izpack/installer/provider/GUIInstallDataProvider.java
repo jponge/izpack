@@ -1,6 +1,7 @@
 package com.izforge.izpack.installer.provider;
 
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.container.CustomDataContainer;
 import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.gui.ButtonFactory;
@@ -8,7 +9,6 @@ import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;

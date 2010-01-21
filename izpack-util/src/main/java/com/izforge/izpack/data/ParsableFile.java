@@ -21,8 +21,8 @@
 
 package com.izforge.izpack.data;
 
+import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.substitutor.SubstitutionType;
 
 import java.io.Serializable;
 import java.util.List;

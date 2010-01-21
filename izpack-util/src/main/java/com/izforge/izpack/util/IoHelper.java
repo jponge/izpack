@@ -21,8 +21,8 @@
 
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.util.substitutor.SubstitutionType;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.api.substitutor.SubstitutionType;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
 import java.io.*;
 import java.util.Properties;

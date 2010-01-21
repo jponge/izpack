@@ -23,6 +23,7 @@ package com.izforge.izpack.installer;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.exception.InstallerException;
 
 /**
  * Defines the Interface that must be implemented for running Panels in automated (or "silent",
@@ -52,7 +53,8 @@ public interface PanelAutomation {
      *
      * @param installData The installation data
      * @param panelRoot   The XML root element of the panels blackbox tree.
-     * @throws InstallerException if the automated work  failed critically.
+     * @throws com.izforge.izpack.api.exception.InstallerException
+     *          if the automated work  failed critically.
      */
     public void runAutomated(AutomatedInstallData installData, IXMLElement panelRoot) throws InstallerException;
 }

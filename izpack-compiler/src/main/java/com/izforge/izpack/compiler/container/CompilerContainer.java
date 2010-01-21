@@ -1,5 +1,6 @@
 package com.izforge.izpack.compiler.container;
 
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.Compiler;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.cli.CliAnalyzer;
@@ -14,7 +15,6 @@ import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.compiler.packager.Packager;
 import com.izforge.izpack.compiler.provider.*;
 import com.izforge.izpack.container.AbstractContainer;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.picocontainer.PicoBuilder;
 import org.picocontainer.injectors.ProviderAdapter;

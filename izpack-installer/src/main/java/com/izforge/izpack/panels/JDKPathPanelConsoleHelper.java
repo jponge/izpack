@@ -23,13 +23,13 @@ package com.izforge.izpack.panels;
 import com.coi.tools.os.win.MSWinConstants;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.exception.NativeLibException;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.PanelConsoleHelper;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.os.RegistryDefaultHandler;
 import com.izforge.izpack.util.os.RegistryHandler;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import java.io.*;
 import java.util.*;

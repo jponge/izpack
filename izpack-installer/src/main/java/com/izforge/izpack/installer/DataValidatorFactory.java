@@ -20,6 +20,8 @@
  */
 package com.izforge.izpack.installer;
 
+import com.izforge.izpack.api.installer.DataValidator;
+
 public final class DataValidatorFactory {
 
     public static DataValidator createDataValidator(String className) {

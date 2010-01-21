@@ -1,5 +1,7 @@
 package com.izforge.izpack.util.substitutor;
 
+import com.izforge.izpack.api.substitutor.SubstitutionType;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import org.hamcrest.core.Is;
 import org.junit.Before;
 import org.junit.Test;

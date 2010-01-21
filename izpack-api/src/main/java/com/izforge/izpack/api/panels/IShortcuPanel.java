@@ -1,4 +1,4 @@
-package com.izforge.izpack.panels;
+package com.izforge.izpack.api.panels;
 
 /**
  * Created by IntelliJ IDEA.

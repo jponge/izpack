@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.installer.debugger;
 
-import com.izforge.izpack.rules.Condition;
+import com.izforge.izpack.api.rules.Condition;
 
 import java.util.ArrayList;
 import java.util.List;

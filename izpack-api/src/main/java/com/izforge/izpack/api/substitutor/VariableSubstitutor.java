@@ -1,4 +1,4 @@
-package com.izforge.izpack.util.substitutor;
+package com.izforge.izpack.api.substitutor;
 
 import java.io.*;
 

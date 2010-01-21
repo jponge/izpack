@@ -52,7 +52,7 @@ package com.izforge.izpack.util.os;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.installer.ResourceNotFoundException;
+import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;

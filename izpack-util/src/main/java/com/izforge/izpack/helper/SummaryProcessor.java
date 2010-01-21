@@ -22,7 +22,7 @@
 package com.izforge.izpack.helper;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.installer.ISummarisable;
+import com.izforge.izpack.api.installer.ISummarisable;
 
 import java.util.Iterator;
 
@@ -61,7 +61,7 @@ public class SummaryProcessor {
 
     /**
      * Returns a HTML formated string which contains the summary of all panels. To get the summary,
-     * the methods * {@link com.izforge.izpack.installer.ISummarisable#getSummaryCaption} and {@link com.izforge.izpack.installer.ISummarisable#getSummaryBody()} of all
+     * the methods * {@link com.izforge.izpack.api.installer.ISummarisable#getSummaryCaption} and {@link com.izforge.izpack.api.installer.ISummarisable#getSummaryBody()} of all
      * panels are called.
      *
      * @param idata AutomatedInstallData which contains the panel references

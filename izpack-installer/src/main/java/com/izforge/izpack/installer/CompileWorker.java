@@ -28,11 +28,11 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.substitutor.SubstitutionType;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.substitutor.SubstitutionType;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;

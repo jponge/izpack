@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.rules;
+package com.izforge.izpack.api.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
@@ -34,8 +34,8 @@ import java.io.Serializable;
 public abstract class Condition implements Serializable {
 
     private static final long serialVersionUID = 507592103321711123L;
-    protected String id;
-    protected AutomatedInstallData installdata;
+    public String id;
+    public AutomatedInstallData installdata;
 
     public Condition() {
         this.id = "UNKNOWN";

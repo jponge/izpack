@@ -23,8 +23,8 @@
 package com.izforge.izpack.api.adaptator;
 
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
-import com.izforge.izpack.util.substitutor.SubstitutionType;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.api.substitutor.SubstitutionType;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.junit.Assert;
 import org.junit.Test;

@@ -21,8 +21,8 @@ package com.izforge.izpack.installer.data;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.data.GUIPrefs;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import javax.swing.*;
 import java.awt.*;

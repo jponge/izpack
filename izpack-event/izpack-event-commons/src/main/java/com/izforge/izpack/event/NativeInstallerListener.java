@@ -22,8 +22,8 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.exception.WrappedNativeLibException;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
-import com.izforge.izpack.util.os.WrappedNativeLibException;
 
 /**
  * This class implements some methods which are needed by installer custom actions with native

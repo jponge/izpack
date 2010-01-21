@@ -1,6 +1,7 @@
 package com.izforge.izpack.container;
 
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.base.AutomatedInstaller;
 import com.izforge.izpack.installer.base.ConditionCheck;
 import com.izforge.izpack.installer.base.ConsoleInstaller;
@@ -9,7 +10,6 @@ import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.provider.GUIInstallDataProvider;
 import com.izforge.izpack.installer.provider.IconsProvider;
 import com.izforge.izpack.installer.provider.RulesProvider;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.picocontainer.PicoBuilder;
 import org.picocontainer.injectors.ConstructorInjection;

@@ -22,11 +22,11 @@
 package com.izforge.izpack.installer.debugger;
 
 import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.rules.Condition;
+import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.rules.Condition;
-import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.rules.RulesEngineImpl;
 
 import javax.swing.*;

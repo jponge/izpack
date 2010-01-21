@@ -21,9 +21,9 @@
 
 package com.izforge.izpack.installer.unpacker;
 
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import java.io.*;
 import java.util.Collection;
@@ -35,13 +35,12 @@ import java.util.Iterator;
  * @author Julien Ponge
  * @author Johannes Lehtinen
  */
-public class ScriptParser
-{
+public class ScriptParser {
     /**
      * The install drive (Windows only, otherwise not set).
      */
     public final static String INSTALL_DRIVE = "INSTALL_DRIVE";
-    /** 
+    /**
      * The files to parse.
      */
     private Collection<ParsableFile> files;
@@ -58,8 +57,7 @@ public class ScriptParser
      * @param files the parsable files to process
      * @param vs    the variable substitutor to use
      */
-    public ScriptParser(Collection<ParsableFile> files, VariableSubstitutor vs)
-    {
+    public ScriptParser(Collection<ParsableFile> files, VariableSubstitutor vs) {
         this.files = files;
         this.vs = vs;
     }
@@ -69,15 +67,12 @@ public class ScriptParser
      *
      * @throws Exception Description of the Exception
      */
-    public void parseFiles() throws Exception
-    {
+    public void parseFiles() throws Exception {
         // Parses the files
         Iterator<ParsableFile> iter = files.iterator();
-        while (iter.hasNext())
-        {
+        while (iter.hasNext()) {
             // If interrupt is desired, return immediately.
-            if (Unpacker.isInterruptDesired())
-            {
+            if (Unpacker.isInterruptDesired()) {
                 return;
             }
             // Create a temporary file for the parsed data
@@ -85,8 +80,7 @@ public class ScriptParser
             ParsableFile pfile = iter.next();
 
             // check whether the OS matches
-            if (!OsConstraint.oneMatchesCurrentSystem(pfile.osConstraints))
-            {
+            if (!OsConstraint.oneMatchesCurrentSystem(pfile.osConstraints)) {
                 continue;
             }
 
@@ -105,8 +99,7 @@ public class ScriptParser
 
             // Replace the original file with the parsed one
             file.delete();
-            if (!parsedFile.renameTo(file))
-            {
+            if (!parsedFile.renameTo(file)) {
                 throw new IOException("Could not rename file " + parsedFile + " to " + file);
             }
         }

@@ -25,7 +25,7 @@ package com.izforge.izpack.util.os;
 import com.coi.tools.os.izpack.Registry;
 import com.coi.tools.os.win.RegDataContainer;
 import com.izforge.izpack.api.exception.NativeLibException;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.util.List;

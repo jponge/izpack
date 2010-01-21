@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.api.exception;
 
 /**
  * Describes that a resource could not be found
@@ -27,7 +27,7 @@ package com.izforge.izpack.installer;
  * @author Marcus Stursberg
  */
 
-public class ResourceNotFoundException extends RuntimeException{
+public class ResourceNotFoundException extends RuntimeException {
 
     private static final long serialVersionUID = 3258688827575906353L;
 

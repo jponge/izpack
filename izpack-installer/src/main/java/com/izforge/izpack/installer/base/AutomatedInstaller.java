@@ -25,16 +25,21 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.installer.DataValidator;
+import com.izforge.izpack.api.installer.DataValidator.Status;
+import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.data.PanelAction;
-import com.izforge.izpack.installer.*;
-import com.izforge.izpack.installer.DataValidator.Status;
+import com.izforge.izpack.installer.ConsolePanelAutomationHelper;
+import com.izforge.izpack.installer.DataValidatorFactory;
+import com.izforge.izpack.installer.PanelActionFactory;
+import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
-import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.File;
@@ -214,7 +219,7 @@ public class AutomatedInstaller extends InstallerBase {
      * @param p                The panel to install.
      * @param automationHelper The helper of the panel.
      * @param panelRoot        The xml element describing the panel.
-     * @throws com.izforge.izpack.installer.InstallerException
+     * @throws com.izforge.izpack.api.exception.InstallerException
      *          if something went wrong while installing.
      */
     private void installPanel(Panel p, PanelAutomation automationHelper, IXMLElement panelRoot) throws InstallerException {
@@ -311,7 +316,8 @@ public class AutomatedInstaller extends InstallerBase {
      * Validate a panel.
      *
      * @param p The panel to validate
-     * @throws InstallerException thrown if the validation fails.
+     * @throws com.izforge.izpack.api.exception.InstallerException
+     *          thrown if the validation fails.
      */
     private void validatePanel(final Panel p) throws InstallerException {
         String dataValidator = p.getValidator();

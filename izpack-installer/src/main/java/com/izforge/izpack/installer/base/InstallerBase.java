@@ -22,7 +22,7 @@
 package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.installer.InstallerRequirementDisplay;
+import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.util.Debug;
 
 /**

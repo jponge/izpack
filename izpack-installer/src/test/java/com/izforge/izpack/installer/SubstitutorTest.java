@@ -22,8 +22,8 @@
 package com.izforge.izpack.installer;
 
 
-import com.izforge.izpack.util.substitutor.SubstitutionType;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.api.substitutor.SubstitutionType;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import junit.framework.TestCase;
 

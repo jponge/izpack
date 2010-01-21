@@ -21,6 +21,7 @@
 package com.izforge.izpack.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.util.Debug;
 
 /**

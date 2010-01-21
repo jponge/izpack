@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.api.exception;
 
 /**
  * Indicates a Failure in a custom action.

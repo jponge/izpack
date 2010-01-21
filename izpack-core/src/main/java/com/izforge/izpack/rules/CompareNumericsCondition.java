@@ -22,6 +22,7 @@ package com.izforge.izpack.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.util.Debug;
 
 import java.util.HashMap;
@@ -120,7 +121,7 @@ public class CompareNumericsCondition extends Condition {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.rules.Condition#getDependenciesDetails()
+     * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
      */
 
     public String getDependenciesDetails() {

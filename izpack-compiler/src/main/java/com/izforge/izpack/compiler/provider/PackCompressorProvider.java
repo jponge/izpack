@@ -1,12 +1,12 @@
 package com.izforge.izpack.compiler.provider;
 
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.compressor.BZip2PackCompressor;
 import com.izforge.izpack.compiler.compressor.DefaultPackCompressor;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.compressor.RawPackCompressor;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.merge.MergeManager;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 import org.picocontainer.injectors.Provider;
 
 /**

@@ -21,7 +21,7 @@
  */
 package com.izforge.izpack.compiler.compressor;
 
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
 import java.io.OutputStream;
 

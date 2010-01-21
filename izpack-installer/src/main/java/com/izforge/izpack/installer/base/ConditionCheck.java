@@ -2,9 +2,9 @@ package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.api.data.InstallerRequirement;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.installer.InstallerRequirementDisplay;
+import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
+import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;

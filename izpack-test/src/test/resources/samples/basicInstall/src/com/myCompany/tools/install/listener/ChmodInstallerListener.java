@@ -21,9 +21,9 @@
 
 package com.myCompany.tools.install.listener;
 
+import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.data.PackFile;
 import com.izforge.izpack.event.SimpleInstallerListener;
-import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
 
@@ -40,6 +40,7 @@ public class ChmodInstallerListener extends SimpleInstallerListener {
     /* (non-Javadoc)
     * @see com.izforge.izpack.installer.InstallerListener#isFileListener()
     */
+
     public boolean isFileListener() {
         // This is a file related listener.
         return true;
@@ -48,6 +49,7 @@ public class ChmodInstallerListener extends SimpleInstallerListener {
     /* (non-Javadoc)
     * @see com.izforge.izpack.compiler.InstallerListener#handleFile(java.io.File, com.izforge.izpack.PackFile)
     */
+
     public void afterFile(File filePath, PackFile pf) throws Exception {
         if (pf.getAdditionals() == null)
             return;
@@ -62,6 +64,7 @@ public class ChmodInstallerListener extends SimpleInstallerListener {
     /* (non-Javadoc)
     * @see com.izforge.izpack.compiler.InstallerListener#handleDir(java.io.File, com.izforge.izpack.PackFile)
     */
+
     public void afterDir(File dirPath, PackFile pf) throws Exception {
         if (pf.getAdditionals() == null)
             return;

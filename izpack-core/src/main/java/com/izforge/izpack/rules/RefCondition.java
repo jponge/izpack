@@ -21,6 +21,7 @@
 package com.izforge.izpack.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.rules.Condition;
 
 /**
  * References an already defined condition
@@ -67,7 +68,7 @@ public class RefCondition extends Condition {
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.rules.Condition#getDependenciesDetails()
+     * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
      */
 
     public String getDependenciesDetails() {

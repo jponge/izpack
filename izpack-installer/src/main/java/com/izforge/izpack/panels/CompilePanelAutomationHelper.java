@@ -24,8 +24,9 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.*;
-import com.izforge.izpack.util.substitutor.VariableSubstitutor;
 
 import java.io.IOException;
 import java.io.PrintStream;
