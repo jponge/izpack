@@ -25,6 +25,7 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.core.event.InstallerListener;
 import com.izforge.izpack.data.PackFile;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.helper.SpecHelper;

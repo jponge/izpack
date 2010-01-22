@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.event;
 
+import com.izforge.izpack.core.event.UninstallerListener;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 
 import java.io.File;

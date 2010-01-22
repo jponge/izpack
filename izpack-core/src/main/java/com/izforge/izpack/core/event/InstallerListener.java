@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.event;
+package com.izforge.izpack.core.event;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
