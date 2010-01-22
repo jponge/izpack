@@ -9,6 +9,7 @@ import com.izforge.izpack.installer.data.GUIInstallData;
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.exception.ScreenLockException;
 import org.hamcrest.core.Is;
+import org.hamcrest.core.IsNull;
 import org.junit.After;
 import org.junit.Test;
 
@@ -26,6 +27,7 @@ public class InstallationTest extends AbstractInstallationTest {
     @After
     public void tearBinding() {
         applicationContainer.dispose();
+
         try {
             if (dialogFrameFixture != null) {
                 dialogFrameFixture.cleanUp();
@@ -43,6 +45,9 @@ public class InstallationTest extends AbstractInstallationTest {
     @Test
     public void testHelloAndFinishPanels() throws Exception {
         compileAndUnzip("helloAndFinish.xml", getWorkingDirectory("samples"));
+        Image image = resourceManager.getImageIconResource("/img/JFrameIcon.png").getImage();
+        assertThat(image, IsNull.<Object>notNullValue());
+
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         installerContainer.getComponent(LanguageDialog.class).initLangPack();
         installerFrameFixture = prepareFrameFixture();

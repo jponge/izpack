@@ -51,7 +51,7 @@ public abstract class AbstractInstallDataProvider implements Provider {
         int i;
 
         // We load the variables
-        Properties variables = null;
+        Properties variables;
         in = resourceManager.getInputStream("vars");
         objIn = new ObjectInputStream(in);
         variables = (Properties) objIn.readObject();

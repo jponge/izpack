@@ -592,7 +592,8 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
         }
         // The uninstaller extension is facultative; it will be exist only
         // if a native library was marked for uninstallation.
-        in[1] = resourceManager.getInputStream("IzPack.uninstaller-ext", null);
+        // REFACTOR Change uninstaller methods of merge and get
+//        in[1] = resourceManager.getInputStream("IzPack.uninstaller-ext", null);
 
         // Me make the .uninstaller directory
         String dest = IoHelper.translatePath(idata.getInfo().getUninstallerPath(), variableSubstitutor);

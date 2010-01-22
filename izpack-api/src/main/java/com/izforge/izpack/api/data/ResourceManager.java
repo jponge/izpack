@@ -137,16 +137,19 @@ public class ResourceManager {
         InputStream in;
 
         String resourcePath = resource + "_" + this.locale;
-        in = ResourceManager.class.getResourceAsStream(resourcePath);
+        in = ClassLoader.getSystemResourceAsStream(resourcePath);
         if (in != null) {
             return resourcePath;
         } else {
             // if there's no language dependent resource found
-            in = ResourceManager.class.getResourceAsStream(resource);
+            in = ClassLoader.getSystemResourceAsStream(resource);
             if (in != null) {
                 return resource;
             } else {
-                return null;
+                if (resource.charAt(0) == '/') {
+                    return getAbsoluteLanguageResourceString(resource.substring(1));
+                }
+                throw new ResourceNotFoundException("Cannot find named Resource: '" + resource + "' AND '" + resourcePath + "'");
             }
         }
     }
@@ -167,10 +170,7 @@ public class ResourceManager {
      */
     public InputStream getInputStream(String resource) throws ResourceNotFoundException {
         String resourcepath = this.getLanguageResourceString(resource);
-        if (resourcepath == null) {
-            throw new ResourceNotFoundException("Cannot find named Resource: '" + resource + "' AND '" + resource + "_" + this.locale + "'");
-        }
-        return ResourceManager.class.getResourceAsStream(resourcepath);
+        return ClassLoader.getSystemResourceAsStream(resourcepath);
     }
 
     /**
@@ -185,7 +185,7 @@ public class ResourceManager {
         if (resourcepath == null) {
             return defaultValue;
         }
-        return ResourceManager.class.getResourceAsStream(resourcepath);
+        return ClassLoader.getSystemResourceAsStream(resourcepath);
     }
 
     /**
@@ -197,7 +197,7 @@ public class ResourceManager {
      * @throws ResourceNotFoundException thrown if there is no resource found
      */
     public URL getURL(String resource) {
-        return this.getClass().getResource(
+        return ClassLoader.getSystemResource(
                 this.getLanguageResourceString(resource));
     }
 
@@ -292,7 +292,7 @@ public class ResourceManager {
      * @return InputStream on the xml
      */
     public InputStream getLangPack(String localeISO3) {
-        return getClass().getResourceAsStream(getResourceBasePath() +
+        return ClassLoader.getSystemResourceAsStream(getResourceBasePath() +
                 "/langpacks/" + localeISO3 + ".xml");
     }
 

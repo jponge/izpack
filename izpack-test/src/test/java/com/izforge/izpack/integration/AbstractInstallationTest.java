@@ -36,6 +36,7 @@ public class AbstractInstallationTest {
     protected IApplicationContainer applicationContainer;
     protected IInstallerContainer installerContainer;
     protected CompilerContainer compilerContainer;
+    protected ResourceManager resourceManager;
 
     protected FrameFixture installerFrameFixture;
     protected DialogFixture dialogFrameFixture;
@@ -46,6 +47,7 @@ public class AbstractInstallationTest {
         applicationContainer.initBindings();
         compilerContainer = new CompilerContainer();
         compilerContainer.initBindings();
+        resourceManager = applicationContainer.getComponent(ResourceManager.class);
     }
 
     @Before

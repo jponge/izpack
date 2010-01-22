@@ -120,13 +120,6 @@ public class Packager extends PackagerBase {
         mergeManager.addResourceToMerge("org/picocontainer/");
         mergeManager.addResourceToMerge("img/");
         mergeManager.addResourceToMerge("bin/");
-//        InputStream is = Packager.class.getResourceAsStream("/" + getSkeletonSubpath());
-//        if (is == null) {
-//            File skeleton = new File(CompilerData.IZPACK_HOME, getSkeletonSubpath());
-//            is = new FileInputStream(skeleton);
-//        }
-//        ZipInputStream inJarStream = new ZipInputStream(is);
-//        PackagerHelper.copyZip(inJarStream, primaryJarStream, null, alreadyWrittenFiles);
         mergeManager.merge(primaryJarStream);
     }
 

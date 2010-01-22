@@ -54,10 +54,10 @@ public class CompilationTest {
     }
 
     @Test
-    public void installerShouldContainClasses() throws Exception {
+    public void installerShouldContainResources() throws Exception {
         CompilerConfig c = compilerContainer.getComponent(CompilerConfig.class);
         c.executeCompiler();
-        AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("ComponentFactory.class"));
+        AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("resources/vars"));
     }
 
     @Test
