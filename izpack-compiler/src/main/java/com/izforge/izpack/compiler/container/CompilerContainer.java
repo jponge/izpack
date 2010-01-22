@@ -14,7 +14,7 @@ import com.izforge.izpack.compiler.merge.MergeManager;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.compiler.packager.Packager;
 import com.izforge.izpack.compiler.provider.*;
-import com.izforge.izpack.container.AbstractContainer;
+import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.picocontainer.PicoBuilder;
 import org.picocontainer.injectors.ProviderAdapter;
