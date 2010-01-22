@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.userpath;
 
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IzPanelConstraints;

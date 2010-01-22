@@ -18,6 +18,8 @@
  */
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.installer.panels.userinput.UIElement;
+
 import javax.swing.*;
 
 /**

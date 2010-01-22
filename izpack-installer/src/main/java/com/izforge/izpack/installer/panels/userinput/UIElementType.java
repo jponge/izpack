@@ -16,7 +16,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.userinput;
 
 public enum UIElementType {
     LABEL, TEXT, CHECKBOX, MULTIPLE_FILE, FILE, DIRECTORY, RULE, COMBOBOX, RADIOBUTTON, PASSWORD, SEARCH, SEARCHBUTTON, SPACE, DIVIDER, DESCRIPTION

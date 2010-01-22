@@ -44,7 +44,6 @@ public class MergeManager implements Mergeable {
                 return TypeFile.JAR_CONTENT;
             }
         }
-
         File path = getFileFromPath(sourcePath);
         if (path != null) {
             if (path.isDirectory()) {
