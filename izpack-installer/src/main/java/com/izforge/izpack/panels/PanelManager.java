@@ -45,27 +45,40 @@ public class PanelManager {
     }
 
     public Class<? extends IzPanel> resolveClassName(final String className) throws ClassNotFoundException {
-        Class<?> aClass;
         URL resource = ClassLoader.getSystemClassLoader().getResource(BASE_CLASSNAME_PATH);
         File panelDirectory = new File(resource.getFile());
         FileFilter fileFilter = new FileFilter() {
             public boolean accept(File pathname) {
-                return pathname.isDirectory() || pathname.getName().contains(className);
+                return pathname.isDirectory() ||
+                        pathname.getName().replaceAll(".class", "").equalsIgnoreCase(className);
             }
         };
-        File classFile = searchForFile(fileFilter, panelDirectory);
-        return resolveClass(panelDirectory, classFile);
-//        System.out.println(classFile.getAbsolutePath());
-//        if (!className.contains(".")) {
-//            aClass = Class.forName(CLASSNAME_PREFIX + className);
-//        } else {
-//            aClass = Class.forName(className);
-//        }
-
-//        return (Class<? extends IzPanel>) aClass;
+        File classFile = findRecursivelyForFile(fileFilter, panelDirectory);
+        if (classFile != null) {
+            return resolveClassFromPath(panelDirectory, classFile);
+        }
+        return resolveClassFromName(className);
     }
 
-    private Class resolveClass(File panelDirectory, File classFile) throws ClassNotFoundException {
+    private Class<? extends IzPanel> resolveClassFromName(String className) throws ClassNotFoundException {
+        Class<?> aClass;
+        if (!className.contains(".")) {
+            aClass = Class.forName(CLASSNAME_PREFIX + "." + className);
+        } else {
+            aClass = Class.forName(className);
+        }
+        return (Class<? extends IzPanel>) aClass;
+    }
+
+    /**
+     * From a class file found in the classpath, convert it to a className
+     *
+     * @param panelDirectory Base directory
+     * @param classFile      Path to the class file
+     * @return The resolved class
+     * @throws ClassNotFoundException
+     */
+    private Class resolveClassFromPath(File panelDirectory, File classFile) throws ClassNotFoundException {
         String result = classFile.getAbsolutePath().replaceAll(panelDirectory.getAbsolutePath(), "");
         result = CLASSNAME_PREFIX + result.replaceAll("/", ".").replaceAll(".class", "");
         return Class.forName(result);
@@ -78,10 +91,11 @@ public class PanelManager {
      * @param currentFile Current directory
      * @return the first found file or null
      */
-    private File searchForFile(FileFilter fileFilter, File currentFile) {
+    private File findRecursivelyForFile(FileFilter fileFilter, File currentFile) {
         if (currentFile.isDirectory()) {
             for (File files : currentFile.listFiles(fileFilter)) {
-                File file = searchForFile(fileFilter, files);
+                System.out.println(files.getAbsolutePath());
+                File file = findRecursivelyForFile(fileFilter, files);
                 if (file != null) {
                     return file;
                 }
