@@ -69,10 +69,10 @@ public class MergeTest {
 
     @Test
     public void testMergeInstaller() throws Exception {
-        File file = new File(ClassLoader.getSystemClassLoader().getResource("com/izforge/izpack/installer/base").getFile()).getParentFile();
-        FileMerge fileMerge = new FileMerge(file, "com/izforge/izpack/installer/");
+        MergeManager mergeManager = new MergeManager();
+        mergeManager.addResourceToMerge("com/izforge/izpack/installer/");
 
-        doMerge(fileMerge);
+        doMerge(mergeManager);
 
         ArrayList<String> arrayList = getFileNameInZip(zip);
         assertThat(arrayList, IsCollectionContaining.hasItems("com/izforge/izpack/installer/bootstrap/Installer.class"));

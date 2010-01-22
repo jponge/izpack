@@ -40,7 +40,7 @@ public class MergeManager implements Mergeable {
     private static TypeFile resolvePath(String sourcePath) {
         URL resource = ClassLoader.getSystemClassLoader().getResource(sourcePath);
         if (resource != null) {
-            if (resource.toString().contains("jar:file")) {
+            if (resource.getPath().contains("jar!")) {
                 return TypeFile.JAR_CONTENT;
             }
         }

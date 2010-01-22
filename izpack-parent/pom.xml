@@ -170,7 +170,6 @@
                 <artifactId>izpack-installer</artifactId>
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>
-                <classifier>skeleton</classifier>
             </dependency>
             <dependency>
                 <artifactId>izpack-listener</artifactId>

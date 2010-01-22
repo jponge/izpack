@@ -68,13 +68,6 @@ public abstract class PackagerBase implements IPackager {
         this.listener = listener;
     }
 
-    public String getSkeletonSubpath() {
-        if (SKELETON_SUBPATH == null) {
-            SKELETON_SUBPATH = properties.getProperty("installer");
-        }
-        return SKELETON_SUBPATH;
-    }
-
     /**
      * Basic installer info.
      */

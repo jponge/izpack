@@ -43,11 +43,4 @@ public class StandalonePackagingTest {
         AssertionHelper.assertZipContainsMatch(standaloneCompiler, StringContains.containsString(pathProperties.getProperty("uninstaller")));
         AssertionHelper.assertZipContainsMatch(standaloneCompiler, StringContains.containsString(pathProperties.getProperty("uninstaller-ext")));
     }
-
-    @Test
-    @Ignore
-    public void skeletonInstallerShouldContainClasses() throws Exception {
-        AssertionHelper.assertZipContainsMatch(skeletonInstallerFile, "Debug.class");
-    }
-
 }
