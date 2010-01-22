@@ -33,10 +33,6 @@ import java.util.Properties;
  */
 public class ConditionTest extends TestCase {
 
-    public final static String RDE_VCS_REVISION = "$Revision: $";
-
-    public final static String RDE_VCS_NAME = "$Name:  $";
-
     protected static GUIInstallData idata = new GUIInstallData(new Properties(), new VariableSubstitutorImpl(new Properties()));
 
     protected RulesEngine rules;
