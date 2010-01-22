@@ -53,9 +53,9 @@ public class ConditionTest extends TestCase {
         IXMLElement conditionspec = new XMLElementImpl("conditions");
 
         Document ownerDocument = conditionspec.getElement().getOwnerDocument();
-        conditionspec.addChild(this.createVariableCondition("test.true", "TEST", "true", ownerDocument));
-        conditionspec.addChild(this.createRefCondition("test.true2", "test.true", ownerDocument));
-        //conditionspec.addChild(createNotCondition("test.not.true", createVariableCondition("test.true", "TEST", "true")));
+        conditionspec.addChild(createVariableCondition("test.true", "TEST", "true", ownerDocument));
+        conditionspec.addChild(createRefCondition("test.true2", "test.true", ownerDocument));
+        conditionspec.addChild(createNotCondition("test.not.true", createVariableCondition("test.true", "TEST", "true", ownerDocument), ownerDocument));
         conditionspec.addChild(createNotCondition("test.not.true", createRefCondition("", "test.true", ownerDocument), ownerDocument));
         rules = new RulesEngineImpl(conditionspec, idata);
     }

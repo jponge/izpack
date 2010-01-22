@@ -140,7 +140,10 @@ public class RulesEngineImpl implements RulesEngine {
         Debug.trace("Initializing RulesEngine");
         RulesEngineImpl.installdata = installdata;
         conditionsmap = rules;
-        for (Condition condition : conditionsmap.values()) {
+        Iterator<String> keyiter = conditionsmap.keySet().iterator();
+        while (keyiter.hasNext()) {
+            String key = keyiter.next();
+            Condition condition = conditionsmap.get(key);
             condition.setInstalldata(installdata);
         }
         init();
@@ -185,7 +188,7 @@ public class RulesEngineImpl implements RulesEngine {
                 conditionclassname = condtype;
             } else {
                 String conditiontype = condtype.toLowerCase();
-                conditionclassname = "com.izforge.izpack.rules."
+                conditionclassname = "com.izforge.izpack.core.rules."
                         + conditiontype.substring(0, 1).toUpperCase()
                         + conditiontype.substring(1, conditiontype.length());
                 conditionclassname += "Condition";
