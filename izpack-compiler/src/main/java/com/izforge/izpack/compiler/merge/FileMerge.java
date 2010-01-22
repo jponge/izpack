@@ -1,6 +1,6 @@
 package com.izforge.izpack.compiler.merge;
 
-import com.izforge.izpack.compiler.packager.PackagerHelper;
+import com.izforge.izpack.compiler.helper.IoHelper;
 import org.apache.tools.zip.ZipOutputStream;
 
 import java.io.File;
@@ -43,7 +43,7 @@ public class FileMerge implements Mergeable {
         } else {
             String entryName = resolveName(fileToCopy, this.fileToCopy, this.destination);
             FileInputStream inputStream = new FileInputStream(fileToCopy);
-            PackagerHelper.copyStreamToJar(inputStream, outputStream, entryName, fileToCopy.lastModified());
+            IoHelper.copyStreamToJar(inputStream, outputStream, entryName, fileToCopy.lastModified());
         }
     }
 

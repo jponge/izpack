@@ -41,10 +41,10 @@ import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
+import com.izforge.izpack.compiler.helper.IoHelper;
 import com.izforge.izpack.compiler.helper.impl.XmlCompilerHelper;
 import com.izforge.izpack.compiler.listener.CompilerListener;
 import com.izforge.izpack.compiler.packager.IPackager;
-import com.izforge.izpack.compiler.packager.PackagerHelper;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.data.PanelAction.ActionStage;
@@ -962,7 +962,7 @@ public class CompilerConfig extends Thread {
                 temp.deleteOnExit();
 
                 FileOutputStream out = new FileOutputStream(temp);
-                PackagerHelper.copyStream(zin, out);
+                IoHelper.copyStream(zin, out);
                 out.close();
 
                 pack.addFile(baseDir, temp, targetdir + "/" + zentry.getName(), osList, override,

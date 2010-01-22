@@ -20,17 +20,18 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.compiler.packager;
+package com.izforge.izpack.compiler.helper;
 
-import com.izforge.izpack.compiler.stream.JarOutputStream;
 import org.apache.tools.zip.ZipOutputStream;
 
-import java.io.*;
+import java.io.FilterOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
@@ -40,7 +41,7 @@ import java.util.zip.ZipInputStream;
  *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
-public class PackagerHelper {
+public class IoHelper {
     /**
      * Copies specified contents of one jar to another.
      * <p/>
@@ -121,17 +122,5 @@ public class PackagerHelper {
             bytesCopied += bytesInBuffer;
         }
         return bytesCopied;
-    }
-
-    /**
-     * Return a stream for the next jar.
-     */
-    public static JarOutputStream getJarOutputStream(String name, File parentFile) throws IOException {
-        File file = new File(parentFile, name);
-        JarOutputStream jar = new JarOutputStream(file);
-        jar.setLevel(Deflater.BEST_COMPRESSION);
-        jar.setPreventClose(true); // Needed at using FilterOutputStreams which calls close
-        // of the slave at finalizing.
-        return jar;
     }
 }

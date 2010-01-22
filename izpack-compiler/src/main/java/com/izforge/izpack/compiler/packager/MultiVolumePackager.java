@@ -226,7 +226,7 @@
 //            }
 //            primaryJarStream.putNextEntry(newEntry);
 //
-//            PackagerHelper.copyStream(in, primaryJarStream);
+//            IoHelper.copyStream(in, primaryJarStream);
 //            primaryJarStream.closeEntry();
 //            in.close();
 //        }
@@ -242,7 +242,7 @@
 //            Object[] current = includedJarURL;
 //            InputStream is = ((URL) current[0]).openStream();
 //            ZipInputStream inJarStream = new ZipInputStream(is);
-//            PackagerHelper.copyZip(inJarStream, primaryJarStream, (List<String>) current[1], alreadyWrittenFiles);
+//            IoHelper.copyZip(inJarStream, primaryJarStream, (List<String>) current[1], alreadyWrittenFiles);
 //        }
 //    }
 //
@@ -322,7 +322,7 @@
 //                    int volumecountbeforewrite = fout.getVolumeCount();
 //
 //                    FileInputStream inStream = new FileInputStream(file);
-//                    long bytesWritten = PackagerHelper.copyStream(inStream, fout);
+//                    long bytesWritten = IoHelper.copyStream(inStream, fout);
 //                    fout.flush();
 //
 //                    long posafterwrite = fout.getFilepointer();
@@ -457,7 +457,7 @@
 //                }
 //                out.putNextEntry(newEntry);
 //
-//                PackagerHelper.copyStream(zin, out);
+//                IoHelper.copyStream(zin, out);
 //                out.closeEntry();
 //                zin.closeEntry();
 //                currentSet.add(currentName);
