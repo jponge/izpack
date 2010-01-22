@@ -2,7 +2,6 @@ package com.izforge.izpack.compiler.helper.impl;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.exception.CompilerException;
-import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.IXmlCompilerHelper;
@@ -27,10 +26,9 @@ public class XmlCompilerHelper implements IXmlCompilerHelper {
      * Call getContent on an element, producing a meaningful error message if not present, or empty.
      * It is an error for 'element' to be null.
      *
-     * @param element        The element to get content of
-     * @param compilerConfig
+     * @param element The element to get content of
      */
-    public String requireContent(IXMLElement element, CompilerConfig compilerConfig) throws CompilerException {
+    public String requireContent(IXMLElement element) throws CompilerException {
         String content = element.getContent();
         if (content == null || content.length() == 0) {
             AssertionHelper.parseError(element, "<" + element.getName() + "> requires content", compilerData.getInstallFile());
@@ -42,13 +40,12 @@ public class XmlCompilerHelper implements IXmlCompilerHelper {
      * Call getContent on an element, producing a meaningful error message if not present, or empty,
      * or a valid URL. It is an error for 'element' to be null.
      *
-     * @param element        The element to get content of
-     * @param compilerConfig
+     * @param element The element to get content of
      */
-    public URL requireURLContent(IXMLElement element, CompilerConfig compilerConfig) throws CompilerException {
+    public URL requireURLContent(IXMLElement element) throws CompilerException {
         URL url = null;
         try {
-            url = new URL(requireContent(element, compilerConfig));
+            url = new URL(requireContent(element));
         }
         catch (MalformedURLException x) {
             AssertionHelper.parseError(element, "<" + element.getName() + "> requires valid URL", x, compilerData.getInstallFile());
@@ -60,11 +57,10 @@ public class XmlCompilerHelper implements IXmlCompilerHelper {
      * Call getFirstChildNamed on the parent, producing a meaningful error message on failure. It is
      * an error for 'parent' to be null.
      *
-     * @param parent         The element to search for a child
-     * @param name           Name of the child element to get
-     * @param compilerConfig
+     * @param parent The element to search for a child
+     * @param name   Name of the child element to get
      */
-    public IXMLElement requireChildNamed(IXMLElement parent, String name, CompilerConfig compilerConfig) throws CompilerException {
+    public IXMLElement requireChildNamed(IXMLElement parent, String name) throws CompilerException {
         IXMLElement child = parent.getFirstChildNamed(name);
         if (child == null) {
             AssertionHelper.parseError(parent, "<" + parent.getName() + "> requires child <" + name + ">", compilerData.getInstallFile());

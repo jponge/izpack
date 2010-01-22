@@ -24,6 +24,7 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.exception.CompilerException;
+import com.izforge.izpack.api.packager.PackagerListener;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;

@@ -26,6 +26,7 @@ import com.izforge.izpack.api.data.DynamicVariable;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.InstallerRequirement;
 import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.packager.PackagerListener;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;

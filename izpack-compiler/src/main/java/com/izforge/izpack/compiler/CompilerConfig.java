@@ -290,7 +290,7 @@ public class CompilerConfig extends Thread {
             // Look and feel mappings
             for (IXMLElement lafNode : gp.getChildrenNamed("laf")) {
                 String lafName = xmlCompilerHelper.requireAttribute(lafNode, "name", compilerData.getInstallFile());
-                xmlCompilerHelper.requireChildNamed(lafNode, "os", this);
+                xmlCompilerHelper.requireChildNamed(lafNode, "os");
 
                 for (IXMLElement osNode : lafNode.getChildrenNamed("os")) {
                     String osName = xmlCompilerHelper.requireAttribute(osNode, "family", compilerData.getInstallFile());
@@ -412,7 +412,7 @@ public class CompilerConfig extends Thread {
         }
         if (needAddOns) {
             // Add the uninstaller extensions as a resource if specified
-            IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "info", this);
+            IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "info");
             IXMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
             if (xmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", YES, compilerData.getInstallFile())) {
                 URL url = findIzPackResource(propertyManager.getProperty("uninstaller-ext"), "Uninstaller extensions",
@@ -452,7 +452,7 @@ public class CompilerConfig extends Thread {
     private void addPacksSingle(IXMLElement data) throws CompilerException {
         notifyCompilerListener("addPacksSingle", CompilerListener.BEGIN, data);
         // Initialisation
-        IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "packs", this);
+        IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "packs");
 
         // at least one pack is required
         Vector<IXMLElement> packElements = root.getChildrenNamed("pack");
@@ -472,7 +472,7 @@ public class CompilerConfig extends Thread {
             String packImgId = packElement.getAttribute("packImgId");
 
             boolean loose = "true".equalsIgnoreCase(packElement.getAttribute("loose", "false"));
-            String description = xmlCompilerHelper.requireChildNamed(packElement, "description", this).getContent();
+            String description = xmlCompilerHelper.requireChildNamed(packElement, "description").getContent();
             boolean required = xmlCompilerHelper.requireYesNoAttribute(packElement, "required", compilerData.getInstallFile());
             String group = packElement.getAttribute("group");
             String installGroups = packElement.getAttribute("installGroups");
@@ -800,7 +800,7 @@ public class CompilerConfig extends Thread {
             }
 
             for (IXMLElement validatorNode : packElement.getChildrenNamed("validator")) {
-                pack.addValidator(xmlCompilerHelper.requireContent(validatorNode, this));
+                pack.addValidator(xmlCompilerHelper.requireContent(validatorNode));
             }
 
             // We add the pack
@@ -1018,7 +1018,7 @@ public class CompilerConfig extends Thread {
      */
     protected void addPanels(IXMLElement data) throws CompilerException {
         notifyCompilerListener("addPanels", CompilerListener.BEGIN, data);
-        IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "panels", this);
+        IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "panels");
 
         // at least one panel is required
         Vector<IXMLElement> panels = root.getChildrenNamed("panel");
@@ -1281,7 +1281,7 @@ public class CompilerConfig extends Thread {
      */
     protected void addLangpacks(IXMLElement data) throws CompilerException {
         notifyCompilerListener("addLangpacks", CompilerListener.BEGIN, data);
-        IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "locale", this);
+        IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "locale");
 
         // at least one langpack is required
         Vector<IXMLElement> locals = root.getChildrenNamed("langpack");
@@ -1314,21 +1314,21 @@ public class CompilerConfig extends Thread {
     protected void addInfo(IXMLElement data) throws Exception {
         notifyCompilerListener("addInfo", CompilerListener.BEGIN, data);
         // Initialisation
-        IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "info", this);
+        IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "info");
 
         Info info = new Info();
-        info.setAppName(xmlCompilerHelper.requireContent(xmlCompilerHelper.requireChildNamed(root, "appname", this), this));
-        info.setAppVersion(xmlCompilerHelper.requireContent(xmlCompilerHelper.requireChildNamed(root, "appversion", this), this));
+        info.setAppName(xmlCompilerHelper.requireContent(xmlCompilerHelper.requireChildNamed(root, "appname")));
+        info.setAppVersion(xmlCompilerHelper.requireContent(xmlCompilerHelper.requireChildNamed(root, "appversion")));
         // We get the installation subpath
         IXMLElement subpath = root.getFirstChildNamed("appsubpath");
         if (subpath != null) {
-            info.setInstallationSubPath(xmlCompilerHelper.requireContent(subpath, this));
+            info.setInstallationSubPath(xmlCompilerHelper.requireContent(subpath));
         }
 
         // validate and insert app URL
         final IXMLElement URLElem = root.getFirstChildNamed("url");
         if (URLElem != null) {
-            URL appURL = xmlCompilerHelper.requireURLContent(URLElem, this);
+            URL appURL = xmlCompilerHelper.requireURLContent(URLElem);
             info.setAppURL(appURL.toString());
         }
 
@@ -1345,7 +1345,7 @@ public class CompilerConfig extends Thread {
         // We get the java version required
         IXMLElement javaVersion = root.getFirstChildNamed("javaversion");
         if (javaVersion != null) {
-            info.setJavaVersion(xmlCompilerHelper.requireContent(javaVersion, this));
+            info.setJavaVersion(xmlCompilerHelper.requireContent(javaVersion));
         }
 
         // Is a JDK required?
@@ -1357,7 +1357,7 @@ public class CompilerConfig extends Thread {
         // validate and insert (and require if -web kind) web dir
         IXMLElement webDirURL = root.getFirstChildNamed("webdir");
         if (webDirURL != null) {
-            info.setWebDirURL(xmlCompilerHelper.requireURLContent(webDirURL, this).toString());
+            info.setWebDirURL(xmlCompilerHelper.requireURLContent(webDirURL).toString());
         }
         String kind = compilerData.getKind();
         if (kind != null) {
@@ -1433,12 +1433,12 @@ public class CompilerConfig extends Thread {
         // Add the path for the summary log file if specified
         IXMLElement slfPath = root.getFirstChildNamed("summarylogfilepath");
         if (slfPath != null) {
-            info.setSummaryLogFilePath(xmlCompilerHelper.requireContent(slfPath, this));
+            info.setSummaryLogFilePath(xmlCompilerHelper.requireContent(slfPath));
         }
 
         IXMLElement writeInstallInfo = root.getFirstChildNamed("writeinstallationinformation");
         if (writeInstallInfo != null) {
-            String writeInstallInfoString = xmlCompilerHelper.requireContent(writeInstallInfo, this);
+            String writeInstallInfoString = xmlCompilerHelper.requireContent(writeInstallInfo);
             info.setWriteInstallationInformation(validateYesNo(writeInstallInfoString));
         }
 

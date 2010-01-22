@@ -49,8 +49,8 @@ public class IoHelper {
      * TODO: it would be useful to be able to keep signature information from signed jar files, can
      * we combine manifests and still have their content signed?
      */
-    static void copyZip(ZipInputStream zin, org.apache.tools.zip.ZipOutputStream out,
-                        List<String> files, HashMap<FilterOutputStream, HashSet<String>> alreadyWrittenFiles)
+    public static void copyZip(ZipInputStream zin, org.apache.tools.zip.ZipOutputStream out,
+                               List<String> files, HashMap<FilterOutputStream, HashSet<String>> alreadyWrittenFiles)
             throws IOException {
         ZipEntry zentry;
         if (!alreadyWrittenFiles.containsKey(out)) {
