@@ -1,25 +1,4 @@
-/*
- * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- *
- * http://izpack.org/
- * http://izpack.codehaus.org/
- *
- * Copyright 2007 Vladimir Ralev
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.treepacks;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.LocaleDatabase;
@@ -32,20 +11,27 @@ import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.debugger.Debugger;
 import com.izforge.izpack.installer.panels.imgpacks.ImgPacksPanelAutomationHelper;
 import com.izforge.izpack.installer.web.WebAccessor;
+import com.izforge.izpack.panels.PacksModel;
+import com.izforge.izpack.panels.PacksPanelInterface;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 
 import javax.swing.*;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.tree.*;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.InputStream;
 import java.util.*;
-import java.util.List;
 
+/**
+ * Created by IntelliJ IDEA.
+ *
+ * @author Anthonin Bonnefoy
+ */
 public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     /**
      * Required (serializable)
@@ -193,7 +179,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
 
     /*
     * (non-Javadoc)
-    * 
+    *
     * @see com.izforge.izpack.panels.PacksPanelInterface#getLangpack()
     */
 
@@ -203,7 +189,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
 
     /*
     * (non-Javadoc)
-    * 
+    *
     * @see com.izforge.izpack.panels.PacksPanelInterface#getBytes()
     */
 
@@ -213,7 +199,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
 
     /*
     * (non-Javadoc)
-    * 
+    *
     * @see com.izforge.izpack.panels.PacksPanelInterface#setBytes(int)
     */
 
@@ -223,7 +209,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
 
     /*
     * (non-Javadoc)
-    * 
+    *
     * @see com.izforge.izpack.panels.PacksPanelInterface#showSpaceRequired()
     */
 
@@ -235,7 +221,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
 
     /*
     * (non-Javadoc)
-    * 
+    *
     * @see com.izforge.izpack.panels.PacksPanelInterface#showFreeSpace()
     */
 
@@ -462,7 +448,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
      *
      * @param packs
      */
-    private void computePacks(List packs) {
+    private void computePacks(java.util.List packs) {
         names = new HashMap<String, Pack>();
         dependenciesExist = false;
         for (Object pack1 : packs) {
@@ -576,7 +562,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
         treeData = new HashMap<String, ArrayList<String>>();
         idToPack = new HashMap<String, Pack>();
 
-        java.util.Iterator iter = this.installData.getAvailablePacks().iterator();
+        Iterator iter = this.installData.getAvailablePacks().iterator();
         while (iter.hasNext()) {
             Pack p = (Pack) iter.next();
             idToPack.put(p.id, p);
@@ -622,7 +608,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     public void setDependencies(String id) {
         if (dependencyArea != null) {
             Pack pack = idToPack.get(id);
-            List<String> dep = pack.dependencies;
+            java.util.List<String> dep = pack.dependencies;
             String list = "";
             if (dep != null) {
                 list += (langpack == null) ? "Dependencies: " : langpack
@@ -690,7 +676,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     private Object populateTreePacks(String parent) {
         if (parent == null) // the root node
         {
-            java.util.Iterator iter = this.installData.getAvailablePacks().iterator();
+            Iterator iter = this.installData.getAvailablePacks().iterator();
             ArrayList rootNodes = new ArrayList();
             while (iter.hasNext()) {
                 Pack p = (Pack) iter.next();
@@ -751,7 +737,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
 
             //initialize helper map to increa performance
             packToRowNumber = new HashMap<Pack, Integer>();
-            java.util.Iterator rowpack = this.installData.getAvailablePacks().iterator();
+            Iterator rowpack = this.installData.getAvailablePacks().iterator();
             while (rowpack.hasNext()) {
                 Pack p = (Pack) rowpack.next();
                 packToRowNumber.put(p, this.installData.getAvailablePacks().indexOf(p));
@@ -781,7 +767,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
 
             // set the JCheckBoxes to the currently selected panels. The
             // selection might have changed in another panel
-            java.util.Iterator iter = this.installData.getAvailablePacks().iterator();
+            Iterator iter = this.installData.getAvailablePacks().iterator();
             bytes = 0;
             while (iter.hasNext()) {
                 Pack p = (Pack) iter.next();
@@ -803,7 +789,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
 
     /*
     * (non-Javadoc)
-    * 
+    *
     * @see com.izforge.izpack.installer.IzPanel#getSummaryBody()
     */
 
@@ -827,301 +813,6 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
         return packsTree;
     }
 
-}
-
-/**
- * The renderer model for individual checkbox nodes in a JTree. It renders the
- * checkbox and a label for the pack size.
- *
- * @author <a href="vralev@redhat.com">Vladimir Ralev</a>
- * @version $Revision: 1.1 $
- */
-class CheckBoxNodeRenderer implements TreeCellRenderer {
-    private static final JPanel rendererPanel = new JPanel();
-    private static final JLabel packSizeLabel = new JLabel();
-    private static final JCheckBox checkbox = new JCheckBox();
-    private static final JCheckBox normalCheckBox = new JCheckBox();
-    private static final java.awt.Font normalFont = new JCheckBox().getFont();
-    private static final java.awt.Font boldFont = new java.awt.Font(normalFont.getFontName(),
-            java.awt.Font.BOLD,
-            normalFont.getSize());
-    private static final java.awt.Font plainFont = new java.awt.Font(normalFont.getFontName(),
-            java.awt.Font.PLAIN,
-            normalFont.getSize());
-    private static final Color annotationColor = new Color(0, 0, 120); // red
-    private static final Color changedColor = new Color(200, 0, 0);
-
-    private static Color selectionForeground, selectionBackground,
-            textForeground, textBackground;
-
-    TreePacksPanel treePacksPanel;
-
-    public CheckBoxNodeRenderer(TreePacksPanel t) {
-        selectionForeground = UIManager.getColor("Tree.selectionForeground");
-        selectionBackground = UIManager.getColor("Tree.selectionBackground");
-        textForeground = UIManager.getColor("Tree.textForeground");
-        textBackground = UIManager.getColor("Tree.textBackground");
-        treePacksPanel = t;
-
-        int treeWidth = t.getTree().getPreferredSize().width;
-        int height = checkbox.getPreferredSize().height;
-        int cellWidth = treeWidth - treeWidth / 4;
-
-        //Don't touch, it fixes various layout bugs in swing/awt
-        rendererPanel.setLayout(new java.awt.BorderLayout(0, 0));
-        rendererPanel.setBackground(textBackground);
-        rendererPanel.add(java.awt.BorderLayout.WEST, checkbox);
-
-        rendererPanel.setAlignmentX((float) 0);
-        rendererPanel.setAlignmentY((float) 0);
-        rendererPanel.add(java.awt.BorderLayout.EAST, packSizeLabel);
-
-        rendererPanel.setMinimumSize(new Dimension(cellWidth, height));
-        rendererPanel.setPreferredSize(new Dimension(cellWidth, height));
-        rendererPanel.setSize(new Dimension(cellWidth, height));
-
-        rendererPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-    }
-
-    public Component getTreeCellRendererComponent(JTree tree, Object value,
-                                                  boolean selected, boolean expanded, boolean leaf, int row,
-                                                  boolean hasFocus) {
-        treePacksPanel.fromModel();
-
-        if (selected) {
-            checkbox.setForeground(selectionForeground);
-            checkbox.setBackground(selectionBackground);
-            rendererPanel.setForeground(selectionForeground);
-            rendererPanel.setBackground(selectionBackground);
-            packSizeLabel.setBackground(selectionBackground);
-        } else {
-            checkbox.setForeground(textForeground);
-            checkbox.setBackground(textBackground);
-            rendererPanel.setForeground(textForeground);
-            rendererPanel.setBackground(textBackground);
-            packSizeLabel.setBackground(textBackground);
-        }
-
-        if ((value != null) && (value instanceof CheckBoxNode)) {
-            CheckBoxNode node = (CheckBoxNode) value;
-
-            if (node.isTotalSizeChanged()) {
-                packSizeLabel.setForeground(changedColor);
-            } else {
-                if (selected) {
-                    packSizeLabel.setForeground(selectionForeground);
-                } else {
-                    packSizeLabel.setForeground(annotationColor);
-                }
-            }
-
-            checkbox.setText(node.getTranslatedText());
-
-            packSizeLabel.setText(Pack.toByteUnitsString(node.getTotalSize()));
-
-            if (node.isPartial()) {
-                checkbox.setSelected(false);
-            } else {
-                checkbox.setSelected(node.isSelected());
-            }
-
-            checkbox.setEnabled(node.isEnabled());
-            packSizeLabel.setEnabled(node.isEnabled());
-
-            if (node.getChildCount() > 0) {
-                checkbox.setFont(boldFont);
-                packSizeLabel.setFont(boldFont);
-            } else {
-                checkbox.setFont(normalFont);
-                packSizeLabel.setFont(plainFont);
-            }
-
-            if (node.isPartial()) {
-                checkbox.setIcon(new PartialIcon());
-            } else {
-                checkbox.setIcon(normalCheckBox.getIcon());
-            }
-        }
-        return rendererPanel;
-    }
-
-    public Component getCheckRenderer() {
-        return rendererPanel;
-    }
-
-}
-
-/**
- * The model structure for a JTree node.
- *
- * @author <a href="vralev@redhat.com">Vladimir Ralev</a>
- * @version $Revision: 1.1 $
- */
-class CheckBoxNode extends DefaultMutableTreeNode {
-
-    /**
-     * Required (serializable)
-     */
-    private static final long serialVersionUID = 8743154051564336973L;
-    String id;
-    boolean selected;
-    boolean partial;
-    boolean enabled;
-    boolean totalSizeChanged;
-    String translatedText;
-    Pack pack;
-    long totalSize;
-
-    public CheckBoxNode(String id, String translated, boolean selected) {
-        this.id = id;
-        this.selected = selected;
-        this.translatedText = translated;
-    }
-
-    public CheckBoxNode(String id, String translated, Object elements[], boolean selected) {
-        this.id = id;
-        this.translatedText = translated;
-        for (int i = 0, n = elements.length; i < n; i++) {
-            CheckBoxNode tn = (CheckBoxNode) elements[i];
-            add(tn);
-        }
-    }
-
-    public boolean isLeaf() {
-        return this.getChildCount() == 0;
-    }
-
-    public boolean isSelected() {
-        return selected;
-    }
-
-    public void setSelected(boolean newValue) {
-        selected = newValue;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String newValue) {
-        id = newValue;
-    }
-
-    public String toString() {
-        return getClass().getName() + "[" + id + "/" + selected + "]";
-    }
-
-    public boolean isPartial() {
-        return partial;
-    }
-
-    public void setPartial(boolean partial) {
-        this.partial = partial;
-        if (partial) {
-            setSelected(true);
-        }
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public String getTranslatedText() {
-        return translatedText;
-    }
-
-    public void setTranslatedText(String translatedText) {
-        this.translatedText = translatedText;
-    }
-
-    public Pack getPack() {
-        return pack;
-    }
-
-    public void setPack(Pack pack) {
-        this.pack = pack;
-    }
-
-    public long getTotalSize() {
-        return totalSize;
-    }
-
-    public void setTotalSize(long totalSize) {
-        this.totalSize = totalSize;
-    }
-
-    public boolean isTotalSizeChanged() {
-        return totalSizeChanged;
-    }
-
-    public void setTotalSizeChanged(boolean totalSizeChanged) {
-        this.totalSizeChanged = totalSizeChanged;
-    }
-}
-
-/**
- * Special checkbox icon which shows partially selected nodes.
- *
- * @author <a href="vralev@redhat.com">Vladimir Ralev</a>
- * @version $Revision: 1.1 $
- */
-class PartialIcon implements Icon {
-    protected int getControlSize() {
-        return 13;
-    }
-
-    public void paintIcon(Component c, Graphics g, int x, int y) {
-        int controlSize = getControlSize();
-        g.setColor(MetalLookAndFeel.getControlShadow());
-        g.fillRect(x, y, controlSize - 1, controlSize - 1);
-        drawBorder(g, x, y, controlSize, controlSize);
-
-        g.setColor(Color.green);
-        drawCheck(c, g, x, y);
-    }
-
-    private void drawBorder(Graphics g, int x, int y, int w, int h) {
-        g.translate(x, y);
-
-        // outer frame rectangle
-        g.setColor(MetalLookAndFeel.getControlDarkShadow());
-        g.setColor(new Color(0.4f, 0.4f, 0.4f));
-        g.drawRect(0, 0, w - 2, h - 2);
-
-        // middle frame
-        g.setColor(MetalLookAndFeel.getControlHighlight());
-        g.setColor(new Color(0.6f, 0.6f, 0.6f));
-        g.drawRect(1, 1, w - 2, h - 2);
-
-        // background
-        g.setColor(new Color(0.99f, 0.99f, 0.99f));
-        g.fillRect(2, 2, w - 3, h - 3);
-
-        //some extra lines for FX
-        g.setColor(MetalLookAndFeel.getControl());
-        g.drawLine(0, h - 1, 1, h - 2);
-        g.drawLine(w - 1, 0, w - 2, 1);
-        g.translate(-x, -y);
-    }
-
-    protected void drawCheck(Component c, Graphics g, int x, int y) {
-        int controlSize = getControlSize();
-        g.setColor(new Color(0.0f, 0.7f, 0.0f));
-
-        g.fillOval(x + controlSize / 2 - 2, y + controlSize / 2 - 2, 6, 6);
-    }
-
-    public int getIconWidth() {
-        return getControlSize();
-    }
-
-    public int getIconHeight() {
-        return getControlSize();
-    }
 }
 
 /**
@@ -1229,7 +920,7 @@ class CheckTreeController extends MouseAdapter {
 
     public void selectAllDependencies(CheckBoxNode cbn) {
         Pack pack = cbn.getPack();
-        List<String> deps = pack.getDependencies();
+        java.util.List<String> deps = pack.getDependencies();
         if (deps == null) {
             return;
         }

@@ -4,6 +4,7 @@ import com.izforge.izpack.compiler.Compiler;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.compiler.stream.JarOutputStream;
 import org.hamcrest.core.IsNull;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +34,13 @@ public class CompilerLauncherTest {
     }
 
     @Test
+    public void testJarOutputStream() throws Exception {
+        compilerContainer.addComponent(CompilerData.class, new CompilerData("", "", ""));
+        JarOutputStream jarOutputStream = compilerContainer.getComponent(JarOutputStream.class);
+        assertThat(jarOutputStream, IsNull.notNullValue());
+    }
+
+    @Test
     public void testCompilerBinding() throws Exception {
         compilerContainer.addComponent(CompilerData.class, new CompilerData("", "", ""));
         Compiler compiler = compilerContainer.getComponent(Compiler.class);
@@ -41,7 +49,7 @@ public class CompilerLauncherTest {
 
     @Test
     public void testCompilerDataBinding() {
-        compilerContainer.addComponent(CompilerData.class, new CompilerData("", "", "", "", "", "", 0));
+        compilerContainer.addComponent(CompilerData.class, new CompilerData("", "", ""));
         CompilerData data = compilerContainer.getComponent(CompilerData.class);
         assertThat(data, IsNull.notNullValue());
     }
@@ -49,6 +57,8 @@ public class CompilerLauncherTest {
     @Test
     public void testCompilerConfigBinding() throws Exception {
         compilerContainer.processCompileDataFromArgs(new String[]{"install.xml"});
+        CompilerData data = compilerContainer.getComponent(CompilerData.class);
+        assertThat(data, IsNull.notNullValue());
         CompilerConfig compiler = compilerContainer.getComponent(CompilerConfig.class);
         assertThat(compiler, IsNull.notNullValue());
     }

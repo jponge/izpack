@@ -39,7 +39,7 @@ import java.util.*;
 /**
  * User: Gaganis Giorgos Date: Sep 17, 2004 Time: 8:33:21 AM
  */
-class PacksModel extends AbstractTableModel {
+public class PacksModel extends AbstractTableModel {
 
     /**
      *

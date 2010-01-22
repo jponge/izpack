@@ -44,9 +44,9 @@ public class CompilerContainer extends AbstractContainer {
         pico.addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class);
 
         pico.addComponent(IPackager.class, Packager.class);
+        pico.addAdapter(new ProviderAdapter(new PropertiesProvider()));
         pico.addAdapter(new ProviderAdapter(new JarOutputStreamProvider()));
         pico.addAdapter(new ProviderAdapter(new CompressedOutputStreamProvider()));
-        pico.addAdapter(new ProviderAdapter(new PropertiesProvider()));
         pico.addAdapter(new ProviderAdapter(new PackCompressorProvider()));
     }
 
