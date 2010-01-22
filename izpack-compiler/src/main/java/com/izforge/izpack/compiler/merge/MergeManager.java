@@ -59,7 +59,7 @@ public class MergeManager implements Mergeable {
         switch (resolvePath(path)) {
             case DIRECTORY:
             case FILE:
-                return new FileMerge(getFileFromPath(path));
+                return new FileMerge(getFileFromPath(path), path);
             case JAR_CONTENT:
                 return new JarMerge(path);
         }

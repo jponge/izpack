@@ -116,7 +116,7 @@ public class Packager extends PackagerBase {
      */
     protected void writeSkeletonInstaller() throws IOException {
         sendMsg("Copying the skeleton installer", PackagerListener.MSG_VERBOSE);
-        mergeManager.addResourceToMerge("com/izforge/izpack/installer/base/IzPanel.class");
+        mergeManager.addResourceToMerge("com/izforge/izpack/installer/");
 //        InputStream is = Packager.class.getResourceAsStream("/" + getSkeletonSubpath());
 //        if (is == null) {
 //            File skeleton = new File(CompilerData.IZPACK_HOME, getSkeletonSubpath());

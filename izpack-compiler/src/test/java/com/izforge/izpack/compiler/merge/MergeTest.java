@@ -135,4 +135,16 @@ public class MergeTest {
         assertThat(jarPath, StringEndsWith.endsWith("junit-4.7.jar"));
         assertThat(new File(jarPath).exists(), Is.is(true));
     }
+
+
+    @Test
+    public void testAddResourceToMerge() throws Exception {
+        MergeManager mergeManager = new MergeManager();
+        mergeManager.addResourceToMerge("com/izforge/izpack/installer/");
+        doMerge(mergeManager);
+
+        ArrayList<String> arrayList = getFileNameInZip(zip);
+        assertThat(arrayList, IsCollectionContaining.hasItems("com/izforge/izpack/installer/bootstrap/Installer.class",
+                "com/izforge/izpack/installer/base/IzPanel.class"));
+    }
 }
