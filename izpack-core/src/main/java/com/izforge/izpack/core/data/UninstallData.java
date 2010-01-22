@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.core.data;
 
 import com.izforge.izpack.data.ExecutableFile;
 

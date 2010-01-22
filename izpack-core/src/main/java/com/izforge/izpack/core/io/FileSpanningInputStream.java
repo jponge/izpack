@@ -15,7 +15,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.izforge.izpack.io;
+package com.izforge.izpack.core.io;
 
 import com.izforge.izpack.util.Debug;
 
@@ -156,6 +156,7 @@ public class FileSpanningInputStream extends InputStream {
      * 
      * @see java.io.InputStream#available()
      */
+
     public int available() throws IOException {
         if (nextvolumenotfound) {
             createInputStreamToNextVolume();
@@ -169,6 +170,7 @@ public class FileSpanningInputStream extends InputStream {
      * 
      * @see java.io.InputStream#close()
      */
+
     public void close() throws IOException {
         zippedinputstream.close();
         fileinputstream.close();
@@ -179,6 +181,7 @@ public class FileSpanningInputStream extends InputStream {
      * 
      * @see java.io.InputStream#read()
      */
+
     public int read() throws IOException {
         if (nextvolumenotfound) {
             // the next volume was not found, so try to create a new input stream to next volume
@@ -210,6 +213,7 @@ public class FileSpanningInputStream extends InputStream {
      * 
      * @see java.io.InputStream#read(byte[], int, int)
      */
+
     public int read(byte[] b, int off, int len) throws IOException {
         if (nextvolumenotfound) {
             // the next volume was not found, so try to create a new input stream to next volume
@@ -245,6 +249,7 @@ public class FileSpanningInputStream extends InputStream {
      * 
      * @see java.io.InputStream#read(byte[])
      */
+
     public int read(byte[] b) throws IOException {
         return this.read(b, 0, b.length);
     }
@@ -254,6 +259,7 @@ public class FileSpanningInputStream extends InputStream {
      * 
      * @see java.io.InputStream#skip(long)
      */
+
     public long skip(long n) throws IOException {
         if (nextvolumenotfound) {
             // the next volume was not found, so try to create a new input stream to next volume

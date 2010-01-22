@@ -23,9 +23,9 @@ package com.izforge.izpack.installer.panels.shortcut;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.core.data.UninstallData;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.installer.PanelAutomation;
-import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.panels.ShortcutData;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.Shortcut;

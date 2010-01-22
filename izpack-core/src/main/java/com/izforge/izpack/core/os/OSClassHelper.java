@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.os;
+package com.izforge.izpack.core.os;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.util.Debug;

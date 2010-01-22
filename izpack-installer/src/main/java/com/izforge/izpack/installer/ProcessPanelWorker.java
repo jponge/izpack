@@ -30,7 +30,7 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.rules.RulesEngineImpl;
+import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 

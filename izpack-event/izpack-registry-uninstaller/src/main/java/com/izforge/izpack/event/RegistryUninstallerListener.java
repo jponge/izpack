@@ -23,9 +23,9 @@ package com.izforge.izpack.event;
 
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.api.exception.WrappedNativeLibException;
+import com.izforge.izpack.core.os.RegistryHandler;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.TargetFactory;
-import com.izforge.izpack.util.os.RegistryHandler;
 
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -89,7 +89,7 @@ public class RegistryUninstallerListener extends NativeUninstallerListener {
         RegistryHandler registryHandler = null;
         try {
             registryHandler = (RegistryHandler) (TargetFactory.getInstance()
-                    .makeObject("com.izforge.izpack.util.os.RegistryHandler"));
+                    .makeObject("com.izforge.izpack.core.os.RegistryHandler"));
         }
         catch (Throwable exception) {
             exception.printStackTrace();

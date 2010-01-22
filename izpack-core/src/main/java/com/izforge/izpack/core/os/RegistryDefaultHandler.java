@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.os;
+package com.izforge.izpack.core.os;
 
 import com.izforge.izpack.util.TargetFactory;
 
@@ -47,7 +47,7 @@ public class RegistryDefaultHandler {
             try {
                 // Load the system dependant handler.
                 registryHandler = (RegistryHandler) (TargetFactory.getInstance()
-                        .makeObject("com.izforge.izpack.util.os.RegistryHandler"));
+                        .makeObject("com.izforge.izpack.core.os.RegistryHandler"));
                 // Switch to the default handler to use one for complete logging.
                 registryHandler = registryHandler.getDefaultHandler();
             }

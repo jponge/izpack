@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack;
+package com.izforge.izpack.core;
 
 import com.izforge.izpack.api.data.LocaleDatabase;
 import org.junit.Ignore;

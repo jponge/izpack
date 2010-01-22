@@ -69,8 +69,8 @@ public class MergeTest {
 
     @Test
     public void testMergeInstaller() throws Exception {
-        File file = new File(ClassLoader.getSystemClassLoader().getResource("com/izforge/izpack/installer/").getFile());
-        FileMerge fileMerge = new FileMerge(file);
+        File file = new File(ClassLoader.getSystemClassLoader().getResource("com/izforge/izpack/installer/base").getFile()).getParentFile();
+        FileMerge fileMerge = new FileMerge(file, "com/izforge/izpack/installer/");
 
         doMerge(fileMerge);
 

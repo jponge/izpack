@@ -4,8 +4,8 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.installer.base.InstallerBase;
-import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.Debug;
 import org.picocontainer.injectors.Provider;
 

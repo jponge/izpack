@@ -20,7 +20,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.os;
+package com.izforge.izpack.core.os;
 
 import com.coi.tools.os.win.MSWinConstants;
 import com.coi.tools.os.win.RegDataContainer;

@@ -21,12 +21,13 @@
 
 package com.izforge.izpack.util.os;
 
-import com.izforge.izpack.installer.UninstallData;
+import com.izforge.izpack.core.data.UninstallData;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Vector;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * This class represents a shortcut in a operating system independent way. OS specific subclasses
  * are used to implement the necessary mapping from this generic API to the classes that reflect the
@@ -103,6 +104,7 @@ public class Shortcut {
     protected UninstallData uninstaller;
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method initializes the object. It is used as a replacement for the contructor because of
      * the way it is instantiated through the <code>TargetFactory</code>.
@@ -114,6 +116,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the base path of the shortcut depending on type. The base path is the directory that
      * the short cut, (or its program group) will be created in. For instance, on Windows NT, a
@@ -128,6 +131,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns a list of currently existing program groups, based on the requested type. For example
      * if the type is <code>APPLICATIONS</code> then all the names of the program groups in the
@@ -144,6 +148,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Subclass implementations return the fully qualified file name under which the link is saved
      * on disk. <b>Note:</b> this method returns valid results only if the instance was created
@@ -157,6 +162,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Subclass implementations return the path of the directory where the link file is stored, if
      * it was necessary during the previous save operation to create the directory. This method
@@ -170,6 +176,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns <code>true</code> if the target OS supports current user and all users.
      *
@@ -180,6 +187,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Determines if a specific instance of this class supports the creation of shortcuts. The use
      * of this method might seem odd, since one would not implement a flavor of this class that does
@@ -199,6 +207,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the command line arguments that will be passed to the target when the link is activated.
      *
@@ -208,6 +217,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the description string that is used to identify the link in a menu or on the desktop.
      *
@@ -217,6 +227,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the location of the icon that is shown for the shortcut on the desktop.
      *
@@ -228,6 +239,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * returns icon Location
      *
@@ -238,6 +250,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the name of the program group this ShellLinbk should be placed in.
      *
@@ -247,6 +260,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the show command that is passed to the target application when the link is activated.
      * The show command determines if the the window will be restored to the previous size,
@@ -272,11 +286,13 @@ public class Shortcut {
     /*
      * retrieves showCommand from the OS. Translates it into Shortcut.XXX terms.
      */
+
     public int getShowCommand() {
         return Shortcut.NORMAL;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the absolute path to the shortcut target.
      *
@@ -286,6 +302,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the working directory for the link target.
      *
@@ -295,6 +312,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Gets the working directory for the link target.
      *
@@ -305,6 +323,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the name shown in a menu or on the desktop for the link.
      *
@@ -315,6 +334,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Gets the type of link types are: <br>
      * <ul>
@@ -330,6 +350,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the type of link
      *
@@ -347,6 +368,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the user type for the link
      *
@@ -358,6 +380,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Gets the user type for the link
      *
@@ -370,6 +393,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Saves this link.
      *
@@ -379,6 +403,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Gets the link hotKey
      *
@@ -389,6 +414,7 @@ public class Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the link hotKey
      *
