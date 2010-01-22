@@ -11,10 +11,7 @@ import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.helper.impl.XmlCompilerHelper;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,27 +23,26 @@ import java.util.Properties;
  *
  * @author Anthonin Bonnefoy
  */
-@RunWith(MockitoJUnitRunner.class)
 public class CompilerConfigTest {
     private XMLParser xmlParser;
     private CompilerConfig compilerConfig;
-    @Mock
     private CompilerData data;
-    @Mock
     private VariableSubstitutor variableSubstitutor;
-    @Mock
     private Compiler compiler;
-    @Mock
     private CompilerHelper compilerHelper;
-    @Mock
     private PropertyManager propertyManager;
-    @Mock
     private XmlCompilerHelper xmlCompilerHerlper;
-    @Mock
     private Map<String, List<DynamicVariable>> mapStringListDyn;
 
     @Before
     public void setUp() {
+        data = Mockito.mock(CompilerData.class);
+        variableSubstitutor = Mockito.mock(VariableSubstitutor.class);
+        compiler = Mockito.mock(Compiler.class);
+        propertyManager = Mockito.mock(PropertyManager.class);
+        compilerHelper = Mockito.mock(CompilerHelper.class);
+        xmlCompilerHerlper = new XmlCompilerHelper(data);
+        mapStringListDyn = Mockito.mock(Map.class);
         compilerConfig = new CompilerConfig(data, variableSubstitutor, compiler, compilerHelper, xmlCompilerHerlper, propertyManager);
         xmlParser = new XMLParser();
     }
@@ -86,4 +82,31 @@ public class CompilerConfigTest {
         Mockito.verify(mapStringListDyn).put(name, list);
     }
 
+    @Test
+    public void compilerShouldAddVariable() throws Exception {
+        IXMLElement xmlData = xmlParser.parse("<root><variables><variable name=\"scriptFile\" value=\"script.bat\"/></variables></root>");
+        Properties variable = Mockito.mock(Properties.class);
+        Mockito.when(compiler.getVariables()).thenReturn(variable);
+        compilerConfig.addVariables(xmlData);
+        Mockito.verify(variable).setProperty("scriptFile", "script.bat");
+    }
+
+    @Test
+    public void shouldAddDynamicVariable() throws Exception {
+        IXMLElement xmlData = xmlParser.parse("<root><dynamicvariables><variable name='myPath' value='$INSTALLPATH/test'/></dynamicvariables></root>");
+        Map variable = Mockito.mock(Map.class);
+
+        Mockito.when(variable.containsKey("myPath")).thenReturn(false);
+        Mockito.when(compiler.getDynamicVariables()).thenReturn(variable);
+
+        compilerConfig.addDynamicVariables(xmlData);
+
+        new ArrayList();
+        DynamicVariable dyn = new DynamicVariable();
+        dyn.setName("myPath");
+        dyn.setValue("$INSTALLPATH/test");
+        ArrayList<DynamicVariable> list = new ArrayList<DynamicVariable>();
+        list.add(dyn);
+        Mockito.verify(variable).put("myPath", list);
+    }
 }
