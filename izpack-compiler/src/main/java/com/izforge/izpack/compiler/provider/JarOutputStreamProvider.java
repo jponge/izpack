@@ -2,7 +2,6 @@ package com.izforge.izpack.compiler.provider;
 
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
-import org.apache.commons.compress.compressors.CompressorException;
 import org.picocontainer.injectors.Provider;
 
 import java.io.File;
@@ -16,9 +15,13 @@ import java.util.zip.Deflater;
  */
 public class JarOutputStreamProvider implements Provider {
 
-    public JarOutputStream provide(CompilerData compilerData) throws IOException, CompressorException {
+    public JarOutputStream provide(CompilerData compilerData) throws IOException {
         JarOutputStream jarOutputStream;
-        jarOutputStream = new JarOutputStream(new File(compilerData.getOutput()));
+        File file = new File(compilerData.getOutput());
+        if (file.exists()) {
+            file.delete();
+        }
+        jarOutputStream = new JarOutputStream(file);
         int level = compilerData.getComprLevel();
         jarOutputStream.setLevel(Deflater.BEST_COMPRESSION);
         if (level >= 0 && level < 10) {

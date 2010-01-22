@@ -35,21 +35,21 @@ public class CompilerLauncherTest {
 
     @Test
     public void testJarOutputStream() throws Exception {
-        compilerContainer.addComponent(CompilerData.class, new CompilerData("", "", ""));
+        compilerContainer.addComponent(CompilerData.class, new CompilerData("", "", "out.zip"));
         JarOutputStream jarOutputStream = compilerContainer.getComponent(JarOutputStream.class);
         assertThat(jarOutputStream, IsNull.notNullValue());
     }
 
     @Test
     public void testCompilerBinding() throws Exception {
-        compilerContainer.addComponent(CompilerData.class, new CompilerData("", "", ""));
+        compilerContainer.addComponent(CompilerData.class, new CompilerData("", "", "out.zip"));
         Compiler compiler = compilerContainer.getComponent(Compiler.class);
         assertThat(compiler, IsNull.notNullValue());
     }
 
     @Test
     public void testCompilerDataBinding() {
-        compilerContainer.addComponent(CompilerData.class, new CompilerData("", "", ""));
+        compilerContainer.addComponent(CompilerData.class, new CompilerData("", "", "out.zip"));
         CompilerData data = compilerContainer.getComponent(CompilerData.class);
         assertThat(data, IsNull.notNullValue());
     }
