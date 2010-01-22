@@ -57,7 +57,6 @@ public class CompilationTest {
     public void installerShouldContainClasses() throws Exception {
         CompilerConfig c = compilerContainer.getComponent(CompilerConfig.class);
         c.executeCompiler();
-        AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("Debug.class"));
         AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("ComponentFactory.class"));
     }
 

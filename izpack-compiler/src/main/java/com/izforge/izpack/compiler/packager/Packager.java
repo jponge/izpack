@@ -117,6 +117,9 @@ public class Packager extends PackagerBase {
     protected void writeSkeletonInstaller() throws IOException {
         sendMsg("Copying the skeleton installer", PackagerListener.MSG_VERBOSE);
         mergeManager.addResourceToMerge("com/izforge/izpack/installer/");
+        mergeManager.addResourceToMerge("org/picocontainer/");
+        mergeManager.addResourceToMerge("img/");
+        mergeManager.addResourceToMerge("bin/");
 //        InputStream is = Packager.class.getResourceAsStream("/" + getSkeletonSubpath());
 //        if (is == null) {
 //            File skeleton = new File(CompilerData.IZPACK_HOME, getSkeletonSubpath());
