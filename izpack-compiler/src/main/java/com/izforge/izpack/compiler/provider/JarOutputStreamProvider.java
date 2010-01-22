@@ -18,7 +18,6 @@ public class JarOutputStreamProvider implements Provider {
     public JarOutputStream provide(CompilerData compilerData) throws IOException {
         JarOutputStream jarOutputStream;
         File file = new File(compilerData.getOutput());
-        System.out.println(file.getAbsolutePath());
         if (file.exists()) {
             file.delete();
         }

@@ -188,12 +188,6 @@ public class MultiVolumePackager extends PackagerBase {
                 }
                 reader.close();
                 modifiedmanifest = modified.toString();
-                /*
-                System.out.println("Manifest:");
-                System.out.println(manifest.toString());
-                System.out.println("Modified Manifest:");
-                System.out.println(modified.toString());
-                */
                 break;
             }
         }
