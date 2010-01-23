@@ -10,9 +10,9 @@ import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.debugger.Debugger;
 import com.izforge.izpack.installer.panels.imgpacks.ImgPacksPanelAutomationHelper;
+import com.izforge.izpack.installer.panels.packs.PacksModel;
+import com.izforge.izpack.installer.panels.packs.PacksPanelInterface;
 import com.izforge.izpack.installer.web.WebAccessor;
-import com.izforge.izpack.panels.PacksModel;
-import com.izforge.izpack.panels.PacksPanelInterface;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 
@@ -180,7 +180,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     /*
     * (non-Javadoc)
     *
-    * @see com.izforge.izpack.panels.PacksPanelInterface#getLangpack()
+    * @see com.izforge.izpack.installer.panels.packs.PacksPanelInterface#getLangpack()
     */
 
     public LocaleDatabase getLangpack() {
@@ -190,7 +190,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     /*
     * (non-Javadoc)
     *
-    * @see com.izforge.izpack.panels.PacksPanelInterface#getBytes()
+    * @see com.izforge.izpack.installer.panels.packs.PacksPanelInterface#getBytes()
     */
 
     public long getBytes() {
@@ -200,7 +200,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     /*
     * (non-Javadoc)
     *
-    * @see com.izforge.izpack.panels.PacksPanelInterface#setBytes(int)
+    * @see com.izforge.izpack.installer.panels.packs.PacksPanelInterface#setBytes(int)
     */
 
     public void setBytes(long bytes) {
@@ -210,7 +210,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     /*
     * (non-Javadoc)
     *
-    * @see com.izforge.izpack.panels.PacksPanelInterface#showSpaceRequired()
+    * @see com.izforge.izpack.installer.panels.packs.PacksPanelInterface#showSpaceRequired()
     */
 
     public void showSpaceRequired() {
@@ -222,7 +222,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     /*
     * (non-Javadoc)
     *
-    * @see com.izforge.izpack.panels.PacksPanelInterface#showFreeSpace()
+    * @see com.izforge.izpack.installer.panels.packs.PacksPanelInterface#showFreeSpace()
     */
 
     public void showFreeSpace() {

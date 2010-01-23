@@ -27,6 +27,8 @@ import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.compiler.helper.IoHelper;
+import com.izforge.izpack.compiler.listener.PackagerListener;
 import com.izforge.izpack.compiler.merge.MergeManager;
 import com.izforge.izpack.compiler.stream.ByteCountingOutputStream;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
@@ -151,7 +153,7 @@ public class Packager extends PackagerBase {
             }
             primaryJarStream.putNextEntry(newEntry);
 
-            PackagerHelper.copyStream(in, primaryJarStream);
+            IoHelper.copyStream(in, primaryJarStream);
             primaryJarStream.closeEntry();
             in.close();
         }
@@ -166,7 +168,7 @@ public class Packager extends PackagerBase {
         for (Object[] includedJarURL : includedJarURLs) {
             InputStream is = ((URL) includedJarURL[0]).openStream();
             ZipInputStream inJarStream = new ZipInputStream(is);
-            PackagerHelper.copyZip(inJarStream, primaryJarStream, (List<String>) includedJarURL[1], alreadyWrittenFiles);
+            IoHelper.copyZip(inJarStream, primaryJarStream, (List<String>) includedJarURL[1], alreadyWrittenFiles);
         }
     }
 
@@ -207,7 +209,7 @@ public class Packager extends PackagerBase {
 //            if (packJarsSeparate) {
             // See installer.Unpacker#getPackAsStream for the counterpart
 //                String name = baseFile.getName() + ".pack-" + pack.id + ".jar";
-//                packStream = PackagerHelper.getJarOutputStream(name, baseFile.getParentFile());
+//                packStream = IoHelper.getJarOutputStream(name, baseFile.getParentFile());
 //            }
 
             sendMsg("Writing Pack " + packNumber + ": " + pack.name, PackagerListener.MSG_VERBOSE);
@@ -261,7 +263,7 @@ public class Packager extends PackagerBase {
                         pack200Counter = pack200Counter + 1;
                     } else {
                         FileInputStream inStream = new FileInputStream(file);
-                        long bytesWritten = PackagerHelper.copyStream(inStream, objOut);
+                        long bytesWritten = IoHelper.copyStream(inStream, objOut);
                         inStream.close();
                         if (bytesWritten != packFile.length()) {
                             throw new IOException("File size mismatch when reading " + file);

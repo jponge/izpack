@@ -21,7 +21,7 @@
  */
 package com.izforge.izpack.gui;
 
-import com.izforge.izpack.panels.PathSelectionPanel;
+import com.izforge.izpack.installer.panels.path.PathSelectionPanel;
 import com.izforge.izpack.util.Log;
 import com.izforge.izpack.util.MultiLineLabel;
 
@@ -254,6 +254,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
      * 
      * @see java.awt.LayoutManager#addLayoutComponent(java.lang.String, java.awt.Component)
      */
+
     public void addLayoutComponent(String name, Component comp) {
         // Has to be implemented, but not supported in this class.
     }
@@ -263,6 +264,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
      * 
      * @see java.awt.LayoutManager#removeLayoutComponent(java.awt.Component)
      */
+
     public void removeLayoutComponent(Component comp) {
         // Has to be implemented, but not supported in this class.
     }
@@ -272,6 +274,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
      * 
      * @see java.awt.LayoutManager#minimumLayoutSize(java.awt.Container)
      */
+
     public Dimension minimumLayoutSize(Container parent) {
         return preferredLayoutSize(parent);
     }
@@ -281,6 +284,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
      * 
      * @see java.awt.LayoutManager#preferredLayoutSize(java.awt.Container)
      */
+
     public Dimension preferredLayoutSize(Container parent) {
         return (determineSize());
     }
@@ -691,6 +695,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
      * 
      * @see java.awt.LayoutManager#layoutContainer(java.awt.Container)
      */
+
     public void layoutContainer(Container parent) {
         if (!needNewLayout(parent)) {
             fastLayoutContainer(parent);
@@ -1005,7 +1010,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
      */
     private boolean needsReEvaluation(Component comp) {
         if ((comp instanceof com.izforge.izpack.util.MultiLineLabel)
-                || (comp instanceof com.izforge.izpack.panels.PathSelectionPanel)) {
+                || (comp instanceof PathSelectionPanel)) {
             return (true);
         }
         return (false);
@@ -1016,6 +1021,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
      * 
      * @see java.awt.LayoutManager2#getLayoutAlignmentX(java.awt.Container)
      */
+
     public float getLayoutAlignmentX(Container target) {
         return 0;
     }
@@ -1025,6 +1031,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
      * 
      * @see java.awt.LayoutManager2#getLayoutAlignmentY(java.awt.Container)
      */
+
     public float getLayoutAlignmentY(Container target) {
         return 0;
     }
@@ -1034,6 +1041,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
      * 
      * @see java.awt.LayoutManager2#invalidateLayout(java.awt.Container)
      */
+
     public void invalidateLayout(Container target) {
         // prefLayoutDim = null;
     }
@@ -1043,6 +1051,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
      * 
      * @see java.awt.LayoutManager2#maximumLayoutSize(java.awt.Container)
      */
+
     public Dimension maximumLayoutSize(Container target) {
         return (minimumLayoutSize(target));
     }
@@ -1052,6 +1061,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
      * 
      * @see java.awt.LayoutManager2#addLayoutComponent(java.awt.Component, java.lang.Object)
      */
+
     public void addLayoutComponent(Component comp, Object constraints) {
         if (comp == null) {
             throw new NullPointerException("component has to be not null");
@@ -1289,6 +1299,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
          * 
          * @see java.awt.Component#getPreferredSize()
          */
+
         public Dimension getPreferredSize() {
             return getMinimumSize();
         }
@@ -1298,6 +1309,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
          * 
          * @see java.awt.Component#getMaximumSize()
          */
+
         public Dimension getMaximumSize() {
             return getMinimumSize();
         }
@@ -1307,6 +1319,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
          * 
          * @see java.awt.Component#getBounds()
          */
+
         public Rectangle getBounds() {
             return (getBounds(new Rectangle()));
         }
@@ -1316,6 +1329,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
          * 
          * @see java.awt.Component#getBounds(java.awt.Rectangle)
          */
+
         public Rectangle getBounds(Rectangle rect) {
             Rectangle rv = (rect != null) ? rect : new Rectangle();
             rv.setBounds(0, 0, size.width, size.height);

@@ -1,6 +1,6 @@
 package com.izforge.izpack.compiler.merge;
 
-import com.izforge.izpack.compiler.packager.PackagerHelper;
+import com.izforge.izpack.compiler.helper.IoHelper;
 import org.apache.tools.zip.ZipOutputStream;
 
 import java.io.File;
@@ -39,7 +39,7 @@ public class JarMerge implements Mergeable {
                 }
                 String entryName = zentry.getName();
                 if (entryName.matches(regexp)) {
-                    PackagerHelper.copyStreamToJar(jarInputStream, outputStream, entryName, zentry.getTime());
+                    IoHelper.copyStreamToJar(jarInputStream, outputStream, entryName, zentry.getTime());
                 }
             }
             jarInputStream.close();

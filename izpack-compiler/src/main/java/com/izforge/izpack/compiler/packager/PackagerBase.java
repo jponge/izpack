@@ -29,6 +29,7 @@ import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
+import com.izforge.izpack.compiler.listener.PackagerListener;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.PackInfo;

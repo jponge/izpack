@@ -5,7 +5,7 @@ import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
-import com.izforge.izpack.compiler.packager.PackagerListener;
+import com.izforge.izpack.compiler.listener.PackagerListener;
 import org.apache.tools.ant.taskdefs.Execute;
 
 import java.io.*;
