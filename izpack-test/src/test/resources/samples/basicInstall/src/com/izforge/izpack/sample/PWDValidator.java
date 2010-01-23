@@ -21,10 +21,11 @@
 
 package com.izforge.izpack.sample;
 
-import com.izforge.izpack.panels.ProcessingClient;
-import com.izforge.izpack.panels.Validator;
+import com.izforge.izpack.installer.panels.input.ProcessingClient;
+import com.izforge.izpack.installer.panels.input.Validator;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * This class represents a simple validator for passwords to demonstrate
  * the implementation of a password validator that cooperates with the
@@ -36,6 +37,7 @@ import com.izforge.izpack.panels.Validator;
 /*---------------------------------------------------------------------------*/
 public class PWDValidator implements Validator {
     /*--------------------------------------------------------------------------*/
+
     /**
      * Validates the contend of multiple password fields. The test
      *

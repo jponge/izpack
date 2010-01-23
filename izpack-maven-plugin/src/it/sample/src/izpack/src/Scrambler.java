@@ -19,46 +19,44 @@
  * limitations under the License.
  */
 
-package   com.izforge.izpack.sample;
+package com.izforge.izpack.sample;
 
-import    com.izforge.izpack.panels.*;
+import com.izforge.izpack.installer.panels.input.ProcessingClient;
+import com.izforge.izpack.installer.panels.input.Processor;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * This class provides a demonstration for using an encryption service in
  * connection with a <code>RuleInputField</code>, as used in a
  * <code>UserInputPanel</code>.
  *
- * @version  0.0.1 / 02/19/03
- * @author   Elmar Grom
+ * @author Elmar Grom
+ * @version 0.0.1 / 02/19/03
  */
 /*---------------------------------------------------------------------------*/
-public class Scrambler implements Processor
-{
- /*--------------------------------------------------------------------------*/
- /**
-  * Rearranges the input fields and concatenates the result, separating
-  * individual fields with a '*'.
-  *
-  * @param     client   the client object using the services of this encryptor.
-  *
-  * @return    the encryption result.
-  */
- /*--------------------------------------------------------------------------*/
-  public String process (ProcessingClient client)
-  {
-    StringBuffer buffer = new StringBuffer ();
-    
-    for (int i = client.getNumFields () - 1; i > -1; i--)
-    {
-      buffer.append (client.getFieldContents (i));
-      if (i > 0)
-      {
-        buffer.append ('*');
-      }
+public class Scrambler implements Processor {
+    /*--------------------------------------------------------------------------*/
+
+    /**
+     * Rearranges the input fields and concatenates the result, separating
+     * individual fields with a '*'.
+     *
+     * @param client the client object using the services of this encryptor.
+     * @return the encryption result.
+     */
+    /*--------------------------------------------------------------------------*/
+    public String process(ProcessingClient client) {
+        StringBuffer buffer = new StringBuffer();
+
+        for (int i = client.getNumFields() - 1; i > -1; i--) {
+            buffer.append(client.getFieldContents(i));
+            if (i > 0) {
+                buffer.append('*');
+            }
+        }
+
+        return (buffer.toString());
     }
-    
-    return (buffer.toString ());
-  }
 }
 /*---------------------------------------------------------------------------*/

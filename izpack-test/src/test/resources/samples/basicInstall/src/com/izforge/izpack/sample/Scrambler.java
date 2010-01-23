@@ -21,10 +21,11 @@
 
 package com.izforge.izpack.sample;
 
-import com.izforge.izpack.panels.ProcessingClient;
-import com.izforge.izpack.panels.Processor;
+import com.izforge.izpack.installer.panels.input.ProcessingClient;
+import com.izforge.izpack.installer.panels.input.Processor;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * This class provides a demonstration for using an encryption service in
  * connection with a <code>RuleInputField</code>, as used in a
@@ -36,6 +37,7 @@ import com.izforge.izpack.panels.Processor;
 /*---------------------------------------------------------------------------*/
 public class Scrambler implements Processor {
     /*--------------------------------------------------------------------------*/
+
     /**
      * Rearranges the input fields and concatenates the result, separating
      * individual fields with a '*'.

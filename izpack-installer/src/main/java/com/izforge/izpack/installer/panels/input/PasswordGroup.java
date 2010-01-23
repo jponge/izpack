@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.input;
 
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Debug;
@@ -37,7 +37,7 @@ import java.util.Vector;
  *
  * @author Elmar Grom
  * @version 0.0.1 / 2/22/03
- * @see com.izforge.izpack.panels.UserInputPanel
+ * @see UserInputPanel
  */
 /*---------------------------------------------------------------------------*/
 public class PasswordGroup implements ProcessingClient {

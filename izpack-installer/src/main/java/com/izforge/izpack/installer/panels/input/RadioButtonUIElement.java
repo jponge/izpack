@@ -16,28 +16,30 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.input;
 
 import com.izforge.izpack.installer.panels.userinput.UIElement;
 
+import javax.swing.*;
+
 /**
- * Additional metadata for password elements.
+ * Additional metadata for radio buttons.
  *
  * @author Dennis Reil
  */
-public class PasswordUIElement extends UIElement {
+public class RadioButtonUIElement extends UIElement {
 
-    public PasswordUIElement() {
+    public RadioButtonUIElement() {
         super();
     }
 
-    PasswordGroup passwordGroup;
+    ButtonGroup buttonGroup;
 
-    public PasswordGroup getPasswordGroup() {
-        return passwordGroup;
+    public ButtonGroup getButtonGroup() {
+        return buttonGroup;
     }
 
-    public void setPasswordGroup(PasswordGroup passwordGroup) {
-        this.passwordGroup = passwordGroup;
+    public void setButtonGroup(ButtonGroup buttonGroup) {
+        this.buttonGroup = buttonGroup;
     }
 }

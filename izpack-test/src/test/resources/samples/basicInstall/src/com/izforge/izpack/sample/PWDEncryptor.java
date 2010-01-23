@@ -21,10 +21,11 @@
 
 package com.izforge.izpack.sample;
 
-import com.izforge.izpack.panels.ProcessingClient;
-import com.izforge.izpack.panels.Processor;
+import com.izforge.izpack.installer.panels.input.ProcessingClient;
+import com.izforge.izpack.installer.panels.input.Processor;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * This class provides a demonstration for using an encryption service in
  * connection with a password field, as used in a <code>UserInputPanel</code>.
@@ -35,6 +36,7 @@ import com.izforge.izpack.panels.Processor;
 /*---------------------------------------------------------------------------*/
 public class PWDEncryptor implements Processor {
     /*--------------------------------------------------------------------------*/
+
     /**
      * Encrypts the a password and returns the encrypted result. <br>
      * <b>Note:</b> this is not a real encryption algorithm. The code only

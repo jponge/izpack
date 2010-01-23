@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.input;
 
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.data.GUIInstallData;

@@ -21,10 +21,11 @@
 
 package com.izforge.izpack.sample;
 
-import com.izforge.izpack.panels.ProcessingClient;
-import com.izforge.izpack.panels.Validator;
+import com.izforge.izpack.installer.panels.input.ProcessingClient;
+import com.izforge.izpack.installer.panels.input.Validator;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * This class represents a simple validator for IP addresses to demonstrate
  * the implementation of a rule validator that cooperates with the
@@ -36,6 +37,7 @@ import com.izforge.izpack.panels.Validator;
 /*---------------------------------------------------------------------------*/
 public class IPValidator implements Validator {
     /*--------------------------------------------------------------------------*/
+
     /**
      * Validates the contend of a <code>RuleInputField</code>. The test is
      * intended for a rule input field composed of four sub-fields. The

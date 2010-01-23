@@ -19,9 +19,9 @@
 
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.panels.PasswordGroup;
-import com.izforge.izpack.panels.ProcessingClient;
-import com.izforge.izpack.panels.Validator;
+import com.izforge.izpack.installer.panels.input.PasswordGroup;
+import com.izforge.izpack.installer.panels.input.ProcessingClient;
+import com.izforge.izpack.installer.panels.input.Validator;
 
 import java.util.Map;
 import java.util.regex.Pattern;

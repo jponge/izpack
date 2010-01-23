@@ -19,23 +19,25 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.input;
 
 import java.util.Map;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * Implement this interface in any class that wants to use processing or validation services.
  *
  * @author Elmar Grom
  * @version 0.0.1 / 2/22/03
- * @see com.izforge.izpack.panels.Processor
- * @see com.izforge.izpack.panels.Validator
+ * @see Processor
+ * @see Validator
  */
 /*---------------------------------------------------------------------------*/
 public interface ProcessingClient {
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the number of sub-fields.
      *
@@ -45,6 +47,7 @@ public interface ProcessingClient {
     public int getNumFields();
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the contents of the field indicated by <code>index</code>.
      *
@@ -69,6 +72,7 @@ public interface ProcessingClient {
     public String getText();
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * @return true if this instance has any parameters to pass to the Validator instance.
      */
@@ -76,6 +80,7 @@ public interface ProcessingClient {
     public boolean hasParams();
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the validator parameters, if any. The caller should check for the existence of
      * validator parameters via the <code>hasParams()</code> method prior to invoking this method.

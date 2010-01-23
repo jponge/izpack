@@ -1,4 +1,4 @@
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.input;
 
 import java.util.Map;
 

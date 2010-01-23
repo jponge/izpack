@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.input;
 
 import com.izforge.izpack.util.Debug;
 
@@ -27,6 +27,7 @@ import javax.swing.*;
 import java.util.Map;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * This class is a wrapper for JTextField to allow field validation.
  * Based on RuleInputField.
@@ -62,6 +63,7 @@ public class TextInputField extends JComponent implements ProcessingClient {
     private boolean hasParams = false;
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Constructs a text input field.
      *
@@ -82,6 +84,7 @@ public class TextInputField extends JComponent implements ProcessingClient {
 
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Constructs a text input field.
      *
@@ -123,6 +126,7 @@ public class TextInputField extends JComponent implements ProcessingClient {
 
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the validator parameters, if any. The caller should check for the existence of
      * validator parameters via the <code>hasParams()</code> method prior to invoking this method.
@@ -134,6 +138,7 @@ public class TextInputField extends JComponent implements ProcessingClient {
     }
 
     /*---------------------------------------------------------------------------*/
+
     /**
      * Returns the field contents, assembled acording to the encryption and separator rules.
      *
@@ -145,22 +150,26 @@ public class TextInputField extends JComponent implements ProcessingClient {
     }
 
     // javadoc inherited
+
     public void setText(String value) {
         field.setText(value);
     }
 
     // javadoc inherited
+
     public String getFieldContents(int index) {
         return field.getText();
     }
 
     // javadoc inherited
+
     public int getNumFields() {
         // We've got only one field
         return 1;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method validates the field content. Validating is performed through a user supplied
      * service class that provides the validation rules.
@@ -180,6 +189,7 @@ public class TextInputField extends JComponent implements ProcessingClient {
     }
 
     // javadoc inherited
+
     public boolean hasParams() {
         return hasParams;
     }

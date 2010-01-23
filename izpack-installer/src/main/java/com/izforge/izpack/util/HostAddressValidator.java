@@ -21,8 +21,8 @@
 
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.panels.ProcessingClient;
-import com.izforge.izpack.panels.Validator;
+import com.izforge.izpack.installer.panels.input.ProcessingClient;
+import com.izforge.izpack.installer.panels.input.Validator;
 
 import java.net.InetAddress;
 import java.net.ServerSocket;

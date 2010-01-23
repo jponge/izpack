@@ -19,26 +19,29 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.input;
 
 /*---------------------------------------------------------------------------*/
+
 /**
- * Interface for classes that provide rule validation services.
+ * Interface for classes that provide input field processing services.
  *
  * @author Elmar Grom
  * @version 0.0.1 / 10/26/02
+ * @see ProcessingClient
  */
 /*---------------------------------------------------------------------------*/
-public interface Validator {
+public interface Processor {
 
     /*--------------------------------------------------------------------------*/
+
     /**
-     * Validates the contend of an input field.
+     * Processes the contend of an input field.
      *
-     * @param client the client object using the services of this validator.
-     * @return <code>true</code> if the validation passes, otherwise <code>false</code>.
+     * @param client the client object using the services of this processor.
+     * @return The result of the encryption.
      */
     /*--------------------------------------------------------------------------*/
-    public boolean validate(ProcessingClient client);
+    public String process(ProcessingClient client);
 }
 /*---------------------------------------------------------------------------*/

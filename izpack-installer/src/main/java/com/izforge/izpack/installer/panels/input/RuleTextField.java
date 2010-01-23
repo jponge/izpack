@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.input;
 
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
@@ -29,6 +29,7 @@ import javax.swing.text.PlainDocument;
 import java.awt.*;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * One line synopsis. <BR>
  * <BR>
