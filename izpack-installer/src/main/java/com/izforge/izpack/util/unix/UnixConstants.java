@@ -4,7 +4,7 @@
  * http://izpack.org/
  * http://izpack.codehaus.org/
  *
- * Copyright 2004 Thorsten Kamann
+ * Copyright 2005 Marc Eppelmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,25 +18,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.izforge.izpack.util.unix;
 
-package com.izforge.izpack.util;
-
-import com.izforge.izpack.installer.panels.input.ProcessingClient;
-import com.izforge.izpack.installer.panels.input.Processor;
-import com.izforge.izpack.util.os.unix.UnixUsers;
 
 /**
- * @author thorsten-kamann
+ * @author marc.eppelmann
  */
-public class UnixUserProcessor implements Processor {
+public class UnixConstants {
+    /**
+     * etcPasswd = "/etc/passwd"
+     */
+    public static String etcPasswd = "/etc/passwd";
 
 
     /**
-     * Overridden Method returns a list of users in the /etc/passwd
+     *
      */
-    public String process(ProcessingClient client) {
-        return UnixUsers.getUsersColonString();
+    public UnixConstants() {
+        // TODO Auto-generated constructor stub
     }
 
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+
+    }
 
 }

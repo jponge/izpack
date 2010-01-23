@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.os.unix;
+package com.izforge.izpack.util.unix;
 
 import com.izforge.izpack.util.FileExecutor;
 

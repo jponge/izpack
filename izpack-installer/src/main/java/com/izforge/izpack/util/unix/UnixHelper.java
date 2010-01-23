@@ -15,7 +15,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.izforge.izpack.util.os.unix;
+package com.izforge.izpack.util.unix;
 
 import com.izforge.izpack.util.FileExecutor;
 
@@ -201,7 +201,7 @@ public class UnixHelper {
 
     /**
      * Standalone Test Main Method call with : &gt; java -cp ../_build
-     * com.izforge.izpack.util.os.unix.UnixHelper
+     * com.izforge.izpack.util.unix.UnixHelper
      *
      * @param args commandline args
      */

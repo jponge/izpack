@@ -15,7 +15,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.izforge.izpack.util.os.unix;
+package com.izforge.izpack.util.unix;
 
 import com.izforge.izpack.util.FileExecutor;
 
@@ -434,7 +434,7 @@ public class ShellScript {
     }
 
     /**
-     * Test Main Method Run test with: java -cp .jar com.izforge.izpack.util.os.unix.ShellScript
+     * Test Main Method Run test with: java -cp .jar com.izforge.izpack.util.unix.ShellScript
      *
      * @param args Arguments from Commandline
      */
