@@ -40,7 +40,7 @@ import java.io.File;
  * parent implements ActionListener, the ActionPerformed method will be called, if
  * PathSelectionPanel.ActionPerformed was called with a source other than the browse button. This
  * can be used to perform parentFrame.navigateNext in the IzPanel parent. An example implementation
- * is done in com.izforge.izpack.panels.PathInputPanel.
+ * is done in com.izforge.izpack.installer.panels.path.PathInputPanel.
  *
  * @author Klaus Bartz
  * @author Jeff Gordon

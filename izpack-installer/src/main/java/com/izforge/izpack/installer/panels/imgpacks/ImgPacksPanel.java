@@ -27,7 +27,7 @@ import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.panels.PacksPanelBase;
+import com.izforge.izpack.installer.panels.packs.PacksPanelBase;
 import com.izforge.izpack.util.IoHelper;
 
 import javax.swing.*;
@@ -77,7 +77,7 @@ public class ImgPacksPanel extends PacksPanelBase {
     /*
      * (non-Javadoc)
      * 
-     * @see com.izforge.izpack.panels.PacksPanelBase#createNormalLayout()
+     * @see com.izforge.izpack.installer.panels.packs.PacksPanelBase#createNormalLayout()
      */
 
     protected void createNormalLayout() {

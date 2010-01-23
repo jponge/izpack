@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.packs;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.LocaleDatabase;
@@ -182,7 +182,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     /*
      * (non-Javadoc)
      * 
-     * @see com.izforge.izpack.panels.PacksPanelInterface#getLangpack()
+     * @see com.izforge.izpack.installer.panels.packs.PacksPanelInterface#getLangpack()
      */
 
     public LocaleDatabase getLangpack() {
@@ -192,7 +192,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     /*
      * (non-Javadoc)
      * 
-     * @see com.izforge.izpack.panels.PacksPanelInterface#getBytes()
+     * @see com.izforge.izpack.installer.panels.packs.PacksPanelInterface#getBytes()
      */
 
     public long getBytes() {
@@ -202,7 +202,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     /*
      * (non-Javadoc)
      * 
-     * @see com.izforge.izpack.panels.PacksPanelInterface#setBytes(int)
+     * @see com.izforge.izpack.installer.panels.packs.PacksPanelInterface#setBytes(int)
      */
 
     public void setBytes(long bytes) {
@@ -212,7 +212,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     /*
      * (non-Javadoc)
      * 
-     * @see com.izforge.izpack.panels.PacksPanelInterface#showSpaceRequired()
+     * @see com.izforge.izpack.installer.panels.packs.PacksPanelInterface#showSpaceRequired()
      */
 
     public void showSpaceRequired() {
@@ -224,7 +224,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     /*
      * (non-Javadoc)
      * 
-     * @see com.izforge.izpack.panels.PacksPanelInterface#showFreeSpace()
+     * @see com.izforge.izpack.installer.panels.packs.PacksPanelInterface#showFreeSpace()
      */
 
     public void showFreeSpace() {

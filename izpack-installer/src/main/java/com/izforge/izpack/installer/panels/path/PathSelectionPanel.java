@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.path;
 
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IzPanelConstraints;
@@ -41,7 +41,7 @@ import java.io.File;
  * parent implements ActionListener, the ActionPerformed method will be called, if
  * PathSelectionPanel.ActionPerformed was called with a source other than the browse button. This
  * can be used to perform parentFrame.navigateNext in the IzPanel parent. An example implementation
- * is done in com.izforge.izpack.panels.PathInputPanel.
+ * is done in com.izforge.izpack.installer.panels.path.PathInputPanel.
  *
  * @author Klaus Bartz
  */
