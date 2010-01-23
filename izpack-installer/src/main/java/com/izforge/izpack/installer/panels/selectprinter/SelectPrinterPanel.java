@@ -23,7 +23,7 @@
  *
  */
 
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels.selectprinter;
 
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;

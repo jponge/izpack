@@ -1,4 +1,4 @@
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels;
 
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.container.IInstallerContainer;

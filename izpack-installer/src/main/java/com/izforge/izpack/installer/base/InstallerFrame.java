@@ -39,9 +39,9 @@ import com.izforge.izpack.installer.GUIListener;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.debugger.Debugger;
+import com.izforge.izpack.installer.panels.PanelManager;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.installer.unpacker.Unpacker;
-import com.izforge.izpack.panels.PanelManager;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
