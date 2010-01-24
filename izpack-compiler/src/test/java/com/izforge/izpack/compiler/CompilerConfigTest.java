@@ -8,7 +8,7 @@ import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
-import com.izforge.izpack.compiler.helper.impl.XmlCompilerHelper;
+import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -41,7 +41,7 @@ public class CompilerConfigTest {
         compiler = Mockito.mock(Compiler.class);
         propertyManager = Mockito.mock(PropertyManager.class);
         compilerHelper = Mockito.mock(CompilerHelper.class);
-        xmlCompilerHerlper = new XmlCompilerHelper(data);
+        xmlCompilerHerlper = new XmlCompilerHelper(data.getInstallFile());
         mapStringListDyn = Mockito.mock(Map.class);
         compilerConfig = new CompilerConfig(data, variableSubstitutor, compiler, compilerHelper, xmlCompilerHerlper, propertyManager);
         xmlParser = new XMLParser();

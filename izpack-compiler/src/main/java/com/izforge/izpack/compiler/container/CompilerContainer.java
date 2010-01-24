@@ -7,8 +7,6 @@ import com.izforge.izpack.compiler.cli.CliAnalyzer;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.helper.CompilerResourceManager;
-import com.izforge.izpack.compiler.helper.IXmlCompilerHelper;
-import com.izforge.izpack.compiler.helper.impl.XmlCompilerHelper;
 import com.izforge.izpack.compiler.listener.CmdlinePackagerListener;
 import com.izforge.izpack.compiler.merge.MergeManager;
 import com.izforge.izpack.compiler.packager.IPackager;
@@ -35,7 +33,6 @@ public class CompilerContainer extends AbstractContainer {
         pico.addComponent(CliAnalyzer.class);
         pico.addComponent(CmdlinePackagerListener.class);
         pico.addComponent(Compiler.class);
-        pico.addComponent(IXmlCompilerHelper.class, XmlCompilerHelper.class);
         pico.addComponent(CompilerConfig.class);
         pico.addComponent(CompilerHelper.class);
         pico.addComponent(PropertyManager.class);
@@ -44,6 +41,7 @@ public class CompilerContainer extends AbstractContainer {
         pico.addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class);
 
         pico.addComponent(IPackager.class, Packager.class);
+        pico.addAdapter(new ProviderAdapter(new XmlCompilerHelperProvider()));
         pico.addAdapter(new ProviderAdapter(new PropertiesProvider()));
         pico.addAdapter(new ProviderAdapter(new JarOutputStreamProvider()));
         pico.addAdapter(new ProviderAdapter(new CompressedOutputStreamProvider()));

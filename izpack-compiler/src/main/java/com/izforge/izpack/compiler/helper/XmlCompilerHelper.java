@@ -1,10 +1,7 @@
-package com.izforge.izpack.compiler.helper.impl;
+package com.izforge.izpack.compiler.helper;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.exception.CompilerException;
-import com.izforge.izpack.compiler.data.CompilerData;
-import com.izforge.izpack.compiler.helper.AssertionHelper;
-import com.izforge.izpack.compiler.helper.IXmlCompilerHelper;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,12 +11,12 @@ import java.net.URL;
  *
  * @author Anthonin Bonnefoy
  */
-public class XmlCompilerHelper implements IXmlCompilerHelper {
+public class XmlCompilerHelper {
 
-    private CompilerData compilerData;
+    private final String installFile;
 
-    public XmlCompilerHelper(CompilerData compilerData) {
-        this.compilerData = compilerData;
+    public XmlCompilerHelper(String installFile) {
+        this.installFile = installFile;
     }
 
     /**
@@ -31,7 +28,7 @@ public class XmlCompilerHelper implements IXmlCompilerHelper {
     public String requireContent(IXMLElement element) throws CompilerException {
         String content = element.getContent();
         if (content == null || content.length() == 0) {
-            AssertionHelper.parseError(element, "<" + element.getName() + "> requires content", compilerData.getInstallFile());
+            AssertionHelper.parseError(element, "<" + element.getName() + "> requires content", installFile);
         }
         return content;
     }
@@ -48,7 +45,7 @@ public class XmlCompilerHelper implements IXmlCompilerHelper {
             url = new URL(requireContent(element));
         }
         catch (MalformedURLException x) {
-            AssertionHelper.parseError(element, "<" + element.getName() + "> requires valid URL", x, compilerData.getInstallFile());
+            AssertionHelper.parseError(element, "<" + element.getName() + "> requires valid URL", x, installFile);
         }
         return url;
     }
@@ -63,7 +60,7 @@ public class XmlCompilerHelper implements IXmlCompilerHelper {
     public IXMLElement requireChildNamed(IXMLElement parent, String name) throws CompilerException {
         IXMLElement child = parent.getFirstChildNamed(name);
         if (child == null) {
-            AssertionHelper.parseError(parent, "<" + parent.getName() + "> requires child <" + name + ">", compilerData.getInstallFile());
+            AssertionHelper.parseError(parent, "<" + parent.getName() + "> requires child <" + name + ">", installFile);
         }
         return child;
     }
