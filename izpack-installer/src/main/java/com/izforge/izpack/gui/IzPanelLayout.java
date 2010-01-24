@@ -21,7 +21,6 @@
  */
 package com.izforge.izpack.gui;
 
-import com.izforge.izpack.installer.panels.path.PathSelectionPanel;
 import com.izforge.izpack.util.Log;
 import com.izforge.izpack.util.MultiLineLabel;
 
@@ -212,8 +211,9 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                     || LabelFactory.FullLineLabel.class.isAssignableFrom(clazz)) {
                 return (FULL_LINE_COMPONENT_CONSTRAINT);
             }
-            if (PathSelectionPanel.class.isAssignableFrom(clazz)
-                    || JCheckBox.class.isAssignableFrom(clazz)
+            // REFACTOR : find how to replace it
+//            if (PathSelectionPanel.class.isAssignableFrom(clazz)
+            if (JCheckBox.class.isAssignableFrom(clazz)
                     || JRadioButton.class.isAssignableFrom(clazz)) {
                 return (FULL_LINE_CONTROL_CONSTRAINT);
             }
@@ -1009,8 +1009,10 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
      * @return whether the type of component needs potential a reevaluation or not
      */
     private boolean needsReEvaluation(Component comp) {
-        if ((comp instanceof com.izforge.izpack.util.MultiLineLabel)
-                || (comp instanceof PathSelectionPanel)) {
+        if ((comp instanceof com.izforge.izpack.util.MultiLineLabel))
+        // REFACTOR : Same here
+        // || (comp instanceof PathSelectionPanel)) {
+        {
             return (true);
         }
         return (false);
