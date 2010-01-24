@@ -1,4 +1,4 @@
-package com.izforge.izpack.installer.panels.userinput;
+package com.izforge.izpack.installer.panels.userinput.validator;
 
 import java.util.Map;
 

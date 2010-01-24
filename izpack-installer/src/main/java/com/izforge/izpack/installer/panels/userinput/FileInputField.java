@@ -24,6 +24,7 @@ import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.panels.userinput.validator.ValidatorContainer;
 import com.izforge.izpack.util.Debug;
 
 import javax.swing.*;

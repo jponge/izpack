@@ -19,49 +19,45 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util;
+package com.izforge.izpack.installer.panels.userinput.validator;
 
 import com.izforge.izpack.installer.panels.userinput.ProcessingClient;
-import com.izforge.izpack.installer.panels.userinput.Validator;
 
 import java.net.InetAddress;
 import java.net.ServerSocket;
 
 /**
- * A validator to check whether a port is available (free) on the localhost.
+ * A validator to check wheter a host:port is available (free).
  * <p/>
  * This validator can be used for rule input fields in the UserInputPanel to make sure that the port
  * the user entered is not in use.
  *
  * @author thorque
  */
-public class PortValidator implements Validator {
+public class HostAddressValidator implements Validator {
 
     public boolean validate(ProcessingClient client) {
         InetAddress inet = null;
-        String host = "localhost";
+        String host = "";
+        int port = 0;
         boolean retValue = false;
-        int numfields = client.getNumFields();
 
-        for (int i = 0; i < numfields; i++) {
-            String value = client.getFieldContents(i);
+        try {
+            host = client.getFieldContents(0);
+            port = Integer.parseInt(client.getFieldContents(1));
+        }
+        catch (Exception e) {
+            return false;
+        }
 
-            if ((value == null) || (value.length() == 0)) {
-                return false;
-            }
-
-            try {
-                inet = InetAddress.getByName(host);
-                ServerSocket socket = new ServerSocket(Integer.parseInt(value), 0, inet);
-                retValue = socket.getLocalPort() > 0;
-                if (!retValue) {
-                    break;
-                }
-                socket.close();
-            }
-            catch (Exception ex) {
-                retValue = false;
-            }
+        try {
+            inet = InetAddress.getByName(host);
+            ServerSocket socket = new ServerSocket(port, 0, inet);
+            retValue = socket.getLocalPort() > 0;
+            socket.close();
+        }
+        catch (Exception ex) {
+            retValue = false;
         }
         return retValue;
     }

@@ -738,7 +738,7 @@ and modify, if required. Example:
                 <spec txt="Environment Properties File:" size="25" set=""/>
                 <str id="UserInputPanel.file.notfile.message" txt="The properties file you have chosen either does not exist or is not valid."/>
                 <str id="UserInputPanel.file.notfile.caption" txt="Invalid File"/>
-                <validator class="com.izforge.izpack.util.RegularExpressionValidator" txt="Invalid properties file!">
+                <validator class="com.izforge.izpack.installer.panels.userinput.validator.RegularExpressionValidator" txt="Invalid properties file!">
                     <param name="pattern" value=".*[.]properties|.*[.]PROPERTIES}"/>
                 </validator>
             </field>

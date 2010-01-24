@@ -20,6 +20,9 @@
  */
 package com.izforge.izpack.installer.panels.userinput;
 
+import com.izforge.izpack.installer.panels.userinput.validator.Validator;
+import com.izforge.izpack.installer.panels.userinput.validator.ValidatorContainer;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

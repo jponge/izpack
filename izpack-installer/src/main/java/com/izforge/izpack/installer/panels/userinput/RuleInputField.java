@@ -23,6 +23,7 @@ package com.izforge.izpack.installer.panels.userinput;
 
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.panels.userinput.validator.Validator;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.apache.regexp.RE;

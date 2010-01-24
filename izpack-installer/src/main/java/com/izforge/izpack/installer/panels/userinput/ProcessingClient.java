@@ -31,7 +31,7 @@ import java.util.Map;
  * @author Elmar Grom
  * @version 0.0.1 / 2/22/03
  * @see Processor
- * @see Validator
+ * @see com.izforge.izpack.installer.panels.userinput.validator.Validator
  */
 /*---------------------------------------------------------------------------*/
 public interface ProcessingClient {

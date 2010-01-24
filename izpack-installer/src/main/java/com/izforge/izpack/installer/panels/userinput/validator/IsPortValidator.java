@@ -4,7 +4,7 @@
  * http://izpack.org/
  * http://izpack.codehaus.org/
  * 
- * Copyright 2003 Tino Schwarze
+ * Copyright 2004 Thorsten Kamann
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,33 +19,35 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util;
+package com.izforge.izpack.installer.panels.userinput.validator;
 
 import com.izforge.izpack.installer.panels.userinput.ProcessingClient;
-import com.izforge.izpack.installer.panels.userinput.Validator;
 
 /**
- * A validator to enforce non-empty fields.
- * <p/>
- * This validator can be used for rule input fields in the UserInputPanel to make sure that the user
- * entered something.
+ * A validator to check whether the field content is a port .
  *
- * @author tisc
+ * @author thorque
  */
-public class NotEmptyValidator implements Validator {
+public class IsPortValidator implements Validator {
 
     public boolean validate(ProcessingClient client) {
-        int numfields = client.getNumFields();
+        int port = 0;
 
-        for (int i = 0; i < numfields; i++) {
-            String value = client.getFieldContents(i);
-
-            if ((value == null) || (value.length() == 0)) {
-                return false;
-            }
+        if ("".equals(client.getFieldContents(0))) {
+            return false;
         }
 
-        return true;
+        try {
+            port = Integer.parseInt(client.getFieldContents(0));
+            if (port > 0 && port < 65535) {
+                return true;
+            }
+        }
+        catch (Exception ex) {
+            return false;
+        }
+
+        return false;
     }
 
 }

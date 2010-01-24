@@ -19,7 +19,9 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer.panels.userinput;
+package com.izforge.izpack.installer.panels.userinput.validator;
+
+import com.izforge.izpack.installer.panels.userinput.ProcessingClient;
 
 /*---------------------------------------------------------------------------*/
 

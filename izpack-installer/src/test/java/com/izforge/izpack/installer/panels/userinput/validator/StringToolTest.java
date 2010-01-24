@@ -17,8 +17,10 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util;
+package com.izforge.izpack.installer.panels.userinput.validator;
 
+import com.izforge.izpack.util.StringTool;
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class StringToolTest extends TestCase {
@@ -29,7 +31,7 @@ public class StringToolTest extends TestCase {
     public void testReplace() {
         String ref = "ABC-012-def";
 
-        assertEquals(null, StringTool.replace(null, null, null));
+        Assert.assertEquals(null, StringTool.replace(null, null, null));
         assertEquals("ABC-012-def", StringTool.replace(ref, null, null));
         assertEquals("ABC-012-def", StringTool.replace(ref, "something", null));
         assertEquals("ABC012def", StringTool.replace(ref, "-", null));

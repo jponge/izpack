@@ -18,11 +18,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.util;
+package com.izforge.izpack.installer.panels.userinput.validator;
 
 import com.izforge.izpack.installer.panels.userinput.PasswordGroup;
 import com.izforge.izpack.installer.panels.userinput.ProcessingClient;
-import com.izforge.izpack.installer.panels.userinput.Validator;
+import com.izforge.izpack.util.Debug;
 import sun.misc.BASE64Encoder;
 
 import javax.crypto.Cipher;

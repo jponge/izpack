@@ -17,6 +17,7 @@ import com.izforge.izpack.gui.TwoColumnLayout;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.panels.userinput.validator.ValidatorContainer;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.HyperlinkHandler;
 import com.izforge.izpack.util.OsConstraint;
@@ -1970,8 +1971,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
      *        &lt;pwd txt=&quot;Keystore Password:&quot; size=&quot;25&quot; set=&quot;&quot;/&gt;
      *        &lt;pwd txt=&quot;Retype Password:&quot; size=&quot;25&quot; set=&quot;&quot;/&gt;
      *      &lt;/spec&gt;
-     *      &lt;validator class=&quot;com.izforge.izpack.util.PasswordEqualityValidator&quot; txt=&quot;Both keystore passwords must match.&quot; id=&quot;key for the error text&quot;/&gt;
-     *      &lt;validator class=&quot;com.izforge.izpack.util.PasswordKeystoreValidator&quot; txt=&quot;Could not validate keystore with password and alias provided.&quot; id=&quot;key for the error text&quot;&gt;
+     *      &lt;validator class=&quot;com.izforge.izpack.installer.panels.userinput.validator.PasswordEqualityValidator&quot; txt=&quot;Both keystore passwords must match.&quot; id=&quot;key for the error text&quot;/&gt;
+     *      &lt;validator class=&quot;com.izforge.izpack.installer.panels.userinput.validator.PasswordKeystoreValidator&quot; txt=&quot;Could not validate keystore with password and alias provided.&quot; id=&quot;key for the error text&quot;&gt;
      *        &lt;param name=&quot;keystoreFile&quot; value=&quot;${existing.ssl.keystore}&quot;/&gt;
      *        &lt;param name=&quot;keystoreType&quot; value=&quot;JKS&quot;/&gt;
      *        &lt;param name=&quot;keystoreAlias&quot; value=&quot;${keystore.key.alias}&quot;/&gt;
