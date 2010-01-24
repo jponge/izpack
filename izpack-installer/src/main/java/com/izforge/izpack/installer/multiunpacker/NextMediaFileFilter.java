@@ -15,7 +15,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.izforge.izpack.installer.panels;
+package com.izforge.izpack.installer.multiunpacker;
 
 import com.izforge.izpack.api.data.LocaleDatabase;
 
@@ -53,4 +53,5 @@ public class NextMediaFileFilter extends FileFilter {
     public String getDescription() {
         return this.langpack.getString("nextmedia.filedesc");
     }
+
 }
