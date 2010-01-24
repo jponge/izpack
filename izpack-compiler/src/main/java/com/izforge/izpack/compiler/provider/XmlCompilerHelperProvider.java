@@ -11,7 +11,7 @@ import org.picocontainer.injectors.Provider;
  */
 public class XmlCompilerHelperProvider implements Provider {
 
-    public XmlCompilerHelper provider(CompilerData compilerData) {
+    public XmlCompilerHelper provide(CompilerData compilerData) {
         return new XmlCompilerHelper(compilerData.getInstallFile());
     }
 }

@@ -1,8 +1,9 @@
-package com.izforge.izpack.installer.panels;
+package com.izforge.izpack.test;
 
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.panels.PanelManager;
 import com.izforge.izpack.installer.panels.checkedhello.CheckedHelloPanel;
 import org.hamcrest.core.Is;
 import org.junit.Before;
