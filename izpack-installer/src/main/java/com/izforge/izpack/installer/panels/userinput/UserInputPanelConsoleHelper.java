@@ -28,7 +28,6 @@ import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.PanelConsoleHelper;
-import com.izforge.izpack.installer.panels.input.Processor;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.helper.SpecHelper;

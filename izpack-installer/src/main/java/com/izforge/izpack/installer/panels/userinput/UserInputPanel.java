@@ -1,4 +1,4 @@
-package com.izforge.izpack.installer.panels.input;
+package com.izforge.izpack.installer.panels.userinput;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
@@ -17,9 +17,6 @@ import com.izforge.izpack.gui.TwoColumnLayout;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.installer.panels.userinput.UIElement;
-import com.izforge.izpack.installer.panels.userinput.UIElementType;
-import com.izforge.izpack.installer.panels.userinput.UserInputPanelAutomationHelper;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.HyperlinkHandler;
 import com.izforge.izpack.util.OsConstraint;

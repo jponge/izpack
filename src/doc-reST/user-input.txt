@@ -1118,7 +1118,7 @@ Creation Your Own Custom Validator
 '''''''''''''''''''''''''''''''''''''
 
 You can create your own custom Validator implementation simply by creating a
-new class which implements the ``com.izforge.izpack.installer.panels.input.Validator``
+new class which implements the ``com.izforge.izpack.installer.panels.userinput.Validator``
 interface. This interface specifies a single method:
 ``validate(ProcessingClient client)`` , which returns a ``boolean`` value.
 You can retrieve the value entered by the user by casting the input

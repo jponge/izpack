@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.installer.panels.input;
+package com.izforge.izpack.installer.panels.userinput;
 
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Debug;

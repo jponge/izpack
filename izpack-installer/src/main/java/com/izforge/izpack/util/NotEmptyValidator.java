@@ -21,8 +21,8 @@
 
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.installer.panels.input.ProcessingClient;
-import com.izforge.izpack.installer.panels.input.Validator;
+import com.izforge.izpack.installer.panels.userinput.ProcessingClient;
+import com.izforge.izpack.installer.panels.userinput.Validator;
 
 /**
  * A validator to enforce non-empty fields.

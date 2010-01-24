@@ -1,6 +1,6 @@
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.installer.panels.input.ProcessingClient;
+import com.izforge.izpack.installer.panels.userinput.ProcessingClient;
 import junit.framework.Assert;
 import org.junit.Ignore;
 import org.junit.Test;

@@ -21,9 +21,9 @@
 package com.izforge.izpack.util;
 
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.installer.panels.input.PasswordGroup;
-import com.izforge.izpack.installer.panels.input.ProcessingClient;
-import com.izforge.izpack.installer.panels.input.Validator;
+import com.izforge.izpack.installer.panels.userinput.PasswordGroup;
+import com.izforge.izpack.installer.panels.userinput.ProcessingClient;
+import com.izforge.izpack.installer.panels.userinput.Validator;
 
 import java.io.FileInputStream;
 import java.security.KeyStore;

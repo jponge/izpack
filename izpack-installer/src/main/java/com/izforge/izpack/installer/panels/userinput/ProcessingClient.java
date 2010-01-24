@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer.panels.input;
+package com.izforge.izpack.installer.panels.userinput;
 
 import java.util.Map;
 
