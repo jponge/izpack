@@ -26,8 +26,8 @@ import java.util.List;
  */
 public class PanelManager {
 
-    public static String CLASSNAME_PREFIX = "com.izforge.izpack.installer.panels";
-    public static String BASE_CLASSNAME_PATH = "com/izforge/izpack/installer/panels";
+    public static String CLASSNAME_PREFIX = "com.izforge.izpack.panels";
+    public static String BASE_CLASSNAME_PATH = CLASSNAME_PREFIX.replaceAll("\\.", "/");
 
     private GUIInstallData installdata;
     private IInstallerContainer installerContainer;

@@ -21,8 +21,8 @@
 
 package com.izforge.izpack.sample;
 
-import com.izforge.izpack.installer.panels.userinput.ProcessingClient;
-import com.izforge.izpack.installer.panels.userinput.validator.Validator;
+import com.izforge.izpack.panels.userinput.processorclient.ProcessingClient;
+import com.izforge.izpack.panels.userinput.validator.Validator;
 
 /*---------------------------------------------------------------------------*/
 

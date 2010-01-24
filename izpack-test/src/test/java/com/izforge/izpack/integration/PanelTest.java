@@ -4,7 +4,7 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.manager.PanelManager;
-import com.izforge.izpack.installer.panels.target.TargetPanel;
+import com.izforge.izpack.panels.target.TargetPanel;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 

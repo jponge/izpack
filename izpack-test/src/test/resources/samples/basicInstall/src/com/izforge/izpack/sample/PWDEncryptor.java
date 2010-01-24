@@ -21,8 +21,8 @@
 
 package com.izforge.izpack.sample;
 
-import com.izforge.izpack.installer.panels.userinput.ProcessingClient;
-import com.izforge.izpack.installer.panels.userinput.Processor;
+import com.izforge.izpack.panels.userinput.processor.Processor;
+import com.izforge.izpack.panels.userinput.processorclient.ProcessingClient;
 
 /*---------------------------------------------------------------------------*/
 

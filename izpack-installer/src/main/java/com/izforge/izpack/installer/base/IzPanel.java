@@ -81,7 +81,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     protected InstallerFrame parent;
 
     /**
-     * i.e. "com.izforge.izpack.installer.panels.hello.HelloPanel"
+     * i.e. "com.izforge.izpack.panels.hello.HelloPanel"
      */
     protected String myFullClassname;
 

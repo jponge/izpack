@@ -36,6 +36,11 @@
             <scope>runtime</scope>
         </dependency>
 
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-panel</artifactId>
+        </dependency>
+
         <!--<dependency>-->
         <!--<groupId>${groupId}</groupId>-->
         <!--<artifactId>izpack-uninstaller</artifactId>-->
