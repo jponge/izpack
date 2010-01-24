@@ -6,7 +6,6 @@ import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.installer.base.AutomatedInstaller;
 import com.izforge.izpack.installer.base.ConditionCheck;
 import com.izforge.izpack.installer.base.ConsoleInstaller;
-import com.izforge.izpack.installer.base.GUIInstaller;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.provider.GUIInstallDataProvider;
 import com.izforge.izpack.installer.provider.IconsProvider;
@@ -39,7 +38,6 @@ public class ApplicationContainer extends AbstractContainer implements IApplicat
                 .addComponent(CustomDataContainer.class)
                 .addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
                 .addComponent(Properties.class)
-                .addComponent(GUIInstaller.class)
                 .addComponent(ResourceManager.class)
                 .addComponent(ConsoleInstaller.class)
                 .addComponent(UninstallDataWriter.class)
