@@ -1,4 +1,4 @@
-package com.izforge.izpack.installer.provider;
+package com.izforge.izpack.installer.container.provider;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;

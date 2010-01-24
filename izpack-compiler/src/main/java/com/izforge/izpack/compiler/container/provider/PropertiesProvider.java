@@ -1,4 +1,4 @@
-package com.izforge.izpack.compiler.provider;
+package com.izforge.izpack.compiler.container.provider;
 
 import org.picocontainer.injectors.Provider;
 

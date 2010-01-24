@@ -1,7 +1,7 @@
 package com.izforge.izpack.compiler.compressor;
 
+import com.izforge.izpack.compiler.container.provider.JarOutputStreamProvider;
 import com.izforge.izpack.compiler.data.CompilerData;
-import com.izforge.izpack.compiler.provider.JarOutputStreamProvider;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
 import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.tools.zip.ZipEntry;

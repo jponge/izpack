@@ -1,4 +1,4 @@
-package com.izforge.izpack.compiler.provider;
+package com.izforge.izpack.compiler.container.provider;
 
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.compressor.BZip2PackCompressor;

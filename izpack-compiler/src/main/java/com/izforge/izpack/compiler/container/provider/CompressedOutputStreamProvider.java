@@ -1,4 +1,4 @@
-package com.izforge.izpack.compiler.provider;
+package com.izforge.izpack.compiler.container.provider;
 
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
