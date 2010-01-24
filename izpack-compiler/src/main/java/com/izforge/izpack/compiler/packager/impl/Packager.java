@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.compiler.packager;
+package com.izforge.izpack.compiler.packager.impl;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;

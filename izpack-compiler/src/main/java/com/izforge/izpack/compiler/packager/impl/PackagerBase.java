@@ -20,7 +20,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.compiler.packager;
+package com.izforge.izpack.compiler.packager.impl;
 
 import com.izforge.izpack.api.data.DynamicVariable;
 import com.izforge.izpack.api.data.Info;
@@ -30,6 +30,7 @@ import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.listener.PackagerListener;
+import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.PackInfo;

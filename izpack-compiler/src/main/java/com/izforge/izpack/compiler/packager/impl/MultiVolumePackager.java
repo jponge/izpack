@@ -1,4 +1,4 @@
-//REFACTOR : Do it after :D ... 
+////REFACTOR : Do it after :D ...
 ///*
 // * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
 // *
@@ -16,7 +16,7 @@
 // * or implied. See the License for the specific language governing permissions and limitations under
 // * the License.
 // */
-//package com.izforge.izpack.compiler.packager;
+//package com.izforge.izpack.compiler.packager.impl;
 //
 //import com.izforge.izpack.api.adaptator.IXMLElement;
 //import com.izforge.izpack.api.data.Pack;
@@ -475,7 +475,7 @@
 //    }
 //
 //    /* (non-Javadoc)
-//     * @see com.izforge.izpack.compiler.packager.PackagerBase#writePacks()
+//     * @see com.izforge.izpack.compiler.packager.impl.PackagerBase#writePacks()
 //     */
 //
 //    protected void writePacks() throws Exception {

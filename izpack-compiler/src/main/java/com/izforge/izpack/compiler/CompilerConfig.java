@@ -110,7 +110,7 @@ public class CompilerConfig extends Thread {
      */
     private HashMap<String, List<URL>> packsLangUrlMap = new HashMap<String, List<URL>>();
     private String unpackerClassname = "com.izforge.izpack.installer.unpacker.Unpacker";
-    private String packagerClassname = "com.izforge.izpack.compiler.packager.Packager";
+    private String packagerClassname = "com.izforge.izpack.compiler.packager.impl.Packager";
     private VariableSubstitutor variableSubstitutor;
     private XmlCompilerHelper xmlCompilerHelper;
     private PropertyManager propertyManager;

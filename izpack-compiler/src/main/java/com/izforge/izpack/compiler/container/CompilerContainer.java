@@ -10,7 +10,7 @@ import com.izforge.izpack.compiler.helper.CompilerResourceManager;
 import com.izforge.izpack.compiler.listener.CmdlinePackagerListener;
 import com.izforge.izpack.compiler.merge.MergeManager;
 import com.izforge.izpack.compiler.packager.IPackager;
-import com.izforge.izpack.compiler.packager.Packager;
+import com.izforge.izpack.compiler.packager.impl.Packager;
 import com.izforge.izpack.compiler.provider.*;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
