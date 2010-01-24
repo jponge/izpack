@@ -246,7 +246,7 @@ Here are the steps needed to develop adn debug IzPack with Eclipse:
       at com.izforge.izpack.util.os.ShellLink.initialize(ShellLink.java:461)
       at com.izforge.izpack.util.os.ShellLink.<init>(ShellLink.java:349)
       at com.izforge.izpack.util.os.Win_Shortcut.initialize(Win_Shortcut.java:79)
-      at com.izforge.izpack.installer.panels.shortcut.ShortcutPanel.<init>(ShortcutPanel.java:473)
+      at com.izforge.izpack.panels.shortcut.ShortcutPanel.<init>(ShortcutPanel.java:473)
       at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
       at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
       at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)

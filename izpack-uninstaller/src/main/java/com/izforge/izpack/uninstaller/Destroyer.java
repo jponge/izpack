@@ -26,7 +26,7 @@ import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.os.unix.ShellScript;
+import com.izforge.izpack.util.unix.ShellScript;
 
 import java.io.*;
 import java.util.*;

@@ -106,6 +106,7 @@ public class InstallationTest extends AbstractInstallationTest {
         installerFrameFixture.optionPane().requireWarningMessage();
         installerFrameFixture.optionPane().okButton().click();
         // Packs Panel
+        Thread.sleep(100);
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Install Panel
         waitAndCheckInstallation(installData, installPath);

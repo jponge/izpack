@@ -1001,7 +1001,7 @@ The example of using Regexp validator in rule input field:
           set="0: 1:domain 2:com" resultFormat="displayFormat"
       />
       <validator
-      class="com.izforge.izpack.util.RegularExpressionValidator"
+      class="com.izforge.izpack.panels.userinput.validator.RegularExpressionValidator"
           txt="Invalid email address!">
         <param
             name="pattern"
@@ -1021,7 +1021,7 @@ The example of using Regexp validator in text input field:
           txt="Your Email address:" set="you@domain.com" size="20" id=""
       />
       <validator
-      class="com.izforge.izpack.util.RegularExpressionValidator"
+      class="com.izforge.izpack.panels.userinput.validator.RegularExpressionValidator"
           txt="Invalid email address!">
         <param
             name="pattern"
@@ -1041,9 +1041,9 @@ An example of using regexp validator in a password field
             <pwd txt="DB Password:" size="25" set=""/>
             <pwd txt="Retype Password:" size="25" set=""/>
           </spec>
-          <validator class="com.izforge.izpack.util.PasswordEqualityValidator" 
+          <validator class="com.izforge.izpack.panels.userinput.validator.PasswordEqualityValidator"
           		txt="Both DB passwords must match." id="key for the error text"/>
-          <validator class="com.izforge.izpack.util.RegularExpressionValidator" 
+          <validator class="com.izforge.izpack.panels.userinput.validator.RegularExpressionValidator"
           		txt="Service password must begin with a character and be 8-20 
           				 mixed-case characters, numbers, and special characters [#@!$_]." 
           				 id="key for the error text">
@@ -1071,7 +1071,7 @@ typed correctly before any other validation takes place.
 		            <pwd txt="The Password:" size="25" set=""/>
 		            <pwd txt="Retype Password:" size="25" set=""/>
 		          </spec>
-		          <validator class="com.izforge.izpack.util.PasswordEqualityValidator" 
+		          <validator class="com.izforge.izpack.panels.userinput.validator.PasswordEqualityValidator"
 		          	txt="Both passwords must match." id="lang pack key for the error text"/>
 		        </field>
 
@@ -1101,9 +1101,9 @@ in the 'keystorePassword' parameter.
 		            <pwd txt="Keystore Password:" size="25" set=""/>
 		            <pwd txt="Retype Password:" size="25" set=""/>
 		          </spec>
-		          <validator class="com.izforge.izpack.util.PasswordEqualityValidator" 
+		          <validator class="com.izforge.izpack.panels.userinput.validator.PasswordEqualityValidator"
 		          		txt="Both keystore passwords must match." id="key for the error text"/>
-		          <validator class="com.izforge.izpack.util.PasswordKeystoreValidator" 
+		          <validator class="com.izforge.izpack.panels.userinput.validator.PasswordKeystoreValidator"
 		          		txt="Could not validate keystore with password and alias provided." id="key for the error text">
 		            <param name="keystoreFile" value="${ssl.keystore}"/>
 		            <param name="keystoreType" value="${ssl.keystore.type}"/>
@@ -1118,7 +1118,7 @@ Creation Your Own Custom Validator
 '''''''''''''''''''''''''''''''''''''
 
 You can create your own custom Validator implementation simply by creating a
-new class which implements the ``com.izforge.izpack.installer.panels.input.Validator``
+new class which implements the ``com.izforge.izpack.panels.userinput.validator.Validator``
 interface. This interface specifies a single method:
 ``validate(ProcessingClient client)`` , which returns a ``boolean`` value.
 You can retrieve the value entered by the user by casting the input
@@ -1128,7 +1128,7 @@ your custom ``Validator`` by calling the
 ``RuleInputField.getValidatorParams()`` which returns a ``java.util.Map``
 object containing parameter names mapped to parameter values. For an example,
 take a look at
-``com.izforge.izpack.util.RegularExpressionValidator``.
+``com.izforge.izpack.panels.userinput.validator.RegularExpressionValidator``.
 
 
 Set values in the RuleInputField can be preprocessed. At now you can specify
@@ -1163,7 +1163,7 @@ Summary Example
       <spec txt="Please enter your phone number:"
             layout="( N:3:3 ) N:3:3 - N:4:4 x N:5:5"
             resultFormat="specialSeparator" separator="."/>
-      <validator class="com.izforge.izpack.util.NotEmptyValidator"
+      <validator class="com.izforge.izpack.panels.userinput.validator.NotEmptyValidator"
                  txt="The phone number is mandatory!" />
       <!--processor class=""/-->
     </field>

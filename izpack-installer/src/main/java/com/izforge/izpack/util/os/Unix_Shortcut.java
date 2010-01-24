@@ -57,10 +57,10 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.StringTool;
-import com.izforge.izpack.util.os.unix.ShellScript;
-import com.izforge.izpack.util.os.unix.UnixHelper;
-import com.izforge.izpack.util.os.unix.UnixUser;
-import com.izforge.izpack.util.os.unix.UnixUsers;
+import com.izforge.izpack.util.unix.ShellScript;
+import com.izforge.izpack.util.unix.UnixHelper;
+import com.izforge.izpack.util.unix.UnixUser;
+import com.izforge.izpack.util.unix.UnixUsers;
 
 import java.io.*;
 import java.util.*;
@@ -643,7 +643,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
         ResourceManager m = ResourceManager.getInstance();
         m.setDefaultOrResourceBasePath("");
 
-        lines = m.getTextResource("/com/izforge/izpack/util/os/unix/xdgdesktopiconscript.sh");
+        lines = m.getTextResource("/com/izforge/izpack/util/unix/xdgdesktopiconscript.sh");
 
         m.setDefaultOrResourceBasePath(null);
 

@@ -2,7 +2,6 @@ package com.izforge.izpack.installer.multiunpacker;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.installer.IMultiVolumeUnpackerHelper;
-import com.izforge.izpack.installer.panels.NextMediaDialog;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 
