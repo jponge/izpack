@@ -1,4 +1,4 @@
-package com.izforge.izpack.installer.panels;
+package com.izforge.izpack.installer.manager;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
