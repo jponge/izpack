@@ -96,27 +96,7 @@
                 <version>${version}</version>
             </dependency>
             <dependency>
-                <artifactId>izpack-events</artifactId>
-                <groupId>org.codehaus.izpack.event</groupId>
-                <version>${version}</version>
-            </dependency>
-            <dependency>
-                <artifactId>izpack-registry-uninstaller-listener</artifactId>
-                <groupId>org.codehaus.izpack.event</groupId>
-                <version>${version}</version>
-            </dependency>
-            <dependency>
-                <artifactId>izpack-registry-installer</artifactId>
-                <groupId>org.codehaus.izpack.event</groupId>
-                <version>${version}</version>
-            </dependency>
-            <dependency>
-                <artifactId>izpack-event-commons</artifactId>
-                <groupId>org.codehaus.izpack.event</groupId>
-                <version>${version}</version>
-            </dependency>
-            <dependency>
-                <artifactId>izpack-summary-logger-installer</artifactId>
+                <artifactId>izpack-event</artifactId>
                 <groupId>org.codehaus.izpack.event</groupId>
                 <version>${version}</version>
             </dependency>
