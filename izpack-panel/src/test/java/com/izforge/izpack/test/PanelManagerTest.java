@@ -46,11 +46,10 @@ public class PanelManagerTest {
     }
 
     @Test
-    public void shouldSearchAutomaticallyInPack() throws Exception {
+    public void shouldSearchAutomaticallyInPackage() throws Exception {
         Class<? extends IzPanel> aClass = panelManager.resolveClassName("CheckedHelloPanel");
         assertThat(aClass.getName(), Is.is(CheckedHelloPanel.class.getName()));
     }
-
 
     @Test(expected = ClassNotFoundException.class)
     public void resolveClassNameShouldThrowException() throws Exception {
