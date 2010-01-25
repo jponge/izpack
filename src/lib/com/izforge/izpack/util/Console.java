@@ -29,6 +29,8 @@ import javax.swing.text.Segment;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.*;
 import java.util.Vector;
 
@@ -93,7 +95,7 @@ public final class Console
         }
     }
 
-    public Console(Process p)
+    public Console(final Process p)
     {
         JFrame frame = new JFrame();
         frame.setTitle("Console");
@@ -105,6 +107,37 @@ public final class Console
         scroll.setPreferredSize(new Dimension(INITIAL_WIDTH, INITIAL_HEIGHT));
         frame.getContentPane().add(scroll);
         frame.pack();
+        frame.addWindowListener(new WindowListener(){
+
+            public void windowActivated(WindowEvent e)
+            {
+            }
+
+            public void windowClosed(WindowEvent e)
+            {
+            }
+
+            public void windowClosing(WindowEvent e)
+            {
+                p.destroy();
+            }
+
+            public void windowDeactivated(WindowEvent e)
+            {
+            }
+
+            public void windowDeiconified(WindowEvent e)
+            {
+            }
+
+            public void windowIconified(WindowEvent e)
+            {
+            }
+
+            public void windowOpened(WindowEvent e)
+            {
+            }
+        });
 
         // From here down your shell should be pretty much
         // as it is written here!
