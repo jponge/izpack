@@ -10,15 +10,14 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>izpack-event-agregator</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>izpack-event</artifactId>
     <name>IzPack event module</name>
-    <modules>
-        <module>izpack-parent-event</module>
-        <module>izpack-event-commons</module>
-        <module>izpack-events</module>
-        <module>izpack-summary-logger-installer</module>
-        <module>izpack-registry-installer</module>
-        <module>izpack-registry-uninstaller</module>
-    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-compiler</artifactId>
+            <version>${version}</version>
+        </dependency>
+    </dependencies>
 </project>
