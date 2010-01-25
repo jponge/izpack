@@ -210,7 +210,15 @@ public class ProcessPanelWorker implements Runnable
 
                     ef_list.add(new ExecutableClass(ef_name, args));
                 }
-                this.jobs.add(new ProcessingJob(job_name, ef_list));
+
+                if(ef_list.isEmpty())
+                {
+                    Debug.trace("Nothing to do for job '" + job_name + "'");
+                }
+                else
+                {
+                    this.jobs.add(new ProcessingJob(job_name, ef_list));
+                }
             }
         }
         
