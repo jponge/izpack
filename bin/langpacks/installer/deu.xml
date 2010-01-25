@@ -25,6 +25,7 @@
     <str id="SummaryPanel.headline" txt="Zusammenfassung Konfigurationsdaten"/>
     <str id="TargetPanel.headline" txt="Installationspfad"/>
     <str id="UserInputPanel.headline" txt="Benutzerdaten"/>
+    <str id="UserPathPanel.headline" txt="Pfad auswählen"/>
     <str id="InstallationTypePanel.headline" txt="Installationsart"/>
 
     <!-- General installer strings -->
@@ -55,6 +56,7 @@
     <str id="uninstaller.uninstall" txt="Deinstallieren"/>
 
     <!-- The strings for the 'official' IzPack plugins -->
+    <!-- HelloPanel strings -->
     <str id="HelloPanel.welcome1" txt="Willkommen zur Installation von "/>
     <str id="HelloPanel.welcome2" txt="!"/>
     <str id="HelloPanel.authors" txt="Der(die) Autor(en) dieser Software ist(sind): "/>
@@ -181,6 +183,14 @@
     <str id="ShortcutPanel.location.startup" txt="Autostart-Gruppe"/>
 
     <str id="UserInputPanel.error.caption" txt="Eingabeproblem"/>
+    <str id="UserInputPanel.dir.nodirectory.message" txt="Wählen Sie ein gültiges Verzeichnis."/>
+    <str id="UserInputPanel.dir.nodirectory.caption" txt="Kein Verzeichnis ausgewählt"/>
+    <str id="UserInputPanel.dir.notdirectory.message" txt="Das gewählte Verzeichnis existiert nicht oder ist nicht gültig."/>
+    <str id="UserInputPanel.dir.notdirectory.caption" txt="Ungültiges Verzeichnis"/>
+    <str id="UserInputPanel.file.nofile.message" txt="Wählen Sie eine gültige Datei."/>
+    <str id="UserInputPanel.file.nofile.caption" txt="Keine Datei ausgewählt"/>
+    <str id="UserInputPanel.file.notfile.message" txt="Die gewählte Datei existiert nicht oder ist nicht gültig."/>
+    <str id="UserInputPanel.file.notfile.caption" txt="Ungültige Datei"/>
     <str id="UserInputPanel.search.autodetect" txt="Automatisch erkennen"/>
 
     <!-- more descriptive error message would be cool, like specifying what file we looked for -->
@@ -194,6 +204,16 @@
     <str id="UserInputPanel.search.wrongselection.message"
          txt="Die gewählte Datei oder das Verzeichnis existiert nicht oder ist unpassend."/>
     <str id="UserInputPanel.search.wrongselection.caption" txt="Ungültige Auswahl."/>
+
+    <!-- UserPathPanel strings -->
+    <str id="UserPathPanel.required" txt="Das ausgewählte Verzeichnis sollte existieren."/>
+    <str id="UserPathPanel.info" txt="Pfad auswählen: "/>
+    <str id="UserPathPanel.browse" txt="Auswählen"/>
+    <str id="UserPathPanel.exists_warn" txt="Das Verzeichnis existiert bereits! Sind Sie sicher, dass Sie in diesem Verzeichnis installieren und möglicherweise bestehende Dateien üvberschreiben wollen?"/>
+    <str id="UserPathPanel.empty_target" txt="Sie haben kein Zielverzeichnis ausgewählt! Ist das korrekt?"/>
+    <str id="UserPathPanel.createdir" txt="Das Zielverzeichnis wird erstellt: "/>
+    <str id="UserPathPanel.nodir" txt="Sie haben eine Datei ausgewählt! Bitte wählen Sie ein Verzeichnis aus!"/>
+    <str id="UserPathPanel.notwritable" txt="Das Verzeichnis ist nicht beschreibbar! Bitte wählen Sie ein anderes Verzeichnis aus!"/>
 
     <str id="CompilePanel.heading" txt="Kompilierung"/>
     <str id="CompilePanel.tip" txt="Job-Fortschritt:"/>
@@ -225,6 +245,8 @@
     <str id="PacksPanel.summaryCaption" txt="Gewählte Installationspakete"/>
     <str id="ImgPacksPanel.summaryCaption" txt="Gewählte Installationspakete"/>
     <str id="TreePacksPanel.summaryCaption" txt="Gewählte Installationspakete"/>
+    <str id="UserPathPanel.summaryCaption" txt="Ausgewähltes Benutzerverzeichnis"/>
+    <str id="DefaultTargetPanel.summaryCaption" txt="Installationsverzeichnis"/>
     <!-- Strings for the summary of panels - END -->
 
     <!-- Strings for the Registry -->
