@@ -50,12 +50,6 @@ import java.util.*;
  */
 public abstract class PackagerBase implements IPackager {
 
-
-    /**
-     * Path to the skeleton installer.
-     */
-    private String SKELETON_SUBPATH = null;
-
     /**
      * Path to resources in jar
      */
@@ -79,11 +73,6 @@ public abstract class PackagerBase implements IPackager {
      * Gui preferences of instatller.
      */
     protected GUIPrefs guiPrefs = null;
-
-    /**
-     * The variables used in the project
-     */
-    protected Properties variables = new Properties();
 
     /**
      * The ordered panels informations.
@@ -298,22 +287,8 @@ public abstract class PackagerBase implements IPackager {
      */
 
     public Properties getVariables() {
-        return variables;
+        return properties;
     }
-//
-//    /* (non-Javadoc)
-//     * @see com.izforge.izpack.compiler.packager.IPackager#initPackCompressor(java.lang.String, int)
-//     */
-//
-//    public void initPackCompressor(String compr_format, int compr_level) throws CompilerException {
-//        try {
-//            compressor = (PackCompressor) compilerContainer.getComponent(compr_format);
-//            compressor.setCompressionLevel(compr_level);
-//            compilerContainer.addComponent("compressedStream",Class.forName(compressor.getEncoderClassName()));
-//        } catch (ClassNotFoundException e) {
-//            throw new CompilerException("Invalid class name", e);
-//        }
-//    }
 
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.packager.IPackager#setGUIPrefs(com.izforge.izpack.GUIPrefs)
@@ -360,7 +335,7 @@ public abstract class PackagerBase implements IPackager {
         writeSkeletonInstaller();
 
         writeInstallerObject("info", info);
-        writeInstallerObject("vars", variables);
+        writeInstallerObject("vars", properties);
         writeInstallerObject("GUIPrefs", guiPrefs);
         writeInstallerObject("panelsOrder", panelList);
         writeInstallerObject("customData", customDataList);

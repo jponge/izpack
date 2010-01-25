@@ -47,6 +47,7 @@ import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.data.PanelAction.ActionStage;
+import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
@@ -114,19 +115,21 @@ public class CompilerConfig extends Thread {
     private VariableSubstitutor variableSubstitutor;
     private XmlCompilerHelper xmlCompilerHelper;
     private PropertyManager propertyManager;
+    private MergeManager mergeManager;
 
     /**
      * Constructor
      *
      * @param compilerData Object containing all informations found in command line
      */
-    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager) {
+    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, MergeManager mergeManager) {
         this.compilerData = compilerData;
         this.variableSubstitutor = variableSubstitutor;
         this.compiler = compiler;
         this.compilerHelper = compilerHelper;
         this.xmlCompilerHelper = xmlCompilerHelper;
         this.propertyManager = propertyManager;
+        this.mergeManager = mergeManager;
     }
 
     /**
