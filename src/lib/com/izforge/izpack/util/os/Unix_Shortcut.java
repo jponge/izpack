@@ -1208,13 +1208,6 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     public void setWorkingDirectory(String aDirectory)
     {
-        StringTokenizer whiteSpaceTester = new StringTokenizer(aDirectory);
-
-        if (whiteSpaceTester.countTokens() > 1)
-        {
-            props.put($P_QUOT, QM);
-        }
-
         props.put($Path, aDirectory);
     }
 
@@ -1272,39 +1265,6 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
         aSample.replace();
         System.out.println(aSample);
-        //        
-        //       
-        //
-        // File targetFileName = new File(System.getProperty("user.home") + File.separator
-        // + "Start Tomcat" + DESKTOP_EXT);
-        // FileWriter fileWriter = null;
-        //
-        // try
-        // {
-        // fileWriter = new FileWriter(targetFileName);
-        // }
-        // catch (IOException e1)
-        // {
-        // e1.printStackTrace();
-        // }
-        //
-        // try
-        // {
-        // fileWriter.write( aSample.toString() );
-        // }
-        // catch (IOException e)
-        // {
-        // e.printStackTrace();
-        // }
-        //
-        // try
-        // {
-        // fileWriter.close();
-        // }
-        // catch (IOException e2)
-        // {
-        // e2.printStackTrace();
-        // }
 
         aSample.createExtXdgDesktopIconCmd(new File(System.getProperty("user.home")));
 
