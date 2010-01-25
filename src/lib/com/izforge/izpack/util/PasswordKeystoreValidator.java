@@ -108,12 +108,12 @@ public class PasswordKeystoreValidator implements Validator
                 }
                 // Get keystore type from parameters or use default
                 keystoreType = params.get("keystoreType");
-                if (keystoreFile == null)
+                if (keystoreType == null)
                 {
                     keystoreType = "JKS";
                     System.out.println("keystoreType parameter null, using default of JKS");
                 }
-                else if (keystorePassword.equalsIgnoreCase(""))
+                else if (keystoreType.equalsIgnoreCase(""))
                 {
                     keystoreType = "JKS";
                     System.out.println("keystoreType parameter empty, using default of JKS");
