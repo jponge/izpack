@@ -710,14 +710,48 @@ public class CompilerConfig extends Thread {
             while (iter.hasNext())
             {
                 IXMLElement p = iter.next();
-                String target = requireAttribute(p, "targetfile");
+                String target = p.getAttribute("targetfile", null);
                 String type = p.getAttribute("type", "plain");
                 String encoding = p.getAttribute("encoding", null);
                 List<OsConstraint> osList = OsConstraint.getOsList(p); // TODO: unverified
                 String condition = p.getAttribute("condition");
-                ParsableFile parsable = new ParsableFile(target, type, encoding, osList);
-                parsable.setCondition(condition);
-                pack.addParsable(parsable);
+                if (target != null)
+                {
+                    ParsableFile parsable = new ParsableFile(target, type, encoding, osList);
+                    parsable.setCondition(condition);
+                    pack.addParsable(parsable);
+                }
+                Iterator<IXMLElement> iterSet = p.getChildrenNamed("fileset").iterator();
+                while (iterSet.hasNext())
+                {
+                    IXMLElement f = iterSet.next();
+                    String targetdir = requireAttribute(f, "targetdir");
+                    String dir_attr = requireAttribute(f, "dir");
+                    File dir = new File(dir_attr);
+                    if (!dir.isAbsolute())
+                    {
+                        dir = new File(basedir, dir_attr);
+                    }
+                    if (!dir.isDirectory()) // also tests '.exists()'
+                    {
+                        parseError(f, "Invalid directory 'dir': " + dir_attr);
+                    }
+                    String []includedFiles = getFilesetIncludedFiles(f);
+                    if (includedFiles != null)
+                    {
+                        for (String filePath:includedFiles)
+                        {
+                            File file = new File(dir,filePath);
+                            if (file.exists() && file.isFile())
+                            {
+                                String targetFile = new File(targetdir, filePath).getPath().replace(File.separatorChar, '/');
+                                ParsableFile parsable = new ParsableFile(targetFile, type, encoding, osList);
+                                parsable.setCondition(condition);
+                                pack.addParsable(parsable);
+                            }
+                        }
+                    }
+                }
             }
 
             // We get the executables list
@@ -876,7 +910,8 @@ public class CompilerConfig extends Thread {
             {
                 IXMLElement f = iter.next();
                 String dir_attr = requireAttribute(f, "dir");
-
+                String targetdir = requireAttribute(f, "targetdir");
+                
                 File dir = new File(dir_attr);
                 if (!dir.isAbsolute())
                 {
@@ -887,125 +922,28 @@ public class CompilerConfig extends Thread {
                     parseError(f, "Invalid directory 'dir': " + dir_attr);
                 }
 
-                boolean casesensitive = validateYesNoAttribute(f, "casesensitive", YES);
-                boolean defexcludes = validateYesNoAttribute(f, "defaultexcludes", YES);
-                String targetdir = requireAttribute(f, "targetdir");
+                String []includedFiles = getFilesetIncludedFiles(f);
                 List<OsConstraint> osList = OsConstraint.getOsList(f); // TODO: unverified
                 int override = getOverrideValue(f);
                 int blockable = getBlockableValue(f, osList);
                 Map additionals = getAdditionals(f);
                 String condition = f.getAttribute("condition");
 
-                // get includes and excludes
-                Vector<IXMLElement> xcludesList = null;
-                String[] includes = null;
-                xcludesList = f.getChildrenNamed("include");
-                if (!xcludesList.isEmpty())
+                if (includedFiles != null)
                 {
-                    includes = new String[xcludesList.size()];
-                    for (int j = 0; j < xcludesList.size(); j++)
+                    for (String filePath:includedFiles)
                     {
-                        IXMLElement xclude = xcludesList.get(j);
-                        includes[j] = requireAttribute(xclude, "name");
-                    }
-                }
-                String[] excludes = null;
-                xcludesList = f.getChildrenNamed("exclude");
-                if (!xcludesList.isEmpty())
-                {
-                    excludes = new String[xcludesList.size()];
-                    for (int j = 0; j < xcludesList.size(); j++)
-                    {
-                        IXMLElement xclude = xcludesList.get(j);
-                        excludes[j] = requireAttribute(xclude, "name");
-                    }
-                }
-
-                // parse additional fileset attributes "includes" and "excludes"
-                String[] toDo = new String[]{"includes", "excludes"};
-                // use the existing containers filled from include and exclude
-                // and add the includes and excludes to it
-                String[][] containers = new String[][]{includes, excludes};
-                for (int j = 0; j < toDo.length; ++j)
-                {
-                    String inex = f.getAttribute(toDo[j]);
-                    if (inex != null && inex.length() > 0)
-                    { // This is the same "splitting" as ant PatternSet do ...
-                        StringTokenizer tok = new StringTokenizer(inex, ", ", false);
-                        int newSize = tok.countTokens();
-                        int k = 0;
-                        String[] nCont = null;
-                        if (containers[j] != null && containers[j].length > 0)
-                        { // old container exist; create a new which can hold
-                            // all values
-                            // and copy the old stuff to the front
-                            newSize += containers[j].length;
-                            nCont = new String[newSize];
-                            for (; k < containers[j].length; ++k)
-                            {
-                                nCont[k] = containers[j][k];
-                            }
-                        }
-                        if (nCont == null) // No container for old values
-                        // created,
-                        // create a new one.
+                        try
                         {
-                            nCont = new String[newSize];
+                            File file = new File(dir,filePath);
+                            String target = new File(targetdir, filePath).getPath();
+                            pack.addFile(baseDir, file, target, osList, override,blockable,
+                                    additionals, condition);
                         }
-                        for (; k < newSize; ++k)
-                        // Fill the new one or expand the existent container
+                        catch (FileNotFoundException x)
                         {
-                            nCont[k] = tok.nextToken();
+                            parseError(f, x.getMessage(), x);
                         }
-                        containers[j] = nCont;
-                    }
-                }
-                includes = containers[0]; // push the new includes to the
-                // local var
-                excludes = containers[1]; // push the new excludes to the
-                // local var
-
-                // scan and add fileset
-                DirectoryScanner ds = new DirectoryScanner();
-                ds.setIncludes(includes);
-                ds.setExcludes(excludes);
-                if (defexcludes)
-                {
-                    ds.addDefaultExcludes();
-                }
-                ds.setBasedir(dir);
-                ds.setCaseSensitive(casesensitive);
-                ds.scan();
-
-                String[] files = ds.getIncludedFiles();
-                String[] dirs = ds.getIncludedDirectories();
-
-                // Directory scanner has done recursion, add files and
-                // directories
-                for (String file : files)
-                {
-                    try
-                    {
-                        String target = new File(targetdir, file).getPath();
-                        pack.addFile(baseDir, new File(dir, file), target, osList, override,
-                                blockable, additionals, condition);
-                    }
-                    catch (FileNotFoundException x)
-                    {
-                        parseError(f, x.getMessage(), x);
-                    }
-                }
-                for (String dir1 : dirs)
-                {
-                    try
-                    {
-                        String target = new File(targetdir, dir1).getPath();
-                        pack.addFile(baseDir, new File(dir, dir1), target, osList, override,
-                                blockable, additionals, condition);
-                    }
-                    catch (FileNotFoundException x)
-                    {
-                        parseError(f, x.getMessage(), x);
                     }
                 }
             }
@@ -1124,6 +1062,121 @@ public class CompilerConfig extends Thread {
         notifyCompilerListener("addPacksSingle", CompilerListener.END, data);
     }
 
+    private String[] getFilesetIncludedFiles(IXMLElement f) throws CompilerException
+    {
+        List<String> includedFiles = new ArrayList<String>();
+        String dir_attr = requireAttribute(f, "dir");
+
+        File dir = new File(dir_attr);
+        if (!dir.isAbsolute())
+        {
+            dir = new File(basedir, dir_attr);
+        }
+        if (!dir.isDirectory()) // also tests '.exists()'
+        {
+            parseError(f, "Invalid directory 'dir': " + dir_attr);
+        }
+
+        boolean casesensitive = validateYesNoAttribute(f, "casesensitive", YES);
+        boolean defexcludes = validateYesNoAttribute(f, "defaultexcludes", YES);
+
+        // get includes and excludes
+        Vector<IXMLElement> xcludesList = null;
+        String[] includes = null;
+        xcludesList = f.getChildrenNamed("include");
+        if (!xcludesList.isEmpty())
+        {
+            includes = new String[xcludesList.size()];
+            for (int j = 0; j < xcludesList.size(); j++)
+            {
+                IXMLElement xclude = xcludesList.get(j);
+                includes[j] = requireAttribute(xclude, "name");
+            }
+        }
+        String[] excludes = null;
+        xcludesList = f.getChildrenNamed("exclude");
+        if (!xcludesList.isEmpty())
+        {
+            excludes = new String[xcludesList.size()];
+            for (int j = 0; j < xcludesList.size(); j++)
+            {
+                IXMLElement xclude = xcludesList.get(j);
+                excludes[j] = requireAttribute(xclude, "name");
+            }
+        }
+
+        // parse additional fileset attributes "includes" and "excludes"
+        String[] toDo = new String[]{"includes", "excludes"};
+        // use the existing containers filled from include and exclude
+        // and add the includes and excludes to it
+        String[][] containers = new String[][]{includes, excludes};
+        for (int j = 0; j < toDo.length; ++j)
+        {
+            String inex = f.getAttribute(toDo[j]);
+            if (inex != null && inex.length() > 0)
+            { // This is the same "splitting" as ant PatternSet do ...
+                StringTokenizer tok = new StringTokenizer(inex, ", ", false);
+                int newSize = tok.countTokens();
+                int k = 0;
+                String[] nCont = null;
+                if (containers[j] != null && containers[j].length > 0)
+                { // old container exist; create a new which can hold
+                    // all values
+                    // and copy the old stuff to the front
+                    newSize += containers[j].length;
+                    nCont = new String[newSize];
+                    for (; k < containers[j].length; ++k)
+                    {
+                        nCont[k] = containers[j][k];
+                    }
+                }
+                if (nCont == null) // No container for old values
+                    // created,
+                    // create a new one.
+                {
+                    nCont = new String[newSize];
+                }
+                for (; k < newSize; ++k)
+                    // Fill the new one or expand the existent container
+                {
+                    nCont[k] = tok.nextToken();
+                }
+                containers[j] = nCont;
+            }
+        }
+        includes = containers[0]; // push the new includes to the
+        // local var
+        excludes = containers[1]; // push the new excludes to the
+        // local var
+
+        // scan and add fileset
+        DirectoryScanner ds = new DirectoryScanner();
+        ds.setIncludes(includes);
+        ds.setExcludes(excludes);
+        if (defexcludes)
+        {
+            ds.addDefaultExcludes();
+        }
+        ds.setBasedir(dir);
+        ds.setCaseSensitive(casesensitive);
+        ds.scan();
+
+        String[] files = ds.getIncludedFiles();
+        String[] dirs = ds.getIncludedDirectories();
+
+        // Directory scanner has done recursion, add files and
+        // directories
+        for (String file : files)
+        {
+            includedFiles.add( file);
+        }
+        for (String dir1 : dirs)
+        {
+            includedFiles.add( dir1);
+        }
+        return includedFiles.toArray(new String[]{});
+    }
+    
     private IXMLElement readRefPackData(String refFileName, boolean isselfcontained)
             throws CompilerException {
         File refXMLFile = new File(refFileName);

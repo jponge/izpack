@@ -1219,7 +1219,7 @@ currently no equivalent to the <defaultexcludes> task. Default excludes are:
 A ``<additionaldata>`` tag can also be specified for customizing.
 
 
-``<parsable>`` - parse a file after installation
+``<parsable>`` - parse file(s) after installation
 ''''''''''''''''''''''''''''''''''''''''''''''''''
 
 Files specified by ``<parsable>`` are parsed after installation and may have
@@ -1228,13 +1228,14 @@ variables substituted.
 -   ``targetfile`` : the file to parse, could be something like
     ``$INSTALL_PATH/bin/launch-script.sh``
     A slash will be changed to the system dependant path separator (e.g. to a
-    backslash on Windows) only if no backslash masks the slash.
+    backslash on Windows) only if no backslash masks the slash. No longer mandatory as a fileset of files can be used.
 -   ``type`` : specifies the type (same as for the resources) - the
     default is ``plain``
 -   ``encoding`` : specifies the file encoding
 -   ``os``: specifies the operating system, works like for ``<file>``
 -  ``condition``: an id of a condition which has to be fullfilled to parse this file
 
+One or more fileset tags can be used inside parsable to specify multiple files at once.
 
 ``<executable>`` - mark file executable or execute it
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
