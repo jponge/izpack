@@ -1,4 +1,4 @@
-package com.izforge.izpack.compiler.merge;
+package com.izforge.izpack.merge;
 
 /**
  * Possibles stage of the installation.

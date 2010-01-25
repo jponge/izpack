@@ -27,13 +27,13 @@ import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
-import com.izforge.izpack.compiler.helper.IoHelper;
 import com.izforge.izpack.compiler.listener.PackagerListener;
-import com.izforge.izpack.compiler.merge.MergeManager;
 import com.izforge.izpack.compiler.stream.ByteCountingOutputStream;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
 import com.izforge.izpack.data.*;
+import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.util.FileUtil;
+import com.izforge.izpack.util.IoHelper;
 
 import java.io.*;
 import java.net.URL;

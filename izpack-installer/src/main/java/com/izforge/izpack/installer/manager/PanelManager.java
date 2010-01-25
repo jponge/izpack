@@ -11,13 +11,14 @@ import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
+import com.izforge.izpack.merge.MergeManager;
+import com.izforge.izpack.merge.Mergeable;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.OsConstraint;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,17 +46,26 @@ public class PanelManager {
     }
 
     public Class<? extends IzPanel> resolveClassName(final String className) throws ClassNotFoundException {
-        URL resource = ClassLoader.getSystemClassLoader().getResource(BASE_CLASSNAME_PATH);
-        File panelDirectory = new File(resource.getFile());
+        String currentPackage;
+        Mergeable mergeable;
+        if (className.contains(".")) {
+            currentPackage = className.substring(0, className.lastIndexOf("."));
+            String packagePath = currentPackage.replaceAll("\\.", "/");
+            mergeable = MergeManager.getMergeableFromPath(packagePath);
+        } else {
+            currentPackage = CLASSNAME_PREFIX;
+            mergeable = MergeManager.getMergeableFromPath(BASE_CLASSNAME_PATH);
+        }
+
         FileFilter fileFilter = new FileFilter() {
             public boolean accept(File pathname) {
                 return pathname.isDirectory() ||
                         pathname.getName().replaceAll(".class", "").equalsIgnoreCase(className);
             }
         };
-        File classFile = findRecursivelyForFile(fileFilter, panelDirectory);
+        File classFile = mergeable.find(fileFilter);
         if (classFile != null) {
-            return resolveClassFromPath(panelDirectory, classFile);
+            return resolveClassFromPath(classFile, currentPackage);
         }
         return resolveClassFromName(className);
     }
@@ -73,15 +83,13 @@ public class PanelManager {
     /**
      * From a class file found in the classpath, convert it to a className
      *
-     * @param panelDirectory Base directory
-     * @param classFile      Path to the class file
      * @return The resolved class
      * @throws ClassNotFoundException
      */
-    private Class resolveClassFromPath(File panelDirectory, File classFile) throws ClassNotFoundException {
-        String result = classFile.getAbsolutePath().replaceAll(panelDirectory.getAbsolutePath(), "");
-        result = CLASSNAME_PREFIX + result.replaceAll("/", ".").replaceAll(".class", "");
-        return Class.forName(result);
+    private Class resolveClassFromPath(File classFile, String currentPackage) throws ClassNotFoundException {
+        String fullClassName = classFile.getAbsolutePath().replaceAll("/", ".").replaceAll(".class", "");
+        fullClassName = fullClassName.substring(fullClassName.indexOf(currentPackage), fullClassName.length());
+        return Class.forName(fullClassName);
     }
 
     /**
@@ -94,7 +102,6 @@ public class PanelManager {
     private File findRecursivelyForFile(FileFilter fileFilter, File currentFile) {
         if (currentFile.isDirectory()) {
             for (File files : currentFile.listFiles(fileFilter)) {
-                System.out.println(files.getAbsolutePath());
                 File file = findRecursivelyForFile(fileFilter, files);
                 if (file != null) {
                     return file;

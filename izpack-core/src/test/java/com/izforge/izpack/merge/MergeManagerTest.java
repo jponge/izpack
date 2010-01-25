@@ -1,4 +1,4 @@
-package com.izforge.izpack.compiler.merge;
+package com.izforge.izpack.merge;
 
 import org.apache.tools.zip.ZipOutputStream;
 import org.hamcrest.collection.IsCollectionContaining;
@@ -8,8 +8,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -21,13 +24,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Anthonin Bonnefoy
  */
-public class MergeTest {
+public class MergeManagerTest {
     private File zip;
+    private MergeManager mergeManager;
 
     @Before
     public void setUp() {
         zip = new File("outputZip.zip");
         zip.delete();
+        mergeManager = new MergeManager();
     }
 
     @Test
@@ -46,36 +51,35 @@ public class MergeTest {
 
     @Test
     public void testMergeDirectory() throws Exception {
-        File file = new File(getClass().getResource("MergeTest.class").getFile()).getParentFile();
+        File file = new File(getClass().getResource("MergeManagerTest.class").getFile()).getParentFile();
         assertThat(file.exists(), Is.is(true));
         FileMerge fileMerge = new FileMerge(file);
 
         doMerge(fileMerge);
 
         ArrayList<String> arrayList = getFileNameInZip(zip);
-        assertThat(arrayList, IsCollectionContaining.hasItems("MergeTest.class", "test/.placeholder"));
+        assertThat(arrayList, IsCollectionContaining.hasItems("MergeManagerTest.class", "test/.placeholder"));
     }
 
     @Test
     public void testMergeDirectoryWithDestination() throws Exception {
-        File file = new File(getClass().getResource("MergeTest.class").getFile()).getParentFile();
+        File file = new File(getClass().getResource("MergeManagerTest.class").getFile()).getParentFile();
         FileMerge fileMerge = new FileMerge(file, "my/dest/path/");
 
         doMerge(fileMerge);
 
         ArrayList<String> arrayList = getFileNameInZip(zip);
-        assertThat(arrayList, IsCollectionContaining.hasItems("my/dest/path/MergeTest.class", "my/dest/path/test/.placeholder"));
+        assertThat(arrayList, IsCollectionContaining.hasItems("my/dest/path/MergeManagerTest.class", "my/dest/path/test/.placeholder"));
     }
 
     @Test
     public void testMergeInstaller() throws Exception {
-        MergeManager mergeManager = new MergeManager();
-        mergeManager.addResourceToMerge("com/izforge/izpack/installer/");
+        mergeManager.addResourceToMerge("com/izforge/izpack/merge/");
 
         doMerge(mergeManager);
 
         ArrayList<String> arrayList = getFileNameInZip(zip);
-        assertThat(arrayList, IsCollectionContaining.hasItems("com/izforge/izpack/installer/bootstrap/Installer.class"));
+        assertThat(arrayList, IsCollectionContaining.hasItems("com/izforge/izpack/merge/MergeManagerTest.class"));
     }
 
     private ArrayList<String> getFileNameInZip(File zip) throws IOException {
@@ -136,15 +140,36 @@ public class MergeTest {
         assertThat(new File(jarPath).exists(), Is.is(true));
     }
 
+    @Test
+    public void findFileInDirectory() throws Exception {
+        FileMerge fileMerge = new FileMerge(MergeManager.getFileFromPath("com/izforge/izpack/merge/test"));
+        File file = fileMerge.find(new FileFilter() {
+            public boolean accept(File pathname) {
+                return pathname.getName().equals(".placeholder") || pathname.isDirectory();
+            }
+        });
+        assertThat(file.getName(), Is.is(".placeholder"));
+    }
 
     @Test
-    public void testAddResourceToMerge() throws Exception {
-        MergeManager mergeManager = new MergeManager();
-        mergeManager.addResourceToMerge("com/izforge/izpack/installer/");
-        doMerge(mergeManager);
+    public void findFileInJar() throws Exception {
+        URL urlJar = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
+        URLClassLoader loader = URLClassLoader.newInstance(new URL[]{urlJar}, ClassLoader.getSystemClassLoader());
 
-        ArrayList<String> arrayList = getFileNameInZip(zip);
-        assertThat(arrayList, IsCollectionContaining.hasItems("com/izforge/izpack/installer/bootstrap/Installer.class",
-                "com/izforge/izpack/installer/base/IzPanel.class"));
+        JarMerge jarMerge = new JarMerge(loader.getResource("jar/izforge"));
+        File file = jarMerge.find(new FileFilter() {
+            public boolean accept(File pathname) {
+                return pathname.getName().matches(".*HelloPanel\\.class") || pathname.isDirectory();
+            }
+        });
+        assertThat(file.getName(), Is.is("HelloPanel.class"));
+    }
+
+    @Test
+    public void testProcessJarPath() throws Exception {
+        URL resource = new URL("file:/home/test/unjar.jar!com/package/in/jar");
+        String jarPath = MergeManager.processUrlToJarPath(resource);
+        System.out.println(jarPath);
+        assertThat(jarPath, Is.is("/home/test/unjar.jar"));
     }
 }

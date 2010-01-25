@@ -1,9 +1,9 @@
-package com.izforge.izpack.compiler.merge;
+package com.izforge.izpack.merge;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.tools.zip.ZipOutputStream;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,10 +79,13 @@ public class MergeManager implements Mergeable {
      */
     public static String getJarAbsolutePath(String resourcePath) {
         URL resource = ClassLoader.getSystemClassLoader().getResource(resourcePath);
-        String res;
-        res = resource.getPath();
-        res = StringUtils.substringAfter(res, "file:");
-        return StringUtils.substringBefore(res, "!");
+        return processUrlToJarPath(resource);
+    }
+
+    public static String processUrlToJarPath(URL resource) {
+        String res = resource.getPath();
+        res = res.replaceAll("file:", "");
+        return res.substring(0, res.lastIndexOf("!"));
     }
 
     public void merge(ZipOutputStream outputStream) {
@@ -90,5 +93,15 @@ public class MergeManager implements Mergeable {
             mergeable.merge(outputStream);
         }
         mergeableList.clear();
+    }
+
+    public File find(FileFilter fileFilter) {
+        for (Mergeable mergeable : mergeableList) {
+            File file = mergeable.find(fileFilter);
+            if (file != null) {
+                return file;
+            }
+        }
+        return null;
     }
 }
