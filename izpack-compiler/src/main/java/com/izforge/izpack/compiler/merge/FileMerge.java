@@ -4,6 +4,7 @@ import com.izforge.izpack.compiler.helper.IoHelper;
 import org.apache.tools.zip.ZipOutputStream;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -25,6 +26,32 @@ public class FileMerge implements Mergeable {
     public FileMerge(File fileToCopy, String destination) {
         this.fileToCopy = fileToCopy;
         this.destination = destination;
+    }
+
+    public File find(FileFilter fileFilter) {
+        return findRecursivelyForFile(fileFilter, fileToCopy);
+    }
+
+
+    /**
+     * Recursively search a file matching the fileFilter
+     *
+     * @param fileFilter  Filter accepting directory and file matching a classname pattern
+     * @param currentFile Current directory
+     * @return the first found file or null
+     */
+    private File findRecursivelyForFile(FileFilter fileFilter, File currentFile) {
+        if (currentFile.isDirectory()) {
+            for (File files : currentFile.listFiles(fileFilter)) {
+                File file = findRecursivelyForFile(fileFilter, files);
+                if (file != null) {
+                    return file;
+                }
+            }
+        } else {
+            return currentFile;
+        }
+        return null;
     }
 
     public void merge(ZipOutputStream outputStream) {

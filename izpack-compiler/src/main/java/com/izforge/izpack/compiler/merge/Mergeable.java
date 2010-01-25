@@ -2,6 +2,9 @@ package com.izforge.izpack.compiler.merge;
 
 import org.apache.tools.zip.ZipOutputStream;
 
+import java.io.File;
+import java.io.FileFilter;
+
 /**
  * Interface to merge in a given output stream
  *
@@ -10,4 +13,6 @@ import org.apache.tools.zip.ZipOutputStream;
 public interface Mergeable {
 
     void merge(ZipOutputStream outputStream);
+
+    File find(FileFilter fileFilter);
 }
