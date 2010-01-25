@@ -12,4 +12,12 @@
 
     <artifactId>izpack-event</artifactId>
     <name>IzPack event module</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-compiler</artifactId>
+            <version>${version}</version>
+        </dependency>
+    </dependencies>
 </project>
