@@ -24,6 +24,11 @@
             <artifactId>izpack-utils</artifactId>
             <version>${version}</version>
         </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-event</artifactId>
+            <version>${version}</version>
+        </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
@@ -36,31 +41,6 @@
             <version>1.4</version>
         </dependency>
     </dependencies>
-
-    <profiles>
-        <profile>
-            <id>bamboo</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <phase>integration-test</phase>
-                                <goals>
-                                    <goal>test</goal>
-                                </goals>
-                                <configuration>
-                                    <skip>true</skip>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
     <build>
         <plugins>
@@ -98,7 +78,6 @@
                 </executions>
                 <configuration>
                     <display>:66</display>
-
                 </configuration>
             </plugin>
             <plugin>
