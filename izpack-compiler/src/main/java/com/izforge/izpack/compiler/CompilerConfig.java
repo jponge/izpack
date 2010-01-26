@@ -418,6 +418,7 @@ public class CompilerConfig extends Thread {
             IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "info");
             IXMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
             if (xmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", YES, compilerData.getInstallFile())) {
+                //REFACTOR Change the way uninstaller are created
                 URL url = findIzPackResource(propertyManager.getProperty("uninstaller-ext"), "Uninstaller extensions",
                         root);
                 compiler.addResource("IzPack.uninstaller-ext", url);
@@ -1407,6 +1408,8 @@ public class CompilerConfig extends Thread {
         // Add the uninstaller as a resource if specified
         IXMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
         if (xmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", YES, compilerData.getInstallFile())) {
+            //REFACTOR Change the way uninstaller is created
+//            mergeManager.addResourceToMerge("com/izforge/izpack/uninstaller/");
             URL url = findIzPackResource(propertyManager.getProperty("uninstaller"), "Uninstaller", root);
             compiler.addResource("IzPack.uninstaller", url);
 

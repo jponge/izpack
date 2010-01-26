@@ -33,7 +33,6 @@
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>izpack-installer</artifactId>
-            <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -41,16 +40,14 @@
             <artifactId>izpack-panel</artifactId>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>${groupId}</groupId>-->
-        <!--<artifactId>izpack-uninstaller</artifactId>-->
-        <!--<scope>runtime</scope>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-uninstaller</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>izpack-uninstaller-ext</artifactId>
-            <scope>runtime</scope>
         </dependency>
 
         <dependency>
