@@ -22,7 +22,7 @@
 package com.izforge.izpack.compiler.compressor;
 
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.compiler.merge.MergeManager;
+import com.izforge.izpack.merge.MergeManager;
 
 
 /**

@@ -18,13 +18,12 @@
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>izpack-compiler</artifactId>
-            <version>${version}</version>
-            <classifier>standalone</classifier>
         </dependency>
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>izpack-utils</artifactId>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -61,6 +60,23 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeArtifactIds>izpack-native</includeArtifactIds>
+                            <outputDirectory>${staging.dir}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>${groupId}</groupId>
                 <artifactId>izpack-maven-plugin</artifactId>
                 <version>${version}</version>
@@ -76,14 +92,6 @@
                         </configuration>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>${groupId}</groupId>
-                        <artifactId>izpack-compiler</artifactId>
-                        <classifier>standalone</classifier>
-                        <version>${version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>

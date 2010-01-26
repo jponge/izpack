@@ -6,7 +6,7 @@ import com.izforge.izpack.compiler.compressor.DefaultPackCompressor;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.compressor.RawPackCompressor;
 import com.izforge.izpack.compiler.data.CompilerData;
-import com.izforge.izpack.compiler.merge.MergeManager;
+import com.izforge.izpack.merge.MergeManager;
 import org.picocontainer.injectors.Provider;
 
 /**

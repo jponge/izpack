@@ -100,6 +100,7 @@ public class InstallationTest extends AbstractInstallationTest {
         installerFrameFixture.radioButton(GuiId.LICENCE_NO_RADIO.id).requireSelected();
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).requireDisabled();
         installerFrameFixture.radioButton(GuiId.LICENCE_YES_RADIO.id).click();
+        Thread.sleep(100);
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Target Panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
@@ -113,7 +114,7 @@ public class InstallationTest extends AbstractInstallationTest {
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Finish panel
         installerFrameFixture.button(GuiId.FINISH_PANEL_AUTO_BUTTON.id).click();
-        Thread.sleep(100);
+        Thread.sleep(300);
         installerFrameFixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).fileNameTextBox().enterText("auto.xml");
         installerFrameFixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).approve();
         assertThat(new File(installPath, "auto.xml").exists(), Is.is(true));
