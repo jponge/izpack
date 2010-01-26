@@ -92,30 +92,35 @@ public class InstallationTest extends AbstractInstallationTest {
         installerFrameFixture = prepareFrameFixture();
         // Hello panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        Thread.sleep(300);
         // Info Panel
         installerFrameFixture.textBox(GuiId.INFO_PANEL_TEXT_AREA.id).requireText("A readme file ...");
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        Thread.sleep(300);
         // Licence Panel
         installerFrameFixture.textBox(GuiId.LICENCE_TEXT_AREA.id).requireText("(Consider it as a licence file ...)");
         installerFrameFixture.radioButton(GuiId.LICENCE_NO_RADIO.id).requireSelected();
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).requireDisabled();
         installerFrameFixture.radioButton(GuiId.LICENCE_YES_RADIO.id).click();
-        Thread.sleep(100);
+        Thread.sleep(300);
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Target Panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        Thread.sleep(300);
         installerFrameFixture.optionPane().requireWarningMessage();
         installerFrameFixture.optionPane().okButton().click();
         // Packs Panel
-        Thread.sleep(100);
+        Thread.sleep(300);
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Install Panel
         waitAndCheckInstallation(installData, installPath);
+
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Finish panel
         installerFrameFixture.button(GuiId.FINISH_PANEL_AUTO_BUTTON.id).click();
         Thread.sleep(300);
         installerFrameFixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).fileNameTextBox().enterText("auto.xml");
+        Thread.sleep(300);
         installerFrameFixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).approve();
         assertThat(new File(installPath, "auto.xml").exists(), Is.is(true));
     }
