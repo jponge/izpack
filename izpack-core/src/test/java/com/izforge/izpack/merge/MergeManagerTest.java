@@ -141,37 +141,6 @@ public class MergeManagerTest {
     }
 
     @Test
-    public void findFileInDirectory() throws Exception {
-        FileMerge fileMerge = new FileMerge(MergeManager.getFileFromPath("com/izforge/izpack/merge/test"));
-        File file = fileMerge.find(new FileFilter() {
-            public boolean accept(File pathname) {
-                return pathname.getName().equals(".placeholder") || pathname.isDirectory();
-            }
-        });
-        assertThat(file.getName(), Is.is(".placeholder"));
-    }
-
-    @Test
-<<<<<<< HEAD:izpack-compiler/src/test/java/com/izforge/izpack/compiler/merge/MergeTest.java
-    public void testAddResourceToMerge() throws Exception {
-        mergeManager.addResourceToMerge("com/izforge/izpack/installer/");
-        doMerge(mergeManager);
-=======
-    public void findFileInJar() throws Exception {
-        URL urlJar = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
-        URLClassLoader loader = URLClassLoader.newInstance(new URL[]{urlJar}, ClassLoader.getSystemClassLoader());
-
-        JarMerge jarMerge = new JarMerge(loader.getResource("jar/izforge"));
-        File file = jarMerge.find(new FileFilter() {
-            public boolean accept(File pathname) {
-                return pathname.getName().matches(".*HelloPanel\\.class") || pathname.isDirectory();
-            }
-        });
-        assertThat(file.getName(), Is.is("HelloPanel.class"));
-    }
->>>>>>> develop:izpack-core/src/test/java/com/izforge/izpack/merge/MergeManagerTest.java
-
-    @Test
     public void testProcessJarPath() throws Exception {
         URL resource = new URL("file:/home/test/unjar.jar!com/package/in/jar");
         String jarPath = MergeManager.processUrlToJarPath(resource);
