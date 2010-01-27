@@ -216,6 +216,10 @@ public class Log implements LogError, LogWarning, LogMessage {
      * This flag signals that the identifiers of the recorded debug channels should be dumped
      */
     private boolean dumpChannels = false;
+    /**
+     * Channel name for debug message about panel tracing.
+     */
+    public final static String PANEL_TRACE = "PanelTrace";
 
     /*--------------------------------------------------------------------------*/
 
