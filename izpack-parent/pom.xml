@@ -19,6 +19,7 @@
     </distributionManagement>
 
     <dependencies>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -45,6 +46,7 @@
         <dependencies>
 
             <!-- Compile libs -->
+
             <dependency>
                 <groupId>ant</groupId>
                 <artifactId>ant</artifactId>

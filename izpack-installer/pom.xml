@@ -13,16 +13,13 @@
     <dependencies>
         <dependency>
             <groupId>${groupId}</groupId>
-            <artifactId>izpack-util</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>${groupId}</groupId>
             <artifactId>izpack-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.picocontainer</groupId>
-            <artifactId>picocontainer</artifactId>
+            <groupId>jakarta-regexp</groupId>
+            <artifactId>jakarta-regexp</artifactId>
         </dependency>
+
     </dependencies>
 
     <artifactId>izpack-installer</artifactId>

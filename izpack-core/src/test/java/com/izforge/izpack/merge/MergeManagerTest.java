@@ -150,7 +150,7 @@ public class MergeManagerTest {
 
     @Test
     public void findFileInDirectory() throws Exception {
-        FileMerge fileMerge = new FileMerge(MergeManager.getFileFromPath("com/izforge/izpack/compiler/merge/test"));
+        FileMerge fileMerge = new FileMerge(MergeManager.getFileFromPath("com/izforge/izpack/merge/test"));
         File file = fileMerge.find(new FileFilter() {
             public boolean accept(File pathname) {
                 return pathname.getName().equals(".placeholder") || pathname.isDirectory();

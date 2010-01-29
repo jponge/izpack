@@ -19,5 +19,9 @@
             <artifactId>izpack-compiler</artifactId>
             <version>${version}</version>
         </dependency>
+        <dependency>
+            <groupId>bsf</groupId>
+            <artifactId>bsf</artifactId>
+        </dependency>
     </dependencies>
 </project>
