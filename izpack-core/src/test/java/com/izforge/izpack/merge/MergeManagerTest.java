@@ -161,7 +161,7 @@ public class MergeManagerTest {
 
     @Test
     public void findFileInJar() throws Exception {
-        URL urlJar = ClassLoader.getSystemResource("com/izforge/izpack/compiler/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
+        URL urlJar = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
         URLClassLoader loader = URLClassLoader.newInstance(new URL[]{urlJar}, ClassLoader.getSystemClassLoader());
 
         JarMerge jarMerge = new JarMerge(loader.getResource("jar/izforge"));
