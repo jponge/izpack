@@ -19,10 +19,6 @@
             <artifactId>izpack-util</artifactId>
         </dependency>
         <dependency>
-            <groupId>ant</groupId>
-            <artifactId>ant</artifactId>
-        </dependency>
-        <dependency>
             <groupId>jakarta-regexp</groupId>
             <artifactId>jakarta-regexp</artifactId>
         </dependency>
