@@ -141,8 +141,16 @@ public class MergeManagerTest {
     }
 
     @Test
+    public void testProcessJarPath() throws Exception {
+        URL resource = new URL("file:/home/test/unjar.jar!com/package/in/jar");
+        String jarPath = MergeManager.processUrlToJarPath(resource);
+        System.out.println(jarPath);
+        assertThat(jarPath, Is.is("/home/test/unjar.jar"));
+    }
+
+    @Test
     public void findFileInDirectory() throws Exception {
-        FileMerge fileMerge = new FileMerge(MergeManager.getFileFromPath("com/izforge/izpack/merge/test"));
+        FileMerge fileMerge = new FileMerge(MergeManager.getFileFromPath("com/izforge/izpack/compiler/merge/test"));
         File file = fileMerge.find(new FileFilter() {
             public boolean accept(File pathname) {
                 return pathname.getName().equals(".placeholder") || pathname.isDirectory();
@@ -163,13 +171,5 @@ public class MergeManagerTest {
             }
         });
         assertThat(file.getName(), Is.is("HelloPanel.class"));
-    }
-
-    @Test
-    public void testProcessJarPath() throws Exception {
-        URL resource = new URL("file:/home/test/unjar.jar!com/package/in/jar");
-        String jarPath = MergeManager.processUrlToJarPath(resource);
-        System.out.println(jarPath);
-        assertThat(jarPath, Is.is("/home/test/unjar.jar"));
     }
 }

@@ -42,7 +42,10 @@ import com.izforge.izpack.installer.debugger.Debugger;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.installer.unpacker.Unpacker;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.Log;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import javax.swing.*;
@@ -558,7 +561,7 @@ public class InstallerFrame extends JFrame {
                     "InstallerFrame.switchPanel: try switching panel from {0} to {1} ({2} to {3})",
                     new String[]{l_panel.getClass().getName(), panel.getClass().getName(),
                             Integer.toString(last), Integer.toString(installdata.getCurPanelNumber())},
-                    DebugConstants.PANEL_TRACE, null);
+                    Log.PANEL_TRACE, null);
 
             // instead of writing data here which leads to duplicated entries in
             // auto-installation script (bug # 4551), let's make data only immediately before
@@ -618,7 +621,7 @@ public class InstallerFrame extends JFrame {
                     getRootPane().setDefaultButton(cdb);
                     Log.getInstance().addDebugMessage(
                             "InstallerFrame.switchPanel: setting {0} as default button",
-                            new String[]{buttonName}, DebugConstants.PANEL_TRACE, null);
+                            new String[]{buttonName}, Log.PANEL_TRACE, null);
                 }
             });
 
@@ -669,7 +672,7 @@ public class InstallerFrame extends JFrame {
             isBack = false;
             callGUIListener(GUIListener.PANEL_SWITCHED);
             Log.getInstance().addDebugMessage("InstallerFrame.switchPanel: switched", null,
-                    DebugConstants.PANEL_TRACE, null);
+                    Log.PANEL_TRACE, null);
         }
         catch (Exception err) {
             err.printStackTrace();

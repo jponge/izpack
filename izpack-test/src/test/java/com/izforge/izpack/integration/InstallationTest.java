@@ -152,8 +152,10 @@ public class InstallationTest extends AbstractInstallationTest {
 
         installerFrameFixture = prepareFrameFixture();
         // Hello panel
+        Thread.sleep(100);
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Chack Panel
+        Thread.sleep(100);
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Licence Panel
         installerFrameFixture.radioButton(GuiId.LICENCE_YES_RADIO.id).click();
