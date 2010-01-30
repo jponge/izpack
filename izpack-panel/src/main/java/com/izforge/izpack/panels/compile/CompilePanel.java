@@ -25,9 +25,6 @@ import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.CompileHandler;
-import com.izforge.izpack.installer.CompileResult;
-import com.izforge.izpack.installer.CompileWorker;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -366,7 +363,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
      * An error was encountered.
      *
      * @param error The error information.
-     * @see com.izforge.izpack.installer.CompileHandler
+     * @see CompileHandler
      */
     public void handleCompileError(CompileResult error) {
         String message = error.getMessage();

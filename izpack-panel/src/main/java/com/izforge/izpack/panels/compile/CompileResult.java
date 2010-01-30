@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.panels.compile;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
