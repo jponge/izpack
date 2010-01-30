@@ -177,6 +177,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      * 
      * @see java.lang.Object#clone()
      */
+
     public Object clone() {
         try {
             IzPanelConstraints c = (IzPanelConstraints) super.clone();

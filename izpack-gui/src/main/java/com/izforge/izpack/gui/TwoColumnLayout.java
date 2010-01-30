@@ -690,6 +690,7 @@ public class TwoColumnLayout implements LayoutManager2 {
      * 
      * return (amount); }
      */
+
     /**
      * Calculates the preferred size dimensions for the specified panel given the components in the
      * specified parent container.

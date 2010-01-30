@@ -97,17 +97,17 @@
                 <version>${version}</version>
             </dependency>
             <dependency>
-                <artifactId>izpack-event</artifactId>
-                <groupId>org.codehaus.izpack.event</groupId>
-                <version>${version}</version>
-            </dependency>
-            <dependency>
                 <artifactId>izpack-api</artifactId>
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>
             </dependency>
             <dependency>
                 <artifactId>izpack-util</artifactId>
+                <groupId>${groupId}</groupId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <artifactId>izpack-gui</artifactId>
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>
             </dependency>

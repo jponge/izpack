@@ -24,6 +24,7 @@ package com.izforge.izpack.gui;
 import java.awt.*;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * A flow layout arranges components in a left-to-right flow, much like lines of text in a
  * paragraph. Flow layouts are typically used to arrange buttons in a panel. It will arrange buttons
@@ -166,6 +167,7 @@ public class FlowLayout implements LayoutManager {
     int vgap;
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Constructs a new Flow Layout with a centered alignment and a default 5-unit horizontal and
      * vertical gap.
@@ -176,6 +178,7 @@ public class FlowLayout implements LayoutManager {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Constructs a new Flow Layout with the specified alignment and a default 5-unit horizontal and
      * vertical gap. The value of the alignment argument must be one of <code>FlowLayout.LEFT</code>,
@@ -189,6 +192,7 @@ public class FlowLayout implements LayoutManager {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Creates a new flow layout manager with the indicated alignment and the indicated horizontal
      * and vertical gaps.
@@ -208,6 +212,7 @@ public class FlowLayout implements LayoutManager {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Gets the alignment for this layout. Possible values are <code>FlowLayout.LEFT</code>,
      * <code>FlowLayout.RIGHT</code>, or <code>FlowLayout.CENTER</code>.
@@ -221,6 +226,7 @@ public class FlowLayout implements LayoutManager {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the alignment for this layout. Possible values are <code>FlowLayout.LEFT</code>,
      * <code>FlowLayout.RIGHT</code>, and <code>FlowLayout.CENTER</code>.
@@ -250,6 +256,7 @@ public class FlowLayout implements LayoutManager {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Gets the horizontal gap between components.
      *
@@ -262,6 +269,7 @@ public class FlowLayout implements LayoutManager {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the horizontal gap between components.
      *
@@ -274,6 +282,7 @@ public class FlowLayout implements LayoutManager {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Gets the vertical gap between components.
      *
@@ -286,6 +295,7 @@ public class FlowLayout implements LayoutManager {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the vertical gap between components.
      *
@@ -298,6 +308,7 @@ public class FlowLayout implements LayoutManager {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Adds the specified component to the layout. Not used by this class.
      *
@@ -309,6 +320,7 @@ public class FlowLayout implements LayoutManager {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Removes the specified component from the layout. Not used by this class.
      *
@@ -319,6 +331,7 @@ public class FlowLayout implements LayoutManager {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the preferred dimensions for this layout given the components in the specified target
      * container.
@@ -357,6 +370,7 @@ public class FlowLayout implements LayoutManager {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the minimum dimensions needed to layout the components contained in the specified
      * target container.
@@ -392,6 +406,7 @@ public class FlowLayout implements LayoutManager {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Centers the elements in the specified row, if there is any slack.
      *
@@ -442,6 +457,7 @@ public class FlowLayout implements LayoutManager {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Lays out the container. This method lets each component take its preferred size by reshaping
      * the components in the target container in order to satisfy the constraints of this
@@ -490,6 +506,7 @@ public class FlowLayout implements LayoutManager {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns a string representation of this <code>FlowLayout</code> object and its values.
      *
