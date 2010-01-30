@@ -1,4 +1,4 @@
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.unpacker;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;

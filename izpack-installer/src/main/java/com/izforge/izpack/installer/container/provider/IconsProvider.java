@@ -42,8 +42,8 @@ public class IconsProvider implements Provider {
         URL url;
         ImageIcon img;
         IXMLElement icon;
-        InputStream inXML = InstallerFrame.class
-                .getResourceAsStream("/com/izforge/izpack/installer/icons.xml");
+        InputStream inXML = getClass().
+                getResourceAsStream("icons.xml");
 
         // Initialises the parser
         IXMLParser parser = new XMLParser();
