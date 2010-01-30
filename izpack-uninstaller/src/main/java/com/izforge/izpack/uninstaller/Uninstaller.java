@@ -19,9 +19,9 @@
 
 package com.izforge.izpack.uninstaller;
 
-import com.izforge.izpack.installer.PrivilegedRunner;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.PrivilegedRunner;
 import com.izforge.izpack.util.SelfModifier;
 
 import javax.swing.*;

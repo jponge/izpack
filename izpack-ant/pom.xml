@@ -18,10 +18,6 @@
             <artifactId>izpack-compiler</artifactId>
             <groupId>${groupId}</groupId>
         </dependency>
-        <dependency>
-            <artifactId>izpack-core</artifactId>
-            <groupId>${groupId}</groupId>
-        </dependency>
     </dependencies>
 
 </project>

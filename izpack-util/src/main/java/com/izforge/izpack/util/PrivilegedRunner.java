@@ -19,9 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
-
-import com.izforge.izpack.util.OsVersion;
+package com.izforge.izpack.util;
 
 import java.io.*;
 import java.net.URI;

@@ -5,12 +5,8 @@ import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.data.CustomData;
-import com.izforge.izpack.installer.PrivilegedRunner;
 import com.izforge.izpack.installer.container.CustomDataContainer;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.*;
 import org.picocontainer.injectors.Provider;
 
 import javax.swing.*;

@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>${groupId}</groupId>
-            <artifactId>izpack-installer</artifactId>
+            <artifactId>izpack-core</artifactId>
         </dependency>
     </dependencies>
 </project>
