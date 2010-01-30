@@ -20,22 +20,22 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util;
+package com.izforge.izpack.gui.log;
 
 /**
- * Interface for handle warnings logging with IzPack Log class.
+ * Interface for handle message logging with IzPack Log class.
  *
  * @author Elmar Grom
  */
-public interface LogWarning {
+public interface LogMessage {
     /**
      * First index for warning messages
      */
-    static final int WARNING_BASE = 1000;
+    static final int MESSAGE_BASE = 0;
 
     /**
      * The highest legal error message number is less than this value.
      */
-    static final int MAX_WARNING = WARNING_BASE;
+    static final int MAX_MESSAGE = 0;
 }
 

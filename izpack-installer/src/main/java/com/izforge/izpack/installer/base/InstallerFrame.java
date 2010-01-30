@@ -35,6 +35,7 @@ import com.izforge.izpack.core.data.UninstallData;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;
+import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.GUIListener;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
@@ -45,7 +46,6 @@ import com.izforge.izpack.installer.unpacker.Unpacker;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
-import com.izforge.izpack.util.Log;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import javax.swing.*;

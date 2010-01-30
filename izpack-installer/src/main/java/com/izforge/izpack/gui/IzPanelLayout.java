@@ -21,8 +21,7 @@
  */
 package com.izforge.izpack.gui;
 
-import com.izforge.izpack.util.Log;
-import com.izforge.izpack.util.MultiLineLabel;
+import com.izforge.izpack.gui.log.Log;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
@@ -1009,7 +1008,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
      * @return whether the type of component needs potential a reevaluation or not
      */
     private boolean needsReEvaluation(Component comp) {
-        if ((comp instanceof com.izforge.izpack.util.MultiLineLabel))
+        if ((comp instanceof MultiLineLabel))
         // REFACTOR : Same here
         // || (comp instanceof PathSelectionPanel)) {
         {

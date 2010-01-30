@@ -30,6 +30,7 @@ import com.izforge.izpack.core.data.UninstallData;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.gui.MultiLineLabel;
 import com.izforge.izpack.installer.base.GuiId;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;

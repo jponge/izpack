@@ -28,11 +28,11 @@ import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
+import com.izforge.izpack.gui.MultiLineLabel;
 import com.izforge.izpack.installer.HelpWindow;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.MultiLineLabel;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import javax.swing.*;

@@ -20,31 +20,22 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util;
+package com.izforge.izpack.gui.log;
 
 /**
- * Interface for handle error logging with IzPack Log class.
+ * Interface for handle warnings logging with IzPack Log class.
  *
  * @author Elmar Grom
  */
-public interface LogError {
+public interface LogWarning {
     /**
-     * First index for error messages
+     * First index for warning messages
      */
-    static final int ERROR_BASE = 2000;
-
-    /**
-     * Informs the user that a specific file could not be written<br>
-     * Detail Paramters
-     * <ol>
-     * <li>name of the file that could not be written
-     * </ol>
-     */
-    public static final int COULD_NOT_WRITE_FILE = ERROR_BASE;
+    static final int WARNING_BASE = 1000;
 
     /**
      * The highest legal error message number is less than this value.
      */
-    static final int MAX_ERROR = ERROR_BASE + 1;
+    static final int MAX_WARNING = WARNING_BASE;
 }
 

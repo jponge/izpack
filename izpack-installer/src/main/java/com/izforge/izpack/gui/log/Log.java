@@ -20,7 +20,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util;
+package com.izforge.izpack.gui.log;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 
@@ -287,7 +287,7 @@ public class Log implements LogError, LogWarning, LogMessage {
      * This method records general installation message
      *
      * @param message the numeric identifier of the message to add, as defined in
-     *                {@link com.izforge.izpack.util.LogMessage <code>LogMessage</code>}
+     *                {@link LogMessage <code>LogMessage</code>}
      * @param detail  a string array of variable fields that should be inserted into the message text
      */
     /*--------------------------------------------------------------------------*/
@@ -320,7 +320,7 @@ public class Log implements LogError, LogWarning, LogMessage {
      * This method records a warning message to the list of messages
      *
      * @param message   the numeric identifier of the message to add, as defined in
-     *                  {@link com.izforge.izpack.util.LogWarning <code>LogWarning</code>}
+     *                  {@link LogWarning <code>LogWarning</code>}
      * @param detail    a string array of variable fields that should be inserted into the message
      *                  text. Each array element will be inserted into the text template, replacing a marker.
      * @param exception the exception associated with the event or <code>null</code> if there was
@@ -359,7 +359,7 @@ public class Log implements LogError, LogWarning, LogMessage {
      * This method records an error message to the list of messages
      *
      * @param message   the numeric identifier of the message to add, as defined in
-     *                  {@link com.izforge.izpack.util.LogError <code>LogError</code>}
+     *                  {@link LogError <code>LogError</code>}
      * @param detail    a string array of variable fields that should be inserted into the message
      *                  text. Each array element will be inserted into the text template, replacing a marker.
      * @param exception the exception associated with the event or <code>null</code> if there was
