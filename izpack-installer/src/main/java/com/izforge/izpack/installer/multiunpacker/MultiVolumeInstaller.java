@@ -18,9 +18,8 @@
 package com.izforge.izpack.installer.multiunpacker;
 
 import com.izforge.izpack.installer.bootstrap.Installer;
-import com.izforge.izpack.installer.ProgressDialog;
-import com.izforge.izpack.util.SelfModifier;
 import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.SelfModifier;
 
 import java.awt.*;
 import java.io.File;

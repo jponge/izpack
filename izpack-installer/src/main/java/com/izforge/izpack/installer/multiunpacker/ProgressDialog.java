@@ -1,9 +1,14 @@
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.multiunpacker;
+
 
 import javax.swing.*;
 import java.awt.*;
 
-
+/**
+ * Created by IntelliJ IDEA.
+ *
+ * @author Anthonin Bonnefoy
+ */
 public class ProgressDialog extends JWindow {
     private static final long serialVersionUID = -6558347134501630050L;
     private JProgressBar progressBar;

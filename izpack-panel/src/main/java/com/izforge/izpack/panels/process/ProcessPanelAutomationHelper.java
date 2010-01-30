@@ -26,7 +26,7 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.installer.PanelAutomationHelper;
-import com.izforge.izpack.installer.ProcessPanelWorker;
+import com.izforge.izpack.installer.multiunpacker.ProcessPanelWorker;
 import com.izforge.izpack.util.AbstractUIProcessHandler;
 
 /**

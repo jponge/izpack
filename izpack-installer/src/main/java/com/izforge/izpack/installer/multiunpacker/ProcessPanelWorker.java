@@ -1,25 +1,4 @@
-/*
- * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
- * http://izpack.org/
- * http://izpack.codehaus.org/
- * 
- * Copyright 2004 Tino Schwarze
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- *     
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.multiunpacker;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
@@ -62,7 +41,7 @@ public class ProcessPanelWorker implements Runnable {
 
     protected AbstractUIProcessHandler handler;
 
-    private ArrayList<ProcessingJob> jobs = new ArrayList<ProcessingJob>();
+    private ArrayList<ProcessPanelWorker.ProcessingJob> jobs = new ArrayList<ProcessPanelWorker.ProcessingJob>();
 
     private boolean result = true;
 
@@ -151,7 +130,7 @@ public class ProcessPanelWorker implements Runnable {
             List<OsConstraint> constraints = OsConstraint.getOsList(job_el);
 
             if (OsConstraint.oneMatchesCurrentSystem(constraints)) {
-                List<Processable> ef_list = new ArrayList<Processable>();
+                List<ProcessPanelWorker.Processable> ef_list = new ArrayList<ProcessPanelWorker.Processable>();
 
                 String job_name = job_el.getAttribute("name", "");
 
@@ -180,7 +159,7 @@ public class ProcessPanelWorker implements Runnable {
                     }
 
 
-                    ef_list.add(new ExecutableFile(ef_name, args, envvars));
+                    ef_list.add(new ProcessPanelWorker.ExecutableFile(ef_name, args, envvars));
                 }
 
                 for (IXMLElement ef : job_el.getChildrenNamed("executeclass")) {
@@ -196,9 +175,9 @@ public class ProcessPanelWorker implements Runnable {
                         args.add(arg_val);
                     }
 
-                    ef_list.add(new ExecutableClass(ef_name, args));
+                    ef_list.add(new ProcessPanelWorker.ExecutableClass(ef_name, args));
                 }
-                this.jobs.add(new ProcessingJob(job_name, ef_list));
+                this.jobs.add(new ProcessPanelWorker.ProcessingJob(job_name, ef_list));
             }
         }
 
@@ -235,7 +214,7 @@ public class ProcessPanelWorker implements Runnable {
                 return;
             }
         }
-        catch (java.io.IOException ioe) {
+        catch (IOException ioe) {
             System.err.println(ioe.toString());
             return;
         }
@@ -272,7 +251,7 @@ public class ProcessPanelWorker implements Runnable {
 
         this.handler.startProcessing(this.jobs.size());
 
-        for (ProcessingJob pj : this.jobs) {
+        for (ProcessPanelWorker.ProcessingJob pj : this.jobs) {
             this.handler.startProcess(pj.name);
 
             this.result = pj.run(this.handler, this.vs);
@@ -338,19 +317,19 @@ public class ProcessPanelWorker implements Runnable {
         public boolean run(AbstractUIProcessHandler handler, VariableSubstitutor vs);
     }
 
-    private static class ProcessingJob implements Processable {
+    private static class ProcessingJob implements ProcessPanelWorker.Processable {
 
         public String name;
 
-        private List<Processable> processables;
+        private List<ProcessPanelWorker.Processable> processables;
 
-        public ProcessingJob(String name, List<Processable> processables) {
+        public ProcessingJob(String name, List<ProcessPanelWorker.Processable> processables) {
             this.name = name;
             this.processables = processables;
         }
 
         public boolean run(AbstractUIProcessHandler handler, VariableSubstitutor vs) {
-            for (Processable pr : this.processables) {
+            for (ProcessPanelWorker.Processable pr : this.processables) {
                 if (!pr.run(handler, vs)) {
                     return false;
                 }
@@ -361,7 +340,7 @@ public class ProcessPanelWorker implements Runnable {
 
     }
 
-    private static class ExecutableFile implements Processable {
+    private static class ExecutableFile implements ProcessPanelWorker.Processable {
 
         private String filename;
 
@@ -402,8 +381,8 @@ public class ProcessPanelWorker implements Runnable {
 
                 Process p = pb.start();
 
-                OutputMonitor stdoutMon = new OutputMonitor(this.handler, p.getInputStream(), false);
-                OutputMonitor stderrMon = new OutputMonitor(this.handler, p.getErrorStream(), true);
+                ProcessPanelWorker.ExecutableFile.OutputMonitor stdoutMon = new ProcessPanelWorker.ExecutableFile.OutputMonitor(this.handler, p.getInputStream(), false);
+                ProcessPanelWorker.ExecutableFile.OutputMonitor stderrMon = new ProcessPanelWorker.ExecutableFile.OutputMonitor(this.handler, p.getErrorStream(), true);
                 Thread stdoutThread = new Thread(stdoutMon);
                 Thread stderrThread = new Thread(stderrMon);
                 stdoutThread.setDaemon(true);
@@ -439,7 +418,7 @@ public class ProcessPanelWorker implements Runnable {
             return true;
         }
 
-        private void stopMonitor(OutputMonitor m, Thread t) {
+        private void stopMonitor(ProcessPanelWorker.ExecutableFile.OutputMonitor m, Thread t) {
             // taken from com.izforge.izpack.util.FileExecutor
             m.doStop();
             long softTimeout = 500;
@@ -525,7 +504,7 @@ public class ProcessPanelWorker implements Runnable {
      * run(AbstractUIProcessHandler, String[]) If found, it calls the method and processes all
      * returned exceptions
      */
-    private static class ExecutableClass implements Processable {
+    private static class ExecutableClass implements ProcessPanelWorker.Processable {
 
         final private String myClassName;
 
@@ -610,20 +589,20 @@ public class ProcessPanelWorker implements Runnable {
      * in the list if that pack is actually selected for installation. <br><br> <b>Note:</b><br>
      * If the list of selected packs is empty then <code>true</code> is always returned. The same
      * is true if the <code>packs</code> list is empty.
-     * 
+     *
      * @param packs a <code>Vector</code> of <code>String</code>s. Each of the strings denotes
      * a pack for which the schortcut should be created if the pack is actually installed.
-     * 
+     *
      * @return <code>true</code> if the shortcut is required for at least on pack in the list,
      * otherwise returns <code>false</code>.
      */
     /*--------------------------------------------------------------------------*/
     /*
      * @design
-     * 
+     *
      * The information about the installed packs comes from GUIInstallData.selectedPacks. This assumes
      * that this panel is presented to the user AFTER the PacksPanel.
-     * 
+     *
      * /*--------------------------------------------------------------------------
      */
 
