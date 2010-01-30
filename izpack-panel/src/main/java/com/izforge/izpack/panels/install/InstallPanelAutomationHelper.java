@@ -27,7 +27,6 @@ import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.installer.PanelAutomationHelper;
-import com.izforge.izpack.installer.UnpackerFactory;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 
@@ -62,7 +61,9 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
         Unpacker unpacker = new Unpacker(installData, this);
         unpacker.start();
         */
-        IUnpacker unpacker = UnpackerFactory.getUnpacker(idata.getInfo().getUnpackerClassName(), idata, this);
+        //REFACTOR : Use container to get unpacker
+//        IUnpacker unpacker = UnpackerFactory.getUnpacker(idata.getInfo().getUnpackerClassName(), idata, this);
+        IUnpacker unpacker = null;
         Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
         unpacker.setRules((RulesEngine) idata.getRules());
         unpackerthread.start();
