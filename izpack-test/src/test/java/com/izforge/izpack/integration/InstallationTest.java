@@ -1,11 +1,11 @@
 package com.izforge.izpack.integration;
 
+import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.core.data.UninstallData;
-import com.izforge.izpack.installer.base.GuiId;
-import com.izforge.izpack.installer.base.LanguageDialog;
 import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.language.LanguageDialog;
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.exception.ScreenLockException;
 import org.hamcrest.core.Is;

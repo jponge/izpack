@@ -1,4 +1,4 @@
-package com.izforge.izpack.installer.base;
+package com.izforge.izpack.installer.language;
 
 import com.izforge.izpack.api.data.InstallerRequirement;
 import com.izforge.izpack.api.data.ResourceManager;

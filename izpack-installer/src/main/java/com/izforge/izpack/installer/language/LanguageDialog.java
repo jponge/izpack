@@ -1,5 +1,6 @@
-package com.izforge.izpack.installer.base;
+package com.izforge.izpack.installer.language;
 
+import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.installer.InstallerRequirementDisplay;

@@ -60,7 +60,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.izforge.izpack.installer.base.GuiId.*;
+import static com.izforge.izpack.api.GuiId.*;
 
 /**
  * The IzPack installer frame.

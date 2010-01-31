@@ -23,10 +23,10 @@ package com.izforge.izpack.installer.bootstrap;
 
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
 import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.base.LanguageDialog;
 import com.izforge.izpack.installer.console.ConsoleInstaller;
 import com.izforge.izpack.installer.container.ApplicationContainer;
 import com.izforge.izpack.installer.container.IInstallerContainer;
+import com.izforge.izpack.installer.language.LanguageDialog;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.StringTool;
 

@@ -1,4 +1,4 @@
-package com.izforge.izpack.installer.base;
+package com.izforge.izpack.api;
 
 /**
  * Enum with identifier of frames

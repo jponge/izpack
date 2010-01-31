@@ -17,6 +17,7 @@
  */
 package com.izforge.izpack.panels.shortcut;
 
+import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
@@ -31,7 +32,6 @@ import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.MultiLineLabel;
-import com.izforge.izpack.installer.base.GuiId;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
