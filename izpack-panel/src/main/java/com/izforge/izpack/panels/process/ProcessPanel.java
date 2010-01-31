@@ -26,7 +26,6 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.installer.multiunpacker.ProcessPanelWorker;
 import com.izforge.izpack.util.AbstractUIProcessHandler;
 
 import javax.swing.*;
