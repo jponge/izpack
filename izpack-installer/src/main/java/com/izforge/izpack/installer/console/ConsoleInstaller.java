@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.installer.base;
+package com.izforge.izpack.installer.console;
 
 import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.exception.InstallerException;
@@ -27,7 +27,8 @@ import com.izforge.izpack.api.installer.DataValidator.Status;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.DataValidatorFactory;
-import com.izforge.izpack.installer.PanelConsole;
+import com.izforge.izpack.installer.base.ConditionCheck;
+import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.bootstrap.Installer;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;

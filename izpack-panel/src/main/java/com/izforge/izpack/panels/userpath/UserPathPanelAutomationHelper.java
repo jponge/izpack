@@ -24,7 +24,7 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.installer.PanelAutomation;
+import com.izforge.izpack.installer.automation.PanelAutomation;
 
 /**
  * Functions to support automated usage of the UserPathPanel

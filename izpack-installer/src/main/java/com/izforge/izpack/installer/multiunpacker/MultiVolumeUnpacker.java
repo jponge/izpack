@@ -29,7 +29,7 @@ import com.izforge.izpack.core.io.FileSpanningInputStream;
 import com.izforge.izpack.core.io.FileSpanningOutputStream;
 import com.izforge.izpack.core.io.VolumeNotFoundException;
 import com.izforge.izpack.data.*;
-import com.izforge.izpack.installer.PanelAutomation;
+import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.unpacker.IMultiVolumeUnpackerHelper;
 import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.installer.unpacker.UnpackerBase;

@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.automation;
 
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Housekeeper;
@@ -34,6 +34,7 @@ abstract public class PanelAutomationHelper implements AbstractUIHandler {
     /*
      * @see com.izforge.izpack.util.AbstractUIHandler#emitNotification(java.lang.String)
      */
+
     public void emitNotification(String message) {
         System.out.println(message);
     }
@@ -42,6 +43,7 @@ abstract public class PanelAutomationHelper implements AbstractUIHandler {
      * @see com.izforge.izpack.util.AbstractUIHandler#emitWarning(java.lang.String,
      * java.lang.String)
      */
+
     public boolean emitWarning(String title, String message) {
         System.err.println("[ WARNING: " + message + " ]");
         // default: continue
@@ -51,6 +53,7 @@ abstract public class PanelAutomationHelper implements AbstractUIHandler {
     /*
      * @see com.izforge.izpack.util.AbstractUIHandler#emitError(java.lang.String, java.lang.String)
      */
+
     public void emitError(String title, String message) {
         System.err.println("[ ERROR: " + message + " ]");
     }
@@ -59,6 +62,7 @@ abstract public class PanelAutomationHelper implements AbstractUIHandler {
     * @see com.izforge.izpack.util.AbstractUIHandler#emitErrorAndBlockNext(java.lang.String,
     * java.lang.String)
     */
+
     public void emitErrorAndBlockNext(String title, String message) {
         emitError(title, message);
         Housekeeper.getInstance().shutDown(10);
@@ -68,6 +72,7 @@ abstract public class PanelAutomationHelper implements AbstractUIHandler {
      * @see com.izforge.izpack.util.AbstractUIHandler#askQuestion(java.lang.String,
      * java.lang.String, int)
      */
+
     public int askQuestion(String title, String question, int choices) {
         // don't know what to answer
         return AbstractUIHandler.ANSWER_CANCEL;
@@ -77,6 +82,7 @@ abstract public class PanelAutomationHelper implements AbstractUIHandler {
      * @see com.izforge.izpack.util.AbstractUIHandler#askQuestion(java.lang.String,
      * java.lang.String, int, int)
      */
+
     public int askQuestion(String title, String question, int choices, int default_choice) {
         return default_choice;
     }

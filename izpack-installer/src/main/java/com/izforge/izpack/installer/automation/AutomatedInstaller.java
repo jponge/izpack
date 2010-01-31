@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer.base;
+package com.izforge.izpack.installer.automation;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
@@ -31,16 +31,16 @@ import com.izforge.izpack.api.installer.DataValidator.Status;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.data.PanelAction;
-import com.izforge.izpack.installer.ConsolePanelAutomationHelper;
 import com.izforge.izpack.installer.DataValidatorFactory;
 import com.izforge.izpack.installer.PanelActionFactory;
-import com.izforge.izpack.installer.PanelAutomation;
+import com.izforge.izpack.installer.base.ConditionCheck;
+import com.izforge.izpack.installer.base.InstallerBase;
+import com.izforge.izpack.installer.console.ConsolePanelAutomationHelper;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -89,16 +89,17 @@ public class AutomatedInstaller extends InstallerBase {
     /**
      * Constructing an instance triggers the install.
      *
+     * @param variableSubstitutor
      * @param resourceManager
      * @throws Exception Description of the Exception
      */
-    public AutomatedInstaller(ResourceManager resourceManager, ConditionCheck checkCondition, UninstallDataWriter uninstallDataWriter) {
+    public AutomatedInstaller(ResourceManager resourceManager, ConditionCheck checkCondition, UninstallDataWriter uninstallDataWriter, VariableSubstitutor variableSubstitutor) {
         super(resourceManager);
         this.checkCondition = checkCondition;
         this.uninstallDataWriter = uninstallDataWriter;
 
         this.panelInstanceCount = new TreeMap<String, Integer>();
-        variableSubstitutor = new VariableSubstitutorImpl(this.idata.getVariables());
+        this.variableSubstitutor = variableSubstitutor;
     }
 
     /**

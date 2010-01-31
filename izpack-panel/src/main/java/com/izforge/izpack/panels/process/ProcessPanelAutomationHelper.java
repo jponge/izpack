@@ -24,8 +24,8 @@ package com.izforge.izpack.panels.process;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.installer.PanelAutomation;
-import com.izforge.izpack.installer.PanelAutomationHelper;
+import com.izforge.izpack.installer.automation.PanelAutomation;
+import com.izforge.izpack.installer.automation.PanelAutomationHelper;
 import com.izforge.izpack.util.AbstractUIProcessHandler;
 
 /**

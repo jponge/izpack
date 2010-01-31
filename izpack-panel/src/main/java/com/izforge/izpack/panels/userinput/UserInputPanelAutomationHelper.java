@@ -27,7 +27,7 @@ import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.installer.PanelAutomation;
+import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.util.Debug;
 
 import java.util.Iterator;

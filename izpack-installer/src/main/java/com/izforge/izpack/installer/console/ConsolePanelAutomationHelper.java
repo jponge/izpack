@@ -19,7 +19,9 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.console;
+
+import com.izforge.izpack.installer.automation.PanelAutomationHelper;
 
 
 public class ConsolePanelAutomationHelper extends PanelAutomationHelper {

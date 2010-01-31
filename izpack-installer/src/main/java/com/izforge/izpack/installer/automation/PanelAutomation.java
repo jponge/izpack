@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.automation;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
@@ -34,7 +34,7 @@ import com.izforge.izpack.api.exception.InstallerException;
  *
  * @author Jonathan Halliday
  * @author Julien Ponge
- * @see com.izforge.izpack.installer.base.AutomatedInstaller
+ * @see AutomatedInstaller
  */
 public interface PanelAutomation {
 

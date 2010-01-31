@@ -23,7 +23,7 @@ package com.izforge.izpack.panels.defaulttarget;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.installer.PanelAutomation;
+import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.path.PathInputPanel;
