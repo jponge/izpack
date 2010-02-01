@@ -118,7 +118,7 @@ public class InstallationTest extends AbstractInstallationTest {
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Finish panel
         installerFrameFixture.button(GuiId.FINISH_PANEL_AUTO_BUTTON.id).click();
-        Thread.sleep(300);
+        Thread.sleep(800);
         installerFrameFixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).fileNameTextBox().enterText("auto.xml");
         Thread.sleep(300);
         installerFrameFixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).approve();

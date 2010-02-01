@@ -33,11 +33,17 @@ public class JarMerge implements Mergeable {
         regexp = new StringBuilder().append(resource.getPath().replaceAll(jarPath, "")).append(".*").toString();
     }
 
+    public JarMerge(File classFile) {
+        String[] strings = classFile.getAbsolutePath().split(".jar!/");
+        jarPath = strings[0] + ".jar";
+        regexp = new StringBuilder().append(strings[1]).append(".*").toString();
+    }
+
     public File find(FileFilter fileFilter) {
         try {
             ArrayList<String> fileNameInZip = getFileNameInZip();
             for (String fileName : fileNameInZip) {
-                File file = new File(jarPath + fileName);
+                File file = new File(jarPath + "!/" + fileName);
                 if (fileFilter.accept(file)) {
                     return file;
                 }
