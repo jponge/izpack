@@ -4,6 +4,7 @@ import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.manager.PanelManager;
+import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.panels.checkedhello.CheckedHelloPanel;
 import org.hamcrest.core.Is;
 import org.junit.Before;
@@ -21,12 +22,14 @@ public class PanelManagerTest {
     private GUIInstallData installDataGUI;
     @Mock
     private IInstallerContainer installerContainer;
+    private MergeManager mergeManager;
     private PanelManager panelManager;
 
     @Before
     public void initMock() throws ClassNotFoundException {
         MockitoAnnotations.initMocks(getClass());
-        panelManager = new PanelManager(installDataGUI, installerContainer);
+        mergeManager = new MergeManager();
+        panelManager = new PanelManager(installDataGUI, installerContainer, mergeManager);
     }
 
     @Test

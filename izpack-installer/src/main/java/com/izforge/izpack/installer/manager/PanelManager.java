@@ -12,13 +12,11 @@ import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.merge.MergeManager;
-import com.izforge.izpack.merge.Mergeable;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.OsConstraint;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +26,10 @@ import java.util.List;
 public class PanelManager {
 
     public static String CLASSNAME_PREFIX = "com.izforge.izpack.panels";
-    public static String BASE_CLASSNAME_PATH = CLASSNAME_PREFIX.replaceAll("\\.", "/");
 
     private GUIInstallData installdata;
     private IInstallerContainer installerContainer;
+    private MergeManager mergeManager;
     private int lastVis;
 
     /**
@@ -39,35 +37,23 @@ public class PanelManager {
      */
     protected ArrayList<Integer> visiblePanelMapping;
 
-    public PanelManager(GUIInstallData installDataGUI, IInstallerContainer installerContainer) throws ClassNotFoundException {
+    public PanelManager(GUIInstallData installDataGUI, IInstallerContainer installerContainer, MergeManager mergeManager) throws ClassNotFoundException {
         this.installdata = installDataGUI;
         this.installerContainer = installerContainer;
+        this.mergeManager = mergeManager;
         visiblePanelMapping = new ArrayList<Integer>();
     }
 
     public Class<? extends IzPanel> resolveClassName(final String className) throws ClassNotFoundException {
-        String currentPackage;
-        Mergeable mergeable;
-        if (className.contains(".")) {
-            currentPackage = className.substring(0, className.lastIndexOf("."));
-            String packagePath = currentPackage.replaceAll("\\.", "/");
-            mergeable = MergeManager.getMergeableFromPath(packagePath);
-        } else {
-            currentPackage = CLASSNAME_PREFIX;
-            mergeable = MergeManager.getMergeableFromPath(BASE_CLASSNAME_PATH);
-        }
+        String classPackage = mergeManager.getPackagePathFromClassName(className);
 
-        FileFilter fileFilter = new FileFilter() {
-            public boolean accept(File pathname) {
-                return pathname.isDirectory() ||
-                        pathname.getName().replaceAll(".class", "").equalsIgnoreCase(className);
-            }
-        };
-        File classFile = mergeable.find(fileFilter);
-        if (classFile != null) {
-            return resolveClassFromPath(classFile, currentPackage);
+        File fileFromPanelClass = null;
+        try {
+            fileFromPanelClass = mergeManager.getFileFromPanelClass(className, classPackage);
+        } catch (Exception e) {
+            return resolveClassFromName(className);
         }
-        return resolveClassFromName(className);
+        return resolveClassFromPath(fileFromPanelClass, classPackage.replaceAll("/", "."));
     }
 
     private Class<? extends IzPanel> resolveClassFromName(String className) throws ClassNotFoundException {
@@ -83,6 +69,8 @@ public class PanelManager {
     /**
      * From a class file found in the classpath, convert it to a className
      *
+     * @param classFile
+     * @param currentPackage Package should be a standard package name
      * @return The resolved class
      * @throws ClassNotFoundException
      */
@@ -90,27 +78,6 @@ public class PanelManager {
         String fullClassName = classFile.getAbsolutePath().replaceAll("/", ".").replaceAll(".class", "");
         fullClassName = fullClassName.substring(fullClassName.indexOf(currentPackage), fullClassName.length());
         return Class.forName(fullClassName);
-    }
-
-    /**
-     * Recursively search a file matching the fileFilter
-     *
-     * @param fileFilter  Filter accepting directory and file matching a classname pattern
-     * @param currentFile Current directory
-     * @return the first found file or null
-     */
-    private File findRecursivelyForFile(FileFilter fileFilter, File currentFile) {
-        if (currentFile.isDirectory()) {
-            for (File files : currentFile.listFiles(fileFilter)) {
-                File file = findRecursivelyForFile(fileFilter, files);
-                if (file != null) {
-                    return file;
-                }
-            }
-        } else {
-            return currentFile;
-        }
-        return null;
     }
 
     /**
