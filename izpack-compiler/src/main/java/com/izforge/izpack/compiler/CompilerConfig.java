@@ -144,15 +144,6 @@ public class CompilerConfig extends Thread {
     }
 
     /**
-     * Access the install compiler
-     *
-     * @return the install compiler
-     */
-    public Compiler getCompiler() {
-        return compiler;
-    }
-
-    /**
      * The run() method.
      */
     public void run() {
