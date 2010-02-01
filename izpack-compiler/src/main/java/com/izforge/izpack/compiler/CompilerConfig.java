@@ -132,18 +132,6 @@ public class CompilerConfig extends Thread {
     }
 
     /**
-     * Add a name value pair to the project property set. It is <i>not</i> replaced it is already
-     * in the set of properties.
-     *
-     * @param name  the name of the property
-     * @param value the value to set
-     * @return true if the property was not already set
-     */
-    public boolean addProperty(String name, String value) {
-        return propertyManager.addProperty(name, value);
-    }
-
-    /**
      * The run() method.
      */
     public void run() {
