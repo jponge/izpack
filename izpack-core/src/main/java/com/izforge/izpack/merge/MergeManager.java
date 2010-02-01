@@ -70,6 +70,13 @@ public class MergeManager implements Mergeable {
         return null;
     }
 
+    public static Mergeable getMergeableFromPath(File path) {
+        if (isJar(path)) {
+            return new JarMerge(path.getAbsolutePath());
+        }
+        return new FileMerge(path);
+    }
+
     public void addResourceToMerge(String resourcePath) {
         mergeableList.add(getMergeableFromPath(resourcePath));
     }
@@ -119,13 +126,19 @@ public class MergeManager implements Mergeable {
      */
     public Mergeable getMergeableFromPanelClass(final String panelClassName) {
         File classFile = getFileFromPanelClass(panelClassName, getPackagePathFromClassName(panelClassName));
-        String packagePath = classFile.getAbsolutePath().substring(0, classFile.getAbsolutePath().lastIndexOf('/'));
-        return MergeManager.getMergeableFromPath(packagePath);
+        if (isJar(classFile)) {
+            return new JarMerge(classFile.getParentFile());
+        }
+        return new FileMerge(classFile.getParentFile());
     }
 
-    public File getFileFromPanelClass(final String panelClassName, String classPackage) {
+    private static boolean isJar(File classFile) {
+        return classFile.getAbsolutePath().contains(".jar!");
+    }
+
+    public File getFileFromPanelClass(final String panelClassName, String globalPackage) {
         // Get the mergeable for corresponding package
-        Mergeable mergeable = MergeManager.getMergeableFromPath(classPackage);
+        Mergeable mergeable = MergeManager.getMergeableFromPath(globalPackage);
 
         FileFilter fileFilter = new FileFilter() {
             public boolean accept(File pathname) {
@@ -135,24 +148,9 @@ public class MergeManager implements Mergeable {
         };
         File classFile = mergeable.find(fileFilter);
         if (classFile == null) {
-            throw new RuntimeException("panel class " + panelClassName + " not found in package " + classPackage);
+            throw new RuntimeException("panel class " + panelClassName + " not found in package " + globalPackage);
         }
         return classFile;
-    }
-
-
-    /**
-     * @param classFile
-     * @param currentPackage
-     * @return
-     */
-    public String getFullClassNameFromFileAndPackage(File classFile, String currentPackage) {
-        if (currentPackage.contains("/")) {
-            currentPackage = currentPackage.replaceAll("/", ".");
-        }
-        String fullClassName = classFile.getAbsolutePath().replaceAll("/", ".").replaceAll(".class", "");
-        fullClassName = fullClassName.substring(fullClassName.indexOf(currentPackage), fullClassName.length());
-        return fullClassName;
     }
 
     /**
