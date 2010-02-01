@@ -56,7 +56,7 @@ public class CompilerConfigTest {
         mapStringListDyn = Mockito.mock(Map.class);
         packager = Mockito.mock(IPackager.class);
         mergeManager = new MergeManager();
-        compilerConfig = new CompilerConfig(data, variableSubstitutor, compiler, compilerHelper, xmlCompilerHerlper, propertyManager, mergeManager, packager);
+        compilerConfig = new CompilerConfig(data, variableSubstitutor, compiler, compilerHelper, xmlCompilerHerlper, propertyManager, packager);
         xmlParser = new XMLParser();
     }
 
