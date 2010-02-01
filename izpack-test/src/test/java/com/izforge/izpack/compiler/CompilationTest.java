@@ -40,17 +40,11 @@ public class CompilationTest {
     }
 
     @Test
-    public void compilerShouldCompile() throws Exception {
-        CompilerConfig c = compilerContainer.getComponent(CompilerConfig.class);
-        c.executeCompiler();
-        assertThat(c.wasSuccessful(), Is.is(true));
-    }
-
-    @Test
     public void installerShouldContainInstallerClass() throws Exception {
         CompilerConfig c = compilerContainer.getComponent(CompilerConfig.class);
         c.executeCompiler();
         AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("Installer.class"));
+        AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("HelloPanel.class"));
     }
 
     @Test
