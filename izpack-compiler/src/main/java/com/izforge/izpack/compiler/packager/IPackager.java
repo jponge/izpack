@@ -179,4 +179,5 @@ public interface IPackager {
      */
     public abstract Map<String, List<DynamicVariable>> getDynamicVariables();
 
+    void addPanel(Panel panel);
 }

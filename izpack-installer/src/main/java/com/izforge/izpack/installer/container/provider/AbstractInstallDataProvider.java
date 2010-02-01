@@ -160,11 +160,9 @@ public abstract class AbstractInstallDataProvider implements Provider {
         installdata.setAllPacks(allPacks);
 
         // get list of preselected packs
-        Iterator<Pack> pack_it = availablePacks.iterator();
-        while (pack_it.hasNext()) {
-            Pack pack = pack_it.next();
-            if (pack.preselected) {
-                installdata.getSelectedPacks().add(pack);
+        for (Pack availablePack : availablePacks) {
+            if (availablePack.preselected) {
+                installdata.getSelectedPacks().add(availablePack);
             }
         }
 
@@ -256,7 +254,7 @@ public abstract class AbstractInstallDataProvider implements Provider {
         if (OsVersion.IS_WINDOWS) {
             dir = buildWindowsDefaultPath();
         } else if (OsVersion.IS_OSX) {
-            dir = "/Applications";
+            dir = "/Applications/";
         } else {
             if (new File("/usr/local/").canWrite()) {
                 dir = "/usr/local";

@@ -34,6 +34,7 @@ import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.PackInfo;
+import com.izforge.izpack.merge.MergeManager;
 
 import java.io.FilterOutputStream;
 import java.io.IOException;
@@ -58,10 +59,11 @@ public abstract class PackagerBase implements IPackager {
 
     protected CompilerContainer compilerContainer;
 
-    public PackagerBase(Properties properties, CompilerContainer compilerContainer, PackagerListener listener) {
+    public PackagerBase(Properties properties, CompilerContainer compilerContainer, PackagerListener listener, MergeManager mergeManager) {
         this.properties = properties;
         this.compilerContainer = compilerContainer;
         this.listener = listener;
+        this.mergeManager = mergeManager;
     }
 
     /**
@@ -123,6 +125,7 @@ public abstract class PackagerBase implements IPackager {
      * The listeners.
      */
     protected PackagerListener listener;
+    private MergeManager mergeManager;
 
     /**
      * The compression format to be used for pack compression
@@ -245,9 +248,14 @@ public abstract class PackagerBase implements IPackager {
         packsList.add(pack);
     }
 
+    public void addPanel(Panel panel) {
+        panelList.add(panel); // serialized to keep order/variables correct
+        mergeManager.addPanelToMerge(panel.getClassName());
+    }
+
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.packager.IPackager#addPanelJar(com.izforge.izpack.Panel, java.net.URL)
-     */
+    * @see com.izforge.izpack.compiler.packager.IPackager#addPanelJar(com.izforge.izpack.Panel, java.net.URL)
+    */
 
     public void addPanelJar(Panel panel, URL jarURL) {
         panelList.add(panel); // serialized to keep order/variables correct

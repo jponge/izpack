@@ -9,15 +9,23 @@ import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
+import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.merge.MergeManager;
+import com.izforge.izpack.merge.Mergeable;
+import org.apache.tools.zip.ZipEntry;
+import org.apache.tools.zip.ZipOutputStream;
+import org.hamcrest.core.IsNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.internal.verification.AtLeast;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Created by IntelliJ IDEA.
@@ -34,6 +42,8 @@ public class CompilerConfigTest {
     private PropertyManager propertyManager;
     private XmlCompilerHelper xmlCompilerHerlper;
     private Map<String, List<DynamicVariable>> mapStringListDyn;
+    private MergeManager mergeManager;
+    private IPackager packager;
 
     @Before
     public void setUp() {
@@ -44,8 +54,9 @@ public class CompilerConfigTest {
         compilerHelper = Mockito.mock(CompilerHelper.class);
         xmlCompilerHerlper = new XmlCompilerHelper(data.getInstallFile());
         mapStringListDyn = Mockito.mock(Map.class);
-        MergeManager mergeManager = Mockito.mock(MergeManager.class);
-        compilerConfig = new CompilerConfig(data, variableSubstitutor, compiler, compilerHelper, xmlCompilerHerlper, propertyManager, mergeManager);
+        packager = Mockito.mock(IPackager.class);
+        mergeManager = new MergeManager();
+        compilerConfig = new CompilerConfig(data, variableSubstitutor, compiler, compilerHelper, xmlCompilerHerlper, propertyManager, mergeManager, packager);
         xmlParser = new XMLParser();
     }
 
@@ -110,5 +121,17 @@ public class CompilerConfigTest {
         ArrayList<DynamicVariable> list = new ArrayList<DynamicVariable>();
         list.add(dyn);
         Mockito.verify(variable).put("myPath", list);
+    }
+
+
+    @Test
+    public void testGetMergeableFromPanelClass() throws Exception {
+        Mergeable mergeable = mergeManager.getMergeableFromPanelClass("HelloPanel");
+        ZipOutputStream outputStream = Mockito.mock(ZipOutputStream.class);
+        assertThat(mergeable, IsNull.<Object>notNullValue());
+
+        mergeable.merge(outputStream);
+        Mockito.verify(outputStream, new AtLeast(2)).putNextEntry(Mockito.<ZipEntry>any());
+
     }
 }

@@ -202,7 +202,7 @@ public class AutomatedInstallData implements Serializable {
         this.variableSubstitutor = variableSubstitutor;
         setAvailablePacks(new ArrayList<Pack>());
         setSelectedPacks(new ArrayList<Pack>());
-        setPanels(new ArrayList());
+        panels = new ArrayList();
         setPanelsOrder(new ArrayList<Panel>());
         setXmlData(new XMLElementImpl("AutomatedInstallation"));
         setVariables(variables);
@@ -420,10 +420,6 @@ public class AutomatedInstallData implements Serializable {
 
     public List getPanels() {
         return panels;
-    }
-
-    public void setPanels(List panels) {
-        this.panels = panels;
     }
 
     public List<Panel> getPanelsOrder() {

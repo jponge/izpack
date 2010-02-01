@@ -32,7 +32,7 @@ public class AbstractInstallationTest {
     protected static final String APPNAME = "Test Installation";
 
     @Rule
-    public MethodRule globalTimeout = new Timeout(60000);
+    public MethodRule globalTimeout = new Timeout(20000);
     protected IApplicationContainer applicationContainer;
     protected IInstallerContainer installerContainer;
     protected CompilerContainer compilerContainer;

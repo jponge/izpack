@@ -74,7 +74,7 @@ public class Packager extends PackagerBase {
      *
      */
     public Packager(Properties properties, CompilerData compilerData, CompilerContainer compilerContainer, PackagerListener listener, JarOutputStream jarOutputStream, PackCompressor packCompressor, OutputStream outputStream, MergeManager mergeManager) throws CompilerException {
-        super(properties, compilerContainer, listener);
+        super(properties, compilerContainer, listener, mergeManager);
         this.compilerData = compilerData;
         this.primaryJarStream = jarOutputStream;
         this.compressor = packCompressor;

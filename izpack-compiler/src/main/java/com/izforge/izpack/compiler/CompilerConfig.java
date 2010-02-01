@@ -116,13 +116,14 @@ public class CompilerConfig extends Thread {
     private XmlCompilerHelper xmlCompilerHelper;
     private PropertyManager propertyManager;
     private MergeManager mergeManager;
+    private IPackager packager;
 
     /**
      * Constructor
      *
      * @param compilerData Object containing all informations found in command line
      */
-    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, MergeManager mergeManager) {
+    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, MergeManager mergeManager, IPackager packager) {
         this.compilerData = compilerData;
         this.variableSubstitutor = variableSubstitutor;
         this.compiler = compiler;
@@ -130,6 +131,7 @@ public class CompilerConfig extends Thread {
         this.xmlCompilerHelper = xmlCompilerHelper;
         this.propertyManager = propertyManager;
         this.mergeManager = mergeManager;
+        this.packager = packager;
     }
 
     /**
@@ -1040,6 +1042,7 @@ public class CompilerConfig extends Thread {
             Panel panel = new Panel();
             panel.osConstraints = OsConstraint.getOsList(panel1);
             String className = panel1.getAttribute("classname");
+
             // add an id
             String panelid = panel1.getAttribute("id");
             panel.setPanelid(panelid);
@@ -1125,7 +1128,8 @@ public class CompilerConfig extends Thread {
             // adding actions
             addPanelActions(panel1, panel);
             // insert into the packager
-            compiler.addPanelJar(panel, url);
+
+            packager.addPanel(panel);
         }
         notifyCompilerListener("addPanels", CompilerListener.END, data);
     }
