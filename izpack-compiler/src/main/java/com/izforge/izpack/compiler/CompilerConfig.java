@@ -320,7 +320,7 @@ public class CompilerConfig extends Thread {
                 compiler.addJarContent(lafJarURL);
             }
         }
-        compiler.setGUIPrefs(prefs);
+        packager.setGUIPrefs(prefs);
         notifyCompilerListener("addGUIPrefs", CompilerListener.END, data);
     }
 
