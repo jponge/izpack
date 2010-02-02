@@ -257,14 +257,6 @@ public abstract class PackagerBase implements IPackager {
     * @see com.izforge.izpack.compiler.packager.IPackager#addPanelJar(com.izforge.izpack.Panel, java.net.URL)
     */
 
-    public void addPanelJar(Panel panel, URL jarURL) {
-        panelList.add(panel); // serialized to keep order/variables correct
-
-        if (jarURL != null) {
-            addJarContent(jarURL); // each included once, no matter how many times added
-        }
-    }
-
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.packager.IPackager#addResource(java.lang.String, java.net.URL)
      */
@@ -325,14 +317,6 @@ public abstract class PackagerBase implements IPackager {
      */
     public Map<String, Condition> getRules() {
         return this.rules;
-    }
-
-
-    /**
-     * @param rules the rules to set
-     */
-    public void setRules(Map<String, Condition> rules) {
-        this.rules = rules;
     }
 
 

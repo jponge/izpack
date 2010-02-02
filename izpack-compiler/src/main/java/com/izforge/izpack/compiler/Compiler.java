@@ -376,7 +376,6 @@ public class Compiler extends Thread {
         jarPath = propertySubstitutor.substitute(jarPath, SubstitutionType.TYPE_AT);
         String fullClassName = className;
         List<String> filePaths = null;
-
         URL url = findIzPackResource(jarPath, "CustomAction jar file", true);
 
         if (url != null) {
