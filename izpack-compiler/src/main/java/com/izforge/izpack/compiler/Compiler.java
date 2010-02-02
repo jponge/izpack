@@ -30,7 +30,6 @@ import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
@@ -71,8 +70,6 @@ public class Compiler extends Thread {
      */
     private boolean compileFailed = true;
 
-    private CompilerContainer compilerContainer;
-
     private CompilerData compilerData;
     private CompilerHelper compilerHelper;
     /**
@@ -89,11 +86,10 @@ public class Compiler extends Thread {
      *
      * @throws CompilerException
      */
-    public Compiler(CompilerData compilerData, VariableSubstitutor variableSubstitutor, CompilerContainer compilerContainer, PropertyManager propertyManager, CompilerHelper compilerHelper, MergeManager mergeManager, IPackager packager) throws CompilerException {
+    public Compiler(CompilerData compilerData, VariableSubstitutor variableSubstitutor, PropertyManager propertyManager, CompilerHelper compilerHelper, MergeManager mergeManager, IPackager packager) throws CompilerException {
         this.compilerData = compilerData;
         this.propertyManager = propertyManager;
         this.propertySubstitutor = variableSubstitutor;
-        this.compilerContainer = compilerContainer;
         this.compilerHelper = compilerHelper;
         this.mergeManager = mergeManager;
         this.packager = packager;
