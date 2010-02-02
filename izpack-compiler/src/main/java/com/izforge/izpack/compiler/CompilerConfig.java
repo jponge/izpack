@@ -1488,7 +1488,7 @@ public class CompilerConfig extends Thread {
             return;
         }
 
-        Map<String, List<DynamicVariable>> dynamicvariables = compiler.getDynamicVariables();
+        Map<String, List<DynamicVariable>> dynamicvariables = packager.getDynamicVariables();
 
         for (IXMLElement variableNode : root.getChildrenNamed("variable")) {
             String name = xmlCompilerHelper.requireAttribute(variableNode, "name", compilerData.getInstallFile());
@@ -1535,7 +1535,7 @@ public class CompilerConfig extends Thread {
         notifyCompilerListener("addConditions", CompilerListener.BEGIN, data);
         // We get the condition list
         IXMLElement root = data.getFirstChildNamed("conditions");
-        Map<String, Condition> conditions = compiler.getConditions();
+        Map<String, Condition> conditions = packager.getRules();
         if (root != null) {
             for (IXMLElement conditionNode : root.getChildrenNamed("condition")) {
                 Condition condition = RulesEngineImpl.analyzeCondition(conditionNode);

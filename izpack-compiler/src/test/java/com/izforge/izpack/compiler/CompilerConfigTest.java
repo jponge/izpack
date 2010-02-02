@@ -63,7 +63,7 @@ public class CompilerConfigTest {
     @Test
     public void testAddTwoVariables() throws Exception {
         Mockito.when(mapStringListDyn.containsKey("myPath")).thenReturn(false);
-        Mockito.when(compiler.getDynamicVariables()).thenReturn(mapStringListDyn);
+        Mockito.when(packager.getDynamicVariables()).thenReturn(mapStringListDyn);
         Properties variable = new Properties();
         Mockito.when(packager.getVariables()).thenReturn(variable);
 
@@ -78,7 +78,7 @@ public class CompilerConfigTest {
     @Test
     public void testAddDynamicVariable() throws CompilerException {
         Mockito.when(mapStringListDyn.containsKey("myPath")).thenReturn(false);
-        Mockito.when(compiler.getDynamicVariables()).thenReturn(mapStringListDyn);
+        Mockito.when(packager.getDynamicVariables()).thenReturn(mapStringListDyn);
 
         IXMLElement element = xmlParser.parse("<root><dynamicvariables><variable name=\"myPath\" value=\"$INSTALLPATH / test\"/></dynamicvariables></root>");
         compilerConfig.addDynamicVariables(element);
@@ -110,7 +110,7 @@ public class CompilerConfigTest {
         Map variable = Mockito.mock(Map.class);
 
         Mockito.when(variable.containsKey("myPath")).thenReturn(false);
-        Mockito.when(compiler.getDynamicVariables()).thenReturn(variable);
+        Mockito.when(packager.getDynamicVariables()).thenReturn(variable);
 
         compilerConfig.addDynamicVariables(xmlData);
 

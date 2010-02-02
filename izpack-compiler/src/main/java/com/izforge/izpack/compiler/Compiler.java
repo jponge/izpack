@@ -25,11 +25,9 @@
 
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.api.data.DynamicVariable;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackColor;
 import com.izforge.izpack.api.exception.CompilerException;
-import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.data.CompilerData;
@@ -359,16 +357,6 @@ public class Compiler extends Thread {
         throw new CompilerException(message, how);
     }
 
-    /**
-     * The main method if the compiler is invoked by a command-line call.
-     * This simply calls the CompilerConfig.main method.
-     *
-     * @param args The arguments passed on the command-line.
-     */
-//    public static void main(String[] args) {
-//        CompilerConfig.main(args);
-//    }
-
     // -------------------------------------------------------------------------
     // ------------- Listener stuff ------------------------- START ------------
 
@@ -441,14 +429,4 @@ public class Compiler extends Thread {
     // -------------------------------------------------------------------------
     // ------------- Listener stuff ------------------------- END ------------
 
-    /**
-     * @return the conditions
-     */
-    public Map<String, Condition> getConditions() {
-        return this.packager.getRules();
-    }
-
-    public Map<String, List<DynamicVariable>> getDynamicVariables() {
-        return this.packager.getDynamicVariables();
-    }
 }
