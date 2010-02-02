@@ -25,13 +25,16 @@
 
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.data.DynamicVariable;
+import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.PackColor;
 import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
+import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.CustomData;
@@ -130,102 +133,6 @@ public class Compiler extends Thread {
      */
     public boolean wasSuccessful() {
         return !this.compileFailed;
-    }
-
-    /**
-     * Add jar content to the installation.
-     *
-     * @param content
-     */
-    public void addJarContent(URL content) {
-        packager.addJarContent(content);
-    }
-
-    /**
-     * Adds a jar file content to the installer. Package structure is maintained. Need mechanism to
-     * copy over signed entry information. If the given file list is null the hole contents of the
-     * jar file will be copied else only the listed.
-     *
-     * @param content The url of the jar to add to the installer. We use a URL so the jar may be
-     *                nested within another.
-     * @param files   to be copied
-     */
-    public void addJarContent(URL content, List<String> files) {
-        packager.addJarContent(content, files);
-    }
-
-    /**
-     * Add a custom jar to the installation.
-     *
-     * @param ca
-     * @param url
-     */
-    public void addCustomJar(CustomData ca, URL url) {
-        packager.addCustomJar(ca, url);
-    }
-
-    public void addInstallerRequirement(List<InstallerRequirement> conditions) {
-        packager.addInstallerRequirements(conditions);
-    }
-
-    /**
-     * Add a lang pack to the installation.
-     *
-     * @param locale
-     * @param localeURL
-     * @param flagURL
-     */
-    public void addLangPack(String locale, URL localeURL, URL flagURL) {
-        packager.addLangPack(locale, localeURL, flagURL);
-    }
-
-    /**
-     * Add a native library to the installation.
-     *
-     * @param name
-     * @param url
-     * @throws Exception
-     */
-    public void addNativeLibrary(String name, URL url) {
-        packager.addNativeLibrary(name, url);
-    }
-
-    /**
-     * Add an unistaller library.
-     *
-     * @param data
-     */
-    public void addNativeUninstallerLibrary(CustomData data) {
-        packager.addNativeUninstallerLibrary(data);
-    }
-
-    /**
-     * Add a pack to the installation.
-     *
-     * @param pack
-     */
-    public void addPack(PackInfo pack) {
-        packager.addPack(pack);
-    }
-
-    /**
-     * Add a panel jar to the installation.
-     *
-     * @param panel
-     * @param url
-     */
-    public void addPanelJar(Panel panel, URL url) {
-        packager.addPanelJar(panel, url);
-    }
-
-    /**
-     * Add a resource to the installation.
-     *
-     * @param name
-     * @param url
-     */
-    public void addResource(String name, URL url) {
-        packager.addResource(name, url);
     }
 
     /**
@@ -410,7 +317,7 @@ public class Compiler extends Thread {
 
             if (!resource.exists()) {
                 if (ignoreWhenNotFound) {
-                    parseWarn(desc + " not found: " + resource);
+                    AssertionHelper.parseWarn(desc + " not found: " + resource);
                 } else {
                     parseError(desc + " not found: " + resource); // fatal
                 }
@@ -425,10 +332,6 @@ public class Compiler extends Thread {
         }
 
         return url;
-    }
-
-    private void parseWarn(String message) {
-        System.out.println("Warning: " + message);
     }
 
     /**

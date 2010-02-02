@@ -49,6 +49,16 @@ public class AssertionHelper {
     }
 
     /**
+     * Create parse error with consistent messages.
+     *
+     * @param message Brief message explaining error
+     * @throws CompilerException
+     */
+    public static void parseError(String message) throws CompilerException {
+        throw new CompilerException(message);
+    }
+
+    /**
      * Create a parse warning with consistent messages. Includes file name and line # of parent. It
      * is an error for 'parent' to be null.
      *
@@ -58,6 +68,10 @@ public class AssertionHelper {
      */
     public static void parseWarn(IXMLElement parent, String message, String installFile) {
         System.out.println("Warning: " + installFile + ":" + parent.getLineNr() + ": " + message);
+    }
+
+    public static void parseWarn(String message) {
+        System.out.println("Warning: " + message);
     }
 
     /**
@@ -85,5 +99,4 @@ public class AssertionHelper {
             }
         }
     }
-
 }

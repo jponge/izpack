@@ -216,7 +216,7 @@ public class CompilerConfig extends Thread {
                 installerrequirements.add(basicInstallerCondition);
             }
         }
-        compiler.addInstallerRequirement(installerrequirements);
+        packager.addInstallerRequirements(installerrequirements);
         notifyCompilerListener("addInstallerRequirement", CompilerListener.END, data);
     }
 
@@ -318,7 +318,7 @@ public class CompilerConfig extends Thread {
 
                 URL lafJarURL = findIzPackResource("lib/" + lafJarName, "Look and Feel Jar file",
                         gp);
-                compiler.addJarContent(lafJarURL);
+                packager.addJarContent(lafJarURL);
             }
         }
         packager.setGUIPrefs(prefs);
@@ -335,7 +335,7 @@ public class CompilerConfig extends Thread {
         for (IXMLElement ixmlElement : data.getChildrenNamed("jar")) {
             String src = xmlCompilerHelper.requireAttribute(ixmlElement, "src", compilerData.getInstallFile());
             URL url = findProjectResource(src, "Jar file", ixmlElement);
-            compiler.addJarContent(url);
+            packager.addJarContent(url);
             // Additionals for mark a jar file also used in the uninstaller.
             // The contained files will be copied from the installer into the
             // uninstaller if needed.
@@ -349,7 +349,7 @@ public class CompilerConfig extends Thread {
                     && ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage))) {
                 CustomData ca = new CustomData(null, compilerHelper.getContainedFilePaths(url), null,
                         CustomData.UNINSTALLER_JAR);
-                compiler.addCustomJar(ca, url);
+                packager.addCustomJar(ca, url);
             }
         }
         notifyCompilerListener("addJars", CompilerListener.END, data);
@@ -371,7 +371,7 @@ public class CompilerConfig extends Thread {
                 path = "bin/native/" + type + "/" + name;
             }
             URL url = findIzPackResource(path, "Native Library", ixmlElement);
-            compiler.addNativeLibrary(name, url);
+            packager.addNativeLibrary(name, url);
             // Additionals for mark a native lib also used in the uninstaller
             // The lib will be copied from the installer into the uninstaller if
             // needed.
@@ -387,7 +387,7 @@ public class CompilerConfig extends Thread {
                 ArrayList<String> al = new ArrayList<String>();
                 al.add(name);
                 CustomData cad = new CustomData(null, al, constraints, CustomData.UNINSTALLER_LIB);
-                compiler.addNativeUninstallerLibrary(cad);
+                packager.addNativeUninstallerLibrary(cad);
                 needAddOns = true;
             }
 
@@ -400,7 +400,7 @@ public class CompilerConfig extends Thread {
                 //REFACTOR Change the way uninstaller are created
                 URL url = findIzPackResource(propertyManager.getProperty("uninstaller-ext"), "Uninstaller extensions",
                         root);
-                compiler.addResource("IzPack.uninstaller-ext", url);
+                packager.addResource("IzPack.uninstaller-ext", url);
             }
 
         }
@@ -787,7 +787,7 @@ public class CompilerConfig extends Thread {
             }
 
             // We add the pack
-            compiler.addPack(pack);
+            packager.addPack(pack);
         }
 
         for (IXMLElement refPackElement : refPackElements) {
@@ -1099,7 +1099,7 @@ public class CompilerConfig extends Thread {
 
                     URL originalUrl = findProjectResource(help
                             .getAttribute(AutomatedInstallData.SRC_ATTRIBUTE), "Help", help);
-                    compiler.addResource(resourceId, originalUrl);
+                    packager.addResource(resourceId, originalUrl);
                 }
             }
             // adding actions
@@ -1240,7 +1240,7 @@ public class CompilerConfig extends Thread {
                 }
             }
 
-            compiler.addResource(id, url);
+            packager.addResource(id, url);
 
             // remembering references to all added packsLang.xml files
             if (id.startsWith("packsLang.xml")) {
@@ -1285,7 +1285,7 @@ public class CompilerConfig extends Thread {
             path = "bin/langpacks/flags/" + iso3 + ".gif";
             URL iso3FlagURL = findIzPackResource(path, "ISO3 flag image", localNode);
 
-            compiler.addLangPack(iso3, iso3xmlURL, iso3FlagURL);
+            packager.addLangPack(iso3, iso3xmlURL, iso3FlagURL);
         }
         notifyCompilerListener("addLangpacks", CompilerListener.END, data);
     }
@@ -1392,7 +1392,7 @@ public class CompilerConfig extends Thread {
             //REFACTOR Change the way uninstaller is created
 //            mergeManager.addResourceToMerge("com/izforge/izpack/uninstaller/");
             URL url = findIzPackResource(propertyManager.getProperty("uninstaller"), "Uninstaller", root);
-            compiler.addResource("IzPack.uninstaller", url);
+            packager.addResource("IzPack.uninstaller", url);
 
             if (privileged != null) {
                 // default behavior for uninstaller elevation: elevate if installer has to be elevated too
@@ -2051,7 +2051,7 @@ public class CompilerConfig extends Thread {
                     mergedPackLangFileURL = mergedPackLangFile.toURL();
                 }
 
-                compiler.addResource(id, mergedPackLangFileURL);
+                packager.addResource(id, mergedPackLangFileURL);
             }
         }
         catch (Exception e) {
