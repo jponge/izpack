@@ -37,7 +37,6 @@ import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.PackInfo;
-import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
 
@@ -78,18 +77,15 @@ public class Compiler extends Thread {
 
     public PropertyManager propertyManager;
 
-    private MergeManager mergeManager;
-
     /**
      * The constructor.
      *
      * @throws CompilerException
      */
-    public Compiler(VariableSubstitutor variableSubstitutor, PropertyManager propertyManager, CompilerHelper compilerHelper, MergeManager mergeManager, IPackager packager) throws CompilerException {
+    public Compiler(VariableSubstitutor variableSubstitutor, PropertyManager propertyManager, CompilerHelper compilerHelper, IPackager packager) throws CompilerException {
         this.propertyManager = propertyManager;
         this.propertySubstitutor = variableSubstitutor;
         this.compilerHelper = compilerHelper;
-        this.mergeManager = mergeManager;
         this.packager = packager;
         // add izpack built in property
     }
