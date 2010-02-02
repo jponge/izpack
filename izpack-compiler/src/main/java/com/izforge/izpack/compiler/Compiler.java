@@ -133,25 +133,6 @@ public class Compiler extends Thread {
     }
 
     /**
-     * Sets an Info object to the packager.
-     *
-     * @param info Info object to be set
-     * @throws Exception
-     */
-    public void setInfo(Info info) {
-        packager.setInfo(info);
-    }
-
-    /**
-     * Returns the install packager.
-     *
-     * @return the install packager.
-     */
-    public IPackager getPackager() {
-        return packager;
-    }
-
-    /**
      * Add jar content to the installation.
      *
      * @param content

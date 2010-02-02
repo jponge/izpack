@@ -223,13 +223,14 @@ public class CompilerConfig extends Thread {
     private void loadPackagingInformation(IXMLElement data) throws CompilerException {
         notifyCompilerListener("loadPackager", CompilerListener.BEGIN, data);
         // Initialisation
+        // REFACTOR : Moved packager initialisation to provider
         IXMLElement root = data.getFirstChildNamed("packaging");
-        IXMLElement packager = null;
+        IXMLElement packagerElement = null;
         if (root != null) {
-            packager = root.getFirstChildNamed("packager");
+            packagerElement = root.getFirstChildNamed("packager");
 
-            if (packager != null) {
-                packagerClassname = xmlCompilerHelper.requireAttribute(packager, "class", compilerData.getInstallFile());
+            if (packagerElement != null) {
+                packagerClassname = xmlCompilerHelper.requireAttribute(packagerElement, "class", compilerData.getInstallFile());
             }
 
             IXMLElement unpacker = root.getFirstChildNamed("unpacker");
@@ -238,10 +239,10 @@ public class CompilerConfig extends Thread {
                 unpackerClassname = xmlCompilerHelper.requireAttribute(unpacker, "class", compilerData.getInstallFile());
             }
         }
-        if (packager != null) {
-            IXMLElement options = packager.getFirstChildNamed("options");
+        if (packagerElement != null) {
+            IXMLElement options = packagerElement.getFirstChildNamed("options");
             if (options != null) {
-                compiler.getPackager().addConfigurationInformation(options);
+                packager.addConfigurationInformation(options);
             }
         }
         propertyManager.addProperty("UNPACKER_CLASS", unpackerClassname);
@@ -1431,7 +1432,7 @@ public class CompilerConfig extends Thread {
         // look for an unpacker class
         String unpackerclass = propertyManager.getProperty("UNPACKER_CLASS");
         info.setUnpackerClassName(unpackerclass);
-        compiler.setInfo(info);
+        packager.setInfo(info);
         notifyCompilerListener("addInfo", CompilerListener.END, data);
     }
 
@@ -1955,7 +1956,6 @@ public class CompilerConfig extends Thread {
      * @throws CompilerException
      */
     private void notifyCompilerListener(String callerName, int state, IXMLElement data) {
-        IPackager packager = compiler.getPackager();
         for (CompilerListener compilerListener : compilerListeners) {
             compilerListener.notify(callerName, state, data, packager);
         }
