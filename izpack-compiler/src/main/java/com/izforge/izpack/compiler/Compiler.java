@@ -70,7 +70,6 @@ public class Compiler extends Thread {
      */
     private boolean compileFailed = true;
 
-    private CompilerData compilerData;
     private CompilerHelper compilerHelper;
     /**
      * Replaces the properties in the install.xml file prior to compiling
@@ -86,16 +85,13 @@ public class Compiler extends Thread {
      *
      * @throws CompilerException
      */
-    public Compiler(CompilerData compilerData, VariableSubstitutor variableSubstitutor, PropertyManager propertyManager, CompilerHelper compilerHelper, MergeManager mergeManager, IPackager packager) throws CompilerException {
-        this.compilerData = compilerData;
+    public Compiler(VariableSubstitutor variableSubstitutor, PropertyManager propertyManager, CompilerHelper compilerHelper, MergeManager mergeManager, IPackager packager) throws CompilerException {
         this.propertyManager = propertyManager;
         this.propertySubstitutor = variableSubstitutor;
         this.compilerHelper = compilerHelper;
         this.mergeManager = mergeManager;
         this.packager = packager;
         // add izpack built in property
-        propertyManager.setProperty("izpack.version", CompilerData.IZPACK_VERSION);
-        propertyManager.setProperty("basedir", compilerData.getBasedir());
     }
 
     /**

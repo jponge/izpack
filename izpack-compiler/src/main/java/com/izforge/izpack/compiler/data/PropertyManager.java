@@ -77,6 +77,8 @@ public class PropertyManager {
         this.variableSubstitutor = variableSubstitutor;
         this.compilerData = compilerData;
         this.packagerListener = packagerListener;
+        this.setProperty("izpack.version", CompilerData.IZPACK_VERSION);
+        this.setProperty("basedir", compilerData.getBasedir());
     }
 
 
