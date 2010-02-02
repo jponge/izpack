@@ -65,7 +65,7 @@ public class CompilerConfigTest {
         Mockito.when(mapStringListDyn.containsKey("myPath")).thenReturn(false);
         Mockito.when(compiler.getDynamicVariables()).thenReturn(mapStringListDyn);
         Properties variable = new Properties();
-        Mockito.when(compiler.getVariables()).thenReturn(variable);
+        Mockito.when(packager.getVariables()).thenReturn(variable);
 
         IXMLElement element = xmlParser.parse("<root><dynamicvariables><variable name=\"myPath\" value=\"$INSTALLPATH / test\"/></dynamicvariables></root>");
         compilerConfig.addDynamicVariables(element);
@@ -99,7 +99,7 @@ public class CompilerConfigTest {
     public void compilerShouldAddVariable() throws Exception {
         IXMLElement xmlData = xmlParser.parse("<root><variables><variable name=\"scriptFile\" value=\"script.bat\"/></variables></root>");
         Properties variable = Mockito.mock(Properties.class);
-        Mockito.when(compiler.getVariables()).thenReturn(variable);
+        Mockito.when(packager.getVariables()).thenReturn(variable);
         compilerConfig.addVariables(xmlData);
         Mockito.verify(variable).setProperty("scriptFile", "script.bat");
     }

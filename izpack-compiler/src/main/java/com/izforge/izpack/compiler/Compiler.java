@@ -43,7 +43,10 @@ import com.izforge.izpack.util.OsConstraint;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
@@ -88,15 +91,6 @@ public class Compiler extends Thread {
         this.compilerHelper = compilerHelper;
         this.packager = packager;
         // add izpack built in property
-    }
-
-    /**
-     * Get the packager variables.
-     *
-     * @return the packager variables
-     */
-    public Properties getVariables() {
-        return packager.getVariables();
     }
 
     /**

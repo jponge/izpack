@@ -1163,7 +1163,7 @@ public class CompilerConfig extends Thread {
                     originalUrl = recodedFile.toURL();
                 }
 
-                if (parsexml || (!"".equals(encoding)) || (substitute && !compiler.getVariables().isEmpty())) {
+                if (parsexml || (!"".equals(encoding)) || (substitute && !packager.getVariables().isEmpty())) {
                     // make the substitutions into a temp file
                     File parsedFile = File.createTempFile("izpp", null);
                     parsedFile.deleteOnExit();
@@ -1182,7 +1182,7 @@ public class CompilerConfig extends Thread {
 
                     IXMLElement xml = parser.parse(originalUrl);
                     IXMLWriter writer = new XMLWriter();
-                    if (substitute && !compiler.getVariables().isEmpty()) {
+                    if (substitute && !packager.getVariables().isEmpty()) {
                         // if we are also performing substitutions on the file
                         // then create an in-memory copy to pass to the
                         // substitutor
@@ -1198,7 +1198,7 @@ public class CompilerConfig extends Thread {
 
                 // substitute variable values in the resource if parsed
                 if (substitute) {
-                    if (compiler.getVariables().isEmpty()) {
+                    if (packager.getVariables().isEmpty()) {
                         // reset url to original.
                         url = originalUrl;
                         AssertionHelper.parseWarn(resNode, "No variables defined. " + url.getPath() + " not parsed.", compilerData.getInstallFile());
@@ -1466,7 +1466,7 @@ public class CompilerConfig extends Thread {
             return;
         }
 
-        Properties variables = compiler.getVariables();
+        Properties variables = packager.getVariables();
 
         for (IXMLElement variableNode : root.getChildrenNamed("variable")) {
             String name = xmlCompilerHelper.requireAttribute(variableNode, "name", compilerData.getInstallFile());
