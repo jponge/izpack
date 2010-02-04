@@ -92,7 +92,7 @@ public class InstallationTest extends AbstractInstallationTest {
         installerFrameFixture = prepareFrameFixture();
         // Hello panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
-        Thread.sleep(300);
+        Thread.sleep(600);
         // Info Panel
         installerFrameFixture.textBox(GuiId.INFO_PANEL_TEXT_AREA.id).requireText("A readme file ...");
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();

@@ -183,4 +183,22 @@ public class MergeManagerTest {
         assertThat(arrayList, IsCollectionContaining.hasItems("com/dest/MergeManagerTest.class"));
     }
 
+    @Test
+    public void testAddSingleClassToMergeWithDestinationFromAJar() throws Exception {
+        mergeManager.addResourceToMerge("org/junit/Assert.class", "com/dest/Assert.class");
+        doMerge(mergeManager);
+
+        ArrayList<String> arrayList = getFileNameInZip(zip);
+        assertThat(arrayList, IsCollectionContaining.hasItems("com/dest/Assert.class"));
+    }
+
+    @Test
+    public void testAddPackageToMergeWithDestinationFromAJar() throws Exception {
+        mergeManager.addResourceToMerge("org/junit", "com/dest");
+        doMerge(mergeManager);
+
+        ArrayList<String> arrayList = getFileNameInZip(zip);
+        assertThat(arrayList, IsCollectionContaining.hasItems("com/dest/Assert.class"));
+    }
+
 }

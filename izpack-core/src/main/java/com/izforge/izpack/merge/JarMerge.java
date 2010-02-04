@@ -42,6 +42,12 @@ public class JarMerge implements Mergeable {
         regexp = new StringBuilder().append(destination).append(".*").toString();
     }
 
+    public JarMerge(URL resource, String destination) {
+        jarPath = MergeManagerImpl.processUrlToJarPath(resource);
+        this.destination = destination;
+        regexp = new StringBuilder().append(resource.getPath().replaceAll(jarPath, "")).append(".*").toString();
+    }
+
     public JarMerge(File classFile) {
         String[] strings = classFile.getAbsolutePath().split(".jar!/");
         jarPath = strings[0] + ".jar";
@@ -75,7 +81,6 @@ public class JarMerge implements Mergeable {
     }
 
     public void merge(ZipOutputStream outputStream) {
-        regexp = new StringBuilder().append(destination).append(".*").toString();
         ZipEntry zentry;
         try {
             JarInputStream jarInputStream = new JarInputStream(new FileInputStream(new File(jarPath)));
@@ -84,6 +89,7 @@ public class JarMerge implements Mergeable {
                     continue;
                 }
                 String entryName = zentry.getName();
+                System.out.println(entryName);
                 if (entryName.matches(regexp)) {
                     IoHelper.copyStreamToJar(jarInputStream, outputStream, entryName, zentry.getTime());
                 }
