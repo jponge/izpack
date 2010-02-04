@@ -50,6 +50,7 @@ import com.izforge.izpack.data.PanelAction.ActionStage;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
+import org.apache.commons.lang.StringUtils;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.io.*;
@@ -999,7 +1000,7 @@ public class CompilerConfig extends Thread {
      * @param data The XML data.
      * @throws CompilerException Description of the Exception
      */
-    protected void addPanels(IXMLElement data) throws CompilerException {
+    protected void addPanels(IXMLElement data) throws IOException {
         notifyCompilerListener("addPanels", CompilerListener.BEGIN, data);
         IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "panels");
 
@@ -1012,53 +1013,34 @@ public class CompilerConfig extends Thread {
         // We process each panel markup
         // We need a panel counter to build unique panel dependet resource names
         int panelCounter = 0;
-        for (IXMLElement panel1 : panels) {
+        for (IXMLElement panelElement : panels) {
             panelCounter++;
 
             // create the serialized Panel data
             Panel panel = new Panel();
-            panel.osConstraints = OsConstraint.getOsList(panel1);
-            String className = panel1.getAttribute("classname");
+            panel.osConstraints = OsConstraint.getOsList(panelElement);
+            String className = panelElement.getAttribute("classname");
 
             // add an id
-            String panelid = panel1.getAttribute("id");
+            String panelid = panelElement.getAttribute("id");
             panel.setPanelid(panelid);
-            String condition = panel1.getAttribute("condition");
+            String condition = panelElement.getAttribute("condition");
             panel.setCondition(condition);
 
             // Panel files come in jars packaged w/ IzPack, or they can be
             // specified via a jar attribute on the panel element
-            String jarPath = panel1.getAttribute("jar");
-            if (jarPath == null) {
-                jarPath = "bin/panels/" + className + ".jar";
-            }
-            URL url = null;
-            // jar="" may be used to suppress the warning message ("Panel jar
-            // file not found")
-            if (!jarPath.equals("")) {
-                url = findIzPackResource(jarPath, "Panel jar file", panel1, true);
-            }
-
-            // when the expected panel jar file is not found, it is assumed that
-            // user will do the jar merge themselves via <jar> tag
-
-            String fullClassName = null;
-            if (url == null) {
-                fullClassName = className;
+            String jarPath = panelElement.getAttribute("jar");
+            if (StringUtils.isNotBlank(jarPath)) {
+                URL jarUrl = findIzPackResource(jarPath, "Panel jar file", panelElement, true);
+                panel.className = compilerHelper.getFullClassName(jarUrl, className);
+                packager.addJarContent(jarUrl);
             } else {
-                try {
-                    fullClassName = compilerHelper.getFullClassName(url, className);
-                }
-                catch (IOException e) {
-                }
-            }
-
-            if (fullClassName != null) {
-                panel.className = fullClassName;
-            } else {
+                //Assume it is merged with <jar> tag
                 panel.className = className;
             }
-            IXMLElement configurationElement = panel1.getFirstChildNamed("configuration");
+
+
+            IXMLElement configurationElement = panelElement.getFirstChildNamed("configuration");
             if (configurationElement != null) {
                 Debug.trace("found a configuration for this panel.");
                 Vector<IXMLElement> params = configurationElement.getChildrenNamed("param");
@@ -1074,7 +1056,7 @@ public class CompilerConfig extends Thread {
             }
 
             // adding validator
-            IXMLElement validatorElement = panel1
+            IXMLElement validatorElement = panelElement
                     .getFirstChildNamed(DataValidator.DATA_VALIDATOR_TAG);
             if (validatorElement != null) {
                 String validator = validatorElement
@@ -1084,7 +1066,7 @@ public class CompilerConfig extends Thread {
                 }
             }
             // adding helps
-            Vector helps = panel1.getChildrenNamed(AutomatedInstallData.HELP_TAG);
+            Vector helps = panelElement.getChildrenNamed(AutomatedInstallData.HELP_TAG);
             if (helps != null) {
                 for (Object help1 : helps) {
                     IXMLElement help = (IXMLElement) help1;
@@ -1103,7 +1085,7 @@ public class CompilerConfig extends Thread {
                 }
             }
             // adding actions
-            addPanelActions(panel1, panel);
+            addPanelActions(panelElement, panel);
             // insert into the packager
 
             packager.addPanel(panel);
