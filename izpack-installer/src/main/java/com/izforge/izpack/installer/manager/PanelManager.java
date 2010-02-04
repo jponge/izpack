@@ -5,8 +5,6 @@ import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.data.PanelAction;
-import com.izforge.izpack.installer.DataValidatorFactory;
-import com.izforge.izpack.installer.PanelActionFactory;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
