@@ -10,11 +10,9 @@ import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
 import com.izforge.izpack.compiler.packager.IPackager;
-import com.izforge.izpack.merge.MergeManager;
-import com.izforge.izpack.merge.Mergeable;
+import com.izforge.izpack.merge.MergeManagerImpl;
 import org.apache.tools.zip.ZipEntry;
 import org.apache.tools.zip.ZipOutputStream;
-import org.hamcrest.core.IsNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -24,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Created by IntelliJ IDEA.
@@ -42,7 +38,7 @@ public class CompilerConfigTest {
     private PropertyManager propertyManager;
     private XmlCompilerHelper xmlCompilerHerlper;
     private Map<String, List<DynamicVariable>> mapStringListDyn;
-    private MergeManager mergeManager;
+    private MergeManagerImpl mergeManager;
     private IPackager packager;
 
     @Before
@@ -55,7 +51,7 @@ public class CompilerConfigTest {
         xmlCompilerHerlper = new XmlCompilerHelper(data.getInstallFile());
         mapStringListDyn = Mockito.mock(Map.class);
         packager = Mockito.mock(IPackager.class);
-        mergeManager = new MergeManager();
+        mergeManager = new MergeManagerImpl();
         compilerConfig = new CompilerConfig(data, variableSubstitutor, compiler, compilerHelper, xmlCompilerHerlper, propertyManager, packager);
         xmlParser = new XMLParser();
     }
@@ -126,11 +122,10 @@ public class CompilerConfigTest {
 
     @Test
     public void testGetMergeableFromPanelClass() throws Exception {
-        Mergeable mergeable = mergeManager.getMergeableFromPanelClass("HelloPanel");
+        mergeManager.addPanelToMerge("HelloPanel");
         ZipOutputStream outputStream = Mockito.mock(ZipOutputStream.class);
-        assertThat(mergeable, IsNull.<Object>notNullValue());
 
-        mergeable.merge(outputStream);
+        mergeManager.merge(outputStream);
         Mockito.verify(outputStream, new AtLeast(2)).putNextEntry(Mockito.<ZipEntry>any());
 
     }

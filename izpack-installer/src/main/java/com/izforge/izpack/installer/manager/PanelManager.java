@@ -9,7 +9,7 @@ import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
-import com.izforge.izpack.merge.MergeManager;
+import com.izforge.izpack.merge.MergeManagerImpl;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.OsConstraint;
@@ -27,7 +27,7 @@ public class PanelManager {
 
     private GUIInstallData installdata;
     private IInstallerContainer installerContainer;
-    private MergeManager mergeManager;
+    private MergeManagerImpl mergeManager;
     private int lastVis;
 
     /**
@@ -35,7 +35,7 @@ public class PanelManager {
      */
     protected ArrayList<Integer> visiblePanelMapping;
 
-    public PanelManager(GUIInstallData installDataGUI, IInstallerContainer installerContainer, MergeManager mergeManager) throws ClassNotFoundException {
+    public PanelManager(GUIInstallData installDataGUI, IInstallerContainer installerContainer, MergeManagerImpl mergeManager) throws ClassNotFoundException {
         this.installdata = installDataGUI;
         this.installerContainer = installerContainer;
         this.mergeManager = mergeManager;
