@@ -129,17 +129,6 @@ public interface IPackager {
     public abstract void addJarContent(URL jarURL);
 
     /**
-     * Adds a jar file content to the installer. Package structure is maintained. Need mechanism to
-     * copy over signed entry information. If the given file list is null the hole contents of the
-     * jar file will be copied else only the listed.
-     *
-     * @param jarURL The url of the jar to add to the installer. We use a URL so the jar may be
-     *               nested within another.
-     * @param files  to be copied
-     */
-    public abstract void addJarContent(URL jarURL, List<String> files);
-
-    /**
      * Marks a native library to be added to the uninstaller.
      *
      * @param data the describing custom action data object
