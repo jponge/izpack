@@ -7,9 +7,10 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.jar.JarInputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -23,36 +24,29 @@ public class JarMerge implements Mergeable {
 
     private String regexp = ".*";
     private String destination;
+    private Pattern pattern;
+
 
     public JarMerge(String path) {
         jarPath = MergeManagerImpl.getJarAbsolutePath(path);
         destination = path;
-        regexp = new StringBuilder().append(path).append(".*").toString();
+        regexp = new StringBuilder().append(path).append("(.*)").toString();
+        pattern = Pattern.compile(regexp);
     }
 
     public JarMerge(String path, String destination) {
         jarPath = MergeManagerImpl.getJarAbsolutePath(path);
         this.destination = destination;
-        regexp = new StringBuilder().append(path).append(".*").toString();
-    }
-
-    public JarMerge(URL resource) {
-        jarPath = MergeManagerImpl.processUrlToJarPath(resource);
-        destination = resource.getPath().replaceAll(jarPath, "");
-        regexp = new StringBuilder().append(destination).append(".*").toString();
-    }
-
-    public JarMerge(URL resource, String destination) {
-        jarPath = MergeManagerImpl.processUrlToJarPath(resource);
-        this.destination = destination;
-        regexp = new StringBuilder().append(resource.getPath().replaceAll(jarPath, "")).append(".*").toString();
+        regexp = new StringBuilder().append(path).append("(.*)").toString();
+        pattern = Pattern.compile(regexp);
     }
 
     public JarMerge(File classFile) {
         String[] strings = classFile.getAbsolutePath().split(".jar!/");
         jarPath = strings[0] + ".jar";
         destination = strings[1];
-        regexp = new StringBuilder().append(destination).append(".*").toString();
+        regexp = new StringBuilder().append(destination).append("(.*)").toString();
+        pattern = Pattern.compile(regexp);
     }
 
     public File find(FileFilter fileFilter) {
@@ -88,11 +82,12 @@ public class JarMerge implements Mergeable {
                 if (zentry.isDirectory()) {
                     continue;
                 }
-                String entryName = zentry.getName();
-                System.out.println(entryName);
-                if (entryName.matches(regexp)) {
-                    IoHelper.copyStreamToJar(jarInputStream, outputStream, entryName, zentry.getTime());
+                Matcher matcher = pattern.matcher(zentry.getName());
+                if (matcher.matches()) {
+                    String dest = destination + matcher.group(1);
+                    IoHelper.copyStreamToJar(jarInputStream, outputStream, dest, zentry.getTime());
                 }
+
             }
             jarInputStream.close();
         } catch (IOException e) {

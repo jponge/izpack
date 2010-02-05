@@ -12,7 +12,6 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -151,16 +150,13 @@ public class MergeManagerTest {
 
     @Test
     public void findFileInJar() throws Exception {
-        URL urlJar = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
-        URLClassLoader loader = URLClassLoader.newInstance(new URL[]{urlJar}, ClassLoader.getSystemClassLoader());
-
-        JarMerge jarMerge = new JarMerge(loader.getResource("jar/izforge"));
+        JarMerge jarMerge = new JarMerge("org/junit");
         File file = jarMerge.find(new FileFilter() {
             public boolean accept(File pathname) {
-                return pathname.getName().matches(".*HelloPanel\\.class") || pathname.isDirectory();
+                return pathname.getName().matches(".*Assert\\.class") || pathname.isDirectory();
             }
         });
-        assertThat(file.getName(), Is.is("HelloPanel.class"));
+        assertThat(file.getName(), Is.is("Assert.class"));
     }
 
     @Test
