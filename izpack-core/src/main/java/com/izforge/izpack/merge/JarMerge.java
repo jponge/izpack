@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.jar.JarInputStream;
 import java.util.regex.Matcher;
@@ -24,21 +25,18 @@ public class JarMerge implements Mergeable {
 
     private String regexp = ".*";
     private String destination;
-    private Pattern pattern;
 
 
     public JarMerge(String path) {
         jarPath = MergeManagerImpl.getJarAbsolutePath(path);
         destination = path;
         regexp = new StringBuilder().append(path).append("(.*)").toString();
-        pattern = Pattern.compile(regexp);
     }
 
     public JarMerge(String path, String destination) {
         jarPath = MergeManagerImpl.getJarAbsolutePath(path);
         this.destination = destination;
         regexp = new StringBuilder().append(path).append("(.*)").toString();
-        pattern = Pattern.compile(regexp);
     }
 
     public JarMerge(File classFile) {
@@ -46,7 +44,19 @@ public class JarMerge implements Mergeable {
         jarPath = strings[0] + ".jar";
         destination = strings[1];
         regexp = new StringBuilder().append(destination).append("(.*)").toString();
-        pattern = Pattern.compile(regexp);
+    }
+
+    public JarMerge(URL resource) {
+        jarPath = MergeManagerImpl.processUrlToJarPath(resource);
+        destination = resource.getPath().replaceAll(jarPath, "");
+        regexp = new StringBuilder().append(destination).append("(.*)").toString();
+    }
+
+    public JarMerge(URL resource, String destination) {
+        jarPath = MergeManagerImpl.processUrlToJarPath(resource);
+        String insideJar = MergeManagerImpl.processUrlToJarPackage(resource);
+        this.destination = destination;
+        regexp = new StringBuilder().append(insideJar).append("(.*)").toString();
     }
 
     public File find(FileFilter fileFilter) {
@@ -75,6 +85,7 @@ public class JarMerge implements Mergeable {
     }
 
     public void merge(ZipOutputStream outputStream) {
+        Pattern pattern = Pattern.compile(regexp);
         ZipEntry zentry;
         try {
             JarInputStream jarInputStream = new JarInputStream(new FileInputStream(new File(jarPath)));

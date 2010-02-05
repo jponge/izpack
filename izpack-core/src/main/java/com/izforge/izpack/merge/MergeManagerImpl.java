@@ -30,6 +30,10 @@ public class MergeManagerImpl implements MergeManager {
         mergeableList.add(mergeable);
     }
 
+    public void addResourceToMerge(Mergeable mergeable) {
+        mergeableList.add(mergeable);
+    }
+
     public void addResourceToMerge(String resourcePath) {
         mergeableList.add(getMergeableFromPath(resourcePath));
     }
@@ -147,6 +151,12 @@ public class MergeManagerImpl implements MergeManager {
         String res = resource.getPath();
         res = res.replaceAll("file:", "");
         return res.substring(0, res.lastIndexOf("!"));
+    }
+
+    public static String processUrlToJarPackage(URL resource) {
+        String res = resource.getPath();
+        res = res.replaceAll("file:", "");
+        return res.substring(res.lastIndexOf("!") + 2, res.length());
     }
 
     public void merge(ZipOutputStream outputStream) {

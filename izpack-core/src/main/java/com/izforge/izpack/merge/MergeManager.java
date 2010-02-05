@@ -45,4 +45,6 @@ public interface MergeManager extends Mergeable {
      * @return If it's the canonical name, return the default package. Else, return the package of the given classname.
      */
     String getPackagePathFromClassName(String className);
+
+    void addResourceToMerge(Mergeable mergeable);
 }
