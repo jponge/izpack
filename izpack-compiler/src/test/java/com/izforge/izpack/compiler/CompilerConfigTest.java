@@ -127,6 +127,6 @@ public class CompilerConfigTest {
 
         mergeManager.merge(outputStream);
         Mockito.verify(outputStream, new AtLeast(2)).putNextEntry(Mockito.<ZipEntry>any());
-
     }
+
 }

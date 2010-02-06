@@ -150,7 +150,10 @@ public class MergeManagerImpl implements MergeManager {
     static String processUrlToJarPath(URL resource) {
         String res = resource.getPath();
         res = res.replaceAll("file:", "");
-        return res.substring(0, res.lastIndexOf("!"));
+        if (res.contains("!")) {
+            return res.substring(0, res.lastIndexOf("!"));
+        }
+        return res;
     }
 
     public static String processUrlToJarPackage(URL resource) {

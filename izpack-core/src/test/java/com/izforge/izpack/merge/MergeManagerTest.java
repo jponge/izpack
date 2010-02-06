@@ -55,9 +55,8 @@ public class MergeManagerTest {
         assertThat(file.exists(), Is.is(true));
         FileMerge fileMerge = new FileMerge(file);
 
-        doMerge(fileMerge);
+        ArrayList<String> arrayList = doMerge(fileMerge);
 
-        ArrayList<String> arrayList = getFileNameInZip(zip);
         assertThat(arrayList, IsCollectionContaining.hasItems("MergeManagerTest.class", "test/.placeholder"));
     }
 
@@ -66,9 +65,8 @@ public class MergeManagerTest {
         File file = new File(getClass().getResource("MergeManagerTest.class").getFile()).getParentFile();
         FileMerge fileMerge = new FileMerge(file, "my/dest/path/");
 
-        doMerge(fileMerge);
+        ArrayList<String> arrayList = doMerge(fileMerge);
 
-        ArrayList<String> arrayList = getFileNameInZip(zip);
         assertThat(arrayList, IsCollectionContaining.hasItems("my/dest/path/MergeManagerTest.class", "my/dest/path/test/.placeholder"));
     }
 
@@ -79,13 +77,15 @@ public class MergeManagerTest {
         while ((zipEntry = inputStream.getNextEntry()) != null) {
             arrayList.add(zipEntry.getName());
         }
+        inputStream.close();
         return arrayList;
     }
 
-    private void doMerge(Mergeable fileMerge) throws IOException {
+    private ArrayList<String> doMerge(Mergeable fileMerge) throws IOException {
         ZipOutputStream outputStream = new ZipOutputStream(zip);
         fileMerge.merge(outputStream);
         outputStream.close();
+        return getFileNameInZip(zip);
     }
 
     @Test
@@ -93,12 +93,10 @@ public class MergeManagerTest {
         Mergeable jarMerge = MergeManagerImpl.getMergeableFromPath("junit/framework/Assert.class");
         assertThat(jarMerge, Is.is(JarMerge.class));
 
-        doMerge(jarMerge);
+        ArrayList<String> arrayList = doMerge(jarMerge);
 
-        ZipInputStream inputStream = new ZipInputStream(new FileInputStream(zip));
-        assertThat(inputStream.available(), Is.is(1));
-        ZipEntry zipEntry = inputStream.getNextEntry();
-        assertThat(zipEntry.getName(), Is.is("junit/framework/Assert.class"));
+        assertThat(arrayList.size(), Is.is(1));
+        assertThat(arrayList, IsCollectionContaining.hasItem(Is.is("junit/framework/Assert.class")));
     }
 
     @Test
@@ -121,9 +119,8 @@ public class MergeManagerTest {
         URLClassLoader loader = URLClassLoader.newInstance(new URL[]{urlJar}, ClassLoader.getSystemClassLoader());
 
         JarMerge jarMerge = new JarMerge(loader.getResource("jar/izforge"), "com/dest");
-        doMerge(jarMerge);
+        ArrayList<String> arrayList = doMerge(jarMerge);
 
-        ArrayList<String> arrayList = getFileNameInZip(zip);
         assertThat(arrayList, IsCollectionContaining.hasItems("com/dest/izpack/panels/hello/HelloPanel.class"));
     }
 
@@ -190,9 +187,8 @@ public class MergeManagerTest {
     public void testAddResourceToMerge() throws Exception {
         mergeManager.addResourceToMerge("com/izforge/izpack/merge/");
 
-        doMerge(mergeManager);
+        ArrayList<String> arrayList = doMerge(mergeManager);
 
-        ArrayList<String> arrayList = getFileNameInZip(zip);
         assertThat(arrayList, IsCollectionContaining.hasItems("com/izforge/izpack/merge/MergeManagerTest.class"));
     }
 
@@ -200,28 +196,31 @@ public class MergeManagerTest {
     public void testAddResourceToMergeWithDestination() throws Exception {
         mergeManager.addResourceToMerge("com/izforge/izpack/merge/", "com/dest/");
 
-        doMerge(mergeManager);
+        ArrayList<String> arrayList = doMerge(mergeManager);
 
-        ArrayList<String> arrayList = getFileNameInZip(zip);
         assertThat(arrayList, IsCollectionContaining.hasItems("com/dest/MergeManagerTest.class"));
     }
 
     @Test
     public void testAddSingleClassToMergeWithDestinationFromAJar() throws Exception {
         mergeManager.addResourceToMerge("org/junit/Assert.class", "com/dest/Assert.class");
-        doMerge(mergeManager);
+        ArrayList<String> arrayList = doMerge(mergeManager);
 
-        ArrayList<String> arrayList = getFileNameInZip(zip);
         assertThat(arrayList, IsCollectionContaining.hasItems("com/dest/Assert.class"));
     }
 
     @Test
     public void testAddPackageToMergeWithDestinationFromAJar() throws Exception {
         mergeManager.addResourceToMerge("org/junit", "com/dest");
-        doMerge(mergeManager);
+        ArrayList<String> arrayList = doMerge(mergeManager);
 
-        ArrayList<String> arrayList = getFileNameInZip(zip);
         assertThat(arrayList, IsCollectionContaining.hasItems("com/dest/Assert.class"));
     }
 
+    @Test
+    public void testAddJarContent() throws Exception {
+        JarMerge jarMerge = new JarMerge(getClass().getResource("test/jar-hellopanel-1.0-SNAPSHOT.jar"));
+        ArrayList<String> arrayList = doMerge(jarMerge);
+        assertThat(arrayList, IsCollectionContaining.hasItems("jar/izforge/izpack/panels/hello/HelloPanel.class"));
+    }
 }

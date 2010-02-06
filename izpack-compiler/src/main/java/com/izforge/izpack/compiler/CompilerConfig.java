@@ -399,8 +399,7 @@ public class CompilerConfig extends Thread {
             IXMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
             if (xmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", YES, compilerData.getInstallFile())) {
                 //REFACTOR Change the way uninstaller are created
-                URL url = findIzPackResource(propertyManager.getProperty("uninstaller-ext"), "Uninstaller extensions",
-                        root);
+                URL url = findIzPackResource(propertyManager.getProperty("uninstaller-ext"), "Uninstaller extensions", root);
                 packager.addResource("IzPack.uninstaller-ext", url);
             }
 
