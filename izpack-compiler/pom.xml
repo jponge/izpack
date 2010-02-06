@@ -36,11 +36,6 @@
         </dependency>
 
         <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>izpack-uninstaller-ext</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
         </dependency>
