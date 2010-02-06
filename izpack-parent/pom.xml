@@ -226,6 +226,7 @@
 
     <build>
         <plugins>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -251,29 +252,16 @@
             <plugin>
                 <groupId>com.google.testability-explorer</groupId>
                 <artifactId>maven-testability-plugin</artifactId>
-                <version>1.3.1</version>
+                <version>1.3.3</version>
             </plugin>
         </plugins>
     </reporting>
 
     <repositories>
         <repository>
-            <id>scala-tools.org</id>
-            <name>Scala-tools Maven2 Repository</name>
-            <url>http://scala-tools.org/repo-releases</url>
-        </repository>
-
-        <repository>
             <id>fest</id>
             <name>Fest repository</name>
             <url>http://fest.googlecode.com/svn/trunk/fest/m2/repository/</url>
         </repository>
     </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>scala-tools.org</id>
-            <name>Scala-tools Maven2 Repository</name>
-            <url>http://scala-tools.org/repo-releases</url>
-        </pluginRepository>
-    </pluginRepositories>
 </project>
