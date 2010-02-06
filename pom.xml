@@ -28,7 +28,6 @@
         <module>izpack-util</module>
         <module>izpack-utils</module>
         <module>izpack-ant</module>
-        <module>izpack-test-scala</module>
     </modules>
 
 </project>
