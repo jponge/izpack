@@ -47,6 +47,7 @@ import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.data.PanelAction.ActionStage;
+import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
@@ -116,13 +117,14 @@ public class CompilerConfig extends Thread {
     private XmlCompilerHelper xmlCompilerHelper;
     private PropertyManager propertyManager;
     private IPackager packager;
+    private MergeManager mergeManager;
 
     /**
      * Constructor
      *
      * @param compilerData Object containing all informations found in command line
      */
-    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager) {
+    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager) {
         this.compilerData = compilerData;
         this.variableSubstitutor = variableSubstitutor;
         this.compiler = compiler;
@@ -130,6 +132,7 @@ public class CompilerConfig extends Thread {
         this.xmlCompilerHelper = xmlCompilerHelper;
         this.propertyManager = propertyManager;
         this.packager = packager;
+        this.mergeManager = mergeManager;
     }
 
     /**
@@ -1371,9 +1374,7 @@ public class CompilerConfig extends Thread {
         IXMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
         if (xmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", YES, compilerData.getInstallFile())) {
             //REFACTOR Change the way uninstaller is created
-//            mergeManager.addResourceToMerge("com/izforge/izpack/uninstaller/");
-            URL url = findIzPackResource(propertyManager.getProperty("uninstaller"), "Uninstaller", root);
-            packager.addResource("IzPack.uninstaller", url);
+            mergeManager.addResourceToMerge("com/izforge/izpack/uninstaller/");
 
             if (privileged != null) {
                 // default behavior for uninstaller elevation: elevate if installer has to be elevated too
