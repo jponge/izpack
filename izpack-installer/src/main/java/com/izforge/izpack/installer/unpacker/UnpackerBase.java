@@ -27,11 +27,11 @@ import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.api.unpacker.IDiscardInterruptable;
-import com.izforge.izpack.core.data.UninstallData;
 import com.izforge.izpack.core.event.InstallerListener;
 import com.izforge.izpack.data.Blockable;
 import com.izforge.izpack.data.PackFile;
 import com.izforge.izpack.data.UpdateCheck;
+import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
@@ -585,11 +585,12 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
         }
         // get the uninstaller base, returning if not found so that
         // installData.uninstallOutJar remains null
+        // REFACTOR : Change put of uninstaller
+
         InputStream[] in = new InputStream[2];
+
         in[0] = resourceManager.getInputStream("IzPack.uninstaller");
-        if (in[0] == null) {
-            return;
-        }
+
         // The uninstaller extension is facultative; it will be exist only
         // if a native library was marked for uninstallation.
         // REFACTOR Change uninstaller methods of merge and get
