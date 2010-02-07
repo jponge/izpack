@@ -1,4 +1,4 @@
-package com.izforge.izpack.installer.unpacker;
+package com.izforge.izpack.test;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Info;
@@ -6,6 +6,7 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.data.UninstallData;
+import com.izforge.izpack.installer.unpacker.Unpacker;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.junit.Before;

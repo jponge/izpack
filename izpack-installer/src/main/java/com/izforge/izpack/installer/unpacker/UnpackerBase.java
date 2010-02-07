@@ -576,7 +576,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
      *
      * @throws Exception Description of the Exception
      */
-    protected void putUninstaller() throws Exception {
+    public void putUninstaller() throws Exception {
         String uninstallerCondition = idata.getInfo().getUninstallerCondition();
         if ((uninstallerCondition != null) &&
                 (uninstallerCondition.length() > 0) &&
