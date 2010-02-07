@@ -5,6 +5,7 @@ import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.junit.Before;
@@ -23,6 +24,7 @@ public class UnpackerTest {
     private ResourceManager resourceManager;
     private AutomatedInstallData idata;
     private Unpacker unpacker;
+    private UninstallData udata;
 
     @Before
     public void setUp() {
@@ -31,7 +33,8 @@ public class UnpackerTest {
         resourceManager = Mockito.mock(ResourceManager.class);
         progressHandler = Mockito.mock(AbstractUIProgressHandler.class);
         idata = Mockito.mock(AutomatedInstallData.class);
-        unpacker = new Unpacker(idata, resourceManager, progressHandler, rules, variableSubstitutor);
+        udata = Mockito.mock(UninstallData.class);
+        unpacker = new Unpacker(idata, resourceManager, progressHandler, rules, variableSubstitutor, udata);
     }
 
     @Test

@@ -46,6 +46,7 @@ public class InstallerContainer extends AbstractChildContainer {
                         new ComponentParameter(),
                         new ComponentParameter(),
                         new ComponentParameter(),
+                        new ComponentParameter(),
                         new ComponentParameter()
                 )
                 .addComponent(LanguageDialog.class, LanguageDialog.class,

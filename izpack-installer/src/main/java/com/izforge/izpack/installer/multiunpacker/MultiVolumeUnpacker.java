@@ -52,8 +52,8 @@ import java.util.Properties;
 public class MultiVolumeUnpacker extends UnpackerBase {
     protected IMultiVolumeUnpackerHelper helper;
 
-    public MultiVolumeUnpacker(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor) {
-        super(idata, handler, resourceManager, rules, variableSubstitutor);
+    public MultiVolumeUnpacker(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata) {
+        super(idata, handler, resourceManager, rules, variableSubstitutor, udata);
         if (handler instanceof PanelAutomation) {
             Debug.trace("running in auto installation mode.");
             helper = new MultiVolumeUnpackerAutomationHelper();
@@ -86,7 +86,6 @@ public class MultiVolumeUnpacker extends UnpackerBase {
             int npacks = packs.size();
             Debug.trace("Unpacker starting");
             handler.startAction("Unpacking", npacks);
-            udata = UninstallData.getInstance();
             // Custom action listener stuff --- load listeners ----
             List[] customActions = getCustomActions();
             // Custom action listener stuff --- beforePacks ----

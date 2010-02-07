@@ -27,15 +27,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Holds uninstallation data. Implemented as a singleton.
+ * Holds uninstallation data.
  *
  * @author Julien Ponge created October 27, 2002
  */
 public class UninstallData {
-    /**
-     * The uninstall data object.
-     */
-    private static UninstallData instance = null;
 
     /**
      * The installed files list.
@@ -75,7 +71,7 @@ public class UninstallData {
     /**
      * The constructor.
      */
-    private UninstallData() {
+    public UninstallData() {
         installedFilesList = new ArrayList<String>();
         uninstallableFilesList = new ArrayList<String>();
         executablesList = new ArrayList<ExecutableFile>();
@@ -87,18 +83,6 @@ public class UninstallData {
      * Constant RootFiles = "rootfiles"
      */
     public final static String ROOTSCRIPT = "rootscript";
-
-    /**
-     * Returns the instance (it is a singleton).
-     *
-     * @return The instance.
-     */
-    public synchronized static UninstallData getInstance() {
-        if (instance == null) {
-            instance = new UninstallData();
-        }
-        return instance;
-    }
 
     /**
      * Adds a file to the data.

@@ -8,6 +8,7 @@ import com.izforge.izpack.installer.console.ConsoleInstaller;
 import com.izforge.izpack.installer.container.provider.GUIInstallDataProvider;
 import com.izforge.izpack.installer.container.provider.IconsProvider;
 import com.izforge.izpack.installer.container.provider.RulesProvider;
+import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.language.ConditionCheck;
 import com.izforge.izpack.merge.MergeManagerImpl;
@@ -38,6 +39,7 @@ public class ApplicationContainer extends AbstractContainer implements IApplicat
                 .addComponent(ConditionCheck.class)
                 .addComponent(MergeManagerImpl.class)
                 .addComponent(CustomDataContainer.class)
+                .addComponent(UninstallData.class)
                 .addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
                 .addComponent(Properties.class)
                 .addComponent(ResourceManager.class)

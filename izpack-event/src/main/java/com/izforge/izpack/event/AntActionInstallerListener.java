@@ -65,15 +65,17 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
 
     private ArrayList<AntAction> uninstActions = null;
     private VariableSubstitutor variableSubstitutor;
+    private UninstallData uninstallData;
 
     /**
      * Default constructor
      */
-    public AntActionInstallerListener(VariableSubstitutor variableSubstitutor) {
+    public AntActionInstallerListener(VariableSubstitutor variableSubstitutor, UninstallData uninstallData) {
         super(true);
         this.variableSubstitutor = variableSubstitutor;
         actions = new HashMap<String, HashMap<Object, ArrayList<AntAction>>>();
         uninstActions = new ArrayList<AntAction>();
+        this.uninstallData = uninstallData;
     }
 
     /**
@@ -188,7 +190,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
             performAllActions(currentPack, ActionBase.AFTERPACKS, handler);
         }
         if (uninstActions.size() > 0) {
-            UninstallData.getInstance().addAdditionalData("antActions", uninstActions);
+            uninstallData.addAdditionalData("antActions", uninstActions);
         }
     }
 
@@ -405,7 +407,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
                 bos.write(c);
             }
             content = bos.toByteArray();
-            UninstallData.getInstance().addAdditionalData("build_resource", content);
+            uninstallData.addAdditionalData("build_resource", content);
         } catch (Exception x) {
             throw new InstallerException("Failed to add buildfile_resource to uninstaller", x);
         } finally {

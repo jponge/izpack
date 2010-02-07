@@ -42,6 +42,11 @@ import java.util.Vector;
  * @version $Revision: 1540 $
  */
 public class ShortcutPanelAutomationHelper implements PanelAutomation {
+    private UninstallData uninstallData;
+
+    public ShortcutPanelAutomationHelper(UninstallData uninstallData) {
+        this.uninstallData = uninstallData;
+    }
 
     // ~ Methods ****************************************************************************
 
@@ -313,8 +318,6 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation {
 
         System.out.println(" done. ]");
         System.out.print("[ Add shortcuts to uninstaller ");
-
-        UninstallData uninstallData = UninstallData.getInstance();
 
         for (int i = 0; i < files.size(); i++) {
             uninstallData.addFile(files.elementAt(i), true);

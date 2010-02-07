@@ -121,14 +121,16 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
      * @param handler             The installation progress handler.
      * @param rules
      * @param variableSubstitutor
+     * @param udata
      */
-    public UnpackerBase(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor) {
+    public UnpackerBase(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata) {
         this.idata = idata;
         this.handler = handler;
         this.resourceManager = resourceManager;
         this.rules = rules;
         // Initialize the variable substitutor
         this.variableSubstitutor = variableSubstitutor;
+        this.udata = udata;
     }
 
     public void setRules(RulesEngine rules) {

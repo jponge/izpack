@@ -186,8 +186,8 @@ public class InstallationTest extends AbstractInstallationTest {
             Thread.sleep(500);
         }
         assertThat(installPath.exists(), Is.is(true));
-        UninstallData u = UninstallData.getInstance();
-        for (String p : u.getInstalledFilesList()) {
+        UninstallData uninstallData = new UninstallData();
+        for (String p : uninstallData.getInstalledFilesList()) {
             File f = new File(p);
             assertThat(f.exists(), Is.is(true));
         }
