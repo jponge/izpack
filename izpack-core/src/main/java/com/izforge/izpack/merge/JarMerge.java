@@ -84,7 +84,7 @@ public class JarMerge implements Mergeable {
         return arrayList;
     }
 
-    public void merge(ZipOutputStream outputStream) {
+    public void merge(java.util.zip.ZipOutputStream outputStream) {
         Pattern pattern = Pattern.compile(regexp);
         ZipEntry zentry;
         try {
@@ -102,7 +102,29 @@ public class JarMerge implements Mergeable {
             }
             jarInputStream.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void merge(ZipOutputStream outJar) {
+        Pattern pattern = Pattern.compile(regexp);
+        ZipEntry zentry;
+        try {
+            JarInputStream jarInputStream = new JarInputStream(new FileInputStream(new File(jarPath)));
+            while ((zentry = jarInputStream.getNextEntry()) != null) {
+                if (zentry.isDirectory()) {
+                    continue;
+                }
+                Matcher matcher = pattern.matcher(zentry.getName());
+                if (matcher.matches()) {
+                    String dest = destination + matcher.group(1);
+                    IoHelper.copyStreamToJar(jarInputStream, outJar, dest, zentry.getTime());
+                }
+
+            }
+            jarInputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
