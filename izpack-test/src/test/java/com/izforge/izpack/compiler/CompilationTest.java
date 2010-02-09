@@ -65,14 +65,14 @@ public class CompilationTest {
     public void mergeManagerShouldTransformClassNameToPackagePath() throws Exception {
         MergeManagerImpl mergeManager = new MergeManagerImpl();
         String pathFromClassName = mergeManager.getPackagePathFromClassName("com.test.sora.UneClasse");
-        assertThat(pathFromClassName, Is.is("com/test/sora"));
+        assertThat(pathFromClassName, Is.is("com/test/sora/"));
     }
 
     @Test
     public void mergeManagerShouldReturnDefaultPackagePath() throws Exception {
         MergeManagerImpl mergeManager = new MergeManagerImpl();
         String pathFromClassName = mergeManager.getPackagePathFromClassName("UneClasse");
-        assertThat(pathFromClassName, Is.is("com/izforge/izpack/panels"));
+        assertThat(pathFromClassName, Is.is("com/izforge/izpack/panels/"));
     }
 
     @Test

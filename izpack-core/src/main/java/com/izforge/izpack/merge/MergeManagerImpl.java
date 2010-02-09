@@ -17,7 +17,7 @@ import java.util.List;
 public class MergeManagerImpl implements MergeManager {
 
     public static String CLASSNAME_PREFIX = "com.izforge.izpack.panels";
-    public static String BASE_CLASSNAME_PATH = CLASSNAME_PREFIX.replaceAll("\\.", "/");
+    public static String BASE_CLASSNAME_PATH = CLASSNAME_PREFIX.replaceAll("\\.", "/") + "/";
 
     private List<Mergeable> mergeableList;
 
@@ -35,11 +35,11 @@ public class MergeManagerImpl implements MergeManager {
     }
 
     public void addResourceToMerge(String resourcePath) {
-        mergeableList.add(getMergeableFromPath(resourcePath));
+        mergeableList.add(MergeHelper.getMergeableFromPath(resourcePath));
     }
 
     public void addResourceToMerge(String resourcePath, String destination) {
-        mergeableList.add(getMergeableFromPath(resourcePath, destination));
+        mergeableList.add(MergeHelper.getMergeableFromPath(resourcePath, destination));
     }
 
 
@@ -72,8 +72,8 @@ public class MergeManagerImpl implements MergeManager {
      * @param sourcePath Source path to search
      * @return Type of file (jar, file or directory)
      */
-    private static TypeFile resolvePath(String sourcePath) {
-        URL resource = ClassLoader.getSystemClassLoader().getResource(sourcePath);
+    static TypeFile resolvePath(String sourcePath) {
+        URL resource = MergeManagerImpl.class.getClassLoader().getSystemClassLoader().getResource(sourcePath);
         if (resource != null) {
             if (resource.getPath().contains("jar!")) {
                 return TypeFile.JAR_CONTENT;
@@ -88,36 +88,6 @@ public class MergeManagerImpl implements MergeManager {
             }
         }
         throw new IllegalArgumentException("Invalid source path : " + sourcePath);
-    }
-
-    /**
-     * Return the mergeable from the given path.
-     *
-     * @param path path of the mergeable
-     * @return Mergeable if found. null else.
-     */
-    static Mergeable getMergeableFromPath(String path) {
-        TypeFile file = resolvePath(path);
-        switch (file) {
-            case DIRECTORY:
-            case FILE:
-                return new FileMerge(getFileFromPath(path), path);
-            case JAR_CONTENT:
-                return new JarMerge(path);
-        }
-        return null;
-    }
-
-    private Mergeable getMergeableFromPath(String path, String destination) {
-        TypeFile file = resolvePath(path);
-        switch (file) {
-            case DIRECTORY:
-            case FILE:
-                return new FileMerge(getFileFromPath(path), destination);
-            case JAR_CONTENT:
-                return new JarMerge(path, destination);
-        }
-        return null;
     }
 
 
@@ -169,6 +139,13 @@ public class MergeManagerImpl implements MergeManager {
         mergeableList.clear();
     }
 
+    public void merge(java.util.zip.ZipOutputStream outputStream) {
+        for (Mergeable mergeable : mergeableList) {
+            mergeable.merge(outputStream);
+        }
+        mergeableList.clear();
+    }
+
     public File find(FileFilter fileFilter) {
         for (Mergeable mergeable : mergeableList) {
             File file = mergeable.find(fileFilter);
@@ -192,7 +169,7 @@ public class MergeManagerImpl implements MergeManager {
         if (isJar(classFile)) {
             return new JarMerge(classFile.getParentFile());
         }
-        return new FileMerge(classFile.getParentFile());
+        return new FileMerge(classFile.getParentFile(), getPackagePathFromClassName(panelClassName));
     }
 
     private static boolean isJar(File classFile) {
@@ -201,7 +178,7 @@ public class MergeManagerImpl implements MergeManager {
 
     public File getFileFromPanelClass(final String panelClassName, String globalPackage) {
         // Get the mergeable for corresponding package
-        Mergeable mergeable = MergeManagerImpl.getMergeableFromPath(globalPackage);
+        Mergeable mergeable = MergeHelper.getMergeableFromPath(globalPackage);
 
         FileFilter fileFilter = new FileFilter() {
             public boolean accept(File pathname) {
@@ -218,7 +195,7 @@ public class MergeManagerImpl implements MergeManager {
 
     public String getPackagePathFromClassName(String className) {
         if (className.contains(".")) {
-            return className.substring(0, className.lastIndexOf(".")).replaceAll("\\.", "/");
+            return className.substring(0, className.lastIndexOf(".")).replaceAll("\\.", "/") + "/";
         }
         return BASE_CLASSNAME_PATH;
     }

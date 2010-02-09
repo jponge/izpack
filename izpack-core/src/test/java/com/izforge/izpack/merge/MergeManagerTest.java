@@ -90,7 +90,7 @@ public class MergeManagerTest {
 
     @Test
     public void testMergeClassFromJarFile() throws Exception {
-        Mergeable jarMerge = MergeManagerImpl.getMergeableFromPath("junit/framework/Assert.class");
+        Mergeable jarMerge = MergeHelper.getMergeableFromPath("junit/framework/Assert.class");
         assertThat(jarMerge, Is.is(JarMerge.class));
 
         ArrayList<String> arrayList = doMerge(jarMerge);
@@ -127,7 +127,7 @@ public class MergeManagerTest {
 
     @Test
     public void testMergePackageFromJar() throws Exception {
-        Mergeable jarMerge = MergeManagerImpl.getMergeableFromPath("junit/framework/");
+        Mergeable jarMerge = MergeHelper.getMergeableFromPath("junit/framework/");
         assertThat(jarMerge, Is.is(JarMerge.class));
 
         doMerge(jarMerge);

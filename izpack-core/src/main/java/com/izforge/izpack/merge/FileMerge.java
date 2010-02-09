@@ -62,6 +62,26 @@ public class FileMerge implements Mergeable {
         }
     }
 
+    public void merge(java.util.zip.ZipOutputStream outputStream) {
+        try {
+            copyFileToJar(fileToCopy, outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void copyFileToJar(File fileToCopy, java.util.zip.ZipOutputStream outputStream) throws IOException {
+        if (fileToCopy.isDirectory()) {
+            for (File file : fileToCopy.listFiles()) {
+                copyFileToJar(file, outputStream);
+            }
+        } else {
+            String entryName = resolveName(fileToCopy, this.fileToCopy, this.destination);
+            FileInputStream inputStream = new FileInputStream(fileToCopy);
+            IoHelper.copyStreamToJar(inputStream, outputStream, entryName, fileToCopy.lastModified());
+        }
+    }
+
     private void copyFileToJar(File fileToCopy, ZipOutputStream outputStream) throws IOException {
         if (fileToCopy.isDirectory()) {
             for (File file : fileToCopy.listFiles()) {
