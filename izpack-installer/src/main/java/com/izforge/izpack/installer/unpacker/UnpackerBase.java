@@ -32,6 +32,8 @@ import com.izforge.izpack.data.Blockable;
 import com.izforge.izpack.data.PackFile;
 import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.installer.data.UninstallData;
+import com.izforge.izpack.merge.MergeHelper;
+import com.izforge.izpack.merge.Mergeable;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
@@ -44,7 +46,6 @@ import java.io.*;
 import java.net.URI;
 import java.util.*;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -589,9 +590,9 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
         // installData.uninstallOutJar remains null
         // REFACTOR : Change put of uninstaller
 
-        InputStream[] in = new InputStream[2];
-
-        in[0] = resourceManager.getInputStream("IzPack.uninstaller");
+//        InputStream[] in = new InputStream[2];
+        Mergeable uninstallerMerge = MergeHelper.getMergeableFromPath("com/izforge/izpack/uninstaller");
+//        in[0] = resourceManager.getInputStream("IzPack.uninstaller");
 
         // The uninstaller extension is facultative; it will be exist only
         // if a native library was marked for uninstallation.
@@ -618,35 +619,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
         udata.addFile(jar, true);
 
         // We copy the uninstallers
-        HashSet<String> doubles = new HashSet<String>();
-
-        for (InputStream anIn : in) {
-            if (anIn == null) {
-                continue;
-            }
-            ZipInputStream inRes = new ZipInputStream(anIn);
-            ZipEntry zentry = inRes.getNextEntry();
-            while (zentry != null) {
-                // Puts a new entry, but not twice like META-INF
-                if (!doubles.contains(zentry.getName())) {
-                    doubles.add(zentry.getName());
-                    outJar.putNextEntry(new ZipEntry(zentry.getName()));
-
-                    // Byte to byte copy
-                    int unc = inRes.read();
-                    while (unc != -1) {
-                        outJar.write(unc);
-                        unc = inRes.read();
-                    }
-
-                    // Next one please
-                    inRes.closeEntry();
-                    outJar.closeEntry();
-                }
-                zentry = inRes.getNextEntry();
-            }
-            inRes.close();
-        }
+        uninstallerMerge.merge(outJar);
 
         // Should we relaunch the uninstaller with privileges?
         if (idata.getInfo().isPrivilegedExecutionRequiredUninstaller()) {
@@ -655,14 +628,8 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
         }
 
         // We put the langpack
-        InputStream in2 = resourceManager.getInputStream("langpacks/" + idata.getLocaleISO3() + ".xml");
-        outJar.putNextEntry(new ZipEntry("langpack.xml"));
-        int read = in2.read();
-        while (read != -1) {
-            outJar.write(read);
-            read = in2.read();
-        }
-        outJar.closeEntry();
+        Mergeable langPack = MergeHelper.getMergeableFromPath("resources/langpacks/" + idata.getLocaleISO3() + ".xml", "langpack.xml");
+        langPack.merge(outJar);
     }
 
     /**
