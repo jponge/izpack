@@ -20,6 +20,9 @@ import org.junit.rules.MethodRule;
 import org.junit.rules.Timeout;
 
 import java.io.File;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -126,6 +129,16 @@ public class AbstractInstallationTest {
         compilerContainer.addComponent(CompilerData.class, data);
         CompilerConfig compilerConfig = compilerContainer.getComponent(CompilerConfig.class);
         compilerConfig.executeCompiler();
+        URLClassLoader urlClassLoader = new URLClassLoader(new URL[]{out.toURI().toURL()}, ClassLoader.getSystemClassLoader());
+        assertThat(urlClassLoader.getResource("resources/langpacks/eng.xml"), IsNull.<Object>notNullValue());
+
+        URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+        Method declaredMethod = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});
+        declaredMethod.setAccessible(true);
+        declaredMethod.invoke(systemClassLoader, out.toURI().toURL());
+        URL urlEnumeration = systemClassLoader.getResource("resources/langpacks/eng.xml");
+
+        assertThat(urlEnumeration, IsNull.<Object>notNullValue());
         File extractedDir = new File(workingDirectory, "temp");
         // Clean before use
         FileUtils.deleteDirectory(extractedDir);
