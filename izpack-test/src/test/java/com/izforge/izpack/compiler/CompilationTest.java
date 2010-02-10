@@ -13,11 +13,11 @@ import org.junit.Test;
 import org.junit.internal.matchers.StringContains;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
-import org.mockito.internal.verification.AtLeast;
 
 import java.io.File;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.times;
 
 /**
  * Test for an Izpack compilation
@@ -49,7 +49,7 @@ public class CompilationTest {
         CompilerConfig c = compilerContainer.getComponent(CompilerConfig.class);
         c.executeCompiler();
         AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("Installer.class"));
-        AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("HelloPanel.class"));
+        AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("com/izforge/izpack/panels/hello/HelloPanel.class"));
     }
 
     @Test
@@ -58,7 +58,9 @@ public class CompilationTest {
         ZipOutputStream outputStream = Mockito.mock(ZipOutputStream.class);
         mergeManager.addPanelToMerge("HelloPanel");
         mergeManager.merge(outputStream);
-        Mockito.verify(outputStream, new AtLeast(2)).putNextEntry(Mockito.<ZipEntry>any());
+        Mockito.verify(outputStream, times(2)).putNextEntry(Mockito.<ZipEntry>any());
+//        Mockito.verify(outputStream).putNextEntry(new org.apache.tools.zip.ZipEntry("com/izforge/izpack/panels/hello/HelloPanelConsoleHelper.class"));
+//        Mockito.verify(outputStream).putNextEntry(new org.apache.tools.zip.ZipEntry("com/izforge/izpack/panels/hello/HelloPanel.class"));
     }
 
     @Test

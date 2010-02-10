@@ -169,7 +169,13 @@ public class MergeManagerImpl implements MergeManager {
         if (isJar(classFile)) {
             return new JarMerge(classFile.getParentFile());
         }
-        return new FileMerge(classFile.getParentFile(), getPackagePathFromClassName(panelClassName));
+        return new FileMerge(classFile.getParentFile(), getPackagePathFromClassNameAndClassFile(classFile, panelClassName));
+    }
+
+    private String getPackagePathFromClassNameAndClassFile(File classFile, String panelClassName) {
+        String classFilePath = classFile.getAbsolutePath();
+        String relativePanelPath = classFilePath.substring(classFilePath.lastIndexOf(getPackagePathFromClassName(panelClassName)));
+        return relativePanelPath.substring(0, relativePanelPath.lastIndexOf("/")) + "/";
     }
 
     private static boolean isJar(File classFile) {
