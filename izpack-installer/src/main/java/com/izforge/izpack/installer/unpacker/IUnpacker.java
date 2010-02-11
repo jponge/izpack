@@ -37,4 +37,6 @@ public interface IUnpacker extends Runnable {
      * @param rules - an instantiated RulesEngine
      */
     public void setRules(RulesEngine rules);
+
+    void putUninstaller() throws Exception;
 }
