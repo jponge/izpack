@@ -584,16 +584,12 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
         }
         // get the uninstaller base, returning if not found so that
         // installData.uninstallOutJar remains null
-        // REFACTOR : Change put of uninstaller
 
-//        InputStream[] in = new InputStream[2];
-        Mergeable uninstallerMerge = MergeHelper.getMergeableFromPath("com/izforge/izpack/uninstaller");
-//        in[0] = resourceManager.getInputStream("IzPack.uninstaller");
+        Mergeable uninstallerMerge = MergeHelper.getMergeableFromPath("com/izforge/izpack/uninstaller/");
 
         // The uninstaller extension is facultative; it will be exist only
         // if a native library was marked for uninstallation.
         // REFACTOR Change uninstaller methods of merge and get
-//        in[1] = resourceManager.getInputStream("IzPack.uninstaller-ext", null);
 
         // Me make the .uninstaller directory
         String dest = IoHelper.translatePath(idata.getInfo().getUninstallerPath(), variableSubstitutor);
@@ -626,6 +622,9 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
         // We put the langpack
         Mergeable langPack = MergeHelper.getMergeableFromPath("resources/langpacks/" + idata.getLocaleISO3() + ".xml", "langpack.xml");
         langPack.merge(outJar);
+        outJar.close();
+        bos.close();
+        out.close();
     }
 
     /**
