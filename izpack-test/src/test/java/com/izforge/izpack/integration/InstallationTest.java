@@ -7,11 +7,10 @@ import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.language.LanguageDialog;
 import org.apache.commons.io.FileUtils;
-import org.fest.swing.exception.ScreenLockException;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
-import org.junit.After;
-import org.junit.Test;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.Test;
 
 import java.awt.*;
 import java.io.File;
@@ -20,25 +19,23 @@ import java.io.IOException;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Test for an installation using mock data
+ * Test for an installation
  */
 public class InstallationTest extends AbstractInstallationTest {
 
-    @After
+    @AfterMethod
     public void tearBinding() {
         applicationContainer.dispose();
-
         try {
             if (dialogFrameFixture != null) {
                 dialogFrameFixture.cleanUp();
                 dialogFrameFixture = null;
             }
+        } finally {
             if (installerFrameFixture != null) {
                 installerFrameFixture.cleanUp();
                 installerFrameFixture = null;
             }
-        } catch (ScreenLockException e) {
-            e.printStackTrace();
         }
     }
 
@@ -59,15 +56,17 @@ public class InstallationTest extends AbstractInstallationTest {
         // Finish panel
     }
 
-    @Test
+
+    @Test(dependsOnMethods = "testHelloAndFinishPanels", enabled = false)
     public void testHelloAndFinishPanelsCompressed() throws Exception {
+        System.out.println("Using file " + out.getName());
         File workingDirectory = getWorkingDirectory("samples");
         File out = new File("out.jar");
         File installerFile = new File(workingDirectory, "helloAndFinish.xml");
         CompilerData data = new CompilerData(installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), out.getAbsolutePath());
         data.setComprFormat("bzip2");
         data.setComprLevel(2);
-        compileAndUnzip(workingDirectory, data);
+        compileAndUnzip(data);
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         installerContainer.getComponent(LanguageDialog.class).initLangPack();
         installerFrameFixture = prepareFrameFixture();
@@ -80,7 +79,7 @@ public class InstallationTest extends AbstractInstallationTest {
     }
 
 
-    @Test
+    @Test(dependsOnMethods = "testHelloAndFinishPanels")
     public void testBasicInstall() throws Exception {
         compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
@@ -142,7 +141,7 @@ public class InstallationTest extends AbstractInstallationTest {
     }
 
 
-    @Test
+    @Test(dependsOnMethods = "testBasicInstall")
     public void testIzpackInstallation() throws Exception {
         compileAndUnzip("IzPack-install.xml", getWorkingDirectory("samples/izpack"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);

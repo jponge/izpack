@@ -4,10 +4,9 @@ import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.language.LanguageDialog;
-import org.fest.swing.exception.ScreenLockException;
 import org.hamcrest.core.Is;
-import org.junit.After;
-import org.junit.Test;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -16,16 +15,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class LanguageSelectionTest extends AbstractInstallationTest {
 
-    @After
+    @AfterMethod
     public void tearBinding() {
         applicationContainer.dispose();
-        try {
-            if (dialogFrameFixture != null) {
-                dialogFrameFixture.cleanUp();
-                dialogFrameFixture = null;
-            }
-        } catch (ScreenLockException e) {
-            e.printStackTrace();
+        if (dialogFrameFixture != null) {
+            dialogFrameFixture.cleanUp();
+            dialogFrameFixture = null;
         }
     }
 
@@ -41,6 +36,7 @@ public class LanguageSelectionTest extends AbstractInstallationTest {
     @Test
     public void testLangPickerChoseFra() throws Exception {
         compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
+        ClassLoader.getSystemResource("langpacks/fra.xml");
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         dialogFrameFixture = prepareDialogFixture();
         assertThat(dialogFrameFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).contents(), Is.is(new String[]{"eng", "fra"}));

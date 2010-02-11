@@ -4,7 +4,7 @@ import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import org.hamcrest.core.IsNull;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 

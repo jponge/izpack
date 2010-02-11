@@ -6,7 +6,7 @@ import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.panels.target.TargetPanel;
 import org.hamcrest.core.Is;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.io.File;
 

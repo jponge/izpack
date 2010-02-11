@@ -7,12 +7,10 @@ import com.izforge.izpack.merge.MergeManagerImpl;
 import org.apache.tools.zip.ZipEntry;
 import org.apache.tools.zip.ZipOutputStream;
 import org.hamcrest.core.Is;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.internal.matchers.StringContains;
-import org.junit.rules.TemporaryFolder;
+import org.hamcrest.text.StringContains;
 import org.mockito.Mockito;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import java.io.File;
 
@@ -30,11 +28,9 @@ public class CompilationTest {
 
     private CompilerContainer compilerContainer;
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
     private CompilerData data;
 
-    @Before
+    @BeforeMethod
     public void cleanFiles() {
         assertThat(baseDir.exists(), Is.is(true));
         out.delete();

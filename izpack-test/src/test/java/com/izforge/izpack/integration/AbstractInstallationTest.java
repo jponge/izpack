@@ -1,6 +1,5 @@
 package com.izforge.izpack.integration;
 
-import com.izforge.izpack.AssertionHelper;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.container.CompilerContainer;
@@ -13,29 +12,27 @@ import com.izforge.izpack.installer.language.LanguageDialog;
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
-import org.hamcrest.core.IsNull;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.MethodRule;
-import org.junit.rules.Timeout;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import sun.misc.URLClassPath;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-
-import static org.hamcrest.MatcherAssert.assertThat;
+import java.util.ArrayList;
 
 /**
  * Abstract test for integration test
  */
 public class AbstractInstallationTest {
-    private File currentDir = new File(getClass().getClassLoader().getResource(".").getFile());
 
     protected static final String APPNAME = "Test Installation";
 
-    @Rule
-    public MethodRule globalTimeout = new Timeout(20000);
     protected IApplicationContainer applicationContainer;
     protected IInstallerContainer installerContainer;
     protected CompilerContainer compilerContainer;
@@ -43,20 +40,27 @@ public class AbstractInstallationTest {
 
     protected FrameFixture installerFrameFixture;
     protected DialogFixture dialogFrameFixture;
+    protected File out;
 
-    @Before
+    @BeforeMethod
     public void initBinding() throws Throwable {
+        out = File.createTempFile("izpack", "jar");
         applicationContainer = new ApplicationContainer();
         applicationContainer.initBindings();
         compilerContainer = new CompilerContainer();
         compilerContainer.initBindings();
         resourceManager = applicationContainer.getComponent(ResourceManager.class);
+        deleteLock();
     }
 
-    @Before
-    public void deleteLock() {
+    private void deleteLock() throws IOException {
         File file = new File(System.getProperty("java.io.tmpdir"), "iz-" + LanguageSelectionTest.APPNAME + ".tmp");
-        file.delete();
+        FileUtils.deleteQuietly(file);
+    }
+
+    @AfterMethod
+    public void deleteTempJar() throws IOException {
+//        FileUtils.forceDelete(out);
     }
 
     /**
@@ -94,68 +98,50 @@ public class AbstractInstallationTest {
      */
     protected void compileAndUnzip(String installationFile, File workingDirectory) throws Exception {
         File installerFile = new File(workingDirectory, installationFile);
-        File out = new File(workingDirectory, "out.jar");
-        compileAndUnzip(workingDirectory, out, new CompilerData(installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), out.getAbsolutePath()));
-    }
-
-    /**
-     * Compile an installer and unzip the created jar.
-     *
-     * @param workingDirectory
-     * @param compilerData
-     * @throws Exception
-     */
-    protected void compileAndUnzip(File workingDirectory, CompilerData compilerData) throws Exception {
-        File out = new File(workingDirectory, "out.jar");
-        compileAndUnzip(workingDirectory, out, compilerData);
+        compileAndUnzip(new CompilerData(installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), out.getAbsolutePath()));
     }
 
     protected File getWorkingDirectory(String workingDirectoryName) {
-        File workingDirectory = new File(getClass().getClassLoader().getResource(workingDirectoryName).getFile());
-        setResourcePath(workingDirectory);
-        return workingDirectory;
+        return new File(ClassLoader.getSystemClassLoader().getResource(workingDirectoryName).getFile());
     }
 
     /**
      * Compile an installer and unzip it.
      *
-     * @param workingDirectory The directory containing the installer file
-     * @param out              The output of the compiler
      * @param compilerData
      * @throws Exception
      */
-    private void compileAndUnzip(File workingDirectory, File out, CompilerData compilerData) throws Exception {
+    public void compileAndUnzip(CompilerData compilerData) throws Exception {
         CompilerData data = compilerData;
         compilerContainer.addComponent(CompilerData.class, data);
         CompilerConfig compilerConfig = compilerContainer.getComponent(CompilerConfig.class);
         compilerConfig.executeCompiler();
-        URLClassLoader urlClassLoader = new URLClassLoader(new URL[]{out.toURI().toURL()}, ClassLoader.getSystemClassLoader());
-        assertThat(urlClassLoader.getResource("resources/langpacks/eng.xml"), IsNull.<Object>notNullValue());
+        loadJarInSystemClassLoader(out);
+    }
 
+    @AfterMethod
+    public void unloadJarInSystemClassLoader() throws Exception {
         URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+        Field ucpField = URLClassLoader.class.getDeclaredField("ucp");
+        ucpField.setAccessible(true);
+        URLClassPath ucp = (URLClassPath) ucpField.get(systemClassLoader);
+        Field pathField = URLClassPath.class.getDeclaredField("path");
+        pathField.setAccessible(true);
+        ArrayList<URL> path = (ArrayList) pathField.get(ucp);
+        path.remove(path.size() - 1);
+
+        Field loaderField = URLClassPath.class.getDeclaredField("loaders");
+        loaderField.setAccessible(true);
+        ArrayList loaders = (ArrayList) loaderField.get(ucp);
+        loaders.remove(loaders.size() - 1);
+    }
+
+    private void loadJarInSystemClassLoader(File out) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, MalformedURLException {
+        URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+
         Method declaredMethod = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});
         declaredMethod.setAccessible(true);
         declaredMethod.invoke(systemClassLoader, out.toURI().toURL());
-        URL urlEnumeration = systemClassLoader.getResource("resources/langpacks/eng.xml");
-
-        assertThat(urlEnumeration, IsNull.<Object>notNullValue());
-        File extractedDir = new File(workingDirectory, "temp");
-        // Clean before use
-        FileUtils.deleteDirectory(extractedDir);
-        extractedDir.mkdirs();
-        AssertionHelper.unzipJar(out, extractedDir);
     }
 
-    /**
-     * Set resource path in resource manager
-     *
-     * @param baseDir Base path where unzip has been operated
-     */
-    protected void setResourcePath(File baseDir) {
-        String relativePath = baseDir.getAbsolutePath().substring(currentDir.getAbsolutePath().length());
-        System.out.println(relativePath);
-        ResourceManager resourceManager = applicationContainer.getComponent(ResourceManager.class);
-        assertThat(resourceManager, IsNull.notNullValue());
-        resourceManager.setResourceBasePath(relativePath + "/temp/resources/");
-    }
 }
