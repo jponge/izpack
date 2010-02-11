@@ -31,7 +31,6 @@ import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -44,8 +43,7 @@ import java.util.List;
  * @phase package
  * @requiresDependencyResolution test
  */
-public class IzPackMojo
-        extends AbstractMojo {
+public class IzPackMojo extends AbstractMojo {
 
     /**
      * IzPack descriptor file.  This plugin interpolates and saves this file to
@@ -210,13 +208,13 @@ public class IzPackMojo
         resource.setDirectory(descriptor.getAbsoluteFile().getParent());
 
         String descriptorFileName = this.descriptor.getName();
-        List includes = new ArrayList();
+        List<String> includes = new ArrayList<String>();
         includes.add(descriptorFileName);
 
         resource.setIncludes(includes);
 
 
-        List resources = new ArrayList();
+        List<Resource> resources = new ArrayList<Resource>();
         resources.add(resource);
 
         MavenResourcesExecution mavenResourcesExecution = new MavenResourcesExecution(resources, izpackBasedir,
@@ -277,10 +275,8 @@ public class IzPackMojo
             throws MojoFailureException {
         List attachedArtifacts = project.getAttachedArtifacts();
 
-        Iterator iter = attachedArtifacts.iterator();
-
-        while (iter.hasNext()) {
-            Artifact artifact = (Artifact) iter.next();
+        for (Object attachedArtifact : attachedArtifacts) {
+            Artifact artifact = (Artifact) attachedArtifact;
             if (installerFile.equals(artifact.getFile())) {
                 throw new MojoFailureException("Duplicate installers found: " + installerFile);
             }
@@ -289,7 +285,7 @@ public class IzPackMojo
 
     private ClassLoader getClassLoader(ClassLoader classLoader)
             throws MojoExecutionException {
-        List classpathURLs = new ArrayList();
+        List<URL> classpathURLs = new ArrayList<URL>();
 
         try {
             //make user's custom panel jar files available in the classpath
@@ -297,8 +293,8 @@ public class IzPackMojo
             classpathURLs.add(customerPanelUrl);
             getLog().debug("Added to classpath " + customPanelDirectory);
 
-            for (int i = 0; i < classpathElements.size(); i++) {
-                String element = (String) classpathElements.get(i);
+            for (Object classpathElement : classpathElements) {
+                String element = (String) classpathElement;
                 File f = new File(element);
                 URL newURL = f.toURI().toURL();
                 classpathURLs.add(newURL);
@@ -309,7 +305,7 @@ public class IzPackMojo
             throw new MojoExecutionException("Error parsing classpath: " + e.getMessage());
         }
 
-        URL[] urls = (URL[]) classpathURLs.toArray(new URL[classpathURLs.size()]);
+        URL[] urls = classpathURLs.toArray(new URL[classpathURLs.size()]);
 
         return new URLClassLoader(urls, classLoader);
     }
