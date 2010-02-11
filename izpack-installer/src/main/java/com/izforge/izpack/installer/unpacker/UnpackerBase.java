@@ -175,9 +175,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
      */
     private static void setInterruptAll() {
         synchronized (instances) {
-            Iterator iter = instances.keySet().iterator();
-            while (iter.hasNext()) {
-                Object key = iter.next();
+            for (Object key : instances.keySet()) {
                 if (instances.get(key).equals(ALIVE)) {
                     instances.put(key, INTERRUPT);
                 }
@@ -217,9 +215,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
 
     private static boolean isInterruptReady() {
         synchronized (instances) {
-            Iterator iter = instances.keySet().iterator();
-            while (iter.hasNext()) {
-                Object key = iter.next();
+            for (Object key : instances.keySet()) {
                 if (!instances.get(key).equals(INTERRUPTED)) {
                     return (false);
                 }
