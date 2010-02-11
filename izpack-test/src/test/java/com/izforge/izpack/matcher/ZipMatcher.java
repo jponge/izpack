@@ -42,7 +42,7 @@ public class ZipMatcher extends TypeSafeMatcher<File> {
             MatcherAssert.assertThat(fileList, listMatcher);
             return true;
         } catch (IOException e) {
-            return false;
+            throw new AssertionError(e);
         }
     }
 

@@ -5,6 +5,7 @@ import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
+import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.util.IoHelper;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
@@ -36,7 +37,7 @@ public class UnpackerTest extends AbstractInstallationTest {
         String jar = dest + File.separator + idata.getInfo().getUninstallerName();
         File uninstallJar = new File(jar);
         assertThat(uninstallJar.exists(), Is.is(true));
-
+        assertThat(uninstallJar, ZipMatcher.isZipContainingFile("com/izforge/izpack/uninstaller/Destroyer.class"));
 
     }
 }
