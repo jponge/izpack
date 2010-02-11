@@ -16,7 +16,7 @@
         The meaning of the tags should be natural ...
     -->
     <info>
-        <appname>Sample Installation</appname>
+        <appname>Test Installation</appname>
         <appversion>1.4 beta 666</appversion>
         <authors>
             <author name="JPz" email="jpz@superman.org"/>
