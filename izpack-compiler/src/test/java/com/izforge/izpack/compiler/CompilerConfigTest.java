@@ -11,12 +11,9 @@ import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.merge.MergeManagerImpl;
-import org.apache.tools.zip.ZipEntry;
-import org.apache.tools.zip.ZipOutputStream;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.internal.verification.AtLeast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,14 +116,5 @@ public class CompilerConfigTest {
         Mockito.verify(variable).put("myPath", list);
     }
 
-
-    @Test
-    public void testGetMergeableFromPanelClass() throws Exception {
-        mergeManager.addPanelToMerge("HelloPanel");
-        ZipOutputStream outputStream = Mockito.mock(ZipOutputStream.class);
-
-        mergeManager.merge(outputStream);
-        Mockito.verify(outputStream, new AtLeast(2)).putNextEntry(Mockito.<ZipEntry>any());
-    }
 
 }

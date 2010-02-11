@@ -4,17 +4,16 @@ import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.merge.MergeManagerImpl;
-import org.apache.tools.zip.ZipEntry;
-import org.apache.tools.zip.ZipOutputStream;
+import com.izforge.izpack.mock.MockOutputStream;
+import org.hamcrest.collection.IsCollectionContaining;
 import org.hamcrest.core.Is;
-import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.File;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.times;
 
 /**
  * Test for an Izpack compilation
@@ -50,12 +49,15 @@ public class CompilationTest {
     @Test
     public void mergeManagerShouldGetTheMergeableFromPanel() throws Exception {
         MergeManagerImpl mergeManager = new MergeManagerImpl();
-        ZipOutputStream outputStream = Mockito.mock(ZipOutputStream.class);
+        MockOutputStream outputStream = new MockOutputStream();
         mergeManager.addPanelToMerge("HelloPanel");
+        mergeManager.addPanelToMerge("CheckedHelloPanel");
         mergeManager.merge(outputStream);
-        Mockito.verify(outputStream, times(2)).putNextEntry(Mockito.<ZipEntry>any());
-//        Mockito.verify(outputStream).putNextEntry(new org.apache.tools.zip.ZipEntry("com/izforge/izpack/panels/hello/HelloPanelConsoleHelper.class"));
-//        Mockito.verify(outputStream).putNextEntry(new org.apache.tools.zip.ZipEntry("com/izforge/izpack/panels/hello/HelloPanel.class"));
+        List<String> listEntryName = outputStream.getListEntryName();
+        assertThat(listEntryName,
+                IsCollectionContaining.hasItems("com/izforge/izpack/panels/hello/HelloPanelConsoleHelper.class",
+                        "com/izforge/izpack/panels/hello/HelloPanel.class",
+                        "com/izforge/izpack/panels/checkedhello/CheckedHelloPanel.class"));
     }
 
     @Test
