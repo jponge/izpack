@@ -18,7 +18,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class PanelTest extends AbstractInstallationTest {
     @Test
     public void testInfoPanelResource() throws Exception {
-        compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
+        compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
         ResourceManager resourceManager = applicationContainer.getComponent(ResourceManager.class);
         String resNamePrifix = "InfoPanel.info";
@@ -28,7 +28,7 @@ public class PanelTest extends AbstractInstallationTest {
 
     @Test
     public void testLicencePanelResource() throws Exception {
-        compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
+        compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
         ResourceManager resourceManager = applicationContainer.getComponent(ResourceManager.class);
         String resNamePrifix = "LicencePanel.licence";
@@ -38,7 +38,7 @@ public class PanelTest extends AbstractInstallationTest {
 
     @Test
     public void testTargetPanel() throws Exception {
-        compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
+        compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
 
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);

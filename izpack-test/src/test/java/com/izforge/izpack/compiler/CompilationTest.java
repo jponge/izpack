@@ -1,13 +1,12 @@
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.AssertionHelper;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.merge.MergeManagerImpl;
 import org.apache.tools.zip.ZipEntry;
 import org.apache.tools.zip.ZipOutputStream;
 import org.hamcrest.core.Is;
-import org.hamcrest.text.StringContains;
 import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -44,8 +43,8 @@ public class CompilationTest {
     public void installerShouldContainInstallerClass() throws Exception {
         CompilerConfig c = compilerContainer.getComponent(CompilerConfig.class);
         c.executeCompiler();
-        AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("Installer.class"));
-        AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("com/izforge/izpack/panels/hello/HelloPanel.class"));
+        assertThat(out, ZipMatcher.isZipContainingFile("com/izforge/izpack/installer/bootstrap/Installer.class"));
+        assertThat(out, ZipMatcher.isZipContainingFile("com/izforge/izpack/panels/hello/HelloPanel.class"));
     }
 
     @Test
@@ -77,14 +76,14 @@ public class CompilationTest {
     public void installerShouldContainResources() throws Exception {
         CompilerConfig c = compilerContainer.getComponent(CompilerConfig.class);
         c.executeCompiler();
-        AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("resources/vars"));
+        assertThat(out, ZipMatcher.isZipContainingFile("resources/vars"));
     }
 
     @Test
     public void installerShouldContainImages() throws Exception {
         CompilerConfig c = compilerContainer.getComponent(CompilerConfig.class);
         c.executeCompiler();
-        AssertionHelper.assertZipContainsMatch(out, Is.is("img/JFrameIcon.png"));
+        assertThat(out, ZipMatcher.isZipContainingFile("img/JFrameIcon.png"));
     }
 
 

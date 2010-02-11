@@ -41,7 +41,7 @@ public class InstallationTest extends AbstractInstallationTest {
 
     @Test
     public void testHelloAndFinishPanels() throws Exception {
-        compileAndUnzip("helloAndFinish.xml", getWorkingDirectory("samples"));
+        compileInstallJar("helloAndFinish.xml", getWorkingDirectory("samples"));
         Image image = resourceManager.getImageIconResource("/img/JFrameIcon.png").getImage();
         assertThat(image, IsNull.<Object>notNullValue());
 
@@ -66,7 +66,7 @@ public class InstallationTest extends AbstractInstallationTest {
         CompilerData data = new CompilerData(installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), out.getAbsolutePath());
         data.setComprFormat("bzip2");
         data.setComprLevel(2);
-        compileAndUnzip(data);
+        compileInstallJar(data);
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         installerContainer.getComponent(LanguageDialog.class).initLangPack();
         installerFrameFixture = prepareFrameFixture();
@@ -81,7 +81,7 @@ public class InstallationTest extends AbstractInstallationTest {
 
     @Test(dependsOnMethods = "testHelloAndFinishPanels")
     public void testBasicInstall() throws Exception {
-        compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
+        compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
 
         File installPath = prepareInstallation(installData);
@@ -143,7 +143,7 @@ public class InstallationTest extends AbstractInstallationTest {
 
     @Test(dependsOnMethods = "testBasicInstall")
     public void testIzpackInstallation() throws Exception {
-        compileAndUnzip("IzPack-install.xml", getWorkingDirectory("samples/izpack"));
+        compileInstallJar("IzPack-install.xml", getWorkingDirectory("samples/izpack"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
 
         File installPath = prepareInstallation(installData);

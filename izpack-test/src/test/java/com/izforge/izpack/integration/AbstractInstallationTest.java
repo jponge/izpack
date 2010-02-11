@@ -90,15 +90,15 @@ public class AbstractInstallationTest {
     }
 
     /**
-     * Compile an installer and unzip the created jar.
+     * Compile an installer jar.
      *
      * @param installationFile The izpack installation file
      * @param workingDirectory
      * @throws Exception
      */
-    protected void compileAndUnzip(String installationFile, File workingDirectory) throws Exception {
+    protected void compileInstallJar(String installationFile, File workingDirectory) throws Exception {
         File installerFile = new File(workingDirectory, installationFile);
-        compileAndUnzip(new CompilerData(installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), out.getAbsolutePath()));
+        compileInstallJar(new CompilerData(installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), out.getAbsolutePath()));
     }
 
     protected File getWorkingDirectory(String workingDirectoryName) {
@@ -106,12 +106,12 @@ public class AbstractInstallationTest {
     }
 
     /**
-     * Compile an installer and unzip it.
+     * Compile an installer
      *
      * @param compilerData
      * @throws Exception
      */
-    public void compileAndUnzip(CompilerData compilerData) throws Exception {
+    public void compileInstallJar(CompilerData compilerData) throws Exception {
         CompilerData data = compilerData;
         compilerContainer.addComponent(CompilerData.class, data);
         CompilerConfig compilerConfig = compilerContainer.getComponent(CompilerConfig.class);

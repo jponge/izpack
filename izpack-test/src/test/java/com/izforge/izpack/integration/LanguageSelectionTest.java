@@ -26,7 +26,7 @@ public class LanguageSelectionTest extends AbstractInstallationTest {
 
     @Test
     public void langpackFraShouldBeSet() throws Exception {
-        compileAndUnzip("fraInstaller.xml", getWorkingDirectory("samples"));
+        compileInstallJar("fraInstaller.xml", getWorkingDirectory("samples"));
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         installerContainer.getComponent(LanguageDialog.class).initLangPack();
         ResourceManager resourceManager = applicationContainer.getComponent(ResourceManager.class);
@@ -35,7 +35,7 @@ public class LanguageSelectionTest extends AbstractInstallationTest {
 
     @Test
     public void testLangPickerChoseFra() throws Exception {
-        compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
+        compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         ClassLoader.getSystemResource("langpacks/fra.xml");
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         dialogFrameFixture = prepareDialogFixture();
