@@ -19,11 +19,6 @@
     </distributionManagement>
 
     <dependencies>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
@@ -35,10 +30,6 @@
         <dependency>
             <groupId>org.easytesting</groupId>
             <artifactId>fest-swing</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.scalatest</groupId>
-            <artifactId>scalatest</artifactId>
         </dependency>
     </dependencies>
 
@@ -199,28 +190,6 @@
                 <version>1.2a3</version>
                 <scope>test</scope>
             </dependency>
-
-            <dependency>
-                <groupId>org.scala-lang</groupId>
-                <artifactId>scala-library</artifactId>
-                <version>2.7.7</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.scalatest</groupId>
-                <artifactId>scalatest</artifactId>
-                <version>1.0</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.scala-lang</groupId>
-                <artifactId>scala-compiler</artifactId>
-                <version>2.7.7</version>
-                <scope>test</scope>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 

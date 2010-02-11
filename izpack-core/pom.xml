@@ -19,6 +19,10 @@
             <artifactId>izpack-util</artifactId>
         </dependency>
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.picocontainer</groupId>
             <artifactId>picocontainer</artifactId>
         </dependency>
