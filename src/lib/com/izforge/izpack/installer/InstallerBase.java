@@ -46,7 +46,7 @@ import java.util.*;
  * @author Jonathan Halliday
  * @author Julien Ponge
  */
-public class InstallerBase
+public abstract class InstallerBase
 {
 
     /**
@@ -63,7 +63,7 @@ public class InstallerBase
      * with the name expanded by _ISO3.
      */
     protected static final String LANG_FILE_NAME = "CustomLangpack.xml";
-    
+
     /**
      * Returns an ArrayList of the available langpacks ISO3 codes.
      *
@@ -607,9 +607,7 @@ public class InstallerBase
         return result;
     }
 
-    protected void showMissingRequirementMessage(String message){
-        Debug.log(message);
-    }
+    protected abstract void showMissingRequirementMessage(String message);
 
     /**
      * Gets the stream to a resource.

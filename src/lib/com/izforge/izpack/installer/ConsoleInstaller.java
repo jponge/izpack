@@ -68,19 +68,20 @@ public class ConsoleInstaller extends InstallerBase
         loadConditions(installdata);
         loadInstallerRequirements();
         loadDynamicVariables();
-        if (!checkInstallerRequirements(installdata))
-        {
-            Debug.log("not all installerconditions are fulfilled.");
-            return;
-        }
         addCustomLangpack(installdata);
+    }
+
+    @Override
+    public void showMissingRequirementMessage(String message){
+        Debug.log("Missing installer requirement: "+message);
+        System.out.println(message);
     }
 
     protected void iterateAndPerformAction(String strAction) throws Exception
     {
         if (!checkInstallerRequirements(this.installdata))
         {
-            Debug.log("not all installerconditions are fulfilled.");
+            System.out.println("[ Console installation FAILED! ]");
             return;
         }
         Debug.log("[ Starting console installation ] " + strAction);
@@ -111,10 +112,8 @@ public class ConsoleInstaller extends InstallerBase
                 Debug.log("ConsoleHelper:" + consoleHelperClassName);
                 try
                 {
-
                     consoleHelperClass = (Class<PanelConsole>) Class
                             .forName(consoleHelperClassName);
-
                 }
                 catch (ClassNotFoundException e)
                 {

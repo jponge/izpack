@@ -1,16 +1,16 @@
 /*
  * $Id$
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -77,7 +77,7 @@ public class GUIInstaller extends InstallerBase
      * holds language to ISO-3 language code translation
      */
     private static HashMap isoTable;
-    
+
     /**
      * The constructor.
      *
@@ -87,15 +87,15 @@ public class GUIInstaller extends InstallerBase
     {
         try {
             init();
-        } catch (Exception e) { 
+        } catch (Exception e) {
             showFatalError(e);
             throw e;
-        } catch (Error e) { 
+        } catch (Error e) {
             showFatalError(e);
             throw e;
         }
     }
-    
+
     private void showFatalError(Throwable e)
     {
         try {
@@ -104,15 +104,15 @@ public class GUIInstaller extends InstallerBase
             e2.printStackTrace();
         }
     }
-    
+
     private void init() throws Exception
     {
-    
-        this.installdata = new InstallData();                
-        
+
+        this.installdata = new InstallData();
+
         // Loads the installation data
         loadInstallData(installdata);
-        
+
         // add the GUI install data
         loadGUIInstallData();
 
@@ -125,7 +125,7 @@ public class GUIInstaller extends InstallerBase
 
         // Check for already running instance
         checkLockFile();
-        
+
 //      Loads the suitable langpack
         SwingUtilities.invokeAndWait(new Runnable()
         {
@@ -142,23 +142,22 @@ public class GUIInstaller extends InstallerBase
                 }
             }
         });
-        
+
         // create the resource manager (after the language selection!)
         ResourceManager.create(this.installdata);
-        
+
 //      load conditions
         loadConditions(installdata);
-        
+
         // loads installer conditions
         loadInstallerRequirements();
 
         // load dynamic variables
         loadDynamicVariables();
-        
+
         // check installer conditions
         if (!checkInstallerRequirements(installdata))
         {
-            Debug.log("not all installerconditions are fulfilled.");
             System.exit(-1);
             return;
         }
@@ -183,8 +182,10 @@ public class GUIInstaller extends InstallerBase
             }
         });
     }
-    
+
+    @Override
     public void showMissingRequirementMessage(String message){
+        Debug.log("Missing installer requirement: "+message);
         JOptionPane.showMessageDialog(null, message);
     }
 
@@ -199,7 +200,7 @@ public class GUIInstaller extends InstallerBase
         ObjectInputStream objIn = new ObjectInputStream(in);
         this.installdata.guiPrefs = (GUIPrefs) objIn.readObject();
         objIn.close();
-    }    
+    }
 
     /**
      * Sets a lock file. Not using java.nio.channels.FileLock to prevent

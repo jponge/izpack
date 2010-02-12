@@ -317,6 +317,12 @@ public class AutomatedInstaller extends InstallerBase
         }
     }
 
+    @Override
+    public void showMissingRequirementMessage(String message){
+        Debug.log("Missing installer requirement: "+message);
+        System.out.println(message);
+    }
+
     /**
      * Runs the automated installation logic for each panel in turn.
      *
@@ -327,7 +333,7 @@ public class AutomatedInstaller extends InstallerBase
         // check installer conditions
         if (!checkInstallerRequirements(this.idata))
         {
-            Debug.log("not all installerconditions are fulfilled.");
+            System.out.println("[ Automated installation FAILED! ]");
             System.exit(-1);
             return;
         }
@@ -336,8 +342,8 @@ public class AutomatedInstaller extends InstallerBase
         System.out.println("[ Starting automated installation ]");
         Debug.log("[ Starting automated installation ]");
 
-        ConsolePanelAutomationHelper uihelper = new ConsolePanelAutomationHelper(); 
-        
+        ConsolePanelAutomationHelper uihelper = new ConsolePanelAutomationHelper();
+
         try
         {
             // assume that installation will succeed
