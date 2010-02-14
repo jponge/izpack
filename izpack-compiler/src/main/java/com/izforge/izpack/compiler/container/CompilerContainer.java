@@ -40,8 +40,8 @@ public class CompilerContainer extends AbstractContainer {
         pico.addComponent(CompilerResourceManager.class);
         pico.addComponent(MergeManager.class, MergeManagerImpl.class);
         pico.addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class);
-
         pico.addComponent(IPackager.class, Packager.class);
+
         pico.addAdapter(new ProviderAdapter(new XmlCompilerHelperProvider()));
         pico.addAdapter(new ProviderAdapter(new PropertiesProvider()));
         pico.addAdapter(new ProviderAdapter(new JarOutputStreamProvider()));
