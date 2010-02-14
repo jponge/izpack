@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>${groupId}</groupId>
-            <artifactId>izpack-dist</artifactId>
+            <artifactId>izpack-compiler</artifactId>
             <version>${version}</version>
         </dependency>
         <dependency>
@@ -46,6 +46,11 @@
             <version>5.10</version>
             <classifier>jdk15</classifier>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>

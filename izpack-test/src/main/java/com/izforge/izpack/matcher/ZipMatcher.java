@@ -4,8 +4,8 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.collection.IsCollectionContaining;
 import org.hamcrest.core.Is;
-import org.junit.internal.matchers.IsCollectionContaining;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -54,7 +54,7 @@ public class ZipMatcher extends TypeSafeMatcher<File> {
         return new ZipMatcher(IsCollectionContaining.hasItem(Is.is(fileName)));
     }
 
-    public static ZipMatcher isZipMatching(Matcher matcher) {
+    public static ZipMatcher isZipMatching(Matcher<Iterable<String>> matcher) {
         return new ZipMatcher(matcher);
     }
 
