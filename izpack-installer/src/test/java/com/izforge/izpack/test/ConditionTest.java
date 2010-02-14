@@ -15,11 +15,12 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.izforge.izpack.core.rules;
+package com.izforge.izpack.test;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import junit.framework.TestCase;
