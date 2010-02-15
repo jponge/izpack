@@ -1,5 +1,6 @@
 package com.izforge.izpack.merge;
 
+import com.izforge.izpack.merge.resolve.PathResolver;
 import org.apache.tools.zip.ZipOutputStream;
 
 import java.io.File;
@@ -35,59 +36,11 @@ public class MergeManagerImpl implements MergeManager {
     }
 
     public void addResourceToMerge(String resourcePath) {
-        mergeableList.add(MergeHelper.getMergeableFromPath(resourcePath));
+        mergeableList.addAll(PathResolver.getMergeableFromPath(resourcePath));
     }
 
     public void addResourceToMerge(String resourcePath, String destination) {
-        mergeableList.add(MergeHelper.getMergeableFromPath(resourcePath, destination));
-    }
-
-
-    /**
-     * Search if the given path exist in the classpath and return it. If nothing is found,
-     * try to load it as a file and return it if exists.
-     *
-     * @param path The path of File to load.
-     * @return The file or null if nothing found.
-     */
-    static File getFileFromPath(String path) {
-        URL resource = ClassLoader.getSystemClassLoader().getResource(path);
-        if (resource != null) {
-            File file = new File(resource.getFile());
-            if (file.exists()) {
-                return file;
-            }
-        }
-        File file = new File(path);
-        if (file.exists()) {
-            return file;
-        }
-        return null;
-    }
-
-
-    /**
-     * Search for the sourcePath in classpath (inside jar or directory) or as a normal path and then return the type or File.
-     *
-     * @param sourcePath Source path to search
-     * @return Type of file (jar, file or directory)
-     */
-    static TypeFile resolvePath(String sourcePath) {
-        URL resource = MergeManagerImpl.class.getClassLoader().getSystemClassLoader().getResource(sourcePath);
-        if (resource != null) {
-            if (resource.getPath().contains("jar!")) {
-                return TypeFile.JAR_CONTENT;
-            }
-        }
-        File path = getFileFromPath(sourcePath);
-        if (path != null) {
-            if (path.isDirectory()) {
-                return TypeFile.DIRECTORY;
-            } else {
-                return TypeFile.FILE;
-            }
-        }
-        throw new IllegalArgumentException("Invalid source path : " + sourcePath);
+        mergeableList.addAll(PathResolver.getMergeableFromPath(resourcePath, destination));
     }
 
 
@@ -98,7 +51,7 @@ public class MergeManagerImpl implements MergeManager {
      * @return Mergeable of the given file
      */
     static Mergeable getMergeableFromPath(File file) {
-        if (isJar(file)) {
+        if (PathResolver.isJar(file)) {
             return new JarMerge(file.getAbsolutePath());
         }
         return new FileMerge(file);
@@ -165,11 +118,12 @@ public class MergeManagerImpl implements MergeManager {
      * @return
      */
     Mergeable getMergeableFromPanelClass(final String panelClassName) {
-        File classFile = getFileFromPanelClass(panelClassName, getPackagePathFromClassName(panelClassName));
-        if (isJar(classFile)) {
-            return new JarMerge(classFile.getParentFile());
-        }
-        return new FileMerge(classFile.getParentFile(), getPackagePathFromClassNameAndClassFile(classFile, panelClassName));
+//        File classFile = getFileFromPanelClass(panelClassName, getPackagePathFromClassName(panelClassName));
+//        if (PathResolver.isJar(classFile)) {
+//            return new JarMerge(classFile.getParentFile());
+//        }
+//        return new FileMerge(classFile.getParentFile(), getPackagePathFromClassNameAndClassFile(classFile, panelClassName));
+        return null;
     }
 
     private String getPackagePathFromClassNameAndClassFile(File classFile, String panelClassName) {
@@ -178,26 +132,23 @@ public class MergeManagerImpl implements MergeManager {
         return relativePanelPath.substring(0, relativePanelPath.lastIndexOf("/")) + "/";
     }
 
-    private static boolean isJar(File classFile) {
-        return classFile.getAbsolutePath().contains(".jar!");
-    }
-
-    public File getFileFromPanelClass(final String panelClassName, String globalPackage) {
-        // Get the mergeable for corresponding package
-        Mergeable mergeable = MergeHelper.getMergeableFromPath(globalPackage);
-
-        FileFilter fileFilter = new FileFilter() {
-            public boolean accept(File pathname) {
-                return pathname.isDirectory() ||
-                        pathname.getName().replaceAll(".class", "").equalsIgnoreCase(panelClassName);
-            }
-        };
-        File classFile = mergeable.find(fileFilter);
-        if (classFile == null) {
-            throw new RuntimeException("panel class " + panelClassName + " not found in package " + globalPackage);
-        }
-        return classFile;
-    }
+//    public File getFileFromPanelClass(final String panelClassName, String globalPackage) {
+//        // Get the mergeable for corresponding package
+//        Mergeable mergeable = MergeHelper.getMergeableFromPath(globalPackage);
+//
+//        assert mergeable != null;
+//        FileFilter fileFilter = new FileFilter() {
+//            public boolean accept(File pathname) {
+//                return pathname.isDirectory() ||
+//                        pathname.getName().replaceAll(".class", "").equalsIgnoreCase(panelClassName);
+//            }
+//        };
+//        File classFile = mergeable.find(fileFilter);
+//        if (classFile == null) {
+//            throw new RuntimeException("panel class " + panelClassName + " not found in package " + globalPackage + ". The current classpath is " + PathResolver.getCurrentClasspath("com/izforge/izpack/"));
+//        }
+//        return classFile;
+//    }
 
     public String getPackagePathFromClassName(String className) {
         if (className.contains(".")) {

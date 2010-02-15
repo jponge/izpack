@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * File merge. Can be a single file or a directory.
@@ -19,6 +20,7 @@ public class FileMerge implements Mergeable {
 
     private String destination;
 
+
     public FileMerge(File fileToCopy) {
         this(fileToCopy, "");
     }
@@ -26,6 +28,10 @@ public class FileMerge implements Mergeable {
     public FileMerge(File fileToCopy, String destination) {
         this.fileToCopy = fileToCopy;
         this.destination = destination;
+    }
+
+    public FileMerge(URL url, String destination) {
+        this(new File(url.getFile()), destination);
     }
 
     public File find(FileFilter fileFilter) {
