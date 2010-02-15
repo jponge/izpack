@@ -20,6 +20,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-test-common</artifactId>
+
+        </dependency>
+        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
         </dependency>
@@ -103,6 +108,12 @@
                 <version>${version}</version>
             </dependency>
             <dependency>
+                <artifactId>izpack-test-common</artifactId>
+                <groupId>${groupId}</groupId>
+                <version>${version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <artifactId>izpack-compiler</artifactId>
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>
@@ -125,11 +136,6 @@
             </dependency>
             <dependency>
                 <artifactId>izpack-uninstaller</artifactId>
-                <groupId>${groupId}</groupId>
-                <version>${version}</version>
-            </dependency>
-            <dependency>
-                <artifactId>izpack-uninstaller-ext</artifactId>
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>
             </dependency>
@@ -172,6 +178,14 @@
                 <version>4.7</version>
                 <scope>test</scope>
             </dependency>
+
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>5.10</version>
+                <classifier>jdk15</classifier>
+                <scope>test</scope>
+            </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-all</artifactId>
@@ -190,12 +204,33 @@
                 <version>1.2a3</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.5.8</version>
+            </dependency>
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.15</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <build>
         <plugins>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
