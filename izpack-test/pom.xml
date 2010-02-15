@@ -17,35 +17,28 @@
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>izpack-compiler</artifactId>
-            <version>${version}</version>
         </dependency>
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>izpack-utils</artifactId>
-            <version>${version}</version>
         </dependency>
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>izpack-event</artifactId>
-            <version>${version}</version>
         </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>1.4</version>
         </dependency>
         <dependency>
             <groupId>jakarta-regexp</groupId>
             <artifactId>jakarta-regexp</artifactId>
-            <version>1.4</version>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>5.10</version>
             <classifier>jdk15</classifier>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>

@@ -89,11 +89,15 @@
             <version>2.0.1</version>
         </dependency>
 
-        <!-- to build this plugin only, at runtime, this plugin will use the one in user's dependency list  -->
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>izpack-compiler</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-uninstaller</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>izpack-test</artifactId>
