@@ -16,6 +16,10 @@
     <dependencies>
         <dependency>
             <groupId>${groupId}</groupId>
+            <artifactId>izpack-test-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
             <artifactId>izpack-compiler</artifactId>
         </dependency>
         <dependency>
@@ -39,11 +43,6 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <classifier>jdk15</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-all</artifactId>
-            <scope>compile</scope>
         </dependency>
 
     </dependencies>

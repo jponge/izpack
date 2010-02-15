@@ -20,11 +20,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>izpack-test-common</artifactId>
-
-        </dependency>
-        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
         </dependency>
@@ -112,6 +107,11 @@
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <artifactId>izpack-event</artifactId>
+                <groupId>${groupId}</groupId>
+                <version>${version}</version>
             </dependency>
             <dependency>
                 <artifactId>izpack-compiler</artifactId>

@@ -95,6 +95,10 @@
         </dependency>
         <dependency>
             <groupId>${groupId}</groupId>
+            <artifactId>izpack-test-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
             <artifactId>izpack-uninstaller</artifactId>
         </dependency>
 
