@@ -13,16 +13,16 @@
     <artifactId>izpack-dist</artifactId>
     <name>IzPack dist module</name>
 
-
     <dependencies>
+
+
         <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>izpack-compiler</artifactId>
+            <groupId>org.apache.maven.plugin-testing</groupId>
+            <artifactId>maven-plugin-testing-harness</artifactId>
+            <version>1.2</version>
+            <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>izpack-utils</artifactId>
-        </dependency>
+
 
     </dependencies>
 
@@ -84,12 +84,8 @@
                     <execution>
                         <phase>package</phase>
                         <goals>
-                            <goal>izpack</goal>
+                            <goal>compile</goal>
                         </goals>
-                        <configuration>
-                            <izpackBasedir>${staging.dir}</izpackBasedir>
-                            <descriptor>IzPack-install.xml</descriptor>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
