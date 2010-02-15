@@ -34,14 +34,14 @@ public class IzPackNewMojo extends AbstractMojo {
     /**
      * Location of the IzPack installation file
      *
-     * @parameter default-value="${basedir}/src/izpack/install.xml"
+     * @parameter default-value="${basedir}/src/main/izpack/install.xml"
      */
     private String installFile;
 
     /**
      * Base directory of compilation process
      *
-     * @parameter default-value="${project.build.directory}/izpack"
+     * @parameter default-value="${project.build.directory}/staging"
      */
     private String baseDir;
 

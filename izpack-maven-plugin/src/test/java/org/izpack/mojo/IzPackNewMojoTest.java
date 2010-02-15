@@ -21,9 +21,6 @@ public class IzPackNewMojoTest extends AbstractMojoTestCase {
     @Test
     public void testExecute() throws Exception {
         File testPom = new File(getBasedir(), "target/test-classes/basic-pom.xml");
-        if (!testPom.exists()) {
-            testPom = new File(getBasedir(), "izpack-maven-plugin/target/test-classes/basic-pom.xml");
-        }
         IzPackNewMojo mojo = (IzPackNewMojo) lookupMojo("compile", testPom);
         assertThat(mojo, IsNull.notNullValue());
         initIzpackMojo(mojo);
@@ -32,11 +29,15 @@ public class IzPackNewMojoTest extends AbstractMojoTestCase {
 
         File outputResult = new File("target/izpackResult.jar");
         assertThat(outputResult.exists(), Is.is(true));
-        assertThat(outputResult,
-                ZipMatcher.isZipMatching(IsCollectionContaining.hasItems(
-                        "com/izforge/izpack/panels/hello/HelloPanel.class",
-                        "com/izforge/izpack/core/container/AbstractContainer.class",
-                        "com/izforge/izpack/panels/simplefinish/SimpleFinishPanel.class")));
+        assertThat(outputResult, ZipMatcher.isZipMatching(IsCollectionContaining.hasItem(
+                "com/izforge/izpack/panels/checkedhello/CheckedHelloPanel.class"
+        )));
+        assertThat(outputResult, ZipMatcher.isZipMatching(IsCollectionContaining.hasItem(
+                "com/izforge/izpack/core/container/AbstractContainer.class"
+        )));
+        assertThat(outputResult, ZipMatcher.isZipMatching(IsCollectionContaining.hasItem(
+                "com/izforge/izpack/uninstaller/Destroyer.class"
+        )));
     }
 
     private void initIzpackMojo(IzPackNewMojo mojo) throws IllegalAccessException {
@@ -48,5 +49,4 @@ public class IzPackNewMojoTest extends AbstractMojoTestCase {
         setVariableValueToObject(mojo, "output", "target/izpackResult.jar");
         setVariableValueToObject(mojo, "comprLevel", -1);
     }
-
 }

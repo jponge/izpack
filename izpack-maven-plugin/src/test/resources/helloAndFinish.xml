@@ -7,7 +7,6 @@
             <author name="Super sora" email="sora@superman.org"/>
         </authors>
         <url>http://www.anotherworld-inspace-website.net/</url>
-
     </info>
 
     <guiprefs width="640" height="480" resizable="yes"/>
@@ -18,6 +17,7 @@
     <panels>
         <panel classname="HelloPanel"/>
         <panel classname="SimpleFinishPanel"/>
+        <panel classname="CheckedHelloPanel"/>
     </panels>
 
     <packs>
