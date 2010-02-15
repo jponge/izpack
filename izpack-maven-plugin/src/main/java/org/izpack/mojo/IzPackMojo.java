@@ -237,8 +237,8 @@ public class IzPackMojo extends AbstractMojo {
 
     private void buildInstaller()
             throws MojoExecutionException {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        Thread.currentThread().setContextClassLoader(getClassLoader(classLoader));
+        ClassLoader parentClassLoader = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(getClassLoader(parentClassLoader));
 
         try {
             String config = this.interpolateDescriptorFile().getAbsolutePath();
@@ -261,8 +261,8 @@ public class IzPackMojo extends AbstractMojo {
             throw new MojoExecutionException("IzPack compilation ERROR", ce);
         }
         finally {
-            if (classLoader != null) {
-                Thread.currentThread().setContextClassLoader(classLoader);
+            if (parentClassLoader != null) {
+                Thread.currentThread().setContextClassLoader(parentClassLoader);
             }
         }
 
@@ -302,7 +302,7 @@ public class IzPackMojo extends AbstractMojo {
             }
         }
         catch (Exception e) {
-            throw new MojoExecutionException("Error parsing classpath: " + e.getMessage());
+            throw new MojoExecutionException("Error parsing classpath: ", e);
         }
 
         URL[] urls = classpathURLs.toArray(new URL[classpathURLs.size()]);
