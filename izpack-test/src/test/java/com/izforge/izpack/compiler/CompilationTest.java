@@ -2,16 +2,15 @@ package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.matcher.MergeMatcher;
 import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.merge.MergeManagerImpl;
-import com.izforge.izpack.mock.MockOutputStream;
-import org.hamcrest.collection.IsCollectionContaining;
+import com.izforge.izpack.merge.panel.PanelMerge;
 import org.hamcrest.core.Is;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.File;
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -49,29 +48,12 @@ public class CompilationTest {
     @Test
     public void mergeManagerShouldGetTheMergeableFromPanel() throws Exception {
         MergeManagerImpl mergeManager = new MergeManagerImpl();
-        MockOutputStream outputStream = new MockOutputStream();
-        mergeManager.addPanelToMerge("HelloPanel");
-        mergeManager.addPanelToMerge("CheckedHelloPanel");
-        mergeManager.merge(outputStream);
-        List<String> listEntryName = outputStream.getListEntryName();
-        assertThat(listEntryName,
-                IsCollectionContaining.hasItems("com/izforge/izpack/panels/hello/HelloPanelConsoleHelper.class",
-                        "com/izforge/izpack/panels/hello/HelloPanel.class",
-                        "com/izforge/izpack/panels/checkedhello/CheckedHelloPanel.class"));
-    }
+        mergeManager.addResourceToMerge(new PanelMerge("HelloPanel"));
+        mergeManager.addResourceToMerge(new PanelMerge("CheckedHelloPanel"));
 
-    @Test
-    public void mergeManagerShouldTransformClassNameToPackagePath() throws Exception {
-        MergeManagerImpl mergeManager = new MergeManagerImpl();
-        String pathFromClassName = mergeManager.getPackagePathFromClassName("com.test.sora.UneClasse");
-        assertThat(pathFromClassName, Is.is("com/test/sora/"));
-    }
-
-    @Test
-    public void mergeManagerShouldReturnDefaultPackagePath() throws Exception {
-        MergeManagerImpl mergeManager = new MergeManagerImpl();
-        String pathFromClassName = mergeManager.getPackagePathFromClassName("UneClasse");
-        assertThat(pathFromClassName, Is.is("com/izforge/izpack/panels/"));
+        assertThat(mergeManager, MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/panels/hello/HelloPanelConsoleHelper.class",
+                "com/izforge/izpack/panels/hello/HelloPanel.class",
+                "com/izforge/izpack/panels/checkedhello/CheckedHelloPanel.class"));
     }
 
     @Test

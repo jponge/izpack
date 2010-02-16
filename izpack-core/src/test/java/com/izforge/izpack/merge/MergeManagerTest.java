@@ -3,11 +3,9 @@ package com.izforge.izpack.merge;
 import com.izforge.izpack.matcher.MergeMatcher;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import org.hamcrest.core.Is;
-import org.hamcrest.text.StringEndsWith;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.net.URL;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,20 +21,6 @@ public class MergeManagerTest {
     @Before
     public void setUp() {
         mergeManager = new MergeManagerImpl();
-    }
-
-    @Test
-    public void testGetJarPath() throws Exception {
-        String jarPath = MergeManagerImpl.getJarAbsolutePath("junit/framework/Assert.class");
-        assertThat(jarPath, StringEndsWith.endsWith("junit-4.7.jar"));
-        assertThat(new File(jarPath).exists(), Is.is(true));
-    }
-
-    @Test
-    public void testGetJarFromPackage() throws Exception {
-        String jarPath = MergeManagerImpl.getJarAbsolutePath("junit/framework");
-        assertThat(jarPath, StringEndsWith.endsWith("junit-4.7.jar"));
-        assertThat(new File(jarPath).exists(), Is.is(true));
     }
 
     @Test

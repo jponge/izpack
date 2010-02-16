@@ -36,6 +36,7 @@ import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.jar.JarMerge;
+import com.izforge.izpack.merge.panel.PanelMerge;
 
 import java.io.FilterOutputStream;
 import java.io.IOException;
@@ -238,7 +239,7 @@ public abstract class PackagerBase implements IPackager {
 
     public void addPanel(Panel panel) {
         panelList.add(panel); // serialized to keep order/variables correct
-        mergeManager.addPanelToMerge(panel.getClassName());
+        mergeManager.addResourceToMerge(new PanelMerge(panel.getClassName()));
     }
 
     /* (non-Javadoc)
