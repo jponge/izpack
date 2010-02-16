@@ -43,21 +43,6 @@ public class MergeManagerImpl implements MergeManager {
         mergeableList.addAll(PathResolver.getMergeableFromPath(resourcePath, destination));
     }
 
-
-    /**
-     * Return the mergeable from the given file.
-     *
-     * @param file file to merge
-     * @return Mergeable of the given file
-     */
-    static Mergeable getMergeableFromPath(File file) {
-        if (PathResolver.isJar(file)) {
-            return new JarMerge(file.getAbsolutePath());
-        }
-        return new FileMerge(file);
-    }
-
-
     /**
      * Get the path to jar containing the given resource.
      *

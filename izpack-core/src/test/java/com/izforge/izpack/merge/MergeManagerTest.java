@@ -38,9 +38,7 @@ public class MergeManagerTest {
 
     @Test
     public void testMergeSingleFile() throws Exception {
-        File file = new File(getClass().getResource("FileMerge.class").getFile());
-        assertThat(file.exists(), Is.is(true));
-        FileMerge fileMerge = new FileMerge(file);
+        FileMerge fileMerge = new FileMerge(getClass().getResource("FileMerge.class"));
 
         doMerge(fileMerge);
 
@@ -52,19 +50,18 @@ public class MergeManagerTest {
 
     @Test
     public void testMergeDirectory() throws Exception {
-        File file = new File(getClass().getResource("MergeManagerTest.class").getFile()).getParentFile();
-        assertThat(file.exists(), Is.is(true));
-        FileMerge fileMerge = new FileMerge(file);
+        URL url = ClassLoader.getSystemResource("com/izforge/izpack/merge/");
+        FileMerge fileMerge = new FileMerge(url);
 
         ArrayList<String> arrayList = doMerge(fileMerge);
 
-        assertThat(arrayList, IsCollectionContaining.hasItems("MergeManagerTest.class", "test/.placeholder"));
+        assertThat(arrayList, IsCollectionContaining.hasItems("merge/test/.placeholder"));
     }
 
     @Test
     public void testMergeDirectoryWithDestination() throws Exception {
-        File file = new File(getClass().getResource("MergeManagerTest.class").getFile()).getParentFile();
-        FileMerge fileMerge = new FileMerge(file, "my/dest/path/");
+        URL url = new File(getClass().getResource("MergeManagerTest.class").getFile()).getParentFile().toURI().toURL();
+        FileMerge fileMerge = new FileMerge(url, "my/dest/path/");
 
         ArrayList<String> arrayList = doMerge(fileMerge);
 
@@ -190,7 +187,7 @@ public class MergeManagerTest {
 
         ArrayList<String> arrayList = doMerge(mergeManager);
 
-        assertThat(arrayList, IsCollectionContaining.hasItems("com/izforge/izpack/merge/MergeManagerTest.class"));
+        assertThat(arrayList, IsCollectionContaining.hasItems("com/izforge/izpack/merge/MergeManager.class"));
     }
 
     @Test
@@ -199,7 +196,7 @@ public class MergeManagerTest {
 
         ArrayList<String> arrayList = doMerge(mergeManager);
 
-        assertThat(arrayList, IsCollectionContaining.hasItems("com/dest/MergeManagerTest.class"));
+        assertThat(arrayList, IsCollectionContaining.hasItems("com/dest/MergeManager.class"));
     }
 
     @Test

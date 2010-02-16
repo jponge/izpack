@@ -27,7 +27,7 @@ public class PathResolverTest {
         List<URL> urlList = PathResolver.resolvePath("com/izforge");
         assertThat(urlList.size(), new IsGreaterThan<Integer>(1));
         assertThat(getListPathFromListURL(urlList), IsNot.not(IsCollectionContaining.hasItem(
-                StringContains.containsString("test"))
+                StringContains.containsString("test-classes"))
         ));
     }
 
@@ -51,6 +51,31 @@ public class PathResolverTest {
     }
 
     @Test
+    public void testGetMergeableFromJar() throws Exception {
+
+    }
+
+    @Test
+    public void testGetMergeableFromFile() throws Exception {
+        List<Mergeable> mergeables = PathResolver.getMergeableFromPath("com/izforge/izpack/merge/FileMerge.class");
+        Mergeable mergeable = mergeables.get(0);
+        assertThat(mergeable, MergeMatcher.isMergeableMatching(
+                IsCollectionContaining.hasItems(
+                        Is.is("com/izforge/izpack/merge/FileMerge.class")
+                )));
+    }
+
+    @Test
+    public void testGetMergeableFromFileWithDestination() throws Exception {
+        List<Mergeable> mergeables = PathResolver.getMergeableFromPath("com/izforge/izpack/merge/FileMerge.class", "a/dest/FileMerge.class");
+        Mergeable mergeable = mergeables.get(0);
+        assertThat(mergeable, MergeMatcher.isMergeableMatching(
+                IsCollectionContaining.hasItems(
+                        Is.is("a/dest/FileMerge.class")
+                )));
+    }
+
+    @Test
     public void testGetMergeableFromDirectory() throws Exception {
         List<Mergeable> mergeables = PathResolver.getMergeableFromPath("com/izforge/izpack/merge/");
         assertThat(mergeables.size(), Is.is(1));
@@ -61,6 +86,15 @@ public class PathResolverTest {
                 )));
     }
 
+    @Test
+    public void testGetMergeableFromDirectoryWithDestination() throws Exception {
+        List<Mergeable> mergeables = PathResolver.getMergeableFromPath("com/izforge/izpack/merge/", "a/dest/");
+        Mergeable mergeable = mergeables.get(0);
+        assertThat(mergeable, MergeMatcher.isMergeableMatching(
+                IsCollectionContaining.hasItems(
+                        Is.is("a/dest/resolve/PathResolver.class")
+                )));
+    }
 
     private List<String> getListPathFromListURL(List<URL> urlList) {
         ArrayList<String> arrayList = new ArrayList<String>();

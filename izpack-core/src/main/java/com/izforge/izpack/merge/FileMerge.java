@@ -18,20 +18,27 @@ public class FileMerge implements Mergeable {
 
     private File fileToCopy;
 
+    private URL url;
     private String destination;
 
 
-    public FileMerge(File fileToCopy) {
-        this(fileToCopy, "");
-    }
+//    public FileMerge(File fileToCopy) {
+//        this(fileToCopy, "");
+//    }
 
-    public FileMerge(File fileToCopy, String destination) {
-        this.fileToCopy = fileToCopy;
-        this.destination = destination;
+//    public FileMerge(File fileToCopy, String destination) {
+//        this.fileToCopy = fileToCopy;
+//        this.destination = destination;
+//    }
+
+    public FileMerge(URL url) {
+        this(url, "");
     }
 
     public FileMerge(URL url, String destination) {
-        this(new File(url.getFile()), destination);
+        this.url = url;
+        this.fileToCopy = new File(url.getFile());
+        this.destination = destination;
     }
 
     public File find(FileFilter fileFilter) {
@@ -82,7 +89,7 @@ public class FileMerge implements Mergeable {
                 copyFileToJar(file, outputStream);
             }
         } else {
-            String entryName = resolveName(fileToCopy, this.fileToCopy, this.destination);
+            String entryName = resolveName(fileToCopy, this.destination);
             FileInputStream inputStream = new FileInputStream(fileToCopy);
             IoHelper.copyStreamToJar(inputStream, outputStream, entryName, fileToCopy.lastModified());
         }
@@ -94,22 +101,29 @@ public class FileMerge implements Mergeable {
                 copyFileToJar(file, outputStream);
             }
         } else {
-            String entryName = resolveName(fileToCopy, this.fileToCopy, this.destination);
+            String entryName = resolveName(fileToCopy, this.destination);
             FileInputStream inputStream = new FileInputStream(fileToCopy);
             IoHelper.copyStreamToJar(inputStream, outputStream, entryName, fileToCopy.lastModified());
         }
     }
 
-    private String resolveName(File fileToCopy, File basePath, String destination) {
-        String path;
-        path = basePath.getPath();
-        if (!basePath.isDirectory()) {
-            path = basePath.getParent();
+    private String resolveName(File fileToCopy, String destination) {
+        if (isFile(destination)) {
+            return destination;
         }
-        path = path + "/";
+        String path = this.fileToCopy.getAbsolutePath();
+        if (destination.equals("")) {
+            path = this.fileToCopy.getParentFile().getAbsolutePath();
+        }
+        path = path + '/';
         StringBuilder builder = new StringBuilder();
         builder.append(destination);
         builder.append(fileToCopy.getAbsolutePath().replaceAll(path, ""));
-        return builder.toString();
+        return builder.toString().replaceAll("//", "/");
+    }
+
+    private boolean isFile(String destination) {
+        if (!destination.contains("/")) return false;
+        return destination.substring(destination.lastIndexOf('/')).contains(".");
     }
 }

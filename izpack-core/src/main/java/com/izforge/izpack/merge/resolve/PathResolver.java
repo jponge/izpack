@@ -100,32 +100,9 @@ public class PathResolver {
     /**
      * Return the mergeable from the given path.
      *
-     * @param resourcePath
-     * @return Mergeable if found. null else.
+     * @param resourcePath Resource path to search
+     * @return Mergeable list of mergeable. Empty if nothing found.
      */
-//    public static Mergeable getMergeableFromPath(String path) {
-//        TypeFile file = resolvePath(path);
-//        switch (file) {
-//            case DIRECTORY:
-//            case FILE:
-//                return new FileMerge(getFileFromPath(path), path);
-//            case JAR_CONTENT:
-//                return new JarMerge(path);
-//        }
-//        return null;
-//    }
-//
-//    public static Mergeable getMergeableFromPath(String path, String destination) {
-//        TypeFile file = resolvePath(path);
-//        switch (file) {
-//            case DIRECTORY:
-//            case FILE:
-//                return new FileMerge(getFileFromPath(path), destination);
-//            case JAR_CONTENT:
-//                return new JarMerge(path, destination);
-//        }
-//        return null;
-//    }
     public static List<Mergeable> getMergeableFromPath(String resourcePath) {
         List<URL> urlList = resolvePath(resourcePath);
         List<Mergeable> result = new ArrayList<Mergeable>();
@@ -139,14 +116,27 @@ public class PathResolver {
         return result;
     }
 
+    private static boolean isDirectory(URL url) {
+        return new File(url.getFile()).isDirectory();
+    }
+
+
+    /**
+     * Return the mergeable from the given path.
+     *
+     * @param resourcePath Resource path to search
+     * @param destination  The destination of resources when merging will ocure.
+     * @return Mergeable list of mergeable. Empty if nothing found.
+     */
     public static List<Mergeable> getMergeableFromPath(String resourcePath, String destination) {
         List<URL> urlList = resolvePath(resourcePath);
         List<Mergeable> result = new ArrayList<Mergeable>();
+//        String fileDestination = (destination + "/" + resourcePath).replaceAll("//", "/");
         for (URL url : urlList) {
             if (isJar(url)) {
                 result.add(new JarMerge(url, destination));
             } else {
-                result.add(new FileMerge(url, destination + resourcePath));
+                result.add(new FileMerge(url, destination));
             }
         }
         return result;
