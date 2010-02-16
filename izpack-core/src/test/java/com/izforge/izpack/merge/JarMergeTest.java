@@ -22,17 +22,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class JarMergeTest {
 
     @Test
-    public void findFileInJar() throws Exception {
-        JarMerge jarMerge = new JarMerge(ClassLoader.getSystemResource("org/junit"));
-        File file = jarMerge.find(new FileFilter() {
-            public boolean accept(File pathname) {
-                return pathname.getName().matches(".*Assert\\.class") || pathname.isDirectory();
-            }
-        });
-        assertThat(file.getName(), Is.is("Assert.class"));
-    }
-
-    @Test
     public void testAddJarContent() throws Exception {
         JarMerge jarMerge = new JarMerge(getClass().getResource("test/jar-hellopanel-1.0-SNAPSHOT.jar"));
         assertThat(jarMerge, MergeMatcher.isMergeableContainingFiles("jar/izforge/izpack/panels/hello/HelloPanel.class")

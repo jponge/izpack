@@ -26,29 +26,9 @@ public class JarMerge implements Mergeable {
     private String regexp = ".*";
     private String destination;
 
-
-//    public JarMerge(String path) {
-//        jarPath = MergeManagerImpl.getJarAbsolutePath(path);
-//        destination = path;
-//        regexp = new StringBuilder().append(path).append("(.*)").toString();
-//    }
-//
-//    public JarMerge(String path, String destination) {
-//        jarPath = MergeManagerImpl.getJarAbsolutePath(path);
-//        this.destination = destination;
-//        regexp = new StringBuilder().append(path).append("(.*)").toString();
-//    }
-//
-//    public JarMerge(File classFile) {
-//        String[] strings = classFile.getAbsolutePath().split(".jar!/");
-//        jarPath = strings[0] + ".jar";
-//        destination = strings[1];
-//        regexp = new StringBuilder().append(destination).append("(.*)").toString();
-//    }
-
     public JarMerge(URL resource) {
         jarPath = MergeManagerImpl.processUrlToJarPath(resource);
-        destination = resource.getPath().replaceAll(jarPath, "");
+        destination = resource.getFile().replaceAll(jarPath, "").replaceAll("file:", "").replaceAll("!/", "");
         regexp = new StringBuilder().append(destination).append("(.*)").toString();
     }
 
