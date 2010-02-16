@@ -47,7 +47,7 @@ public class PanelManager {
 
         File fileFromPanelClass = null;
         try {
-            fileFromPanelClass = mergeManager.getFileFromPanelClass(className, classPackage);
+//            fileFromPanelClass = mergeManager.getFileFromPanelClass(className, classPackage);
         } catch (Exception e) {
             return resolveClassFromName(className);
         }

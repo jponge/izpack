@@ -32,8 +32,6 @@ import com.izforge.izpack.data.Blockable;
 import com.izforge.izpack.data.PackFile;
 import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.merge.MergeHelper;
-import com.izforge.izpack.merge.Mergeable;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
@@ -585,7 +583,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
         // get the uninstaller base, returning if not found so that
         // installData.uninstallOutJar remains null
 
-        Mergeable uninstallerMerge = MergeHelper.getMergeableFromPath("com/izforge/izpack/uninstaller/");
+//        Mergeable uninstallerMerge = MergeHelper.getMergeableFromPath("com/izforge/izpack/uninstaller/");
 
         // The uninstaller extension is facultative; it will be exist only
         // if a native library was marked for uninstallation.
@@ -611,7 +609,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
         udata.addFile(jar, true);
 
         // We copy the uninstallers
-        uninstallerMerge.merge(outJar);
+//        uninstallerMerge.merge(outJar);
 
         // Should we relaunch the uninstaller with privileges?
         if (idata.getInfo().isPrivilegedExecutionRequiredUninstaller()) {
@@ -620,11 +618,11 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
         }
 
         // We put the langpack
-        Mergeable langPack = MergeHelper.getMergeableFromPath("resources/langpacks/" + idata.getLocaleISO3() + ".xml", "langpack.xml");
-        langPack.merge(outJar);
-        outJar.close();
-        bos.close();
-        out.close();
+//        Mergeable langPack = PathResolver.getMergeableFromPath("resources/langpacks/" + idata.getLocaleISO3() + ".xml", "langpack.xml");
+//        langPack.merge(outJar);
+//        outJar.close();
+//        bos.close();
+//        out.close();
     }
 
     /**

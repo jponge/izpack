@@ -1,5 +1,6 @@
-package com.izforge.izpack.merge;
+package com.izforge.izpack.merge.file;
 
+import com.izforge.izpack.merge.Mergeable;
 import com.izforge.izpack.util.IoHelper;
 import org.apache.tools.zip.ZipOutputStream;
 

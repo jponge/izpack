@@ -34,8 +34,8 @@ import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.PackInfo;
-import com.izforge.izpack.merge.JarMerge;
 import com.izforge.izpack.merge.MergeManager;
+import com.izforge.izpack.merge.jar.JarMerge;
 
 import java.io.FilterOutputStream;
 import java.io.IOException;

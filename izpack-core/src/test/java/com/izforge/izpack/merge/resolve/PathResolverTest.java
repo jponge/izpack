@@ -1,8 +1,8 @@
 package com.izforge.izpack.merge.resolve;
 
 import com.izforge.izpack.matcher.MergeMatcher;
-import com.izforge.izpack.merge.JarMerge;
 import com.izforge.izpack.merge.Mergeable;
+import com.izforge.izpack.merge.jar.JarMerge;
 import org.hamcrest.collection.IsCollectionContaining;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNot;
@@ -66,16 +66,16 @@ public class PathResolverTest {
 
 
     @Test
-    public void testGetMergeableFromFile() throws Exception {
-        List<Mergeable> mergeables = PathResolver.getMergeableFromPath("com/izforge/izpack/merge/FileMerge.class");
+    public void ftestGetMergeableFromFile() throws Exception {
+        List<Mergeable> mergeables = PathResolver.getMergeableFromPath("com/izforge/izpack/merge/file/FileMerge.class");
         Mergeable mergeable = mergeables.get(0);
-        assertThat(mergeable, MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/merge/FileMerge.class")
+        assertThat(mergeable, MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/merge/file/FileMerge.class")
         );
     }
 
     @Test
     public void testGetMergeableFromFileWithDestination() throws Exception {
-        List<Mergeable> mergeables = PathResolver.getMergeableFromPath("com/izforge/izpack/merge/FileMerge.class", "a/dest/FileMerge.class");
+        List<Mergeable> mergeables = PathResolver.getMergeableFromPath("com/izforge/izpack/merge/file/FileMerge.class", "a/dest/FileMerge.class");
         Mergeable mergeable = mergeables.get(0);
         assertThat(mergeable, MergeMatcher.isMergeableContainingFiles("a/dest/FileMerge.class")
         );

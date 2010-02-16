@@ -1,9 +1,9 @@
 package com.izforge.izpack.merge.resolve;
 
 import com.izforge.izpack.api.exception.IzPackException;
-import com.izforge.izpack.merge.FileMerge;
-import com.izforge.izpack.merge.JarMerge;
 import com.izforge.izpack.merge.Mergeable;
+import com.izforge.izpack.merge.file.FileMerge;
+import com.izforge.izpack.merge.jar.JarMerge;
 
 import java.io.File;
 import java.io.IOException;
@@ -140,5 +140,20 @@ public class PathResolver {
             }
         }
         return result;
+    }
+
+    public static String processUrlToJarPath(URL resource) {
+        String res = resource.getPath();
+        res = res.replaceAll("file:", "");
+        if (res.contains("!")) {
+            return res.substring(0, res.lastIndexOf("!"));
+        }
+        return res;
+    }
+
+    public static String processUrlToJarPackage(URL resource) {
+        String res = resource.getPath();
+        res = res.replaceAll("file:", "");
+        return res.substring(res.lastIndexOf("!") + 2, res.length());
     }
 }

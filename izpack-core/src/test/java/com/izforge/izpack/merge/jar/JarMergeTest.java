@@ -1,6 +1,7 @@
-package com.izforge.izpack.merge;
+package com.izforge.izpack.merge.jar;
 
 import com.izforge.izpack.matcher.MergeMatcher;
+import com.izforge.izpack.merge.Mergeable;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import org.hamcrest.core.Is;
 import org.hamcrest.text.StringContains;
@@ -23,7 +24,8 @@ public class JarMergeTest {
 
     @Test
     public void testAddJarContent() throws Exception {
-        JarMerge jarMerge = new JarMerge(getClass().getResource("test/jar-hellopanel-1.0-SNAPSHOT.jar"));
+        URL resource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
+        JarMerge jarMerge = new JarMerge(resource);
         assertThat(jarMerge, MergeMatcher.isMergeableContainingFiles("jar/izforge/izpack/panels/hello/HelloPanel.class")
         );
     }
@@ -52,7 +54,8 @@ public class JarMergeTest {
 
     @Test
     public void testFindPanelInJar() throws Exception {
-        JarMerge jarMerge = new JarMerge(getClass().getResource("test/izpack-panel-5.0.0-SNAPSHOT.jar"));
+        URL resource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/izpack-panel-5.0.0-SNAPSHOT.jar");
+        JarMerge jarMerge = new JarMerge(resource);
         File file = jarMerge.find(new FileFilter() {
             public boolean accept(File pathname) {
                 return pathname.isDirectory() ||
