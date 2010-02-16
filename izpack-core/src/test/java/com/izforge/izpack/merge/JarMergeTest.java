@@ -40,6 +40,17 @@ public class JarMergeTest {
 
 
     @Test
+    public void testMergeJarFoundDynamicallyLoaded() throws Exception {
+        URL urlJar = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
+        URLClassLoader loader = URLClassLoader.newInstance(new URL[]{urlJar}, ClassLoader.getSystemClassLoader());
+
+        JarMerge jarMerge = new JarMerge(loader.getResource("jar/izforge"), "com/dest");
+
+        assertThat(jarMerge, MergeMatcher.isMergeableContainingFiles("com/dest/izpack/panels/hello/HelloPanel.class"));
+    }
+
+
+    @Test
     public void testFindPanelInJar() throws Exception {
         JarMerge jarMerge = new JarMerge(getClass().getResource("test/izpack-panel-5.0.0-SNAPSHOT.jar"));
         File file = jarMerge.find(new FileFilter() {
@@ -53,7 +64,7 @@ public class JarMergeTest {
 
 
     @Test
-    public void findFileInJarFoundWithURL() throws Exception {
+    public void testFindFileInJarFoundWithURL() throws Exception {
         URL urlJar = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
         URLClassLoader loader = URLClassLoader.newInstance(new URL[]{urlJar}, ClassLoader.getSystemClassLoader());
 
@@ -64,16 +75,5 @@ public class JarMergeTest {
             }
         });
         assertThat(file.getName(), Is.is("HelloPanel.class"));
-    }
-
-
-    @Test
-    public void mergeJarFoundWithURL() throws Exception {
-        URL urlJar = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
-        URLClassLoader loader = URLClassLoader.newInstance(new URL[]{urlJar}, ClassLoader.getSystemClassLoader());
-
-        JarMerge jarMerge = new JarMerge(loader.getResource("jar/izforge"), "com/dest");
-
-        assertThat(jarMerge, MergeMatcher.isMergeableContainingFiles("com/dest/izpack/panels/hello/HelloPanel.class"));
     }
 }
