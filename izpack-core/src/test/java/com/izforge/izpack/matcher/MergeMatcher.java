@@ -50,5 +50,9 @@ public class MergeMatcher extends TypeSafeMatcher<Mergeable> {
         return new MergeMatcher(matcher);
     }
 
+    public static MergeMatcher isMergeableContainingFiles(String... files) {
+        return new MergeMatcher(IsCollectionContaining.hasItems(files));
+    }
+
 
 }
