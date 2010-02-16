@@ -18,8 +18,10 @@ public class PanelMerge implements Mergeable {
     public static String BASE_CLASSNAME_PATH = CLASSNAME_PREFIX.replaceAll("\\.", "/") + "/";
 
     private List<Mergeable> panelMerge;
+    private String panelName;
 
     public PanelMerge(String panelName) {
+        this.panelName = panelName;
         String packagePath = getPackagePathFromClassName(panelName);
         panelMerge = PathResolver.getMergeableFromPath(packagePath);
     }
@@ -53,4 +55,22 @@ public class PanelMerge implements Mergeable {
         return BASE_CLASSNAME_PATH;
     }
 
+
+    public String getFullClassNameFromPanelName() {
+        if (panelName.contains(".")) {
+            return panelName;
+        }
+        FileFilter fileFilter = new FileFilter() {
+            public boolean accept(File pathname) {
+                return pathname.getAbsolutePath().contains(panelName);
+            }
+        };
+        for (Mergeable mergeable : panelMerge) {
+            File file = mergeable.find(fileFilter);
+            if (file != null) {
+                System.out.println(file.getPath());
+            }
+        }
+        return CLASSNAME_PREFIX + "." + panelName;
+    }
 }
