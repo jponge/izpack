@@ -1,5 +1,6 @@
 package com.izforge.izpack.merge.file;
 
+import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.merge.Mergeable;
 import com.izforge.izpack.util.IoHelper;
 import org.apache.tools.zip.ZipOutputStream;
@@ -22,16 +23,6 @@ public class FileMerge implements Mergeable {
     private URL url;
     private String destination;
 
-
-//    public FileMerge(File fileToCopy) {
-//        this(fileToCopy, "");
-//    }
-
-//    public FileMerge(File fileToCopy, String destination) {
-//        this.fileToCopy = fileToCopy;
-//        this.destination = destination;
-//    }
-
     public FileMerge(URL url) {
         this(url, "");
     }
@@ -45,7 +36,6 @@ public class FileMerge implements Mergeable {
     public File find(FileFilter fileFilter) {
         return findRecursivelyForFile(fileFilter, fileToCopy);
     }
-
 
     /**
      * Recursively search a file matching the fileFilter
@@ -72,7 +62,7 @@ public class FileMerge implements Mergeable {
         try {
             copyFileToJar(fileToCopy, outputStream);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new MergeException(e);
         }
     }
 
@@ -80,7 +70,7 @@ public class FileMerge implements Mergeable {
         try {
             copyFileToJar(fileToCopy, outputStream);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new MergeException(e);
         }
     }
 
@@ -124,7 +114,9 @@ public class FileMerge implements Mergeable {
     }
 
     private boolean isFile(String destination) {
-        if (!destination.contains("/")) return false;
-        return destination.substring(destination.lastIndexOf('/')).contains(".");
+        if (destination.isEmpty()) {
+            return false;
+        }
+        return !destination.endsWith("/");
     }
 }

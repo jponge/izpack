@@ -89,6 +89,7 @@ public class InstallationTest extends AbstractInstallationTest {
         clickDefaultLang();
 
         installerFrameFixture = prepareFrameFixture();
+        Thread.sleep(600);
         // Hello panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         Thread.sleep(600);

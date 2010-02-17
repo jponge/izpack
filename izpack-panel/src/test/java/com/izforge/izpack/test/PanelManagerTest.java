@@ -1,5 +1,6 @@
 package com.izforge.izpack.test;
 
+import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -54,7 +55,7 @@ public class PanelManagerTest {
         assertThat(aClass.getName(), Is.is(CheckedHelloPanel.class.getName()));
     }
 
-    @Test(expected = ClassNotFoundException.class)
+    @Test(expected = MergeException.class)
     public void resolveClassNameShouldThrowException() throws Exception {
         panelManager.resolveClassName("unknown");
     }

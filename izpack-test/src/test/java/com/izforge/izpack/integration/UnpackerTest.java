@@ -37,7 +37,7 @@ public class UnpackerTest extends AbstractInstallationTest {
         String jar = dest + File.separator + idata.getInfo().getUninstallerName();
         File uninstallJar = new File(jar);
         assertThat(uninstallJar.exists(), Is.is(true));
-        assertThat(uninstallJar, ZipMatcher.isZipContainingFile("com/izforge/izpack/uninstaller/Destroyer.class"));
+        assertThat(uninstallJar, ZipMatcher.isZipContainingFiles("com/izforge/izpack/uninstaller/Destroyer.class", "langpack.xml"));
 
     }
 }
