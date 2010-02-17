@@ -19,8 +19,8 @@ public class FileMergeTest {
 
     @Test
     public void testMergeSingleFile() throws Exception {
-        FileMerge fileMerge = new FileMerge(getClass().getResource("FileMerge.class"));
-        assertThat(fileMerge, MergeMatcher.isMergeableContainingFile("FileMerge.class"));
+        FileMerge fileMerge = new FileMerge(getClass().getResource("FileMergeTest.class"));
+        assertThat(fileMerge, MergeMatcher.isMergeableContainingFile("FileMergeTest.class"));
     }
 
     @Test
@@ -39,14 +39,14 @@ public class FileMergeTest {
 
     @Test
     public void testMergeFileWithDestination() throws Exception {
-        URL url = ClassLoader.getSystemResource("com/izforge/izpack/merge/Mergeable.class");
+        URL url = ClassLoader.getSystemResource("com/izforge/izpack/merge/file/FileMergeTest.class");
         FileMerge fileMerge = new FileMerge(url, "my/dest/path/NewFile.ga");
         assertThat(fileMerge, MergeMatcher.isMergeableContainingFiles("my/dest/path/NewFile.ga"));
     }
 
     @Test
     public void testMergeFileWithRootDestination() throws Exception {
-        URL url = ClassLoader.getSystemResource("com/izforge/izpack/merge/Mergeable.class");
+        URL url = ClassLoader.getSystemResource("com/izforge/izpack/merge/file/FileMergeTest.class");
         FileMerge fileMerge = new FileMerge(url, "NewFile.ga");
         assertThat(fileMerge, MergeMatcher.isMergeableContainingFiles("NewFile.ga"));
     }

@@ -32,11 +32,11 @@ public class JarMergeTest {
 
     @Test
     public void testMergeClassFromJarFile() throws Exception {
-        List<Mergeable> jarMergeList = PathResolver.getMergeableFromPath("junit/framework/Assert.class");
+        List<Mergeable> jarMergeList = PathResolver.getMergeableFromPath("org/fest/assertions/Assert.class");
         assertThat(jarMergeList.size(), Is.is(1));
 
         Mergeable jarMerge = jarMergeList.get(0);
-        assertThat(jarMerge, MergeMatcher.isMergeableContainingFiles("junit/framework/Assert.class")
+        assertThat(jarMerge, MergeMatcher.isMergeableContainingFiles("org/fest/assertions/Assert.class")
         );
     }
 
