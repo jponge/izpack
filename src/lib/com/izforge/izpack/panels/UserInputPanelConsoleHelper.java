@@ -387,6 +387,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         String variable = input.strVariableName;
         if ((variable == null) || (variable.length() == 0)) { return false; }
         String currentvariablevalue = idata.getVariable(variable);
+		  //If we dont do this, choice with index=0 will always be displayed, no matter what is selected
+		  input.iSelectedChoice = -1;
         boolean userinput = false;
 
         // display the description for this combo or radio field
