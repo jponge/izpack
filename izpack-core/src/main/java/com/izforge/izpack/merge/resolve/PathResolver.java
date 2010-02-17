@@ -37,7 +37,9 @@ public class PathResolver {
         }
 
         try {
-            Enumeration<URL> urlEnumeration = ClassLoader.getSystemClassLoader().getResources(sourcePath);
+
+            ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+            Enumeration<URL> urlEnumeration = contextClassLoader.getResources(sourcePath);
             while (urlEnumeration.hasMoreElements()) {
                 URL url = urlEnumeration.nextElement();
                 if (url.getPath().contains("test-classes")) {
