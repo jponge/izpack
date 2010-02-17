@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.zip.ZipFile;
 
 /**
  * Try to resolve paths by searching inside the classpath or files with the corresponding name
@@ -55,11 +56,37 @@ public class PathResolver {
     }
 
     public static boolean isJar(File classFile) {
-        return classFile.getAbsolutePath().contains(".jar!");
+        ZipFile zipFile = null;
+        try {
+            zipFile = new ZipFile(classFile);
+            zipFile.getName();
+        } catch (IOException e) {
+            return false;
+        } finally {
+            if (zipFile != null) {
+                try {
+                    zipFile.close();
+                } catch (IOException ignored) {
+                }
+            }
+        }
+        return true;
     }
 
+    /**
+     * Extract file name from url and test jar file
+     *
+     * @param url url to test. If it is a jar content, the jar file is extracted and treated as a jar
+     * @return true if the file is a jar
+     */
     public static boolean isJar(URL url) {
-        return url.getFile().contains(".jar!");
+        String file = url.getFile();
+        file = file.substring(file.indexOf(":") + 1);
+        if (file.contains("!")) {
+            file = file.substring(0, file.lastIndexOf('!'));
+        }
+        File classFile = new File(file);
+        return isJar(classFile);
     }
 
     public static String getCurrentClasspath(String packagePath) {
@@ -115,11 +142,6 @@ public class PathResolver {
         }
         return result;
     }
-
-    private static boolean isDirectory(URL url) {
-        return new File(url.getFile()).isDirectory();
-    }
-
 
     /**
      * Return the mergeable from the given path.

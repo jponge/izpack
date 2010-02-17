@@ -44,7 +44,7 @@ public class AbstractInstallationTest {
 
     @BeforeMethod
     public void initBinding() throws Throwable {
-        out = File.createTempFile("izpack", "jar");
+        out = File.createTempFile("izpack", ".jar");
         applicationContainer = new ApplicationContainer();
         applicationContainer.initBindings();
         compilerContainer = new CompilerContainer();

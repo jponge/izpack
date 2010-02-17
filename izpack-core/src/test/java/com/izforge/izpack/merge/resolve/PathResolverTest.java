@@ -10,6 +10,7 @@ import org.hamcrest.number.IsGreaterThan;
 import org.hamcrest.text.StringContains;
 import org.junit.Test;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +24,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class PathResolverTest {
 
-
     @Test
     public void testGetMergeableFromJar() throws Exception {
         List<Mergeable> jarMergeList = PathResolver.getMergeableFromPath("junit/framework");
         assertThat(jarMergeList.size(), Is.is(1));
         Mergeable jarMerge = jarMergeList.get(0);
         assertThat(jarMerge, Is.is(JarMerge.class));
-
         assertThat(jarMerge, MergeMatcher.isMergeableContainingFiles("junit/framework/Assert.class",
                 "junit/framework/AssertionFailedError.class"
         ));
@@ -103,4 +102,30 @@ public class PathResolverTest {
         }
         return arrayList;
     }
+
+    @Test
+    public void testIsJarWithURL() throws Exception {
+        URL fileResource = ClassLoader.getSystemResource("com/izforge/izpack/merge/Mergeable.class");
+        URL jarResource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
+        assertThat(PathResolver.isJar(
+                fileResource),
+                Is.is(false));
+        assertThat(PathResolver.isJar(
+                jarResource),
+                Is.is(true));
+    }
+
+    @Test
+    public void testIsJarWithFile() throws Exception {
+        File fileResource = new File(ClassLoader.getSystemResource("com/izforge/izpack/merge/Mergeable.class").getFile());
+        File jarResource = new File(ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar").getFile());
+        assertThat(PathResolver.isJar(
+                fileResource),
+                Is.is(false));
+        assertThat(PathResolver.isJar(
+                jarResource),
+                Is.is(true));
+    }
+
+
 }
