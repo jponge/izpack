@@ -114,43 +114,43 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/src/test/resources/lib</outputDirectory>
-                            <includeGroupIds>org.codehaus.izpack</includeGroupIds>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-custom actions</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/src/test/resources/bin/customActions</outputDirectory>
-                            <includeGroupIds>org.codehaus.izpack.event</includeGroupIds>
-                            <stripVersion>true</stripVersion>
-                        </configuration>
-                    </execution>
+                    <!--<execution>-->
+                    <!--<id>copy-dependencies</id>-->
+                    <!--<phase>process-resources</phase>-->
+                    <!--<goals>-->
+                    <!--<goal>copy-dependencies</goal>-->
+                    <!--</goals>-->
+                    <!--<configuration>-->
+                    <!--<outputDirectory>${basedir}/src/test/resources/lib</outputDirectory>-->
+                    <!--<includeGroupIds>org.codehaus.izpack</includeGroupIds>-->
+                    <!--</configuration>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                    <!--<id>copy-custom actions</id>-->
+                    <!--<phase>process-resources</phase>-->
+                    <!--<goals>-->
+                    <!--<goal>copy-dependencies</goal>-->
+                    <!--</goals>-->
+                    <!--<configuration>-->
+                    <!--<outputDirectory>${basedir}/src/test/resources/bin/customActions</outputDirectory>-->
+                    <!--<includeGroupIds>org.codehaus.izpack.event</includeGroupIds>-->
+                    <!--<stripVersion>true</stripVersion>-->
+                    <!--</configuration>-->
+                    <!--</execution>-->
 
-                    <execution>
-                        <id>Unpack native libs</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>unpack-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <includeArtifactIds>izpack-native</includeArtifactIds>
-                            <classifier>dll</classifier>
-                            <type>tar.gz</type>
-                            <outputDirectory>${basedir}/src/test/resources/</outputDirectory>
-                        </configuration>
-                    </execution>
+                    <!--<execution>-->
+                    <!--<id>Unpack native libs</id>-->
+                    <!--<phase>process-resources</phase>-->
+                    <!--<goals>-->
+                    <!--<goal>unpack-dependencies</goal>-->
+                    <!--</goals>-->
+                    <!--<configuration>-->
+                    <!--<includeArtifactIds>izpack-native</includeArtifactIds>-->
+                    <!--<classifier>dll</classifier>-->
+                    <!--<type>tar.gz</type>-->
+                    <!--<outputDirectory>${basedir}/src/test/resources/</outputDirectory>-->
+                    <!--</configuration>-->
+                    <!--</execution>-->
 
                     <execution>
                         <id>Unpack izpack installer files</id>

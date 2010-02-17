@@ -144,7 +144,7 @@ public class InstallationTest extends AbstractInstallationTest {
 
     @Test(dependsOnMethods = "testBasicInstall")
     public void testIzpackInstallation() throws Exception {
-        compileInstallJar("IzPack-install.xml", getWorkingDirectory("samples/izpack"));
+        compileInstallJar("install.xml", getWorkingDirectory("samples/izpack"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
 
         File installPath = prepareInstallation(installData);
