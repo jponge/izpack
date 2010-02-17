@@ -54,6 +54,10 @@ public class ZipMatcher extends TypeSafeMatcher<File> {
         return new ZipMatcher(IsCollectionContaining.hasItem(Is.is(fileName)));
     }
 
+    public static ZipMatcher isZipContainingFiles(String... fileName) {
+        return new ZipMatcher(IsCollectionContaining.hasItems(fileName));
+    }
+
     public static ZipMatcher isZipMatching(Matcher<Iterable<String>> matcher) {
         return new ZipMatcher(matcher);
     }
