@@ -1391,6 +1391,8 @@ public class CompilerConfig extends Thread {
 
         FileInputStream fin = new FileInputStream(archive);
         ZipInputStream zin = new ZipInputStream(fin);
+        List<String> allDirList = new Vector<String>();
+        String s = null;
         while (true)
         {
             ZipEntry zentry = zin.getNextEntry();
@@ -1400,6 +1402,9 @@ public class CompilerConfig extends Thread {
             }
             if (zentry.isDirectory())
             {
+                // add to all dir listing/empty dir needs to be handle
+                String dName = zentry.getName().substring(0, zentry.getName().length() - 1);
+                allDirList.add(dName);
                 continue;
             }
 
@@ -1413,14 +1418,23 @@ public class CompilerConfig extends Thread {
                 out.close();
 
                 pack.addFile(baseDir, temp, targetdir + "/" + zentry.getName(), osList, override,
-                        blockable, additionals, condition);
+                             blockable, additionals, condition);
             }
             catch (IOException e)
             {
                 throw new IOException("Couldn't create temporary file for " + zentry.getName()
-                        + " in archive " + archive + " (" + e.getMessage() + ")");
+                         + " in archive " + archive + " (" + e.getMessage() + ")");
             }
 
+        }
+
+        for (String dirName : allDirList)
+        {
+            File tmp = new File(dirName);
+            tmp.mkdirs();
+            tmp.deleteOnExit();
+            pack.addFile(baseDir, tmp, targetdir + "/" + dirName, osList,
+                         blockable, override, additionals, condition);
         }
         fin.close();
     }
