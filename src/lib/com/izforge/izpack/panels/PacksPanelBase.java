@@ -168,9 +168,9 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 int col = packsTable.columnAtPoint(event.getPoint());
                 if (col == 0)
                 {
-                    Integer checked = (Integer) packsModel.getValueAt(row, 0);
-                    checked = (checked == 0) ? 1 : 0;
-                    packsModel.setValueAt(checked, row, 0);
+                    nteger checked = (Integer) packsModel.getValueAt(row, 0); 
+                    checked = (checked <= 0) ? 1 : 0; 
+                    packsModel.setValueAt(checked, row, 0); 
                     packsTable.repaint();
                 }
             }
