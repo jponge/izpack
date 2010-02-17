@@ -5,7 +5,7 @@ import com.izforge.izpack.merge.Mergeable;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import org.hamcrest.core.Is;
 import org.hamcrest.text.StringContains;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.FileFilter;

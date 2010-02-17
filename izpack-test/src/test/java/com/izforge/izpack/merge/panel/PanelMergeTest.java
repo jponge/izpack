@@ -2,7 +2,7 @@ package com.izforge.izpack.merge.panel;
 
 import com.izforge.izpack.matcher.MergeMatcher;
 import org.hamcrest.core.Is;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 

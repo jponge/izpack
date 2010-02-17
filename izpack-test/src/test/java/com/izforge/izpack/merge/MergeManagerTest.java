@@ -3,8 +3,8 @@ package com.izforge.izpack.merge;
 import com.izforge.izpack.matcher.MergeMatcher;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import org.hamcrest.core.Is;
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import java.net.URL;
 
@@ -18,7 +18,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class MergeManagerTest {
     private MergeManagerImpl mergeManager;
 
-    @Before
+    @BeforeMethod
     public void setUp() {
         mergeManager = new MergeManagerImpl();
     }
