@@ -7,7 +7,7 @@ import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Created by IntelliJ IDEA.
+ * Unit tests for panel merge
  *
  * @author Anthonin Bonnefoy
  */
