@@ -17,7 +17,7 @@
             <groupId>${groupId}</groupId>
             <artifactId>izpack-native</artifactId>
             <classifier>dll</classifier>
-            <type>tar.gz</type>
+            <type>zip</type>
         </dependency>
 
         <dependency>

@@ -151,7 +151,7 @@
                     <!--<configuration>-->
                     <!--<includeArtifactIds>izpack-native</includeArtifactIds>-->
                     <!--<classifier>dll</classifier>-->
-                    <!--<type>tar.gz</type>-->
+                    <!--<type>zip</type>-->
                     <!--<outputDirectory>${basedir}/src/test/resources/</outputDirectory>-->
                     <!--</configuration>-->
                     <!--</execution>-->

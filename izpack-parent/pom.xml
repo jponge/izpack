@@ -164,7 +164,7 @@
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>
                 <classifier>dll</classifier>
-                <type>tar.gz</type>
+                <type>zip</type>
             </dependency>
             <dependency>
                 <artifactId>izpack-core</artifactId>
