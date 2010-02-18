@@ -142,20 +142,6 @@
                     <!--</configuration>-->
                     <!--</execution>-->
 
-                    <!--<execution>-->
-                    <!--<id>Unpack native libs</id>-->
-                    <!--<phase>process-resources</phase>-->
-                    <!--<goals>-->
-                    <!--<goal>unpack-dependencies</goal>-->
-                    <!--</goals>-->
-                    <!--<configuration>-->
-                    <!--<includeArtifactIds>izpack-native</includeArtifactIds>-->
-                    <!--<classifier>dll</classifier>-->
-                    <!--<type>zip</type>-->
-                    <!--<outputDirectory>${basedir}/src/test/resources/</outputDirectory>-->
-                    <!--</configuration>-->
-                    <!--</execution>-->
-
                     <execution>
                         <id>Unpack izpack installer files</id>
                         <phase>process-resources</phase>
