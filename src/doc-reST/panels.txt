@@ -680,7 +680,7 @@ overriding the following values (attribute values wrapped for readability):
 
 
 LoadPropertiesPanel
---------------
+--------------------
 
 This panel is a non-visible panel. It simply loads values from a properties file 
 specified by the variable ``load.properties.file`` and sets them to their respective 
@@ -694,9 +694,9 @@ prior to the ``LoadPropertiesPanel``. Nothing is loaded if the variable is not s
 the panel is activated.
 
 An example use case for this panel would be an installer for an enterprise application 
- deployed in multiple environments (e.g. UAT, Production, etc.) with each deployment 
+deployed in multiple environments (e.g. UAT, Production, etc.) with each deployment 
 requiring many environment-specific settings such as database information, application URL, etc. 
-While several ``UserInputPanel``s can be used to prompt the user for data, it maybe impossible to set suitable
+While several ``UserInputPanel`` instances can be used to prompt the user for data, it maybe impossible to set suitable
 default values for each different environments at the installer build time. Furthermore, it
 would be inconvenient and error-prone to have the user manually input all values into the panels. 
 
