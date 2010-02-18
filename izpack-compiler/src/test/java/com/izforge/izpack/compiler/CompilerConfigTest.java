@@ -116,7 +116,4 @@ public class CompilerConfigTest {
         Mockito.verify(variable).put("myPath", list);
     }
 
-    @Test
-    public void shouldAddNativeLibrary() throws Exception {
-    }
 }

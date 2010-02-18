@@ -1,5 +1,6 @@
 package com.izforge.izpack.merge.jar;
 
+import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.merge.Mergeable;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.IoHelper;
@@ -27,6 +28,7 @@ public class JarMerge implements Mergeable {
 
     private String regexp = ".*";
     private String destination;
+
 
     public JarMerge(URL resource) {
         jarPath = PathResolver.processUrlToJarPath(resource);
@@ -106,7 +108,7 @@ public class JarMerge implements Mergeable {
             }
             jarInputStream.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new MergeException(e);
         }
     }
 }

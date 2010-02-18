@@ -377,8 +377,6 @@ public class CompilerConfig extends Thread {
             }
             mergeManager.addResourceToMerge(path);
 
-//            URL url = findIzPackResource(path, "Native Library", ixmlElement);
-//            packager.addNativeLibrary(name, url);
             // Additionals for mark a native lib also used in the uninstaller
             // The lib will be copied from the installer into the uninstaller if
             // needed.
