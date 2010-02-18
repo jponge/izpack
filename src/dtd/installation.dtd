@@ -101,13 +101,18 @@ $Id$
         <!ATTLIST langpack iso3 CDATA #REQUIRED>
 
 <!-- The resources section (resources for the panel's usings) -->
-<!ELEMENT resources (res*)>
-    <!ELEMENT res EMPTY>
-        <!ATTLIST res src CDATA #REQUIRED>
-        <!ATTLIST res id CDATA #REQUIRED>
-        <!ATTLIST  res parse  (yes|no) "no">
-        <!ATTLIST  res type CDATA "plain">
-        <!ATTLIST  res encoding CDATA #IMPLIED>        
+<!ELEMENT resources (bundle*, res*)>
+
+<!ELEMENT bundle ( res+ ) >
+  <!ATTLIST bundle default (true|false) #IMPLIED >
+  <!ATTLIST bundle id NMTOKEN #REQUIRED >
+
+<!ELEMENT res EMPTY>
+    <!ATTLIST res src CDATA #REQUIRED>
+    <!ATTLIST res id CDATA #REQUIRED>
+    <!ATTLIST  res parse  (yes|no) "no">
+    <!ATTLIST  res type CDATA "plain">
+    <!ATTLIST  res encoding CDATA #IMPLIED>        
 
 <!-- The panels section (indicates the panels to use) -->
 <!ELEMENT panels (panel+)>
