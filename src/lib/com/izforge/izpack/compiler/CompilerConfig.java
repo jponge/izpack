@@ -1852,7 +1852,7 @@ public class CompilerConfig extends Thread
                 }
             }
 
-            if (bundleName != null && !bundleName.isEmpty())
+            if (bundleName != null && bundleName.length() > 0)
             {
                 id = bundleName + "/" + id;
             }
