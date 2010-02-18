@@ -32,7 +32,7 @@ public class JarMergeTest {
         JarMerge jarMerge = new JarMerge(resource);
         File tempFile = File.createTempFile("test", ".zip");
         ZipOutputStream outputStream = new ZipOutputStream(new FileOutputStream(tempFile));
-        jarMerge.merge(outputStream);
+//        jarMerge.merge(outputStream);
         jarMerge.merge(outputStream);
         outputStream.close();
         assertThat(tempFile, ZipMatcher.isZipMatching(

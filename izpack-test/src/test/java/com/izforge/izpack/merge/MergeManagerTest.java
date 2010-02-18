@@ -31,6 +31,11 @@ public class MergeManagerTest {
         assertThat(jarPath, Is.is("/home/test/unjar.jar"));
     }
 
+    @Test
+    public void testAddNativeLibrary() throws Exception {
+        mergeManager.addResourceToMerge("bin/native/");
+        assertThat(mergeManager, MergeMatcher.isMergeableContainingFiles("bin/native/izpack/ShellLink.dll"));
+    }
 
     @Test
     public void testAddResourceToMerge() throws Exception {

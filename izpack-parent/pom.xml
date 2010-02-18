@@ -160,13 +160,6 @@
                 <version>${version}</version>
             </dependency>
             <dependency>
-                <artifactId>izpack-native</artifactId>
-                <groupId>${groupId}</groupId>
-                <version>${version}</version>
-                <classifier>dll</classifier>
-                <type>zip</type>
-            </dependency>
-            <dependency>
                 <artifactId>izpack-core</artifactId>
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>
