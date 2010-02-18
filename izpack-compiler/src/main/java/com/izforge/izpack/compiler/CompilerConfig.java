@@ -338,8 +338,8 @@ public class CompilerConfig extends Thread {
         notifyCompilerListener("addJars", CompilerListener.BEGIN, data);
         for (IXMLElement ixmlElement : data.getChildrenNamed("jar")) {
             String src = xmlCompilerHelper.requireAttribute(ixmlElement, "src", compilerData.getInstallFile());
-            URL url = findProjectResource(src, "Jar file", ixmlElement);
-            packager.addJarContent(url);
+            mergeManager.addResourceToMerge(src);
+
             // Additionals for mark a jar file also used in the uninstaller.
             // The contained files will be copied from the installer into the
             // uninstaller if needed.
@@ -351,6 +351,7 @@ public class CompilerConfig extends Thread {
             String stage = ixmlElement.getAttribute("stage");
             if (stage != null
                     && ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage))) {
+                URL url = findProjectResource(src, "Jar file", ixmlElement);
                 CustomData ca = new CustomData(null, compilerHelper.getContainedFilePaths(url), null,
                         CustomData.UNINSTALLER_JAR);
                 packager.addCustomJar(ca, url);
@@ -374,8 +375,10 @@ public class CompilerConfig extends Thread {
             if (path == null) {
                 path = "bin/native/" + type + "/" + name;
             }
-            URL url = findIzPackResource(path, "Native Library", ixmlElement);
-            packager.addNativeLibrary(name, url);
+            mergeManager.addResourceToMerge(path);
+
+//            URL url = findIzPackResource(path, "Native Library", ixmlElement);
+//            packager.addNativeLibrary(name, url);
             // Additionals for mark a native lib also used in the uninstaller
             // The lib will be copied from the installer into the uninstaller if
             // needed.
