@@ -448,6 +448,7 @@ public class VariableSubstitutor implements Serializable
             case TYPE_JAVA:
                 buffer = new StringBuffer(str);
                 len = str.length();
+                boolean leading = true;
                 for (i = 0; i < len; i++)
                 {
                     // Check for control characters
@@ -475,11 +476,28 @@ public class VariableSubstitutor implements Serializable
                         }
 
                         // Check for special characters
-                        if (c == '\\' || c == '"' || c == '\'' || c == ' ')
+                        // According to the spec:
+                        // 'For the element, leading space characters, but not embedded or trailing space characters, 
+                        // are written with a preceding \  character'
+                        else if (c == ' ')
                         {
+                            if (leading)
+                            {
+                                buffer.insert(i, '\\');
+                                len++;
+                                i++;
+                            }
+                        }
+                        else if (c == '\\' || c == '"' || c == '\'')
+                        {
+                            leading = false;
                             buffer.insert(i, '\\');
                             len++;
                             i++;
+                        }
+                        else
+                        {
+                            leading = false;
                         }
                     }
                     else
