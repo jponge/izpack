@@ -321,12 +321,14 @@ public class WebRepositoryAccessor {
             Iterator<IXMLElement> iter = el.getChildrenNamed("parsable").iterator();
             while (iter.hasNext()) {
                 IXMLElement p = iter.next();
-                String target = requireAttribute(p, "targetfile");
+                String target = p.getAttribute("targetfile", null);
                 SubstitutionType type = SubstitutionType.lookup(p.getAttribute("type", "plain"));
                 String encoding = p.getAttribute("encoding", null);
                 List<OsConstraint> osList = OsConstraint.getOsList(p); // TODO: unverified
-
-                pack.addParsable(new ParsableFile(target, type, encoding, osList));
+                if (target != null)
+                {
+                    pack.addParsable(new ParsableFile(target, type, encoding, osList));
+                }
             }
 
             // We get the executables list
