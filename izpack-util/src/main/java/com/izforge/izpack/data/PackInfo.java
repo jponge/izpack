@@ -56,7 +56,7 @@ public class PackInfo implements Serializable {
     /**
      * Files of the Pack.
      */
-    private Map<PackFile, File> files = new HashMap<PackFile, File>();
+    private Map files = new LinkedHashMap();
 
     /**
      * Parsables files in this Pack.
