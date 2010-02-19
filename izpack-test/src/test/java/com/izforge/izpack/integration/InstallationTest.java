@@ -22,28 +22,36 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Test for an installation using mock data
  */
-public class InstallationTest extends AbstractInstallationTest {
+public class InstallationTest extends AbstractInstallationTest
+{
 
     @After
-    public void tearBinding() {
+    public void tearBinding()
+    {
         applicationContainer.dispose();
 
-        try {
-            if (dialogFrameFixture != null) {
+        try
+        {
+            if (dialogFrameFixture != null)
+            {
                 dialogFrameFixture.cleanUp();
                 dialogFrameFixture = null;
             }
-            if (installerFrameFixture != null) {
+            if (installerFrameFixture != null)
+            {
                 installerFrameFixture.cleanUp();
                 installerFrameFixture = null;
             }
-        } catch (ScreenLockException e) {
+        }
+        catch (ScreenLockException e)
+        {
             e.printStackTrace();
         }
     }
 
     @Test
-    public void testHelloAndFinishPanels() throws Exception {
+    public void testHelloAndFinishPanels() throws Exception
+    {
         compileAndUnzip("helloAndFinish.xml", getWorkingDirectory("samples"));
         Image image = resourceManager.getImageIconResource("/img/JFrameIcon.png").getImage();
         assertThat(image, IsNull.<Object>notNullValue());
@@ -60,7 +68,8 @@ public class InstallationTest extends AbstractInstallationTest {
     }
 
     @Test
-    public void testHelloAndFinishPanelsCompressed() throws Exception {
+    public void testHelloAndFinishPanelsCompressed() throws Exception
+    {
         File workingDirectory = getWorkingDirectory("samples");
         File out = new File("out.jar");
         File installerFile = new File(workingDirectory, "helloAndFinish.xml");
@@ -81,7 +90,8 @@ public class InstallationTest extends AbstractInstallationTest {
 
 
     @Test
-    public void testBasicInstall() throws Exception {
+    public void testBasicInstall() throws Exception
+    {
         compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
 
@@ -125,7 +135,8 @@ public class InstallationTest extends AbstractInstallationTest {
         assertThat(new File(installPath, "auto.xml").exists(), Is.is(true));
     }
 
-    private void clickDefaultLang() {
+    private void clickDefaultLang()
+    {
         dialogFrameFixture = prepareDialogFixture();
         dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
         // Seems necessary to unlock window
@@ -133,7 +144,8 @@ public class InstallationTest extends AbstractInstallationTest {
         dialogFrameFixture = null;
     }
 
-    private File prepareInstallation(GUIInstallData installData) throws IOException {
+    private File prepareInstallation(GUIInstallData installData) throws IOException
+    {
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         File installPath = new File(installData.getInstallPath());
         FileUtils.deleteDirectory(installPath);
@@ -143,8 +155,9 @@ public class InstallationTest extends AbstractInstallationTest {
 
 
     @Test
-    public void testIzpackInstallation() throws Exception {
-        compileAndUnzip("IzPack-install.xml", getWorkingDirectory("samples/izpack"));
+    public void testIzpackInstallation() throws Exception
+    {
+        compileAndUnzip("install.xml", getWorkingDirectory("samples/izpack"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
 
         File installPath = prepareInstallation(installData);
@@ -181,13 +194,16 @@ public class InstallationTest extends AbstractInstallationTest {
 
     }
 
-    private void waitAndCheckInstallation(GUIInstallData installData, File installPath) throws InterruptedException {
-        while (!installData.isCanClose()) {
+    private void waitAndCheckInstallation(GUIInstallData installData, File installPath) throws InterruptedException
+    {
+        while (!installData.isCanClose())
+        {
             Thread.sleep(500);
         }
         assertThat(installPath.exists(), Is.is(true));
         UninstallData u = UninstallData.getInstance();
-        for (String p : u.getInstalledFilesList()) {
+        for (String p : u.getInstalledFilesList())
+        {
             File f = new File(p);
             assertThat(f.exists(), Is.is(true));
         }
