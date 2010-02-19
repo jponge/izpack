@@ -1,7 +1,8 @@
 package com.izforge.izpack.util.os;
 
 import java.io.File;
-import java.util.*;
+import java.util.List;
+import java.util.Vector;
 
 public class WinSetupDefaultCallbackHandler implements WinSetupQueueCallbackInterface
 {
@@ -9,10 +10,13 @@ public class WinSetupDefaultCallbackHandler implements WinSetupQueueCallbackInte
     private List<SystemErrorException> exceptions;
 
     public int handleNeedMedia(String tagfile, String description, String sourcePath,
-            String sourceFile)
+                               String sourceFile)
     {
         File f = new File(sourcePath, sourceFile);
-        if (f.exists() && f.canRead()) { return FILEOP_RETRY; }
+        if (f.exists() && f.canRead())
+        {
+            return FILEOP_RETRY;
+        }
         addException("Source file " + f.getPath() + " not found, aborting.");
         return FILEOP_ABORT;
     }
@@ -48,7 +52,10 @@ public class WinSetupDefaultCallbackHandler implements WinSetupQueueCallbackInte
 
     private void addException(int errCode, String errMsg)
     {
-        if (exceptions == null) exceptions = new Vector<SystemErrorException>();
+        if (exceptions == null)
+        {
+            exceptions = new Vector<SystemErrorException>();
+        }
         exceptions.add(new SystemErrorException(errCode, errMsg));
     }
 

@@ -38,7 +38,7 @@ public class HTMLHelloPanel extends HTMLInfoPanel
      */
     public HTMLHelloPanel(InstallerFrame parent, InstallData idata)
     {
-        super(parent,idata,"HTMLHelloPanel",false);
+        super(parent, idata, "HTMLHelloPanel", false);
     }
 
     /**

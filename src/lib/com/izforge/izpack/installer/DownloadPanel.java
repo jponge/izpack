@@ -22,7 +22,7 @@
 package com.izforge.izpack.installer;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

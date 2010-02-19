@@ -21,8 +21,10 @@
 
 package com.izforge.izpack.gui;
 
+import javax.swing.Icon;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import java.awt.Font;
-import javax.swing.*;
 
 /**
  * <p>
@@ -62,7 +64,7 @@ public class LabelFactory implements SwingConstants
      * Returns the current label-font-size multiplier.
      *
      * @return the current label-font-size multiplier (or 1.0 if none
-     * has been entered).
+     *         has been entered).
      */
     public static float getLabelFontSize()
     {
@@ -82,7 +84,7 @@ public class LabelFactory implements SwingConstants
             labelFontSizeVal = val;
             final Font fontObj = (new JLabel()).getFont();
             customLabelFontObj =
-                              fontObj.deriveFont(fontObj.getSize2D() * val);
+                    fontObj.deriveFont(fontObj.getSize2D() * val);
         }
     }
 

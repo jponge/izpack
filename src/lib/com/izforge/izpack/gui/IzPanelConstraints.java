@@ -19,9 +19,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.gui;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Rectangle;
 
 /**
  * Constraints class for the layout manager <code>IzPanelLayout</code>.

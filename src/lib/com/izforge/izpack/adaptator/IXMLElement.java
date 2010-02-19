@@ -90,9 +90,7 @@ public interface IXMLElement extends Serializable
      * Returns the child at a specific index.
      *
      * @param index Index of the child
-     *
      * @return the non-null child
-     *
      * @throws java.lang.ArrayIndexOutOfBoundsException
      *          if the index is out of bounds.
      */
@@ -102,7 +100,6 @@ public interface IXMLElement extends Serializable
      * Searches a child element.
      *
      * @param name the name of the child to search for.
-     *
      * @return the child element, or null if no such child was found.
      */
     IXMLElement getFirstChildNamed(String name);
@@ -111,7 +108,6 @@ public interface IXMLElement extends Serializable
      * Returns a vector of all child elements named <I>name</I>.
      *
      * @param name the name of the children to search for.
-     *
      * @return the non-null vector of child elements.
      */
     Vector<IXMLElement> getChildrenNamed(String name);
@@ -120,7 +116,6 @@ public interface IXMLElement extends Serializable
      * Returns the value of an attribute.
      *
      * @param name the non-null name of the attribute.
-     *
      * @return the value, or null if the attribute does not exist.
      */
     String getAttribute(String name);
@@ -130,7 +125,6 @@ public interface IXMLElement extends Serializable
      *
      * @param name         the non-null name of the attribute.
      * @param defaultValue the default value of the attribute.
-     *
      * @return the value, or defaultValue if the attribute does not exist.
      */
     String getAttribute(String name, String defaultValue);
@@ -161,7 +155,6 @@ public interface IXMLElement extends Serializable
      * Returns whether an attribute exists.
      *
      * @param name The name of the attribute
-     *
      * @return true if the attribute exists.
      */
     boolean hasAttribute(String name);
@@ -177,7 +170,6 @@ public interface IXMLElement extends Serializable
      * Returns the line number in the data where the element started.
      *
      * @return the line number, or NO_LINE if unknown.
-     *
      * @see #NO_LINE
      */
     int getLineNr();

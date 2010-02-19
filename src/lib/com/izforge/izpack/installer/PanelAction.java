@@ -1,10 +1,11 @@
 /**
  * File Name: PanelAction.java
- * 
+ *
  * Copyright (c) 2009 BISON Schweiz AG, All Rights Reserved.
  *
  * Version: $Id: PanelAction.java,v 1.1.2.1 2009/02/12 12:21:01 blf Exp $
  */
+
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.util.AbstractUIHandler;
@@ -44,16 +45,17 @@ public interface PanelAction
      * attribute for the stage of the action
      */
     public static final String PANEL_ACTION_STAGE_TAG = "stage";
-    
+
     /**
-     * tag-name for the configuration of an action. 
+     * tag-name for the configuration of an action.
      */
     public static final String PANEL_ACTION_CONFIGURATION_TAG = "configuration";
 
     /**
      * pre panel activation stage
      */
-    public static enum ActionStage {
+    public static enum ActionStage
+    {
         preconstruct, preactivate, prevalidate, postvalidate
     }
 
@@ -63,17 +65,18 @@ public interface PanelAction
     public static final String PANEL_ACTION_CLASSNAME_TAG = "classname";
 
     /**
-     * @param adata - AutomatedInstallData instance
+     * @param adata   - AutomatedInstallData instance
      * @param handler - actual UIHandler (
-     * NOTE: 
-     * On a preconstruct action the handler is null because it is not available until it is constructed.
-     * During an automated installation the handler is null on each action because we have no GUI to handle.
+     *                NOTE:
+     *                On a preconstruct action the handler is null because it is not available until it is constructed.
+     *                During an automated installation the handler is null on each action because we have no GUI to handle.
      */
     public void executeAction(final AutomatedInstallData adata, AbstractUIHandler handler);
-       
-    
+
+
     /**
      * Initializes the PanelAction with the given configuration.
+     *
      * @param configuration an PanelActionConfiguration containing the configuration of the action or
      *                      null if no configuration was found.
      */

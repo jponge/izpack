@@ -21,7 +21,6 @@ package com.izforge.izpack.uninstaller;
 
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.event.UninstallerListener;
-import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
@@ -115,13 +114,13 @@ public class Destroyer extends Thread
 
             if (OsVersion.IS_UNIX)
             {
-                ArrayList<String> rootScripts = getRootScripts(); 
+                ArrayList<String> rootScripts = getRootScripts();
                 Iterator<String> rsi = rootScripts.iterator();
                 while (rsi.hasNext())
                 {
-                  execRootScript((String) rsi.next() );                    
+                    execRootScript((String) rsi.next());
                 }
-                
+
             }
             // We make a complementary cleanup
             handler.progress(size, "[ cleanups ]");
@@ -219,23 +218,23 @@ public class Destroyer extends Thread
     private ArrayList<String> getRootScripts() throws Exception
     {
         ArrayList<String> result = new ArrayList<String>();
-        
-        int idx=0;
-        while(true)
+
+        int idx = 0;
+        while (true)
         {
-          try
-          {
-            ObjectInputStream in = new ObjectInputStream(Destroyer.class.getResourceAsStream("/"
-                  + UninstallData.ROOTSCRIPT+Integer.toString(idx)));
-        
-            result.add( in.readUTF() );
-          }
-          catch (Exception e) 
-          {
-             Debug.log("Last RootScript Index=" + idx);
-             break;
-          }        
-          idx++;
+            try
+            {
+                ObjectInputStream in = new ObjectInputStream(Destroyer.class.getResourceAsStream("/"
+                        + UninstallData.ROOTSCRIPT + Integer.toString(idx)));
+
+                result.add(in.readUTF());
+            }
+            catch (Exception e)
+            {
+                Debug.log("Last RootScript Index=" + idx);
+                break;
+            }
+            idx++;
         }
         return result;
     }

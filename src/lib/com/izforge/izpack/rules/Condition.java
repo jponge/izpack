@@ -18,12 +18,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.rules;
 
-import java.io.Serializable;
+package com.izforge.izpack.rules;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.installer.AutomatedInstallData;
+
+import java.io.Serializable;
 
 /**
  * Abstract base class for all conditions. Implementations of custom conditions
@@ -80,10 +81,11 @@ public abstract class Condition implements Serializable
     {
         return "No dependencies for this condition.";
     }
-    
+
     /**
      * This element will be called by the RulesEngine to serialize the configuration
      * of a condition into XML.
+     *
      * @param conditionRoot the root element for this condition
      */
     public abstract void makeXMLData(IXMLElement conditionRoot);

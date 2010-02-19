@@ -23,19 +23,13 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.*;
-import com.izforge.izpack.adaptator.IXMLElement;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -292,7 +286,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     /**
      * Returns an ant call which is defined in the given XML element.
      *
-     * @param el XML element which contains the description of an ant call
+     * @param el    XML element which contains the description of an ant call
      * @param idata The installation data
      * @return an ant call which is defined in the given XML element
      * @throws InstallerException
@@ -301,7 +295,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     {
         String buildFile = null;
         String buildResource = null;
-        
+
         if (el == null)
         {
             return null;
@@ -320,7 +314,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         }
 
         act.setQuiet(spec.isAttributeYes(el, ActionBase.QUIET, false));
-        act.setVerbose(spec.isAttributeYes(el, ActionBase.VERBOSE, false));                
+        act.setVerbose(spec.isAttributeYes(el, ActionBase.VERBOSE, false));
         buildFile = el.getAttribute(ActionBase.BUILDFILE);
         buildResource = processBuildfileResource(spec, idata, el);
         if (null == buildFile && null == buildResource)
@@ -331,7 +325,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         {
             throw new InstallerException("Invalid " + SPEC_FILE_NAME + ": cannot specify both buildfile and buildresource");
         }
-        if (null != buildFile) 
+        if (null != buildFile)
         {
             act.setBuildFile(buildFile);
         }
@@ -384,7 +378,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         }
 
         // see if this was an build_resource and there were uninstall actions
-        if (null != buildResource &&  act.getUninstallTargets().size() > 0)
+        if (null != buildResource && act.getUninstallTargets().size() > 0)
         {
             // We need to add the build_resource file to the uninstaller
             addBuildResourceToUninstallerData(buildResource);
@@ -393,23 +387,23 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         return act;
     }
 
-    private String processBuildfileResource(SpecHelper spec, AutomatedInstallData idata, IXMLElement el) throws InstallerException 
+    private String processBuildfileResource(SpecHelper spec, AutomatedInstallData idata, IXMLElement el) throws InstallerException
     {
         String buildResource = null;
-        
+
         // See if the build file is a resource
         String attr = el.getAttribute(ActionBase.BUILDRESOURCE);
-        if (null != attr) 
+        if (null != attr)
         {
             // Get the resource
             BufferedInputStream bis = new BufferedInputStream(spec.getResource(attr));
-            if (null == bis) 
+            if (null == bis)
             {
                 // Resource not found
                 throw new InstallerException("Failed to find buildfile_resource: " + attr);
             }
             BufferedOutputStream bos = null;
-            try 
+            try
             {
                 // Write the resource to a temporary file
                 File tempFile = File.createTempFile("buildfile_resource", "xml");
@@ -423,20 +417,20 @@ public class AntActionInstallerListener extends SimpleInstallerListener
                 bis.close();
                 bos.close();
                 buildResource = tempFile.getAbsolutePath();
-            } 
-            catch (Exception x) 
+            }
+            catch (Exception x)
             {
                 throw new InstallerException("Failed to write buildfile_resource", x);
-            } 
-            finally 
+            }
+            finally
             {
-                if (bos != null) 
+                if (bos != null)
                 {
-                    try 
+                    try
                     {
                         bos.close();
-                    } 
-                    catch (Exception x) 
+                    }
+                    catch (Exception x)
                     {
                         // Ignore this exception
                     }
@@ -446,26 +440,36 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         return buildResource;
     }
 
-    private void addBuildResourceToUninstallerData(String buildResource) throws InstallerException {
+    private void addBuildResourceToUninstallerData(String buildResource) throws InstallerException
+    {
         byte[] content = null;
         File buildFile = new File(buildResource);
         ByteArrayOutputStream bos = new ByteArrayOutputStream((int) buildFile.length());
         BufferedInputStream bis = null;
-        try {
+        try
+        {
             bis = new BufferedInputStream(new FileInputStream(buildFile));
             int c;
-            while (-1 != (c = bis.read())) {
+            while (-1 != (c = bis.read()))
+            {
                 bos.write(c);
             }
             content = bos.toByteArray();
             UninstallData.getInstance().addAdditionalData("build_resource", content);
-        } catch (Exception x) {
+        }
+        catch (Exception x)
+        {
             throw new InstallerException("Failed to add buildfile_resource to uninstaller", x);
-        } finally {
-            try {
+        }
+        finally
+        {
+            try
+            {
                 bis.close();
                 bos.close();
-            } catch (IOException iOException) {
+            }
+            catch (IOException iOException)
+            {
                 // Ignore the error
             }
         }

@@ -33,7 +33,10 @@ import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JEditorPane;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
@@ -160,7 +163,7 @@ public class DataCheckPanel extends IzPanel
      * @return True
      */
     public boolean isValidated()
-	{
-		return true;
-	}
+    {
+        return true;
+    }
 }

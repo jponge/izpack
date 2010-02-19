@@ -21,12 +21,12 @@
 
 package com.izforge.izpack.panels;
 
-import javax.swing.*;
+import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
-import java.awt.*;
+import java.awt.Toolkit;
 
 /*---------------------------------------------------------------------------*/
 /**

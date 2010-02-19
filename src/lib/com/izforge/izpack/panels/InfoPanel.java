@@ -26,7 +26,8 @@ import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 
-import javax.swing.*;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 /**
  * The info panel class. Displays some raw-text informations.

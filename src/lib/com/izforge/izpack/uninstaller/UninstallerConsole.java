@@ -273,10 +273,10 @@ public class UninstallerConsole
         {
             out(title + ": " + error);
         }
-        
+
         /**
          * The destroyer encountered an error.
-         * 
+         *
          * @param error The error message.
          */
         public void emitErrorAndBlockNext(String title, String error)

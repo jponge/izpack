@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.gui.IzPanelConstraints;
@@ -25,8 +26,11 @@ import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LayoutConstants;
 import com.izforge.izpack.installer.IzPanel.Filler;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.LayoutManager2;
 
 /**
  * This class manages the layout for IzPanels. The layout related methods in IzPanel delegates the

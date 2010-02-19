@@ -28,8 +28,13 @@ import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.util.VariableSubstitutor;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 /**
  * The XInfo panel class - shows some adaptative text (ie by parsing for some variables.
@@ -84,10 +89,10 @@ public class XInfoPanel extends IzPanel
         textArea.setEditable(false);
 
         String textAreaFont = idata.getVariable("XInfoPanel.font");
-        if( textAreaFont!=null && textAreaFont.length()>0 )
+        if (textAreaFont != null && textAreaFont.length() > 0)
         {
             Font font = Font.decode(textAreaFont);
-            textArea.setFont( font );
+            textArea.setFont(font);
         }
 
         JScrollPane scroller = new JScrollPane(textArea);

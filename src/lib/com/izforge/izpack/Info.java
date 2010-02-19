@@ -142,12 +142,12 @@ public class Info implements Serializable
     {
         this.requirePrivilegedExecution = requirePrivilegedExecution;
     }
-    
+
     public boolean isPrivilegedExecutionRequiredUninstaller()
     {
         return requirePrivilegedExecutionUninstaller;
     }
-    
+
     public void setRequirePrivilegedExecutionUninstaller(boolean required)
     {
         this.requirePrivilegedExecutionUninstaller = required;
@@ -356,8 +356,9 @@ public class Info implements Serializable
      *
      * @param path the path to the uninstaller
      */
-    public void setUninstallerPath(String path) {
-      this.uninstallerPath = path;
+    public void setUninstallerPath(String path)
+    {
+        this.uninstallerPath = path;
     }
 
     /**
@@ -365,8 +366,9 @@ public class Info implements Serializable
      *
      * @return the path to the uninstaller
      */
-    public String getUninstallerPath() {
-      return this.uninstallerPath;
+    public String getUninstallerPath()
+    {
+        return this.uninstallerPath;
     }
 
     public boolean isJdkRequired()

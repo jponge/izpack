@@ -18,19 +18,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import javax.swing.JFileChooser;
 
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsVersion;
+
+import javax.swing.JFileChooser;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 public class DirInputField extends FileInputField
 {
@@ -42,7 +42,7 @@ public class DirInputField extends FileInputField
     private final boolean canCreate;
 
     public DirInputField(IzPanel parent, InstallData data, boolean directory, String set, int size,
-            List<ValidatorContainer> validatorConfig, boolean mustExist, boolean canCreate)
+                         List<ValidatorContainer> validatorConfig, boolean mustExist, boolean canCreate)
     {
         super(parent, data, directory, set, size, validatorConfig, null, null);
         this.mustExist = mustExist;
@@ -98,7 +98,10 @@ public class DirInputField extends FileInputField
         {
             if (!parent.emitNotificationFeedback(parent.getI18nStringForClass("createdir",
                     "TargetPanel")
-                    + "\n" + path.getAbsolutePath())) return false;
+                    + "\n" + path.getAbsolutePath()))
+            {
+                return false;
+            }
         }
 
         // We assume, that we would install something into this dir
@@ -113,13 +116,16 @@ public class DirInputField extends FileInputField
 
     /**
      * This method determines whether the chosen dir is writeable or not.
-     * 
+     *
      * @return whether the chosen dir is writeable or not
      */
     private static boolean isWriteable(File path)
     {
         File existParent = IoHelper.existingParent(path);
-        if (existParent == null) { return false; }
+        if (existParent == null)
+        {
+            return false;
+        }
 
         // On windows we cannot use canWrite because
         // it looks to the dos flags which are not valid

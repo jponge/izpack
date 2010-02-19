@@ -18,11 +18,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.rules;
 
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.util.Debug;
 
 import java.util.HashMap;
 
@@ -140,12 +141,12 @@ public class VariableCondition extends Condition
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {
-       XMLElementImpl nameEl = new XMLElementImpl("name",conditionRoot);
-       nameEl.setContent(this.variablename);               
-       conditionRoot.addChild(nameEl);
-       
-       XMLElementImpl valueEl = new XMLElementImpl("value",conditionRoot);
-       valueEl.setContent(this.value);
-       conditionRoot.addChild(valueEl);
+        XMLElementImpl nameEl = new XMLElementImpl("name", conditionRoot);
+        nameEl.setContent(this.variablename);
+        conditionRoot.addChild(nameEl);
+
+        XMLElementImpl valueEl = new XMLElementImpl("value", conditionRoot);
+        valueEl.setContent(this.value);
+        conditionRoot.addChild(valueEl);
     }
 }

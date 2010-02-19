@@ -22,7 +22,7 @@ package com.izforge.izpack.installer;
 import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.Panel;
 
-import java.awt.*;
+import java.awt.Color;
 import java.io.Serializable;
 
 /**

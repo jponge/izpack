@@ -307,20 +307,23 @@ public class JDKPathPanel extends PathInputPanel
         // We cannot look to the version of this vm because we should
         // test the given JDK VM.
         String[] params;
-        if ( System.getProperty("os.name").indexOf("Windows") >= 0 ) {
+        if (System.getProperty("os.name").indexOf("Windows") >= 0)
+        {
             String[] paramsp = {
-                "cmd",
-                "/c",
-                pathSelectionPanel.getPath() + File.separator + "bin" + File.separator + "java",
-                "-version"
+                    "cmd",
+                    "/c",
+                    pathSelectionPanel.getPath() + File.separator + "bin" + File.separator + "java",
+                    "-version"
             };
-            params=paramsp;
-        } else {
+            params = paramsp;
+        }
+        else
+        {
             String[] paramsp = {
-                pathSelectionPanel.getPath() + File.separator + "bin" + File.separator + "java",
-                "-version"
+                    pathSelectionPanel.getPath() + File.separator + "bin" + File.separator + "java",
+                    "-version"
             };
-            params=paramsp;
+            params = paramsp;
         }
         String[] output = new String[2];
         FileExecutor fe = new FileExecutor();
@@ -358,8 +361,8 @@ public class JDKPathPanel extends PathInputPanel
     }
 
     private boolean compareVersions(String in, String template, boolean isMin,
-            int assumedPlace, int halfRange, String useNotIdentifier)
-            {
+                                    int assumedPlace, int halfRange, String useNotIdentifier)
+    {
         StringTokenizer st = new StringTokenizer(in, " \t\n\r\f\"");
         int i;
         int currentRange = 0;

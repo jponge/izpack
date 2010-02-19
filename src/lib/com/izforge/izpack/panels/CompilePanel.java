@@ -18,13 +18,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.*;
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -520,10 +521,10 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
     public void makeXMLData(IXMLElement panelRoot)
     {
         // just save the compiler chosen and the arguments
-        IXMLElement compiler = new XMLElementImpl("compiler",panelRoot);
+        IXMLElement compiler = new XMLElementImpl("compiler", panelRoot);
         compiler.setContent(this.worker.getCompiler());
         panelRoot.addChild(compiler);
-        IXMLElement args = new XMLElementImpl("arguments",panelRoot);
+        IXMLElement args = new XMLElementImpl("arguments", panelRoot);
         args.setContent(this.worker.getCompilerArguments());
         panelRoot.addChild(args);
     }

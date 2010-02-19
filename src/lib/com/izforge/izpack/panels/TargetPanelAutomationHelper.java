@@ -21,11 +21,11 @@
 
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.util.VariableSubstitutor;
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 
 /**
  * Functions to support automated usage of the TargetPanel
@@ -45,7 +45,7 @@ public class TargetPanelAutomationHelper implements PanelAutomation
     public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot)
     {
         // Installation path markup
-        IXMLElement ipath = new XMLElementImpl("installpath",panelRoot);
+        IXMLElement ipath = new XMLElementImpl("installpath", panelRoot);
         // check this writes even if value is the default,
         // because without the constructor, default does not get set.
         ipath.setContent(idata.getInstallPath());

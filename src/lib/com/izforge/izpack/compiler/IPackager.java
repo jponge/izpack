@@ -16,16 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.CustomData;
 import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.Panel;
+import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.compressor.PackCompressor;
 import com.izforge.izpack.installer.InstallerRequirement;
 import com.izforge.izpack.rules.Condition;
-import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.io.File;
 import java.net.URL;
@@ -89,7 +90,7 @@ public interface IPackager
 
     /**
      * Add a panel, where order is important. Only one copy of the class files needd are inserted in
-     * the installer. When jarURL is null, it is assumed that user will do the manual merged 
+     * the installer. When jarURL is null, it is assumed that user will do the manual merged
      * using <Jar> tag themselves
      */
     public abstract void addPanelJar(Panel panel, URL jarURL);
@@ -167,7 +168,7 @@ public interface IPackager
      * @param data the describing custom action data object
      */
     public abstract void addNativeUninstallerLibrary(CustomData data);
-    
+
     public abstract void addInstallerRequirements(List<InstallerRequirement> conditions);
 
     /**

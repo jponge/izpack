@@ -32,7 +32,7 @@ import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
 import java.io.File;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -81,7 +81,8 @@ public abstract class InstallerBase
         return available;
     }
 
-    public RulesEngine getRules(){
+    public RulesEngine getRules()
+    {
         return this.rules;
     }
 
@@ -296,13 +297,13 @@ public abstract class InstallerBase
                 {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(null, "The installer could not launch itself with administrator permissions.\n" +
-                        "The installation will still continue but you may encounter problems due to insufficient permissions.");
+                            "The installation will still continue but you may encounter problems due to insufficient permissions.");
                 }
             }
             else if (!runner.isPlatformSupported())
             {
                 JOptionPane.showMessageDialog(null, "This installer should be run by an administrator.\n" +
-                    "The installation will still continue but you may encounter problems due to insufficient permissions.");
+                        "The installation will still continue but you may encounter problems due to insufficient permissions.");
             }
         }
 
@@ -314,7 +315,9 @@ public abstract class InstallerBase
         if (conditionId != null)
         {
             if (!RulesEngine.getCondition(conditionId).isTrue())
+            {
                 info.setRebootAction(Info.REBOOT_ACTION_IGNORE);
+            }
         }
     }
 

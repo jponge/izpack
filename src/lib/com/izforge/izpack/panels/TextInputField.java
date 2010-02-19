@@ -23,7 +23,8 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.util.Debug;
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JTextField;
 import java.util.Map;
 
 /*---------------------------------------------------------------------------*/

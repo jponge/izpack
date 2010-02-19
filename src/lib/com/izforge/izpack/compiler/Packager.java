@@ -23,9 +23,7 @@ package com.izforge.izpack.compiler;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.PackFile;
 import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.IXMLWriter;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.adaptator.impl.XMLWriter;
 import com.izforge.izpack.util.FileUtil;
 
 import java.io.*;
@@ -382,7 +380,7 @@ public class Packager extends PackagerBase
                 packStream.closeAlways();
             }
 
-            IXMLElement child = new XMLElementImpl("pack",root);
+            IXMLElement child = new XMLElementImpl("pack", root);
             child.setAttribute("nbytes", Long.toString(pack.nbytes));
             child.setAttribute("name", pack.name);
             if (pack.id != null)
@@ -430,7 +428,7 @@ public class Packager extends PackagerBase
         m.put(Pack200.Packer.KEEP_FILE_ORDER, Pack200.Packer.FALSE);
         m.put(Pack200.Packer.DEFLATE_HINT, Pack200.Packer.FALSE);
         m.put(Pack200.Packer.MODIFICATION_TIME, Pack200.Packer.LATEST);
-        m.put(Pack200.Packer.CODE_ATTRIBUTE_PFX +"LineNumberTable", Pack200.Packer.STRIP);
+        m.put(Pack200.Packer.CODE_ATTRIBUTE_PFX + "LineNumberTable", Pack200.Packer.STRIP);
         m.put(Pack200.Packer.CODE_ATTRIBUTE_PFX + "LocalVariableTable", Pack200.Packer.STRIP);
         m.put(Pack200.Packer.CODE_ATTRIBUTE_PFX + "SourceFile", Pack200.Packer.STRIP);
         return packer;

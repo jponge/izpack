@@ -21,12 +21,17 @@
 
 package com.izforge.izpack.util;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 import javax.swing.text.Segment;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
@@ -107,7 +112,8 @@ public final class Console
         scroll.setPreferredSize(new Dimension(INITIAL_WIDTH, INITIAL_HEIGHT));
         frame.getContentPane().add(scroll);
         frame.pack();
-        frame.addWindowListener(new WindowListener(){
+        frame.addWindowListener(new WindowListener()
+        {
 
             public void windowActivated(WindowEvent e)
             {

@@ -36,7 +36,6 @@ import java.util.Vector;
  *
  * @author Anthonin Bonnefoy
  * @author David Duponchel
- *
  */
 public class XMLElementTest extends TestCase
 {

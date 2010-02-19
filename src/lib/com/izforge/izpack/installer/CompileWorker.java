@@ -429,7 +429,8 @@ public class CompileWorker implements Runnable
         ArrayList ourclasspath = (ArrayList) classpath.clone();
         ArrayList<File> files = new ArrayList<File>();
 
-        for (int i = 0; i < toplevel_tags.size(); i++) {
+        for (int i = 0; i < toplevel_tags.size(); i++)
+        {
             IXMLElement child = (IXMLElement) toplevel_tags.elementAt(i);
 
             if ("classpath".equals(child.getName()))

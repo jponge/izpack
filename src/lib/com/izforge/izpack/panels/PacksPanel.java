@@ -26,8 +26,10 @@ import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.util.IoHelper;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JScrollPane;
+import java.awt.Dimension;
 
 /**
  * The packs selection panel class. This class handles only the layout. Common stuff are handled by
@@ -74,9 +76,9 @@ public class PacksPanel extends PacksPanelBase
         {
             dependencyArea = createTextArea("PacksPanel.dependencyList", null, null, null);
         }
-        descriptionArea = createTextArea("PacksPanel.description", null, null, null);       
+        descriptionArea = createTextArea("PacksPanel.description", null, null, null);
         spaceLabel = createPanelWithLabel("PacksPanel.space", null, null);
-                
+
         if (IoHelper.supported("getFreeSpace"))
         {
             add(Box.createRigidArea(new Dimension(0, 3)));

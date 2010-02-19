@@ -28,7 +28,6 @@ import com.izforge.izpack.util.AbstractUIProgressHandler;
 import java.io.File;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.util.Iterator;
 import java.util.List;
 
 

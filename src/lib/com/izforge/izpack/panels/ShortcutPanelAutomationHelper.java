@@ -19,15 +19,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.ExecutableFile;
+import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.Shortcut;
-import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.io.File;
 import java.util.ArrayList;

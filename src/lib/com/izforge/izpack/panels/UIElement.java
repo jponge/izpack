@@ -16,17 +16,17 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.panels;
-
-import java.util.Vector;
-
-import javax.swing.JComponent;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 
+import javax.swing.JComponent;
+import java.util.Vector;
+
 /**
  * Metadata for elements shown in the dialog.
- * 
+ *
  * @author Dennis Reil
  */
 public class UIElement

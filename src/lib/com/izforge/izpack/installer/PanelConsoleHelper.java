@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.installer;
 
 import java.io.BufferedReader;
@@ -26,12 +27,11 @@ import java.io.InputStreamReader;
 
 /**
  * Abstract class implementing basic functions needed by all panel console helpers.
- * 
+ *
  * @author Mounir El Hajj
  */
-abstract public class PanelConsoleHelper 
+abstract public class PanelConsoleHelper
 {
-
 
 
     public int askEndOfConsolePanel()
@@ -51,7 +51,10 @@ abstract public class PanelConsoleHelper
                 {
                     return 2;
                 }
-                else if (strIn.equals("3")) { return 3; }
+                else if (strIn.equals("3"))
+                {
+                    return 3;
+                }
             }
 
         }

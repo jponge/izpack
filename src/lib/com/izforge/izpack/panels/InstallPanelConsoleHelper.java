@@ -18,18 +18,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels;
+
+import com.izforge.izpack.installer.*;
+import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.util.AbstractUIProgressHandler;
 
 import java.io.PrintWriter;
 import java.util.Properties;
 
-import com.izforge.izpack.installer.AutomatedInstallData;
-import com.izforge.izpack.installer.IUnpacker;
-import com.izforge.izpack.installer.PanelConsole;
-import com.izforge.izpack.installer.PanelConsoleHelper;
-import com.izforge.izpack.installer.UnpackerFactory;
-import com.izforge.izpack.util.AbstractUIHandler;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
 /**
  * Install Panel console helper
  *
@@ -42,8 +40,7 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
     private int noOfPacks = 0;
 
 
-
-    public boolean runGeneratePropertiesFile(AutomatedInstallData installData,PrintWriter printWriter)
+    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
     {
         return true;
     }

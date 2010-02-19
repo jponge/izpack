@@ -406,7 +406,7 @@ public class Win_Shortcut extends Shortcut
             case ShellLink.NORMAL:
                 showCommand = NORMAL;
                 break;
-                // both MINNOACTIVE and MINIMIZED map to Shortcut.MINIMIZED
+            // both MINNOACTIVE and MINIMIZED map to Shortcut.MINIMIZED
             case ShellLink.MINNOACTIVE:
             case ShellLink.MINIMIZED:
                 showCommand = MINIMIZED;

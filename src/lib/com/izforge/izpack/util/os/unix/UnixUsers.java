@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.util.os.unix;
 
 import com.izforge.izpack.util.StringTool;
@@ -115,7 +116,7 @@ public class UnixUsers extends ArrayList
             UnixUser user = usersWithValidShellsAndExistingHomes.get(idx);
 
             if ((user.getHome() != null)
-                    && new File( user.getXdgDesktopfolder() ).exists())
+                    && new File(user.getXdgDesktopfolder()).exists())
             {
                 result.add(user);
             }
@@ -141,7 +142,7 @@ public class UnixUsers extends ArrayList
 
             if (user.getHome() != null)
             {
-                File DesktopFolder = new File( user.getXdgDesktopfolder() );
+                File DesktopFolder = new File(user.getXdgDesktopfolder());
 
                 if (DesktopFolder.exists() && DesktopFolder.isDirectory())
                 {

@@ -18,26 +18,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.rules;
 
-import java.util.HashMap;
+package com.izforge.izpack.rules;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
-
 import com.izforge.izpack.util.Debug;
+
+import java.util.HashMap;
 
 /**
  * @author Dennis Reil, <izpack@reil-online.de>
  */
 public class CompareNumericsCondition extends Condition
-{       
+{
     private static final long serialVersionUID = 5631805710151645907L;
 
     protected String variablename;
     protected String value;
-    protected String operator;    
-    
+    protected String operator;
+
     public CompareNumericsCondition(String variablename, String value, HashMap packstoremove)
     {
         super();
@@ -102,36 +102,46 @@ public class CompareNumericsCondition extends Condition
     public boolean isTrue()
     {
         boolean result = false;
-        if (this.installdata != null) {
+        if (this.installdata != null)
+        {
             String val = this.installdata.getVariable(variablename);
-            if (val != null){
-                if (operator == null){
-                    operator = "eq";                    
+            if (val != null)
+            {
+                if (operator == null)
+                {
+                    operator = "eq";
                 }
-                try {
+                try
+                {
                     int currentValue = new Integer(val);
                     int comparisonValue = new Integer(value);
-                    if ("eq".equalsIgnoreCase(operator)){
+                    if ("eq".equalsIgnoreCase(operator))
+                    {
                         result = currentValue == comparisonValue;
                     }
-                    else if ("gt".equalsIgnoreCase(operator)){
+                    else if ("gt".equalsIgnoreCase(operator))
+                    {
                         result = currentValue > comparisonValue;
                     }
-                    else if ("lt".equalsIgnoreCase(operator)){
+                    else if ("lt".equalsIgnoreCase(operator))
+                    {
                         result = currentValue < comparisonValue;
                     }
-                    else if ("leq".equalsIgnoreCase(operator)){
+                    else if ("leq".equalsIgnoreCase(operator))
+                    {
                         result = currentValue <= comparisonValue;
                     }
-                    else if ("geq".equalsIgnoreCase(operator)){
+                    else if ("geq".equalsIgnoreCase(operator))
+                    {
                         result = currentValue >= comparisonValue;
-                    }                                                          
+                    }
                 }
-                catch (NumberFormatException nfe){
-                    Debug.log("The value of the associated variable is not a numeric value or the value which should be compared is not a number.");                    
-                }            
+                catch (NumberFormatException nfe)
+                {
+                    Debug.log("The value of the associated variable is not a numeric value or the value which should be compared is not a number.");
+                }
             }
-        }                    
+        }
         return result;
     }
 
@@ -142,7 +152,7 @@ public class CompareNumericsCondition extends Condition
     {
         StringBuffer details = new StringBuffer();
         details.append(this.id);
-        details.append(" depends on a value of <b>");        
+        details.append(" depends on a value of <b>");
         details.append(this.value);
         details.append("</b> on variable <b>");
         details.append(this.variablename);
@@ -154,13 +164,13 @@ public class CompareNumericsCondition extends Condition
         return details.toString();
     }
 
-    
+
     public String getOperator()
     {
         return operator;
     }
 
-    
+
     public void setOperator(String operator)
     {
         this.operator = operator;
@@ -169,13 +179,13 @@ public class CompareNumericsCondition extends Condition
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {
-        XMLElementImpl nameXml = new XMLElementImpl("name",conditionRoot);
+        XMLElementImpl nameXml = new XMLElementImpl("name", conditionRoot);
         nameXml.setContent(this.variablename);
         conditionRoot.addChild(nameXml);
-        XMLElementImpl valueXml = new XMLElementImpl("value",conditionRoot);
+        XMLElementImpl valueXml = new XMLElementImpl("value", conditionRoot);
         valueXml.setContent(this.value);
         conditionRoot.addChild(valueXml);
-        XMLElementImpl opXml = new XMLElementImpl("op",conditionRoot);
+        XMLElementImpl opXml = new XMLElementImpl("op", conditionRoot);
         opXml.setContent(this.operator);
         conditionRoot.addChild(opXml);
     }

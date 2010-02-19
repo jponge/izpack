@@ -19,7 +19,7 @@
 
 package com.izforge.izpack.gui;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
 import java.util.TreeMap;
 
 /**

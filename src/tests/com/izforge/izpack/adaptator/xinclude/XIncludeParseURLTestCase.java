@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.adaptator.xinclude;
 
 import com.izforge.izpack.adaptator.IXMLElement;

@@ -18,7 +18,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels;
+
+import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.installer.PanelConsole;
+import com.izforge.izpack.installer.PanelConsoleHelper;
+import com.izforge.izpack.installer.ScriptParser;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,11 +33,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Properties;
 
-import com.izforge.izpack.installer.AutomatedInstallData;
-import com.izforge.izpack.installer.PanelConsole;
-import com.izforge.izpack.installer.PanelConsoleHelper;
-import com.izforge.izpack.installer.ScriptParser;
-import com.izforge.izpack.util.VariableSubstitutor;
 /**
  * The Target panel console helper class.
  *
@@ -39,7 +41,7 @@ import com.izforge.izpack.util.VariableSubstitutor;
 public class TargetPanelConsoleHelper extends PanelConsoleHelper implements PanelConsole
 {
 
-    public boolean runGeneratePropertiesFile(AutomatedInstallData installData,PrintWriter printWriter)
+    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
     {
         printWriter.println(ScriptParser.INSTALL_PATH + "=");
         return true;
@@ -67,9 +69,9 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
 
         String strTargetPath = "";
         String strDefaultPath = idata.getVariable("SYSTEM_user_dir"); // this is a special
-                                                                      // requirement to make the
-                                                                      // default path point to the
-                                                                      // current location
+        // requirement to make the
+        // default path point to the
+        // current location
         System.out.println("Select target path [" + strDefaultPath + "] ");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try

@@ -77,7 +77,8 @@ public class XMLElementImpl implements IXMLElement
             document.setXmlVersion("1.0");
             element = document.createElement(name);
             document.appendChild(element);
-        } catch (ParserConfigurationException e)
+        }
+        catch (ParserConfigurationException e)
         {
             e.printStackTrace();
         }
@@ -200,7 +201,7 @@ public class XMLElementImpl implements IXMLElement
         for (int i = 0; i < children.size(); i++)
         {
             IXMLElement child = children.elementAt(i);
-            if (child.getName()!= null && child.getName().equals(name))
+            if (child.getName() != null && child.getName().equals(name))
             {
                 res.add(new XMLElementImpl(child.getElement()));
             }

@@ -20,49 +20,6 @@
 
 package com.izforge.izpack.installer;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GraphicsEnvironment;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TreeMap;
-
-import javax.swing.GrayFilter;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
-import javax.swing.LookAndFeel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.plaf.metal.MetalTheme;
-
 import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.gui.ButtonFactory;
@@ -72,9 +29,24 @@ import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.VariableSubstitutor;
 
+import javax.swing.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.MetalTheme;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.List;
+
 /**
  * The IzPack graphical installer class.
- * 
+ *
  * @author Julien Ponge
  */
 public class GUIInstaller extends InstallerBase
@@ -113,12 +85,17 @@ public class GUIInstaller extends InstallerBase
      */
     public GUIInstaller() throws Exception
     {
-        try {
+        try
+        {
             init();
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             showFatalError(e);
             throw e;
-        } catch (Error e) {
+        }
+        catch (Error e)
+        {
             showFatalError(e);
             throw e;
         }
@@ -126,9 +103,12 @@ public class GUIInstaller extends InstallerBase
 
     private void showFatalError(Throwable e)
     {
-        try {
-            JOptionPane.showMessageDialog (null, "Error: "+e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e2) {
+        try
+        {
+            JOptionPane.showMessageDialog(null, "Error: " + e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        catch (Exception e2)
+        {
             e2.printStackTrace();
         }
     }
@@ -194,7 +174,8 @@ public class GUIInstaller extends InstallerBase
         addCustomLangpack(installdata);
 
         // We launch the installer GUI
-        SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable()
+        {
 
             public void run()
             {
@@ -211,8 +192,9 @@ public class GUIInstaller extends InstallerBase
     }
 
     @Override
-    public void showMissingRequirementMessage(String message){
-        Debug.log("Missing installer requirement: "+message);
+    public void showMissingRequirementMessage(String message)
+    {
+        Debug.log("Missing installer requirement: " + message);
         JOptionPane.showMessageDialog(null, message);
     }
 
@@ -265,7 +247,7 @@ public class GUIInstaller extends InstallerBase
             msg.append("</html>");
             JLabel label = new JLabel(msg.toString());
             label.setFont(new Font("Sans Serif", Font.PLAIN, 12));
-            Object[] optionValues = { "Continue", "Exit"};
+            Object[] optionValues = {"Continue", "Exit"};
             int selectedOption = JOptionPane.showOptionDialog(null, label, "Warning",
                     JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, optionValues,
                     optionValues[1]);
@@ -309,7 +291,7 @@ public class GUIInstaller extends InstallerBase
 
     /**
      * Checks the Java version.
-     * 
+     *
      * @throws Exception Description of the Exception
      */
     private void checkJavaVersion() throws Exception
@@ -338,11 +320,14 @@ public class GUIInstaller extends InstallerBase
      */
     private void checkJDKAvailable()
     {
-        if (!this.installdata.info.isJdkRequired()) { return; }
+        if (!this.installdata.info.isJdkRequired())
+        {
+            return;
+        }
 
         FileExecutor exec = new FileExecutor();
         String[] output = new String[2];
-        String[] params = { "javac", "-help"};
+        String[] params = {"javac", "-help"};
         if (exec.executeCommand(params, output) != 0)
         {
             String[] message = {
@@ -360,7 +345,7 @@ public class GUIInstaller extends InstallerBase
 
     /**
      * Loads the suitable langpack.
-     * 
+     *
      * @throws Exception Description of the Exception
      */
     private void loadLangPack() throws Exception
@@ -368,7 +353,10 @@ public class GUIInstaller extends InstallerBase
         // Initialisations
         List availableLangPacks = getAvailableLangPacks();
         int npacks = availableLangPacks.size();
-        if (npacks == 0) { throw new Exception("no language pack available"); }
+        if (npacks == 0)
+        {
+            throw new Exception("no language pack available");
+        }
         String selectedPack;
 
         // Dummy Frame
@@ -402,7 +390,10 @@ public class GUIInstaller extends InstallerBase
             picker.setVisible(true);
 
             selectedPack = (String) picker.getSelection();
-            if (selectedPack == null) { throw new Exception("installation canceled"); }
+            if (selectedPack == null)
+            {
+                throw new Exception("installation canceled");
+            }
         }
         else
         {
@@ -422,7 +413,7 @@ public class GUIInstaller extends InstallerBase
 
     /**
      * Loads the suitable L&F.
-     * 
+     *
      * @throws Exception Description of the Exception
      */
     protected void loadLookAndFeel() throws Exception
@@ -506,7 +497,7 @@ public class GUIInstaller extends InstallerBase
             Class<LookAndFeel> lafClass = (Class<LookAndFeel>) Class
                     .forName("com.incors.plaf.kunststoff.KunststoffLookAndFeel");
             Class mtheme = Class.forName("javax.swing.plaf.metal.MetalTheme");
-            Class[] params = { mtheme};
+            Class[] params = {mtheme};
             Class<MetalTheme> theme = (Class<MetalTheme>) Class
                     .forName("com.izforge.izpack.gui.IzPackKMetalTheme");
             Method setCurrentThemeMethod = lafClass.getMethod("setCurrentTheme", params);
@@ -514,7 +505,7 @@ public class GUIInstaller extends InstallerBase
             // We invoke and place Kunststoff as our L&F
             LookAndFeel kunststoff = lafClass.newInstance();
             MetalTheme ktheme = theme.newInstance();
-            Object[] kparams = { ktheme};
+            Object[] kparams = {ktheme};
             UIManager.setLookAndFeel(kunststoff);
             setCurrentThemeMethod.invoke(kunststoff, kparams);
 
@@ -621,7 +612,7 @@ public class GUIInstaller extends InstallerBase
 
     /**
      * Loads the GUI.
-     * 
+     *
      * @throws Exception Description of the Exception
      */
     private void loadGUI() throws Exception
@@ -651,20 +642,23 @@ public class GUIInstaller extends InstallerBase
 
     /**
      * Returns whether flags should be used in the language selection dialog or not.
-     * 
+     *
      * @return whether flags should be used in the language selection dialog or not
      */
     protected boolean useFlags()
     {
         if (installdata.guiPrefs.modifier.containsKey("useFlags")
-                && "no".equalsIgnoreCase(installdata.guiPrefs.modifier.get("useFlags"))) { return (false); }
+                && "no".equalsIgnoreCase(installdata.guiPrefs.modifier.get("useFlags")))
+        {
+            return (false);
+        }
         return (true);
     }
 
     /**
      * Returns the type in which the language should be displayed in the language selction dialog.
      * Possible are "iso3", "native" and "usingDefault".
-     * 
+     *
      * @return language display type
      */
     protected String getLangType()
@@ -676,7 +670,10 @@ public class GUIInstaller extends InstallerBase
             // Verify that the value is valid, else return the default.
             for (String aLANGUAGE_DISPLAY_TYPES : LANGUAGE_DISPLAY_TYPES)
             {
-                if (val.equalsIgnoreCase(aLANGUAGE_DISPLAY_TYPES)) { return (val); }
+                if (val.equalsIgnoreCase(aLANGUAGE_DISPLAY_TYPES))
+                {
+                    return (val);
+                }
             }
             Debug.trace("Value for language display type not valid; value: " + val);
         }
@@ -687,7 +684,7 @@ public class GUIInstaller extends InstallerBase
      * Used to prompt the user for the language. Languages can be displayed in iso3 or the native
      * notation or the notation of the default locale. Revising to native notation is based on code
      * from Christian Murphy (patch #395).
-     * 
+     *
      * @author Julien Ponge
      * @author Christian Murphy
      * @author Klaus Bartz
@@ -714,7 +711,7 @@ public class GUIInstaller extends InstallerBase
 
         /**
          * The constructor.
-         * 
+         *
          * @param items The items to display in the box.
          */
         public LanguageDialog(JFrame frame, Object[] items, ResourceManager rm)
@@ -802,7 +799,7 @@ public class GUIInstaller extends InstallerBase
 
         /**
          * Revises iso3 language items depending on the language display type.
-         * 
+         *
          * @param items item array to be revised
          * @return the revised array
          */
@@ -810,13 +807,22 @@ public class GUIInstaller extends InstallerBase
         {
             String langType = getLangType();
             // iso3: nothing todo.
-            if (langType.equals(LANGUAGE_DISPLAY_TYPES[0])) { return (items); }
+            if (langType.equals(LANGUAGE_DISPLAY_TYPES[0]))
+            {
+                return (items);
+            }
             // native: get the names as they are written in that language.
-            if (langType.equals(LANGUAGE_DISPLAY_TYPES[1])) { return (expandItems(items,
-                    (new JComboBox()).getFont())); }
+            if (langType.equals(LANGUAGE_DISPLAY_TYPES[1]))
+            {
+                return (expandItems(items,
+                        (new JComboBox()).getFont()));
+            }
             // default: get the names as they are written in the default
             // language.
-            if (langType.equals(LANGUAGE_DISPLAY_TYPES[2])) { return (expandItems(items, null)); }
+            if (langType.equals(LANGUAGE_DISPLAY_TYPES[2]))
+            {
+                return (expandItems(items, null));
+            }
             // Should never be.
             return (items);
         }
@@ -825,8 +831,8 @@ public class GUIInstaller extends InstallerBase
          * Expands the given iso3 codes to language names. If a testFont is given, the codes are
          * tested whether they can displayed or not. If not, or no font given, the language name
          * will be returned as written in the default language of this VM.
-         * 
-         * @param items item array to be expanded to the language name
+         *
+         * @param items    item array to be expanded to the language name
          * @param testFont font to test wheter a name is displayable
          * @return aray of expanded items
          */
@@ -855,8 +861,8 @@ public class GUIInstaller extends InstallerBase
          * Expands the given iso3 code to a language name. If a testFont is given, the code will be
          * tested whether it is displayable or not. If not, or no font given, the language name will
          * be returned as written in the default language of this VM.
-         * 
-         * @param item item to be expanded to the language name
+         *
+         * @param item     item to be expanded to the language name
          * @param testFont font to test wheter the name is displayable
          * @return expanded item
          */
@@ -876,11 +882,15 @@ public class GUIInstaller extends InstallerBase
             }
             if (iso2Str == null)
             // Unknown item, return it self.
-            { return (item); }
+            {
+                return (item);
+            }
             Locale locale = new Locale((String) iso2Str);
             if (testFont == null)
             // Return the language name in the spelling of the default locale.
-            { return (locale.getDisplayLanguage()); }
+            {
+                return (locale.getDisplayLanguage());
+            }
             // Get the language name in the spelling of that language.
             String str = locale.getDisplayLanguage(locale);
             int cdut = testFont.canDisplayUpTo(str);
@@ -895,7 +905,7 @@ public class GUIInstaller extends InstallerBase
 
         /**
          * Loads an image.
-         * 
+         *
          * @return The image icon.
          */
         public ImageIcon getImage()
@@ -914,7 +924,7 @@ public class GUIInstaller extends InstallerBase
 
         /**
          * Gets the selected object.
-         * 
+         *
          * @return The selected item.
          */
         public Object getSelection()
@@ -929,7 +939,7 @@ public class GUIInstaller extends InstallerBase
 
         /**
          * Sets the selection.
-         * 
+         *
          * @param item The item to be selected.
          */
         public void setSelection(Object item)
@@ -957,7 +967,7 @@ public class GUIInstaller extends InstallerBase
 
         /**
          * Closer.
-         * 
+         *
          * @param e The event.
          */
         public void actionPerformed(ActionEvent e)
@@ -967,7 +977,7 @@ public class GUIInstaller extends InstallerBase
 
         /**
          * The window events handler.
-         * 
+         *
          * @author Julien Ponge
          */
         private class WindowHandler extends WindowAdapter
@@ -975,7 +985,7 @@ public class GUIInstaller extends InstallerBase
 
             /**
              * We can't avoid the exit here, so don't call exit anywhere else.
-             * 
+             *
              * @param e the event.
              */
             public void windowClosing(WindowEvent e)
@@ -987,7 +997,7 @@ public class GUIInstaller extends InstallerBase
 
     /**
      * A list cell renderer that adds the flags on the display.
-     * 
+     *
      * @author Julien Ponge
      */
     private static class FlagRenderer extends JLabel implements ListCellRenderer
@@ -1012,16 +1022,16 @@ public class GUIInstaller extends InstallerBase
 
         /**
          * Returns a suitable cell.
-         * 
-         * @param list The list.
-         * @param value The object.
-         * @param index The index.
-         * @param isSelected true if it is selected.
+         *
+         * @param list         The list.
+         * @param value        The object.
+         * @param index        The index.
+         * @param isSelected   true if it is selected.
          * @param cellHasFocus Description of the Parameter
          * @return The cell.
          */
         public Component getListCellRendererComponent(JList list, Object value, int index,
-                boolean isSelected, boolean cellHasFocus)
+                                                      boolean isSelected, boolean cellHasFocus)
         {
             // We put the label
             String iso3 = (String) value;

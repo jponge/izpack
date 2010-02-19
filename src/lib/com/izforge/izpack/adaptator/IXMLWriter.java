@@ -22,7 +22,6 @@
 
 package com.izforge.izpack.adaptator;
 
-import javax.xml.transform.TransformerException;
 import java.io.OutputStream;
 
 /**

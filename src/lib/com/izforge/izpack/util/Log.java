@@ -24,7 +24,8 @@ package com.izforge.izpack.util;
 
 import com.izforge.izpack.installer.AutomatedInstallData;
 
-import javax.swing.*;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import java.io.File;
 import java.io.FileWriter;
 import java.text.DateFormatSymbols;
@@ -748,7 +749,7 @@ public class Log implements LogError, LogWarning, LogMessage
         }
         else
         {
-            message.append(MessageFormat.format(record.template, (Object[])record.variables));
+            message.append(MessageFormat.format(record.template, (Object[]) record.variables));
         }
 
         message.append(newline);
@@ -782,7 +783,7 @@ public class Log implements LogError, LogWarning, LogMessage
         }
         else
         {
-            message.append(MessageFormat.format(record.template, (Object[])record.variables));
+            message.append(MessageFormat.format(record.template, (Object[]) record.variables));
         }
 
         // ----------------------------------------------------
@@ -824,7 +825,7 @@ public class Log implements LogError, LogWarning, LogMessage
         }
         else
         {
-            message.append(MessageFormat.format(record.template, (Object[])record.variables));
+            message.append(MessageFormat.format(record.template, (Object[]) record.variables));
         }
 
         // ----------------------------------------------------
@@ -878,7 +879,7 @@ public class Log implements LogError, LogWarning, LogMessage
             message.append("Debug - ").append(record.channel).append(": ");
         }
 
-        message.append(MessageFormat.format(record.template, (Object[])record.variables));
+        message.append(MessageFormat.format(record.template, (Object[]) record.variables));
 
         // ----------------------------------------------------
         // append the exception

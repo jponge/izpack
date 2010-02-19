@@ -18,18 +18,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.panels;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
-import java.util.StringTokenizer;
+package com.izforge.izpack.panels;
 
 import com.coi.tools.os.win.MSWinConstants;
 import com.coi.tools.os.win.NativeLibException;
@@ -37,12 +27,15 @@ import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.PanelConsoleHelper;
 import com.izforge.izpack.installer.ScriptParser;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.os.RegistryDefaultHandler;
 import com.izforge.izpack.util.os.RegistryHandler;
+
+import java.io.*;
+import java.util.*;
+
 /**
  * The Target panel console helper class.
  *
@@ -55,7 +48,7 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
     private String variableName;
     private String detectedVersion;
 
-    public boolean runGeneratePropertiesFile(AutomatedInstallData installData,PrintWriter printWriter)
+    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
     {
         printWriter.println(ScriptParser.INSTALL_PATH + "=");
         return true;
@@ -86,7 +79,8 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
 
         String strPath = "";
         String strDefaultPath = idata.getVariable(variableName);
-        if ( strDefaultPath == null ) {
+        if (strDefaultPath == null)
+        {
             if (OsVersion.IS_OSX)
             {
                 strDefaultPath = JDKPathPanel.OSX_JDK_HOME;
@@ -130,16 +124,19 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
 
                 e.printStackTrace();
             }
-            if ( !pathIsValid(strPath) ) {
-                System.out.println("Path "+strPath+" is not valid.");
-            } else if ( !verifyVersion(minVersion, maxVersion, strPath) ) {
-                System.out.println("The chosen JDK has the wrong version (available: "+detectedVersion+" required: "+minVersion+" - "+maxVersion+").");
+            if (!pathIsValid(strPath))
+            {
+                System.out.println("Path " + strPath + " is not valid.");
+            }
+            else if (!verifyVersion(minVersion, maxVersion, strPath))
+            {
+                System.out.println("The chosen JDK has the wrong version (available: " + detectedVersion + " required: " + minVersion + " - " + maxVersion + ").");
                 System.out.println("Continue anyway? [no]");
                 br = new BufferedReader(new InputStreamReader(System.in));
                 try
                 {
                     String strIn = br.readLine();
-                    if ( strIn.trim().toLowerCase().equals("y") || strIn.trim().toLowerCase().equals("yes") )
+                    if (strIn.trim().toLowerCase().equals("y") || strIn.trim().toLowerCase().equals("yes"))
                     {
                         bKeepAsking = false;
                     }
@@ -149,7 +146,9 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
 
                     e.printStackTrace();
                 }
-            } else {
+            }
+            else
+            {
                 bKeepAsking = false;
             }
             idata.setVariable(variableName, strPath);
@@ -203,20 +202,23 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
         // We cannot look to the version of this vm because we should
         // test the given JDK VM.
         String[] params;
-        if ( System.getProperty("os.name").indexOf("Windows") >= 0 ) {
+        if (System.getProperty("os.name").indexOf("Windows") >= 0)
+        {
             String[] paramsp = {
-                "cmd",
-                "/c",
-                path + File.separator + "bin" + File.separator + "java",
-                "-version"
+                    "cmd",
+                    "/c",
+                    path + File.separator + "bin" + File.separator + "java",
+                    "-version"
             };
-            params=paramsp;
-        } else {
+            params = paramsp;
+        }
+        else
+        {
             String[] paramsp = {
-                path + File.separator + "bin" + File.separator + "java",
-                "-version"
+                    path + File.separator + "bin" + File.separator + "java",
+                    "-version"
             };
-            params=paramsp;
+            params = paramsp;
         }
         String[] output = new String[2];
         FileExecutor fe = new FileExecutor();
@@ -241,8 +243,8 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
     }
 
     private boolean compareVersions(String in, String template, boolean isMin,
-            int assumedPlace, int halfRange, String useNotIdentifier)
-            {
+                                    int assumedPlace, int halfRange, String useNotIdentifier)
+    {
         StringTokenizer st = new StringTokenizer(in, " \t\n\r\f\"");
         int i;
         int currentRange = 0;
@@ -372,10 +374,10 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
             // We search for the highest allowd version, therefore retrograde
             while (i > 0)
             {
-                if ( max == null || compareVersions(keys[i], max, false, 4, 4, "__NO_NOT_IDENTIFIER_"))
+                if (max == null || compareVersions(keys[i], max, false, 4, 4, "__NO_NOT_IDENTIFIER_"))
                 { // First allowed version found, now we have to test that the min value
                     // also allows this version.
-                    if ( min == null || compareVersions(keys[i], min, true, 4, 4, "__NO_NOT_IDENTIFIER_"))
+                    if (min == null || compareVersions(keys[i], min, true, 4, 4, "__NO_NOT_IDENTIFIER_"))
                     {
                         String cv = JDKPathPanel.JDK_ROOT_KEY + "\\" + keys[i];
                         String path = rh.getValue(cv, JDKPathPanel.JDK_VALUE_NAME).getStringData();

@@ -22,9 +22,9 @@
 
 package com.izforge.izpack.adaptator;
 
+import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
-import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

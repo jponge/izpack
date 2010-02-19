@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.rules;
 
 import com.izforge.izpack.adaptator.IXMLElement;
@@ -27,26 +28,28 @@ import com.izforge.izpack.util.Debug;
 /**
  * This condition checks if a certain variable has a value. If it is not
  * in the current list of variables it will evaluate to false.
- * 
+ *
  * @author Dennis Reil,<izpack@reil-online.de>
  */
 public class VariableExistenceCondition extends Condition
 {
     private static final long serialVersionUID = -7424383017678759732L;
-    
+
     private String variable;
-    
-    public VariableExistenceCondition(){
-        this.variable = "default.variable";        
+
+    public VariableExistenceCondition()
+    {
+        this.variable = "default.variable";
     }
-    
-    
+
+
     @Override
     public boolean isTrue()
     {
         boolean result = false;
         String value = this.installdata.getVariable(this.variable);
-        if (value != null){
+        if (value != null)
+        {
             result = true;
         }
         return result;
@@ -55,26 +58,27 @@ public class VariableExistenceCondition extends Condition
     @Override
     public void readFromXML(IXMLElement xmlcondition)
     {
-        if (xmlcondition != null){
+        if (xmlcondition != null)
+        {
             IXMLElement variableElement = xmlcondition.getFirstChildNamed("variable");
-            if (variableElement != null){
+            if (variableElement != null)
+            {
                 this.variable = variableElement.getContent();
             }
-            else {
+            else
+            {
                 Debug.error("VariableExistenceCondition needs a variable element in its spec.");
-            }            
+            }
         }
     }
 
 
-    
     public String getVariable()
     {
         return variable;
     }
 
 
-    
     public void setVariable(String variable)
     {
         this.variable = variable;
@@ -84,9 +88,9 @@ public class VariableExistenceCondition extends Condition
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {
-        XMLElementImpl variableEl = new XMLElementImpl("variable",conditionRoot);
+        XMLElementImpl variableEl = new XMLElementImpl("variable", conditionRoot);
         variableEl.setContent(this.variable);
-        conditionRoot.addChild(variableEl);        
+        conditionRoot.addChild(variableEl);
     }
 
 }

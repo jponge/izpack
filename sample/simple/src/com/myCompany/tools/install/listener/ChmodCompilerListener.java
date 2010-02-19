@@ -20,62 +20,67 @@
  */
 
 package com.myCompany.tools.install.listener;
+
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.event.SimpleCompilerListener;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.compiler.CompilerException;
-import com.izforge.izpack.event.*;
-
 
 /**
  * <p>CompilerListener for file and directory permissions.</p>
  *
- * @author  Klaus Bartz
- *
+ * @author Klaus Bartz
  */
 public class ChmodCompilerListener extends SimpleCompilerListener
 {
 
 
-  /* (non-Javadoc)
-   * @see com.izforge.izpack.compiler.CompilerListener#reviseAdditionalDataMap(java.util.Map, net.n3.nanoxml.XMLElement)
-   */
-  public Map reviseAdditionalDataMap(Map existentDataMap, IXMLElement element)
-    throws CompilerException
-  {
-    Map retval = existentDataMap != null ? 
-      existentDataMap : new  HashMap();
-    Vector dataList = element.getChildrenNamed("additionaldata");
-    Iterator iter = null;
-    if( dataList == null ||  dataList.size() == 0  )
-      return( existentDataMap);
-    iter = dataList.iterator();
-    while( iter.hasNext() )
+    /* (non-Javadoc)
+    * @see com.izforge.izpack.compiler.CompilerListener#reviseAdditionalDataMap(java.util.Map, net.n3.nanoxml.XMLElement)
+    */
+    public Map reviseAdditionalDataMap(Map existentDataMap, IXMLElement element)
+            throws CompilerException
     {
-      IXMLElement data = (IXMLElement) iter.next();
-      String [] relevantKeys = { "permission.dir", "permission.file"};
-      for( int i = 0; i < relevantKeys.length; ++i )
-      {
-        String key = data.getAttribute("key");
-        if( key.equalsIgnoreCase(relevantKeys[i]))
+        Map retval = existentDataMap != null ?
+                existentDataMap : new HashMap();
+        Vector dataList = element.getChildrenNamed("additionaldata");
+        Iterator iter = null;
+        if (dataList == null || dataList.size() == 0)
         {
-          String value = data.getAttribute("value");
-          if (value == null || value.length() == 0)
-            continue;
-          try
-          {
-            int radix = value.startsWith("0") ? 8 : 10;
-            retval.put(key,Integer.valueOf(value, radix));
-          } catch (NumberFormatException x)
-          {
-            throw new CompilerException("'" + relevantKeys[i] + "' must be an integer");
-          }
+            return (existentDataMap);
         }
-      }
+        iter = dataList.iterator();
+        while (iter.hasNext())
+        {
+            IXMLElement data = (IXMLElement) iter.next();
+            String[] relevantKeys = {"permission.dir", "permission.file"};
+            for (int i = 0; i < relevantKeys.length; ++i)
+            {
+                String key = data.getAttribute("key");
+                if (key.equalsIgnoreCase(relevantKeys[i]))
+                {
+                    String value = data.getAttribute("value");
+                    if (value == null || value.length() == 0)
+                    {
+                        continue;
+                    }
+                    try
+                    {
+                        int radix = value.startsWith("0") ? 8 : 10;
+                        retval.put(key, Integer.valueOf(value, radix));
+                    }
+                    catch (NumberFormatException x)
+                    {
+                        throw new CompilerException("'" + relevantKeys[i] + "' must be an integer");
+                    }
+                }
+            }
+        }
+        return retval;
     }
-    return retval;
-  }
 }

@@ -1,9 +1,9 @@
 package com.izforge.izpack.util.os;
 
+import com.izforge.izpack.util.Debug;
+
 import java.io.File;
 import java.io.IOException;
-
-import com.izforge.izpack.util.*;
 
 /*
  * File queue delete operation (Windows Setup API)

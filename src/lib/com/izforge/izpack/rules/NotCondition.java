@@ -18,10 +18,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.rules;
 
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.util.Debug;
 
 /**
  * @author Dennis Reil, <izpack@reil-online.de>
@@ -47,9 +48,10 @@ public class NotCondition extends Condition
     public NotCondition(Condition operand)
     {
         this.operand = operand;
-        if (operand != null){
+        if (operand != null)
+        {
             this.operand.setInstalldata(this.installdata);
-        }        
+        }
     }
 
     /*
@@ -95,11 +97,12 @@ public class NotCondition extends Condition
     */
     public boolean isTrue()
     {
-        if ((this.operand == null)){
+        if ((this.operand == null))
+        {
             Debug.trace("Operand of condition " + this.id + " not initialized correctly.");
             return false;
         }
-        this.operand.setInstalldata(this.installdata);        
+        this.operand.setInstalldata(this.installdata);
         return !operand.isTrue();
     }
 
@@ -119,8 +122,8 @@ public class NotCondition extends Condition
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {
-        IXMLElement op = RulesEngine.createConditionElement(this.operand,conditionRoot);
+        IXMLElement op = RulesEngine.createConditionElement(this.operand, conditionRoot);
         this.operand.makeXMLData(op);
-        conditionRoot.addChild(op);                        
+        conditionRoot.addChild(op);
     }
 }

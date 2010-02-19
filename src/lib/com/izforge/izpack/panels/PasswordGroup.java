@@ -18,12 +18,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.util.Debug;
 
-import javax.swing.*;
+import javax.swing.JPasswordField;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -49,7 +50,7 @@ public class PasswordGroup implements ProcessingClient
 
     private List<ValidatorContainer> validatorContainers = null;
 //  private Validator validator = null;
-//  private boolean hasParams = false;
+    //  private boolean hasParams = false;
     //  private Map validatorParams = null;
     private Processor processor = null;
     private String modifiedPassword = null;

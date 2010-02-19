@@ -18,10 +18,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.rules;
 
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.util.Debug;
 
 /**
  * @author Dennis Reil, <izpack@reil-online.de>
@@ -94,7 +95,8 @@ public class OrCondition extends Condition
      */
     public boolean isTrue()
     {
-        if ((this.leftoperand == null) || (this.rightoperand == null)){
+        if ((this.leftoperand == null) || (this.rightoperand == null))
+        {
             Debug.trace("Operands of condition " + this.id + " not initialized correctly.");
             return false;
         }
@@ -123,9 +125,9 @@ public class OrCondition extends Condition
     {
         IXMLElement left = RulesEngine.createConditionElement(this.leftoperand, conditionRoot);
         this.leftoperand.makeXMLData(left);
-        conditionRoot.addChild(left);        
+        conditionRoot.addChild(left);
         IXMLElement right = RulesEngine.createConditionElement(this.rightoperand, conditionRoot);
         this.rightoperand.makeXMLData(right);
-        conditionRoot.addChild(right);     
+        conditionRoot.addChild(right);
     }
 }

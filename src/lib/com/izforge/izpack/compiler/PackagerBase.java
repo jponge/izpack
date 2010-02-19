@@ -188,7 +188,7 @@ public abstract class PackagerBase implements IPackager
     public void addCustomJar(CustomData ca, URL url)
     {
         customDataList.add(ca); // serialized to keep order/variables correct
-        if ( url != null )
+        if (url != null)
         {
             addJarContent(url); // each included once, no matter how many times added
         }
@@ -259,8 +259,8 @@ public abstract class PackagerBase implements IPackager
     public void addPanelJar(Panel panel, URL jarURL)
     {
         panelList.add(panel); // serialized to keep order/variables correct
-        
-        if ( jarURL != null )
+
+        if (jarURL != null)
         {
             addJarContent(jarURL); // each included once, no matter how many times added
         }
@@ -381,8 +381,8 @@ public abstract class PackagerBase implements IPackager
         writeInstallerObject("langpacks.info", langpackNameList);
         writeInstallerObject("rules", rules);
         writeInstallerObject("dynvariables", dynamicvariables);
-        writeInstallerObject("installerrequirements",installerrequirements);
-        
+        writeInstallerObject("installerrequirements", installerrequirements);
+
         writeInstallerResources();
         writeIncludedJars();
 
@@ -420,6 +420,6 @@ public abstract class PackagerBase implements IPackager
 
     public void addInstallerRequirements(List<InstallerRequirement> conditions)
     {
-        this.installerrequirements = conditions;        
+        this.installerrequirements = conditions;
     }
 }

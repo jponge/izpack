@@ -26,7 +26,6 @@ import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Housekeeper;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.BufferedReader;
@@ -434,10 +433,10 @@ public class UninstallerFrame extends JFrame
             progressBar.setString(error);
             JOptionPane.showMessageDialog(null, error, title, JOptionPane.OK_CANCEL_OPTION);
         }
-        
+
         /**
          * The destroyer encountered an error.
-         * 
+         *
          * @param error The error message.
          */
         public void emitErrorAndBlockNext(String title, String error)

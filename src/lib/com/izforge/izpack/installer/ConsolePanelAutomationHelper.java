@@ -22,7 +22,6 @@
 package com.izforge.izpack.installer;
 
 
-
 public class ConsolePanelAutomationHelper extends PanelAutomationHelper
 {
 
