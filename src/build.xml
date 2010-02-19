@@ -738,6 +738,7 @@
         <build-panel name="ProcessPanel">
             <include name="com/izforge/izpack/panels/ProcessPanel.java"/>
             <include name="com/izforge/izpack/panels/ProcessPanelAutomationHelper.java"/>
+            <include name="com/izforge/izpack/panels/ProcessPanelConsoleHelper.java"/>
         </build-panel>
         <build-panel name="SudoPanel">
             <include name="com/izforge/izpack/panels/SudoPanel.java"/>
