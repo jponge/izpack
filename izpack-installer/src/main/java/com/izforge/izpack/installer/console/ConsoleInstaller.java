@@ -271,11 +271,10 @@ public class ConsoleInstaller extends InstallerBase {
      * Validate a panel.
      *
      * @param p The panel to validate
-     * @throws com.izforge.izpack.api.exception.InstallerException
+     * @return The status of the validation - false makes the installation fail
      *          thrown if the validation fails.
      */
     private boolean validatePanel(final Panel p) throws InstallerException {
-        boolean bValidity = true;
         String dataValidator = p.getValidator();
         if (dataValidator != null) {
             DataValidator validator = DataValidatorFactory.createDataValidator(dataValidator);
@@ -285,14 +284,16 @@ public class ConsoleInstaller extends InstallerBase {
                 if (validationResult == Status.WARNING && validator.getDefaultAnswer()) {
                     System.out
                             .println("Configuration said, it's ok to go on, if validation is not successfull");
-
                 }
-                // make installation fail instantly
-                bValidity = false;
-                System.out.println("Validation failed, please verify your input");
+                else
+                {
+                    // make installation fail instantly
+                    System.out.println("Validation failed, please verify your input");
+                    return false;
+                }
             }
         }
-        return bValidity;
+        return true;
     }
 
     private void mergeAndOverwriteFromSysProperties() {
