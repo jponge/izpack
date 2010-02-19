@@ -6,8 +6,8 @@
         </xi:include>
     </bar>
     <not ln="8" xmlns:xi="http://www.w3.org/2001/XInclude">
-        <logical ln="9"/>
-        <element ln="10"/>
-        <xi:include href="src/tests/com/izforge/izpack/adaptator/linenumber/content2.xml"/>
+        <logical ln="9" />
+        <element ln="10" />
+        <xi:include href="src/tests/com/izforge/izpack/adaptator/linenumber/content2.xml" />
     </not>
 </foo>

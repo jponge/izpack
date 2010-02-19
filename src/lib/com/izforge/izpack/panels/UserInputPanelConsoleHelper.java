@@ -18,19 +18,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.panels;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-import java.util.StringTokenizer;
-import java.util.Vector;
+package com.izforge.izpack.panels;
 
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.Panel;
@@ -42,6 +31,12 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.SpecHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.*;
 
 /**
  * The user input panel console helper class.
@@ -161,7 +156,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     }
 
     public boolean runGeneratePropertiesFile(AutomatedInstallData installData,
-            PrintWriter printWriter)
+                                             PrintWriter printWriter)
     {
 
         collectInputs(installData);
@@ -181,7 +176,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     {
 
         boolean processpanel = collectInputs(idata);
-        if (!processpanel) {
+        if (!processpanel)
+        {
             return true;
         }
         boolean status = true;
@@ -191,8 +187,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             Input input = inputsIterator.next();
 
             if (TEXT_FIELD.equals(input.strFieldType)
-                || FILE.equals(input.strFieldType)
-                || RULE_FIELD.equals(input.strFieldType))
+                    || FILE.equals(input.strFieldType)
+                    || RULE_FIELD.equals(input.strFieldType))
             {
                 status = status && processTextField(input, idata);
             }
@@ -205,16 +201,17 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             {
                 status = status && processCheckField(input, idata);
             }
-           else if(STATIC_TEXT.equals(input.strFieldType)
-                || TITLE_FIELD.equals(input.strFieldType)
-                || DIVIDER.equals(input.strFieldType)
-                || SPACE.equals(input.strFieldType) )
-           {
-            status = status && processSimpleField(input, idata);
-           }
-           else if (PASSWORD.equals(input.strFieldType) ) {
-               status = status && processPasswordField(input, idata);
-           }
+            else if (STATIC_TEXT.equals(input.strFieldType)
+                    || TITLE_FIELD.equals(input.strFieldType)
+                    || DIVIDER.equals(input.strFieldType)
+                    || SPACE.equals(input.strFieldType))
+            {
+                status = status && processSimpleField(input, idata);
+            }
+            else if (PASSWORD.equals(input.strFieldType))
+            {
+                status = status && processPasswordField(input, idata);
+            }
 
         }
 
@@ -271,14 +268,16 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 Vector<IXMLElement> forPacks = data.getChildrenNamed(SELECTEDPACKS);
                 Vector<IXMLElement> forOs = data.getChildrenNamed(OS);
 
-                if (itemRequiredFor(forPacks, idata) && itemRequiredForOs(forOs)) {
+                if (itemRequiredFor(forPacks, idata) && itemRequiredForOs(forOs))
+                {
                     spec = data;
                     break;
                 }
             }
         }
 
-        if (spec == null) {
+        if (spec == null)
+        {
             return false;
         }
         Vector<IXMLElement> fields = spec.getChildrenNamed(FIELD_NODE_ID);
@@ -289,7 +288,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             Vector<IXMLElement> forPacks = field.getChildrenNamed(SELECTEDPACKS);
             Vector<IXMLElement> forOs = field.getChildrenNamed(OS);
 
-            if (itemRequiredFor(forPacks, idata) && itemRequiredForOs(forOs)) {
+            if (itemRequiredFor(forPacks, idata) && itemRequiredForOs(forOs))
+            {
 
                 String conditionid = field.getAttribute(ATTRIBUTE_CONDITIONID_NAME);
                 if (conditionid != null)
@@ -301,11 +301,12 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     }
                 }
                 Input in = getInputFromField(field, idata);
-                if (in != null) {
+                if (in != null)
+                {
                     listInputs.add(in);
                 }
             }
-         }
+        }
         return true;
     }
 
@@ -316,14 +317,19 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         return true;
     }
 
-    boolean processPasswordField(Input input, AutomatedInstallData idata) {
+    boolean processPasswordField(Input input, AutomatedInstallData idata)
+    {
 
         Password pwd = (Password) input;
 
         boolean rtn = false;
-        for (int i=0; i < pwd.input.length; i++) {
+        for (int i = 0; i < pwd.input.length; i++)
+        {
             rtn = processTextField(pwd.input[i], idata);
-            if (!rtn) return rtn;
+            if (!rtn)
+            {
+                return rtn;
+            }
         }
 
         return rtn;
@@ -335,7 +341,10 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         String variable = input.strVariableName;
         String set;
         String fieldText;
-        if ((variable == null) || (variable.length() == 0)) { return false; }
+        if ((variable == null) || (variable.length() == 0))
+        {
+            return false;
+        }
 
         if (input.listChoices.size() == 0)
         {
@@ -385,14 +394,18 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     boolean processComboRadioField(Input input, AutomatedInstallData idata)
     {// TODO protection if selection not valid and no set value
         String variable = input.strVariableName;
-        if ((variable == null) || (variable.length() == 0)) { return false; }
+        if ((variable == null) || (variable.length() == 0))
+        {
+            return false;
+        }
         String currentvariablevalue = idata.getVariable(variable);
-		  //If we dont do this, choice with index=0 will always be displayed, no matter what is selected
-		  input.iSelectedChoice = -1;
+        //If we dont do this, choice with index=0 will always be displayed, no matter what is selected
+        input.iSelectedChoice = -1;
         boolean userinput = false;
 
         // display the description for this combo or radio field
-        if (input.strText != null) {
+        if (input.strText != null)
+        {
             System.out.println(input.strText);
         }
 
@@ -460,7 +473,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     j = Integer.valueOf(strIn).intValue();
                 }
                 catch (Exception ex)
-                {}
+                {
+                }
                 // take user input if user input is valid
                 if (j >= 0 && j < lisChoices.size())
                 {
@@ -481,7 +495,10 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     boolean processCheckField(Input input, AutomatedInstallData idata)
     {
         String variable = input.strVariableName;
-        if ((variable == null) || (variable.length() == 0)) { return false; }
+        if ((variable == null) || (variable.length() == 0))
+        {
+            return false;
+        }
         String currentvariablevalue = idata.getVariable(variable);
         if (currentvariablevalue == null)
         {
@@ -542,7 +559,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     j = Integer.valueOf(strIn).intValue();
                 }
                 catch (Exception ex)
-                {}
+                {
+                }
                 // take user input if user input is valid
                 if ((j == 0) || j == 1)
                 {
@@ -578,7 +596,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             return new Input(strVariableName, null, null, STATIC_TEXT, strText, 0);
         }
 
-        if (TEXT_FIELD.equals(strFieldType) || FILE.equals(strFieldType) )
+        if (TEXT_FIELD.equals(strFieldType) || FILE.equals(strFieldType))
         {
             List<Choice> choicesList = new ArrayList<Choice>();
             String strFieldText = null;
@@ -723,14 +741,15 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                         String token = tokenizer.nextToken();
                         String choiceSet = null;
                         if (token.equals(set)
-                                ) {
-                            choiceSet="true";
-                            selection=counter;
+                                )
+                        {
+                            choiceSet = "true";
+                            selection = counter;
                         }
                         choicesList.add(new Choice(
-                                    token,
-                                    token,
-                                    choiceSet));
+                                token,
+                                token,
+                                choiceSet));
                         counter++;
 
                     }
@@ -740,7 +759,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     String value = choice.getAttribute(VALUE);
 
                     String set = choice.getAttribute(SET);
-                     if (set != null)
+                    if (set != null)
                     {
                         if (set != null && !"".equals(set))
                         {
@@ -750,21 +769,22 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                         }
                         if (set.equalsIgnoreCase(TRUE))
                         {
-                            selection=i;
+                            selection = i;
 
                         }
                     }
 
 
                     choicesList.add(new Choice(
-                                choice.getAttribute(TEXT),
-                                value,
-                                set));
+                            choice.getAttribute(TEXT),
+                            value,
+                            set));
 
-                    }
                 }
+            }
 
-            if (choicesList.size() == 1) {
+            if (choicesList.size() == 1)
+            {
                 selection = 0;
             }
 
@@ -808,7 +828,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         }
 
 
-        if (SPACE.equals(strFieldType) )
+        if (SPACE.equals(strFieldType))
         {
             return SPACE_INTPUT_FIELD;
 
@@ -832,7 +852,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             {
 
                 Vector<IXMLElement> pwds = spec.getChildrenNamed(PWD);
-                if (pwds == null || pwds.size() == 0) {
+                if (pwds == null || pwds.size() == 0)
+                {
                     System.out.println("No pwd specified in the spec for type password");
                     return null;
                 }
@@ -848,9 +869,9 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     inputs[i] = new Input(strVariableName, strSet, choicesList, strFieldType, strFieldText, 0);
 
                 }
-                 return new Password(strFieldType, inputs);
+                return new Password(strFieldType, inputs);
 
-             }
+            }
 
             System.out.println("No spec specified for input of type password");
             return null;
@@ -872,9 +893,9 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
      * true if the <code>packs</code> list is empty.
      *
      * @param packs a <code>Vector</code> of <code>String</code>s. Each of the strings denotes a
-     * pack for which an item should be created if the pack is actually installed.
+     *              pack for which an item should be created if the pack is actually installed.
      * @return <code>true</code> if the item is required for at least one pack in the list,
-     * otherwise returns <code>false</code>.
+     *         otherwise returns <code>false</code>.
      */
     /*--------------------------------------------------------------------------*/
     /*
@@ -890,7 +911,10 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         String selected;
         String required;
 
-        if (packs.size() == 0) { return (true); }
+        if (packs.size() == 0)
+        {
+            return (true);
+        }
 
         // ----------------------------------------------------
         // We are getting to this point if any packs have been
@@ -913,7 +937,10 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             for (int k = 0; k < packs.size(); k++)
             {
                 required = (packs.elementAt(k)).getAttribute(NAME, "");
-                if (selected.equals(required)) { return (true); }
+                if (selected.equals(required))
+                {
+                    return (true);
+                }
             }
         }
 
@@ -930,11 +957,14 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
      *
      * @param os The <code>Vector</code> of <code>String</code>s. containing the os names
      * @return <code>true</code> if the item is required for the os, otherwise returns
-     * <code>false</code>.
+     *         <code>false</code>.
      */
     public boolean itemRequiredForOs(Vector<IXMLElement> os)
     {
-        if (os.size() == 0) { return true; }
+        if (os.size() == 0)
+        {
+            return true;
+        }
 
         for (int i = 0; i < os.size(); i++)
         {
@@ -953,11 +983,13 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             {
                 match = OsVersion.IS_UNIX;
             }
-            if (match) { return true; }
+            if (match)
+            {
+                return true;
+            }
         }
         return false;
     }
-
 
 
     public static class Input
@@ -965,11 +997,11 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
         public Input(String strFieldType)
         {
-                this.strFieldType = strFieldType;
+            this.strFieldType = strFieldType;
         }
 
         public Input(String strVariableName, String strDefaultValue, List<Choice> listChoices,
-                String strFieldType, String strFieldText, int iSelectedChoice)
+                     String strFieldType, String strFieldText, int iSelectedChoice)
         {
             this.strVariableName = strVariableName;
             this.strDefaultValue = strDefaultValue;
@@ -1012,7 +1044,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     public static class Password extends Input
     {
 
-        public Password(String strFieldType, Input[] input) {
+        public Password(String strFieldType, Input[] input)
+        {
             super(strFieldType);
             this.input = input;
         }

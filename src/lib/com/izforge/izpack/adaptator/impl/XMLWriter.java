@@ -78,7 +78,8 @@ public class XMLWriter implements IXMLWriter
             if (outputStream != null)
             {
                 result = new StreamResult(outputStream);
-            } else
+            }
+            else
             {
                 result = new StreamResult(systemId);
             }

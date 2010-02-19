@@ -19,13 +19,16 @@
 
 package com.izforge.izpack.panels;
 
-import java.io.PrintWriter;
-import java.util.Properties;
-import java.io.IOException;
-
-import com.izforge.izpack.installer.*;
+import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.installer.PanelConsole;
+import com.izforge.izpack.installer.PanelConsoleHelper;
+import com.izforge.izpack.installer.ProcessPanelWorker;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProcessHandler;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Properties;
 
 
 /**
@@ -34,40 +37,44 @@ import com.izforge.izpack.util.AbstractUIProcessHandler;
  * @author Dustin Hawkins
  * @author Mounir el hajj
  */
-public class ProcessPanelConsoleHelper extends PanelConsoleHelper implements PanelConsole, 
-	AbstractUIProcessHandler 
+public class ProcessPanelConsoleHelper extends PanelConsoleHelper implements PanelConsole,
+        AbstractUIProcessHandler
 {
-	
+
     private int noOfJobs = 0;
 
     private int currentJob = 0;
-    
-	 public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p){
-		boolean retVal = false;
 
-		retVal = this.runConsole(installData);
+    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p)
+    {
+        boolean retVal = false;
 
-		return (retVal);
-	 }
+        retVal = this.runConsole(installData);
+
+        return (retVal);
+    }
 
 
-	public boolean runGeneratePropertiesFile(AutomatedInstallData installData,PrintWriter printWriter) {
-		return true;
-	}
-	
-	public boolean runConsoleFromPropertiesFile(AutomatedInstallData installData, Properties p){
-		boolean retVal = false;
+    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
+    {
+        return true;
+    }
 
-		retVal = this.runConsole(installData);
+    public boolean runConsoleFromPropertiesFile(AutomatedInstallData installData, Properties p)
+    {
+        boolean retVal = false;
 
-		return (retVal);
-		
-	}
+        retVal = this.runConsole(installData);
 
-	public boolean runConsole(AutomatedInstallData idata) {
+        return (retVal);
+
+    }
+
+    public boolean runConsole(AutomatedInstallData idata)
+    {
         try
         {
-            
+
             ProcessPanelWorker worker = new ProcessPanelWorker(idata, this);
 
             worker.run();
@@ -81,53 +88,54 @@ public class ProcessPanelConsoleHelper extends PanelConsoleHelper implements Pan
             e.printStackTrace();
         }
 
-		  return (true);
-	}
-	  public void logOutput(String message, boolean stderr)
-	    {
-	        if (stderr)
-	        {
-	            System.err.println(message);
-	        }
-	        else
-	        {
-	            System.out.println(message);
-	        }
-	    }
+        return (true);
+    }
 
-	    /**
-	     * Reports progress on System.out
-	     *
-	     * @see com.izforge.izpack.util.AbstractUIProcessHandler#startProcessing(int)
-	     */
-	    public void startProcessing(int noOfJobs)
-	    {
-	        System.out.println("[ Starting processing ]");
-	        this.noOfJobs = noOfJobs;
-	    }
+    public void logOutput(String message, boolean stderr)
+    {
+        if (stderr)
+        {
+            System.err.println(message);
+        }
+        else
+        {
+            System.out.println(message);
+        }
+    }
 
-	    /**
-	     * @see com.izforge.izpack.util.AbstractUIProcessHandler#finishProcessing
-	     */
-	    public void finishProcessing(boolean unlockPrev, boolean unlockNext)
-	    {
-	        /* FIXME: maybe we should abort if unlockNext is false...? */
-	        System.out.println("[ Processing finished ]");
-	    }
+    /**
+     * Reports progress on System.out
+     *
+     * @see com.izforge.izpack.util.AbstractUIProcessHandler#startProcessing(int)
+     */
+    public void startProcessing(int noOfJobs)
+    {
+        System.out.println("[ Starting processing ]");
+        this.noOfJobs = noOfJobs;
+    }
 
-	    /**
-	     *
-	     */
-	    public void startProcess(String name)
-	    {
-	        this.currentJob++;
-	        System.out.println("Starting process " + name + " (" + Integer.toString(this.currentJob)
-	                + "/" + Integer.toString(this.noOfJobs) + ")");
-	    }
+    /**
+     * @see com.izforge.izpack.util.AbstractUIProcessHandler#finishProcessing
+     */
+    public void finishProcessing(boolean unlockPrev, boolean unlockNext)
+    {
+        /* FIXME: maybe we should abort if unlockNext is false...? */
+        System.out.println("[ Processing finished ]");
+    }
 
-	    public void finishProcess()
-	    {
-	    }
+    /**
+     *
+     */
+    public void startProcess(String name)
+    {
+        this.currentJob++;
+        System.out.println("Starting process " + name + " (" + Integer.toString(this.currentJob)
+                + "/" + Integer.toString(this.noOfJobs) + ")");
+    }
+
+    public void finishProcess()
+    {
+    }
 
     public void emitNotification(String message)
     {
@@ -145,7 +153,7 @@ public class ProcessPanelConsoleHelper extends PanelConsoleHelper implements Pan
     {
         System.err.println("[ ERROR: " + message + " ]");
     }
-    
+
     public void emitErrorAndBlockNext(String title, String message)
     {
         System.err.println("[ ERROR: " + message + " ]");
@@ -160,7 +168,7 @@ public class ProcessPanelConsoleHelper extends PanelConsoleHelper implements Pan
     public int askQuestion(String title, String question, int choices, int default_choice)
     {
         return default_choice;
-    }   
+    }
 
     public void startAction(String name, int no_of_steps)
     {

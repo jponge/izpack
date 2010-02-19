@@ -18,40 +18,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.rules;
 
-import com.izforge.izpack.util.Debug;
+package com.izforge.izpack.rules;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.util.Debug;
 
 /**
  * Checks to see whether the user who is running the installer is the same as the user who should be
  * running the installer.
- * 
+ *
  * @author J. Chris Folsom <jchrisfolsom@gmail.com>
  * @author Dennis Reil <izpack@reil-online.de>
  */
 public class UserCondition extends Condition
-{    
+{
     private static final long serialVersionUID = -2076347348048202718L;
     private String requiredUsername;
-    
+
     @Override
     public boolean isTrue()
     {
         boolean result = false;
         if (this.requiredUsername == null)
         {
-            Debug.log("Expected user name not set in user condition. Condition will return false.");            
+            Debug.log("Expected user name not set in user condition. Condition will return false.");
         }
         else
         {
             String actualUsername = System.getProperty("user.name");
-            if ((actualUsername != null) || (actualUsername.length() >= 0)){
+            if ((actualUsername != null) || (actualUsername.length() >= 0))
+            {
                 result = this.requiredUsername.equals(actualUsername);
-            }            
-            else {
+            }
+            else
+            {
                 Debug.log("No user.name found in system properties. Condition will return false.");
             }
         }
@@ -76,10 +78,10 @@ public class UserCondition extends Condition
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {
-        XMLElementImpl requiredUserEl = new XMLElementImpl("requiredusername",conditionRoot);
+        XMLElementImpl requiredUserEl = new XMLElementImpl("requiredusername", conditionRoot);
         requiredUserEl.setContent(this.requiredUsername);
         conditionRoot.addChild(requiredUserEl);
-        
+
     }
 
 }

@@ -1,8 +1,8 @@
 package com.izforge.izpack.util.os;
 
-import java.io.*;
+import com.izforge.izpack.util.Debug;
 
-import com.izforge.izpack.util.*;
+import java.io.*;
 
 
 /**
@@ -27,14 +27,14 @@ public class FileQueueMove extends FileQueueCopy
         try
         {
             Debug.log("Enqueueing moving " + fromFile + " to " + toFile
-                    + " (0x"+Integer.toHexString(copyStyle)+")");
+                    + " (0x" + Integer.toHexString(copyStyle) + ")");
             filequeue.addMove(fromFile, toFile);
         }
         catch (IOException e)
         {
             throw new IOException(
                     "Failed to enqueue moving " + fromFile + " to " + toFile
-                    + " due to " + e.getMessage());
+                            + " due to " + e.getMessage());
         }
     }
 

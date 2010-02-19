@@ -457,7 +457,8 @@ public class Compiler extends Thread
         packager.addCustomJar(ca, url);
     }
 
-    public void addInstallerRequirement(List<InstallerRequirement> conditions){
+    public void addInstallerRequirement(List<InstallerRequirement> conditions)
+    {
         packager.addInstallerRequirements(conditions);
     }
 
@@ -712,7 +713,7 @@ public class Compiler extends Thread
     }
 
     public URL findIzPackResource(String path, String desc)
-        throws CompilerException
+            throws CompilerException
     {
         return findIzPackResource(path, desc, false);
     }
@@ -722,10 +723,10 @@ public class Compiler extends Thread
      * not be absolute. The path must use '/' as the fileSeparator (it's used to access the jar
      * file). If the resource is not found, take appropriate action base on ignoreWhenNotFound flag.
      *
-     * @param path the relative path (using '/' as separator) to the resource.
-     * @param desc the description of the resource used to report errors
+     * @param path               the relative path (using '/' as separator) to the resource.
+     * @param desc               the description of the resource used to report errors
      * @param ignoreWhenNotFound when false, throws a CompilerException indicate
-     *        fault in the parent element when resource not found.
+     *                           fault in the parent element when resource not found.
      * @return a URL to the resource.
      * @throws CompilerException
      */
@@ -743,7 +744,7 @@ public class Compiler extends Thread
 
             if (!resource.exists())
             {
-                if ( ignoreWhenNotFound )
+                if (ignoreWhenNotFound)
                 {
                     parseWarn(desc + " not found: " + resource);
                 }
@@ -834,15 +835,15 @@ public class Compiler extends Thread
 
         URL url = findIzPackResource(jarPath, "CustomAction jar file", true);
 
-        if ( url != null )
+        if (url != null)
         {
-             fullClassName = getFullClassName(url, className);
-             if (fullClassName == null)
-             {
+            fullClassName = getFullClassName(url, className);
+            if (fullClassName == null)
+            {
                 throw new CompilerException("CustomListener class '" + className + "' not found in '"
-                    + url + "'. The class and listener name must match");
-             }
-             filePaths = getContainedFilePaths(url);
+                        + url + "'. The class and listener name must match");
+            }
+            filePaths = getContainedFilePaths(url);
         }
 
         CustomData ca = new CustomData(fullClassName, filePaths, constraints, type);

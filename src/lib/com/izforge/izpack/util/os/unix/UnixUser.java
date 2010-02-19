@@ -21,11 +21,11 @@
 
 package com.izforge.izpack.util.os.unix;
 
+import com.izforge.izpack.util.FileExecutor;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.StringTokenizer;
-
-import com.izforge.izpack.util.FileExecutor;
 
 
 /**
@@ -72,13 +72,13 @@ public class UnixUser
      * internal itsShell
      */
     private String itsShell;
-    
+
     /**
      * internal name
      */
     private static String XDGDesktopFolderNameScriptFilename;
 
-    
+
     private static File XDGDesktopFolderNameScript;
     //~ Methods ****************************************************************************
 
@@ -207,22 +207,22 @@ public class UnixUser
 
         return u;
     }
-    
+
     /**
-     * Creates a small script, which calls $HOME/.config/user-dirs.dirs then echoes the $XDG_DESKTOP_DIR 
-     * in the /tmp folder and returns its pseudo unique absolute filename. 
+     * Creates a small script, which calls $HOME/.config/user-dirs.dirs then echoes the $XDG_DESKTOP_DIR
+     * in the /tmp folder and returns its pseudo unique absolute filename.
      * The call of this script should return the absolute Desktop foldername.
-     *  
+     *
      * @return the absolute Filename of the script.
      */
     public String getCreatedXDGDesktopFolderNameScriptFilename()
     {
         ShellScript sh = new ShellScript();
-        
-        sh.appendln( ". " + getHome()+ File.separator + ".config" + File.separator + "user-dirs.dirs"  );
+
+        sh.appendln(". " + getHome() + File.separator + ".config" + File.separator + "user-dirs.dirs");
         sh.appendln();
-        sh.appendln( "echo $XDG_DESKTOP_DIR" );
-      
+        sh.appendln("echo $XDG_DESKTOP_DIR");
+
         String pseudoUnique = this.getClass().getName() + Long.toString(System.currentTimeMillis());
 
         String scriptFilename = null;
@@ -237,38 +237,42 @@ public class UnixUser
                     + ".sh";
             e.printStackTrace();
         }
-       
-        sh.write( scriptFilename );
-                
+
+        sh.write(scriptFilename);
+
         return scriptFilename;
     }
 
     /**
      * Gets the Name of the XDG-Desktop Folder if defined in the $HOME/.config/user-dirs.dirs File as absolute File/Pathname
-     * 
+     *
      * @return The absolute File/Pathname of the Desktop foldername.
      */
     public String getXdgDesktopfolder()
     {
-        File configFile = new File( getHome() + File.separator + ".config" + File.separator + "user-dirs.dirs");      
-        if( configFile.exists() )            
-        {  
-          if( XDGDesktopFolderNameScript == null )
-              /** TODO: can be optimized with a shared script **/
-             XDGDesktopFolderNameScriptFilename = getCreatedXDGDesktopFolderNameScriptFilename();          
-          
-          FileExecutor.getExecOutput( new String[] { UnixHelper.getCustomCommand("chmod"), "+x", XDGDesktopFolderNameScriptFilename }, true );                    
-          //
-          String xdgDesktopfolder = FileExecutor.getExecOutput( new String[] { UnixHelper.getSuCommand(), itsName, "-c", XDGDesktopFolderNameScriptFilename }, true ).trim();
-          
-          File scriptToDelete = new File( XDGDesktopFolderNameScriptFilename ); 
-          scriptToDelete.delete();
-          //
-          return xdgDesktopfolder;
-                   
+        File configFile = new File(getHome() + File.separator + ".config" + File.separator + "user-dirs.dirs");
+        if (configFile.exists())
+        {
+            if (XDGDesktopFolderNameScript == null)
+            /** TODO: can be optimized with a shared script **/
+            {
+                XDGDesktopFolderNameScriptFilename = getCreatedXDGDesktopFolderNameScriptFilename();
+            }
+
+            FileExecutor.getExecOutput(new String[]{UnixHelper.getCustomCommand("chmod"), "+x", XDGDesktopFolderNameScriptFilename}, true);
+            //
+            String xdgDesktopfolder = FileExecutor.getExecOutput(new String[]{UnixHelper.getSuCommand(), itsName, "-c", XDGDesktopFolderNameScriptFilename}, true).trim();
+
+            File scriptToDelete = new File(XDGDesktopFolderNameScriptFilename);
+            scriptToDelete.delete();
+            //
+            return xdgDesktopfolder;
+
         }
         else
-          return getHome() + File.separator + "Desktop";
+        {
+            return getHome() + File.separator + "Desktop";
+        }
     }
 
     /**
@@ -314,5 +318,5 @@ public class UnixUser
         System.out.println(new UnixUser().fromEtcPasswdLine(""));
         System.out.println(new UnixUser().fromEtcPasswdLine("eppelmann.local:x:500:100:Marc L Eppelmann:/mnt/local/home/eppelmann.local:/bin/bash"));
     }
-    
+
 }

@@ -18,13 +18,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.util;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -131,7 +128,7 @@ public class Debug
             + LOGFILE_EXTENSION;
 
     public static boolean LOG_TRACE_STATEMENTS = false;
-    
+
     /**
      * The log initializion bloc.
      */
@@ -231,7 +228,8 @@ public class Debug
         if (TRACE)
         {
             // console.println(s.toString());
-            if (LOG_TRACE_STATEMENTS){
+            if (LOG_TRACE_STATEMENTS)
+            {
                 log(s);
             }
             System.out.println(s);

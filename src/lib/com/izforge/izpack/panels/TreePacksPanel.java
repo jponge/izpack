@@ -23,12 +23,12 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.*;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
-import com.izforge.izpack.adaptator.IXMLElement;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -151,8 +151,8 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
                     // just ignore this. we use the fallback below
                 }
             }
-            
-            if(langPackStream == null)
+
+            if (langPackStream == null)
             {
                 langPackStream = ResourceManager.getInstance().getInputStream(LANG_FILE_NAME);
             }

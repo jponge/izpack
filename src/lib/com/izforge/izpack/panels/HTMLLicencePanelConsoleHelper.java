@@ -18,7 +18,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels;
+
+import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.installer.PanelConsole;
+import com.izforge.izpack.installer.PanelConsoleHelper;
+import com.izforge.izpack.installer.ResourceManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,18 +33,13 @@ import java.io.PrintWriter;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import com.izforge.izpack.installer.AutomatedInstallData;
-import com.izforge.izpack.installer.PanelConsole;
-import com.izforge.izpack.installer.PanelConsoleHelper;
-import com.izforge.izpack.installer.ResourceManager;
 /**
  * HTML License Panel console helper
- *
  */
 public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements PanelConsole
 {
 
-    public boolean runGeneratePropertiesFile(AutomatedInstallData installData,PrintWriter printWriter)
+    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
     {
         return true;
     }
@@ -56,7 +57,7 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
         try
         {
             // We read it
-             license = ResourceManager.getInstance().getTextResource(resNamePrefix);
+            license = ResourceManager.getInstance().getTextResource(resNamePrefix);
         }
         catch (Exception err)
         {
@@ -66,7 +67,7 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
         }
 
         // controls # of lines to display at a time, to allow simulated scrolling down
-        int lines=25;
+        int lines = 25;
         int l = 0;
 
 
@@ -75,15 +76,17 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
         StringTokenizer st = new StringTokenizer(strippedHTML, "\n");
         while (st.hasMoreTokens())
         {
-             String token = st.nextToken();
-             System.out.println(token);
-             l++;
-             if (l >= lines) {
-                 if (! doContinue()) {
-                     return false;
-                 }
-                 l=0;
-             }
+            String token = st.nextToken();
+            System.out.println(token);
+            l++;
+            if (l >= lines)
+            {
+                if (!doContinue())
+                {
+                    return false;
+                }
+                l = 0;
+            }
 
         }
 
@@ -147,7 +150,10 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
                 {
                     return 2;
                 }
-                else if (strIn.equals("3")) { return 3; }
+                else if (strIn.equals("3"))
+                {
+                    return 3;
+                }
             }
 
         }
@@ -165,7 +171,7 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
         {
             // chose to keep newline (\n) instead of carriage return (\r) for line breaks.
 
-             // Replace line breaks with space
+            // Replace line breaks with space
             result = source.replaceAll("\r", " ");
             // Remove step-formatting
             result = result.replaceAll("\t", "");
@@ -174,67 +180,68 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
             result = result.replaceAll("( )+", " ");
 
 
-            result = result.replaceAll("<( )*head([^>])*>","<head>");
-            result = result.replaceAll("(<( )*(/)( )*head( )*>)","</head>");
+            result = result.replaceAll("<( )*head([^>])*>", "<head>");
+            result = result.replaceAll("(<( )*(/)( )*head( )*>)", "</head>");
             result = result.replaceAll("(<head>).*(</head>)", "");
-            result = result.replaceAll("<( )*script([^>])*>","<script>");
-            result = result.replaceAll("(<( )*(/)( )*script( )*>)","</script>");
-            result = result.replaceAll("(<script>).*(</script>)","");
+            result = result.replaceAll("<( )*script([^>])*>", "<script>");
+            result = result.replaceAll("(<( )*(/)( )*script( )*>)", "</script>");
+            result = result.replaceAll("(<script>).*(</script>)", "");
 
-         // remove all styles (prepare first by clearing attributes)
-            result = result.replaceAll("<( )*style([^>])*>","<style>");
-            result = result.replaceAll("(<( )*(/)( )*style( )*>)","</style>");
-            result = result.replaceAll("(<style>).*(</style>)","");
+            // remove all styles (prepare first by clearing attributes)
+            result = result.replaceAll("<( )*style([^>])*>", "<style>");
+            result = result.replaceAll("(<( )*(/)( )*style( )*>)", "</style>");
+            result = result.replaceAll("(<style>).*(</style>)", "");
 
-            result = result.replaceAll("(<( )*(/)( )*sup( )*>)","</sup>");
-            result = result.replaceAll("<( )*sup([^>])*>","<sup>");
+            result = result.replaceAll("(<( )*(/)( )*sup( )*>)", "</sup>");
+            result = result.replaceAll("<( )*sup([^>])*>", "<sup>");
             result = result.replaceAll("(<sup>).*(</sup>)", "");
 
-         // insert tabs in spaces of <td> tags
-            result = result.replaceAll("<( )*td([^>])*>","\t");
+            // insert tabs in spaces of <td> tags
+            result = result.replaceAll("<( )*td([^>])*>", "\t");
 
-         // insert line breaks in places of <BR> and <LI> tags
-            result = result.replaceAll("<( )*br( )*>","\r");
-            result = result.replaceAll("<( )*li( )*>","\r");
+            // insert line breaks in places of <BR> and <LI> tags
+            result = result.replaceAll("<( )*br( )*>", "\r");
+            result = result.replaceAll("<( )*li( )*>", "\r");
 
             // insert line paragraphs (double line breaks) in place
             // if <P>, <DIV> and <TR> tags
-            result = result.replaceAll("<( )*div([^>])*>","\r\r");
-            result = result.replaceAll("<( )*tr([^>])*>","\r\r");
+            result = result.replaceAll("<( )*div([^>])*>", "\r\r");
+            result = result.replaceAll("<( )*tr([^>])*>", "\r\r");
 
-            result = result.replaceAll("(<) h (\\w+) >","\r");
-            result = result.replaceAll("(\\b) (</) h (\\w+) (>) (\\b)","");
-            result = result.replaceAll("<( )*p([^>])*>","\r\r");
+            result = result.replaceAll("(<) h (\\w+) >", "\r");
+            result = result.replaceAll("(\\b) (</) h (\\w+) (>) (\\b)", "");
+            result = result.replaceAll("<( )*p([^>])*>", "\r\r");
 
             // Remove remaining tags like <a>, links, images,
             // comments etc - anything that's enclosed inside < >
-            result = result.replaceAll("<[^>]*>","");
+            result = result.replaceAll("<[^>]*>", "");
 
 
-            result = result.replaceAll("&bull;"," * ");
-            result = result.replaceAll("&lsaquo;","<");
-            result = result.replaceAll("&rsaquo;",">");
-            result = result.replaceAll("&trade;","(tm)");
-            result = result.replaceAll("&frasl;","/");
-            result = result.replaceAll("&lt;","<");
-            result = result.replaceAll("&gt;",">");
+            result = result.replaceAll("&bull;", " * ");
+            result = result.replaceAll("&lsaquo;", "<");
+            result = result.replaceAll("&rsaquo;", ">");
+            result = result.replaceAll("&trade;", "(tm)");
+            result = result.replaceAll("&frasl;", "/");
+            result = result.replaceAll("&lt;", "<");
+            result = result.replaceAll("&gt;", ">");
 
-            result = result.replaceAll("&copy;","(c)");
-            result = result.replaceAll("&reg;","(r)");
-            result = result.replaceAll("&(.{2,6});","");
+            result = result.replaceAll("&copy;", "(c)");
+            result = result.replaceAll("&reg;", "(r)");
+            result = result.replaceAll("&(.{2,6});", "");
 
             // Remove extra line breaks and tabs:
             // replace over 2 breaks with 2 and over 4 tabs with 4.
             // Prepare first to remove any whitespaces in between
             // the escaped characters and remove redundant tabs in between line breaks
-            result = result.replaceAll("(\r)( )+(\r)","\r\r");
-            result = result.replaceAll("(\t)( )+(\t)","\t\t");
-            result = result.replaceAll("(\t)( )+(\r)","\t\r");
-            result = result.replaceAll("(\r)( )+(\t)","\r\t");
-            result = result.replaceAll("(\r)(\t)+(\\r)","\r\r");
-            result = result.replaceAll("(\r)(\t)+","\r\t");
+            result = result.replaceAll("(\r)( )+(\r)", "\r\r");
+            result = result.replaceAll("(\t)( )+(\t)", "\t\t");
+            result = result.replaceAll("(\t)( )+(\r)", "\t\r");
+            result = result.replaceAll("(\r)( )+(\t)", "\r\t");
+            result = result.replaceAll("(\r)(\t)+(\\r)", "\r\r");
+            result = result.replaceAll("(\r)(\t)+", "\r\t");
 
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
 

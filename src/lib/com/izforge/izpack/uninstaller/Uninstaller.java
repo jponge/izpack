@@ -19,8 +19,8 @@
 
 package com.izforge.izpack.uninstaller;
 
-import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.installer.PrivilegedRunner;
+import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsVersion;
 
 import javax.swing.*;
@@ -107,13 +107,13 @@ public class Uninstaller
                 {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(null, "The uninstaller could not launch itself with administrator permissions.\n" +
-                        "The uninstallation will still continue but you may encounter problems due to insufficient permissions.");
+                            "The uninstallation will still continue but you may encounter problems due to insufficient permissions.");
                 }
             }
             else if (!runner.isPlatformSupported())
             {
                 JOptionPane.showMessageDialog(null, "This uninstaller should be run by an administrator.\n" +
-                    "The uninstallation will still continue but you may encounter problems due to insufficient permissions.");
+                        "The uninstallation will still continue but you may encounter problems due to insufficient permissions.");
             }
         }
     }

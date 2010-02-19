@@ -143,9 +143,11 @@ public class Housekeeper
 
         if (reboot)
         {
-            try {
+            try
+            {
                 systemReboot();
-            } catch (IOException e)
+            }
+            catch (IOException e)
             {
                 // Do nothing at the moment
             }
@@ -158,13 +160,16 @@ public class Housekeeper
     {
         final int waitseconds = 2;
 
-        if (OsVersion.IS_UNIX) {
-            Runtime.getRuntime().exec("sudo /sbin/shutdown -r -t "+waitseconds+" now");
+        if (OsVersion.IS_UNIX)
+        {
+            Runtime.getRuntime().exec("sudo /sbin/shutdown -r -t " + waitseconds + " now");
         }
-        else if (OsVersion.IS_WINDOWS) {
-            Runtime.getRuntime().exec("shutdown /r /f /t "+waitseconds);
+        else if (OsVersion.IS_WINDOWS)
+        {
+            Runtime.getRuntime().exec("shutdown /r /f /t " + waitseconds);
         }
-        else {
+        else
+        {
             throw new IOException("Reboot not implemented for your OS");
         }
     }

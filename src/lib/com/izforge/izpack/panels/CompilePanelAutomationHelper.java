@@ -22,8 +22,8 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.installer.*;
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.installer.*;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -109,7 +109,8 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
 
             this.worker.run();
 
-            if(this.worker.getResult().isSuccess()) {
+            if (this.worker.getResult().isSuccess())
+            {
                 throw new InstallerException("Compilation failed (xml line " + panelRoot.getLineNr() + ")");
             }
         }

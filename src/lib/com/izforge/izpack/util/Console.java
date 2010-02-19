@@ -107,7 +107,8 @@ public final class Console
         scroll.setPreferredSize(new Dimension(INITIAL_WIDTH, INITIAL_HEIGHT));
         frame.getContentPane().add(scroll);
         frame.pack();
-        frame.addWindowListener(new WindowListener(){
+        frame.addWindowListener(new WindowListener()
+        {
 
             public void windowActivated(WindowEvent e)
             {

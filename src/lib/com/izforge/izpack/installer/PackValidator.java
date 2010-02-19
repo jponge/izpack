@@ -21,6 +21,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.util.AbstractUIHandler;
@@ -28,10 +29,9 @@ import com.izforge.izpack.util.AbstractUIHandler;
 
 /**
  * @author Kjell Braden
- *
  */
 public interface PackValidator
 {
     public boolean validate(AbstractUIHandler handler,
-            InstallData idata, String packsId, boolean isSelected);
+                            InstallData idata, String packsId, boolean isSelected);
 }

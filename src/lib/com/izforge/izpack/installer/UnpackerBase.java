@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.LocaleDatabase;
@@ -658,9 +659,10 @@ public abstract class UnpackerBase implements IUnpacker
     {
         String uninstallerCondition = idata.info.getUninstallerCondition();
         if ((uninstallerCondition != null) &&
-             (uninstallerCondition.length() > 0) &&
-             !this.rules.isConditionTrue(uninstallerCondition)){
-            Debug.log("Uninstaller has a condition (" + uninstallerCondition  + ") which is not fulfilled.");
+                (uninstallerCondition.length() > 0) &&
+                !this.rules.isConditionTrue(uninstallerCondition))
+        {
+            Debug.log("Uninstaller has a condition (" + uninstallerCondition + ") which is not fulfilled.");
             Debug.log("Skipping creation of uninstaller.");
             return;
         }
@@ -950,7 +952,7 @@ public abstract class UnpackerBase implements IUnpacker
             URI uri = getClass().getProtectionDomain().getCodeSource().getLocation().toURI();
             if (!"file".equals(uri.getScheme()))
             {
-                throw new Exception ("Unexpected scheme in JAR file URI: "+uri);
+                throw new Exception("Unexpected scheme in JAR file URI: " + uri);
             }
             absolutInstallSource = new File(uri.getSchemeSpecificPart()).getAbsoluteFile();
             if (absolutInstallSource.getName().endsWith(".jar"))
@@ -964,8 +966,8 @@ public abstract class UnpackerBase implements IUnpacker
     protected boolean blockableForCurrentOs(PackFile pf)
     {
         return
-            (pf.blockable() != PackFile.BLOCKABLE_NONE)
-            && (OsVersion.IS_WINDOWS);
+                (pf.blockable() != PackFile.BLOCKABLE_NONE)
+                        && (OsVersion.IS_WINDOWS);
     }
 }
 

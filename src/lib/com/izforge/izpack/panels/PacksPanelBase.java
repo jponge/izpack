@@ -26,12 +26,12 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.*;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
-import com.izforge.izpack.adaptator.IXMLElement;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -168,9 +168,9 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 int col = packsTable.columnAtPoint(event.getPoint());
                 if (col == 0)
                 {
-                    Integer checked = (Integer) packsModel.getValueAt(row, 0); 
-                    checked = (checked <= 0) ? 1 : 0; 
-                    packsModel.setValueAt(checked, row, 0); 
+                    Integer checked = (Integer) packsModel.getValueAt(row, 0);
+                    checked = (checked <= 0) ? 1 : 0;
+                    packsModel.setValueAt(checked, row, 0);
                     packsTable.repaint();
                 }
             }
@@ -263,8 +263,9 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                     .getString("installer.error"), JOptionPane.ERROR_MESSAGE);
             return (false);
         }
-        
-        for (Pack pack : idata.availablePacks) {
+
+        for (Pack pack : idata.availablePacks)
+        {
             for (String validator : pack.getValidators())
             {
                 /*
@@ -273,7 +274,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                  *   InstallData idata, String packsId, boolean isSelected)
                  * from the validator class  
                  */
-                        
+
                 PackValidator validatorInst;
                 try
                 {
@@ -282,23 +283,27 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 catch (Exception e)
                 {
                     e.printStackTrace();
-                    System.err.println("Error: Validator class "+validator
-                            +" for pack "+pack.name+" not available.");
+                    System.err.println("Error: Validator class " + validator
+                            + " for pack " + pack.name + " not available.");
                     continue;
                 }
-                
+
                 try
                 {
                     if (validatorInst.validate(this, idata, pack.id, (idata.selectedPacks.indexOf(pack) > -1)))
+                    {
                         continue;
+                    }
                     else
+                    {
                         return false;
+                    }
                 }
                 catch (Exception e)
                 {
                     e.printStackTrace();
-                    System.err.println("Error: Exception in "+validator+".validate("
-                            +(idata.selectedPacks.indexOf(pack) > -1)+") for pack "+pack.name);
+                    System.err.println("Error: Exception in " + validator + ".validate("
+                            + (idata.selectedPacks.indexOf(pack) > -1) + ") for pack " + pack.name);
                     continue;
                 }
             }
@@ -611,11 +616,12 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             packsTable.getColumnModel().getColumn(1).setCellRenderer(new PacksPanelTableCellRenderer());
             PacksPanelTableCellRenderer packTextColumnRenderer = new PacksPanelTableCellRenderer();
             packTextColumnRenderer.setHorizontalAlignment(RIGHT);
-            if (packsTable.getColumnCount() > 2){
+            if (packsTable.getColumnCount() > 2)
+            {
                 packsTable.getColumnModel().getColumn(2).setCellRenderer(packTextColumnRenderer);
-                packsTable.getColumnModel().getColumn(2).setMaxWidth(100);    
+                packsTable.getColumnModel().getColumn(2).setMaxWidth(100);
             }
-            
+
 
             // remove header,so we don't need more strings
             tableScroller.remove(packsTable.getTableHeader());

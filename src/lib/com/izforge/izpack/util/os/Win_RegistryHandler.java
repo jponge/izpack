@@ -22,11 +22,10 @@
 
 package com.izforge.izpack.util.os;
 
-import com.izforge.izpack.util.VariableSubstitutor;
-
 import com.coi.tools.os.izpack.Registry;
 import com.coi.tools.os.win.NativeLibException;
 import com.coi.tools.os.win.RegDataContainer;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 import java.util.List;
 import java.util.Properties;
@@ -70,10 +69,10 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return;
         }
-        if(contents.indexOf("OLD_KEY_VALUE") > -1 && regWorker.valueExist(key, value))
+        if (contents.indexOf("OLD_KEY_VALUE") > -1 && regWorker.valueExist(key, value))
         {
             Object ob = regWorker.getValueAsObject(key, value);
-            if(ob instanceof String)
+            if (ob instanceof String)
             {
                 Properties props = new Properties();
                 props.put("OLD_KEY_VALUE", ob);
@@ -345,7 +344,7 @@ public class Win_RegistryHandler extends RegistryHandler
      * called then the flag wll default to 'true'.
      *
      * @param flagVal true to have the previous contents of registry
-     * values logged by the 'setValue()' method.
+     *                values logged by the 'setValue()' method.
      */
     public void setLogPrevSetValueFlag(boolean flagVal)
     {
@@ -361,7 +360,7 @@ public class Win_RegistryHandler extends RegistryHandler
      * will be logged by the 'setValue()' method.
      *
      * @return true if the previous contents of registry values will be
-     * logged by the 'setValue()' method.
+     *         logged by the 'setValue()' method.
      */
     public boolean getLogPrevSetValueFlag()
     {

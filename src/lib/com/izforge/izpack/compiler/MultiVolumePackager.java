@@ -15,15 +15,16 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.PackFile;
 import com.izforge.izpack.XPackFile;
+import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.io.FileSpanningOutputStream;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileUtil;
-import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.io.*;
 import java.net.URL;
@@ -421,7 +422,7 @@ public class MultiVolumePackager extends PackagerBase
             iter = packInfo.getParsables().iterator();
             while (iter.hasNext())
             {
-                
+
                 objOut.writeObject(iter.next());
             }
 

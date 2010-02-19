@@ -21,12 +21,12 @@
 
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ProcessPanelWorker;
 import com.izforge.izpack.util.AbstractUIProcessHandler;
-import com.izforge.izpack.adaptator.IXMLElement;
 
 import javax.swing.*;
 import java.awt.*;
@@ -172,10 +172,14 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
         if (idata.panels.indexOf(this) != (idata.panels.size() - 1))
         {
             if (unlockNext)
+            {
                 parent.unlockNextButton();
+            }
         }
         if (unlockPrev)
+        {
             parent.unlockPrevButton();
+        }
 
         // set to finished only in case of success
         finishedWork = idata.installSuccess;

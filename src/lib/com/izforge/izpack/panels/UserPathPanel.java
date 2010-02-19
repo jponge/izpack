@@ -18,14 +18,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.VariableSubstitutor;
-import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.util.Iterator;
 
@@ -104,8 +105,8 @@ public class UserPathPanel extends UserPathInputPanel
         super.panelActivate();
         // Set the default or old value to the path selection panel.
         VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
-		String expandedPath = vs.substitute(idata.getVariable(pathVariableName), null);
-		_pathSelectionPanel.setPath(expandedPath);
+        String expandedPath = vs.substitute(idata.getVariable(pathVariableName), null);
+        _pathSelectionPanel.setPath(expandedPath);
     }
 
     /**

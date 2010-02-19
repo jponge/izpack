@@ -15,6 +15,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.util.os.unix;
 
 import com.izforge.izpack.util.FileExecutor;
@@ -106,19 +107,20 @@ public class ShellScript
      * internal field: where to write via write( itsLocation ) this shellscript.
      */
     private String itsLocation;
-    
-    /** internal field: holds the shell */
+
+    /**
+     * internal field: holds the shell
+     */
     private String itsShell;
-    
+
     public final static String SH = "sh";
-    
+
     public final static String BOURNE_SHELL = SH;
-    
+
     public final static String BASH = "bash";
-    
+
     public final static String BOURNE_AGAIN_SHELL = BASH;
-    
-    
+
 
     // ~ Constructors ***********************************************************************
 
@@ -132,11 +134,11 @@ public class ShellScript
     public ShellScript(String aShell)
     {
         // Null was given the Header has to be self created 
-        if( null != aShell )
+        if (null != aShell)
         {
-          setShell(aShell);
-          content.append("#!/usr/bin/env ").append(getShell());
-          content.append(header);
+            setShell(aShell);
+            content.append("#!/usr/bin/env ").append(getShell());
+            content.append(header);
         }
     }
 
@@ -147,24 +149,26 @@ public class ShellScript
     {
         this(SH);
     }
-    
-    
+
+
     /**
      * Sets the current used shell
+     *
      * @param aShell The Shell which should set and used.
      */
-    public void setShell( String aShell)
+    public void setShell(String aShell)
     {
         itsShell = aShell;
     }
-    
+
     /**
      * Gets the current used shell. Can be null.
-     * @return the Shell 
+     *
+     * @return the Shell
      */
     public String getShell()
     {
-      return itsShell;
+        return itsShell;
     }
 
     // ~ Methods ****************************************************************************
@@ -190,46 +194,52 @@ public class ShellScript
     {
         content.append(aChar);
     }
-    
-    
+
+
     /**
      * Appends the Array as one Commandline Space Separated
-     * This is usefull with our FileExecutor 
+     * This is usefull with our FileExecutor
+     *
      * @param anArray
-     */    
-    public void append( String[] anArray )
+     */
+    public void append(String[] anArray)
     {
         for (int i = 0; i < anArray.length; i++)
         {
             String string = anArray[i];
-            
-            append( string );
-            if( anArray.length>i)
-              append(' ');
+
+            append(string);
+            if (anArray.length > i)
+            {
+                append(' ');
+            }
         }
     }
 
 
     /**
-     * Appends the Array as ONE! Commandline Space Separated 
-     * And additionionally append an linefeed "\n" 
-     * This is usefull with our FileExecutor 
+     * Appends the Array as ONE! Commandline Space Separated
+     * And additionionally append an linefeed "\n"
+     * This is usefull with our FileExecutor
+     *
      * @param anArray
-     */    
-    public void appendln( String[] anArray )
+     */
+    public void appendln(String[] anArray)
     {
         for (int i = 0; i < anArray.length; i++)
         {
             String string = anArray[i];
-            
-            append( string );
-            if( anArray.length>i)
-              append(' ');
+
+            append(string);
+            if (anArray.length > i)
+            {
+                append(' ');
+            }
         }
         appendln();
     }
 
-    
+
     /**
      * Appends an Object or String to this ShellScript with unix linefeed ("\n").
      *
@@ -360,8 +370,8 @@ public class ShellScript
     {
         return exec(null);
     }
-    
-    
+
+
 //    /**
 //     * Prepared for later use and for refactoring 
 //     **/    
@@ -386,7 +396,7 @@ public class ShellScript
 //        return exec();
 //        
 //    }
-    
+
     /**
      * Execs ths given lines in the creted shell stored on location.
      *
@@ -480,22 +490,22 @@ public class ShellScript
     }
 
     /**
-     * Deletes only  if Location is not null. 
+     * Deletes only  if Location is not null.
      */
     public void delete()
     {
-        if(itsLocation!=null)
+        if (itsLocation != null)
         {
-          File location = new File(itsLocation);
+            File location = new File(itsLocation);
 
-          try
-          {
-              location.delete();
-          }
-          catch (Exception e)
-          {
-             location.deleteOnExit();
-          }
+            try
+            {
+                location.delete();
+            }
+            catch (Exception e)
+            {
+                location.deleteOnExit();
+            }
         }
     }
 }

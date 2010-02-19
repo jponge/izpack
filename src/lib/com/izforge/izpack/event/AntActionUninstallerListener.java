@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.util.AbstractUIProgressHandler;
@@ -115,7 +116,8 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
             AntAction action = (AntAction) iter.next();
             // See if we need to set the action with the build_resource that
             //  we extracted
-            if (null != buildResource) {
+            if (null != buildResource)
+            {
                 // We do
                 action.setBuildFile(buildResource);
             }

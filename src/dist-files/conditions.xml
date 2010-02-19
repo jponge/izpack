@@ -4,5 +4,5 @@
         <name>izpack.setuptype</name>
         <value>warfile</value>
     </condition>
-    <panelcondition conditionid="warfilesetup" panelid="infopanel"/>
+    <panelcondition conditionid="warfilesetup" panelid="infopanel" />
 </conditions>

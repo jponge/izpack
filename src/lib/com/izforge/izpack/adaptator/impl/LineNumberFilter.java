@@ -9,9 +9,9 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLFilterImpl;
 
 import javax.xml.transform.dom.DOMResult;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
-import java.util.LinkedList;
 
 
 /**
@@ -77,7 +77,6 @@ public class LineNumberFilter extends XMLFilterImpl
      * Return the first element found from the given Node.
      *
      * @param elt The Node start point.
-     *
      * @return The first Element found, or null.
      */
     private Element getFirstFoundElement(Node elt)
@@ -93,7 +92,6 @@ public class LineNumberFilter extends XMLFilterImpl
      * Return the next element sibling found from the given Node.
      *
      * @param elt The Node start point.
-     *
      * @return The next sibling Element, or null if nto found.
      */
     private Element getNextSibling(Node elt)
@@ -105,7 +103,6 @@ public class LineNumberFilter extends XMLFilterImpl
      * Return the first element child found from the given Node.
      *
      * @param elt The Node start point.
-     *
      * @return The first child Element found, or null.
      */
     private Element getFirstChild(Node elt)
@@ -117,7 +114,6 @@ public class LineNumberFilter extends XMLFilterImpl
      * Returns whether the given node has any element children.
      *
      * @param elt The node to check.
-     *
      * @return Returns <code>true</code> if this node has any children,
      *         <code>false</code> otherwise.
      */
@@ -181,7 +177,8 @@ public class LineNumberFilter extends XMLFilterImpl
                             elt = stack.pop();
                             elt = getNextSibling(elt);
                         }
-                    } while (!end && elt == null);
+                    }
+                    while (!end && elt == null);
                 }
             }
         }

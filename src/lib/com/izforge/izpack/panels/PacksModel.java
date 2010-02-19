@@ -75,7 +75,7 @@ class PacksModel extends AbstractTableModel
 
     // reference to the current variables, needed for condition validation
     private Properties variables;
-    
+
     private InstallData idata;
 
     public PacksModel(PacksPanelInterface panel, InstallData idata, RulesEngine rules)
@@ -136,19 +136,22 @@ class PacksModel extends AbstractTableModel
             }
         }
         this.rules = rules;
-        
+
         this.packs = new ArrayList();
         this.hiddenPacks = new ArrayList<Pack>();
-        for(Pack availablePack : idata.availablePacks){
+        for (Pack availablePack : idata.availablePacks)
+        {
             // only add a pack if not hidden
-            if (!availablePack.isHidden()){
+            if (!availablePack.isHidden())
+            {
                 this.packs.add(availablePack);
             }
-            else {
+            else
+            {
                 this.hiddenPacks.add(availablePack);
             }
-        }        
-        
+        }
+
         this.packsToInstall = idata.selectedPacks;
         this.panel = panel;
         this.variables = idata.getVariables();
@@ -161,8 +164,9 @@ class PacksModel extends AbstractTableModel
         refreshPacksToInstall();
         this.variables.setProperty(INITAL_PACKSELECTION, Boolean.toString(false));
     }
-    
-    public Pack getPackAtRow(int row){
+
+    public Pack getPackAtRow(int row)
+    {
         return (Pack) this.packs.get(row);
     }
 
@@ -388,14 +392,16 @@ class PacksModel extends AbstractTableModel
     public int getColumnCount()
     {
         boolean doNotShowPackSize = Boolean.parseBoolean(idata.guiPrefs.modifier.get("doNotShowPackSizeColumn"));
-        
-        int result=0;
-        if (!doNotShowPackSize){
+
+        int result = 0;
+        if (!doNotShowPackSize)
+        {
             result = 3;
         }
-        else {
+        else
+        {
             result = 2;
-        }        
+        }
         return result;
     }
 
@@ -542,7 +548,7 @@ class PacksModel extends AbstractTableModel
                 }
                 refreshPacksToInstall();
                 updateBytes();
-                fireTableDataChanged();                
+                fireTableDataChanged();
                 panel.showSpaceRequired();
             }
         }
@@ -590,8 +596,10 @@ class PacksModel extends AbstractTableModel
             }
         }
         // add hidden packs
-        for (Pack hiddenpack : this.hiddenPacks){
-            if (this.rules.canInstallPack(hiddenpack.id,variables)){
+        for (Pack hiddenpack : this.hiddenPacks)
+        {
+            if (this.rules.canInstallPack(hiddenpack.id, variables))
+            {
                 packsToInstall.add(hiddenpack);
             }
         }
@@ -688,10 +696,12 @@ class PacksModel extends AbstractTableModel
                 bytes += pack.nbytes;
             }
         }
-        
+
         // add selected hidden bytes
-        for (Pack hidden : this.hiddenPacks){
-            if (this.rules.canInstallPack(hidden.id, variables)){
+        for (Pack hidden : this.hiddenPacks)
+        {
+            if (this.rules.canInstallPack(hidden.id, variables))
+            {
                 bytes += hidden.nbytes;
             }
         }

@@ -18,10 +18,11 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License. 
  */
+
 package com.izforge.izpack.rules;
 
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.util.Debug;
 
 /**
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
@@ -30,14 +31,14 @@ import com.izforge.izpack.adaptator.IXMLElement;
 public class XorCondition extends OrCondition
 {
 
-    /** 
-      * 
+    /**
+     *
      */
     private static final long serialVersionUID = 3148555083095194992L;
 
-    /** 
-    * 
-   */
+    /**
+     *
+     */
     public XorCondition()
     {
         super();

@@ -1,13 +1,12 @@
 package com.izforge.izpack.installer;
 
-import java.awt.Component;
-import java.io.File;
-
-import javax.swing.JOptionPane;
-
 import com.izforge.izpack.panels.NextMediaDialog;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
 
 public class MultiVolumeUnpackerHelper implements IMultiVolumeUnpackerHelper
 {
@@ -18,7 +17,7 @@ public class MultiVolumeUnpackerHelper implements IMultiVolumeUnpackerHelper
 
     public MultiVolumeUnpackerHelper()
     {
-        
+
     }
 
     public File enterNextMediaMessage(String volumename, boolean lastcorrupt)

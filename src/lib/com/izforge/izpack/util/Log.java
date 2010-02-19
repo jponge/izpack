@@ -748,7 +748,7 @@ public class Log implements LogError, LogWarning, LogMessage
         }
         else
         {
-            message.append(MessageFormat.format(record.template, (Object[])record.variables));
+            message.append(MessageFormat.format(record.template, (Object[]) record.variables));
         }
 
         message.append(newline);
@@ -782,7 +782,7 @@ public class Log implements LogError, LogWarning, LogMessage
         }
         else
         {
-            message.append(MessageFormat.format(record.template, (Object[])record.variables));
+            message.append(MessageFormat.format(record.template, (Object[]) record.variables));
         }
 
         // ----------------------------------------------------
@@ -824,7 +824,7 @@ public class Log implements LogError, LogWarning, LogMessage
         }
         else
         {
-            message.append(MessageFormat.format(record.template, (Object[])record.variables));
+            message.append(MessageFormat.format(record.template, (Object[]) record.variables));
         }
 
         // ----------------------------------------------------
@@ -878,7 +878,7 @@ public class Log implements LogError, LogWarning, LogMessage
             message.append("Debug - ").append(record.channel).append(": ");
         }
 
-        message.append(MessageFormat.format(record.template, (Object[])record.variables));
+        message.append(MessageFormat.format(record.template, (Object[]) record.variables));
 
         // ----------------------------------------------------
         // append the exception

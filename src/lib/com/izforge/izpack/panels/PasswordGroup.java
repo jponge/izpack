@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.installer.InstallData;
@@ -49,7 +50,7 @@ public class PasswordGroup implements ProcessingClient
 
     private List<ValidatorContainer> validatorContainers = null;
 //  private Validator validator = null;
-//  private boolean hasParams = false;
+    //  private boolean hasParams = false;
     //  private Map validatorParams = null;
     private Processor processor = null;
     private String modifiedPassword = null;

@@ -23,20 +23,15 @@ package com.izforge.izpack.event;
 
 import com.coi.tools.os.win.NativeLibException;
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.installer.Unpacker;
 import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
-import com.izforge.izpack.util.CleanupClient;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.Housekeeper;
-import com.izforge.izpack.util.SpecHelper;
-import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.RegistryDefaultHandler;
 import com.izforge.izpack.util.os.RegistryHandler;
 import com.izforge.izpack.util.os.WrappedNativeLibException;
-import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.util.Iterator;
 import java.util.List;
@@ -86,8 +81,8 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
 
     private RulesEngine rules;
 
-	private List registryModificationLog;
-    
+    private List registryModificationLog;
+
     /**
      * Default constructor.
      */
@@ -121,9 +116,9 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
     {
         try
         {
-        	// Register for cleanup
-        	Housekeeper.getInstance().registerForCleanup(this);
-        	
+            // Register for cleanup
+            Housekeeper.getInstance().registerForCleanup(this);
+
             // Start logging
             RegistryHandler rh = RegistryDefaultHandler.getInstance();
             if (rh == null)
@@ -189,15 +184,14 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             }
         }
     }
-    
-    
+
 
     /**
      * Remove all registry entries on failed installation
      */
     public void cleanUp()
     {
-		// installation was not successful now rewind all registry changes
+        // installation was not successful now rewind all registry changes
         if (AutomatedInstallData.getInstance().installSuccess || registryModificationLog == null || registryModificationLog.size() < 1)
         {
             return;
@@ -223,7 +217,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
         }
     }
 
-	/**
+    /**
      * Performs the registry settings for the given pack.
      *
      * @param pack XML elemtent which contains the registry settings for one pack
@@ -235,17 +229,19 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
         {
             return;
         }
-        
+
         String packcondition = pack.getAttribute("condition");
-        if (packcondition != null){
+        if (packcondition != null)
+        {
             Debug.trace("condition " + packcondition + " found for pack of registry entries.");
-            if (!rules.isConditionTrue(packcondition)){
+            if (!rules.isConditionTrue(packcondition))
+            {
                 // condition not fulfilled, continue with next element.
                 Debug.trace("not fulfilled.");
                 return;
             }
         }
-        
+
         // Get all entries for registry settings.
         Vector regEntries = pack.getChildren();
         if (regEntries == null)
@@ -257,15 +253,17 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
         {
             IXMLElement regEntry = (IXMLElement) entriesIter.next();
             String condition = regEntry.getAttribute("condition");
-            if (condition != null){
+            if (condition != null)
+            {
                 Debug.trace("condition " + condition + " found for registry entry.");
-                if (!rules.isConditionTrue(condition)){
+                if (!rules.isConditionTrue(condition))
+                {
                     // condition not fulfilled, continue with next element.
                     Debug.trace("not fulfilled.");
                     continue;
                 }
             }
-            
+
             // Perform one registry entry.
             String type = regEntry.getName();
             if (type.equalsIgnoreCase(REG_KEY))
@@ -322,10 +320,10 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             }
         }
 
-              //set flag for logging previous contents if "saveprevious"
-              // attribute not specified or specified as 'true':
+        //set flag for logging previous contents if "saveprevious"
+        // attribute not specified or specified as 'true':
         rh.setLogPrevSetValueFlag("true".equalsIgnoreCase(
-                              regEntry.getAttribute(SAVE_PREVIOUS,"true")));
+                regEntry.getAttribute(SAVE_PREVIOUS, "true")));
 
         String value = regEntry.getAttribute(REG_DWORD);
         if (value != null)

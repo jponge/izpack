@@ -2,7 +2,7 @@
 <aaa xmlns:xi="http://www.w3.org/2001/XInclude">
     <xi:include href="does-not-exist.xml">
         <xi:fallback>
-            <bbb/>
+            <bbb />
         </xi:fallback>
     </xi:include>
 </aaa>
