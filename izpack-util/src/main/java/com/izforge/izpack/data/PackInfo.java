@@ -36,7 +36,8 @@ import java.util.*;
  *
  * @author Chadwick McHenry
  */
-public class PackInfo implements Serializable {
+public class PackInfo implements Serializable
+{
 
     /**
      *
@@ -56,7 +57,7 @@ public class PackInfo implements Serializable {
     /**
      * Files of the Pack.
      */
-    private Map files = new LinkedHashMap();
+    private Map<PackFile, File> files = new LinkedHashMap<PackFile, File>();
 
     /**
      * Parsables files in this Pack.
@@ -84,7 +85,8 @@ public class PackInfo implements Serializable {
      * @param excludegroup name of the exclude group
      * @param uninstall    pack must be uninstalled
      */
-    public PackInfo(String name, String id, String description, boolean required, boolean loose, String excludegroup, boolean uninstall) {
+    public PackInfo(String name, String id, String description, boolean required, boolean loose, String excludegroup, boolean uninstall)
+    {
         boolean ispreselected = (excludegroup == null);
         pack = new Pack(name, id, description, null, null, required, ispreselected, loose, excludegroup, uninstall);
         colour = PackColor.WHITE;
@@ -96,7 +98,8 @@ public class PackInfo implements Serializable {
      * ********************************************************************************************
      */
 
-    public void setDependencies(List<String> dependencies) {
+    public void setDependencies(List<String> dependencies)
+    {
         pack.dependencies = dependencies;
     }
 
@@ -105,23 +108,28 @@ public class PackInfo implements Serializable {
      *
      * @param group name of the mutal exclude group
      */
-    public void setExcludeGroup(String group) {
+    public void setExcludeGroup(String group)
+    {
         pack.excludeGroup = group;
     }
 
-    public void setOsConstraints(List<OsConstraint> osConstraints) {
+    public void setOsConstraints(List<OsConstraint> osConstraints)
+    {
         pack.osConstraints = osConstraints;
     }
 
-    public List<OsConstraint> getOsConstraints(List osConstraints) {
+    public List<OsConstraint> getOsConstraints(List osConstraints)
+    {
         return pack.osConstraints;
     }
 
-    public void setPreselected(boolean preselected) {
+    public void setPreselected(boolean preselected)
+    {
         pack.preselected = preselected;
     }
 
-    public boolean isPreselected() {
+    public boolean isPreselected()
+    {
         return pack.preselected;
     }
 
@@ -130,7 +138,8 @@ public class PackInfo implements Serializable {
      *
      * @return Get the pack group, null if there is no group.
      */
-    public String getGroup() {
+    public String getGroup()
+    {
         return pack.group;
     }
 
@@ -139,7 +148,8 @@ public class PackInfo implements Serializable {
      *
      * @param group the group to associate the pack with.
      */
-    public void setGroup(String group) {
+    public void setGroup(String group)
+    {
         pack.group = group;
     }
 
@@ -148,7 +158,8 @@ public class PackInfo implements Serializable {
      *
      * @param group the install group to associate the pack with.
      */
-    public void addInstallGroup(String group) {
+    public void addInstallGroup(String group)
+    {
         pack.installGroups.add(group);
     }
 
@@ -158,7 +169,8 @@ public class PackInfo implements Serializable {
      * @param group the install group name to check
      * @return true if the given group is associated with the pack.
      */
-    public boolean hasInstallGroup(String group) {
+    public boolean hasInstallGroup(String group)
+    {
         return pack.installGroups.contains(group);
     }
 
@@ -167,20 +179,24 @@ public class PackInfo implements Serializable {
      *
      * @return Set<String> for the install groups
      */
-    public Set<String> getInstallGroups() {
+    public Set<String> getInstallGroups()
+    {
         return pack.installGroups;
     }
 
-    public Pack getPack() {
+    public Pack getPack()
+    {
         return pack;
     }
 
-    public boolean isHidden() {
+    public boolean isHidden()
+    {
         return pack.isHidden();
     }
 
 
-    public void setHidden(boolean hidden) {
+    public void setHidden(boolean hidden)
+    {
         pack.setHidden(hidden);
     }
 
@@ -197,7 +213,7 @@ public class PackInfo implements Serializable {
      * @param override   what to do if the file already exists when installing
      * @param condition
      * @throws FileNotFoundException if the file specified does not exist. The file is not read
-     *                               until the {@link com.izforge.izpack.compiler.Packager#createInstaller} is invoked, thus a FileNotFoundEception will occur
+     *                               until the {@link Packager} is invoked, thus a FileNotFoundEception will occur
      *                               then, if the file is deleted in between.
      */
     /*
@@ -217,8 +233,10 @@ public class PackInfo implements Serializable {
      * then, if the file is deleted in between.
      */
     public void addFile(File baseDir, File file, String targetfile, List<OsConstraint> osList, OverrideType override, Blockable blockable, Map additionals, String condition)
-            throws FileNotFoundException {
-        if (!file.exists()) {
+            throws FileNotFoundException
+    {
+        if (!file.exists())
+        {
             throw new FileNotFoundException(file.toString());
         }
 
@@ -231,7 +249,8 @@ public class PackInfo implements Serializable {
     /**
      * Set of PackFile objects for this Pack.
      */
-    public Set<PackFile> getPackFiles() {
+    public Set<PackFile> getPackFiles()
+    {
         return files.keySet();
     }
 
@@ -239,21 +258,24 @@ public class PackInfo implements Serializable {
      * The file described by the specified PackFile. Returns <tt>null</tt> if the PackFile did not
      * come from the set returned by {@link #getPackFiles()}.
      */
-    public File getFile(PackFile packFile) {
+    public File getFile(PackFile packFile)
+    {
         return files.get(packFile);
     }
 
     /**
      * Parsable files have variables substituted after installation.
      */
-    public void addParsable(ParsableFile parsable) {
+    public void addParsable(ParsableFile parsable)
+    {
         parsables.add(parsable);
     }
 
     /**
      * List of parsables for this Pack.
      */
-    public List<ParsableFile> getParsables() {
+    public List<ParsableFile> getParsables()
+    {
         return parsables;
     }
 
@@ -261,14 +283,16 @@ public class PackInfo implements Serializable {
      * Executables files have their executable flag set, may be executed, and optionally, deleted
      * when finished executing.
      */
-    public void addExecutable(ExecutableFile executable) {
+    public void addExecutable(ExecutableFile executable)
+    {
         executables.add(executable);
     }
 
     /**
      * List of parsables for this Pack.
      */
-    public List<ExecutableFile> getExecutables() {
+    public List<ExecutableFile> getExecutables()
+    {
         return executables;
     }
 
@@ -276,44 +300,53 @@ public class PackInfo implements Serializable {
      * Executables files have their executable flag set, may be executed, and optionally, deleted
      * when finished executing.
      */
-    public void addUpdateCheck(UpdateCheck updateCheck) {
+    public void addUpdateCheck(UpdateCheck updateCheck)
+    {
         updateChecks.add(updateCheck);
     }
 
     /**
      * List of update checks for this Pack.
      */
-    public List<UpdateCheck> getUpdateChecks() {
+    public List<UpdateCheck> getUpdateChecks()
+    {
         return updateChecks;
     }
 
     /**
      * The packs that this file depends on
      */
-    public void addDependency(String dependency) {
-        if (pack.dependencies == null) {
+    public void addDependency(String dependency)
+    {
+        if (pack.dependencies == null)
+        {
             pack.dependencies = new ArrayList<String>();
         }
         pack.dependencies.add(dependency);
     }
 
-    public List<String> getDependencies() {
+    public List<String> getDependencies()
+    {
         return pack.dependencies;
     }
 
-    public String getParent() {
+    public String getParent()
+    {
         return pack.parent;
     }
 
-    public void setParent(String p) {
+    public void setParent(String p)
+    {
         pack.parent = p;
     }
 
-    public String toString() {
+    public String toString()
+    {
         return pack.name;
     }
 
-    public void setPackImgId(String packImgId) {
+    public void setPackImgId(String packImgId)
+    {
         pack.packImgId = packImgId;
     }
 
@@ -321,7 +354,8 @@ public class PackInfo implements Serializable {
     /**
      * @return the condition
      */
-    public String getCondition() {
+    public String getCondition()
+    {
         return this.pack.getCondition();
     }
 
@@ -329,11 +363,13 @@ public class PackInfo implements Serializable {
     /**
      * @param condition the condition to set
      */
-    public void setCondition(String condition) {
+    public void setCondition(String condition)
+    {
         this.pack.setCondition(condition);
     }
 
-    public void addValidator(String validatorClassName) {
+    public void addValidator(String validatorClassName)
+    {
         pack.addValidator(validatorClassName);
     }
 }
