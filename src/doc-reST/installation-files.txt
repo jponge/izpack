@@ -582,7 +582,7 @@ The Installer Requirements Element ``<installerrequirements>``
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 This element allows to specify requirements for running the installation. This will be done based
-on conditions defined in the conditons section.
+on conditions defined in the conditions section.
 
 An installer requirement consists of a condition and a message which will be shown if the condition
 is not fulfilled. If so, the installer will show the message and exit after that.
@@ -597,7 +597,7 @@ Installerrequirements have the following attributes:
 ::
 
     <installerrequirements>
-       <installerrequirement conditon="installonwindows" message="This installer could only be run on Windows operating systems."/>
+       <installerrequirement condition="izpack.windowsinstall" message="This installer could only be run on Windows operating systems."/>
     </installerrequirements>
 
 
