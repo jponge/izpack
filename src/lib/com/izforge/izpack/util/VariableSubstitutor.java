@@ -368,9 +368,7 @@ public class VariableSubstitutor implements Serializable
                 {
                     varvalue = IoHelper.getenv(name.substring(4, name.length() - 1));
                     if (varvalue == null)
-                    {
                         varvalue = "";
-                    }
                 }
                 else
                 {
@@ -445,7 +443,7 @@ public class VariableSubstitutor implements Serializable
                 return str;
             case TYPE_SHELL:
                 //apple mac has major problem with \r, make sure they are gone
-                return str.replace("\r", "");
+                return str.replace("\r","");
             case TYPE_JAVA_PROPERTIES:
             case TYPE_JAVA:
                 buffer = new StringBuffer(str);

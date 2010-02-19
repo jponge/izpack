@@ -15,7 +15,6 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package com.izforge.izpack.installer;
 
 import java.io.Serializable;
@@ -24,39 +23,34 @@ import java.util.Map;
 
 public class PanelActionConfiguration implements Serializable
 {
-    private Map<String, String> properties;
-
-    public PanelActionConfiguration()
-    {
+    private Map<String,String> properties;  
+    
+    public PanelActionConfiguration(){
         this.properties = new HashMap<String, String>();
     }
-
-    public void addProperty(String key, String value)
-    {
+    
+    public void addProperty(String key, String value){
         this.properties.put(key, value);
     }
-
-    public String getProperty(String key)
-    {
+    
+    public String getProperty(String key){
         return this.properties.get(key);
     }
-
-    public String getProperty(String key, String defaultValue)
-    {
+    
+    public String getProperty(String key, String defaultValue){
         String result = getProperty(key);
-        if (result == null)
-        {
+        if (result == null){
             result = defaultValue;
         }
         return result;
     }
-
+    
     public Map<String, String> getProperties()
     {
         return properties;
     }
 
-
+    
     public void setProperties(Map<String, String> properties)
     {
         this.properties = properties;

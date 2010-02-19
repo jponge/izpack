@@ -18,17 +18,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.izforge.izpack.panels;
+
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Properties;
 
 import com.izforge.izpack.Info;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.PanelConsoleHelper;
-
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Properties;
 
 /**
  * Hello Panel console helper
@@ -44,7 +43,7 @@ public class HelloPanelConsoleHelper extends PanelConsoleHelper implements Panel
     }
 
     public boolean runGeneratePropertiesFile(AutomatedInstallData installData,
-                                             PrintWriter printWriter)
+            PrintWriter printWriter)
     {
         return true;
     }

@@ -18,13 +18,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.izforge.izpack.rules;
 
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.util.Debug;
 
 import java.util.List;
 import java.util.Properties;
@@ -117,9 +116,9 @@ public class PackselectionCondition extends Condition
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {
-        XMLElementImpl packel = new XMLElementImpl("packid", conditionRoot);
+        XMLElementImpl packel = new XMLElementImpl("packid",conditionRoot);
         packel.setContent(this.packid);
-        conditionRoot.addChild(packel);
+        conditionRoot.addChild(packel);        
     }
 
 }

@@ -16,13 +16,13 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package com.izforge.izpack.panels;
 
 /**
  * Additional metadata for password elements.
- *
+ * 
  * @author Dennis Reil
+ * 
  */
 public class PasswordUIElement extends UIElement
 {

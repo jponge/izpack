@@ -18,16 +18,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.Pack;
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.panels.InstallationGroupPanel.GroupData;
 import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -52,7 +51,7 @@ public class InstallationGroupPanelAutomationHelper
         // Write out the group to pack mappings
         for (GroupData gd : rows)
         {
-            IXMLElement xgroup = new XMLElementImpl("group", panelRoot);
+            IXMLElement xgroup = new XMLElementImpl("group",panelRoot);
             xgroup.setAttribute("name", gd.name);
             Iterator<String> names = gd.packNames.iterator();
             while (names.hasNext())
@@ -60,7 +59,7 @@ public class InstallationGroupPanelAutomationHelper
                 String name = names.next();
                 Pack pack = (Pack) packsByName.get(name);
                 int index = idata.availablePacks.indexOf(pack);
-                IXMLElement xpack = new XMLElementImpl("pack", xgroup);
+                IXMLElement xpack = new XMLElementImpl("pack",xgroup);
                 xpack.setAttribute("name", name);
                 xpack.setAttribute("index", "" + index);
                 xgroup.addChild(xpack);
@@ -74,7 +73,7 @@ public class InstallationGroupPanelAutomationHelper
      * xml data to allow an install group to specify the selected packs.
      */
     public void runAutomated(AutomatedInstallData idata,
-                             IXMLElement panelRoot)
+                                IXMLElement panelRoot)
     {
         String installGroup = idata.getVariable("INSTALL_GROUP");
         Debug.trace("InstallationGroupPanelAutomationHelper: runAutomated, INSTALL_GROUP: " + installGroup);

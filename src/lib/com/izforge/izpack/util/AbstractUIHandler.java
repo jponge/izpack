@@ -57,11 +57,11 @@ public interface AbstractUIHandler
      * @param message The error message.
      */
     public void emitError(String title, String message);
-
+    
     /**
      * Notify the user of some error and block the next button.
-     *
-     * @param title   The message title (used for dialog name, might not be displayed)
+     * 
+     * @param title The message title (used for dialog name, might not be displayed)
      * @param message The error message.
      */
     public void emitErrorAndBlockNext(String title, String message);

@@ -45,7 +45,7 @@ public interface WinSetupQueueCallbackInterface
      * @return One of the allowed callback return codes
      */
     public int handleNeedMedia(String tagfile, String description, String sourcePath,
-                               String sourceFile);
+            String sourceFile);
 
     /**
      * Handles a copy error notification occuring during a file queue commit.

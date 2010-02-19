@@ -19,6 +19,15 @@
 
 package com.izforge.izpack.panels;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
+import javax.swing.JEditorPane;
+import javax.swing.JScrollPane;
+
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
@@ -26,13 +35,6 @@ import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.util.HyperlinkHandler;
-
-import javax.swing.*;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 
 /**
  * The HTML info panel.
@@ -44,14 +46,10 @@ public class HTMLInfoPanel extends IzPanel
 
     private static final long serialVersionUID = 3257008769514025270L;
 
-    /**
-     * Resource prefix for panel.
-     */
+    /** Resource prefix for panel. */
     protected String panelResourcePrefixStr;
 
-    /**
-     * Resource name for panel content.
-     */
+    /** Resource name for panel content. */
     protected String panelResourceNameStr;
 
     /**
@@ -67,66 +65,63 @@ public class HTMLInfoPanel extends IzPanel
      */
     public HTMLInfoPanel(InstallerFrame parent, InstallData idata)
     {
-        this(parent, idata, "HTMLInfoPanel", true);
+        this(parent,idata,"HTMLInfoPanel",true);
     }
 
     /**
      * Alternate constructor with additional parameters.  For use with
      * subclasses.
      *
-     * @param parent            The parent.
-     * @param idata             The installation data.
-     * @param resPrefixStr      prefix string for content resource name.
+     * @param parent The parent.
+     * @param idata  The installation data.
+     * @param resPrefixStr prefix string for content resource name.
      * @param showInfoLabelFlag true to show "please read..." label
-     *                          above content.
+     * above content.
      */
     public HTMLInfoPanel(InstallerFrame parent, InstallData idata,
-                         String resPrefixStr, boolean showInfoLabelFlag)
+                             String resPrefixStr, boolean showInfoLabelFlag)
     {
         super(parent, idata, new IzPanelLayout());
-        //setup given resource prefix and name:
+                   //setup given resource prefix and name:
         panelResourcePrefixStr = resPrefixStr;
         panelResourceNameStr = resPrefixStr + ".info";
 
         // We add the components
 
-        if (showInfoLabelFlag)
+        if(showInfoLabelFlag)
         {  //flag is set; add label above content
-            add(LabelFactory.create(parent.langpack.getString("InfoPanel.info"), parent.icons
-                    .getImageIcon("edit"), LEADING), NEXT_LINE);
+        add(LabelFactory.create(parent.langpack.getString("InfoPanel.info"), parent.icons
+                .getImageIcon("edit"), LEADING), NEXT_LINE);
         }
         try
         {
             textArea = new JEditorPane()
-            {       //override get-stream method to parse variable
-
-                // declarations in HTML content:
-                protected InputStream getStream(URL urlObj)
-                        throws IOException
-                {                  //get original stream contents:
-                    final InputStream inStm = super.getStream(urlObj);
-                    final ByteArrayOutputStream btArrOutStm =
-                            new ByteArrayOutputStream();
-                    int b;         //copy contents to output stream:
-                    final byte[] buff = new byte[2048];
-                    while ((b = inStm.read(buff, 0, buff.length)) > 0)
-                    {
-                        btArrOutStm.write(buff, 0, b);
+                {       //override get-stream method to parse variable
+                        // declarations in HTML content:
+                    protected InputStream getStream(URL urlObj)
+                                                          throws IOException
+                    {                  //get original stream contents:
+                        final InputStream inStm = super.getStream(urlObj);
+                        final ByteArrayOutputStream btArrOutStm =
+                                                new ByteArrayOutputStream();
+                        int b;         //copy contents to output stream:
+                        final byte [] buff = new byte[2048];
+                        while((b=inStm.read(buff,0,buff.length)) > 0)
+                            btArrOutStm.write(buff,0,b);
+                                  //convert to string and parse variables:
+                        final String parsedStr =
+                                          parseText(btArrOutStm.toString());
+                                  //return input stream to parsed string:
+                        return new ByteArrayInputStream(
+                                                      parsedStr.getBytes());
                     }
-                    //convert to string and parse variables:
-                    final String parsedStr =
-                            parseText(btArrOutStm.toString());
-                    //return input stream to parsed string:
-                    return new ByteArrayInputStream(
-                            parsedStr.getBytes());
-                }
-            };
+                };
             textArea.setContentType("text/html; charset=utf-8");
             textArea.setEditable(false);
             textArea.addHyperlinkListener(new HyperlinkHandler());
             JScrollPane scroller = new JScrollPane(textArea);
             textArea.setPage(loadHTMLInfoContent());
-            //set caret so beginning of file is displayed:
+                   //set caret so beginning of file is displayed:
             textArea.setCaretPosition(0);
             add(scroller, NEXT_LINE);
         }
@@ -186,7 +181,7 @@ public class HTMLInfoPanel extends IzPanel
         try
         {
             textArea.setPage(loadHTMLInfoContent());
-            //set caret so beginning of file is displayed:
+                   //set caret so beginning of file is displayed:
             textArea.setCaretPosition(0);
         }
         catch (IOException e)

@@ -18,26 +18,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.izforge.izpack.rules;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Vector;
+
+import javax.xml.transform.TransformerException;
 
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.XMLException;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.util.Debug;
 
-import javax.xml.transform.TransformerException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
-import java.util.*;
-
 /**
  * The rules engine class is the central point for checking conditions
- *
+ * 
  * @author Dennis Reil, <Dennis.Reil@reddot.de> created: 09.11.2006, 13:48:39
  */
 public class RulesEngine implements Serializable
@@ -166,7 +173,7 @@ public class RulesEngine implements Serializable
 
     /**
      * Returns the current known condition ids.
-     *
+     * 
      * @return
      */
     public String[] getKnownConditionIds()
@@ -179,10 +186,10 @@ public class RulesEngine implements Serializable
 
     /**
      * Checks if an attribute for an xmlelement is set.
-     *
-     * @param val       value of attribute to check
+     * 
+     * @param val value of attribute to check
      * @param attribute the attribute which is checked
-     * @param element   the element
+     * @param element the element
      * @return true value was set false no value was set
      */
     protected boolean checkAttribute(String val, String attribute, String element)
@@ -222,16 +229,15 @@ public class RulesEngine implements Serializable
             try
             {
                 Class<Condition> conditionClass = getConditionClass(conditionclassname);
-                if (conditionClass != null)
-                {
+                if (conditionClass != null){
                     result = conditionClass.newInstance();
                     result.readFromXML(condition);
                     if (condid != null)
                     {
                         result.setId(condid);
                     }
-                    result.setInstalldata(RulesEngine.installdata);
-                }
+                    result.setInstalldata(RulesEngine.installdata);    
+                }                
             }
             catch (InstantiationException e)
             {
@@ -357,43 +363,43 @@ public class RulesEngine implements Serializable
             char currentchar = conditionexpr.charAt(index);
             switch (currentchar)
             {
-                case '+':
-                    // and-condition
-                    Condition op1 = conditionsmap.get(conditionexpr.substring(0, index));
-                    conditionexpr.delete(0, index + 1);
-                    result = new AndCondition(op1, getConditionByExpr(conditionexpr));
+            case '+':
+                // and-condition
+                Condition op1 = conditionsmap.get(conditionexpr.substring(0, index));
+                conditionexpr.delete(0, index + 1);
+                result = new AndCondition(op1, getConditionByExpr(conditionexpr));
+                result.setInstalldata(RulesEngine.installdata);
+                break;
+            case '|':
+                // or-condition
+                op1 = conditionsmap.get(conditionexpr.substring(0, index));
+                conditionexpr.delete(0, index + 1);
+                result = new OrCondition(op1, getConditionByExpr(conditionexpr));
+                result.setInstalldata(RulesEngine.installdata);
+                break;
+            case '\\':
+                // xor-condition
+                op1 = conditionsmap.get(conditionexpr.substring(0, index));
+                conditionexpr.delete(0, index + 1);
+                result = new XorCondition(op1, getConditionByExpr(conditionexpr));
+                result.setInstalldata(RulesEngine.installdata);
+                break;
+            case '!':
+                // not-condition
+                if (index > 0)
+                {
+                    Debug.trace("error: ! operator only allowed at position 0");
+                }
+                else
+                {
+                    // delete not symbol
+                    conditionexpr.deleteCharAt(index);
+                    result = new NotCondition(getConditionByExpr(conditionexpr));
                     result.setInstalldata(RulesEngine.installdata);
-                    break;
-                case '|':
-                    // or-condition
-                    op1 = conditionsmap.get(conditionexpr.substring(0, index));
-                    conditionexpr.delete(0, index + 1);
-                    result = new OrCondition(op1, getConditionByExpr(conditionexpr));
-                    result.setInstalldata(RulesEngine.installdata);
-                    break;
-                case '\\':
-                    // xor-condition
-                    op1 = conditionsmap.get(conditionexpr.substring(0, index));
-                    conditionexpr.delete(0, index + 1);
-                    result = new XorCondition(op1, getConditionByExpr(conditionexpr));
-                    result.setInstalldata(RulesEngine.installdata);
-                    break;
-                case '!':
-                    // not-condition
-                    if (index > 0)
-                    {
-                        Debug.trace("error: ! operator only allowed at position 0");
-                    }
-                    else
-                    {
-                        // delete not symbol
-                        conditionexpr.deleteCharAt(index);
-                        result = new NotCondition(getConditionByExpr(conditionexpr));
-                        result.setInstalldata(RulesEngine.installdata);
-                    }
-                    break;
-                default:
-                    // do nothing
+                }
+                break;
+            default:
+                // do nothing
             }
             index++;
         }
@@ -451,8 +457,7 @@ public class RulesEngine implements Serializable
         Condition cond = RulesEngine.getCondition(id);
         if (cond != null)
         {
-            if (cond.getInstalldata() == null)
-            {
+            if (cond.getInstalldata() == null){
                 cond.setInstalldata(RulesEngine.installdata);
             }
             return this.isConditionTrue(cond);
@@ -465,8 +470,7 @@ public class RulesEngine implements Serializable
 
     public boolean isConditionTrue(Condition cond)
     {
-        if (cond.getInstalldata() == null)
-        {
+        if (cond.getInstalldata() == null){
             cond.setInstalldata(RulesEngine.installdata);
         }
         return cond.isTrue();
@@ -474,11 +478,11 @@ public class RulesEngine implements Serializable
 
     /**
      * Can a panel be shown?
-     *
-     * @param panelid   - id of the panel, which should be shown
+     * 
+     * @param panelid - id of the panel, which should be shown
      * @param variables - the variables
      * @return true - there is no condition or condition is met false - there is a condition and the
-     *         condition was not met
+     * condition was not met
      */
     public boolean canShowPanel(String panelid, Properties variables)
     {
@@ -490,27 +494,21 @@ public class RulesEngine implements Serializable
         }
         Debug.trace("there is a condition");
         Condition condition = getCondition(this.panelconditions.get(panelid));
-        if (condition != null)
-        {
-            return condition.isTrue();
-        }
+        if (condition != null) { return condition.isTrue(); }
         return false;
     }
 
     /**
      * Is the installation of a pack possible?
-     *
+     * 
      * @param packid
      * @param variables
      * @return true - there is no condition or condition is met false - there is a condition and the
-     *         condition was not met
+     * condition was not met
      */
     public boolean canInstallPack(String packid, Properties variables)
     {
-        if (packid == null)
-        {
-            return true;
-        }
+        if (packid == null) { return true; }
         Debug.trace("can install pack with id " + packid + "?");
         if (!this.packconditions.containsKey(packid))
         {
@@ -519,16 +517,13 @@ public class RulesEngine implements Serializable
         }
         Debug.trace("there is a condition");
         Condition condition = getCondition(this.packconditions.get(packid));
-        if (condition != null)
-        {
-            return condition.isTrue();
-        }
+        if (condition != null) { return condition.isTrue(); }
         return false;
     }
 
     /**
      * Is an optional installation of a pack possible if the condition is not met?
-     *
+     * 
      * @param packid
      * @param variables
      * @return
@@ -549,6 +544,7 @@ public class RulesEngine implements Serializable
     }
 
     /**
+     * 
      * @param condition
      */
     public void addCondition(Condition condition)

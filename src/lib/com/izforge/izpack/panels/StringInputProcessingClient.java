@@ -18,7 +18,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.izforge.izpack.panels;
 
 import java.util.HashMap;
@@ -33,7 +32,7 @@ public class StringInputProcessingClient implements ProcessingClient
     private List<ValidatorContainer> validators;
 
     private ValidatorContainer currentValidator;
-
+    
     private String message;
 
     public StringInputProcessingClient(String input, List<ValidatorContainer> validators)
@@ -58,8 +57,8 @@ public class StringInputProcessingClient implements ProcessingClient
     }
 
     public Map<String, String> getValidatorParams()
-    {
-        return (currentValidator != null) ? currentValidator.getValidatorParams() : new HashMap<String, String>();
+    {        
+        return (currentValidator != null) ? currentValidator.getValidatorParams() : new HashMap<String,String>();
     }
 
     public boolean hasParams()
@@ -70,31 +69,27 @@ public class StringInputProcessingClient implements ProcessingClient
     public boolean validate()
     {
         boolean success = true;
-
-        if (validators != null)
-        {
+        
+        if (validators != null){
             for (ValidatorContainer validator : validators)
             {
                 currentValidator = validator;
                 Validator validatorInstance = currentValidator.getValidator();
-                if (validatorInstance != null)
-                {
+                if (validatorInstance != null){
                     success = validatorInstance.validate(this);
-                    if (!success)
-                    {
+                    if (!success){
                         message = currentValidator.getMessage();
                         break;
                     }
                 }
-
-            }
+                
+            }    
         }
-
+        
         return success;
     }
-
-    public String getValidationMessage()
-    {
+    
+    public String getValidationMessage(){
         return message;
     }
 }

@@ -299,7 +299,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
      * called then the flag wll default to 'true'.
      *
      * @param flagVal true to have the previous contents of registry
-     *                values logged by the 'setValue()' method.
+     * values logged by the 'setValue()' method.
      */
     public void setLogPrevSetValueFlag(boolean flagVal)
     {
@@ -310,7 +310,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
      * will be logged by the 'setValue()' method.
      *
      * @return true if the previous contents of registry values will be
-     *         logged by the 'setValue()' method.
+     * logged by the 'setValue()' method.
      */
     public boolean getLogPrevSetValueFlag()
     {

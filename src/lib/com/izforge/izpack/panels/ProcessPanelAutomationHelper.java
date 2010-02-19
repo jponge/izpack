@@ -21,9 +21,9 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.installer.*;
 import com.izforge.izpack.util.AbstractUIProcessHandler;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.io.IOException;
 

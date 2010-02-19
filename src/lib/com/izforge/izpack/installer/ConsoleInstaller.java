@@ -18,24 +18,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.Info;
-import com.izforge.izpack.LocaleDatabase;
-import com.izforge.izpack.Panel;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.FileInputStream;
+import java.util.*;
+
+import com.izforge.izpack.*;
 import com.izforge.izpack.installer.DataValidator.Status;
-import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
-
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.util.*;
-
+import com.izforge.izpack.rules.RulesEngine;
 /**
  * Runs the console installer
  *
@@ -77,13 +73,12 @@ public class ConsoleInstaller extends InstallerBase
         loadDynamicVariables();
         addCustomLangpack(installdata);
 
-        this.rules = this.installdata.getRules();
+		  this.rules = this.installdata.getRules();
     }
 
     @Override
-    public void showMissingRequirementMessage(String message)
-    {
-        Debug.log("Missing installer requirement: " + message);
+    public void showMissingRequirementMessage(String message){
+        Debug.log("Missing installer requirement: "+message);
         System.out.println(message);
     }
 
@@ -147,8 +142,8 @@ public class ConsoleInstaller extends InstallerBase
                     }
                 }
 
-                //Check to see if we can show the panel based on its conditions.
-                if ((consoleHelperInstance != null) && (canShow(p)))
+					 //Check to see if we can show the panel based on its conditions.
+                if ( (consoleHelperInstance != null) && (canShow(p)) )
                 {
                     try
                     {
@@ -239,7 +234,7 @@ public class ConsoleInstaller extends InstallerBase
         }
     }
 
-    protected void doGeneratePropertiesFile(String strFile) throws Exception
+   protected void doGeneratePropertiesFile(String strFile) throws Exception
     {
         try
         {
@@ -323,28 +318,22 @@ public class ConsoleInstaller extends InstallerBase
      * Method checks whether conditions are met to show the given panel.
      *
      * @param p the panel to check
+     *
      * @return true or false
      */
-    public boolean canShow(Panel p)
-    {
-
-        String panelid = p.getPanelid();
-
-        if (p.hasCondition())
-        {
+    public boolean canShow(Panel p) {
+        
+		  String panelid = p.getPanelid();
+        
+		  if (p.hasCondition()) {
             return rules.isConditionTrue(p.getCondition());
-        }
-        else
-        {
-            if (!rules.canShowPanel(panelid, this.installdata.variables))
-            {
+        } else {
+            if (!rules.canShowPanel(panelid, this.installdata.variables)) {
                 // skip panel, if conditions for panel aren't met
                 Debug.trace("Skip panel with panelid=" + panelid);
                 // panel should be skipped, so we have to decrement panelnumber for skipping
                 return false;
-            }
-            else
-            {
+            } else {
                 Debug.trace("Showing panel with panelid=" + panelid);
                 return true;
             }
@@ -390,14 +379,14 @@ public class ConsoleInstaller extends InstallerBase
         Enumeration<?> e = p.propertyNames();
         while (e.hasMoreElements())
         {
-            String key = (String) e.nextElement();
+            String key = (String)e.nextElement();
             String newval = p.getProperty(key);
             String oldval = (String) properties.setProperty(key, newval);
             if (oldval != null)
             {
                 System.out.println(
-                        "Warning: Property " + key + " overwritten: '"
-                                + oldval + "' --> '" + newval + "'");
+                        "Warning: Property "+key+" overwritten: '"
+                        +oldval+"' --> '"+newval+"'");
             }
         }
     }
@@ -409,15 +398,12 @@ public class ConsoleInstaller extends InstallerBase
         if (installdata.rebootNecessary)
         {
             System.out.println("[ There are file operations pending after reboot ]");
-            switch (installdata.info.getRebootAction())
-            {
+            switch( installdata.info.getRebootAction()) {
                 case Info.REBOOT_ACTION_ALWAYS:
                     reboot = true;
             }
             if (reboot)
-            {
                 System.out.println("[ Rebooting now automatically ]");
-            }
         }
         Housekeeper.getInstance().shutDown(this.result ? 0 : 1, reboot);
     }

@@ -19,10 +19,9 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.sample;
+package   com.izforge.izpack.sample;
 
-import com.izforge.izpack.panels.ProcessingClient;
-import com.izforge.izpack.panels.Validator;
+import    com.izforge.izpack.panels.*;
 
 /*---------------------------------------------------------------------------*/
 /**
@@ -30,61 +29,62 @@ import com.izforge.izpack.panels.Validator;
  * the implementation of a rule validator that cooperates with the
  * <code>RuleInputField</code> used in the <code>UserInputPanel</code>
  *
- * @author Elmar Grom
- * @version 0.0.1 / 02/19/03
+ * @version  0.0.1 / 02/19/03
+ * @author   Elmar Grom
  */
 /*---------------------------------------------------------------------------*/
 public class IPValidator implements Validator
 {
-    /*--------------------------------------------------------------------------*/
-    /**
-     * Validates the contend of a <code>RuleInputField</code>. The test is
-     * intended for a rule input field composed of four sub-fields. The
-     * combination of their individual content is assumed to represent an IP
-     * address.
-     *
-     * @param client the client object using the services of this validator.
-     * @return <code>true</code> if the validation passes, otherwise <code>false</code>.
-     */
-    /*--------------------------------------------------------------------------*/
-    public boolean validate(ProcessingClient client)
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Validates the contend of a <code>RuleInputField</code>. The test is
+  * intended for a rule input field composed of four sub-fields. The
+  * combination of their individual content is assumed to represent an IP
+  * address.
+  *
+  * @param     client   the client object using the services of this validator.
+  *
+  * @return    <code>true</code> if the validation passes, otherwise <code>false</code>.
+  */
+ /*--------------------------------------------------------------------------*/
+  public boolean validate (ProcessingClient client)
+  {
+    // ----------------------------------------------------
+    // verify that there are actually four sub-fields. A
+    // different number would indicate that we are not
+    // connected with the RuleInputField that we expect
+    // ----------------------------------------------------
+    if (client.getNumFields () != 4)
     {
-        // ----------------------------------------------------
-        // verify that there are actually four sub-fields. A
-        // different number would indicate that we are not
-        // connected with the RuleInputField that we expect
-        // ----------------------------------------------------
-        if (client.getNumFields() != 4)
-        {
-            return (false);
-        }
-
-        // ----------------------------------------------------
-        // test each field to make sure it actually contains
-        // an integer and the value of the integer is beween
-        // 0 and 255.
-        // ----------------------------------------------------
-        boolean isIP = true;
-
-        for (int i = 0; i < 4; i++)
-        {
-            int value;
-
-            try
-            {
-                value = Integer.parseInt(client.getFieldContents(i));
-                if ((value < 0) || (value > 255))
-                {
-                    isIP = false;
-                }
-            }
-            catch (Throwable exception)
-            {
-                isIP = false;
-            }
-        }
-
-        return (isIP);
+      return (false);
     }
+    
+    // ----------------------------------------------------
+    // test each field to make sure it actually contains
+    // an integer and the value of the integer is beween
+    // 0 and 255.
+    // ----------------------------------------------------
+    boolean isIP = true;
+    
+    for (int i = 0; i < 4; i++)
+    {
+      int value;
+      
+      try
+      {
+        value = Integer.parseInt (client.getFieldContents (i));
+        if ((value < 0) || (value > 255))
+        {
+          isIP = false;
+        }
+      }
+      catch (Throwable exception)
+      {
+        isIP = false;
+      }
+    }
+    
+    return (isIP);
+  }
 }
 /*---------------------------------------------------------------------------*/

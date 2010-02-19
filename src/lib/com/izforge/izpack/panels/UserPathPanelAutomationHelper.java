@@ -18,14 +18,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 
 /**
  * Functions to support automated usage of the UserPathPanel
@@ -46,7 +45,7 @@ public class UserPathPanelAutomationHelper implements PanelAutomation
     public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot)
     {
         // Installation path markup
-        IXMLElement ipath = new XMLElementImpl(UserPathPanel.pathElementName, panelRoot);
+        IXMLElement ipath = new XMLElementImpl(UserPathPanel.pathElementName,panelRoot);
         // check this writes even if value is the default,
         // because without the constructor, default does not get set.
         ipath.setContent(idata.getVariable(UserPathPanel.pathVariableName));

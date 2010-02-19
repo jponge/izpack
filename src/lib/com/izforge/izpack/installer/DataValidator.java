@@ -18,14 +18,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.izforge.izpack.installer;
 
 public interface DataValidator
 {
 
-    public enum Status
-    {
+    public enum Status {
         OK, WARNING, ERROR
     }
 
@@ -41,7 +39,7 @@ public interface DataValidator
 
     /**
      * Method to validate on {@link AutomatedInstallData}
-     *
+     * 
      * @param adata
      * @return {@link Status} the result of the validation
      */
@@ -49,14 +47,14 @@ public interface DataValidator
 
     /**
      * Returns the string with messageId for an error
-     *
+     * 
      * @return String the messageId
      */
     public String getErrorMessageId();
 
     /**
      * Returns the string with messageId for a warning
-     *
+     * 
      * @return String the messageId
      */
     public String getWarningMessageId();
@@ -64,7 +62,7 @@ public interface DataValidator
     /**
      * if Installer is run in automated mode, and validator returns a warning, this method is asked,
      * how to go on
-     *
+     * 
      * @return boolean
      */
 

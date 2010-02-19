@@ -22,10 +22,10 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.Pack;
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -175,7 +175,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
                             if ((idata.selectedPacks.indexOf(pack) < 0)
                                     && (pack.id != null)
                                     && (idata.getRules().canInstallPack(pack.id,
-                                    idata.getVariables())))
+                                            idata.getVariables())))
                             {
                                 idata.selectedPacks.add(pack);
                                 System.out.println("Pack [" + packInfo.toString()

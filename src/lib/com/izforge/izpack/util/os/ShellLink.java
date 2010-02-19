@@ -1142,16 +1142,16 @@ public class ShellLink implements NativeLibraryClient
             linkDirectory = "";
         }
 
-        //work-around for bug in Windows Vista where link-save to
-        // current-user location ends up in all-users location;
-        // if link is for current user then setup file object for
-        // all-users location and check file last-modification time:
+              //work-around for bug in Windows Vista where link-save to
+              // current-user location ends up in all-users location;
+              // if link is for current user then setup file object for
+              // all-users location and check file last-modification time:
         File allUsersFileObj = null;
         long aufLastModVal = 0;
         if (userType == CURRENT_USER)
         {  //link is for current user; setup file obj for all-users location
             allUsersFileObj = new File(fullLinkName(ALL_USERS));
-            //get last-modified time (or 0 if no file):
+                        //get last-modified time (or 0 if no file):
             aufLastModVal = allUsersFileObj.lastModified();
         }
 
@@ -1174,18 +1174,18 @@ public class ShellLink implements NativeLibraryClient
             try
             {
                 if (allUsersFileObj.exists() &&
-                        allUsersFileObj.lastModified() > aufLastModVal)
+                               allUsersFileObj.lastModified() > aufLastModVal)
                 {  //link exists in all-users location and has been updated
-                    //setup file object for current-user location:
+                          //setup file object for current-user location:
                     final File curUserFileObj = new File(saveTo);
-                    //move link file to current-user location:
-                    moveFileTo(allUsersFileObj, curUserFileObj);
-                    //attempt to remove directory in all-users location
-                    // (will succeed if directory is empty):
+                          //move link file to current-user location:
+                    moveFileTo(allUsersFileObj,curUserFileObj);
+                          //attempt to remove directory in all-users location
+                          // (will succeed if directory is empty):
                     allUsersFileObj.getParentFile().delete();
                 }
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {  //some kind of exception error; ignore and move on
             }
         }
@@ -1241,8 +1241,7 @@ public class ShellLink implements NativeLibraryClient
     /**
      * Moves a file to a given destination.  Works even if destination
      * file exists and needs to be overwritten.
-     *
-     * @param srcFileObj  source file to be moved.
+     * @param srcFileObj source file to be moved.
      * @param destFileObj destination file object.
      */
     protected void moveFileTo(File srcFileObj, File destFileObj)
@@ -1250,15 +1249,13 @@ public class ShellLink implements NativeLibraryClient
         if (destFileObj.exists())
         {  //destination file currently exists
             final File tempFileObj =       //create new, unique target filename
-                    new File(destFileObj.getPath() + System.currentTimeMillis());
+                   new File(destFileObj.getPath()+System.currentTimeMillis());
             destFileObj.renameTo(tempFileObj);  //rename dest to temp name
             srcFileObj.renameTo(destFileObj);   //move source file to dest
             tempFileObj.delete();               //remove renamed original file
         }
         else    //destination file does not exist
-        {
             srcFileObj.renameTo(destFileObj);
-        }
     }
 
     /*--------------------------------------------------------------------------*/

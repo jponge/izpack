@@ -64,7 +64,9 @@ public class LocaleDatabase extends TreeMap
      * Load a locale database. If the database has already been loaded it will not be reloaded.
      *
      * @param isoCode The io code of the locale database.
+     *
      * @return The locale database or null if it cannot be found.
+     *
      * @throws Exception
      */
     public static synchronized LocaleDatabase getLocaleDatabase(String isoCode) throws Exception
@@ -77,6 +79,7 @@ public class LocaleDatabase extends TreeMap
      *
      * @param isoCode The ISO language prefix for the locale.
      * @param reload  Whether or not to reload the locale database if it has already been loaded.
+     *
      * @return The locale database or null if it cannot be found. <p/> FIXME Maybe we should define
      *         some custom exception like LocaleLoadException or something similar so that this class can
      *         have a method signature that does not throw Exception
@@ -130,6 +133,7 @@ public class LocaleDatabase extends TreeMap
      * The constructor.
      *
      * @param in An InputStream to read the translation from.
+     *
      * @throws Exception Description of the Exception
      */
     public LocaleDatabase(InputStream in) throws Exception
@@ -144,6 +148,7 @@ public class LocaleDatabase extends TreeMap
      * pairs as declared by the DTD langpack.dtd.
      *
      * @param in an InputStream to read the translation from.
+     *
      * @throws Exception
      */
     public void add(InputStream in) throws Exception
@@ -183,6 +188,7 @@ public class LocaleDatabase extends TreeMap
      * Convenience method to retrieve an element.
      *
      * @param key The key of the element to retrieve.
+     *
      * @return The element value or the key if not found.
      */
     public String getString(String key)
@@ -207,6 +213,7 @@ public class LocaleDatabase extends TreeMap
      *
      * @param key       The key of the element to retrieve.
      * @param variables the variables to insert
+     *
      * @return The element value with the variables inserted or the key if not found.
      */
     public String getString(String key, String[] variables)

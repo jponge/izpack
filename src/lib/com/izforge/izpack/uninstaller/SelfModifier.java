@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.uninstaller;
 
+import com.izforge.izpack.installer.MultiVolumeInstaller;
 import com.izforge.izpack.util.OsVersion;
 
 import java.io.*;
@@ -149,7 +150,7 @@ public class SelfModifier
      * System property name of phase (1, 2, or 3) indicator.
      */
     public static final String PHASE_KEY = "self.mod.phase";
-
+    
     public static final String MEMORY_KEY = "self.memory";
 
     /**
@@ -188,7 +189,7 @@ public class SelfModifier
     private SimpleDateFormat isoPoint = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
     private Date date = new Date();
-
+    
     private long maxmemory = 64;
     private long maxpermgensize = 16;
     private boolean useMemorySettings = false;
@@ -264,7 +265,7 @@ public class SelfModifier
         jarFile = new File(System.getProperty(JAR_KEY));
         logFile = new File(System.getProperty(BASE_KEY) + ".log");
         sandbox = new File(System.getProperty(BASE_KEY) + ".d");
-
+        
         this.maxmemory = Long.parseLong(System.getProperty(MEMORY_KEY, "64"));
         this.maxpermgensize = this.maxmemory / 4;
 
@@ -310,9 +311,8 @@ public class SelfModifier
         initJavaExec();
         initMethod(method);
     }
-
-    public SelfModifier(Method method, long maxmemory, long maxpermgensize) throws IOException
-    {
+    
+    public SelfModifier(Method method, long maxmemory, long maxpermgensize) throws IOException {
         this(method);
         this.maxmemory = maxmemory;
         this.maxpermgensize = maxpermgensize;
@@ -438,7 +438,7 @@ public class SelfModifier
         {
             args = new String[0];
         }
-        spawn(args, 2);
+        spawn(args, 2);        
 
         // finally, if all went well, the invoking process must exit
         log("Exit");
@@ -458,7 +458,7 @@ public class SelfModifier
         // invoke from tmpdir, passing target method arguments as args, and
         // SelfModifier parameters as sustem properties
         String javaCommand = javaCommand();
-
+        
         List<String> command = new ArrayList<String>();
         command.add(javaCommand);
         command.add("-Xmx" + this.maxmemory + "m");
@@ -476,11 +476,10 @@ public class SelfModifier
         command.add("-D" + PHASE_KEY + "=" + nextPhase);
         command.add("-D" + MEMORY_KEY + "=" + this.maxmemory);
         command.add(getClass().getName());
-
-        for (String arg : args)
-        {
+        
+        for(String arg : args){
             command.add(arg);
-        }
+        }        
 
         StringBuffer sb = new StringBuffer("Spawning phase ");
         sb.append(nextPhase).append(": ");
@@ -492,7 +491,7 @@ public class SelfModifier
 
 //        ProcessBuilder process = new ProcessBuilder(command);       
 //        return process.start();
-        return Runtime.getRuntime().exec(command.toArray(new String[command.size()]), null, null);
+        return Runtime.getRuntime().exec(command.toArray(new String[command.size()]),null,null);
     }
 
     /**
@@ -653,7 +652,8 @@ public class SelfModifier
             {
             }
 
-
+            
+            
             // spawn phase 3, capture its stdio and wait for it to exit
             Process p = spawn(args, 3);
 

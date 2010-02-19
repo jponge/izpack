@@ -26,7 +26,11 @@ import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.installer.DataValidator.Status;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 import java.io.*;
 import java.util.*;
@@ -314,9 +318,8 @@ public class AutomatedInstaller extends InstallerBase
     }
 
     @Override
-    public void showMissingRequirementMessage(String message)
-    {
-        Debug.log("Missing installer requirement: " + message);
+    public void showMissingRequirementMessage(String message){
+        Debug.log("Missing installer requirement: "+message);
         System.out.println(message);
     }
 
@@ -415,15 +418,12 @@ public class AutomatedInstaller extends InstallerBase
             if (idata.rebootNecessary)
             {
                 System.out.println("[ There are file operations pending after reboot ]");
-                switch (idata.info.getRebootAction())
-                {
+                switch( idata.info.getRebootAction()) {
                     case Info.REBOOT_ACTION_ALWAYS:
                         reboot = true;
                 }
                 if (reboot)
-                {
                     System.out.println("[ Rebooting now automatically ]");
-                }
             }
             Housekeeper.getInstance().shutDown(this.result ? 0 : 1, reboot);
         }
@@ -431,10 +431,9 @@ public class AutomatedInstaller extends InstallerBase
 
     /**
      * Run the installation logic for a panel.
-     *
-     * @param p                The panel to install.
-     * @param automationHelper The helper of the panel.
-     * @param panelRoot        The xml element describing the panel.
+     * @param p                   The panel to install.
+     * @param automationHelper    The helper of the panel.
+     * @param panelRoot           The xml element describing the panel.
      * @throws InstallerException if something went wrong while installing.
      */
     private void installPanel(Panel p, PanelAutomation automationHelper, IXMLElement panelRoot) throws InstallerException
@@ -456,10 +455,9 @@ public class AutomatedInstaller extends InstallerBase
 
     /**
      * Update the panelInstanceCount object with a panel.
-     *
+     * @see this.panelInstanceCount
      * @param p The panel.
      * @return The xml element which describe the panel.
-     * @see this.panelInstanceCount
      */
     private IXMLElement updateInstanceCount(Panel p)
     {
@@ -484,7 +482,6 @@ public class AutomatedInstaller extends InstallerBase
 
     /**
      * Try to get the automation helper for the specified panel.
-     *
      * @param p The panel to handle.
      * @return The automation helper if possible, null otherwise.
      */
@@ -579,7 +576,7 @@ public class AutomatedInstaller extends InstallerBase
 
         // Initialises the parser
         IXMLParser parser = new XMLParser();
-        IXMLElement rtn = parser.parse(in, input.getAbsolutePath());
+        IXMLElement rtn = parser.parse(in,input.getAbsolutePath());
         in.close();
 
         return rtn;

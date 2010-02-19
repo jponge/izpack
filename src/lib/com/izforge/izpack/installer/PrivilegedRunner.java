@@ -129,6 +129,7 @@ public class PrivilegedRunner
      * Relaunches the installer with elevated rights.
      *
      * @return the status code returned by the launched process (by convention, 0 means a success).
+     *
      * @throws IOException
      * @throws InterruptedException
      */
@@ -230,7 +231,7 @@ public class PrivilegedRunner
             URI uri = getClass().getProtectionDomain().getCodeSource().getLocation().toURI();
             if (!"file".equals(uri.getScheme()))
             {
-                throw new Exception("Unexpected scheme in JAR file URI: " + uri);
+                throw new Exception("Unexpected scheme in JAR file URI: "+uri);
             }
             return new File(uri.getSchemeSpecificPart()).getCanonicalPath();
         }
@@ -265,6 +266,6 @@ public class PrivilegedRunner
 
     public static boolean isPrivilegedMode()
     {
-        return "privileged".equals(System.getenv("izpack.mode")) || "privileged".equals(System.getProperty("izpack.mode"));
+       return "privileged".equals(System.getenv("izpack.mode")) || "privileged".equals(System.getProperty("izpack.mode"));
     }
 }

@@ -230,7 +230,7 @@ public class UninstallData
      */
     public void addUninstallScript(String aRootUninstallScript)
     {
-        unInstallScripts.add(aRootUninstallScript == null ? "" : aRootUninstallScript);
+        unInstallScripts.add( aRootUninstallScript == null ? "" : aRootUninstallScript );
     }
 
     /**

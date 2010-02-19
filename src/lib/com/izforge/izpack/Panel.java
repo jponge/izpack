@@ -18,17 +18,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.izforge.izpack;
-
-import com.izforge.izpack.installer.PanelActionConfiguration;
-import com.izforge.izpack.util.OsConstraint;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.installer.PanelActionConfiguration;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.OsConstraint;
 
 /**
  * @author Jan Blok
@@ -63,7 +64,7 @@ public class Panel implements Serializable
      * The validator for this panel
      */
     private String validator = null;
-
+    
     /**
      * list of all pre panel construction actions
      */
@@ -83,15 +84,15 @@ public class Panel implements Serializable
      * list of all post panel validation actions
      */
     private List<String> postValidationActions = null;
-
-    private HashMap<String, PanelActionConfiguration> actionConfiguration = null;
+    
+    private HashMap<String,PanelActionConfiguration> actionConfiguration = null;
 
 
     /**
      * A HashMap for URLs to Helpfiles, key should be iso3-code
      */
     private HashMap<String, String> helps = null;
-
+    
     /**
      * Contains configuration values for a panel.
      */
@@ -175,7 +176,7 @@ public class Panel implements Serializable
     {
         return this.helps;
     }
-
+    
     public List<String> getPreConstructionActions()
     {
         return preConstructionActions;
@@ -230,46 +231,37 @@ public class Panel implements Serializable
             this.postValidationActions = new ArrayList<String>();
         }
         this.postValidationActions.add(postValidationAction);
-    }
-
-    public void putPanelActionConfiguration(String panelActionClassName, PanelActionConfiguration configuration)
-    {
-        if (this.actionConfiguration == null)
-        {
+     }
+    
+    public void putPanelActionConfiguration(String panelActionClassName, PanelActionConfiguration configuration){
+        if (this.actionConfiguration == null){
             this.actionConfiguration = new HashMap<String, PanelActionConfiguration>();
-        }
+        }                
         this.actionConfiguration.put(panelActionClassName, configuration);
     }
-
-    public PanelActionConfiguration getPanelActionConfiguration(String panelActionClassName)
-    {
+    
+    public PanelActionConfiguration getPanelActionConfiguration(String panelActionClassName){
         PanelActionConfiguration result = null;
-        if (this.actionConfiguration != null)
-        {
+        if (this.actionConfiguration != null){
             result = this.actionConfiguration.get(panelActionClassName);
         }
         return result;
     }
-
-    public boolean hasConfiguration()
-    {
+    
+    public boolean hasConfiguration(){
         return this.configuration != null;
     }
-
-    public void addConfiguration(String key, String value)
-    {
-        if (this.configuration == null)
-        {
+    
+    public void addConfiguration(String key, String value){
+        if (this.configuration == null){
             this.configuration = new HashMap<String, String>();
         }
         this.configuration.put(key, value);
     }
-
-    public String getConfiguration(String key)
-    {
+    
+    public String getConfiguration(String key){
         String result = null;
-        if (this.configuration != null)
-        {
+        if (this.configuration != null){
             result = this.configuration.get(key);
         }
         return result;

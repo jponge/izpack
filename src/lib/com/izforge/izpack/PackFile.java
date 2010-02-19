@@ -180,13 +180,11 @@ public class PackFile implements Serializable
         this.mtime = src.lastModified();
         this.isDirectory = src.isDirectory();
         this.additionals = additionals;
-
+        
         // File.length is undefined for directories - we don't add any data, so don't skip
         // any please!
         if (isDirectory)
-        {
             length = 0;
-        }
     }
 
     /**
@@ -215,15 +213,14 @@ public class PackFile implements Serializable
      */
     public static String computeRelativePathFrom(File baseDir, File file)
     {
-        if (baseDir == null || file == null)
-        {
-            return null;
+        if (baseDir == null || file == null) {
+          return null;
         }
         try
         { // extract relative path...
             if (file.getAbsolutePath().startsWith(baseDir.getAbsolutePath()))
             {
-                return file.getAbsolutePath().substring(baseDir.getAbsolutePath().length() + 1);
+              return file.getAbsolutePath().substring(baseDir.getAbsolutePath().length() + 1);
             }
         }
         catch (Exception x)// don't throw an exception here. return null instead!
@@ -260,7 +257,7 @@ public class PackFile implements Serializable
     }
 
     /**
-     * The size of the file in bytes (is the same as the length if it is not a loose pack)
+     *  The size of the file in bytes (is the same as the length if it is not a loose pack)
      */
     public final long size()
     {

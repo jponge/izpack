@@ -17,11 +17,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.izforge.izpack.installer;
 
+import java.awt.*;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.LookAndFeel;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+
 import com.izforge.izpack.Panel;
-import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
 import com.izforge.izpack.panels.HelpWindow;
@@ -29,13 +42,7 @@ import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.MultiLineLabel;
 import com.izforge.izpack.util.VariableSubstitutor;
-
-import javax.swing.*;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import java.awt.*;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 /**
  * Defines the base class for the IzPack panels. Any panel should be a subclass of it and should
@@ -47,7 +54,7 @@ import java.util.HashMap;
  * the layout helper. There are some points which should be observed at layouting. One point e.g. is
  * the anchor. All IzPanels have to be able to use different anchors, as minimum CENTER and
  * NORTHWEST. To use a consistent appearance use this special layout manger and not others.
- *
+ * 
  * @author Julien Ponge
  * @author Klaus Bartz
  */
@@ -114,11 +121,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     private DataValidator validationService = null;
 
     private java.util.List<PanelAction> preActivateActions = null;
-
+    
     private java.util.List<PanelAction> preValidateActions = null;
-
+    
     private java.util.List<PanelAction> postValidateActions = null;
-
+    
     /**
      * X_ORIGIN = 0
      */
@@ -156,9 +163,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * The constructor.
-     *
+     * 
      * @param parent The parent IzPack installer frame.
-     * @param idata  The installer internal data.
+     * @param idata The installer internal data.
      */
     public IzPanel(InstallerFrame parent, InstallData idata)
     {
@@ -169,10 +176,10 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * Creates a new IzPanel object with the given layout manager. Valid layout manager are the
      * IzPanelLayout and the GridBagLayout. New panels should be use the IzPanelLaout. If lm is
      * null, no layout manager will be created or initialized.
-     *
+     * 
      * @param parent The parent IzPack installer frame.
-     * @param idata  The installer internal data.
-     * @param lm     layout manager to be used with this IzPanel
+     * @param idata The installer internal data.
+     * @param lm layout manager to be used with this IzPanel
      */
     public IzPanel(InstallerFrame parent, InstallData idata, LayoutManager2 lm)
     {
@@ -186,9 +193,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * Creates a new IzPanel object.
-     *
-     * @param parent   the Parent Frame
-     * @param idata    Installers Runtime Data Set
+     * 
+     * @param parent the Parent Frame
+     * @param idata Installers Runtime Data Set
      * @param iconName The Headline IconName
      */
     public IzPanel(InstallerFrame parent, InstallData idata, String iconName)
@@ -198,9 +205,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * The constructor with Icon.
-     *
-     * @param parent   The parent IzPack installer frame.
-     * @param idata    The installer internal data.
+     * 
+     * @param parent The parent IzPack installer frame.
+     * @param idata The installer internal data.
      * @param iconName A iconname to show as left oriented headline-leading Icon.
      * @param instance An instance counter
      */
@@ -215,18 +222,15 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * immediately with false. Allows also to display a leading Icon for the PanelHeadline. This
      * Icon can also be different if the panel has more than one Instances. The UserInputPanel is
      * one of these Candidates. <p/> by marc.eppelmann&#064;gmx.de
-     *
-     * @param imageIconName  an Iconname
+     * 
+     * @param imageIconName an Iconname
      * @param instanceNumber an panel instance
      * @return true if successful build
      */
     protected boolean buildHeadline(String imageIconName, int instanceNumber)
     {
         boolean result = false;
-        if (parent.isHeading(this))
-        {
-            return (false);
-        }
+        if (parent.isHeading(this)) { return (false); }
 
         // TODO: proteced instancenumber
         // TODO: is to be validated
@@ -302,7 +306,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * Gets a language Resource String from the parent, which holds these global resource.
-     *
+     * 
      * @param key The Search key
      * @return The Languageresource or the key if not found.
      */
@@ -313,7 +317,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * Gets a named image icon
-     *
+     * 
      * @param iconName a valid image icon
      * @return the icon
      */
@@ -342,9 +346,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * Internal init method
-     *
+     * 
      * @param parent the parent frame
-     * @param idata  installers runtime dataset
+     * @param idata installers runtime dataset
      */
     protected void init(InstallerFrame parent, InstallData idata)
     {
@@ -370,7 +374,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * Indicates wether the panel has been validated or not. The installer won't let the user go
      * further through the installation process until the panel is validated. Default behaviour is
      * to return <code>true</code>.
-     *
+     * 
      * @return A boolean stating whether the panel has been validated or not.
      */
     protected boolean isValidated()
@@ -403,7 +407,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * Asks the panel to set its own XML data that can be brought back for an automated installation
      * process. Use it as a blackbox if your panel needs to do something even in automated mode.
-     *
+     * 
      * @param panelRoot The XML root element of the panels blackbox tree.
      */
     public void makeXMLData(IXMLElement panelRoot)
@@ -412,10 +416,10 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * Ask the user a question.
-     *
-     * @param title    Message title.
+     * 
+     * @param title Message title.
      * @param question The question.
-     * @param choices  The set of choices to present.
+     * @param choices The set of choices to present.
      * @return The user's choice.
      * @see AbstractUIHandler#askQuestion(String, String, int)
      */
@@ -426,10 +430,10 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * Ask the user a question.
-     *
-     * @param title          Message title.
-     * @param question       The question.
-     * @param choices        The set of choices to present.
+     * 
+     * @param title Message title.
+     * @param question The question.
+     * @param choices The set of choices to present.
      * @param default_choice The default choice. (-1 = no default choice)
      * @return The user's choice.
      * @see AbstractUIHandler#askQuestion(String, String, int, int)
@@ -450,25 +454,13 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         int user_choice = JOptionPane.showConfirmDialog(this, question, title, jo_choices,
                 JOptionPane.QUESTION_MESSAGE);
 
-        if (user_choice == JOptionPane.CANCEL_OPTION)
-        {
-            return AbstractUIHandler.ANSWER_CANCEL;
-        }
+        if (user_choice == JOptionPane.CANCEL_OPTION) { return AbstractUIHandler.ANSWER_CANCEL; }
 
-        if (user_choice == JOptionPane.YES_OPTION)
-        {
-            return AbstractUIHandler.ANSWER_YES;
-        }
+        if (user_choice == JOptionPane.YES_OPTION) { return AbstractUIHandler.ANSWER_YES; }
 
-        if (user_choice == JOptionPane.CLOSED_OPTION)
-        {
-            return AbstractUIHandler.ANSWER_NO;
-        }
+        if (user_choice == JOptionPane.CLOSED_OPTION) { return AbstractUIHandler.ANSWER_NO; }
 
-        if (user_choice == JOptionPane.NO_OPTION)
-        {
-            return AbstractUIHandler.ANSWER_NO;
-        }
+        if (user_choice == JOptionPane.NO_OPTION) { return AbstractUIHandler.ANSWER_NO; }
 
         return default_choice;
     }
@@ -482,7 +474,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * Notify the user about something.
-     *
+     * 
      * @param message The notification.
      */
     public void emitNotification(String message)
@@ -492,7 +484,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * Warn the user about something.
-     *
+     * 
      * @param message The warning message.
      */
     public boolean emitWarning(String title, String message)
@@ -504,7 +496,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * Notify the user of some error.
-     *
+     * 
      * @param message The error message.
      */
     public void emitError(String title, String message)
@@ -514,7 +506,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * Notify the user of some error and block the next button.
-     *
+     * 
      * @param message The error message.
      */
     public void emitErrorAndBlockNext(String title, String message)
@@ -522,10 +514,10 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         emitError(title, message);
         parent.lockNextButton();
     }
-
+    
     /**
      * Returns the component which should be get the focus at activation of this panel.
-     *
+     * 
      * @return the component which should be get the focus at activation of this panel
      */
     public Component getInitialFocus()
@@ -535,7 +527,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * Sets the component which should be get the focus at activation of this panel.
-     *
+     * 
      * @param component which should be get the focus at activation of this panel
      */
     public void setInitialFocus(Component component)
@@ -548,7 +540,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * Do not add a point infront of subkey, it is always added in this method. If
      * <tt>RuntimeClassName.subkey</tt> is not found, the super class name will be used until it
      * is <tt>IzPanel</tt>. If no key will be found, null returns.
-     *
+     * 
      * @param subkey the subkey for the string which should be returned
      * @return the founded string
      */
@@ -568,10 +560,10 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * Calls the langpack of parent InstallerFrame for the String <tt>RuntimeClassName.subkey</tt>.
      * Do not add a point infront of subkey, it is always added in this method. If no key will be
      * found the key or - if alternate class is null - null returns.
-     *
-     * @param subkey         the subkey for the string which should be returned
+     * 
+     * @param subkey the subkey for the string which should be returned
      * @param alternateClass the short name of the class which should be used if no string is
-     *                       present with the runtime class name
+     * present with the runtime class name
      * @return the founded string
      */
     public String getI18nStringForClass(String subkey, String alternateClass)
@@ -606,10 +598,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         }
         if (retval == null || retval.startsWith(fullkey))
         {
-            if (alternateClass == null)
-            {
-                return (null);
-            }
+            if (alternateClass == null) { return (null); }
             buf.delete(0, buf.length());
             buf.append(alternateClass).append(".").append(subkey);
             retval = parent.langpack.getString(buf.toString());
@@ -624,7 +613,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * Returns the parent of this IzPanel (which is a InstallerFrame).
-     *
+     * 
      * @return the parent of this IzPanel
      */
     public InstallerFrame getInstallerFrame()
@@ -637,12 +626,12 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * Creates a label via LabelFactory using iconId, pos and method getI18nStringForClass for
      * resolving the text to be used. If the icon id is null, the label will be created also.
-     *
-     * @param subkey         the subkey which should be used for resolving the text
+     * 
+     * @param subkey the subkey which should be used for resolving the text
      * @param alternateClass the short name of the class which should be used if no string is
-     *                       present with the runtime class name
-     * @param iconId         id string for the icon
-     * @param pos            horizontal alignment
+     * present with the runtime class name
+     * @param iconId id string for the icon
+     * @param pos horizontal alignment
      * @return the newly created label
      */
     public JLabel createLabel(String subkey, String alternateClass, String iconId, int pos)
@@ -663,17 +652,17 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * resolving the text to be used. If the icon id is null, the label will be created also. If
      * isFullLine true a LabelFactory.FullLineLabel will be created instead of a JLabel. The
      * difference between both classes are a different layout handling.
-     *
-     * @param subkey         the subkey which should be used for resolving the text
+     * 
+     * @param subkey the subkey which should be used for resolving the text
      * @param alternateClass the short name of the class which should be used if no string is
-     *                       present with the runtime class name
-     * @param iconId         id string for the icon
-     * @param pos            horizontal alignment
-     * @param isFullLine     determines whether a FullLineLabel or a JLabel should be created
+     * present with the runtime class name
+     * @param iconId id string for the icon
+     * @param pos horizontal alignment
+     * @param isFullLine determines whether a FullLineLabel or a JLabel should be created
      * @return the newly created label
      */
     public JLabel createLabel(String subkey, String alternateClass, String iconId, int pos,
-                              boolean isFullLine)
+            boolean isFullLine)
     {
         ImageIcon ii = (iconId != null) ? parent.icons.getImageIcon(iconId) : null;
         String msg = getI18nStringForClass(subkey, alternateClass);
@@ -690,10 +679,10 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * Creates a label via LabelFactory with the given ids and the given horizontal alignment. If
      * the icon id is null, the label will be created also. The strings are the ids for the text in
      * langpack and the icon in icons of the installer frame.
-     *
+     * 
      * @param textId id string for the text
      * @param iconId id string for the icon
-     * @param pos    horizontal alignment
+     * @param pos horizontal alignment
      * @return the newly created label
      */
     public JLabel createLabel(String textId, String iconId, int pos)
@@ -707,10 +696,10 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * langpack and the icon in icons of the installer frame. If isFullLine true a
      * LabelFactory.FullLineLabel will be created instead of a JLabel. The difference between both
      * classes are a different layout handling.
-     *
-     * @param textId     id string for the text
-     * @param iconId     id string for the icon
-     * @param pos        horizontal alignment
+     * 
+     * @param textId id string for the text
+     * @param iconId id string for the icon
+     * @param pos horizontal alignment
      * @param isFullLine determines whether a FullLineLabel or a JLabel should be created
      * @return the newly created label
      */
@@ -730,7 +719,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * Creates a multi line label with the language dependent text given by the text id. The strings
      * is the id for the text in langpack of the installer frame. The horizontal alignment will be
      * LEFT.
-     *
+     * 
      * @param textId id string for the text
      * @return the newly created multi line label
      */
@@ -741,7 +730,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * Creates a multi line label with the given text. The horizontal alignment will be LEFT.
-     *
+     * 
      * @param text text to be used in the label
      * @return the newly created multi line label
      */
@@ -754,10 +743,10 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * Creates a label via LabelFactory with the given text, the given icon id and the given
      * horizontal alignment. If the icon id is null, the label will be created also. The strings are
      * the ids for the text in langpack and the icon in icons of the installer frame.
-     *
-     * @param text   text to be used in the label
+     * 
+     * @param text text to be used in the label
      * @param iconId id string for the icon
-     * @param pos    horizontal alignment
+     * @param pos horizontal alignment
      * @return the created multi line label
      */
     public MultiLineLabel createMultiLineLabel(String text, String iconId, int pos)
@@ -777,24 +766,19 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     public Font getControlTextFont()
     {
         Font fontObj = (getLAF() != null) ?
-                MetalLookAndFeel.getControlTextFont() : getFont();
-        //if guiprefs 'labelFontSize' multiplier value
-        // has been setup then apply it to the font:
+                          MetalLookAndFeel.getControlTextFont() : getFont();
+              //if guiprefs 'labelFontSize' multiplier value
+              // has been setup then apply it to the font:
         final float val;
-        if ((val = LabelFactory.getLabelFontSize()) != 1.0f)
-        {
-            fontObj = fontObj.deriveFont(fontObj.getSize2D() * val);
-        }
+        if ((val=LabelFactory.getLabelFontSize()) != 1.0f)
+            fontObj = fontObj.deriveFont(fontObj.getSize2D()*val);
         return fontObj;
     }
 
     protected static MetalLookAndFeel getLAF()
     {
         LookAndFeel laf = UIManager.getLookAndFeel();
-        if (laf instanceof MetalLookAndFeel)
-        {
-            return ((MetalLookAndFeel) laf);
-        }
+        if (laf instanceof MetalLookAndFeel) { return ((MetalLookAndFeel) laf); }
         return (null);
     }
 
@@ -802,7 +786,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     // ------------------- Layout stuff -------------------- START ---
     /**
      * Returns the default GridBagConstraints of this panel.
-     *
+     * 
      * @return the default GridBagConstraints of this panel
      * @deprecated use <code>getLayoutHelper().getDefaulConstraints</code> instead
      */
@@ -813,7 +797,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * Sets the default GridBagConstraints of this panel to the given object.
-     *
+     * 
      * @param constraints which should be set as default for this object
      * @deprecated use <code>getLayoutHelper().setDefaultConstraints</code> instead
      */
@@ -825,7 +809,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * Resets the grid counters which are used at getNextXGridBagConstraints and
      * getNextYGridBagConstraints.
-     *
+     * 
      * @deprecated use <code>getLayoutHelper().resetGridCounter</code> instead
      */
     public void resetGridCounter()
@@ -836,11 +820,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * Returns a newly created GridBagConstraints with the given values and the values from the
      * defaultGridBagConstraints for the other parameters.
-     *
+     * 
      * @param gridx value to be used for the new constraint
      * @param gridy value to be used for the new constraint
      * @return newly created GridBagConstraints with the given values and the values from the
-     *         defaultGridBagConstraints for the other parameters
+     * defaultGridBagConstraints for the other parameters
      * @deprecated use <code>getLayoutHelper().getNewConstraints</code> instead
      */
     public GridBagConstraints getNewGridBagConstraints(int gridx, int gridy)
@@ -851,17 +835,17 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * Returns a newly created GridBagConstraints with the given values and the values from the
      * defaultGridBagConstraints for the other parameters.
-     *
-     * @param gridx      value to be used for the new constraint
-     * @param gridy      value to be used for the new constraint
-     * @param gridwidth  value to be used for the new constraint
+     * 
+     * @param gridx value to be used for the new constraint
+     * @param gridy value to be used for the new constraint
+     * @param gridwidth value to be used for the new constraint
      * @param gridheight value to be used for the new constraint
      * @return newly created GridBagConstraints with the given values and the values from the
-     *         defaultGridBagConstraints for the other parameters
+     * defaultGridBagConstraints for the other parameters
      * @deprecated use <code>getLayoutHelper().getNewConstraints</code> instead
      */
     public GridBagConstraints getNewGridBagConstraints(int gridx, int gridy, int gridwidth,
-                                                       int gridheight)
+            int gridheight)
     {
         return (GridBagConstraints) (layoutHelper.getNewConstraints(gridx, gridy, gridwidth,
                 gridheight));
@@ -869,7 +853,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * Returns a newly created GridBagConstraints for the next column of the current layout row.
-     *
+     * 
      * @return a newly created GridBagConstraints for the next column of the current layout row
      * @deprecated use <code>getLayoutHelper().getNextXConstraints</code> instead
      */
@@ -880,7 +864,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * Returns a newly created GridBagConstraints with column 0 for the next row.
-     *
+     * 
      * @return a newly created GridBagConstraints with column 0 for the next row
      * @deprecated use <code>getLayoutHelper().getNextYConstraints</code> instead
      */
@@ -892,11 +876,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * Returns a newly created GridBagConstraints with column 0 for the next row using the given
      * parameters.
-     *
-     * @param gridwidth  width for this constraint
+     * 
+     * @param gridwidth width for this constraint
      * @param gridheight height for this constraint
      * @return a newly created GridBagConstraints with column 0 for the next row using the given
-     *         parameters
+     * parameters
      * @deprecated use <code>getLayoutHelper().getNextYConstraints</code> instead
      */
     public GridBagConstraints getNextYGridBagConstraints(int gridwidth, int gridheight)
@@ -909,7 +893,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * This will be done, if the IzPack guiprefs modifier with the key "layoutAnchor" has the value
      * "SOUTH" or "SOUTHWEST". The earlier used value "BOTTOM" and the declaration via the IzPack
      * variable <code>IzPanel.LayoutType</code> are also supported.
-     *
+     * 
      * @deprecated use <code>getLayoutHelper().startLayout</code> instead
      */
     public void startGridBagLayout()
@@ -922,7 +906,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * This will be done, if the IzPack guiprefs modifier with the key "layoutAnchor" has the value
      * "NORTH" or "NORTHWEST". The earlier used value "TOP" and the declaration via the IzPack
      * variable <code>IzPanel.LayoutType</code> are also supported.
-     *
+     * 
      * @deprecated use <code>getLayoutHelper().completeLayout</code> instead
      */
     public void completeGridBagLayout()
@@ -940,7 +924,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * item. The caption will be requested from the method getCaption. If <code>null</code>
      * returns, no summary for this panel will be generated. Default behaviour is to return
      * <code>null</code>.
-     *
+     * 
      * @return the summary for this class
      */
     public String getSummaryBody()
@@ -954,7 +938,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * panel will be generated. Default behaviour is to return the string given by langpack for the
      * key <code>&lt;current class name>.summaryCaption&gt;</code> if exist, else the string
      * &quot;summaryCaption.&lt;ClassName&gt;&quot;.
-     *
+     * 
      * @return the caption for this class
      */
     public String getSummaryCaption()
@@ -989,7 +973,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * Returns whether this panel will be hidden general or not. A hidden panel will be not counted
      * in the step counter and for panel icons.
-     *
+     * 
      * @return whether this panel will be hidden general or not
      */
     public boolean isHidden()
@@ -1000,7 +984,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * Set whether this panel should be hidden or not. A hidden panel will be not counted in the
      * step counter and for panel icons.
-     *
+     * 
      * @param hidden flag to be set
      */
     public void setHidden(boolean hidden)
@@ -1010,7 +994,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * Returns the used layout helper. Can be used in a derived class to create custom layout.
-     *
+     * 
      * @return the used layout helper
      */
     public LayoutHelper getLayoutHelper()
@@ -1048,9 +1032,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * This method validates the field content. Validating is performed through a user supplied
      * service class that provides the validation rules.
-     *
+     * 
      * @return <code>true</code> if the validation passes or no implementation of a validation
-     *         rule exists. Otherwise <code>false</code> is returned.
+     * rule exists. Otherwise <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     private final boolean validatePanel()
@@ -1150,7 +1134,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * Indicates wether the panel can display help. The installer will hide Help button if current
      * panel does not support help functions. Default behaviour is to return <code>false</code>.
-     *
+     * 
      * @return A boolean stating wether the panel supports Help function.
      */
     public boolean canShowHelp()
@@ -1176,10 +1160,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     private HelpWindow getHelpWindow()
     {
-        if (this.helpWindow != null)
-        {
-            return this.helpWindow;
-        }
+        if (this.helpWindow != null) { return this.helpWindow; }
 
         this.helpWindow = new HelpWindow(parent, getString("installer.help.close"));
         return this.helpWindow;
@@ -1211,7 +1192,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         }
         this.postValidateActions.add(postValidateAction);
     }
-
+    
     protected final void executePreActivationActions()
     {
         if (preActivateActions != null)

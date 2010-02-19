@@ -66,12 +66,10 @@ public class XMLParser implements IXMLParser
         {
             this.buf = buf;
         }
-
+        
         @Override
-        public synchronized int read() throws IOException
-        {
-            if (!buf.hasRemaining())
-            {
+        public synchronized int read() throws IOException {
+            if (!buf.hasRemaining()) {
                 return -1;
             }
             int c = buf.get() & 0xff;
@@ -79,20 +77,17 @@ public class XMLParser implements IXMLParser
         }
 
         @Override
-        public synchronized int read(byte[] bytes, int off, int len) throws IOException
-        {
-            if (!buf.hasRemaining())
-            {
+        public synchronized int read(byte[] bytes, int off, int len) throws IOException {
+            if (!buf.hasRemaining()) {
                 return -1;
             }
             len = Math.min(len, buf.remaining());
             buf.get(bytes, off, len);
             return len;
         }
-
+        
         @Override
-        public int available() throws IOException
-        {
+        public int available() throws IOException {
             return buf.remaining();
         }
     }
@@ -110,12 +105,10 @@ public class XMLParser implements IXMLParser
             XMLReader xmlReader = saxParserFactory.newSAXParser().getXMLReader();
             filter = new LineNumberFilter(xmlReader);
 
-        }
-        catch (ParserConfigurationException e)
+        } catch (ParserConfigurationException e)
         {
             throw new XMLException(e);
-        }
-        catch (SAXException e)
+        } catch (SAXException e)
         {
             throw new XMLException(e);
         }
@@ -142,16 +135,14 @@ public class XMLParser implements IXMLParser
             SAXSource source = new SAXSource(inputSource);
             source.setXMLReader(filter);
             URL xslResourceUrl = IXMLParser.class.getResource(XSL_FILE_NAME);
-            if (xslResourceUrl == null)
-            {
+            if(xslResourceUrl == null) {
                 throw new XMLException("Can't find IzPack internal file \"" + XSL_FILE_NAME + "\"");
             }
             Source xsltSource = new StreamSource(xslResourceUrl.openStream());
             Transformer xformer = TransformerFactory.newInstance().newTransformer(xsltSource);
             xformer.transform(source, result);
             filter.applyLN(result);
-        }
-        catch (TransformerException e)
+        } catch (TransformerException e)
         {
             String extraInfos = null;
             if (this.parsedItem != null)
@@ -165,13 +156,9 @@ public class XMLParser implements IXMLParser
                 Locator locator = filter.getDocumentLocator();
                 extraInfos += " at line " + locator.getLineNumber() + ", column " + locator.getColumnNumber();
             }
-            if (extraInfos != null)
-            {
-                throw new XMLException("Error" + extraInfos + " : " + e.getMessage(), e);
-            }
+            if (extraInfos != null) throw new XMLException("Error" + extraInfos + " : " + e.getMessage(), e);
             throw new XMLException(e);
-        }
-        catch (IOException e)
+        } catch (IOException e)
         {
             throw new XMLException(e);
         }
@@ -202,7 +189,7 @@ public class XMLParser implements IXMLParser
     public IXMLElement parse(String inputString)
     {
         this.parsedItem = null;
-
+        
         final ByteBuffer buf = Charset.forName("UTF-8").encode(inputString);
 
         return parse(new ByteBufferInputStream(buf));

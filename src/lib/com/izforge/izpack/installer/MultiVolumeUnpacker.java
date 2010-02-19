@@ -15,24 +15,39 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.*;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Properties;
+
+import com.izforge.izpack.ExecutableFile;
+import com.izforge.izpack.Pack;
+import com.izforge.izpack.PackFile;
+import com.izforge.izpack.ParsableFile;
+import com.izforge.izpack.UpdateCheck;
+import com.izforge.izpack.XPackFile;
 import com.izforge.izpack.event.InstallerListener;
 import com.izforge.izpack.io.CorruptVolumeException;
 import com.izforge.izpack.io.FileSpanningInputStream;
 import com.izforge.izpack.io.FileSpanningOutputStream;
 import com.izforge.izpack.io.VolumeNotFoundException;
-import com.izforge.izpack.util.*;
-import com.izforge.izpack.util.os.FileQueue;
-import com.izforge.izpack.util.os.FileQueueMove;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Properties;
+import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.os.*;
 
 
 /**
@@ -47,13 +62,11 @@ public class MultiVolumeUnpacker extends UnpackerBase
     public MultiVolumeUnpacker(AutomatedInstallData idata, AbstractUIProgressHandler handler)
     {
         super(idata, handler);
-        if (handler instanceof PanelAutomation)
-        {
+        if (handler instanceof PanelAutomation){
             Debug.trace("running in auto installation mode.");
             helper = new MultiVolumeUnpackerAutomationHelper();
         }
-        else
-        {
+        else {
             Debug.trace("running in normal installation mode.");
             helper = new MultiVolumeUnpackerHelper();
         }
@@ -61,8 +74,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
     }
 
 
-    public IMultiVolumeUnpackerHelper getHelper()
-    {
+    public IMultiVolumeUnpackerHelper getHelper(){
         return this.helper;
     }
 
@@ -173,8 +185,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
                         stepname = name;
                     }
                 }
-                if (pack.isHidden())
-                {
+                if (pack.isHidden()){
                     // TODO: hide the pack completely
                     // hide the pack name if pack is hidden
                     stepname = "";
@@ -315,7 +326,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
                         }
                         else
                         {
-                            out = new FileOutputStream(pathFile);
+                            out=new FileOutputStream(pathFile);
                         }
 
                         byte[] buffer = new byte[5120];
@@ -409,13 +420,9 @@ public class MultiVolumeUnpacker extends UnpackerBase
                         if (pf.lastModified() >= 0)
                         {
                             if (blockableForCurrentOs(pf))
-                            {
                                 tmpFile.setLastModified(pf.lastModified());
-                            }
                             else
-                            {
                                 pathFile.setLastModified(pf.lastModified());
-                            }
                         }
 
                         if (blockableForCurrentOs(pf))
@@ -436,7 +443,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
                                     + " -> "
                                     + pathFile.getAbsolutePath()
                                     + " added to file queue for being copied after reboot"
-                            );
+                                    );
                             // The temporary file must not be deleted
                             // until the file queue will be committed
                             tmpFile.deleteOnExit();

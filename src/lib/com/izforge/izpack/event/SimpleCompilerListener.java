@@ -21,10 +21,10 @@
 
 package com.izforge.izpack.event;
 
-import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.compiler.CompilerException;
 import com.izforge.izpack.compiler.IPackager;
 import com.izforge.izpack.compiler.PackInfo;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.util.Map;
 

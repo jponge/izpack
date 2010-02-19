@@ -1,9 +1,9 @@
 package com.izforge.izpack.util.os;
 
-import com.izforge.izpack.util.Debug;
-
 import java.io.File;
 import java.io.IOException;
+
+import com.izforge.izpack.util.Debug;
 
 public class WinSetupFileQueue extends WinSetupAPIBase
 {
@@ -40,7 +40,7 @@ public class WinSetupFileQueue extends WinSetupAPIBase
      *
      * @param sourcefile Copy source file
      * @param targetfile Copy target file
-     * @param style      A bitwise 'or-ed' combination of copy styles
+     * @param style A bitwise 'or-ed' combination of copy styles
      */
     protected void addCopy(File sourcefile, File targetfile, int /* DWORD */copyStyle) throws IOException
     {
@@ -70,9 +70,7 @@ public class WinSetupFileQueue extends WinSetupAPIBase
     {
         int style = 0 /*SP_COPY_IN_USE_NEEDS_REBOOT*/;
         if (forceInUse)
-        {
             style |= SP_COPY_FORCE_IN_USE;
-        }
         addCopy(sourcefile, targetfile, style);
     }
 
@@ -119,14 +117,12 @@ public class WinSetupFileQueue extends WinSetupAPIBase
      * @param sourcefile Move source file
      * @param targetfile Move target file
      * @param forceInUse Whether to force target-in-use behavior
-     */
+    */
     public void addMove(File sourcefile, File targetfile, boolean forceInUse) throws IOException
     {
         int style = SP_COPY_DELETESOURCE /* | SP_COPY_IN_USE_NEEDS_REBOOT*/;
         if (forceInUse)
-        {
             style |= SP_COPY_FORCE_IN_USE;
-        }
         addCopy(sourcefile, targetfile, style);
     }
 
@@ -150,9 +146,7 @@ public class WinSetupFileQueue extends WinSetupAPIBase
                 Debug.log("System reboot is recommended");
             }
             if ((reboot & SPFILEQ_REBOOT_IN_PROGRESS) != 0)
-            {
                 Debug.log("System shutdown is already in progress");
-            }
         }
 
         return result;
@@ -171,7 +165,6 @@ public class WinSetupFileQueue extends WinSetupAPIBase
     /**
      * Check whether reboot is necessary to apply committed changes.
      * Valid only after committing the file queue, otherwise always false.
-     *
      * @return true - if reboot is necessary to apply committed changes
      */
     public boolean isRebootNecessary()

@@ -15,7 +15,6 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.adaptator.IXMLElement;

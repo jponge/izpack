@@ -22,16 +22,18 @@
 
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.installer.PanelAutomation;
+import com.izforge.izpack.installer.InstallerException;
+import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.installer.AutomatedInstallData;
-import com.izforge.izpack.installer.InstallerException;
-import com.izforge.izpack.installer.PanelAutomation;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.VariableSubstitutor;
 
 import java.util.Iterator;
 import java.util.Map;
+// Add variable substitution
+import com.izforge.izpack.util.VariableSubstitutor;
+
 import java.util.Vector;
 
 /**
@@ -92,7 +94,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
         // ----------------------------------------------------
         // add the item that combines all entries
         // ----------------------------------------------------
-        userInput = new XMLElementImpl(AUTO_KEY_USER_INPUT, panelRoot);
+        userInput = new XMLElementImpl(AUTO_KEY_USER_INPUT,panelRoot);
         panelRoot.addChild(userInput);
 
         // ----------------------------------------------------
@@ -103,7 +105,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
         {
             String key = keys.next();
             String value = this.entries.get(key);
-            dataElement = new XMLElementImpl(AUTO_KEY_ENTRY, userInput);
+            dataElement = new XMLElementImpl(AUTO_KEY_ENTRY,userInput);
             dataElement.setAttribute(AUTO_ATTRIBUTE_KEY, key);
             dataElement.setAttribute(AUTO_ATTRIBUTE_VALUE, value);
 
@@ -154,7 +156,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
             // Substitute variable used in the 'value' field
             VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
             value = dataElement.getAttribute(AUTO_ATTRIBUTE_VALUE);
-            value = vs.substitute(value, null);
+            value = vs.substitute(value, null);            
 
             Debug.trace("UserInputPanel: setting variable " + variable + " to " + value);
             idata.setVariable(variable, value);

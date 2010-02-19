@@ -18,20 +18,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.izforge.izpack.panels;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.*;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.util.Debug;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.*;
-import java.util.List;
 
 public class FileInputField extends JPanel implements ActionListener
 {
@@ -59,17 +63,17 @@ public class FileInputField extends JPanel implements ActionListener
     String fileExtensionDescription;
 
     boolean allowEmpty;
-
-    protected static final int INVALID = 0, EMPTY = 1;
+    
+    protected static final int INVALID = 0, EMPTY = 1; 
 
     public FileInputField(IzPanel parent, InstallData data, boolean directory, String set,
-                          int size, List<ValidatorContainer> validatorConfig)
+            int size, List<ValidatorContainer> validatorConfig)
     {
         this(parent, data, directory, set, size, validatorConfig, null, null);
     }
 
     public FileInputField(IzPanel parent, InstallData data, boolean directory, String set,
-                          int size, List<ValidatorContainer> validatorConfig, String fileExt, String fileExtDesc)
+            int size, List<ValidatorContainer> validatorConfig, String fileExt, String fileExtDesc)
     {
         this.parent = parent;
         this.parentFrame = parent.getInstallerFrame();
@@ -121,9 +125,8 @@ public class FileInputField extends JPanel implements ActionListener
             }
         }
     }
-
-    protected void prepareFileChooser(JFileChooser filechooser)
-    {
+    
+    protected void prepareFileChooser(JFileChooser filechooser) {
         filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         if ((fileExtension != null) && (fileExtensionDescription != null))
         {
@@ -155,7 +158,7 @@ public class FileInputField extends JPanel implements ActionListener
             showMessage("file.nofile");
         }
     }
-
+    
     protected void showMessage(String messageType)
     {
         JOptionPane.showMessageDialog(parentFrame, parentFrame.langpack.getString("UserInputPanel."
@@ -167,7 +170,7 @@ public class FileInputField extends JPanel implements ActionListener
     {
         boolean result = false;
         String input = filetxt.getText();
-
+        
         if (allowEmpty && ((input == null) || (input.length() == 0)))
         {
             result = true;
@@ -186,7 +189,7 @@ public class FileInputField extends JPanel implements ActionListener
             input = file.toString();
 
             filetxt.setText(input);
-
+            
             if (!_validate(file))
             {
                 result = false;

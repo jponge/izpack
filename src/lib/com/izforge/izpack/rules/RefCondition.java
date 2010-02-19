@@ -18,7 +18,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.izforge.izpack.rules;
 
 import com.izforge.izpack.adaptator.IXMLElement;
@@ -67,10 +66,9 @@ public class RefCondition extends Condition
             {
                 this.referencedcondition = RulesEngine.getCondition(this.referencedConditionId);
             }
-            if (this.referencedcondition != null)
-            {
+            if (this.referencedcondition != null){
                 this.referencedcondition.setInstalldata(this.installdata);
-            }
+            }            
             return (this.referencedcondition != null) ? this.referencedcondition.isTrue() : false;
         }
     }
@@ -91,6 +89,6 @@ public class RefCondition extends Condition
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {
-        conditionRoot.setAttribute("refid", this.referencedConditionId);
+       conditionRoot.setAttribute("refid", this.referencedConditionId);        
     }
 }

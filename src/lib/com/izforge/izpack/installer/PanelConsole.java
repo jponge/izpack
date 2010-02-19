@@ -31,6 +31,7 @@ import java.util.Properties;
  * this interface directly, they should use e.g. helper classes instead.
  *
  * @author Mounir El Hajj
+ *
  */
 
 public interface PanelConsole
@@ -48,7 +49,7 @@ public interface PanelConsole
      * Asks the panel to run and do its work, given a set of properties to use as variables
      *
      * @param installData The installation data
-     * @param p           The the properties
+     * @param p The the properties
      */
     public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p);
 

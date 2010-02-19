@@ -160,7 +160,7 @@ public class DataCheckPanel extends IzPanel
      * @return True
      */
     public boolean isValidated()
-    {
-        return true;
-    }
+	{
+		return true;
+	}
 }

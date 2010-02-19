@@ -84,10 +84,10 @@ public class XInfoPanel extends IzPanel
         textArea.setEditable(false);
 
         String textAreaFont = idata.getVariable("XInfoPanel.font");
-        if (textAreaFont != null && textAreaFont.length() > 0)
+        if( textAreaFont!=null && textAreaFont.length()>0 )
         {
             Font font = Font.decode(textAreaFont);
-            textArea.setFont(font);
+            textArea.setFont( font );
         }
 
         JScrollPane scroller = new JScrollPane(textArea);

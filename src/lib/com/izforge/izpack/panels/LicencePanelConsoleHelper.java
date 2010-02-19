@@ -18,13 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.izforge.izpack.panels;
-
-import com.izforge.izpack.installer.AutomatedInstallData;
-import com.izforge.izpack.installer.PanelConsole;
-import com.izforge.izpack.installer.PanelConsoleHelper;
-import com.izforge.izpack.installer.ResourceManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,13 +27,18 @@ import java.io.PrintWriter;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.installer.PanelConsole;
+import com.izforge.izpack.installer.PanelConsoleHelper;
+import com.izforge.izpack.installer.ResourceManager;
 /**
  * License Panel console helper
+ *
  */
 public class LicencePanelConsoleHelper extends PanelConsoleHelper implements PanelConsole
 {
 
-    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
+    public boolean runGeneratePropertiesFile(AutomatedInstallData installData,PrintWriter printWriter)
     {
         return true;
     }
@@ -57,7 +56,7 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
         try
         {
             // We read it
-            license = ResourceManager.getInstance().getTextResource(resNamePrefix);
+             license = ResourceManager.getInstance().getTextResource(resNamePrefix);
         }
         catch (Exception err)
         {
@@ -67,23 +66,21 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
         }
 
         // controls # of lines to display at a time, to allow simulated scrolling down
-        int lines = 25;
+        int lines=25;
         int l = 0;
 
         StringTokenizer st = new StringTokenizer(license, "\n");
         while (st.hasMoreTokens())
         {
-            String token = st.nextToken();
-            System.out.println(token);
-            l++;
-            if (l >= lines)
-            {
-                if (!doContinue())
-                {
-                    return false;
-                }
-                l = 0;
-            }
+             String token = st.nextToken();
+             System.out.println(token);
+             l++;
+             if (l >= lines) {
+                 if (! doContinue()) {
+                     return false;
+                 }
+                 l=0;
+             }
 
         }
 
@@ -147,10 +144,7 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
                 {
                     return 2;
                 }
-                else if (strIn.equals("3"))
-                {
-                    return 3;
-                }
+                else if (strIn.equals("3")) { return 3; }
             }
 
         }

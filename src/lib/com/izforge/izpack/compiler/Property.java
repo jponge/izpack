@@ -21,8 +21,8 @@
 
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.adaptator.IXMLElement;
 import org.apache.tools.ant.taskdefs.Execute;
 
 import java.io.*;

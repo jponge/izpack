@@ -51,16 +51,14 @@ public class AndCondition extends Condition
     public AndCondition(Condition operand1, Condition operand2)
     {
         this.leftoperand = operand1;
-        if (this.leftoperand != null)
-        {
-            this.leftoperand.setInstalldata(this.installdata);
+        if (this.leftoperand != null){
+            this.leftoperand.setInstalldata(this.installdata);    
         }
-
+        
         this.rightoperand = operand2;
-        if (this.rightoperand != null)
-        {
-            this.rightoperand.setInstalldata(this.installdata);
-        }
+        if (this.rightoperand != null){
+            this.rightoperand.setInstalldata(this.installdata);    
+        }        
     }
 
 
@@ -90,8 +88,7 @@ public class AndCondition extends Condition
 
     public boolean isTrue()
     {
-        if ((this.leftoperand == null) || (this.rightoperand == null))
-        {
+        if ((this.leftoperand == null) || (this.rightoperand == null)){
             Debug.trace("Operands of condition " + this.id + " not initialized correctly.");
             return false;
         }
@@ -120,9 +117,9 @@ public class AndCondition extends Condition
     {
         IXMLElement left = RulesEngine.createConditionElement(this.leftoperand, root);
         this.leftoperand.makeXMLData(left);
-        root.addChild(left);
+        root.addChild(left);        
         IXMLElement right = RulesEngine.createConditionElement(this.rightoperand, root);
         this.rightoperand.makeXMLData(right);
-        root.addChild(right);
+        root.addChild(right);                
     }
 }

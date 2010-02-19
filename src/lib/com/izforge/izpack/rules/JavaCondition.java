@@ -18,12 +18,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.izforge.izpack.rules;
 
+import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.util.Debug;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -68,7 +67,7 @@ public class JavaCondition extends Condition
             {
                 try
                 {
-                    this.usedclass = Class.forName(this.classname);
+                    this.usedclass = Class.forName(this.classname); 
                 }
                 catch (ClassNotFoundException e)
                 {
@@ -175,28 +174,26 @@ public class JavaCondition extends Condition
         }
         this.complete = true;
     }
-
+    
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {
-        XMLElementImpl javael = new XMLElementImpl("java", conditionRoot);
+        XMLElementImpl javael = new XMLElementImpl("java",conditionRoot);
         conditionRoot.addChild(javael);
-        XMLElementImpl classel = new XMLElementImpl("class", javael);
+        XMLElementImpl classel = new XMLElementImpl("class",javael);
         classel.setContent(this.classname);
         javael.addChild(classel);
-        if (this.methodname != null)
-        {
-            XMLElementImpl methodel = new XMLElementImpl("method", javael);
+        if (this.methodname != null){
+            XMLElementImpl methodel = new XMLElementImpl("method",javael);
             methodel.setContent(this.methodname);
-            javael.addChild(methodel);
+            javael.addChild(methodel);    
         }
-        if (this.fieldname != null)
-        {
-            XMLElementImpl fieldel = new XMLElementImpl("field", javael);
+        if (this.fieldname != null){
+            XMLElementImpl fieldel = new XMLElementImpl("field",javael);
             fieldel.setContent(this.fieldname);
-            javael.addChild(fieldel);
-        }
-        XMLElementImpl returnvalel = new XMLElementImpl("returnvalue", javael);
+            javael.addChild(fieldel);    
+        }        
+        XMLElementImpl returnvalel = new XMLElementImpl("returnvalue",javael);
         returnvalel.setContent(this.returnvalue);
         returnvalel.setAttribute("type", this.returnvaluetype);
         javael.addChild(returnvalel);
@@ -230,5 +227,6 @@ public class JavaCondition extends Condition
         return details.toString();
     }
 
+    
 
 }

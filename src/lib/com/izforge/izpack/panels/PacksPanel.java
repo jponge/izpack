@@ -74,9 +74,9 @@ public class PacksPanel extends PacksPanelBase
         {
             dependencyArea = createTextArea("PacksPanel.dependencyList", null, null, null);
         }
-        descriptionArea = createTextArea("PacksPanel.description", null, null, null);
+        descriptionArea = createTextArea("PacksPanel.description", null, null, null);       
         spaceLabel = createPanelWithLabel("PacksPanel.space", null, null);
-
+                
         if (IoHelper.supported("getFreeSpace"))
         {
             add(Box.createRigidArea(new Dimension(0, 3)));

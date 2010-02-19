@@ -25,8 +25,7 @@ package com.izforge.izpack.installer;
 import com.izforge.izpack.*;
 import com.izforge.izpack.event.InstallerListener;
 import com.izforge.izpack.util.*;
-import com.izforge.izpack.util.os.FileQueue;
-import com.izforge.izpack.util.os.FileQueueMove;
+import com.izforge.izpack.util.os.*;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -130,8 +129,7 @@ public class Unpacker extends UnpackerBase
                         stepname = name;
                     }
                 }
-                if (pack.isHidden())
-                {
+                if (pack.isHidden()){
                     // TODO: hide the pack completely
                     // hide the pack name if pack is hidden
                     stepname = "";
@@ -146,8 +144,7 @@ public class Unpacker extends UnpackerBase
                     {
                         if (!rules.isConditionTrue(pf.getCondition()))
                         {
-                            if (!pf.isBackReference())
-                            {
+                            if (!pf.isBackReference()){
                                 // skip, condition is not fulfilled
                                 objIn.skip(pf.length());
                             }
@@ -257,14 +254,12 @@ public class Unpacker extends UnpackerBase
                             {
                                 if (!pf.isBackReference() && !((Pack) packs.get(i)).loose)
                                 {
-                                    if (pf.isPack200Jar())
-                                    {
-                                        objIn.skip(Integer.SIZE / 8);
+                                    if ( pf.isPack200Jar() ) {
+                                        objIn.skip( Integer.SIZE / 8 );
                                     }
-                                    else
-                                    {
-                                        objIn.skip(pf.length());
-                                    }
+                                    else {
+                                    objIn.skip(pf.length());
+                                }
                                 }
                                 continue;
                             }
@@ -293,8 +288,8 @@ public class Unpacker extends UnpackerBase
                            pis = new FileInputStream(pf.sourcePath);
                             */
 
-                            File resolvedFile = new File(getAbsolutInstallSource(), pf
-                                    .getRelativeSourcePath());
+                          File resolvedFile = new File(getAbsolutInstallSource(), pf
+                              .getRelativeSourcePath());
                             if (!resolvedFile.exists())
                             {
                                 //try alternative destination - the current working directory
@@ -333,7 +328,7 @@ public class Unpacker extends UnpackerBase
                         }
                         else
                         {
-                            out = new FileOutputStream(pathFile);
+                            out=new FileOutputStream(pathFile);
                         }
 
                         if (pf.isPack200Jar())
@@ -383,13 +378,9 @@ public class Unpacker extends UnpackerBase
                         if (pf.lastModified() >= 0)
                         {
                             if (blockableForCurrentOs(pf))
-                            {
                                 tmpFile.setLastModified(pf.lastModified());
-                            }
                             else
-                            {
                                 pathFile.setLastModified(pf.lastModified());
-                            }
                         }
 
                         if (blockableForCurrentOs(pf))
@@ -410,7 +401,7 @@ public class Unpacker extends UnpackerBase
                                     + " -> "
                                     + pathFile.getAbsolutePath()
                                     + " added to file queue for being copied after reboot"
-                            );
+                                    );
                             // The temporary file must not be deleted
                             // until the file queue will be committed
                             tmpFile.deleteOnExit();
@@ -506,8 +497,7 @@ public class Unpacker extends UnpackerBase
 
             // Commit a file queue if there are potentially blocked files
             // Use one file queue for all packs
-            if (fq != null)
-            {
+            if (fq != null) {
                 fq.execute();
                 idata.rebootNecessary = fq.isRebootNecessary();
             }
@@ -622,7 +612,7 @@ public class Unpacker extends UnpackerBase
             // See compiler.Packager#getJarOutputStream for the counterpart
             String baseName = idata.info.getInstallerBase();
             String packURL = webDirURL + "/" + baseName + ".pack" + packid + ".jar";
-            String tf = IoHelper.translatePath(idata.info.getUninstallerPath() + Unpacker.tempSubPath, vs);
+            String tf = IoHelper.translatePath(idata.info.getUninstallerPath()+ Unpacker.tempSubPath, vs);
             String tempfile;
             try
             {

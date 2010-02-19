@@ -15,13 +15,11 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.Pack;
-import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.IXMLParser;
+import com.izforge.izpack.adaptator.*;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.gui.ButtonFactory;
@@ -75,8 +73,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     // ~ Static fields/initializers *********************************************************
 
-    public final static String SPEC_ATTRIBUTE_CONDITION = "condition";
-
+    public final static String SPEC_ATTRIBUTE_CONDITION="condition";
+    
     /**
      * SPEC_ATTRIBUTE_KDE_USERNAME ="KdeUsername"
      */
@@ -859,7 +857,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 {  //'defaultCurrentUser' element was specified
                     rUserFlag = false;
                     Debug.log("Element '" + SPEC_KEY_DEF_CUR_USER +
-                            "' was specified");
+                                                         "' was specified");
                 }
                 else
                 {  //'defaultCurrentUser' element not specified
@@ -1038,9 +1036,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         IXMLElement skipper = spec.getFirstChildNamed(SPEC_KEY_SKIP_IFNOT_SUPPORTED);
         skipIfNotSupported = (skipper != null);
 
-        //set flag if 'defaultCurrentUser' element found:
+              //set flag if 'defaultCurrentUser' element found:
         defaultCurrentUserFlag =
-                (spec.getFirstChildNamed(SPEC_KEY_DEF_CUR_USER) != null);
+                   (spec.getFirstChildNamed(SPEC_KEY_DEF_CUR_USER) != null);
 
         // ----------------------------------------------------
         // find out if we should simulate a not supported
@@ -1314,11 +1312,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     private boolean checkConditions(IXMLElement shortcutSpec)
     {
         boolean result = true;
-        String conditionid = shortcutSpec.getAttribute(SPEC_ATTRIBUTE_CONDITION);
-        if (conditionid != null)
-        {
-            result = this.parent.getRules().isConditionTrue(conditionid);
-        }
+         String conditionid = shortcutSpec.getAttribute(SPEC_ATTRIBUTE_CONDITION);
+         if (conditionid != null){
+             result = this.parent.getRules().isConditionTrue(conditionid);
+         }
 //          Vector conditions = shortcutSpec.getChildrenNamed( Condition.CONDITION );
 //          
 //          for( int i = 0; i < conditions.size(); i++ ) { Condition condition = new Condition(
@@ -1330,7 +1327,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 //          if( result == false ) { System.out.println( "Unresolved Condition: " + condition );
 //          
 //          return result; } }
-
+         
         return result; // If there is no Condition defined, just create the shortcut.
     }
 
@@ -1461,11 +1458,11 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         //fix: don't influence other shortcuts when altering group name...
         String gn = groupName;
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        setCursor( Cursor.getPredefinedCursor( Cursor.WAIT_CURSOR ) );
 
-        progressbar = new JProgressBar(JProgressBar.HORIZONTAL, 0, shortcuts.size());
+        progressbar = new JProgressBar( JProgressBar.HORIZONTAL, 0,shortcuts.size() );
 
-        constraints.gridx = col;
+        constraints.gridx = col ;
         constraints.gridy = line + 7;
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
@@ -1482,7 +1479,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         {
             data = (ShortcutData) shortcuts.elementAt(i);
 
-            progressbar.setString("create " + data.name + " [" + data.description + "]");
+            progressbar.setString( "create " + data.name + " [" + data.description + "]" );
 
             try
             {
@@ -1592,7 +1589,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             catch (Throwable exception)
             {
             }
-            progressbar.setValue(i);
+            progressbar.setValue( i );
             invalidate();
         }
         if (OsVersion.IS_UNIX)
@@ -1629,7 +1626,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
 
         shortcut.cleanUp();
-        setCursor(Cursor.getDefaultCursor());
+        setCursor( Cursor.getDefaultCursor() );
     }
 
     /*--------------------------------------------------------------------------*/
@@ -1843,9 +1840,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         if (shortcut.multipleUsers())
         {
-            //if 'defaultCurrentUser' specified, default to current user:
+              //if 'defaultCurrentUser' specified, default to current user:
             final boolean rUserFlag = defaultCurrentUserFlag ? false :
-                    isRootUser;
+                                                                 isRootUser;
 
             JPanel usersPanel = new JPanel(new GridLayout(2, 1));
             ButtonGroup usersGroup = new ButtonGroup();
@@ -2339,7 +2336,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         // add the item that defines the name of the program group
         // ----------------------------------------------------
-        dataElement = new XMLElementImpl(AUTO_KEY_PROGRAM_GROUP, panelRoot);
+        dataElement = new XMLElementImpl(AUTO_KEY_PROGRAM_GROUP,panelRoot);
         dataElement.setAttribute(AUTO_ATTRIBUTE_NAME, groupName);
         panelRoot.addChild(dataElement);
 
@@ -2350,7 +2347,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         {
             Debug.log("entering makeXMLData");
             data = (ShortcutData) shortcuts.elementAt(i);
-            dataElement = new XMLElementImpl(AUTO_KEY_SHORTCUT, panelRoot);
+            dataElement = new XMLElementImpl(AUTO_KEY_SHORTCUT,panelRoot);
 
             dataElement.setAttribute(AUTO_ATTRIBUTE_NAME, data.name);
             dataElement.setAttribute(AUTO_ATTRIBUTE_GROUP, (data.addToGroup ? Boolean.TRUE

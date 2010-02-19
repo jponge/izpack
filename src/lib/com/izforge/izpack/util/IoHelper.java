@@ -159,10 +159,10 @@ public class IoHelper
      * be open. If the VariableSubstitutor is not null, a substition
      * will be done during copy.
      *
-     * @param in   stream object for input
-     * @param out  stream object for output
-     * @param vs   substitutor which is used during copying
-     * @param type file type for the substitutor
+     * @param in          stream object for input
+     * @param out         stream object for output
+     * @param vs          substitutor which is used during copying
+     * @param type        file type for the substitutor
      * @throws IOException if an I/O error occurs
      */
     public static void copyStream(InputStream in, OutputStream out, VariableSubstitutor vs, String type) throws IOException
@@ -210,9 +210,9 @@ public class IoHelper
      * the temporary file. If the variable substitutor is not null, variables will be replaced
      * during copying.
      *
-     * @param is  input stream to copy from
-     * @param ext file extension
-     * @param vss substitutor which is used during copying
+     * @param is               input stream to copy from
+     * @param ext              file extension
+     * @param vss              substitutor which is used during copying
      * @return newly created and filled temporary file
      * @throws IOException
      */

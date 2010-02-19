@@ -67,8 +67,8 @@ public class ProcessPanelWorker implements Runnable
     private String logfiledir = null;
 
     protected AutomatedInstallData idata;
-
-    private Map<Boolean, List<ButtonConfig>> buttonConfigs = new Hashtable<Boolean, List<ButtonConfig>>();
+    
+    private Map<Boolean,List<ButtonConfig>> buttonConfigs = new Hashtable<Boolean, List<ButtonConfig>>();
 
     /**
      * The constructor.
@@ -101,7 +101,7 @@ public class ProcessPanelWorker implements Runnable
             e.printStackTrace();
             return false;
         }
-
+	
         IXMLParser parser = new XMLParser();
         IXMLElement spec;
         try
@@ -211,7 +211,7 @@ public class ProcessPanelWorker implements Runnable
                     ef_list.add(new ExecutableClass(ef_name, args));
                 }
 
-                if (ef_list.isEmpty())
+                if(ef_list.isEmpty())
                 {
                     Debug.trace("Nothing to do for job '" + job_name + "'");
                 }
@@ -221,19 +221,17 @@ public class ProcessPanelWorker implements Runnable
                 }
             }
         }
-
+        
         buttonConfigs.put(Boolean.FALSE, new ArrayList<ButtonConfig>());
         buttonConfigs.put(Boolean.TRUE, new ArrayList<ButtonConfig>());
-
-        for (IXMLElement ef : spec.getChildrenNamed("onFail"))
-        {
+        
+        for (IXMLElement ef : spec.getChildrenNamed("onFail")) {
             String conditionid = ef.hasAttribute("condition") ? ef.getAttribute("condition") : ef.hasAttribute("conditionid") ? ef.getAttribute("conditionid") : null;
             boolean unlockPrev = ef.hasAttribute("previous") ? Boolean.parseBoolean(ef.getAttribute("previous")) : false;
             boolean unlockNext = ef.hasAttribute("next") ? Boolean.parseBoolean(ef.getAttribute("next")) : false;
             buttonConfigs.get(Boolean.FALSE).add(new ButtonConfig(conditionid, unlockPrev, unlockNext));
         }
-        for (IXMLElement ef : spec.getChildrenNamed("onSuccess"))
-        {
+        for (IXMLElement ef : spec.getChildrenNamed("onSuccess")) {
             String conditionid = ef.hasAttribute("condition") ? ef.getAttribute("condition") : ef.hasAttribute("conditionid") ? ef.getAttribute("conditionid") : null;
             boolean unlockPrev = ef.hasAttribute("previous") ? Boolean.parseBoolean(ef.getAttribute("previous")) : false;
             buttonConfigs.get(Boolean.TRUE).add(new ButtonConfig(conditionid, unlockPrev, true));
@@ -321,7 +319,7 @@ public class ProcessPanelWorker implements Runnable
 
         boolean unlockNext = true;
         boolean unlockPrev = false;
-
+        
         // get the ButtonConfigs matching the this.result
         for (ButtonConfig bc : buttonConfigs.get(Boolean.valueOf(this.result)))
         {
@@ -337,12 +335,12 @@ public class ProcessPanelWorker implements Runnable
                     continue;
                 }
             }
-
+            
             unlockNext = bc.isUnlockNext();
             unlockPrev = bc.isUnlockPrev();
             break;
         }
-
+        
         this.handler.finishProcessing(unlockPrev, unlockNext);
         if (logfile != null)
         {
@@ -641,12 +639,12 @@ public class ProcessPanelWorker implements Runnable
 
                 if (m.getReturnType().getName().equals("boolean"))
                 {
-                    result = ((Boolean) m.invoke(o, new Object[]{myHandler, params}))
+                    result = ((Boolean) m.invoke(o, new Object[] { myHandler, params}))
                             .booleanValue();
                 }
                 else
                 {
-                    m.invoke(o, new Object[]{myHandler, params});
+                    m.invoke(o, new Object[] { myHandler, params});
                     result = true;
                 }
             }
@@ -755,12 +753,11 @@ public class ProcessPanelWorker implements Runnable
 
 }
 
-class ButtonConfig
-{
+class  ButtonConfig {
     private final String conditionid;
     private final boolean unlockPrev;
     private final boolean unlockNext;
-
+    
     /**
      * @param conditionid
      * @param unlockPrev
@@ -780,7 +777,7 @@ class ButtonConfig
     {
         return unlockPrev;
     }
-
+    
     /**
      * @return the unlockNext
      */
@@ -789,7 +786,7 @@ class ButtonConfig
         return unlockNext;
     }
 
-
+    
     /**
      * @return the conditionid
      */

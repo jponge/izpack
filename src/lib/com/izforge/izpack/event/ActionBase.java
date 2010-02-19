@@ -79,7 +79,7 @@ public class ActionBase implements Serializable
     public static final String LOGFILE = "logfile";
 
     public static final String BUILDFILE = "buildfile";
-
+    
     public static final String BUILDRESOURCE = "buildresource";
 
     public static final String PROPERTYFILE = "propertyfile";

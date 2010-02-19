@@ -21,9 +21,9 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.installer.*;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 /**
  * Functions to support automated usage of the InstallPanel
@@ -74,9 +74,8 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
                 // ignore it, we're waiting for the unpacker to finish...
             }
         }
-        if (!unpacker.getResult())
-        {
-            throw new InstallerException("Unpack failed (xml line " + panelRoot.getLineNr() + ")");
+        if(!unpacker.getResult()) {
+            throw new InstallerException("Unpack failed (xml line "+ panelRoot.getLineNr() + ")");
         }
     }
 

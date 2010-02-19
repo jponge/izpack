@@ -58,11 +58,11 @@ abstract public class PanelAutomationHelper implements AbstractUIHandler
     {
         System.err.println("[ ERROR: " + message + " ]");
     }
-
+    
     /*
-    * @see com.izforge.izpack.util.AbstractUIHandler#emitErrorAndBlockNext(java.lang.String,
-    * java.lang.String)
-    */
+     * @see com.izforge.izpack.util.AbstractUIHandler#emitErrorAndBlockNext(java.lang.String,
+     * java.lang.String)
+     */
     public void emitErrorAndBlockNext(String title, String message)
     {
         emitError(title, message);
