@@ -10,7 +10,8 @@ import java.io.InputStreamReader;
  * Time: 11:37:06 PM
  * To change this template use File | Settings | File Templates.
  */
-class StdOut extends Thread {
+class StdOut extends Thread
+{
 
     private InputStreamReader output;
 
@@ -20,7 +21,8 @@ class StdOut extends Thread {
 
     private StringBuffer data;
 
-    public StdOut(Process p, ConsoleTextArea cta) {
+    public StdOut(Process p, ConsoleTextArea cta)
+    {
         setDaemon(true);
         output = new InputStreamReader(p.getInputStream());
         this.cta = cta;
@@ -28,19 +30,24 @@ class StdOut extends Thread {
         data = new StringBuffer();
     }
 
-    public void run() {
-        try {
+    public void run()
+    {
+        try
+        {
             /*
              * Loop as long as there is output from the process to be displayed or as long as the
              * process is still running even if there is presently no output.
              */
-            while (output.ready() || processRunning) {
+            while (output.ready() || processRunning)
+            {
 
                 // If there is output get it and display it.
-                if (output.ready()) {
+                if (output.ready())
+                {
                     char[] array = new char[255];
                     int num = output.read(array);
-                    if (num != -1) {
+                    if (num != -1)
+                    {
                         String s = new String(array, 0, num);
                         data.append(s);
                         SwingUtilities.invokeAndWait(new ConsoleWrite(cta, s));
@@ -48,17 +55,20 @@ class StdOut extends Thread {
                 }
             }
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             System.err.println("Problem writing to standard output.");
             System.err.println(e);
         }
     }
 
-    public void done() {
+    public void done()
+    {
         processRunning = false;
     }
 
-    public String getData() {
+    public String getData()
+    {
         return data.toString();
     }
 }

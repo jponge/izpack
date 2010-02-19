@@ -9,7 +9,8 @@ import java.io.*;
  * Time: 11:37:06 PM
  * To change this template use File | Settings | File Templates.
  */
-class StdIn extends Thread {
+class StdIn extends Thread
+{
 
     private BufferedReader kb;
 
@@ -17,7 +18,8 @@ class StdIn extends Thread {
 
     private PrintWriter op;
 
-    public StdIn(Process p, ConsoleTextArea cta) {
+    public StdIn(Process p, ConsoleTextArea cta)
+    {
         setDaemon(true);
         InputStreamReader ir = new InputStreamReader(cta.getIn());
         kb = new BufferedReader(ir);
@@ -27,21 +29,27 @@ class StdIn extends Thread {
         processRunning = true;
     }
 
-    public void run() {
-        try {
-            while (kb.ready() || processRunning) {
-                if (kb.ready()) {
+    public void run()
+    {
+        try
+        {
+            while (kb.ready() || processRunning)
+            {
+                if (kb.ready())
+                {
                     op.println(kb.readLine());
                 }
             }
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             System.err.println("Problem reading standard input.");
             System.err.println(e);
         }
     }
 
-    public void done() {
+    public void done()
+    {
         processRunning = false;
     }
 }

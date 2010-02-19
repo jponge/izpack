@@ -8,6 +8,8 @@ import javax.swing.text.Segment;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.*;
 import java.util.Vector;
 
@@ -18,16 +20,19 @@ import java.util.Vector;
  * Time: 11:37:06 PM
  * To change this template use File | Settings | File Templates.
  */
-public final class Console {
+public final class Console
+{
 
     public static final int INITIAL_WIDTH = 800;
 
     public static final int INITIAL_HEIGHT = 600;
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         Runtime rt = Runtime.getRuntime();
         Process p = null;
-        try {
+        try
+        {
 
             /*
              * Start a new process in which to execute the commands in cmd, using the environment in
@@ -37,7 +42,8 @@ public final class Console {
             new Console(p);
             System.exit(p.exitValue());
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             /*
              * Couldn't even get the command to start. Most likely it couldn't be found because of a
              * typo.
@@ -51,23 +57,32 @@ public final class Console {
 
     private StdOut se;
 
-    public String getOutputData() {
-        if (so != null) {
+    public String getOutputData()
+    {
+        if (so != null)
+        {
             return so.getData();
-        } else {
+        }
+        else
+        {
             return "";
         }
     }
 
-    public String getErrorData() {
-        if (se != null) {
+    public String getErrorData()
+    {
+        if (se != null)
+        {
             return se.getData();
-        } else {
+        }
+        else
+        {
             return "";
         }
     }
 
-    public Console(Process p) {
+    public Console(final Process p)
+    {
         JFrame frame = new JFrame();
         frame.setTitle("Console");
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -78,6 +93,38 @@ public final class Console {
         scroll.setPreferredSize(new Dimension(INITIAL_WIDTH, INITIAL_HEIGHT));
         frame.getContentPane().add(scroll);
         frame.pack();
+        frame.addWindowListener(new WindowListener()
+        {
+
+            public void windowActivated(WindowEvent e)
+            {
+            }
+
+            public void windowClosed(WindowEvent e)
+            {
+            }
+
+            public void windowClosing(WindowEvent e)
+            {
+                p.destroy();
+            }
+
+            public void windowDeactivated(WindowEvent e)
+            {
+            }
+
+            public void windowDeiconified(WindowEvent e)
+            {
+            }
+
+            public void windowIconified(WindowEvent e)
+            {
+            }
+
+            public void windowOpened(WindowEvent e)
+            {
+            }
+        });
 
         // From here down your shell should be pretty much
         // as it is written here!
@@ -93,11 +140,13 @@ public final class Console {
         si.start();
 
         // Wait for the process p to complete.
-        try {
+        try
+        {
             frame.setVisible(true);
             p.waitFor();
         }
-        catch (InterruptedException e) {
+        catch (InterruptedException e)
+        {
             /*
              * Something bad happened while the command was executing.
              */
@@ -109,7 +158,8 @@ public final class Console {
          * Now signal the StdOut, StdErr and StdIn threads that the process is done, and wait for
          * them to complete.
          */
-        try {
+        try
+        {
             so.done();
             se.done();
             si.done();
@@ -117,7 +167,8 @@ public final class Console {
             se.join();
             si.join();
         }
-        catch (InterruptedException e) {
+        catch (InterruptedException e)
+        {
             // Something bad happend to one of the Std threads.
             System.out.println("Error in StdOut, StdErr or StdIn.");
             System.out.println(e);
@@ -126,7 +177,9 @@ public final class Console {
     }
 }
 
-class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener {
+
+class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
+{
 
     /**
      *
@@ -149,12 +202,14 @@ class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
 
     private int outputMark = 0;
 
-    public void select(int start, int end) {
+    public void select(int start, int end)
+    {
         requestFocus();
         super.select(start, end);
     }
 
-    public ConsoleTextArea() {
+    public ConsoleTextArea()
+    {
         super();
         history = new java.util.Vector<String>();
         console1 = new ConsoleWriter(this);
@@ -164,10 +219,12 @@ class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
         PipedOutputStream outPipe = new PipedOutputStream();
         inPipe = new PrintWriter(outPipe);
         in = new PipedInputStream();
-        try {
+        try
+        {
             outPipe.connect(in);
         }
-        catch (IOException exc) {
+        catch (IOException exc)
+        {
             exc.printStackTrace();
         }
         getDocument().addDocumentListener(this);
@@ -176,25 +233,31 @@ class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
         setFont(new Font("Monospaced", 0, 12));
     }
 
-    void returnPressed() {
+    void returnPressed()
+    {
         Document doc = getDocument();
         int len = doc.getLength();
         Segment segment = new Segment();
-        try {
-            synchronized (doc) {
+        try
+        {
+            synchronized (doc)
+            {
                 doc.getText(outputMark, len - outputMark, segment);
             }
         }
-        catch (javax.swing.text.BadLocationException ignored) {
+        catch (javax.swing.text.BadLocationException ignored)
+        {
             ignored.printStackTrace();
         }
-        if (segment.count > 0) {
+        if (segment.count > 0)
+        {
             history.addElement(segment.toString());
         }
         historyIndex = history.size();
         inPipe.write(segment.array, segment.offset, segment.count);
         append("\n");
-        synchronized (doc) {
+        synchronized (doc)
+        {
             outputMark = doc.getLength();
         }
         inPipe.write("\n");
@@ -202,68 +265,99 @@ class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
         console1.flush();
     }
 
-    public void eval(String str) {
+    public void eval(String str)
+    {
         inPipe.write(str);
         inPipe.write("\n");
         inPipe.flush();
         console1.flush();
     }
 
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e)
+    {
         int code = e.getKeyCode();
-        if (code == KeyEvent.VK_BACK_SPACE || code == KeyEvent.VK_LEFT) {
-            if (outputMark == getCaretPosition()) {
+        if (code == KeyEvent.VK_BACK_SPACE || code == KeyEvent.VK_LEFT)
+        {
+            if (outputMark == getCaretPosition())
+            {
                 e.consume();
             }
-        } else if (code == KeyEvent.VK_HOME) {
+        }
+        else if (code == KeyEvent.VK_HOME)
+        {
             int caretPos = getCaretPosition();
-            if (caretPos == outputMark) {
+            if (caretPos == outputMark)
+            {
                 e.consume();
-            } else if (caretPos > outputMark) {
-                if (!e.isControlDown()) {
-                    if (e.isShiftDown()) {
+            }
+            else if (caretPos > outputMark)
+            {
+                if (!e.isControlDown())
+                {
+                    if (e.isShiftDown())
+                    {
                         moveCaretPosition(outputMark);
-                    } else {
+                    }
+                    else
+                    {
                         setCaretPosition(outputMark);
                     }
                     e.consume();
                 }
             }
-        } else if (code == KeyEvent.VK_ENTER) {
+        }
+        else if (code == KeyEvent.VK_ENTER)
+        {
             returnPressed();
             e.consume();
-        } else if (code == KeyEvent.VK_UP) {
+        }
+        else if (code == KeyEvent.VK_UP)
+        {
             historyIndex--;
-            if (historyIndex >= 0) {
-                if (historyIndex >= history.size()) {
+            if (historyIndex >= 0)
+            {
+                if (historyIndex >= history.size())
+                {
                     historyIndex = history.size() - 1;
                 }
-                if (historyIndex >= 0) {
+                if (historyIndex >= 0)
+                {
                     String str = history.elementAt(historyIndex);
                     int len = getDocument().getLength();
                     replaceRange(str, outputMark, len);
                     int caretPos = outputMark + str.length();
                     select(caretPos, caretPos);
-                } else {
+                }
+                else
+                {
                     historyIndex++;
                 }
-            } else {
+            }
+            else
+            {
                 historyIndex++;
             }
             e.consume();
-        } else if (code == KeyEvent.VK_DOWN) {
+        }
+        else if (code == KeyEvent.VK_DOWN)
+        {
             int caretPos = outputMark;
-            if (history.size() > 0) {
+            if (history.size() > 0)
+            {
                 historyIndex++;
-                if (historyIndex < 0) {
+                if (historyIndex < 0)
+                {
                     historyIndex = 0;
                 }
                 int len = getDocument().getLength();
-                if (historyIndex < history.size()) {
+                if (historyIndex < history.size())
+                {
                     String str = history.elementAt(historyIndex);
                     replaceRange(str, outputMark, len);
                     caretPos = outputMark + str.length();
-                } else {
+                }
+                else
+                {
                     historyIndex = history.size();
                     replaceRange("", outputMark, len);
                 }
@@ -273,68 +367,88 @@ class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
         }
     }
 
-    public void keyTyped(KeyEvent e) {
+    public void keyTyped(KeyEvent e)
+    {
         int keyChar = e.getKeyChar();
-        if (keyChar == 0x8 /* KeyEvent.VK_BACK_SPACE */) {
-            if (outputMark == getCaretPosition()) {
+        if (keyChar == 0x8 /* KeyEvent.VK_BACK_SPACE */)
+        {
+            if (outputMark == getCaretPosition())
+            {
                 e.consume();
             }
-        } else if (getCaretPosition() < outputMark) {
+        }
+        else if (getCaretPosition() < outputMark)
+        {
             setCaretPosition(outputMark);
         }
     }
 
-    public void keyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent e)
+    {
     }
 
-    public synchronized void write(String str) {
+    public synchronized void write(String str)
+    {
         insert(str, outputMark);
         int len = str.length();
         outputMark += len;
         select(outputMark, outputMark);
     }
 
-    public synchronized void insertUpdate(DocumentEvent e) {
+    public synchronized void insertUpdate(DocumentEvent e)
+    {
         int len = e.getLength();
         int off = e.getOffset();
-        if (outputMark > off) {
+        if (outputMark > off)
+        {
             outputMark += len;
         }
     }
 
-    public synchronized void removeUpdate(DocumentEvent e) {
+    public synchronized void removeUpdate(DocumentEvent e)
+    {
         int len = e.getLength();
         int off = e.getOffset();
-        if (outputMark > off) {
-            if (outputMark >= off + len) {
+        if (outputMark > off)
+        {
+            if (outputMark >= off + len)
+            {
                 outputMark -= len;
-            } else {
+            }
+            else
+            {
                 outputMark = off;
             }
         }
     }
 
-    public void postUpdateUI() {
+    public void postUpdateUI()
+    {
         // this attempts to cleanup the damage done by updateComponentTreeUI
         requestFocus();
         setCaret(getCaret());
-        synchronized (this) {
+        synchronized (this)
+        {
             select(outputMark, outputMark);
         }
     }
 
-    public void changedUpdate(DocumentEvent e) {
+    public void changedUpdate(DocumentEvent e)
+    {
     }
 
-    public InputStream getIn() {
+    public InputStream getIn()
+    {
         return in;
     }
 
-    public PrintStream getOut() {
+    public PrintStream getOut()
+    {
         return out;
     }
 
-    public PrintStream getErr() {
+    public PrintStream getErr()
+    {
         return err;
     }
 
