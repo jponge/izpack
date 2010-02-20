@@ -1171,7 +1171,7 @@ public class CompilerConfig extends Thread
             tmp.mkdirs();
             tmp.deleteOnExit();
             pack.addFile(baseDir, tmp, targetdir + "/" + dirName, osList,
-                    blockable, override, additionals, condition);
+                    override, blockable, additionals, condition);
         }
         fin.close();
     }
