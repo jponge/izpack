@@ -1155,12 +1155,12 @@ public class CompilerConfig extends Thread
                 out.close();
 
                 pack.addFile(baseDir, temp, targetdir + "/" + zentry.getName(), osList, override,
-                             blockable, additionals, condition);
+                        blockable, additionals, condition);
             }
             catch (IOException e)
             {
                 throw new IOException("Couldn't create temporary file for " + zentry.getName()
-                         + " in archive " + archive + " (" + e.getMessage() + ")");
+                        + " in archive " + archive + " (" + e.getMessage() + ")");
             }
 
         }
@@ -1171,7 +1171,7 @@ public class CompilerConfig extends Thread
             tmp.mkdirs();
             tmp.deleteOnExit();
             pack.addFile(baseDir, tmp, targetdir + "/" + dirName, osList,
-                         blockable, override, additionals, condition);
+                    blockable, override, additionals, condition);
         }
         fin.close();
     }
