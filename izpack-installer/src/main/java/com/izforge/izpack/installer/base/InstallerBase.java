@@ -23,7 +23,6 @@ package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
-import com.izforge.izpack.util.Debug;
 
 /**
  * Common utility functions for the GUI and text installers. (Do not import swing/awt classes to
@@ -32,8 +31,8 @@ import com.izforge.izpack.util.Debug;
  * @author Jonathan Halliday
  * @author Julien Ponge
  */
-public abstract class InstallerBase implements InstallerRequirementDisplay {
-
+public abstract class InstallerBase implements InstallerRequirementDisplay
+{
 
     protected ResourceManager resourceManager;
 
@@ -42,11 +41,12 @@ public abstract class InstallerBase implements InstallerRequirementDisplay {
      *
      * @param resourceManager
      */
-    protected InstallerBase(ResourceManager resourceManager) {
+    protected InstallerBase(ResourceManager resourceManager)
+    {
         this.resourceManager = resourceManager;
     }
 
-    public void showMissingRequirementMessage(String message) {
-        Debug.log(message);
-    }
+    public abstract void showMissingRequirementMessage(String message);
+
+
 }

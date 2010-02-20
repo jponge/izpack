@@ -16,16 +16,20 @@ import java.io.File;
 /**
  * Checker for java version, JDK and running install
  */
-public class ConditionCheck {
+public class ConditionCheck
+{
     private GUIInstallData installdata;
     private ResourceManager resourceManager;
 
-    public ConditionCheck(GUIInstallData installdata, ResourceManager resourceManager) {
+
+    public ConditionCheck(GUIInstallData installdata, ResourceManager resourceManager)
+    {
         this.installdata = installdata;
         this.resourceManager = resourceManager;
     }
 
-    public void check() throws Exception {
+    public void check() throws Exception
+    {
         checkJavaVersion();
         checkJDKAvailable();
         // Check for already running instance
@@ -40,14 +44,16 @@ public class ConditionCheck {
      *
      * @throws Exception Description of the Exception
      */
-    public void checkLockFile() throws Exception {
+    public void checkLockFile() throws Exception
+    {
         String tempDir = System.getProperty("java.io.tmpdir");
         String appName = installdata.getInfo().getAppName();
         String fileName = "iz-" + appName + ".tmp";
         Debug.trace("Making temp file: " + fileName);
         Debug.trace("In temp directory: " + tempDir);
         File file = new File(tempDir, fileName);
-        if (file.exists()) {
+        if (file.exists())
+        {
             // Ask user if they want to proceed.
             Debug.trace("Lock File Exists, asking user for permission to proceed.");
             StringBuffer msg = new StringBuffer();
@@ -66,27 +72,37 @@ public class ConditionCheck {
                     JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, optionValues,
                     optionValues[1]);
             Debug.trace("Selected option: " + selectedOption);
-            if (selectedOption == 0) {
+            if (selectedOption == 0)
+            {
                 // Take control of the file so it gets deleted after this installer instance exits.
                 Debug.trace("Setting temp file to delete on exit");
                 file.deleteOnExit();
-            } else {
+            }
+            else
+            {
                 // Leave the file as it is.
                 Debug.trace("Leaving temp file alone and exiting");
                 System.exit(1);
             }
-        } else {
-            try {
+        }
+        else
+        {
+            try
+            {
                 // Create the new lock file
-                if (file.createNewFile()) {
+                if (file.createNewFile())
+                {
                     Debug.trace("Temp file created");
                     file.deleteOnExit();
-                } else {
+                }
+                else
+                {
                     Debug.trace("Temp file could not be created");
                     Debug.trace("*** Multiple instances of installer will be allowed ***");
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Debug.trace("Temp file could not be created: " + e);
                 Debug.trace("*** Multiple instances of installer will be allowed ***");
             }
@@ -98,10 +114,12 @@ public class ConditionCheck {
      *
      * @throws Exception Description of the Exception
      */
-    private void checkJavaVersion() throws Exception {
+    private void checkJavaVersion() throws Exception
+    {
         String version = System.getProperty("java.version");
         String required = installdata.getInfo().getJavaVersion();
-        if (version.compareTo(required) < 0) {
+        if (version.compareTo(required) < 0)
+        {
             StringBuffer msg = new StringBuffer();
             msg.append("The application that you are trying to install requires a ");
             msg.append(required);
@@ -120,15 +138,18 @@ public class ConditionCheck {
     /**
      * Checks if a JDK is available.
      */
-    private void checkJDKAvailable() {
-        if (!installdata.getInfo().isJdkRequired()) {
+    private void checkJDKAvailable()
+    {
+        if (!installdata.getInfo().isJdkRequired())
+        {
             return;
         }
 
         FileExecutor exec = new FileExecutor();
         String[] output = new String[2];
         String[] params = {"javac", "-help"};
-        if (exec.executeCommand(params, output) != 0) {
+        if (exec.executeCommand(params, output) != 0)
+        {
             String[] message = {
                     "It looks like your system does not have a Java Development Kit (JDK) available.",
                     "The software that you plan to install requires a JDK for both its installation and execution.",
@@ -136,25 +157,32 @@ public class ConditionCheck {
                     "Do you still want to proceed with the installation process?"
             };
             int status = JOptionPane.showConfirmDialog(null, message, "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            if (status == JOptionPane.NO_OPTION) {
+            if (status == JOptionPane.NO_OPTION)
+            {
                 System.exit(1);
             }
         }
     }
 
 
-    public boolean checkInstallerRequirements(InstallerRequirementDisplay display) throws Exception {
+    public boolean checkInstallerRequirements(InstallerRequirementDisplay display) throws Exception
+    {
         boolean result = true;
-        for (InstallerRequirement installerrequirement : installdata.getInstallerrequirements()) {
+
+        for (InstallerRequirement installerrequirement : installdata.getInstallerrequirements())
+        {
             String conditionid = installerrequirement.getCondition();
             Condition condition = RulesEngineImpl.getCondition(conditionid);
-            if (condition == null) {
+            if (condition == null)
+            {
                 Debug.log(conditionid + " not a valid condition.");
                 throw new Exception(conditionid + "could not be found as a defined condition");
             }
-            if (!condition.isTrue()) {
+            if (!condition.isTrue())
+            {
                 String message = installerrequirement.getMessage();
-                if ((message != null) && (message.length() > 0)) {
+                if ((message != null) && (message.length() > 0))
+                {
                     String localizedMessage = installdata.getLangpack().getString(message);
                     display.showMissingRequirementMessage(localizedMessage);
                 }
@@ -165,7 +193,8 @@ public class ConditionCheck {
         return result;
     }
 
-    public boolean checkLangPackAvaible() throws Exception {
+    public boolean checkLangPackAvaible() throws Exception
+    {
         java.util.List<String> availableLangPacks = resourceManager.getAvailableLangPacks();
         return availableLangPacks.size() != 0;
     }
