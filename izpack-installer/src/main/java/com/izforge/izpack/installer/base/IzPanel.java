@@ -1075,7 +1075,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             return this.helpWindow;
         }
 
-        this.helpWindow = new HelpWindow(parent, getString("installer.prev"));
+        this.helpWindow = new HelpWindow(parent, getString("installer.help.close"));
         return this.helpWindow;
     }
 
