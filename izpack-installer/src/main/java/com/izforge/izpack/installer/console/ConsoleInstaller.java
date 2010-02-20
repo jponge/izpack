@@ -35,14 +35,13 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
-
+import com.izforge.izpack.rules.RulesEngine;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Properties;
-
 /**
  * Runs the console installer
  *
@@ -63,6 +62,7 @@ public class ConsoleInstaller extends InstallerBase
     private VariableSubstitutor variableSubstitutor;
 
     public ConsoleInstaller(AutomatedInstallData installdata, RulesEngine rules, ResourceManager resourceManager, ConditionCheck checkCondition) throws Exception
+
     {
         super(resourceManager);
 //        super(resourceManager);
@@ -84,6 +84,8 @@ public class ConsoleInstaller extends InstallerBase
         {
             variableSubstitutor = new VariableSubstitutorImpl(this.installdata.getVariables());
         }
+
+		  this.rules = this.installdata.getRules();
     }
 
     @Override
@@ -152,7 +154,8 @@ public class ConsoleInstaller extends InstallerBase
                     }
                 }
 
-                if (consoleHelperInstance != null)
+					 //Check to see if we can show the panel based on its conditions.
+                if ( (consoleHelperInstance != null) && (canShow(p)) )
                 {
                     try
                     {
@@ -322,6 +325,34 @@ public class ConsoleInstaller extends InstallerBase
             checkedReboot();
         }
     }
+
+
+    /**
+     * Method checks whether conditions are met to show the given panel.
+     *
+     * @param p the panel to check
+     *
+     * @return true or false
+     */
+    public boolean canShow(Panel p) {
+        
+		  String panelid = p.getPanelid();
+        
+		  if (p.hasCondition()) {
+            return rules.isConditionTrue(p.getCondition());
+        } else {
+            if (!rules.canShowPanel(panelid, this.installdata.variables)) {
+                // skip panel, if conditions for panel aren't met
+                Debug.trace("Skip panel with panelid=" + panelid);
+                // panel should be skipped, so we have to decrement panelnumber for skipping
+                return false;
+            } else {
+                Debug.trace("Showing panel with panelid=" + panelid);
+                return true;
+            }
+        }
+    }
+
 
     /**
      * Validate a panel.
