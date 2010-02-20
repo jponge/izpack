@@ -271,7 +271,9 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
             case TYPE_JAVA:
                 buffer = new StringBuffer(str);
                 len = str.length();
-                for (i = 0; i < len; i++) {
+                boolean leading = true;
+                for (i = 0; i < len; i++)
+                {
                     // Check for control characters
                     char c = buffer.charAt(i);
                     if (type == SubstitutionType.TYPE_JAVA_PROPERTIES) {
@@ -290,10 +292,27 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
                         }
 
                         // Check for special characters
-                        if (c == '\\' || c == '"' || c == '\'' || c == ' ') {
+                        // According to the spec:
+                        // 'For the element, leading space characters, but not embedded or trailing space characters, 
+                        // are written with a preceding \  character'
+                        else if (c == ' ')
+                        {
+                            if (leading)
+                            {
+                                buffer.insert(i, '\\');
+                                len++;
+                                i++;
+                            }
+                        }
+                        else if (c == '\\' || c == '"' || c == '\'')
+                            leading = false;
                             buffer.insert(i, '\\');
                             len++;
                             i++;
+                        }
+                        else
+                        {
+                            leading = false;
                         }
                     } else {
                         if (c == '\\') {
