@@ -31,7 +31,8 @@ import java.util.Properties;
 /**
  * Implementation of variable substitutor
  */
-public class VariableSubstitutorImpl implements VariableSubstitutor {
+public class VariableSubstitutorImpl implements VariableSubstitutor
+{
 
     private static final long serialVersionUID = 3907213762447685687L;
 
@@ -56,20 +57,25 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
      *
      * @param variables the map with variable value mappings
      */
-    public VariableSubstitutorImpl(Properties variables) {
+    public VariableSubstitutorImpl(Properties variables)
+    {
         this.variables = variables;
     }
 
-    public void setBracesRequired(boolean braces) {
+    public void setBracesRequired(boolean braces)
+    {
         bracesRequired = braces;
     }
 
-    public String substitute(String str) throws IllegalArgumentException {
+    public String substitute(String str) throws IllegalArgumentException
+    {
         return substitute(str, SubstitutionType.TYPE_PLAIN);
     }
 
-    public String substitute(String str, SubstitutionType type) throws IllegalArgumentException {
-        if (str == null) {
+    public String substitute(String str, SubstitutionType type) throws IllegalArgumentException
+    {
+        if (str == null)
+        {
             return null;
         }
 
@@ -78,10 +84,12 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
         StringWriter writer = new StringWriter();
 
         // Substitute any variables
-        try {
+        try
+        {
             substitute(reader, writer, type);
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             throw new Error("Unexpected I/O exception when reading/writing memory "
                     + "buffer; nested exception is: " + e);
         }
@@ -91,10 +99,13 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
     }
 
     public int substitute(InputStream in, OutputStream out, SubstitutionType type, String encoding)
-            throws IllegalArgumentException, IOException {
+            throws IllegalArgumentException, IOException
+    {
         // Check if file type specific default encoding known
-        if (encoding == null) {
-            switch (type) {
+        if (encoding == null)
+        {
+            switch (type)
+            {
                 case TYPE_JAVA_PROPERTIES:
                     encoding = "ISO-8859-1";
                     break;
@@ -120,11 +131,13 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
     }
 
     public String substitute(InputStream in, SubstitutionType type)
-            throws IllegalArgumentException, IOException {
+            throws IllegalArgumentException, IOException
+    {
         // Check if file type specific default encoding known
         String encoding = PLAIN;
         {
-            switch (type) {
+            switch (type)
+            {
                 case TYPE_JAVA_PROPERTIES:
                     encoding = "ISO-8859-1";
 
@@ -154,12 +167,14 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
 
 
     public int substitute(Reader reader, Writer writer, SubstitutionType type)
-            throws IllegalArgumentException, IOException {
+            throws IllegalArgumentException, IOException
+    {
 
         // determine character which starts (and ends) a variable
         char variable_start = '$';
         char variable_end = '\0';
-        switch (type) {
+        switch (type)
+        {
             case TYPE_SHELL:
                 variable_start = '%';
                 break;
@@ -177,26 +192,34 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
         // Copy data and substitute variables
         int c = reader.read();
 
-        while (true) {
+        while (true)
+        {
             // Find the next potential variable reference or EOF
-            while (c != -1 && c != variable_start) {
+            while (c != -1 && c != variable_start)
+            {
                 writer.write(c);
                 c = reader.read();
             }
-            if (c == -1) {
+            if (c == -1)
+            {
                 return subs;
             }
 
             // Check if braces used or start char escaped
             boolean braces = false;
             c = reader.read();
-            if (c == '{') {
+            if (c == '{')
+            {
                 braces = true;
                 c = reader.read();
-            } else if (bracesRequired) {
+            }
+            else if (bracesRequired)
+            {
                 writer.write(variable_start);
                 continue;
-            } else if (c == -1) {
+            }
+            else if (c == -1)
+            {
                 writer.write(variable_start);
                 return subs;
             }
@@ -205,7 +228,8 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
             StringBuffer nameBuffer = new StringBuffer();
             while (c != -1 && (braces && c != '}') || (c >= 'a' && c <= 'z')
                     || (c >= 'A' && c <= 'Z') || (braces && ((c == '[') || (c == ']')))
-                    || (((c >= '0' && c <= '9') || c == '_' || c == '.' || c == '-') && nameBuffer.length() > 0)) {
+                    || (((c >= '0' && c <= '9') || c == '_' || c == '.' || c == '-') && nameBuffer.length() > 0))
+            {
                 nameBuffer.append((char) c);
                 c = reader.read();
             }
@@ -216,14 +240,20 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
 
             if (((!braces || c == '}') &&
                     (!braces || variable_end == '\0' || variable_end == c)
-            ) && name.length() > 0) {
+            ) && name.length() > 0)
+            {
                 // check for environment variables
                 if (braces && name.startsWith("ENV[")
-                        && (name.lastIndexOf(']') == name.length() - 1)) {
+                        && (name.lastIndexOf(']') == name.length() - 1))
+                {
                     varvalue = IoHelper.getenv(name.substring(4, name.length() - 1));
                     if (varvalue == null)
+                    {
                         varvalue = "";
-                } else {
+                    }
+                }
+                else
+                {
                     varvalue = variables.getProperty(name);
                 }
 
@@ -231,16 +261,20 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
             }
 
             // Substitute the variable...
-            if (varvalue != null) {
+            if (varvalue != null)
+            {
                 writer.write(escapeSpecialChars(varvalue, type));
-                if (braces || variable_end != '\0') {
+                if (braces || variable_end != '\0')
+                {
                     c = reader.read();
                 }
             }
             // ...or ignore it
-            else {
+            else
+            {
                 writer.write(variable_start);
-                if (braces) {
+                if (braces)
+                {
                     writer.write('{');
                 }
                 writer.write(name);
@@ -255,11 +289,13 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
      * @param type the target file type (one of TYPE_xxx)
      * @return the string with the special characters properly escaped
      */
-    protected String escapeSpecialChars(String str, SubstitutionType type) {
+    protected String escapeSpecialChars(String str, SubstitutionType type)
+    {
         StringBuffer buffer;
         int len;
         int i;
-        switch (type) {
+        switch (type)
+        {
             case TYPE_PLAIN:
             case TYPE_AT:
             case TYPE_ANT:
@@ -276,14 +312,21 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
                 {
                     // Check for control characters
                     char c = buffer.charAt(i);
-                    if (type == SubstitutionType.TYPE_JAVA_PROPERTIES) {
-                        if (c == '\t' || c == '\n' || c == '\r') {
+                    if (type.equals(SubstitutionType.TYPE_JAVA_PROPERTIES))
+                    {
+                        if (c == '\t' || c == '\n' || c == '\r')
+                        {
                             char tag;
-                            if (c == '\t') {
+                            if (c == '\t')
+                            {
                                 tag = 't';
-                            } else if (c == '\n') {
+                            }
+                            else if (c == '\n')
+                            {
                                 tag = 'n';
-                            } else {
+                            }
+                            else
+                            {
                                 tag = 'r';
                             }
                             buffer.replace(i, i + 1, "\\" + tag);
@@ -293,8 +336,8 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
 
                         // Check for special characters
                         // According to the spec:
-                        // 'For the element, leading space characters, but not embedded or trailing space characters, 
-                        // are written with a preceding \  character'
+                        // 'For the element, leading space characters, but not embedded or trailing space characters,
+                        // are written with a preceding \ character'
                         else if (c == ' ')
                         {
                             if (leading)
@@ -305,6 +348,7 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
                             }
                         }
                         else if (c == '\\' || c == '"' || c == '\'')
+                        {
                             leading = false;
                             buffer.insert(i, '\\');
                             len++;
@@ -314,8 +358,11 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
                         {
                             leading = false;
                         }
-                    } else {
-                        if (c == '\\') {
+                    }
+                    else
+                    {
+                        if (c == '\\')
+                        {
                             buffer.replace(i, i + 1, "\\\\");
                             len++;
                             i++;
@@ -326,10 +373,12 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
             case TYPE_XML:
                 buffer = new StringBuffer(str);
                 len = str.length();
-                for (i = 0; i < len; i++) {
+                for (i = 0; i < len; i++)
+                {
                     String r = null;
                     char c = buffer.charAt(i);
-                    switch (c) {
+                    switch (c)
+                    {
                         case '<':
                             r = "&lt;";
                             break;
@@ -346,7 +395,8 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
                             r = "&quot;";
                             break;
                     }
-                    if (r != null) {
+                    if (r != null)
+                    {
                         buffer.replace(i, i + 1, r);
                         len = buffer.length();
                         i += r.length() - 1;
@@ -358,4 +408,3 @@ public class VariableSubstitutorImpl implements VariableSubstitutor {
         }
     }
 }
-

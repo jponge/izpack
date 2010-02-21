@@ -273,8 +273,19 @@ public class InstallerFrame extends JFrame
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); // patch 06/07/2005,
         // Fabrice Mirabile
         // Sets the frame icon
-        setIconImage(icons.getImageIcon("JFrameIcon").getImage());
-
+        try
+        {
+            ImageIcon jframeIcon = ResourceManager.getInstance().getImageIconResource("JFrameIcon");
+            if (jframeIcon == null)
+            {
+                jframeIcon = icons.getImageIcon("JFrameIcon");
+            }
+            setIconImage(jframeIcon.getImage());
+        }
+        catch (Exception ignored)
+        {
+            // ignore
+        }
         // Prepares the glass pane to block the gui interaction when needed
         JPanel glassPane = (JPanel) getGlassPane();
         glassPane.addMouseListener(new MouseAdapter()

@@ -35,7 +35,6 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
-import com.izforge.izpack.rules.RulesEngine;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -341,7 +340,7 @@ public class ConsoleInstaller extends InstallerBase
 		  if (p.hasCondition()) {
             return rules.isConditionTrue(p.getCondition());
         } else {
-            if (!rules.canShowPanel(panelid, this.installdata.variables)) {
+            if (!rules.canShowPanel(panelid, this.installdata.getVariables())) {
                 // skip panel, if conditions for panel aren't met
                 Debug.trace("Skip panel with panelid=" + panelid);
                 // panel should be skipped, so we have to decrement panelnumber for skipping

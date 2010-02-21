@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.URL;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * With this ResourceManager you are able to get resources from the jar file.
@@ -69,17 +70,16 @@ public class ResourceManager
     private String resourceBasePath = "/resources/";
 
     /**
+     * Contains current bundle name. The bundleName is taken from
+     * InstallData#installData#getVariable("resource.bundle.system.property") If there is no bundle
+     * name set, it stays null.
+     */
+    private String bundleName = null;
+
+    /**
      * The instance of this class.
      */
     private static ResourceManager instance = null;
-
-    /**
-     * Constructor. Protected because this is a singleton.
-     */
-    public ResourceManager()
-    {
-        this.locale = "eng";
-    }
 
     /**
      * Return the resource manager.
@@ -90,9 +90,22 @@ public class ResourceManager
     {
         if (ResourceManager.instance == null)
         {
-            ResourceManager.instance = new ResourceManager();
+            ResourceManager.instance = new ResourceManager(new Properties());
         }
         return ResourceManager.instance;
+    }
+
+    /**
+     * Constructor. Protected because this is a singleton.
+     */
+    public ResourceManager(Properties properties)
+    {
+        this.locale = "eng";
+        final String systemPropertyBundleName = properties.getProperty("resource.bundle.system.property");
+        if (systemPropertyBundleName != null)
+        {
+            setBundleName(System.getProperty(systemPropertyBundleName));
+        }
     }
 
     /**
@@ -128,14 +141,59 @@ public class ResourceManager
      */
     private String getLanguageResourceString(String resource)
     {
-        if (resource.charAt(0) == '/')
+//        if (resource.charAt(0) == '/')
+//        {
+//            return getAbsoluteLanguageResourceString(resource);
+//        }
+//        else
+//        {
+//            return getAbsoluteLanguageResourceString(this.getResourceBasePath() + resource);
+//        }
+//
+//        {
+        String localeSuffix = "_" + this.locale;
+        String resourcePath = getBundlePath() + resource + localeSuffix;
+        if (resourceExists(resourcePath))
         {
-            return getAbsoluteLanguageResourceString(resource);
+            return resourcePath;
         }
-        else
+
+        // if there's no language dependent resource found
+        resourcePath = getBundlePath() + resource;
+        if (resourceExists(resourcePath))
         {
-            return getAbsoluteLanguageResourceString(this.getResourceBasePath() + resource);
+            return resourcePath;
         }
+
+        resourcePath = this.resourceBasePath + resource + localeSuffix;
+        if (resourceExists(resourcePath))
+        {
+            return resourcePath;
+        }
+
+        // if there's no language dependent resource found
+        resourcePath = this.resourceBasePath + resource;
+        if (resourceExists(resourcePath))
+        {
+            return resourcePath;
+        }
+
+        throw new ResourceNotFoundException("Cannot find named Resource: '" + getBundlePath()
+                + resource + "', '" + getBundlePath() + resource + localeSuffix + "'" + ", '"
+                + this.resourceBasePath + resource + "' AND '" + this.resourceBasePath + resource
+                + localeSuffix + "'");
+
+    }
+
+    private boolean resourceExists(String resourcePath)
+    {
+        boolean result = true;
+        InputStream in = ResourceManager.class.getResourceAsStream(resourcePath);
+        if (in == null)
+        {
+            result = false;
+        }
+        return result;
     }
 
     /**
@@ -359,5 +417,25 @@ public class ResourceManager
         List<String> available = (List<String>) objIn.readObject();
         objIn.close();
         return available;
+    }
+
+    protected void setBundleName(String bundleName)
+    {
+        this.bundleName = bundleName;
+    }
+
+    protected String getBundleName()
+    {
+        return this.bundleName;
+    }
+
+    private String getBundlePath()
+    {
+        String basePath = this.resourceBasePath;
+        if (this.bundleName != null)
+        {
+            basePath += this.bundleName + "/";
+        }
+        return basePath;
     }
 }
