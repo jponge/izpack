@@ -795,6 +795,46 @@ However there is an exception for ``packsLang.xml_xyz`` files
 If multiple packsLang-files were defined, all files will be merged into a single temporary
 file. This allows ``refpack`` files to provide their own internationalization-information.
 
+You can define bundles of resources by using ``<bundle>``
+You have to set a unique id for the bundle ``id``. One bundle can be marked to be default: ``default="true"``
+
+You need to define a variable to set the name of the SystemProperty: ``resource.bundle.system.property``
+
+Here's a sample:
+
+::
+
+
+    <variables>
+      ...
+      <variable name="resource.bundle.system.property" value="BUNDLE_NAME" />
+    </variables>
+    ...
+    <resources>
+      <!-- bundle 1 -->
+      <bundle id="bundle1" default="yes">
+        <res id="Heading.image" src="path1/HeadingImage.png" />
+        <res id="installer.langsel.img" src="path1/langselImage.png" />
+      </bundle>
+      <!-- bundle 2 -->
+      <bundle id="bundle2">
+        <res id="Heading.image" src="path2/HeadingImage.png" />
+        <res id="installer.langsel.img" src="path2/langselImage.png" />
+      </bundle>
+      <!-- common resources -->
+      <res id="resource.id" src="path.to.resource" />
+      ...
+      
+Resources will be then be loaded in the following order:
+
+::
+
+    /res/<bundleName>/<resourceName>_<iso3>
+    /res/<bundleName>/<resourceName>
+    /res/<resourceName>_<iso3>
+    /res/<resourceName>
+
+
 The Panels Element ``<panels>``
 '''''''''''''''''''''''''''''''''
 
