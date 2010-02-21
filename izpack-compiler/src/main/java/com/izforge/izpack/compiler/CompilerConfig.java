@@ -1512,6 +1512,7 @@ public class CompilerConfig extends Thread
                 }
             }
 
+            if (bundleName != null && bundleName.length() > 0)
             compiler.addResource(id, url);
 
             // remembering references to all added packsLang.xml files
