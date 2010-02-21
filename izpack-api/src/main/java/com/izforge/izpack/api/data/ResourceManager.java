@@ -141,47 +141,46 @@ public class ResourceManager
      */
     private String getLanguageResourceString(String resource)
     {
-//        if (resource.charAt(0) == '/')
+        if (resource.charAt(0) == '/')
+        {
+            return getAbsoluteLanguageResourceString(resource);
+        }
+        else
+        {
+            return getAbsoluteLanguageResourceString(this.getResourceBasePath() + resource);
+        }
+
+//        String localeSuffix = "_" + this.locale;
+//        String resourcePath = getBundlePath() + resource + localeSuffix;
+//        if (resourceExists(resourcePath))
 //        {
-//            return getAbsoluteLanguageResourceString(resource);
-//        }
-//        else
-//        {
-//            return getAbsoluteLanguageResourceString(this.getResourceBasePath() + resource);
+//            return resourcePath;
 //        }
 //
+//        // if there's no language dependent resource found
+//        resourcePath = getBundlePath() + resource;
+//        if (resourceExists(resourcePath))
 //        {
-        String localeSuffix = "_" + this.locale;
-        String resourcePath = getBundlePath() + resource + localeSuffix;
-        if (resourceExists(resourcePath))
-        {
-            return resourcePath;
-        }
-
-        // if there's no language dependent resource found
-        resourcePath = getBundlePath() + resource;
-        if (resourceExists(resourcePath))
-        {
-            return resourcePath;
-        }
-
-        resourcePath = this.resourceBasePath + resource + localeSuffix;
-        if (resourceExists(resourcePath))
-        {
-            return resourcePath;
-        }
-
-        // if there's no language dependent resource found
-        resourcePath = this.resourceBasePath + resource;
-        if (resourceExists(resourcePath))
-        {
-            return resourcePath;
-        }
-
-        throw new ResourceNotFoundException("Cannot find named Resource: '" + getBundlePath()
-                + resource + "', '" + getBundlePath() + resource + localeSuffix + "'" + ", '"
-                + this.resourceBasePath + resource + "' AND '" + this.resourceBasePath + resource
-                + localeSuffix + "'");
+//            return resourcePath;
+//        }
+//
+//        resourcePath = this.resourceBasePath + resource + localeSuffix;
+//        if (resourceExists(resourcePath))
+//        {
+//            return resourcePath;
+//        }
+//
+//        // if there's no language dependent resource found
+//        resourcePath = this.resourceBasePath + resource;
+//        if (resourceExists(resourcePath))
+//        {
+//            return resourcePath;
+//        }
+//
+//        throw new ResourceNotFoundException("Cannot find named Resource: '" + getBundlePath()
+//                + resource + "', '" + getBundlePath() + resource + localeSuffix + "'" + ", '"
+//                + this.resourceBasePath + resource + "' AND '" + this.resourceBasePath + resource
+//                + localeSuffix + "'");
 
     }
 
