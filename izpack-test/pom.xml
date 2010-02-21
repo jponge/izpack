@@ -48,6 +48,11 @@
             <artifactId>testng</artifactId>
             <classifier>jdk15</classifier>
         </dependency>
+        <dependency>
+            <groupId>org.apache.maven.shared</groupId>
+            <artifactId>maven-shared-jar</artifactId>
+            <version>1.0</version>
+        </dependency>
 
     </dependencies>
 
