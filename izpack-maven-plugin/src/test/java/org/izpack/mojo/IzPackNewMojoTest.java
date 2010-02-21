@@ -22,7 +22,9 @@ public class IzPackNewMojoTest extends AbstractMojoTestCase
     @Test
     public void testExecute() throws Exception
     {
-        File testPom = new File(getBasedir(), "target/test-classes/basic-pom.xml");
+        File testPom = new File(
+                Thread.currentThread().getContextClassLoader().getResource("basic-pom.xml").toURI()
+        );
         IzPackNewMojo mojo = (IzPackNewMojo) lookupMojo("compile", testPom);
         assertThat(mojo, IsNull.notNullValue());
         initIzpackMojo(mojo);

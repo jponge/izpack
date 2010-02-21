@@ -128,12 +128,15 @@ public class Packager extends PackagerBase
         mergeManager.addResourceToMerge("img/");
         mergeManager.addResourceToMerge("bin/");
         mergeManager.addResourceToMerge("com/izforge/izpack/api/");
+        mergeManager.addResourceToMerge("com/izforge/izpack/event/");
         mergeManager.addResourceToMerge("com/izforge/izpack/core/");
         mergeManager.addResourceToMerge("com/izforge/izpack/data/");
         mergeManager.addResourceToMerge("com/izforge/izpack/gui/");
         mergeManager.addResourceToMerge("com/izforge/izpack/merge/");
         mergeManager.addResourceToMerge("com/izforge/izpack/util/");
         mergeManager.addResourceToMerge("org/apache/regexp/");
+        mergeManager.addResourceToMerge("com/coi/tools/");
+        mergeManager.addResourceToMerge("org/apache/tools/zip/");
         mergeManager.merge(primaryJarStream);
     }
 
