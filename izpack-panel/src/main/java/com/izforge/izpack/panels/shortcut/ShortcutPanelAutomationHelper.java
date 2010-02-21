@@ -23,9 +23,9 @@ package com.izforge.izpack.panels.shortcut;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.core.data.UninstallData;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.installer.automation.PanelAutomation;
+import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.Shortcut;
 
@@ -42,6 +42,11 @@ import java.util.Vector;
  * @version $Revision: 1540 $
  */
 public class ShortcutPanelAutomationHelper implements PanelAutomation {
+    private UninstallData uninstallData;
+
+    public ShortcutPanelAutomationHelper(UninstallData uninstallData) {
+        this.uninstallData = uninstallData;
+    }
 
     // ~ Methods ****************************************************************************
 
@@ -313,8 +318,6 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation {
 
         System.out.println(" done. ]");
         System.out.print("[ Add shortcuts to uninstaller ");
-
-        UninstallData uninstallData = UninstallData.getInstance();
 
         for (int i = 0; i < files.size(); i++) {
             uninstallData.addFile(files.elementAt(i), true);

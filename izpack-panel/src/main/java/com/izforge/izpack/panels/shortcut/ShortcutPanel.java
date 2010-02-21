@@ -27,7 +27,6 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.panels.IShortcuPanel;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.core.data.UninstallData;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
@@ -35,6 +34,7 @@ import com.izforge.izpack.gui.MultiLineLabel;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.Shortcut;
 import com.izforge.izpack.util.unix.UnixHelper;
@@ -611,6 +611,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * internal column counter
      */
     int col;
+    private UninstallData uninstallData;
 
     // ~ Constructors ***********************************************************************
 
@@ -623,6 +624,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /**
      * Constructor.
      *
+     * @param uninstallData
      * @param parent         reference to the application frame
      * @param installDataGUI shared information about the installation
      */
@@ -630,9 +632,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /*
      * --------------------------------------------------------------------------
      */
-    public ShortcutPanel(InstallerFrame parent, GUIInstallData installDataGUI, ResourceManager resourceManager) {
+    public ShortcutPanel(InstallerFrame parent, GUIInstallData installDataGUI, ResourceManager resourceManager, UninstallData uninstallData) {
         super(parent, installDataGUI, "link16x16", resourceManager);
-
+        this.uninstallData = uninstallData;
         layout = (GridBagLayout) super.getLayout();
         Object con = getLayoutHelper().getDefaultConstraints();
         if (con instanceof GridBagConstraints) {
@@ -1341,7 +1343,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             Debug.log("Failed to create menu for gnome.");
         }
         if (!failed) {
-            UninstallData.getInstance().addFile(file, true);
+            uninstallData.addFile(file, true);
         }
     }
     /*--------------------------------------------------------------------------*/
@@ -1408,7 +1410,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 shortcut.setCategories(data.Categories);
                 shortcut.setCreateForAll(data.createForAll);
 
-                shortcut.setUninstaller(UninstallData.getInstance());
+                shortcut.setUninstaller(uninstallData);
 
                 if (data.addToGroup) {
                     shortcut.setProgramGroup(gn);
@@ -2113,7 +2115,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /*--------------------------------------------------------------------------*/
     private void addToUninstaller() {
-        UninstallData uninstallData = UninstallData.getInstance();
+        UninstallData uninstallData = this.uninstallData;
 
         for (int i = 0; i < files.size(); i++) {
             uninstallData.addFile(files.elementAt(i), true);
@@ -2226,14 +2228,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     }
 
     /*--------------------------------------------------------------------------*/
-
-    /**
-     * Creates shortcuts based on teh information in panelRoot without UI.
-     *
-     * @param panelRoot the root of the XML tree
-     */
-
-    /*--------------------------------------------------------------------------*/
     /*
      * 
      * 
@@ -2243,6 +2237,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * createShortcuts() to complete the operation.
      * --------------------------------------------------------------------------
      */
+
     public boolean isCreateImmediately() {
         return createImmediately;
     }

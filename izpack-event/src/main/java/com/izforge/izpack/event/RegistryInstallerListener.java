@@ -29,9 +29,9 @@ import com.izforge.izpack.api.exception.WrappedNativeLibException;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.api.unpacker.IDiscardInterruptable;
-import com.izforge.izpack.core.data.UninstallData;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.os.RegistryHandler;
+import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.CleanupClient;
 import com.izforge.izpack.util.Debug;
@@ -89,14 +89,16 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
 
     private IDiscardInterruptable unpacker;
     private VariableSubstitutor variableSubstitutor;
+    private UninstallData uninstallData;
 
     /**
      * Default constructor.
      */
-    public RegistryInstallerListener(IDiscardInterruptable unpacker, VariableSubstitutor variableSubstitutor) {
+    public RegistryInstallerListener(IDiscardInterruptable unpacker, VariableSubstitutor variableSubstitutor, UninstallData uninstallData) {
         super(true);
         this.variableSubstitutor = variableSubstitutor;
         this.unpacker = unpacker;
+        this.uninstallData = uninstallData;
     }
 
     /*
@@ -167,7 +169,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             // CustomAction.
             List<Object> info = rh.getLoggingInfo();
             if (info != null) {
-                UninstallData.getInstance().addAdditionalData("registryEntries", info);
+                uninstallData.addAdditionalData("registryEntries", info);
             }
             // Remember all registry info to rewind registry modifications in case of failed installation
             registryModificationLog = info;

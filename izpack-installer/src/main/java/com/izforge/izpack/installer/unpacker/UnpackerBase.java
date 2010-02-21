@@ -27,11 +27,13 @@ import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.api.unpacker.IDiscardInterruptable;
-import com.izforge.izpack.core.data.UninstallData;
 import com.izforge.izpack.core.event.InstallerListener;
 import com.izforge.izpack.data.Blockable;
 import com.izforge.izpack.data.PackFile;
 import com.izforge.izpack.data.UpdateCheck;
+import com.izforge.izpack.installer.data.UninstallData;
+import com.izforge.izpack.merge.Mergeable;
+import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
@@ -44,7 +46,6 @@ import java.io.*;
 import java.net.URI;
 import java.util.*;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -121,14 +122,16 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
      * @param handler             The installation progress handler.
      * @param rules
      * @param variableSubstitutor
+     * @param udata
      */
-    public UnpackerBase(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor) {
+    public UnpackerBase(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata) {
         this.idata = idata;
         this.handler = handler;
         this.resourceManager = resourceManager;
         this.rules = rules;
         // Initialize the variable substitutor
         this.variableSubstitutor = variableSubstitutor;
+        this.udata = udata;
     }
 
     public void setRules(RulesEngine rules) {
@@ -172,9 +175,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
      */
     private static void setInterruptAll() {
         synchronized (instances) {
-            Iterator iter = instances.keySet().iterator();
-            while (iter.hasNext()) {
-                Object key = iter.next();
+            for (Object key : instances.keySet()) {
                 if (instances.get(key).equals(ALIVE)) {
                     instances.put(key, INTERRUPT);
                 }
@@ -214,9 +215,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
 
     private static boolean isInterruptReady() {
         synchronized (instances) {
-            Iterator iter = instances.keySet().iterator();
-            while (iter.hasNext()) {
-                Object key = iter.next();
+            for (Object key : instances.keySet()) {
                 if (!instances.get(key).equals(INTERRUPTED)) {
                     return (false);
                 }
@@ -574,7 +573,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
      *
      * @throws Exception Description of the Exception
      */
-    protected void putUninstaller() throws Exception {
+    public void putUninstaller() throws Exception {
         String uninstallerCondition = idata.getInfo().getUninstallerCondition();
         if ((uninstallerCondition != null) &&
                 (uninstallerCondition.length() > 0) &&
@@ -585,15 +584,12 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
         }
         // get the uninstaller base, returning if not found so that
         // installData.uninstallOutJar remains null
-        InputStream[] in = new InputStream[2];
-        in[0] = resourceManager.getInputStream("IzPack.uninstaller");
-        if (in[0] == null) {
-            return;
-        }
+
+        List<Mergeable> uninstallerMerge = PathResolver.getMergeableFromPath("com/izforge/izpack/uninstaller/");
+
         // The uninstaller extension is facultative; it will be exist only
         // if a native library was marked for uninstallation.
         // REFACTOR Change uninstaller methods of merge and get
-//        in[1] = resourceManager.getInputStream("IzPack.uninstaller-ext", null);
 
         // Me make the .uninstaller directory
         String dest = IoHelper.translatePath(idata.getInfo().getUninstallerPath(), variableSubstitutor);
@@ -615,34 +611,8 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
         udata.addFile(jar, true);
 
         // We copy the uninstallers
-        HashSet<String> doubles = new HashSet<String>();
-
-        for (InputStream anIn : in) {
-            if (anIn == null) {
-                continue;
-            }
-            ZipInputStream inRes = new ZipInputStream(anIn);
-            ZipEntry zentry = inRes.getNextEntry();
-            while (zentry != null) {
-                // Puts a new entry, but not twice like META-INF
-                if (!doubles.contains(zentry.getName())) {
-                    doubles.add(zentry.getName());
-                    outJar.putNextEntry(new ZipEntry(zentry.getName()));
-
-                    // Byte to byte copy
-                    int unc = inRes.read();
-                    while (unc != -1) {
-                        outJar.write(unc);
-                        unc = inRes.read();
-                    }
-
-                    // Next one please
-                    inRes.closeEntry();
-                    outJar.closeEntry();
-                }
-                zentry = inRes.getNextEntry();
-            }
-            inRes.close();
+        for (Mergeable mergeable : uninstallerMerge) {
+            mergeable.merge(outJar);
         }
 
         // Should we relaunch the uninstaller with privileges?
@@ -652,14 +622,14 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
         }
 
         // We put the langpack
-        InputStream in2 = resourceManager.getInputStream("langpacks/" + idata.getLocaleISO3() + ".xml");
-        outJar.putNextEntry(new ZipEntry("langpack.xml"));
-        int read = in2.read();
-        while (read != -1) {
-            outJar.write(read);
-            read = in2.read();
+        List<Mergeable> langPack = PathResolver.getMergeableFromPath("resources/langpacks/" + idata.getLocaleISO3() + ".xml", "langpack.xml");
+        for (Mergeable mergeable : langPack) {
+            System.out.println(mergeable.getClass().getCanonicalName());
+            mergeable.merge(outJar);
         }
-        outJar.closeEntry();
+        outJar.close();
+        bos.close();
+        out.close();
     }
 
     /**

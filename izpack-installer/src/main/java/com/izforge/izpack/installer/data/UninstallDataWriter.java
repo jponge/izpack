@@ -2,7 +2,6 @@ package com.izforge.izpack.installer.data;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.data.UninstallData;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.ExecutableFile;
@@ -19,9 +18,11 @@ public class UninstallDataWriter {
     private static final String UNINSTALLER_CONDITION = "UNINSTALLER_CONDITION";
     private static final String LOGFILE_PATH = "InstallerFrame.logfilePath";
     private VariableSubstitutor variableSubstitutor;
+    private UninstallData udata;
 
-    public UninstallDataWriter(VariableSubstitutor variableSubstitutor) {
+    public UninstallDataWriter(VariableSubstitutor variableSubstitutor, UninstallData udata) {
         this.variableSubstitutor = variableSubstitutor;
+        this.udata = udata;
     }
 
     /**
@@ -43,7 +44,6 @@ public class UninstallDataWriter {
                 }
             }
             // We get the data
-            UninstallData udata = UninstallData.getInstance();
             List<String> files = udata.getUninstalableFilesList();
             ZipOutputStream outJar = installdata.getUninstallOutJar();
 

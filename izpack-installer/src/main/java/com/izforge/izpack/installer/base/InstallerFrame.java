@@ -31,12 +31,12 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.data.UninstallData;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.debugger.Debugger;
 import com.izforge.izpack.installer.manager.PanelManager;
@@ -201,16 +201,18 @@ public class InstallerFrame extends JFrame
      */
     private UninstallDataWriter uninstallDataWriter;
     private VariableSubstitutor variableSubstitutor;
+    private UninstallData uninstallData;
 
     /**
      * The constructor (normal mode).
      *
      * @param variableSubstitutor
+     * @param uninstallData
      * @param title               The window title.
      * @param installdata         The installation data.
      * @throws Exception Description of the Exception
      */
-    public InstallerFrame(String title, GUIInstallData installdata, RulesEngine rules, IconsDatabase icons, PanelManager panelManager, UninstallDataWriter uninstallDataWriter, ResourceManager resourceManager, VariableSubstitutor variableSubstitutor)
+    public InstallerFrame(String title, GUIInstallData installdata, RulesEngine rules, IconsDatabase icons, PanelManager panelManager, UninstallDataWriter uninstallDataWriter, ResourceManager resourceManager, VariableSubstitutor variableSubstitutor, UninstallData uninstallData)
             throws Exception
     {
         super(title);
@@ -950,8 +952,7 @@ public class InstallerFrame extends JFrame
 
         // Wipe the files that had been installed
         UninstallData u = UninstallData.getInstance();
-        for (String p : u.getInstalledFilesList())
-        {
+        for (String p : uninstallData.getInstalledFilesList()) {
             File f = new File(p);
             f.delete();
         }

@@ -5,18 +5,16 @@ import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.data.PanelAction;
-import com.izforge.izpack.installer.DataValidatorFactory;
-import com.izforge.izpack.installer.PanelActionFactory;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
-import com.izforge.izpack.merge.MergeManager;
+import com.izforge.izpack.merge.MergeManagerImpl;
+import com.izforge.izpack.merge.panel.PanelMerge;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.OsConstraint;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,12 +22,8 @@ import java.util.List;
  * Load panels in the container
  */
 public class PanelManager {
-
-    public static String CLASSNAME_PREFIX = "com.izforge.izpack.panels";
-
     private GUIInstallData installdata;
     private IInstallerContainer installerContainer;
-    private MergeManager mergeManager;
     private int lastVis;
 
     /**
@@ -37,47 +31,15 @@ public class PanelManager {
      */
     protected ArrayList<Integer> visiblePanelMapping;
 
-    public PanelManager(GUIInstallData installDataGUI, IInstallerContainer installerContainer, MergeManager mergeManager) throws ClassNotFoundException {
+    public PanelManager(GUIInstallData installDataGUI, IInstallerContainer installerContainer, MergeManagerImpl mergeManager) throws ClassNotFoundException {
         this.installdata = installDataGUI;
         this.installerContainer = installerContainer;
-        this.mergeManager = mergeManager;
         visiblePanelMapping = new ArrayList<Integer>();
     }
 
     public Class<? extends IzPanel> resolveClassName(final String className) throws ClassNotFoundException {
-        String classPackage = mergeManager.getPackagePathFromClassName(className);
-
-        File fileFromPanelClass = null;
-        try {
-            fileFromPanelClass = mergeManager.getFileFromPanelClass(className, classPackage);
-        } catch (Exception e) {
-            return resolveClassFromName(className);
-        }
-        return resolveClassFromPath(fileFromPanelClass, classPackage.replaceAll("/", "."));
-    }
-
-    private Class<? extends IzPanel> resolveClassFromName(String className) throws ClassNotFoundException {
-        Class<?> aClass;
-        if (!className.contains(".")) {
-            aClass = Class.forName(CLASSNAME_PREFIX + "." + className);
-        } else {
-            aClass = Class.forName(className);
-        }
-        return (Class<? extends IzPanel>) aClass;
-    }
-
-    /**
-     * From a class file found in the classpath, convert it to a className
-     *
-     * @param classFile
-     * @param currentPackage Package should be a standard package name
-     * @return The resolved class
-     * @throws ClassNotFoundException
-     */
-    private Class resolveClassFromPath(File classFile, String currentPackage) throws ClassNotFoundException {
-        String fullClassName = classFile.getAbsolutePath().replaceAll("/", ".").replaceAll(".class", "");
-        fullClassName = fullClassName.substring(fullClassName.indexOf(currentPackage), fullClassName.length());
-        return Class.forName(fullClassName);
+        PanelMerge panelMerge = new PanelMerge(className);
+        return (Class<? extends IzPanel>) Class.forName(panelMerge.getFullClassNameFromPanelName());
     }
 
     /**

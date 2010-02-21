@@ -10,22 +10,15 @@ import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
 import com.izforge.izpack.compiler.packager.IPackager;
-import com.izforge.izpack.merge.MergeManager;
-import com.izforge.izpack.merge.Mergeable;
-import org.apache.tools.zip.ZipEntry;
-import org.apache.tools.zip.ZipOutputStream;
-import org.hamcrest.core.IsNull;
+import com.izforge.izpack.merge.MergeManagerImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.internal.verification.AtLeast;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Created by IntelliJ IDEA.
@@ -42,7 +35,7 @@ public class CompilerConfigTest {
     private PropertyManager propertyManager;
     private XmlCompilerHelper xmlCompilerHerlper;
     private Map<String, List<DynamicVariable>> mapStringListDyn;
-    private MergeManager mergeManager;
+    private MergeManagerImpl mergeManager;
     private IPackager packager;
 
     @Before
@@ -55,17 +48,17 @@ public class CompilerConfigTest {
         xmlCompilerHerlper = new XmlCompilerHelper(data.getInstallFile());
         mapStringListDyn = Mockito.mock(Map.class);
         packager = Mockito.mock(IPackager.class);
-        mergeManager = new MergeManager();
-        compilerConfig = new CompilerConfig(data, variableSubstitutor, compiler, compilerHelper, xmlCompilerHerlper, propertyManager, mergeManager, packager);
+        mergeManager = new MergeManagerImpl();
+        compilerConfig = new CompilerConfig(data, variableSubstitutor, compiler, compilerHelper, xmlCompilerHerlper, propertyManager, packager, mergeManager);
         xmlParser = new XMLParser();
     }
 
     @Test
     public void testAddTwoVariables() throws Exception {
         Mockito.when(mapStringListDyn.containsKey("myPath")).thenReturn(false);
-        Mockito.when(compiler.getDynamicVariables()).thenReturn(mapStringListDyn);
+        Mockito.when(packager.getDynamicVariables()).thenReturn(mapStringListDyn);
         Properties variable = new Properties();
-        Mockito.when(compiler.getVariables()).thenReturn(variable);
+        Mockito.when(packager.getVariables()).thenReturn(variable);
 
         IXMLElement element = xmlParser.parse("<root><dynamicvariables><variable name=\"myPath\" value=\"$INSTALLPATH / test\"/></dynamicvariables></root>");
         compilerConfig.addDynamicVariables(element);
@@ -78,7 +71,7 @@ public class CompilerConfigTest {
     @Test
     public void testAddDynamicVariable() throws CompilerException {
         Mockito.when(mapStringListDyn.containsKey("myPath")).thenReturn(false);
-        Mockito.when(compiler.getDynamicVariables()).thenReturn(mapStringListDyn);
+        Mockito.when(packager.getDynamicVariables()).thenReturn(mapStringListDyn);
 
         IXMLElement element = xmlParser.parse("<root><dynamicvariables><variable name=\"myPath\" value=\"$INSTALLPATH / test\"/></dynamicvariables></root>");
         compilerConfig.addDynamicVariables(element);
@@ -99,7 +92,7 @@ public class CompilerConfigTest {
     public void compilerShouldAddVariable() throws Exception {
         IXMLElement xmlData = xmlParser.parse("<root><variables><variable name=\"scriptFile\" value=\"script.bat\"/></variables></root>");
         Properties variable = Mockito.mock(Properties.class);
-        Mockito.when(compiler.getVariables()).thenReturn(variable);
+        Mockito.when(packager.getVariables()).thenReturn(variable);
         compilerConfig.addVariables(xmlData);
         Mockito.verify(variable).setProperty("scriptFile", "script.bat");
     }
@@ -110,7 +103,7 @@ public class CompilerConfigTest {
         Map variable = Mockito.mock(Map.class);
 
         Mockito.when(variable.containsKey("myPath")).thenReturn(false);
-        Mockito.when(compiler.getDynamicVariables()).thenReturn(variable);
+        Mockito.when(packager.getDynamicVariables()).thenReturn(variable);
 
         compilerConfig.addDynamicVariables(xmlData);
 
@@ -123,15 +116,4 @@ public class CompilerConfigTest {
         Mockito.verify(variable).put("myPath", list);
     }
 
-
-    @Test
-    public void testGetMergeableFromPanelClass() throws Exception {
-        Mergeable mergeable = mergeManager.getMergeableFromPanelClass("HelloPanel");
-        ZipOutputStream outputStream = Mockito.mock(ZipOutputStream.class);
-        assertThat(mergeable, IsNull.<Object>notNullValue());
-
-        mergeable.merge(outputStream);
-        Mockito.verify(outputStream, new AtLeast(2)).putNextEntry(Mockito.<ZipEntry>any());
-
-    }
 }

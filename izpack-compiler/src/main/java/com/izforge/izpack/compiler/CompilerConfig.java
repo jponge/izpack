@@ -51,6 +51,7 @@ import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
+import org.apache.commons.lang.StringUtils;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.io.*;
@@ -116,47 +117,23 @@ public class CompilerConfig extends Thread
     private VariableSubstitutor variableSubstitutor;
     private XmlCompilerHelper xmlCompilerHelper;
     private PropertyManager propertyManager;
-    private MergeManager mergeManager;
     private IPackager packager;
+    private MergeManager mergeManager;
 
     /**
      * Constructor
      *
      * @param compilerData Object containing all informations found in command line
      */
-    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, MergeManager mergeManager, IPackager packager)
-    {
+    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager) {
         this.compilerData = compilerData;
         this.variableSubstitutor = variableSubstitutor;
         this.compiler = compiler;
         this.compilerHelper = compilerHelper;
         this.xmlCompilerHelper = xmlCompilerHelper;
         this.propertyManager = propertyManager;
-        this.mergeManager = mergeManager;
         this.packager = packager;
-    }
-
-    /**
-     * Add a name value pair to the project property set. It is <i>not</i> replaced it is already
-     * in the set of properties.
-     *
-     * @param name  the name of the property
-     * @param value the value to set
-     * @return true if the property was not already set
-     */
-    public boolean addProperty(String name, String value)
-    {
-        return propertyManager.addProperty(name, value);
-    }
-
-    /**
-     * Access the install compiler
-     *
-     * @return the install compiler
-     */
-    public Compiler getCompiler()
-    {
-        return compiler;
+        this.mergeManager = mergeManager;
     }
 
     /**
@@ -256,7 +233,7 @@ public class CompilerConfig extends Thread
                 installerrequirements.add(basicInstallerCondition);
             }
         }
-        compiler.addInstallerRequirement(installerrequirements);
+        packager.addInstallerRequirements(installerrequirements);
         notifyCompilerListener("addInstallerRequirement", CompilerListener.END, data);
     }
 
@@ -264,15 +241,14 @@ public class CompilerConfig extends Thread
     {
         notifyCompilerListener("loadPackager", CompilerListener.BEGIN, data);
         // Initialisation
+        // REFACTOR : Moved packager initialisation to provider
         IXMLElement root = data.getFirstChildNamed("packaging");
-        IXMLElement packager = null;
-        if (root != null)
-        {
-            packager = root.getFirstChildNamed("packager");
+        IXMLElement packagerElement = null;
+        if (root != null) {
+            packagerElement = root.getFirstChildNamed("packager");
 
-            if (packager != null)
-            {
-                packagerClassname = xmlCompilerHelper.requireAttribute(packager, "class", compilerData.getInstallFile());
+            if (packagerElement != null) {
+                packagerClassname = xmlCompilerHelper.requireAttribute(packagerElement, "class", compilerData.getInstallFile());
             }
 
             IXMLElement unpacker = root.getFirstChildNamed("unpacker");
@@ -282,12 +258,10 @@ public class CompilerConfig extends Thread
                 unpackerClassname = xmlCompilerHelper.requireAttribute(unpacker, "class", compilerData.getInstallFile());
             }
         }
-        if (packager != null)
-        {
-            IXMLElement options = packager.getFirstChildNamed("options");
-            if (options != null)
-            {
-                compiler.getPackager().addConfigurationInformation(options);
+        if (packagerElement != null) {
+            IXMLElement options = packagerElement.getFirstChildNamed("options");
+            if (options != null) {
+                packager.addConfigurationInformation(options);
             }
         }
         propertyManager.addProperty("UNPACKER_CLASS", unpackerClassname);
@@ -372,10 +346,10 @@ public class CompilerConfig extends Thread
 
                 URL lafJarURL = findIzPackResource("lib/" + lafJarName, "Look and Feel Jar file",
                         gp);
-                compiler.addJarContent(lafJarURL);
+                packager.addJarContent(lafJarURL);
             }
         }
-        compiler.setGUIPrefs(prefs);
+        packager.setGUIPrefs(prefs);
         notifyCompilerListener("addGUIPrefs", CompilerListener.END, data);
     }
 
@@ -390,8 +364,8 @@ public class CompilerConfig extends Thread
         for (IXMLElement ixmlElement : data.getChildrenNamed("jar"))
         {
             String src = xmlCompilerHelper.requireAttribute(ixmlElement, "src", compilerData.getInstallFile());
-            URL url = findProjectResource(src, "Jar file", ixmlElement);
-            compiler.addJarContent(url);
+            mergeManager.addResourceToMerge(src);
+
             // Additionals for mark a jar file also used in the uninstaller.
             // The contained files will be copied from the installer into the
             // uninstaller if needed.
@@ -402,11 +376,11 @@ public class CompilerConfig extends Thread
             // wiil be only observed for the uninstaller.
             String stage = ixmlElement.getAttribute("stage");
             if (stage != null
-                    && ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage)))
-            {
+                    && ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage))) {
+                URL url = findProjectResource(src, "Jar file", ixmlElement);
                 CustomData ca = new CustomData(null, compilerHelper.getContainedFilePaths(url), null,
                         CustomData.UNINSTALLER_JAR);
-                compiler.addCustomJar(ca, url);
+                packager.addCustomJar(ca, url);
             }
         }
         notifyCompilerListener("addJars", CompilerListener.END, data);
@@ -430,8 +404,8 @@ public class CompilerConfig extends Thread
             {
                 path = "bin/native/" + type + "/" + name;
             }
-            URL url = findIzPackResource(path, "Native Library", ixmlElement);
-            compiler.addNativeLibrary(name, url);
+            mergeManager.addResourceToMerge(path);
+
             // Additionals for mark a native lib also used in the uninstaller
             // The lib will be copied from the installer into the uninstaller if
             // needed.
@@ -448,7 +422,7 @@ public class CompilerConfig extends Thread
                 ArrayList<String> al = new ArrayList<String>();
                 al.add(name);
                 CustomData cad = new CustomData(null, al, constraints, CustomData.UNINSTALLER_LIB);
-                compiler.addNativeUninstallerLibrary(cad);
+                packager.addNativeUninstallerLibrary(cad);
                 needAddOns = true;
             }
 
@@ -461,9 +435,9 @@ public class CompilerConfig extends Thread
             if (xmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", YES, compilerData.getInstallFile()))
             {
                 //REFACTOR Change the way uninstaller are created
-                URL url = findIzPackResource(propertyManager.getProperty("uninstaller-ext"), "Uninstaller extensions",
-                        root);
-                compiler.addResource("IzPack.uninstaller-ext", url);
+                // Do we still need it on compile time?
+//                URL url = findIzPackResource(propertyManager.getProperty("uninstaller-ext"), "Uninstaller extensions", root);
+//                packager.addResource("IzPack.uninstaller-ext", url);
             }
 
         }
@@ -849,7 +823,7 @@ public class CompilerConfig extends Thread
             }
 
             // We add the pack
-            compiler.addPack(pack);
+            packager.addPack(pack);
         }
 
         for (IXMLElement refPackElement : refPackElements)
@@ -1222,8 +1196,7 @@ public class CompilerConfig extends Thread
      * @param data The XML data.
      * @throws CompilerException Description of the Exception
      */
-    protected void addPanels(IXMLElement data) throws CompilerException
-    {
+    protected void addPanels(IXMLElement data) throws IOException {
         notifyCompilerListener("addPanels", CompilerListener.BEGIN, data);
         IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "panels");
 
@@ -1237,66 +1210,35 @@ public class CompilerConfig extends Thread
         // We process each panel markup
         // We need a panel counter to build unique panel dependet resource names
         int panelCounter = 0;
-        for (IXMLElement panel1 : panels)
-        {
+        for (IXMLElement panelElement : panels) {
             panelCounter++;
 
             // create the serialized Panel data
             Panel panel = new Panel();
-            panel.osConstraints = OsConstraint.getOsList(panel1);
-            String className = panel1.getAttribute("classname");
+            panel.osConstraints = OsConstraint.getOsList(panelElement);
+            String className = panelElement.getAttribute("classname");
 
             // add an id
-            String panelid = panel1.getAttribute("id");
+            String panelid = panelElement.getAttribute("id");
             panel.setPanelid(panelid);
-            String condition = panel1.getAttribute("condition");
+            String condition = panelElement.getAttribute("condition");
             panel.setCondition(condition);
 
             // Panel files come in jars packaged w/ IzPack, or they can be
             // specified via a jar attribute on the panel element
-            String jarPath = panel1.getAttribute("jar");
-            if (jarPath == null)
-            {
-                jarPath = "bin/panels/" + className + ".jar";
-            }
-            URL url = null;
-            // jar="" may be used to suppress the warning message ("Panel jar
-            // file not found")
-            if (!jarPath.equals(""))
-            {
-                url = findIzPackResource(jarPath, "Panel jar file", panel1, true);
-            }
-
-            // when the expected panel jar file is not found, it is assumed that
-            // user will do the jar merge themselves via <jar> tag
-
-            String fullClassName = null;
-            if (url == null)
-            {
-                fullClassName = className;
-            }
-            else
-            {
-                try
-                {
-                    fullClassName = compilerHelper.getFullClassName(url, className);
-                }
-                catch (IOException e)
-                {
-                }
-            }
-
-            if (fullClassName != null)
-            {
-                panel.className = fullClassName;
-            }
-            else
-            {
+            String jarPath = panelElement.getAttribute("jar");
+            if (StringUtils.isNotBlank(jarPath)) {
+                URL jarUrl = findIzPackResource(jarPath, "Panel jar file", panelElement, true);
+                panel.className = compilerHelper.getFullClassName(jarUrl, className);
+                packager.addJarContent(jarUrl);
+            } else {
+                //Assume it is merged with <jar> tag
                 panel.className = className;
             }
-            IXMLElement configurationElement = panel1.getFirstChildNamed("configuration");
-            if (configurationElement != null)
-            {
+
+
+            IXMLElement configurationElement = panelElement.getFirstChildNamed("configuration");
+            if (configurationElement != null) {
                 Debug.trace("found a configuration for this panel.");
                 Vector<IXMLElement> params = configurationElement.getChildrenNamed("param");
                 if (params != null)
@@ -1314,7 +1256,7 @@ public class CompilerConfig extends Thread
             }
 
             // adding validator
-            IXMLElement validatorElement = panel1
+            IXMLElement validatorElement = panelElement
                     .getFirstChildNamed(DataValidator.DATA_VALIDATOR_TAG);
             if (validatorElement != null)
             {
@@ -1326,7 +1268,7 @@ public class CompilerConfig extends Thread
                 }
             }
             // adding helps
-            Vector helps = panel1.getChildrenNamed(AutomatedInstallData.HELP_TAG);
+            Vector helps = panelElement.getChildrenNamed(AutomatedInstallData.HELP_TAG);
             if (helps != null)
             {
                 for (Object help1 : helps)
@@ -1346,11 +1288,11 @@ public class CompilerConfig extends Thread
 
                     URL originalUrl = findProjectResource(help
                             .getAttribute(AutomatedInstallData.SRC_ATTRIBUTE), "Help", help);
-                    compiler.addResource(resourceId, originalUrl);
+                    packager.addResource(resourceId, originalUrl);
                 }
             }
             // adding actions
-            addPanelActions(panel1, panel);
+            addPanelActions(panelElement, panel);
             // insert into the packager
 
             packager.addPanel(panel);
@@ -1418,8 +1360,7 @@ public class CompilerConfig extends Thread
                     originalUrl = recodedFile.toURL();
                 }
 
-                if (parsexml || (!"".equals(encoding)) || (substitute && !compiler.getVariables().isEmpty()))
-                {
+                if (parsexml || (!"".equals(encoding)) || (substitute && !packager.getVariables().isEmpty())) {
                     // make the substitutions into a temp file
                     File parsedFile = File.createTempFile("izpp", null);
                     parsedFile.deleteOnExit();
@@ -1439,8 +1380,7 @@ public class CompilerConfig extends Thread
 
                     IXMLElement xml = parser.parse(originalUrl);
                     IXMLWriter writer = new XMLWriter();
-                    if (substitute && !compiler.getVariables().isEmpty())
-                    {
+                    if (substitute && !packager.getVariables().isEmpty()) {
                         // if we are also performing substitutions on the file
                         // then create an in-memory copy to pass to the
                         // substitutor
@@ -1457,10 +1397,8 @@ public class CompilerConfig extends Thread
                 }
 
                 // substitute variable values in the resource if parsed
-                if (substitute)
-                {
-                    if (compiler.getVariables().isEmpty())
-                    {
+                if (substitute) {
+                    if (packager.getVariables().isEmpty()) {
                         // reset url to original.
                         url = originalUrl;
                         AssertionHelper.parseWarn(resNode, "No variables defined. " + url.getPath() + " not parsed.", compilerData.getInstallFile());
@@ -1512,8 +1450,7 @@ public class CompilerConfig extends Thread
                 }
             }
 
-            if (bundleName != null && bundleName.length() > 0)
-            compiler.addResource(id, url);
+            packager.addResource(id, url);
 
             // remembering references to all added packsLang.xml files
             if (id.startsWith("packsLang.xml"))
@@ -1565,7 +1502,7 @@ public class CompilerConfig extends Thread
             path = "bin/langpacks/flags/" + iso3 + ".gif";
             URL iso3FlagURL = findIzPackResource(path, "ISO3 flag image", localNode);
 
-            compiler.addLangPack(iso3, iso3xmlURL, iso3FlagURL);
+            packager.addLangPack(iso3, iso3xmlURL, iso3FlagURL);
         }
         notifyCompilerListener("addLangpacks", CompilerListener.END, data);
     }
@@ -1696,9 +1633,7 @@ public class CompilerConfig extends Thread
         if (xmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", YES, compilerData.getInstallFile()))
         {
             //REFACTOR Change the way uninstaller is created
-//            mergeManager.addResourceToMerge("com/izforge/izpack/uninstaller/");
-            URL url = findIzPackResource(propertyManager.getProperty("uninstaller"), "Uninstaller", root);
-            compiler.addResource("IzPack.uninstaller", url);
+            mergeManager.addResourceToMerge("com/izforge/izpack/uninstaller/");
 
             if (privileged != null)
             {
@@ -1745,7 +1680,7 @@ public class CompilerConfig extends Thread
         // look for an unpacker class
         String unpackerclass = propertyManager.getProperty("UNPACKER_CLASS");
         info.setUnpackerClassName(unpackerclass);
-        compiler.setInfo(info);
+        packager.setInfo(info);
         notifyCompilerListener("addInfo", CompilerListener.END, data);
     }
 
@@ -1782,7 +1717,7 @@ public class CompilerConfig extends Thread
             return;
         }
 
-        Properties variables = compiler.getVariables();
+        Properties variables = packager.getVariables();
 
         for (IXMLElement variableNode : root.getChildrenNamed("variable"))
         {
@@ -1807,7 +1742,7 @@ public class CompilerConfig extends Thread
             return;
         }
 
-        Map<String, List<DynamicVariable>> dynamicvariables = compiler.getDynamicVariables();
+        Map<String, List<DynamicVariable>> dynamicvariables = packager.getDynamicVariables();
 
         for (IXMLElement variableNode : root.getChildrenNamed("variable"))
         {
@@ -1865,7 +1800,7 @@ public class CompilerConfig extends Thread
         notifyCompilerListener("addConditions", CompilerListener.BEGIN, data);
         // We get the condition list
         IXMLElement root = data.getFirstChildNamed("conditions");
-        Map<String, Condition> conditions = compiler.getConditions();
+        Map<String, Condition> conditions = packager.getRules();
         if (root != null)
         {
             for (IXMLElement conditionNode : root.getChildrenNamed("condition"))
@@ -2366,7 +2301,6 @@ public class CompilerConfig extends Thread
      */
     private void notifyCompilerListener(String callerName, int state, IXMLElement data)
     {
-        IPackager packager = compiler.getPackager();
         for (CompilerListener compilerListener : compilerListeners)
         {
             compilerListener.notify(callerName, state, data, packager);
@@ -2484,7 +2418,7 @@ public class CompilerConfig extends Thread
                     mergedPackLangFileURL = mergedPackLangFile.toURL();
                 }
 
-                compiler.addResource(id, mergedPackLangFileURL);
+                packager.addResource(id, mergedPackLangFileURL);
             }
         }
         catch (Exception e)

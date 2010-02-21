@@ -16,7 +16,15 @@
     <dependencies>
         <dependency>
             <groupId>${groupId}</groupId>
+            <artifactId>izpack-test-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
             <artifactId>izpack-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
         </dependency>
         <dependency>
             <groupId>org.picocontainer</groupId>

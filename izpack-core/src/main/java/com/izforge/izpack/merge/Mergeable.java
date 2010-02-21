@@ -15,4 +15,6 @@ public interface Mergeable {
     void merge(ZipOutputStream outputStream);
 
     File find(FileFilter fileFilter);
+
+    void merge(java.util.zip.ZipOutputStream outputStream);
 }

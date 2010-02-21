@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.util.os;
 
-import com.izforge.izpack.core.data.UninstallData;
+import com.izforge.izpack.installer.data.UninstallData;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Vector;

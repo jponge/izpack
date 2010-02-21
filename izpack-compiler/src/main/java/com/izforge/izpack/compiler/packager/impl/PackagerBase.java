@@ -35,6 +35,8 @@ import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.merge.MergeManager;
+import com.izforge.izpack.merge.jar.JarMerge;
+import com.izforge.izpack.merge.panel.PanelMerge;
 
 import java.io.FilterOutputStream;
 import java.io.IOException;
@@ -194,22 +196,9 @@ public abstract class PackagerBase implements IPackager {
      */
 
     public void addJarContent(URL jarURL) {
-        addJarContent(jarURL, null);
-    }
-
-    /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.packager.IPackager#addJarContent(java.net.URL, java.util.List)
-     */
-
-    public void addJarContent(URL jarURL, List<String> files) {
-        Object[] cont = {jarURL, files};
         sendMsg("Adding content of jar: " + jarURL.getFile(), PackagerListener.MSG_VERBOSE);
-        includedJarURLs.add(cont);
+        mergeManager.addResourceToMerge(new JarMerge(jarURL));
     }
-
-    /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.packager.IPackager#addLangPack(java.lang.String, java.net.URL, java.net.URL)
-     */
 
     public void addLangPack(String iso3, URL xmlURL, URL flagURL) {
         sendMsg("Adding langpack: " + iso3, PackagerListener.MSG_VERBOSE);
@@ -250,20 +239,12 @@ public abstract class PackagerBase implements IPackager {
 
     public void addPanel(Panel panel) {
         panelList.add(panel); // serialized to keep order/variables correct
-        mergeManager.addPanelToMerge(panel.getClassName());
+        mergeManager.addResourceToMerge(new PanelMerge(panel.getClassName()));
     }
 
     /* (non-Javadoc)
     * @see com.izforge.izpack.compiler.packager.IPackager#addPanelJar(com.izforge.izpack.Panel, java.net.URL)
     */
-
-    public void addPanelJar(Panel panel, URL jarURL) {
-        panelList.add(panel); // serialized to keep order/variables correct
-
-        if (jarURL != null) {
-            addJarContent(jarURL); // each included once, no matter how many times added
-        }
-    }
 
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.packager.IPackager#addResource(java.lang.String, java.net.URL)
@@ -325,14 +306,6 @@ public abstract class PackagerBase implements IPackager {
      */
     public Map<String, Condition> getRules() {
         return this.rules;
-    }
-
-
-    /**
-     * @param rules the rules to set
-     */
-    public void setRules(Map<String, Condition> rules) {
-        this.rules = rules;
     }
 
 

@@ -28,9 +28,9 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.data.UninstallData;
 import com.izforge.izpack.core.event.InstallerListener;
 import com.izforge.izpack.data.*;
+import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.web.WebAccessor;
 import com.izforge.izpack.installer.web.WebRepositoryAccessor;
 import com.izforge.izpack.util.*;
@@ -60,11 +60,12 @@ public class Unpacker extends UnpackerBase {
      * The constructor.
      *
      * @param variableSubstitutor
+     * @param udata
      * @param idata                     The installation data.
      * @param abstractUIProgressHandler The installation progress abstractUIProgressHandler.
      */
-    public Unpacker(AutomatedInstallData idata, ResourceManager resourceManager, AbstractUIProgressHandler abstractUIProgressHandler, RulesEngine rules, VariableSubstitutor variableSubstitutor) {
-        super(idata, abstractUIProgressHandler, resourceManager, rules, variableSubstitutor);
+    public Unpacker(AutomatedInstallData idata, ResourceManager resourceManager, AbstractUIProgressHandler abstractUIProgressHandler, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata) {
+        super(idata, abstractUIProgressHandler, resourceManager, rules, variableSubstitutor, udata);
     }
 
     /* (non-Javadoc)
@@ -84,7 +85,6 @@ public class Unpacker extends UnpackerBase {
             List packs = idata.getSelectedPacks();
             int npacks = packs.size();
             handler.startAction("Unpacking", npacks);
-            udata = UninstallData.getInstance();
             // Custom action listener stuff --- load listeners ----
             List[] customActions = getCustomActions();
             // Custom action listener stuff --- beforePacks ----

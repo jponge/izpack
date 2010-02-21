@@ -19,11 +19,6 @@
     </distributionManagement>
 
     <dependencies>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
@@ -35,10 +30,6 @@
         <dependency>
             <groupId>org.easytesting</groupId>
             <artifactId>fest-swing</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.scalatest</groupId>
-            <artifactId>scalatest</artifactId>
         </dependency>
     </dependencies>
 
@@ -112,6 +103,17 @@
                 <version>${version}</version>
             </dependency>
             <dependency>
+                <artifactId>izpack-test-common</artifactId>
+                <groupId>${groupId}</groupId>
+                <version>${version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <artifactId>izpack-event</artifactId>
+                <groupId>${groupId}</groupId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
                 <artifactId>izpack-compiler</artifactId>
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>
@@ -138,11 +140,6 @@
                 <version>${version}</version>
             </dependency>
             <dependency>
-                <artifactId>izpack-uninstaller-ext</artifactId>
-                <groupId>${groupId}</groupId>
-                <version>${version}</version>
-            </dependency>
-            <dependency>
                 <artifactId>izpack-installer</artifactId>
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>
@@ -163,13 +160,6 @@
                 <version>${version}</version>
             </dependency>
             <dependency>
-                <artifactId>izpack-native</artifactId>
-                <groupId>${groupId}</groupId>
-                <version>${version}</version>
-                <classifier>dll</classifier>
-                <type>tar.gz</type>
-            </dependency>
-            <dependency>
                 <artifactId>izpack-core</artifactId>
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>
@@ -179,6 +169,14 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.7</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>5.10</version>
+                <classifier>jdk15</classifier>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -199,33 +197,33 @@
                 <version>1.2a3</version>
                 <scope>test</scope>
             </dependency>
-
             <dependency>
-                <groupId>org.scala-lang</groupId>
-                <artifactId>scala-library</artifactId>
-                <version>2.7.7</version>
-                <scope>test</scope>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.5.8</version>
             </dependency>
-
             <dependency>
-                <groupId>org.scalatest</groupId>
-                <artifactId>scalatest</artifactId>
-                <version>1.0</version>
-                <scope>test</scope>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.15</version>
             </dependency>
-
-            <dependency>
-                <groupId>org.scala-lang</groupId>
-                <artifactId>scala-compiler</artifactId>
-                <version>2.7.7</version>
-                <scope>test</scope>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -251,29 +249,16 @@
             <plugin>
                 <groupId>com.google.testability-explorer</groupId>
                 <artifactId>maven-testability-plugin</artifactId>
-                <version>1.3.1</version>
+                <version>1.3.3</version>
             </plugin>
         </plugins>
     </reporting>
 
     <repositories>
         <repository>
-            <id>scala-tools.org</id>
-            <name>Scala-tools Maven2 Repository</name>
-            <url>http://scala-tools.org/repo-releases</url>
-        </repository>
-
-        <repository>
             <id>fest</id>
             <name>Fest repository</name>
             <url>http://fest.googlecode.com/svn/trunk/fest/m2/repository/</url>
         </repository>
     </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>scala-tools.org</id>
-            <name>Scala-tools Maven2 Repository</name>
-            <url>http://scala-tools.org/repo-releases</url>
-        </pluginRepository>
-    </pluginRepositories>
 </project>

@@ -19,5 +19,15 @@
             <artifactId>izpack-installer</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-test-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

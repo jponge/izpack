@@ -2,16 +2,15 @@ package com.izforge.izpack.integration;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.compiler.data.CompilerData;
-import com.izforge.izpack.core.data.UninstallData;
 import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.language.LanguageDialog;
 import org.apache.commons.io.FileUtils;
-import org.fest.swing.exception.ScreenLockException;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
-import org.junit.After;
-import org.junit.Test;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.Test;
 
 import java.awt.*;
 import java.io.File;
@@ -20,16 +19,15 @@ import java.io.IOException;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Test for an installation using mock data
+ * Test for an installation
  */
 public class InstallationTest extends AbstractInstallationTest
 {
 
-    @After
+    @AfterMethod
     public void tearBinding()
     {
         applicationContainer.dispose();
-
         try
         {
             if (dialogFrameFixture != null)
@@ -37,22 +35,17 @@ public class InstallationTest extends AbstractInstallationTest
                 dialogFrameFixture.cleanUp();
                 dialogFrameFixture = null;
             }
-            if (installerFrameFixture != null)
-            {
+        } finally {
+            if (installerFrameFixture != null) {
                 installerFrameFixture.cleanUp();
                 installerFrameFixture = null;
             }
         }
-        catch (ScreenLockException e)
-        {
-            e.printStackTrace();
-        }
     }
 
     @Test
-    public void testHelloAndFinishPanels() throws Exception
-    {
-        compileAndUnzip("helloAndFinish.xml", getWorkingDirectory("samples"));
+    public void testHelloAndFinishPanels() throws Exception {
+        compileInstallJar("helloAndFinish.xml", getWorkingDirectory("samples"));
         Image image = resourceManager.getImageIconResource("/img/JFrameIcon.png").getImage();
         assertThat(image, IsNull.<Object>notNullValue());
 
@@ -67,16 +60,17 @@ public class InstallationTest extends AbstractInstallationTest
         // Finish panel
     }
 
-    @Test
-    public void testHelloAndFinishPanelsCompressed() throws Exception
-    {
+
+    @Test(dependsOnMethods = "testHelloAndFinishPanels", enabled = false)
+    public void testHelloAndFinishPanelsCompressed() throws Exception {
+        System.out.println("Using file " + out.getName());
         File workingDirectory = getWorkingDirectory("samples");
         File out = new File("out.jar");
         File installerFile = new File(workingDirectory, "helloAndFinish.xml");
         CompilerData data = new CompilerData(installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), out.getAbsolutePath());
         data.setComprFormat("bzip2");
         data.setComprLevel(2);
-        compileAndUnzip(workingDirectory, data);
+        compileInstallJar(data);
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         installerContainer.getComponent(LanguageDialog.class).initLangPack();
         installerFrameFixture = prepareFrameFixture();
@@ -89,10 +83,9 @@ public class InstallationTest extends AbstractInstallationTest
     }
 
 
-    @Test
+    @Test(dependsOnMethods = "testHelloAndFinishPanels")
     public void testBasicInstall() throws Exception
-    {
-        compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
+        compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
 
         File installPath = prepareInstallation(installData);
@@ -100,9 +93,10 @@ public class InstallationTest extends AbstractInstallationTest
         clickDefaultLang();
 
         installerFrameFixture = prepareFrameFixture();
+        Thread.sleep(600);
         // Hello panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
-        Thread.sleep(300);
+        Thread.sleep(600);
         // Info Panel
         installerFrameFixture.textBox(GuiId.INFO_PANEL_TEXT_AREA.id).requireText("A readme file ...");
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
@@ -154,9 +148,9 @@ public class InstallationTest extends AbstractInstallationTest
     }
 
 
-    @Test
+    @Test(dependsOnMethods = "testBasicInstall")
     public void testIzpackInstallation() throws Exception
-    {
+        compileInstallJar("install.xml", getWorkingDirectory("samples/izpack"));
         compileAndUnzip("install.xml", getWorkingDirectory("samples/izpack"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
 
@@ -201,9 +195,8 @@ public class InstallationTest extends AbstractInstallationTest
             Thread.sleep(500);
         }
         assertThat(installPath.exists(), Is.is(true));
-        UninstallData u = UninstallData.getInstance();
-        for (String p : u.getInstalledFilesList())
-        {
+        UninstallData uninstallData = new UninstallData();
+        for (String p : uninstallData.getInstalledFilesList()) {
             File f = new File(p);
             assertThat(f.exists(), Is.is(true));
         }

@@ -27,8 +27,8 @@ import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.data.UninstallData;
 import com.izforge.izpack.data.PackFile;
+import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
@@ -51,12 +51,14 @@ public class BSFInstallerListener extends SimpleInstallerListener {
     private String currentPack = null;
     private AutomatedInstallData installdata = null;
     private VariableSubstitutor variableSubstitutor;
+    private UninstallData uninstallData;
 
-    public BSFInstallerListener(VariableSubstitutor variableSubstitutor) {
+    public BSFInstallerListener(VariableSubstitutor variableSubstitutor, UninstallData uninstallData) {
         super(true);
         this.variableSubstitutor = variableSubstitutor;
         actions = new HashMap<String, ArrayList<BSFAction>>();
         uninstActions = new ArrayList<BSFAction>();
+        this.uninstallData = uninstallData;
     }
 
     public void beforePacks(AutomatedInstallData idata, Integer npacks, AbstractUIProgressHandler handler) throws Exception {
@@ -132,7 +134,7 @@ public class BSFInstallerListener extends SimpleInstallerListener {
             performAllActions(currentPack, ActionBase.AFTERPACKS, handler, new Object[]{idata, handler});
         }
         if (uninstActions.size() > 0) {
-            UninstallData.getInstance().addAdditionalData("bsfActions", uninstActions);
+            uninstallData.addAdditionalData("bsfActions", uninstActions);
         }
         installdata = null;
     }

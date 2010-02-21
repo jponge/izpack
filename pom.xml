@@ -14,7 +14,7 @@
         <module>izpack-maven-plugin</module>
         <module>izpack-core</module>
         <module>izpack-compiler</module>
-        <!--<module>izpack-dist</module>-->
+        <module>izpack-dist</module>
         <module>izpack-gui</module>
         <module>izpack-uninstaller</module>
         <module>izpack-panel</module>
@@ -22,13 +22,12 @@
         <module>izpack-listener</module>
         <module>izpack-installer</module>
         <module>izpack-event</module>
-        <module>izpack-uninstaller-ext</module>
         <module>izpack-test</module>
         <module>izpack-api</module>
         <module>izpack-util</module>
         <module>izpack-utils</module>
         <module>izpack-ant</module>
-        <module>izpack-test-scala</module>
+        <module>izpack-test-common</module>
     </modules>
 
 </project>

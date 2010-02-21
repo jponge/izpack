@@ -16,31 +16,65 @@
     <dependencies>
         <dependency>
             <groupId>${groupId}</groupId>
-            <artifactId>izpack-dist</artifactId>
-            <version>${version}</version>
+            <artifactId>izpack-test-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-compiler</artifactId>
         </dependency>
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>izpack-utils</artifactId>
-            <version>${version}</version>
         </dependency>
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>izpack-event</artifactId>
-            <version>${version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-dist</artifactId>
         </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>1.4</version>
         </dependency>
         <dependency>
             <groupId>jakarta-regexp</groupId>
             <artifactId>jakarta-regexp</artifactId>
-            <version>1.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <classifier>jdk15</classifier>
+        </dependency>
+
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>bamboo</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>true</skip>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
@@ -84,43 +118,29 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/src/test/resources/lib</outputDirectory>
-                            <includeGroupIds>org.codehaus.izpack</includeGroupIds>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-custom actions</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/src/test/resources/bin/customActions</outputDirectory>
-                            <includeGroupIds>org.codehaus.izpack.event</includeGroupIds>
-                            <stripVersion>true</stripVersion>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>Unpack native libs</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>unpack-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <includeArtifactIds>izpack-native</includeArtifactIds>
-                            <classifier>dll</classifier>
-                            <type>tar.gz</type>
-                            <outputDirectory>${basedir}/src/test/resources/</outputDirectory>
-                        </configuration>
-                    </execution>
+                    <!--<execution>-->
+                    <!--<id>copy-dependencies</id>-->
+                    <!--<phase>process-resources</phase>-->
+                    <!--<goals>-->
+                    <!--<goal>copy-dependencies</goal>-->
+                    <!--</goals>-->
+                    <!--<configuration>-->
+                    <!--<outputDirectory>${basedir}/src/test/resources/lib</outputDirectory>-->
+                    <!--<includeGroupIds>org.codehaus.izpack</includeGroupIds>-->
+                    <!--</configuration>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                    <!--<id>copy-custom actions</id>-->
+                    <!--<phase>process-resources</phase>-->
+                    <!--<goals>-->
+                    <!--<goal>copy-dependencies</goal>-->
+                    <!--</goals>-->
+                    <!--<configuration>-->
+                    <!--<outputDirectory>${basedir}/src/test/resources/bin/customActions</outputDirectory>-->
+                    <!--<includeGroupIds>org.codehaus.izpack.event</includeGroupIds>-->
+                    <!--<stripVersion>true</stripVersion>-->
+                    <!--</configuration>-->
+                    <!--</execution>-->
 
                     <execution>
                         <id>Unpack izpack installer files</id>

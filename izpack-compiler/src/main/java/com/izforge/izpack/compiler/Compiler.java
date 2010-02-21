@@ -25,27 +25,28 @@
 
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.PackColor;
 import com.izforge.izpack.api.exception.CompilerException;
-import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
+import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.CustomData;
-import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.PackInfo;
-import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
@@ -71,9 +72,6 @@ public class Compiler extends Thread {
      */
     private boolean compileFailed = true;
 
-    private CompilerContainer compilerContainer;
-
-    private CompilerData compilerData;
     private CompilerHelper compilerHelper;
     /**
      * Replaces the properties in the install.xml file prior to compiling
@@ -82,33 +80,17 @@ public class Compiler extends Thread {
 
     public PropertyManager propertyManager;
 
-    private MergeManager mergeManager;
-
     /**
      * The constructor.
      *
      * @throws CompilerException
      */
-    public Compiler(CompilerData compilerData, VariableSubstitutor variableSubstitutor, CompilerContainer compilerContainer, PropertyManager propertyManager, CompilerHelper compilerHelper, MergeManager mergeManager, IPackager packager) throws CompilerException {
-        this.compilerData = compilerData;
+    public Compiler(VariableSubstitutor variableSubstitutor, PropertyManager propertyManager, CompilerHelper compilerHelper, IPackager packager) throws CompilerException {
         this.propertyManager = propertyManager;
         this.propertySubstitutor = variableSubstitutor;
-        this.compilerContainer = compilerContainer;
         this.compilerHelper = compilerHelper;
-        this.mergeManager = mergeManager;
         this.packager = packager;
         // add izpack built in property
-        propertyManager.setProperty("izpack.version", CompilerData.IZPACK_VERSION);
-        propertyManager.setProperty("basedir", compilerData.getBasedir());
-    }
-
-    /**
-     * Get the packager variables.
-     *
-     * @return the packager variables
-     */
-    public Properties getVariables() {
-        return packager.getVariables();
     }
 
     /**
@@ -149,130 +131,6 @@ public class Compiler extends Thread {
      */
     public boolean wasSuccessful() {
         return !this.compileFailed;
-    }
-
-    /**
-     * Sets GUI preferences to the packager.
-     *
-     * @param prefs preferences to be set
-     */
-    public void setGUIPrefs(GUIPrefs prefs) {
-        packager.setGUIPrefs(prefs);
-    }
-
-    /**
-     * Sets an Info object to the packager.
-     *
-     * @param info Info object to be set
-     * @throws Exception
-     */
-    public void setInfo(Info info) {
-        packager.setInfo(info);
-    }
-
-    /**
-     * Returns the install packager.
-     *
-     * @return the install packager.
-     */
-    public IPackager getPackager() {
-        return packager;
-    }
-
-    /**
-     * Add jar content to the installation.
-     *
-     * @param content
-     */
-    public void addJarContent(URL content) {
-        packager.addJarContent(content);
-    }
-
-    /**
-     * Adds a jar file content to the installer. Package structure is maintained. Need mechanism to
-     * copy over signed entry information. If the given file list is null the hole contents of the
-     * jar file will be copied else only the listed.
-     *
-     * @param content The url of the jar to add to the installer. We use a URL so the jar may be
-     *                nested within another.
-     * @param files   to be copied
-     */
-    public void addJarContent(URL content, List<String> files) {
-        packager.addJarContent(content, files);
-    }
-
-    /**
-     * Add a custom jar to the installation.
-     *
-     * @param ca
-     * @param url
-     */
-    public void addCustomJar(CustomData ca, URL url) {
-        packager.addCustomJar(ca, url);
-    }
-
-    public void addInstallerRequirement(List<InstallerRequirement> conditions) {
-        packager.addInstallerRequirements(conditions);
-    }
-
-    /**
-     * Add a lang pack to the installation.
-     *
-     * @param locale
-     * @param localeURL
-     * @param flagURL
-     */
-    public void addLangPack(String locale, URL localeURL, URL flagURL) {
-        packager.addLangPack(locale, localeURL, flagURL);
-    }
-
-    /**
-     * Add a native library to the installation.
-     *
-     * @param name
-     * @param url
-     * @throws Exception
-     */
-    public void addNativeLibrary(String name, URL url) {
-        packager.addNativeLibrary(name, url);
-    }
-
-    /**
-     * Add an unistaller library.
-     *
-     * @param data
-     */
-    public void addNativeUninstallerLibrary(CustomData data) {
-        packager.addNativeUninstallerLibrary(data);
-    }
-
-    /**
-     * Add a pack to the installation.
-     *
-     * @param pack
-     */
-    public void addPack(PackInfo pack) {
-        packager.addPack(pack);
-    }
-
-    /**
-     * Add a panel jar to the installation.
-     *
-     * @param panel
-     * @param url
-     */
-    public void addPanelJar(Panel panel, URL url) {
-        packager.addPanelJar(panel, url);
-    }
-
-    /**
-     * Add a resource to the installation.
-     *
-     * @param name
-     * @param url
-     */
-    public void addResource(String name, URL url) {
-        packager.addResource(name, url);
     }
 
     /**
@@ -457,7 +315,7 @@ public class Compiler extends Thread {
 
             if (!resource.exists()) {
                 if (ignoreWhenNotFound) {
-                    parseWarn(desc + " not found: " + resource);
+                    AssertionHelper.parseWarn(desc + " not found: " + resource);
                 } else {
                     parseError(desc + " not found: " + resource); // fatal
                 }
@@ -472,10 +330,6 @@ public class Compiler extends Thread {
         }
 
         return url;
-    }
-
-    private void parseWarn(String message) {
-        System.out.println("Warning: " + message);
     }
 
     /**
@@ -503,16 +357,6 @@ public class Compiler extends Thread {
         throw new CompilerException(message, how);
     }
 
-    /**
-     * The main method if the compiler is invoked by a command-line call.
-     * This simply calls the CompilerConfig.main method.
-     *
-     * @param args The arguments passed on the command-line.
-     */
-//    public static void main(String[] args) {
-//        CompilerConfig.main(args);
-//    }
-
     // -------------------------------------------------------------------------
     // ------------- Listener stuff ------------------------- START ------------
 
@@ -532,7 +376,6 @@ public class Compiler extends Thread {
         jarPath = propertySubstitutor.substitute(jarPath, SubstitutionType.TYPE_AT);
         String fullClassName = className;
         List<String> filePaths = null;
-
         URL url = findIzPackResource(jarPath, "CustomAction jar file", true);
 
         if (url != null) {
@@ -582,17 +425,4 @@ public class Compiler extends Thread {
         return (null);
     }
 
-    // -------------------------------------------------------------------------
-    // ------------- Listener stuff ------------------------- END ------------
-
-    /**
-     * @return the conditions
-     */
-    public Map<String, Condition> getConditions() {
-        return this.packager.getRules();
-    }
-
-    public Map<String, List<DynamicVariable>> getDynamicVariables() {
-        return this.packager.getDynamicVariables();
-    }
 }

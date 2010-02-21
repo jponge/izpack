@@ -19,9 +19,9 @@
 
 package com.izforge.izpack.uninstaller;
 
-import com.izforge.izpack.core.data.UninstallData;
 import com.izforge.izpack.core.event.UninstallerListener;
 import com.izforge.izpack.data.ExecutableFile;
+import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;

@@ -73,13 +73,6 @@ public interface IPackager {
     public abstract Properties getVariables();
 
     /**
-     * Add a panel, where order is important. Only one copy of the class files needd are inserted in
-     * the installer. When jarURL is null, it is assumed that user will do the manual merged
-     * using <Jar> tag themselves
-     */
-    public abstract void addPanelJar(Panel panel, URL jarURL);
-
-    /**
      * Add a custom data like custom actions, where order is important. Only one copy of the class
      * files neeed are inserted in the installer.
      *
@@ -136,17 +129,6 @@ public interface IPackager {
     public abstract void addJarContent(URL jarURL);
 
     /**
-     * Adds a jar file content to the installer. Package structure is maintained. Need mechanism to
-     * copy over signed entry information. If the given file list is null the hole contents of the
-     * jar file will be copied else only the listed.
-     *
-     * @param jarURL The url of the jar to add to the installer. We use a URL so the jar may be
-     *               nested within another.
-     * @param files  to be copied
-     */
-    public abstract void addJarContent(URL jarURL, List<String> files);
-
-    /**
      * Marks a native library to be added to the uninstaller.
      *
      * @param data the describing custom action data object
@@ -168,16 +150,15 @@ public interface IPackager {
     public abstract Map<String, Condition> getRules();
 
     /**
-     * @param rules the rules to set
-     */
-    public abstract void setRules(Map<String, Condition> rules);
-
-    /**
      * Returns a map of dynamically refreshed variables
      *
      * @return the map
      */
     public abstract Map<String, List<DynamicVariable>> getDynamicVariables();
 
+    /**
+     * Add a panel, where order is important. Only one copy of the class files needd are inserted in
+     * the installer. The panel class is automatically searched in the classpath.
+     */
     void addPanel(Panel panel);
 }

@@ -685,6 +685,18 @@ public class IoHelper {
         out.closeEntry();
     }
 
+    public static void copyStreamToJar(InputStream zin, java.util.zip.ZipOutputStream out, String currentName, long fileTime) throws IOException {
+        // Create new entry for zip file.
+        org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(currentName);
+        // Make sure there is date and time set.
+        if (fileTime != -1) {
+            newEntry.setTime(fileTime); // If found set it into output file.
+        }
+        out.putNextEntry(newEntry);
+        copyStream(zin, out);
+        out.closeEntry();
+    }
+
     /**
      * Copies all the data from the specified input stream to the specified output stream.
      *

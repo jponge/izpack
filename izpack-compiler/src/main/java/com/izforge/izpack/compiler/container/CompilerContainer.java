@@ -13,6 +13,7 @@ import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.compiler.packager.impl.Packager;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.merge.MergeManager;
+import com.izforge.izpack.merge.MergeManagerImpl;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.picocontainer.PicoBuilder;
 import org.picocontainer.injectors.ProviderAdapter;
@@ -37,10 +38,10 @@ public class CompilerContainer extends AbstractContainer {
         pico.addComponent(CompilerHelper.class);
         pico.addComponent(PropertyManager.class);
         pico.addComponent(CompilerResourceManager.class);
-        pico.addComponent(MergeManager.class);
+        pico.addComponent(MergeManager.class, MergeManagerImpl.class);
         pico.addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class);
-
         pico.addComponent(IPackager.class, Packager.class);
+
         pico.addAdapter(new ProviderAdapter(new XmlCompilerHelperProvider()));
         pico.addAdapter(new ProviderAdapter(new PropertiesProvider()));
         pico.addAdapter(new ProviderAdapter(new JarOutputStreamProvider()));

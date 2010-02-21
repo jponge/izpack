@@ -22,7 +22,6 @@ import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.data.UninstallData;
 import com.izforge.izpack.core.event.InstallerListener;
 import com.izforge.izpack.core.io.CorruptVolumeException;
 import com.izforge.izpack.core.io.FileSpanningInputStream;
@@ -30,6 +29,7 @@ import com.izforge.izpack.core.io.FileSpanningOutputStream;
 import com.izforge.izpack.core.io.VolumeNotFoundException;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.installer.automation.PanelAutomation;
+import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.unpacker.IMultiVolumeUnpackerHelper;
 import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.installer.unpacker.UnpackerBase;
@@ -52,8 +52,8 @@ import java.util.Properties;
 public class MultiVolumeUnpacker extends UnpackerBase {
     protected IMultiVolumeUnpackerHelper helper;
 
-    public MultiVolumeUnpacker(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor) {
-        super(idata, handler, resourceManager, rules, variableSubstitutor);
+    public MultiVolumeUnpacker(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata) {
+        super(idata, handler, resourceManager, rules, variableSubstitutor, udata);
         if (handler instanceof PanelAutomation) {
             Debug.trace("running in auto installation mode.");
             helper = new MultiVolumeUnpackerAutomationHelper();
@@ -86,7 +86,6 @@ public class MultiVolumeUnpacker extends UnpackerBase {
             int npacks = packs.size();
             Debug.trace("Unpacker starting");
             handler.startAction("Unpacking", npacks);
-            udata = UninstallData.getInstance();
             // Custom action listener stuff --- load listeners ----
             List[] customActions = getCustomActions();
             // Custom action listener stuff --- beforePacks ----
