@@ -35,8 +35,11 @@ public class InstallationTest extends AbstractInstallationTest
                 dialogFrameFixture.cleanUp();
                 dialogFrameFixture = null;
             }
-        } finally {
-            if (installerFrameFixture != null) {
+        }
+        finally
+        {
+            if (installerFrameFixture != null)
+            {
                 installerFrameFixture.cleanUp();
                 installerFrameFixture = null;
             }
@@ -44,7 +47,8 @@ public class InstallationTest extends AbstractInstallationTest
     }
 
     @Test
-    public void testHelloAndFinishPanels() throws Exception {
+    public void testHelloAndFinishPanels() throws Exception
+    {
         compileInstallJar("helloAndFinish.xml", getWorkingDirectory("samples"));
         Image image = resourceManager.getImageIconResource("/img/JFrameIcon.png").getImage();
         assertThat(image, IsNull.<Object>notNullValue());
@@ -62,7 +66,8 @@ public class InstallationTest extends AbstractInstallationTest
 
 
     @Test(dependsOnMethods = "testHelloAndFinishPanels", enabled = false)
-    public void testHelloAndFinishPanelsCompressed() throws Exception {
+    public void testHelloAndFinishPanelsCompressed() throws Exception
+    {
         System.out.println("Using file " + out.getName());
         File workingDirectory = getWorkingDirectory("samples");
         File out = new File("out.jar");
@@ -85,6 +90,7 @@ public class InstallationTest extends AbstractInstallationTest
 
     @Test(dependsOnMethods = "testHelloAndFinishPanels")
     public void testBasicInstall() throws Exception
+    {
         compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
 
@@ -150,8 +156,8 @@ public class InstallationTest extends AbstractInstallationTest
 
     @Test(dependsOnMethods = "testBasicInstall")
     public void testIzpackInstallation() throws Exception
+    {
         compileInstallJar("install.xml", getWorkingDirectory("samples/izpack"));
-        compileAndUnzip("install.xml", getWorkingDirectory("samples/izpack"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
 
         File installPath = prepareInstallation(installData);
@@ -196,7 +202,8 @@ public class InstallationTest extends AbstractInstallationTest
         }
         assertThat(installPath.exists(), Is.is(true));
         UninstallData uninstallData = new UninstallData();
-        for (String p : uninstallData.getInstalledFilesList()) {
+        for (String p : uninstallData.getInstalledFilesList())
+        {
             File f = new File(p);
             assertThat(f.exists(), Is.is(true));
         }

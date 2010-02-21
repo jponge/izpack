@@ -224,6 +224,7 @@ public class InstallerFrame extends JFrame
         this.icons = icons;
         this.resourceManager = resourceManager;
         this.uninstallDataWriter = uninstallDataWriter;
+        this.uninstallData = uninstallData;
         this.panelManager = panelManager;
         // Sets the window events handler
         addWindowListener(new WindowHandler());
@@ -951,7 +952,6 @@ public class InstallerFrame extends JFrame
         }
 
         // Wipe the files that had been installed
-        UninstallData u = UninstallData.getInstance();
         for (String p : uninstallData.getInstalledFilesList()) {
             File f = new File(p);
             f.delete();
