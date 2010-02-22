@@ -5,8 +5,8 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractChildContainer;
+import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.container.IApplicationContainer;
 import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.language.LanguageDialog;
 import com.izforge.izpack.installer.manager.PanelManager;
@@ -23,7 +23,7 @@ import java.awt.*;
 public class InstallerContainer extends AbstractChildContainer
 {
 
-    public InstallerContainer(IApplicationContainer parent) throws ClassNotFoundException
+    public InstallerContainer(AbstractContainer parent) throws ClassNotFoundException
     {
         super(parent);
         initBindings();
