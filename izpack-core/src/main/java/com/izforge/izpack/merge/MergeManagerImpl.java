@@ -19,9 +19,11 @@ public class MergeManagerImpl implements MergeManager
 
 
     private List<Mergeable> mergeableList;
+    private PathResolver pathResolver;
 
-    public MergeManagerImpl()
+    public MergeManagerImpl(PathResolver pathResolver)
     {
+        this.pathResolver = pathResolver;
         mergeableList = new ArrayList<Mergeable>();
     }
 
@@ -32,12 +34,12 @@ public class MergeManagerImpl implements MergeManager
 
     public void addResourceToMerge(String resourcePath)
     {
-        mergeableList.addAll(PathResolver.getMergeableFromPath(resourcePath));
+        mergeableList.addAll(pathResolver.getMergeableFromPath(resourcePath));
     }
 
     public void addResourceToMerge(String resourcePath, String destination)
     {
-        mergeableList.addAll(PathResolver.getMergeableFromPath(resourcePath, destination));
+        mergeableList.addAll(pathResolver.getMergeableFromPath(resourcePath, destination));
     }
 
     public void merge(ZipOutputStream outputStream)

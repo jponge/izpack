@@ -22,7 +22,8 @@ public class MergeManagerTest
     @BeforeMethod
     public void setUp()
     {
-        mergeManager = new MergeManagerImpl();
+        PathResolver pathResolver = new PathResolver();
+        mergeManager = new MergeManagerImpl(pathResolver);
     }
 
     @Test

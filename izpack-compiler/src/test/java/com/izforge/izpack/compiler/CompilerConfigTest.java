@@ -11,6 +11,7 @@ import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.merge.MergeManagerImpl;
+import com.izforge.izpack.merge.resolve.PathResolver;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -50,7 +51,8 @@ public class CompilerConfigTest
         xmlCompilerHerlper = new XmlCompilerHelper(data.getInstallFile());
         mapStringListDyn = Mockito.mock(Map.class);
         packager = Mockito.mock(IPackager.class);
-        mergeManager = new MergeManagerImpl();
+        PathResolver pathResolver = new PathResolver();
+        mergeManager = new MergeManagerImpl(pathResolver);
         compilerConfig = new CompilerConfig(data, variableSubstitutor, compiler, compilerHelper, xmlCompilerHerlper, propertyManager, packager, mergeManager);
         xmlParser = new XMLParser();
     }

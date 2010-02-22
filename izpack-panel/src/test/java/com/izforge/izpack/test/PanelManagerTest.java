@@ -6,6 +6,7 @@ import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.merge.MergeManagerImpl;
+import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.panels.checkedhello.CheckedHelloPanel;
 import org.hamcrest.core.Is;
 import org.junit.Before;
@@ -31,7 +32,8 @@ public class PanelManagerTest
     public void initMock() throws ClassNotFoundException
     {
         MockitoAnnotations.initMocks(getClass());
-        mergeManager = new MergeManagerImpl();
+        PathResolver pathResolver = new PathResolver();
+        mergeManager = new MergeManagerImpl(pathResolver);
         panelManager = new PanelManager(installDataGUI, installerContainer, mergeManager);
     }
 
