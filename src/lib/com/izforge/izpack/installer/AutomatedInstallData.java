@@ -23,11 +23,10 @@ import com.izforge.izpack.Info;
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.Panel;
-import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
-
+import com.izforge.izpack.rules.RulesEngine;
+import com.izforge.izpack.util.OsVersion;
 
 import java.io.Serializable;
 import java.util.*;
@@ -249,7 +248,9 @@ public class AutomatedInstallData implements Serializable
         {
             String[] parts = path.trim().split(":", 2);
             if (parts.length > 0 && parts[0].length() == 1)
-                setVariable(ScriptParser.INSTALL_DRIVE, parts[0]+":");
+            {
+                setVariable(ScriptParser.INSTALL_DRIVE, parts[0] + ":");
+            }
         }
     }
 

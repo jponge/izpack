@@ -43,7 +43,8 @@ import static junit.framework.Assert.assertEquals;
  * @author Anthonin Bonnefoy
  * @author David Duponchel
  */
-public class XMLParserTest {
+public class XMLParserTest
+{
 
     private static final String filename = "shortcutSpec.xml";
     private static final String shortFilename = "short.xml";
@@ -54,7 +55,8 @@ public class XMLParserTest {
 
 
     @org.junit.Test
-    public void testParseFile() throws Exception {
+    public void testParseFile() throws Exception
+    {
         InputStream input;
         IXMLElement spec;
         input = XMLParserTest.class.getResourceAsStream(shortFilename);
@@ -65,7 +67,8 @@ public class XMLParserTest {
     }
 
     @Test
-    public void testParseString() throws Exception {
+    public void testParseString() throws Exception
+    {
         IXMLElement spec;
         String substitutedSpec = FileUtils.readFileToString(new File(XMLParserTest.class.getResource(filename).getFile()));
         IXMLParser parser = new XMLParser();
@@ -73,15 +76,18 @@ public class XMLParserTest {
         Assert.assertEquals("shortcuts", spec.getName());
     }
 
-    private void checkEltLN(IXMLElement elt) {
+    private void checkEltLN(IXMLElement elt)
+    {
         assertEquals(Integer.parseInt(elt.getAttribute("ln")), elt.getLineNr());
-        for (IXMLElement child : elt.getChildren()) {
+        for (IXMLElement child : elt.getChildren())
+        {
             checkEltLN(child);
         }
     }
 
     @org.junit.Test
-    public void testLineNumber() throws SAXException, ParserConfigurationException, IOException, TransformerException {
+    public void testLineNumber() throws SAXException, ParserConfigurationException, IOException, TransformerException
+    {
         InputStream input = XMLParserTest.class.getResourceAsStream(lnFilename);
         IXMLElement elt;
 
@@ -92,7 +98,8 @@ public class XMLParserTest {
     }
 
     @Test
-    public void testXincludeLineNumber() throws SAXException, ParserConfigurationException, IOException, TransformerException {
+    public void testXincludeLineNumber() throws SAXException, ParserConfigurationException, IOException, TransformerException
+    {
         URL url = XMLParserTest.class.getResource(xlnFilename);
 
         IXMLParser parser = new XMLParser();
@@ -102,14 +109,16 @@ public class XMLParserTest {
     }
 
     @Test(expected = XMLException.class)
-    public void testXMLExceptionThrown() {
+    public void testXMLExceptionThrown()
+    {
         InputStream input = XMLParserTest.class.getResourceAsStream(parseErrorFilename);
         IXMLParser parser = new XMLParser();
         parser.parse(input, parseErrorFilename);
     }
 
     @Test(expected = XMLException.class)
-    public void testXMLExceptionThrownXInclude() {
+    public void testXMLExceptionThrownXInclude()
+    {
         InputStream input = XMLParserTest.class.getResourceAsStream(parseErrorXincludeFilename);
         IXMLParser parser = new XMLParser();
         parser.parse(input, parseErrorXincludeFilename);

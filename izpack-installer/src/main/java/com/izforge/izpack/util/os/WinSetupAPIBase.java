@@ -5,7 +5,8 @@ import com.izforge.izpack.util.NativeLibraryClient;
 
 import java.io.IOException;
 
-public class WinSetupAPIBase implements NativeLibraryClient {
+public class WinSetupAPIBase implements NativeLibraryClient
+{
 
     protected static final int INVALID_HANDLE_VALUE = -1;
 
@@ -139,18 +140,22 @@ public class WinSetupAPIBase implements NativeLibraryClient {
 
     // ----------------------------- Constructor -------------------------------
 
-    public WinSetupAPIBase() throws Exception {
-        try {
+    public WinSetupAPIBase() throws Exception
+    {
+        try
+        {
             Librarian.getInstance().loadLibrary("WinSetupAPI", this);
         }
-        catch (UnsatisfiedLinkError exception) {
+        catch (UnsatisfiedLinkError exception)
+        {
             throw (new Exception("could not locate native library"));
         }
     }
 
     // ----------------------------- Interface NativeLibraryClient -------------
 
-    public void freeLibrary(String name) {
+    public void freeLibrary(String name)
+    {
     }
 
     ;

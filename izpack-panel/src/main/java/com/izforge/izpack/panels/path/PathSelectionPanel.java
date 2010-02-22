@@ -45,7 +45,8 @@ import java.io.File;
  *
  * @author Klaus Bartz
  */
-public class PathSelectionPanel extends JPanel implements ActionListener, LayoutConstants {
+public class PathSelectionPanel extends JPanel implements ActionListener, LayoutConstants
+{
 
     /**
      *
@@ -78,7 +79,8 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
      * @param parent The parent IzPanel.
      * @param idata  The installer internal installDataGUI.
      */
-    public PathSelectionPanel(IzPanel parent, GUIInstallData idata) {
+    public PathSelectionPanel(IzPanel parent, GUIInstallData idata)
+    {
         super();
         this.parent = parent;
         this.idata = idata;
@@ -88,7 +90,8 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
     /**
      * Creates the layout for this sub panel.
      */
-    protected void createLayout() {
+    protected void createLayout()
+    {
         // We would use the IzPanelLayout also in this "sub" panel.
         // In an IzPanel there is support for this layout manager in
         // more than one place, but not in this panel so we have
@@ -119,7 +122,8 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
     // There are problems with the size if no other component needs the
     // full size. Sometimes directly, somtimes only after a back step.
 
-    public Dimension getMinimumSize() {
+    public Dimension getMinimumSize()
+    {
         Dimension ss = super.getPreferredSize();
         Dimension retval = parent.getSize();
         retval.height = ss.height;
@@ -131,10 +135,12 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
      *
      * @param e The event.
      */
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
         Object source = e.getSource();
 
-        if (source == browseButton) {
+        if (source == browseButton)
+        {
             // The user wants to browse its filesystem
 
             // Prepares the file chooser
@@ -145,13 +151,17 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
             fc.addChoosableFileFilter(fc.getAcceptAllFileFilter());
 
             // Shows it
-            if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
+            {
                 String path = fc.getSelectedFile().getAbsolutePath();
                 textField.setText(path);
             }
 
-        } else {
-            if (parent instanceof ActionListener) {
+        }
+        else
+        {
+            if (parent instanceof ActionListener)
+            {
                 ((ActionListener) parent).actionPerformed(e);
             }
         }
@@ -162,7 +172,8 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
      *
      * @return the chosen path
      */
-    public String getPath() {
+    public String getPath()
+    {
         return (textField.getText());
     }
 
@@ -171,7 +182,8 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
      *
      * @param path the path to be set
      */
-    public void setPath(String path) {
+    public void setPath(String path)
+    {
         textField.setText(path);
     }
 
@@ -181,7 +193,8 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
      *
      * @return the text input field for the path
      */
-    public JTextField getPathInputField() {
+    public JTextField getPathInputField()
+    {
         return textField;
     }
 
@@ -190,7 +203,8 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
      *
      * @return the browse button to open the JFileChooser
      */
-    public JButton getBrowseButton() {
+    public JButton getBrowseButton()
+    {
         return browseButton;
     }
 

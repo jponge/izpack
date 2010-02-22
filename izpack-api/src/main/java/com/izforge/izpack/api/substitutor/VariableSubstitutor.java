@@ -15,7 +15,8 @@ import java.io.*;
  *
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
-public interface VariableSubstitutor extends Serializable {
+public interface VariableSubstitutor extends Serializable
+{
 
     /**
      * Specify whether this substitutor requires braces.

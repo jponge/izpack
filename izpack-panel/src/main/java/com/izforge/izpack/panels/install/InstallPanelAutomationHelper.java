@@ -36,7 +36,8 @@ import com.izforge.izpack.util.AbstractUIProgressHandler;
  * @author Jonathan Halliday
  */
 public class InstallPanelAutomationHelper extends PanelAutomationHelper implements PanelAutomation,
-        AbstractUIProgressHandler {
+        AbstractUIProgressHandler
+{
 
     private int noOfPacks = 0;
 
@@ -46,7 +47,8 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
      * @param installData unused.
      * @param panelRoot   unused.
      */
-    public void makeXMLData(AutomatedInstallData installData, IXMLElement panelRoot) {
+    public void makeXMLData(AutomatedInstallData installData, IXMLElement panelRoot)
+    {
         // do nothing.
     }
 
@@ -56,7 +58,8 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
      * @param panelRoot The panel XML tree root.
      * @return true if the installation was successful.
      */
-    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException {
+    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException
+    {
         /*
         Unpacker unpacker = new Unpacker(installData, this);
         unpacker.start();
@@ -67,15 +70,19 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
         Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
         unpacker.setRules((RulesEngine) idata.getRules());
         unpackerthread.start();
-        while (unpackerthread.isAlive()) {
-            try {
+        while (unpackerthread.isAlive())
+        {
+            try
+            {
                 Thread.sleep(100);
             }
-            catch (InterruptedException e) {
+            catch (InterruptedException e)
+            {
                 // ignore it, we're waiting for the unpacker to finish...
             }
         }
-        if (!unpacker.getResult()) {
+        if (!unpacker.getResult())
+        {
             throw new InstallerException("Unpack failed (xml line " + panelRoot.getLineNr() + ")");
         }
     }
@@ -85,7 +92,8 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
      *
      * @see AbstractUIProgressHandler#startAction(String, int)
      */
-    public void startAction(String name, int no_of_steps) {
+    public void startAction(String name, int no_of_steps)
+    {
         System.out.println("[ Starting to unpack ]");
         this.noOfPacks = no_of_steps;
     }
@@ -95,7 +103,8 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
      *
      * @see com.izforge.izpack.util.AbstractUIProgressHandler#stopAction()
      */
-    public void stopAction() {
+    public void stopAction()
+    {
         System.out.println("[ Unpacking finished ]");
         boolean done = true;
     }
@@ -107,7 +116,8 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
      * @param msg
      * @see com.izforge.izpack.util.AbstractUIProgressHandler#progress(int, String)
      */
-    public void progress(int val, String msg) {
+    public void progress(int val, String msg)
+    {
         // silent for now. should log individual files here, if we had a verbose
         // mode?
     }
@@ -120,7 +130,8 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
      * @param stepsize unused
      * @see com.izforge.izpack.util.AbstractUIProgressHandler#nextStep(String, int, int)
      */
-    public void nextStep(String packName, int stepno, int stepsize) {
+    public void nextStep(String packName, int stepno, int stepsize)
+    {
         System.out.print("[ Processing package: " + packName + " (");
         System.out.print(stepno);
         System.out.print('/');
@@ -131,7 +142,8 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
     /**
      * {@inheritDoc}
      */
-    public void setSubStepNo(int no_of_substeps) {
+    public void setSubStepNo(int no_of_substeps)
+    {
         // not used here
     }
 }

@@ -10,10 +10,13 @@ import java.util.Properties;
 /**
  * Install data loader
  */
-public class AutomatedInstallDataProvider extends AbstractInstallDataProvider {
+public class AutomatedInstallDataProvider extends AbstractInstallDataProvider
+{
 
-    public AutomatedInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer, VariableSubstitutor variableSubstitutor, Properties variables) {
-        try {
+    public AutomatedInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer, VariableSubstitutor variableSubstitutor, Properties variables)
+    {
+        try
+        {
             this.resourceManager = resourceManager;
             this.variableSubstitutor = variableSubstitutor;
             final AutomatedInstallData automatedInstallData = new AutomatedInstallData(variables, variableSubstitutor);
@@ -28,7 +31,9 @@ public class AutomatedInstallDataProvider extends AbstractInstallDataProvider {
             loadDynamicVariables(automatedInstallData);
             loadInstallerRequirements(automatedInstallData);
             return automatedInstallData;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             // TODO little workaround to get pico message. Should find a better way in the future            
             throw new RuntimeException(e);
         }

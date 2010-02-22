@@ -90,7 +90,8 @@ import java.util.Vector;
  * @version 0.0.1 / 11/14/02
  * @see com.izforge.izpack.gui.TwoColumnConstraints
  */
-public class TwoColumnLayout implements LayoutManager2 {
+public class TwoColumnLayout implements LayoutManager2
+{
 
     public static final int LEFT = 0;
 
@@ -151,17 +152,21 @@ public class TwoColumnLayout implements LayoutManager2 {
      *                  cluster. Values between 0% and 100% are accepted.
      * @param alignment how to align the overall layout. Legal values are LEFT, CENTER, RIGHT.
      */
-    public TwoColumnLayout(int margin, int gap, int indent, int topBuffer, int alignment) {
+    public TwoColumnLayout(int margin, int gap, int indent, int topBuffer, int alignment)
+    {
         this.indent = indent;
         this.gap = gap;
 
-        if ((margin >= 0) && (margin <= 50)) {
+        if ((margin >= 0) && (margin <= 50))
+        {
             this.margin = margin;
         }
-        if ((topBuffer >= 0) && (topBuffer <= 100)) {
+        if ((topBuffer >= 0) && (topBuffer <= 100))
+        {
             this.topBuffer = topBuffer;
         }
-        if ((alignment == LEFT) || (alignment == CENTER) || (alignment == RIGHT)) {
+        if ((alignment == LEFT) || (alignment == CENTER) || (alignment == RIGHT))
+        {
             this.alignment = alignment;
         }
     }
@@ -173,17 +178,21 @@ public class TwoColumnLayout implements LayoutManager2 {
      * @param comp        the component to be modified.
      * @param constraints the constraints to be applied.
      */
-    public void addLayoutComponent(Component comp, Object constraints) {
-        if (constraints == null) {
+    public void addLayoutComponent(Component comp, Object constraints)
+    {
+        if (constraints == null)
+        {
             return;
         }
 
         TwoColumnConstraints component = null;
-        try {
+        try
+        {
             component = (TwoColumnConstraints) constraints;
             component = (TwoColumnConstraints) component.clone();
         }
-        catch (Throwable exception) {
+        catch (Throwable exception)
+        {
             return;
         }
 
@@ -194,9 +203,11 @@ public class TwoColumnLayout implements LayoutManager2 {
         // variable, displacing any component that might have
         // been previously recorded for that location.
         // ----------------------------------------------------
-        if (component.position == TwoColumnConstraints.NORTH) {
+        if (component.position == TwoColumnConstraints.NORTH)
+        {
             title = component;
-            if (title.stretch) {
+            if (title.stretch)
+            {
                 title.align = LEFT;
             }
         }
@@ -225,13 +236,16 @@ public class TwoColumnLayout implements LayoutManager2 {
         // Unoccupied spots higher in the right column become
         // inaccessible.
         // ----------------------------------------------------
-        else if (component.position == TwoColumnConstraints.BOTH) {
+        else if (component.position == TwoColumnConstraints.BOTH)
+        {
             // first make sure that both columns have the same number of entries
-            while (components[RIGHT].size() > components[LEFT].size()) {
+            while (components[RIGHT].size() > components[LEFT].size())
+            {
                 components[LEFT].add(null);
             }
 
-            while (components[LEFT].size() > components[RIGHT].size()) {
+            while (components[LEFT].size() > components[RIGHT].size())
+            {
                 components[RIGHT].add(null);
             }
 
@@ -242,7 +256,8 @@ public class TwoColumnLayout implements LayoutManager2 {
         // ----------------------------------------------------
         // WEST components are added to the left column
         // ----------------------------------------------------
-        else if (component.position == TwoColumnConstraints.WEST) {
+        else if (component.position == TwoColumnConstraints.WEST)
+        {
             components[LEFT].add(component);
         }
 
@@ -250,11 +265,13 @@ public class TwoColumnLayout implements LayoutManager2 {
         // WESTONLY components are added to the left column
         // the right column has to be kept free
         // ----------------------------------------------------
-        else if (component.position == TwoColumnConstraints.WESTONLY) {
+        else if (component.position == TwoColumnConstraints.WESTONLY)
+        {
             components[LEFT].add(component);
 
             // fill right column to make sure nothing is placed there
-            while (components[RIGHT].size() < components[LEFT].size()) {
+            while (components[RIGHT].size() < components[LEFT].size())
+            {
                 components[RIGHT].add(null);
             }
 
@@ -263,7 +280,8 @@ public class TwoColumnLayout implements LayoutManager2 {
         // ----------------------------------------------------
         // EAST components are added to the right column
         // ----------------------------------------------------
-        else if (component.position == TwoColumnConstraints.EAST) {
+        else if (component.position == TwoColumnConstraints.EAST)
+        {
             components[RIGHT].add(component);
         }
 
@@ -271,11 +289,13 @@ public class TwoColumnLayout implements LayoutManager2 {
         // EASTONLY components are added to the left column
         // the right column has to be kept free
         // ----------------------------------------------------
-        else if (component.position == TwoColumnConstraints.EASTONLY) {
+        else if (component.position == TwoColumnConstraints.EASTONLY)
+        {
             components[RIGHT].add(component);
 
             // fill left column to make sure nothing is placed there
-            while (components[LEFT].size() < components[RIGHT].size()) {
+            while (components[LEFT].size() < components[RIGHT].size())
+            {
                 components[LEFT].add(null);
             }
 
@@ -293,7 +313,8 @@ public class TwoColumnLayout implements LayoutManager2 {
      *
      * @param parent the component which needs to be laid out.
      */
-    public void layoutContainer(Container parent) {
+    public void layoutContainer(Container parent)
+    {
         positionRules(parent);
         positionTitle(parent);
         positionComponents(parent);
@@ -309,18 +330,24 @@ public class TwoColumnLayout implements LayoutManager2 {
      *
      * @param parent the component which needs to be laid out.
      */
-    private void positionRules(Container parent) {
+    private void positionRules(Container parent)
+    {
         int margin = margin(parent);
 
-        if (alignment == LEFT) {
+        if (alignment == LEFT)
+        {
             leftRule = margin;
             centerRule = leftRule + minimumColumnWidth(LEFT, parent) + gap;
             rightRule = parent.getWidth() - margin;
-        } else if (alignment == CENTER) {
+        }
+        else if (alignment == CENTER)
+        {
             centerRule = (int) (parent.getMinimumSize().getWidth() / 2);
             leftRule = centerRule - minimumColumnWidth(LEFT, parent) - gap;
             rightRule = parent.getWidth() - margin;
-        } else if (alignment == RIGHT) {
+        }
+        else if (alignment == RIGHT)
+        {
             rightRule = parent.getWidth() - margin;
             centerRule = rightRule - minimumColumnWidth(RIGHT, parent);
             leftRule = centerRule - minimumColumnWidth(LEFT, parent) - gap;
@@ -333,22 +360,32 @@ public class TwoColumnLayout implements LayoutManager2 {
      *
      * @param parent the component which needs to be laid out.
      */
-    private void positionTitle(Container parent) {
-        if (title != null) {
+    private void positionTitle(Container parent)
+    {
+        if (title != null)
+        {
             Component component = title.component;
             int width = (int) component.getMinimumSize().getWidth();
             titleHeight = (int) component.getMinimumSize().getHeight();
 
-            if (component != null) {
-                if (title.stretch) {
+            if (component != null)
+            {
+                if (title.stretch)
+                {
                     width = rightRule - leftRule;
                     component.setBounds(leftRule, 0, width, titleHeight);
-                } else if (title.align == TwoColumnConstraints.LEFT) {
+                }
+                else if (title.align == TwoColumnConstraints.LEFT)
+                {
                     component.setBounds(leftRule, 0, width, titleHeight);
-                } else if (title.align == TwoColumnConstraints.CENTER) {
+                }
+                else if (title.align == TwoColumnConstraints.CENTER)
+                {
                     int left = centerRule - (width / 2);
                     component.setBounds(left, 0, width, titleHeight);
-                } else if (title.align == TwoColumnConstraints.RIGHT) {
+                }
+                else if (title.align == TwoColumnConstraints.RIGHT)
+                {
                     int left = rightRule - width;
                     component.setBounds(left, 0, width, titleHeight);
                 }
@@ -361,37 +398,45 @@ public class TwoColumnLayout implements LayoutManager2 {
      *
      * @param parent the component which needs to be laid out.
      */
-    private void positionComponents(Container parent) {
+    private void positionComponents(Container parent)
+    {
         int usedHeight = titleHeight + minimumClusterHeight();
         int topBuffer = topBuffer(usedHeight, parent);
         int leftHeight = 0;
         int rightHeight = 0;
 
-        if (topBuffer < 0) {
+        if (topBuffer < 0)
+        {
             topBuffer = 0;
         }
 
         int y = titleHeight + topBuffer;
 
-        for (int i = 0; i < rows(); i++) {
+        for (int i = 0; i < rows(); i++)
+        {
             leftHeight = height(i, LEFT);
             rightHeight = height(i, RIGHT);
 
-            if (leftHeight > rightHeight) {
+            if (leftHeight > rightHeight)
+            {
                 int offset = (leftHeight - rightHeight) / 2;
 
                 positionComponent(y, i, LEFT, parent);
                 positionComponent((y + offset), i, RIGHT, parent);
 
                 y += leftHeight;
-            } else if (leftHeight < rightHeight) {
+            }
+            else if (leftHeight < rightHeight)
+            {
                 int offset = (rightHeight - leftHeight) / 2;
 
                 positionComponent((y + offset), i, LEFT, parent);
                 positionComponent(y, i, RIGHT, parent);
 
                 y += rightHeight;
-            } else {
+            }
+            else
+            {
                 positionComponent(y, i, LEFT, parent);
                 positionComponent(y, i, RIGHT, parent);
 
@@ -410,19 +455,23 @@ public class TwoColumnLayout implements LayoutManager2 {
      * @param column the column of the component
      * @param parent the container which needs to be laid out.
      */
-    private void positionComponent(int y, int row, int column, Container parent) {
+    private void positionComponent(int y, int row, int column, Container parent)
+    {
         TwoColumnConstraints constraints = null;
 
-        try {
+        try
+        {
             constraints = (TwoColumnConstraints) (components[column].elementAt(row));
         }
-        catch (Throwable exception) {
+        catch (Throwable exception)
+        {
             return;
         }
 
         int x = 0;
 
-        if (constraints != null) {
+        if (constraints != null)
+        {
             Component component = constraints.component;
             int width = (int) component.getPreferredSize().getWidth();
             int height = (int) component.getPreferredSize().getHeight();
@@ -431,23 +480,32 @@ public class TwoColumnLayout implements LayoutManager2 {
             // set x to the appropriate rule. The only need to
             // modify this is for indent
             // --------------------------------------------------
-            if (column == LEFT) {
+            if (column == LEFT)
+            {
                 x = leftRule;
-            } else {
+            }
+            else
+            {
                 x = centerRule;
             }
 
-            if (component != null) {
+            if (component != null)
+            {
                 // --------------------------------------------------
                 // set the width for stretch based on BOTH, LEFT and
                 // RIGHT positionsing
                 // --------------------------------------------------
-                if ((constraints.stretch) && (constraints.position == TwoColumnConstraints.BOTH)) {
+                if ((constraints.stretch) && (constraints.position == TwoColumnConstraints.BOTH))
+                {
                     width = rightRule - leftRule;
                     x = leftRule;
-                } else if ((constraints.stretch) && (column == LEFT)) {
+                }
+                else if ((constraints.stretch) && (column == LEFT))
+                {
                     width = centerRule - leftRule;
-                } else if ((constraints.stretch) && (column == RIGHT)) {
+                }
+                else if ((constraints.stretch) && (column == RIGHT))
+                {
                     width = rightRule - centerRule;
                 }
 
@@ -457,8 +515,10 @@ public class TwoColumnLayout implements LayoutManager2 {
                 // the width of both columns combined. Also set the x
                 // position to left, just to be sure.
                 // --------------------------------------------------
-                else if (constraints.position == TwoColumnConstraints.BOTH) {
-                    if (width > (rightRule - leftRule)) {
+                else if (constraints.position == TwoColumnConstraints.BOTH)
+                {
+                    if (width > (rightRule - leftRule))
+                    {
                         width = rightRule - leftRule;
                     }
                     x = leftRule;
@@ -467,7 +527,8 @@ public class TwoColumnLayout implements LayoutManager2 {
                 // --------------------------------------------------
                 // correct for indent if this option is set
                 // --------------------------------------------------
-                if (constraints.indent) {
+                if (constraints.indent)
+                {
                     width -= indent;
                     x += indent;
                 }
@@ -484,24 +545,29 @@ public class TwoColumnLayout implements LayoutManager2 {
      * @param parent the component which needs to be laid out.
      * @return the minimum width required to fis the components in this column
      */
-    private int minimumColumnWidth(int column, Container parent) {
+    private int minimumColumnWidth(int column, Container parent)
+    {
         Component component = null;
         TwoColumnConstraints constraints = null;
         int width = 0;
         int temp = 0;
 
-        for (int i = 0; i < components[column].size(); i++) {
+        for (int i = 0; i < components[column].size(); i++)
+        {
             constraints = (TwoColumnConstraints) components[column].elementAt(i);
 
-            if ((constraints != null) && (constraints.position != TwoColumnConstraints.BOTH)) {
+            if ((constraints != null) && (constraints.position != TwoColumnConstraints.BOTH))
+            {
                 component = constraints.component;
                 temp = (int) component.getMinimumSize().getWidth();
 
-                if (constraints.indent) {
+                if (constraints.indent)
+                {
                     temp += indent;
                 }
 
-                if (temp > width) {
+                if (temp > width)
+                {
                     width = temp;
                 }
             }
@@ -517,29 +583,35 @@ public class TwoColumnLayout implements LayoutManager2 {
      * @param parent the component which needs to be laid out.
      * @return the minimum width required to fis the components in this column
      */
-    private int minimumBothColumnsWidth(Container parent) {
+    private int minimumBothColumnsWidth(Container parent)
+    {
         Component component = null;
         TwoColumnConstraints constraints = null;
         int width = 0;
         int temp = 0;
 
-        if (title != null) {
+        if (title != null)
+        {
             component = title.component;
             width = (int) component.getMinimumSize().getWidth();
         }
 
-        for (int i = 0; i < components[LEFT].size(); i++) {
+        for (int i = 0; i < components[LEFT].size(); i++)
+        {
             constraints = (TwoColumnConstraints) components[LEFT].elementAt(i);
 
-            if ((constraints != null) && (constraints.position == TwoColumnConstraints.BOTH)) {
+            if ((constraints != null) && (constraints.position == TwoColumnConstraints.BOTH))
+            {
                 component = constraints.component;
                 temp = (int) component.getMinimumSize().getWidth();
 
-                if (constraints.indent) {
+                if (constraints.indent)
+                {
                     temp += indent;
                 }
 
-                if (temp > width) {
+                if (temp > width)
+                {
                     width = temp;
                 }
             }
@@ -548,10 +620,12 @@ public class TwoColumnLayout implements LayoutManager2 {
         return (width);
     }
 
-    private int minimumClusterHeight() {
+    private int minimumClusterHeight()
+    {
         int height = 0;
 
-        for (int i = 0; i < rows(); i++) {
+        for (int i = 0; i < rows(); i++)
+        {
             height += rowHeight(i);
         }
 
@@ -561,14 +635,18 @@ public class TwoColumnLayout implements LayoutManager2 {
     /**
      * Returns the number of rows that need to be laid out.
      */
-    private int rows() {
+    private int rows()
+    {
         int rows = 0;
         int leftRows = components[LEFT].size();
         int rightRows = components[RIGHT].size();
 
-        if (leftRows > rightRows) {
+        if (leftRows > rightRows)
+        {
             rows = leftRows;
-        } else {
+        }
+        else
+        {
             rows = rightRows;
         }
 
@@ -581,7 +659,8 @@ public class TwoColumnLayout implements LayoutManager2 {
      *
      * @param row the index of the row to measure
      */
-    private int rowHeight(int row) {
+    private int rowHeight(int row)
+    {
         int height = 0;
         int height1 = height(row, LEFT);
         int height2 = height(row, RIGHT);
@@ -589,9 +668,12 @@ public class TwoColumnLayout implements LayoutManager2 {
         // ----------------------------------------------------
         // take the higher one
         // ----------------------------------------------------
-        if (height1 > height2) {
+        if (height1 > height2)
+        {
             height = height1;
-        } else {
+        }
+        else
+        {
             height = height2;
         }
 
@@ -606,29 +688,40 @@ public class TwoColumnLayout implements LayoutManager2 {
      * @param column the column of the component to measure (<code>LEFT</code> or
      *               <code>RIGHT</code>)
      */
-    private int height(int row, int column) {
+    private int height(int row, int column)
+    {
         int height = 0;
         int width = 0;
         Component component;
         TwoColumnConstraints constraints;
 
-        try {
+        try
+        {
             constraints = (TwoColumnConstraints) components[column].elementAt(row);
-            if (constraints != null) {
+            if (constraints != null)
+            {
                 component = constraints.component;
                 width = (int) component.getMinimumSize().getWidth();
                 height = (int) component.getMinimumSize().getHeight();
 
-                if (constraints.position == TwoColumnConstraints.WEST) {
-                    if (width > (centerRule - leftRule)) {
+                if (constraints.position == TwoColumnConstraints.WEST)
+                {
+                    if (width > (centerRule - leftRule))
+                    {
                         component.setBounds(0, 0, (centerRule - leftRule), height);
                     }
-                } else if (constraints.position == TwoColumnConstraints.EAST) {
-                    if (width > (rightRule - centerRule)) {
+                }
+                else if (constraints.position == TwoColumnConstraints.EAST)
+                {
+                    if (width > (rightRule - centerRule))
+                    {
                         component.setBounds(0, 0, (rightRule - centerRule), height);
                     }
-                } else if (constraints.position == TwoColumnConstraints.BOTH) {
-                    if (width > (rightRule - leftRule)) {
+                }
+                else if (constraints.position == TwoColumnConstraints.BOTH)
+                {
+                    if (width > (rightRule - leftRule))
+                    {
                         component.setBounds(0, 0, (rightRule - leftRule), height);
                     }
                 }
@@ -642,7 +735,8 @@ public class TwoColumnLayout implements LayoutManager2 {
         // is nothing there then the height is 0, nothing
         // further to worry about!
         // ----------------------------------------------------
-        catch (Throwable exception) {
+        catch (Throwable exception)
+        {
         }
 
         return (height);
@@ -653,7 +747,8 @@ public class TwoColumnLayout implements LayoutManager2 {
      *
      * @param parent the component which needs to be laid out.
      */
-    private int margin(Container parent) {
+    private int margin(Container parent)
+    {
         int amount = (int) (((parent.getSize().getWidth()) * margin) / 100);
 
         return (amount);
@@ -666,7 +761,8 @@ public class TwoColumnLayout implements LayoutManager2 {
      *                   of the title and the combined height of all rows).
      * @param parent     the component which needs to be laid out.
      */
-    private int topBuffer(int usedHeight, Container parent) {
+    private int topBuffer(int usedHeight, Container parent)
+    {
         int amount = ((int) parent.getSize().getHeight()) - usedHeight;
         amount = amount * topBuffer / 100;
 
@@ -697,7 +793,8 @@ public class TwoColumnLayout implements LayoutManager2 {
      *
      * @param parent the component to be laid out
      */
-    public Dimension preferredLayoutSize(Container parent) {
+    public Dimension preferredLayoutSize(Container parent)
+    {
         return (minimumLayoutSize(parent));
     }
 
@@ -707,7 +804,8 @@ public class TwoColumnLayout implements LayoutManager2 {
      *
      * @param parent the component to be laid out
      */
-    public Dimension minimumLayoutSize(Container parent) {
+    public Dimension minimumLayoutSize(Container parent)
+    {
         positionTitle(parent);
 
         int width = minimumBothColumnsWidth(parent);
@@ -722,7 +820,8 @@ public class TwoColumnLayout implements LayoutManager2 {
      *
      * @param parent the component to be laid out
      */
-    public Dimension maximumLayoutSize(Container parent) {
+    public Dimension maximumLayoutSize(Container parent)
+    {
         return (minimumLayoutSize(parent));
     }
 
@@ -734,7 +833,8 @@ public class TwoColumnLayout implements LayoutManager2 {
      *
      * @param parent the component to be laid out
      */
-    public float getLayoutAlignmentX(Container parent) {
+    public float getLayoutAlignmentX(Container parent)
+    {
         return (0);
     }
 
@@ -746,7 +846,8 @@ public class TwoColumnLayout implements LayoutManager2 {
      *
      * @param parent the component to be laid out
      */
-    public float getLayoutAlignmentY(Container parent) {
+    public float getLayoutAlignmentY(Container parent)
+    {
         return (0);
     }
 
@@ -756,7 +857,8 @@ public class TwoColumnLayout implements LayoutManager2 {
      *
      * @param parent the component to be laid out
      */
-    public void invalidateLayout(Container parent) {
+    public void invalidateLayout(Container parent)
+    {
         leftRule = 0;
         rightRule = 0;
         centerRule = 0;
@@ -770,7 +872,8 @@ public class TwoColumnLayout implements LayoutManager2 {
      * @param name the component name
      * @param comp the component to be added
      */
-    public void addLayoutComponent(String name, Component comp) {
+    public void addLayoutComponent(String name, Component comp)
+    {
     }
 
     /**
@@ -780,32 +883,41 @@ public class TwoColumnLayout implements LayoutManager2 {
      *
      * @param comp the component to be removed
      */
-    public void removeLayoutComponent(Component comp) {
+    public void removeLayoutComponent(Component comp)
+    {
         Vector left = components[LEFT];
         Vector right = components[RIGHT];
 
-        for (int i = 0; i < left.size(); i++) {
+        for (int i = 0; i < left.size(); i++)
+        {
             TwoColumnConstraints constraints = (TwoColumnConstraints) left.get(i);
-            if (constraints == null) {
+            if (constraints == null)
+            {
                 continue;
             }
             Component ctemp = constraints.component;
-            if (ctemp != null && ctemp.equals(comp)) {
-                if (constraints.position == TwoColumnConstraints.BOTH || constraints.position == TwoColumnConstraints.WESTONLY) {
+            if (ctemp != null && ctemp.equals(comp))
+            {
+                if (constraints.position == TwoColumnConstraints.BOTH || constraints.position == TwoColumnConstraints.WESTONLY)
+                {
                     right.remove(i);
                 }
                 break;
             }
         }
 
-        for (int j = 0; j < right.size(); j++) {
+        for (int j = 0; j < right.size(); j++)
+        {
             TwoColumnConstraints constraints = (TwoColumnConstraints) right.get(j);
-            if (constraints == null) {
+            if (constraints == null)
+            {
                 continue;
             }
             Component ctemp = constraints.component;
-            if (ctemp != null && ctemp.equals(comp)) {
-                if (constraints.position == TwoColumnConstraints.BOTH || constraints.position == TwoColumnConstraints.EASTONLY) {
+            if (ctemp != null && ctemp.equals(comp))
+            {
+                if (constraints.position == TwoColumnConstraints.BOTH || constraints.position == TwoColumnConstraints.EASTONLY)
+                {
                     left.remove(j);
                 }
                 break;
@@ -832,7 +944,8 @@ public class TwoColumnLayout implements LayoutManager2 {
      * @param graphics the graphics context used for drawing.
      * @param color    the color to use for rendering the layout grid
      */
-    public void showRules(Graphics2D graphics, Color color) {
+    public void showRules(Graphics2D graphics, Color color)
+    {
         int height = graphics.getClipBounds().height;
 
         Stroke currentStroke = graphics.getStroke();

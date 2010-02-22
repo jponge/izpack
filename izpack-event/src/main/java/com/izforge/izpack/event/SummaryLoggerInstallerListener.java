@@ -37,13 +37,15 @@ import java.io.FileOutputStream;
  *
  * @author Klaus Bartz
  */
-public class SummaryLoggerInstallerListener extends SimpleInstallerListener {
+public class SummaryLoggerInstallerListener extends SimpleInstallerListener
+{
     private VariableSubstitutor variableSubstitutor;
 
     /**
      * Default constructor.
      */
-    public SummaryLoggerInstallerListener() {
+    public SummaryLoggerInstallerListener()
+    {
         super(false);
         variableSubstitutor = new VariableSubstitutorImpl(getInstalldata().getVariables());
     }
@@ -56,23 +58,28 @@ public class SummaryLoggerInstallerListener extends SimpleInstallerListener {
      */
 
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
-            throws Exception {
-        if (!getInstalldata().isInstallSuccess()) {
+            throws Exception
+    {
+        if (!getInstalldata().isInstallSuccess())
+        {
             return;
         }
         // No logfile at automated installation because panels are not
         // involved.
-        if (getInstalldata().getPanels() == null || getInstalldata().getPanels().size() < 1) {
+        if (getInstalldata().getPanels() == null || getInstalldata().getPanels().size() < 1)
+        {
             return;
         }
         String path = getInstalldata().getInfo().getSummaryLogFilePath();
-        if (path == null) {
+        if (path == null)
+        {
             return;
         }
         path = IoHelper.translatePath(path, variableSubstitutor);
         File parent = new File(path).getParentFile();
 
-        if (!parent.exists()) {
+        if (!parent.exists())
+        {
             parent.mkdirs();
         }
 

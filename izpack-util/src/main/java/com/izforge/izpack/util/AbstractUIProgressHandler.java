@@ -29,7 +29,8 @@ package com.izforge.izpack.util;
  * divided into steps (for example, packs when installing) and sub-steps (for example, files of a
  * pack).
  */
-public interface AbstractUIProgressHandler extends AbstractUIHandler {
+public interface AbstractUIProgressHandler extends AbstractUIHandler
+{
 
     /**
      * The action starts.

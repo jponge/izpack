@@ -26,9 +26,11 @@ import java.util.TreeMap;
  * Provide installData for GUI :
  * Load install data with l&f and GUIPrefs
  */
-public class GUIInstallDataProvider extends AbstractInstallDataProvider {
+public class GUIInstallDataProvider extends AbstractInstallDataProvider
+{
 
-    public GUIInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer, VariableSubstitutor variableSubstitutor, Properties variables) throws Exception {
+    public GUIInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer, VariableSubstitutor variableSubstitutor, Properties variables) throws Exception
+    {
         this.resourceManager = resourceManager;
         this.variableSubstitutor = variableSubstitutor;
         final GUIInstallData guiInstallData = new GUIInstallData(variables, variableSubstitutor);
@@ -53,17 +55,22 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider {
      * @param installdata
      * @throws Exception Description of the Exception
      */
-    protected void loadLookAndFeel(GUIInstallData installdata) throws Exception {
+    protected void loadLookAndFeel(GUIInstallData installdata) throws Exception
+    {
         String lnf;
         // Do we have any preference for this OS ?
         String syskey = "unix";
-        if (OsVersion.IS_WINDOWS) {
+        if (OsVersion.IS_WINDOWS)
+        {
             syskey = "windows";
-        } else if (OsVersion.IS_OSX) {
+        }
+        else if (OsVersion.IS_OSX)
+        {
             syskey = "mac";
         }
         String laf = null;
-        if (installdata.guiPrefs.lookAndFeelMapping.containsKey(syskey)) {
+        if (installdata.guiPrefs.lookAndFeelMapping.containsKey(syskey))
+        {
             laf = installdata.guiPrefs.lookAndFeelMapping.get(syskey);
         }
 
@@ -72,42 +79,51 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider {
         boolean useButtonIcons = true;
         if (installdata.guiPrefs.modifier.containsKey("useButtonIcons")
                 && "no".equalsIgnoreCase(installdata.guiPrefs.modifier
-                .get("useButtonIcons"))) {
+                .get("useButtonIcons")))
+        {
             useButtonIcons = false;
         }
         ButtonFactory.useButtonIcons(useButtonIcons);
         boolean useLabelIcons = true;
         if (installdata.guiPrefs.modifier.containsKey("useLabelIcons")
                 && "no".equalsIgnoreCase(installdata.guiPrefs.modifier
-                .get("useLabelIcons"))) {
+                .get("useLabelIcons")))
+        {
             useLabelIcons = false;
         }
         LabelFactory.setUseLabelIcons(useLabelIcons);
-        if (installdata.guiPrefs.modifier.containsKey("labelFontSize")) {  //'labelFontSize' modifier found in 'guiprefs'
+        if (installdata.guiPrefs.modifier.containsKey("labelFontSize"))
+        {  //'labelFontSize' modifier found in 'guiprefs'
             final String valStr =
                     installdata.guiPrefs.modifier.get("labelFontSize");
-            try {      //parse value and enter as label-font-size multiplier:
+            try
+            {      //parse value and enter as label-font-size multiplier:
                 LabelFactory.setLabelFontSize(Float.parseFloat(valStr));
             }
-            catch (NumberFormatException ex) {      //error parsing value; log message
+            catch (NumberFormatException ex)
+            {      //error parsing value; log message
                 Debug.log("Error parsing guiprefs 'labelFontSize' value (" +
                         valStr + ')');
             }
         }
 
-        if (laf == null) {
-            if (!"mac".equals(syskey)) {
+        if (laf == null)
+        {
+            if (!"mac".equals(syskey))
+            {
                 // In Linux we will use the English locale, because of a bug in
                 // JRE6. In Korean, Persian, Chinese, japanese and some other
                 // locales the installer throws and exception and doesn't load
                 // at all. See http://jira.jboss.com/jira/browse/JBINSTALL-232.
                 // This is a workaround until this bug gets fixed.
-                if ("unix".equals(syskey)) {
+                if ("unix".equals(syskey))
+                {
                     Locale.setDefault(Locale.ENGLISH);
                 }
                 String syslaf = UIManager.getSystemLookAndFeelClassName();
                 UIManager.setLookAndFeel(syslaf);
-                if (UIManager.getLookAndFeel() instanceof MetalLookAndFeel) {
+                if (UIManager.getLookAndFeel() instanceof MetalLookAndFeel)
+                {
                     ButtonFactory.useButtonIcons(useButtonIcons);
                 }
             }
@@ -116,7 +132,8 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider {
         }
 
         // Kunststoff (http://www.incors.org/)
-        if ("kunststoff".equals(laf)) {
+        if ("kunststoff".equals(laf))
+        {
             ButtonFactory.useHighlightButtons();
             // Reset the use button icons state because useHighlightButtons
             // make it always true.
@@ -140,20 +157,25 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider {
         }
 
         // Liquid (http://liquidlnf.sourceforge.net/)
-        if ("liquid".equals(laf)) {
+        if ("liquid".equals(laf))
+        {
             UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
             lnf = "liquid";
 
             Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(laf);
-            if (params.containsKey("decorate.frames")) {
+            if (params.containsKey("decorate.frames"))
+            {
                 String value = params.get("decorate.frames");
-                if ("yes".equals(value)) {
+                if ("yes".equals(value))
+                {
                     JFrame.setDefaultLookAndFeelDecorated(true);
                 }
             }
-            if (params.containsKey("decorate.dialogs")) {
+            if (params.containsKey("decorate.dialogs"))
+            {
                 String value = params.get("decorate.dialogs");
-                if ("yes".equals(value)) {
+                if ("yes".equals(value))
+                {
                     JDialog.setDefaultLookAndFeelDecorated(true);
                 }
             }
@@ -162,20 +184,23 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider {
         }
 
         // Metouia (http://mlf.sourceforge.net/)
-        if ("metouia".equals(laf)) {
+        if ("metouia".equals(laf))
+        {
             UIManager.setLookAndFeel("net.sourceforge.mlf.metouia.MetouiaLookAndFeel");
             lnf = "metouia";
             return;
         }
 
         // Nimbus (http://nimbus.dev.java.net/)
-        if ("nimbus".equals(laf)) {
+        if ("nimbus".equals(laf))
+        {
             UIManager.setLookAndFeel("org.jdesktop.swingx.plaf.nimbus.NimbusLookAndFeel");
             return;
         }
 
         // JGoodies Looks (http://looks.dev.java.net/)
-        if ("looks".equals(laf)) {
+        if ("looks".equals(laf))
+        {
             Map<String, String> variants = new TreeMap<String, String>();
             variants.put("windows", "com.jgoodies.looks.windows.WindowsLookAndFeel");
             variants.put("plastic", "com.jgoodies.looks.plastic.PlasticLookAndFeel");
@@ -184,9 +209,11 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider {
             String variant = variants.get("plasticXP");
 
             Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(laf);
-            if (params.containsKey("variant")) {
+            if (params.containsKey("variant"))
+            {
                 String param = params.get("variant");
-                if (variants.containsKey(param)) {
+                if (variants.containsKey(param))
+                {
                     variant = variants.get(param);
                 }
             }
@@ -196,7 +223,8 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider {
         }
 
         // Substance (http://substance.dev.java.net/)
-        if ("substance".equals(laf)) {
+        if ("substance".equals(laf))
+        {
             Map<String, String> variants = new TreeMap<String, String>();
             variants.put("default", "org.jvnet.substance.SubstanceLookAndFeel"); // Ugly!!!
             variants.put("business", "org.jvnet.substance.skin.SubstanceBusinessLookAndFeel");
@@ -209,9 +237,11 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider {
             String variant = variants.get("default");
 
             Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(laf);
-            if (params.containsKey("variant")) {
+            if (params.containsKey("variant"))
+            {
                 String param = params.get("variant");
-                if (variants.containsKey(param)) {
+                if (variants.containsKey(param))
+                {
                     variant = variants.get(param);
                 }
             }
@@ -226,7 +256,8 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider {
      * @param installdata
      * @throws Exception
      */
-    private void loadGUIInstallData(GUIInstallData installdata) throws Exception {
+    private void loadGUIInstallData(GUIInstallData installdata) throws Exception
+    {
         InputStream in = resourceManager.getInputStream("GUIPrefs");
         ObjectInputStream objIn = new ObjectInputStream(in);
         installdata.guiPrefs = (GUIPrefs) objIn.readObject();

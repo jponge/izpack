@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.util;
 
 /**
@@ -25,7 +26,8 @@ package com.izforge.izpack.util;
  *
  * @author marc.eppelmann&#064;reddot.de
  */
-public interface OsVersionConstants {
+public interface OsVersionConstants
+{
     //~ Static fields/initializers *********************************************************
 
     /**

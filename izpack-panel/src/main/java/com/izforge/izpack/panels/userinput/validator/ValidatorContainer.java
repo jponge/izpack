@@ -5,24 +5,30 @@ import java.util.Map;
 /**
  * @author Jeff Gordon
  */
-public class ValidatorContainer {
+public class ValidatorContainer
+{
     private Validator validator = null;
     private String message;
     private boolean hasParams = false;
     private Map<String, String> validatorParams = null;
 
-    public ValidatorContainer(String validator, String message, Map<String, String> validatorParams) {
-        try {
+    public ValidatorContainer(String validator, String message, Map<String, String> validatorParams)
+    {
+        try
+        {
             this.validator = (Validator) Class.forName(validator).newInstance();
             this.message = message;
             this.validatorParams = validatorParams;
-            if (validatorParams != null) {
-                if (validatorParams.size() > 0) {
+            if (validatorParams != null)
+            {
+                if (validatorParams.size() > 0)
+                {
                     hasParams = true;
                 }
             }
         }
-        catch (Throwable e) {
+        catch (Throwable e)
+        {
             System.out.println("ValidatorContainer Constructor Failed: " + e);
             this.validator = null;
             this.message = null;
@@ -34,7 +40,8 @@ public class ValidatorContainer {
     /**
      * @return true if this instance has any parameters to pass to the Validator instance.
      */
-    public boolean hasParams() {
+    public boolean hasParams()
+    {
         return hasParams;
     }
 
@@ -44,15 +51,18 @@ public class ValidatorContainer {
      *
      * @return a java.util.Map containing the validator parameters.
      */
-    public Map<String, String> getValidatorParams() {
+    public Map<String, String> getValidatorParams()
+    {
         return validatorParams;
     }
 
-    public Validator getValidator() {
+    public Validator getValidator()
+    {
         return validator;
     }
 
-    public String getMessage() {
+    public String getMessage()
+    {
         return message;
     }
 

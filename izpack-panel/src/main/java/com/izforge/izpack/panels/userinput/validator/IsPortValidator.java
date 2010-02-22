@@ -28,22 +28,28 @@ import com.izforge.izpack.panels.userinput.processorclient.ProcessingClient;
  *
  * @author thorque
  */
-public class IsPortValidator implements Validator {
+public class IsPortValidator implements Validator
+{
 
-    public boolean validate(ProcessingClient client) {
+    public boolean validate(ProcessingClient client)
+    {
         int port = 0;
 
-        if ("".equals(client.getFieldContents(0))) {
+        if ("".equals(client.getFieldContents(0)))
+        {
             return false;
         }
 
-        try {
+        try
+        {
             port = Integer.parseInt(client.getFieldContents(0));
-            if (port > 0 && port < 65535) {
+            if (port > 0 && port < 65535)
+            {
                 return true;
             }
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             return false;
         }
 

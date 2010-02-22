@@ -36,7 +36,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class TwoColumnLayoutTestManual implements ActionListener {
+public class TwoColumnLayoutTestManual implements ActionListener
+{
     JFrame converterFrame;
     JPanel converterPanel;
     JTextField tempText;
@@ -46,7 +47,8 @@ public class TwoColumnLayoutTestManual implements ActionListener {
 
     boolean removed = false;
 
-    public TwoColumnLayoutTestManual() {
+    public TwoColumnLayoutTestManual()
+    {
         //Create and set up the window.
         converterFrame = new JFrame("TwoColumnLayoutTestManual");
         converterFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,7 +77,8 @@ public class TwoColumnLayoutTestManual implements ActionListener {
     /**
      * Create and add the widgets.
      */
-    private void addWidgets() {
+    private void addWidgets()
+    {
         //Create widgets.
         tempText = new JTextField("10", 30);
         TwoColumnConstraints constraints = new TwoColumnConstraints();
@@ -102,15 +105,19 @@ public class TwoColumnLayoutTestManual implements ActionListener {
 
     }
 
-    public void actionPerformed(ActionEvent event) {
+    public void actionPerformed(ActionEvent event)
+    {
 
-        if (!removed) {
+        if (!removed)
+        {
 
             converterPanel.remove(tempText);
             converterPanel.remove(label);
             removed = true;
 
-        } else {
+        }
+        else
+        {
             TwoColumnConstraints constraints = new TwoColumnConstraints();
             constraints.position = TwoColumnConstraints.EAST;
             converterPanel.add(tempText, constraints);
@@ -130,18 +137,22 @@ public class TwoColumnLayoutTestManual implements ActionListener {
      * this method should be invoked from the
      * event-dispatching thread.
      */
-    private static void createAndShowGUI() {
+    private static void createAndShowGUI()
+    {
         //Make sure we have nice window decorations.
         JFrame.setDefaultLookAndFeelDecorated(true);
 
         TwoColumnLayoutTestManual converter = new TwoColumnLayoutTestManual();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+        javax.swing.SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run()
+            {
                 createAndShowGUI();
             }
         });

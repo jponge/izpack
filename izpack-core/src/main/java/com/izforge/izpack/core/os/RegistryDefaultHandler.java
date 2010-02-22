@@ -29,7 +29,8 @@ import com.izforge.izpack.util.TargetFactory;
  *
  * @author Klaus Bartz
  */
-public class RegistryDefaultHandler {
+public class RegistryDefaultHandler
+{
 
     private static RegistryHandler registryHandler = null;
 
@@ -38,25 +39,31 @@ public class RegistryDefaultHandler {
     /**
      * Default constructor. No instance of this class should be created.
      */
-    private RegistryDefaultHandler() {
+    private RegistryDefaultHandler()
+    {
         super();
     }
 
-    public synchronized static RegistryHandler getInstance() {
-        if (!initialized) {
-            try {
+    public synchronized static RegistryHandler getInstance()
+    {
+        if (!initialized)
+        {
+            try
+            {
                 // Load the system dependant handler.
                 registryHandler = (RegistryHandler) (TargetFactory.getInstance()
                         .makeObject("com.izforge.izpack.core.os.RegistryHandler"));
                 // Switch to the default handler to use one for complete logging.
                 registryHandler = registryHandler.getDefaultHandler();
             }
-            catch (Throwable exception) {
+            catch (Throwable exception)
+            {
                 registryHandler = null; // 
             }
             initialized = true;
         }
-        if (registryHandler != null && (!registryHandler.good() || !registryHandler.doPerform())) {
+        if (registryHandler != null && (!registryHandler.good() || !registryHandler.doPerform()))
+        {
             registryHandler = null;
         }
 

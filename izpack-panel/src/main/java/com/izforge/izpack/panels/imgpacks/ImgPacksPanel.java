@@ -47,7 +47,8 @@ import java.util.Iterator;
  * @author Volker Friedritz
  * @author Klaus Bartz
  */
-public class ImgPacksPanel extends PacksPanelBase {
+public class ImgPacksPanel extends PacksPanelBase
+{
 
     /**
      *
@@ -70,7 +71,8 @@ public class ImgPacksPanel extends PacksPanelBase {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public ImgPacksPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public ImgPacksPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, resourceManager);
     }
 
@@ -80,7 +82,8 @@ public class ImgPacksPanel extends PacksPanelBase {
      * @see com.izforge.izpack.panels.packs.PacksPanelBase#createNormalLayout()
      */
 
-    protected void createNormalLayout() {
+    protected void createNormalLayout()
+    {
         preLoadImages();
         GridBagLayout layout = new GridBagLayout();
         GridBagConstraints gbConstraints = new GridBagConstraints();
@@ -108,13 +111,17 @@ public class ImgPacksPanel extends PacksPanelBase {
         Iterator pack_it = this.installData.getAvailablePacks().iterator();
         Pack firstImgPack = null;
         boolean imgFound = false;
-        while (!imgFound && pack_it.hasNext()) {
+        while (!imgFound && pack_it.hasNext())
+        {
             firstImgPack = (Pack) pack_it.next();
             imgFound = firstImgPack.packImgId != null;
         }
-        if (imgFound) {
+        if (imgFound)
+        {
             imgLabel = new JLabel(images.get(firstImgPack.packImgId));
-        } else {
+        }
+        else
+        {
             imgLabel = new JLabel();
         }
         JScrollPane imgScroller = new JScrollPane(imgLabel);
@@ -131,7 +138,8 @@ public class ImgPacksPanel extends PacksPanelBase {
         add(strut);
 
         // Create the dependency area with a scroller.
-        if (dependenciesExist) {
+        if (dependenciesExist)
+        {
             JScrollPane depScroller = new JScrollPane();
             depScroller.setPreferredSize(new Dimension(250, 40));
             parent.buildConstraints(gbConstraints, 0, 3, 1, 1, 0.50, 0.50);
@@ -153,7 +161,8 @@ public class ImgPacksPanel extends PacksPanelBase {
         // Create the space label.
         parent.buildConstraints(gbConstraints, 0, 5, 2, 1, 0.0, 0.0);
         spaceLabel = createPanelWithLabel("PacksPanel.space", layout, gbConstraints);
-        if (IoHelper.supported("getFreeSpace")) { // Create the free space label only if free space is supported.
+        if (IoHelper.supported("getFreeSpace"))
+        { // Create the free space label only if free space is supported.
             parent.buildConstraints(gbConstraints, 0, 6, 2, 1, 0.0, 0.0);
             freeSpaceLabel = createPanelWithLabel("PacksPanel.freespace", layout, gbConstraints);
         }
@@ -163,19 +172,24 @@ public class ImgPacksPanel extends PacksPanelBase {
     /**
      * Pre-loads the images.
      */
-    private void preLoadImages() {
+    private void preLoadImages()
+    {
         int size = this.installData.getAvailablePacks().size();
         images = new HashMap<String, ImageIcon>(size);
         Iterator pack_it = this.installData.getAvailablePacks().iterator();
-        while (pack_it.hasNext()) {
+        while (pack_it.hasNext())
+        {
             Pack pack = (Pack) pack_it.next();
-            if (pack.packImgId != null) {
-                try {
+            if (pack.packImgId != null)
+            {
+                try
+                {
                     URL url = resourceManager.getURL(pack.packImgId);
                     ImageIcon img = new ImageIcon(url);
                     images.put(pack.packImgId, img);
                 }
-                catch (Exception err) {
+                catch (Exception err)
+                {
                     err.printStackTrace();
                 }
             }
@@ -186,12 +200,14 @@ public class ImgPacksPanel extends PacksPanelBase {
      * Try to find a good preferredSize for imgScroller by checking all loaded images' width and
      * height.
      */
-    private Dimension getPreferredSizeFromImages() {
+    private Dimension getPreferredSizeFromImages()
+    {
         int maxWidth = 80;
         int maxHeight = 60;
         ImageIcon icon;
 
-        for (ImageIcon imageIcon : images.values()) {
+        for (ImageIcon imageIcon : images.values())
+        {
             icon = imageIcon;
             maxWidth = Math.max(maxWidth, icon.getIconWidth());
             maxHeight = Math.max(maxHeight, icon.getIconHeight());
@@ -209,16 +225,19 @@ public class ImgPacksPanel extends PacksPanelBase {
      * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
      */
 
-    public void valueChanged(ListSelectionEvent e) {
+    public void valueChanged(ListSelectionEvent e)
+    {
         // this MUST be called before calling the super's valueChanged() since
         // that method refreshes the tablemodel and thus deselects the 
         // just selected row
         int i = packsTable.getSelectedRow();
         super.valueChanged(e);
-        if (i < 0) {
+        if (i < 0)
+        {
             return;
         }
-        if (i >= 0) {
+        if (i >= 0)
+        {
             Pack pack = (Pack) this.installData.getAvailablePacks().get(i);
             imgLabel.setIcon(images.get(pack.packImgId));
         }

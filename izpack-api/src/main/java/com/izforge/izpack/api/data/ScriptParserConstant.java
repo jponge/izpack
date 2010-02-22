@@ -1,6 +1,7 @@
 package com.izforge.izpack.api.data;
 
-public class ScriptParserConstant {
+public class ScriptParserConstant
+{
     /**
      * The Java home path.
      */

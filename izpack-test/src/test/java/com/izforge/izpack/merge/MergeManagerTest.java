@@ -15,16 +15,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Anthonin Bonnefoy
  */
-public class MergeManagerTest {
+public class MergeManagerTest
+{
     private MergeManagerImpl mergeManager;
 
     @BeforeMethod
-    public void setUp() {
+    public void setUp()
+    {
         mergeManager = new MergeManagerImpl();
     }
 
     @Test
-    public void testProcessJarPath() throws Exception {
+    public void testProcessJarPath() throws Exception
+    {
         URL resource = new URL("file:/home/test/unjar.jar!com/package/in/jar");
         String jarPath = PathResolver.processUrlToJarPath(resource);
         System.out.println(jarPath);
@@ -32,31 +35,36 @@ public class MergeManagerTest {
     }
 
     @Test
-    public void testAddNativeLibrary() throws Exception {
+    public void testAddNativeLibrary() throws Exception
+    {
         mergeManager.addResourceToMerge("bin/native/");
         assertThat(mergeManager, MergeMatcher.isMergeableContainingFiles("bin/native/izpack/ShellLink.dll"));
     }
 
     @Test
-    public void testAddResourceToMerge() throws Exception {
+    public void testAddResourceToMerge() throws Exception
+    {
         mergeManager.addResourceToMerge("com/izforge/izpack/merge/");
         assertThat(mergeManager, MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/merge/MergeManager.class"));
     }
 
     @Test
-    public void testAddResourceToMergeWithDestination() throws Exception {
+    public void testAddResourceToMergeWithDestination() throws Exception
+    {
         mergeManager.addResourceToMerge("com/izforge/izpack/merge/", "com/dest/");
         assertThat(mergeManager, MergeMatcher.isMergeableContainingFiles("com/dest/MergeManager.class"));
     }
 
     @Test
-    public void testAddSingleClassToMergeWithDestinationFromAJar() throws Exception {
+    public void testAddSingleClassToMergeWithDestinationFromAJar() throws Exception
+    {
         mergeManager.addResourceToMerge("org/junit/Assert.class", "com/dest/Assert.class");
         assertThat(mergeManager, MergeMatcher.isMergeableContainingFiles("com/dest/Assert.class"));
     }
 
     @Test
-    public void testAddPackageToMergeWithDestinationFromAJar() throws Exception {
+    public void testAddPackageToMergeWithDestinationFromAJar() throws Exception
+    {
         mergeManager.addResourceToMerge("org/junit", "com/dest");
         assertThat(mergeManager, MergeMatcher.isMergeableContainingFiles("com/dest/Assert.class"));
     }

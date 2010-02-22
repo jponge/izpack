@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License. 
  */
+
 package com.izforge.izpack.core.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -28,7 +29,8 @@ import com.izforge.izpack.util.Debug;
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  * @version $Id: XOrCondition.java,v 1.1 2006/09/29 14:40:38 dennis Exp $
  */
-public class XorCondition extends OrCondition {
+public class XorCondition extends OrCondition
+{
 
     /**
      *
@@ -38,7 +40,8 @@ public class XorCondition extends OrCondition {
     /**
      *
      */
-    public XorCondition() {
+    public XorCondition()
+    {
         super();
     }
 
@@ -46,7 +49,8 @@ public class XorCondition extends OrCondition {
      * @param operand1
      * @param operand2
      */
-    public XorCondition(Condition operand1, Condition operand2) {
+    public XorCondition(Condition operand1, Condition operand2)
+    {
         super(operand1, operand2);
     }
 
@@ -56,22 +60,28 @@ public class XorCondition extends OrCondition {
      * @see de.reddot.installer.rules.Condition#readFromXML(net.n3.nanoxml.XMLElement)
      */
 
-    public void readFromXML(IXMLElement xmlcondition) {
-        try {
-            if (xmlcondition.getChildrenCount() != 2) {
+    public void readFromXML(IXMLElement xmlcondition)
+    {
+        try
+        {
+            if (xmlcondition.getChildrenCount() != 2)
+            {
                 Debug.log("xor-condition needs two conditions as operands");
                 return;
             }
             this.leftoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(0));
             this.rightoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(1));
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.log("missing element in xor-condition");
         }
     }
 
-    public boolean isTrue() {
-        if ((this.leftoperand == null) || (this.rightoperand == null)) {
+    public boolean isTrue()
+    {
+        if ((this.leftoperand == null) || (this.rightoperand == null))
+        {
             Debug.trace("Operands of condition " + this.id + " not initialized correctly.");
             return false;
         }
@@ -81,7 +91,8 @@ public class XorCondition extends OrCondition {
         boolean op1true = leftoperand.isTrue();
         boolean op2true = rightoperand.isTrue();
 
-        if (op1true && op2true) {
+        if (op1true && op2true)
+        {
             // in case where both are true
             return false;
         }
@@ -94,7 +105,8 @@ public class XorCondition extends OrCondition {
      * @see com.izforge.izpack.core.rules.OrCondition#getDependenciesDetails()
      */
 
-    public String getDependenciesDetails() {
+    public String getDependenciesDetails()
+    {
         StringBuffer details = new StringBuffer();
         details.append(this.id);
         details.append(" depends on:<ul><li>");

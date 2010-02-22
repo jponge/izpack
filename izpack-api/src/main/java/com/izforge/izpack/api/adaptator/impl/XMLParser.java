@@ -51,22 +51,27 @@ import java.nio.charset.Charset;
  * @author Anthonin Bonnefoy
  * @author David Duponchel
  */
-public class XMLParser implements IXMLParser {
+public class XMLParser implements IXMLParser
+{
 
     // the path of the xsl style sheet, relatively to the IXMLParser class
     private static final String XSL_FILE_NAME = "styleSheet.xsl";
 
 
-    public class ByteBufferInputStream extends InputStream {
+    public class ByteBufferInputStream extends InputStream
+    {
         private final ByteBuffer buf;
 
-        public ByteBufferInputStream(ByteBuffer buf) {
+        public ByteBufferInputStream(ByteBuffer buf)
+        {
             this.buf = buf;
         }
 
         @Override
-        public synchronized int read() throws IOException {
-            if (!buf.hasRemaining()) {
+        public synchronized int read() throws IOException
+        {
+            if (!buf.hasRemaining())
+            {
                 return -1;
             }
             int c = buf.get() & 0xff;
@@ -74,8 +79,10 @@ public class XMLParser implements IXMLParser {
         }
 
         @Override
-        public synchronized int read(byte[] bytes, int off, int len) throws IOException {
-            if (!buf.hasRemaining()) {
+        public synchronized int read(byte[] bytes, int off, int len) throws IOException
+        {
+            if (!buf.hasRemaining())
+            {
                 return -1;
             }
             len = Math.min(len, buf.remaining());
@@ -84,7 +91,8 @@ public class XMLParser implements IXMLParser {
         }
 
         @Override
-        public int available() throws IOException {
+        public int available() throws IOException
+        {
             return buf.remaining();
         }
     }
@@ -92,74 +100,98 @@ public class XMLParser implements IXMLParser {
     private LineNumberFilter filter;
     private String parsedItem = null;
 
-    public XMLParser() {
-        try {
+    public XMLParser()
+    {
+        try
+        {
             SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
             saxParserFactory.setNamespaceAware(true);
             saxParserFactory.setXIncludeAware(true);
             XMLReader xmlReader = saxParserFactory.newSAXParser().getXMLReader();
             filter = new LineNumberFilter(xmlReader);
 
-        } catch (ParserConfigurationException e) {
+        }
+        catch (ParserConfigurationException e)
+        {
             throw new XMLException(e);
-        } catch (SAXException e) {
+        }
+        catch (SAXException e)
+        {
             throw new XMLException(e);
         }
     }
 
-    private IXMLElement searchFirstElement(DOMResult domResult) {
-        for (Node child = domResult.getNode().getFirstChild(); child != null; child = child.getNextSibling()) {
-            if (child.getNodeType() == Node.ELEMENT_NODE) {
+    private IXMLElement searchFirstElement(DOMResult domResult)
+    {
+        for (Node child = domResult.getNode().getFirstChild(); child != null; child = child.getNextSibling())
+        {
+            if (child.getNodeType() == Node.ELEMENT_NODE)
+            {
                 return new XMLElementImpl(child);
             }
         }
         return null;
     }
 
-    private DOMResult parseLineNrFromInputSource(InputSource inputSource) {
+    private DOMResult parseLineNrFromInputSource(InputSource inputSource)
+    {
         DOMResult result = null;
-        try {
+        try
+        {
             result = new DOMResult();
             SAXSource source = new SAXSource(inputSource);
             source.setXMLReader(filter);
             URL xslResourceUrl = IXMLParser.class.getResource(XSL_FILE_NAME);
-            if (xslResourceUrl == null) {
+            if (xslResourceUrl == null)
+            {
                 throw new XMLException("Can't find IzPack internal file \"" + XSL_FILE_NAME + "\"");
             }
             Source xsltSource = new StreamSource(xslResourceUrl.openStream());
             Transformer xformer = TransformerFactory.newInstance().newTransformer(xsltSource);
             xformer.transform(source, result);
             filter.applyLN(result);
-        } catch (TransformerException e) {
+        }
+        catch (TransformerException e)
+        {
             String extraInfos = null;
-            if (this.parsedItem != null) {
+            if (this.parsedItem != null)
+            {
                 extraInfos = " in " + parsedItem;
             }
             // we try to get the location of the error.
             // can't use an ErrorHander here !
-            if (e.getLocator() == null && filter.getDocumentLocator() != null) {
+            if (e.getLocator() == null && filter.getDocumentLocator() != null)
+            {
                 Locator locator = filter.getDocumentLocator();
                 extraInfos += " at line " + locator.getLineNumber() + ", column " + locator.getColumnNumber();
             }
-            if (extraInfos != null) throw new XMLException("Error" + extraInfos + " : " + e.getMessage(), e);
-            throw new XMLException(e);
-        } catch (IOException e) {
+            if (extraInfos != null)
+            {
+                throw new XMLException("Error" + extraInfos + " : " + e.getMessage(), e);
+            }
             throw new XMLException(e);
         }
-        finally {
+        catch (IOException e)
+        {
+            throw new XMLException(e);
+        }
+        finally
+        {
             this.parsedItem = null;
         }
         return result;
     }
 
-    public IXMLElement parse(InputStream inputStream) {
+    public IXMLElement parse(InputStream inputStream)
+    {
         this.parsedItem = null;
         InputSource inputSource = new InputSource(inputStream);
         DOMResult result = parseLineNrFromInputSource(inputSource);
         return searchFirstElement(result);
     }
 
-    public IXMLElement parse(InputStream inputStream, String systemId) {
+    public IXMLElement parse(InputStream inputStream, String systemId)
+    {
         this.parsedItem = systemId;
         InputSource inputSource = new InputSource(inputStream);
         inputSource.setSystemId(systemId);
@@ -167,7 +199,8 @@ public class XMLParser implements IXMLParser {
         return searchFirstElement(result);
     }
 
-    public IXMLElement parse(String inputString) {
+    public IXMLElement parse(String inputString)
+    {
         this.parsedItem = null;
 
         final ByteBuffer buf = Charset.forName("UTF-8").encode(inputString);
@@ -175,7 +208,8 @@ public class XMLParser implements IXMLParser {
         return parse(new ByteBufferInputStream(buf));
     }
 
-    public IXMLElement parse(URL inputURL) {
+    public IXMLElement parse(URL inputURL)
+    {
         this.parsedItem = inputURL.toString();
         InputSource inputSource = new InputSource(inputURL.toExternalForm());
         DOMResult domResult = parseLineNrFromInputSource(inputSource);

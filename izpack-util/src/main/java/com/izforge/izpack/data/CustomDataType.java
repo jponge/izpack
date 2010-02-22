@@ -3,7 +3,8 @@ package com.izforge.izpack.data;
 /**
  * Enumeration for custom data type
  */
-public enum CustomDataType {
+public enum CustomDataType
+{
 
     /**
      * Identifier for custom data type "installer listener".
@@ -26,11 +27,13 @@ public enum CustomDataType {
 
     private String attribute;
 
-    CustomDataType(String attribute) {
+    CustomDataType(String attribute)
+    {
         this.attribute = attribute;
     }
 
-    public String getAttribute() {
+    public String getAttribute()
+    {
         return attribute;
     }
 }

@@ -49,7 +49,8 @@ import java.util.Vector;
  * @author Thomas Guenter
  * @author Klaus Bartz
  */
-public class AntActionInstallerListener extends SimpleInstallerListener {
+public class AntActionInstallerListener extends SimpleInstallerListener
+{
 
     // ------------------------------------------------------------------------
     // Constant Definitions
@@ -70,7 +71,8 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
     /**
      * Default constructor
      */
-    public AntActionInstallerListener(VariableSubstitutor variableSubstitutor, UninstallData uninstallData) {
+    public AntActionInstallerListener(VariableSubstitutor variableSubstitutor, UninstallData uninstallData)
+    {
         super(true);
         this.variableSubstitutor = variableSubstitutor;
         actions = new HashMap<String, HashMap<Object, ArrayList<AntAction>>>();
@@ -83,7 +85,8 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
      *
      * @return the actions map
      */
-    public HashMap<String, HashMap<Object, ArrayList<AntAction>>> getActions() {
+    public HashMap<String, HashMap<Object, ArrayList<AntAction>>> getActions()
+    {
         return (actions);
     }
 
@@ -95,24 +98,28 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
      */
 
     public void beforePacks(AutomatedInstallData idata, Integer npacks,
-                            AbstractUIProgressHandler handler) throws Exception {
+                            AbstractUIProgressHandler handler) throws Exception
+    {
         super.beforePacks(idata, npacks, handler);
 
         getSpecHelper().readSpec(SPEC_FILE_NAME, variableSubstitutor);
 
-        if (getSpecHelper().getSpec() == null) {
+        if (getSpecHelper().getSpec() == null)
+        {
             return;
         }
 
         // Selected packs.
         Iterator iter = idata.getSelectedPacks().iterator();
         Pack p = null;
-        while (iter != null && iter.hasNext()) {
+        while (iter != null && iter.hasNext())
+        {
             p = (Pack) iter.next();
 
             // Resolve data for current pack.
             IXMLElement pack = getSpecHelper().getPackForName(p.name);
-            if (pack == null) {
+            if (pack == null)
+            {
                 continue;
             }
 
@@ -125,16 +132,20 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
 
             // Get all entries for antcalls.
             Vector<IXMLElement> antCallEntries = pack.getChildrenNamed(AntAction.ANTCALL);
-            if (antCallEntries != null && antCallEntries.size() >= 1) {
+            if (antCallEntries != null && antCallEntries.size() >= 1)
+            {
                 Iterator<IXMLElement> entriesIter = antCallEntries.iterator();
-                while (entriesIter != null && entriesIter.hasNext()) {
+                while (entriesIter != null && entriesIter.hasNext())
+                {
                     AntAction act = readAntCall(entriesIter.next(), idata);
-                    if (act != null) {
+                    if (act != null)
+                    {
                         (packActions.get(act.getOrder())).add(act);
                     }
                 }
                 // Set for progress bar interaction.
-                if ((packActions.get(ActionBase.AFTERPACKS)).size() > 0) {
+                if ((packActions.get(ActionBase.AFTERPACKS)).size() > 0)
+                {
                     this.setProgressBarCaller();
                 }
             }
@@ -142,7 +153,8 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
             actions.put(p.name, packActions);
         }
         iter = idata.getAvailablePacks().iterator();
-        while (iter.hasNext()) {
+        while (iter.hasNext())
+        {
             String currentPack = ((Pack) iter.next()).name;
             performAllActions(currentPack, ActionBase.BEFOREPACKS, null);
         }
@@ -156,7 +168,8 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
      */
 
     public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler)
-            throws Exception {
+            throws Exception
+    {
         performAllActions(pack.name, ActionBase.BEFOREPACK, handler);
     }
 
@@ -167,7 +180,8 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
      * java.lang.Integer, com.izforge.izpack.util.AbstractUIProgressHandler)
      */
 
-    public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception {
+    public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
+    {
         performAllActions(pack.name, ActionBase.AFTERPACK, handler);
     }
 
@@ -179,28 +193,35 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
      */
 
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
-            throws Exception {
-        if (informProgressBar()) {
+            throws Exception
+    {
+        if (informProgressBar())
+        {
             handler.nextStep(getMsg("AntAction.pack"), getProgressBarCallerId(), getActionCount(
                     idata, ActionBase.AFTERPACKS));
         }
         Iterator iter = idata.getSelectedPacks().iterator();
-        while (iter.hasNext()) {
+        while (iter.hasNext())
+        {
             String currentPack = ((Pack) iter.next()).name;
             performAllActions(currentPack, ActionBase.AFTERPACKS, handler);
         }
-        if (uninstActions.size() > 0) {
+        if (uninstActions.size() > 0)
+        {
             uninstallData.addAdditionalData("antActions", uninstActions);
         }
     }
 
-    private int getActionCount(AutomatedInstallData idata, String order) {
+    private int getActionCount(AutomatedInstallData idata, String order)
+    {
         int retval = 0;
         Iterator iter = idata.getSelectedPacks().iterator();
-        while (iter.hasNext()) {
+        while (iter.hasNext())
+        {
             String currentPack = ((Pack) iter.next()).name;
             ArrayList<AntAction> actList = getActions(currentPack, order);
-            if (actList != null) {
+            if (actList != null)
+            {
                 retval += actList.size();
             }
         }
@@ -215,13 +236,16 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
      * @return a list which contains all defined actions for the given pack and order
      */
     // -------------------------------------------------------
-    protected ArrayList<AntAction> getActions(String packName, String order) {
-        if (actions == null) {
+    protected ArrayList<AntAction> getActions(String packName, String order)
+    {
+        if (actions == null)
+        {
             return null;
         }
 
         HashMap<Object, ArrayList<AntAction>> packActions = actions.get(packName);
-        if (packActions == null || packActions.size() == 0) {
+        if (packActions == null || packActions.size() == 0)
+        {
             return null;
         }
 
@@ -236,29 +260,36 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
      * @throws InstallerException
      */
     private void performAllActions(String packName, String order, AbstractUIProgressHandler handler)
-            throws InstallerException {
+            throws InstallerException
+    {
         ArrayList<AntAction> actList = getActions(packName, order);
-        if (actList == null || actList.size() == 0) {
+        if (actList == null || actList.size() == 0)
+        {
             return;
         }
 
         Debug.trace("******* Executing all " + order + " actions of " + packName + " ...");
-        for (AntAction act : actList) {
+        for (AntAction act : actList)
+        {
             // Inform progress bar if needed. Works only
             // on AFTER_PACKS
             if (informProgressBar() && handler != null
                     && handler instanceof ExtendedUIProgressHandler
-                    && order.equals(ActionBase.AFTERPACKS)) {
+                    && order.equals(ActionBase.AFTERPACKS))
+            {
                 ((ExtendedUIProgressHandler) handler)
                         .progress((act.getMessageID() != null) ? getMsg(act.getMessageID()) : "");
             }
-            try {
+            try
+            {
                 act.performInstallAction();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 throw new InstallerException(e);
             }
-            if (act.getUninstallTargets().size() > 0) {
+            if (act.getUninstallTargets().size() > 0)
+            {
                 uninstActions.add(act);
             }
         }
@@ -272,21 +303,25 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
      * @return an ant call which is defined in the given XML element
      * @throws InstallerException
      */
-    private AntAction readAntCall(IXMLElement el, AutomatedInstallData idata) throws InstallerException {
+    private AntAction readAntCall(IXMLElement el, AutomatedInstallData idata) throws InstallerException
+    {
         String buildFile = null;
         String buildResource = null;
 
-        if (el == null) {
+        if (el == null)
+        {
             return null;
         }
         SpecHelper spec = getSpecHelper();
         AntAction act = new AntAction();
-        try {
+        try
+        {
             act.setOrder(spec.getRequiredAttribute(el, ActionBase.ORDER));
             act.setUninstallOrder(el.getAttribute(ActionBase.UNINSTALL_ORDER,
                     ActionBase.BEFOREDELETION));
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             throw new InstallerException(e);
         }
 
@@ -294,36 +329,45 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
         act.setVerbose(spec.isAttributeYes(el, ActionBase.VERBOSE, false));
         buildFile = el.getAttribute(ActionBase.BUILDFILE);
         buildResource = processBuildfileResource(spec, idata, el);
-        if (null == buildFile && null == buildResource) {
+        if (null == buildFile && null == buildResource)
+        {
             throw new InstallerException("Invalid " + SPEC_FILE_NAME + ": either buildfile or buildresource must be specified");
         }
-        if (null != buildFile && null != buildResource) {
+        if (null != buildFile && null != buildResource)
+        {
             throw new InstallerException("Invalid " + SPEC_FILE_NAME + ": cannot specify both buildfile and buildresource");
         }
-        if (null != buildFile) {
+        if (null != buildFile)
+        {
             act.setBuildFile(buildFile);
-        } else {
+        }
+        else
+        {
             act.setBuildFile(buildResource);
         }
         String str = el.getAttribute(ActionBase.LOGFILE);
-        if (str != null) {
+        if (str != null)
+        {
             act.setLogFile(str);
         }
         String msgId = el.getAttribute(ActionBase.MESSAGEID);
-        if (msgId != null && msgId.length() > 0) {
+        if (msgId != null && msgId.length() > 0)
+        {
             act.setMessageID(msgId);
         }
 
         // read propertyfiles
         Iterator<IXMLElement> iter = el.getChildrenNamed(ActionBase.PROPERTYFILE).iterator();
-        while (iter.hasNext()) {
+        while (iter.hasNext())
+        {
             IXMLElement propEl = iter.next();
             act.addPropertyFile(spec.getRequiredAttribute(propEl, ActionBase.PATH));
         }
 
         // read properties
         iter = el.getChildrenNamed(ActionBase.PROPERTY).iterator();
-        while (iter.hasNext()) {
+        while (iter.hasNext())
+        {
             IXMLElement propEl = iter.next();
             act.setProperty(spec.getRequiredAttribute(propEl, ActionBase.NAME), spec
                     .getRequiredAttribute(propEl, ActionBase.VALUE));
@@ -331,20 +375,23 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
 
         // read targets
         iter = el.getChildrenNamed(ActionBase.TARGET).iterator();
-        while (iter.hasNext()) {
+        while (iter.hasNext())
+        {
             IXMLElement targEl = iter.next();
             act.addTarget(spec.getRequiredAttribute(targEl, ActionBase.NAME));
         }
 
         // read uninstall rules
         iter = el.getChildrenNamed(ActionBase.UNINSTALL_TARGET).iterator();
-        while (iter.hasNext()) {
+        while (iter.hasNext())
+        {
             IXMLElement utargEl = iter.next();
             act.addUninstallTarget(spec.getRequiredAttribute(utargEl, ActionBase.NAME));
         }
 
         // see if this was an build_resource and there were uninstall actions
-        if (null != buildResource && act.getUninstallTargets().size() > 0) {
+        if (null != buildResource && act.getUninstallTargets().size() > 0)
+        {
             // We need to add the build_resource file to the uninstaller
             addBuildResourceToUninstallerData(buildResource);
         }
@@ -352,41 +399,51 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
         return act;
     }
 
-    private String processBuildfileResource(SpecHelper spec, AutomatedInstallData idata, IXMLElement el) throws InstallerException {
+    private String processBuildfileResource(SpecHelper spec, AutomatedInstallData idata, IXMLElement el) throws InstallerException
+    {
         String buildResource = null;
 
         // See if the build file is a resource
         String attr = el.getAttribute(ActionBase.BUILDRESOURCE);
-        if (null != attr) {
+        if (null != attr)
+        {
             // Get the resource
             BufferedInputStream bis = new BufferedInputStream(spec.getResource(attr));
-            if (null == bis) {
+            if (null == bis)
+            {
                 // Resource not found
                 throw new InstallerException("Failed to find buildfile_resource: " + attr);
             }
             BufferedOutputStream bos = null;
-            try {
+            try
+            {
                 // Write the resource to a temporary file
                 File tempFile = File.createTempFile("buildfile_resource", "xml");
                 tempFile.deleteOnExit();
                 bos = new BufferedOutputStream(new FileOutputStream(tempFile));
                 int c;
-                while (-1 != (c = bis.read())) {
+                while (-1 != (c = bis.read()))
+                {
                     bos.write(c);
                 }
                 bis.close();
                 bos.close();
                 buildResource = tempFile.getAbsolutePath();
             }
-            catch (Exception x) {
+            catch (Exception x)
+            {
                 throw new InstallerException("Failed to write buildfile_resource", x);
             }
-            finally {
-                if (bos != null) {
-                    try {
+            finally
+            {
+                if (bos != null)
+                {
+                    try
+                    {
                         bos.close();
                     }
-                    catch (Exception x) {
+                    catch (Exception x)
+                    {
                         // Ignore this exception
                     }
                 }
@@ -395,26 +452,36 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
         return buildResource;
     }
 
-    private void addBuildResourceToUninstallerData(String buildResource) throws InstallerException {
+    private void addBuildResourceToUninstallerData(String buildResource) throws InstallerException
+    {
         byte[] content = null;
         File buildFile = new File(buildResource);
         ByteArrayOutputStream bos = new ByteArrayOutputStream((int) buildFile.length());
         BufferedInputStream bis = null;
-        try {
+        try
+        {
             bis = new BufferedInputStream(new FileInputStream(buildFile));
             int c;
-            while (-1 != (c = bis.read())) {
+            while (-1 != (c = bis.read()))
+            {
                 bos.write(c);
             }
             content = bos.toByteArray();
             uninstallData.addAdditionalData("build_resource", content);
-        } catch (Exception x) {
+        }
+        catch (Exception x)
+        {
             throw new InstallerException("Failed to add buildfile_resource to uninstaller", x);
-        } finally {
-            try {
+        }
+        finally
+        {
+            try
+            {
                 bis.close();
                 bos.close();
-            } catch (IOException iOException) {
+            }
+            catch (IOException iOException)
+            {
                 // Ignore the error
             }
         }

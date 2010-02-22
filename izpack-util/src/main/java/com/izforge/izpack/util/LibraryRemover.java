@@ -16,6 +16,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.util;
 
 import java.io.*;
@@ -37,7 +38,8 @@ import java.util.*;
  *
  * @author Klaus Bartz
  */
-public class LibraryRemover {
+public class LibraryRemover
+{
 
     /**
      * All class files which are needed for the second process. All have to be in this installers
@@ -102,11 +104,15 @@ public class LibraryRemover {
      * @param phase for which an object should be created.
      * @throws IOException
      */
-    private LibraryRemover(int phase) throws IOException {
+    private LibraryRemover(int phase) throws IOException
+    {
         this.phase = phase;
-        if (phase == 1) {
+        if (phase == 1)
+        {
             initJavaExec();
-        } else {
+        }
+        else
+        {
             logFile = new File(System.getProperty(BASE_KEY) + ".log");
             specFile = new File(System.getProperty(BASE_KEY) + ".spec");
             sandbox = new File(System.getProperty(BASE_KEY) + ".d");
@@ -119,7 +125,8 @@ public class LibraryRemover {
      * @param temporaryFileNames
      * @throws IOException
      */
-    public static void invoke(List<String> temporaryFileNames) throws IOException {
+    public static void invoke(List<String> temporaryFileNames) throws IOException
+    {
         LibraryRemover self = new LibraryRemover(1);
         self.invoke1(temporaryFileNames);
     }
@@ -131,8 +138,10 @@ public class LibraryRemover {
      * @throws SecurityException if a security manager exists and doesn't allow creation of a
      *                           subprocess
      */
-    private void initJavaExec() throws IOException {
-        try {
+    private void initJavaExec() throws IOException
+    {
+        try
+        {
             Process p = Runtime.getRuntime().exec(javaCommand());
 
             new StreamProxy(p.getErrorStream(), "err").start();
@@ -142,7 +151,8 @@ public class LibraryRemover {
             // even if it returns an error code, it was at least found
             p.waitFor();
         }
-        catch (InterruptedException ie) {
+        catch (InterruptedException ie)
+        {
             throw new IOException("Unable to create a java subprocess");
         }
     }
@@ -153,22 +163,26 @@ public class LibraryRemover {
      * @param temporaryFileNames list of paths of the files which should be removed
      * @throws IOException
      */
-    private void invoke1(List<String> temporaryFileNames) throws IOException {
+    private void invoke1(List<String> temporaryFileNames) throws IOException
+    {
         // Initialize sandbox and log file to be unique, but similarly named
-        while (true) {
+        while (true)
+        {
             logFile = File.createTempFile(PREFIX, ".log");
             String f = logFile.getCanonicalPath();
             specFile = new File(f.substring(0, f.length() - 4) + ".spec");
             sandbox = new File(f.substring(0, f.length() - 4) + ".d");
 
             // check if the similarly named directory is free
-            if (!sandbox.exists()) {
+            if (!sandbox.exists())
+            {
                 break;
             }
 
             logFile.delete();
         }
-        if (!sandbox.mkdir()) {
+        if (!sandbox.mkdir())
+        {
             throw new RuntimeException("Failed to create temp dir: " + sandbox);
         }
 
@@ -182,19 +196,22 @@ public class LibraryRemover {
         // This allows later to delete the classes because class files are deleteable
         // also the using process is running, jar files are not deletable in that
         // situation.,
-        for (String aSANDBOX_CONTENT : SANDBOX_CONTENT) {
+        for (String aSANDBOX_CONTENT : SANDBOX_CONTENT)
+        {
             in = getClass().getResourceAsStream("/" + aSANDBOX_CONTENT);
 
             File outFile = new File(sandbox, aSANDBOX_CONTENT);
             File parent = outFile.getParentFile();
-            if (parent != null && !parent.exists()) {
+            if (parent != null && !parent.exists())
+            {
                 parent.mkdirs();
             }
 
             out = new BufferedOutputStream(new FileOutputStream(outFile));
 
             int n;
-            while ((n = in.read(buf, 0, buf.length)) > 0) {
+            while ((n = in.read(buf, 0, buf.length)) > 0)
+            {
                 out.write(buf, 0, n);
             }
 
@@ -206,9 +223,11 @@ public class LibraryRemover {
         out = new BufferedOutputStream(new FileOutputStream(specFile));
         BufferedWriter specWriter = new BufferedWriter(new OutputStreamWriter(out));
         Iterator<String> iter = temporaryFileNames.iterator();
-        while (iter.hasNext()) {
+        while (iter.hasNext())
+        {
             specWriter.write(iter.next());
-            if (iter.hasNext()) {
+            if (iter.hasNext())
+            {
                 specWriter.newLine();
             }
         }
@@ -231,7 +250,8 @@ public class LibraryRemover {
      * @return The files list.
      * @throws Exception Description of the Exception
      */
-    private ArrayList<File> getFilesList() throws Exception {
+    private ArrayList<File> getFilesList() throws Exception
+    {
         // Initialisations
         TreeSet<File> files = new TreeSet<File>(Collections.reverseOrder());
         InputStream in = new FileInputStream(specFile);
@@ -240,7 +260,8 @@ public class LibraryRemover {
 
         // We read it
         String read = reader.readLine();
-        while (read != null) {
+        while (read != null)
+        {
             files.add(new File(read));
             read = reader.readLine();
         }
@@ -252,14 +273,18 @@ public class LibraryRemover {
     /**
      * Invoke methode for phase 2.
      */
-    private void invoke2() {
+    private void invoke2()
+    {
 
-        try {
+        try
+        {
             // Give main program time to exit.
-            try {
+            try
+            {
                 Thread.sleep(1000);
             }
-            catch (Exception x) {
+            catch (Exception x)
+            {
             }
 
             ArrayList<File> files = getFilesList();
@@ -267,12 +292,16 @@ public class LibraryRemover {
             // We destroy the files
 
             log("deleteing temporary dlls/shls");
-            for (int i = 0; i < size; i++) {
+            for (int i = 0; i < size; i++)
+            {
                 File file = files.get(i);
                 file.delete();
-                if (file.exists()) {
+                if (file.exists())
+                {
                     log("    deleting of " + file.getCanonicalPath() + " failed!!!");
-                } else {
+                }
+                else
+                {
                     log("    " + file.getCanonicalPath());
                 }
 
@@ -283,7 +312,8 @@ public class LibraryRemover {
             deleteTree(sandbox);
             specFile.delete();
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             log(e);
         }
     }
@@ -295,7 +325,8 @@ public class LibraryRemover {
      * @return created process object
      * @throws IOException
      */
-    private Process spawn(int nextPhase) throws IOException {
+    private Process spawn(int nextPhase) throws IOException
+    {
         String base = logFile.getAbsolutePath();
         base = base.substring(0, base.length() - 4);
 
@@ -307,7 +338,8 @@ public class LibraryRemover {
 
         StringBuffer sb = new StringBuffer("Spawning phase ");
         sb.append(nextPhase).append(": ");
-        for (String aJavaCmd : javaCmd) {
+        for (String aJavaCmd : javaCmd)
+        {
             sb.append("\n\t").append(aJavaCmd);
         }
         log(sb.toString());
@@ -322,10 +354,13 @@ public class LibraryRemover {
      *
      * @return command for spawning
      */
-    public static boolean deleteTree(File file) {
-        if (file.isDirectory()) {
+    public static boolean deleteTree(File file)
+    {
+        if (file.isDirectory())
+        {
             File[] files = file.listFiles();
-            for (File file1 : files) {
+            for (File file1 : files)
+            {
                 deleteTree(file1);
             }
         }
@@ -337,7 +372,8 @@ public class LibraryRemover {
      *
      * @return command command extended with extension of executable
      */
-    private static String addExtension(String command) {
+    private static String addExtension(String command)
+    {
         // This is the most common extension case - exe for windows and OS/2,
         // nothing for *nix.
         return command + (OsVersion.IS_WINDOWS || OsVersion.IS_OS2 ? ".exe" : "");
@@ -348,7 +384,8 @@ public class LibraryRemover {
      *
      * @return command for spawning
      */
-    private static String javaCommand() {
+    private static String javaCommand()
+    {
         String executable = addExtension("java");
         String dir = new File(JAVA_HOME + "/bin").getAbsolutePath();
         File jExecutable = new File(dir, executable);
@@ -356,24 +393,28 @@ public class LibraryRemover {
         // Unfortunately on Windows java.home doesn't always refer
         // to the correct location, so we need to fall back to
         // assuming java is somewhere on the PATH.
-        if (!jExecutable.exists()) {
+        if (!jExecutable.exists())
+        {
             return executable;
         }
         return jExecutable.getAbsolutePath();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         // Phase 2 removes given path list, sandbox and spec file.
         // Phase 3 as used in SelfModifier will be not needed here because
         // this class do not use a GUI which can call exit like the
         // one in SelfModifier.
 
-        try {
+        try
+        {
             // all it's attributes are retrieved from system properties
             LibraryRemover librianRemover = new LibraryRemover(2);
             librianRemover.invoke2();
         }
-        catch (IOException ioe) {
+        catch (IOException ioe)
+        {
             System.err.println("Error invoking a secondary phase");
             System.err.println("Note that this program is only intended as a secondary process");
             ioe.printStackTrace();
@@ -389,13 +430,17 @@ public class LibraryRemover {
 
     PrintStream log = null;
 
-    private PrintStream checkLog() {
-        try {
-            if (log == null) {
+    private PrintStream checkLog()
+    {
+        try
+        {
+            if (log == null)
+            {
                 log = new PrintStream(new FileOutputStream(logFile.toString(), true));
             }
         }
-        catch (IOException x) {
+        catch (IOException x)
+        {
             System.err.println("Phase " + phase + " log err: " + x.getMessage());
             x.printStackTrace();
         }
@@ -403,20 +448,25 @@ public class LibraryRemover {
         return log;
     }
 
-    private void log(Throwable t) {
-        if (checkLog() != null) {
+    private void log(Throwable t)
+    {
+        if (checkLog() != null)
+        {
             log.println(isoPoint.format(date) + " Phase " + phase + ": " + t.getMessage());
             t.printStackTrace(log);
         }
     }
 
-    private void log(String msg) {
-        if (checkLog() != null) {
+    private void log(String msg)
+    {
+        if (checkLog() != null)
+        {
             log.println(isoPoint.format(date) + " Phase " + phase + ": " + msg);
         }
     }
 
-    public static class StreamProxy extends Thread {
+    public static class StreamProxy extends Thread
+    {
 
         InputStream in;
 
@@ -424,36 +474,45 @@ public class LibraryRemover {
 
         OutputStream out;
 
-        public StreamProxy(InputStream in, String name) {
+        public StreamProxy(InputStream in, String name)
+        {
             this(in, name, null);
         }
 
-        public StreamProxy(InputStream in, String name, OutputStream out) {
+        public StreamProxy(InputStream in, String name, OutputStream out)
+        {
             this.in = in;
             this.name = name;
             this.out = out;
         }
 
-        public void run() {
-            try {
+        public void run()
+        {
+            try
+            {
                 PrintWriter pw = null;
-                if (out != null) {
+                if (out != null)
+                {
                     pw = new PrintWriter(out);
                 }
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
                 String line;
-                while ((line = br.readLine()) != null) {
-                    if (pw != null) {
+                while ((line = br.readLine()) != null)
+                {
+                    if (pw != null)
+                    {
                         pw.println(line);
                     }
                     // System.out.println(name + ">" + line);
                 }
-                if (pw != null) {
+                if (pw != null)
+                {
                     pw.flush();
                 }
             }
-            catch (IOException ioe) {
+            catch (IOException ioe)
+            {
                 ioe.printStackTrace();
             }
         }

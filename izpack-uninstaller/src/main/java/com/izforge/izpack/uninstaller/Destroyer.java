@@ -37,7 +37,8 @@ import java.util.*;
  *
  * @author Julien Ponge
  */
-public class Destroyer extends Thread {
+public class Destroyer extends Thread
+{
 
     /**
      * True if the destroyer must force the recursive deletion.
@@ -61,7 +62,8 @@ public class Destroyer extends Thread {
      * @param forceDestroy Shall we force the recursive deletion.
      * @param handler      The destroyer listener.
      */
-    public Destroyer(String installPath, boolean forceDestroy, AbstractUIProgressHandler handler) {
+    public Destroyer(String installPath, boolean forceDestroy, AbstractUIProgressHandler handler)
+    {
         super("IzPack - Destroyer");
 
         this.installPath = installPath;
@@ -72,8 +74,10 @@ public class Destroyer extends Thread {
     /**
      * The run method.
      */
-    public void run() {
-        try {
+    public void run()
+    {
+        try
+        {
             // We get the list of uninstaller listeners
             List[] listeners = getListenerLists();
             // We get the list of the files to delete
@@ -91,7 +95,8 @@ public class Destroyer extends Thread {
             handler.startAction("destroy", size);
 
             // We destroy the files
-            for (int i = 0; i < size; i++) {
+            for (int i = 0; i < size; i++)
+            {
                 File file = files.get(i);
                 // Custem action listener stuff --- beforeDelete ----
                 informListeners(listeners[1], UninstallerListener.BEFORE_DELETE, file, handler);
@@ -107,10 +112,12 @@ public class Destroyer extends Thread {
             // Custem action listener stuff --- afterDeletion ----
             informListeners(listeners[0], UninstallerListener.AFTER_DELETION, files, handler);
 
-            if (OsVersion.IS_UNIX) {
+            if (OsVersion.IS_UNIX)
+            {
                 ArrayList<String> rootScripts = getRootScripts();
                 Iterator<String> rsi = rootScripts.iterator();
-                while (rsi.hasNext()) {
+                while (rsi.hasNext())
+                {
                     execRootScript((String) rsi.next());
                 }
 
@@ -121,7 +128,8 @@ public class Destroyer extends Thread {
 
             handler.stopAction();
         }
-        catch (Throwable err) {
+        catch (Throwable err)
+        {
             handler.stopAction();
             err.printStackTrace();
 
@@ -159,7 +167,8 @@ public class Destroyer extends Thread {
      * @return The files list.
      * @throws Exception Description of the Exception
      */
-    private ArrayList<File> getFilesList() throws Exception {
+    private ArrayList<File> getFilesList() throws Exception
+    {
         // Initialisations
         TreeSet<File> files = new TreeSet<File>(Collections.reverseOrder());
         InputStream in = Destroyer.class.getResourceAsStream("/install.log");
@@ -171,7 +180,8 @@ public class Destroyer extends Thread {
 
         // We read it
         String read = reader.readLine();
-        while (read != null) {
+        while (read != null)
+        {
             files.add(new File(read));
             read = reader.readLine();
         }
@@ -186,12 +196,14 @@ public class Destroyer extends Thread {
      * @return The ArrayList of the Executables
      * @throws Exception
      */
-    private ArrayList<ExecutableFile> getExecutablesList() throws Exception {
+    private ArrayList<ExecutableFile> getExecutablesList() throws Exception
+    {
         ArrayList<ExecutableFile> executables = new ArrayList<ExecutableFile>();
         ObjectInputStream in = new ObjectInputStream(Destroyer.class
                 .getResourceAsStream("/executables"));
         int num = in.readInt();
-        for (int i = 0; i < num; i++) {
+        for (int i = 0; i < num; i++)
+        {
             ExecutableFile file = (ExecutableFile) in.readObject();
             executables.add(file);
         }
@@ -204,18 +216,22 @@ public class Destroyer extends Thread {
      * @return The files which should remove by root for another user
      * @throws Exception
      */
-    private ArrayList<String> getRootScripts() throws Exception {
+    private ArrayList<String> getRootScripts() throws Exception
+    {
         ArrayList<String> result = new ArrayList<String>();
 
         int idx = 0;
-        while (true) {
-            try {
+        while (true)
+        {
+            try
+            {
                 ObjectInputStream in = new ObjectInputStream(Destroyer.class.getResourceAsStream("/"
                         + UninstallData.ROOTSCRIPT + Integer.toString(idx)));
 
                 result.add(in.readUTF());
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Debug.log("Last RootScript Index=" + idx);
                 break;
             }
@@ -229,17 +245,21 @@ public class Destroyer extends Thread {
      *
      * @param aRootScript The Script to exec as uninstall time by root.
      */
-    private void execRootScript(String aRootScript) {
-        if (!"".equals(aRootScript)) {
+    private void execRootScript(String aRootScript)
+    {
+        if (!"".equals(aRootScript))
+        {
             Debug.log("Will Execute: " + aRootScript);
 
-            try {
+            try
+            {
                 String result = ShellScript.execAndDelete(new StringBuffer(aRootScript), File.createTempFile(
                         this.getClass().getName(),
                         Long.toString(System.currentTimeMillis()) + ".sh").toString());
                 Debug.log("Result: " + result);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Debug.log("Exeption during su remove: " + ex.getMessage());
             }
         }
@@ -251,17 +271,23 @@ public class Destroyer extends Thread {
      * @param file The file to wipe.
      * @throws Exception Description of the Exception
      */
-    private void cleanup(File file) throws Exception {
-        if (file.isDirectory()) {
+    private void cleanup(File file) throws Exception
+    {
+        if (file.isDirectory())
+        {
             File[] files = file.listFiles();
-            if (files != null) {
+            if (files != null)
+            {
                 int size = files.length;
-                for (int i = 0; i < size; i++) {
+                for (int i = 0; i < size; i++)
+                {
                     cleanup(files[i]);
                 }
             }
             file.delete();
-        } else if (forceDestroy) {
+        }
+        else if (forceDestroy)
+        {
             file.delete();
         }
 
@@ -275,21 +301,25 @@ public class Destroyer extends Thread {
      * @return a list with the defined uninstall listeners
      * @throws Exception
      */
-    private List[] getListenerLists() throws Exception {
+    private List[] getListenerLists() throws Exception
+    {
         ArrayList[] uninstaller = new ArrayList[]{new ArrayList(), new ArrayList()};
         // Load listeners if exist
         InputStream in;
         ObjectInputStream objIn;
         in = Destroyer.class.getResourceAsStream("/uninstallerListeners");
-        if (in != null) {
+        if (in != null)
+        {
             objIn = new ObjectInputStream(in);
             List listeners = (List) objIn.readObject();
             objIn.close();
             Iterator iter = listeners.iterator();
-            while (iter != null && iter.hasNext()) {
+            while (iter != null && iter.hasNext())
+            {
                 Class<UninstallerListener> clazz = (Class<UninstallerListener>) Class.forName(((String) iter.next()));
                 UninstallerListener ul = clazz.newInstance();
-                if (ul.isFileListener()) {
+                if (ul.isFileListener())
+                {
                     uninstaller[1].add(ul);
                 }
                 uninstaller[0].add(ul);
@@ -308,14 +338,18 @@ public class Destroyer extends Thread {
      */
 
     private void informListeners(List listeners, int action, Object param,
-                                 AbstractUIProgressHandler handler) {
+                                 AbstractUIProgressHandler handler)
+    {
         // Iterate the action list.
         Iterator iter = listeners.iterator();
         UninstallerListener il = null;
-        while (iter.hasNext()) {
-            try {
+        while (iter.hasNext())
+        {
+            try
+            {
                 il = (UninstallerListener) iter.next();
-                switch (action) {
+                switch (action)
+                {
                     case UninstallerListener.BEFORE_DELETION:
                         il.beforeDeletion((List) param, handler);
                         break;
@@ -330,7 +364,8 @@ public class Destroyer extends Thread {
                         break;
                 }
             }
-            catch (Throwable e) { // Catch it to prevent for a block of uninstallation.
+            catch (Throwable e)
+            { // Catch it to prevent for a block of uninstallation.
                 handler.emitError("Skipping custom action because exception caught during "
                         + il.getClass().getName(), e.toString());
             }

@@ -63,22 +63,22 @@ div.abstract p.topic-title {
 }
 
 div.admonition, div.attention, div.caution, div.danger, div.error,
-    div.hint, div.important, div.note, div.tip, div.warning {
+div.hint, div.important, div.note, div.tip, div.warning {
     margin: 2em;
     border: medium outset;
     padding: 1em
 }
 
 div.admonition p.admonition-title, div.hint p.admonition-title,
-    div.important p.admonition-title, div.note p.admonition-title,
-    div.tip p.admonition-title {
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
     font-weight: bold;
     font-family: sans-serif
 }
 
 div.attention p.admonition-title, div.caution p.admonition-title,
-    div.danger p.admonition-title, div.error p.admonition-title,
-    div.warning p.admonition-title {
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
     color: red;
     font-weight: bold;
     font-family: sans-serif
@@ -164,7 +164,7 @@ div.topic {
 }
 
 h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
-    h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
     margin-top: 0.4em
 }
 
@@ -316,7 +316,7 @@ table.footnote {
 }
 
 table.docutils td, table.docutils th,
-    table.docinfo td, table.docinfo th {
+table.docinfo td, table.docinfo th {
     padding-left: 0.5em;
     padding-right: 0.5em;
     vertical-align: top
@@ -330,7 +330,7 @@ table.docutils th.field-name, table.docinfo th.docinfo-name {
 }
 
 h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
-    h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
     font-size: 100%
 }
 

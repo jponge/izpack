@@ -35,12 +35,14 @@ import java.util.List;
  *
  * @author Klaus Bartz
  */
-public class SimpleUninstallerListener implements UninstallerListener {
+public class SimpleUninstallerListener implements UninstallerListener
+{
 
     /**
      *
      */
-    public SimpleUninstallerListener() {
+    public SimpleUninstallerListener()
+    {
         super();
     }
 
@@ -51,7 +53,8 @@ public class SimpleUninstallerListener implements UninstallerListener {
      * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
 
-    public void beforeDeletion(List files, AbstractUIProgressHandler handler) throws Exception {
+    public void beforeDeletion(List files, AbstractUIProgressHandler handler) throws Exception
+    {
         // Do nothing
     }
 
@@ -62,7 +65,8 @@ public class SimpleUninstallerListener implements UninstallerListener {
      * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
 
-    public void beforeDelete(File file, AbstractUIProgressHandler handler) throws Exception {
+    public void beforeDelete(File file, AbstractUIProgressHandler handler) throws Exception
+    {
         // Do nothing
     }
 
@@ -73,7 +77,8 @@ public class SimpleUninstallerListener implements UninstallerListener {
      * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
 
-    public void afterDelete(File file, AbstractUIProgressHandler handler) throws Exception {
+    public void afterDelete(File file, AbstractUIProgressHandler handler) throws Exception
+    {
         // Do nothing
     }
 
@@ -84,7 +89,8 @@ public class SimpleUninstallerListener implements UninstallerListener {
      * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
 
-    public void afterDeletion(List files, AbstractUIProgressHandler handler) throws Exception {
+    public void afterDeletion(List files, AbstractUIProgressHandler handler) throws Exception
+    {
         // Do nothing
     }
 
@@ -94,7 +100,8 @@ public class SimpleUninstallerListener implements UninstallerListener {
      * @see com.izforge.izpack.uninstaller.UninstallerListener#isFileListener()
      */
 
-    public boolean isFileListener() {
+    public boolean isFileListener()
+    {
         return false;
     }
 

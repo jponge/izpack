@@ -9,9 +9,11 @@ import java.util.Properties;
  *
  * @author Anthonin Bonnefoy
  */
-public class PropertiesProvider implements Provider {
+public class PropertiesProvider implements Provider
+{
 
-    public Properties provide() {
+    public Properties provide()
+    {
         // initialize backed by system properties
         return new Properties(System.getProperties());
     }

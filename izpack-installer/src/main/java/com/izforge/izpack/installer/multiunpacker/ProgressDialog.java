@@ -9,18 +9,21 @@ import java.awt.*;
  *
  * @author Anthonin Bonnefoy
  */
-public class ProgressDialog extends JWindow {
+public class ProgressDialog extends JWindow
+{
     private static final long serialVersionUID = -6558347134501630050L;
     private JProgressBar progressBar;
     private ProgressDialogThread thread;
 
 
-    public ProgressDialog() {
+    public ProgressDialog()
+    {
         initialize();
         this.thread = new ProgressDialogThread();
     }
 
-    private void initialize() {
+    private void initialize()
+    {
         JPanel main = new JPanel();
         main.setLayout(new BoxLayout(main, BoxLayout.PAGE_AXIS));
 
@@ -49,57 +52,72 @@ public class ProgressDialog extends JWindow {
         this.setLocation(width - mywidth, height - myheight);
     }
 
-    public void startProgress() {
+    public void startProgress()
+    {
 
         this.setVisible(true);
         this.thread.init(this.progressBar);
         this.thread.start();
     }
 
-    public void stopProgress() {
+    public void stopProgress()
+    {
         this.setVisible(false);
         this.thread.requestStop();
     }
 }
 
-class ProgressDialogThread extends Thread {
+class ProgressDialogThread extends Thread
+{
     private boolean stopRequested;
     private JProgressBar progressBar;
 
-    public ProgressDialogThread() {
+    public ProgressDialogThread()
+    {
         super("ProgressThread");
     }
 
-    public void requestStop() {
+    public void requestStop()
+    {
         stopRequested = true;
     }
 
-    public void init(JProgressBar progressBar) {
+    public void init(JProgressBar progressBar)
+    {
         this.progressBar = progressBar;
     }
 
     @Override
-    public void run() {
+    public void run()
+    {
         int count = 0;
         boolean up = true;
 
-        while (!stopRequested) {
-            if (up) {
+        while (!stopRequested)
+        {
+            if (up)
+            {
                 count++;
-                if (count >= 100) {
+                if (count >= 100)
+                {
                     up = false;
                 }
-            } else {
+            }
+            else
+            {
                 count--;
-                if (count <= 0) {
+                if (count <= 0)
+                {
                     up = true;
                 }
             }
             this.progressBar.setValue(count);
-            try {
+            try
+            {
                 Thread.sleep(100);
             }
-            catch (InterruptedException e) {
+            catch (InterruptedException e)
+            {
                 e.printStackTrace();
             }
         }

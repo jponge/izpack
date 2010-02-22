@@ -49,7 +49,8 @@ import java.util.jar.Manifest;
  *
  * @author Klaus Bartz
  */
-public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream {
+public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream
+{
     private static final int JAR_MAGIC = 0xCAFE;
     private boolean firstEntry = true;
     private boolean preventClose = false;
@@ -63,7 +64,8 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream {
      * @param out the actual output stream
      * @throws IOException if an I/O error has occurred
      */
-    public JarOutputStream(OutputStream out) {
+    public JarOutputStream(OutputStream out)
+    {
         super(out);
     }
 
@@ -78,9 +80,11 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream {
      * @param man  the <code>Manifest</code>
      * @throws IOException if an I/O error has occurred
      */
-    public JarOutputStream(File fout, Manifest man) throws IOException {
+    public JarOutputStream(File fout, Manifest man) throws IOException
+    {
         super(fout);
-        if (man == null) {
+        if (man == null)
+        {
             throw new NullPointerException("man");
         }
         org.apache.tools.zip.ZipEntry e =
@@ -98,7 +102,8 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream {
      *             should be created
      * @throws java.io.IOException
      */
-    public JarOutputStream(File arg0) throws IOException {
+    public JarOutputStream(File arg0) throws IOException
+    {
         super(arg0);
     }
 
@@ -114,17 +119,22 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream {
      * @throws java.util.zip.ZipException if a ZIP error has occurred
      * @throws IOException                if an I/O error has occurred
      */
-    public void putNextEntry(org.apache.tools.zip.ZipEntry ze) throws IOException {
-        if (firstEntry) {
+    public void putNextEntry(org.apache.tools.zip.ZipEntry ze) throws IOException
+    {
+        if (firstEntry)
+        {
             // Make sure that extra field data for first JAR
             // entry includes JAR magic number id.
             byte[] edata = ze.getExtra();
-            if (edata != null && !hasMagic(edata)) {
+            if (edata != null && !hasMagic(edata))
+            {
                 // Prepend magic to existing extra data
                 byte[] tmp = new byte[edata.length + 4];
                 System.arraycopy(tmp, 4, edata, 0, edata.length);
                 edata = tmp;
-            } else {
+            }
+            else
+            {
                 edata = new byte[4];
             }
             set16(edata, 0, JAR_MAGIC); // extra field id
@@ -138,7 +148,8 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream {
     /**
      * @return Returns the preventClose.
      */
-    public boolean isPreventClose() {
+    public boolean isPreventClose()
+    {
         return preventClose;
     }
 
@@ -152,7 +163,8 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream {
      *
      * @param preventClose The preventClose to set.
      */
-    public void setPreventClose(boolean preventClose) {
+    public void setPreventClose(boolean preventClose)
+    {
         this.preventClose = preventClose;
     }
 
@@ -166,8 +178,10 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream {
      *
      * @throws IOException if an I/O error occurs.
      */
-    public void close() throws IOException {
-        if (!isPreventClose()) {
+    public void close() throws IOException
+    {
+        if (!isPreventClose())
+        {
             super.close();
         }
     }
@@ -181,7 +195,8 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream {
      *
      * @throws IOException if an I/O error occurs.
      */
-    public void closeAlways() throws IOException {
+    public void closeAlways() throws IOException
+    {
         setPreventClose(false);
         close();
     }
@@ -191,18 +206,23 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream {
      * jar magic extra field id.
      */
 
-    private static boolean hasMagic(byte[] edata) {
+    private static boolean hasMagic(byte[] edata)
+    {
 
-        try {
+        try
+        {
             int i = 0;
-            while (i < edata.length) {
-                if (get16(edata, i) == JAR_MAGIC) {
+            while (i < edata.length)
+            {
+                if (get16(edata, i) == JAR_MAGIC)
+                {
                     return true;
                 }
                 i += get16(edata, i + 2) + 4;
             }
         }
-        catch (ArrayIndexOutOfBoundsException e) {
+        catch (ArrayIndexOutOfBoundsException e)
+        {
             // Invalid extra field data
         }
         return false;
@@ -213,7 +233,8 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream {
      * The bytes are assumed to be in Intel (little-endian) byte order.
      */
 
-    private static int get16(byte[] b, int off) {
+    private static int get16(byte[] b, int off)
+    {
         return (b[off] & 0xff) | ((b[off + 1] & 0xff) << 8);
     }
 
@@ -222,7 +243,8 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream {
      * be in Intel (little-endian) byte order.
      */
 
-    private static void set16(byte[] b, int off, int value) {
+    private static void set16(byte[] b, int off, int value)
+    {
         b[off] = (byte) value;
         b[off + 1] = (byte) (value >> 8);
     }

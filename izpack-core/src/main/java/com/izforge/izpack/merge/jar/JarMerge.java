@@ -23,91 +23,116 @@ import java.util.zip.ZipInputStream;
  *
  * @author Anthonin Bonnefoy
  */
-public class JarMerge implements Mergeable {
+public class JarMerge implements Mergeable
+{
     private String jarPath;
 
     private String regexp = ".*";
     private String destination;
 
 
-    public JarMerge(URL resource) {
+    public JarMerge(URL resource)
+    {
         jarPath = PathResolver.processUrlToJarPath(resource);
         destination = resource.getFile().replaceAll(jarPath, "").replaceAll("file:", "").replaceAll("!/", "");
         regexp = new StringBuilder().append(destination).append("(.*)").toString();
     }
 
-    public JarMerge(URL resource, String destination) {
+    public JarMerge(URL resource, String destination)
+    {
         jarPath = PathResolver.processUrlToJarPath(resource);
         String insideJar = PathResolver.processUrlToJarPackage(resource);
         this.destination = destination;
         regexp = new StringBuilder().append(insideJar).append("(.*)").toString();
     }
 
-    public File find(FileFilter fileFilter) {
-        try {
+    public File find(FileFilter fileFilter)
+    {
+        try
+        {
             ArrayList<String> fileNameInZip = getFileNameInZip();
-            for (String fileName : fileNameInZip) {
+            for (String fileName : fileNameInZip)
+            {
                 File file = new File(jarPath + "!/" + fileName);
-                if (fileFilter.accept(file)) {
+                if (fileFilter.accept(file))
+                {
                     return file;
                 }
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             throw new RuntimeException(e);
         }
         return null;
     }
 
-    public ArrayList<String> getFileNameInZip() throws IOException {
+    public ArrayList<String> getFileNameInZip() throws IOException
+    {
         ZipInputStream inputStream = new ZipInputStream(new FileInputStream(jarPath));
         ArrayList<String> arrayList = new ArrayList<String>();
         ZipEntry zipEntry;
-        while ((zipEntry = inputStream.getNextEntry()) != null) {
+        while ((zipEntry = inputStream.getNextEntry()) != null)
+        {
             arrayList.add(zipEntry.getName());
         }
         return arrayList;
     }
 
-    public void merge(java.util.zip.ZipOutputStream outputStream) {
+    public void merge(java.util.zip.ZipOutputStream outputStream)
+    {
         Pattern pattern = Pattern.compile(regexp);
         ZipEntry zentry;
-        try {
+        try
+        {
             JarInputStream jarInputStream = new JarInputStream(new FileInputStream(new File(jarPath)));
-            while ((zentry = jarInputStream.getNextEntry()) != null) {
-                if (zentry.isDirectory()) {
+            while ((zentry = jarInputStream.getNextEntry()) != null)
+            {
+                if (zentry.isDirectory())
+                {
                     continue;
                 }
                 Matcher matcher = pattern.matcher(zentry.getName());
-                if (matcher.matches()) {
+                if (matcher.matches())
+                {
                     String dest = destination + matcher.group(1);
                     IoHelper.copyStreamToJar(jarInputStream, outputStream, dest, zentry.getTime());
                 }
 
             }
             jarInputStream.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             throw new RuntimeException(e);
         }
     }
 
-    public void merge(ZipOutputStream outJar) {
+    public void merge(ZipOutputStream outJar)
+    {
         Pattern pattern = Pattern.compile(regexp);
         ZipEntry zentry;
-        try {
+        try
+        {
             JarInputStream jarInputStream = new JarInputStream(new FileInputStream(new File(jarPath)));
-            while ((zentry = jarInputStream.getNextEntry()) != null) {
-                if (zentry.isDirectory()) {
+            while ((zentry = jarInputStream.getNextEntry()) != null)
+            {
+                if (zentry.isDirectory())
+                {
                     continue;
                 }
                 Matcher matcher = pattern.matcher(zentry.getName());
-                if (matcher.matches()) {
+                if (matcher.matches())
+                {
                     String dest = destination + matcher.group(1);
                     IoHelper.copyStreamToJar(jarInputStream, outJar, dest, zentry.getTime());
                 }
 
             }
             jarInputStream.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             throw new MergeException(e);
         }
     }

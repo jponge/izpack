@@ -30,7 +30,8 @@ package com.izforge.izpack.util.os;
  *
  * @author marc.eppelmann&#064;reddot.de
  */
-public interface Unix_ShortcutConstants {
+public interface Unix_ShortcutConstants
+{
 
     /**
      * $Comment = "$Comment" *

@@ -19,6 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.compiler.compressor;
 
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -32,7 +33,8 @@ import com.izforge.izpack.merge.MergeManager;
  *
  * @author Klaus Bartz
  */
-public class BZip2PackCompressor extends PackCompressorBase {
+public class BZip2PackCompressor extends PackCompressorBase
+{
 
     private static final String[] THIS_FORMAT_NAMES = {"bzip2"};
     private static final String THIS_DECODER_MAPPER = "org.apache.tools.bzip2.CBZip2InputStream";
@@ -41,7 +43,8 @@ public class BZip2PackCompressor extends PackCompressorBase {
     /**
      *
      */
-    public BZip2PackCompressor(VariableSubstitutor variableSubstitutor, MergeManager mergeManager) {
+    public BZip2PackCompressor(VariableSubstitutor variableSubstitutor, MergeManager mergeManager)
+    {
         super(variableSubstitutor);
         mergeManager.addResourceToMerge("org/apache/tools/bzip2");
         formatNames = THIS_FORMAT_NAMES;

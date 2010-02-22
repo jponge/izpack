@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.util.AbstractUIProgressHandler;
@@ -41,7 +42,8 @@ import java.util.List;
  *
  * @author Klaus Bartz
  */
-public class AntActionUninstallerListener extends SimpleUninstallerListener {
+public class AntActionUninstallerListener extends SimpleUninstallerListener
+{
 
     /**
      * Ant actions to be performed after deletion
@@ -51,7 +53,8 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener {
     /**
      * Default constructor
      */
-    public AntActionUninstallerListener() {
+    public AntActionUninstallerListener()
+    {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -63,17 +66,20 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener {
      * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
 
-    public void beforeDeletion(List files, AbstractUIProgressHandler handler) throws Exception {
+    public void beforeDeletion(List files, AbstractUIProgressHandler handler) throws Exception
+    {
         String buildResource = null;
         // See if we have an embedded build_resource.  If so, it will be stored
         //  under the /build_resource stream
         InputStream is = getClass().getResourceAsStream("/build_resource");
-        if (null != is) {
+        if (null != is)
+        {
             // There is an embedded build_resource.  The stream will contain a byte array
             //  of the contents of the embedded build_resouce.
             ObjectInputStream ois = new ObjectInputStream(is);
             byte[] content = (byte[]) ois.readObject();
-            if (null != content) {
+            if (null != content)
+            {
                 // Save it to a temporary file
                 ByteArrayInputStream bin = new ByteArrayInputStream(content);
                 File buildFile = IoHelper.copyToTempFile(bin, "xml", null);
@@ -84,7 +90,8 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener {
         }
         // Load the defined actions.
         InputStream in = getClass().getResourceAsStream("/antActions");
-        if (in == null) { // No actions, nothing todo.
+        if (in == null)
+        { // No actions, nothing todo.
             return;
         }
         ObjectInputStream objIn = new ObjectInputStream(in);
@@ -105,20 +112,26 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener {
         // files like the properties file for this order because if they're
         // part of the pack the'll be lost after the deletion has been
         // performed.
-        while (iter.hasNext()) {
+        while (iter.hasNext())
+        {
             AntAction action = (AntAction) iter.next();
             // See if we need to set the action with the build_resource that
             //  we extracted
-            if (null != buildResource) {
+            if (null != buildResource)
+            {
                 // We do
                 action.setBuildFile(buildResource);
             }
             // 
-            if (action.getUninstallOrder().equals(ActionBase.BEFOREDELETION)) {
+            if (action.getUninstallOrder().equals(ActionBase.BEFOREDELETION))
+            {
                 befDel.add(action);
-            } else {// We need the build and the properties file(s) outside the
+            }
+            else
+            {// We need the build and the properties file(s) outside the
                 // install dir.
-                if (null == buildResource) {
+                if (null == buildResource)
+                {
                     // We have not copied a build_resource to a temporary file
                     //  so now copy the local build file to a temporary file
                     //  and set it as the build file for the action
@@ -126,10 +139,12 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener {
                     action.setBuildFile(tmpFile.getCanonicalPath());
                 }
                 List<String> props = action.getPropertyFiles();
-                if (props != null) {
+                if (props != null)
+                {
                     Iterator<String> iter2 = props.iterator();
                     ArrayList<String> newProps = new ArrayList<String>();
-                    while (iter2.hasNext()) {
+                    while (iter2.hasNext())
+                    {
                         String propName = iter2.next();
                         File propFile = IoHelper.copyToTempFile(propName, ".properties");
                         newProps.add(propFile.getCanonicalPath());
@@ -140,8 +155,10 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener {
             }
         }
         // Perform the actions with the order "beforedeletion".
-        if (befDel.size() > 0) {
-            for (AntAction act : befDel) {
+        if (befDel.size() > 0)
+        {
+            for (AntAction act : befDel)
+            {
                 act.performUninstallAction();
             }
         }
@@ -155,9 +172,12 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener {
      * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
 
-    public void afterDeletion(List files, AbstractUIProgressHandler handler) throws Exception {
-        if (antActions != null && antActions.size() > 0) { // There are actions of the order "afterdeletion".
-            for (AntAction act : antActions) {
+    public void afterDeletion(List files, AbstractUIProgressHandler handler) throws Exception
+    {
+        if (antActions != null && antActions.size() > 0)
+        { // There are actions of the order "afterdeletion".
+            for (AntAction act : antActions)
+            {
                 act.performUninstallAction();
             }
 

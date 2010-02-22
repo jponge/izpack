@@ -35,7 +35,8 @@ import java.io.InputStream;
  * @author <a href="vralev@redhat.com">Vladimir Ralev</a>
  * @version $Revision: 1.1 $
  */
-public class LoggedInputStream extends InputStream {
+public class LoggedInputStream extends InputStream
+{
     private long bytesRead = 0;
     private InputStream is;
     private DownloadPanel downloader;
@@ -44,21 +45,27 @@ public class LoggedInputStream extends InputStream {
     private long lastTime = -1;
     private long lastBytes = -1;
 
-    public void setCancelled(boolean cancel) {
+    public void setCancelled(boolean cancel)
+    {
         cancelled = cancel;
     }
 
-    public LoggedInputStream(InputStream is, WebAccessor webAccessor) {
-        if (is == null) {
+    public LoggedInputStream(InputStream is, WebAccessor webAccessor)
+    {
+        if (is == null)
+        {
             throw new RuntimeException("Unable to connect");
         }
         this.is = is;
         // this.webAccessor = webAccessor;
 
         String sizeStr;
-        if (webAccessor.getContentLength() > 0) {
+        if (webAccessor.getContentLength() > 0)
+        {
             sizeStr = "(" + Pack.toByteUnitsString(webAccessor.getContentLength()) + ")";
-        } else {
+        }
+        else
+        {
             sizeStr = "";
         }
 
@@ -67,85 +74,105 @@ public class LoggedInputStream extends InputStream {
         downloader.setFileLabel(webAccessor.getUrl() + " " + sizeStr);
         downloader.setLocationRelativeTo(null);
         downloader.setVisible(true);
-        if (webAccessor.getContentLength() > 0) {
+        if (webAccessor.getContentLength() > 0)
+        {
             downloader.setProgressMax(webAccessor.getContentLength());
             downloader.setProgressCurrent(0);
         }
     }
 
-    public int available() throws IOException {
+    public int available() throws IOException
+    {
         return is.available();
     }
 
-    public void close() throws IOException {
+    public void close() throws IOException
+    {
         downloader.setVisible(false);
         downloader.dispose();
         is.close();
     }
 
-    public synchronized void mark(int readlimit) {
+    public synchronized void mark(int readlimit)
+    {
         is.mark(readlimit);
     }
 
-    public boolean markSupported() {
+    public boolean markSupported()
+    {
         return is.markSupported();
     }
 
-    public synchronized void reset() throws IOException {
+    public synchronized void reset() throws IOException
+    {
         is.reset();
     }
 
-    public long skip(long n) throws IOException {
+    public long skip(long n) throws IOException
+    {
         return is.skip(n);
     }
 
-    public int read(byte[] b, int off, int len) throws IOException {
+    public int read(byte[] b, int off, int len) throws IOException
+    {
         int bytes = is.read(b, off, len);
-        if (bytes > 0) {
+        if (bytes > 0)
+        {
             bytesRead += bytes;
         }
         update();
         return bytes;
     }
 
-    public int read(byte[] b) throws IOException {
+    public int read(byte[] b) throws IOException
+    {
         int bytes = is.read(b);
-        if (bytes > 0) {
+        if (bytes > 0)
+        {
             bytesRead += bytes;
         }
         update();
         return bytes;
     }
 
-    public long getBytesRead() {
+    public long getBytesRead()
+    {
         return bytesRead;
     }
 
-    public int read() throws IOException {
+    public int read() throws IOException
+    {
         int bytes = is.read();
-        if (bytes > 0) {
+        if (bytes > 0)
+        {
             bytesRead += 1;
         }
         update();
         return bytes;
     }
 
-    private void update() {
-        if (lastTime > 0) {
+    private void update()
+    {
+        if (lastTime > 0)
+        {
             long currTime = System.currentTimeMillis();
             long diff = currTime - lastTime;
-            if (diff > 800) {
+            if (diff > 800)
+            {
                 double bps = (double) (bytesRead - lastBytes) / ((double) (diff) / 1000.);
                 downloader.setStatusLabel(Pack.toByteUnitsString(Math.round(bps)) + "/s");
                 lastTime = currTime;
                 lastBytes = bytesRead;
             }
-        } else {
+        }
+        else
+        {
             lastTime = System.currentTimeMillis();
             lastBytes = bytesRead;
         }
         downloader.setProgressCurrent((int) bytesRead);
-        if (cancelled) {
+        if (cancelled)
+        {
             throw new RuntimeException("Cancelled");
         }
     }

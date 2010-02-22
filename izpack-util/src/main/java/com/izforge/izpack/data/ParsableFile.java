@@ -33,7 +33,8 @@ import java.util.List;
  *
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
-public class ParsableFile implements Serializable {
+public class ParsableFile implements Serializable
+{
 
     static final long serialVersionUID = -7761309341843715721L;
 
@@ -70,7 +71,8 @@ public class ParsableFile implements Serializable {
      * @param encoding      the file encoding (or null for default)
      * @param osConstraints the OS constraint (or null for any OS)
      */
-    public ParsableFile(String path, SubstitutionType type, String encoding, List<OsConstraint> osConstraints) {
+    public ParsableFile(String path, SubstitutionType type, String encoding, List<OsConstraint> osConstraints)
+    {
         this.path = path;
         this.type = type;
         this.encoding = encoding;
@@ -81,7 +83,8 @@ public class ParsableFile implements Serializable {
     /**
      * @return the condition
      */
-    public String getCondition() {
+    public String getCondition()
+    {
         return this.condition;
     }
 
@@ -89,11 +92,13 @@ public class ParsableFile implements Serializable {
     /**
      * @param condition the condition to set
      */
-    public void setCondition(String condition) {
+    public void setCondition(String condition)
+    {
         this.condition = condition;
     }
 
-    public boolean hasCondition() {
+    public boolean hasCondition()
+    {
         return this.condition != null;
     }
 

@@ -13,19 +13,23 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Test for an installation using mock data
  */
-public class LanguageSelectionTest extends AbstractInstallationTest {
+public class LanguageSelectionTest extends AbstractInstallationTest
+{
 
     @AfterMethod
-    public void tearBinding() {
+    public void tearBinding()
+    {
         applicationContainer.dispose();
-        if (dialogFrameFixture != null) {
+        if (dialogFrameFixture != null)
+        {
             dialogFrameFixture.cleanUp();
             dialogFrameFixture = null;
         }
     }
 
     @Test
-    public void langpackFraShouldBeSet() throws Exception {
+    public void langpackFraShouldBeSet() throws Exception
+    {
         compileInstallJar("fraInstaller.xml", getWorkingDirectory("samples"));
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         installerContainer.getComponent(LanguageDialog.class).initLangPack();
@@ -34,7 +38,8 @@ public class LanguageSelectionTest extends AbstractInstallationTest {
     }
 
     @Test
-    public void testLangPickerChoseFra() throws Exception {
+    public void testLangPickerChoseFra() throws Exception
+    {
         compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         ClassLoader.getSystemResource("langpacks/fra.xml");
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);

@@ -25,9 +25,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class ByteCountingOutputStreamTest extends TestCase {
+public class ByteCountingOutputStreamTest extends TestCase
+{
 
-    public void testWriting() throws IOException {
+    public void testWriting() throws IOException
+    {
         File temp = File.createTempFile("foo", "bar");
         FileOutputStream fout = new FileOutputStream(temp);
         ByteCountingOutputStream out = new ByteCountingOutputStream(fout);

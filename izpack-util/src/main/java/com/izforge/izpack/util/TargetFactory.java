@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * The <code>TargetFactory</code> serves as a central mechanism to instantiate OS specific class
  * flavors, provide OS specific file extension types, default install directories and similar
@@ -54,7 +55,8 @@ import java.util.StringTokenizer;
  * 
  * ---------------------------------------------------------------------------
  */
-public class TargetFactory {
+public class TargetFactory
+{
 
     // ------------------------------------------------------------------------
     // Constant Definitions
@@ -233,6 +235,7 @@ public class TargetFactory {
     private String version = "";
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Constructor
      */
@@ -245,30 +248,38 @@ public class TargetFactory {
      * and store this information for later use.
      * --------------------------------------------------------------------------
      */
-    private TargetFactory() {
+    private TargetFactory()
+    {
         version = System.getProperty("os.version");
 
         // ----------------------------------------------------
         // test for Windows
         // ----------------------------------------------------
-        if (OsVersion.IS_WINDOWS) {
+        if (OsVersion.IS_WINDOWS)
+        {
             os = WINDOWS;
             osFlavor = STANDARD;
             architecture = X86;
             String osName = OsVersion.OS_NAME.toLowerCase();
 
-            if (osName.indexOf("nt") > -1) {
+            if (osName.indexOf("nt") > -1)
+            {
                 osFlavor = NT;
-            } else if (osName.indexOf("2000") > -1) {
+            }
+            else if (osName.indexOf("2000") > -1)
+            {
                 osFlavor = NT;
-            } else if (osName.indexOf("xp") > -1) {
+            }
+            else if (osName.indexOf("xp") > -1)
+            {
                 osFlavor = NT;
             }
         }
         // ----------------------------------------------------
         // test for Mac OS
         // ----------------------------------------------------
-        else if (OsVersion.IS_OSX) {
+        else if (OsVersion.IS_OSX)
+        {
             os = X;
             osFlavor = STANDARD;
             architecture = OTHER;
@@ -276,27 +287,32 @@ public class TargetFactory {
         // ----------------------------------------------------
         // what's left should be unix
         // ----------------------------------------------------
-        else {
+        else
+        {
             os = UNIX;
             osFlavor = STANDARD;
             architecture = OTHER;
             String osName = OsVersion.OS_NAME.toLowerCase();
 
-            if (osName.indexOf("x86") > -1) {
+            if (osName.indexOf("x86") > -1)
+            {
                 architecture = X86;
             }
         }
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns an instance of <code>TargetFactory</code> to use.
      *
      * @return an instance of <code>TargetFactory</code>.
      */
     /*--------------------------------------------------------------------------*/
-    public static TargetFactory getInstance() {
-        if (me == null) {
+    public static TargetFactory getInstance()
+    {
+        if (me == null)
+        {
             me = new TargetFactory();
         }
 
@@ -304,6 +320,7 @@ public class TargetFactory {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method returns an OS and OS flavor specific instance of the requested class. <br>
      * <br>
@@ -375,29 +392,36 @@ public class TargetFactory {
      * @throws Exception if all attempts to instantiate class fail
      */
     /*--------------------------------------------------------------------------*/
-    public Object makeObject(String name) throws Exception {
+    public Object makeObject(String name) throws Exception
+    {
         int nameStart = name.lastIndexOf('.') + 1;
         String packageName = name.substring(0, nameStart);
         String className = name.substring(nameStart, name.length());
         String actualName;
 
-        try {
+        try
+        {
             actualName = packageName + CLASS_PREFIX[os] + CLASS_FLAVOR_PREFIX[osFlavor] + className;
             Class temp = Class.forName(actualName);
             return temp.newInstance();
         }
-        catch (Throwable exception1) {
-            try {
+        catch (Throwable exception1)
+        {
+            try
+            {
                 Class temp = Class.forName(packageName + CLASS_PREFIX[os] + className);
                 return temp.newInstance();
             }
-            catch (Throwable exception2) {
-                try {
+            catch (Throwable exception2)
+            {
+                try
+                {
                     actualName = name;
                     Class temp = Class.forName(actualName);
                     return temp.newInstance();
                 }
-                catch (Throwable exception3) {
+                catch (Throwable exception3)
+                {
                     throw new Exception("can not instantiate class " + name);
                 }
             }
@@ -405,6 +429,7 @@ public class TargetFactory {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns true if the version in the parameter string is higher than the version of the target
      * os.
@@ -427,25 +452,32 @@ public class TargetFactory {
      * returned, otherwise true.
      * --------------------------------------------------------------------------
      */
-    public boolean versionIsHigher(String version) throws Exception {
+    public boolean versionIsHigher(String version) throws Exception
+    {
         StringTokenizer targetVersion = new StringTokenizer(this.version, VERSION_DELIMITER);
         StringTokenizer compareVersion = new StringTokenizer(version, VERSION_DELIMITER);
 
         int target;
         int compare;
 
-        while (targetVersion.hasMoreTokens() && compareVersion.hasMoreTokens()) {
-            try {
+        while (targetVersion.hasMoreTokens() && compareVersion.hasMoreTokens())
+        {
+            try
+            {
                 target = Integer.parseInt(targetVersion.nextToken());
                 compare = Integer.parseInt(compareVersion.nextToken());
             }
-            catch (Throwable exception) {
+            catch (Throwable exception)
+            {
                 throw new Exception("error in version string");
             }
 
-            if (compare > target) {
+            if (compare > target)
+            {
                 return true;
-            } else if (target > compare) {
+            }
+            else if (target > compare)
+            {
                 return false;
             }
         }
@@ -454,6 +486,7 @@ public class TargetFactory {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the index number for the target operating system that was detected.
      *
@@ -463,11 +496,13 @@ public class TargetFactory {
      * @see #GENERIC
      */
     /*--------------------------------------------------------------------------*/
-    public int getOS() {
+    public int getOS()
+    {
         return os;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the index number for the operating system flavor that was detected on the target
      * system.
@@ -478,11 +513,13 @@ public class TargetFactory {
      * @see #X
      */
     /*--------------------------------------------------------------------------*/
-    public int getOSFlavor() {
+    public int getOSFlavor()
+    {
         return osFlavor;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns an index number that identified the processor architecture of the target system.
      *
@@ -491,11 +528,13 @@ public class TargetFactory {
      * @see #OTHER
      */
     /*--------------------------------------------------------------------------*/
-    public int getArchitecture() {
+    public int getArchitecture()
+    {
         return architecture;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the file extension customarily used on the target OS for dynamically loadable
      * libraries.
@@ -504,11 +543,13 @@ public class TargetFactory {
      *         Note that the string might be empty if there no such specific extension for the target OS.
      */
     /*--------------------------------------------------------------------------*/
-    public String getNativeLibraryExtension() {
+    public String getNativeLibraryExtension()
+    {
         return LIBRARY_EXTENSION[os];
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the system dependent default install path. This is typically used to suggest an
      * istall path to the end user, when performing an installation. The default install path is
@@ -543,7 +584,8 @@ public class TargetFactory {
      * expanded by the application name to form the full path that to returne.
      * --------------------------------------------------------------------------
      */
-    public String getDefaultInstallPath(String appName) {
+    public String getDefaultInstallPath(String appName)
+    {
         String path = null;
         InputStream input;
         String keyFragment = "/res/" + INSTALL_PATH_RESOURCE_KEY[GENERIC][STANDARD];
@@ -560,7 +602,8 @@ public class TargetFactory {
         // OS by using the string returned by
         // System.getProperty ("os.name").toLowerCase ()
         // ----------------------------------------------------
-        if (input == null) {
+        if (input == null)
+        {
             String key = OsVersion.OS_NAME.toLowerCase().replace(' ', '_'); // avoid
             // spaces
             // in
@@ -575,7 +618,8 @@ public class TargetFactory {
         // attempt to get an input stream through a resource
         // based on a key which is not specific to any target OS
         // ----------------------------------------------------
-        if (input == null) {
+        if (input == null)
+        {
             input = TargetFactory.class.getResourceAsStream(keyFragment);
         }
 
@@ -583,34 +627,43 @@ public class TargetFactory {
         // If we got an input stream try to read the path
         // from the file
         // ----------------------------------------------------
-        if (input != null) {
+        if (input != null)
+        {
             InputStreamReader streamReader;
             BufferedReader reader = null;
             String line;
 
-            try {
+            try
+            {
                 streamReader = new InputStreamReader(input);
                 reader = new BufferedReader(streamReader);
                 line = reader.readLine();
 
-                while (line != null) {
+                while (line != null)
+                {
                     line = line.trim();
-                    if (!"".equals(line)) {
+                    if (!"".equals(line))
+                    {
                         break;
                     }
                     line = reader.readLine();
                 }
                 path = line;
             }
-            catch (Throwable exception) {
+            catch (Throwable exception)
+            {
             }
-            finally {
-                try {
-                    if (reader != null) {
+            finally
+            {
+                try
+                {
+                    if (reader != null)
+                    {
                         reader.close();
                     }
                 }
-                catch (Throwable exception) {
+                catch (Throwable exception)
+                {
                 }
             }
         }
@@ -619,7 +672,8 @@ public class TargetFactory {
         // if we were unable to obtain a path from a resource,
         // use the default for the traget operating system.
         // ----------------------------------------------------
-        if (path == null || "".equals(path)) {
+        if (path == null || "".equals(path))
+        {
             path = "";
 
             // --------------------------------------------------
@@ -629,7 +683,8 @@ public class TargetFactory {
             // drive that also contains the install directory,
             // so this seems the best choice here.
             // --------------------------------------------------
-            if (os == WINDOWS) {
+            if (os == WINDOWS)
+            {
                 String home = System.getProperty("user.home");
                 // take everything up to and including the first '\'
                 path = home.substring(0, home.indexOf(File.separatorChar) + 1);
@@ -648,7 +703,8 @@ public class TargetFactory {
      * @return a prefix alias for the current platform
      */
 
-    public static String getCurrentOSPrefix() {
+    public static String getCurrentOSPrefix()
+    {
         String OSName = System.getProperty("os.name").toLowerCase();
         String OSArch = System.getProperty("os.arch").toLowerCase();
         int OS = 0;
@@ -657,40 +713,50 @@ public class TargetFactory {
         // ----------------------------------------------------
         // test for Windows
         // ----------------------------------------------------
-        if (OSName.indexOf("windows") > -1) {
+        if (OSName.indexOf("windows") > -1)
+        {
             OS = WINDOWS;
             OSFlavor = STANDARD;
             OSarchitecture = X86;
 
-            if (OSName.indexOf("nt") > -1) {
+            if (OSName.indexOf("nt") > -1)
+            {
                 OSFlavor = NT;
-            } else if (OSName.indexOf("2000") > -1) {
+            }
+            else if (OSName.indexOf("2000") > -1)
+            {
                 OSFlavor = NT;
-            } else if (OSName.indexOf("xp") > -1) {
+            }
+            else if (OSName.indexOf("xp") > -1)
+            {
                 OSFlavor = NT;
             }
         }
         // ----------------------------------------------------
         // test for Mac OS
         // ----------------------------------------------------
-        else if (OSName.indexOf("mac") > -1) {
+        else if (OSName.indexOf("mac") > -1)
+        {
             OS = GENERIC;
             OSFlavor = STANDARD;
             OSarchitecture = OTHER;
 
-            if (OSName.indexOf("macosx") > -1) {
+            if (OSName.indexOf("macosx") > -1)
+            {
                 OSFlavor = X;
             }
         }
         // ----------------------------------------------------
         // what's left should be unix
         // ----------------------------------------------------
-        else {
+        else
+        {
             OS = UNIX;
             OSFlavor = STANDARD;
             OSarchitecture = OTHER;
 
-            if (OSArch.indexOf("86") > -1) {
+            if (OSArch.indexOf("86") > -1)
+            {
                 OSarchitecture = X86;
             }
         }

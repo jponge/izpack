@@ -7,7 +7,8 @@ package com.izforge.izpack.api.installer;
  * Time: 5:33:35 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface ISummarisable {
+public interface ISummarisable
+{
     String getSummaryBody();
 
     String getSummaryCaption();

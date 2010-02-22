@@ -14,12 +14,17 @@ import org.picocontainer.injectors.Provider;
  *
  * @author Anthonin Bonnefoy
  */
-public class PackCompressorProvider implements Provider {
-    public PackCompressor provide(CompilerData compilerData, MergeManager mergeManager, VariableSubstitutor variableSubstitutor) {
+public class PackCompressorProvider implements Provider
+{
+    public PackCompressor provide(CompilerData compilerData, MergeManager mergeManager, VariableSubstitutor variableSubstitutor)
+    {
         String format = compilerData.getComprFormat();
-        if (format.equals("bzip2")) {
+        if (format.equals("bzip2"))
+        {
             return new BZip2PackCompressor(variableSubstitutor, mergeManager);
-        } else if (format.equals("raw")) {
+        }
+        else if (format.equals("raw"))
+        {
             return new RawPackCompressor(variableSubstitutor);
         }
         return new DefaultPackCompressor(variableSubstitutor);

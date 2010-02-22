@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.userpath;
 
 import com.izforge.izpack.gui.ButtonFactory;
@@ -45,7 +46,8 @@ import java.io.File;
  * @author Klaus Bartz
  * @author Jeff Gordon
  */
-public class UserPathSelectionPanel extends JPanel implements ActionListener, LayoutConstants {
+public class UserPathSelectionPanel extends JPanel implements ActionListener, LayoutConstants
+{
 
     /**
      *
@@ -77,7 +79,8 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
      * @param parent The parent IzPanel.
      * @param idata  The installer internal installDataGUI.
      */
-    public UserPathSelectionPanel(IzPanel parent, GUIInstallData idata, String targetPanel, String variableName) {
+    public UserPathSelectionPanel(IzPanel parent, GUIInstallData idata, String targetPanel, String variableName)
+    {
         super();
         this.parent = parent;
         this.idata = idata;
@@ -89,7 +92,8 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
     /**
      * Creates the layout for this sub panel.
      */
-    protected void createLayout() {
+    protected void createLayout()
+    {
         // We woulduse the IzPanelLayout also in this "sub"panel.
         // In an IzPanel there are support of this layout manager at
         // more than one places. In this panel not, therefore we have
@@ -111,7 +115,8 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
         // No explicit constraints for the button (else implicit) because
         // defaults are OK.
         String buttonText = parent.getInstallerFrame().langpack.getString(targetPanel + ".browse");
-        if (buttonText == null) {
+        if (buttonText == null)
+        {
             buttonText = parent.getInstallerFrame().langpack.getString(defaultPanelName + ".browse");
         }
         browseButton = ButtonFactory.createButton(buttonText, parent.getInstallerFrame().icons.getImageIcon("open"), idata.buttonsHColor);
@@ -122,7 +127,8 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
     // There are problems with the size if no other component needs the
     // full size. Sometimes directly, somtimes only after a back step.
 
-    public Dimension getMinimumSize() {
+    public Dimension getMinimumSize()
+    {
         Dimension ss = super.getPreferredSize();
         Dimension retval = parent.getSize();
         retval.height = ss.height;
@@ -134,10 +140,12 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
      *
      * @param e The event.
      */
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
         Object source = e.getSource();
 
-        if (source == browseButton) {
+        if (source == browseButton)
+        {
             // The user wants to browse its filesystem
 
             // Prepares the file chooser
@@ -148,13 +156,17 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
             fc.addChoosableFileFilter(fc.getAcceptAllFileFilter());
 
             // Shows it
-            if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+            {
                 String path = fc.getSelectedFile().getAbsolutePath();
                 textField.setText(path);
             }
 
-        } else {
-            if (parent instanceof ActionListener) {
+        }
+        else
+        {
+            if (parent instanceof ActionListener)
+            {
                 ((ActionListener) parent).actionPerformed(e);
             }
         }
@@ -165,7 +177,8 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
      *
      * @return the chosen path
      */
-    public String getPath() {
+    public String getPath()
+    {
         return (textField.getText());
     }
 
@@ -174,7 +187,8 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
      *
      * @param path the path to be set
      */
-    public void setPath(String path) {
+    public void setPath(String path)
+    {
         textField.setText(path);
     }
 
@@ -184,7 +198,8 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
      *
      * @return the text input field for the path
      */
-    public JTextField getPathInputField() {
+    public JTextField getPathInputField()
+    {
         return textField;
     }
 
@@ -193,7 +208,8 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
      *
      * @return the browse button to open the JFileChooser
      */
-    public JButton getBrowseButton() {
+    public JButton getBrowseButton()
+    {
         return browseButton;
     }
 }

@@ -19,6 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.gui;
 
 import java.awt.*;
@@ -26,7 +27,8 @@ import java.awt.*;
 /**
  * Constraints class for the layout manager <code>IzPanelLayout</code>.
  */
-public class IzPanelConstraints implements Cloneable, LayoutConstants {
+public class IzPanelConstraints implements Cloneable, LayoutConstants
+{
 
     /**
      * Current defined gaps. Here are the defaults which can be overwritten at the first call to
@@ -70,7 +72,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @return the declared stretch value in x direction
      */
-    public double getXStretch() {
+    public double getXStretch()
+    {
         return xStretch;
     }
 
@@ -79,7 +82,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @param stretch value to be set
      */
-    public void setXStretch(double stretch) {
+    public void setXStretch(double stretch)
+    {
         this.xStretch = stretch;
     }
 
@@ -88,7 +92,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @return the declared stretch value in y direction
      */
-    public double getYStretch() {
+    public double getYStretch()
+    {
         return yStretch;
     }
 
@@ -97,7 +102,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @param stretch value to be set
      */
-    public void setYStretch(double stretch) {
+    public void setYStretch(double stretch)
+    {
         this.yStretch = stretch;
     }
 
@@ -106,7 +112,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @return the declared x gap value
      */
-    public int getXGap() {
+    public int getXGap()
+    {
         return xGap;
     }
 
@@ -115,7 +122,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @param gap value to be set
      */
-    public void setXGap(int gap) {
+    public void setXGap(int gap)
+    {
         xGap = gap;
     }
 
@@ -124,7 +132,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @return the declared y gap value
      */
-    public int getYGap() {
+    public int getYGap()
+    {
         return yGap;
     }
 
@@ -133,7 +142,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @param gap value to be set
      */
-    public void setYGap(int gap) {
+    public void setYGap(int gap)
+    {
         yGap = gap;
     }
 
@@ -152,7 +162,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      * @param yStretch       stretch value for the y direction
      */
     public IzPanelConstraints(int xCellAlignment, int yCellAlignment, int xPos, int yPos,
-                              int xWeight, int yWeight, int xGap, int yGap, double xStretch, double yStretch) {
+                              int xWeight, int yWeight, int xGap, int yGap, double xStretch, double yStretch)
+    {
         this.xCellAlignment = xCellAlignment;
         this.yCellAlignment = yCellAlignment;
         this.xPos = xPos;
@@ -168,7 +179,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
     /**
      * Default constructor
      */
-    public IzPanelConstraints() {
+    public IzPanelConstraints()
+    {
         super();
     }
 
@@ -178,12 +190,15 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      * @see java.lang.Object#clone()
      */
 
-    public Object clone() {
-        try {
+    public Object clone()
+    {
+        try
+        {
             IzPanelConstraints c = (IzPanelConstraints) super.clone();
             return c;
         }
-        catch (CloneNotSupportedException e) {
+        catch (CloneNotSupportedException e)
+        {
             // this shouldn't happen, since we are Cloneable
             throw new InternalError();
         }
@@ -194,7 +209,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @return the alignment for the x direction
      */
-    public int getXCellAlignment() {
+    public int getXCellAlignment()
+    {
         return xCellAlignment;
     }
 
@@ -203,7 +219,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @param cellAlignment to be used
      */
-    public void setXCellAlignment(int cellAlignment) {
+    public void setXCellAlignment(int cellAlignment)
+    {
         xCellAlignment = cellAlignment;
     }
 
@@ -212,7 +229,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @return the x position (column number)
      */
-    public int getXPos() {
+    public int getXPos()
+    {
         return xPos;
     }
 
@@ -221,7 +239,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @param pos position to be used
      */
-    public void setXPos(int pos) {
+    public void setXPos(int pos)
+    {
         xPos = pos;
     }
 
@@ -231,7 +250,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @return the weight for the x direction
      */
-    public int getXWeight() {
+    public int getXWeight()
+    {
         return xWeight;
     }
 
@@ -240,7 +260,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @param weight to be used for the x direction
      */
-    public void setXWeight(int weight) {
+    public void setXWeight(int weight)
+    {
         xWeight = weight;
     }
 
@@ -249,7 +270,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @return the alignment for the y direction
      */
-    public int getYCellAlignment() {
+    public int getYCellAlignment()
+    {
         return yCellAlignment;
     }
 
@@ -258,7 +280,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @param cellAlignment to be used
      */
-    public void setYCellAlignment(int cellAlignment) {
+    public void setYCellAlignment(int cellAlignment)
+    {
         yCellAlignment = cellAlignment;
     }
 
@@ -267,7 +290,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @return the y position (row number)
      */
-    public int getYPos() {
+    public int getYPos()
+    {
         return yPos;
     }
 
@@ -276,7 +300,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @param pos position to be used
      */
-    public void setYPos(int pos) {
+    public void setYPos(int pos)
+    {
         yPos = pos;
     }
 
@@ -286,7 +311,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @return the weight for the y direction
      */
-    public int getYWeight() {
+    public int getYWeight()
+    {
         return yWeight;
     }
 
@@ -295,7 +321,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @param weight to be used for the y direction
      */
-    public void setYWeight(int weight) {
+    public void setYWeight(int weight)
+    {
         yWeight = weight;
     }
 
@@ -305,8 +332,10 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @return used bounds
      */
-    public Rectangle getBounds() {
-        if (bounds != null) {
+    public Rectangle getBounds()
+    {
+        if (bounds != null)
+        {
             return (Rectangle) (bounds.clone());
         }
         return (new Rectangle());
@@ -317,7 +346,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants {
      *
      * @param bounds bounds to be used
      */
-    public void setBounds(Rectangle bounds) {
+    public void setBounds(Rectangle bounds)
+    {
         this.bounds = (Rectangle) bounds.clone();
     }
 }

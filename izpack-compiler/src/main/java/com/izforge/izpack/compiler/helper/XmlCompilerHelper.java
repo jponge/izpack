@@ -11,11 +11,13 @@ import java.net.URL;
  *
  * @author Anthonin Bonnefoy
  */
-public class XmlCompilerHelper {
+public class XmlCompilerHelper
+{
 
     private final String installFile;
 
-    public XmlCompilerHelper(String installFile) {
+    public XmlCompilerHelper(String installFile)
+    {
         this.installFile = installFile;
     }
 
@@ -25,9 +27,11 @@ public class XmlCompilerHelper {
      *
      * @param element The element to get content of
      */
-    public String requireContent(IXMLElement element) throws CompilerException {
+    public String requireContent(IXMLElement element) throws CompilerException
+    {
         String content = element.getContent();
-        if (content == null || content.length() == 0) {
+        if (content == null || content.length() == 0)
+        {
             AssertionHelper.parseError(element, "<" + element.getName() + "> requires content", installFile);
         }
         return content;
@@ -39,12 +43,15 @@ public class XmlCompilerHelper {
      *
      * @param element The element to get content of
      */
-    public URL requireURLContent(IXMLElement element) throws CompilerException {
+    public URL requireURLContent(IXMLElement element) throws CompilerException
+    {
         URL url = null;
-        try {
+        try
+        {
             url = new URL(requireContent(element));
         }
-        catch (MalformedURLException x) {
+        catch (MalformedURLException x)
+        {
             AssertionHelper.parseError(element, "<" + element.getName() + "> requires valid URL", x, installFile);
         }
         return url;
@@ -57,9 +64,11 @@ public class XmlCompilerHelper {
      * @param parent The element to search for a child
      * @param name   Name of the child element to get
      */
-    public IXMLElement requireChildNamed(IXMLElement parent, String name) throws CompilerException {
+    public IXMLElement requireChildNamed(IXMLElement parent, String name) throws CompilerException
+    {
         IXMLElement child = parent.getFirstChildNamed(name);
-        if (child == null) {
+        if (child == null)
+        {
             AssertionHelper.parseError(parent, "<" + parent.getName() + "> requires child <" + name + ">", installFile);
         }
         return child;
@@ -75,16 +84,20 @@ public class XmlCompilerHelper {
      * @param installFile
      */
     public int requireIntAttribute(IXMLElement element, String attribute, String installFile)
-            throws CompilerException {
+            throws CompilerException
+    {
         String value = element.getAttribute(attribute);
-        if (value == null || value.length() == 0) {
+        if (value == null || value.length() == 0)
+        {
             AssertionHelper.parseError(element, "<" + element.getName() + "> requires attribute '" + attribute
                     + "'", installFile);
         }
-        try {
+        try
+        {
             return Integer.parseInt(value);
         }
-        catch (NumberFormatException x) {
+        catch (NumberFormatException x)
+        {
             AssertionHelper.parseError(element, "'" + attribute + "' must be an integer", installFile);
         }
         return 0; // never happens
@@ -99,12 +112,15 @@ public class XmlCompilerHelper {
      * @param installFile
      */
     public boolean requireYesNoAttribute(IXMLElement element, String attribute, String installFile)
-            throws CompilerException {
+            throws CompilerException
+    {
         String value = requireAttribute(element, attribute, installFile);
-        if ("yes".equalsIgnoreCase(value)) {
+        if ("yes".equalsIgnoreCase(value))
+        {
             return true;
         }
-        if ("no".equalsIgnoreCase(value)) {
+        if ("no".equalsIgnoreCase(value))
+        {
             return false;
         }
 
@@ -124,16 +140,20 @@ public class XmlCompilerHelper {
      * @param installFile
      */
     public boolean validateYesNoAttribute(IXMLElement element, String attribute,
-                                          boolean defaultValue, String installFile) {
-        if (element == null) {
+                                          boolean defaultValue, String installFile)
+    {
+        if (element == null)
+        {
             return defaultValue;
         }
 
         String value = element.getAttribute(attribute, (defaultValue ? "yes" : "no"));
-        if ("yes".equalsIgnoreCase(value)) {
+        if ("yes".equalsIgnoreCase(value))
+        {
             return true;
         }
-        if ("no".equalsIgnoreCase(value)) {
+        if ("no".equalsIgnoreCase(value))
+        {
             return false;
         }
 
@@ -154,9 +174,11 @@ public class XmlCompilerHelper {
      * @param installFile
      */
     public String requireAttribute(IXMLElement element, String attribute, String installFile)
-            throws CompilerException {
+            throws CompilerException
+    {
         String value = element.getAttribute(attribute);
-        if (value == null) {
+        if (value == null)
+        {
             AssertionHelper.parseError(element, "<" + element.getName() + "> requires attribute '" + attribute
                     + "'", installFile);
         }

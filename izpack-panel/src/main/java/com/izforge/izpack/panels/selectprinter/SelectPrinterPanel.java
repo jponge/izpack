@@ -43,7 +43,8 @@ import java.awt.event.ActionListener;
  *
  * @author Hal Vaughan
  */
-public class SelectPrinterPanel extends IzPanel implements ActionListener {
+public class SelectPrinterPanel extends IzPanel implements ActionListener
+{
 
     /**
      *
@@ -66,7 +67,8 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener {
      * @param parent The parent.
      * @param id     The installation installDataGUI.
      */
-    public SelectPrinterPanel(InstallerFrame parent, GUIInstallData id, ResourceManager resourceManager) {
+    public SelectPrinterPanel(InstallerFrame parent, GUIInstallData id, ResourceManager resourceManager)
+    {
         super(parent, id, resourceManager);
 
         installDataGUI = id;
@@ -89,7 +91,8 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener {
         cbPrinters = new JComboBox();
         PrintService[] pServices = PrintServiceLookup.lookupPrintServices(null, null);
         installDataGUI.setVariable("SELECTED_PRINTER", pServices[0].getName());
-        for (PrintService pService : pServices) {
+        for (PrintService pService : pServices)
+        {
             cbPrinters.addItem(pService.getName());
         }
         cbPrinters.addActionListener(this);
@@ -111,7 +114,8 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener {
 
     }
 
-    public void actionPerformed(ActionEvent event) {
+    public void actionPerformed(ActionEvent event)
+    {
         String sPrinter = (String) cbPrinters.getSelectedItem();
         installDataGUI.setVariable("SELECTED_PRINTER", sPrinter);
     }
@@ -121,7 +125,8 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener {
      *
      * @return Always true.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         return true;
     }
 }

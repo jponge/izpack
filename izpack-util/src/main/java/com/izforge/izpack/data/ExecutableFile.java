@@ -34,7 +34,8 @@ import java.util.List;
  * @author Olexij Tkatchenko <ot@parcs.de>
  */
 
-public class ExecutableFile implements Serializable {
+public class ExecutableFile implements Serializable
+{
 
     static final long serialVersionUID = 4175489415984990405L;
 
@@ -114,7 +115,8 @@ public class ExecutableFile implements Serializable {
     /**
      * Constructs a new uninitialized instance.
      */
-    public ExecutableFile() {
+    public ExecutableFile()
+    {
         this.path = null;
         executionStage = NEVER;
         mainClass = null;
@@ -134,7 +136,8 @@ public class ExecutableFile implements Serializable {
      * @param osList         list of operating systems to run on
      */
     public ExecutableFile(String path, int executionStage, int onFailure, List<OsConstraint> osList,
-                          boolean keepFile) {
+                          boolean keepFile)
+    {
         this.path = path;
         this.executionStage = executionStage;
         this.onFailure = onFailure;
@@ -143,7 +146,8 @@ public class ExecutableFile implements Serializable {
     }
 
     public ExecutableFile(String path, int type, String mainClass, int executionStage,
-                          int onFailure, List<String> argList, List<OsConstraint> osList, boolean keepFile) {
+                          int onFailure, List<String> argList, List<OsConstraint> osList, boolean keepFile)
+    {
         this.path = path;
         this.mainClass = mainClass;
         this.type = type;
@@ -154,7 +158,8 @@ public class ExecutableFile implements Serializable {
         this.keepFile = keepFile;
     }
 
-    public String toString() {
+    public String toString()
+    {
         StringBuffer retval = new StringBuffer();
         retval.append("path = ").append(path);
         retval.append("\n");
@@ -168,8 +173,10 @@ public class ExecutableFile implements Serializable {
         retval.append("\n");
         retval.append("argList: ").append(argList);
         retval.append("\n");
-        if (argList != null) {
-            for (String anArgList : argList) {
+        if (argList != null)
+        {
+            for (String anArgList : argList)
+            {
                 retval.append("\targ: ").append(anArgList);
                 retval.append("\n");
             }
@@ -177,8 +184,10 @@ public class ExecutableFile implements Serializable {
         retval.append("\n");
         retval.append("osList = ").append(osList);
         retval.append("\n");
-        if (osList != null) {
-            for (OsConstraint anOsList : osList) {
+        if (osList != null)
+        {
+            for (OsConstraint anOsList : osList)
+            {
                 retval.append("\tos: ").append(anOsList);
                 retval.append("\n");
             }
@@ -192,7 +201,8 @@ public class ExecutableFile implements Serializable {
     /**
      * @return the condition
      */
-    public String getCondition() {
+    public String getCondition()
+    {
         return this.condition;
     }
 
@@ -200,11 +210,13 @@ public class ExecutableFile implements Serializable {
     /**
      * @param condition the condition to set
      */
-    public void setCondition(String condition) {
+    public void setCondition(String condition)
+    {
         this.condition = condition;
     }
 
-    public boolean hasCondition() {
+    public boolean hasCondition()
+    {
         return this.condition != null;
     }
 }

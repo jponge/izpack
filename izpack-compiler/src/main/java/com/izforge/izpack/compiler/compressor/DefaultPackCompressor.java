@@ -19,6 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.compiler.compressor;
 
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -35,7 +36,8 @@ import java.io.OutputStream;
  *
  * @author Klaus Bartz
  */
-public class DefaultPackCompressor extends PackCompressorBase {
+public class DefaultPackCompressor extends PackCompressorBase
+{
     private static final String[] THIS_FORMAT_NAMES =
             {"default", "deflate", "zip", "lz77"};
     private static final String THIS_DECODER_MAPPER = null;
@@ -45,7 +47,8 @@ public class DefaultPackCompressor extends PackCompressorBase {
     /**
      *
      */
-    public DefaultPackCompressor(VariableSubstitutor variableSubstitutor) {
+    public DefaultPackCompressor(VariableSubstitutor variableSubstitutor)
+    {
         super(variableSubstitutor);
         formatNames = THIS_FORMAT_NAMES;
         decoderMapper = THIS_DECODER_MAPPER;
@@ -56,7 +59,8 @@ public class DefaultPackCompressor extends PackCompressorBase {
      * @see com.izforge.izpack.compressor.PackCompressor#getOutputStream(java.io.OutputStream)
      */
 
-    public OutputStream getOutputStream(OutputStream os) {
+    public OutputStream getOutputStream(OutputStream os)
+    {
         // This will crash the packager if implementation is wrong :-)
         return (null);
     }
@@ -65,7 +69,8 @@ public class DefaultPackCompressor extends PackCompressorBase {
      * @see com.izforge.izpack.compressor.PackCompressor#useStandardCompression()
      */
 
-    public boolean useStandardCompression() {
+    public boolean useStandardCompression()
+    {
         return (true);
     }
 
@@ -73,7 +78,8 @@ public class DefaultPackCompressor extends PackCompressorBase {
     * @see com.izforge.izpack.compressor.PackCompressor#needsBufferedOutputStream()
     */
 
-    public boolean needsBufferedOutputStream() {
+    public boolean needsBufferedOutputStream()
+    {
         return (false);
     }
 

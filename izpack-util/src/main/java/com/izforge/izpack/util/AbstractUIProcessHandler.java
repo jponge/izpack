@@ -26,7 +26,8 @@ package com.izforge.izpack.util;
  *
  * @author tisc
  */
-public interface AbstractUIProcessHandler extends AbstractUIHandler {
+public interface AbstractUIProcessHandler extends AbstractUIHandler
+{
 
     /**
      * Log the given message.

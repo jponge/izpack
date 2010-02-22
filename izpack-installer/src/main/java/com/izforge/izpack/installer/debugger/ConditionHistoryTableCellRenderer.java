@@ -31,11 +31,13 @@ import java.util.Map;
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  * @version $Id: $
  */
-public class ConditionHistoryTableCellRenderer extends DefaultTableCellRenderer {
+public class ConditionHistoryTableCellRenderer extends DefaultTableCellRenderer
+{
     private static final long serialVersionUID = 6779914244548965230L;
     private Map<String, ConditionHistory> conditionhistory;
 
-    public ConditionHistoryTableCellRenderer(Map<String, ConditionHistory> conditionhistory) {
+    public ConditionHistoryTableCellRenderer(Map<String, ConditionHistory> conditionhistory)
+    {
         this.conditionhistory = conditionhistory;
     }
 
@@ -43,8 +45,10 @@ public class ConditionHistoryTableCellRenderer extends DefaultTableCellRenderer 
     /* (non-Javadoc)
     * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
     */
+
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                   boolean hasFocus, int row, int column) {
+                                                   boolean hasFocus, int row, int column)
+    {
         JComponent comp = null;
 
         ConditionHistory ch = (ConditionHistory) value;
@@ -56,16 +60,21 @@ public class ConditionHistoryTableCellRenderer extends DefaultTableCellRenderer 
         label.setText(ch.toString());
 
         comp.setOpaque(true);
-        if (ch.isNewcondition()) {
+        if (ch.isNewcondition())
+        {
             comp.setBackground(Color.green);
-        } else if (ch.isChangedcondition()) {
+        }
+        else if (ch.isChangedcondition())
+        {
             comp.setBackground(Color.yellow);
         }
         return comp;
     }
 
-    public void clearState() {
-        for (String s : conditionhistory.keySet()) {
+    public void clearState()
+    {
+        for (String s : conditionhistory.keySet())
+        {
             ConditionHistory ch = conditionhistory.get(s);
             ch.clearState();
         }

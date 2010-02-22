@@ -13,32 +13,39 @@ import java.util.List;
  *
  * @author Anthonin Bonnefoy
  */
-public class MockOutputStream extends ZipOutputStream {
+public class MockOutputStream extends ZipOutputStream
+{
 
     private List<String> listEntryName = new ArrayList<String>();
 
-    public List<String> getListEntryName() {
+    public List<String> getListEntryName()
+    {
         return listEntryName;
     }
 
     @Override
-    public void putNextEntry(ZipEntry ze) throws IOException {
+    public void putNextEntry(ZipEntry ze) throws IOException
+    {
         listEntryName.add(ze.getName());
     }
 
-    public MockOutputStream() throws IOException {
+    public MockOutputStream() throws IOException
+    {
         super(File.createTempFile("test", "test"));
     }
 
     @Override
-    public void write(int b) throws IOException {
+    public void write(int b) throws IOException
+    {
     }
 
     @Override
-    public void write(byte[] b) throws IOException {
+    public void write(byte[] b) throws IOException
+    {
     }
 
     @Override
-    public void write(byte[] b, int offset, int length) throws IOException {
+    public void write(byte[] b, int offset, int length) throws IOException
+    {
     }
 }

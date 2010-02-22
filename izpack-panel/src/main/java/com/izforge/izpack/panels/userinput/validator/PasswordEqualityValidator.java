@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.userinput.validator;
 
 import com.izforge.izpack.panels.userinput.PasswordGroup;
@@ -35,7 +36,8 @@ import java.util.Map;
  * @author Elmar Grom
  * @author Jeff Gordon
  */
-public class PasswordEqualityValidator implements Validator {
+public class PasswordEqualityValidator implements Validator
+{
 
     /**
      * PasswordEqualityValidator
@@ -44,52 +46,67 @@ public class PasswordEqualityValidator implements Validator {
      * @param client the client object using the services of this validator.
      * @return <code>true</code> if the validation passes, otherwise <code>false</code>.
      */
-    public boolean validate(ProcessingClient client) {
+    public boolean validate(ProcessingClient client)
+    {
         boolean returnValue = false;
         Map<String, String> params = getParams(client);
-        try {
+        try
+        {
             returnValue = fieldsMatch(client);
-            if (returnValue) {
+            if (returnValue)
+            {
                 // Additional checking if params passed...
-                if (params != null) {
+                if (params != null)
+                {
                     System.out.println("Additional " + params.size() + " params not evaluated");
                 }
             }
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             System.out.println("validate() Failed: " + e);
         }
         return (returnValue);
     }
 
-    private Map<String, String> getParams(ProcessingClient client) {
+    private Map<String, String> getParams(ProcessingClient client)
+    {
         PasswordGroup group = null;
         Map<String, String> params = null;
-        try {
+        try
+        {
             group = (PasswordGroup) client;
-            if (group.hasParams()) {
+            if (group.hasParams())
+            {
                 params = group.getValidatorParams();
             }
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             System.out.println("getParams() Failed: " + e);
         }
         return (params);
     }
 
-    private boolean fieldsMatch(ProcessingClient client) {
+    private boolean fieldsMatch(ProcessingClient client)
+    {
         boolean returnValue = true;
         int numFields = client.getNumFields();
         // ----------------------------------------------------
         // verify that there is more than one field. If there
         // is only one field we have to return true.
         // ----------------------------------------------------
-        if (numFields < 2) {
+        if (numFields < 2)
+        {
             returnValue = true;
-        } else {
+        }
+        else
+        {
             String content = client.getFieldContents(0);
-            for (int i = 1; i < numFields; i++) {
-                if (!content.equals(client.getFieldContents(i))) {
+            for (int i = 1; i < numFields; i++)
+            {
+                if (!content.equals(client.getFieldContents(i)))
+                {
                     returnValue = false;
                 }
             }

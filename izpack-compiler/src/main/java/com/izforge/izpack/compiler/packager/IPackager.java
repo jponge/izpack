@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.compiler.packager;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -38,7 +39,8 @@ import java.util.Properties;
  *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
-public interface IPackager {
+public interface IPackager
+{
 
     /**
      * Create the installer, beginning with the specified jar. If the name specified does not end in

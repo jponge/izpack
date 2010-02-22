@@ -10,7 +10,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * @author <a href="vralev@redhat.com">Vladimir Ralev</a>
  * @version $Revision: 1.1 $
  */
-class CheckBoxNode extends DefaultMutableTreeNode {
+class CheckBoxNode extends DefaultMutableTreeNode
+{
 
     /**
      * Required (serializable)
@@ -25,93 +26,115 @@ class CheckBoxNode extends DefaultMutableTreeNode {
     Pack pack;
     long totalSize;
 
-    public CheckBoxNode(String id, String translated, boolean selected) {
+    public CheckBoxNode(String id, String translated, boolean selected)
+    {
         this.id = id;
         this.selected = selected;
         this.translatedText = translated;
     }
 
-    public CheckBoxNode(String id, String translated, Object elements[], boolean selected) {
+    public CheckBoxNode(String id, String translated, Object elements[], boolean selected)
+    {
         this.id = id;
         this.translatedText = translated;
-        for (int i = 0, n = elements.length; i < n; i++) {
+        for (int i = 0, n = elements.length; i < n; i++)
+        {
             CheckBoxNode tn = (CheckBoxNode) elements[i];
             add(tn);
         }
     }
 
-    public boolean isLeaf() {
+    public boolean isLeaf()
+    {
         return this.getChildCount() == 0;
     }
 
-    public boolean isSelected() {
+    public boolean isSelected()
+    {
         return selected;
     }
 
-    public void setSelected(boolean newValue) {
+    public void setSelected(boolean newValue)
+    {
         selected = newValue;
     }
 
-    public String getId() {
+    public String getId()
+    {
         return id;
     }
 
-    public void setId(String newValue) {
+    public void setId(String newValue)
+    {
         id = newValue;
     }
 
-    public String toString() {
+    public String toString()
+    {
         return getClass().getName() + "[" + id + "/" + selected + "]";
     }
 
-    public boolean isPartial() {
+    public boolean isPartial()
+    {
         return partial;
     }
 
-    public void setPartial(boolean partial) {
+    public void setPartial(boolean partial)
+    {
         this.partial = partial;
-        if (partial) {
+        if (partial)
+        {
             setSelected(true);
         }
     }
 
-    public boolean isEnabled() {
+    public boolean isEnabled()
+    {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(boolean enabled)
+    {
         this.enabled = enabled;
     }
 
-    public String getTranslatedText() {
+    public String getTranslatedText()
+    {
         return translatedText;
     }
 
-    public void setTranslatedText(String translatedText) {
+    public void setTranslatedText(String translatedText)
+    {
         this.translatedText = translatedText;
     }
 
-    public Pack getPack() {
+    public Pack getPack()
+    {
         return pack;
     }
 
-    public void setPack(Pack pack) {
+    public void setPack(Pack pack)
+    {
         this.pack = pack;
     }
 
-    public long getTotalSize() {
+    public long getTotalSize()
+    {
         return totalSize;
     }
 
-    public void setTotalSize(long totalSize) {
+    public void setTotalSize(long totalSize)
+    {
         this.totalSize = totalSize;
     }
 
-    public boolean isTotalSizeChanged() {
+    public boolean isTotalSizeChanged()
+    {
         return totalSizeChanged;
     }
 
-    public void setTotalSizeChanged(boolean totalSizeChanged) {
+    public void setTotalSizeChanged(boolean totalSizeChanged)
+    {
         this.totalSizeChanged = totalSizeChanged;
     }
 }

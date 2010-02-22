@@ -23,9 +23,11 @@ import java.util.Properties;
  * Application Component. <br />
  * Encapsulate the pico provider for application level component.
  */
-public class ApplicationContainer extends AbstractContainer implements IApplicationContainer {
+public class ApplicationContainer extends AbstractContainer implements IApplicationContainer
+{
 
-    public void initBindings() {
+    public void initBindings()
+    {
         pico = new PicoBuilder(new ConstructorInjection())
                 .withCaching()
                 .build();

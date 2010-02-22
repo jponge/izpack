@@ -26,28 +26,32 @@ package com.izforge.izpack.api.exception;
  *
  * @author Klaus Bartz
  */
-public class InstallerException extends Exception {
+public class InstallerException extends Exception
+{
 
     private static final long serialVersionUID = 3978984358113982004L;
 
     /**
      *
      */
-    public InstallerException() {
+    public InstallerException()
+    {
         super();
     }
 
     /**
      * @param message
      */
-    public InstallerException(String message) {
+    public InstallerException(String message)
+    {
         super(message);
     }
 
     /**
      * @param cause
      */
-    public InstallerException(Throwable cause) {
+    public InstallerException(Throwable cause)
+    {
         super(cause);
     }
 
@@ -55,7 +59,8 @@ public class InstallerException extends Exception {
      * @param message
      * @param cause
      */
-    public InstallerException(String message, Throwable cause) {
+    public InstallerException(String message, Throwable cause)
+    {
         super(message, cause);
     }
 

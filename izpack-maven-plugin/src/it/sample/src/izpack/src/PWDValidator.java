@@ -35,7 +35,8 @@ import com.izforge.izpack.panels.userinput.validator.Validator;
  * @version 0.0.1 / 02/19/03
  */
 /*---------------------------------------------------------------------------*/
-public class PWDValidator implements Validator {
+public class PWDValidator implements Validator
+{
     /*--------------------------------------------------------------------------*/
 
     /**
@@ -45,22 +46,26 @@ public class PWDValidator implements Validator {
      * @return <code>true</code> if the validation passes, otherwise <code>false</code>.
      */
     /*--------------------------------------------------------------------------*/
-    public boolean validate(ProcessingClient client) {
+    public boolean validate(ProcessingClient client)
+    {
         int numFields = client.getNumFields();
 
         // ----------------------------------------------------
         // verify that there is more than one field. If there
         // is only one field we have to return true.
         // ----------------------------------------------------
-        if (numFields < 2) {
+        if (numFields < 2)
+        {
             return (true);
         }
 
         boolean match = true;
         String content = client.getFieldContents(0);
 
-        for (int i = 1; i < numFields; i++) {
-            if (!content.equals(client.getFieldContents(i))) {
+        for (int i = 1; i < numFields; i++)
+        {
+            if (!content.equals(client.getFieldContents(i)))
+            {
                 match = false;
             }
         }

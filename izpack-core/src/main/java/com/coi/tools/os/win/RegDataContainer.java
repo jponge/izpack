@@ -33,7 +33,8 @@ import java.io.Serializable;
  *
  * @author Klaus Bartz
  */
-public class RegDataContainer implements Cloneable, Serializable, MSWinConstants {
+public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
+{
 
     private static final long serialVersionUID = 3979265850388066865L;
 
@@ -52,7 +53,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
     /**
      * Default constructor.
      */
-    public RegDataContainer() {
+    public RegDataContainer()
+    {
         super();
     }
 
@@ -62,9 +64,11 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      * @param type
      * @throws IllegalArgumentException if the type is not valid
      */
-    public RegDataContainer(int type) throws IllegalArgumentException {
+    public RegDataContainer(int type) throws IllegalArgumentException
+    {
         super();
-        if (!isValidType(type)) {
+        if (!isValidType(type))
+        {
             throw new IllegalArgumentException("Type is not valid");
         }
 
@@ -76,7 +80,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      *
      * @param data data which should be used with this object
      */
-    public RegDataContainer(long data) {
+    public RegDataContainer(long data)
+    {
         super();
         type = REG_DWORD;
         dwordData = data;
@@ -87,11 +92,15 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      *
      * @param data data which should be used with this object
      */
-    public RegDataContainer(String data) {
+    public RegDataContainer(String data)
+    {
         super();
-        if (containsPlaceholder(data)) {
+        if (containsPlaceholder(data))
+        {
             setType(REG_EXPAND_SZ);
-        } else {
+        }
+        else
+        {
             setType(REG_SZ);
         }
         stringData = data;
@@ -102,7 +111,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      *
      * @param data data which should be used with this object
      */
-    public RegDataContainer(String[] data) {
+    public RegDataContainer(String[] data)
+    {
         super();
         type = REG_MULTI_SZ;
         multiStringData = data;
@@ -113,7 +123,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      *
      * @param data data which should be used with this object
      */
-    public RegDataContainer(byte[] data) {
+    public RegDataContainer(byte[] data)
+    {
         super();
         type = REG_BINARY;
         binData = data;
@@ -125,7 +136,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      *
      * @return binary data
      */
-    public byte[] getBinData() {
+    public byte[] getBinData()
+    {
         return binData;
     }
 
@@ -135,7 +147,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      *
      * @return the dword data
      */
-    public long getDwordData() {
+    public long getDwordData()
+    {
         return dwordData;
     }
 
@@ -145,7 +158,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      *
      * @return the multi string data
      */
-    public String[] getMultiStringData() {
+    public String[] getMultiStringData()
+    {
         return multiStringData;
     }
 
@@ -155,7 +169,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      *
      * @return the string data
      */
-    public String getStringData() {
+    public String getStringData()
+    {
         return stringData;
     }
 
@@ -164,7 +179,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      *
      * @return the data type handled by this object
      */
-    public int getType() {
+    public int getType()
+    {
         return type;
     }
 
@@ -173,7 +189,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      *
      * @param bytes data to be set
      */
-    public void setBinData(byte[] bytes) {
+    public void setBinData(byte[] bytes)
+    {
         binData = bytes;
     }
 
@@ -182,7 +199,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      *
      * @param i data to be set
      */
-    public void setDwordData(long i) {
+    public void setDwordData(long i)
+    {
         dwordData = i;
     }
 
@@ -191,7 +209,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      *
      * @param strings data to be set
      */
-    public void setMultiStringData(String[] strings) {
+    public void setMultiStringData(String[] strings)
+    {
         multiStringData = strings;
     }
 
@@ -200,7 +219,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      *
      * @param string data to be set
      */
-    public void setStringData(String string) {
+    public void setStringData(String string)
+    {
         stringData = string;
     }
 
@@ -209,7 +229,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      *
      * @param i type to be set
      */
-    public void setType(int i) {
+    public void setType(int i)
+    {
         type = i;
     }
 
@@ -219,9 +240,12 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      * @param type0 value to be verified
      * @return whether the given int represents a valid type or not
      */
-    public boolean isValidType(int type0) {
-        for (int aVALID_TYPES : VALID_TYPES) {
-            if (type0 == aVALID_TYPES) {
+    public boolean isValidType(int type0)
+    {
+        for (int aVALID_TYPES : VALID_TYPES)
+        {
+            if (type0 == aVALID_TYPES)
+            {
                 return (true);
             }
         }
@@ -235,8 +259,10 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      *
      * @return the contained data
      */
-    public Object getDataAsObject() {
-        switch (type) {
+    public Object getDataAsObject()
+    {
+        switch (type)
+        {
             case REG_SZ:
             case REG_EXPAND_SZ:
                 return (getStringData());
@@ -251,44 +277,57 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
         }
     }
 
-    public Object clone() throws CloneNotSupportedException {
+    public Object clone() throws CloneNotSupportedException
+    {
         RegDataContainer retval = (RegDataContainer) super.clone();
-        if (multiStringData != null) {
+        if (multiStringData != null)
+        {
             retval.multiStringData = new String[multiStringData.length];
             System.arraycopy(multiStringData, 0, retval.multiStringData, 0, multiStringData.length);
         }
-        if (binData != null) {
+        if (binData != null)
+        {
             retval.binData = new byte[binData.length];
             System.arraycopy(binData, 0, retval.binData, 0, binData.length);
         }
         return (retval);
     }
 
-    public boolean equals(Object anObject) {
-        if (this == anObject) {
+    public boolean equals(Object anObject)
+    {
+        if (this == anObject)
+        {
             return (true);
         }
-        if (anObject instanceof RegDataContainer) {
+        if (anObject instanceof RegDataContainer)
+        {
             RegDataContainer other = (RegDataContainer) anObject;
-            if (other.type != type) {
+            if (other.type != type)
+            {
                 return (false);
             }
-            switch (type) {
+            switch (type)
+            {
                 case REG_DWORD:
                     return (other.dwordData == dwordData);
                 case REG_SZ:
                 case REG_EXPAND_SZ:
-                    if (stringData == null) {
+                    if (stringData == null)
+                    {
                         return (other.stringData == null);
                     }
                     return (stringData.equals(other.stringData));
                 case REG_BINARY:
-                    if (binData == null) {
+                    if (binData == null)
+                    {
                         return (other.binData == null);
                     }
-                    if (other.binData != null && binData.length == other.binData.length) {
-                        for (int i = 0; i < binData.length; ++i) {
-                            if (binData[i] != other.binData[i]) {
+                    if (other.binData != null && binData.length == other.binData.length)
+                    {
+                        for (int i = 0; i < binData.length; ++i)
+                        {
+                            if (binData[i] != other.binData[i])
+                            {
                                 return (false);
                             }
                         }
@@ -296,17 +335,24 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
                     }
                     return (false);
                 case REG_MULTI_SZ:
-                    if (multiStringData == null) {
+                    if (multiStringData == null)
+                    {
                         return (other.multiStringData == null);
                     }
                     if (other.multiStringData != null
-                            && multiStringData.length == other.multiStringData.length) {
-                        for (int i = 0; i < multiStringData.length; ++i) {
-                            if (multiStringData[i] != null) {
-                                if (!multiStringData[i].equals(other.multiStringData[i])) {
+                            && multiStringData.length == other.multiStringData.length)
+                    {
+                        for (int i = 0; i < multiStringData.length; ++i)
+                        {
+                            if (multiStringData[i] != null)
+                            {
+                                if (!multiStringData[i].equals(other.multiStringData[i]))
+                                {
                                     return (false);
                                 }
-                            } else if (other.multiStringData[i] == null) {
+                            }
+                            else if (other.multiStringData[i] == null)
+                            {
                                 return (false);
                             }
                         }
@@ -318,7 +364,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
         return (false);
     }
 
-    public int hashCode() {
+    public int hashCode()
+    {
         int result;
         result = (int) (dwordData ^ (dwordData >>> 32));
         result = 29 * result + (stringData != null ? stringData.hashCode() : 0);
@@ -326,7 +373,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
         return result;
     }
 
-    private boolean containsPlaceholder(String str) {
+    private boolean containsPlaceholder(String str)
+    {
         return str.indexOf("%") >= 0;
     }
 

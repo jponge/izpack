@@ -31,7 +31,8 @@ import java.util.Map;
  *
  * @author Julien Ponge created October 27, 2002
  */
-public class UninstallData {
+public class UninstallData
+{
 
     /**
      * The installed files list.
@@ -71,7 +72,8 @@ public class UninstallData {
     /**
      * The constructor.
      */
-    public UninstallData() {
+    public UninstallData()
+    {
         installedFilesList = new ArrayList<String>();
         uninstallableFilesList = new ArrayList<String>();
         executablesList = new ArrayList<ExecutableFile>();
@@ -90,10 +92,13 @@ public class UninstallData {
      * @param path      The file to add.
      * @param uninstall If true, file must be uninstalled.
      */
-    public synchronized void addFile(String path, boolean uninstall) {
-        if (path != null) {
+    public synchronized void addFile(String path, boolean uninstall)
+    {
+        if (path != null)
+        {
             installedFilesList.add(path);
-            if (uninstall) {
+            if (uninstall)
+            {
                 uninstallableFilesList.add(path);
             }
         }
@@ -104,7 +109,8 @@ public class UninstallData {
      *
      * @return The installed files list.
      */
-    public List<String> getInstalledFilesList() {
+    public List<String> getInstalledFilesList()
+    {
         return installedFilesList;
     }
 
@@ -113,7 +119,8 @@ public class UninstallData {
      *
      * @return The uninstallable files list.
      */
-    public List<String> getUninstalableFilesList() {
+    public List<String> getUninstalableFilesList()
+    {
         return uninstallableFilesList;
     }
 
@@ -122,7 +129,8 @@ public class UninstallData {
      *
      * @param file The executable file.
      */
-    public synchronized void addExecutable(ExecutableFile file) {
+    public synchronized void addExecutable(ExecutableFile file)
+    {
         executablesList.add(file);
     }
 
@@ -131,7 +139,8 @@ public class UninstallData {
      *
      * @return The executables list.
      */
-    public List<ExecutableFile> getExecutablesList() {
+    public List<ExecutableFile> getExecutablesList()
+    {
         return executablesList;
     }
 
@@ -140,7 +149,8 @@ public class UninstallData {
      *
      * @return The uninstaller jar filename.
      */
-    public synchronized String getUninstallerJarFilename() {
+    public synchronized String getUninstallerJarFilename()
+    {
         return uninstallerJarFilename;
     }
 
@@ -149,7 +159,8 @@ public class UninstallData {
      *
      * @param name The uninstaller jar filename.
      */
-    public synchronized void setUninstallerJarFilename(String name) {
+    public synchronized void setUninstallerJarFilename(String name)
+    {
         uninstallerJarFilename = name;
     }
 
@@ -158,7 +169,8 @@ public class UninstallData {
      *
      * @return The uninstaller filename path.
      */
-    public String getUninstallerPath() {
+    public String getUninstallerPath()
+    {
         return uninstallerPath;
     }
 
@@ -167,7 +179,8 @@ public class UninstallData {
      *
      * @param path The uninstaller path.
      */
-    public void setUninstallerPath(String path) {
+    public void setUninstallerPath(String path)
+    {
         uninstallerPath = path;
     }
 
@@ -176,7 +189,8 @@ public class UninstallData {
      *
      * @return additional uninstall data
      */
-    public Map<String, Object> getAdditionalData() {
+    public Map<String, Object> getAdditionalData()
+    {
         return additionalData;
     }
 
@@ -186,7 +200,8 @@ public class UninstallData {
      * @param name  key for the additional uninstall data
      * @param value the additional uninstall data
      */
-    public void addAdditionalData(String name, Object value) {
+    public void addAdditionalData(String name, Object value)
+    {
         additionalData.put(name, value);
     }
 
@@ -195,7 +210,8 @@ public class UninstallData {
      *
      * @param aRootUninstallScript The Script to exec as Root at uninstall.
      */
-    public void addUninstallScript(String aRootUninstallScript) {
+    public void addUninstallScript(String aRootUninstallScript)
+    {
         unInstallScripts.add(aRootUninstallScript == null ? "" : aRootUninstallScript);
     }
 
@@ -204,7 +220,8 @@ public class UninstallData {
      *
      * @return root data
      */
-    public ArrayList<String> getUninstallScripts() {
+    public ArrayList<String> getUninstallScripts()
+    {
         return unInstallScripts;
     }
 

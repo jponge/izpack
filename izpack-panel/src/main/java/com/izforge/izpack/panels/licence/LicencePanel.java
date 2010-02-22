@@ -39,7 +39,8 @@ import java.awt.event.ActionListener;
  * @author Julien Ponge
  */
 public class
-        LicencePanel extends IzPanel implements ActionListener {
+        LicencePanel extends IzPanel implements ActionListener
+{
 
     /**
      *
@@ -63,7 +64,8 @@ public class
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public LicencePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public LicencePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, new IzPanelLayout(), resourceManager);
         // We load the licence
         loadLicence();
@@ -103,13 +105,16 @@ public class
     /**
      * Loads the licence text.
      */
-    private void loadLicence() {
-        try {
+    private void loadLicence()
+    {
+        try
+        {
             // We read it
             String resNamePrifix = "LicencePanel.licence";
             licence = resourceManager.getTextResource(resNamePrifix);
         }
-        catch (Exception err) {
+        catch (Exception err)
+        {
             licence = "Error : could not load the licence text !";
         }
     }
@@ -119,10 +124,14 @@ public class
      *
      * @param e The event.
      */
-    public void actionPerformed(ActionEvent e) {
-        if (yesRadio.isSelected()) {
+    public void actionPerformed(ActionEvent e)
+    {
+        if (yesRadio.isSelected())
+        {
             parent.unlockNextButton();
-        } else {
+        }
+        else
+        {
             parent.lockNextButton();
         }
     }
@@ -132,8 +141,10 @@ public class
      *
      * @return true if the user has agreed.
      */
-    public boolean isValidated() {
-        if (noRadio.isSelected()) {
+    public boolean isValidated()
+    {
+        if (noRadio.isSelected())
+        {
             parent.exit();
             return false;
         }
@@ -143,8 +154,10 @@ public class
     /**
      * Called when the panel becomes active.
      */
-    public void panelActivate() {
-        if (!yesRadio.isSelected()) {
+    public void panelActivate()
+    {
+        if (!yesRadio.isSelected())
+        {
             parent.lockNextButton();
         }
     }

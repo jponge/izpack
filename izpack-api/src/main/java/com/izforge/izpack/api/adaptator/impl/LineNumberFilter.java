@@ -24,7 +24,8 @@ import java.util.Stack;
  * @author Anthonin Bonnefoy
  * @author David Duponchel
  */
-public class LineNumberFilter extends XMLFilterImpl {
+public class LineNumberFilter extends XMLFilterImpl
+{
 
     /**
      * a queue to store line numbers while parsing.
@@ -36,24 +37,28 @@ public class LineNumberFilter extends XMLFilterImpl {
      */
     private Locator locator;
 
-    public LineNumberFilter(XMLReader xmlReader) {
+    public LineNumberFilter(XMLReader xmlReader)
+    {
         super(xmlReader);
     }
 
     @Override
-    public void startDocument() throws SAXException {
+    public void startDocument() throws SAXException
+    {
         super.startDocument();
         lnQueue = new LinkedList<Integer>();
     }
 
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+    public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException
+    {
         super.startElement(uri, localName, qName, atts);
         lnQueue.add(locator.getLineNumber());
     }
 
     @Override
-    public void setDocumentLocator(Locator locator) {
+    public void setDocumentLocator(Locator locator)
+    {
         super.setDocumentLocator(locator);
         this.locator = locator;
     }
@@ -63,7 +68,8 @@ public class LineNumberFilter extends XMLFilterImpl {
      *
      * @return the current locator.
      */
-    public Locator getDocumentLocator() {
+    public Locator getDocumentLocator()
+    {
         return locator;
     }
 
@@ -73,8 +79,10 @@ public class LineNumberFilter extends XMLFilterImpl {
      * @param elt The Node start point.
      * @return The first Element found, or null.
      */
-    private Element getFirstFoundElement(Node elt) {
-        while (elt != null && elt.getNodeType() != Node.ELEMENT_NODE) {
+    private Element getFirstFoundElement(Node elt)
+    {
+        while (elt != null && elt.getNodeType() != Node.ELEMENT_NODE)
+        {
             elt = elt.getNextSibling();
         }
         return (Element) elt;
@@ -86,7 +94,8 @@ public class LineNumberFilter extends XMLFilterImpl {
      * @param elt The Node start point.
      * @return The next sibling Element, or null if nto found.
      */
-    private Element getNextSibling(Node elt) {
+    private Element getNextSibling(Node elt)
+    {
         return getFirstFoundElement(elt.getNextSibling());
     }
 
@@ -96,7 +105,8 @@ public class LineNumberFilter extends XMLFilterImpl {
      * @param elt The Node start point.
      * @return The first child Element found, or null.
      */
-    private Element getFirstChild(Node elt) {
+    private Element getFirstChild(Node elt)
+    {
         return getFirstFoundElement(elt.getFirstChild());
     }
 
@@ -107,7 +117,8 @@ public class LineNumberFilter extends XMLFilterImpl {
      * @return Returns <code>true</code> if this node has any children,
      *         <code>false</code> otherwise.
      */
-    private boolean hasChildElements(Node elt) {
+    private boolean hasChildElements(Node elt)
+    {
         return getFirstChild(elt) != null;
     }
 
@@ -118,7 +129,8 @@ public class LineNumberFilter extends XMLFilterImpl {
      *
      * @param elt the element to apply the line number.
      */
-    private void applyLN(Element elt) {
+    private void applyLN(Element elt)
+    {
         elt.setUserData("ln", lnQueue.poll(), null);
     }
 
@@ -127,7 +139,8 @@ public class LineNumberFilter extends XMLFilterImpl {
      *
      * @param result The result of the parse.
      */
-    public void applyLN(DOMResult result) {
+    public void applyLN(DOMResult result)
+    {
         Element elt = getFirstChild(result.getNode());
         boolean end = false;
         Stack<Element> stack = new Stack<Element>();
@@ -135,25 +148,37 @@ public class LineNumberFilter extends XMLFilterImpl {
         /*
          * We collected the line numbers, now we walk through the xml tree to apply them.
          */
-        while (!end) {
-            if (hasChildElements(elt)) { // not a leaf
+        while (!end)
+        {
+            if (hasChildElements(elt))
+            { // not a leaf
                 stack.push(elt);
                 applyLN(elt);
                 elt = getFirstChild(elt); // go down
-            } else { // a leaf
+            }
+            else
+            { // a leaf
                 applyLN(elt);
                 Element sibling = getNextSibling(elt);
-                if (sibling != null) { // has a sibling
+                if (sibling != null)
+                { // has a sibling
                     elt = sibling;
-                } else { // no sibling
-                    do {
-                        if (stack.isEmpty()) {
+                }
+                else
+                { // no sibling
+                    do
+                    {
+                        if (stack.isEmpty())
+                        {
                             end = true;
-                        } else {
+                        }
+                        else
+                        {
                             elt = stack.pop();
                             elt = getNextSibling(elt);
                         }
-                    } while (!end && elt == null);
+                    }
+                    while (!end && elt == null);
                 }
             }
         }

@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.util;
 
 
@@ -38,7 +39,8 @@ import java.util.List;
  * @author Olexij Tkatchenko <ot@parcs.de>
  */
 public class OsConstraint
-        implements java.io.Serializable {
+        implements java.io.Serializable
+{
     //~ Static variables/initializers 
 
     /**
@@ -88,7 +90,8 @@ public class OsConstraint
                         String name,
                         String version,
                         String arch,
-                        String jre) {
+                        String jre)
+    {
         this.family = (family != null)
                 ? family.toLowerCase()
                 : null;
@@ -118,7 +121,8 @@ public class OsConstraint
     public OsConstraint(String family,
                         String name,
                         String version,
-                        String arch) {
+                        String arch)
+    {
         this(family, name, version, arch, null);
     }    // end OsConstraint()
 
@@ -129,36 +133,45 @@ public class OsConstraint
      *
      * @return Description of the Return Value
      */
-    public boolean matchCurrentSystem() {
+    public boolean matchCurrentSystem()
+    {
         boolean match = true;
         String osName = System.getProperty("os.name").toLowerCase();
 
 
-        if ((arch != null) && (arch.length() != 0)) {
+        if ((arch != null) && (arch.length() != 0))
+        {
             match = System.getProperty("os.arch").toLowerCase().equals(arch);
         }    // end if
 
-        if (match && (version != null) && (version.length() != 0)) {
+        if (match && (version != null) && (version.length() != 0))
+        {
             match = System.getProperty("os.version").toLowerCase().equals(version);
         }    // end if
 
-        if (match && (name != null) && (name.length() != 0)) {
+        if (match && (name != null) && (name.length() != 0))
+        {
             match = osName.equals(name);
         }    // end if
 
-        if (match && (family != null)) {
-            if ("windows".equals(family)) {
+        if (match && (family != null))
+        {
+            if ("windows".equals(family))
+            {
                 match = OsVersion.IS_WINDOWS;
             }    // end if
-            else if ("mac".equals(family) || "osx".equals(family)) {
+            else if ("mac".equals(family) || "osx".equals(family))
+            {
                 match = OsVersion.IS_OSX;
             }    // end else if
-            else if ("unix".equals(family)) {
+            else if ("unix".equals(family))
+            {
                 match = OsVersion.IS_UNIX;
             }    // end else if
         }    // end if
 
-        if (match && (jre != null) && (jre.length() > 0)) {
+        if (match && (jre != null) && (jre.length() > 0))
+        {
             match = System.getProperty("java.version").toLowerCase().startsWith(jre);
         }    // end if
 
@@ -173,13 +186,15 @@ public class OsConstraint
      * @param element parent IXMLElement
      * @return List of OsConstraint (or empty List if no constraints found)
      */
-    public static List<OsConstraint> getOsList(IXMLElement element) {
+    public static List<OsConstraint> getOsList(IXMLElement element)
+    {
         // get os info on this executable
         ArrayList<OsConstraint> osList = new ArrayList<OsConstraint>();
         Iterator<IXMLElement> osIterator = element.getChildrenNamed("os").iterator();
 
 
-        while (osIterator.hasNext()) {
+        while (osIterator.hasNext())
+        {
             IXMLElement os = osIterator.next();
 
 
@@ -199,7 +214,8 @@ public class OsConstraint
         String osattr = element.getAttribute("os");
 
 
-        if ((osattr != null) && (osattr.length() > 0)) {
+        if ((osattr != null) && (osattr.length() > 0))
+        {
             // add the "os" attribute as a family constraint
             osList.add(new OsConstraint(osattr,
                     null,
@@ -219,26 +235,31 @@ public class OsConstraint
      * @return true if one of the OsConstraints matched the current system or constraint_list is
      *         null (no constraints), false if none of the OsConstraints matched
      */
-    public static boolean oneMatchesCurrentSystem(List<OsConstraint> constraint_list) {
-        if (constraint_list == null) {
+    public static boolean oneMatchesCurrentSystem(List<OsConstraint> constraint_list)
+    {
+        if (constraint_list == null)
+        {
             return true;
         }    // end if
 
         Iterator<OsConstraint> constraint_it = constraint_list.iterator();
 
         // no constraints at all - matches!
-        if (!constraint_it.hasNext()) {
+        if (!constraint_it.hasNext())
+        {
             return true;
         }    // end if
 
-        while (constraint_it.hasNext()) {
+        while (constraint_it.hasNext())
+        {
             OsConstraint osc = constraint_it.next();
 
 
             Debug.trace("checking if os constraints " + osc + " match current OS");
 
             // check for match
-            if (osc.matchCurrentSystem()) {
+            if (osc.matchCurrentSystem())
+            {
                 Debug.trace("matched current OS.");
 
                 return true;    // bail out on first match
@@ -258,50 +279,60 @@ public class OsConstraint
      * @param el The IXMLElement to check for OS constraints.
      * @return true if there were no OS constraints or the constraints matched the current OS.
      */
-    public static boolean oneMatchesCurrentSystem(IXMLElement el) {
+    public static boolean oneMatchesCurrentSystem(IXMLElement el)
+    {
         return oneMatchesCurrentSystem(getOsList(el));
     }    // end oneMatchesCurrentSystem()
 
 
-    public void setFamily(String f) {
+    public void setFamily(String f)
+    {
         family = f.toLowerCase();
     }    // end setFamily()
 
 
-    public String getFamily() {
+    public String getFamily()
+    {
         return family;
     }    // end getFamily()
 
 
-    public void setName(String n) {
+    public void setName(String n)
+    {
         name = n.toLowerCase();
     }    // end setName()
 
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }    // end getName()
 
-    public void setVersion(String v) {
+    public void setVersion(String v)
+    {
         version = v.toLowerCase();
     }    // end setVersion()
 
 
-    public String getVersion() {
+    public String getVersion()
+    {
         return version;
     }    // end getVersion()
 
 
-    public void setArch(String a) {
+    public void setArch(String a)
+    {
         arch = a.toLowerCase();
     }    // end setArch()
 
 
-    public String getArch() {
+    public String getArch()
+    {
         return arch;
     }    // end getArch()
 
-    public String toString() {
+    public String toString()
+    {
         StringBuffer retval = new StringBuffer();
 
 

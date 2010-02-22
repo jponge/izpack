@@ -42,7 +42,8 @@ import java.io.FileOutputStream;
  *
  * @author Julien Ponge
  */
-public class FinishPanel extends IzPanel implements ActionListener {
+public class FinishPanel extends IzPanel implements ActionListener
+{
 
     private static final long serialVersionUID = 3257282535107998009L;
 
@@ -57,7 +58,8 @@ public class FinishPanel extends IzPanel implements ActionListener {
      * @param parent The parent.
      * @param idata  The installation installDataGUI.
      */
-    public FinishPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public FinishPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, new IzPanelLayout(), resourceManager);
     }
 
@@ -66,24 +68,28 @@ public class FinishPanel extends IzPanel implements ActionListener {
      *
      * @return true if the panel has been validated.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         return true;
     }
 
     /**
      * Called when the panel becomes active.
      */
-    public void panelActivate() {
+    public void panelActivate()
+    {
         parent.lockNextButton();
         parent.lockPrevButton();
         parent.setQuitButtonText(installData.getLangpack().getString("FinishPanel.done"));
         parent.setQuitButtonIcon("done");
-        if (this.installData.isInstallSuccess()) {
+        if (this.installData.isInstallSuccess())
+        {
             // We set the information
             add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.success"),
                     parent.icons.getImageIcon("preferences"), LEADING), NEXT_LINE);
             add(IzPanelLayout.createVerticalStrut(5));
-            if (this.installData.getUninstallOutJar() != null) {
+            if (this.installData.getUninstallOutJar() != null)
+            {
                 // We prepare a message for the uninstaller feature
                 String path = translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
 
@@ -102,7 +108,9 @@ public class FinishPanel extends IzPanel implements ActionListener {
             autoButton.setToolTipText(installData.getLangpack().getString("FinishPanel.auto.tip"));
             autoButton.addActionListener(this);
             add(autoButton, NEXT_LINE);
-        } else {
+        }
+        else
+        {
             add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.fail"),
                     parent.icons.getImageIcon("stop"), LEADING), NEXT_LINE);
         }
@@ -115,7 +123,8 @@ public class FinishPanel extends IzPanel implements ActionListener {
      *
      * @param e The event.
      */
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
         // Prepares the file chooser
         JFileChooser fc = new JFileChooser();
         fc.setName(GuiId.FINISH_PANEL_FILE_CHOOSER.id);
@@ -125,8 +134,10 @@ public class FinishPanel extends IzPanel implements ActionListener {
         // fc.setCurrentDirectory(new File("."));
 
         // Shows it
-        try {
-            if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+        try
+        {
+            if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
+            {
                 // We handle the xml installDataGUI writing
                 File file = fc.getSelectedFile();
                 FileOutputStream out = new FileOutputStream(file);
@@ -138,7 +149,8 @@ public class FinishPanel extends IzPanel implements ActionListener {
                 autoButton.setEnabled(false);
             }
         }
-        catch (Exception err) {
+        catch (Exception err)
+        {
             err.printStackTrace();
             JOptionPane.showMessageDialog(this, err.toString(), installData.getLangpack()
                     .getString("installer.error"), JOptionPane.ERROR_MESSAGE);
@@ -151,7 +163,8 @@ public class FinishPanel extends IzPanel implements ActionListener {
      * @param destination The path to translate.
      * @return The translated path.
      */
-    protected String translatePath(String destination) {
+    protected String translatePath(String destination)
+    {
         // Parse for variables
         destination = variableSubstitutor.substitute(destination);
 

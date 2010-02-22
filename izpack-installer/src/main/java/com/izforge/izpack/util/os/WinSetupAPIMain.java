@@ -2,7 +2,8 @@ package com.izforge.izpack.util.os;
 
 import java.io.File;
 
-public class WinSetupAPIMain {
+public class WinSetupAPIMain
+{
 
     /**
      * Small test of functionality of the WIndows Setup API.
@@ -15,44 +16,57 @@ public class WinSetupAPIMain {
      *
      * @param args See above usage notes
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
 
-        if (args.length > 0) {
+        if (args.length > 0)
+        {
 
-            try {
+            try
+            {
                 System.out.println("(Java) Opening new file queue...");
                 WinSetupFileQueue fq = new WinSetupFileQueue(new WinSetupDefaultCallbackHandler());
 
                 String name = args[0];
                 char c = name.charAt(0);
-                switch (c) {
+                switch (c)
+                {
                     case 'c':
-                        if (args.length == 3) {
+                        if (args.length == 3)
+                        {
                             File srcfile = new File(args[1]);
                             File destfile = new File(args[2]);
                             System.out.println("(Java) Copying " + args[1] + " -> " + args[2]);
                             fq.addCopy(srcfile, destfile);
-                        } else {
+                        }
+                        else
+                        {
                             usageNotes();
                         }
                         break;
                     case 'm':
-                        if (args.length == 3) {
+                        if (args.length == 3)
+                        {
                             File srcfile = new File(args[1]);
                             File destfile = new File(args[2]);
                             System.out.println("(Java) Renaming/Moving " + args[1] + " -> " + args[2]);
                             // fq.addRename( srcfile, destfile );
                             fq.addMove(srcfile, destfile);
-                        } else {
+                        }
+                        else
+                        {
                             usageNotes();
                         }
                         break;
                     case 'd':
-                        if (args.length == 2) {
+                        if (args.length == 2)
+                        {
                             File file = new File(args[1]);
                             System.out.println("(Java) Deleting " + args[1]);
                             fq.addDelete(file);
-                        } else {
+                        }
+                        else
+                        {
                             usageNotes();
                         }
                         break;
@@ -67,19 +81,24 @@ public class WinSetupAPIMain {
                 System.out.println("(Java) Closing file queue...");
                 fq.close();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 System.err.println("Command failed due to " + e.getMessage());
             }
-            finally {
+            finally
+            {
                 System.exit(1);
             }
 
-        } else {
+        }
+        else
+        {
             usageNotes();
         }
     }
 
-    private static void usageNotes() {
+    private static void usageNotes()
+    {
         System.out.println("Usage:");
         System.out.println("c(opy) <sourcefile> <destfile>");
         System.out.println("m(ove)/rename <sourcefile> <destfile>");

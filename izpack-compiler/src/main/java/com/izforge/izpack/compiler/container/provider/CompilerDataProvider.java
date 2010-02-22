@@ -10,14 +10,17 @@ import org.picocontainer.injectors.Provider;
  *
  * @author Anthonin Bonnefoy
  */
-public class CompilerDataProvider implements Provider {
+public class CompilerDataProvider implements Provider
+{
     private String[] args;
 
-    public CompilerDataProvider(String[] args) {
+    public CompilerDataProvider(String[] args)
+    {
         this.args = args;
     }
 
-    public CompilerData provide(CliAnalyzer cliAnalyzer) throws ParseException {
+    public CompilerData provide(CliAnalyzer cliAnalyzer) throws ParseException
+    {
         CompilerData compilerData = cliAnalyzer.printAndParseArgs(args);
         // REFACTOR : find a way to test with a fake home 
         // compilerData.resolveIzpackHome();

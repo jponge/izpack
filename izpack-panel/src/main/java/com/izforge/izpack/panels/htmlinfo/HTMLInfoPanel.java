@@ -39,7 +39,8 @@ import java.net.URL;
  *
  * @author Julien Ponge
  */
-public class HTMLInfoPanel extends IzPanel {
+public class HTMLInfoPanel extends IzPanel
+{
 
     private static final long serialVersionUID = 3257008769514025270L;
 
@@ -64,7 +65,8 @@ public class HTMLInfoPanel extends IzPanel {
      * @param parent The parent.
      * @param idata  The installation installDataGUI.
      */
-    public HTMLInfoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public HTMLInfoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         this(parent, idata, "HTMLInfoPanel", true, resourceManager);
     }
 
@@ -79,7 +81,8 @@ public class HTMLInfoPanel extends IzPanel {
      *                          above content.
      */
     public HTMLInfoPanel(InstallerFrame parent, GUIInstallData idata,
-                         String resPrefixStr, boolean showInfoLabelFlag, ResourceManager resourceManager) {
+                         String resPrefixStr, boolean showInfoLabelFlag, ResourceManager resourceManager)
+    {
         super(parent, idata, new IzPanelLayout(), resourceManager);
         //setup given resource prefix and name:
         panelResourcePrefixStr = resPrefixStr;
@@ -87,23 +90,29 @@ public class HTMLInfoPanel extends IzPanel {
 
         // We add the components
 
-        if (showInfoLabelFlag) {  //flag is set; add label above content
+        if (showInfoLabelFlag)
+        {  //flag is set; add label above content
             add(LabelFactory.create(installData.getLangpack().getString("InfoPanel.info"), parent.icons
                     .getImageIcon("edit"), LEADING), NEXT_LINE);
         }
-        try {
-            textArea = new JEditorPane() {       //override get-stream method to parse variable
+        try
+        {
+            textArea = new JEditorPane()
+            {       //override get-stream method to parse variable
 
                 // declarations in HTML content:
                 protected InputStream getStream(URL urlObj)
-                        throws IOException {                  //get original stream contents:
+                        throws IOException
+                {                  //get original stream contents:
                     final InputStream inStm = super.getStream(urlObj);
                     final ByteArrayOutputStream btArrOutStm =
                             new ByteArrayOutputStream();
                     int b;         //copy contents to output stream:
                     final byte[] buff = new byte[2048];
                     while ((b = inStm.read(buff, 0, buff.length)) > 0)
+                    {
                         btArrOutStm.write(buff, 0, b);
+                    }
                     //convert to string and parse variables:
                     final String parsedStr =
                             parseText(btArrOutStm.toString());
@@ -121,7 +130,8 @@ public class HTMLInfoPanel extends IzPanel {
             textArea.setCaretPosition(0);
             add(scroller, NEXT_LINE);
         }
-        catch (Exception err) {
+        catch (Exception err)
+        {
             err.printStackTrace();
         }
         getLayoutHelper().completeLayout();
@@ -131,24 +141,31 @@ public class HTMLInfoPanel extends IzPanel {
     * loads the content of the info resource as text so that it can be parsed afterwards
     */
 
-    private URL loadHTMLInfoContent() {
-        if (getMetadata() != null && getMetadata().getPanelid() != null) {
-            try {
+    private URL loadHTMLInfoContent()
+    {
+        if (getMetadata() != null && getMetadata().getPanelid() != null)
+        {
+            try
+            {
                 String panelSpecificResName = panelResourcePrefixStr + '.' + this.getMetadata().getPanelid();
                 String panelspecificResContent = resourceManager.getTextResource(panelSpecificResName);
-                if (panelspecificResContent != null) {
+                if (panelspecificResContent != null)
+                {
                     panelResourceNameStr = panelSpecificResName;
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 // Those ones can be skipped
             }
         }
 
-        try {
+        try
+        {
             return resourceManager.getURL(panelResourceNameStr);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
 
@@ -160,17 +177,21 @@ public class HTMLInfoPanel extends IzPanel {
      *
      * @return Always true.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         return true;
     }
 
-    public void panelActivate() {
-        try {
+    public void panelActivate()
+    {
+        try
+        {
             textArea.setPage(loadHTMLInfoContent());
             //set caret so beginning of file is displayed:
             textArea.setCaretPosition(0);
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
     }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.api.adaptator.xinclude;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -25,9 +26,11 @@ import java.net.URL;
  * Test the XInclude style functionality.
  * Use the URL as input for the parser
  */
-public class XIncludeParseURLTestCase extends BaseXIncludeTestCase {
+public class XIncludeParseURLTestCase extends BaseXIncludeTestCase
+{
     @Override
-    public void doTest(String fileBase) throws Exception {
+    public void doTest(String fileBase) throws Exception
+    {
         URL inputURL = getClass().getResource(fileBase + "-input.xml");
         URL expectURL = getClass().getResource(fileBase + "-expect.xml");
         // set up a new parser to parse the input xml (with includes)

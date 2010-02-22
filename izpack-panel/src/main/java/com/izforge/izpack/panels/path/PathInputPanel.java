@@ -42,7 +42,8 @@ import java.io.*;
  *
  * @author Klaus Bartz
  */
-public class PathInputPanel extends IzPanel implements ActionListener {
+public class PathInputPanel extends IzPanel implements ActionListener
+{
 
     /**
      *
@@ -78,7 +79,8 @@ public class PathInputPanel extends IzPanel implements ActionListener {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public PathInputPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public PathInputPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, new IzPanelLayout(), resourceManager);
         // Set default values
         emptyTargetMsg = getI18nStringForClass("empty_target", "TargetPanel");
@@ -86,9 +88,11 @@ public class PathInputPanel extends IzPanel implements ActionListener {
 
         String introText = getI18nStringForClass("extendedIntro", "PathInputPanel");
         if (introText == null || introText.endsWith("extendedIntro")
-                || introText.indexOf('$') > -1) {
+                || introText.indexOf('$') > -1)
+        {
             introText = getI18nStringForClass("intro", "PathInputPanel");
-            if (introText == null || introText.endsWith("intro")) {
+            if (introText == null || introText.endsWith("intro"))
+            {
                 introText = "";
             }
         }
@@ -113,7 +117,8 @@ public class PathInputPanel extends IzPanel implements ActionListener {
      * This method does nothing. It is called from ctor of PathInputPanel, to give in a derived
      * class the possibility to add more components under the path input components.
      */
-    public void createLayoutBottom() {
+    public void createLayoutBottom()
+    {
         // Derived classes implements additional elements.
     }
 
@@ -122,9 +127,11 @@ public class PathInputPanel extends IzPanel implements ActionListener {
      *
      * @param e The event.
      */
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
         Object source = e.getSource();
-        if (source == pathSelectionPanel.getPathInputField()) {
+        if (source == pathSelectionPanel.getPathInputField())
+        {
             parent.navigateNext();
         }
 
@@ -135,17 +142,20 @@ public class PathInputPanel extends IzPanel implements ActionListener {
      *
      * @return Wether the panel has been validated or not.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         String chosenPath = pathSelectionPanel.getPath();
         boolean ok = true;
 
         boolean modifyinstallation = Boolean.valueOf(this.installData.getVariable(GUIInstallData.MODIFY_INSTALLATION));
-        if (modifyinstallation) {
+        if (modifyinstallation)
+        {
             // installation directory has to exist in a modification installation
             mustExist = true;
 
             File installationinformation = new File(pathSelectionPanel.getPath() + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION);
-            if (!installationinformation.exists()) {
+            if (!installationinformation.exists())
+            {
                 emitError(installData.getLangpack().getString("installer.error"), installData.getLangpack().getString("PathInputPanel.required.forModificationInstallation"));
 
                 return false;
@@ -153,20 +163,24 @@ public class PathInputPanel extends IzPanel implements ActionListener {
         }
 
         // We put a warning if the specified target is nameless
-        if (chosenPath.length() == 0) {
-            if (isMustExist()) {
+        if (chosenPath.length() == 0)
+        {
+            if (isMustExist())
+            {
                 emitError(installData.getLangpack().getString("installer.error"), installData.getLangpack()
                         .getString("PathInputPanel.required"));
                 return false;
             }
             ok = emitWarning(installData.getLangpack().getString("installer.warning"), emptyTargetMsg);
         }
-        if (!ok) {
+        if (!ok)
+        {
             return ok;
         }
 
         // Expand unix home reference
-        if (chosenPath.startsWith("~")) {
+        if (chosenPath.startsWith("~"))
+        {
             String home = System.getProperty("user.home");
             chosenPath = home + chosenPath.substring(1);
         }
@@ -175,36 +189,46 @@ public class PathInputPanel extends IzPanel implements ActionListener {
         File path = new File(chosenPath).getAbsoluteFile();
         chosenPath = path.toString();
         pathSelectionPanel.setPath(chosenPath);
-        if (isMustExist()) {
-            if (!path.exists()) {
+        if (isMustExist())
+        {
+            if (!path.exists())
+            {
                 emitError(installData.getLangpack().getString("installer.error"), installData.getLangpack()
                         .getString(getI18nStringForClass("required", "PathInputPanel")));
                 return false;
             }
-            if (!pathIsValid()) {
+            if (!pathIsValid())
+            {
                 emitError(installData.getLangpack().getString("installer.error"), installData.getLangpack()
                         .getString(getI18nStringForClass("notValid", "PathInputPanel")));
                 return false;
             }
-        } else {
+        }
+        else
+        {
             // We assume, that we would install something into this dir
-            if (!isWriteable()) {
+            if (!isWriteable())
+            {
                 emitError(installData.getLangpack().getString("installer.error"), getI18nStringForClass(
                         "notwritable", "TargetPanel"));
                 return false;
             }
             // We put a warning if the directory exists else we warn
             // that it will be created
-            if (path.exists()) {
+            if (path.exists())
+            {
                 int res = askQuestion(installData.getLangpack().getString("installer.warning"), warnMsg,
                         AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_YES);
                 ok = res == AbstractUIHandler.ANSWER_YES;
-            } else {
+            }
+            else
+            {
                 //if 'ShowCreateDirectoryMessage' variable set to 'false'
                 // then don't show "directory will be created" dialog:
                 final String vStr =
                         this.installData.getVariable("ShowCreateDirectoryMessage");
-                if (vStr == null || Boolean.getBoolean(vStr)) {
+                if (vStr == null || Boolean.getBoolean(vStr))
+                {
                     ok = this.emitNotificationFeedback(getI18nStringForClass(
                             "createdir", "TargetPanel") + "\n" + chosenPath);
                 }
@@ -220,13 +244,17 @@ public class PathInputPanel extends IzPanel implements ActionListener {
      *
      * @return true if existFiles are exist or not defined, else false
      */
-    protected boolean pathIsValid() {
-        if (existFiles == null) {
+    protected boolean pathIsValid()
+    {
+        if (existFiles == null)
+        {
             return true;
         }
-        for (String existFile : existFiles) {
+        for (String existFile : existFiles)
+        {
             File path = new File(pathSelectionPanel.getPath(), existFile).getAbsoluteFile();
-            if (!path.exists()) {
+            if (!path.exists())
+            {
                 return false;
             }
         }
@@ -238,7 +266,8 @@ public class PathInputPanel extends IzPanel implements ActionListener {
      *
      * @return the must exist state
      */
-    public boolean isMustExist() {
+    public boolean isMustExist()
+    {
         return mustExist;
     }
 
@@ -247,7 +276,8 @@ public class PathInputPanel extends IzPanel implements ActionListener {
      *
      * @param b must exist state
      */
-    public void setMustExist(boolean b) {
+    public void setMustExist(boolean b)
+    {
         mustExist = b;
     }
 
@@ -256,7 +286,8 @@ public class PathInputPanel extends IzPanel implements ActionListener {
      *
      * @return paths of files which must exist
      */
-    public String[] getExistFiles() {
+    public String[] getExistFiles()
+    {
         return existFiles;
     }
 
@@ -265,7 +296,8 @@ public class PathInputPanel extends IzPanel implements ActionListener {
      *
      * @param strings paths of files which must exist under the chosen path
      */
-    public void setExistFiles(String[] strings) {
+    public void setExistFiles(String[] strings)
+    {
         existFiles = strings;
     }
 
@@ -284,65 +316,88 @@ public class PathInputPanel extends IzPanel implements ActionListener {
      * As with all IzPack resources, each the above ids should be associated with a separate
      * filename, which is set in the install.xml file at compile time.
      */
-    public void loadDefaultInstallDir(InstallerFrame parentFrame) {
+    public void loadDefaultInstallDir(InstallerFrame parentFrame)
+    {
         // Load only once ...
-        if (getDefaultInstallDir() != null) {
+        if (getDefaultInstallDir() != null)
+        {
             return;
         }
         BufferedReader br = null;
-        try {
+        try
+        {
             InputStream in = null;
             String os = System.getProperty("os.name");
             // first try to look up by specific os name
             os = os.replace(' ', '_'); // avoid spaces in file names
             os = os.toLowerCase(); // for consistency among TargetPanel res
             // files
-            try {
+            try
+            {
                 in = parentFrame.getResource("TargetPanel.dir.".concat(os));
             }
-            catch (ResourceNotFoundException rnfe) {
+            catch (ResourceNotFoundException rnfe)
+            {
             }
-            if (in == null) {
-                if (OsVersion.IS_WINDOWS) {
-                    try {
+            if (in == null)
+            {
+                if (OsVersion.IS_WINDOWS)
+                {
+                    try
+                    {
                         in = parentFrame.getResource("TargetPanel.dir.windows");
                     }
-                    catch (ResourceNotFoundException rnfe) {
+                    catch (ResourceNotFoundException rnfe)
+                    {
                     }//it's usual, that the resource does not exist
-                } else if (OsVersion.IS_OSX) {
-                    try {
+                }
+                else if (OsVersion.IS_OSX)
+                {
+                    try
+                    {
                         in = parentFrame.getResource("TargetPanel.dir.macosx");
                     }
-                    catch (ResourceNotFoundException rnfe) {
+                    catch (ResourceNotFoundException rnfe)
+                    {
                     }//it's usual, that the resource does not exist
-                } else {
-                    try {
+                }
+                else
+                {
+                    try
+                    {
                         in = parentFrame.getResource("TargetPanel.dir.unix");
                     }
-                    catch (ResourceNotFoundException eee) {
+                    catch (ResourceNotFoundException eee)
+                    {
                     }//it's usual, that the resource does not exist
                 }
             }
 
             // if all above tests failed, there is no resource file,
             // so use system default
-            if (in == null) {
-                try {
+            if (in == null)
+            {
+                try
+                {
                     in = parentFrame.getResource("TargetPanel.dir");
                 }
-                catch (ResourceNotFoundException ignored) {
+                catch (ResourceNotFoundException ignored)
+                {
                 }
             }
 
-            if (in != null) {
+            if (in != null)
+            {
                 // now read the file, once we've identified which one to read
                 InputStreamReader isr = new InputStreamReader(in);
                 br = new BufferedReader(isr);
                 String line;
-                while ((line = br.readLine()) != null) {
+                while ((line = br.readLine()) != null)
+                {
                     line = line.trim();
                     // use the first non-blank line
-                    if (!"".equals(line)) {
+                    if (!"".equals(line))
+                    {
                         break;
                     }
                 }
@@ -351,19 +406,24 @@ public class PathInputPanel extends IzPanel implements ActionListener {
                 defaultInstallDir = variableSubstitutor.substitute(defaultInstallDir);
             }
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             //mar: what's the common way to log an exception ?
             e.printStackTrace();
             defaultInstallDir = null;
             // leave unset to take the system default set by Installer class
         }
-        finally {
-            try {
-                if (br != null) {
+        finally
+        {
+            try
+            {
+                if (br != null)
+                {
                     br.close();
                 }
             }
-            catch (IOException ignored) {
+            catch (IOException ignored)
+            {
             }
         }
     }
@@ -373,21 +433,26 @@ public class PathInputPanel extends IzPanel implements ActionListener {
      *
      * @return whether the chosen dir is writeable or not
      */
-    public boolean isWriteable() {
+    public boolean isWriteable()
+    {
         File existParent = IoHelper.existingParent(new File(pathSelectionPanel.getPath()));
-        if (existParent == null) {
+        if (existParent == null)
+        {
             return false;
         }
         // On windows we cannot use canWrite because
         // it looks to the dos flags which are not valid
         // on NT or 2k XP or ...
-        if (OsVersion.IS_WINDOWS) {
+        if (OsVersion.IS_WINDOWS)
+        {
             File tmpFile;
-            try {
+            try
+            {
                 tmpFile = File.createTempFile("izWrTe", ".tmp", existParent);
                 tmpFile.deleteOnExit();
             }
-            catch (IOException e) {
+            catch (IOException e)
+            {
                 Debug.trace(e.toString());
                 return false;
             }
@@ -401,7 +466,8 @@ public class PathInputPanel extends IzPanel implements ActionListener {
      *
      * @return the default for the installation directory
      */
-    public static String getDefaultInstallDir() {
+    public static String getDefaultInstallDir()
+    {
         return defaultInstallDir;
     }
 
@@ -410,7 +476,8 @@ public class PathInputPanel extends IzPanel implements ActionListener {
      *
      * @param string path for default for the installation directory
      */
-    public static void setDefaultInstallDir(String string) {
+    public static void setDefaultInstallDir(String string)
+    {
         defaultInstallDir = string;
     }
 

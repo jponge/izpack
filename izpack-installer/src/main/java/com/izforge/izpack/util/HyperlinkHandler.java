@@ -29,41 +29,53 @@ import javax.swing.event.HyperlinkListener;
  *
  * @author Mathieu ANCELIN
  */
-public class HyperlinkHandler implements HyperlinkListener {
+public class HyperlinkHandler implements HyperlinkListener
+{
     /**
      * Handle an event on the link
      *
      * @param HyperlinkEvent the event on the link
      */
-    public void hyperlinkUpdate(HyperlinkEvent e) {
-        try {
-            if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+    public void hyperlinkUpdate(HyperlinkEvent e)
+    {
+        try
+        {
+            if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
+            {
                 String urls = e.getURL().toExternalForm();
-                if (com.izforge.izpack.util.OsVersion.IS_OSX) {
+                if (com.izforge.izpack.util.OsVersion.IS_OSX)
+                {
                     Runtime.getRuntime().exec("open " + urls);
-                } else if (com.izforge.izpack.util.OsVersion.IS_UNIX) {
+                }
+                else if (com.izforge.izpack.util.OsVersion.IS_UNIX)
+                {
                     String[] launchers = {"htmlview QqzURL", "xdg-open QqzURL",
                             "gnome-open QqzURL", "kfmclient openURL QqzURL", "call-browser QqzURL",
                             "firefox QqzURL", "opera QqzURL", "konqueror QqzURL",
                             "epiphany QqzURL", "mozilla QqzURL", "netscape QqzURL"};
-                    for (String launcher : launchers) {
-                        try {
+                    for (String launcher : launchers)
+                    {
+                        try
+                        {
                             Runtime.getRuntime().exec(launcher.replaceAll("QqzURL", urls));
                             System.out.println("OK");
                             break;
                         }
-                        catch (Exception ignore) {
+                        catch (Exception ignore)
+                        {
                             System.out.println(launcher + " NOT OK");
                         }
                     }
-                } else
+                }
+                else
                 // windows
                 {
                     Runtime.getRuntime().exec("cmd /C start " + urls);
                 }
             }
         }
-        catch (Exception err) {
+        catch (Exception err)
+        {
             err.printStackTrace();
         }
     }

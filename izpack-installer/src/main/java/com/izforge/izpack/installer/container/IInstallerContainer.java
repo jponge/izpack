@@ -3,7 +3,8 @@ package com.izforge.izpack.installer.container;
 /**
  * Interface for panel level component
  */
-public interface IInstallerContainer {
+public interface IInstallerContainer
+{
 
     <T> void addComponent(Class<T> componentType);
 

@@ -15,6 +15,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.core.io;
 
 import java.io.IOException;
@@ -24,7 +25,8 @@ import java.io.IOException;
  *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
-public class VolumeNotFoundException extends IOException {
+public class VolumeNotFoundException extends IOException
+{
 
     protected String volumename;
 
@@ -32,11 +34,13 @@ public class VolumeNotFoundException extends IOException {
 
     private static final long serialVersionUID = 9062182895972373707L;
 
-    public VolumeNotFoundException() {
+    public VolumeNotFoundException()
+    {
         super();
     }
 
-    public VolumeNotFoundException(String message, String volumename) {
+    public VolumeNotFoundException(String message, String volumename)
+    {
         super(message);
         this.volumename = volumename;
     }
@@ -46,7 +50,8 @@ public class VolumeNotFoundException extends IOException {
      *
      * @return the name of the volume
      */
-    public String getVolumename() {
+    public String getVolumename()
+    {
         return volumename;
     }
 
@@ -55,7 +60,8 @@ public class VolumeNotFoundException extends IOException {
      *
      * @return the amount of skipped bytes
      */
-    public long getAlreadyskippedbytes() {
+    public long getAlreadyskippedbytes()
+    {
         return alreadyskippedbytes;
     }
 
@@ -64,7 +70,8 @@ public class VolumeNotFoundException extends IOException {
      *
      * @param alreadyskippedbytes
      */
-    public void setAlreadyskippedbytes(long alreadyskippedbytes) {
+    public void setAlreadyskippedbytes(long alreadyskippedbytes)
+    {
         this.alreadyskippedbytes = alreadyskippedbytes;
     }
 }

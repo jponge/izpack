@@ -11,16 +11,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 
-public class MultiVolumeUnpackerAutomationHelper implements IMultiVolumeUnpackerHelper {
+public class MultiVolumeUnpackerAutomationHelper implements IMultiVolumeUnpackerHelper
+{
     private AutomatedInstallData idata;
     private AbstractUIProgressHandler handler;
 
-    public MultiVolumeUnpackerAutomationHelper() {
+    public MultiVolumeUnpackerAutomationHelper()
+    {
 
     }
 
-    public File enterNextMediaMessage(String volumename, boolean lastcorrupt) {
-        if (lastcorrupt) {
+    public File enterNextMediaMessage(String volumename, boolean lastcorrupt)
+    {
+        if (lastcorrupt)
+        {
             System.err.println(" [ " + idata.getLangpack().getString("nextmedia.corruptmedia.title") + " ] ");
             System.err.println(idata.getLangpack().getString("nextmedia.corruptmedia"));
         }
@@ -29,39 +33,48 @@ public class MultiVolumeUnpackerAutomationHelper implements IMultiVolumeUnpacker
         File nextvolume = new File(volumename);
         NextMediaDialog nmd = null;
 
-        while (!nextvolume.exists() || lastcorrupt) {
+        while (!nextvolume.exists() || lastcorrupt)
+        {
             System.out.println(" [ " + idata.getLangpack().getString("nextmedia.title") + " ] ");
             System.out.println(idata.getLangpack().getString("nextmedia.msg"));
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
             String nextmediainput = null;
-            try {
+            try
+            {
                 nextmediainput = reader.readLine();
             }
-            catch (IOException e) {
+            catch (IOException e)
+            {
                 Debug.error("Error reading next media path: " + e.getMessage());
                 e.printStackTrace();
             }
 
-            if (nextmediainput != null) {
+            if (nextmediainput != null)
+            {
                 nextvolume = new File(nextmediainput);
-            } else {
+            }
+            else
+            {
                 Debug.trace("Input from NextMediaDialog was null");
                 nextvolume = new File(volumename);
             }
             // selection equal to last selected which was corrupt?
-            if (!(volumename.equals(nextvolume.getAbsolutePath()) && lastcorrupt)) {
+            if (!(volumename.equals(nextvolume.getAbsolutePath()) && lastcorrupt))
+            {
                 lastcorrupt = false;
             }
         }
         return nextvolume;
     }
 
-    public File enterNextMediaMessage(String volumename) {
+    public File enterNextMediaMessage(String volumename)
+    {
         return enterNextMediaMessage(volumename, false);
     }
 
-    public void init(AutomatedInstallData idata, AbstractUIProgressHandler handler) {
+    public void init(AutomatedInstallData idata, AbstractUIProgressHandler handler)
+    {
         this.idata = idata;
         this.handler = handler;
     }

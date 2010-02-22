@@ -19,6 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.compiler.compressor;
 
 /**
@@ -29,7 +30,8 @@ package com.izforge.izpack.compiler.compressor;
  * @author Klaus Bartz
  */
 
-public interface PackCompressor {
+public interface PackCompressor
+{
 
     /**
      * Returns a newly created output stream which write method

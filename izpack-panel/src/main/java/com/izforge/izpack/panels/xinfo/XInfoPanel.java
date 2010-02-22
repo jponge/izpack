@@ -35,7 +35,8 @@ import java.awt.*;
  *
  * @author Julien Ponge
  */
-public class XInfoPanel extends IzPanel {
+public class XInfoPanel extends IzPanel
+{
 
     /**
      *
@@ -58,7 +59,8 @@ public class XInfoPanel extends IzPanel {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public XInfoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public XInfoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, resourceManager);
 
         // We initialize our layout
@@ -81,7 +83,8 @@ public class XInfoPanel extends IzPanel {
         textArea.setEditable(false);
 
         String textAreaFont = idata.getVariable("XInfoPanel.font");
-        if (textAreaFont != null && textAreaFont.length() > 0) {
+        if (textAreaFont != null && textAreaFont.length() > 0)
+        {
             Font font = Font.decode(textAreaFont);
             textArea.setFont(font);
         }
@@ -96,12 +99,15 @@ public class XInfoPanel extends IzPanel {
     /**
      * Loads the info text.
      */
-    private void loadInfo() {
-        try {
+    private void loadInfo()
+    {
+        try
+        {
             // We read it
             info = resourceManager.getTextResource("XInfoPanel.info");
         }
-        catch (Exception err) {
+        catch (Exception err)
+        {
             info = "Error : could not load the info text !";
         }
     }
@@ -109,12 +115,15 @@ public class XInfoPanel extends IzPanel {
     /**
      * Parses the text for special variables.
      */
-    private void parseText() {
-        try {
+    private void parseText()
+    {
+        try
+        {
             // Parses the info text
             info = variableSubstitutor.substitute(info);
         }
-        catch (Exception err) {
+        catch (Exception err)
+        {
             err.printStackTrace();
         }
     }
@@ -122,7 +131,8 @@ public class XInfoPanel extends IzPanel {
     /**
      * Called when the panel becomes active.
      */
-    public void panelActivate() {
+    public void panelActivate()
+    {
         // Text handling
         loadInfo();
         parseText();
@@ -137,7 +147,8 @@ public class XInfoPanel extends IzPanel {
      *
      * @return Always true.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         return true;
     }
 }

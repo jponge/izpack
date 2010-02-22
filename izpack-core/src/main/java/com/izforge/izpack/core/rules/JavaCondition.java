@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.core.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -33,7 +34,8 @@ import java.lang.reflect.Method;
  *
  * @author Dennis Reil, <izpack@reil-online.de>
  */
-public class JavaCondition extends Condition {
+public class JavaCondition extends Condition
+{
     /**
      *
      */
@@ -50,56 +52,76 @@ public class JavaCondition extends Condition {
     protected Field usedfield;
     protected Method usedmethod;
 
-    public JavaCondition() {
+    public JavaCondition()
+    {
 
     }
 
-    public boolean isTrue() {
-        if (!this.complete) {
+    public boolean isTrue()
+    {
+        if (!this.complete)
+        {
             return false;
-        } else {
-            if (this.usedclass == null) {
-                try {
+        }
+        else
+        {
+            if (this.usedclass == null)
+            {
+                try
+                {
                     this.usedclass = Class.forName(this.classname);
                 }
-                catch (ClassNotFoundException e) {
+                catch (ClassNotFoundException e)
+                {
                     Debug.log("Can't find class " + this.classname);
                     return false;
                 }
             }
-            if ((this.usedfield == null) && (this.fieldname != null)) {
-                try {
+            if ((this.usedfield == null) && (this.fieldname != null))
+            {
+                try
+                {
                     this.usedfield = this.usedclass.getField(this.fieldname);
                 }
-                catch (SecurityException e) {
+                catch (SecurityException e)
+                {
                     Debug.log("No permission to access specified field: " + this.fieldname);
                     return false;
                 }
-                catch (NoSuchFieldException e) {
+                catch (NoSuchFieldException e)
+                {
                     Debug.log("No such field: " + this.fieldname);
                     return false;
                 }
             }
-            if ((this.usedmethod == null) && (this.methodname != null)) {
+            if ((this.usedmethod == null) && (this.methodname != null))
+            {
                 Debug.log("not implemented yet.");
                 return false;
             }
 
-            if (this.usedfield != null) {
+            if (this.usedfield != null)
+            {
                 // access field
-                if ("boolean".equals(this.returnvaluetype)) {
-                    try {
+                if ("boolean".equals(this.returnvaluetype))
+                {
+                    try
+                    {
                         boolean returnval = this.usedfield.getBoolean(null);
                         boolean expectedreturnval = Boolean.valueOf(this.returnvalue);
                         return returnval == expectedreturnval;
                     }
-                    catch (IllegalArgumentException e) {
+                    catch (IllegalArgumentException e)
+                    {
                         Debug.log("IllegalArgumentexeption " + this.fieldname);
                     }
-                    catch (IllegalAccessException e) {
+                    catch (IllegalAccessException e)
+                    {
                         Debug.log("IllegalAccessException " + this.fieldname);
                     }
-                } else {
+                }
+                else
+                {
                     Debug.log("not implemented yet.");
                     return false;
                 }
@@ -108,36 +130,47 @@ public class JavaCondition extends Condition {
         }
     }
 
-    public void readFromXML(IXMLElement xmlcondition) {
-        if (xmlcondition.getChildrenCount() != 2) {
+    public void readFromXML(IXMLElement xmlcondition)
+    {
+        if (xmlcondition.getChildrenCount() != 2)
+        {
             Debug.log("Condition of type java needs (java,returnvalue)");
             return;
         }
         IXMLElement javael = xmlcondition.getFirstChildNamed("java");
         IXMLElement classel = javael.getFirstChildNamed("class");
-        if (classel != null) {
+        if (classel != null)
+        {
             this.classname = classel.getContent();
-        } else {
+        }
+        else
+        {
             Debug.log("Java-Element needs (class,method?,field?)");
             return;
         }
         IXMLElement methodel = javael.getFirstChildNamed("method");
-        if (methodel != null) {
+        if (methodel != null)
+        {
             this.methodname = methodel.getContent();
         }
         IXMLElement fieldel = javael.getFirstChildNamed("field");
-        if (fieldel != null) {
+        if (fieldel != null)
+        {
             this.fieldname = fieldel.getContent();
         }
-        if ((this.methodname == null) && (this.fieldname == null)) {
+        if ((this.methodname == null) && (this.fieldname == null))
+        {
             Debug.log("java element needs (class, method?,field?)");
             return;
         }
         IXMLElement returnvalel = xmlcondition.getFirstChildNamed("returnvalue");
-        if (returnvalel != null) {
+        if (returnvalel != null)
+        {
             this.returnvalue = returnvalel.getContent();
             this.returnvaluetype = returnvalel.getAttribute("type");
-        } else {
+        }
+        else
+        {
             Debug.log("no returnvalue-element specified.");
             return;
         }
@@ -145,18 +178,21 @@ public class JavaCondition extends Condition {
     }
 
     @Override
-    public void makeXMLData(IXMLElement conditionRoot) {
+    public void makeXMLData(IXMLElement conditionRoot)
+    {
         XMLElementImpl javael = new XMLElementImpl("java", conditionRoot);
         conditionRoot.addChild(javael);
         XMLElementImpl classel = new XMLElementImpl("class", javael);
         classel.setContent(this.classname);
         javael.addChild(classel);
-        if (this.methodname != null) {
+        if (this.methodname != null)
+        {
             XMLElementImpl methodel = new XMLElementImpl("method", javael);
             methodel.setContent(this.methodname);
             javael.addChild(methodel);
         }
-        if (this.fieldname != null) {
+        if (this.fieldname != null)
+        {
             XMLElementImpl fieldel = new XMLElementImpl("field", javael);
             fieldel.setContent(this.fieldname);
             javael.addChild(fieldel);
@@ -171,15 +207,19 @@ public class JavaCondition extends Condition {
      * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
      */
 
-    public String getDependenciesDetails() {
+    public String getDependenciesDetails()
+    {
         StringBuffer details = new StringBuffer();
         details.append(this.id);
         details.append(" depends on the ");
-        if (this.fieldname != null) {
+        if (this.fieldname != null)
+        {
             details.append("value of field <b>");
             details.append(this.fieldname);
             details.append("</b>");
-        } else {
+        }
+        else
+        {
             details.append("return value of method <b>");
             details.append(this.methodname);
             details.append("</b>");

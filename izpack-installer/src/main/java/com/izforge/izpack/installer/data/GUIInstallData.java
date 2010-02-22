@@ -37,7 +37,8 @@ import java.util.Properties;
  * @author Julien Ponge <julien@izforge.com>
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
-public class GUIInstallData extends AutomatedInstallData implements Serializable {
+public class GUIInstallData extends AutomatedInstallData implements Serializable
+{
 
     private static final long serialVersionUID = 4048793450990024505L;
 
@@ -58,11 +59,13 @@ public class GUIInstallData extends AutomatedInstallData implements Serializable
      */
     public Color buttonsHColor = new Color(230, 230, 230);
 
-    public GUIInstallData(Properties variables, VariableSubstitutor variableSubstitutor) {
+    public GUIInstallData(Properties variables, VariableSubstitutor variableSubstitutor)
+    {
         super(variables, variableSubstitutor);
     }
 
-    public void configureGuiButtons() {
+    public void configureGuiButtons()
+    {
         UIManager.put("OptionPane.yesButtonText", getLangpack().getString("installer.yes"));
         UIManager.put("OptionPane.noButtonText", getLangpack().getString("installer.no"));
         UIManager.put("OptionPane.cancelButtonText", getLangpack()

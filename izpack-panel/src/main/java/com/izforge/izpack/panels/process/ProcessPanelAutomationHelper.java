@@ -35,14 +35,16 @@ import com.izforge.izpack.util.AbstractUIProcessHandler;
  * @author Tino Schwarze
  */
 public class ProcessPanelAutomationHelper extends PanelAutomationHelper implements PanelAutomation,
-        AbstractUIProcessHandler {
+        AbstractUIProcessHandler
+{
 
     private int noOfJobs = 0;
 
     private int currentJob = 0;
     private ProcessPanelWorker processPanelWorker;
 
-    public ProcessPanelAutomationHelper(ProcessPanelWorker processPanelWorker) {
+    public ProcessPanelAutomationHelper(ProcessPanelWorker processPanelWorker)
+    {
         this.processPanelWorker = processPanelWorker;
     }
 
@@ -52,7 +54,8 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
      * @param installData installation parameters
      * @param panelRoot   unused.
      */
-    public void makeXMLData(AutomatedInstallData installData, IXMLElement panelRoot) {
+    public void makeXMLData(AutomatedInstallData installData, IXMLElement panelRoot)
+    {
         // not used here - during automatic installation, no automatic
         // installation information is generated
     }
@@ -62,17 +65,23 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
      *
      * @param panelRoot The panel XML tree root.
      */
-    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException {
+    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException
+    {
         processPanelWorker.run();
-        if (!processPanelWorker.getResult()) {
+        if (!processPanelWorker.getResult())
+        {
             throw new InstallerException("The work done by the ProcessPanel (line " + panelRoot.getLineNr() + ") failed");
         }
     }
 
-    public void logOutput(String message, boolean stderr) {
-        if (stderr) {
+    public void logOutput(String message, boolean stderr)
+    {
+        if (stderr)
+        {
             System.err.println(message);
-        } else {
+        }
+        else
+        {
             System.out.println(message);
         }
     }
@@ -82,7 +91,8 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
      *
      * @see com.izforge.izpack.util.AbstractUIProcessHandler#startProcessing(int)
      */
-    public void startProcessing(int noOfJobs) {
+    public void startProcessing(int noOfJobs)
+    {
         System.out.println("[ Starting processing ]");
         this.noOfJobs = noOfJobs;
     }
@@ -90,7 +100,8 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
     /**
      * @see com.izforge.izpack.util.AbstractUIProcessHandler#finishProcessing
      */
-    public void finishProcessing(boolean unlockPrev, boolean unlockNext) {
+    public void finishProcessing(boolean unlockPrev, boolean unlockNext)
+    {
         /* FIXME: maybe we should abort if unlockNext is false...? */
         System.out.println("[ Processing finished ]");
     }
@@ -98,12 +109,14 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
     /**
      *
      */
-    public void startProcess(String name) {
+    public void startProcess(String name)
+    {
         this.currentJob++;
         System.out.println("Starting process " + name + " (" + Integer.toString(this.currentJob)
                 + "/" + Integer.toString(this.noOfJobs) + ")");
     }
 
-    public void finishProcess() {
+    public void finishProcess()
+    {
     }
 }

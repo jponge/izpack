@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.licence;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
@@ -35,25 +36,31 @@ import java.util.StringTokenizer;
 /**
  * License Panel console helper
  */
-public class LicencePanelConsoleHelper extends PanelConsoleHelper implements PanelConsole {
+public class LicencePanelConsoleHelper extends PanelConsoleHelper implements PanelConsole
+{
 
-    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter) {
+    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
+    {
         return true;
     }
 
-    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p) {
+    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p)
+    {
         return true;
     }
 
-    public boolean runConsole(AutomatedInstallData idata) {
+    public boolean runConsole(AutomatedInstallData idata)
+    {
 
         String license = null;
         String resNamePrefix = "LicencePanel.licence";
-        try {
+        try
+        {
             // We read it
             license = ResourceManager.getInstance().getTextResource(resNamePrefix);
         }
-        catch (Exception err) {
+        catch (Exception err)
+        {
             license = "Error : could not load the licence text for defined resource " + resNamePrefix;
             System.out.println(license);
             return false;
@@ -64,12 +71,15 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
         int l = 0;
 
         StringTokenizer st = new StringTokenizer(license, "\n");
-        while (st.hasMoreTokens()) {
+        while (st.hasMoreTokens())
+        {
             String token = st.nextToken();
             System.out.println(token);
             l++;
-            if (l >= lines) {
-                if (!doContinue()) {
+            if (l >= lines)
+            {
+                if (!doContinue())
+                {
                     return false;
                 }
                 l = 0;
@@ -79,24 +89,33 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
 
         int i = askToAcceptLicense();
 
-        if (i == 1) {
+        if (i == 1)
+        {
             return true;
-        } else if (i == 2) {
+        }
+        else if (i == 2)
+        {
             return false;
-        } else {
+        }
+        else
+        {
             return runConsole(idata);
         }
 
     }
 
-    private boolean doContinue() {
-        try {
+    private boolean doContinue()
+    {
+        try
+        {
             System.out.println("\r");
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            while (true) {
+            while (true)
+            {
                 System.out.println("press Enter to continue, X to exit");
                 String strIn = br.readLine();
-                if (strIn.equalsIgnoreCase("x")) {
+                if (strIn.equalsIgnoreCase("x"))
+                {
                     return false;
                 }
 
@@ -104,29 +123,39 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
             }
 
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
         return false;
     }
 
-    private int askToAcceptLicense() {
-        try {
+    private int askToAcceptLicense()
+    {
+        try
+        {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            while (true) {
+            while (true)
+            {
                 System.out.println("press 1 to accept, 2 to reject, 3 to redisplay");
                 String strIn = br.readLine();
-                if (strIn.equals("1")) {
+                if (strIn.equals("1"))
+                {
                     return 1;
-                } else if (strIn.equals("2")) {
+                }
+                else if (strIn.equals("2"))
+                {
                     return 2;
-                } else if (strIn.equals("3")) {
+                }
+                else if (strIn.equals("3"))
+                {
                     return 3;
                 }
             }
 
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
         return 2;

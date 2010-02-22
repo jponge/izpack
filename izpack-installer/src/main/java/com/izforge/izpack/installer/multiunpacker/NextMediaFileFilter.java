@@ -15,6 +15,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.installer.multiunpacker;
 
 import com.izforge.izpack.api.data.LocaleDatabase;
@@ -25,11 +26,13 @@ import java.io.File;
 /**
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
-public class NextMediaFileFilter extends FileFilter {
+public class NextMediaFileFilter extends FileFilter
+{
     protected String volumename;
     protected LocaleDatabase langpack;
 
-    public NextMediaFileFilter(String volumename, LocaleDatabase langpack) {
+    public NextMediaFileFilter(String volumename, LocaleDatabase langpack)
+    {
         this.volumename = volumename;
         this.langpack = langpack;
     }
@@ -38,8 +41,10 @@ public class NextMediaFileFilter extends FileFilter {
     * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
     */
 
-    public boolean accept(File f) {
-        if (f.isDirectory()) {
+    public boolean accept(File f)
+    {
+        if (f.isDirectory())
+        {
             return true;
         }
         String filepath = f.getAbsolutePath();
@@ -50,7 +55,8 @@ public class NextMediaFileFilter extends FileFilter {
     * @see javax.swing.filechooser.FileFilter#getDescription()
     */
 
-    public String getDescription() {
+    public String getDescription()
+    {
         return this.langpack.getString("nextmedia.filedesc");
     }
 

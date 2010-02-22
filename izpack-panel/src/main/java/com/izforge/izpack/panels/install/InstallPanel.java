@@ -35,7 +35,8 @@ import java.awt.*;
  *
  * @author Julien Ponge
  */
-public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
+public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
+{
 
     private static final long serialVersionUID = 3257282547959410992L;
 
@@ -85,7 +86,8 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public InstallPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public InstallPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, new IzPanelLayout(), resourceManager);
         this.tipLabel = LabelFactory.create(installData.getLangpack().getString("InstallPanel.tip"),
                 parent.icons.getImageIcon(iconName), LEADING);
@@ -108,7 +110,8 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
 
         overallProgressBar = new JProgressBar();
         overallProgressBar.setStringPainted(true);
-        if (noOfPacks == 1) {
+        if (noOfPacks == 1)
+        {
             overallProgressBar.setIndeterminate(true);
         }
         overallProgressBar.setString("");
@@ -123,17 +126,21 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
      *
      * @return The validation state.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         return this.validated;
     }
 
     /**
      * The unpacker starts.
      */
-    public void startAction(String name, int noOfJobs) {
+    public void startAction(String name, int noOfJobs)
+    {
         this.noOfPacks = noOfJobs;
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run()
+            {
                 parent.blockGUI();
 
                 // figure out how many packs there are to install
@@ -149,7 +156,8 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
      *
      * @param error The error text.
      */
-    public void emitError(String title, String error) {
+    public void emitError(String title, String error)
+    {
         this.packOpLabel.setText(error);
         this.installData.setInstallSuccess(false);
         JOptionPane.showMessageDialog(this, error, installData.getLangpack().getString("installer.error"),
@@ -159,9 +167,12 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
     /**
      * The unpacker stops.
      */
-    public void stopAction() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+    public void stopAction()
+    {
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run()
+            {
                 parent.releaseGUI();
                 parent.lockPrevButton();
 
@@ -170,7 +181,8 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
                 // progress bars to signal finish state.
                 overallProgressBar.setValue(overallProgressBar.getMaximum());
                 int ppbMax = packProgressBar.getMaximum();
-                if (ppbMax < 1) {
+                if (ppbMax < 1)
+                {
                     ppbMax = 1;
                     packProgressBar.setMaximum(ppbMax);
                 }
@@ -179,7 +191,8 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
                 packProgressBar.setString(installData.getLangpack().getString("InstallPanel.finished"));
                 packProgressBar.setEnabled(false);
                 String no_of_packs = Integer.toString(noOfPacks);
-                if (noOfPacks == 1) {
+                if (noOfPacks == 1)
+                {
                     overallProgressBar.setIndeterminate(false);
                 }
                 overallProgressBar.setString(no_of_packs + " / " + no_of_packs);
@@ -188,7 +201,8 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
                 packOpLabel.setEnabled(false);
                 installData.setCanClose(true);
                 validated = true;
-                if (installData.getPanels().indexOf(this) != (installData.getPanels().size() - 1)) {
+                if (installData.getPanels().indexOf(this) != (installData.getPanels().size() - 1))
+                {
                     parent.unlockNextButton();
                 }
             }
@@ -201,9 +215,12 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
      * @param val The progression value.
      * @param msg The progression message.
      */
-    public void progress(final int val, final String msg) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+    public void progress(final int val, final String msg)
+    {
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run()
+            {
                 packProgressBar.setValue(val + 1);
                 packOpLabel.setText(msg);
             }
@@ -217,9 +234,12 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
      * @param stepno   The number of the pack.
      * @param max      The new maximum progress.
      */
-    public void nextStep(final String packName, final int stepno, final int max) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+    public void nextStep(final String packName, final int stepno, final int max)
+    {
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run()
+            {
                 packProgressBar.setValue(0);
                 packProgressBar.setMinimum(0);
                 packProgressBar.setMaximum(max);
@@ -234,9 +254,12 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
     /**
      * {@inheritDoc}
      */
-    public void setSubStepNo(final int no_of_substeps) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+    public void setSubStepNo(final int no_of_substeps)
+    {
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run()
+            {
                 packProgressBar.setMaximum(no_of_substeps);
             }
         });
@@ -245,7 +268,8 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
     /**
      * Called when the panel becomes active.
      */
-    public void panelActivate() {
+    public void panelActivate()
+    {
         // We clip the panel
         Dimension dim = parent.getPanelsContainerSize();
         dim.width -= (dim.width / 4);

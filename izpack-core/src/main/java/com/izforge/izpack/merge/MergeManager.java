@@ -5,7 +5,8 @@ package com.izforge.izpack.merge;
  *
  * @author Anthonin Bonnefoy
  */
-public interface MergeManager extends Mergeable {
+public interface MergeManager extends Mergeable
+{
 
     /**
      * Add the given resource to merge in the produced installer. <br />

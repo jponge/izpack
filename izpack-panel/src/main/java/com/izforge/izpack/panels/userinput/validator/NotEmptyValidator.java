@@ -31,15 +31,19 @@ import com.izforge.izpack.panels.userinput.processorclient.ProcessingClient;
  *
  * @author tisc
  */
-public class NotEmptyValidator implements Validator {
+public class NotEmptyValidator implements Validator
+{
 
-    public boolean validate(ProcessingClient client) {
+    public boolean validate(ProcessingClient client)
+    {
         int numfields = client.getNumFields();
 
-        for (int i = 0; i < numfields; i++) {
+        for (int i = 0; i < numfields; i++)
+        {
             String value = client.getFieldContents(i);
 
-            if ((value == null) || (value.length() == 0)) {
+            if ((value == null) || (value.length() == 0))
+            {
                 return false;
             }
         }

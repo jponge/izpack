@@ -43,7 +43,8 @@ import java.util.Iterator;
 import java.util.Vector;
 
 
-public class BSFInstallerListener extends SimpleInstallerListener {
+public class BSFInstallerListener extends SimpleInstallerListener
+{
     public static final String SPEC_FILE_NAME = "BSFActionsSpec.xml";
 
     private HashMap<String, ArrayList<BSFAction>> actions = null;
@@ -53,7 +54,8 @@ public class BSFInstallerListener extends SimpleInstallerListener {
     private VariableSubstitutor variableSubstitutor;
     private UninstallData uninstallData;
 
-    public BSFInstallerListener(VariableSubstitutor variableSubstitutor, UninstallData uninstallData) {
+    public BSFInstallerListener(VariableSubstitutor variableSubstitutor, UninstallData uninstallData)
+    {
         super(true);
         this.variableSubstitutor = variableSubstitutor;
         actions = new HashMap<String, ArrayList<BSFAction>>();
@@ -61,48 +63,58 @@ public class BSFInstallerListener extends SimpleInstallerListener {
         this.uninstallData = uninstallData;
     }
 
-    public void beforePacks(AutomatedInstallData idata, Integer npacks, AbstractUIProgressHandler handler) throws Exception {
-        if (installdata == null) {
+    public void beforePacks(AutomatedInstallData idata, Integer npacks, AbstractUIProgressHandler handler) throws Exception
+    {
+        if (installdata == null)
+        {
             installdata = idata;
         }
         super.beforePacks(idata, npacks, handler);
 
         getSpecHelper().readSpec(SPEC_FILE_NAME, variableSubstitutor);
 
-        if (getSpecHelper().getSpec() == null) {
+        if (getSpecHelper().getSpec() == null)
+        {
             return;
         }
 
         Iterator iter = idata.getSelectedPacks().iterator();
         Pack p;
-        while (iter != null && iter.hasNext()) {
+        while (iter != null && iter.hasNext())
+        {
             p = (Pack) iter.next();
 
             IXMLElement pack = getSpecHelper().getPackForName(p.name);
-            if (pack == null) {
+            if (pack == null)
+            {
                 continue;
             }
 
             ArrayList<BSFAction> packActions = new ArrayList<BSFAction>();
 
             Vector<IXMLElement> scriptEntries = pack.getChildrenNamed("script");
-            if (scriptEntries != null && scriptEntries.size() >= 1) {
+            if (scriptEntries != null && scriptEntries.size() >= 1)
+            {
                 Iterator<IXMLElement> entriesIter = scriptEntries.iterator();
-                while (entriesIter != null && entriesIter.hasNext()) {
+                while (entriesIter != null && entriesIter.hasNext())
+                {
                     BSFAction action = readAction(entriesIter.next(), idata);
-                    if (action != null) {
+                    if (action != null)
+                    {
                         packActions.add(action);
                         String script = action.getScript().toLowerCase();
                         if (script.contains(BSFAction.BEFOREDELETE) ||
                                 script.contains(BSFAction.AFTERDELETE) ||
                                 script.contains(BSFAction.BEFOREDELETION) ||
-                                script.contains(BSFAction.AFTERDELETION)) {
+                                script.contains(BSFAction.AFTERDELETION))
+                        {
                             uninstActions.add(action);
                         }
                     }
                 }
 
-                if (packActions.size() > 0) {
+                if (packActions.size() > 0)
+                {
                     this.setProgressBarCaller();
                 }
             }
@@ -112,73 +124,90 @@ public class BSFInstallerListener extends SimpleInstallerListener {
         }
 
         iter = idata.getAvailablePacks().iterator();
-        while (iter.hasNext()) {
+        while (iter.hasNext())
+        {
             String currentPack = ((Pack) iter.next()).name;
             performAllActions(currentPack, ActionBase.BEFOREPACKS, null, new Object[]{idata, npacks, handler});
         }
     }
 
-    public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception {
+    public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
+    {
         performAllActions(pack.name, ActionBase.AFTERPACK, handler,
                 new Object[]{pack, i, handler});
         currentPack = null;
     }
 
-    public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler) throws Exception {
-        if (informProgressBar()) {
+    public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler) throws Exception
+    {
+        if (informProgressBar())
+        {
             handler.nextStep(getMsg("BSFAction.pack"), getProgressBarCallerId(), getActionCount(
                     idata));
         }
-        for (Object selectedPack : idata.getSelectedPacks()) {
+        for (Object selectedPack : idata.getSelectedPacks())
+        {
             String currentPack = ((Pack) selectedPack).name;
             performAllActions(currentPack, ActionBase.AFTERPACKS, handler, new Object[]{idata, handler});
         }
-        if (uninstActions.size() > 0) {
+        if (uninstActions.size() > 0)
+        {
             uninstallData.addAdditionalData("bsfActions", uninstActions);
         }
         installdata = null;
     }
 
-    public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception {
+    public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
+    {
         currentPack = pack.name;
         performAllActions(pack.name, ActionBase.BEFOREPACK, handler, new Object[]{pack, i, handler});
     }
 
-    public void afterDir(File file, PackFile pack) throws Exception {
+    public void afterDir(File file, PackFile pack) throws Exception
+    {
         performAllActions(currentPack, BSFAction.AFTERDIR, null, new Object[]{file, pack});
 
     }
 
-    public void afterFile(File file, PackFile pack) throws Exception {
+    public void afterFile(File file, PackFile pack) throws Exception
+    {
         performAllActions(currentPack, BSFAction.AFTERFILE, null, new Object[]{file, pack});
     }
 
-    public void beforeDir(File file, PackFile pack) throws Exception {
+    public void beforeDir(File file, PackFile pack) throws Exception
+    {
         performAllActions(currentPack, BSFAction.BEFOREDIR, null, new Object[]{file, pack});
     }
 
-    public void beforeFile(File file, PackFile pack) throws Exception {
+    public void beforeFile(File file, PackFile pack) throws Exception
+    {
         performAllActions(currentPack, BSFAction.BEFOREFILE, null, new Object[]{file, pack});
     }
 
-    public boolean isFileListener() {
+    public boolean isFileListener()
+    {
         return true;
     }
 
-    protected ArrayList<BSFAction> getActions(String packName) {
-        if (actions == null) {
+    protected ArrayList<BSFAction> getActions(String packName)
+    {
+        if (actions == null)
+        {
             return null;
         }
 
         return actions.get(packName);
     }
 
-    private int getActionCount(AutomatedInstallData idata) {
+    private int getActionCount(AutomatedInstallData idata)
+    {
         int retval = 0;
-        for (Object selectedPack : idata.getSelectedPacks()) {
+        for (Object selectedPack : idata.getSelectedPacks())
+        {
             String currentPack = ((Pack) selectedPack).name;
             ArrayList<BSFAction> actList = getActions(currentPack);
-            if (actList != null) {
+            if (actList != null)
+            {
                 retval += actList.size();
             }
         }
@@ -189,82 +218,105 @@ public class BSFInstallerListener extends SimpleInstallerListener {
                                    String order,
                                    AbstractUIProgressHandler handler,
                                    Object callParams[])
-            throws InstallerException {
+            throws InstallerException
+    {
         ArrayList<BSFAction> actList = getActions(packName);
-        if (actList == null || actList.size() == 0) {
+        if (actList == null || actList.size() == 0)
+        {
             return;
         }
 
         Debug.trace("******* Executing all " + order + " actions of " + packName + " ...");
-        for (BSFAction act : actList) {
+        for (BSFAction act : actList)
+        {
             // Inform progress bar if needed. Works only
             // on AFTER_PACKS
             if (informProgressBar() && handler != null
                     && handler instanceof ExtendedUIProgressHandler
-                    && order.equals(ActionBase.AFTERPACKS)) {
+                    && order.equals(ActionBase.AFTERPACKS))
+            {
                 ((ExtendedUIProgressHandler) handler)
                         .progress((act.getMessageID() != null) ? getMsg(act.getMessageID()) : "");
             }
 
-            try {
-                if (ActionBase.BEFOREPACKS.equalsIgnoreCase(order)) {
+            try
+            {
+                if (ActionBase.BEFOREPACKS.equalsIgnoreCase(order))
+                {
                     act.init();
                 }
                 act.execute(order, callParams, installdata);
-                if (ActionBase.AFTERPACKS.equalsIgnoreCase(order)) {
+                if (ActionBase.AFTERPACKS.equalsIgnoreCase(order))
+                {
                     act.destroy();
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 throw new InstallerException(e);
             }
         }
 
     }
 
-    private BSFAction readAction(IXMLElement element, AutomatedInstallData idata) throws InstallerException {
+    private BSFAction readAction(IXMLElement element, AutomatedInstallData idata) throws InstallerException
+    {
         BSFAction action = new BSFAction();
         String src = element.getAttribute("src");
-        if (src != null) {
+        if (src != null)
+        {
             InputStream is = null;
             InputStream subis = null;
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            try {
+            try
+            {
                 byte buf[] = new byte[10 * 1024];
                 int read = 0;
                 is = ResourceManager.getInstance().getInputStream(src);
                 subis = new SpecHelper().substituteVariables(is, variableSubstitutor);
 
-                while ((read = subis.read(buf, 0, 10 * 1024)) != -1) {
+                while ((read = subis.read(buf, 0, 10 * 1024)) != -1)
+                {
                     baos.write(buf, 0, read);
                 }
 
                 action.setScript(new String(baos.toByteArray()));
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 throw new InstallerException(e);
             }
-            finally {
-                try {
-                    if (subis != null) {
+            finally
+            {
+                try
+                {
+                    if (subis != null)
+                    {
                         subis.close();
                     }
                 }
-                catch (java.io.IOException e) {
+                catch (java.io.IOException e)
+                {
                     e.printStackTrace();
                 }
-                try {
-                    if (is != null) {
+                try
+                {
+                    if (is != null)
+                    {
                         is.close();
                     }
                 }
-                catch (java.io.IOException e) {
+                catch (java.io.IOException e)
+                {
                     e.printStackTrace();
                 }
             }
-        } else {
+        }
+        else
+        {
             String script = element.getContent();
-            if (script == null) {
+            if (script == null)
+            {
                 script = "";
             }
             action.setScript(script);

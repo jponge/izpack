@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.core.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -28,7 +29,8 @@ import com.izforge.izpack.api.rules.Condition;
  *
  * @author Dennis Reil, <izpack@reil-online.de>
  */
-public class RefCondition extends Condition {
+public class RefCondition extends Condition
+{
 
     /**
      *
@@ -37,7 +39,8 @@ public class RefCondition extends Condition {
     Condition referencedcondition;
     private String referencedConditionId;
 
-    public RefCondition() {
+    public RefCondition()
+    {
         this.referencedcondition = null;
         this.referencedConditionId = null;
     }
@@ -47,20 +50,27 @@ public class RefCondition extends Condition {
      * false; } else { return referencedcondition.isTrue(variables); } }
      */
 
-    public void readFromXML(IXMLElement xmlcondition) {
+    public void readFromXML(IXMLElement xmlcondition)
+    {
         this.referencedConditionId = xmlcondition.getAttribute("refid");
         this.referencedcondition = RulesEngineImpl.getCondition(this.referencedConditionId);
         this.id = "ref." + this.referencedConditionId;
     }
 
-    public boolean isTrue() {
-        if (this.referencedConditionId == null) {
+    public boolean isTrue()
+    {
+        if (this.referencedConditionId == null)
+        {
             return false;
-        } else {
-            if (this.referencedcondition == null) {
+        }
+        else
+        {
+            if (this.referencedcondition == null)
+            {
                 this.referencedcondition = RulesEngineImpl.getCondition(this.referencedConditionId);
             }
-            if (this.referencedcondition != null) {
+            if (this.referencedcondition != null)
+            {
                 this.referencedcondition.setInstalldata(this.installdata);
             }
             return (this.referencedcondition != null) ? this.referencedcondition.isTrue() : false;
@@ -71,7 +81,8 @@ public class RefCondition extends Condition {
      * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
      */
 
-    public String getDependenciesDetails() {
+    public String getDependenciesDetails()
+    {
         StringBuffer details = new StringBuffer();
         details.append(this.id);
         details.append(" depends on:<ul><li>");
@@ -81,7 +92,8 @@ public class RefCondition extends Condition {
     }
 
     @Override
-    public void makeXMLData(IXMLElement conditionRoot) {
+    public void makeXMLData(IXMLElement conditionRoot)
+    {
         conditionRoot.setAttribute("refid", this.referencedConditionId);
     }
 }

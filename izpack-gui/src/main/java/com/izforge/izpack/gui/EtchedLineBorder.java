@@ -27,7 +27,8 @@ import java.awt.*;
  *
  * @author Julien Ponge
  */
-public class EtchedLineBorder extends EtchedBorder {
+public class EtchedLineBorder extends EtchedBorder
+{
 
     private static final long serialVersionUID = 3256999956257649201L;
 
@@ -41,7 +42,8 @@ public class EtchedLineBorder extends EtchedBorder {
      * @param width  The border width.
      * @param height The border height.
      */
-    public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+    public void paintBorder(Component c, Graphics g, int x, int y, int width, int height)
+    {
         g.translate(x, y);
 
         g.setColor(etchType == LOWERED ? getShadowColor(c) : getHighlightColor(c));

@@ -30,6 +30,7 @@ import com.izforge.izpack.panels.packs.PacksPanelAutomationHelper;
  * @author Jonathan Halliday
  * @author Julien Ponge
  */
-public class ImgPacksPanelAutomationHelper extends PacksPanelAutomationHelper {
+public class ImgPacksPanelAutomationHelper extends PacksPanelAutomationHelper
+{
     // simply inherit everything from PacksPanelAutomationHelper
 }

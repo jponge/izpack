@@ -7,7 +7,8 @@ import java.io.Serializable;
  *
  * @author dennis.reil
  */
-public class InstallerRequirement implements Serializable {
+public class InstallerRequirement implements Serializable
+{
     /**
      *
      */
@@ -15,19 +16,23 @@ public class InstallerRequirement implements Serializable {
     private String condition;
     private String message;
 
-    public String getCondition() {
+    public String getCondition()
+    {
         return condition;
     }
 
-    public void setCondition(String condition) {
+    public void setCondition(String condition)
+    {
         this.condition = condition;
     }
 
-    public String getMessage() {
+    public String getMessage()
+    {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(String message)
+    {
         this.message = message;
     }
 }

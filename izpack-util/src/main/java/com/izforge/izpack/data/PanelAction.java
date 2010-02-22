@@ -5,6 +5,7 @@
  *
  * Version: $Id: PanelAction.java,v 1.1.2.1 2009/02/12 12:21:01 blf Exp $
  */
+
 package com.izforge.izpack.data;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
@@ -30,7 +31,8 @@ import com.izforge.izpack.util.AbstractUIHandler;
  * the License.
  */
 
-public interface PanelAction {
+public interface PanelAction
+{
 
     /**
      * tag-name of the panel action
@@ -55,7 +57,8 @@ public interface PanelAction {
     /**
      * pre panel activation stage
      */
-    public static enum ActionStage {
+    public static enum ActionStage
+    {
         preconstruct, preactivate, prevalidate, postvalidate
     }
 

@@ -23,12 +23,14 @@ import com.izforge.izpack.util.StringTool;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-public class StringToolTest extends TestCase {
+public class StringToolTest extends TestCase
+{
 
     /*
      * Class under test for String replace(String, String, String[, boolean])
      */
-    public void testReplace() {
+    public void testReplace()
+    {
         String ref = "ABC-012-def";
 
         Assert.assertEquals(null, StringTool.replace(null, null, null));
@@ -43,7 +45,8 @@ public class StringToolTest extends TestCase {
     /*
      * Class under test for String normalizePath(String[, String])
      */
-    public void testNormalizePath() {
+    public void testNormalizePath()
+    {
         assertEquals("C:\\Foo\\Bar\\is\\so\\boring;plop;plop", StringTool.normalizePath(
                 "C:\\Foo/Bar/is\\so\\boring:plop;plop", "\\"));
         assertEquals("/some/where/that:matters:really", StringTool.normalizePath(

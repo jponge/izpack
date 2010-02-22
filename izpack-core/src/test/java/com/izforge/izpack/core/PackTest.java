@@ -22,9 +22,11 @@ package com.izforge.izpack.core;
 import com.izforge.izpack.api.data.Pack;
 import junit.framework.TestCase;
 
-public class PackTest extends TestCase {
+public class PackTest extends TestCase
+{
 
-    public void testToByteUnitsString() {
+    public void testToByteUnitsString()
+    {
         TestCase.assertEquals("5 bytes", Pack.toByteUnitsString(5));
         TestCase.assertEquals("1 KB", Pack.toByteUnitsString(1024));
         TestCase.assertEquals("2 KB", Pack.toByteUnitsString(2048));

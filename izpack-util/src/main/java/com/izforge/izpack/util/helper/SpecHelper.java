@@ -40,7 +40,8 @@ import java.util.Vector;
  *
  * @author Klaus Bartz
  */
-public class SpecHelper {
+public class SpecHelper
+{
 
     private String specFilename;
 
@@ -59,7 +60,8 @@ public class SpecHelper {
     /**
      * The default constructor.
      */
-    public SpecHelper() {
+    public SpecHelper()
+    {
         super();
     }
 
@@ -71,7 +73,8 @@ public class SpecHelper {
      * @throws Exception for any problems in reading the specification
      */
     /*--------------------------------------------------------------------------*/
-    public void readSpec(String specFileName) throws Exception {
+    public void readSpec(String specFileName) throws Exception
+    {
         readSpec(specFileName, null);
     }
 
@@ -83,17 +86,21 @@ public class SpecHelper {
      * @throws Exception for any problems in reading the specification
      */
     /*--------------------------------------------------------------------------*/
-    public void readSpec(String specFileName, VariableSubstitutor substitutor) throws Exception {
+    public void readSpec(String specFileName, VariableSubstitutor substitutor) throws Exception
+    {
         // open an input stream
         InputStream input = null;
-        try {
+        try
+        {
             input = getResource(specFileName);
         }
-        catch (Exception exception) {
+        catch (Exception exception)
+        {
             _haveSpec = false;
             return;
         }
-        if (input == null) {
+        if (input == null)
+        {
             _haveSpec = false;
             return;
         }
@@ -113,7 +120,8 @@ public class SpecHelper {
      * @throws Exception for any problems in reading the specification
      */
     /*--------------------------------------------------------------------------*/
-    public void readSpec(InputStream input) throws Exception {
+    public void readSpec(InputStream input) throws Exception
+    {
         readSpec(input, null);
     }
 
@@ -125,9 +133,11 @@ public class SpecHelper {
      * @throws Exception for any problems in reading the specification
      */
     /*--------------------------------------------------------------------------*/
-    public void readSpec(InputStream input, VariableSubstitutor substitutor) throws Exception {
+    public void readSpec(InputStream input, VariableSubstitutor substitutor) throws Exception
+    {
         // first try to substitute the variables
-        if (substitutor != null) {
+        if (substitutor != null)
+        {
             input = substituteVariables(input, substitutor);
         }
 
@@ -145,12 +155,15 @@ public class SpecHelper {
      * @param res The resource id.
      * @return The resource value, null if not found
      */
-    public InputStream getResource(String res) {
-        try {
+    public InputStream getResource(String res)
+    {
+        try
+        {
             // System.out.println ("retrieving resource " + res);
             return ResourceManager.getInstance().getInputStream(res);
         }
-        catch (Exception e) { // Cannot catch ResourceNotFoundException because it is not public.
+        catch (Exception e)
+        { // Cannot catch ResourceNotFoundException because it is not public.
             return null;
         }
     }
@@ -161,18 +174,22 @@ public class SpecHelper {
      * @param packDestName name of the pack which should be returned
      * @return a XML element which represents the pack for the given name
      */
-    public IXMLElement getPackForName(String packDestName) {
+    public IXMLElement getPackForName(String packDestName)
+    {
         Vector<IXMLElement> packs = getSpec().getChildrenNamed(PACK_KEY);
         Iterator<IXMLElement> iter = null;
-        if (packs == null) {
+        if (packs == null)
+        {
             return (null);
         }
         iter = packs.iterator();
-        while (iter.hasNext()) {
+        while (iter.hasNext())
+        {
 
             IXMLElement pack = iter.next();
             String packName = pack.getAttribute(PACK_NAME);
-            if (packName.equals(packDestName)) {
+            if (packName.equals(packDestName))
+            {
                 return (pack);
             }
         }
@@ -187,7 +204,8 @@ public class SpecHelper {
      * @param parent  The element in which the error occured
      * @param message Brief message explaining error
      */
-    public void parseError(IXMLElement parent, String message) throws InstallerException {
+    public void parseError(IXMLElement parent, String message) throws InstallerException
+    {
         throw new InstallerException(specFilename + ":" + parent.getLineNr() + ": " + message);
     }
 
@@ -196,7 +214,8 @@ public class SpecHelper {
      *
      * @return true if a specification exist, else false
      */
-    public boolean haveSpec() {
+    public boolean haveSpec()
+    {
         return _haveSpec;
     }
 
@@ -205,7 +224,8 @@ public class SpecHelper {
      *
      * @return the specification
      */
-    public IXMLElement getSpec() {
+    public IXMLElement getSpec()
+    {
         return spec;
     }
 
@@ -214,7 +234,8 @@ public class SpecHelper {
      *
      * @param element
      */
-    public void setSpec(IXMLElement element) {
+    public void setSpec(IXMLElement element)
+    {
         spec = element;
     }
 
@@ -226,7 +247,8 @@ public class SpecHelper {
      *                 name
      * @return a Vector of XMLElements of all leafs founded under root
      */
-    public Vector<IXMLElement> getAllSubChildren(IXMLElement root, String[] childdef) {
+    public Vector<IXMLElement> getAllSubChildren(IXMLElement root, String[] childdef)
+    {
         return (getSubChildren(root, childdef, 0));
     }
 
@@ -240,25 +262,33 @@ public class SpecHelper {
      * @param depth    depth to start in childdef
      * @return a Vector of XMLElements of all leafs founded under root
      */
-    private Vector<IXMLElement> getSubChildren(IXMLElement root, String[] childdef, int depth) {
+    private Vector<IXMLElement> getSubChildren(IXMLElement root, String[] childdef, int depth)
+    {
         Vector<IXMLElement> retval = null;
         Vector<IXMLElement> retval2 = null;
         Vector<IXMLElement> children = root != null ? root.getChildrenNamed(childdef[depth]) : null;
-        if (children == null) {
+        if (children == null)
+        {
             return (null);
         }
-        if (depth < childdef.length - 1) {
+        if (depth < childdef.length - 1)
+        {
             Iterator<IXMLElement> iter = children.iterator();
-            while (iter.hasNext()) {
+            while (iter.hasNext())
+            {
                 retval2 = getSubChildren(iter.next(), childdef, depth + 1);
-                if (retval2 != null) {
-                    if (retval == null) {
+                if (retval2 != null)
+                {
+                    if (retval == null)
+                    {
                         retval = new Vector<IXMLElement>();
                     }
                     retval.addAll(retval2);
                 }
             }
-        } else {
+        }
+        else
+        {
             return (children);
         }
         return (retval);
@@ -274,16 +304,20 @@ public class SpecHelper {
      * @throws Exception
      */
     public InputStream substituteVariables(InputStream input, VariableSubstitutor substitutor)
-            throws Exception {
+            throws Exception
+    {
         File tempFile = File.createTempFile("izpacksubs", "");
         FileOutputStream fos = null;
         tempFile.deleteOnExit();
-        try {
+        try
+        {
             fos = new FileOutputStream(tempFile);
             substitutor.substitute(input, fos, null, "UTF-8");
         }
-        finally {
-            if (fos != null) {
+        finally
+        {
+            if (fos != null)
+            {
                 fos.close();
             }
         }
@@ -299,12 +333,15 @@ public class SpecHelper {
      * @param defaultValue the default value
      * @return whether the value to the given attribute is "yes" or not
      */
-    public boolean isAttributeYes(IXMLElement element, String attribute, boolean defaultValue) {
+    public boolean isAttributeYes(IXMLElement element, String attribute, boolean defaultValue)
+    {
         String value = element.getAttribute(attribute, (defaultValue ? YES : NO));
-        if (value.equalsIgnoreCase(YES)) {
+        if (value.equalsIgnoreCase(YES))
+        {
             return true;
         }
-        if (value.equalsIgnoreCase(NO)) {
+        if (value.equalsIgnoreCase(NO))
+        {
             return false;
         }
 
@@ -321,9 +358,11 @@ public class SpecHelper {
      * @throws InstallerException
      */
     public String getRequiredAttribute(IXMLElement element, String attrName)
-            throws InstallerException {
+            throws InstallerException
+    {
         String attr = element.getAttribute(attrName);
-        if (attr == null) {
+        if (attr == null)
+        {
             parseError(element, "<" + element.getName() + "> requires attribute '" + attrName
                     + "'.");
         }

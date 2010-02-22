@@ -35,7 +35,8 @@ import com.izforge.izpack.panels.userinput.processorclient.ProcessingClient;
  * @version 0.0.1 / 02/19/03
  */
 /*---------------------------------------------------------------------------*/
-public class Scrambler implements Processor {
+public class Scrambler implements Processor
+{
     /*--------------------------------------------------------------------------*/
 
     /**
@@ -46,12 +47,15 @@ public class Scrambler implements Processor {
      * @return the encryption result.
      */
     /*--------------------------------------------------------------------------*/
-    public String process(ProcessingClient client) {
+    public String process(ProcessingClient client)
+    {
         StringBuffer buffer = new StringBuffer();
 
-        for (int i = client.getNumFields() - 1; i > -1; i--) {
+        for (int i = client.getNumFields() - 1; i > -1; i--)
+        {
             buffer.append(client.getFieldContents(i));
-            if (i > 0) {
+            if (i > 0)
+            {
                 buffer.append('*');
             }
         }

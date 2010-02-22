@@ -10,7 +10,8 @@ import java.io.FileFilter;
  *
  * @author Anthonin Bonnefoy
  */
-public interface Mergeable {
+public interface Mergeable
+{
 
     void merge(ZipOutputStream outputStream);
 

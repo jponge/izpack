@@ -18,10 +18,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Test of unpacker
  */
-public class UnpackerTest extends AbstractInstallationTest {
+public class UnpackerTest extends AbstractInstallationTest
+{
 
     @Test
-    public void testUnpackerPutUninstaller() throws Exception {
+    public void testUnpackerPutUninstaller() throws Exception
+    {
         compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         PanelManager panelManager = installerContainer.getComponent(PanelManager.class);

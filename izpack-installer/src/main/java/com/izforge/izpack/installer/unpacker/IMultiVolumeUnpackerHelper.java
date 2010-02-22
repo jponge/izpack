@@ -5,7 +5,8 @@ import com.izforge.izpack.util.AbstractUIProgressHandler;
 
 import java.io.File;
 
-public interface IMultiVolumeUnpackerHelper {
+public interface IMultiVolumeUnpackerHelper
+{
     public void init(AutomatedInstallData idata, AbstractUIProgressHandler handler);
 
     public File enterNextMediaMessage(String volumename, boolean lastcorrupt);

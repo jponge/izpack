@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.core.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -30,44 +31,52 @@ import java.util.HashMap;
 /**
  * @author Dennis Reil, <izpack@reil-online.de>
  */
-public class CompareNumericsCondition extends Condition {
+public class CompareNumericsCondition extends Condition
+{
     private static final long serialVersionUID = 5631805710151645907L;
 
     protected String variablename;
     protected String value;
     protected String operator;
 
-    public CompareNumericsCondition(String variablename, String value, HashMap packstoremove) {
+    public CompareNumericsCondition(String variablename, String value, HashMap packstoremove)
+    {
         super();
         this.variablename = variablename;
         this.value = value;
         this.operator = "eq";
     }
 
-    public CompareNumericsCondition(String variablename, String value) {
+    public CompareNumericsCondition(String variablename, String value)
+    {
         super();
         this.variablename = variablename;
         this.value = value;
         this.operator = "eq";
     }
 
-    public CompareNumericsCondition() {
+    public CompareNumericsCondition()
+    {
         super();
     }
 
-    public String getValue() {
+    public String getValue()
+    {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(String value)
+    {
         this.value = value;
     }
 
-    public String getVariablename() {
+    public String getVariablename()
+    {
         return variablename;
     }
 
-    public void setVariablename(String variablename) {
+    public void setVariablename(String variablename)
+    {
         this.variablename = variablename;
     }
 
@@ -77,42 +86,60 @@ public class CompareNumericsCondition extends Condition {
      * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.api.adaptator.IXMLElement)
      */
 
-    public void readFromXML(IXMLElement xmlcondition) {
-        try {
+    public void readFromXML(IXMLElement xmlcondition)
+    {
+        try
+        {
             this.variablename = xmlcondition.getFirstChildNamed("name").getContent();
             this.value = xmlcondition.getFirstChildNamed("value").getContent();
             this.operator = xmlcondition.getFirstChildNamed("operator").getContent();
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.log("missing element in <condition type=\"variable\"/>");
         }
 
     }
 
-    public boolean isTrue() {
+    public boolean isTrue()
+    {
         boolean result = false;
-        if (this.installdata != null) {
+        if (this.installdata != null)
+        {
             String val = this.installdata.getVariable(variablename);
-            if (val != null) {
-                if (operator == null) {
+            if (val != null)
+            {
+                if (operator == null)
+                {
                     operator = "eq";
                 }
-                try {
+                try
+                {
                     int currentValue = new Integer(val);
                     int comparisonValue = new Integer(value);
-                    if ("eq".equalsIgnoreCase(operator)) {
+                    if ("eq".equalsIgnoreCase(operator))
+                    {
                         result = currentValue == comparisonValue;
-                    } else if ("gt".equalsIgnoreCase(operator)) {
+                    }
+                    else if ("gt".equalsIgnoreCase(operator))
+                    {
                         result = currentValue > comparisonValue;
-                    } else if ("lt".equalsIgnoreCase(operator)) {
+                    }
+                    else if ("lt".equalsIgnoreCase(operator))
+                    {
                         result = currentValue < comparisonValue;
-                    } else if ("leq".equalsIgnoreCase(operator)) {
+                    }
+                    else if ("leq".equalsIgnoreCase(operator))
+                    {
                         result = currentValue <= comparisonValue;
-                    } else if ("geq".equalsIgnoreCase(operator)) {
+                    }
+                    else if ("geq".equalsIgnoreCase(operator))
+                    {
                         result = currentValue >= comparisonValue;
                     }
                 }
-                catch (NumberFormatException nfe) {
+                catch (NumberFormatException nfe)
+                {
                     Debug.log("The value of the associated variable is not a numeric value or the value which should be compared is not a number.");
                 }
             }
@@ -124,7 +151,8 @@ public class CompareNumericsCondition extends Condition {
      * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
      */
 
-    public String getDependenciesDetails() {
+    public String getDependenciesDetails()
+    {
         StringBuffer details = new StringBuffer();
         details.append(this.id);
         details.append(" depends on a value of <b>");
@@ -140,17 +168,20 @@ public class CompareNumericsCondition extends Condition {
     }
 
 
-    public String getOperator() {
+    public String getOperator()
+    {
         return operator;
     }
 
 
-    public void setOperator(String operator) {
+    public void setOperator(String operator)
+    {
         this.operator = operator;
     }
 
     @Override
-    public void makeXMLData(IXMLElement conditionRoot) {
+    public void makeXMLData(IXMLElement conditionRoot)
+    {
         XMLElementImpl nameXml = new XMLElementImpl("name", conditionRoot);
         nameXml.setContent(this.variablename);
         conditionRoot.addChild(nameXml);

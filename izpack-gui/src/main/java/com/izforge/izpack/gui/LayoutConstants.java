@@ -19,6 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.gui;
 
 import javax.swing.*;
@@ -28,7 +29,8 @@ import javax.swing.*;
  *
  * @author Klaus Bartz
  */
-public interface LayoutConstants extends SwingConstants {
+public interface LayoutConstants extends SwingConstants
+{
 
     /**
      * Identifier for gaps between labels.

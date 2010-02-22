@@ -32,7 +32,8 @@ import com.izforge.izpack.panels.path.PathInputPanel;
  *
  * @author Julien Ponge
  */
-public class TargetPanel extends PathInputPanel {
+public class TargetPanel extends PathInputPanel
+{
 
     /**
      *
@@ -45,11 +46,13 @@ public class TargetPanel extends PathInputPanel {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public TargetPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public TargetPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, resourceManager);
         // load the default directory info (if present)
         loadDefaultInstallDir(parent);
-        if (getDefaultInstallDir() != null) {
+        if (getDefaultInstallDir() != null)
+        {
             // override the system default that uses app name (which is set in
             // the Installer class)
             idata.setInstallPath(getDefaultInstallDir());
@@ -59,7 +62,8 @@ public class TargetPanel extends PathInputPanel {
     /**
      * Called when the panel becomes active.
      */
-    public void panelActivate() {
+    public void panelActivate()
+    {
         // Resolve the default for chosenPath
         super.panelActivate();
         // Set the default or old value to the path selection panel.
@@ -70,7 +74,8 @@ public class TargetPanel extends PathInputPanel {
      * This method simple delegates to <code>PathInputPanel.loadDefaultInstallDir</code> with the
      * current parent as installer frame.
      */
-    public void loadDefaultDir() {
+    public void loadDefaultDir()
+    {
         super.loadDefaultInstallDir(parent);
     }
 
@@ -79,9 +84,11 @@ public class TargetPanel extends PathInputPanel {
      *
      * @return Wether the panel has been validated or not.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         // Standard behavior of PathInputPanel.
-        if (!super.isValidated()) {
+        if (!super.isValidated())
+        {
             return (false);
         }
         this.installData.setInstallPath(pathSelectionPanel.getPath());
@@ -94,7 +101,8 @@ public class TargetPanel extends PathInputPanel {
      *
      * @return the default install directory
      */
-    public String getDefaultDir() {
+    public String getDefaultDir()
+    {
         return getDefaultInstallDir();
     }
 
@@ -104,7 +112,8 @@ public class TargetPanel extends PathInputPanel {
      *
      * @param defaultDir path to be used for the install directory
      */
-    public void setDefaultDir(String defaultDir) {
+    public void setDefaultDir(String defaultDir)
+    {
         setDefaultInstallDir(defaultDir);
     }
 
@@ -113,7 +122,8 @@ public class TargetPanel extends PathInputPanel {
      *
      * @param panelRoot The tree to put the installDataGUI in.
      */
-    public void makeXMLData(IXMLElement panelRoot) {
+    public void makeXMLData(IXMLElement panelRoot)
+    {
         new TargetPanelAutomationHelper(variableSubstitutor).makeXMLData(this.installData, panelRoot);
     }
 
@@ -123,7 +133,8 @@ public class TargetPanel extends PathInputPanel {
      * @see com.izforge.izpack.installer.IzPanel#getSummaryBody()
      */
 
-    public String getSummaryBody() {
+    public String getSummaryBody()
+    {
         return (this.installData.getInstallPath());
     }
 

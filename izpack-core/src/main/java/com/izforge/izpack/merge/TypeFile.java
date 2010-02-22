@@ -5,6 +5,7 @@ package com.izforge.izpack.merge;
  *
  * @author Anthonin Bonnefoy
  */
-public enum TypeFile {
+public enum TypeFile
+{
     FILE, DIRECTORY, JAR_CONTENT
 }

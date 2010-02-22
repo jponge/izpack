@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.installer.console;
 
 import java.io.BufferedReader;
@@ -29,26 +30,36 @@ import java.io.InputStreamReader;
  *
  * @author Mounir El Hajj
  */
-abstract public class PanelConsoleHelper {
+abstract public class PanelConsoleHelper
+{
 
 
-    public int askEndOfConsolePanel() {
-        try {
+    public int askEndOfConsolePanel()
+    {
+        try
+        {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            while (true) {
+            while (true)
+            {
                 System.out.println("press 1 to continue, 2 to quit, 3 to redisplay");
                 String strIn = br.readLine();
-                if (strIn.equals("1")) {
+                if (strIn.equals("1"))
+                {
                     return 1;
-                } else if (strIn.equals("2")) {
+                }
+                else if (strIn.equals("2"))
+                {
                     return 2;
-                } else if (strIn.equals("3")) {
+                }
+                else if (strIn.equals("3"))
+                {
                     return 3;
                 }
             }
 
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
         return 2;

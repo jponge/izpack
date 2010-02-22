@@ -37,7 +37,8 @@ import java.util.Vector;
  * @version 0.0.1 / 3/4/02
  * @see com.izforge.izpack.util.TargetFactory
  */
-public class Shortcut {
+public class Shortcut
+{
 
     // ------------------------------------------------------------------------
     // Constant Definitions
@@ -112,7 +113,8 @@ public class Shortcut {
      * @param type the type or classification of the program group in which the link should exist.
      * @param name the name of the shortcut.
      */
-    public void initialize(int type, String name) throws Exception {
+    public void initialize(int type, String name) throws Exception
+    {
     }
 
     /*--------------------------------------------------------------------------*/
@@ -126,7 +128,8 @@ public class Shortcut {
      * @see #setLinkType(int)
      * @see #setUserType(int)
      */
-    public String getBasePath() throws Exception {
+    public String getBasePath() throws Exception
+    {
         return ("");
     }
 
@@ -143,7 +146,8 @@ public class Shortcut {
      * @see #APPLICATIONS
      * @see #START_MENU
      */
-    public Vector<String> getProgramGroups(int userType) {
+    public Vector<String> getProgramGroups(int userType)
+    {
         return (null);
     }
 
@@ -157,7 +161,8 @@ public class Shortcut {
      *
      * @return an empty <code>String</code>
      */
-    public String getFileName() {
+    public String getFileName()
+    {
         return ("");
     }
 
@@ -171,7 +176,8 @@ public class Shortcut {
      *
      * @return this implementation returns always <code>null</code>.
      */
-    public String getDirectoryCreated() {
+    public String getDirectoryCreated()
+    {
         return (null);
     }
 
@@ -182,7 +188,8 @@ public class Shortcut {
      *
      * @return <code>true</code> if the target OS supports current and all users.
      */
-    public boolean multipleUsers() {
+    public boolean multipleUsers()
+    {
         return (false);
     }
 
@@ -202,7 +209,8 @@ public class Shortcut {
      * @return <code>true</code> if the creation of shortcuts is supported, <code>false</code>
      *         if this is not supported.
      */
-    public boolean supported() {
+    public boolean supported()
+    {
         return (false);
     }
 
@@ -213,7 +221,8 @@ public class Shortcut {
      *
      * @param arguments the command line arguments
      */
-    public void setArguments(String arguments) {
+    public void setArguments(String arguments)
+    {
     }
 
     /*--------------------------------------------------------------------------*/
@@ -223,7 +232,8 @@ public class Shortcut {
      *
      * @param description the descriptiojn string
      */
-    public void setDescription(String description) {
+    public void setDescription(String description)
+    {
     }
 
     /*--------------------------------------------------------------------------*/
@@ -235,7 +245,8 @@ public class Shortcut {
      * @param index the index of the specific icon to use in the file. If there is only one icon in
      *              the file, use an index of 0.
      */
-    public void setIconLocation(String path, int index) {
+    public void setIconLocation(String path, int index)
+    {
     }
 
     /*--------------------------------------------------------------------------*/
@@ -245,7 +256,8 @@ public class Shortcut {
      *
      * @return iconLocation
      */
-    public String getIconLocation() {
+    public String getIconLocation()
+    {
         return "";
     }
 
@@ -256,7 +268,8 @@ public class Shortcut {
      *
      * @param groupName the name of the program group
      */
-    public void setProgramGroup(String groupName) {
+    public void setProgramGroup(String groupName)
+    {
     }
 
     /*--------------------------------------------------------------------------*/
@@ -280,14 +293,16 @@ public class Shortcut {
      *             </ul>
      * @see #getShowCommand
      */
-    public void setShowCommand(int show) {
+    public void setShowCommand(int show)
+    {
     }
 
     /*
      * retrieves showCommand from the OS. Translates it into Shortcut.XXX terms.
      */
 
-    public int getShowCommand() {
+    public int getShowCommand()
+    {
         return Shortcut.NORMAL;
     }
 
@@ -298,7 +313,8 @@ public class Shortcut {
      *
      * @param path the fully qualified file name of the target
      */
-    public void setTargetPath(String path) {
+    public void setTargetPath(String path)
+    {
     }
 
     /*--------------------------------------------------------------------------*/
@@ -308,7 +324,8 @@ public class Shortcut {
      *
      * @param dir the working directory
      */
-    public void setWorkingDirectory(String dir) {
+    public void setWorkingDirectory(String dir)
+    {
     }
 
     /*--------------------------------------------------------------------------*/
@@ -318,7 +335,8 @@ public class Shortcut {
      *
      * @return the working directory.
      */
-    public String getWorkingDirectory() {
+    public String getWorkingDirectory()
+    {
         return "";
     }
 
@@ -330,7 +348,8 @@ public class Shortcut {
      * @param name The name that the link should display on a menu or on the desktop. Do not include
      *             a file extension.
      */
-    public void setLinkName(String name) {
+    public void setLinkName(String name)
+    {
     }
 
     /*--------------------------------------------------------------------------*/
@@ -344,7 +363,8 @@ public class Shortcut {
      * <li>{@link com.izforge.izpack.util.os.Shortcut#START_UP}
      * </ul>
      */
-    public int getLinkType() {
+    public int getLinkType()
+    {
         // fake default.
         return Shortcut.DESKTOP;
     }
@@ -364,7 +384,8 @@ public class Shortcut {
      * @throws IllegalArgumentException     if an an invalid type is passed
      * @throws UnsupportedEncodingException
      */
-    public void setLinkType(int type) throws IllegalArgumentException, UnsupportedEncodingException {
+    public void setLinkType(int type) throws IllegalArgumentException, UnsupportedEncodingException
+    {
     }
 
     /*--------------------------------------------------------------------------*/
@@ -376,7 +397,8 @@ public class Shortcut {
      * @see #CURRENT_USER
      * @see #ALL_USERS
      */
-    public void setUserType(int type) {
+    public void setUserType(int type)
+    {
     }
 
     /*--------------------------------------------------------------------------*/
@@ -388,7 +410,8 @@ public class Shortcut {
      * @see #CURRENT_USER
      * @see #ALL_USERS
      */
-    public int getUserType() {
+    public int getUserType()
+    {
         return CURRENT_USER;
     }
 
@@ -399,7 +422,8 @@ public class Shortcut {
      *
      * @throws Exception if problems are encountered
      */
-    public void save() throws Exception {
+    public void save() throws Exception
+    {
     }
 
     /*--------------------------------------------------------------------------*/
@@ -409,7 +433,8 @@ public class Shortcut {
      *
      * @return int hotKey
      */
-    public int getHotkey() {
+    public int getHotkey()
+    {
         return 0;
     }
 
@@ -420,7 +445,8 @@ public class Shortcut {
      *
      * @param hotkey
      */
-    public void setHotkey(int hotkey) {
+    public void setHotkey(int hotkey)
+    {
     }
 
     /**
@@ -428,7 +454,8 @@ public class Shortcut {
      *
      * @param string
      */
-    public void setEncoding(String string) {
+    public void setEncoding(String string)
+    {
     }
 
     /**
@@ -436,7 +463,8 @@ public class Shortcut {
      *
      * @param string
      */
-    public void setMimetype(String string) {
+    public void setMimetype(String string)
+    {
     }
 
     /**
@@ -444,7 +472,8 @@ public class Shortcut {
      *
      * @param string
      */
-    public void setTerminal(String string) {
+    public void setTerminal(String string)
+    {
     }
 
     /**
@@ -452,7 +481,8 @@ public class Shortcut {
      *
      * @param string
      */
-    public void setTerminalOptions(String string) {
+    public void setTerminalOptions(String string)
+    {
     }
 
     /**
@@ -460,7 +490,8 @@ public class Shortcut {
      *
      * @param string
      */
-    public void setType(String string) {
+    public void setType(String string)
+    {
     }
 
     /**
@@ -468,7 +499,8 @@ public class Shortcut {
      *
      * @param string The UserName
      */
-    public void setKdeUserName(String string) {
+    public void setKdeUserName(String string)
+    {
     }
 
     /**
@@ -476,7 +508,8 @@ public class Shortcut {
      *
      * @param string exactly &quot;true&quot; or &quot;false&quot; or nothing
      */
-    public void setKdeSubstUID(String string) {
+    public void setKdeSubstUID(String string)
+    {
     }
 
     /**
@@ -484,7 +517,8 @@ public class Shortcut {
      *
      * @param string
      */
-    public void setURL(String string) {
+    public void setURL(String string)
+    {
     }
 
     /**
@@ -494,7 +528,8 @@ public class Shortcut {
      * @param current_user one of current or all
      * @return The Foldername or null on unsupported platforms.
      */
-    public String getProgramsFolder(int current_user) {
+    public String getProgramsFolder(int current_user)
+    {
         return null;
     }
 
@@ -503,7 +538,8 @@ public class Shortcut {
      *
      * @param aCreateForAll A Flag - Set to true, if to create for All.
      */
-    public void setCreateForAll(Boolean aCreateForAll) {
+    public void setCreateForAll(Boolean aCreateForAll)
+    {
         this.createForAll = aCreateForAll.booleanValue();
     }
 
@@ -512,7 +548,8 @@ public class Shortcut {
      *
      * @return Returns True if this should be for all.
      */
-    public Boolean getCreateForAll() {
+    public Boolean getCreateForAll()
+    {
         return createForAll;
     }
 
@@ -521,7 +558,8 @@ public class Shortcut {
      *
      * @param theCategories the categories
      */
-    public void setCategories(String theCategories) {
+    public void setCategories(String theCategories)
+    {
     }
 
     /**
@@ -529,7 +567,8 @@ public class Shortcut {
      *
      * @param aTryExec the try exec command
      */
-    public void setTryExec(String aTryExec) {
+    public void setTryExec(String aTryExec)
+    {
     }
 
     /**
@@ -537,14 +576,16 @@ public class Shortcut {
      *
      * @param theUninstaller the unique instance
      */
-    public void setUninstaller(UninstallData theUninstaller) {
+    public void setUninstaller(UninstallData theUninstaller)
+    {
         uninstaller = theUninstaller;
     }
 
     /**
      * Dummy Method especially for the Unix Root User.
      */
-    public void execPostAction() {
+    public void execPostAction()
+    {
         //Debug.log("Call of unused execPostAction Method in " + this.getClass().getName() );
     }
 
@@ -553,7 +594,8 @@ public class Shortcut {
      * <br>
      * currently unused.
      */
-    public void cleanUp() {
+    public void cleanUp()
+    {
         //Debug.log("Call of unused cleanUp Method in " + this.getClass().getName() );     
     }
 

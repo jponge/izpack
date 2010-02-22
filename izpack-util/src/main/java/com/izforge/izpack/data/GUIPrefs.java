@@ -28,7 +28,8 @@ import java.util.TreeMap;
  *
  * @author Julien Ponge
  */
-public class GUIPrefs implements Serializable {
+public class GUIPrefs implements Serializable
+{
 
     static final long serialVersionUID = -9081878949718963824L;
 

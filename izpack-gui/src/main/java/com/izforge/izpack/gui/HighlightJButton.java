@@ -29,7 +29,8 @@ import java.awt.event.MouseEvent;
  *
  * @author Julien Ponge
  */
-public class HighlightJButton extends JButton {
+public class HighlightJButton extends JButton
+{
 
     private static final long serialVersionUID = 3833184718324969525L;
 
@@ -39,7 +40,8 @@ public class HighlightJButton extends JButton {
      * @param icon  The icon to display.
      * @param color The highlight color.
      */
-    HighlightJButton(Icon icon, Color color) {
+    HighlightJButton(Icon icon, Color color)
+    {
         super(icon);
         initButton(color);
     }
@@ -50,7 +52,8 @@ public class HighlightJButton extends JButton {
      * @param text  The text to display.
      * @param color The highlight color.
      */
-    HighlightJButton(String text, Color color) {
+    HighlightJButton(String text, Color color)
+    {
         super(text);
         initButton(color);
     }
@@ -62,7 +65,8 @@ public class HighlightJButton extends JButton {
      * @param icon  The icon to display.
      * @param color The highlight color.
      */
-    HighlightJButton(String text, Icon icon, Color color) {
+    HighlightJButton(String text, Icon icon, Color color)
+    {
         super(text, icon);
         initButton(color);
     }
@@ -73,7 +77,8 @@ public class HighlightJButton extends JButton {
      * @param a     The action.
      * @param color The highlight color.
      */
-    HighlightJButton(Action a, Color color) {
+    HighlightJButton(Action a, Color color)
+    {
         super(a);
         initButton(color);
     }
@@ -83,7 +88,8 @@ public class HighlightJButton extends JButton {
      *
      * @param highlightColor The highlight color.
      */
-    protected void initButton(Color highlightColor) {
+    protected void initButton(Color highlightColor)
+    {
         this.highlightColor = highlightColor;
         defaultColor = getBackground();
 
@@ -95,7 +101,8 @@ public class HighlightJButton extends JButton {
      *
      * @param b Button state.
      */
-    public void setEnabled(boolean b) {
+    public void setEnabled(boolean b)
+    {
         reset();
         super.setEnabled(b);
     }
@@ -103,7 +110,8 @@ public class HighlightJButton extends JButton {
     /**
      * Forces the button to unhighlight.
      */
-    protected void reset() {
+    protected void reset()
+    {
         setBackground(defaultColor);
     }
 
@@ -122,15 +130,18 @@ public class HighlightJButton extends JButton {
      *
      * @author Julien Ponge
      */
-    private class MouseHandler extends MouseAdapter {
+    private class MouseHandler extends MouseAdapter
+    {
 
         /**
          * When the mouse passes over the button.
          *
          * @param e The event.
          */
-        public void mouseEntered(MouseEvent e) {
-            if (isEnabled()) {
+        public void mouseEntered(MouseEvent e)
+        {
+            if (isEnabled())
+            {
                 setBackground(highlightColor);
             }
         }
@@ -140,8 +151,10 @@ public class HighlightJButton extends JButton {
          *
          * @param e The event.
          */
-        public void mouseExited(MouseEvent e) {
-            if (isEnabled()) {
+        public void mouseExited(MouseEvent e)
+        {
+            if (isEnabled())
+            {
                 setBackground(defaultColor);
             }
         }

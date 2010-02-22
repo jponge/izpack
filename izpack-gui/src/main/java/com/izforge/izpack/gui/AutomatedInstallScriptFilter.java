@@ -44,7 +44,8 @@ import java.io.InputStream;
  *
  * @author J. Chris Folsom <jchrisfolsom@gmail.com>
  */
-public class AutomatedInstallScriptFilter extends FileFilter {
+public class AutomatedInstallScriptFilter extends FileFilter
+{
     /**
      * The default description for the file filter if it cannot be loaded from
      * the LocaleDatabase.
@@ -63,7 +64,8 @@ public class AutomatedInstallScriptFilter extends FileFilter {
       * @see java.io.FileFilter#accept(java.io.File)
       */
 
-    public boolean accept(File pathname) {
+    public boolean accept(File pathname)
+    {
         /*
            * Return true only if the file is a directory or ends with ".xml"
            */
@@ -75,14 +77,16 @@ public class AutomatedInstallScriptFilter extends FileFilter {
     /**
      *
      */
-    public String getDescription() {
+    public String getDescription()
+    {
         // Load the lang pack using the current locale
         ResourceManager resourceManager = ResourceManager.getInstance();
         String locale = resourceManager.getLocale();
 
         String description = null;
 
-        try {
+        try
+        {
             //All of this will be changed to a few lines of code after the locale database refactor.
             InputStream in = this.getClass().getResourceAsStream(
                     "/langpacks/" + locale + ".xml");
@@ -91,7 +95,8 @@ public class AutomatedInstallScriptFilter extends FileFilter {
             description = langpack.getString(DESCRIPTION_LOCALE_DATABASE_KEY);
 
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             /*
                 * We'll just log the exception if something happens and provide the
                 * default value.
@@ -99,7 +104,8 @@ public class AutomatedInstallScriptFilter extends FileFilter {
             Debug.log(e);
         }
 
-        if (description == null) {
+        if (description == null)
+        {
             description = DEFAULT_DESCRIPTION;
         }
 

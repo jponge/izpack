@@ -39,7 +39,8 @@ import java.util.regex.Pattern;
  * @author Anthonin Bonnefoy
  * @author David Duponchel
  */
-public class XMLElementImpl implements IXMLElement {
+public class XMLElementImpl implements IXMLElement
+{
 
     /**
      * The dom element embedded by the XMLElement
@@ -63,9 +64,11 @@ public class XMLElementImpl implements IXMLElement {
      *
      * @param name Name of the root element
      */
-    public XMLElementImpl(String name) {
+    public XMLElementImpl(String name)
+    {
         Document document;
-        try {
+        try
+        {
             // Création d'un nouveau DOM
             DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder constructeur = documentFactory.newDocumentBuilder();
@@ -74,7 +77,9 @@ public class XMLElementImpl implements IXMLElement {
             document.setXmlVersion("1.0");
             element = document.createElement(name);
             document.appendChild(element);
-        } catch (ParserConfigurationException e) {
+        }
+        catch (ParserConfigurationException e)
+        {
             e.printStackTrace();
         }
     }
@@ -85,7 +90,8 @@ public class XMLElementImpl implements IXMLElement {
      * @param name       Name of the root element
      * @param inDocument The document in which to create the xml
      */
-    public XMLElementImpl(String name, Document inDocument) {
+    public XMLElementImpl(String name, Document inDocument)
+    {
         element = inDocument.createElement(name);
     }
 
@@ -95,7 +101,8 @@ public class XMLElementImpl implements IXMLElement {
      * @param name             Name of the element
      * @param elementReference Reference of an existing xml. It is used to generate an xmlElement on the same document.
      */
-    public XMLElementImpl(String name, IXMLElement elementReference) {
+    public XMLElementImpl(String name, IXMLElement elementReference)
+    {
         element = elementReference.getElement().getOwnerDocument().createElement(name);
     }
 
@@ -104,144 +111,179 @@ public class XMLElementImpl implements IXMLElement {
      *
      * @param node Node to save inside the XMLElement
      */
-    public XMLElementImpl(Node node) {
-        if (!(node instanceof Element)) {
+    public XMLElementImpl(Node node)
+    {
+        if (!(node instanceof Element))
+        {
             throw new IllegalArgumentException("The node should be an instance of Element");
         }
         this.element = (Element) node;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return element.getNodeName();
     }
 
-    public void addChild(IXMLElement child) {
+    public void addChild(IXMLElement child)
+    {
         hasChanged = true;
         element.appendChild(child.getElement());
     }
 
-    public void removeChild(IXMLElement child) {
+    public void removeChild(IXMLElement child)
+    {
         hasChanged = true;
         element.removeChild(child.getElement());
     }
 
-    public boolean hasChildren() {
-        for (Node child = element.getFirstChild(); child != null; child = child.getNextSibling()) {
-            if (child.getNodeType() == Node.ELEMENT_NODE) {
+    public boolean hasChildren()
+    {
+        for (Node child = element.getFirstChild(); child != null; child = child.getNextSibling())
+        {
+            if (child.getNodeType() == Node.ELEMENT_NODE)
+            {
                 return true;
             }
         }
         return false;
     }
 
-    private void initChildrenVector() {
-        if (hasChanged) {
+    private void initChildrenVector()
+    {
+        if (hasChanged)
+        {
             hasChanged = false;
             childrenVector = new Vector<IXMLElement>();
-            for (Node child = element.getFirstChild(); child != null; child = child.getNextSibling()) {
-                if (child.getNodeType() == Node.ELEMENT_NODE) {
+            for (Node child = element.getFirstChild(); child != null; child = child.getNextSibling())
+            {
+                if (child.getNodeType() == Node.ELEMENT_NODE)
+                {
                     childrenVector.add(new XMLElementImpl(child));
                 }
             }
         }
     }
 
-    public int getChildrenCount() {
+    public int getChildrenCount()
+    {
         initChildrenVector();
         return childrenVector.size();
     }
 
-    public Vector<IXMLElement> getChildren() {
+    public Vector<IXMLElement> getChildren()
+    {
         initChildrenVector();
         return childrenVector;
     }
 
-    public IXMLElement getChildAtIndex(int index) {
+    public IXMLElement getChildAtIndex(int index)
+    {
         initChildrenVector();
         return childrenVector.get(index);
     }
 
-    public IXMLElement getFirstChildNamed(String name) {
+    public IXMLElement getFirstChildNamed(String name)
+    {
         XMLElementImpl res = null;
         NodeList nodeList = element.getElementsByTagName(name);
-        if (nodeList.getLength() > 0) {
+        if (nodeList.getLength() > 0)
+        {
             res = new XMLElementImpl(nodeList.item(0));
         }
         return res;
     }
 
-    public Vector<IXMLElement> getChildrenNamed(String name) {
+    public Vector<IXMLElement> getChildrenNamed(String name)
+    {
         Vector<IXMLElement> res = new Vector<IXMLElement>();
         Vector<IXMLElement> children = getChildren();
-        for (int i = 0; i < children.size(); i++) {
+        for (int i = 0; i < children.size(); i++)
+        {
             IXMLElement child = children.elementAt(i);
-            if (child.getName() != null && child.getName().equals(name)) {
+            if (child.getName() != null && child.getName().equals(name))
+            {
                 res.add(new XMLElementImpl(child.getElement()));
             }
         }
         return res;
     }
 
-    public String getAttribute(String name) {
+    public String getAttribute(String name)
+    {
         return this.getAttribute(name, null);
     }
 
-    public String getAttribute(String name, String defaultValue) {
+    public String getAttribute(String name, String defaultValue)
+    {
         Node attribute = element.getAttributes().getNamedItem(name);
-        if (attribute != null) {
+        if (attribute != null)
+        {
             return attribute.getNodeValue();
         }
         return defaultValue;
     }
 
-    public void setAttribute(String name, String value) {
+    public void setAttribute(String name, String value)
+    {
         NamedNodeMap attributes = element.getAttributes();
         Attr attribute = element.getOwnerDocument().createAttribute(name);
         attribute.setValue(value);
         attributes.setNamedItem(attribute);
     }
 
-    public void removeAttribute(String name) {
+    public void removeAttribute(String name)
+    {
         this.element.getAttributes().removeNamedItem(name);
     }
 
-    public Enumeration enumerateAttributeNames() {
+    public Enumeration enumerateAttributeNames()
+    {
         NamedNodeMap namedNodeMap = element.getAttributes();
         Properties properties = new Properties();
-        for (int i = 0; i < namedNodeMap.getLength(); i++) {
+        for (int i = 0; i < namedNodeMap.getLength(); i++)
+        {
             Node node = namedNodeMap.item(i);
             properties.put(node.getNodeName(), node.getNodeValue());
         }
         return properties.keys();
     }
 
-    public boolean hasAttribute(String name) {
+    public boolean hasAttribute(String name)
+    {
         return (this.element.getAttributes().getNamedItem(name) != null);
     }
 
-    public Properties getAttributes() {
+    public Properties getAttributes()
+    {
         Properties properties = new Properties();
         NamedNodeMap namedNodeMap = this.element.getAttributes();
-        for (int i = 0; i < namedNodeMap.getLength(); ++i) {
+        for (int i = 0; i < namedNodeMap.getLength(); ++i)
+        {
             properties.put(namedNodeMap.item(i).getNodeName(), namedNodeMap.item(i).getNodeValue());
         }
         return properties;
     }
 
-    public int getLineNr() {
+    public int getLineNr()
+    {
         Object ln = element.getUserData("ln");
-        if (ln == null) {
+        if (ln == null)
+        {
             return NO_LINE;
         }
-        try {
+        try
+        {
             return (Integer) element.getUserData("ln");
         }
-        catch (ClassCastException e) {
+        catch (ClassCastException e)
+        {
             return NO_LINE;
         }
     }
 
-    public String getContent() {
+    public String getContent()
+    {
         StringBuilder sb = new StringBuilder();
         String content;
         Node child = this.element.getFirstChild();
@@ -252,18 +294,24 @@ public class XMLElementImpl implements IXMLElement {
         // pattern : only whitespace characters
         Pattern p = Pattern.compile("^\\s+$");
 
-        while (!err && child != null) {
+        while (!err && child != null)
+        {
             content = child.getNodeValue();
-            if (child.getNodeType() == Node.TEXT_NODE) {
+            if (child.getNodeType() == Node.TEXT_NODE)
+            {
                 // text node : nanoXML ignores it if it's only whitespace characters.
-                if (content != null && !p.matcher(content).matches()) {
+                if (content != null && !p.matcher(content).matches())
+                {
                     sb.append(content);
                 }
-            } else if (child.getNodeType() == Node.CDATA_SECTION_NODE) {
+            }
+            else if (child.getNodeType() == Node.CDATA_SECTION_NODE)
+            {
                 sb.append(content);
             }
             // neither CDATA nor text : real nested element !
-            else {
+            else
+            {
                 err = true;
             }
             child = child.getNextSibling();
@@ -271,31 +319,39 @@ public class XMLElementImpl implements IXMLElement {
         return (err) ? null : sb.toString().trim();
     }
 
-    public void setContent(String content) {
+    public void setContent(String content)
+    {
         Node child;
-        while ((child = this.element.getFirstChild()) != null) {
+        while ((child = this.element.getFirstChild()) != null)
+        {
             this.element.removeChild(child);
         }
         element.appendChild(element.getOwnerDocument().createTextNode(content));
     }
 
-    public Node getElement() {
+    public Node getElement()
+    {
         return element;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return element.getNodeName() + " " + element.getNodeValue();
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof IXMLElement) {
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof IXMLElement)
+        {
             IXMLElement o = (IXMLElement) obj;
             Element elem = (Element) o.getElement();
             Node child2 = elem.getFirstChild();
-            for (Node child = element.getFirstChild(); child != null && child2 != null; child = child.getNextSibling()) {
-                if (!child.equals(child2)) {
+            for (Node child = element.getFirstChild(); child != null && child2 != null; child = child.getNextSibling())
+            {
+                if (!child.equals(child2))
+                {
                     return false;
                 }
                 child2.getNextSibling();
@@ -306,9 +362,11 @@ public class XMLElementImpl implements IXMLElement {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int hashCode = 0;
-        for (Node child = element.getFirstChild(); child != null; child = child.getNextSibling()) {
+        for (Node child = element.getFirstChild(); child != null; child = child.getNextSibling())
+        {
             hashCode += child.hashCode();
         }
         return hashCode;

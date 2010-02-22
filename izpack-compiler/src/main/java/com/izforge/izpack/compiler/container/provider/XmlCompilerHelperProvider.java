@@ -9,9 +9,11 @@ import org.picocontainer.injectors.Provider;
  *
  * @author Anthonin Bonnefoy
  */
-public class XmlCompilerHelperProvider implements Provider {
+public class XmlCompilerHelperProvider implements Provider
+{
 
-    public XmlCompilerHelper provide(CompilerData compilerData) {
+    public XmlCompilerHelper provide(CompilerData compilerData)
+    {
         return new XmlCompilerHelper(compilerData.getInstallFile());
     }
 }

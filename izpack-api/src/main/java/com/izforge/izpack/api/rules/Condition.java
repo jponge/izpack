@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.api.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -31,13 +32,15 @@ import java.io.Serializable;
  *
  * @author Dennis Reil, <izpack@reil-online.de>
  */
-public abstract class Condition implements Serializable {
+public abstract class Condition implements Serializable
+{
 
     private static final long serialVersionUID = 507592103321711123L;
     public String id;
     public AutomatedInstallData installdata;
 
-    public Condition() {
+    public Condition()
+    {
         this.id = "UNKNOWN";
         this.installdata = null;
     }
@@ -45,7 +48,8 @@ public abstract class Condition implements Serializable {
     /**
      * @return the id
      */
-    public String getId() {
+    public String getId()
+    {
         return this.id;
     }
 
@@ -53,7 +57,8 @@ public abstract class Condition implements Serializable {
     /**
      * @param id the id to set
      */
-    public void setId(String id) {
+    public void setId(String id)
+    {
         this.id = id;
     }
 
@@ -61,16 +66,19 @@ public abstract class Condition implements Serializable {
 
     public abstract boolean isTrue();
 
-    public AutomatedInstallData getInstalldata() {
+    public AutomatedInstallData getInstalldata()
+    {
         return installdata;
     }
 
 
-    public void setInstalldata(AutomatedInstallData installdata) {
+    public void setInstalldata(AutomatedInstallData installdata)
+    {
         this.installdata = installdata;
     }
 
-    public String getDependenciesDetails() {
+    public String getDependenciesDetails()
+    {
         return "No dependencies for this condition.";
     }
 

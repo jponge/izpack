@@ -18,44 +18,51 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Anthonin Bonnefoy
  */
-public class CompilerLauncherTest {
+public class CompilerLauncherTest
+{
     private CompilerContainer compilerContainer;
 
     @Before
-    public void initContainer() {
+    public void initContainer()
+    {
         compilerContainer = new CompilerContainer();
         compilerContainer.initBindings();
     }
 
     @Test
-    public void testPropertiesBinding() throws Exception {
+    public void testPropertiesBinding() throws Exception
+    {
         Properties properties = compilerContainer.getComponent(Properties.class);
         assertThat(properties, IsNull.notNullValue());
     }
 
     @Test
-    public void testJarOutputStream() throws Exception {
+    public void testJarOutputStream() throws Exception
+    {
         compilerContainer.addComponent(CompilerData.class, new CompilerData("", "", "out.zip"));
         JarOutputStream jarOutputStream = compilerContainer.getComponent(JarOutputStream.class);
         assertThat(jarOutputStream, IsNull.notNullValue());
     }
 
     @Test
-    public void testCompilerBinding() throws Exception {
+    public void testCompilerBinding() throws Exception
+    {
         compilerContainer.addComponent(CompilerData.class, new CompilerData("", "", "out.zip"));
         Compiler compiler = compilerContainer.getComponent(Compiler.class);
         assertThat(compiler, IsNull.notNullValue());
     }
 
     @Test
-    public void testCompilerDataBinding() {
+    public void testCompilerDataBinding()
+    {
         compilerContainer.addComponent(CompilerData.class, new CompilerData("", "", "out.zip"));
         CompilerData data = compilerContainer.getComponent(CompilerData.class);
         assertThat(data, IsNull.notNullValue());
     }
 
     @Test
-    public void testCompilerConfigBinding() throws Exception {
+    public void testCompilerConfigBinding() throws Exception
+    {
         compilerContainer.processCompileDataFromArgs(new String[]{"install.xml"});
         CompilerData data = compilerContainer.getComponent(CompilerData.class);
         assertThat(data, IsNull.notNullValue());

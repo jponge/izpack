@@ -14,10 +14,12 @@ import java.io.IOException;
  *
  * @author Anthonin Bonnefoy
  */
-public class CompressorTest {
+public class CompressorTest
+{
 
     @Test
-    public void testBzip2Compression() throws IOException, CompressorException {
+    public void testBzip2Compression() throws IOException, CompressorException
+    {
         CompilerData data = new CompilerData("", "", "output.jar");
         data.setComprFormat("bzip2");
         data.setComprLevel(5);

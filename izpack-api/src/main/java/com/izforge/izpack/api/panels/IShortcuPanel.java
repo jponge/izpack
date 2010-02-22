@@ -7,7 +7,8 @@ package com.izforge.izpack.api.panels;
  * Time: 7:48:08 AM
  * To change this template use File | Settings | File Templates.
  */
-public interface IShortcuPanel {
+public interface IShortcuPanel
+{
     void createAndRegisterShortcuts();
 
     void setCreateImmediately(boolean createImmediately);

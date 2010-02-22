@@ -34,7 +34,8 @@ import javax.swing.*;
  *
  * @author Julien Ponge
  */
-public class InfoPanel extends IzPanel {
+public class InfoPanel extends IzPanel
+{
 
     private static final long serialVersionUID = 3833748780590905399L;
 
@@ -49,7 +50,8 @@ public class InfoPanel extends IzPanel {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public InfoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public InfoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, new IzPanelLayout(), resourceManager);
         // We load the text.
         loadInfo();
@@ -70,12 +72,15 @@ public class InfoPanel extends IzPanel {
     /**
      * Loads the info text.
      */
-    private void loadInfo() {
-        try {
+    private void loadInfo()
+    {
+        try
+        {
             String resNamePrifix = "InfoPanel.info";
             info = resourceManager.getTextResource(resNamePrifix);
         }
-        catch (Exception err) {
+        catch (Exception err)
+        {
             info = "Error : could not load the info text !";
         }
     }
@@ -85,7 +90,8 @@ public class InfoPanel extends IzPanel {
      *
      * @return Always true.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         return true;
     }
 }

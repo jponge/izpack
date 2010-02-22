@@ -38,7 +38,8 @@ import java.io.*;
  *
  * @author Anthonin Bonnefoy
  */
-public class XMLWriterTest {
+public class XMLWriterTest
+{
 
     private static final String filename = "partial.xml";
     private static final String output = "output.xml";
@@ -49,7 +50,8 @@ public class XMLWriterTest {
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
     @Before
-    public void setUp() throws FileNotFoundException {
+    public void setUp() throws FileNotFoundException
+    {
         parser = new XMLParser();
         root = parser.parse(XMLWriterTest.class.getResourceAsStream(filename));
     }
@@ -60,7 +62,8 @@ public class XMLWriterTest {
      * @throws FileNotFoundException
      */
     @Test
-    public void testWriteFile() throws IOException {
+    public void testWriteFile() throws IOException
+    {
         IXMLWriter writer = new XMLWriter();
         File file = tempFolder.newFile(output);
         FileOutputStream out = new FileOutputStream(file);
@@ -78,7 +81,8 @@ public class XMLWriterTest {
      * @throws java.io.IOException
      */
     @Test
-    public void testWriteURL() throws IOException {
+    public void testWriteURL() throws IOException
+    {
         IXMLWriter writer = new XMLWriter();
         File file = tempFolder.newFile(output);
         FileOutputStream out = new FileOutputStream(file);
@@ -90,7 +94,8 @@ public class XMLWriterTest {
     }
 
     @Test(expected = XMLException.class)
-    public void testFail() {
+    public void testFail()
+    {
         // TODO : don't use XMLElementImpl !
         IXMLElement elt = new XMLElementImpl("root");
         IXMLWriter writer = new XMLWriter();

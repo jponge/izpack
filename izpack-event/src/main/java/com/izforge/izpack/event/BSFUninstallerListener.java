@@ -31,17 +31,21 @@ import java.io.ObjectInputStream;
 import java.util.List;
 
 
-public class BSFUninstallerListener extends SimpleUninstallerListener {
+public class BSFUninstallerListener extends SimpleUninstallerListener
+{
 
     private List bsfActions = null;
 
-    public BSFUninstallerListener() {
+    public BSFUninstallerListener()
+    {
         super();
     }
 
-    private void loadActions() throws Exception {
+    private void loadActions() throws Exception
+    {
         InputStream in = getClass().getResourceAsStream("/bsfActions");
-        if (in == null) {
+        if (in == null)
+        {
             return;
         }
         ObjectInputStream objIn = new ObjectInputStream(in);
@@ -50,10 +54,12 @@ public class BSFUninstallerListener extends SimpleUninstallerListener {
         in.close();
     }
 
-    public void beforeDeletion(List files, AbstractUIProgressHandler handler) throws Exception {
+    public void beforeDeletion(List files, AbstractUIProgressHandler handler) throws Exception
+    {
         loadActions();
 
-        for (Object bsfAction : bsfActions) {
+        for (Object bsfAction : bsfActions)
+        {
             BSFAction action = (BSFAction) bsfAction;
             action.init();
             action.executeUninstall(BSFAction.BEFOREDELETION, new Object[]{files, handler});
@@ -62,8 +68,10 @@ public class BSFUninstallerListener extends SimpleUninstallerListener {
     }
 
 
-    public void afterDeletion(List files, AbstractUIProgressHandler handler) throws Exception {
-        for (Object bsfAction : bsfActions) {
+    public void afterDeletion(List files, AbstractUIProgressHandler handler) throws Exception
+    {
+        for (Object bsfAction : bsfActions)
+        {
             BSFAction action = (BSFAction) bsfAction;
             action.init();
             action.executeUninstall(BSFAction.AFTERDELETION, new Object[]{files, handler});
@@ -71,8 +79,10 @@ public class BSFUninstallerListener extends SimpleUninstallerListener {
         }
     }
 
-    public void beforeDelete(File file, AbstractUIProgressHandler handler) throws Exception {
-        for (Object bsfAction : bsfActions) {
+    public void beforeDelete(File file, AbstractUIProgressHandler handler) throws Exception
+    {
+        for (Object bsfAction : bsfActions)
+        {
             BSFAction action = (BSFAction) bsfAction;
             action.init();
             action.executeUninstall(BSFAction.BEFOREDELETE, new Object[]{file, handler});
@@ -80,8 +90,10 @@ public class BSFUninstallerListener extends SimpleUninstallerListener {
         }
     }
 
-    public void afterDelete(File file, AbstractUIProgressHandler handler) throws Exception {
-        for (Object bsfAction : bsfActions) {
+    public void afterDelete(File file, AbstractUIProgressHandler handler) throws Exception
+    {
+        for (Object bsfAction : bsfActions)
+        {
             BSFAction action = (BSFAction) bsfAction;
             action.init();
             action.executeUninstall(BSFAction.AFTERDELETE, new Object[]{file, handler});
@@ -89,7 +101,8 @@ public class BSFUninstallerListener extends SimpleUninstallerListener {
         }
     }
 
-    public boolean isFileListener() {
+    public boolean isFileListener()
+    {
         return true;
     }
 

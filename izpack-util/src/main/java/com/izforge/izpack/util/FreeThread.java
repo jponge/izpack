@@ -22,6 +22,7 @@
 package com.izforge.izpack.util;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * This class implements a thred that can be used to free native libraries safely.
  *
@@ -29,13 +30,15 @@ package com.izforge.izpack.util;
  * @version 0.0.1 / 2/6/02
  */
 /*---------------------------------------------------------------------------*/
-public class FreeThread extends Thread {
+public class FreeThread extends Thread
+{
 
     private String name = "";
 
     private NativeLibraryClient client = null;
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Standard constructor.
      *
@@ -45,18 +48,21 @@ public class FreeThread extends Thread {
      * @param client reference of the client object that is linked with the library to be freed.
      */
     /*--------------------------------------------------------------------------*/
-    public FreeThread(String name, NativeLibraryClient client) {
+    public FreeThread(String name, NativeLibraryClient client)
+    {
         this.name = name;
         this.client = client;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * The run() method. Frees the library. Note that the thread is likely to get 'frozen' and the
      * application can only be treminated through a call to <code>System.exit()</code>.
      */
     /*--------------------------------------------------------------------------*/
-    public void run() {
+    public void run()
+    {
         client.freeLibrary(name);
     }
 }

@@ -15,6 +15,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.core.io;
 
 import java.io.IOException;
@@ -25,7 +26,8 @@ import java.io.IOException;
  *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
-public class CorruptVolumeException extends IOException {
+public class CorruptVolumeException extends IOException
+{
     private static final long serialVersionUID = -1659572038393604549L;
     //  name of the corrupt volume
     private String volumename;
@@ -33,22 +35,26 @@ public class CorruptVolumeException extends IOException {
     /**
      *
      */
-    public CorruptVolumeException() {
+    public CorruptVolumeException()
+    {
     }
 
     /**
      * @param msg
      */
-    public CorruptVolumeException(String msg, String volumename) {
+    public CorruptVolumeException(String msg, String volumename)
+    {
         super(msg);
         this.volumename = volumename;
     }
 
-    public String getVolumename() {
+    public String getVolumename()
+    {
         return volumename;
     }
 
-    public void setVolumename(String volumename) {
+    public void setVolumename(String volumename)
+    {
         this.volumename = volumename;
     }
 }

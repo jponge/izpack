@@ -125,7 +125,8 @@ public class CompilerConfig extends Thread
      *
      * @param compilerData Object containing all informations found in command line
      */
-    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager) {
+    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager)
+    {
         this.compilerData = compilerData;
         this.variableSubstitutor = variableSubstitutor;
         this.compiler = compiler;
@@ -244,10 +245,12 @@ public class CompilerConfig extends Thread
         // REFACTOR : Moved packager initialisation to provider
         IXMLElement root = data.getFirstChildNamed("packaging");
         IXMLElement packagerElement = null;
-        if (root != null) {
+        if (root != null)
+        {
             packagerElement = root.getFirstChildNamed("packager");
 
-            if (packagerElement != null) {
+            if (packagerElement != null)
+            {
                 packagerClassname = xmlCompilerHelper.requireAttribute(packagerElement, "class", compilerData.getInstallFile());
             }
 
@@ -258,9 +261,11 @@ public class CompilerConfig extends Thread
                 unpackerClassname = xmlCompilerHelper.requireAttribute(unpacker, "class", compilerData.getInstallFile());
             }
         }
-        if (packagerElement != null) {
+        if (packagerElement != null)
+        {
             IXMLElement options = packagerElement.getFirstChildNamed("options");
-            if (options != null) {
+            if (options != null)
+            {
                 packager.addConfigurationInformation(options);
             }
         }
@@ -376,7 +381,8 @@ public class CompilerConfig extends Thread
             // wiil be only observed for the uninstaller.
             String stage = ixmlElement.getAttribute("stage");
             if (stage != null
-                    && ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage))) {
+                    && ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage)))
+            {
                 URL url = findProjectResource(src, "Jar file", ixmlElement);
                 CustomData ca = new CustomData(null, compilerHelper.getContainedFilePaths(url), null,
                         CustomData.UNINSTALLER_JAR);
@@ -1196,7 +1202,8 @@ public class CompilerConfig extends Thread
      * @param data The XML data.
      * @throws CompilerException Description of the Exception
      */
-    protected void addPanels(IXMLElement data) throws IOException {
+    protected void addPanels(IXMLElement data) throws IOException
+    {
         notifyCompilerListener("addPanels", CompilerListener.BEGIN, data);
         IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "panels");
 
@@ -1210,7 +1217,8 @@ public class CompilerConfig extends Thread
         // We process each panel markup
         // We need a panel counter to build unique panel dependet resource names
         int panelCounter = 0;
-        for (IXMLElement panelElement : panels) {
+        for (IXMLElement panelElement : panels)
+        {
             panelCounter++;
 
             // create the serialized Panel data
@@ -1227,18 +1235,22 @@ public class CompilerConfig extends Thread
             // Panel files come in jars packaged w/ IzPack, or they can be
             // specified via a jar attribute on the panel element
             String jarPath = panelElement.getAttribute("jar");
-            if (StringUtils.isNotBlank(jarPath)) {
+            if (StringUtils.isNotBlank(jarPath))
+            {
                 URL jarUrl = findIzPackResource(jarPath, "Panel jar file", panelElement, true);
                 panel.className = compilerHelper.getFullClassName(jarUrl, className);
                 packager.addJarContent(jarUrl);
-            } else {
+            }
+            else
+            {
                 //Assume it is merged with <jar> tag
                 panel.className = className;
             }
 
 
             IXMLElement configurationElement = panelElement.getFirstChildNamed("configuration");
-            if (configurationElement != null) {
+            if (configurationElement != null)
+            {
                 Debug.trace("found a configuration for this panel.");
                 Vector<IXMLElement> params = configurationElement.getChildrenNamed("param");
                 if (params != null)
@@ -1360,7 +1372,8 @@ public class CompilerConfig extends Thread
                     originalUrl = recodedFile.toURL();
                 }
 
-                if (parsexml || (!"".equals(encoding)) || (substitute && !packager.getVariables().isEmpty())) {
+                if (parsexml || (!"".equals(encoding)) || (substitute && !packager.getVariables().isEmpty()))
+                {
                     // make the substitutions into a temp file
                     File parsedFile = File.createTempFile("izpp", null);
                     parsedFile.deleteOnExit();
@@ -1380,7 +1393,8 @@ public class CompilerConfig extends Thread
 
                     IXMLElement xml = parser.parse(originalUrl);
                     IXMLWriter writer = new XMLWriter();
-                    if (substitute && !packager.getVariables().isEmpty()) {
+                    if (substitute && !packager.getVariables().isEmpty())
+                    {
                         // if we are also performing substitutions on the file
                         // then create an in-memory copy to pass to the
                         // substitutor
@@ -1397,8 +1411,10 @@ public class CompilerConfig extends Thread
                 }
 
                 // substitute variable values in the resource if parsed
-                if (substitute) {
-                    if (packager.getVariables().isEmpty()) {
+                if (substitute)
+                {
+                    if (packager.getVariables().isEmpty())
+                    {
                         // reset url to original.
                         url = originalUrl;
                         AssertionHelper.parseWarn(resNode, "No variables defined. " + url.getPath() + " not parsed.", compilerData.getInstallFile());

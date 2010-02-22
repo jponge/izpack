@@ -31,11 +31,13 @@ import java.util.Map;
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  * @version $Id: $
  */
-public class VariableHistoryTableCellRenderer extends DefaultTableCellRenderer {
+public class VariableHistoryTableCellRenderer extends DefaultTableCellRenderer
+{
     private static final long serialVersionUID = 6779914244548965230L;
     private Map<String, VariableHistory> variablehistory;
 
-    public VariableHistoryTableCellRenderer(Map<String, VariableHistory> variablehistory) {
+    public VariableHistoryTableCellRenderer(Map<String, VariableHistory> variablehistory)
+    {
         this.variablehistory = variablehistory;
     }
 
@@ -43,8 +45,10 @@ public class VariableHistoryTableCellRenderer extends DefaultTableCellRenderer {
     /* (non-Javadoc)
     * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
     */
+
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                   boolean hasFocus, int row, int column) {
+                                                   boolean hasFocus, int row, int column)
+    {
         JComponent comp = null;
 
         VariableHistory vh = (VariableHistory) value;
@@ -56,16 +60,21 @@ public class VariableHistoryTableCellRenderer extends DefaultTableCellRenderer {
         label.setText(vh.getLastValue());
 
         comp.setOpaque(true);
-        if (vh.isNewvariable()) {
+        if (vh.isNewvariable())
+        {
             comp.setBackground(Color.green);
-        } else if (vh.isChanged()) {
+        }
+        else if (vh.isChanged())
+        {
             comp.setBackground(Color.yellow);
         }
         return comp;
     }
 
-    public void clearState() {
-        for (String s : variablehistory.keySet()) {
+    public void clearState()
+    {
+        for (String s : variablehistory.keySet())
+        {
             VariableHistory vh = variablehistory.get(s);
             vh.clearState();
         }

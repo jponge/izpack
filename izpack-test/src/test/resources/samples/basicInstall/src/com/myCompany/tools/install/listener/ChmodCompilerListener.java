@@ -36,7 +36,8 @@ import java.util.Vector;
  *
  * @author Klaus Bartz
  */
-public class ChmodCompilerListener extends SimpleCompilerListener {
+public class ChmodCompilerListener extends SimpleCompilerListener
+{
 
 
     /* (non-Javadoc)
@@ -44,27 +45,38 @@ public class ChmodCompilerListener extends SimpleCompilerListener {
     */
 
     public Map reviseAdditionalDataMap(Map existentDataMap, IXMLElement element)
-            throws CompilerException {
+            throws CompilerException
+    {
         Map retval = existentDataMap != null ?
                 existentDataMap : new HashMap();
         Vector dataList = element.getChildrenNamed("additionaldata");
         Iterator iter = null;
         if (dataList == null || dataList.size() == 0)
+        {
             return (existentDataMap);
+        }
         iter = dataList.iterator();
-        while (iter.hasNext()) {
+        while (iter.hasNext())
+        {
             IXMLElement data = (IXMLElement) iter.next();
             String[] relevantKeys = {"permission.dir", "permission.file"};
-            for (int i = 0; i < relevantKeys.length; ++i) {
+            for (int i = 0; i < relevantKeys.length; ++i)
+            {
                 String key = data.getAttribute("key");
-                if (key.equalsIgnoreCase(relevantKeys[i])) {
+                if (key.equalsIgnoreCase(relevantKeys[i]))
+                {
                     String value = data.getAttribute("value");
                     if (value == null || value.length() == 0)
+                    {
                         continue;
-                    try {
+                    }
+                    try
+                    {
                         int radix = value.startsWith("0") ? 8 : 10;
                         retval.put(key, Integer.valueOf(value, radix));
-                    } catch (NumberFormatException x) {
+                    }
+                    catch (NumberFormatException x)
+                    {
                         throw new CompilerException("'" + relevantKeys[i] + "' must be an integer");
                     }
                 }

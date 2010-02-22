@@ -35,7 +35,8 @@ import java.io.File;
  *
  * @author Julien Ponge
  */
-public class SimpleFinishPanel extends IzPanel {
+public class SimpleFinishPanel extends IzPanel
+{
 
     /**
      *
@@ -53,7 +54,8 @@ public class SimpleFinishPanel extends IzPanel {
      * @param parent The parent.
      * @param idata  The installation installDataGUI.
      */
-    public SimpleFinishPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public SimpleFinishPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, new IzPanelLayout(), resourceManager);
     }
 
@@ -62,19 +64,22 @@ public class SimpleFinishPanel extends IzPanel {
      *
      * @return true if the panel has been validated.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         return true;
     }
 
     /**
      * Called when the panel becomes active.
      */
-    public void panelActivate() {
+    public void panelActivate()
+    {
         parent.lockNextButton();
         parent.lockPrevButton();
         parent.setQuitButtonText(installData.getLangpack().getString("FinishPanel.done"));
         parent.setQuitButtonIcon("done");
-        if (this.installData.isInstallSuccess()) {
+        if (this.installData.isInstallSuccess())
+        {
 
             // We set the information
             add(LabelFactory.create(parent.icons.getImageIcon("check")));
@@ -82,7 +87,8 @@ public class SimpleFinishPanel extends IzPanel {
             add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.success"),
                     parent.icons.getImageIcon("preferences"), LEADING), NEXT_LINE);
             add(IzPanelLayout.createVerticalStrut(5));
-            if (this.installData.getUninstallOutJar() != null) {
+            if (this.installData.getUninstallOutJar() != null)
+            {
                 // We prepare a message for the uninstaller feature
                 String path = translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
 
@@ -92,7 +98,9 @@ public class SimpleFinishPanel extends IzPanel {
                 add(LabelFactory.create(path, parent.icons.getImageIcon("empty"),
                         LEADING), NEXT_LINE);
             }
-        } else {
+        }
+        else
+        {
             add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.fail"),
                     parent.icons.getImageIcon("stop"), LEADING));
         }
@@ -106,7 +114,8 @@ public class SimpleFinishPanel extends IzPanel {
      * @param destination The path to translate.
      * @return The translated path.
      */
-    private String translatePath(String destination) {
+    private String translatePath(String destination)
+    {
         // Parse for variables
         destination = variableSubstitutor.substitute(destination);
 

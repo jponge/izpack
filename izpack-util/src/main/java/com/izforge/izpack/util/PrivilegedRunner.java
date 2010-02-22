@@ -33,13 +33,15 @@ import java.util.List;
  *
  * @author Julien Ponge
  */
-public class PrivilegedRunner {
+public class PrivilegedRunner
+{
     private boolean vetoed = false;
 
     /**
      * Builds a default privileged runner.
      */
-    public PrivilegedRunner() {
+    public PrivilegedRunner()
+    {
     }
 
     /**
@@ -47,7 +49,8 @@ public class PrivilegedRunner {
      *
      * @param vetoed should the elevation be vetoed?
      */
-    public PrivilegedRunner(boolean vetoed) {
+    public PrivilegedRunner(boolean vetoed)
+    {
         this.vetoed = vetoed;
     }
 
@@ -56,7 +59,8 @@ public class PrivilegedRunner {
      *
      * @return <code>true</code> if the elevation is to be vetoed.
      */
-    public boolean isVetoed() {
+    public boolean isVetoed()
+    {
         return vetoed;
     }
 
@@ -65,7 +69,8 @@ public class PrivilegedRunner {
      *
      * @return <code>true</code> if the platform is supported, <code>false</code> otherwise.
      */
-    public boolean isPlatformSupported() {
+    public boolean isPlatformSupported()
+    {
         return OsVersion.IS_MAC || OsVersion.IS_UNIX || OsVersion.IS_WINDOWS;
     }
 
@@ -74,33 +79,45 @@ public class PrivilegedRunner {
      *
      * @return <code>true</code> if elevation is needed to have administrator permissions, <code>false</code> otherwise.
      */
-    public boolean isElevationNeeded() {
-        if (vetoed) {
+    public boolean isElevationNeeded()
+    {
+        if (vetoed)
+        {
             return false;
         }
 
-        if (OsVersion.IS_WINDOWS) {
+        if (OsVersion.IS_WINDOWS)
+        {
             return !isPrivilegedMode() && !canWriteToProgramFiles();
-        } else {
+        }
+        else
+        {
             return !System.getProperty("user.name").equals("root");
         }
     }
 
-    public boolean canWriteToProgramFiles() {
-        try {
+    public boolean canWriteToProgramFiles()
+    {
+        try
+        {
             String programFiles = System.getenv("ProgramFiles");
-            if (programFiles == null) {
+            if (programFiles == null)
+            {
                 programFiles = "C:\\Program Files";
             }
             File temp = new File(programFiles, "foo.txt");
-            if (temp.createNewFile()) {
+            if (temp.createNewFile())
+            {
                 temp.delete();
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             return false;
         }
     }
@@ -112,7 +129,8 @@ public class PrivilegedRunner {
      * @throws IOException
      * @throws InterruptedException
      */
-    public int relaunchWithElevatedRights() throws IOException, InterruptedException {
+    public int relaunchWithElevatedRights() throws IOException, InterruptedException
+    {
         String javaCommand = getJavaCommand();
         String installer = getInstallerJar();
         ProcessBuilder builder = new ProcessBuilder(getElevator(javaCommand, installer));
@@ -120,15 +138,19 @@ public class PrivilegedRunner {
         return builder.start().waitFor();
     }
 
-    private List<String> getElevator(String javaCommand, String installer) throws IOException, InterruptedException {
+    private List<String> getElevator(String javaCommand, String installer) throws IOException, InterruptedException
+    {
         List<String> elevator = new ArrayList<String>();
 
-        if (OsVersion.IS_OSX) {
+        if (OsVersion.IS_OSX)
+        {
             elevator.add(extractMacElevator().getCanonicalPath());
             elevator.add(javaCommand);
             elevator.add("-jar");
             elevator.add(installer);
-        } else if (OsVersion.IS_UNIX) {
+        }
+        else if (OsVersion.IS_UNIX)
+        {
             elevator.add("xterm");
             elevator.add("-title");
             elevator.add("Installer");
@@ -137,7 +159,9 @@ public class PrivilegedRunner {
             elevator.add(javaCommand);
             elevator.add("-jar");
             elevator.add(installer);
-        } else if (OsVersion.IS_WINDOWS) {
+        }
+        else if (OsVersion.IS_WINDOWS)
+        {
             elevator.add("wscript");
             elevator.add(extractVistaElevator().getCanonicalPath());
             elevator.add(javaCommand);
@@ -149,7 +173,8 @@ public class PrivilegedRunner {
         return elevator;
     }
 
-    private File extractVistaElevator() throws IOException {
+    private File extractVistaElevator() throws IOException
+    {
         String path = System.getProperty("java.io.tmpdir") + File.separator + "Installer.js";
         File elevator = new File(path);
 
@@ -163,7 +188,8 @@ public class PrivilegedRunner {
         return elevator;
     }
 
-    private File extractMacElevator() throws IOException, InterruptedException {
+    private File extractMacElevator() throws IOException, InterruptedException
+    {
         String path = System.getProperty("java.io.tmpdir") + File.separator + "Installer";
         File elevator = new File(path);
 
@@ -179,33 +205,41 @@ public class PrivilegedRunner {
         return elevator;
     }
 
-    private void makeExecutable(String path) throws InterruptedException, IOException {
+    private void makeExecutable(String path) throws InterruptedException, IOException
+    {
         new ProcessBuilder("/bin/chmod", "+x", path).start().waitFor();
     }
 
-    private void copyStream(OutputStream out, InputStream in) throws IOException {
+    private void copyStream(OutputStream out, InputStream in) throws IOException
+    {
         byte[] buffer = new byte[1024];
         int bytesRead = 0;
-        while ((bytesRead = in.read(buffer)) >= 0) {
+        while ((bytesRead = in.read(buffer)) >= 0)
+        {
             out.write(buffer, 0, bytesRead);
         }
     }
 
-    private String getInstallerJar() {
-        try {
+    private String getInstallerJar()
+    {
+        try
+        {
             URI uri = getClass().getProtectionDomain().getCodeSource().getLocation().toURI();
-            if (!"file".equals(uri.getScheme())) {
+            if (!"file".equals(uri.getScheme()))
+            {
                 throw new Exception("Unexpected scheme in JAR file URI: " + uri);
             }
             return new File(uri.getSchemeSpecificPart()).getCanonicalPath();
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
         return null;
     }
 
-    private String getJavaCommand() {
+    private String getJavaCommand()
+    {
         return new StringBuilder(System.getProperty("java.home"))
                 .append(File.separator)
                 .append("bin")
@@ -214,15 +248,20 @@ public class PrivilegedRunner {
                 .toString();
     }
 
-    private String getJavaExecutable() {
-        if (OsVersion.IS_WINDOWS) {
+    private String getJavaExecutable()
+    {
+        if (OsVersion.IS_WINDOWS)
+        {
             return "javaw.exe";
-        } else {
+        }
+        else
+        {
             return "java";
         }
     }
 
-    public static boolean isPrivilegedMode() {
+    public static boolean isPrivilegedMode()
+    {
         return "privileged".equals(System.getenv("izpack.mode")) || "privileged".equals(System.getProperty("izpack.mode"));
     }
 }

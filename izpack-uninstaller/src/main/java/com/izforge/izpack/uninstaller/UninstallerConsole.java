@@ -28,7 +28,8 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class UninstallerConsole {
+public class UninstallerConsole
+{
 
     /**
      * The installation path.
@@ -40,7 +41,8 @@ public class UninstallerConsole {
      */
     protected static LocaleDatabase langpack;
 
-    public UninstallerConsole() throws Exception {
+    public UninstallerConsole() throws Exception
+    {
         // Initializations
         langpack = new LocaleDatabase(UninstallerFrame.class.getResourceAsStream("/langpack.xml"));
         getInstallPath();
@@ -51,7 +53,8 @@ public class UninstallerConsole {
      *
      * @throws Exception Description of the Exception
      */
-    private void getInstallPath() throws Exception {
+    private void getInstallPath() throws Exception
+    {
         InputStream in = UninstallerFrame.class.getResourceAsStream("/install.log");
         InputStreamReader inReader = new InputStreamReader(in);
         BufferedReader reader = new BufferedReader(inReader);
@@ -64,7 +67,8 @@ public class UninstallerConsole {
      *
      * @param destroy Equivallen to the destroy option in the GUI.
      */
-    public void runUninstall(boolean destroy) {
+    public void runUninstall(boolean destroy)
+    {
         Destroyer destroyer = new Destroyer(installPath,
                 destroy, new DestroyerHandler());
         destroyer.start();
@@ -77,94 +81,121 @@ public class UninstallerConsole {
      * rid of the InstallListener - implement generic Listener
      */
     private final class DestroyerHandler implements
-            com.izforge.izpack.util.AbstractUIProgressHandler {
+            com.izforge.izpack.util.AbstractUIProgressHandler
+    {
         private int AUTO_ANSWER_MODE = -2;
 
-        private void out(String str) {
+        private void out(String str)
+        {
             System.out.println(str);
         }
 
-        private boolean askOKCancel(String question, int defaultchoice) {
-            if (defaultchoice == AUTO_ANSWER_MODE) {
+        private boolean askOKCancel(String question, int defaultchoice)
+        {
+            if (defaultchoice == AUTO_ANSWER_MODE)
+            {
                 return true;
             }
             boolean defaultanswer = defaultchoice == 1;
-            try {
+            try
+            {
                 System.out.print(question + " (Ok/Cancel) [" + (defaultanswer ? "O" : "C") + "]:");
                 String rline = readln();
-                if (rline.toLowerCase().startsWith("o")) {
+                if (rline.toLowerCase().startsWith("o"))
+                {
                     return true;
                 }
-                if (rline.toLowerCase().startsWith("c")) {
+                if (rline.toLowerCase().startsWith("c"))
+                {
                     return false;
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
             }
-            if (defaultchoice == -1) {
+            if (defaultchoice == -1)
+            {
                 return askOKCancel(question, defaultchoice);
             }
             return defaultanswer;
         }
 
-        private int askYesNoCancel(String question, int defaultchoice) {
-            if (defaultchoice == AUTO_ANSWER_MODE) {
+        private int askYesNoCancel(String question, int defaultchoice)
+        {
+            if (defaultchoice == AUTO_ANSWER_MODE)
+            {
                 return AbstractUIHandler.ANSWER_YES;
             }
             boolean defaultanswer = defaultchoice == 1;
-            try {
+            try
+            {
                 System.out.print(question + " (Yes/No/Cancel) [" + (defaultanswer ? "Y" : "N") + "]:");
                 String rline = readln();
-                if (rline.toLowerCase().equals("y")) {
+                if (rline.toLowerCase().equals("y"))
+                {
                     return AbstractUIHandler.ANSWER_YES;
                 }
-                if (rline.toLowerCase().equals("n")) {
+                if (rline.toLowerCase().equals("n"))
+                {
                     return AbstractUIHandler.ANSWER_NO;
                 }
-                if (rline.toLowerCase().equals("c")) {
+                if (rline.toLowerCase().equals("c"))
+                {
                     return AbstractUIHandler.ANSWER_CANCEL;
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
             }
-            if (defaultchoice == -1) {
+            if (defaultchoice == -1)
+            {
                 return askYesNoCancel(question, defaultchoice);
             }
             return defaultchoice;
         }
 
-        private int askYesNo(String question, int defaultchoice) {
-            if (defaultchoice == AUTO_ANSWER_MODE) {
+        private int askYesNo(String question, int defaultchoice)
+        {
+            if (defaultchoice == AUTO_ANSWER_MODE)
+            {
                 return AbstractUIHandler.ANSWER_YES;
             }
             boolean defaultanswer = defaultchoice == 1;
-            try {
+            try
+            {
                 System.out.print(question + " (Yes/No) [" + (defaultanswer ? "Y" : "N") + "]:");
                 String rline = readln();
-                if (rline.toLowerCase().equals("y")) {
+                if (rline.toLowerCase().equals("y"))
+                {
                     return AbstractUIHandler.ANSWER_YES;
                 }
-                if (rline.toLowerCase().equals("n")) {
+                if (rline.toLowerCase().equals("n"))
+                {
                     return AbstractUIHandler.ANSWER_NO;
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
             }
-            if (defaultchoice == -1) {
+            if (defaultchoice == -1)
+            {
                 return askYesNoCancel(question, defaultchoice);
             }
             return defaultchoice;
         }
 
-        private String read() throws Exception {
+        private String read() throws Exception
+        {
             byte[] byteArray = {(byte) System.in.read()};
             return new String(byteArray);
         }
 
-        private String readln() throws Exception {
+        private String readln() throws Exception
+        {
             String input = read();
             int available = System.in.available();
-            if (available > 0) {
+            if (available > 0)
+            {
                 byte[] byteArray = new byte[available];
                 System.in.read(byteArray);
                 input += new String(byteArray);
@@ -178,14 +209,16 @@ public class UninstallerConsole {
          * @param name The name of the overall action. Not used here.
          * @param max  The maximum value of the progress.
          */
-        public void startAction(final String name, final int max) {
+        public void startAction(final String name, final int max)
+        {
             out("Processing " + name);
         }
 
         /**
          * The destroyer stops.
          */
-        public void stopAction() {
+        public void stopAction()
+        {
             out(langpack.getString("InstallPanel.finished"));
         }
 
@@ -195,15 +228,18 @@ public class UninstallerConsole {
          * @param pos     The actual position.
          * @param message The message.
          */
-        public void progress(final int pos, final String message) {
+        public void progress(final int pos, final String message)
+        {
             out(message);
         }
 
-        public void nextStep(String step_name, int step_no, int no_of_substeps) {
+        public void nextStep(String step_name, int step_no, int no_of_substeps)
+        {
             // not used
         }
 
-        public void setSubStepNo(int no_of_substeps) {
+        public void setSubStepNo(int no_of_substeps)
+        {
             // not used
         }
 
@@ -214,7 +250,8 @@ public class UninstallerConsole {
          *
          * @param text
          */
-        public void emitNotification(String text) {
+        public void emitNotification(String text)
+        {
         }
 
         /**
@@ -222,7 +259,8 @@ public class UninstallerConsole {
          *
          * @param text
          */
-        public boolean emitWarning(String title, String text) {
+        public boolean emitWarning(String title, String text)
+        {
             return askOKCancel(title + ": " + text, AUTO_ANSWER_MODE);
         }
 
@@ -231,7 +269,8 @@ public class UninstallerConsole {
          *
          * @param error The error message.
          */
-        public void emitError(String title, String error) {
+        public void emitError(String title, String error)
+        {
             out(title + ": " + error);
         }
 
@@ -240,7 +279,8 @@ public class UninstallerConsole {
          *
          * @param error The error message.
          */
-        public void emitErrorAndBlockNext(String title, String error) {
+        public void emitErrorAndBlockNext(String title, String error)
+        {
             emitError(title, error);
         }
 
@@ -253,7 +293,8 @@ public class UninstallerConsole {
          * @return The user's choice.
          * @see AbstractUIHandler#askQuestion(String, String, int)
          */
-        public int askQuestion(String title, String question, int choices) {
+        public int askQuestion(String title, String question, int choices)
+        {
             return askQuestion(title, question, choices, AUTO_ANSWER_MODE);
         }
 
@@ -267,12 +308,16 @@ public class UninstallerConsole {
          * @return The user's choice.
          * @see AbstractUIHandler#askQuestion(String, String, int, int)
          */
-        public int askQuestion(String title, String question, int choices, int default_choice) {
+        public int askQuestion(String title, String question, int choices, int default_choice)
+        {
             int choice = 0;
 
-            if (choices == AbstractUIHandler.CHOICES_YES_NO) {
+            if (choices == AbstractUIHandler.CHOICES_YES_NO)
+            {
                 choice = askYesNo(title + ": " + question, default_choice);
-            } else if (choices == AbstractUIHandler.CHOICES_YES_NO_CANCEL) {
+            }
+            else if (choices == AbstractUIHandler.CHOICES_YES_NO_CANCEL)
+            {
                 choice = askYesNoCancel(title + ": " + question, default_choice);
             }
 

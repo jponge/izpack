@@ -36,7 +36,8 @@ import java.util.Vector;
  * @author Julien Ponge
  * @author J. Chris Folsom <jchrisfolsom@gmail.com>
  */
-public class LocaleDatabase extends TreeMap {
+public class LocaleDatabase extends TreeMap
+{
 
     /*
      * Static cache of locale databases mapped by their iso name.
@@ -66,7 +67,8 @@ public class LocaleDatabase extends TreeMap {
      * @param in An InputStream to read the translation from.
      * @throws Exception Description of the Exception
      */
-    public LocaleDatabase(InputStream in) throws Exception {
+    public LocaleDatabase(InputStream in) throws Exception
+    {
         // We call the superclass default constructor
         super();
         add(in);
@@ -79,14 +81,16 @@ public class LocaleDatabase extends TreeMap {
      * @param in an InputStream to read the translation from.
      * @throws Exception
      */
-    public void add(InputStream in) throws Exception {
+    public void add(InputStream in) throws Exception
+    {
         // Initialises the parser
         IXMLParser parser = new XMLParser();
         // We get the data
         IXMLElement data = parser.parse(in);
 
         // We check the data
-        if (!"langpack".equalsIgnoreCase(data.getName())) {
+        if (!"langpack".equalsIgnoreCase(data.getName()))
+        {
             throw new Exception(
                     "this is not an IzPack XML langpack file");
         }
@@ -94,12 +98,16 @@ public class LocaleDatabase extends TreeMap {
         // We fill the Hashtable
         Vector children = data.getChildren();
         int size = children.size();
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++)
+        {
             IXMLElement e = (IXMLElement) children.get(i);
             String text = e.getContent();
-            if (text != null && !"".equals(text)) {
+            if (text != null && !"".equals(text))
+            {
                 put(e.getAttribute("id"), text.trim());
-            } else {
+            }
+            else
+            {
                 put(e.getAttribute("id"), e.getAttribute("txt"));
             }
         }
@@ -112,12 +120,14 @@ public class LocaleDatabase extends TreeMap {
      * @param key The key of the element to retrieve.
      * @return The element value or the key if not found.
      */
-    public String getString(String key) {
+    public String getString(String key)
+    {
         String val = (String) get(key);
         // At a change of the return value at val == null the method
         // com.izforge.izpack.installer.IzPanel.getI18nStringForClass
         // should be also addapted.
-        if (val == null) {
+        if (val == null)
+        {
             val = key;
         }
         return val;
@@ -134,16 +144,24 @@ public class LocaleDatabase extends TreeMap {
      * @param variables the variables to insert
      * @return The element value with the variables inserted or the key if not found.
      */
-    public String getString(String key, String[] variables) {
-        for (int i = 0; i < variables.length; ++i) {
-            if (variables[i] == null) {
+    public String getString(String key, String[] variables)
+    {
+        for (int i = 0; i < variables.length; ++i)
+        {
+            if (variables[i] == null)
+            {
                 // The argument array with index is NULL! Replace it with N/A
                 variables[i] = "N/A";
-            } else if (variables[i].startsWith("$")) { // Argument is also a key into the LocaleDatabase.
+            }
+            else if (variables[i].startsWith("$"))
+            { // Argument is also a key into the LocaleDatabase.
                 String curArg = variables[i];
-                if (curArg.startsWith("${")) {
+                if (curArg.startsWith("${"))
+                {
                     curArg = curArg.substring(2, curArg.length() - 1);
-                } else {
+                }
+                else
+                {
                     curArg = curArg.substring(1);
                 }
                 variables[i] = getString(curArg);

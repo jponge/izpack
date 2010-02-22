@@ -19,6 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.compiler.compressor;
 
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -33,7 +34,8 @@ import com.izforge.izpack.api.substitutor.VariableSubstitutor;
  * @author Klaus Bartz
  */
 
-public abstract class PackCompressorBase implements PackCompressor {
+public abstract class PackCompressorBase implements PackCompressor
+{
 
     protected String[] formatNames = null;
     protected String decoderMapper = null;
@@ -48,7 +50,8 @@ public abstract class PackCompressorBase implements PackCompressor {
     /**
      * @param variableSubstitutor
      */
-    public PackCompressorBase(VariableSubstitutor variableSubstitutor) {
+    public PackCompressorBase(VariableSubstitutor variableSubstitutor)
+    {
         super();
         this.variableSubstitutor = variableSubstitutor;
     }
@@ -57,7 +60,8 @@ public abstract class PackCompressorBase implements PackCompressor {
      * @see com.izforge.izpack.compressor.PackCompressor#getEncoderClassName()
      */
 
-    public String getEncoderClassName() {
+    public String getEncoderClassName()
+    {
         return (encoderClassName);
     }
 
@@ -65,7 +69,8 @@ public abstract class PackCompressorBase implements PackCompressor {
      * @see com.izforge.izpack.compressor.PackCompressor#useStandardCompression()
      */
 
-    public boolean useStandardCompression() {
+    public boolean useStandardCompression()
+    {
         return (false);
     }
 
@@ -73,7 +78,8 @@ public abstract class PackCompressorBase implements PackCompressor {
      * @see com.izforge.izpack.compressor.PackCompressor#getCompressionFormatSymbols()
      */
 
-    public String[] getCompressionFormatSymbols() {
+    public String[] getCompressionFormatSymbols()
+    {
         return formatNames;
     }
 
@@ -81,7 +87,8 @@ public abstract class PackCompressorBase implements PackCompressor {
      * @see com.izforge.izpack.compressor.PackCompressor#getDecoderMapperName()
      */
 
-    public String getDecoderMapperName() {
+    public String getDecoderMapperName()
+    {
         return (decoderMapper);
     }
 
@@ -89,7 +96,8 @@ public abstract class PackCompressorBase implements PackCompressor {
      * @see com.izforge.izpack.compressor.PackCompressor#setCompressionLevel(int)
      */
 
-    public void setCompressionLevel(int level) {
+    public void setCompressionLevel(int level)
+    {
         this.level = level;
     }
 
@@ -97,7 +105,8 @@ public abstract class PackCompressorBase implements PackCompressor {
      * @see com.izforge.izpack.compressor.PackCompressor#getCompressionLevel()
      */
 
-    public int getCompressionLevel() {
+    public int getCompressionLevel()
+    {
         return (level);
     }
 
@@ -105,7 +114,8 @@ public abstract class PackCompressorBase implements PackCompressor {
      * @see com.izforge.izpack.compressor.PackCompressor#needsBufferedOutputStream()
      */
 
-    public boolean needsBufferedOutputStream() {
+    public boolean needsBufferedOutputStream()
+    {
         return (true);
     }
 }

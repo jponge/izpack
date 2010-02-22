@@ -44,7 +44,8 @@ import java.util.ArrayList;
  *
  * @author Klaus Bartz
  */
-public class SimpleInstallerListener implements InstallerListener {
+public class SimpleInstallerListener implements InstallerListener
+{
 
     private static ArrayList<SimpleInstallerListener> progressBarCaller = new ArrayList<SimpleInstallerListener>();
 
@@ -67,7 +68,8 @@ public class SimpleInstallerListener implements InstallerListener {
     /**
      * The default constructor.
      */
-    public SimpleInstallerListener() {
+    public SimpleInstallerListener()
+    {
         this(false);
     }
 
@@ -77,9 +79,11 @@ public class SimpleInstallerListener implements InstallerListener {
      *
      * @param useSpecHelper
      */
-    public SimpleInstallerListener(boolean useSpecHelper) {
+    public SimpleInstallerListener(boolean useSpecHelper)
+    {
         super();
-        if (useSpecHelper) {
+        if (useSpecHelper)
+        {
             setSpecHelper(new SpecHelper());
         }
     }
@@ -91,7 +95,8 @@ public class SimpleInstallerListener implements InstallerListener {
      * com.izforge.izpack.PackFile)
      */
 
-    public void afterFile(File file, PackFile pf) throws Exception {
+    public void afterFile(File file, PackFile pf) throws Exception
+    {
         // Do nothing
     }
 
@@ -102,7 +107,8 @@ public class SimpleInstallerListener implements InstallerListener {
      * com.izforge.izpack.PackFile)
      */
 
-    public void afterDir(File dir, PackFile pf) throws Exception {
+    public void afterDir(File dir, PackFile pf) throws Exception
+    {
         // Do nothing
     }
 
@@ -114,7 +120,8 @@ public class SimpleInstallerListener implements InstallerListener {
      */
 
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
-            throws Exception {
+            throws Exception
+    {
 
         // Do nothing
     }
@@ -126,7 +133,8 @@ public class SimpleInstallerListener implements InstallerListener {
      * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
 
-    public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception {
+    public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
+    {
         // TODO Auto-generated method stub
 
     }
@@ -139,18 +147,23 @@ public class SimpleInstallerListener implements InstallerListener {
      */
 
     public void beforePacks(AutomatedInstallData idata, Integer npacks,
-                            AbstractUIProgressHandler handler) throws Exception {
-        if (installdata == null) {
+                            AbstractUIProgressHandler handler) throws Exception
+    {
+        if (installdata == null)
+        {
             installdata = idata;
         }
-        if (installdata != null && SimpleInstallerListener.langpack == null) {
+        if (installdata != null && SimpleInstallerListener.langpack == null)
+        {
             // Load langpack.
-            try {
+            try
+            {
                 String resource = LANG_FILE_NAME + "_" + installdata.getLocaleISO3();
                 SimpleInstallerListener.langpack = new LocaleDatabase(ResourceManager.getInstance()
                         .getInputStream(resource));
             }
-            catch (Throwable exception) {
+            catch (Throwable exception)
+            {
             }
 
         }
@@ -164,7 +177,8 @@ public class SimpleInstallerListener implements InstallerListener {
      */
 
     public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler)
-            throws Exception {
+            throws Exception
+    {
         // Do nothing
     }
 
@@ -174,7 +188,8 @@ public class SimpleInstallerListener implements InstallerListener {
      * @see com.izforge.izpack.installer.InstallerListener#isFileListener()
      */
 
-    public boolean isFileListener() {
+    public boolean isFileListener()
+    {
         // For default no.
         return false;
     }
@@ -186,7 +201,8 @@ public class SimpleInstallerListener implements InstallerListener {
      * com.izforge.izpack.PackFile)
      */
 
-    public void beforeFile(File file, PackFile pf) throws Exception {
+    public void beforeFile(File file, PackFile pf) throws Exception
+    {
         // Do nothing
     }
 
@@ -197,11 +213,13 @@ public class SimpleInstallerListener implements InstallerListener {
      * com.izforge.izpack.PackFile)
      */
 
-    public void beforeDir(File dir, PackFile pf) throws Exception {
+    public void beforeDir(File dir, PackFile pf) throws Exception
+    {
         // Do nothing
     }
 
-    public void afterInstallerInitialization(AutomatedInstallData data) {
+    public void afterInstallerInitialization(AutomatedInstallData data)
+    {
         this.installdata = data;
     }
 
@@ -210,7 +228,8 @@ public class SimpleInstallerListener implements InstallerListener {
      *
      * @return current specification helper
      */
-    public SpecHelper getSpecHelper() {
+    public SpecHelper getSpecHelper()
+    {
         return specHelper;
     }
 
@@ -219,7 +238,8 @@ public class SimpleInstallerListener implements InstallerListener {
      *
      * @param helper specification helper which should be used
      */
-    public void setSpecHelper(SpecHelper helper) {
+    public void setSpecHelper(SpecHelper helper)
+    {
         specHelper = helper;
     }
 
@@ -228,7 +248,8 @@ public class SimpleInstallerListener implements InstallerListener {
      *
      * @return current installdata object
      */
-    public AutomatedInstallData getInstalldata() {
+    public AutomatedInstallData getInstalldata()
+    {
         return installdata;
     }
 
@@ -237,7 +258,8 @@ public class SimpleInstallerListener implements InstallerListener {
      *
      * @param data installdata object which should be set to current
      */
-    public void setInstalldata(AutomatedInstallData data) {
+    public void setInstalldata(AutomatedInstallData data)
+    {
         installdata = data;
     }
 
@@ -246,7 +268,8 @@ public class SimpleInstallerListener implements InstallerListener {
      *
      * @return the count of listeners which are registered as progress bar caller
      */
-    public static int getProgressBarCallerCount() {
+    public static int getProgressBarCallerCount()
+    {
         return (progressBarCaller.size());
     }
 
@@ -255,9 +278,12 @@ public class SimpleInstallerListener implements InstallerListener {
      *
      * @return the progress bar caller id of this object
      */
-    protected int getProgressBarCallerId() {
-        for (int i = 0; i < progressBarCaller.size(); ++i) {
-            if (progressBarCaller.get(i) == this) {
+    protected int getProgressBarCallerId()
+    {
+        for (int i = 0; i < progressBarCaller.size(); ++i)
+        {
+            if (progressBarCaller.get(i) == this)
+            {
                 return (i + 1);
             }
         }
@@ -267,7 +293,8 @@ public class SimpleInstallerListener implements InstallerListener {
     /**
      * Sets this object as progress bar caller.
      */
-    protected void setProgressBarCaller() {
+    protected void setProgressBarCaller()
+    {
         progressBarCaller.add(this);
 
     }
@@ -277,7 +304,8 @@ public class SimpleInstallerListener implements InstallerListener {
      *
      * @return whether this object should inform the progress bar or not
      */
-    protected boolean informProgressBar() {
+    protected boolean informProgressBar()
+    {
         return (doInformProgressBar);
     }
 
@@ -288,12 +316,15 @@ public class SimpleInstallerListener implements InstallerListener {
      * @param id string id for which the message should be resolved
      * @return the related language dependant message
      */
-    protected String getMsg(String id) {
+    protected String getMsg(String id)
+    {
         String retval = id;
-        if (SimpleInstallerListener.langpack != null) {
+        if (SimpleInstallerListener.langpack != null)
+        {
             retval = SimpleInstallerListener.langpack.getString(id);
         }
-        if (retval.equals(id) && getInstalldata() != null) {
+        if (retval.equals(id) && getInstalldata() != null)
+        {
             retval = getInstalldata().getLangpack().getString(id);
         }
         return (retval);

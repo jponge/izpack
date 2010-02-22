@@ -32,7 +32,8 @@ package com.izforge.izpack.panels.compile;
  * @author Tino Schwarze
  * @see com.izforge.izpack.util.AbstractUIProgressHandler
  */
-public interface CompileHandler extends com.izforge.izpack.util.AbstractUIProgressHandler {
+public interface CompileHandler extends com.izforge.izpack.util.AbstractUIProgressHandler
+{
 
     /**
      * An error was encountered.

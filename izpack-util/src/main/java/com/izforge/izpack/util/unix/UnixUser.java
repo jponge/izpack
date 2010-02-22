@@ -34,7 +34,8 @@ import java.util.StringTokenizer;
  *
  * @author marc.eppelmann&#064;reddot.de
  */
-public class UnixUser {
+public class UnixUser
+{
     //~ Instance fields ********************************************************************
 
     /**
@@ -86,7 +87,8 @@ public class UnixUser {
      *
      * @return the users login Name
      */
-    public String getName() {
+    public String getName()
+    {
         return itsName;
     }
 
@@ -95,7 +97,8 @@ public class UnixUser {
      *
      * @return the passwdDigest or x
      */
-    public String getPasswdDigest() {
+    public String getPasswdDigest()
+    {
         return itsPasswdDigest;
     }
 
@@ -104,7 +107,8 @@ public class UnixUser {
      *
      * @return The Uid
      */
-    public String getId() {
+    public String getId()
+    {
         return itsId;
     }
 
@@ -113,7 +117,8 @@ public class UnixUser {
      *
      * @return the gid
      */
-    public String getGid() {
+    public String getGid()
+    {
         return itsGid;
     }
 
@@ -122,7 +127,8 @@ public class UnixUser {
      *
      * @return the users descriptio or full name
      */
-    public String getDescription() {
+    public String getDescription()
+    {
         return itsDescription;
     }
 
@@ -131,7 +137,8 @@ public class UnixUser {
      *
      * @return the users home dir
      */
-    public String getHome() {
+    public String getHome()
+    {
         return itsHome.trim();
     }
 
@@ -140,7 +147,8 @@ public class UnixUser {
      *
      * @return The login shell or /bin/false for system users
      */
-    public String getShell() {
+    public String getShell()
+    {
         return itsShell;
     }
 
@@ -151,8 +159,10 @@ public class UnixUser {
      * @param anEtcPasswdLine A Passwd Line of the User.
      * @return The filled User
      */
-    public UnixUser fromEtcPasswdLine(String anEtcPasswdLine) {
-        if (anEtcPasswdLine == null) {
+    public UnixUser fromEtcPasswdLine(String anEtcPasswdLine)
+    {
+        if (anEtcPasswdLine == null)
+        {
             return null;
         }
 
@@ -160,31 +170,38 @@ public class UnixUser {
 
         UnixUser u = new UnixUser();
 
-        if (usersToken.hasMoreTokens()) {
+        if (usersToken.hasMoreTokens())
+        {
             u.itsName = usersToken.nextToken();
         }
 
-        if (usersToken.hasMoreTokens()) {
+        if (usersToken.hasMoreTokens())
+        {
             u.itsPasswdDigest = usersToken.nextToken();
         }
 
-        if (usersToken.hasMoreTokens()) {
+        if (usersToken.hasMoreTokens())
+        {
             u.itsId = usersToken.nextToken();
         }
 
-        if (usersToken.hasMoreTokens()) {
+        if (usersToken.hasMoreTokens())
+        {
             u.itsGid = usersToken.nextToken();
         }
 
-        if (usersToken.hasMoreTokens()) {
+        if (usersToken.hasMoreTokens())
+        {
             u.itsDescription = usersToken.nextToken();
         }
 
-        if (usersToken.hasMoreTokens()) {
+        if (usersToken.hasMoreTokens())
+        {
             u.itsHome = usersToken.nextToken();
         }
 
-        if (usersToken.hasMoreTokens()) {
+        if (usersToken.hasMoreTokens())
+        {
             u.itsShell = usersToken.nextToken();
         }
 
@@ -198,7 +215,8 @@ public class UnixUser {
      *
      * @return the absolute Filename of the script.
      */
-    public String getCreatedXDGDesktopFolderNameScriptFilename() {
+    public String getCreatedXDGDesktopFolderNameScriptFilename()
+    {
         ShellScript sh = new ShellScript();
 
         sh.appendln(". " + getHome() + File.separator + ".config" + File.separator + "user-dirs.dirs");
@@ -209,10 +227,12 @@ public class UnixUser {
 
         String scriptFilename = null;
 
-        try {
+        try
+        {
             scriptFilename = File.createTempFile(pseudoUnique, ".sh").toString();
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             scriptFilename = System.getProperty("java.io.tmpdir", "/tmp") + "/" + pseudoUnique
                     + ".sh";
             e.printStackTrace();
@@ -228,12 +248,16 @@ public class UnixUser {
      *
      * @return The absolute File/Pathname of the Desktop foldername.
      */
-    public String getXdgDesktopfolder() {
+    public String getXdgDesktopfolder()
+    {
         File configFile = new File(getHome() + File.separator + ".config" + File.separator + "user-dirs.dirs");
-        if (configFile.exists()) {
+        if (configFile.exists())
+        {
             if (XDGDesktopFolderNameScript == null)
             /** TODO: can be optimized with a shared script **/
+            {
                 XDGDesktopFolderNameScriptFilename = getCreatedXDGDesktopFolderNameScriptFilename();
+            }
 
             FileExecutor.getExecOutput(new String[]{UnixHelper.getCustomCommand("chmod"), "+x", XDGDesktopFolderNameScriptFilename}, true);
             //
@@ -244,8 +268,11 @@ public class UnixUser {
             //
             return xdgDesktopfolder;
 
-        } else
+        }
+        else
+        {
             return getHome() + File.separator + "Desktop";
+        }
     }
 
     /**
@@ -253,7 +280,8 @@ public class UnixUser {
      *
      * @return The User representation as String
      */
-    public String toString() {
+    public String toString()
+    {
         StringBuffer result = new StringBuffer();
 
         result.append("User: ");
@@ -285,7 +313,8 @@ public class UnixUser {
      *
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         System.out.println(new UnixUser().fromEtcPasswdLine(""));
         System.out.println(new UnixUser().fromEtcPasswdLine("eppelmann.local:x:500:100:Marc L Eppelmann:/mnt/local/home/eppelmann.local:/bin/bash"));
     }

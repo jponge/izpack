@@ -29,7 +29,8 @@ import java.io.Serializable;
  *
  * @author Klaus Bartz
  */
-public class RegistryLogItem implements Cloneable, Serializable {
+public class RegistryLogItem implements Cloneable, Serializable
+{
 
     /**
      *
@@ -78,7 +79,8 @@ public class RegistryLogItem implements Cloneable, Serializable {
     /**
      * Default constructor.
      */
-    private RegistryLogItem() {
+    private RegistryLogItem()
+    {
         super();
     }
 
@@ -95,7 +97,8 @@ public class RegistryLogItem implements Cloneable, Serializable {
      * @param oldValue  old value of the registry entry if it is a value type, else null
      */
     public RegistryLogItem(int type, int root, String key, String valueName,
-                           RegDataContainer newValue, RegDataContainer oldValue) {
+                           RegDataContainer newValue, RegDataContainer oldValue)
+    {
         this.type = type;
         this.root = root;
         this.key = key;
@@ -109,7 +112,8 @@ public class RegistryLogItem implements Cloneable, Serializable {
      *
      * @return the key name of this logging item
      */
-    public String getKey() {
+    public String getKey()
+    {
         return key;
     }
 
@@ -118,7 +122,8 @@ public class RegistryLogItem implements Cloneable, Serializable {
      *
      * @return the new value of this logging item
      */
-    public RegDataContainer getNewValue() {
+    public RegDataContainer getNewValue()
+    {
         return newValue;
     }
 
@@ -127,7 +132,8 @@ public class RegistryLogItem implements Cloneable, Serializable {
      *
      * @return the old value of this logging item
      */
-    public RegDataContainer getOldValue() {
+    public RegDataContainer getOldValue()
+    {
         return oldValue;
     }
 
@@ -136,7 +142,8 @@ public class RegistryLogItem implements Cloneable, Serializable {
      *
      * @return the root id of this logging item
      */
-    public int getRoot() {
+    public int getRoot()
+    {
         return root;
     }
 
@@ -145,7 +152,8 @@ public class RegistryLogItem implements Cloneable, Serializable {
      *
      * @return the type id of this logging item
      */
-    public int getType() {
+    public int getType()
+    {
         return type;
     }
 
@@ -154,7 +162,8 @@ public class RegistryLogItem implements Cloneable, Serializable {
      *
      * @return the value name of this logging item
      */
-    public String getValueName() {
+    public String getValueName()
+    {
         return valueName;
     }
 
@@ -163,7 +172,8 @@ public class RegistryLogItem implements Cloneable, Serializable {
      *
      * @param string to be used as key name
      */
-    public void setKey(String string) {
+    public void setKey(String string)
+    {
         key = string;
     }
 
@@ -172,7 +182,8 @@ public class RegistryLogItem implements Cloneable, Serializable {
      *
      * @param container to be used as new value
      */
-    public void setNewValue(RegDataContainer container) {
+    public void setNewValue(RegDataContainer container)
+    {
         newValue = container;
     }
 
@@ -181,7 +192,8 @@ public class RegistryLogItem implements Cloneable, Serializable {
      *
      * @param container to be used as old value
      */
-    public void setOldValue(RegDataContainer container) {
+    public void setOldValue(RegDataContainer container)
+    {
         oldValue = container;
     }
 
@@ -190,7 +202,8 @@ public class RegistryLogItem implements Cloneable, Serializable {
      *
      * @param i root id to be used for this logging item
      */
-    public void setRoot(int i) {
+    public void setRoot(int i)
+    {
         root = i;
     }
 
@@ -199,7 +212,8 @@ public class RegistryLogItem implements Cloneable, Serializable {
      *
      * @param i type id to be used for this logging item
      */
-    public void setType(int i) {
+    public void setType(int i)
+    {
         type = i;
     }
 
@@ -208,16 +222,20 @@ public class RegistryLogItem implements Cloneable, Serializable {
      *
      * @param string to be used as value name
      */
-    public void setValueName(String string) {
+    public void setValueName(String string)
+    {
         valueName = string;
     }
 
-    public Object clone() throws CloneNotSupportedException {
+    public Object clone() throws CloneNotSupportedException
+    {
         RegistryLogItem retval = (RegistryLogItem) super.clone();
-        if (newValue != null) {
+        if (newValue != null)
+        {
             retval.newValue = (RegDataContainer) newValue.clone();
         }
-        if (oldValue != null) {
+        if (oldValue != null)
+        {
             retval.oldValue = (RegDataContainer) oldValue.clone();
         }
         return (retval);

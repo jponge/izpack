@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.userinput;
 
 import com.izforge.izpack.gui.ButtonFactory;
@@ -34,7 +35,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 
-public class FileInputField extends JPanel implements ActionListener {
+public class FileInputField extends JPanel implements ActionListener
+{
 
     private static final long serialVersionUID = 4673684743657328492L;
 
@@ -63,12 +65,14 @@ public class FileInputField extends JPanel implements ActionListener {
     protected static final int INVALID = 0, EMPTY = 1;
 
     public FileInputField(IzPanel parent, GUIInstallData installDataGUI, boolean directory, String set,
-                          int size, List<ValidatorContainer> validatorConfig) {
+                          int size, List<ValidatorContainer> validatorConfig)
+    {
         this(parent, installDataGUI, directory, set, size, validatorConfig, null, null);
     }
 
     public FileInputField(IzPanel parent, GUIInstallData installDataGUI, boolean directory, String set,
-                          int size, List<ValidatorContainer> validatorConfig, String fileExt, String fileExtDesc) {
+                          int size, List<ValidatorContainer> validatorConfig, String fileExt, String fileExtDesc)
+    {
         this.parent = parent;
         this.parentFrame = parent.getInstallerFrame();
         this.installDataGUI = installDataGUI;
@@ -80,7 +84,8 @@ public class FileInputField extends JPanel implements ActionListener {
         this.initialize();
     }
 
-    private void initialize() {
+    private void initialize()
+    {
         filetxt = new JTextField(set, size);
         filetxt.setCaretPosition(0);
 
@@ -92,21 +97,26 @@ public class FileInputField extends JPanel implements ActionListener {
         this.add(browseBtn);
     }
 
-    public void setFile(String filename) {
+    public void setFile(String filename)
+    {
         filetxt.setText(filename);
     }
 
-    public void actionPerformed(ActionEvent arg0) {
-        if (arg0.getSource() == browseBtn) {
+    public void actionPerformed(ActionEvent arg0)
+    {
+        if (arg0.getSource() == browseBtn)
+        {
             Debug.trace("Show dirchooser");
             String initialPath = ".";
-            if (filetxt.getText() != null) {
+            if (filetxt.getText() != null)
+            {
                 initialPath = filetxt.getText();
             }
             JFileChooser filechooser = new JFileChooser(initialPath);
             prepareFileChooser(filechooser);
 
-            if (filechooser.showOpenDialog(parentFrame) == JFileChooser.APPROVE_OPTION) {
+            if (filechooser.showOpenDialog(parentFrame) == JFileChooser.APPROVE_OPTION)
+            {
                 String selectedFile = filechooser.getSelectedFile().getAbsolutePath();
                 filetxt.setText(selectedFile);
                 Debug.trace("Setting current file chooser directory to: " + selectedFile);
@@ -114,9 +124,11 @@ public class FileInputField extends JPanel implements ActionListener {
         }
     }
 
-    protected void prepareFileChooser(JFileChooser filechooser) {
+    protected void prepareFileChooser(JFileChooser filechooser)
+    {
         filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        if ((fileExtension != null) && (fileExtensionDescription != null)) {
+        if ((fileExtension != null) && (fileExtensionDescription != null))
+        {
             UserInputFileFilter fileFilter = new UserInputFileFilter();
             fileFilter.setFileExt(fileExtension);
             fileFilter.setFileExtDesc(fileExtensionDescription);
@@ -124,37 +136,49 @@ public class FileInputField extends JPanel implements ActionListener {
         }
     }
 
-    public File getSelectedFile() {
+    public File getSelectedFile()
+    {
         File result = null;
-        if (filetxt.getText() != null) {
+        if (filetxt.getText() != null)
+        {
             result = new File(filetxt.getText());
         }
         return result;
     }
 
-    protected void showMessage(int k) {
-        if (k == INVALID) {
+    protected void showMessage(int k)
+    {
+        if (k == INVALID)
+        {
             showMessage("file.notfile");
-        } else if (k == EMPTY) {
+        }
+        else if (k == EMPTY)
+        {
             showMessage("file.nofile");
         }
     }
 
-    protected void showMessage(String messageType) {
+    protected void showMessage(String messageType)
+    {
         JOptionPane.showMessageDialog(parentFrame, parentFrame.langpack.getString("UserInputPanel."
                 + messageType + ".message"), parentFrame.langpack.getString("UserInputPanel."
                 + messageType + ".caption"), JOptionPane.WARNING_MESSAGE);
     }
 
-    public boolean validateField() {
+    public boolean validateField()
+    {
         boolean result = false;
         String input = filetxt.getText();
 
-        if (allowEmpty && ((input == null) || (input.length() == 0))) {
+        if (allowEmpty && ((input == null) || (input.length() == 0)))
+        {
             result = true;
-        } else if (input != null) {
+        }
+        else if (input != null)
+        {
             // Expand unix home reference
-            if (input.startsWith("~")) {
+            if (input.startsWith("~"))
+            {
                 String home = System.getProperty("user.home");
                 input = home + input.substring(1);
             }
@@ -165,14 +189,18 @@ public class FileInputField extends JPanel implements ActionListener {
 
             filetxt.setText(input);
 
-            if (!_validate(file)) {
+            if (!_validate(file))
+            {
                 result = false;
                 showMessage(INVALID);
-            } else {
+            }
+            else
+            {
                 StringInputProcessingClient processingClient = new StringInputProcessingClient(
                         input, validators);
                 boolean success = processingClient.validate();
-                if (!success) {
+                if (!success)
+                {
                     JOptionPane
                             .showMessageDialog(parentFrame,
                                     processingClient.getValidationMessage(), parentFrame.langpack
@@ -181,21 +209,26 @@ public class FileInputField extends JPanel implements ActionListener {
                 }
                 result = success;
             }
-        } else {
+        }
+        else
+        {
             showMessage(EMPTY);
         }
         return result;
     }
 
-    protected boolean _validate(File file) {
+    protected boolean _validate(File file)
+    {
         return file.isFile();
     }
 
-    public boolean isAllowEmptyInput() {
+    public boolean isAllowEmptyInput()
+    {
         return allowEmpty;
     }
 
-    public void setAllowEmptyInput(boolean allowEmpty) {
+    public void setAllowEmptyInput(boolean allowEmpty)
+    {
         this.allowEmpty = allowEmpty;
     }
 }

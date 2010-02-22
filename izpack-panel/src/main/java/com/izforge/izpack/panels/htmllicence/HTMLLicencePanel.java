@@ -39,7 +39,8 @@ import java.net.URL;
  *
  * @author Julien Ponge
  */
-public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, ActionListener {
+public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, ActionListener
+{
 
     /**
      *
@@ -63,7 +64,8 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
      * @param idata  The installation installDataGUI.
      * @param parent Description of the Parameter
      */
-    public HTMLLicencePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public HTMLLicencePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, new IzPanelLayout(), resourceManager);
         // We load the licence
         loadLicence();
@@ -72,7 +74,8 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
 
         add(LabelFactory.create(installData.getLangpack().getString("LicencePanel.info"),
                 parent.icons.getImageIcon("history"), LEADING), NEXT_LINE);
-        try {
+        try
+        {
             textArea = new JEditorPane();
             textArea.setEditable(false);
             textArea.addHyperlinkListener(this);
@@ -80,7 +83,8 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
             textArea.setPage(loadLicence());
             add(scroller, NEXT_LINE);
         }
-        catch (Exception err) {
+        catch (Exception err)
+        {
             err.printStackTrace();
         }
 
@@ -106,12 +110,15 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
      *
      * @return The license text URL.
      */
-    private URL loadLicence() {
+    private URL loadLicence()
+    {
         String resNamePrifix = "HTMLLicencePanel.licence";
-        try {
+        try
+        {
             return resourceManager.getURL(resNamePrifix);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
         return null;
@@ -122,10 +129,14 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
      *
      * @param e The event.
      */
-    public void actionPerformed(ActionEvent e) {
-        if (yesRadio.isSelected()) {
+    public void actionPerformed(ActionEvent e)
+    {
+        if (yesRadio.isSelected())
+        {
             parent.unlockNextButton();
-        } else {
+        }
+        else
+        {
             parent.lockNextButton();
         }
     }
@@ -135,8 +146,10 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
      *
      * @return true if the user agrees with the license, false otherwise.
      */
-    public boolean isValidated() {
-        if (noRadio.isSelected()) {
+    public boolean isValidated()
+    {
+        if (noRadio.isSelected())
+        {
             parent.exit();
             return false;
         }
@@ -148,13 +161,17 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
      *
      * @param e The event.
      */
-    public void hyperlinkUpdate(HyperlinkEvent e) {
-        try {
-            if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+    public void hyperlinkUpdate(HyperlinkEvent e)
+    {
+        try
+        {
+            if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
+            {
                 textArea.setPage(e.getURL());
             }
         }
-        catch (Exception err) {
+        catch (Exception err)
+        {
             // TODO: Extend exception handling.
         }
     }
@@ -162,8 +179,10 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
     /**
      * Called when the panel becomes active.
      */
-    public void panelActivate() {
-        if (!yesRadio.isSelected()) {
+    public void panelActivate()
+    {
+        if (!yesRadio.isSelected())
+        {
             parent.lockNextButton();
         }
     }

@@ -16,7 +16,8 @@ import java.util.Map;
 /**
  * Injection provider for rules.
  */
-public class RulesProvider implements Provider {
+public class RulesProvider implements Provider
+{
 
     /**
      * Resource name of the conditions specification
@@ -26,29 +27,36 @@ public class RulesProvider implements Provider {
     /**
      * Reads the conditions specification file and initializes the rules engine.
      */
-    public RulesEngine provide(AutomatedInstallData installdata) {
+    public RulesEngine provide(AutomatedInstallData installdata)
+    {
         // try to load already parsed conditions
         RulesEngine res = null;
-        try {
+        try
+        {
             InputStream in = InstallerBase.class.getResourceAsStream("/rules");
             ObjectInputStream objIn = new ObjectInputStream(in);
             Map rules = (Map) objIn.readObject();
-            if ((rules != null) && (rules.size() != 0)) {
+            if ((rules != null) && (rules.size() != 0))
+            {
                 res = new RulesEngineImpl(rules, installdata);
             }
             objIn.close();
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.trace("Can not find optional rules");
         }
-        if (res != null) {
+        if (res != null)
+        {
             installdata.setRules(res);
             // rules already read
             return res;
         }
-        try {
+        try
+        {
             InputStream input = this.getClass().getResourceAsStream(CONDITIONS_SPECRESOURCENAME);
-            if (input == null) {
+            if (input == null)
+            {
                 res = new RulesEngineImpl((IXMLElement) null, installdata);
                 return res;
             }
@@ -58,7 +66,8 @@ public class RulesProvider implements Provider {
             IXMLElement conditionsxml = xmlParser.parse(input);
             res = new RulesEngineImpl(conditionsxml, installdata);
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.trace("Can not find optional resource " + CONDITIONS_SPECRESOURCENAME);
             // there seem to be no conditions
             res = new RulesEngineImpl((IXMLElement) null, installdata);

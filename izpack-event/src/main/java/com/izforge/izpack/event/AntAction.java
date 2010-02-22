@@ -39,7 +39,8 @@ import java.util.Properties;
  * @author Thomas Guenter
  * @author Klaus Bartz
  */
-public class AntAction extends ActionBase {
+public class AntAction extends ActionBase
+{
 
     // --------AntAction specific String constants for ------------
     // --- parsing the XML specification ------------
@@ -71,7 +72,8 @@ public class AntAction extends ActionBase {
     /**
      * Default constructor
      */
-    public AntAction() {
+    public AntAction()
+    {
         super();
         properties = new Properties();
         targets = new ArrayList<String>();
@@ -86,7 +88,8 @@ public class AntAction extends ActionBase {
      *
      * @throws Exception
      */
-    public void performInstallAction() throws Exception {
+    public void performInstallAction() throws Exception
+    {
         performAction(false);
     }
 
@@ -97,7 +100,8 @@ public class AntAction extends ActionBase {
      *
      * @throws Exception
      */
-    public void performUninstallAction() throws Exception {
+    public void performUninstallAction() throws Exception
+    {
         performAction(true);
     }
 
@@ -110,17 +114,21 @@ public class AntAction extends ActionBase {
      * @see #performInstallAction() for calling all install actions.
      * @see #performUninstallAction() for calling all uninstall actions.
      */
-    public void performAction(boolean uninstall) throws Exception {
-        if (verbose) {
+    public void performAction(boolean uninstall) throws Exception
+    {
+        if (verbose)
+        {
             System.out.println("Calling ANT with buildfile: " + buildFile);
         }
         SecurityManager oldsm = null;
-        if (!JavaEnvUtils.isJavaVersion("1.0") && !JavaEnvUtils.isJavaVersion("1.1")) {
+        if (!JavaEnvUtils.isJavaVersion("1.0") && !JavaEnvUtils.isJavaVersion("1.1"))
+        {
             oldsm = System.getSecurityManager();
         }
         PrintStream err = System.err;
         PrintStream out = System.out;
-        try {
+        try
+        {
             Project antProj = new Project();
             antProj.setName("antcallproject");
             antProj.addBuildListener(createLogger());
@@ -133,9 +141,11 @@ public class AntAction extends ActionBase {
             antProj.init();
             List<Ant> antcalls = new ArrayList<Ant>();
             List<String> choosenTargets = (uninstall) ? uninstallTargets : targets;
-            if (choosenTargets.size() > 0) {
+            if (choosenTargets.size() > 0)
+            {
                 Ant antcall = null;
-                for (String choosenTarget : choosenTargets) {
+                for (String choosenTarget : choosenTargets)
+                {
                     antcall = (Ant) antProj.createTask("ant");
                     antcall.setAntfile(getBuildFile());
                     antcall.setTarget(choosenTarget);
@@ -145,7 +155,8 @@ public class AntAction extends ActionBase {
             Target target = new Target();
             target.setName("calltarget");
 
-            for (Ant antcall : antcalls) {
+            for (Ant antcall : antcalls)
+            {
                 target.addTask(antcall);
             }
             antProj.addTarget(target);
@@ -153,8 +164,10 @@ public class AntAction extends ActionBase {
             System.setErr(new PrintStream(new DemuxOutputStream(antProj, true)));
             antProj.executeTarget("calltarget");
         }
-        finally {
-            if (oldsm != null) {
+        finally
+        {
+            if (oldsm != null)
+            {
                 System.setSecurityManager(oldsm);
             }
             System.setOut(out);
@@ -167,7 +180,8 @@ public class AntAction extends ActionBase {
      *
      * @return the build file
      */
-    public String getBuildFile() {
+    public String getBuildFile()
+    {
         return buildFile;
     }
 
@@ -176,7 +190,8 @@ public class AntAction extends ActionBase {
      *
      * @param buildFile build file path to be used
      */
-    public void setBuildFile(String buildFile) {
+    public void setBuildFile(String buildFile)
+    {
         this.buildFile = buildFile;
     }
 
@@ -185,7 +200,8 @@ public class AntAction extends ActionBase {
      *
      * @return current logfile path
      */
-    public String getLogFile() {
+    public String getLogFile()
+    {
         return logFile;
     }
 
@@ -194,7 +210,8 @@ public class AntAction extends ActionBase {
      *
      * @param logFile to be set
      */
-    public void setLogFile(String logFile) {
+    public void setLogFile(String logFile)
+    {
         this.logFile = logFile;
     }
 
@@ -203,7 +220,8 @@ public class AntAction extends ActionBase {
      *
      * @return the property file paths
      */
-    public List<String> getPropertyFiles() {
+    public List<String> getPropertyFiles()
+    {
         return propertyFiles;
     }
 
@@ -212,7 +230,8 @@ public class AntAction extends ActionBase {
      *
      * @param propertyFile to be added
      */
-    public void addPropertyFile(String propertyFile) {
+    public void addPropertyFile(String propertyFile)
+    {
         this.propertyFiles.add(propertyFile);
     }
 
@@ -221,7 +240,8 @@ public class AntAction extends ActionBase {
      *
      * @param propertyFiles list of property file paths to be set
      */
-    public void setPropertyFiles(List<String> propertyFiles) {
+    public void setPropertyFiles(List<String> propertyFiles)
+    {
         this.propertyFiles = propertyFiles;
     }
 
@@ -230,7 +250,8 @@ public class AntAction extends ActionBase {
      *
      * @return the properties
      */
-    public Properties getProperties() {
+    public Properties getProperties()
+    {
         return properties;
     }
 
@@ -239,7 +260,8 @@ public class AntAction extends ActionBase {
      *
      * @param properties properties to be set
      */
-    public void setProperties(Properties properties) {
+    public void setProperties(Properties properties)
+    {
         this.properties = properties;
     }
 
@@ -249,7 +271,8 @@ public class AntAction extends ActionBase {
      * @param name  key of the property
      * @param value value to be used for the property
      */
-    public void setProperty(String name, String value) {
+    public void setProperty(String name, String value)
+    {
         this.properties.put(name, value);
     }
 
@@ -259,7 +282,8 @@ public class AntAction extends ActionBase {
      * @param name name of the property
      * @return value of the property
      */
-    public String getProperty(String name) {
+    public String getProperty(String name)
+    {
         return this.properties.getProperty(name);
     }
 
@@ -268,7 +292,8 @@ public class AntAction extends ActionBase {
      *
      * @return quiet state
      */
-    public boolean isQuiet() {
+    public boolean isQuiet()
+    {
         return quiet;
     }
 
@@ -277,7 +302,8 @@ public class AntAction extends ActionBase {
      *
      * @param quiet quiet state to set
      */
-    public void setQuiet(boolean quiet) {
+    public void setQuiet(boolean quiet)
+    {
         this.quiet = quiet;
     }
 
@@ -286,7 +312,8 @@ public class AntAction extends ActionBase {
      *
      * @return the targets
      */
-    public List<String> getTargets() {
+    public List<String> getTargets()
+    {
         return targets;
     }
 
@@ -295,7 +322,8 @@ public class AntAction extends ActionBase {
      *
      * @param targets list of targets
      */
-    public void setTargets(ArrayList<String> targets) {
+    public void setTargets(ArrayList<String> targets)
+    {
         this.targets = targets;
     }
 
@@ -304,7 +332,8 @@ public class AntAction extends ActionBase {
      *
      * @param target target to be add
      */
-    public void addTarget(String target) {
+    public void addTarget(String target)
+    {
         this.targets.add(target);
     }
 
@@ -313,7 +342,8 @@ public class AntAction extends ActionBase {
      *
      * @return the uninstaller targets
      */
-    public List<String> getUninstallTargets() {
+    public List<String> getUninstallTargets()
+    {
         return uninstallTargets;
     }
 
@@ -322,7 +352,8 @@ public class AntAction extends ActionBase {
      *
      * @param targets list of targets
      */
-    public void setUninstallTargets(ArrayList<String> targets) {
+    public void setUninstallTargets(ArrayList<String> targets)
+    {
         this.uninstallTargets = targets;
     }
 
@@ -331,7 +362,8 @@ public class AntAction extends ActionBase {
      *
      * @param target target to be add
      */
-    public void addUninstallTarget(String target) {
+    public void addUninstallTarget(String target)
+    {
         this.uninstallTargets.add(target);
     }
 
@@ -340,7 +372,8 @@ public class AntAction extends ActionBase {
      *
      * @return verbose state
      */
-    public boolean isVerbose() {
+    public boolean isVerbose()
+    {
         return verbose;
     }
 
@@ -349,73 +382,96 @@ public class AntAction extends ActionBase {
      *
      * @param verbose state to be set
      */
-    public void setVerbose(boolean verbose) {
+    public void setVerbose(boolean verbose)
+    {
         this.verbose = verbose;
     }
 
-    private BuildLogger createLogger() {
+    private BuildLogger createLogger()
+    {
         int msgOutputLevel = 2;
-        if (verbose) {
+        if (verbose)
+        {
             msgOutputLevel = 4;
-        } else if (quiet) {
+        }
+        else if (quiet)
+        {
             msgOutputLevel = 1;
         }
         BuildLogger logger = new DefaultLogger();
         logger.setMessageOutputLevel(msgOutputLevel);
-        if (logFile != null) {
+        if (logFile != null)
+        {
             PrintStream printStream;
-            try {
+            try
+            {
                 printStream = new PrintStream(new FileOutputStream(logFile));
                 logger.setOutputPrintStream(printStream);
                 logger.setErrorPrintStream(printStream);
             }
-            catch (FileNotFoundException e) {
+            catch (FileNotFoundException e)
+            {
                 logger.setOutputPrintStream(System.out);
                 logger.setErrorPrintStream(System.err);
             }
-        } else {
+        }
+        else
+        {
             logger.setOutputPrintStream(System.out);
             logger.setErrorPrintStream(System.err);
         }
         return logger;
     }
 
-    private void addProperties(Project proj, Properties props) {
-        if (proj == null) {
+    private void addProperties(Project proj, Properties props)
+    {
+        if (proj == null)
+        {
             return;
         }
-        if (props.size() > 0) {
+        if (props.size() > 0)
+        {
             Iterator iter = props.keySet().iterator();
             String key = null;
-            while (iter.hasNext()) {
+            while (iter.hasNext())
+            {
                 key = (String) iter.next();
                 proj.setProperty(key, props.getProperty(key));
             }
         }
     }
 
-    private void addPropertiesFromPropertyFiles(Project proj) throws Exception {
-        if (proj == null) {
+    private void addPropertiesFromPropertyFiles(Project proj) throws Exception
+    {
+        if (proj == null)
+        {
             return;
         }
         Properties props = new Properties();
         File pf = null;
         FileInputStream fis = null;
-        try {
-            for (String propertyFile : propertyFiles) {
+        try
+        {
+            for (String propertyFile : propertyFiles)
+            {
                 pf = new File(propertyFile);
-                if (pf.exists()) {
+                if (pf.exists())
+                {
                     fis = new FileInputStream(pf);
                     props.load(fis);
                     fis.close();
-                } else {
+                }
+                else
+                {
                     throw new Exception("Required propertyfile " + pf
                             + " for antcall doesn't exist.");
                 }
             }
         }
-        finally {
-            if (fis != null) {
+        finally
+        {
+            if (fis != null)
+            {
                 fis.close();
             }
         }

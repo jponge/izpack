@@ -15,9 +15,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Integration test for panels
  */
-public class PanelTest extends AbstractInstallationTest {
+public class PanelTest extends AbstractInstallationTest
+{
     @Test
-    public void testInfoPanelResource() throws Exception {
+    public void testInfoPanelResource() throws Exception
+    {
         compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
         ResourceManager resourceManager = applicationContainer.getComponent(ResourceManager.class);
@@ -27,7 +29,8 @@ public class PanelTest extends AbstractInstallationTest {
     }
 
     @Test
-    public void testLicencePanelResource() throws Exception {
+    public void testLicencePanelResource() throws Exception
+    {
         compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
         ResourceManager resourceManager = applicationContainer.getComponent(ResourceManager.class);
@@ -37,7 +40,8 @@ public class PanelTest extends AbstractInstallationTest {
     }
 
     @Test
-    public void testTargetPanel() throws Exception {
+    public void testTargetPanel() throws Exception
+    {
         compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
 
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
@@ -52,7 +56,8 @@ public class PanelTest extends AbstractInstallationTest {
         System.out.println(installData.getInstallPath());
 
         File file = new File(defaultDir);
-        if (file.exists()) {
+        if (file.exists())
+        {
             file.delete();
         }
     }

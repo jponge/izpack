@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.core.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -30,7 +31,8 @@ import java.util.HashMap;
 /**
  * @author Dennis Reil, <izpack@reil-online.de>
  */
-public class VariableCondition extends Condition {
+public class VariableCondition extends Condition
+{
 
     /**
      *
@@ -41,35 +43,42 @@ public class VariableCondition extends Condition {
 
     protected String value;
 
-    public VariableCondition(String variablename, String value, HashMap packstoremove) {
+    public VariableCondition(String variablename, String value, HashMap packstoremove)
+    {
         super();
         this.variablename = variablename;
         this.value = value;
     }
 
-    public VariableCondition(String variablename, String value) {
+    public VariableCondition(String variablename, String value)
+    {
         super();
         this.variablename = variablename;
         this.value = value;
     }
 
-    public VariableCondition() {
+    public VariableCondition()
+    {
         super();
     }
 
-    public String getValue() {
+    public String getValue()
+    {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(String value)
+    {
         this.value = value;
     }
 
-    public String getVariablename() {
+    public String getVariablename()
+    {
         return variablename;
     }
 
-    public void setVariablename(String variablename) {
+    public void setVariablename(String variablename)
+    {
         this.variablename = variablename;
     }
 
@@ -79,26 +88,36 @@ public class VariableCondition extends Condition {
      * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.api.adaptator.IXMLElement)
      */
 
-    public void readFromXML(IXMLElement xmlcondition) {
-        try {
+    public void readFromXML(IXMLElement xmlcondition)
+    {
+        try
+        {
             this.variablename = xmlcondition.getFirstChildNamed("name").getContent();
             this.value = xmlcondition.getFirstChildNamed("value").getContent();
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.log("missing element in <condition type=\"variable\"/>");
         }
 
     }
 
-    public boolean isTrue() {
-        if (this.installdata != null) {
+    public boolean isTrue()
+    {
+        if (this.installdata != null)
+        {
             String val = this.installdata.getVariable(variablename);
-            if (val == null) {
+            if (val == null)
+            {
                 return false;
-            } else {
+            }
+            else
+            {
                 return val.equals(value);
             }
-        } else {
+        }
+        else
+        {
             return false;
         }
     }
@@ -107,7 +126,8 @@ public class VariableCondition extends Condition {
      * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
      */
 
-    public String getDependenciesDetails() {
+    public String getDependenciesDetails()
+    {
         StringBuffer details = new StringBuffer();
         details.append(this.id);
         details.append(" depends on a value of <b>");
@@ -122,7 +142,8 @@ public class VariableCondition extends Condition {
     }
 
     @Override
-    public void makeXMLData(IXMLElement conditionRoot) {
+    public void makeXMLData(IXMLElement conditionRoot)
+    {
         XMLElementImpl nameEl = new XMLElementImpl("name", conditionRoot);
         nameEl.setContent(this.variablename);
         conditionRoot.addChild(nameEl);

@@ -35,7 +35,8 @@ import java.util.Map;
  *
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
-public class PackFile implements Serializable {
+public class PackFile implements Serializable
+{
 
     static final long serialVersionUID = -834377078706854909L;
 
@@ -119,7 +120,8 @@ public class PackFile implements Serializable {
      * @throws FileNotFoundException if the specified file does not exist.
      */
     public PackFile(File baseDir, File src, String target, List<OsConstraint> osList, OverrideType override, Blockable blockable)
-            throws FileNotFoundException {
+            throws FileNotFoundException
+    {
         this(src, computeRelativePathFrom(baseDir, src), target, osList, override, blockable, null);
     }
 
@@ -135,16 +137,19 @@ public class PackFile implements Serializable {
      * @throws FileNotFoundException if the specified file does not exist.
      */
     public PackFile(File src, String relativeSourcePath, String target, List<OsConstraint> osList, OverrideType override, Blockable blockable, Map additionals)
-            throws FileNotFoundException {
+            throws FileNotFoundException
+    {
         if (!src.exists()) // allows cleaner client co
         {
             throw new FileNotFoundException("No such file: " + src);
         }
 
-        if ('/' != File.separatorChar) {
+        if ('/' != File.separatorChar)
+        {
             target = target.replace(File.separatorChar, '/');
         }
-        if (target.endsWith("/")) {
+        if (target.endsWith("/"))
+        {
             target = target.substring(0, target.length() - 1);
         }
 
@@ -165,7 +170,9 @@ public class PackFile implements Serializable {
         // File.length is undefined for directories - we don't add any data, so don't skip
         // any please!
         if (isDirectory)
+        {
             length = 0;
+        }
     }
 
     /**
@@ -180,7 +187,8 @@ public class PackFile implements Serializable {
      * @throws FileNotFoundException if the specified file does not exist.
      */
     public PackFile(File baseDir, File src, String target, List<OsConstraint> osList, OverrideType override, Blockable blockable, Map additionals)
-            throws FileNotFoundException {
+            throws FileNotFoundException
+    {
         this(src, computeRelativePathFrom(baseDir, src), target, osList, override, blockable, additionals);
     }
 
@@ -191,12 +199,16 @@ public class PackFile implements Serializable {
      * @param file    the file inside basDir
      * @return null if file is not a inside baseDir
      */
-    public static String computeRelativePathFrom(File baseDir, File file) {
-        if (baseDir == null || file == null) {
+    public static String computeRelativePathFrom(File baseDir, File file)
+    {
+        if (baseDir == null || file == null)
+        {
             return null;
         }
-        try { // extract relative path...
-            if (file.getAbsolutePath().startsWith(baseDir.getAbsolutePath())) {
+        try
+        { // extract relative path...
+            if (file.getAbsolutePath().startsWith(baseDir.getAbsolutePath()))
+            {
                 return file.getAbsolutePath().substring(baseDir.getAbsolutePath().length() + 1);
             }
         }
@@ -211,7 +223,8 @@ public class PackFile implements Serializable {
         return null;
     }
 
-    public void setPreviousPackFileRef(String previousPackId, Long offsetInPreviousPack) {
+    public void setPreviousPackFileRef(String previousPackId, Long offsetInPreviousPack)
+    {
         this.previousPackId = previousPackId;
         this.offsetInPreviousPack = offsetInPreviousPack;
     }
@@ -219,57 +232,66 @@ public class PackFile implements Serializable {
     /**
      * The target operating system constraints of this file
      */
-    public final List<OsConstraint> osConstraints() {
+    public final List<OsConstraint> osConstraints()
+    {
         return osConstraints;
     }
 
     /**
      * The length of the file in bytes
      */
-    public final long length() {
+    public final long length()
+    {
         return length;
     }
 
     /**
      * The size of the file in bytes (is the same as the length if it is not a loose pack)
      */
-    public final long size() {
+    public final long size()
+    {
         return size;
     }
 
     /**
      * The last-modification time of the file.
      */
-    public final long lastModified() {
+    public final long lastModified()
+    {
         return mtime;
     }
 
     /**
      * Whether or not this file is going to override any existing ones
      */
-    public final OverrideType override() {
+    public final OverrideType override()
+    {
         return override;
     }
 
     /**
      * Whether or not this file might be blocked during installation/uninstallation
      */
-    public final Blockable blockable() {
+    public final Blockable blockable()
+    {
         return blockable;
     }
 
-    public final boolean isDirectory() {
+    public final boolean isDirectory()
+    {
         return isDirectory;
     }
 
-    public final boolean isBackReference() {
+    public final boolean isBackReference()
+    {
         return (previousPackId != null);
     }
 
     /**
      * The full path name of the target file, using '/' as fileseparator.
      */
-    public final String getTargetPath() {
+    public final String getTargetPath()
+    {
         return targetPath;
     }
 
@@ -277,7 +299,8 @@ public class PackFile implements Serializable {
      * The Path of the file relative to the given (compiletime's) basedirectory.
      * Can be resolved while installing with either current working directory or directory of "installer.jar"
      */
-    public String getRelativeSourcePath() {
+    public String getRelativeSourcePath()
+    {
         return relativePath;
     }
 
@@ -286,7 +309,8 @@ public class PackFile implements Serializable {
      *
      * @return additionals
      */
-    public Map getAdditionals() {
+    public Map getAdditionals()
+    {
         return additionals;
     }
 
@@ -294,7 +318,8 @@ public class PackFile implements Serializable {
     /**
      * @return the condition
      */
-    public String getCondition() {
+    public String getCondition()
+    {
         return this.condition;
     }
 
@@ -302,24 +327,30 @@ public class PackFile implements Serializable {
     /**
      * @param condition the condition to set
      */
-    public void setCondition(String condition) {
+    public void setCondition(String condition)
+    {
         this.condition = condition;
     }
 
-    public boolean hasCondition() {
+    public boolean hasCondition()
+    {
         return this.condition != null;
     }
 
-    public boolean isPack200Jar() {
+    public boolean isPack200Jar()
+    {
         return pack200Jar;
     }
 
-    public void setPack200Jar(boolean pack200Jar) {
+    public void setPack200Jar(boolean pack200Jar)
+    {
         this.pack200Jar = pack200Jar;
     }
 
-    public void setLoosePackInfo(boolean loose) {
-        if (loose) {
+    public void setLoosePackInfo(boolean loose)
+    {
+        if (loose)
+        {
             // file is part of a loose pack
             length = 0;
         }

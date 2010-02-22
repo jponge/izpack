@@ -952,7 +952,8 @@ public class InstallerFrame extends JFrame
         }
 
         // Wipe the files that had been installed
-        for (String p : uninstallData.getInstalledFilesList()) {
+        for (String p : uninstallData.getInstalledFilesList())
+        {
             File f = new File(p);
             f.delete();
         }

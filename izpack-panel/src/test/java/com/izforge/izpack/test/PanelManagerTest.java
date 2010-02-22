@@ -18,7 +18,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Test for panel manager
  */
-public class PanelManagerTest {
+public class PanelManagerTest
+{
     @Mock
     private GUIInstallData installDataGUI;
     @Mock
@@ -27,14 +28,16 @@ public class PanelManagerTest {
     private PanelManager panelManager;
 
     @Before
-    public void initMock() throws ClassNotFoundException {
+    public void initMock() throws ClassNotFoundException
+    {
         MockitoAnnotations.initMocks(getClass());
         mergeManager = new MergeManagerImpl();
         panelManager = new PanelManager(installDataGUI, installerContainer, mergeManager);
     }
 
     @Test
-    public void resolveClassNameShouldAddDefaultPrefix() throws Exception {
+    public void resolveClassNameShouldAddDefaultPrefix() throws Exception
+    {
         Class<?> aClass = panelManager.resolveClassName("HelloPanel");
         assertThat(aClass.getName(), Is.is("com.izforge.izpack.panels.hello.HelloPanel"));
         aClass = panelManager.resolveClassName("FinishPanel");
@@ -42,7 +45,8 @@ public class PanelManagerTest {
     }
 
     @Test
-    public void resolveClassNameShouldNotAddPrefixWithCompleteClass() throws Exception {
+    public void resolveClassNameShouldNotAddPrefixWithCompleteClass() throws Exception
+    {
         Class<?> aClass = panelManager.resolveClassName("com.izforge.izpack.panels.hello.HelloPanel");
         assertThat(aClass.getName(), Is.is("com.izforge.izpack.panels.hello.HelloPanel"));
         aClass = panelManager.resolveClassName("com.izforge.izpack.installer.container.InstallerContainer");
@@ -50,13 +54,15 @@ public class PanelManagerTest {
     }
 
     @Test
-    public void shouldSearchAutomaticallyInPackage() throws Exception {
+    public void shouldSearchAutomaticallyInPackage() throws Exception
+    {
         Class<? extends IzPanel> aClass = panelManager.resolveClassName("CheckedHelloPanel");
         assertThat(aClass.getName(), Is.is(CheckedHelloPanel.class.getName()));
     }
 
     @Test(expected = MergeException.class)
-    public void resolveClassNameShouldThrowException() throws Exception {
+    public void resolveClassNameShouldThrowException() throws Exception
+    {
         panelManager.resolveClassName("unknown");
     }
 }

@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.core.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -38,7 +39,8 @@ import java.util.*;
  *
  * @author Dennis Reil, <Dennis.Reil@reddot.de> created: 09.11.2006, 13:48:39
  */
-public class RulesEngineImpl implements RulesEngine {
+public class RulesEngineImpl implements RulesEngine
+{
 
     private static final long serialVersionUID = 3966346766966632860L;
 
@@ -54,11 +56,13 @@ public class RulesEngineImpl implements RulesEngine {
 
     protected static AutomatedInstallData installdata;
 
-    static {
+    static
+    {
         loadStaticConditions();
     }
 
-    private static void loadStaticConditions() {
+    private static void loadStaticConditions()
+    {
         createBuiltinOsCondition("IS_AIX", "izpack.aixinstall");
         createBuiltinOsCondition("IS_WINDOWS", "izpack.windowsinstall");
         createBuiltinOsCondition("IS_WINDOWS_XP", "izpack.windowsinstall.xp");
@@ -73,7 +77,8 @@ public class RulesEngineImpl implements RulesEngine {
         createBuiltinOsCondition("IS_SUNOS_SPARC", "izpack.solarisinstall.sparc");
     }
 
-    private RulesEngineImpl() {
+    private RulesEngineImpl()
+    {
         conditionsmap = new Hashtable<String, Condition>();
         this.panelconditions = new Hashtable<String, String>();
         this.packconditions = new Hashtable<String, String>();
@@ -83,15 +88,19 @@ public class RulesEngineImpl implements RulesEngine {
     /**
      * initializes builtin conditions
      */
-    private void init() {
+    private void init()
+    {
         Debug.trace("RulesEngine.init()");
 
         loadStaticConditions();
 
-        if ((installdata != null) && (installdata.getAllPacks() != null)) {
+        if ((installdata != null) && (installdata.getAllPacks() != null))
+        {
             Debug.trace("Initializing builtin conditions for packs.");
-            for (Pack pack : installdata.getAllPacks()) {
-                if (pack.id != null) {
+            for (Pack pack : installdata.getAllPacks())
+            {
+                if (pack.id != null)
+                {
                     // automatically add packselection condition
                     PackselectionCondition packselcond = new PackselectionCondition();
                     packselcond.setInstalldata(installdata);
@@ -101,7 +110,8 @@ public class RulesEngineImpl implements RulesEngine {
 
                     Debug.trace("Pack.getCondition(): " + pack.getCondition() + " for pack "
                             + pack.id);
-                    if ((pack.getCondition() != null) && pack.getCondition().length() > 0) {
+                    if ((pack.getCondition() != null) && pack.getCondition().length() > 0)
+                    {
                         Debug.trace("Adding pack condition " + pack.getCondition() + " for pack "
                                 + pack.id);
                         packconditions.put(pack.id, pack.getCondition());
@@ -112,7 +122,8 @@ public class RulesEngineImpl implements RulesEngine {
         }
     }
 
-    private static void createBuiltinOsCondition(String osVersionField, String conditionId) {
+    private static void createBuiltinOsCondition(String osVersionField, String conditionId)
+    {
         JavaCondition condition = new JavaCondition();
         condition.setInstalldata(installdata);
         condition.id = conditionId;
@@ -127,7 +138,8 @@ public class RulesEngineImpl implements RulesEngine {
     /**
      *
      */
-    public RulesEngineImpl(IXMLElement conditionsspecxml, AutomatedInstallData installdata) {
+    public RulesEngineImpl(IXMLElement conditionsspecxml, AutomatedInstallData installdata)
+    {
         this();
         this.conditionsspec = conditionsspecxml;
         this.installdata = installdata;
@@ -135,13 +147,15 @@ public class RulesEngineImpl implements RulesEngine {
         init();
     }
 
-    public RulesEngineImpl(Map<String, Condition> rules, AutomatedInstallData installdata) {
+    public RulesEngineImpl(Map<String, Condition> rules, AutomatedInstallData installdata)
+    {
         this();
         Debug.trace("Initializing RulesEngine");
         RulesEngineImpl.installdata = installdata;
         conditionsmap = rules;
         Iterator<String> keyiter = conditionsmap.keySet().iterator();
-        while (keyiter.hasNext()) {
+        while (keyiter.hasNext())
+        {
             String key = keyiter.next();
             Condition condition = conditionsmap.get(key);
             condition.setInstalldata(installdata);
@@ -154,7 +168,8 @@ public class RulesEngineImpl implements RulesEngine {
      *
      * @return
      */
-    public String[] getKnownConditionIds() {
+    public String[] getKnownConditionIds()
+    {
         String[] conditionids = conditionsmap.keySet().toArray(
                 new String[this.conditionsmap.size()]);
         Arrays.sort(conditionids);
@@ -169,24 +184,33 @@ public class RulesEngineImpl implements RulesEngine {
      * @param element   the element
      * @return true value was set false no value was set
      */
-    protected boolean checkAttribute(String val, String attribute, String element) {
-        if ((val != null) && (val.length() > 0)) {
+    protected boolean checkAttribute(String val, String attribute, String element)
+    {
+        if ((val != null) && (val.length() > 0))
+        {
             return true;
-        } else {
+        }
+        else
+        {
             Debug.trace("Element " + element + " has to specify an attribute " + attribute);
             return false;
         }
     }
 
-    public static Condition analyzeCondition(IXMLElement condition) {
+    public static Condition analyzeCondition(IXMLElement condition)
+    {
         String condid = condition.getAttribute("id");
         String condtype = condition.getAttribute("type");
         Condition result = null;
-        if (condtype != null) {
+        if (condtype != null)
+        {
             String conditionclassname = "";
-            if (condtype.indexOf('.') > -1) {
+            if (condtype.indexOf('.') > -1)
+            {
                 conditionclassname = condtype;
-            } else {
+            }
+            else
+            {
                 String conditiontype = condtype.toLowerCase();
                 conditionclassname = "com.izforge.izpack.core.rules."
                         + conditiontype.substring(0, 1).toUpperCase()
@@ -194,42 +218,52 @@ public class RulesEngineImpl implements RulesEngine {
                 conditionclassname += "Condition";
             }
 
-            try {
+            try
+            {
                 Class<Condition> conditionClass = getConditionClass(conditionclassname);
-                if (conditionClass != null) {
+                if (conditionClass != null)
+                {
                     result = conditionClass.newInstance();
                     result.readFromXML(condition);
-                    if (condid != null) {
+                    if (condid != null)
+                    {
                         result.setId(condid);
                     }
                     result.setInstalldata(RulesEngineImpl.installdata);
                 }
             }
-            catch (InstantiationException e) {
+            catch (InstantiationException e)
+            {
                 Debug.trace(conditionclassname + " couldn't be instantiated.");
             }
-            catch (IllegalAccessException e) {
+            catch (IllegalAccessException e)
+            {
                 Debug.trace("Illegal access to " + conditionclassname);
             }
         }
         return result;
     }
 
-    private static Class<Condition> getConditionClass(String conditionClassName) {
+    private static Class<Condition> getConditionClass(String conditionClassName)
+    {
         ClassLoader loader = Thread.currentThread().getContextClassLoader(); // 
         Class<Condition> conditionclass = null;
-        try {
+        try
+        {
             conditionclass = (Class<Condition>) loader.loadClass(conditionClassName);
         }
-        catch (ClassNotFoundException e) {
+        catch (ClassNotFoundException e)
+        {
             Debug.trace(conditionClassName + " not found in context class loader.");
         }
-        try {
+        try
+        {
             // try with a different classloader
             loader = RulesEngineImpl.class.getClassLoader();
             conditionclass = (Class<Condition>) loader.loadClass(conditionClassName);
         }
-        catch (ClassNotFoundException e) {
+        catch (ClassNotFoundException e)
+        {
             Debug.trace(conditionClassName + " not found.");
         }
         return conditionclass;
@@ -238,23 +272,30 @@ public class RulesEngineImpl implements RulesEngine {
     /**
      * Read the spec for the conditions
      */
-    protected void readConditions() {
-        if (this.conditionsspec == null) {
+    protected void readConditions()
+    {
+        if (this.conditionsspec == null)
+        {
             Debug.trace("No specification for conditions found.");
             return;
         }
-        try {
-            if (this.conditionsspec.hasChildren()) {
+        try
+        {
+            if (this.conditionsspec.hasChildren())
+            {
                 // read in the condition specs
                 Vector<IXMLElement> childs = this.conditionsspec.getChildrenNamed("condition");
 
-                for (IXMLElement condition : childs) {
+                for (IXMLElement condition : childs)
+                {
                     Condition cond = analyzeCondition(condition);
-                    if (cond != null) {
+                    if (cond != null)
+                    {
                         // this.conditionslist.add(cond);
                         String condid = cond.getId();
                         cond.setInstalldata(RulesEngineImpl.installdata);
-                        if ((condid != null) && !("UNKNOWN".equals(condid))) {
+                        if ((condid != null) && !("UNKNOWN".equals(condid)))
+                        {
                             conditionsmap.put(condid, cond);
                         }
                     }
@@ -262,7 +303,8 @@ public class RulesEngineImpl implements RulesEngine {
 
                 Vector<IXMLElement> panelconditionels = this.conditionsspec
                         .getChildrenNamed("panelcondition");
-                for (IXMLElement panelel : panelconditionels) {
+                for (IXMLElement panelel : panelconditionels)
+                {
                     String panelid = panelel.getAttribute("panelid");
                     String conditionid = panelel.getAttribute("conditionid");
                     this.panelconditions.put(panelid, conditionid);
@@ -270,15 +312,18 @@ public class RulesEngineImpl implements RulesEngine {
 
                 Vector<IXMLElement> packconditionels = this.conditionsspec
                         .getChildrenNamed("packcondition");
-                for (IXMLElement panelel : packconditionels) {
+                for (IXMLElement panelel : packconditionels)
+                {
                     String panelid = panelel.getAttribute("packid");
                     String conditionid = panelel.getAttribute("conditionid");
                     this.packconditions.put(panelid, conditionid);
                     // optional install allowed, if condition is not met?
                     String optional = panelel.getAttribute("optional");
-                    if (optional != null) {
+                    if (optional != null)
+                    {
                         boolean optionalinstall = Boolean.valueOf(optional);
-                        if (optionalinstall) {
+                        if (optionalinstall)
+                        {
                             // optional installation is allowed
                             this.optionalpackconditions.put(panelid, conditionid);
                         }
@@ -286,25 +331,31 @@ public class RulesEngineImpl implements RulesEngine {
                 }
             }
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
 
-    public static Condition getCondition(String id) {
+    public static Condition getCondition(String id)
+    {
         Condition result = conditionsmap.get(id);
-        if (result == null) {
+        if (result == null)
+        {
             result = getConditionByExpr(new StringBuffer(id));
         }
         return result;
     }
 
-    protected static Condition getConditionByExpr(StringBuffer conditionexpr) {
+    protected static Condition getConditionByExpr(StringBuffer conditionexpr)
+    {
         Condition result = null;
         int index = 0;
-        while (index < conditionexpr.length()) {
+        while (index < conditionexpr.length())
+        {
             char currentchar = conditionexpr.charAt(index);
-            switch (currentchar) {
+            switch (currentchar)
+            {
                 case '+':
                     // and-condition
                     Condition op1 = conditionsmap.get(conditionexpr.substring(0, index));
@@ -328,9 +379,12 @@ public class RulesEngineImpl implements RulesEngine {
                     break;
                 case '!':
                     // not-condition
-                    if (index > 0) {
+                    if (index > 0)
+                    {
                         Debug.trace("error: ! operator only allowed at position 0");
-                    } else {
+                    }
+                    else
+                    {
                         // delete not symbol
                         conditionexpr.deleteCharAt(index);
                         result = new NotCondition(getConditionByExpr(conditionexpr));
@@ -342,9 +396,11 @@ public class RulesEngineImpl implements RulesEngine {
             }
             index++;
         }
-        if (conditionexpr.length() > 0) {
+        if (conditionexpr.length() > 0)
+        {
             result = conditionsmap.get(conditionexpr.toString());
-            if (result != null) {
+            if (result != null)
+            {
                 result.setInstalldata(RulesEngineImpl.installdata);
                 conditionexpr.delete(0, conditionexpr.length());
             }
@@ -352,47 +408,64 @@ public class RulesEngineImpl implements RulesEngine {
         return result;
     }
 
-    public boolean isConditionTrue(String id, Properties variables) {
+    public boolean isConditionTrue(String id, Properties variables)
+    {
         Condition cond = getCondition(id);
-        if (cond == null) {
+        if (cond == null)
+        {
             Debug.trace("Condition (" + id + ") not found.");
             return true;
-        } else {
+        }
+        else
+        {
             Debug.trace("Checking condition");
-            try {
+            try
+            {
                 return cond.isTrue();
             }
-            catch (NullPointerException npe) {
+            catch (NullPointerException npe)
+            {
                 Debug.error("Nullpointerexception checking condition: " + id);
                 return false;
             }
         }
     }
 
-    public boolean isConditionTrue(Condition cond, Properties variables) {
-        if (cond == null) {
+    public boolean isConditionTrue(Condition cond, Properties variables)
+    {
+        if (cond == null)
+        {
             Debug.trace("Condition not found.");
             return true;
-        } else {
+        }
+        else
+        {
             Debug.trace("Checking condition");
             return cond.isTrue();
         }
     }
 
-    public boolean isConditionTrue(String id) {
+    public boolean isConditionTrue(String id)
+    {
         Condition cond = RulesEngineImpl.getCondition(id);
-        if (cond != null) {
-            if (cond.getInstalldata() == null) {
+        if (cond != null)
+        {
+            if (cond.getInstalldata() == null)
+            {
                 cond.setInstalldata(RulesEngineImpl.installdata);
             }
             return this.isConditionTrue(cond);
-        } else {
+        }
+        else
+        {
             return false;
         }
     }
 
-    public boolean isConditionTrue(Condition cond) {
-        if (cond.getInstalldata() == null) {
+    public boolean isConditionTrue(Condition cond)
+    {
+        if (cond.getInstalldata() == null)
+        {
             cond.setInstalldata(RulesEngineImpl.installdata);
         }
         return cond.isTrue();
@@ -406,15 +479,18 @@ public class RulesEngineImpl implements RulesEngine {
      * @return true - there is no condition or condition is met false - there is a condition and the
      *         condition was not met
      */
-    public boolean canShowPanel(String panelid, Properties variables) {
+    public boolean canShowPanel(String panelid, Properties variables)
+    {
         Debug.trace("can show panel with id " + panelid + " ?");
-        if (!this.panelconditions.containsKey(panelid)) {
+        if (!this.panelconditions.containsKey(panelid))
+        {
             Debug.trace("no condition, show panel");
             return true;
         }
         Debug.trace("there is a condition");
         Condition condition = getCondition(this.panelconditions.get(panelid));
-        if (condition != null) {
+        if (condition != null)
+        {
             return condition.isTrue();
         }
         return false;
@@ -428,18 +504,22 @@ public class RulesEngineImpl implements RulesEngine {
      * @return true - there is no condition or condition is met false - there is a condition and the
      *         condition was not met
      */
-    public boolean canInstallPack(String packid, Properties variables) {
-        if (packid == null) {
+    public boolean canInstallPack(String packid, Properties variables)
+    {
+        if (packid == null)
+        {
             return true;
         }
         Debug.trace("can install pack with id " + packid + "?");
-        if (!this.packconditions.containsKey(packid)) {
+        if (!this.packconditions.containsKey(packid))
+        {
             Debug.trace("no condition, can install pack");
             return true;
         }
         Debug.trace("there is a condition");
         Condition condition = getCondition(this.packconditions.get(packid));
-        if (condition != null) {
+        if (condition != null)
+        {
             return condition.isTrue();
         }
         return false;
@@ -452,12 +532,16 @@ public class RulesEngineImpl implements RulesEngine {
      * @param variables
      * @return
      */
-    public boolean canInstallPackOptional(String packid, Properties variables) {
+    public boolean canInstallPackOptional(String packid, Properties variables)
+    {
         Debug.trace("can install pack optional with id " + packid + "?");
-        if (!this.optionalpackconditions.containsKey(packid)) {
+        if (!this.optionalpackconditions.containsKey(packid))
+        {
             Debug.trace("not in optionalpackconditions.");
             return false;
-        } else {
+        }
+        else
+        {
             Debug.trace("optional install possible");
             return true;
         }
@@ -466,47 +550,64 @@ public class RulesEngineImpl implements RulesEngine {
     /**
      * @param condition
      */
-    public void addCondition(Condition condition) {
-        if (condition != null) {
-            if (conditionsmap.containsKey(condition.id)) {
+    public void addCondition(Condition condition)
+    {
+        if (condition != null)
+        {
+            if (conditionsmap.containsKey(condition.id))
+            {
                 Debug.error("Condition already registered.");
-            } else {
+            }
+            else
+            {
                 conditionsmap.put(condition.id, condition);
             }
-        } else {
+        }
+        else
+        {
             Debug.error("Cannot add condition. Condition was null.");
         }
     }
 
-    public void writeRulesXML(OutputStream out) {
+    public void writeRulesXML(OutputStream out)
+    {
         XMLWriter xmlOut = new XMLWriter();
         xmlOut.setOutput(out);
-        if (conditionsspec != null) {
+        if (conditionsspec != null)
+        {
             Debug.trace("Writing original conditions specification.");
-            try {
+            try
+            {
                 xmlOut.write(conditionsspec);
             }
-            catch (XMLException e) {
+            catch (XMLException e)
+            {
                 Debug.error("Error writing condition specification: " + e);
             }
-        } else {
+        }
+        else
+        {
             XMLElementImpl conditionsel = new XMLElementImpl("conditions");
-            for (Condition condition : conditionsmap.values()) {
+            for (Condition condition : conditionsmap.values())
+            {
                 IXMLElement conditionEl = createConditionElement(condition, conditionsel);
                 condition.makeXMLData(conditionEl);
                 conditionsel.addChild(conditionEl);
             }
             Debug.trace("Writing generated conditions specification.");
-            try {
+            try
+            {
                 xmlOut.write(conditionsel);
             }
-            catch (XMLException e) {
+            catch (XMLException e)
+            {
                 Debug.error("Error writing condition specification: " + e);
             }
         }
     }
 
-    public static IXMLElement createConditionElement(Condition condition, IXMLElement root) {
+    public static IXMLElement createConditionElement(Condition condition, IXMLElement root)
+    {
         XMLElementImpl xml = new XMLElementImpl("condition", root);
         xml.setAttribute("id", condition.getId());
         xml.setAttribute("type", condition.getClass().getCanonicalName());

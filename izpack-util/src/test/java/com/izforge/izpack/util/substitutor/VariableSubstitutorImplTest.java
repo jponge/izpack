@@ -15,12 +15,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Anthonin Bonnefoy
  */
-public class VariableSubstitutorImplTest {
+public class VariableSubstitutorImplTest
+{
 
     private VariableSubstitutor variableSubstitutor;
 
     @Before
-    public void setupVariableSubstitutor() {
+    public void setupVariableSubstitutor()
+    {
         Properties properties = new Properties(System.getProperties());
         properties.put("MY_PROP", "one");
         properties.put("MY_PROP2", "two");
@@ -28,7 +30,8 @@ public class VariableSubstitutorImplTest {
     }
 
     @Test
-    public void shouldNotSubstitute() throws Exception {
+    public void shouldNotSubstitute() throws Exception
+    {
         String res = variableSubstitutor.substitute("string not substitute", SubstitutionType.TYPE_PLAIN);
         assertThat(res, Is.is("string not substitute"));
         res = variableSubstitutor.substitute("string not ${substitute}", SubstitutionType.TYPE_PLAIN);
@@ -36,7 +39,8 @@ public class VariableSubstitutorImplTest {
     }
 
     @Test
-    public void shouldSubstitutePlainText() throws Exception {
+    public void shouldSubstitutePlainText() throws Exception
+    {
         assertThat(
                 variableSubstitutor.substitute("${MY_PROP}${MY_PROP2}", SubstitutionType.TYPE_PLAIN),
                 Is.is("onetwo"));
@@ -46,14 +50,16 @@ public class VariableSubstitutorImplTest {
     }
 
     @Test
-    public void shouldSubstituteAntType() throws Exception {
+    public void shouldSubstituteAntType() throws Exception
+    {
         assertThat(
                 variableSubstitutor.substitute("@MY_PROP@@MY_PROP2@", SubstitutionType.TYPE_ANT),
                 Is.is("onetwo"));
     }
 
     @Test
-    public void shouldSubstituteShellType() throws Exception {
+    public void shouldSubstituteShellType() throws Exception
+    {
         assertThat(
                 variableSubstitutor.substitute("%MY_PROP%MY_PROP2", SubstitutionType.TYPE_SHELL),
                 Is.is("onetwo"));

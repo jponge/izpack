@@ -19,18 +19,18 @@
 
 package com.izforge.izpack.panels;
 
-import java.io.FileInputStream;
-import java.util.Enumeration;
-import java.util.Properties;
-
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.util.Debug;
 
+import java.io.FileInputStream;
+import java.util.Enumeration;
+import java.util.Properties;
+
 /**
  * The panel that loads and sets variable values from a properties file.
- * 
+ *
  * @author Dasapich Thongnopnua
  */
 public class LoadPropertiesPanel extends IzPanel
@@ -40,9 +40,9 @@ public class LoadPropertiesPanel extends IzPanel
     /**
      * The constructor. The panel loads values from a properties file specified by the variable
      * load.properties.file.
-     * 
+     *
      * @param parent The parent window.
-     * @param idata The installation data.
+     * @param idata  The installation data.
      */
     public LoadPropertiesPanel(InstallerFrame parent, InstallData idata)
     {
@@ -69,7 +69,7 @@ public class LoadPropertiesPanel extends IzPanel
 
     /**
      * Set variables from the properties file.
-     * 
+     *
      * @throws Exception
      */
     public void loadVariables() throws Exception
@@ -108,7 +108,7 @@ public class LoadPropertiesPanel extends IzPanel
 
     /**
      * Indicates whether the panel has been validated or not.
-     * 
+     *
      * @return Always true.
      */
     public boolean isValidated()

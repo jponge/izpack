@@ -36,12 +36,14 @@ import java.io.IOException;
  *
  * @author Klaus Bartz
  */
-public class ChmodInstallerListener extends SimpleInstallerListener {
+public class ChmodInstallerListener extends SimpleInstallerListener
+{
     /* (non-Javadoc)
     * @see com.izforge.izpack.installer.InstallerListener#isFileListener()
     */
 
-    public boolean isFileListener() {
+    public boolean isFileListener()
+    {
         // This is a file related listener.
         return true;
     }
@@ -50,46 +52,67 @@ public class ChmodInstallerListener extends SimpleInstallerListener {
     * @see com.izforge.izpack.compiler.InstallerListener#handleFile(java.io.File, com.izforge.izpack.PackFile)
     */
 
-    public void afterFile(File filePath, PackFile pf) throws Exception {
+    public void afterFile(File filePath, PackFile pf) throws Exception
+    {
         if (pf.getAdditionals() == null)
+        {
             return;
+        }
         Object file = pf.getAdditionals().get("permission.file");
         int fileVal = -1;
         if (file != null && file instanceof Integer)
+        {
             fileVal = ((Integer) file).intValue();
+        }
         if (fileVal != -1)
+        {
             chmod(filePath, fileVal);
+        }
     }
 
     /* (non-Javadoc)
     * @see com.izforge.izpack.compiler.InstallerListener#handleDir(java.io.File, com.izforge.izpack.PackFile)
     */
 
-    public void afterDir(File dirPath, PackFile pf) throws Exception {
+    public void afterDir(File dirPath, PackFile pf) throws Exception
+    {
         if (pf.getAdditionals() == null)
+        {
             return;
+        }
         if (dirPath == null)
+        {
             return;
+        }
         Object dir = pf.getAdditionals().get("permission.dir");
         int dirVal = -1;
         if (dir != null && dir instanceof Integer)
+        {
             dirVal = ((Integer) dir).intValue();
-        if (dirVal != -1) {
+        }
+        if (dirVal != -1)
+        {
             if ((dirVal & 0x000001C0) < 0x000001C0)
+            {
                 throw new InstallerException("Bad owner permission for directory "
                         + dirPath.getAbsolutePath() + "; at installation time the owner needs full rights");
+            }
             chmod(dirPath, dirVal);
         }
     }
 
-    private void chmod(File path, int permissions) throws IOException {
+    private void chmod(File path, int permissions) throws IOException
+    {
         String pathSep = System.getProperty("path.separator");
-        if (OsVersion.IS_WINDOWS) {
+        if (OsVersion.IS_WINDOWS)
+        {
             throw new IOException("Sorry, chmod not supported yet on windows; use this class OS dependant.");
         }
         if (path == null)
-            // Oops this is an error, but in this example we ignore it ...
+        // Oops this is an error, but in this example we ignore it ...
+        {
             return;
+        }
         String permStr = Integer.toOctalString(permissions);
         String[] params = {"chmod", permStr, path.getAbsolutePath()};
         String[] output = new String[2];

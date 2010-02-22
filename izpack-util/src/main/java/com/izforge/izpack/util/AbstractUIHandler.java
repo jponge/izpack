@@ -28,7 +28,8 @@ package com.izforge.izpack.util;
  * such purposes. This way, we can separate UI from function.
  */
 
-public interface AbstractUIHandler {
+public interface AbstractUIHandler
+{
 
     /**
      * Notify the user about something.

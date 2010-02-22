@@ -18,39 +18,49 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Anthonin Bonnefoy
  */
-public class MergeMatcher extends TypeSafeMatcher<Mergeable> {
+public class MergeMatcher extends TypeSafeMatcher<Mergeable>
+{
     private Matcher<Iterable<String>> listMatcher;
 
-    MergeMatcher(Matcher<Iterable<String>> listMatcher) {
+    MergeMatcher(Matcher<Iterable<String>> listMatcher)
+    {
         this.listMatcher = listMatcher;
     }
 
     @Override
-    public boolean matchesSafely(Mergeable mergeable) {
-        try {
+    public boolean matchesSafely(Mergeable mergeable)
+    {
+        try
+        {
             MockOutputStream outputStream = new MockOutputStream();
             mergeable.merge(outputStream);
             List<String> entryName = outputStream.getListEntryName();
             assertThat(entryName, listMatcher);
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             throw new RuntimeException(e);
         }
         return true;
     }
 
-    public void describeTo(Description description) {
+    public void describeTo(Description description)
+    {
         description.appendText("Excepting meargeable containing ").appendValue(listMatcher);
     }
 
-    public static MergeMatcher isMergeableContainingFile(String fileName) {
+    public static MergeMatcher isMergeableContainingFile(String fileName)
+    {
         return new MergeMatcher(IsCollectionContaining.hasItem(Is.is(fileName)));
     }
 
-    public static MergeMatcher isMergeableMatching(Matcher<Iterable<String>> matcher) {
+    public static MergeMatcher isMergeableMatching(Matcher<Iterable<String>> matcher)
+    {
         return new MergeMatcher(matcher);
     }
 
-    public static MergeMatcher isMergeableContainingFiles(String... files) {
+    public static MergeMatcher isMergeableContainingFiles(String... files)
+    {
         return new MergeMatcher(IsCollectionContaining.hasItems(files));
     }
 

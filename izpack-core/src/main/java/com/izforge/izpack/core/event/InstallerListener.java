@@ -36,7 +36,8 @@ import java.io.File;
  *
  * @author Klaus Bartz
  */
-public interface InstallerListener {
+public interface InstallerListener
+{
 
     // ------------------------------------------------------------------------
     // Constant Definitions

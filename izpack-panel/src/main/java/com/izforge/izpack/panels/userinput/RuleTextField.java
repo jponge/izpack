@@ -40,7 +40,8 @@ import java.awt.*;
  * @see UserInputPanel
  */
 /*---------------------------------------------------------------------------*/
-public class RuleTextField extends JTextField {
+public class RuleTextField extends JTextField
+{
 
     /**
      *
@@ -81,7 +82,8 @@ public class RuleTextField extends JTextField {
     private Toolkit toolkit;
 
     public RuleTextField(int digits, int editLength, int type, boolean unlimitedEdit,
-                         Toolkit toolkit) {
+                         Toolkit toolkit)
+    {
         super(digits + 1);
 
         setColumns(digits);
@@ -93,24 +95,29 @@ public class RuleTextField extends JTextField {
         setDocument(rule);
     }
 
-    protected Document createDefaultModel() {
+    protected Document createDefaultModel()
+    {
         Rule rule = new Rule();
         return (rule);
     }
 
-    public int getColumns() {
+    public int getColumns()
+    {
         return (columns);
     }
 
-    public int getEditLength() {
+    public int getEditLength()
+    {
         return (editLength);
     }
 
-    public boolean unlimitedEdit() {
+    public boolean unlimitedEdit()
+    {
         return (unlimitedEdit);
     }
 
-    public void setColumns(int columns) {
+    public void setColumns(int columns)
+    {
         super.setColumns(columns + 1);
         this.columns = columns;
     }
@@ -119,7 +126,8 @@ public class RuleTextField extends JTextField {
     //
     // --------------------------------------------------------------------------
 
-    class Rule extends PlainDocument {
+    class Rule extends PlainDocument
+    {
 
         /**
          *
@@ -132,17 +140,20 @@ public class RuleTextField extends JTextField {
 
         private boolean unlimitedEdit;
 
-        public void setRuleType(int type, int editLength, boolean unlimitedEdit) {
+        public void setRuleType(int type, int editLength, boolean unlimitedEdit)
+        {
             this.type = type;
             this.editLength = editLength;
             this.unlimitedEdit = unlimitedEdit;
         }
 
-        public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+        public void insertString(int offs, String str, AttributeSet a) throws BadLocationException
+        {
             // --------------------------------------------------
             // don't process if we get a null reference
             // --------------------------------------------------
-            if (str == null) {
+            if (str == null)
+            {
                 return;
             }
 
@@ -154,48 +165,64 @@ public class RuleTextField extends JTextField {
             // --------------------------------------------------
             int totalSize = getLength() + str.length();
 
-            if ((totalSize <= editLength) || (unlimitedEdit)) {
+            if ((totalSize <= editLength) || (unlimitedEdit))
+            {
                 boolean error = false;
 
                 // test for numeric type
-                if (type == N) {
-                    for (int i = 0; i < str.length(); i++) {
-                        if (!Character.isDigit(str.charAt(i))) {
+                if (type == N)
+                {
+                    for (int i = 0; i < str.length(); i++)
+                    {
+                        if (!Character.isDigit(str.charAt(i)))
+                        {
                             error = true;
                         }
                     }
                 }
                 // test for hex type
-                else if (type == H) {
-                    for (int i = 0; i < str.length(); i++) {
+                else if (type == H)
+                {
+                    for (int i = 0; i < str.length(); i++)
+                    {
                         char focusChar = Character.toUpperCase(str.charAt(i));
                         if (!Character.isDigit(focusChar) && (focusChar != 'A')
                                 && (focusChar != 'B') && (focusChar != 'C') && (focusChar != 'D')
-                                && (focusChar != 'E') && (focusChar != 'F')) {
+                                && (focusChar != 'E') && (focusChar != 'F'))
+                        {
                             error = true;
                         }
                     }
                 }
                 // test for alpha type
-                else if (type == A) {
-                    for (int i = 0; i < str.length(); i++) {
-                        if (!Character.isLetter(str.charAt(i))) {
+                else if (type == A)
+                {
+                    for (int i = 0; i < str.length(); i++)
+                    {
+                        if (!Character.isLetter(str.charAt(i)))
+                        {
                             error = true;
                         }
                     }
                 }
                 // test for alpha-numeric type
-                else if (type == AN) {
-                    for (int i = 0; i < str.length(); i++) {
-                        if (!Character.isLetterOrDigit(str.charAt(i))) {
+                else if (type == AN)
+                {
+                    for (int i = 0; i < str.length(); i++)
+                    {
+                        if (!Character.isLetterOrDigit(str.charAt(i)))
+                        {
                             error = true;
                         }
                     }
                 }
                 // test for 'open' -> no limiting rule at all
-                else if (type == O) {
+                else if (type == O)
+                {
                     // let it slide...
-                } else {
+                }
+                else
+                {
                     System.out.println("type = " + type);
                 }
 
@@ -204,12 +231,17 @@ public class RuleTextField extends JTextField {
                 // are ready to insert the string, otherwise give
                 // an error signal.
                 // ------------------------------------------------
-                if (!error) {
+                if (!error)
+                {
                     super.insertString(offs, str, a);
-                } else {
+                }
+                else
+                {
                     toolkit.beep();
                 }
-            } else {
+            }
+            else
+            {
                 toolkit.beep();
             }
         }

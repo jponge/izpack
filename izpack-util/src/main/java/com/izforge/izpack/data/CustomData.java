@@ -31,7 +31,8 @@ import java.util.List;
  *
  * @author Klaus Bartz
  */
-public class CustomData implements Serializable {
+public class CustomData implements Serializable
+{
 
     static final long serialVersionUID = 5504496325961965576L;
 
@@ -92,7 +93,8 @@ public class CustomData implements Serializable {
      * @param osConstraints target operation system of this custom action
      * @param type          type of this custom data
      */
-    public CustomData(String listenerName, List<String> contents, List<OsConstraint> osConstraints, int type) {
+    public CustomData(String listenerName, List<String> contents, List<OsConstraint> osConstraints, int type)
+    {
         this.listenerName = listenerName;
         this.contents = contents;
         this.osConstraints = osConstraints;

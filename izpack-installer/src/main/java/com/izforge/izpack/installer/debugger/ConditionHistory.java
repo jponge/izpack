@@ -30,7 +30,8 @@ import java.util.List;
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  * @version $Id: $
  */
-public class ConditionHistory {
+public class ConditionHistory
+{
     private Condition condition;
     private List<Object[]> values;
 
@@ -38,41 +39,53 @@ public class ConditionHistory {
     private boolean changedcondition;
 
 
-    public ConditionHistory(Condition condition) {
+    public ConditionHistory(Condition condition)
+    {
         this.condition = condition;
         values = new ArrayList<Object[]>();
         newcondition = true;
         changedcondition = true;
     }
 
-    public void addValue(boolean value, String comment) {
-        if ((values.size() == 0) || value != getLastValue()) {
+    public void addValue(boolean value, String comment)
+    {
+        if ((values.size() == 0) || value != getLastValue())
+        {
             Object[] valuecomment = new Object[2];
             valuecomment[0] = value;
             valuecomment[1] = comment;
             this.values.add(valuecomment);
-            if (values.size() == 1) {
+            if (values.size() == 1)
+            {
                 newcondition = true;
                 changedcondition = true;
-            } else {
+            }
+            else
+            {
                 changedcondition = true;
             }
         }
     }
 
-    public boolean getLastValue() {
-        if (values.size() > 0) {
+    public boolean getLastValue()
+    {
+        if (values.size() > 0)
+        {
             return (Boolean) (values.get(values.size() - 1))[0];
-        } else {
+        }
+        else
+        {
             return false;
         }
     }
 
-    public int getValueCount() {
+    public int getValueCount()
+    {
         return values.size();
     }
 
-    public void clearState() {
+    public void clearState()
+    {
         newcondition = false;
         changedcondition = false;
     }
@@ -80,7 +93,8 @@ public class ConditionHistory {
     /**
      * @return the newcondition
      */
-    public boolean isNewcondition() {
+    public boolean isNewcondition()
+    {
         return this.newcondition;
     }
 
@@ -88,21 +102,25 @@ public class ConditionHistory {
     /**
      * @return the changedcondition
      */
-    public boolean isChangedcondition() {
+    public boolean isChangedcondition()
+    {
         return this.changedcondition;
     }
 
-    public String toString() {
+    public String toString()
+    {
         return Boolean.toString(getLastValue());
     }
 
-    public String getConditionHistoryDetails() {
+    public String getConditionHistoryDetails()
+    {
         StringBuffer details = new StringBuffer();
         details.append("<html><body>");
         details.append("<h3>Details of <b>");
         details.append(this.condition.getId());
         details.append("</b></h3>");
-        for (int i = values.size() - 1; i >= 0; i--) {
+        for (int i = values.size() - 1; i >= 0; i--)
+        {
             Object[] condcomment = values.get(i);
             details.append(i + 1);
             details.append(". ");

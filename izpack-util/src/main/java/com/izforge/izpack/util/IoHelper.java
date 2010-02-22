@@ -36,7 +36,8 @@ import java.util.zip.ZipInputStream;
  * Class with some IO related helper.
  * </p>
  */
-public class IoHelper {
+public class IoHelper
+{
 
     // This class uses the same values for family and flavor as
     // TargetFactory. But this class should not depends on TargetFactory,
@@ -57,7 +58,8 @@ public class IoHelper {
     /**
      * Default constructor
      */
-    private IoHelper() {
+    private IoHelper()
+    {
     }
 
     /**
@@ -66,7 +68,8 @@ public class IoHelper {
      * @param inFile  path of file which should be copied
      * @param outFile path of file to create and copy the contents of inFile into
      */
-    public static void copyFile(String inFile, String outFile) throws IOException {
+    public static void copyFile(String inFile, String outFile) throws IOException
+    {
         copyFile(new File(inFile), new File(outFile));
     }
 
@@ -78,7 +81,8 @@ public class IoHelper {
      * @param outFile File object for output
      * @throws IOException if an I/O error occurs
      */
-    public static void copyFile(File inFile, File outFile) throws IOException {
+    public static void copyFile(File inFile, File outFile) throws IOException
+    {
         copyFile(inFile, outFile, null, null);
     }
 
@@ -92,7 +96,8 @@ public class IoHelper {
      * @param permissions permissions for the output file
      * @throws IOException if an I/O error occurs
      */
-    public static void copyFile(File inFile, File outFile, String permissions) throws IOException {
+    public static void copyFile(File inFile, File outFile, String permissions) throws IOException
+    {
         copyFile(inFile, outFile, permissions, null);
     }
 
@@ -107,7 +112,8 @@ public class IoHelper {
      * @throws IOException if an I/O error occurs
      */
     public static void copyFile(File inFile, File outFile, VariableSubstitutor vss)
-            throws IOException {
+            throws IOException
+    {
         copyFile(inFile, outFile, null, vss);
     }
 
@@ -124,7 +130,8 @@ public class IoHelper {
      * @throws IOException if an I/O error occurs
      */
     public static void copyFile(File inFile, File outFile, String permissions,
-                                VariableSubstitutor vs) throws IOException {
+                                VariableSubstitutor vs) throws IOException
+    {
         copyFile(inFile, outFile, permissions, vs, null);
     }
 
@@ -142,11 +149,13 @@ public class IoHelper {
      * @throws IOException if an I/O error occurs
      */
     public static void copyFile(File inFile, File outFile, String permissions,
-                                VariableSubstitutor vs, SubstitutionType type) throws IOException {
+                                VariableSubstitutor vs, SubstitutionType type) throws IOException
+    {
         FileOutputStream out = new FileOutputStream(outFile);
         FileInputStream in = new FileInputStream(inFile);
         copyStream(in, out, vs, type);
-        if (permissions != null && IoHelper.supported("chmod")) {
+        if (permissions != null && IoHelper.supported("chmod"))
+        {
             chmod(outFile.getAbsolutePath(), permissions);
         }
     }
@@ -162,18 +171,23 @@ public class IoHelper {
      * @param type file type for the substitutor
      * @throws IOException if an I/O error occurs
      */
-    public static void copyStream(InputStream in, OutputStream out, VariableSubstitutor vs, SubstitutionType type) throws IOException {
-        if (vs == null) {
+    public static void copyStream(InputStream in, OutputStream out, VariableSubstitutor vs, SubstitutionType type) throws IOException
+    {
+        if (vs == null)
+        {
             byte[] buffer = new byte[5120];
             long bytesCopied = 0;
             int bytesInBuffer;
-            while ((bytesInBuffer = in.read(buffer)) != -1) {
+            while ((bytesInBuffer = in.read(buffer)) != -1)
+            {
                 out.write(buffer, 0, bytesInBuffer);
                 bytesCopied += bytesInBuffer;
             }
             in.close();
             out.close();
-        } else {
+        }
+        else
+        {
             BufferedInputStream bin = new BufferedInputStream(in, 5120);
             BufferedOutputStream bout = new BufferedOutputStream(out, 5120);
             vs.substitute(bin, bout, type, null);
@@ -192,7 +206,8 @@ public class IoHelper {
      * @return newly created and filled temporary file
      * @throws IOException
      */
-    public static File copyToTempFile(File template, String defaultExtension) throws IOException {
+    public static File copyToTempFile(File template, String defaultExtension) throws IOException
+    {
         return copyToTempFile(template, defaultExtension, null);
     }
 
@@ -208,7 +223,8 @@ public class IoHelper {
      * @throws IOException
      */
     public static File copyToTempFile(InputStream is, String ext,
-                                      VariableSubstitutor vss) throws IOException {
+                                      VariableSubstitutor vss) throws IOException
+    {
         File tmpFile = File.createTempFile("izpack_io", ext);
         tmpFile.deleteOnExit();
         IoHelper.copyStream(is, new FileOutputStream(tmpFile), vss, null);
@@ -228,11 +244,13 @@ public class IoHelper {
      * @throws IOException
      */
     public static File copyToTempFile(File template, String defaultExtension,
-                                      VariableSubstitutor vss) throws IOException {
+                                      VariableSubstitutor vss) throws IOException
+    {
         String path = template.getCanonicalPath();
         int pos = path.lastIndexOf('.');
         String ext = path.substring(pos);
-        if (ext == null) {
+        if (ext == null)
+        {
             ext = defaultExtension;
         }
         File tmpFile = File.createTempFile("izpack_io", ext);
@@ -251,7 +269,8 @@ public class IoHelper {
      * @return newly created and filled temporary file
      * @throws IOException
      */
-    public static File copyToTempFile(String template, String defaultExtension) throws IOException {
+    public static File copyToTempFile(String template, String defaultExtension) throws IOException
+    {
         return copyToTempFile(new File(template), defaultExtension);
     }
 
@@ -262,7 +281,8 @@ public class IoHelper {
      * @param permissions POSIX permissions to be set
      * @throws IOException if an I/O error occurs
      */
-    public static void chmod(File file, String permissions) throws IOException {
+    public static void chmod(File file, String permissions) throws IOException
+    {
         chmod(file.getAbsolutePath(), permissions);
     }
 
@@ -274,14 +294,18 @@ public class IoHelper {
      * @param permissions POSIX permissions to be set
      * @throws IOException if an I/O error occurs
      */
-    public static void chmod(String path, String permissions) throws IOException {
+    public static void chmod(String path, String permissions) throws IOException
+    {
         // Perform UNIX
-        if (OsVersion.IS_UNIX) {
+        if (OsVersion.IS_UNIX)
+        {
             String[] params = {"chmod", permissions, path};
             String[] output = new String[2];
             FileExecutor fe = new FileExecutor();
             fe.executeCommand(params, output);
-        } else {
+        }
+        else
+        {
             throw new IOException("Sorry, chmod not supported yet on " + OsVersion.OS_NAME + ".");
         }
     }
@@ -292,11 +316,14 @@ public class IoHelper {
      * @param path path for which the free space should be detected
      * @return the free space for the given path
      */
-    public static long getFreeSpace(String path) {
+    public static long getFreeSpace(String path)
+    {
         long retval = -1;
-        if (OsVersion.IS_WINDOWS) {
+        if (OsVersion.IS_WINDOWS)
+        {
             String command = "cmd.exe";
-            if (System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1) {
+            if (System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1)
+            {
                 return (-1);
             }
             String[] params = {command, "/C", "\"dir /D /-C \"" + path + "\"\""};
@@ -304,19 +331,25 @@ public class IoHelper {
             FileExecutor fe = new FileExecutor();
             fe.executeCommand(params, output);
             retval = extractLong(output[0], -3, 3, "%");
-        } else if (OsVersion.IS_SUNOS) {
+        }
+        else if (OsVersion.IS_SUNOS)
+        {
             String[] params = {"df", "-k", path};
             String[] output = new String[2];
             FileExecutor fe = new FileExecutor();
             fe.executeCommand(params, output);
             retval = extractLong(output[0], -3, 3, "%") * 1024;
-        } else if (OsVersion.IS_HPUX) {
+        }
+        else if (OsVersion.IS_HPUX)
+        {
             String[] params = {"bdf", path};
             String[] output = new String[2];
             FileExecutor fe = new FileExecutor();
             fe.executeCommand(params, output);
             retval = extractLong(output[0], -3, 3, "%") * 1024;
-        } else if (OsVersion.IS_UNIX) {
+        }
+        else if (OsVersion.IS_UNIX)
+        {
             String[] params = {"df", "-Pk", path};
             String[] output = new String[2];
             FileExecutor fe = new FileExecutor();
@@ -334,30 +367,47 @@ public class IoHelper {
      * @return true if the method will be supported with the current enivronment else false
      * @throws RuntimeException if the given method name does not exist
      */
-    public static boolean supported(String method) {
-        if ("getFreeSpace".equals(method)) {
-            if (OsVersion.IS_UNIX) {
+    public static boolean supported(String method)
+    {
+        if ("getFreeSpace".equals(method))
+        {
+            if (OsVersion.IS_UNIX)
+            {
                 return true;
             }
-            if (OsVersion.IS_WINDOWS) { // getFreeSpace do not work on Windows 98.
-                if (System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1) {
+            if (OsVersion.IS_WINDOWS)
+            { // getFreeSpace do not work on Windows 98.
+                if (System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1)
+                {
                     return (false);
                 }
                 return (true);
             }
-        } else if ("chmod".equals(method)) {
-            if (OsVersion.IS_UNIX) {
+        }
+        else if ("chmod".equals(method))
+        {
+            if (OsVersion.IS_UNIX)
+            {
                 return true;
             }
-        } else if ("copyFile".equals(method)) {
+        }
+        else if ("copyFile".equals(method))
+        {
             return true;
-        } else if ("getPrimaryGroup".equals(method)) {
-            if (OsVersion.IS_UNIX) {
+        }
+        else if ("getPrimaryGroup".equals(method))
+        {
+            if (OsVersion.IS_UNIX)
+            {
                 return true;
             }
-        } else if ("getenv".equals(method)) {
+        }
+        else if ("getenv".equals(method))
+        {
             return true;
-        } else {
+        }
+        else
+        {
             throw new RuntimeException("method name " + method + "not supported by this method");
         }
         return false;
@@ -370,10 +420,13 @@ public class IoHelper {
      * @param path path which should be scanned
      * @return the first existing parent directory in a path
      */
-    public static File existingParent(File path) {
+    public static File existingParent(File path)
+    {
         File result = path;
-        while (!result.exists()) {
-            if (result.getParent() == null) {
+        while (!result.exists())
+        {
+            if (result.getParent() == null)
+            {
                 return result;
             }
             result = result.getParentFile();
@@ -394,32 +447,40 @@ public class IoHelper {
      * @return founded long
      */
     private static long extractLong(String in, int assumedPlace, int halfRange,
-                                    String useNotIdentifier) {
+                                    String useNotIdentifier)
+    {
         long retval = -1;
         StringTokenizer st = new StringTokenizer(in);
         int length = st.countTokens();
         int i;
         int currentRange = 0;
         String[] interestedEntries = new String[halfRange + halfRange];
-        for (i = 0; i < length - halfRange + assumedPlace; ++i) {
+        for (i = 0; i < length - halfRange + assumedPlace; ++i)
+        {
             st.nextToken(); // Forget this entries.
         }
 
-        for (i = 0; i < halfRange + halfRange; ++i) { // Put the interesting Strings into an intermediaer array.
-            if (st.hasMoreTokens()) {
+        for (i = 0; i < halfRange + halfRange; ++i)
+        { // Put the interesting Strings into an intermediaer array.
+            if (st.hasMoreTokens())
+            {
                 interestedEntries[i] = st.nextToken();
                 currentRange++;
             }
         }
 
-        for (i = currentRange - 1; i >= 0; --i) {
-            if (useNotIdentifier != null && interestedEntries[i].indexOf(useNotIdentifier) > -1) {
+        for (i = currentRange - 1; i >= 0; --i)
+        {
+            if (useNotIdentifier != null && interestedEntries[i].indexOf(useNotIdentifier) > -1)
+            {
                 continue;
             }
-            try {
+            try
+            {
                 retval = Long.parseLong(interestedEntries[i]);
             }
-            catch (NumberFormatException nfe) {
+            catch (NumberFormatException nfe)
+            {
                 continue;
             }
             break;
@@ -433,33 +494,43 @@ public class IoHelper {
      *
      * @return the primary group of the current user
      */
-    public static String getPrimaryGroup() {
-        if (supported("getPrimaryGroup")) {
-            if (OsVersion.IS_SUNOS) { // Standard id of SOLARIS do not support -gn.
+    public static String getPrimaryGroup()
+    {
+        if (supported("getPrimaryGroup"))
+        {
+            if (OsVersion.IS_SUNOS)
+            { // Standard id of SOLARIS do not support -gn.
                 String[] params = {"id"};
                 String[] output = new String[2];
                 FileExecutor fe = new FileExecutor();
                 fe.executeCommand(params, output);
                 // No we have "uid=%u(%s) gid=%u(%s)"
-                if (output[0] != null) {
+                if (output[0] != null)
+                {
                     StringTokenizer st = new StringTokenizer(output[0], "()");
                     int length = st.countTokens();
-                    if (length >= 4) {
-                        for (int i = 0; i < 3; ++i) {
+                    if (length >= 4)
+                    {
+                        for (int i = 0; i < 3; ++i)
+                        {
                             st.nextToken();
                         }
                         return (st.nextToken());
                     }
                 }
                 return (null);
-            } else {
+            }
+            else
+            {
                 String[] params = {"id", "-gn"};
                 String[] output = new String[2];
                 FileExecutor fe = new FileExecutor();
                 fe.executeCommand(params, output);
                 return output[0];
             }
-        } else {
+        }
+        else
+        {
             return null;
         }
     }
@@ -475,22 +546,27 @@ public class IoHelper {
      * @param with        with what string what should be replaced
      * @return a new String object if what was found in the given string, else the given string self
      */
-    public static String replaceString(String destination, String what, String with) {
-        if (destination.indexOf(what) >= 0) { // what found, with (placeholder) not included in destination ->
+    public static String replaceString(String destination, String what, String with)
+    {
+        if (destination.indexOf(what) >= 0)
+        { // what found, with (placeholder) not included in destination ->
             // perform changing.
             StringBuffer buf = new StringBuffer();
             int last = 0;
             int current = destination.indexOf(what);
             int whatLength = what.length();
-            while (current >= 0) { // Do not use Methods from JRE 1.4 and higher ...
-                if (current > 0) {
+            while (current >= 0)
+            { // Do not use Methods from JRE 1.4 and higher ...
+                if (current > 0)
+                {
                     buf.append(destination.substring(last, current));
                 }
                 buf.append(with);
                 last = current + whatLength;
                 current = destination.indexOf(what, last);
             }
-            if (destination.length() > last) {
+            if (destination.length() > last)
+            {
                 buf.append(destination.substring(last));
             }
             return buf.toString();
@@ -504,7 +580,8 @@ public class IoHelper {
      * @param destination The path to translate.
      * @return The translated path.
      */
-    public static String translatePath(String destination, VariableSubstitutor vs) {
+    public static String translatePath(String destination, VariableSubstitutor vs)
+    {
         // Parse for variables
         destination = vs.substitute(destination);
 
@@ -520,7 +597,8 @@ public class IoHelper {
         // handles backslashes in the replacement string in a special way
         // and the method exist only beginning with JRE 1.4.
         // Therefore the little bit crude way following ...
-        if (destination.indexOf("\\/") >= 0 && destination.indexOf(MASKED_SLASH_PLACEHOLDER) < 0) { // Masked slash found, placeholder not included in destination ->
+        if (destination.indexOf("\\/") >= 0 && destination.indexOf(MASKED_SLASH_PLACEHOLDER) < 0)
+        { // Masked slash found, placeholder not included in destination ->
             // perform masking.
             destination = replaceString(destination, "\\/", MASKED_SLASH_PLACEHOLDER);
             // Masked slashes changed to MASKED_SLASH_PLACEHOLDER.
@@ -530,7 +608,9 @@ public class IoHelper {
             // backslashes will
             // be removed.
             destination = replaceString(destination, MASKED_SLASH_PLACEHOLDER, "/");
-        } else {
+        }
+        else
+        {
             destination = destination.replace('/', File.separatorChar);
         }
         return destination;
@@ -544,14 +624,18 @@ public class IoHelper {
      * @param key variable name for which the value should be resolved
      * @return the value of the environment variable given by key
      */
-    public static String getenv(String key) {
-        if (envVars == null) {
+    public static String getenv(String key)
+    {
+        if (envVars == null)
+        {
             loadEnv();
         }
-        if (envVars == null) {
+        if (envVars == null)
+        {
             return (null);
         }
-        if (OsVersion.IS_WINDOWS) {
+        if (OsVersion.IS_WINDOWS)
+        {
             key = key.toUpperCase();
         }
         return (String) (envVars.get(key));
@@ -560,38 +644,51 @@ public class IoHelper {
     /**
      * Loads all environment variables via an exec.
      */
-    private static void loadEnv() {
+    private static void loadEnv()
+    {
         String[] output = new String[2];
         String[] params;
-        if (OsVersion.IS_WINDOWS) {
+        if (OsVersion.IS_WINDOWS)
+        {
             String command = "cmd.exe";
-            if (System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1) {
+            if (System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1)
+            {
                 command = "command.com";
             }
             String[] paramst = {command, "/C", "set"};
             params = paramst;
-        } else {
+        }
+        else
+        {
             String[] paramst = {"env"};
             params = paramst;
         }
         FileExecutor fe = new FileExecutor();
         fe.executeCommand(params, output);
-        if (output[0].length() <= 0) {
+        if (output[0].length() <= 0)
+        {
             return;
         }
         String lineSep = System.getProperty("line.separator");
         StringTokenizer st = new StringTokenizer(output[0], lineSep);
         envVars = new Properties();
         String var = null;
-        while (st.hasMoreTokens()) {
+        while (st.hasMoreTokens())
+        {
             String line = st.nextToken();
-            if (line.indexOf('=') == -1) { // May be a env var with a new line in it.
-                if (var == null) {
+            if (line.indexOf('=') == -1)
+            { // May be a env var with a new line in it.
+                if (var == null)
+                {
                     var = lineSep + line;
-                } else {
+                }
+                else
+                {
                     var += lineSep + line;
                 }
-            } else { // New var, perform the previous one.
+            }
+            else
+            { // New var, perform the previous one.
                 setEnvVar(var);
                 var = line;
             }
@@ -605,17 +702,21 @@ public class IoHelper {
      *
      * @param var
      */
-    private static void setEnvVar(String var) {
-        if (var == null) {
+    private static void setEnvVar(String var)
+    {
+        if (var == null)
+        {
             return;
         }
         int index = var.indexOf('=');
-        if (index < 0) {
+        if (index < 0)
+        {
             return;
         }
         String key = var.substring(0, index);
         // On windows change all key chars to upper.
-        if (OsVersion.IS_WINDOWS) {
+        if (OsVersion.IS_WINDOWS)
+        {
             key = key.toUpperCase();
         }
         envVars.setProperty(key, var.substring(index + 1));
@@ -631,41 +732,51 @@ public class IoHelper {
      */
     public static void copyZip(ZipInputStream zin, org.apache.tools.zip.ZipOutputStream out,
                                List<String> files, HashMap<FilterOutputStream, HashSet<String>> alreadyWrittenFiles)
-            throws IOException {
+            throws IOException
+    {
         ZipEntry zentry;
-        if (!alreadyWrittenFiles.containsKey(out)) {
+        if (!alreadyWrittenFiles.containsKey(out))
+        {
             alreadyWrittenFiles.put(out, new HashSet<String>());
         }
         HashSet<String> currentSet = alreadyWrittenFiles.get(out);
-        while ((zentry = zin.getNextEntry()) != null) {
+        while ((zentry = zin.getNextEntry()) != null)
+        {
             String currentName = zentry.getName();
             String testName = currentName.replace('/', '.');
             testName = testName.replace('\\', '.');
-            if (files != null) {
+            if (files != null)
+            {
                 Iterator<String> iterator = files.iterator();
                 boolean founded = false;
-                while (iterator.hasNext()) {   // Make "includes" self to support regex.
+                while (iterator.hasNext())
+                {   // Make "includes" self to support regex.
                     String doInclude = iterator.next();
-                    if (testName.matches(doInclude)) {
+                    if (testName.matches(doInclude))
+                    {
                         founded = true;
                         break;
                     }
                 }
-                if (!founded) {
+                if (!founded)
+                {
                     continue;
                 }
             }
-            if (currentSet.contains(currentName)) {
+            if (currentSet.contains(currentName))
+            {
                 continue;
             }
-            try {
+            try
+            {
                 // Get input file date and time.
                 long fileTime = zentry.getTime();
                 copyStreamToJar(zin, out, currentName, fileTime);
                 zin.closeEntry();
                 currentSet.add(currentName);
             }
-            catch (ZipException x) {
+            catch (ZipException x)
+            {
                 // This avoids any problem that can occur with duplicate
                 // directories. for instance all META-INF data in jars
                 // unfortunately this do not work with the apache ZipOutputStream...
@@ -673,11 +784,13 @@ public class IoHelper {
         }
     }
 
-    public static void copyStreamToJar(InputStream zin, ZipOutputStream out, String currentName, long fileTime) throws IOException {
+    public static void copyStreamToJar(InputStream zin, ZipOutputStream out, String currentName, long fileTime) throws IOException
+    {
         // Create new entry for zip file.
         org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(currentName);
         // Make sure there is date and time set.
-        if (fileTime != -1) {
+        if (fileTime != -1)
+        {
             newEntry.setTime(fileTime); // If found set it into output file.
         }
         out.putNextEntry(newEntry);
@@ -685,11 +798,13 @@ public class IoHelper {
         out.closeEntry();
     }
 
-    public static void copyStreamToJar(InputStream zin, java.util.zip.ZipOutputStream out, String currentName, long fileTime) throws IOException {
+    public static void copyStreamToJar(InputStream zin, java.util.zip.ZipOutputStream out, String currentName, long fileTime) throws IOException
+    {
         // Create new entry for zip file.
         org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(currentName);
         // Make sure there is date and time set.
-        if (fileTime != -1) {
+        if (fileTime != -1)
+        {
             newEntry.setTime(fileTime); // If found set it into output file.
         }
         out.putNextEntry(newEntry);
@@ -705,11 +820,13 @@ public class IoHelper {
      * @return the total number of bytes copied
      * @throws IOException if an I/O error occurs
      */
-    public static long copyStream(InputStream in, OutputStream out) throws IOException {
+    public static long copyStream(InputStream in, OutputStream out) throws IOException
+    {
         byte[] buffer = new byte[5120];
         long bytesCopied = 0;
         int bytesInBuffer;
-        while ((bytesInBuffer = in.read(buffer)) != -1) {
+        while ((bytesInBuffer = in.read(buffer)) != -1)
+        {
             out.write(buffer, 0, bytesInBuffer);
             bytesCopied += bytesInBuffer;
         }

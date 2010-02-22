@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.core.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -33,7 +34,8 @@ import java.util.Properties;
  * @author Dennis Reil, <izpack@reil-online.de>
  * @version $Id: PackselectionCondition.java,v 1.1 2006/11/03 13:03:26 dennis Exp $
  */
-public class PackselectionCondition extends Condition {
+public class PackselectionCondition extends Condition
+{
 
     /**
      *
@@ -44,7 +46,8 @@ public class PackselectionCondition extends Condition {
     /**
      *
      */
-    public PackselectionCondition() {
+    public PackselectionCondition()
+    {
         // TODO Auto-generated constructor stub
     }
 
@@ -54,7 +57,8 @@ public class PackselectionCondition extends Condition {
      * @see de.reddot.installer.rules.Condition#isTrue(java.util.Properties)
      */
 
-    private boolean isTrue(Properties variables) {
+    private boolean isTrue(Properties variables)
+    {
         // no information about selected packs given, so return false
         return false;
     }
@@ -65,20 +69,27 @@ public class PackselectionCondition extends Condition {
      * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.api.adaptator.IXMLElement)
      */
 
-    public void readFromXML(IXMLElement xmlcondition) {
-        try {
+    public void readFromXML(IXMLElement xmlcondition)
+    {
+        try
+        {
             this.packid = xmlcondition.getFirstChildNamed("packid").getContent();
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.log("missing element in <condition type=\"variable\"/>");
         }
     }
 
-    private boolean isTrue(Properties variables, List selectedpacks) {
-        if (selectedpacks != null) {
-            for (Object selectedpack : selectedpacks) {
+    private boolean isTrue(Properties variables, List selectedpacks)
+    {
+        if (selectedpacks != null)
+        {
+            for (Object selectedpack : selectedpacks)
+            {
                 Pack p = (Pack) selectedpack;
-                if (packid.equals(p.id)) {
+                if (packid.equals(p.id))
+                {
                     // pack is selected
                     return true;
                 }
@@ -88,7 +99,8 @@ public class PackselectionCondition extends Condition {
         return false;
     }
 
-    public boolean isTrue() {
+    public boolean isTrue()
+    {
         return this.isTrue(this.installdata.getVariables(), this.installdata.getSelectedPacks());
     }
 
@@ -96,7 +108,8 @@ public class PackselectionCondition extends Condition {
      * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
      */
 
-    public String getDependenciesDetails() {
+    public String getDependenciesDetails()
+    {
         StringBuffer details = new StringBuffer();
         details.append(this.id);
         details.append("depends on the selection of pack <b>");
@@ -106,7 +119,8 @@ public class PackselectionCondition extends Condition {
     }
 
     @Override
-    public void makeXMLData(IXMLElement conditionRoot) {
+    public void makeXMLData(IXMLElement conditionRoot)
+    {
         XMLElementImpl packel = new XMLElementImpl("packid", conditionRoot);
         packel.setContent(this.packid);
         conditionRoot.addChild(packel);

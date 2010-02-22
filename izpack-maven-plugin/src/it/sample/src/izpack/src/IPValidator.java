@@ -35,7 +35,8 @@ import com.izforge.izpack.panels.userinput.validator.Validator;
  * @version 0.0.1 / 02/19/03
  */
 /*---------------------------------------------------------------------------*/
-public class IPValidator implements Validator {
+public class IPValidator implements Validator
+{
     /*--------------------------------------------------------------------------*/
 
     /**
@@ -48,13 +49,15 @@ public class IPValidator implements Validator {
      * @return <code>true</code> if the validation passes, otherwise <code>false</code>.
      */
     /*--------------------------------------------------------------------------*/
-    public boolean validate(ProcessingClient client) {
+    public boolean validate(ProcessingClient client)
+    {
         // ----------------------------------------------------
         // verify that there are actually four sub-fields. A
         // different number would indicate that we are not
         // connected with the RuleInputField that we expect
         // ----------------------------------------------------
-        if (client.getNumFields() != 4) {
+        if (client.getNumFields() != 4)
+        {
             return (false);
         }
 
@@ -65,16 +68,20 @@ public class IPValidator implements Validator {
         // ----------------------------------------------------
         boolean isIP = true;
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++)
+        {
             int value;
 
-            try {
+            try
+            {
                 value = Integer.parseInt(client.getFieldContents(i));
-                if ((value < 0) || (value > 255)) {
+                if ((value < 0) || (value > 255))
+                {
                     isIP = false;
                 }
             }
-            catch (Throwable exception) {
+            catch (Throwable exception)
+            {
                 isIP = false;
             }
         }

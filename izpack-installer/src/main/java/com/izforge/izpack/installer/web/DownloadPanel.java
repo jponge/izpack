@@ -32,7 +32,8 @@ import java.awt.event.ActionListener;
  * @author <a href="vralev@redhat.com">Vladimir Ralev</a>
  * @version $Revision: 1.1 $
  */
-public class DownloadPanel extends JDialog implements ActionListener {
+public class DownloadPanel extends JDialog implements ActionListener
+{
     private static final long serialVersionUID = -4458769435196053866L;
 
     JLabel statusLabel = new JLabel("", JLabel.RIGHT);
@@ -49,7 +50,8 @@ public class DownloadPanel extends JDialog implements ActionListener {
 
     LoggedInputStream lis;
 
-    public DownloadPanel(LoggedInputStream lis) {
+    public DownloadPanel(LoggedInputStream lis)
+    {
         Dimension dialogSize = new Dimension(406, 150);
         this.setLayout(null);
         this.setMinimumSize(dialogSize);
@@ -82,11 +84,15 @@ public class DownloadPanel extends JDialog implements ActionListener {
         pack();
     }
 
-    public void setStatusLabel(String text) {
+    public void setStatusLabel(String text)
+    {
         statusText = text;
-        if (!SwingUtilities.isEventDispatchThread()) {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
+        if (!SwingUtilities.isEventDispatchThread())
+        {
+            SwingUtilities.invokeLater(new Runnable()
+            {
+                public void run()
+                {
                     statusLabel.setText(statusText);
                 }
             });
@@ -94,21 +100,28 @@ public class DownloadPanel extends JDialog implements ActionListener {
 
     }
 
-    public void setFileLabel(String text) {
+    public void setFileLabel(String text)
+    {
         int maxStr = 35;
         int lastSeparator = text.lastIndexOf("/");
         text = text.substring(lastSeparator + 1, text.length());
         int length = text.length();
 
-        if (length > maxStr) {
+        if (length > maxStr)
+        {
             fileText = ".." + text.substring(length - maxStr, length);
-        } else {
+        }
+        else
+        {
             fileText = text;
         }
 
-        if (!SwingUtilities.isEventDispatchThread()) {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
+        if (!SwingUtilities.isEventDispatchThread())
+        {
+            SwingUtilities.invokeLater(new Runnable()
+            {
+                public void run()
+                {
                     fileLabel.setText(fileText);
                 }
             });
@@ -116,19 +129,22 @@ public class DownloadPanel extends JDialog implements ActionListener {
 
     }
 
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
         lis.setCancelled(true);
         this.dispose();
     }
 
-    public void setProgressMax(int total) {
+    public void setProgressMax(int total)
+    {
         progressBar.setIndeterminate(false);
         progressBar.setStringPainted(true);
         progressBar.setMaximum(total);
         progressBar.setMinimum(0);
     }
 
-    public void setProgressCurrent(int curr) {
+    public void setProgressCurrent(int curr)
+    {
         progressBar.setValue(curr);
     }
 }

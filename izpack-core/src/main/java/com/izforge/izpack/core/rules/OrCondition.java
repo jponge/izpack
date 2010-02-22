@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.core.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -28,7 +29,8 @@ import com.izforge.izpack.util.Debug;
  * @author Dennis Reil, <izpack@reil-online.de>
  * @version $Id: OrCondition.java,v 1.1 2006/09/29 14:40:38 dennis Exp $
  */
-public class OrCondition extends Condition {
+public class OrCondition extends Condition
+{
     private static final long serialVersionUID = 8341350377205144199L;
 
     protected Condition leftoperand;
@@ -38,7 +40,8 @@ public class OrCondition extends Condition {
     /**
      *
      */
-    public OrCondition() {
+    public OrCondition()
+    {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -46,7 +49,8 @@ public class OrCondition extends Condition {
     /**
      *
      */
-    public OrCondition(Condition operand1, Condition operand2) {
+    public OrCondition(Condition operand1, Condition operand2)
+    {
         this.leftoperand = operand1;
         this.leftoperand.setInstalldata(this.installdata);
         this.rightoperand = operand2;
@@ -68,16 +72,20 @@ public class OrCondition extends Condition {
      * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.api.adaptator.IXMLElement)
      */
 
-    public void readFromXML(IXMLElement xmlcondition) {
-        try {
-            if (xmlcondition.getChildrenCount() != 2) {
+    public void readFromXML(IXMLElement xmlcondition)
+    {
+        try
+        {
+            if (xmlcondition.getChildrenCount() != 2)
+            {
                 Debug.log("or-condition needs two conditions as operands");
                 return;
             }
             this.leftoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(0));
             this.rightoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(1));
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.log("missing element in or-condition");
         }
     }
@@ -88,8 +96,10 @@ public class OrCondition extends Condition {
      * selectedpacks); }
      */
 
-    public boolean isTrue() {
-        if ((this.leftoperand == null) || (this.rightoperand == null)) {
+    public boolean isTrue()
+    {
+        if ((this.leftoperand == null) || (this.rightoperand == null))
+        {
             Debug.trace("Operands of condition " + this.id + " not initialized correctly.");
             return false;
         }
@@ -102,7 +112,8 @@ public class OrCondition extends Condition {
      * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
      */
 
-    public String getDependenciesDetails() {
+    public String getDependenciesDetails()
+    {
         StringBuffer details = new StringBuffer();
         details.append(this.id);
         details.append(" depends on:<ul><li>");
@@ -114,7 +125,8 @@ public class OrCondition extends Condition {
     }
 
     @Override
-    public void makeXMLData(IXMLElement conditionRoot) {
+    public void makeXMLData(IXMLElement conditionRoot)
+    {
         IXMLElement left = RulesEngineImpl.createConditionElement(this.leftoperand, conditionRoot);
         this.leftoperand.makeXMLData(left);
         conditionRoot.addChild(left);

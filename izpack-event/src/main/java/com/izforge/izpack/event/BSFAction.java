@@ -37,7 +37,8 @@ import java.util.Properties;
  *
  * @author minger
  */
-public class BSFAction extends ActionBase {
+public class BSFAction extends ActionBase
+{
     private static final long serialVersionUID = 3258131345250005557L;
 
     public static final String BSFACTIONS = "bsfactions";
@@ -64,25 +65,29 @@ public class BSFAction extends ActionBase {
 
     private Properties variables = new Properties();
 
-    private static class MethodDescriptor {
+    private static class MethodDescriptor
+    {
         private String name;
         private String argNames[];
 
-        public MethodDescriptor(String name, String[] argNames) {
+        public MethodDescriptor(String name, String[] argNames)
+        {
             super();
             this.name = name;
             this.argNames = argNames;
         }
     }
 
-    private static interface MethodExistenceChecker {
+    private static interface MethodExistenceChecker
+    {
         boolean isMethodDefined(String method, String scriptName, BSFEngine engine, BSFManager manager)
                 throws BSFException;
     }
 
     private static Map<String, MethodExistenceChecker> langToMethodCheckerMap = new HashMap<String, MethodExistenceChecker>();
 
-    static {
+    static
+    {
         orderMethodMap = new HashMap<String, MethodDescriptor>();
 
         // UninstallerListener Methods
@@ -118,9 +123,11 @@ public class BSFAction extends ActionBase {
                 new MethodDescriptor("afterPack", new String[]{"pack", "i", "handler"}));
 
         langToMethodCheckerMap.put("beanshell",
-                new MethodExistenceChecker() {
+                new MethodExistenceChecker()
+                {
                     public boolean isMethodDefined(String method, String scriptName, BSFEngine engine, BSFManager manager)
-                            throws BSFException {
+                            throws BSFException
+                    {
                         String script = "this.namespace.getMethod(\"" + method + "\", new Class[0])";
                         Object res =
                                 engine.eval(scriptName, 1, 1, script);
@@ -131,28 +138,35 @@ public class BSFAction extends ActionBase {
 
     }
 
-    public BSFAction() {
+    public BSFAction()
+    {
         super();
     }
 
-    public void setScript(String script) {
+    public void setScript(String script)
+    {
         this.script = script;
     }
 
-    public String getScript() {
+    public String getScript()
+    {
         return script;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage(String language)
+    {
         this.language = language;
     }
 
-    public void init() throws Exception {
-        if (manager == null) {
+    public void init() throws Exception
+    {
+        if (manager == null)
+        {
             manager = new BSFManager();
         }
 
-        if (engine == null) {
+        if (engine == null)
+        {
             engine = manager.loadScriptingEngine(language);
             scriptName = "script." + language;
             engine.exec(scriptName, 1, 1, script);
@@ -160,25 +174,33 @@ public class BSFAction extends ActionBase {
 
     }
 
-    public void destroy() throws Exception {
-        if (engine != null) {
+    public void destroy() throws Exception
+    {
+        if (engine != null)
+        {
             engine.terminate();
             engine = null;
         }
 
-        if (manager != null) {
+        if (manager != null)
+        {
             manager.terminate();
             manager = null;
         }
     }
 
-    public void executeUninstall(String order, Object[] params) throws Exception {
+    public void executeUninstall(String order, Object[] params) throws Exception
+    {
         MethodDescriptor desc = orderMethodMap.get(order);
 
-        if (desc != null) {
-            try {
-                for (int i = 0; i < desc.argNames.length; i++) {
-                    if (params[i] != null) {
+        if (desc != null)
+        {
+            try
+            {
+                for (int i = 0; i < desc.argNames.length; i++)
+                {
+                    if (params[i] != null)
+                    {
                         manager.declareBean(desc.argNames[i],
                                 params[i],
                                 params[i].getClass());
@@ -188,25 +210,34 @@ public class BSFAction extends ActionBase {
                 manager.declareBean("variables", variables, Properties.class);
 
                 MethodExistenceChecker checker = langToMethodCheckerMap.get(language);
-                try {
-                    if (checker != null) {
-                        if (!checker.isMethodDefined(desc.name, scriptName, engine, manager)) {
+                try
+                {
+                    if (checker != null)
+                    {
+                        if (!checker.isMethodDefined(desc.name, scriptName, engine, manager))
+                        {
                             return;
                         }
-                    } else {
+                    }
+                    else
+                    {
                         engine.eval(scriptName, 1, 1, desc.name);
                     }
                 }
-                catch (BSFException e) {
+                catch (BSFException e)
+                {
                     e.printStackTrace();
                     return;
                 }
 
                 engine.exec(scriptName, 1, 1, desc.name + "()");
             }
-            finally {
-                if (desc.argNames != null) {
-                    for (int i = 0; i < desc.argNames.length; i++) {
+            finally
+            {
+                if (desc.argNames != null)
+                {
+                    for (int i = 0; i < desc.argNames.length; i++)
+                    {
                         manager.undeclareBean(desc.argNames[i]);
                     }
                 }
@@ -216,12 +247,17 @@ public class BSFAction extends ActionBase {
 
     }
 
-    public void execute(String order, Object[] params, Object idata) throws Exception {
+    public void execute(String order, Object[] params, Object idata) throws Exception
+    {
         MethodDescriptor desc = orderMethodMap.get(order);
-        if (desc != null) {
-            try {
-                for (int i = 0; i < desc.argNames.length; i++) {
-                    if (params[i] != null) {
+        if (desc != null)
+        {
+            try
+            {
+                for (int i = 0; i < desc.argNames.length; i++)
+                {
+                    if (params[i] != null)
+                    {
                         manager.declareBean(desc.argNames[i],
                                 params[i],
                                 params[i].getClass());
@@ -230,16 +266,20 @@ public class BSFAction extends ActionBase {
 
                 Method m = null;
                 Class clazz = idata.getClass();
-                while (m == null && clazz != Object.class) {
-                    try {
+                while (m == null && clazz != Object.class)
+                {
+                    try
+                    {
                         m = clazz.getDeclaredMethod("getVariables");
                     }
-                    catch (NoSuchMethodException e) {
+                    catch (NoSuchMethodException e)
+                    {
                         clazz = clazz.getSuperclass();
                     }
                 }
 
-                if (m != null) {
+                if (m != null)
+                {
                     Properties properties = (Properties) m.invoke(idata);
                     variables.putAll(properties);
                 }
@@ -247,24 +287,32 @@ public class BSFAction extends ActionBase {
                 manager.declareBean("installData", idata, Class.forName("com.izforge.izpack.installer.AutomatedInstallData"));
 
                 MethodExistenceChecker checker = langToMethodCheckerMap.get(language);
-                try {
-                    if (checker != null) {
-                        if (!checker.isMethodDefined(desc.name, scriptName, engine, manager)) {
+                try
+                {
+                    if (checker != null)
+                    {
+                        if (!checker.isMethodDefined(desc.name, scriptName, engine, manager))
+                        {
                             return;
                         }
-                    } else {
+                    }
+                    else
+                    {
                         engine.eval(scriptName, 1, 1, desc.name);
                     }
                 }
-                catch (BSFException e) {
+                catch (BSFException e)
+                {
                     e.printStackTrace();
                     return;
                 }
 
                 engine.exec(scriptName, 1, 1, desc.name + "()");
             }
-            finally {
-                for (int i = 0; i < desc.argNames.length; i++) {
+            finally
+            {
+                for (int i = 0; i < desc.argNames.length; i++)
+                {
                     manager.undeclareBean(desc.argNames[i]);
                 }
                 manager.undeclareBean("installData");

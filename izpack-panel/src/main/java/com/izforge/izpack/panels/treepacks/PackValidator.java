@@ -21,6 +21,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.treepacks;
 
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -30,7 +31,8 @@ import com.izforge.izpack.util.AbstractUIHandler;
 /**
  * @author Kjell Braden
  */
-public interface PackValidator {
+public interface PackValidator
+{
     public boolean validate(AbstractUIHandler handler,
                             GUIInstallData idata, String packsId, boolean isSelected);
 }

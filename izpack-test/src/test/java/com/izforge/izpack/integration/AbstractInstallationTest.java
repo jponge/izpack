@@ -29,7 +29,8 @@ import java.util.ArrayList;
 /**
  * Abstract test for integration test
  */
-public class AbstractInstallationTest {
+public class AbstractInstallationTest
+{
 
     protected static final String APPNAME = "Test Installation";
 
@@ -43,7 +44,8 @@ public class AbstractInstallationTest {
     protected File out;
 
     @BeforeMethod
-    public void initBinding() throws Throwable {
+    public void initBinding() throws Throwable
+    {
         out = File.createTempFile("izpack", ".jar");
         applicationContainer = new ApplicationContainer();
         applicationContainer.initBindings();
@@ -53,13 +55,15 @@ public class AbstractInstallationTest {
         deleteLock();
     }
 
-    private void deleteLock() throws IOException {
+    private void deleteLock() throws IOException
+    {
         File file = new File(System.getProperty("java.io.tmpdir"), "iz-" + LanguageSelectionTest.APPNAME + ".tmp");
         FileUtils.deleteQuietly(file);
     }
 
     @AfterMethod
-    public void deleteTempJar() throws IOException {
+    public void deleteTempJar() throws IOException
+    {
 //        FileUtils.forceDelete(out);
     }
 
@@ -68,7 +72,8 @@ public class AbstractInstallationTest {
      *
      * @throws Exception
      */
-    protected FrameFixture prepareFrameFixture() throws Exception {
+    protected FrameFixture prepareFrameFixture() throws Exception
+    {
         InstallerFrame installerFrame = installerContainer.getComponent(InstallerFrame.class);
         FrameFixture installerFrameFixture = new FrameFixture(installerFrame);
         installerFrame.loadPanels();
@@ -82,7 +87,8 @@ public class AbstractInstallationTest {
     /**
      * Prepare fest fixture for lang selection
      */
-    protected DialogFixture prepareDialogFixture() {
+    protected DialogFixture prepareDialogFixture()
+    {
         LanguageDialog languageDialog = installerContainer.getComponent(LanguageDialog.class);
         DialogFixture dialogFixture = new DialogFixture(languageDialog);
         dialogFixture.show();
@@ -96,12 +102,14 @@ public class AbstractInstallationTest {
      * @param workingDirectory
      * @throws Exception
      */
-    protected void compileInstallJar(String installationFile, File workingDirectory) throws Exception {
+    protected void compileInstallJar(String installationFile, File workingDirectory) throws Exception
+    {
         File installerFile = new File(workingDirectory, installationFile);
         compileInstallJar(new CompilerData(installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), out.getAbsolutePath()));
     }
 
-    protected File getWorkingDirectory(String workingDirectoryName) {
+    protected File getWorkingDirectory(String workingDirectoryName)
+    {
         return new File(ClassLoader.getSystemClassLoader().getResource(workingDirectoryName).getFile());
     }
 
@@ -111,7 +119,8 @@ public class AbstractInstallationTest {
      * @param compilerData
      * @throws Exception
      */
-    public void compileInstallJar(CompilerData compilerData) throws Exception {
+    public void compileInstallJar(CompilerData compilerData) throws Exception
+    {
         CompilerData data = compilerData;
         compilerContainer.addComponent(CompilerData.class, data);
         CompilerConfig compilerConfig = compilerContainer.getComponent(CompilerConfig.class);
@@ -120,7 +129,8 @@ public class AbstractInstallationTest {
     }
 
     @AfterMethod
-    public void unloadJarInSystemClassLoader() throws Exception {
+    public void unloadJarInSystemClassLoader() throws Exception
+    {
         URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
         Field ucpField = URLClassLoader.class.getDeclaredField("ucp");
         ucpField.setAccessible(true);
@@ -136,7 +146,8 @@ public class AbstractInstallationTest {
         loaders.remove(loaders.size() - 1);
     }
 
-    private void loadJarInSystemClassLoader(File out) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, MalformedURLException {
+    private void loadJarInSystemClassLoader(File out) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, MalformedURLException
+    {
         URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
 
         Method declaredMethod = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});

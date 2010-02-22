@@ -31,7 +31,8 @@ import java.net.URL;
  * @author Anthonin Bonnefoy
  * @author David Duponchel
  */
-public interface IXMLParser {
+public interface IXMLParser
+{
     /**
      * Parse the given stream to a XML
      *

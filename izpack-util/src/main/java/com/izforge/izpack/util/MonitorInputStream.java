@@ -27,7 +27,8 @@ import java.io.*;
  *
  * @author Olexij Tkatchenko <ot@parcs.de>
  */
-public class MonitorInputStream implements Runnable {
+public class MonitorInputStream implements Runnable
+{
 
     private BufferedReader reader;
 
@@ -41,7 +42,8 @@ public class MonitorInputStream implements Runnable {
      * @param in  The input to read.
      * @param out The writer to write to.
      */
-    public MonitorInputStream(Reader in, Writer out) {
+    public MonitorInputStream(Reader in, Writer out)
+    {
         this.reader = new BufferedReader(in);
         this.writer = new BufferedWriter(out);
     }
@@ -49,26 +51,32 @@ public class MonitorInputStream implements Runnable {
     /**
      * Request stopping this thread.
      */
-    public void doStop() {
+    public void doStop()
+    {
         this.shouldStop = true;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void run() {
-        try {
+    public void run()
+    {
+        try
+        {
             String line;
-            while ((line = this.reader.readLine()) != null) {
+            while ((line = this.reader.readLine()) != null)
+            {
                 this.writer.write(line);
                 this.writer.newLine();
                 this.writer.flush();
-                if (this.shouldStop) {
+                if (this.shouldStop)
+                {
                     return;
                 }
             }
         }
-        catch (IOException ioe) {
+        catch (IOException ioe)
+        {
             ioe.printStackTrace(System.out);
         }
     }

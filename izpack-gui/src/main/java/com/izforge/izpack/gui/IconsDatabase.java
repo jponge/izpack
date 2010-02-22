@@ -27,14 +27,16 @@ import java.util.TreeMap;
  *
  * @author Julien Ponge October 27, 2002
  */
-public class IconsDatabase extends TreeMap {
+public class IconsDatabase extends TreeMap
+{
 
     private static final long serialVersionUID = 3257567287145083446L;
 
     /**
      * The constructor.
      */
-    public IconsDatabase() {
+    public IconsDatabase()
+    {
         super();
     }
 
@@ -44,7 +46,8 @@ public class IconsDatabase extends TreeMap {
      * @param key The icon key.
      * @return The icon as an ImageIcon object.
      */
-    public ImageIcon getImageIcon(String key) {
+    public ImageIcon getImageIcon(String key)
+    {
         return (ImageIcon) get(key);
     }
 }

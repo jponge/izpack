@@ -34,7 +34,8 @@ import java.util.List;
  *
  * @author Klaus Bartz
  */
-public interface UninstallerListener {
+public interface UninstallerListener
+{
 
     // ------------------------------------------------------------------------
     // Constant Definitions

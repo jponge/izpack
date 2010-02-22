@@ -14,13 +14,15 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
 
-public class UninstallDataWriter {
+public class UninstallDataWriter
+{
     private static final String UNINSTALLER_CONDITION = "UNINSTALLER_CONDITION";
     private static final String LOGFILE_PATH = "InstallerFrame.logfilePath";
     private VariableSubstitutor variableSubstitutor;
     private UninstallData udata;
 
-    public UninstallDataWriter(VariableSubstitutor variableSubstitutor, UninstallData udata) {
+    public UninstallDataWriter(VariableSubstitutor variableSubstitutor, UninstallData udata)
+    {
         this.variableSubstitutor = variableSubstitutor;
         this.udata = udata;
     }
@@ -31,14 +33,18 @@ public class UninstallDataWriter {
      * @param installdata The install data to use.
      * @return true if the infos were successfuly written, false otherwise.
      */
-    public boolean write(AutomatedInstallData installdata) {
+    public boolean write(AutomatedInstallData installdata)
+    {
 
 
         BufferedWriter extLogWriter = getExternLogFile(installdata);
-        try {
+        try
+        {
             String condition = installdata.getVariable(UNINSTALLER_CONDITION);
-            if (condition != null) {
-                if (!RulesEngineImpl.getCondition(condition).isTrue()) {
+            if (condition != null)
+            {
+                if (!RulesEngineImpl.getCondition(condition).isTrue())
+                {
                     // condition for creating the uninstaller is not fulfilled.
                     return false;
                 }
@@ -47,7 +53,8 @@ public class UninstallDataWriter {
             List<String> files = udata.getUninstalableFilesList();
             ZipOutputStream outJar = installdata.getUninstallOutJar();
 
-            if (outJar == null) {
+            if (outJar == null)
+            {
                 return true; // it is allowed not to have an installer
             }
 
@@ -68,7 +75,8 @@ public class UninstallDataWriter {
             outJar.close();
             return true;
         }
-        catch (Exception err) {
+        catch (Exception err)
+        {
             err.printStackTrace();
             return false;
         }
@@ -76,27 +84,34 @@ public class UninstallDataWriter {
 
     // Show whether a separated logfile should be also written or not.
 
-    private BufferedWriter getExternLogFile(AutomatedInstallData installdata) {
+    private BufferedWriter getExternLogFile(AutomatedInstallData installdata)
+    {
         String logfile = installdata.getVariable(LOGFILE_PATH);
         BufferedWriter extLogWriter = null;
-        if (logfile != null) {
-            if (logfile.toLowerCase().startsWith("default")) {
+        if (logfile != null)
+        {
+            if (logfile.toLowerCase().startsWith("default"))
+            {
                 logfile = installdata.getInfo().getUninstallerPath() + "/install.log";
             }
             logfile = IoHelper.translatePath(logfile, variableSubstitutor);
             File outFile = new File(logfile);
-            if (!outFile.getParentFile().exists()) {
+            if (!outFile.getParentFile().exists())
+            {
                 outFile.getParentFile().mkdirs();
             }
             FileOutputStream out = null;
-            try {
+            try
+            {
                 out = new FileOutputStream(outFile);
             }
-            catch (FileNotFoundException e) {
+            catch (FileNotFoundException e)
+            {
                 Debug.trace("Cannot create logfile!");
                 Debug.error(e);
             }
-            if (out != null) {
+            if (out != null)
+            {
                 extLogWriter = new BufferedWriter(new OutputStreamWriter(out));
             }
         }
@@ -106,19 +121,23 @@ public class UninstallDataWriter {
 
     // We write the files log
 
-    private void writeFilesLog(AutomatedInstallData installdata, BufferedWriter extLogWriter, List<String> files, ZipOutputStream outJar) throws IOException {
+    private void writeFilesLog(AutomatedInstallData installdata, BufferedWriter extLogWriter, List<String> files, ZipOutputStream outJar) throws IOException
+    {
         outJar.putNextEntry(new ZipEntry("install.log"));
         BufferedWriter logWriter = new BufferedWriter(new OutputStreamWriter(outJar));
         logWriter.write(installdata.getInstallPath());
         logWriter.newLine();
         Iterator<String> iter = files.iterator();
-        if (extLogWriter != null) { // Write intern (in uninstaller.jar) and extern log file.
+        if (extLogWriter != null)
+        { // Write intern (in uninstaller.jar) and extern log file.
 
-            while (iter.hasNext()) {
+            while (iter.hasNext())
+            {
                 String txt = iter.next();
                 logWriter.write(txt);
                 extLogWriter.write(txt);
-                if (iter.hasNext()) {
+                if (iter.hasNext())
+                {
                     logWriter.newLine();
                     extLogWriter.newLine();
                 }
@@ -126,11 +145,15 @@ public class UninstallDataWriter {
             logWriter.flush();
             extLogWriter.flush();
             extLogWriter.close();
-        } else {
-            while (iter.hasNext()) {
+        }
+        else
+        {
+            while (iter.hasNext())
+            {
                 String txt = iter.next();
                 logWriter.write(txt);
-                if (iter.hasNext()) {
+                if (iter.hasNext())
+                {
                     logWriter.newLine();
                 }
             }
@@ -142,11 +165,13 @@ public class UninstallDataWriter {
 
     // Write out executables to execute on uninstall
 
-    private void writeExecutables(UninstallData udata, ZipOutputStream outJar) throws IOException {
+    private void writeExecutables(UninstallData udata, ZipOutputStream outJar) throws IOException
+    {
         outJar.putNextEntry(new ZipEntry("executables"));
         ObjectOutputStream execStream = new ObjectOutputStream(outJar);
         execStream.writeInt(udata.getExecutablesList().size());
-        for (ExecutableFile file : udata.getExecutablesList()) {
+        for (ExecutableFile file : udata.getExecutablesList())
+        {
             execStream.writeObject(file);
         }
         execStream.flush();
@@ -155,7 +180,8 @@ public class UninstallDataWriter {
 
     // We write the uninstaller jar file log
 
-    private void writeUninstallerJarFileLog(UninstallData udata, ZipOutputStream outJar) throws IOException {
+    private void writeUninstallerJarFileLog(UninstallData udata, ZipOutputStream outJar) throws IOException
+    {
         BufferedWriter logWriter;
         outJar.putNextEntry(new ZipEntry("jarlocation.log"));
         logWriter = new BufferedWriter(new OutputStreamWriter(outJar));
@@ -169,12 +195,14 @@ public class UninstallDataWriter {
     // write the script files, which will
     // perform several complement and unindependend uninstall actions
 
-    private void writeScriptFiles(UninstallData udata, ZipOutputStream outJar) throws IOException {
+    private void writeScriptFiles(UninstallData udata, ZipOutputStream outJar) throws IOException
+    {
 
         ArrayList<String> unInstallScripts = udata.getUninstallScripts();
         ObjectOutputStream rootStream;
         int idx = 0;
-        for (String unInstallScript : unInstallScripts) {
+        for (String unInstallScript : unInstallScripts)
+        {
             outJar.putNextEntry(new ZipEntry(UninstallData.ROOTSCRIPT + Integer.toString(idx)));
             rootStream = new ObjectOutputStream(outJar);
             rootStream.writeUTF(unInstallScript);
@@ -189,17 +217,22 @@ public class UninstallDataWriter {
     // with custom uninstall data. Therefore log it to Debug,
     // but do not throw.
 
-    private void writeAdditionalUninstallData(UninstallData udata, ZipOutputStream outJar) throws IOException {
+    private void writeAdditionalUninstallData(UninstallData udata, ZipOutputStream outJar) throws IOException
+    {
         Map<String, Object> additionalData = udata.getAdditionalData();
-        if (additionalData != null && !additionalData.isEmpty()) {
+        if (additionalData != null && !additionalData.isEmpty())
+        {
             Iterator<String> keys = additionalData.keySet().iterator();
             Set<String> exist = new HashSet<String>();
-            while (keys != null && keys.hasNext()) {
+            while (keys != null && keys.hasNext())
+            {
                 String key = keys.next();
                 Object contents = additionalData.get(key);
-                if ("__uninstallLibs__".equals(key)) {
+                if ("__uninstallLibs__".equals(key))
+                {
                     Iterator nativeLibIter = ((List) contents).iterator();
-                    while (nativeLibIter != null && nativeLibIter.hasNext()) {
+                    while (nativeLibIter != null && nativeLibIter.hasNext())
+                    {
                         String nativeLibName = (String) ((List) nativeLibIter.next()).get(0);
                         byte[] buffer = new byte[5120];
                         long bytesCopied = 0;
@@ -207,13 +240,16 @@ public class UninstallDataWriter {
                         outJar.putNextEntry(new ZipEntry("native/" + nativeLibName));
                         InputStream in = getClass().getResourceAsStream(
                                 "/native/" + nativeLibName);
-                        while ((bytesInBuffer = in.read(buffer)) != -1) {
+                        while ((bytesInBuffer = in.read(buffer)) != -1)
+                        {
                             outJar.write(buffer, 0, bytesInBuffer);
                             bytesCopied += bytesInBuffer;
                         }
                         outJar.closeEntry();
                     }
-                } else if ("uninstallerListeners".equals(key) || "uninstallerJars".equals(key)) {
+                }
+                else if ("uninstallerListeners".equals(key) || "uninstallerJars".equals(key))
+                {
                     // It is a ArrayList of ArrayLists which contains the full
                     // package paths of all needed class files.
                     // First we create a new ArrayList which contains only
@@ -222,7 +258,8 @@ public class UninstallDataWriter {
                     ArrayList<String> subContents = new ArrayList<String>();
 
                     // Secound put the class into uninstaller.jar
-                    for (Object o : ((List) contents)) {
+                    for (Object o : ((List) contents))
+                    {
                         byte[] buffer = new byte[5120];
                         long bytesCopied = 0;
                         int bytesInBuffer;
@@ -230,18 +267,23 @@ public class UninstallDataWriter {
                         // First element of the list contains the listener
                         // class path;
                         // remind it for later.
-                        if (customData.listenerName != null) {
+                        if (customData.listenerName != null)
+                        {
                             subContents.add(customData.listenerName);
                         }
-                        for (String content : customData.contents) {
-                            if (exist.contains(content)) {
+                        for (String content : customData.contents)
+                        {
+                            if (exist.contains(content))
+                            {
                                 continue;
                             }
                             exist.add(content);
-                            try {
+                            try
+                            {
                                 outJar.putNextEntry(new ZipEntry(content));
                             }
-                            catch (ZipException ze) { // Ignore, or ignore not ?? May be it is a
+                            catch (ZipException ze)
+                            { // Ignore, or ignore not ?? May be it is a
                                 // exception because
                                 // a doubled entry was tried, then we should
                                 // ignore ...
@@ -250,12 +292,16 @@ public class UninstallDataWriter {
                                 continue;
                             }
                             InputStream in = getClass().getResourceAsStream("/" + content);
-                            if (in != null) {
-                                while ((bytesInBuffer = in.read(buffer)) != -1) {
+                            if (in != null)
+                            {
+                                while ((bytesInBuffer = in.read(buffer)) != -1)
+                                {
                                     outJar.write(buffer, 0, bytesInBuffer);
                                     bytesCopied += bytesInBuffer;
                                 }
-                            } else {
+                            }
+                            else
+                            {
                                 Debug.trace("custom data not found: " + content);
                             }
                             outJar.closeEntry();
@@ -270,11 +316,16 @@ public class UninstallDataWriter {
                     objOut.flush();
                     outJar.closeEntry();
 
-                } else {
+                }
+                else
+                {
                     outJar.putNextEntry(new ZipEntry(key));
-                    if (contents instanceof ByteArrayOutputStream) {
+                    if (contents instanceof ByteArrayOutputStream)
+                    {
                         ((ByteArrayOutputStream) contents).writeTo(outJar);
-                    } else {
+                    }
+                    else
+                    {
                         ObjectOutputStream objOut = new ObjectOutputStream(outJar);
                         objOut.writeObject(contents);
                         objOut.flush();

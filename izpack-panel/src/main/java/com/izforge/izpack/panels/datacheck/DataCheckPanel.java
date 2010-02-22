@@ -49,7 +49,8 @@ import java.util.Properties;
  * @author Hal Vaughan
  * @author Fabrice Mirabile
  */
-public class DataCheckPanel extends IzPanel {
+public class DataCheckPanel extends IzPanel
+{
 
     private static final long serialVersionUID = 3257848774955905587L;
 
@@ -67,7 +68,8 @@ public class DataCheckPanel extends IzPanel {
      * @param parent The parent.
      * @param id     The installation installDataGUI.
      */
-    public DataCheckPanel(InstallerFrame parent, GUIInstallData id, ResourceManager resourceManager) {
+    public DataCheckPanel(InstallerFrame parent, GUIInstallData id, ResourceManager resourceManager)
+    {
         super(parent, id, resourceManager);
 
         installDataGUI = id;
@@ -92,7 +94,8 @@ public class DataCheckPanel extends IzPanel {
      *
      * @see com.izforge.izpack.installer.base.IzPanel#panelActivate()
      */
-    public void panelActivate() {
+    public void panelActivate()
+    {
         printDebugInfo();
     }
 
@@ -102,16 +105,21 @@ public class DataCheckPanel extends IzPanel {
      * @param packList
      * @return String
      */
-    private String getPackNames(List<Pack> packList) {
+    private String getPackNames(List<Pack> packList)
+    {
         int i;
         String pStatus;
         String sOutput = "";
         Pack iPack;
-        for (i = 0; i < packList.size(); i++) {
+        for (i = 0; i < packList.size(); i++)
+        {
             iPack = packList.get(i);
-            if (installDataGUI.getSelectedPacks().indexOf(iPack) != -1) {
+            if (installDataGUI.getSelectedPacks().indexOf(iPack) != -1)
+            {
                 pStatus = "Selected";
-            } else {
+            }
+            else
+            {
                 pStatus = "Unselected";
             }
             sOutput = sOutput + "\t" + i + ": " + iPack.name + " (" + pStatus + ")\n";
@@ -123,7 +131,8 @@ public class DataCheckPanel extends IzPanel {
      * Print list of variables names and value, as well as the list
      * of packages and their status (selected or not).
      */
-    private void printDebugInfo() {
+    private void printDebugInfo()
+    {
         int i = 0;
         String sInfo = "GUIInstallData Variables:\n";
         System.out.println("------------------------Data Check Panel Instance " +
@@ -132,11 +141,13 @@ public class DataCheckPanel extends IzPanel {
         Properties varList = installDataGUI.getVariables();
         String[] alphaName = new String[varList.size()];
         Enumeration<String> varNames = (Enumeration<String>) varList.propertyNames();
-        while (varNames.hasMoreElements()) {
+        while (varNames.hasMoreElements())
+        {
             alphaName[i++] = varNames.nextElement();
         }
         java.util.Arrays.sort(alphaName);
-        for (i = 0; i < alphaName.length; i++) {
+        for (i = 0; i < alphaName.length; i++)
+        {
             sInfo = sInfo + "\tName: " + alphaName[i] + ", Value: " + varList.getProperty(alphaName[i]) + "\n";
         }
         sInfo = sInfo + "\nAvailable Packs: \n" + getPackNames(installDataGUI.getAllPacks()) + "\n";
@@ -149,7 +160,8 @@ public class DataCheckPanel extends IzPanel {
      *
      * @return True
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         return true;
     }
 }

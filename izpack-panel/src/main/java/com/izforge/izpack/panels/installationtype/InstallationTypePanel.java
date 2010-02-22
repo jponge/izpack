@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.installationtype;
 
 import com.izforge.izpack.api.data.ResourceManager;
@@ -37,16 +38,19 @@ import java.awt.event.ActionListener;
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  * @version $Id: $
  */
-public class InstallationTypePanel extends IzPanel implements ActionListener {
+public class InstallationTypePanel extends IzPanel implements ActionListener
+{
     private JRadioButton normalinstall;
     private JRadioButton modifyinstall;
 
-    public InstallationTypePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public InstallationTypePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, new IzPanelLayout(), resourceManager);
         buildGUI();
     }
 
-    private void buildGUI() {
+    private void buildGUI()
+    {
         // We put our components
 
         add(LabelFactory.create(installData.getLangpack().getString("InstallationTypePanel.info"),
@@ -80,21 +84,29 @@ public class InstallationTypePanel extends IzPanel implements ActionListener {
     * @see com.izforge.izpack.installer.IzPanel#panelActivate()
     */
 
-    public void panelActivate() {
+    public void panelActivate()
+    {
         boolean modifyinstallation = Boolean.valueOf(this.installData.getVariable(GUIInstallData.MODIFY_INSTALLATION));
-        if (modifyinstallation) {
+        if (modifyinstallation)
+        {
             modifyinstall.setSelected(true);
-        } else {
+        }
+        else
+        {
             normalinstall.setSelected(true);
         }
     }
 
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
         Debug.trace("installation type changed");
-        if (e.getSource() == normalinstall) {
+        if (e.getSource() == normalinstall)
+        {
             Debug.trace("normal installation");
             this.installData.setVariable(GUIInstallData.MODIFY_INSTALLATION, "false");
-        } else {
+        }
+        else
+        {
             Debug.trace("modification installation");
             this.installData.setVariable(GUIInstallData.MODIFY_INSTALLATION, "true");
         }

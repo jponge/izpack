@@ -31,14 +31,16 @@ import com.izforge.izpack.util.NativeLibraryClient;
  *
  * @author Klaus Bartz
  */
-public class Registry extends RegistryImpl implements NativeLibraryClient {
+public class Registry extends RegistryImpl implements NativeLibraryClient
+{
 
     /**
      * Default constructor.
      *
      * @throws Exception if initialize of native part fails
      */
-    public Registry() throws Exception {
+    public Registry() throws Exception
+    {
         super();
         initialize();
     }
@@ -49,11 +51,13 @@ public class Registry extends RegistryImpl implements NativeLibraryClient {
      * @throws Exception if problems are encountered
      */
     /*--------------------------------------------------------------------------*/
-    private void initialize() throws Exception {
+    private void initialize() throws Exception
+    {
         COIOSHelper.getInstance().addDependant(this);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method is used to free the library at the end of progam execution. This class has no own
      * library else it shares it in the COI common lib. To free the library, the helper class is
@@ -70,7 +74,8 @@ public class Registry extends RegistryImpl implements NativeLibraryClient {
      * @see com.izforge.izpack.util.NativeLibraryClient#freeLibrary
      */
     /*--------------------------------------------------------------------------*/
-    public void freeLibrary(String name) {
+    public void freeLibrary(String name)
+    {
 
         COIOSHelper.getInstance().freeLibrary(name);
     }

@@ -14,45 +14,57 @@ import java.util.List;
  *
  * @author Anthonin Bonnefoy
  */
-public class MergeManagerImpl implements MergeManager {
+public class MergeManagerImpl implements MergeManager
+{
 
 
     private List<Mergeable> mergeableList;
 
-    public MergeManagerImpl() {
+    public MergeManagerImpl()
+    {
         mergeableList = new ArrayList<Mergeable>();
     }
 
-    public void addResourceToMerge(Mergeable mergeable) {
+    public void addResourceToMerge(Mergeable mergeable)
+    {
         mergeableList.add(mergeable);
     }
 
-    public void addResourceToMerge(String resourcePath) {
+    public void addResourceToMerge(String resourcePath)
+    {
         mergeableList.addAll(PathResolver.getMergeableFromPath(resourcePath));
     }
 
-    public void addResourceToMerge(String resourcePath, String destination) {
+    public void addResourceToMerge(String resourcePath, String destination)
+    {
         mergeableList.addAll(PathResolver.getMergeableFromPath(resourcePath, destination));
     }
 
-    public void merge(ZipOutputStream outputStream) {
-        for (Mergeable mergeable : mergeableList) {
+    public void merge(ZipOutputStream outputStream)
+    {
+        for (Mergeable mergeable : mergeableList)
+        {
             mergeable.merge(outputStream);
         }
         mergeableList.clear();
     }
 
-    public void merge(java.util.zip.ZipOutputStream outputStream) {
-        for (Mergeable mergeable : mergeableList) {
+    public void merge(java.util.zip.ZipOutputStream outputStream)
+    {
+        for (Mergeable mergeable : mergeableList)
+        {
             mergeable.merge(outputStream);
         }
         mergeableList.clear();
     }
 
-    public File find(FileFilter fileFilter) {
-        for (Mergeable mergeable : mergeableList) {
+    public File find(FileFilter fileFilter)
+    {
+        for (Mergeable mergeable : mergeableList)
+        {
             File file = mergeable.find(fileFilter);
-            if (file != null) {
+            if (file != null)
+            {
                 return file;
             }
         }

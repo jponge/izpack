@@ -15,6 +15,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.panels.shortcut;
 
 import com.izforge.izpack.api.GuiId;
@@ -632,19 +633,24 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /*
      * --------------------------------------------------------------------------
      */
-    public ShortcutPanel(InstallerFrame parent, GUIInstallData installDataGUI, ResourceManager resourceManager, UninstallData uninstallData) {
+    public ShortcutPanel(InstallerFrame parent, GUIInstallData installDataGUI, ResourceManager resourceManager, UninstallData uninstallData)
+    {
         super(parent, installDataGUI, "link16x16", resourceManager);
         this.uninstallData = uninstallData;
         layout = (GridBagLayout) super.getLayout();
         Object con = getLayoutHelper().getDefaultConstraints();
-        if (con instanceof GridBagConstraints) {
+        if (con instanceof GridBagConstraints)
+        {
             constraints = (GridBagConstraints) con;
-        } else {
+        }
+        else
+        {
             con = new GridBagConstraints();
         }
         setLayout(super.getLayout());
 
-        if (self != null) {
+        if (self != null)
+        {
             throw new RuntimeException(this.getClass().getName() + " is not allowed to instantiate more than once!");
         }
 
@@ -665,7 +671,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
 
     /*--------------------------------------------------------------------------*/
-    public void actionPerformed(ActionEvent event) {
+    public void actionPerformed(ActionEvent event)
+    {
         Object eventSource = event.getSource();
 
         /*
@@ -678,8 +685,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // refresh the list of program groups accordingly and
         // reset the program group to the default setting.
         // ----------------------------------------------------
-        if (eventSource.equals(currentUser)) {
-            if (groupList != null) {
+        if (eventSource.equals(currentUser))
+        {
+            if (groupList != null)
+            {
                 groupList.setListData(shortcut.getProgramGroups(Shortcut.CURRENT_USER));
             }
             programGroup.setText(suggestedProgramGroup);
@@ -692,8 +701,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // refresh the list of program groups accordingly and
         // reset the program group to the default setting.
         // ----------------------------------------------------
-        else if (eventSource.equals(allUsers)) {
-            if (groupList != null) {
+        else if (eventSource.equals(allUsers))
+        {
+            if (groupList != null)
+            {
                 groupList.setListData(shortcut.getProgramGroups(Shortcut.ALL_USERS));
             }
             programGroup.setText(suggestedProgramGroup);
@@ -708,8 +719,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // - refill the program group edit control with the
         // suggested program group name
         // ----------------------------------------------------
-        else if (eventSource.equals(defaultButton)) {
-            if (groupList != null && groupList.getSelectionModel() != null) {
+        else if (eventSource.equals(defaultButton))
+        {
+            if (groupList != null && groupList.getSelectionModel() != null)
+            {
                 groupList.getSelectionModel().clearSelection();
             }
             programGroup.setText(suggestedProgramGroup);
@@ -720,16 +733,20 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // the save button was pressed. This is a request to
         // save shortcut information to a text file.
         // ----------------------------------------------------
-        else if (eventSource.equals(saveButton)) {
+        else if (eventSource.equals(saveButton))
+        {
             saveToFile();
 
             // add the file to the uninstaller
             addToUninstaller();
 
-        } else if (eventSource.equals(createShortcuts)) {
+        }
+        else if (eventSource.equals(createShortcuts))
+        {
             create = createShortcuts.isSelected();
 
-            if (groupList != null) {
+            if (groupList != null)
+            {
                 groupList.setEnabled(create);
             }
 
@@ -738,11 +755,13 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             defaultButton.setEnabled(create);
 
             // ** There where no Desktop Links or not allowed, this may be null: **//
-            if (allowDesktopShortcut != null) {
+            if (allowDesktopShortcut != null)
+            {
                 allowDesktopShortcut.setEnabled(create);
             }
 
-            if (isRootUser) {
+            if (isRootUser)
+            {
                 allUsers.setEnabled(create);
             }
         }
@@ -758,17 +777,21 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
 
     /*--------------------------------------------------------------------------*/
-    public boolean isValidated() {
-        try {
+    public boolean isValidated()
+    {
+        try
+        {
             groupName = programGroup.getText();
         }
-        catch (Throwable exception) {
+        catch (Throwable exception)
+        {
             groupName = "";
         }
 
         create = createShortcuts.isSelected();
 
-        if (isCreateImmediately()) {
+        if (isCreateImmediately())
+        {
             createAndRegisterShortcuts();
         }
 
@@ -782,30 +805,37 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
 
     /*--------------------------------------------------------------------------*/
-    public void panelActivate() {
-        try {
+    public void panelActivate()
+    {
+        try
+        {
             readShortcutSpec();
         }
-        catch (Throwable exception) {
+        catch (Throwable exception)
+        {
             System.out.println("could not read shortcut spec!");
             exception.printStackTrace();
         }
 
         // Create the UI elements
-        try {
+        try
+        {
             shortcut = (Shortcut) (TargetFactory.getInstance()
                     .makeObject("com.izforge.izpack.util.os.Shortcut"));
             shortcut.initialize(Shortcut.APPLICATIONS, "-");
         }
-        catch (Throwable exception) {
+        catch (Throwable exception)
+        {
             System.out.println("could not create shortcut instance");
             exception.printStackTrace();
         }
 
         analyzeShortcutSpec();
 
-        if (shortcutsToCreate && !OsVersion.IS_OSX) {
-            if (shortcut.supported() && !simulteNotSupported) {
+        if (shortcutsToCreate && !OsVersion.IS_OSX)
+        {
+            if (shortcut.supported() && !simulteNotSupported)
+            {
                 File allUsersProgramsFolder = getProgramsFolder(Shortcut.ALL_USERS);
 
                 Debug.log("All UsersProgramsFolder: '" + allUsersProgramsFolder + "'");
@@ -813,17 +843,20 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 File forceTest = new File(allUsersProgramsFolder + File.separator
                         + System.getProperty("user.name") + System.currentTimeMillis());
 
-                try {
+                try
+                {
                     isRootUser = forceTest.createNewFile();
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
                     isRootUser = false;
                     Debug.log("IOException: " + "'" + e.getLocalizedMessage() + "'");
                     Debug.log("You cannot create '" + forceTest + "'");
 
                 }
 
-                if (forceTest.exists()) {
+                if (forceTest.exists())
+                {
                     Debug.log("Delete temporary File: '" + forceTest + "'");
                     forceTest.delete();
                 }
@@ -833,21 +866,28 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 Debug.log("You " + perm + " write into '" + allUsersProgramsFolder + "'");
 
                 final boolean rUserFlag;
-                if (defaultCurrentUserFlag) {  //'defaultCurrentUser' element was specified
+                if (defaultCurrentUserFlag)
+                {  //'defaultCurrentUser' element was specified
                     rUserFlag = false;
                     Debug.log("Element '" + SPEC_KEY_DEF_CUR_USER +
                             "' was specified");
-                } else {  //'defaultCurrentUser' element not specified
+                }
+                else
+                {  //'defaultCurrentUser' element not specified
                     rUserFlag = isRootUser;
                 }
 
-                if (rUserFlag) {
+                if (rUserFlag)
+                {
                     itsUserType = Shortcut.ALL_USERS;
-                } else {
+                }
+                else
+                {
                     itsUserType = Shortcut.CURRENT_USER;
                 }
 
-                if (firstTime) {
+                if (firstTime)
+                {
                     buildUI(getProgramsFolder(rUserFlag ? Shortcut.ALL_USERS : Shortcut.CURRENT_USER));
                 }
 
@@ -856,9 +896,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 // JList shortCutList = null;
                 // addList( shortCuts, ListSelectionModel.SINGLE_SELECTION, shortCutList, col,
                 // line+6, 1, 1, GridBagConstraints.BOTH );
-            } else {
+            }
+            else
+            {
                 // TODO MEP: Test
-                if (firstTime) {
+                if (firstTime)
+                {
                     buildAlternateUI();
                 }
 
@@ -866,7 +909,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 // parent.lockPrevButton();
             }
             firstTime = false;
-        } else {
+        }
+        else
+        {
             // Skip on OS X
             parent.skipPanel();
         }
@@ -878,7 +923,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * @param userType DOCUMENT ME!
      * @return The Basedir
      */
-    private File getProgramsFolder(int userType) {
+    private File getProgramsFolder(int userType)
+    {
         String path = shortcut.getProgramsFolder(userType);
 
         return (new File(path));
@@ -906,20 +952,25 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
 
     /*--------------------------------------------------------------------------*/
-    public void valueChanged(ListSelectionEvent event) {
-        if (programGroup == null) {
+    public void valueChanged(ListSelectionEvent event)
+    {
+        if (programGroup == null)
+        {
             return;
         }
 
         String value = "";
 
-        try {
+        try
+        {
             value = (String) groupList.getSelectedValue();
         }
-        catch (ClassCastException exception) {
+        catch (ClassCastException exception)
+        {
         }
 
-        if (value == null) {
+        if (value == null)
+        {
             value = "";
         }
 
@@ -935,17 +986,21 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
 
     /*--------------------------------------------------------------------------*/
-    private void readShortcutSpec() throws Exception {
+    private void readShortcutSpec() throws Exception
+    {
         // open an input stream
         InputStream input = null;
 
-        try {
+        try
+        {
             input = resourceManager.getInputStream(TargetFactory.getCurrentOSPrefix() + SPEC_FILE_NAME);
         }
-        catch (ResourceNotFoundException rnfE) {
+        catch (ResourceNotFoundException rnfE)
+        {
             input = resourceManager.getInputStream(SPEC_FILE_NAME);
         }
-        if (input == null) {
+        if (input == null)
+        {
             haveShortcutSpec = false;
 
             return;
@@ -980,8 +1035,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
 
     /*--------------------------------------------------------------------------*/
-    private void analyzeShortcutSpec() {
-        if (!haveShortcutSpec) {
+    private void analyzeShortcutSpec()
+    {
+        if (!haveShortcutSpec)
+        {
             shortcutsToCreate = false;
 
             return;
@@ -1000,7 +1057,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         IXMLElement support = spec.getFirstChildNamed(SPEC_KEY_NOT_SUPPORTED);
 
-        if (support != null) {
+        if (support != null)
+        {
             simulteNotSupported = true;
         }
 
@@ -1013,19 +1071,23 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         IXMLElement group = null;
         Vector<IXMLElement> groupSpecs = spec.getChildrenNamed(SPEC_KEY_PROGRAM_GROUP);
         String selectedInstallGroup = this.installData.getVariable("INSTALL_GROUP");
-        if (selectedInstallGroup != null) {
+        if (selectedInstallGroup != null)
+        {
             //The user selected an InstallGroup before.
             //We may have some restrictions on the Installationgroup
             //search all defined ProgramGroups for the given InstallGroup
-            for (IXMLElement g : groupSpecs) {
+            for (IXMLElement g : groupSpecs)
+            {
                 String instGrp = g.getAttribute(SPEC_ATTRIBUTE_INSTALLGROUP);
-                if (instGrp != null && selectedInstallGroup.equalsIgnoreCase(instGrp)) {
+                if (instGrp != null && selectedInstallGroup.equalsIgnoreCase(instGrp))
+                {
                     group = g;
                     break;
                 }
             }
         }
-        if (group == null) {
+        if (group == null)
+        {
             //default (old) behavior
             group = spec.getFirstChildNamed(SPEC_KEY_PROGRAM_GROUP);
         }
@@ -1033,19 +1095,25 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         String location = null;
         hasDesktopShortcuts = false;
 
-        if (group != null) {
+        if (group != null)
+        {
             suggestedProgramGroup = group.getAttribute(SPEC_ATTRIBUTE_DEFAULT_GROUP, "");
             programGroupIconFile = group.getAttribute("iconFile", "");
             programGroupComment = group.getAttribute("comment", "");
             location = group.getAttribute(SPEC_ATTRIBUTE_LOCATION, SPEC_VALUE_APPLICATIONS);
-        } else {
+        }
+        else
+        {
             suggestedProgramGroup = "";
             location = SPEC_VALUE_APPLICATIONS;
         }
 
-        if (location.equals(SPEC_VALUE_APPLICATIONS)) {
+        if (location.equals(SPEC_VALUE_APPLICATIONS))
+        {
             groupLocation = Shortcut.APPLICATIONS;
-        } else if (location.equals(SPEC_VALUE_START_MENU)) {
+        }
+        else if (location.equals(SPEC_VALUE_START_MENU))
+        {
             groupLocation = Shortcut.START_MENU;
         }
 
@@ -1060,16 +1128,19 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         shortCuts = new Vector<String>();
 
-        for (int i = 0; i < shortcutSpecs.size(); i++) {
+        for (int i = 0; i < shortcutSpecs.size(); i++)
+        {
             // System.out.println( "Processing shortcut: " + i );
             shortcutSpec = shortcutSpecs.elementAt(i);
 
-            if (!OsConstraint.oneMatchesCurrentSystem(shortcutSpec)) {
+            if (!OsConstraint.oneMatchesCurrentSystem(shortcutSpec))
+            {
                 continue;
             }
 
             Debug.log("Checking Condition for " + shortcutSpec.getAttribute(SPEC_ATTRIBUTE_NAME));
-            if (!checkConditions(shortcutSpec)) {
+            if (!checkConditions(shortcutSpec))
+            {
                 continue;
             }
 
@@ -1125,15 +1196,24 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
             String initialState = shortcutSpec.getAttribute(SPEC_ATTRIBUTE_INITIAL_STATE, "");
 
-            if (initialState.equals(SPEC_VALUE_NO_SHOW)) {
+            if (initialState.equals(SPEC_VALUE_NO_SHOW))
+            {
                 data.initialState = Shortcut.HIDE;
-            } else if (initialState.equals(SPEC_VALUE_NORMAL)) {
+            }
+            else if (initialState.equals(SPEC_VALUE_NORMAL))
+            {
                 data.initialState = Shortcut.NORMAL;
-            } else if (initialState.equals(SPEC_VALUE_MAXIMIZED)) {
+            }
+            else if (initialState.equals(SPEC_VALUE_MAXIMIZED))
+            {
                 data.initialState = Shortcut.MAXIMIZED;
-            } else if (initialState.equals(SPEC_VALUE_MINIMIZED)) {
+            }
+            else if (initialState.equals(SPEC_VALUE_MINIMIZED))
+            {
                 data.initialState = Shortcut.MINIMIZED;
-            } else {
+            }
+            else
+            {
                 data.initialState = Shortcut.NORMAL;
             }
 
@@ -1147,13 +1227,15 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             // shortcut in each of the associated locations.
             // --------------------------------------------------
             // without a name we can not create a shortcut
-            if (data.name == null) {
+            if (data.name == null)
+            {
                 continue;
             }
 
             // 1. Elmar: "Without a target we can not create a shortcut."
             // 2. Marc: "No, Even on Linux a Link can be an URL and has no target."
-            if (data.target == null) {
+            if (data.target == null)
+            {
                 // TODO: write log info INFO.warn( "Shortcut: " + installDataGUI + " has no target" );
                 data.target = "";
             }
@@ -1163,7 +1245,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             // is not actually required for any of the selected packs
             Vector<IXMLElement> forPacks = shortcutSpec.getChildrenNamed(SPEC_KEY_PACKS);
 
-            if (!shortcutRequiredFor(forPacks)) {
+            if (!shortcutRequiredFor(forPacks))
+            {
                 continue;
             }
             // --------------------------------------------------
@@ -1179,32 +1262,37 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             // not use 'else if' statements!
             // --------------------------------------------------
             {
-                if (XMLHelper.attributeIsTrue(shortcutSpec, SPEC_ATTRIBUTE_DESKTOP)) {
+                if (XMLHelper.attributeIsTrue(shortcutSpec, SPEC_ATTRIBUTE_DESKTOP))
+                {
                     hasDesktopShortcuts = true;
                     data.addToGroup = false;
                     data.type = Shortcut.DESKTOP;
                     shortcuts.add(data.clone());
                 }
 
-                if (XMLHelper.attributeIsTrue(shortcutSpec, SPEC_ATTRIBUTE_APPLICATIONS)) {
+                if (XMLHelper.attributeIsTrue(shortcutSpec, SPEC_ATTRIBUTE_APPLICATIONS))
+                {
                     data.addToGroup = false;
                     data.type = Shortcut.APPLICATIONS;
                     shortcuts.add(data.clone());
                 }
 
-                if (XMLHelper.attributeIsTrue(shortcutSpec, SPEC_ATTRIBUTE_START_MENU)) {
+                if (XMLHelper.attributeIsTrue(shortcutSpec, SPEC_ATTRIBUTE_START_MENU))
+                {
                     data.addToGroup = false;
                     data.type = Shortcut.START_MENU;
                     shortcuts.add(data.clone());
                 }
 
-                if (XMLHelper.attributeIsTrue(shortcutSpec, SPEC_ATTRIBUTE_STARTUP)) {
+                if (XMLHelper.attributeIsTrue(shortcutSpec, SPEC_ATTRIBUTE_STARTUP))
+                {
                     data.addToGroup = false;
                     data.type = Shortcut.START_UP;
                     shortcuts.add(data.clone());
                 }
 
-                if (XMLHelper.attributeIsTrue(shortcutSpec, SPEC_ATTRIBUTE_PROGRAM_GROUP)) {
+                if (XMLHelper.attributeIsTrue(shortcutSpec, SPEC_ATTRIBUTE_PROGRAM_GROUP))
+                {
                     data.addToGroup = true;
                     data.type = Shortcut.APPLICATIONS;
                     shortcuts.add(data.clone());
@@ -1220,7 +1308,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         // signal if there are any shortcuts to create
         // ----------------------------------------------------
-        if (shortcuts.size() > 0) {
+        if (shortcuts.size() > 0)
+        {
             shortcutsToCreate = true;
         }
     }
@@ -1231,10 +1320,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * @param shortcutSpec
      * @return true if condtion is resolved positive - currently unimplemented: returns always true.
      */
-    private boolean checkConditions(IXMLElement shortcutSpec) {
+    private boolean checkConditions(IXMLElement shortcutSpec)
+    {
         boolean result = true;
         String conditionid = shortcutSpec.getAttribute(SPEC_ATTRIBUTE_CONDITION);
-        if (conditionid != null) {
+        if (conditionid != null)
+        {
             result = this.parent.getRules().isConditionTrue(conditionid);
         }
 //          Vector conditions = shortcutSpec.getChildrenNamed( Condition.CONDITION );
@@ -1259,12 +1350,14 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * The Installerlistener can switch the flag "createImmediately" to false on initialisation, and call this method when afterpacks is performed.
      * This makes only sense, if the ShorcutPanel is displayed before the files are copied onto the disk.
      */
-    public void createAndRegisterShortcuts() {
+    public void createAndRegisterShortcuts()
+    {
         createShortcuts();
         addToUninstaller();
     }
 
-    private String createXDGMenu(ArrayList shortcuts, String menuName) {
+    private String createXDGMenu(ArrayList shortcuts, String menuName)
+    {
         String menuConfigText = "<Menu>\n" +
                 "<Name>Applications</Name>\n" +
                 "<Menu>\n" +
@@ -1273,7 +1366,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 "<Name>" + menuName + "</Name>\n" +
                 "<Include>\n";
 
-        for (Object shortcut1 : shortcuts) {
+        for (Object shortcut1 : shortcuts)
+        {
             String shortcutFile = (String) shortcut1;
             menuConfigText += "<Filename>" + shortcutFile + "</Filename>\n";
         }
@@ -1282,7 +1376,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     }
 
-    private String createXDGDirectory(String menuName, String icon, String comment) {
+    private String createXDGDirectory(String menuName, String icon, String comment)
+    {
         String menuDirectoryDescriptor = "[Desktop Entry]\n" +
                 "Name=$Name\n" +
                 "Comment=$Comment\n" +
@@ -1298,20 +1393,26 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         return menuDirectoryDescriptor;
     }
 
-    private void writeXDGMenuFile(ArrayList desktopFileNames, String groupName, String icon, String comment) {
-        if ("".equals(suggestedProgramGroup) || suggestedProgramGroup == null) {
+    private void writeXDGMenuFile(ArrayList desktopFileNames, String groupName, String icon, String comment)
+    {
+        if ("".equals(suggestedProgramGroup) || suggestedProgramGroup == null)
+        {
             return; // No group name means the shortcuts
         }
         // will be placed by category
-        if (OsVersion.IS_UNIX) {
+        if (OsVersion.IS_UNIX)
+        {
             String menuFile = createXDGMenu(desktopFileNames, groupName);
             String dirFile = createXDGDirectory(groupName, icon, comment);
             String menuFolder;
             String directoryFolder;
-            if (itsUserType == Shortcut.ALL_USERS) {
+            if (itsUserType == Shortcut.ALL_USERS)
+            {
                 menuFolder = "/etc/xdg/menus/applications-merged/";
                 directoryFolder = "/usr/share/desktop-directories/";
-            } else {
+            }
+            else
+            {
                 menuFolder = System.getProperty("user.home") + File.separator
                         + ".config/menus/applications-merged/";
                 directoryFolder = System.getProperty("user.home") + File.separator
@@ -1331,18 +1432,22 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     }
 
-    private void writeString(String str, String file) {
+    private void writeString(String str, String file)
+    {
         boolean failed = false;
-        try {
+        try
+        {
             FileWriter writer = new FileWriter(file);
             writer.write(str);
             writer.close();
         }
-        catch (Exception ignore) {
+        catch (Exception ignore)
+        {
             failed = true;
             Debug.log("Failed to create menu for gnome.");
         }
-        if (!failed) {
+        if (!failed)
+        {
             uninstallData.addFile(file, true);
         }
     }
@@ -1353,8 +1458,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
 
     /*--------------------------------------------------------------------------*/
-    private void createShortcuts() {
-        if (!create) {
+    private void createShortcuts()
+    {
+        if (!create)
+        {
             Debug.log(this.getClass().getName() + "::createShortcuts():create=" + create);
             return;
         }
@@ -1380,12 +1487,14 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         invalidate();
 
         ArrayList startMenuShortcuts = new ArrayList();
-        for (int i = 0; i < shortcuts.size(); i++) {
+        for (int i = 0; i < shortcuts.size(); i++)
+        {
             data = (ShortcutData) shortcuts.elementAt(i);
 
             progressbar.setString("create " + data.name + " [" + data.description + "]");
 
-            try {
+            try
+            {
                 gn = groupName + data.subgroup;
                 shortcut.setUserType(itsUserType);
                 shortcut.setLinkName(data.name);
@@ -1412,13 +1521,17 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
                 shortcut.setUninstaller(uninstallData);
 
-                if (data.addToGroup) {
+                if (data.addToGroup)
+                {
                     shortcut.setProgramGroup(gn);
-                } else {
+                }
+                else
+                {
                     shortcut.setProgramGroup("");
                 }
 
-                try {
+                try
+                {
                     // ----------------------------------------------
                     // save the shortcut only if it is either not on
                     // the desktop or if it is on the desktop and
@@ -1427,17 +1540,21 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                     // ----------------------------------------------
                     if ((data.type != Shortcut.DESKTOP)
                             || ((data.type == Shortcut.DESKTOP) && allowDesktopShortcut
-                            .isSelected())) {
+                            .isSelected()))
+                    {
 
                         // save the shortcut
                         shortcut.save();
 
-                        if (data.type == Shortcut.APPLICATIONS || data.addToGroup) {
-                            if (shortcut instanceof com.izforge.izpack.util.os.Unix_Shortcut) {
+                        if (data.type == Shortcut.APPLICATIONS || data.addToGroup)
+                        {
+                            if (shortcut instanceof com.izforge.izpack.util.os.Unix_Shortcut)
+                            {
                                 com.izforge.izpack.util.os.Unix_Shortcut unixcut =
                                         (com.izforge.izpack.util.os.Unix_Shortcut) shortcut;
                                 Object f = unixcut.getWrittenFileName();
-                                if (f != null) {
+                                if (f != null)
+                                {
                                     startMenuShortcuts.add(f);
                                 }
                             }
@@ -1456,39 +1573,48 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
                         files.add(fileName);
 
-                        while ((file = file.getParentFile()) != null) {
-                            if (file.equals(base)) {
+                        while ((file = file.getParentFile()) != null)
+                        {
+                            if (file.equals(base))
+                            {
                                 break;
                             }
 
                             intermediates.add(file);
                         }
 
-                        if (file != null) {
+                        if (file != null)
+                        {
                             Enumeration<File> filesEnum = intermediates.elements();
 
-                            while (filesEnum.hasMoreElements()) {
+                            while (filesEnum.hasMoreElements())
+                            {
                                 files.add(0, filesEnum.nextElement().toString());
                             }
                         }
                     }
                 }
-                catch (Exception exception) {
+                catch (Exception exception)
+                {
                 }
             }
-            catch (Throwable exception) {
+            catch (Throwable exception)
+            {
             }
             progressbar.setValue(i);
             invalidate();
         }
-        if (OsVersion.IS_UNIX) {
+        if (OsVersion.IS_UNIX)
+        {
             writeXDGMenuFile(startMenuShortcuts,
                     groupName, programGroupIconFile, programGroupComment);
         }
         shortcut.execPostAction();
 
-        try {
-            if (execFiles != null) {
+        try
+        {
+            if (execFiles != null)
+            {
                 FileExecutor executor = new FileExecutor(execFiles);
 
                 // 
@@ -1501,10 +1627,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 // evaluate executor.executeFiles( ExecutableFile.NEVER, null );
             }
         }
-        catch (NullPointerException nep) {
+        catch (NullPointerException nep)
+        {
             nep.printStackTrace();
         }
-        catch (RuntimeException cannot) {
+        catch (RuntimeException cannot)
+        {
             cannot.printStackTrace();
         }
 
@@ -1535,22 +1663,27 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * that this panel is presented to the user AFTER the PacksPanel.
      * --------------------------------------------------------------------------
      */
-    private boolean shortcutRequiredFor(Vector<IXMLElement> packs) {
+    private boolean shortcutRequiredFor(Vector<IXMLElement> packs)
+    {
         String selected;
         String required;
 
-        if (packs.size() == 0) {
+        if (packs.size() == 0)
+        {
             return (true);
         }
 
-        for (int i = 0; i < this.installData.getSelectedPacks().size(); i++) {
+        for (int i = 0; i < this.installData.getSelectedPacks().size(); i++)
+        {
             selected = ((Pack) this.installData.getSelectedPacks().get(i)).name;
 
-            for (int k = 0; k < packs.size(); k++) {
+            for (int k = 0; k < packs.size(); k++)
+            {
                 required = (packs.elementAt(k)).getAttribute(
                         SPEC_ATTRIBUTE_NAME, "");
 
-                if (selected.equals(required)) {
+                if (selected.equals(required))
+                {
                     return (true);
                 }
             }
@@ -1570,7 +1703,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
 
     /*--------------------------------------------------------------------------*/
-    private String fixSeparatorChar(String path) {
+    private String fixSeparatorChar(String path)
+    {
         String newPath = path.replace('/', File.separatorChar);
         newPath = newPath.replace('\\', File.separatorChar);
 
@@ -1587,13 +1721,15 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
 
     /*--------------------------------------------------------------------------*/
-    private void buildUI(File groups) {
+    private void buildUI(File groups)
+    {
         constraints.insets = new Insets(10, 10, 0, 0);
 
         // Add a CheckBox which enables the user to entirely supress shortcut creation.
         String menuKind = installData.getLangpack().getString("ShortcutPanel.regular.StartMenu:Start-Menu");
 
-        if (OsVersion.IS_UNIX && UnixHelper.kdeIsInstalled()) {
+        if (OsVersion.IS_UNIX && UnixHelper.kdeIsInstalled())
+        {
             menuKind = installData.getLangpack().getString("ShortcutPanel.regular.StartMenu:K-Menu");
         }
 
@@ -1622,13 +1758,17 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // this should only be created if needed and requested
         // in the definition file.
         // ----------------------------------------------------
-        if (hasDesktopShortcuts) {
+        if (hasDesktopShortcuts)
+        {
             String initialAllowedValue = this.installData.getVariable("DesktopShortcutCheckboxEnabled");
             boolean initialAllowedFlag = false;
 
-            if (initialAllowedValue == null) {
+            if (initialAllowedValue == null)
+            {
                 initialAllowedFlag = false;
-            } else if (Boolean.TRUE.toString().equals(initialAllowedValue)) {
+            }
+            else if (Boolean.TRUE.toString().equals(initialAllowedValue))
+            {
                 initialAllowedFlag = true;
             }
 
@@ -1648,7 +1788,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         listLabel = LabelFactory.create(installData.getLangpack().getString("ShortcutPanel.regular.list"),
                 JLabel.LEADING);
-        if (OsVersion.IS_WINDOWS) {
+        if (OsVersion.IS_WINDOWS)
+        {
             constraints.gridx = col;
             constraints.gridy = line + 3;
 
@@ -1659,7 +1800,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
             constraints.fill = GridBagConstraints.HORIZONTAL;
             constraints.anchor = GridBagConstraints.NORTHWEST;
-        } else {
+        }
+        else
+        {
             constraints.gridx = col;
             constraints.gridy = line + 4;
 
@@ -1684,15 +1827,20 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         // Quickfix prevent NullPointer on non default compliant Linux - KDEs
         // i.e Mandrake 2005 LE stores from now also in "applnk" instead in prior "applnk-mdk":
-        if (entries != null && !OsVersion.IS_UNIX) {
-            for (File entry : entries) {
-                if (entry.isDirectory()) {
+        if (entries != null && !OsVersion.IS_UNIX)
+        {
+            for (File entry : entries)
+            {
+                if (entry.isDirectory())
+                {
                     dirEntries.add(entry.getName());
                 }
             }
         }
-        if (OsVersion.IS_WINDOWS) {
-            if (groupList == null) {
+        if (OsVersion.IS_WINDOWS)
+        {
+            if (groupList == null)
+            {
                 groupList = new JList();
             }
 
@@ -1703,7 +1851,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         // radio buttons to select current user or all users.
         // ----------------------------------------------------
-        if (shortcut.multipleUsers()) {
+        if (shortcut.multipleUsers())
+        {
             //if 'defaultCurrentUser' specified, default to current user:
             final boolean rUserFlag = defaultCurrentUserFlag ? false :
                     isRootUser;
@@ -1729,12 +1878,15 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             TitledBorder border = new TitledBorder(new EmptyBorder(2, 2, 2, 2), installData.getLangpack()
                     .getString("ShortcutPanel.regular.userIntro"));
             usersPanel.setBorder(border);
-            if (OsVersion.IS_WINDOWS) {
+            if (OsVersion.IS_WINDOWS)
+            {
                 constraints.gridx = col + 1;
                 constraints.gridy = line + 4;
                 constraints.gridwidth = 1;
                 constraints.gridheight = 1;
-            } else {
+            }
+            else
+            {
                 constraints.insets = new Insets(10, 10, 20, 0);
                 constraints.gridx = col;
                 constraints.gridy = line + 4;
@@ -1784,7 +1936,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         layout.addLayoutComponent(defaultButton, constraints);
         add(defaultButton);
 
-        if (suggestedProgramGroup == null || "".equals(suggestedProgramGroup)) {
+        if (suggestedProgramGroup == null || "".equals(suggestedProgramGroup))
+        {
             programGroup.setVisible(false);
             defaultButton.setVisible(false);
             listLabel.setVisible(false);
@@ -1805,10 +1958,14 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * @return the filled JList
      */
     private JList addList(Vector<String> Entries, int ListModel, JList aJList, int aGridx, int aGridy,
-                          int aGridwidth, int aGridheight, int aFill) {
-        if (aJList == null) {
+                          int aGridwidth, int aGridheight, int aFill)
+    {
+        if (aJList == null)
+        {
             aJList = new JList(Entries);
-        } else {
+        }
+        else
+        {
             aJList.setListData(Entries);
         }
 
@@ -1841,7 +1998,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
 
     /*--------------------------------------------------------------------------*/
-    private void buildAlternateUI() {
+    private void buildAlternateUI()
+    {
         layout = new GridBagLayout();
         constraints = new GridBagConstraints();
         setLayout(layout);
@@ -1886,7 +2044,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         Vector<String> targets = new Vector<String>();
 
-        for (int i = 0; i < shortcuts.size(); i++) {
+        for (int i = 0; i < shortcuts.size(); i++)
+        {
             targets.add(((ShortcutData) shortcuts.elementAt(i)).target);
         }
 
@@ -1940,13 +2099,15 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
 
     /*--------------------------------------------------------------------------*/
-    public Dimension getSize() {
+    public Dimension getSize()
+    {
         Dimension size = getParent().getSize();
         Insets insets = getInsets();
         Border border = getBorder();
         Insets borderInsets = new Insets(0, 0, 0, 0);
 
-        if (border != null) {
+        if (border != null)
+        {
             borderInsets = border.getBorderInsets(this);
         }
 
@@ -1965,7 +2126,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
 
     /*--------------------------------------------------------------------------*/
-    private void saveToFile() {
+    private void saveToFile()
+    {
         File file = null;
 
         // ----------------------------------------------------
@@ -1974,9 +2136,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         JFileChooser fileDialog = new JFileChooser(this.installData.getInstallPath());
         fileDialog.setSelectedFile(new File(TEXT_FILE_NAME));
 
-        if (fileDialog.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+        if (fileDialog.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
+        {
             file = fileDialog.getSelectedFile();
-        } else {
+        }
+        else
+        {
             return;
         }
 
@@ -1989,10 +2154,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         String newline = System.getProperty("line.separator", "\n");
 
-        try {
+        try
+        {
             output = new FileWriter(file);
         }
-        catch (Throwable exception) {
+        catch (Throwable exception)
+        {
             // !!! show an error dialog
             return;
         }
@@ -2004,14 +2171,18 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         int nextIndex = 0;
         int currentIndex = 0;
 
-        do {
+        do
+        {
             nextIndex = header.indexOf("\\n", currentIndex);
 
-            if (nextIndex > -1) {
+            if (nextIndex > -1)
+            {
                 buffer.append(header.substring(currentIndex, nextIndex));
                 buffer.append(newline);
                 currentIndex = nextIndex + 2;
-            } else {
+            }
+            else
+            {
                 buffer.append(header.substring(currentIndex, header.length()));
                 buffer.append(newline);
             }
@@ -2022,7 +2193,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         buffer.append(newline);
         buffer.append(newline);
 
-        for (int i = 0; i < shortcuts.size(); i++) {
+        for (int i = 0; i < shortcuts.size(); i++)
+        {
             ShortcutData data = (ShortcutData) shortcuts.elementAt(i);
 
             buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.name"));
@@ -2031,26 +2203,31 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
             buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.location"));
 
-            switch (data.type) {
-                case Shortcut.DESKTOP: {
+            switch (data.type)
+            {
+                case Shortcut.DESKTOP:
+                {
                     buffer.append(installData.getLangpack().getString("ShortcutPanel.location.desktop"));
 
                     break;
                 }
 
-                case Shortcut.APPLICATIONS: {
+                case Shortcut.APPLICATIONS:
+                {
                     buffer.append(installData.getLangpack().getString("ShortcutPanel.location.applications"));
 
                     break;
                 }
 
-                case Shortcut.START_MENU: {
+                case Shortcut.START_MENU:
+                {
                     buffer.append(installData.getLangpack().getString("ShortcutPanel.location.startMenu"));
 
                     break;
                 }
 
-                case Shortcut.START_UP: {
+                case Shortcut.START_UP:
+                {
                     buffer.append(installData.getLangpack().getString("ShortcutPanel.location.startup"));
 
                     break;
@@ -2089,18 +2266,23 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             buffer.append(newline);
         }
 
-        try {
+        try
+        {
             output.write(buffer.toString());
         }
-        catch (Throwable exception) {
+        catch (Throwable exception)
+        {
         }
-        finally {
-            try {
+        finally
+        {
+            try
+            {
                 output.flush();
                 output.close();
                 files.add(file.getPath());
             }
-            catch (Throwable exception) {
+            catch (Throwable exception)
+            {
                 // not really anything I can do here, maybe should show a dialog that
                 // tells the user that installDataGUI might not have been saved completely!?
             }
@@ -2114,10 +2296,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
 
     /*--------------------------------------------------------------------------*/
-    private void addToUninstaller() {
+    private void addToUninstaller()
+    {
         UninstallData uninstallData = this.uninstallData;
 
-        for (int i = 0; i < files.size(); i++) {
+        for (int i = 0; i < files.size(); i++)
+        {
             uninstallData.addFile(files.elementAt(i), true);
         }
     }
@@ -2127,7 +2311,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /**
      * Returns Instance of themself
      */
-    public static ShortcutPanel getInstance() {
+    public static ShortcutPanel getInstance()
+    {
         return self;
     }
 
@@ -2141,7 +2326,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * --------------------------------------------------------------------------
      */
 
-    public void makeXMLData(IXMLElement panelRoot) {
+    public void makeXMLData(IXMLElement panelRoot)
+    {
         // ----------------------------------------------------
         // if there are no shortcuts to create, shortcuts are
         // not supported, or we should simulate that they are
@@ -2152,7 +2338,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
 
         if (!shortcutsToCreate || !shortcut.supported() || (groupName == null)
-                || simulteNotSupported || !create) {
+                || simulteNotSupported || !create)
+        {
             Debug.log("abort makeXMLData!");
             return;
         }
@@ -2170,7 +2357,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         // add the details for each of the shortcuts
         // ----------------------------------------------------
-        for (int i = 0; i < shortcuts.size(); i++) {
+        for (int i = 0; i < shortcuts.size(); i++)
+        {
             Debug.log("entering makeXMLData");
             data = (ShortcutData) shortcuts.elementAt(i);
             dataElement = new XMLElementImpl(AUTO_KEY_SHORTCUT, panelRoot);
@@ -2199,7 +2387,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             dataElement.setAttribute(SPEC_ATTRIBUTE_MIMETYPE, data.deskTopEntryLinux_MimeType);
             dataElement.setAttribute(SPEC_ATTRIBUTE_TERMINAL, data.deskTopEntryLinux_Terminal);
             dataElement.setAttribute(SPEC_ATTRIBUTE_TERMINAL_OPTIONS, data.deskTopEntryLinux_TerminalOptions);
-            if (!OsVersion.IS_WINDOWS) {
+            if (!OsVersion.IS_WINDOWS)
+            {
                 dataElement.setAttribute(SPEC_ATTRIBUTE_TYPE, data.deskTopEntryLinux_Type);
             }
 
@@ -2221,7 +2410,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             // shortcuts on the desktop.
             // ----------------------------------------------
             if ((data.type != Shortcut.DESKTOP)
-                    || ((data.type == Shortcut.DESKTOP) && allowDesktopShortcut.isSelected())) {
+                    || ((data.type == Shortcut.DESKTOP) && allowDesktopShortcut.isSelected()))
+            {
                 panelRoot.addChild(dataElement);
             }
         }
@@ -2238,11 +2428,13 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * --------------------------------------------------------------------------
      */
 
-    public boolean isCreateImmediately() {
+    public boolean isCreateImmediately()
+    {
         return createImmediately;
     }
 
-    public void setCreateImmediately(boolean createImmediately) {
+    public void setCreateImmediately(boolean createImmediately)
+    {
         this.createImmediately = createImmediately;
     }
 }

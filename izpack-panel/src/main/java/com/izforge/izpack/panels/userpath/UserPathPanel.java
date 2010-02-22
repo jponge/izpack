@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.userpath;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -35,7 +36,8 @@ import java.util.Iterator;
  * @author Julien Ponge
  * @author Jeff Gordon
  */
-public class UserPathPanel extends UserPathInputPanel {
+public class UserPathPanel extends UserPathInputPanel
+{
 
     private static final long serialVersionUID = 3256443616359429170L;
 
@@ -53,10 +55,12 @@ public class UserPathPanel extends UserPathInputPanel {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public UserPathPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public UserPathPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, thisName, resourceManager);
         // load the default directory info (if present)
-        if (getDefaultDir() != null) {
+        if (getDefaultDir() != null)
+        {
             idata.setVariable(pathVariableName, getDefaultDir());
         }
     }
@@ -64,29 +68,36 @@ public class UserPathPanel extends UserPathInputPanel {
     /**
      * Called when the panel becomes active.
      */
-    public void panelActivate() {
+    public void panelActivate()
+    {
         boolean found = false;
         Debug.trace(thisName + " looking for activation condition");
         // Need to have a way to supress panel if not in selected packs.
         String dependsName = installData.getVariable(pathPackDependsName);
-        if (dependsName != null && !(dependsName.equalsIgnoreCase(""))) {
+        if (dependsName != null && !(dependsName.equalsIgnoreCase("")))
+        {
             Debug.trace("Checking for pack dependency of " + dependsName);
             Iterator iter = installData.getSelectedPacks().iterator();
-            while (iter.hasNext()) {
+            while (iter.hasNext())
+            {
                 Pack pack = (Pack) iter.next();
                 Debug.trace("- Checking if " + pack.name + " equals " + dependsName);
-                if (pack.name.equalsIgnoreCase(dependsName)) {
+                if (pack.name.equalsIgnoreCase(dependsName))
+                {
                     found = true;
                     Debug.trace("-- Found " + dependsName + ", panel will be shown");
                     break;
                 }
             }
             skip = !(found);
-        } else {
+        }
+        else
+        {
             Debug.trace("Not Checking for a pack dependency, panel will be shown");
             skip = false;
         }
-        if (skip) {
+        if (skip)
+        {
             Debug.trace(thisName + " will not be shown");
             parent.skipPanel();
             return;
@@ -102,9 +113,11 @@ public class UserPathPanel extends UserPathInputPanel {
      *
      * @return Whether the panel has been validated or not.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         // Standard behavior of PathInputPanel.
-        if (!super.isValidated()) {
+        if (!super.isValidated())
+        {
             return (false);
         }
         installData.setVariable(pathVariableName, _pathSelectionPanel.getPath());
@@ -116,8 +129,10 @@ public class UserPathPanel extends UserPathInputPanel {
      *
      * @param panelRoot The tree to put the installDataGUI in.
      */
-    public void makeXMLData(IXMLElement panelRoot) {
-        if (!(skip)) {
+    public void makeXMLData(IXMLElement panelRoot)
+    {
+        if (!(skip))
+        {
             new UserPathPanelAutomationHelper(variableSubstitutor).makeXMLData(installData, panelRoot);
         }
     }
@@ -128,10 +143,14 @@ public class UserPathPanel extends UserPathInputPanel {
     * @see com.izforge.izpack.installer.IzPanel#getSummaryBody()
     */
 
-    public String getSummaryBody() {
-        if (skip) {
+    public String getSummaryBody()
+    {
+        if (skip)
+        {
             return null;
-        } else {
+        }
+        else
+        {
             return (installData.getVariable(pathVariableName));
         }
     }

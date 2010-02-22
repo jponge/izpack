@@ -25,7 +25,8 @@ import java.util.Properties;
  *
  * @author Anthonin Bonnefoy
  */
-public class CompilerConfigTest {
+public class CompilerConfigTest
+{
     private XMLParser xmlParser;
     private CompilerConfig compilerConfig;
     private CompilerData data;
@@ -39,7 +40,8 @@ public class CompilerConfigTest {
     private IPackager packager;
 
     @Before
-    public void setUp() {
+    public void setUp()
+    {
         data = Mockito.mock(CompilerData.class);
         variableSubstitutor = Mockito.mock(VariableSubstitutor.class);
         compiler = Mockito.mock(Compiler.class);
@@ -54,7 +56,8 @@ public class CompilerConfigTest {
     }
 
     @Test
-    public void testAddTwoVariables() throws Exception {
+    public void testAddTwoVariables() throws Exception
+    {
         Mockito.when(mapStringListDyn.containsKey("myPath")).thenReturn(false);
         Mockito.when(packager.getDynamicVariables()).thenReturn(mapStringListDyn);
         Properties variable = new Properties();
@@ -69,7 +72,8 @@ public class CompilerConfigTest {
     }
 
     @Test
-    public void testAddDynamicVariable() throws CompilerException {
+    public void testAddDynamicVariable() throws CompilerException
+    {
         Mockito.when(mapStringListDyn.containsKey("myPath")).thenReturn(false);
         Mockito.when(packager.getDynamicVariables()).thenReturn(mapStringListDyn);
 
@@ -79,7 +83,8 @@ public class CompilerConfigTest {
         verifyCallToMap(mapStringListDyn, "myPath", "$INSTALLPATH/test");
     }
 
-    private void verifyCallToMap(Map<String, List<DynamicVariable>> mapStringListDyn, String name, String value) {
+    private void verifyCallToMap(Map<String, List<DynamicVariable>> mapStringListDyn, String name, String value)
+    {
         DynamicVariable dyn = new DynamicVariable();
         dyn.setName(name);
         dyn.setValue(value);
@@ -89,7 +94,8 @@ public class CompilerConfigTest {
     }
 
     @Test
-    public void compilerShouldAddVariable() throws Exception {
+    public void compilerShouldAddVariable() throws Exception
+    {
         IXMLElement xmlData = xmlParser.parse("<root><variables><variable name=\"scriptFile\" value=\"script.bat\"/></variables></root>");
         Properties variable = Mockito.mock(Properties.class);
         Mockito.when(packager.getVariables()).thenReturn(variable);
@@ -98,7 +104,8 @@ public class CompilerConfigTest {
     }
 
     @Test
-    public void shouldAddDynamicVariable() throws Exception {
+    public void shouldAddDynamicVariable() throws Exception
+    {
         IXMLElement xmlData = xmlParser.parse("<root><dynamicvariables><variable name='myPath' value='$INSTALLPATH/test'/></dynamicvariables></root>");
         Map variable = Mockito.mock(Map.class);
 

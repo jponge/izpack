@@ -16,6 +16,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.installer.base;
 
 
@@ -24,7 +25,8 @@ package com.izforge.izpack.installer.base;
  *
  * @author Klaus Bartz
  */
-public interface GUIListener {
+public interface GUIListener
+{
 
     /**
      * Constant to indicate that method buildGUI has called

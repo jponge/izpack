@@ -29,14 +29,16 @@ import java.util.List;
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  * @version $Id: $
  */
-public class VariableHistory {
+public class VariableHistory
+{
     private String name;
     private List<String[]> values;
     private boolean newvariable;
     private boolean changed;
 
 
-    public VariableHistory(String variable) {
+    public VariableHistory(String variable)
+    {
         name = variable;
         values = new ArrayList<String[]>();
     }
@@ -45,7 +47,8 @@ public class VariableHistory {
     /**
      * @return the name
      */
-    public String getName() {
+    public String getName()
+    {
         return this.name;
     }
 
@@ -53,36 +56,47 @@ public class VariableHistory {
     /**
      * @param name the name to set
      */
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public void addValue(String value, String comment) {
+    public void addValue(String value, String comment)
+    {
         String[] valuecomment = new String[2];
         valuecomment[0] = value;
         valuecomment[1] = comment;
         values.add(valuecomment);
-        if (values.size() == 1) {
+        if (values.size() == 1)
+        {
             newvariable = true;
             changed = true;
-        } else {
+        }
+        else
+        {
             changed = true;
         }
     }
 
-    public String[] getValueComment(int index) {
+    public String[] getValueComment(int index)
+    {
         return values.get(index);
     }
 
-    public int getValuesCount() {
+    public int getValuesCount()
+    {
         return values.size();
     }
 
-    public String getLastValue() {
-        if (values.size() > 0) {
+    public String getLastValue()
+    {
+        if (values.size() > 0)
+        {
             String[] valuecomment = values.get(values.size() - 1);
             return valuecomment[0];
-        } else {
+        }
+        else
+        {
             return "";
         }
     }
@@ -90,7 +104,8 @@ public class VariableHistory {
     /**
      * @return the newvariable
      */
-    public boolean isNewvariable() {
+    public boolean isNewvariable()
+    {
         return this.newvariable;
     }
 
@@ -98,7 +113,8 @@ public class VariableHistory {
     /**
      * @return the changed
      */
-    public boolean isChanged() {
+    public boolean isChanged()
+    {
         return this.changed;
     }
 
@@ -106,22 +122,26 @@ public class VariableHistory {
     /**
      * @param changed the changed to set
      */
-    public void setChanged(boolean changed) {
+    public void setChanged(boolean changed)
+    {
         this.changed = changed;
     }
 
-    public void clearState() {
+    public void clearState()
+    {
         newvariable = false;
         changed = false;
     }
 
-    public String getValueHistoryDetails() {
+    public String getValueHistoryDetails()
+    {
         StringBuffer details = new StringBuffer();
         details.append("<html><body>");
         details.append("<h3>Details of <b>");
         details.append(this.name);
         details.append("</b></h3>");
-        for (int i = values.size() - 1; i >= 0; i--) {
+        for (int i = values.size() - 1; i >= 0; i--)
+        {
             String[] valuecomment = values.get(i);
             details.append(i + 1);
             details.append(". ");
@@ -134,7 +154,8 @@ public class VariableHistory {
         return details.toString();
     }
 
-    public String toString() {
+    public String toString()
+    {
         return this.getLastValue();
     }
 }

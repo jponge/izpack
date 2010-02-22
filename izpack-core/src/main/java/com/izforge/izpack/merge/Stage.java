@@ -5,6 +5,7 @@ package com.izforge.izpack.merge;
  *
  * @author Anthonin Bonnefoy
  */
-public enum Stage {
+public enum Stage
+{
     INSTALL, UNINSTALL, BOTH
 }

@@ -23,12 +23,14 @@ import org.picocontainer.injectors.ProviderAdapter;
  *
  * @author Anthonin Bonnefoy
  */
-public class CompilerContainer extends AbstractContainer {
+public class CompilerContainer extends AbstractContainer
+{
 
     /**
      * Init component bindings
      */
-    public void initBindings() {
+    public void initBindings()
+    {
         pico = new PicoBuilder().withConstructorInjection().withCaching().build();
         pico.addComponent(CompilerContainer.class, this);
         pico.addComponent(CliAnalyzer.class);
@@ -54,7 +56,8 @@ public class CompilerContainer extends AbstractContainer {
      *
      * @param args command line args passed to the main
      */
-    public void processCompileDataFromArgs(String[] args) {
+    public void processCompileDataFromArgs(String[] args)
+    {
         pico.addAdapter(new ProviderAdapter(new CompilerDataProvider(args)));
     }
 

@@ -51,7 +51,8 @@ import java.util.*;
  *
  * @author Klaus Bartz
  */
-public abstract class PackagerBase implements IPackager {
+public abstract class PackagerBase implements IPackager
+{
 
     /**
      * Path to resources in jar
@@ -61,7 +62,8 @@ public abstract class PackagerBase implements IPackager {
 
     protected CompilerContainer compilerContainer;
 
-    public PackagerBase(Properties properties, CompilerContainer compilerContainer, PackagerListener listener, MergeManager mergeManager) {
+    public PackagerBase(Properties properties, CompilerContainer compilerContainer, PackagerListener listener, MergeManager mergeManager)
+    {
         this.properties = properties;
         this.compilerContainer = compilerContainer;
         this.listener = listener;
@@ -146,7 +148,8 @@ public abstract class PackagerBase implements IPackager {
      *
      * @param job The job description.
      */
-    protected void sendMsg(String job) {
+    protected void sendMsg(String job)
+    {
         sendMsg(job, PackagerListener.MSG_INFO);
     }
 
@@ -156,8 +159,10 @@ public abstract class PackagerBase implements IPackager {
      * @param job      The job description.
      * @param priority The message priority.
      */
-    protected void sendMsg(String job, int priority) {
-        if (listener != null) {
+    protected void sendMsg(String job, int priority)
+    {
+        if (listener != null)
+        {
             listener.packagerMsg(job, priority);
         }
     }
@@ -165,8 +170,10 @@ public abstract class PackagerBase implements IPackager {
     /**
      * Dispatches a start event to the listeners.
      */
-    protected void sendStart() {
-        if (listener != null) {
+    protected void sendStart()
+    {
+        if (listener != null)
+        {
             listener.packagerStart();
         }
     }
@@ -174,8 +181,10 @@ public abstract class PackagerBase implements IPackager {
     /**
      * Dispatches a stop event to the listeners.
      */
-    protected void sendStop() {
-        if (listener != null) {
+    protected void sendStop()
+    {
+        if (listener != null)
+        {
             listener.packagerStop();
         }
     }
@@ -184,9 +193,11 @@ public abstract class PackagerBase implements IPackager {
      * @see com.izforge.izpack.compiler.packager.IPackager#addCustomJar(com.izforge.izpack.CustomData, java.net.URL)
      */
 
-    public void addCustomJar(CustomData ca, URL url) {
+    public void addCustomJar(CustomData ca, URL url)
+    {
         customDataList.add(ca); // serialized to keep order/variables correct
-        if (url != null) {
+        if (url != null)
+        {
             addJarContent(url); // each included once, no matter how many times added
         }
     }
@@ -195,12 +206,14 @@ public abstract class PackagerBase implements IPackager {
      * @see com.izforge.izpack.compiler.packager.IPackager#addJarContent(java.net.URL)
      */
 
-    public void addJarContent(URL jarURL) {
+    public void addJarContent(URL jarURL)
+    {
         sendMsg("Adding content of jar: " + jarURL.getFile(), PackagerListener.MSG_VERBOSE);
         mergeManager.addResourceToMerge(new JarMerge(jarURL));
     }
 
-    public void addLangPack(String iso3, URL xmlURL, URL flagURL) {
+    public void addLangPack(String iso3, URL xmlURL, URL flagURL)
+    {
         sendMsg("Adding langpack: " + iso3, PackagerListener.MSG_VERBOSE);
         // put data & flag as entries in installer, and keep array of iso3's
         // names
@@ -213,7 +226,8 @@ public abstract class PackagerBase implements IPackager {
      * @see com.izforge.izpack.compiler.packager.IPackager#addNativeLibrary(java.lang.String, java.net.URL)
      */
 
-    public void addNativeLibrary(String name, URL url) {
+    public void addNativeLibrary(String name, URL url)
+    {
         sendMsg("Adding native library: " + name, PackagerListener.MSG_VERBOSE);
         installerResourceURLMap.put("native/" + name, url);
     }
@@ -223,7 +237,8 @@ public abstract class PackagerBase implements IPackager {
      * @see com.izforge.izpack.compiler.packager.IPackager#addNativeUninstallerLibrary(com.izforge.izpack.CustomData)
      */
 
-    public void addNativeUninstallerLibrary(CustomData data) {
+    public void addNativeUninstallerLibrary(CustomData data)
+    {
         customDataList.add(data); // serialized to keep order/variables
         // correct
 
@@ -233,11 +248,13 @@ public abstract class PackagerBase implements IPackager {
      * @see com.izforge.izpack.compiler.packager.IPackager#addPack(com.izforge.izpack.compiler.PackInfo)
      */
 
-    public void addPack(PackInfo pack) {
+    public void addPack(PackInfo pack)
+    {
         packsList.add(pack);
     }
 
-    public void addPanel(Panel panel) {
+    public void addPanel(Panel panel)
+    {
         panelList.add(panel); // serialized to keep order/variables correct
         mergeManager.addResourceToMerge(new PanelMerge(panel.getClassName()));
     }
@@ -250,7 +267,8 @@ public abstract class PackagerBase implements IPackager {
      * @see com.izforge.izpack.compiler.packager.IPackager#addResource(java.lang.String, java.net.URL)
      */
 
-    public void addResource(String resId, URL url) {
+    public void addResource(String resId, URL url)
+    {
         sendMsg("Adding resource: " + resId, PackagerListener.MSG_VERBOSE);
         installerResourceURLMap.put(resId, url);
     }
@@ -259,7 +277,8 @@ public abstract class PackagerBase implements IPackager {
      * @see com.izforge.izpack.compiler.packager.IPackager#getCompressor()
      */
 
-    public PackCompressor getCompressor() {
+    public PackCompressor getCompressor()
+    {
         return compressor;
     }
 
@@ -267,7 +286,8 @@ public abstract class PackagerBase implements IPackager {
      * @see com.izforge.izpack.compiler.packager.IPackager#getPacksList()
      */
 
-    public List<PackInfo> getPacksList() {
+    public List<PackInfo> getPacksList()
+    {
         return packsList;
     }
 
@@ -275,7 +295,8 @@ public abstract class PackagerBase implements IPackager {
      * @see com.izforge.izpack.compiler.packager.IPackager#getVariables()
      */
 
-    public Properties getVariables() {
+    public Properties getVariables()
+    {
         return properties;
     }
 
@@ -283,7 +304,8 @@ public abstract class PackagerBase implements IPackager {
      * @see com.izforge.izpack.compiler.packager.IPackager#setGUIPrefs(com.izforge.izpack.GUIPrefs)
      */
 
-    public void setGUIPrefs(GUIPrefs prefs) {
+    public void setGUIPrefs(GUIPrefs prefs)
+    {
         sendMsg("Setting the GUI preferences", PackagerListener.MSG_VERBOSE);
         guiPrefs = prefs;
     }
@@ -292,11 +314,13 @@ public abstract class PackagerBase implements IPackager {
      * @see com.izforge.izpack.compiler.packager.IPackager#setInfo(com.izforge.izpack.Info)
      */
 
-    public void setInfo(Info info) {
+    public void setInfo(Info info)
+    {
         sendMsg("Setting the installer information", PackagerListener.MSG_VERBOSE);
         this.info = info;
 
-        if (!getCompressor().useStandardCompression() && getCompressor().getDecoderMapperName() != null) {
+        if (!getCompressor().useStandardCompression() && getCompressor().getDecoderMapperName() != null)
+        {
             this.info.setPackDecoderClassName(getCompressor().getDecoderMapperName());
         }
     }
@@ -304,12 +328,14 @@ public abstract class PackagerBase implements IPackager {
     /**
      * @return the rules
      */
-    public Map<String, Condition> getRules() {
+    public Map<String, Condition> getRules()
+    {
         return this.rules;
     }
 
 
-    protected void writeInstaller() throws Exception {
+    protected void writeInstaller() throws Exception
+    {
         // write the primary jar. MUST be first so manifest is not overwritten
         // by
         // an included jar
@@ -346,12 +372,14 @@ public abstract class PackagerBase implements IPackager {
     /**
      * @return the dynamicvariables
      */
-    public Map<String, List<DynamicVariable>> getDynamicVariables() {
+    public Map<String, List<DynamicVariable>> getDynamicVariables()
+    {
         return this.dynamicvariables;
     }
 
 
-    public void addInstallerRequirements(List<InstallerRequirement> conditions) {
+    public void addInstallerRequirements(List<InstallerRequirement> conditions)
+    {
         this.installerrequirements = conditions;
     }
 }

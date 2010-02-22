@@ -9,30 +9,37 @@ import java.util.Map;
  *
  * @author Anthonin Bonnefoy
  */
-public enum Blockable {
+public enum Blockable
+{
     BLOCKABLE_NONE("none"), BLOCKABLE_AUTO("auto"), BLOCKABLE_FORCE("force");
 
     private static Map<String, Blockable> lookup;
 
     private String attribute;
 
-    Blockable(String attribute) {
+    Blockable(String attribute)
+    {
         this.attribute = attribute;
     }
 
-    static {
+    static
+    {
         lookup = new HashMap<String, Blockable>();
-        for (Blockable blockable : EnumSet.allOf(Blockable.class)) {
+        for (Blockable blockable : EnumSet.allOf(Blockable.class))
+        {
             lookup.put(blockable.getAttribute(), blockable);
         }
     }
 
-    public String getAttribute() {
+    public String getAttribute()
+    {
         return attribute;
     }
 
-    public static Blockable getBlockableFromAttribute(String attribute) {
-        if (attribute != null && lookup.containsKey(attribute)) {
+    public static Blockable getBlockableFromAttribute(String attribute)
+    {
+        if (attribute != null && lookup.containsKey(attribute))
+        {
             return lookup.get(attribute);
         }
         return null;

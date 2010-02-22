@@ -15,6 +15,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.data;
 
 import com.izforge.izpack.util.OsConstraint;
@@ -29,7 +30,8 @@ import java.util.Map;
  *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
-public class XPackFile extends PackFile implements Comparable<XPackFile> {
+public class XPackFile extends PackFile implements Comparable<XPackFile>
+{
     private static final long serialVersionUID = 5875050264763504283L;
     protected long archivefileposition;
 
@@ -41,7 +43,8 @@ public class XPackFile extends PackFile implements Comparable<XPackFile> {
      * @throws FileNotFoundException
      */
     public XPackFile(File baseDir, File src, String target, List<OsConstraint> osList, OverrideType override, Blockable blockable)
-            throws FileNotFoundException {
+            throws FileNotFoundException
+    {
         super(baseDir, src, target, osList, override, blockable);
         this.archivefileposition = 0;
     }
@@ -55,32 +58,38 @@ public class XPackFile extends PackFile implements Comparable<XPackFile> {
      * @throws FileNotFoundException
      */
     public XPackFile(File baseDir, File src, String target, List<OsConstraint> osList, OverrideType override, Blockable blockable, Map additionals)
-            throws FileNotFoundException {
+            throws FileNotFoundException
+    {
         super(baseDir, src, target, osList, override, blockable, additionals);
         this.archivefileposition = 0;
     }
 
-    public XPackFile(PackFile packf) throws FileNotFoundException {
+    public XPackFile(PackFile packf) throws FileNotFoundException
+    {
         super(new File(packf.sourcePath), packf.relativePath, packf.getTargetPath(), packf.osConstraints(), packf
                 .override(), packf.blockable(), packf.getAdditionals());
         this.archivefileposition = 0;
         this.setCondition(packf.getCondition());
     }
 
-    public long getArchivefileposition() {
+    public long getArchivefileposition()
+    {
         return archivefileposition;
     }
 
-    public void setArchivefileposition(long archivefileposition) {
+    public void setArchivefileposition(long archivefileposition)
+    {
         this.archivefileposition = archivefileposition;
     }
 
-    public PackFile getPackfile() {
+    public PackFile getPackfile()
+    {
         return this;
     }
 
 
-    public int compareTo(XPackFile arg0) {
+    public int compareTo(XPackFile arg0)
+    {
         return this.getTargetPath().compareTo(arg0.getTargetPath());
     }
 }
