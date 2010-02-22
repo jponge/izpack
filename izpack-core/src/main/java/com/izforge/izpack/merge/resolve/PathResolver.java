@@ -4,6 +4,7 @@ import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.merge.Mergeable;
 import com.izforge.izpack.merge.file.FileMerge;
 import com.izforge.izpack.merge.jar.JarMerge;
+import com.izforge.izpack.merge.panel.PanelMerge;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,6 +62,11 @@ public class PathResolver
             return result;
         }
         throw new IzPackException("The path " + sourcePath + " is not present inside the classpath.\n The current classpath is :" + getCurrentClasspath("com/izforge/izpack/uninstaller/"));
+    }
+
+    public Mergeable getPanelMerge(String className)
+    {
+        return new PanelMerge(className);
     }
 
     public static boolean isJar(File classFile)

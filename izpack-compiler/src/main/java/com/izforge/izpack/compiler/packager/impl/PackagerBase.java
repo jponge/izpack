@@ -36,7 +36,7 @@ import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.jar.JarMerge;
-import com.izforge.izpack.merge.panel.PanelMerge;
+import com.izforge.izpack.merge.resolve.PathResolver;
 
 import java.io.FilterOutputStream;
 import java.io.IOException;
@@ -61,13 +61,16 @@ public abstract class PackagerBase implements IPackager
     private Properties properties;
 
     protected CompilerContainer compilerContainer;
+    private PathResolver pathResolver;
 
-    public PackagerBase(Properties properties, CompilerContainer compilerContainer, PackagerListener listener, MergeManager mergeManager)
+
+    public PackagerBase(Properties properties, CompilerContainer compilerContainer, PackagerListener listener, MergeManager mergeManager, PathResolver pathResolver)
     {
         this.properties = properties;
         this.compilerContainer = compilerContainer;
         this.listener = listener;
         this.mergeManager = mergeManager;
+        this.pathResolver = pathResolver;
     }
 
     /**
@@ -256,12 +259,8 @@ public abstract class PackagerBase implements IPackager
     public void addPanel(Panel panel)
     {
         panelList.add(panel); // serialized to keep order/variables correct
-        mergeManager.addResourceToMerge(new PanelMerge(panel.getClassName()));
+        mergeManager.addResourceToMerge(pathResolver.getPanelMerge(panel.getClassName()));
     }
-
-    /* (non-Javadoc)
-    * @see com.izforge.izpack.compiler.packager.IPackager#addPanelJar(com.izforge.izpack.Panel, java.net.URL)
-    */
 
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.packager.IPackager#addResource(java.lang.String, java.net.URL)

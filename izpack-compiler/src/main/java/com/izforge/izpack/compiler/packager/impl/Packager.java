@@ -32,6 +32,7 @@ import com.izforge.izpack.compiler.stream.ByteCountingOutputStream;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.merge.MergeManager;
+import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.IoHelper;
 
@@ -74,9 +75,9 @@ public class Packager extends PackagerBase
      * @throws com.izforge.izpack.api.exception.CompilerException
      *
      */
-    public Packager(Properties properties, CompilerData compilerData, CompilerContainer compilerContainer, PackagerListener listener, JarOutputStream jarOutputStream, PackCompressor packCompressor, OutputStream outputStream, MergeManager mergeManager) throws CompilerException
+    public Packager(Properties properties, CompilerData compilerData, CompilerContainer compilerContainer, PackagerListener listener, JarOutputStream jarOutputStream, PackCompressor packCompressor, OutputStream outputStream, MergeManager mergeManager, PathResolver pathResolver) throws CompilerException
     {
-        super(properties, compilerContainer, listener, mergeManager);
+        super(properties, compilerContainer, listener, mergeManager, pathResolver);
         this.compilerData = compilerData;
         this.primaryJarStream = jarOutputStream;
         this.compressor = packCompressor;
