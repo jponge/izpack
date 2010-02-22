@@ -1,10 +1,13 @@
-package com.izforge.izpack.installer.container;
+package com.izforge.izpack.installer.container.impl;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.container.AbstractChildContainer;
 import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.container.IApplicationContainer;
+import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.language.LanguageDialog;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.installer.unpacker.IUnpacker;

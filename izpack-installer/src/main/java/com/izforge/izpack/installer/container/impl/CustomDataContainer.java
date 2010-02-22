@@ -1,4 +1,7 @@
-package com.izforge.izpack.installer.container;
+package com.izforge.izpack.installer.container.impl;
+
+import com.izforge.izpack.core.container.AbstractChildContainer;
+import com.izforge.izpack.installer.container.IApplicationContainer;
 
 /**
  * Container for custom data

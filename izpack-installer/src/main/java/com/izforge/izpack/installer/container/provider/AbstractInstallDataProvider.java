@@ -5,7 +5,7 @@ import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.data.CustomData;
-import com.izforge.izpack.installer.container.CustomDataContainer;
+import com.izforge.izpack.installer.container.impl.CustomDataContainer;
 import com.izforge.izpack.util.*;
 import org.picocontainer.injectors.Provider;
 

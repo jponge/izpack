@@ -49,8 +49,8 @@ public class PanelManagerTest
     {
         Class<?> aClass = panelManager.resolveClassName("com.izforge.izpack.panels.hello.HelloPanel");
         assertThat(aClass.getName(), Is.is("com.izforge.izpack.panels.hello.HelloPanel"));
-        aClass = panelManager.resolveClassName("com.izforge.izpack.installer.container.InstallerContainer");
-        assertThat(aClass.getName(), Is.is("com.izforge.izpack.installer.container.InstallerContainer"));
+        aClass = panelManager.resolveClassName("com.izforge.izpack.installer.container.impl.InstallerContainer");
+        assertThat(aClass.getName(), Is.is("com.izforge.izpack.installer.container.impl.InstallerContainer"));
     }
 
     @Test

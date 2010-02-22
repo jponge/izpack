@@ -1,10 +1,12 @@
-package com.izforge.izpack.installer.container;
+package com.izforge.izpack.installer.container.impl;
 
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
 import com.izforge.izpack.installer.console.ConsoleInstaller;
+import com.izforge.izpack.installer.container.IApplicationContainer;
+import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.container.provider.GUIInstallDataProvider;
 import com.izforge.izpack.installer.container.provider.IconsProvider;
 import com.izforge.izpack.installer.container.provider.RulesProvider;
