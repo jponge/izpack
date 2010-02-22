@@ -174,7 +174,7 @@ public class PathResolver
         {
             if (isJar(url))
             {
-                result.add(new JarMerge(url));
+                result.add(new JarMerge(url, processUrlToJarPath(url)));
             }
             else
             {
@@ -200,7 +200,7 @@ public class PathResolver
         {
             if (isJar(url))
             {
-                result.add(new JarMerge(url, destination));
+                result.add(new JarMerge(processUrlToJarPath(url), processUrlToJarPackage(url), destination));
             }
             else
             {

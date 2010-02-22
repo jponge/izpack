@@ -2,7 +2,6 @@ package com.izforge.izpack.merge.jar;
 
 import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.merge.Mergeable;
-import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.IoHelper;
 import org.apache.tools.zip.ZipOutputStream;
 
@@ -31,19 +30,18 @@ public class JarMerge implements Mergeable
     private String destination;
 
 
-    public JarMerge(URL resource)
+    public JarMerge(URL resource, String jarPath)
     {
-        jarPath = PathResolver.processUrlToJarPath(resource);
-        destination = resource.getFile().replaceAll(jarPath, "").replaceAll("file:", "").replaceAll("!/", "");
+        this.jarPath = jarPath;
+        destination = resource.getFile().replaceAll(this.jarPath, "").replaceAll("file:", "").replaceAll("!/", "");
         regexp = new StringBuilder().append(destination).append("(.*)").toString();
     }
 
-    public JarMerge(URL resource, String destination)
+    public JarMerge(String jarPath, String jarPackage, String destination)
     {
-        jarPath = PathResolver.processUrlToJarPath(resource);
-        String insideJar = PathResolver.processUrlToJarPackage(resource);
+        this.jarPath = jarPath;
         this.destination = destination;
-        regexp = new StringBuilder().append(insideJar).append("(.*)").toString();
+        regexp = new StringBuilder().append(jarPackage).append("(.*)").toString();
     }
 
     public File find(FileFilter fileFilter)

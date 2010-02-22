@@ -212,7 +212,7 @@ public abstract class PackagerBase implements IPackager
     public void addJarContent(URL jarURL)
     {
         sendMsg("Adding content of jar: " + jarURL.getFile(), PackagerListener.MSG_VERBOSE);
-        mergeManager.addResourceToMerge(new JarMerge(jarURL));
+        mergeManager.addResourceToMerge(new JarMerge(jarURL, PathResolver.processUrlToJarPath(jarURL)));
     }
 
     public void addLangPack(String iso3, URL xmlURL, URL flagURL)
