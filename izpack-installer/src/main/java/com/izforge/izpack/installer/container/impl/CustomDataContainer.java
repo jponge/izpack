@@ -1,7 +1,6 @@
 package com.izforge.izpack.installer.container.impl;
 
 import com.izforge.izpack.core.container.AbstractChildContainer;
-import com.izforge.izpack.core.container.AbstractContainer;
 
 /**
  * Container for custom data
@@ -9,7 +8,7 @@ import com.izforge.izpack.core.container.AbstractContainer;
 public class CustomDataContainer extends AbstractChildContainer
 {
 
-    public CustomDataContainer(AbstractContainer parent) throws ClassNotFoundException
+    public CustomDataContainer(ApplicationContainer parent) throws ClassNotFoundException
     {
         super(parent);
     }
