@@ -9,8 +9,8 @@ import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
-import com.izforge.izpack.merge.MergeManagerImpl;
 import com.izforge.izpack.merge.panel.PanelMerge;
+import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.OsConstraint;
@@ -31,17 +31,19 @@ public class PanelManager
      * Mapping from "raw" panel number to visible panel number.
      */
     protected ArrayList<Integer> visiblePanelMapping;
+    private PathResolver pathResolver;
 
-    public PanelManager(GUIInstallData installDataGUI, IInstallerContainer installerContainer, MergeManagerImpl mergeManager) throws ClassNotFoundException
+    public PanelManager(GUIInstallData installDataGUI, IInstallerContainer installerContainer, PathResolver pathResolver) throws ClassNotFoundException
     {
         this.installdata = installDataGUI;
         this.installerContainer = installerContainer;
+        this.pathResolver = pathResolver;
         visiblePanelMapping = new ArrayList<Integer>();
     }
 
     public Class<? extends IzPanel> resolveClassName(final String className) throws ClassNotFoundException
     {
-        PanelMerge panelMerge = new PanelMerge(className);
+        PanelMerge panelMerge = pathResolver.getPanelMerge(className);
         return (Class<? extends IzPanel>) Class.forName(panelMerge.getFullClassNameFromPanelName());
     }
 

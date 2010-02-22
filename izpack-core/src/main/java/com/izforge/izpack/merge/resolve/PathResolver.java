@@ -64,7 +64,7 @@ public class PathResolver
         throw new IzPackException("The path " + sourcePath + " is not present inside the classpath.\n The current classpath is :" + getCurrentClasspath("com/izforge/izpack/uninstaller/"));
     }
 
-    public Mergeable getPanelMerge(String className)
+    public PanelMerge getPanelMerge(String className)
     {
         return new PanelMerge(className);
     }

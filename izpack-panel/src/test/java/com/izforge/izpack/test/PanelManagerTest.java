@@ -34,7 +34,7 @@ public class PanelManagerTest
         MockitoAnnotations.initMocks(getClass());
         PathResolver pathResolver = new PathResolver();
         mergeManager = new MergeManagerImpl(pathResolver);
-        panelManager = new PanelManager(installDataGUI, installerContainer, mergeManager);
+        panelManager = new PanelManager(installDataGUI, installerContainer, pathResolver);
     }
 
     @Test

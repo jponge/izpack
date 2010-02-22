@@ -8,6 +8,7 @@ import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNot;
 import org.hamcrest.number.IsGreaterThan;
 import org.hamcrest.text.StringContains;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -24,6 +25,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class PathResolverTest
 {
+    private PathResolver pathResolver;
+
+    @Before
+    public void setUp()
+    {
+        pathResolver = new PathResolver();
+    }
 
     @Test
     public void testGetMergeableFromJar() throws Exception
@@ -50,7 +58,7 @@ public class PathResolverTest
     @Test
     public void testResolvePathOfFileAndJar() throws Exception
     {
-        List<URL> urlList = PathResolver.resolvePath("META-INF/MANIFEST.MF");
+        List<URL> urlList = pathResolver.resolvePath("META-INF/MANIFEST.MF");
         assertThat(getListPathFromListURL(urlList), IsCollectionContaining.hasItems(
                 StringContains.containsString("jar!"),
                 IsNot.not(StringContains.containsString("jar!"))
@@ -60,7 +68,7 @@ public class PathResolverTest
     @Test
     public void testResolvePathOfDirectory() throws Exception
     {
-        List<URL> urlList = PathResolver.resolvePath("com/izforge/izpack/merge/");
+        List<URL> urlList = pathResolver.resolvePath("com/izforge/izpack/merge/");
         assertThat(urlList.size(), Is.is(1));
         assertThat(getListPathFromListURL(urlList), IsCollectionContaining.hasItems(
                 IsNot.not(StringContains.containsString("jar!")),
@@ -72,7 +80,7 @@ public class PathResolverTest
     @Test
     public void ftestGetMergeableFromFile() throws Exception
     {
-        List<Mergeable> mergeables = PathResolver.getMergeableFromPath("com/izforge/izpack/merge/file/FileMerge.class");
+        List<Mergeable> mergeables = pathResolver.getMergeableFromPath("com/izforge/izpack/merge/file/FileMerge.class");
         Mergeable mergeable = mergeables.get(0);
         assertThat(mergeable, MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/merge/file/FileMerge.class")
         );
@@ -81,7 +89,7 @@ public class PathResolverTest
     @Test
     public void testGetMergeableFromFileWithDestination() throws Exception
     {
-        List<Mergeable> mergeables = PathResolver.getMergeableFromPath("com/izforge/izpack/merge/file/FileMerge.class", "a/dest/FileMerge.class");
+        List<Mergeable> mergeables = pathResolver.getMergeableFromPath("com/izforge/izpack/merge/file/FileMerge.class", "a/dest/FileMerge.class");
         Mergeable mergeable = mergeables.get(0);
         assertThat(mergeable, MergeMatcher.isMergeableContainingFiles("a/dest/FileMerge.class")
         );
@@ -90,7 +98,7 @@ public class PathResolverTest
     @Test
     public void testGetMergeableFromDirectory() throws Exception
     {
-        List<Mergeable> mergeables = PathResolver.getMergeableFromPath("com/izforge/izpack/merge/");
+        List<Mergeable> mergeables = pathResolver.getMergeableFromPath("com/izforge/izpack/merge/");
         assertThat(mergeables.size(), Is.is(1));
         Mergeable mergeable = mergeables.get(0);
         assertThat(mergeable, MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/merge/resolve/PathResolver.class"));
@@ -99,7 +107,7 @@ public class PathResolverTest
     @Test
     public void testGetMergeableFromDirectoryWithDestination() throws Exception
     {
-        List<Mergeable> mergeables = PathResolver.getMergeableFromPath("com/izforge/izpack/merge/", "a/dest/");
+        List<Mergeable> mergeables = pathResolver.getMergeableFromPath("com/izforge/izpack/merge/", "a/dest/");
         Mergeable mergeable = mergeables.get(0);
         assertThat(mergeable, MergeMatcher.isMergeableContainingFiles("a/dest/resolve/PathResolver.class"));
     }
@@ -119,10 +127,10 @@ public class PathResolverTest
     {
         URL fileResource = ClassLoader.getSystemResource("com/izforge/izpack/merge/Mergeable.class");
         URL jarResource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
-        assertThat(PathResolver.isJar(
+        assertThat(pathResolver.isJar(
                 fileResource),
                 Is.is(false));
-        assertThat(PathResolver.isJar(
+        assertThat(pathResolver.isJar(
                 jarResource),
                 Is.is(true));
     }
@@ -132,10 +140,10 @@ public class PathResolverTest
     {
         File fileResource = new File(ClassLoader.getSystemResource("com/izforge/izpack/merge/Mergeable.class").getFile());
         File jarResource = new File(ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar").getFile());
-        assertThat(PathResolver.isJar(
+        assertThat(pathResolver.isJar(
                 fileResource),
                 Is.is(false));
-        assertThat(PathResolver.isJar(
+        assertThat(pathResolver.isJar(
                 jarResource),
                 Is.is(true));
     }
