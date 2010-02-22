@@ -8,6 +8,7 @@ import com.izforge.izpack.merge.resolve.PathResolver;
 import org.apache.tools.zip.ZipOutputStream;
 import org.hamcrest.core.Is;
 import org.hamcrest.text.StringContains;
+import org.junit.Before;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -26,12 +27,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class JarMergeTest
 {
+    private PathResolver pathResolver;
+
+    @Before
+    public void setUp()
+    {
+        this.pathResolver = new PathResolver();
+    }
+
 
     @Test
     public void testAddJarDuplicated() throws Exception
     {
         URL resource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
-        JarMerge jarMerge = new JarMerge(resource, PathResolver.processUrlToJarPath(resource));
+        Mergeable jarMerge = pathResolver.getMergeable(resource);
         File tempFile = File.createTempFile("test", ".zip");
         ZipOutputStream outputStream = new ZipOutputStream(new FileOutputStream(tempFile));
 //        jarMerge.merge(outputStream);
@@ -46,7 +55,7 @@ public class JarMergeTest
     public void testAddJarContent() throws Exception
     {
         URL resource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
-        JarMerge jarMerge = new JarMerge(resource, PathResolver.processUrlToJarPath(resource));
+        Mergeable jarMerge = pathResolver.getMergeable(resource);
         assertThat(jarMerge, MergeMatcher.isMergeableContainingFiles("jar/izforge/izpack/panels/hello/HelloPanel.class")
         );
     }
@@ -54,7 +63,8 @@ public class JarMergeTest
     @Test
     public void testMergeClassFromJarFile() throws Exception
     {
-        List<Mergeable> jarMergeList = PathResolver.getMergeableFromPath("org/fest/assertions/Assert.class");
+        List<Mergeable> jarMergeList = pathResolver.getMergeableFromPath("org/fest/assertions/Assert.class");
+
         assertThat(jarMergeList.size(), Is.is(1));
 
         Mergeable jarMerge = jarMergeList.get(0);
@@ -69,7 +79,7 @@ public class JarMergeTest
         URL urlJar = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
         URLClassLoader loader = URLClassLoader.newInstance(new URL[]{urlJar}, ClassLoader.getSystemClassLoader());
 
-        JarMerge jarMerge = new JarMerge(PathResolver.processUrlToJarPath(loader.getResource("jar/izforge")), PathResolver.processUrlToJarPackage(loader.getResource("jar/izforge")), "com/dest");
+        Mergeable jarMerge = pathResolver.getMergeable(loader.getResource("jar/izforge"), "com/dest");
 
         assertThat(jarMerge, MergeMatcher.isMergeableContainingFiles("com/dest/izpack/panels/hello/HelloPanel.class"));
     }
@@ -79,7 +89,7 @@ public class JarMergeTest
     public void testFindPanelInJar() throws Exception
     {
         URL resource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/izpack-panel-5.0.0-SNAPSHOT.jar");
-        JarMerge jarMerge = new JarMerge(resource, PathResolver.processUrlToJarPath(resource));
+        Mergeable jarMerge = pathResolver.getMergeable(resource);
         File file = jarMerge.find(new FileFilter()
         {
             public boolean accept(File pathname)
@@ -98,7 +108,7 @@ public class JarMergeTest
         URL urlJar = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
         URLClassLoader loader = URLClassLoader.newInstance(new URL[]{urlJar}, ClassLoader.getSystemClassLoader());
 
-        JarMerge jarMerge = new JarMerge(loader.getResource("jar/izforge"), PathResolver.processUrlToJarPath(loader.getResource("jar/izforge")));
+        Mergeable jarMerge = pathResolver.getMergeable(loader.getResource("jar/izforge"));
         File file = jarMerge.find(new FileFilter()
         {
             public boolean accept(File pathname)

@@ -35,7 +35,6 @@ import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.merge.MergeManager;
-import com.izforge.izpack.merge.jar.JarMerge;
 import com.izforge.izpack.merge.resolve.PathResolver;
 
 import java.io.FilterOutputStream;
@@ -212,7 +211,7 @@ public abstract class PackagerBase implements IPackager
     public void addJarContent(URL jarURL)
     {
         sendMsg("Adding content of jar: " + jarURL.getFile(), PackagerListener.MSG_VERBOSE);
-        mergeManager.addResourceToMerge(new JarMerge(jarURL, PathResolver.processUrlToJarPath(jarURL)));
+        mergeManager.addResourceToMerge(pathResolver.getMergeable(jarURL));
     }
 
     public void addLangPack(String iso3, URL xmlURL, URL flagURL)

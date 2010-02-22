@@ -172,16 +172,33 @@ public class PathResolver
         List<Mergeable> result = new ArrayList<Mergeable>();
         for (URL url : urlList)
         {
-            if (isJar(url))
-            {
-                result.add(new JarMerge(url, processUrlToJarPath(url)));
-            }
-            else
-            {
-                result.add(new FileMerge(url, resourcePath));
-            }
+            result.add(getMergeable(url));
         }
         return result;
+    }
+
+    public static Mergeable getMergeable(URL url, String destination)
+    {
+        if (isJar(url))
+        {
+            return new JarMerge(processUrlToJarPath(url), processUrlToJarPackage(url), destination);
+        }
+        else
+        {
+            return new FileMerge(url, destination);
+        }
+    }
+
+    public static Mergeable getMergeable(URL url)
+    {
+        if (isJar(url))
+        {
+            return new JarMerge(url, processUrlToJarPath(url));
+        }
+        else
+        {
+            return new FileMerge(url);
+        }
     }
 
     /**
