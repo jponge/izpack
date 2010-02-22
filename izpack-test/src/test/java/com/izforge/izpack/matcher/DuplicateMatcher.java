@@ -10,19 +10,25 @@ import org.hamcrest.core.Is;
  *
  * @author Anthonin Bonnefoy
  */
-public class DuplicateMatcher extends TypeSafeMatcher<Iterable<String>> {
+public class DuplicateMatcher extends TypeSafeMatcher<Iterable<String>>
+{
     public Matcher<String> itemMatcher;
 
-    public DuplicateMatcher(Matcher<String> itemMatcher) {
+    public DuplicateMatcher(Matcher<String> itemMatcher)
+    {
         this.itemMatcher = itemMatcher;
     }
 
     @Override
-    public boolean matchesSafely(Iterable<String> strings) {
+    public boolean matchesSafely(Iterable<String> strings)
+    {
         boolean alreadyFound = false;
-        for (String string : strings) {
-            if (itemMatcher.matches(string)) {
-                if (alreadyFound) {
+        for (String string : strings)
+        {
+            if (itemMatcher.matches(string))
+            {
+                if (alreadyFound)
+                {
                     return false;
                 }
                 alreadyFound = true;
@@ -31,11 +37,13 @@ public class DuplicateMatcher extends TypeSafeMatcher<Iterable<String>> {
         return true;
     }
 
-    public void describeTo(Description description) {
-        description.appendText("List containing ").appendValue(itemMatcher);
+    public void describeTo(Description description)
+    {
+        description.appendText("List containing a unique entity ").appendValue(itemMatcher);
     }
 
-    public static DuplicateMatcher isEntryUnique(String entry) {
+    public static DuplicateMatcher isEntryUnique(String entry)
+    {
         return new DuplicateMatcher(Is.is(entry));
     }
 }
