@@ -21,8 +21,6 @@ import java.util.zip.ZipFile;
  */
 public class PathResolver
 {
-
-
     /**
      * Search for the sourcePath in classpath (inside jar or directory) or as a normal path and then return the type or File.
      * Ignore all path containing test-classes.
