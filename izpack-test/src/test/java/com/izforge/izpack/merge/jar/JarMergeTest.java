@@ -1,11 +1,8 @@
 package com.izforge.izpack.merge.jar;
 
-import com.izforge.izpack.matcher.DuplicateMatcher;
 import com.izforge.izpack.matcher.MergeMatcher;
-import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.merge.Mergeable;
 import com.izforge.izpack.merge.resolve.PathResolver;
-import org.apache.tools.zip.ZipOutputStream;
 import org.hamcrest.core.Is;
 import org.hamcrest.text.StringContains;
 import org.testng.annotations.BeforeMethod;
@@ -13,7 +10,6 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileOutputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
@@ -33,22 +29,6 @@ public class JarMergeTest
     public void setUp()
     {
         this.pathResolver = new PathResolver();
-    }
-
-
-    @Test
-    public void testAddJarDuplicated() throws Exception
-    {
-        URL resource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
-        Mergeable jarMerge = pathResolver.getMergeableFromURL(resource);
-        File tempFile = File.createTempFile("test", ".zip");
-        ZipOutputStream outputStream = new ZipOutputStream(new FileOutputStream(tempFile));
-//        jarMerge.merge(outputStream);
-        jarMerge.merge(outputStream);
-        outputStream.close();
-        assertThat(tempFile, ZipMatcher.isZipMatching(
-                DuplicateMatcher.isEntryUnique("jar/izforge/izpack/panels/hello/HelloPanelConsoleHelper.class")
-        ));
     }
 
     @Test

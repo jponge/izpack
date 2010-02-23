@@ -1,7 +1,7 @@
 package com.izforge.izpack.merge.jar;
 
 import com.izforge.izpack.api.exception.MergeException;
-import com.izforge.izpack.merge.Mergeable;
+import com.izforge.izpack.merge.AbstractMerge;
 import com.izforge.izpack.util.IoHelper;
 import org.apache.tools.zip.ZipOutputStream;
 
@@ -21,13 +21,12 @@ import java.util.zip.ZipInputStream;
  *
  * @author Anthonin Bonnefoy
  */
-public class JarMerge implements Mergeable
+public class JarMerge extends AbstractMerge
 {
     private String jarPath;
 
     private String regexp = ".*";
     private String destination;
-    private Map<OutputStream, List<String>> mergeContent;
 
 
     public JarMerge(URL resource, String jarPath, Map<OutputStream, List<String>> mergeContent)
@@ -83,6 +82,7 @@ public class JarMerge implements Mergeable
     public void merge(java.util.zip.ZipOutputStream outputStream)
     {
         Pattern pattern = Pattern.compile(regexp);
+        List<String> mergeList = getMergeList(outputStream);
         ZipEntry zentry;
         try
         {
@@ -96,6 +96,11 @@ public class JarMerge implements Mergeable
                 Matcher matcher = pattern.matcher(zentry.getName());
                 if (matcher.matches())
                 {
+                    if (mergeList.contains(zentry.getName()))
+                    {
+                        continue;
+                    }
+                    mergeList.add(zentry.getName());
                     String dest = destination + matcher.group(1);
                     IoHelper.copyStreamToJar(jarInputStream, outputStream, dest, zentry.getTime());
                 }
@@ -112,6 +117,7 @@ public class JarMerge implements Mergeable
     public void merge(ZipOutputStream outJar)
     {
         Pattern pattern = Pattern.compile(regexp);
+        List<String> mergeList = getMergeList(outJar);
         ZipEntry zentry;
         try
         {
@@ -125,6 +131,11 @@ public class JarMerge implements Mergeable
                 Matcher matcher = pattern.matcher(zentry.getName());
                 if (matcher.matches())
                 {
+                    if (mergeList.contains(zentry.getName()))
+                    {
+                        continue;
+                    }
+                    mergeList.add(zentry.getName());
                     String dest = destination + matcher.group(1);
                     IoHelper.copyStreamToJar(jarInputStream, outJar, dest, zentry.getTime());
                 }

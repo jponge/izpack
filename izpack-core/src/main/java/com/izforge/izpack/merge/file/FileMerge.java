@@ -1,7 +1,7 @@
 package com.izforge.izpack.merge.file;
 
 import com.izforge.izpack.api.exception.MergeException;
-import com.izforge.izpack.merge.Mergeable;
+import com.izforge.izpack.merge.AbstractMerge;
 import com.izforge.izpack.util.IoHelper;
 import org.apache.tools.zip.ZipOutputStream;
 
@@ -16,13 +16,12 @@ import java.util.Map;
  *
  * @author Anthonin Bonnefoy
  */
-public class FileMerge implements Mergeable
+public class FileMerge extends AbstractMerge
 {
 
     private File fileToCopy;
 
     private String destination;
-    private Map<OutputStream, List<String>> mergeContent;
 
     public FileMerge(URL url, Map<OutputStream, List<String>> mergeContent)
     {
@@ -77,8 +76,14 @@ public class FileMerge implements Mergeable
 
     public void merge(ZipOutputStream outputStream)
     {
+        List<String> mergeList = getMergeList(outputStream);
         try
         {
+            if (mergeList.contains(fileToCopy.getAbsolutePath()))
+            {
+                return;
+            }
+            mergeList.add(fileToCopy.getAbsolutePath());
             copyFileToJar(fileToCopy, outputStream);
         }
         catch (IOException e)
@@ -89,8 +94,14 @@ public class FileMerge implements Mergeable
 
     public void merge(java.util.zip.ZipOutputStream outputStream)
     {
+        List<String> mergeList = getMergeList(outputStream);
         try
         {
+            if (mergeList.contains(fileToCopy.getAbsolutePath()))
+            {
+                return;
+            }
+            mergeList.add(fileToCopy.getAbsolutePath());
             copyFileToJar(fileToCopy, outputStream);
         }
         catch (IOException e)
