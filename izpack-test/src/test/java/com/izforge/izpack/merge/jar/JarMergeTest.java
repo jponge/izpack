@@ -8,7 +8,7 @@ import com.izforge.izpack.merge.resolve.PathResolver;
 import org.apache.tools.zip.ZipOutputStream;
 import org.hamcrest.core.Is;
 import org.hamcrest.text.StringContains;
-import org.junit.Before;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -29,7 +29,7 @@ public class JarMergeTest
 {
     private PathResolver pathResolver;
 
-    @Before
+    @BeforeMethod
     public void setUp()
     {
         this.pathResolver = new PathResolver();

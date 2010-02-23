@@ -9,11 +9,10 @@ import com.izforge.izpack.merge.panel.PanelMerge;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 import java.util.zip.ZipFile;
 
 /**
@@ -25,6 +24,13 @@ public class PathResolver
 {
     public static final String CLASSNAME_PREFIX = "com.izforge.izpack.panels";
     public static final String BASE_CLASSNAME_PATH = CLASSNAME_PREFIX.replaceAll("\\.", "/") + "/";
+
+    public Map<OutputStream, List<String>> mergeContent;
+
+    public PathResolver()
+    {
+        mergeContent = new HashMap<OutputStream, List<String>>();
+    }
 
     /**
      * Search for the sourcePath in classpath (inside jar or directory) or as a normal path and then return the type or File.
@@ -69,7 +75,7 @@ public class PathResolver
 
     public PanelMerge getPanelMerge(String className)
     {
-        return new PanelMerge(className, getMergeableFromPath(getPackagePathFromClassName(className)));
+        return new PanelMerge(className, getMergeableFromPath(getPackagePathFromClassName(className)), mergeContent);
     }
 
     public boolean isJar(File classFile)
@@ -184,11 +190,11 @@ public class PathResolver
     {
         if (isJar(url))
         {
-            return new JarMerge(processUrlToJarPath(url), processUrlToJarPackage(url), destination);
+            return new JarMerge(processUrlToJarPath(url), processUrlToJarPackage(url), destination, mergeContent);
         }
         else
         {
-            return new FileMerge(url, destination);
+            return new FileMerge(url, destination, mergeContent);
         }
     }
 
@@ -198,18 +204,18 @@ public class PathResolver
         {
             throw new MergeException("Only a jar can be merge with an URL in  parameter. The current url is " + url);
         }
-        return new JarMerge(url, processUrlToJarPath(url));
+        return new JarMerge(url, processUrlToJarPath(url), mergeContent);
     }
 
     public Mergeable getMergeableFromURL(URL url, String resourcePath)
     {
         if (isJar(url))
         {
-            return new JarMerge(url, processUrlToJarPath(url));
+            return new JarMerge(url, processUrlToJarPath(url), mergeContent);
         }
         else
         {
-            return new FileMerge(url, resourcePath);
+            return new FileMerge(url, resourcePath, mergeContent);
         }
     }
 

@@ -5,12 +5,11 @@ import com.izforge.izpack.merge.Mergeable;
 import com.izforge.izpack.util.IoHelper;
 import org.apache.tools.zip.ZipOutputStream;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.jar.JarInputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,21 +27,25 @@ public class JarMerge implements Mergeable
 
     private String regexp = ".*";
     private String destination;
+    private Map<OutputStream, List<String>> mergeContent;
 
 
-    public JarMerge(URL resource, String jarPath)
+    public JarMerge(URL resource, String jarPath, Map<OutputStream, List<String>> mergeContent)
     {
         this.jarPath = jarPath;
+        this.mergeContent = mergeContent;
         destination = resource.getFile().replaceAll(this.jarPath, "").replaceAll("file:", "").replaceAll("!/", "");
         regexp = new StringBuilder().append(destination).append("(.*)").toString();
     }
 
-    public JarMerge(String jarPath, String jarPackage, String destination)
+    public JarMerge(String jarPath, String jarPackage, String destination, Map<OutputStream, List<String>> mergeContent)
     {
         this.jarPath = jarPath;
         this.destination = destination;
+        this.mergeContent = mergeContent;
         regexp = new StringBuilder().append(jarPackage).append("(.*)").toString();
     }
+
 
     public File find(FileFilter fileFilter)
     {

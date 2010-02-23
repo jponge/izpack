@@ -5,11 +5,11 @@ import com.izforge.izpack.merge.Mergeable;
 import com.izforge.izpack.util.IoHelper;
 import org.apache.tools.zip.ZipOutputStream;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
 /**
  * File merge. Can be a single file or a directory.
@@ -21,18 +21,25 @@ public class FileMerge implements Mergeable
 
     private File fileToCopy;
 
-    private URL url;
     private String destination;
+    private Map<OutputStream, List<String>> mergeContent;
 
-    public FileMerge(URL url)
+    public FileMerge(URL url, Map<OutputStream, List<String>> mergeContent)
     {
-        this(url, "");
+        this(url, "", mergeContent);
     }
 
-    public FileMerge(URL url, String destination)
+    public FileMerge(URL url, String destination, Map<OutputStream, List<String>> mergeContent)
     {
-        this.url = url;
-        this.fileToCopy = new File(url.getFile());
+        this.mergeContent = mergeContent;
+        try
+        {
+            this.fileToCopy = new File(url.toURI());
+        }
+        catch (URISyntaxException e)
+        {
+            throw new MergeException(e);
+        }
         this.destination = destination;
     }
 

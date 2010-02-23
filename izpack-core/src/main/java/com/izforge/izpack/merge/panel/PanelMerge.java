@@ -6,8 +6,10 @@ import org.apache.tools.zip.ZipOutputStream;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Merge for a panel
@@ -20,13 +22,15 @@ public class PanelMerge implements Mergeable
     // TODO Externalize this field in a property
     private final List<String> packageBegin = Arrays.asList("com/", "org/", "net/");
     private List<Mergeable> packageMerge;
+    private Map<OutputStream, List<String>> mergeContent;
     private String panelName;
     private FileFilter fileFilter;
 
-    public PanelMerge(final String panelName, List<Mergeable> packageMergeable)
+    public PanelMerge(final String panelName, List<Mergeable> packageMergeable, Map<OutputStream, List<String>> mergeContent)
     {
         this.panelName = panelName;
         packageMerge = packageMergeable;
+        this.mergeContent = mergeContent;
         fileFilter = new FileFilter()
         {
             public boolean accept(File pathname)
