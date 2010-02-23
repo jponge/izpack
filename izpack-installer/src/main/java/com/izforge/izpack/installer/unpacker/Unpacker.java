@@ -33,6 +33,7 @@ import com.izforge.izpack.data.*;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.web.WebAccessor;
 import com.izforge.izpack.installer.web.WebRepositoryAccessor;
+import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.FileQueue;
 import com.izforge.izpack.util.os.FileQueueMove;
@@ -62,12 +63,13 @@ public class Unpacker extends UnpackerBase
      *
      * @param variableSubstitutor
      * @param udata
+     * @param pathResolver
      * @param idata                     The installation data.
      * @param abstractUIProgressHandler The installation progress abstractUIProgressHandler.
      */
-    public Unpacker(AutomatedInstallData idata, ResourceManager resourceManager, AbstractUIProgressHandler abstractUIProgressHandler, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata)
+    public Unpacker(AutomatedInstallData idata, ResourceManager resourceManager, AbstractUIProgressHandler abstractUIProgressHandler, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata, PathResolver pathResolver)
     {
-        super(idata, abstractUIProgressHandler, resourceManager, rules, variableSubstitutor, udata);
+        super(idata, abstractUIProgressHandler, resourceManager, rules, variableSubstitutor, udata, pathResolver);
     }
 
     /* (non-Javadoc)

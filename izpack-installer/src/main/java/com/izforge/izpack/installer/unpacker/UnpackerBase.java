@@ -116,6 +116,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
 
     protected ResourceManager resourceManager;
     protected VariableSubstitutor variableSubstitutor;
+    private PathResolver pathResolver;
 
     /**
      * The constructor.
@@ -126,12 +127,13 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
      * @param variableSubstitutor
      * @param udata
      */
-    public UnpackerBase(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata)
+    public UnpackerBase(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata, PathResolver pathResolver)
     {
         this.idata = idata;
         this.handler = handler;
         this.resourceManager = resourceManager;
         this.rules = rules;
+        this.pathResolver = pathResolver;
         // Initialize the variable substitutor
         this.variableSubstitutor = variableSubstitutor;
         this.udata = udata;
@@ -662,7 +664,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
         // get the uninstaller base, returning if not found so that
         // installData.uninstallOutJar remains null
 
-        List<Mergeable> uninstallerMerge = PathResolver.getMergeableFromPath("com/izforge/izpack/uninstaller/");
+        List<Mergeable> uninstallerMerge = pathResolver.getMergeableFromPath("com/izforge/izpack/uninstaller/");
 
         // The uninstaller extension is facultative; it will be exist only
         // if a native library was marked for uninstallation.

@@ -36,7 +36,7 @@ public class PathResolverTest
     @Test
     public void testGetMergeableFromJar() throws Exception
     {
-        List<Mergeable> jarMergeList = PathResolver.getMergeableFromPath("junit/framework");
+        List<Mergeable> jarMergeList = pathResolver.getMergeableFromPath("junit/framework");
         assertThat(jarMergeList.size(), Is.is(1));
         Mergeable jarMerge = jarMergeList.get(0);
         assertThat(jarMerge, Is.is(JarMerge.class));

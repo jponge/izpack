@@ -34,6 +34,7 @@ import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.unpacker.IMultiVolumeUnpackerHelper;
 import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.installer.unpacker.UnpackerBase;
+import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.FileQueue;
 import com.izforge.izpack.util.os.FileQueueMove;
@@ -54,9 +55,9 @@ public class MultiVolumeUnpacker extends UnpackerBase
 {
     protected IMultiVolumeUnpackerHelper helper;
 
-    public MultiVolumeUnpacker(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata)
+    public MultiVolumeUnpacker(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata, PathResolver pathResolver)
     {
-        super(idata, handler, resourceManager, rules, variableSubstitutor, udata);
+        super(idata, handler, resourceManager, rules, variableSubstitutor, udata, pathResolver);
         if (handler instanceof PanelAutomation)
         {
             Debug.trace("running in auto installation mode.");

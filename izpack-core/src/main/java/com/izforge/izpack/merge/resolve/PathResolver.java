@@ -169,7 +169,7 @@ public class PathResolver
      * @param resourcePath Resource path to search
      * @return Mergeable list of mergeable. Empty if nothing found.
      */
-    public static List<Mergeable> getMergeableFromPath(String resourcePath)
+    public List<Mergeable> getMergeableFromPath(String resourcePath)
     {
         List<URL> urlList = resolvePath(resourcePath);
         List<Mergeable> result = new ArrayList<Mergeable>();
