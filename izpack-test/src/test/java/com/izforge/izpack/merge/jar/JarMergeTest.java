@@ -40,7 +40,7 @@ public class JarMergeTest
     public void testAddJarDuplicated() throws Exception
     {
         URL resource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
-        Mergeable jarMerge = pathResolver.getMergeable(resource);
+        Mergeable jarMerge = pathResolver.getMergeableFromURL(resource);
         File tempFile = File.createTempFile("test", ".zip");
         ZipOutputStream outputStream = new ZipOutputStream(new FileOutputStream(tempFile));
 //        jarMerge.merge(outputStream);
@@ -55,7 +55,7 @@ public class JarMergeTest
     public void testAddJarContent() throws Exception
     {
         URL resource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
-        Mergeable jarMerge = pathResolver.getMergeable(resource);
+        Mergeable jarMerge = pathResolver.getMergeableFromURL(resource);
         assertThat(jarMerge, MergeMatcher.isMergeableContainingFiles("jar/izforge/izpack/panels/hello/HelloPanel.class")
         );
     }
@@ -79,7 +79,7 @@ public class JarMergeTest
         URL urlJar = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
         URLClassLoader loader = URLClassLoader.newInstance(new URL[]{urlJar}, ClassLoader.getSystemClassLoader());
 
-        Mergeable jarMerge = pathResolver.getMergeable(loader.getResource("jar/izforge"), "com/dest");
+        Mergeable jarMerge = pathResolver.getMergeableFromURLWithDestination(loader.getResource("jar/izforge"), "com/dest");
 
         assertThat(jarMerge, MergeMatcher.isMergeableContainingFiles("com/dest/izpack/panels/hello/HelloPanel.class"));
     }
@@ -89,7 +89,7 @@ public class JarMergeTest
     public void testFindPanelInJar() throws Exception
     {
         URL resource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/izpack-panel-5.0.0-SNAPSHOT.jar");
-        Mergeable jarMerge = pathResolver.getMergeable(resource);
+        Mergeable jarMerge = pathResolver.getMergeableFromURL(resource);
         File file = jarMerge.find(new FileFilter()
         {
             public boolean accept(File pathname)
@@ -108,7 +108,7 @@ public class JarMergeTest
         URL urlJar = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
         URLClassLoader loader = URLClassLoader.newInstance(new URL[]{urlJar}, ClassLoader.getSystemClassLoader());
 
-        Mergeable jarMerge = pathResolver.getMergeable(loader.getResource("jar/izforge"));
+        Mergeable jarMerge = pathResolver.getMergeableFromURL(loader.getResource("jar/izforge"));
         File file = jarMerge.find(new FileFilter()
         {
             public boolean accept(File pathname)

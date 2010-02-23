@@ -5,7 +5,6 @@ import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.matcher.MergeMatcher;
 import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.merge.MergeManagerImpl;
-import com.izforge.izpack.merge.panel.PanelMerge;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import org.apache.maven.shared.jar.JarAnalyzer;
 import org.apache.maven.shared.jar.classes.JarClasses;
@@ -60,8 +59,8 @@ public class CompilationTest
     {
         PathResolver pathResolver = new PathResolver();
         MergeManagerImpl mergeManager = new MergeManagerImpl(pathResolver);
-        mergeManager.addResourceToMerge(new PanelMerge("HelloPanel"));
-        mergeManager.addResourceToMerge(new PanelMerge("CheckedHelloPanel"));
+        mergeManager.addResourceToMerge(pathResolver.getPanelMerge("HelloPanel"));
+        mergeManager.addResourceToMerge(pathResolver.getPanelMerge("CheckedHelloPanel"));
 
         assertThat(mergeManager, MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/panels/hello/HelloPanelConsoleHelper.class",
                 "com/izforge/izpack/panels/hello/HelloPanel.class",

@@ -1,7 +1,9 @@
 package com.izforge.izpack.merge.panel;
 
 import com.izforge.izpack.matcher.MergeMatcher;
+import com.izforge.izpack.merge.resolve.PathResolver;
 import org.hamcrest.core.Is;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -15,47 +17,39 @@ public class PanelMergeTest
 {
     private PanelMerge panelMerge;
 
-    @Test
-    public void mergeManagerShouldTransformClassNameToPackagePath() throws Exception
-    {
-        panelMerge = new PanelMerge("");
-        String pathFromClassName = panelMerge.getPackagePathFromClassName("com.test.sora.UneClasse");
-        assertThat(pathFromClassName, Is.is("com/test/sora/"));
-    }
+    private PathResolver pathResolver;
 
-    @Test
-    public void mergeManagerShouldReturnDefaultPackagePath() throws Exception
+    @BeforeMethod
+    public void setUp()
     {
-        panelMerge = new PanelMerge("");
-        String pathFromClassName = panelMerge.getPackagePathFromClassName("UneClasse");
-        assertThat(pathFromClassName, Is.is("com/izforge/izpack/panels/"));
+        pathResolver = new PathResolver();
     }
 
     @Test
     public void testResolvePanelNameFromFile() throws Exception
     {
-        panelMerge = new PanelMerge("HelloPanel");
+        panelMerge = pathResolver.getPanelMerge("HelloPanel");
         assertThat(panelMerge, MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/panels/hello/HelloPanel.class"));
     }
 
     @Test
     public void testResolvePanelWithCompleteNameFromFile() throws Exception
     {
-        panelMerge = new PanelMerge("com.izforge.izpack.panels.hello.HelloPanel");
+        panelMerge = pathResolver.getPanelMerge("com.izforge.izpack.panels.hello.HelloPanel");
         assertThat(panelMerge, MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/panels/hello/HelloPanel.class"));
     }
 
     @Test
     public void testGetClassNameFromPanelMergeWithFullClassGiven() throws Exception
     {
-        panelMerge = new PanelMerge("com.izforge.izpack.panels.hello.HelloPanel");
+        panelMerge = pathResolver.getPanelMerge("com.izforge.izpack.panels.hello.HelloPanel");
         assertThat(panelMerge.getFullClassNameFromPanelName(), Is.is("com.izforge.izpack.panels.hello.HelloPanel"));
     }
 
     @Test
     public void testGetClassNameFromPanelMergeWithOnlyPanelName() throws Exception
     {
-        panelMerge = new PanelMerge("HelloPanel");
+        panelMerge = pathResolver.getPanelMerge("HelloPanel");
         assertThat(panelMerge.getFullClassNameFromPanelName(), Is.is("com.izforge.izpack.panels.hello.HelloPanel"));
     }
 }

@@ -2,7 +2,6 @@ package com.izforge.izpack.merge.panel;
 
 import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.merge.Mergeable;
-import com.izforge.izpack.merge.resolve.PathResolver;
 import org.apache.tools.zip.ZipOutputStream;
 
 import java.io.File;
@@ -17,19 +16,17 @@ import java.util.List;
  */
 public class PanelMerge implements Mergeable
 {
-    public static String CLASSNAME_PREFIX = "com.izforge.izpack.panels";
-    public static String BASE_CLASSNAME_PATH = CLASSNAME_PREFIX.replaceAll("\\.", "/") + "/";
+
     // TODO Externalize this field in a property
     private final List<String> packageBegin = Arrays.asList("com/", "org/", "net/");
-    private List<Mergeable> panelMerge;
+    private List<Mergeable> packageMerge;
     private String panelName;
     private FileFilter fileFilter;
 
-    public PanelMerge(final String panelName)
+    public PanelMerge(final String panelName, List<Mergeable> packageMergeable)
     {
         this.panelName = panelName;
-        String packagePath = getPackagePathFromClassName(panelName);
-        panelMerge = PathResolver.getMergeableFromPath(packagePath);
+        packageMerge = packageMergeable;
         fileFilter = new FileFilter()
         {
             public boolean accept(File pathname)
@@ -42,7 +39,7 @@ public class PanelMerge implements Mergeable
 
     public void merge(ZipOutputStream outputStream)
     {
-        for (Mergeable mergeable : panelMerge)
+        for (Mergeable mergeable : packageMerge)
         {
             mergeable.merge(outputStream);
         }
@@ -50,7 +47,7 @@ public class PanelMerge implements Mergeable
 
     public File find(FileFilter fileFilter)
     {
-        for (Mergeable mergeable : panelMerge)
+        for (Mergeable mergeable : packageMerge)
         {
             File file = mergeable.find(fileFilter);
             if (file != null)
@@ -63,25 +60,16 @@ public class PanelMerge implements Mergeable
 
     public void merge(java.util.zip.ZipOutputStream outputStream)
     {
-        for (Mergeable mergeable : panelMerge)
+        for (Mergeable mergeable : packageMerge)
         {
             mergeable.merge(outputStream);
         }
     }
 
-    public String getPackagePathFromClassName(String className)
-    {
-        if (className.contains("."))
-        {
-            return className.substring(0, className.lastIndexOf(".")).replaceAll("\\.", "/") + "/";
-        }
-        return BASE_CLASSNAME_PATH;
-    }
-
 
     public String getFullClassNameFromPanelName()
     {
-        if (panelMerge.isEmpty())
+        if (packageMerge.isEmpty())
         {
             throw new MergeException("No mergeable found for panel " + panelName);
         }
@@ -89,7 +77,7 @@ public class PanelMerge implements Mergeable
         {
             return panelName;
         }
-        for (Mergeable mergeable : panelMerge)
+        for (Mergeable mergeable : packageMerge)
         {
             File file = mergeable.find(fileFilter);
             if (file != null)

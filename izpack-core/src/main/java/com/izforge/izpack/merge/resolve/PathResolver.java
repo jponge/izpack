@@ -1,6 +1,7 @@
 package com.izforge.izpack.merge.resolve;
 
 import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.merge.Mergeable;
 import com.izforge.izpack.merge.file.FileMerge;
 import com.izforge.izpack.merge.jar.JarMerge;
@@ -22,6 +23,9 @@ import java.util.zip.ZipFile;
  */
 public class PathResolver
 {
+    public static String CLASSNAME_PREFIX = "com.izforge.izpack.panels";
+    public static String BASE_CLASSNAME_PATH = CLASSNAME_PREFIX.replaceAll("\\.", "/") + "/";
+
     /**
      * Search for the sourcePath in classpath (inside jar or directory) or as a normal path and then return the type or File.
      * Ignore all path containing test-classes.
@@ -37,7 +41,6 @@ public class PathResolver
         {
             result.add(path);
         }
-
         try
         {
             ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
@@ -66,7 +69,7 @@ public class PathResolver
 
     public PanelMerge getPanelMerge(String className)
     {
-        return new PanelMerge(className);
+        return new PanelMerge(className, getMergeableFromPath(getPackagePathFromClassName(className)));
     }
 
     public static boolean isJar(File classFile)
@@ -172,12 +175,12 @@ public class PathResolver
         List<Mergeable> result = new ArrayList<Mergeable>();
         for (URL url : urlList)
         {
-            result.add(getMergeable(url));
+            result.add(getMergeableFromURL(url, resourcePath));
         }
         return result;
     }
 
-    public static Mergeable getMergeable(URL url, String destination)
+    public static Mergeable getMergeableFromURLWithDestination(URL url, String destination)
     {
         if (isJar(url))
         {
@@ -189,7 +192,16 @@ public class PathResolver
         }
     }
 
-    public static Mergeable getMergeable(URL url)
+    public static Mergeable getMergeableFromURL(URL url)
+    {
+        if (!isJar(url))
+        {
+            throw new MergeException("Only a jar can be merge with an URL in  parameter. The current url is " + url);
+        }
+        return new JarMerge(url, processUrlToJarPath(url));
+    }
+
+    public static Mergeable getMergeableFromURL(URL url, String resourcePath)
     {
         if (isJar(url))
         {
@@ -197,7 +209,7 @@ public class PathResolver
         }
         else
         {
-            return new FileMerge(url);
+            return new FileMerge(url, resourcePath);
         }
     }
 
@@ -215,14 +227,7 @@ public class PathResolver
 //        String fileDestination = (destination + "/" + resourcePath).replaceAll("//", "/");
         for (URL url : urlList)
         {
-            if (isJar(url))
-            {
-                result.add(new JarMerge(processUrlToJarPath(url), processUrlToJarPackage(url), destination));
-            }
-            else
-            {
-                result.add(new FileMerge(url, destination));
-            }
+            result.add(getMergeableFromURLWithDestination(url, destination));
         }
         return result;
     }
@@ -244,4 +249,15 @@ public class PathResolver
         res = res.replaceAll("file:", "");
         return res.substring(res.lastIndexOf("!") + 2, res.length());
     }
+
+
+    public String getPackagePathFromClassName(String className)
+    {
+        if (className.contains("."))
+        {
+            return className.substring(0, className.lastIndexOf(".")).replaceAll("\\.", "/") + "/";
+        }
+        return BASE_CLASSNAME_PATH;
+    }
+
 }
