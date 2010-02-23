@@ -23,8 +23,8 @@ import java.util.zip.ZipFile;
  */
 public class PathResolver
 {
-    public static String CLASSNAME_PREFIX = "com.izforge.izpack.panels";
-    public static String BASE_CLASSNAME_PATH = CLASSNAME_PREFIX.replaceAll("\\.", "/") + "/";
+    public static final String CLASSNAME_PREFIX = "com.izforge.izpack.panels";
+    public static final String BASE_CLASSNAME_PATH = CLASSNAME_PREFIX.replaceAll("\\.", "/") + "/";
 
     /**
      * Search for the sourcePath in classpath (inside jar or directory) or as a normal path and then return the type or File.
@@ -33,7 +33,7 @@ public class PathResolver
      * @param sourcePath Source path to search
      * @return url list
      */
-    public static List<URL> resolvePath(String sourcePath)
+    public List<URL> resolvePath(String sourcePath)
     {
         List<URL> result = new ArrayList<URL>();
         URL path = getFileFromPath(sourcePath);
@@ -72,7 +72,7 @@ public class PathResolver
         return new PanelMerge(className, getMergeableFromPath(getPackagePathFromClassName(className)));
     }
 
-    public static boolean isJar(File classFile)
+    public boolean isJar(File classFile)
     {
         ZipFile zipFile = null;
         try
@@ -106,7 +106,7 @@ public class PathResolver
      * @param url url to test. If it is a jar content, the jar file is extracted and treated as a jar
      * @return true if the file is a jar
      */
-    public static boolean isJar(URL url)
+    public boolean isJar(URL url)
     {
         String file = url.getFile();
         file = file.substring(file.indexOf(":") + 1);
@@ -118,7 +118,7 @@ public class PathResolver
         return isJar(classFile);
     }
 
-    public static String getCurrentClasspath(String packagePath)
+    public String getCurrentClasspath(String packagePath)
     {
         try
         {
@@ -146,7 +146,7 @@ public class PathResolver
      * @param path The path of File to load.
      * @return The file or null if nothing found.
      */
-    static URL getFileFromPath(String path)
+    URL getFileFromPath(String path)
     {
         try
         {
@@ -180,7 +180,7 @@ public class PathResolver
         return result;
     }
 
-    public static Mergeable getMergeableFromURLWithDestination(URL url, String destination)
+    public Mergeable getMergeableFromURLWithDestination(URL url, String destination)
     {
         if (isJar(url))
         {
@@ -192,7 +192,7 @@ public class PathResolver
         }
     }
 
-    public static Mergeable getMergeableFromURL(URL url)
+    public Mergeable getMergeableFromURL(URL url)
     {
         if (!isJar(url))
         {
@@ -201,7 +201,7 @@ public class PathResolver
         return new JarMerge(url, processUrlToJarPath(url));
     }
 
-    public static Mergeable getMergeableFromURL(URL url, String resourcePath)
+    public Mergeable getMergeableFromURL(URL url, String resourcePath)
     {
         if (isJar(url))
         {
@@ -220,7 +220,7 @@ public class PathResolver
      * @param destination  The destination of resources when merging will ocure.
      * @return Mergeable list of mergeable. Empty if nothing found.
      */
-    public static List<Mergeable> getMergeableFromPath(String resourcePath, String destination)
+    public List<Mergeable> getMergeableFromPath(String resourcePath, String destination)
     {
         List<URL> urlList = resolvePath(resourcePath);
         List<Mergeable> result = new ArrayList<Mergeable>();
@@ -232,7 +232,7 @@ public class PathResolver
         return result;
     }
 
-    public static String processUrlToJarPath(URL resource)
+    public String processUrlToJarPath(URL resource)
     {
         String res = resource.getPath();
         res = res.replaceAll("file:", "");
@@ -243,7 +243,7 @@ public class PathResolver
         return res;
     }
 
-    public static String processUrlToJarPackage(URL resource)
+    public String processUrlToJarPackage(URL resource)
     {
         String res = resource.getPath();
         res = res.replaceAll("file:", "");

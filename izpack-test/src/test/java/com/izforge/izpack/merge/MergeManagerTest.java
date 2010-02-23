@@ -18,11 +18,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class MergeManagerTest
 {
     private MergeManagerImpl mergeManager;
+    private PathResolver pathResolver;
 
     @BeforeMethod
     public void setUp()
     {
-        PathResolver pathResolver = new PathResolver();
+        pathResolver = new PathResolver();
         mergeManager = new MergeManagerImpl(pathResolver);
     }
 
@@ -30,7 +31,7 @@ public class MergeManagerTest
     public void testProcessJarPath() throws Exception
     {
         URL resource = new URL("file:/home/test/unjar.jar!com/package/in/jar");
-        String jarPath = PathResolver.processUrlToJarPath(resource);
+        String jarPath = pathResolver.processUrlToJarPath(resource);
         System.out.println(jarPath);
         assertThat(jarPath, Is.is("/home/test/unjar.jar"));
     }

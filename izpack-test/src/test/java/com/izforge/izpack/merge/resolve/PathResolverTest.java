@@ -48,7 +48,7 @@ public class PathResolverTest
     @Test
     public void testResolvePathOfJar()
     {
-        List<URL> urlList = PathResolver.resolvePath("com/izforge");
+        List<URL> urlList = pathResolver.resolvePath("com/izforge");
         assertThat(urlList.size(), new IsGreaterThan<Integer>(1));
         assertThat(getListPathFromListURL(urlList), IsNot.not(IsCollectionContaining.hasItem(
                 StringContains.containsString("test-classes"))
