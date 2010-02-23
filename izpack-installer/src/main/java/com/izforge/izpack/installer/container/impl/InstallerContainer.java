@@ -10,8 +10,7 @@ import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.language.LanguageDialog;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
-import org.picocontainer.parameters.ComponentParameter;
-import org.picocontainer.parameters.ConstantParameter;
+import org.picocontainer.Characteristics;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,38 +29,22 @@ public class InstallerContainer extends AbstractChildContainer implements IInsta
 
     public void initBindings() throws ClassNotFoundException
     {
-        pico
-                .addComponent(IInstallerContainer.class, this)
-                .addComponent(PanelManager.class)
-                ;
-        addVariablerComponent();
-    }
+        pico.addComponent(IInstallerContainer.class, this)
+                .addComponent(PanelManager.class);
 
-    private void addVariablerComponent() throws ClassNotFoundException
-    {
         AutomatedInstallData installdata = pico.getComponent(AutomatedInstallData.class);
         VariableSubstitutor substitutor = pico.getComponent(VariableSubstitutor.class);
         String unpackerclassname = installdata.getInfo().getUnpackerClassName();
         Class<IUnpacker> unpackerclass = (Class<IUnpacker>) Class.forName(unpackerclassname);
         pico
+                // Configuration of title parameter in InstallerFrame
+                .addConfig("title", getTitle(installdata, substitutor))
+                        // Configuration of frame parameter in languageDialog
+                .addConfig("frame", initFrame());
+        pico
                 .addComponent(IUnpacker.class, unpackerclass)
-                .addComponent(InstallerFrame.class, InstallerFrame.class,
-                        new ConstantParameter(getTitle(installdata, substitutor)),
-                        new ComponentParameter(),
-                        new ComponentParameter(),
-                        new ComponentParameter(),
-                        new ComponentParameter(),
-                        new ComponentParameter(),
-                        new ComponentParameter(),
-                        new ComponentParameter(),
-                        new ComponentParameter()
-                )
-                .addComponent(LanguageDialog.class, LanguageDialog.class,
-                        new ConstantParameter(initFrame()),
-                        new ComponentParameter(),
-                        new ComponentParameter(),
-                        new ComponentParameter()
-                );
+                .as(Characteristics.USE_NAMES).addComponent(InstallerFrame.class)
+                .as(Characteristics.USE_NAMES).addComponent(LanguageDialog.class);
     }
 
 
