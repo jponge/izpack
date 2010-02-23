@@ -34,7 +34,7 @@ public class DuplicateMatcher extends TypeSafeMatcher<Iterable<String>>
                 alreadyFound = true;
             }
         }
-        return true;
+        return alreadyFound;
     }
 
     public void describeTo(Description description)
