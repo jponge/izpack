@@ -1,5 +1,6 @@
-package com.izforge.izpack.integration;
+package com.izforge.izpack.unpacker;
 
+import com.izforge.izpack.AbstractInstallationTest;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.container.IInstallerContainer;
