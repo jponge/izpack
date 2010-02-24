@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="HeadlessSuite" verbose="1">
+    <test name="RegressionIzPack">
+        <groups>
+            <run>
+                <exclude name="integration" />
+            </run>
+        </groups>
+        <packages>
+            <package name="com.izforge.izpack.*" />
+        </packages>
+    </test>
+</suite>
