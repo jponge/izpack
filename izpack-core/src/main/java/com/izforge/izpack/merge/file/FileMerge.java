@@ -168,6 +168,10 @@ public class FileMerge extends AbstractMerge
         {
             return false;
         }
+        if (!destination.contains("/"))
+        {
+            return true;
+        }
         return !destination.endsWith("/");
     }
 }
