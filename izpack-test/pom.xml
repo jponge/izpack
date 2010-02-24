@@ -71,7 +71,9 @@
                                     <goal>test</goal>
                                 </goals>
                                 <configuration>
-                                    <skip>true</skip>
+                                    <suiteXmlFiles>
+                                        <suiteXmlFile>src/test/resources/testng-bamboo.xml</suiteXmlFile>
+                                    </suiteXmlFiles>
                                 </configuration>
                             </execution>
                         </executions>
