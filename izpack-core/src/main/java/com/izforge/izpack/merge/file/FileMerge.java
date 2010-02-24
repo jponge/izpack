@@ -164,7 +164,7 @@ public class FileMerge extends AbstractMerge
 
     private boolean isFile(String destination)
     {
-        if (destination.length() > 0)
+        if (destination.length() == 0)
         {
             return false;
         }
