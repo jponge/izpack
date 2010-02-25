@@ -1,6 +1,5 @@
 package com.izforge.izpack.integration;
 
-import com.izforge.izpack.AbstractInstallationTest;
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.installer.container.IInstallerContainer;
@@ -23,7 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Test for an installation
  */
 @Test(groups = "integration")
-public class InstallationTest extends AbstractInstallationTest
+public class InstallationTest extends AbstractIntegrationTest
 {
 
     @AfterMethod

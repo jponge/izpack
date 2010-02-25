@@ -1,11 +1,11 @@
 package com.izforge.izpack.unpacker;
 
-import com.izforge.izpack.AbstractInstallationTest;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
+import com.izforge.izpack.integration.AbstractIntegrationTest;
 import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.util.IoHelper;
 import org.hamcrest.core.Is;
@@ -19,7 +19,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Test of unpacker
  */
-public class UnpackerTest extends AbstractInstallationTest
+@Test(groups = "integration")
+public class UnpackerTest extends AbstractIntegrationTest
 {
 
     @Test

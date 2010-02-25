@@ -1,4 +1,4 @@
-package com.izforge.izpack;
+package com.izforge.izpack.integration;
 
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.compiler.CompilerConfig;
@@ -9,7 +9,6 @@ import com.izforge.izpack.installer.container.IApplicationContainer;
 import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.container.impl.ApplicationContainer;
 import com.izforge.izpack.installer.language.LanguageDialog;
-import com.izforge.izpack.integration.LanguageSelectionTest;
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
@@ -30,10 +29,10 @@ import java.util.ArrayList;
 /**
  * Abstract test for integration test
  */
-public class AbstractInstallationTest
+public class AbstractIntegrationTest
 {
 
-    protected static final String APPNAME = "Test Installation";
+    public static final String APPNAME = "Test Installation";
 
     protected IApplicationContainer applicationContainer;
     protected IInstallerContainer installerContainer;

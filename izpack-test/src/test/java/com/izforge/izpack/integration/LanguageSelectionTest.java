@@ -1,6 +1,5 @@
 package com.izforge.izpack.integration;
 
-import com.izforge.izpack.AbstractInstallationTest;
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.container.IInstallerContainer;
@@ -15,7 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Test for an installation using mock data
  */
 @Test(groups = "integration")
-public class LanguageSelectionTest extends AbstractInstallationTest
+public class LanguageSelectionTest extends AbstractIntegrationTest
 {
 
     @AfterMethod
