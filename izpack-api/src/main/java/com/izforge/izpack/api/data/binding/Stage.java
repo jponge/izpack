@@ -1,4 +1,4 @@
-package com.izforge.izpack.api.data;
+package com.izforge.izpack.api.data.binding;
 
 /**
  * Possibles stage of the installation.

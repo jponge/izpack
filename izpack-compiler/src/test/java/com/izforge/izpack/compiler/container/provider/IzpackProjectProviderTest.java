@@ -1,9 +1,12 @@
 package com.izforge.izpack.compiler.container.provider;
 
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
+import com.izforge.izpack.api.data.binding.Listener;
+import com.izforge.izpack.api.data.binding.Stage;
 import org.hamcrest.core.IsNull;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.internal.matchers.IsCollectionContaining;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -27,6 +30,8 @@ public class IzpackProjectProviderTest
     {
         IzpackProjectInstaller izpackProjectInstaller = izpackProjectProvider.provide("install.xml");
         assertThat(izpackProjectInstaller, IsNull.notNullValue());
-        assertThat(izpackProjectInstaller.getListeners(), IsNull.notNullValue());
+
+        Listener listener = new Listener("SummaryLoggerInstallerListener", Stage.INSTALL);
+        assertThat(izpackProjectInstaller.getListeners(), IsCollectionContaining.hasItem(listener));
     }
 }

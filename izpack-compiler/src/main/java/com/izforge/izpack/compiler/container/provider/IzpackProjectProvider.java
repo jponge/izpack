@@ -18,7 +18,7 @@ public class IzpackProjectProvider implements Provider
 
     public static List<String> TAG_TO_IGNORE = Arrays.asList("info", "guiprefs", "variables",
             "packs", "packaging", "conditions", "installerrequirements", "locale", "resources", "panels", "help", "validator"
-            , "actions");
+            , "actions", "native");
 
     public IzpackProjectInstaller provide(String installFile)
     {
@@ -28,6 +28,7 @@ public class IzpackProjectProvider implements Provider
 
         xStream.alias("installation", IzpackProjectInstaller.class);
         xStream.alias("listener", Listener.class);
+//        xStream.alias("os", OsModel.class);
 
         for (String tag : TAG_TO_IGNORE)
         {

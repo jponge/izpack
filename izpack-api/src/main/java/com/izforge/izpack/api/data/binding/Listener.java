@@ -1,7 +1,5 @@
 package com.izforge.izpack.api.data.binding;
 
-import com.izforge.izpack.api.data.Stage;
-
 /**
  * Listener entity
  *
@@ -13,6 +11,7 @@ public class Listener
 
     private Stage stage;
 
+    private OsModel os;
 
     public Listener(String className, Stage stage)
     {
@@ -28,5 +27,15 @@ public class Listener
     public Stage getStage()
     {
         return stage;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Listener{" +
+                "className='" + className + '\'' +
+                ", stage=" + stage +
+                ", os=" + os +
+                '}';
     }
 }

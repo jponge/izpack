@@ -25,6 +25,15 @@ public class OsModel implements Serializable
      */
     public String version;
 
+    public OsModel(String arch, String family, String jre, String name, String version)
+    {
+        this.arch = arch;
+        this.family = family;
+        this.jre = jre;
+        this.name = name;
+        this.version = version;
+    }
+
     public String getArch()
     {
         return arch;

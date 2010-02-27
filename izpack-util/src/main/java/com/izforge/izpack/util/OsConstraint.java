@@ -51,19 +51,13 @@ public class OsConstraint
 
     //~ Instance variables 
 
-    private final OsModel osModel = new OsModel();
+    private OsModel osModel;
 
-    //~ Constructors 
+    public OsConstraint(OsModel osModel)
+    {
+        this.osModel = osModel;
+    }
 
-    /**
-     * Constructs a new instance. Please remember, MacOSX belongs to Unix family.
-     *
-     * @param family  The OS family (unix, windows or mac).
-     * @param name    The exact OS name.
-     * @param version The exact OS version (check property <code>os.version</code> for values).
-     * @param arch    The machine architecture (check property <code>os.arch</code> for values).
-     * @param jre     The Java version used for installation (check property <code>java.version</code> for values).
-     */
     public OsConstraint(String family,
                         String name,
                         String version,
@@ -85,7 +79,7 @@ public class OsConstraint
         this.osModel.setJre((jre != null)
                 ? jre.toLowerCase()
                 : null);
-    }    // end OsConstraint()
+    }
 
 
     /**
@@ -102,7 +96,7 @@ public class OsConstraint
                         String arch)
     {
         this(family, name, version, arch, null);
-    }    // end OsConstraint()
+    }
 
     //~ Methods 
 
@@ -151,11 +145,11 @@ public class OsConstraint
         if (match && (osModel.getJre() != null) && (osModel.getJre().length() > 0))
         {
             match = System.getProperty("java.version").toLowerCase().startsWith(osModel.getJre());
-        }    // end if
+        }
 
         return match
                 && ((osModel.getFamily() != null) || (osModel.getName() != null) || (osModel.getVersion() != null) || (osModel.getArch() != null) || (osModel.getJre() != null));
-    }    // end matchCurrentSystem()
+    }
 
 
     /**
@@ -170,31 +164,33 @@ public class OsConstraint
         ArrayList<OsConstraint> osList = new ArrayList<OsConstraint>();
         for (IXMLElement osElement : element.getChildrenNamed("os"))
         {
-            osList.add(new OsConstraint(osElement.getAttribute("family",
-                    null),
-                    osElement.getAttribute("name",
-                            null),
-                    osElement.getAttribute("version",
-                            null),
-                    osElement.getAttribute("arch",
-                            null),
-                    osElement.getAttribute("jre",
-                            null)));
+            osList.add(new OsConstraint(
+                    new OsModel(
+                            osElement.getAttribute("family",
+                                    null),
+                            osElement.getAttribute("name",
+                                    null),
+                            osElement.getAttribute("version",
+                                    null),
+                            osElement.getAttribute("arch",
+                                    null),
+                            osElement.getAttribute("jre",
+                                    null))
+            ));
         }
         // backward compatibility: still support os attribute
         String osattr = element.getAttribute("os");
         if ((osattr != null) && (osattr.length() > 0))
         {
             // add the "os" attribute as a family constraint
-            osList.add(new OsConstraint(osattr,
-                    null,
-                    null,
-                    null,
-                    null));
-        }    // end if
+            osList.add(new OsConstraint(
+                    new OsModel(osattr,
+                            null, null, null, null)
+            ));
+        }
 
         return osList;
-    }    // end getOsList()
+    }
 
 
     /**
@@ -239,7 +235,7 @@ public class OsConstraint
 
         // no match found
         return false;
-    }    // end oneMatchesCurrentSystem()
+    }
 
 
     /**
@@ -251,31 +247,29 @@ public class OsConstraint
     public static boolean oneMatchesCurrentSystem(IXMLElement el)
     {
         return oneMatchesCurrentSystem(getOsList(el));
-    }    // end oneMatchesCurrentSystem()
+    }
 
 
     public String getFamily()
     {
         return osModel.getFamily();
-    }    // end getFamily()
+    }
 
 
     public void setName(String n)
     {
         osModel.setName(n);
-    }    // end setName()
+    }
 
 
     public String getName()
     {
         return osModel.getName();
-    }    // end getName()
+    }
 
 
     public String toString()
     {
-
-
         return osModel.toString();
-    }    // end toString()
-}    // end OsConstraint
+    }
+}
