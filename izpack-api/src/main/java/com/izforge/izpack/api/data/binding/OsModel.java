@@ -39,19 +39,9 @@ public class OsModel implements Serializable
         return arch;
     }
 
-    public void setArch(String arch)
-    {
-        this.arch = arch;
-    }
-
     public String getFamily()
     {
         return family;
-    }
-
-    public void setFamily(String family)
-    {
-        this.family = family;
     }
 
     public String getJre()
@@ -59,29 +49,14 @@ public class OsModel implements Serializable
         return jre;
     }
 
-    public void setJre(String jre)
-    {
-        this.jre = jre;
-    }
-
     public String getName()
     {
         return name;
     }
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
     public String getVersion()
     {
         return version;
-    }
-
-    public void setVersion(String version)
-    {
-        this.version = version;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.izforge.izpack.compiler.container.provider;
 
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
+import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.data.binding.Stage;
 import org.hamcrest.beans.HasPropertyWithValue;
 import org.hamcrest.collection.IsCollectionContaining;
@@ -30,7 +31,7 @@ public class IzpackProjectProviderTest
     }
 
     @Test
-    public void testProvide() throws Exception
+    public void bindingListener() throws Exception
     {
         IzpackProjectInstaller izpackProjectInstaller = izpackProjectProvider.provide("bindingTest.xml");
         assertThat(izpackProjectInstaller, Is.is(IzpackProjectInstaller.class));
@@ -42,5 +43,15 @@ public class IzpackProjectProviderTest
                         HasPropertyWithValue.<Listener>hasProperty("stage", Is.is(Stage.install))
                 )
         ));
+
+        assertThat(listenerList, IsCollectionContaining.hasItem(
+                AllOf.allOf(
+                        HasPropertyWithValue.<Listener>hasProperty("classname", Is.is("RegistryInstallerListener")),
+                        HasPropertyWithValue.<Listener>hasProperty("stage", Is.is(Stage.install)),
+                        HasPropertyWithValue.<Listener>hasProperty("os",
+                                HasPropertyWithValue.<OsModel>hasProperty("family", Is.is("windows"))))
+        ));
+
+
     }
 }

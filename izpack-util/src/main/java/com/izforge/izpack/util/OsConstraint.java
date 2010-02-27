@@ -64,21 +64,7 @@ public class OsConstraint
                         String arch,
                         String jre)
     {
-        this.osModel.setFamily((family != null)
-                ? family.toLowerCase()
-                : null);
-        this.osModel.setName((name != null)
-                ? name.toLowerCase()
-                : null);
-        this.osModel.setVersion((version != null)
-                ? version.toLowerCase()
-                : null);
-        this.osModel.setArch((arch != null)
-                ? arch.toLowerCase()
-                : null);
-        this.osModel.setJre((jre != null)
-                ? jre.toLowerCase()
-                : null);
+        new OsModel(arch, family, jre, name, version);
     }
 
 
@@ -254,13 +240,6 @@ public class OsConstraint
     {
         return osModel.getFamily();
     }
-
-
-    public void setName(String n)
-    {
-        osModel.setName(n);
-    }
-
 
     public String getName()
     {
