@@ -3,9 +3,12 @@ package com.izforge.izpack.compiler.container.provider;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.data.binding.OsModel;
+import com.izforge.izpack.compiler.data.CompilerData;
 import com.thoughtworks.xstream.XStream;
 import org.picocontainer.injectors.Provider;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,12 +28,11 @@ public class IzpackProjectProvider implements Provider
     public static List<String> OS_ATTRIBUTE = Arrays.asList("arch", "jre", "family", "name", "version");
 
 
-    public IzpackProjectInstaller provide(String installFile)
+    public IzpackProjectInstaller provide(CompilerData compilerData) throws IOException
     {
         IzpackProjectInstaller izpackProjectInstaller;
 
         XStream xStream = new XStream();
-
 
         xStream.alias("installation", IzpackProjectInstaller.class);
 
@@ -41,8 +43,11 @@ public class IzpackProjectProvider implements Provider
             xStream.omitField(IzpackProjectInstaller.class, tag);
         }
 
-        izpackProjectInstaller = (IzpackProjectInstaller) xStream.fromXML(ClassLoader.getSystemResourceAsStream(installFile));
+        InputStream stream = ClassLoader.getSystemResourceAsStream(compilerData.getInstallFile());
 
+        izpackProjectInstaller = (IzpackProjectInstaller) xStream.fromXML(
+                stream);
+        stream.close();
         return izpackProjectInstaller;
     }
 

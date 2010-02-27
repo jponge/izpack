@@ -6,6 +6,7 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import org.codehaus.izpack.TestContainer;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -23,6 +24,8 @@ public class TestFinishPanel
         testContainer.initBindings();
     }
 
+
+    @Ignore
     @Test
     public void launchTest() throws Exception
     {

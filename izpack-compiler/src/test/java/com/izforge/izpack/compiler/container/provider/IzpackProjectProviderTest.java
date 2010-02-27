@@ -4,6 +4,7 @@ import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.data.binding.Stage;
+import com.izforge.izpack.compiler.data.CompilerData;
 import org.hamcrest.beans.HasPropertyWithValue;
 import org.hamcrest.collection.IsCollectionContaining;
 import org.hamcrest.core.AllOf;
@@ -33,7 +34,8 @@ public class IzpackProjectProviderTest
     @Test
     public void bindingListener() throws Exception
     {
-        IzpackProjectInstaller izpackProjectInstaller = izpackProjectProvider.provide("bindingTest.xml");
+        IzpackProjectInstaller izpackProjectInstaller = izpackProjectProvider.provide(
+                new CompilerData("bindingTest.xml", null, null));
         assertThat(izpackProjectInstaller, Is.is(IzpackProjectInstaller.class));
         List<Listener> listenerList = izpackProjectInstaller.getListeners();
 

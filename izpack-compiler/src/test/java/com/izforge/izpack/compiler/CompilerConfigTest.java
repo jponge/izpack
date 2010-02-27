@@ -3,6 +3,7 @@ package com.izforge.izpack.compiler;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.DynamicVariable;
+import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.data.CompilerData;
@@ -53,7 +54,8 @@ public class CompilerConfigTest
         packager = Mockito.mock(IPackager.class);
         PathResolver pathResolver = new PathResolver();
         mergeManager = new MergeManagerImpl(pathResolver);
-        compilerConfig = new CompilerConfig(data, variableSubstitutor, compiler, compilerHelper, xmlCompilerHerlper, propertyManager, packager, mergeManager);
+        IzpackProjectInstaller izpackProject = new IzpackProjectInstaller();
+        compilerConfig = new CompilerConfig(data, variableSubstitutor, compiler, compilerHelper, xmlCompilerHerlper, propertyManager, packager, mergeManager, izpackProject);
         xmlParser = new XMLParser();
     }
 

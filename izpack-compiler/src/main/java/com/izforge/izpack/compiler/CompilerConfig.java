@@ -29,9 +29,11 @@ package com.izforge.izpack.compiler;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.IXMLWriter;
+import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
 import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.rules.Condition;
@@ -119,13 +121,14 @@ public class CompilerConfig extends Thread
     private PropertyManager propertyManager;
     private IPackager packager;
     private MergeManager mergeManager;
+    private IzpackProjectInstaller izpackProjectInstaller;
 
     /**
      * Constructor
      *
      * @param compilerData Object containing all informations found in command line
      */
-    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager)
+    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller)
     {
         this.compilerData = compilerData;
         this.variableSubstitutor = variableSubstitutor;
@@ -135,6 +138,7 @@ public class CompilerConfig extends Thread
         this.propertyManager = propertyManager;
         this.packager = packager;
         this.mergeManager = mergeManager;
+        this.izpackProjectInstaller = izpackProjectInstaller;
     }
 
     /**
@@ -2161,12 +2165,7 @@ public class CompilerConfig extends Thread
      */
     private void addCustomListeners(IXMLElement data) throws Exception
     {
-        // We get the listeners
-        IXMLElement root = data.getFirstChildNamed("listeners");
-        if (root == null)
-        {
-            return;
-        }
+        XMLElementImpl root = null;
         for (IXMLElement ixmlElement : root.getChildrenNamed("listener"))
         {
             Object[] listener = getCompilerListenerInstance(ixmlElement);
