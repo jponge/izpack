@@ -32,7 +32,6 @@ import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
-import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.CustomData;
@@ -276,6 +275,11 @@ public class Compiler extends Thread
 
     }
 
+    public static void parseWarn(String message)
+    {
+        System.out.println("Warning: " + message);
+    }
+
     /**
      * This class is used for the classification of the edges
      */
@@ -361,7 +365,7 @@ public class Compiler extends Thread
             {
                 if (ignoreWhenNotFound)
                 {
-                    AssertionHelper.parseWarn(desc + " not found: " + resource);
+                    parseWarn(desc + " not found: " + resource);
                 }
                 else
                 {

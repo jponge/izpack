@@ -15,10 +15,12 @@ public class XmlCompilerHelper
 {
 
     private final String installFile;
+    private AssertionHelper assertionHelper;
 
-    public XmlCompilerHelper(String installFile)
+    public XmlCompilerHelper(String installFile, AssertionHelper assertionHelper)
     {
         this.installFile = installFile;
+        this.assertionHelper = assertionHelper;
     }
 
     /**
@@ -32,7 +34,7 @@ public class XmlCompilerHelper
         String content = element.getContent();
         if (content == null || content.length() == 0)
         {
-            AssertionHelper.parseError(element, "<" + element.getName() + "> requires content", installFile);
+            assertionHelper.parseError(element, "<" + element.getName() + "> requires content");
         }
         return content;
     }
@@ -52,7 +54,7 @@ public class XmlCompilerHelper
         }
         catch (MalformedURLException x)
         {
-            AssertionHelper.parseError(element, "<" + element.getName() + "> requires valid URL", x, installFile);
+            assertionHelper.parseError(element, "<" + element.getName() + "> requires valid URL", x);
         }
         return url;
     }
@@ -69,7 +71,7 @@ public class XmlCompilerHelper
         IXMLElement child = parent.getFirstChildNamed(name);
         if (child == null)
         {
-            AssertionHelper.parseError(parent, "<" + parent.getName() + "> requires child <" + name + ">", installFile);
+            assertionHelper.parseError(parent, "<" + parent.getName() + "> requires child <" + name + ">");
         }
         return child;
     }
@@ -89,8 +91,8 @@ public class XmlCompilerHelper
         String value = element.getAttribute(attribute);
         if (value == null || value.length() == 0)
         {
-            AssertionHelper.parseError(element, "<" + element.getName() + "> requires attribute '" + attribute
-                    + "'", installFile);
+            assertionHelper.parseError(element, "<" + element.getName() + "> requires attribute '" + attribute
+                    + "'");
         }
         try
         {
@@ -98,7 +100,7 @@ public class XmlCompilerHelper
         }
         catch (NumberFormatException x)
         {
-            AssertionHelper.parseError(element, "'" + attribute + "' must be an integer", installFile);
+            assertionHelper.parseError(element, "'" + attribute + "' must be an integer");
         }
         return 0; // never happens
     }
@@ -124,8 +126,8 @@ public class XmlCompilerHelper
             return false;
         }
 
-        AssertionHelper.parseError(element, "<" + element.getName() + "> invalid attribute '" + attribute
-                + "': Expected (yes|no)", installFile);
+        assertionHelper.parseError(element, "<" + element.getName() + "> invalid attribute '" + attribute
+                + "': Expected (yes|no)");
 
         return false; // never happens
     }
@@ -159,8 +161,8 @@ public class XmlCompilerHelper
 
         // TODO: should this be an error if it's present but "none of the
         // above"?
-        AssertionHelper.parseWarn(element, "<" + element.getName() + "> invalid attribute '" + attribute
-                + "': Expected (yes|no) if present", installFile);
+        assertionHelper.parseWarn(element, "<" + element.getName() + "> invalid attribute '" + attribute
+                + "': Expected (yes|no) if present");
 
         return defaultValue;
     }
@@ -179,8 +181,8 @@ public class XmlCompilerHelper
         String value = element.getAttribute(attribute);
         if (value == null)
         {
-            AssertionHelper.parseError(element, "<" + element.getName() + "> requires attribute '" + attribute
-                    + "'", installFile);
+            assertionHelper.parseError(element, "<" + element.getName() + "> requires attribute '" + attribute
+                    + "'");
         }
         return value;
     }

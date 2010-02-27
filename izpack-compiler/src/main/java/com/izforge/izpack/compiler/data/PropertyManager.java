@@ -72,9 +72,11 @@ public class PropertyManager
     private CompilerData compilerData;
     private VariableSubstitutor variableSubstitutor;
     private PackagerListener packagerListener;
+    private AssertionHelper assertionHelper;
 
-    public PropertyManager(Properties properties, VariableSubstitutor variableSubstitutor, CompilerData compilerData, PackagerListener packagerListener)
+    public PropertyManager(Properties properties, VariableSubstitutor variableSubstitutor, CompilerData compilerData, PackagerListener packagerListener, AssertionHelper assertionHelper)
     {
+        this.assertionHelper = assertionHelper;
         this.properties = properties;
         this.variableSubstitutor = variableSubstitutor;
         this.compilerData = compilerData;
@@ -163,21 +165,21 @@ public class PropertyManager
         {
             if (value == null)
             {
-                AssertionHelper.parseError(xmlProp, "You must specify a value with the name attribute", compilerData.getInstallFile());
+                assertionHelper.parseError(xmlProp, "You must specify a value with the name attribute");
             }
         }
         else
         {
             if (file == null && env == null)
             {
-                AssertionHelper.parseError(xmlProp,
-                        "You must specify file, or environment when not using the name attribute", compilerData.getInstallFile());
+                assertionHelper.parseError(xmlProp,
+                        "You must specify file, or environment when not using the name attribute");
             }
         }
 
         if (file == null && prefix != null)
         {
-            AssertionHelper.parseError(xmlProp, "Prefix is only valid when loading from a file ", compilerData.getInstallFile());
+            assertionHelper.parseError(xmlProp, "Prefix is only valid when loading from a file ");
         }
 
         if ((name != null) && (value != null))
@@ -230,7 +232,7 @@ public class PropertyManager
         }
         catch (IOException ex)
         {
-            AssertionHelper.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(), ex, compilerData.getInstallFile());
+            assertionHelper.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(), ex);
         }
     }
 
@@ -333,8 +335,8 @@ public class PropertyManager
                 }
                 catch (IOException ex)
                 {
-                    AssertionHelper.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(),
-                            ex, compilerData.getInstallFile());
+                    assertionHelper.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(),
+                            ex);
                 }
             }
             while (mods != 0);

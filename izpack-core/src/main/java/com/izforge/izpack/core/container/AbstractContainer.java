@@ -29,6 +29,11 @@ public class AbstractContainer
         return pico.getComponent(componentKeyOrType);
     }
 
+    public void addConfig(Object val, String name)
+    {
+        pico.addConfig(name, val);
+    }
+
     public void dispose()
     {
         pico.dispose();

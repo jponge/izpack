@@ -8,6 +8,7 @@ import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
+import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
 import com.izforge.izpack.compiler.packager.IPackager;
@@ -49,13 +50,14 @@ public class CompilerConfigTest
         compiler = Mockito.mock(Compiler.class);
         propertyManager = Mockito.mock(PropertyManager.class);
         compilerHelper = Mockito.mock(CompilerHelper.class);
-        xmlCompilerHerlper = new XmlCompilerHelper(data.getInstallFile());
+        AssertionHelper assertionHelper = Mockito.mock(AssertionHelper.class);
+        xmlCompilerHerlper = new XmlCompilerHelper(data.getInstallFile(), assertionHelper);
         mapStringListDyn = Mockito.mock(Map.class);
         packager = Mockito.mock(IPackager.class);
         PathResolver pathResolver = new PathResolver();
         mergeManager = new MergeManagerImpl(pathResolver);
         IzpackProjectInstaller izpackProject = new IzpackProjectInstaller();
-        compilerConfig = new CompilerConfig(data, variableSubstitutor, compiler, compilerHelper, xmlCompilerHerlper, propertyManager, packager, mergeManager, izpackProject);
+        compilerConfig = new CompilerConfig(data, variableSubstitutor, compiler, compilerHelper, xmlCompilerHerlper, propertyManager, packager, mergeManager, izpackProject, assertionHelper);
         xmlParser = new XMLParser();
     }
 

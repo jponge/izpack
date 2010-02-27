@@ -6,6 +6,7 @@ import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.cli.CliAnalyzer;
 import com.izforge.izpack.compiler.container.provider.*;
 import com.izforge.izpack.compiler.data.PropertyManager;
+import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.helper.CompilerResourceManager;
 import com.izforge.izpack.compiler.listener.CmdlinePackagerListener;
@@ -39,6 +40,7 @@ public class CompilerContainer extends AbstractContainer
         pico.addComponent(Compiler.class);
         pico.addComponent(PathResolver.class);
         pico.addComponent(CompilerConfig.class);
+        pico.addComponent(AssertionHelper.class);
         pico.addComponent(CompilerHelper.class);
         pico.addComponent(PropertyManager.class);
         pico.addComponent(CompilerResourceManager.class);
