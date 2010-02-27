@@ -3,10 +3,14 @@ package com.izforge.izpack.compiler.container.provider;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.data.binding.Stage;
-import org.hamcrest.core.IsNull;
+import org.hamcrest.beans.HasPropertyWithValue;
+import org.hamcrest.collection.IsCollectionContaining;
+import org.hamcrest.core.AllOf;
+import org.hamcrest.core.Is;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.internal.matchers.IsCollectionContaining;
+
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -28,10 +32,15 @@ public class IzpackProjectProviderTest
     @Test
     public void testProvide() throws Exception
     {
-        IzpackProjectInstaller izpackProjectInstaller = izpackProjectProvider.provide("install.xml");
-        assertThat(izpackProjectInstaller, IsNull.notNullValue());
+        IzpackProjectInstaller izpackProjectInstaller = izpackProjectProvider.provide("bindingTest.xml");
+        assertThat(izpackProjectInstaller, Is.is(IzpackProjectInstaller.class));
+        List<Listener> listenerList = izpackProjectInstaller.getListeners();
 
-        Listener listener = new Listener("SummaryLoggerInstallerListener", Stage.INSTALL);
-        assertThat(izpackProjectInstaller.getListeners(), IsCollectionContaining.hasItem(listener));
+        assertThat(listenerList, IsCollectionContaining.hasItem(
+                AllOf.allOf(
+                        HasPropertyWithValue.<Listener>hasProperty("classname", Is.is("SummaryLoggerInstallerListener")),
+                        HasPropertyWithValue.<Listener>hasProperty("stage", Is.is(Stage.install))
+                )
+        ));
     }
 }

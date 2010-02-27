@@ -12,8 +12,7 @@ public class IzpackProjectInstaller
 {
     private List<Listener> listeners = new ArrayList<Listener>();
 
-
-    public void addIzpackListeners(Listener listener)
+    public void add(Listener listener)
     {
         this.listeners.add(listener);
     }

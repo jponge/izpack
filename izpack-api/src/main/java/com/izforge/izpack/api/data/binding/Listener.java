@@ -7,21 +7,22 @@ package com.izforge.izpack.api.data.binding;
  */
 public class Listener
 {
-    private String className;
+    private String classname;
 
     private Stage stage;
 
     private OsModel os;
 
-    public Listener(String className, Stage stage)
+    public Listener(String classname, Stage stage, OsModel os)
     {
-        this.className = className;
+        this.classname = classname;
         this.stage = stage;
+        this.os = os;
     }
 
-    public String getClassName()
+    public String getClassname()
     {
-        return className;
+        return classname;
     }
 
     public Stage getStage()
@@ -29,11 +30,16 @@ public class Listener
         return stage;
     }
 
+    public OsModel getOs()
+    {
+        return os;
+    }
+
     @Override
     public String toString()
     {
         return "Listener{" +
-                "className='" + className + '\'' +
+                "classname='" + classname + '\'' +
                 ", stage=" + stage +
                 ", os=" + os +
                 '}';

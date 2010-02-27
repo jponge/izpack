@@ -3,6 +3,7 @@ package com.izforge.izpack.compiler.container.provider;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.enums.EnumConverter;
 import org.picocontainer.injectors.Provider;
 
 import java.util.Arrays;
@@ -28,7 +29,10 @@ public class IzpackProjectProvider implements Provider
 
         xStream.alias("installation", IzpackProjectInstaller.class);
         xStream.alias("listener", Listener.class);
-//        xStream.alias("os", OsModel.class);
+
+        xStream.aliasAttribute(Listener.class, "classname", "classname");
+        xStream.aliasAttribute(Listener.class, "stage", "stage");
+        xStream.registerConverter(new EnumConverter());
 
         for (String tag : TAG_TO_IGNORE)
         {
