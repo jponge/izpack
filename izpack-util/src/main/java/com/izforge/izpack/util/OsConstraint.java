@@ -23,6 +23,7 @@ package com.izforge.izpack.util;
 
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.binding.OsModel;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -50,30 +51,7 @@ public class OsConstraint
 
     //~ Instance variables 
 
-    /**
-     * OS architecture from java system properties
-     */
-    private String arch;
-
-    /**
-     * The OS family
-     */
-    private String family;
-
-    /**
-     * JRE version used for installation
-     */
-    private String jre;
-
-    /**
-     * OS name from java system properties
-     */
-    private String name;
-
-    /**
-     * OS version from java system properties
-     */
-    private String version;
+    private final OsModel osModel = new OsModel();
 
     //~ Constructors 
 
@@ -92,21 +70,21 @@ public class OsConstraint
                         String arch,
                         String jre)
     {
-        this.family = (family != null)
+        this.osModel.setFamily((family != null)
                 ? family.toLowerCase()
-                : null;
-        this.name = (name != null)
+                : null);
+        this.osModel.setName((name != null)
                 ? name.toLowerCase()
-                : null;
-        this.version = (version != null)
+                : null);
+        this.osModel.setVersion((version != null)
                 ? version.toLowerCase()
-                : null;
-        this.arch = (arch != null)
+                : null);
+        this.osModel.setArch((arch != null)
                 ? arch.toLowerCase()
-                : null;
-        this.jre = (jre != null)
+                : null);
+        this.osModel.setJre((jre != null)
                 ? jre.toLowerCase()
-                : null;
+                : null);
     }    // end OsConstraint()
 
 
@@ -139,44 +117,44 @@ public class OsConstraint
         String osName = System.getProperty("os.name").toLowerCase();
 
 
-        if ((arch != null) && (arch.length() != 0))
+        if ((osModel.getArch() != null) && (osModel.getArch().length() != 0))
         {
-            match = System.getProperty("os.arch").toLowerCase().equals(arch);
+            match = System.getProperty("os.arch").toLowerCase().equals(osModel.getArch());
         }    // end if
 
-        if (match && (version != null) && (version.length() != 0))
+        if (match && (osModel.getVersion() != null) && (osModel.getVersion().length() != 0))
         {
-            match = System.getProperty("os.version").toLowerCase().equals(version);
+            match = System.getProperty("os.version").toLowerCase().equals(osModel.getVersion());
         }    // end if
 
-        if (match && (name != null) && (name.length() != 0))
+        if (match && (osModel.getName() != null) && (osModel.getName().length() != 0))
         {
-            match = osName.equals(name);
+            match = osName.equals(osModel.getName());
         }    // end if
 
-        if (match && (family != null))
+        if (match && (osModel.getFamily() != null))
         {
-            if ("windows".equals(family))
+            if ("windows".equals(osModel.getFamily()))
             {
                 match = OsVersion.IS_WINDOWS;
             }    // end if
-            else if ("mac".equals(family) || "osx".equals(family))
+            else if ("mac".equals(osModel.getFamily()) || "osx".equals(osModel.getFamily()))
             {
                 match = OsVersion.IS_OSX;
             }    // end else if
-            else if ("unix".equals(family))
+            else if ("unix".equals(osModel.getFamily()))
             {
                 match = OsVersion.IS_UNIX;
             }    // end else if
         }    // end if
 
-        if (match && (jre != null) && (jre.length() > 0))
+        if (match && (osModel.getJre() != null) && (osModel.getJre().length() > 0))
         {
-            match = System.getProperty("java.version").toLowerCase().startsWith(jre);
+            match = System.getProperty("java.version").toLowerCase().startsWith(osModel.getJre());
         }    // end if
 
         return match
-                && ((family != null) || (name != null) || (version != null) || (arch != null) || (jre != null));
+                && ((osModel.getFamily() != null) || (osModel.getName() != null) || (osModel.getVersion() != null) || (osModel.getArch() != null) || (osModel.getJre() != null));
     }    // end matchCurrentSystem()
 
 
@@ -190,30 +168,21 @@ public class OsConstraint
     {
         // get os info on this executable
         ArrayList<OsConstraint> osList = new ArrayList<OsConstraint>();
-        Iterator<IXMLElement> osIterator = element.getChildrenNamed("os").iterator();
-
-
-        while (osIterator.hasNext())
+        for (IXMLElement osElement : element.getChildrenNamed("os"))
         {
-            IXMLElement os = osIterator.next();
-
-
-            osList.add(new OsConstraint(os.getAttribute("family",
+            osList.add(new OsConstraint(osElement.getAttribute("family",
                     null),
-                    os.getAttribute("name",
+                    osElement.getAttribute("name",
                             null),
-                    os.getAttribute("version",
+                    osElement.getAttribute("version",
                             null),
-                    os.getAttribute("arch",
+                    osElement.getAttribute("arch",
                             null),
-                    os.getAttribute("jre",
+                    osElement.getAttribute("jre",
                             null)));
-        }    // end while
-
+        }
         // backward compatibility: still support os attribute
         String osattr = element.getAttribute("os");
-
-
         if ((osattr != null) && (osattr.length() > 0))
         {
             // add the "os" attribute as a family constraint
@@ -285,65 +254,28 @@ public class OsConstraint
     }    // end oneMatchesCurrentSystem()
 
 
-    public void setFamily(String f)
-    {
-        family = f.toLowerCase();
-    }    // end setFamily()
-
-
     public String getFamily()
     {
-        return family;
+        return osModel.getFamily();
     }    // end getFamily()
 
 
     public void setName(String n)
     {
-        name = n.toLowerCase();
+        osModel.setName(n);
     }    // end setName()
 
 
     public String getName()
     {
-        return name;
+        return osModel.getName();
     }    // end getName()
 
-    public void setVersion(String v)
-    {
-        version = v.toLowerCase();
-    }    // end setVersion()
-
-
-    public String getVersion()
-    {
-        return version;
-    }    // end getVersion()
-
-
-    public void setArch(String a)
-    {
-        arch = a.toLowerCase();
-    }    // end setArch()
-
-
-    public String getArch()
-    {
-        return arch;
-    }    // end getArch()
 
     public String toString()
     {
-        StringBuffer retval = new StringBuffer();
 
 
-        retval.append("[Os ");
-        retval.append(" family ").append(family);
-        retval.append(" name ").append(name);
-        retval.append(" version ").append(version);
-        retval.append(" arch ").append(arch);
-        retval.append(" jre ").append(jre);
-        retval.append(" ]");
-
-        return retval.toString();
+        return osModel.toString();
     }    // end toString()
 }    // end OsConstraint

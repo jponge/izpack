@@ -1,6 +1,6 @@
 package com.izforge.izpack.compiler.container.provider;
 
-import com.izforge.izpack.api.data.IzpackProjectInstaller;
+import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import org.hamcrest.core.IsNull;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +27,6 @@ public class IzpackProjectProviderTest
     {
         IzpackProjectInstaller izpackProjectInstaller = izpackProjectProvider.provide("install.xml");
         assertThat(izpackProjectInstaller, IsNull.notNullValue());
-        assertThat(izpackProjectInstaller.getIzpackListeners(), IsNull.notNullValue());
+        assertThat(izpackProjectInstaller.getListeners(), IsNull.notNullValue());
     }
 }

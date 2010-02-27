@@ -1,7 +1,7 @@
 package com.izforge.izpack.compiler.container.provider;
 
-import com.izforge.izpack.api.data.IzpackListener;
-import com.izforge.izpack.api.data.IzpackProjectInstaller;
+import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
+import com.izforge.izpack.api.data.binding.Listener;
 import com.thoughtworks.xstream.XStream;
 import org.picocontainer.injectors.Provider;
 
@@ -27,7 +27,7 @@ public class IzpackProjectProvider implements Provider
         XStream xStream = new XStream();
 
         xStream.alias("installation", IzpackProjectInstaller.class);
-        xStream.alias("listners", IzpackListener.class);
+        xStream.alias("listener", Listener.class);
 
         for (String tag : TAG_TO_IGNORE)
         {

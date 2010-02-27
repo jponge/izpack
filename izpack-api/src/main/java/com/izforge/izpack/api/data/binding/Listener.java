@@ -1,17 +1,20 @@
-package com.izforge.izpack.api.data;
+package com.izforge.izpack.api.data.binding;
+
+import com.izforge.izpack.api.data.Stage;
 
 /**
  * Listener entity
  *
  * @author Anthonin Bonnefoy
  */
-public class IzpackListener
+public class Listener
 {
     private String className;
 
     private Stage stage;
 
-    public IzpackListener(String className, Stage stage)
+
+    public Listener(String className, Stage stage)
     {
         this.className = className;
         this.stage = stage;
