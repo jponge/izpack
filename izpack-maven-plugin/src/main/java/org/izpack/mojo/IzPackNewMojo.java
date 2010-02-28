@@ -1,5 +1,6 @@
 package org.izpack.mojo;
 
+import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
@@ -66,6 +67,8 @@ public class IzPackNewMojo extends AbstractMojo
         CompilerData compilerData = initCompilerData();
         CompilerContainer compilerContainer = new CompilerContainer();
         compilerContainer.initBindings();
+        compilerContainer.addConfig("installFile", installFile);
+        compilerContainer.getComponent(IzpackProjectInstaller.class);
         compilerContainer.addComponent(CompilerData.class, compilerData);
 
         CompilerConfig compilerConfig = compilerContainer.getComponent(CompilerConfig.class);

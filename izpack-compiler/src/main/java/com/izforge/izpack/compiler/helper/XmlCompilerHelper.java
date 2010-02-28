@@ -81,11 +81,10 @@ public class XmlCompilerHelper
      * is generated as a CompilerException if not present or parseable as an int. It is an error for
      * 'element' or 'attribute' to be null.
      *
-     * @param element     The element to get the attribute value of
-     * @param attribute   The name of the attribute to get
-     * @param installFile
+     * @param element   The element to get the attribute value of
+     * @param attribute The name of the attribute to get
      */
-    public int requireIntAttribute(IXMLElement element, String attribute, String installFile)
+    public int requireIntAttribute(IXMLElement element, String attribute)
             throws CompilerException
     {
         String value = element.getAttribute(attribute);
@@ -109,14 +108,13 @@ public class XmlCompilerHelper
      * Call getAttribute on an element, producing a meaningful error message if not present, or one
      * of "yes" or "no". It is an error for 'element' or 'attribute' to be null.
      *
-     * @param element     The element to get the attribute value of
-     * @param attribute   The name of the attribute to get
-     * @param installFile
+     * @param element   The element to get the attribute value of
+     * @param attribute The name of the attribute to get
      */
-    public boolean requireYesNoAttribute(IXMLElement element, String attribute, String installFile)
+    public boolean requireYesNoAttribute(IXMLElement element, String attribute)
             throws CompilerException
     {
-        String value = requireAttribute(element, attribute, installFile);
+        String value = requireAttribute(element, attribute);
         if ("yes".equalsIgnoreCase(value))
         {
             return true;
@@ -139,10 +137,9 @@ public class XmlCompilerHelper
      * @param element      The element to get the attribute value of
      * @param attribute    The name of the attribute to get
      * @param defaultValue Value returned if attribute not present or invalid
-     * @param installFile
      */
     public boolean validateYesNoAttribute(IXMLElement element, String attribute,
-                                          boolean defaultValue, String installFile)
+                                          boolean defaultValue)
     {
         if (element == null)
         {
@@ -171,11 +168,10 @@ public class XmlCompilerHelper
      * Call getAttribute on an element, producing a meaningful error message if not present, or
      * empty. It is an error for 'element' or 'attribute' to be null.
      *
-     * @param element     The element to get the attribute value of
-     * @param attribute   The name of the attribute to get
-     * @param installFile
+     * @param element   The element to get the attribute value of
+     * @param attribute The name of the attribute to get
      */
-    public String requireAttribute(IXMLElement element, String attribute, String installFile)
+    public String requireAttribute(IXMLElement element, String attribute)
             throws CompilerException
     {
         String value = element.getAttribute(attribute);

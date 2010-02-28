@@ -122,6 +122,7 @@ public class AbstractIntegrationTest
     public void compileInstallJar(CompilerData compilerData) throws Exception
     {
         CompilerData data = compilerData;
+        compilerContainer.addConfig("installFile",compilerData.getInstallFile());
         compilerContainer.addComponent(CompilerData.class, data);
         CompilerConfig compilerConfig = compilerContainer.getComponent(CompilerConfig.class);
         compilerConfig.executeCompiler();

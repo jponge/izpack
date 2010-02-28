@@ -29,7 +29,6 @@ package com.izforge.izpack.compiler;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.IXMLWriter;
-import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
 import com.izforge.izpack.api.data.*;
@@ -257,14 +256,14 @@ public class CompilerConfig extends Thread
 
             if (packagerElement != null)
             {
-                packagerClassname = xmlCompilerHelper.requireAttribute(packagerElement, "class", compilerData.getInstallFile());
+                packagerClassname = xmlCompilerHelper.requireAttribute(packagerElement, "class");
             }
 
             IXMLElement unpacker = root.getFirstChildNamed("unpacker");
 
             if (unpacker != null)
             {
-                unpackerClassname = xmlCompilerHelper.requireAttribute(unpacker, "class", compilerData.getInstallFile());
+                unpackerClassname = xmlCompilerHelper.requireAttribute(unpacker, "class");
             }
         }
         if (packagerElement != null)
@@ -298,27 +297,27 @@ public class CompilerConfig extends Thread
         GUIPrefs prefs = new GUIPrefs();
         if (gp != null)
         {
-            prefs.resizable = xmlCompilerHelper.requireYesNoAttribute(gp, "resizable", compilerData.getInstallFile());
-            prefs.width = xmlCompilerHelper.requireIntAttribute(gp, "width", compilerData.getInstallFile());
-            prefs.height = xmlCompilerHelper.requireIntAttribute(gp, "height", compilerData.getInstallFile());
+            prefs.resizable = xmlCompilerHelper.requireYesNoAttribute(gp, "resizable");
+            prefs.width = xmlCompilerHelper.requireIntAttribute(gp, "width");
+            prefs.height = xmlCompilerHelper.requireIntAttribute(gp, "height");
 
             // Look and feel mappings
             for (IXMLElement lafNode : gp.getChildrenNamed("laf"))
             {
-                String lafName = xmlCompilerHelper.requireAttribute(lafNode, "name", compilerData.getInstallFile());
+                String lafName = xmlCompilerHelper.requireAttribute(lafNode, "name");
                 xmlCompilerHelper.requireChildNamed(lafNode, "os");
 
                 for (IXMLElement osNode : lafNode.getChildrenNamed("os"))
                 {
-                    String osName = xmlCompilerHelper.requireAttribute(osNode, "family", compilerData.getInstallFile());
+                    String osName = xmlCompilerHelper.requireAttribute(osNode, "family");
                     prefs.lookAndFeelMapping.put(osName, lafName);
                 }
 
                 Map<String, String> params = new TreeMap<String, String>();
                 for (IXMLElement parameterNode : lafNode.getChildrenNamed("param"))
                 {
-                    String name = xmlCompilerHelper.requireAttribute(parameterNode, "name", compilerData.getInstallFile());
-                    String value = xmlCompilerHelper.requireAttribute(parameterNode, "value", compilerData.getInstallFile());
+                    String name = xmlCompilerHelper.requireAttribute(parameterNode, "name");
+                    String value = xmlCompilerHelper.requireAttribute(parameterNode, "value");
                     params.put(name, value);
                 }
                 prefs.lookAndFeelParams.put(lafName, params);
@@ -326,8 +325,8 @@ public class CompilerConfig extends Thread
             // Load modifier
             for (IXMLElement ixmlElement : gp.getChildrenNamed("modifier"))
             {
-                String key = xmlCompilerHelper.requireAttribute(ixmlElement, "key", compilerData.getInstallFile());
-                String value = xmlCompilerHelper.requireAttribute(ixmlElement, "value", compilerData.getInstallFile());
+                String key = xmlCompilerHelper.requireAttribute(ixmlElement, "key");
+                String value = xmlCompilerHelper.requireAttribute(ixmlElement, "value");
                 prefs.modifier.put(key, value);
 
             }
@@ -374,7 +373,7 @@ public class CompilerConfig extends Thread
         notifyCompilerListener("addJars", CompilerListener.BEGIN, data);
         for (IXMLElement ixmlElement : data.getChildrenNamed("jar"))
         {
-            String src = xmlCompilerHelper.requireAttribute(ixmlElement, "src", compilerData.getInstallFile());
+            String src = xmlCompilerHelper.requireAttribute(ixmlElement, "src");
             mergeManager.addResourceToMerge(src);
 
             // Additionals for mark a jar file also used in the uninstaller.
@@ -409,8 +408,8 @@ public class CompilerConfig extends Thread
         notifyCompilerListener("addNativeLibraries", CompilerListener.BEGIN, data);
         for (IXMLElement ixmlElement : data.getChildrenNamed("native"))
         {
-            String type = xmlCompilerHelper.requireAttribute(ixmlElement, "type", compilerData.getInstallFile());
-            String name = xmlCompilerHelper.requireAttribute(ixmlElement, "name", compilerData.getInstallFile());
+            String type = xmlCompilerHelper.requireAttribute(ixmlElement, "type");
+            String name = xmlCompilerHelper.requireAttribute(ixmlElement, "name");
             String path = ixmlElement.getAttribute("src");
             if (path == null)
             {
@@ -444,7 +443,7 @@ public class CompilerConfig extends Thread
             // Add the uninstaller extensions as a resource if specified
             IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "info");
             IXMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
-            if (xmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", YES, compilerData.getInstallFile()))
+            if (xmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", YES))
             {
                 //REFACTOR Change the way uninstaller are created
                 // Do we still need it on compile time?
@@ -503,13 +502,13 @@ public class CompilerConfig extends Thread
         {
 
             // Trivial initialisations
-            String name = xmlCompilerHelper.requireAttribute(packElement, "name", compilerData.getInstallFile());
+            String name = xmlCompilerHelper.requireAttribute(packElement, "name");
             String id = packElement.getAttribute("id");
             String packImgId = packElement.getAttribute("packImgId");
 
             boolean loose = "true".equalsIgnoreCase(packElement.getAttribute("loose", "false"));
             String description = xmlCompilerHelper.requireChildNamed(packElement, "description").getContent();
-            boolean required = xmlCompilerHelper.requireYesNoAttribute(packElement, "required", compilerData.getInstallFile());
+            boolean required = xmlCompilerHelper.requireYesNoAttribute(packElement, "required");
             String group = packElement.getAttribute("group");
             String installGroups = packElement.getAttribute("installGroups");
             String excludeGroup = packElement.getAttribute("excludeGroup");
@@ -537,11 +536,11 @@ public class CompilerConfig extends Thread
             // if the pack belongs to an excludeGroup it's not preselected by default
             if (excludeGroup == null)
             {
-                pack.setPreselected(xmlCompilerHelper.validateYesNoAttribute(packElement, "preselected", YES, compilerData.getInstallFile()));
+                pack.setPreselected(xmlCompilerHelper.validateYesNoAttribute(packElement, "preselected", YES));
             }
             else
             {
-                pack.setPreselected(xmlCompilerHelper.validateYesNoAttribute(packElement, "preselected", NO, compilerData.getInstallFile()));
+                pack.setPreselected(xmlCompilerHelper.validateYesNoAttribute(packElement, "preselected", NO));
             }
 
             // Set the pack group if specified
@@ -569,7 +568,7 @@ public class CompilerConfig extends Thread
             // We get the parsables list
             for (IXMLElement parsableNode : packElement.getChildrenNamed("parsable"))
             {
-                String target = xmlCompilerHelper.requireAttribute(parsableNode, "targetfile", compilerData.getInstallFile());
+                String target = xmlCompilerHelper.requireAttribute(parsableNode, "targetfile");
                 SubstitutionType type = SubstitutionType.lookup(parsableNode.getAttribute("type", "plain"));
                 String encoding = parsableNode.getAttribute("encoding", null);
                 List<OsConstraint> osList = OsConstraint.getOsList(parsableNode); // TODO: unverified
@@ -584,8 +583,8 @@ public class CompilerConfig extends Thread
                 while (iterSet.hasNext())
                 {
                     IXMLElement f = iterSet.next();
-                    String targetdir = xmlCompilerHelper.requireAttribute(f, "targetdir", compilerData.getInstallFile());
-                    String dir_attr = xmlCompilerHelper.requireAttribute(f, "dir", compilerData.getInstallFile());
+                    String targetdir = xmlCompilerHelper.requireAttribute(f, "targetdir");
+                    String dir_attr = xmlCompilerHelper.requireAttribute(f, "dir");
                     File dir = new File(dir_attr);
                     if (!dir.isAbsolute())
                     {
@@ -620,7 +619,7 @@ public class CompilerConfig extends Thread
                 String val; // temp value
                 String condition = executableNode.getAttribute("condition");
                 executable.setCondition(condition);
-                executable.path = xmlCompilerHelper.requireAttribute(executableNode, "targetfile", compilerData.getInstallFile());
+                executable.path = xmlCompilerHelper.requireAttribute(executableNode, "targetfile");
 
                 // when to execute this executable
                 val = executableNode.getAttribute("stage", "never");
@@ -667,7 +666,7 @@ public class CompilerConfig extends Thread
                 {
                     for (IXMLElement ixmlElement : args.getChildrenNamed("arg"))
                     {
-                        executable.argList.add(xmlCompilerHelper.requireAttribute(ixmlElement, "value", compilerData.getInstallFile()));
+                        executable.argList.add(xmlCompilerHelper.requireAttribute(ixmlElement, "value"));
                     }
                 }
 
@@ -680,8 +679,8 @@ public class CompilerConfig extends Thread
             // We get the files list
             for (IXMLElement fileNode : packElement.getChildrenNamed("file"))
             {
-                String src = xmlCompilerHelper.requireAttribute(fileNode, "src", compilerData.getInstallFile());
-                String targetdir = xmlCompilerHelper.requireAttribute(fileNode, "targetdir", compilerData.getInstallFile());
+                String src = xmlCompilerHelper.requireAttribute(fileNode, "src");
+                String targetdir = xmlCompilerHelper.requireAttribute(fileNode, "targetdir");
                 List<OsConstraint> osList = OsConstraint.getOsList(fileNode); // TODO: unverified
                 OverrideType override = getOverrideValue(fileNode);
                 Blockable blockable = getBlockableValue(fileNode, osList);
@@ -725,8 +724,8 @@ public class CompilerConfig extends Thread
             // We get the singlefiles list
             for (IXMLElement singleFileNode : packElement.getChildrenNamed("singlefile"))
             {
-                String src = xmlCompilerHelper.requireAttribute(singleFileNode, "src", compilerData.getInstallFile());
-                String target = xmlCompilerHelper.requireAttribute(singleFileNode, "target", compilerData.getInstallFile());
+                String src = xmlCompilerHelper.requireAttribute(singleFileNode, "src");
+                String target = xmlCompilerHelper.requireAttribute(singleFileNode, "target");
                 List<OsConstraint> osList = OsConstraint.getOsList(singleFileNode); // TODO: unverified
                 OverrideType override = getOverrideValue(singleFileNode);
                 Blockable blockable = getBlockableValue(singleFileNode, osList);
@@ -758,7 +757,7 @@ public class CompilerConfig extends Thread
             // We get the fileset list
             for (IXMLElement fileSetNode : packElement.getChildrenNamed("fileset"))
             {
-                String dir_attr = xmlCompilerHelper.requireAttribute(fileSetNode, "dir", compilerData.getInstallFile());
+                String dir_attr = xmlCompilerHelper.requireAttribute(fileSetNode, "dir");
 
                 File dir = new File(dir_attr);
                 if (!dir.isAbsolute())
@@ -771,7 +770,7 @@ public class CompilerConfig extends Thread
                 }
 
                 String[] includedFiles = getFilesetIncludedFiles(fileSetNode);
-                String targetdir = xmlCompilerHelper.requireAttribute(fileSetNode, "targetdir", compilerData.getInstallFile());
+                String targetdir = xmlCompilerHelper.requireAttribute(fileSetNode, "targetdir");
                 List<OsConstraint> osList = OsConstraint.getOsList(fileSetNode); // TODO: unverified
                 OverrideType override = getOverrideValue(fileSetNode);
                 Blockable blockable = getBlockableValue(fileSetNode, osList);
@@ -811,12 +810,12 @@ public class CompilerConfig extends Thread
                 // get includes and excludes
                 for (IXMLElement ixmlElement1 : updateNode.getChildrenNamed("include"))
                 {
-                    includesList.add(xmlCompilerHelper.requireAttribute(ixmlElement1, "name", compilerData.getInstallFile()));
+                    includesList.add(xmlCompilerHelper.requireAttribute(ixmlElement1, "name"));
                 }
 
                 for (IXMLElement ixmlElement : updateNode.getChildrenNamed("exclude"))
                 {
-                    excludesList.add(xmlCompilerHelper.requireAttribute(ixmlElement, "name", compilerData.getInstallFile()));
+                    excludesList.add(xmlCompilerHelper.requireAttribute(ixmlElement, "name"));
                 }
 
                 pack.addUpdateCheck(new UpdateCheck(includesList, excludesList, casesensitive));
@@ -824,7 +823,7 @@ public class CompilerConfig extends Thread
             // We get the dependencies
             for (IXMLElement dependsNode : packElement.getChildrenNamed("depends"))
             {
-                String depName = xmlCompilerHelper.requireAttribute(dependsNode, "packname", compilerData.getInstallFile());
+                String depName = xmlCompilerHelper.requireAttribute(dependsNode, "packname");
                 pack.addDependency(depName);
 
             }
@@ -842,7 +841,7 @@ public class CompilerConfig extends Thread
         {
 
             // get the name of reference xml file
-            String refFileName = xmlCompilerHelper.requireAttribute(refPackElement, "file", compilerData.getInstallFile());
+            String refFileName = xmlCompilerHelper.requireAttribute(refPackElement, "file");
             String selfcontained = refPackElement.getAttribute("selfcontained");
             boolean isselfcontained = Boolean.valueOf(selfcontained);
 
@@ -858,7 +857,7 @@ public class CompilerConfig extends Thread
         {
 
             // the directory to scan
-            String dir_attr = xmlCompilerHelper.requireAttribute(refPackSet, "dir", this.compilerData.getInstallFile());
+            String dir_attr = xmlCompilerHelper.requireAttribute(refPackSet, "dir");
 
             File dir = new File(dir_attr);
             if (!dir.isAbsolute())
@@ -871,7 +870,7 @@ public class CompilerConfig extends Thread
             }
 
             // include pattern
-            String includeString = xmlCompilerHelper.requireAttribute(refPackSet, "includes", this.compilerData.getInstallFile());
+            String includeString = xmlCompilerHelper.requireAttribute(refPackSet, "includes");
             String[] includes = includeString.split(", ");
 
             // scan for refpack files
@@ -901,7 +900,7 @@ public class CompilerConfig extends Thread
     private String[] getFilesetIncludedFiles(IXMLElement f) throws CompilerException
     {
         List<String> includedFiles = new ArrayList<String>();
-        String dir_attr = xmlCompilerHelper.requireAttribute(f, "dir", compilerData.getInstallFile());
+        String dir_attr = xmlCompilerHelper.requireAttribute(f, "dir");
 
         File dir = new File(dir_attr);
         if (!dir.isAbsolute())
@@ -913,8 +912,8 @@ public class CompilerConfig extends Thread
             assertionHelper.parseError(f, "Invalid directory 'dir': " + dir_attr);
         }
 
-        boolean casesensitive = xmlCompilerHelper.validateYesNoAttribute(f, "casesensitive", YES, compilerData.getInstallFile());
-        boolean defexcludes = xmlCompilerHelper.validateYesNoAttribute(f, "defaultexcludes", YES, compilerData.getInstallFile());
+        boolean casesensitive = xmlCompilerHelper.validateYesNoAttribute(f, "casesensitive", YES);
+        boolean defexcludes = xmlCompilerHelper.validateYesNoAttribute(f, "defaultexcludes", YES);
 
         // get includes and excludes
         Vector<IXMLElement> xcludesList = null;
@@ -926,7 +925,7 @@ public class CompilerConfig extends Thread
             for (int j = 0; j < xcludesList.size(); j++)
             {
                 IXMLElement xclude = xcludesList.get(j);
-                includes[j] = xmlCompilerHelper.requireAttribute(xclude, "name", compilerData.getInstallFile());
+                includes[j] = xmlCompilerHelper.requireAttribute(xclude, "name");
             }
         }
         String[] excludes = null;
@@ -937,7 +936,7 @@ public class CompilerConfig extends Thread
             for (int j = 0; j < xcludesList.size(); j++)
             {
                 IXMLElement xclude = xcludesList.get(j);
-                excludes[j] = xmlCompilerHelper.requireAttribute(xclude, "name", compilerData.getInstallFile());
+                excludes[j] = xmlCompilerHelper.requireAttribute(xclude, "name");
             }
         }
 
@@ -1071,7 +1070,7 @@ public class CompilerConfig extends Thread
         {
             assertionHelper.parseError(refXMLData, "this is not an IzPack XML installation file");
         }
-        if (!CompilerData.VERSION.equalsIgnoreCase(xmlCompilerHelper.requireAttribute(refXMLData, "version", compilerData.getInstallFile())))
+        if (!CompilerData.VERSION.equalsIgnoreCase(xmlCompilerHelper.requireAttribute(refXMLData, "version")))
         {
             assertionHelper.parseError(refXMLData, "the file version is different from the compiler version");
         }
@@ -1336,12 +1335,12 @@ public class CompilerConfig extends Thread
         // We process each res markup
         for (IXMLElement resNode : root.getChildrenNamed("res"))
         {
-            String id = xmlCompilerHelper.requireAttribute(resNode, "id", compilerData.getInstallFile());
-            String src = xmlCompilerHelper.requireAttribute(resNode, "src", compilerData.getInstallFile());
+            String id = xmlCompilerHelper.requireAttribute(resNode, "id");
+            String src = xmlCompilerHelper.requireAttribute(resNode, "src");
             // the parse attribute causes substitution to occur
-            boolean substitute = xmlCompilerHelper.validateYesNoAttribute(resNode, "parse", NO, compilerData.getInstallFile());
+            boolean substitute = xmlCompilerHelper.validateYesNoAttribute(resNode, "parse", NO);
             // the parsexml attribute causes the xml document to be parsed
-            boolean parsexml = xmlCompilerHelper.validateYesNoAttribute(resNode, "parsexml", NO, compilerData.getInstallFile());
+            boolean parsexml = xmlCompilerHelper.validateYesNoAttribute(resNode, "parsexml", NO);
 
             String encoding = resNode.getAttribute("encoding");
             if (encoding == null)
@@ -1515,7 +1514,7 @@ public class CompilerConfig extends Thread
         // We process each langpack markup
         for (IXMLElement localNode : locals)
         {
-            String iso3 = xmlCompilerHelper.requireAttribute(localNode, "iso3", compilerData.getInstallFile());
+            String iso3 = xmlCompilerHelper.requireAttribute(localNode, "iso3");
             String path;
 
             path = "bin/langpacks/installer/" + iso3 + ".xml";
@@ -1565,8 +1564,8 @@ public class CompilerConfig extends Thread
         {
             for (IXMLElement authorNode : authors.getChildrenNamed("author"))
             {
-                String name = xmlCompilerHelper.requireAttribute(authorNode, "name", compilerData.getInstallFile());
-                String email = xmlCompilerHelper.requireAttribute(authorNode, "email", compilerData.getInstallFile());
+                String name = xmlCompilerHelper.requireAttribute(authorNode, "name");
+                String email = xmlCompilerHelper.requireAttribute(authorNode, "email");
                 info.addAuthor(new Info.Author(name, email));
             }
         }
@@ -1652,7 +1651,7 @@ public class CompilerConfig extends Thread
 
         // Add the uninstaller as a resource if specified
         IXMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
-        if (xmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", YES, compilerData.getInstallFile()))
+        if (xmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", YES))
         {
             //REFACTOR Change the way uninstaller is created
             mergeManager.addResourceToMerge("com/izforge/izpack/uninstaller/");
@@ -1661,7 +1660,7 @@ public class CompilerConfig extends Thread
             {
                 // default behavior for uninstaller elevation: elevate if installer has to be elevated too
                 info.setRequirePrivilegedExecutionUninstaller(xmlCompilerHelper.validateYesNoAttribute(privileged,
-                        "uninstaller", YES, compilerData.getInstallFile()));
+                        "uninstaller", YES));
             }
 
             if (uninstallInfo != null)
@@ -1743,8 +1742,8 @@ public class CompilerConfig extends Thread
 
         for (IXMLElement variableNode : root.getChildrenNamed("variable"))
         {
-            String name = xmlCompilerHelper.requireAttribute(variableNode, "name", compilerData.getInstallFile());
-            String value = xmlCompilerHelper.requireAttribute(variableNode, "value", compilerData.getInstallFile());
+            String name = xmlCompilerHelper.requireAttribute(variableNode, "name");
+            String value = xmlCompilerHelper.requireAttribute(variableNode, "value");
             if (variables.contains(name))
             {
                 assertionHelper.parseWarn(variableNode, "Variable '" + name + "' being overwritten");
@@ -1768,7 +1767,7 @@ public class CompilerConfig extends Thread
 
         for (IXMLElement variableNode : root.getChildrenNamed("variable"))
         {
-            String name = xmlCompilerHelper.requireAttribute(variableNode, "name", compilerData.getInstallFile());
+            String name = xmlCompilerHelper.requireAttribute(variableNode, "name");
             String value = variableNode.getAttribute("value");
             if (value == null)
             {
@@ -1948,7 +1947,9 @@ public class CompilerConfig extends Thread
         {
             File file = new File(compilerData.getInstallFile()).getAbsoluteFile();
             assertionHelper.assertIsNormalReadableFile(file, "Configuration file");
-            data = parser.parse(new FileInputStream(compilerData.getInstallFile()), file.getAbsolutePath());
+            FileInputStream inputStream = new FileInputStream(compilerData.getInstallFile());
+            data = parser.parse(inputStream, file.getAbsolutePath());
+            inputStream.close();
             // add izpack built in property
             propertyManager.setProperty("izpack.file", file.toString());
         }
@@ -1965,7 +1966,7 @@ public class CompilerConfig extends Thread
         {
             assertionHelper.parseError(data, "this is not an IzPack XML installation file");
         }
-        if (!CompilerData.VERSION.equalsIgnoreCase(xmlCompilerHelper.requireAttribute(data, "version", compilerData.getInstallFile())))
+        if (!CompilerData.VERSION.equalsIgnoreCase(xmlCompilerHelper.requireAttribute(data, "version")))
         {
             assertionHelper.parseError(data, "the file version is different from the compiler version");
         }
@@ -2167,38 +2168,38 @@ public class CompilerConfig extends Thread
      */
     private void addCustomListeners(IXMLElement data) throws Exception
     {
-        XMLElementImpl root = null;
-        for (IXMLElement ixmlElement : root.getChildrenNamed("listener"))
-        {
-            Object[] listener = getCompilerListenerInstance(ixmlElement);
-            if (listener != null)
-            {
-                addCompilerListener((CompilerListener) listener[0]);
-            }
-            String[] typeNames = new String[]{"installer", "uninstaller"};
-            int[] types = new int[]{CustomData.INSTALLER_LISTENER, CustomData.UNINSTALLER_LISTENER};
-
-            for (int i = 0; i < typeNames.length; ++i)
-            {
-                String className = ixmlElement.getAttribute(typeNames[i]);
-                if (className != null)
-                {
-                    // Check for a jar attribute on the listener
-                    String jarPath = ixmlElement.getAttribute("jar");
-                    jarPath = variableSubstitutor.substitute(jarPath, SubstitutionType.TYPE_AT);
-                    if (jarPath == null)
-                    {
-                        jarPath = "bin/customActions/" + className + ".jar";
-                        if (!new File(jarPath).exists())
-                        {
-                            jarPath = compilerHelper.resolveCustomActionsJarPath(className);
-                        }
-                    }
-                    List<OsConstraint> constraints = OsConstraint.getOsList(ixmlElement);
-                    compiler.addCustomListener(types[i], className, jarPath, constraints);
-                }
-            }
-        }
+//        XMLElementImpl root = null;
+//        for (IXMLElement ixmlElement : root.getChildrenNamed("listener"))
+//        {
+//            Object[] listener = getCompilerListenerInstance(ixmlElement);
+//            if (listener != null)
+//            {
+//                addCompilerListener((CompilerListener) listener[0]);
+//            }
+//            String[] typeNames = new String[]{"installer", "uninstaller"};
+//            int[] types = new int[]{CustomData.INSTALLER_LISTENER, CustomData.UNINSTALLER_LISTENER};
+//
+//            for (int i = 0; i < typeNames.length; ++i)
+//            {
+//                String className = ixmlElement.getAttribute(typeNames[i]);
+//                if (className != null)
+//                {
+//                    // Check for a jar attribute on the listener
+//                    String jarPath = ixmlElement.getAttribute("jar");
+//                    jarPath = variableSubstitutor.substitute(jarPath, SubstitutionType.TYPE_AT);
+//                    if (jarPath == null)
+//                    {
+//                        jarPath = "bin/customActions/" + className + ".jar";
+//                        if (!new File(jarPath).exists())
+//                        {
+//                            jarPath = compilerHelper.resolveCustomActionsJarPath(className);
+//                        }
+//                    }
+//                    List<OsConstraint> constraints = OsConstraint.getOsList(ixmlElement);
+//                    compiler.addCustomListener(types[i], className, jarPath, constraints);
+//                }
+//            }
+//        }
 
     }
 

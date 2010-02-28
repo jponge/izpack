@@ -2,7 +2,6 @@ package com.izforge.izpack.compiler.helper;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.exception.CompilerException;
-import com.izforge.izpack.compiler.data.CompilerData;
 
 import java.io.File;
 
@@ -15,9 +14,9 @@ public class AssertionHelper
 {
     private String installFile;
 
-    public AssertionHelper(CompilerData compilerData)
+    public AssertionHelper(String installFile)
     {
-        this.installFile = compilerData.getInstallFile();
+        this.installFile = installFile;
     }
 
     /**

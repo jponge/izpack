@@ -3,12 +3,14 @@ package com.izforge.izpack.compiler.container.provider;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.data.binding.OsModel;
-import com.izforge.izpack.compiler.data.CompilerData;
 import com.thoughtworks.xstream.XStream;
 import org.picocontainer.injectors.Provider;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class IzpackProjectProvider implements Provider
     public static List<String> OS_ATTRIBUTE = Arrays.asList("arch", "jre", "family", "name", "version");
 
 
-    public IzpackProjectInstaller provide(CompilerData compilerData) throws IOException
+    public IzpackProjectInstaller provide(String installFile) throws IOException
     {
         IzpackProjectInstaller izpackProjectInstaller;
 
@@ -43,11 +45,18 @@ public class IzpackProjectProvider implements Provider
             xStream.omitField(IzpackProjectInstaller.class, tag);
         }
 
-        InputStream stream = ClassLoader.getSystemResourceAsStream(compilerData.getInstallFile());
 
-        izpackProjectInstaller = (IzpackProjectInstaller) xStream.fromXML(
-                stream);
-        stream.close();
+        URL resource = ClassLoader.getSystemResource(installFile);
+        InputStream inputStream;
+        if (resource != null)
+        {
+            inputStream = resource.openStream();
+        }
+        else
+        {
+            inputStream = new FileInputStream(new File(installFile));
+        }
+        izpackProjectInstaller = (IzpackProjectInstaller) xStream.fromXML(inputStream);
         return izpackProjectInstaller;
     }
 

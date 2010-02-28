@@ -136,19 +136,9 @@ public class CompilerData
         return installFile;
     }
 
-    public void setInstallFile(String installFile)
-    {
-        this.installFile = installFile;
-    }
-
     public String getInstallText()
     {
         return installText;
-    }
-
-    public void setInstallText(String installText)
-    {
-        this.installText = installText;
     }
 
     public String getBasedir()
@@ -164,11 +154,6 @@ public class CompilerData
     public String getOutput()
     {
         return output;
-    }
-
-    public void setOutput(String output)
-    {
-        this.output = output;
     }
 
     public String getComprFormat()
