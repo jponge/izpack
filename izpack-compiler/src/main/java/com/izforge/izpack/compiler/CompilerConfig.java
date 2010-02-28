@@ -40,6 +40,7 @@ import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
@@ -51,6 +52,7 @@ import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.data.PanelAction.ActionStage;
 import com.izforge.izpack.merge.MergeManager;
+import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
@@ -60,7 +62,6 @@ import org.apache.tools.ant.DirectoryScanner;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -124,13 +125,15 @@ public class CompilerConfig extends Thread
     private MergeManager mergeManager;
     private IzpackProjectInstaller izpackProjectInstaller;
     private AssertionHelper assertionHelper;
+    private PathResolver pathResolver;
+    private CompilerContainer compilerContainer;
 
     /**
      * Constructor
      *
      * @param compilerData Object containing all informations found in command line
      */
-    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller, AssertionHelper assertionHelper)
+    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller, AssertionHelper assertionHelper, PathResolver pathResolver, CompilerContainer compilerContainer)
     {
         this.assertionHelper = assertionHelper;
         this.compilerData = compilerData;
@@ -142,6 +145,8 @@ public class CompilerConfig extends Thread
         this.packager = packager;
         this.mergeManager = mergeManager;
         this.izpackProjectInstaller = izpackProjectInstaller;
+        this.pathResolver = pathResolver;
+        this.compilerContainer = compilerContainer;
     }
 
     /**
@@ -1287,7 +1292,7 @@ public class CompilerConfig extends Thread
                 }
             }
             // adding helps
-            Vector helps = panelElement.getChildrenNamed(AutomatedInstallData.HELP_TAG);
+            Vector<IXMLElement> helps = panelElement.getChildrenNamed(AutomatedInstallData.HELP_TAG);
             if (helps != null)
             {
                 for (Object help1 : helps)
@@ -2170,153 +2175,46 @@ public class CompilerConfig extends Thread
      */
     private void addCustomListeners(IXMLElement data) throws Exception
     {
-//        XMLElementImpl root = null;
-//        for (IXMLElement ixmlElement : root.getChildrenNamed("listener"))
-//        {
-//            Object[] listener = getCompilerListenerInstance(ixmlElement);
-//            if (listener != null)
-//            {
-//                addCompilerListener((CompilerListener) listener[0]);
-//            }
-//            String[] typeNames = new String[]{"installer", "uninstaller"};
-//            int[] types = new int[]{CustomData.INSTALLER_LISTENER, CustomData.UNINSTALLER_LISTENER};
-//
-//            for (int i = 0; i < typeNames.length; ++i)
-//            {
-//                String className = ixmlElement.getAttribute(typeNames[i]);
-//                if (className != null)
-//                {
-//                    // Check for a jar attribute on the listener
-//                    String jarPath = ixmlElement.getAttribute("jar");
-//                    jarPath = variableSubstitutor.substitute(jarPath, SubstitutionType.TYPE_AT);
-//                    if (jarPath == null)
-//                    {
-//                        jarPath = "bin/customActions/" + className + ".jar";
-//                        if (!new File(jarPath).exists())
-//                        {
-//                            jarPath = compilerHelper.resolveCustomActionsJarPath(className);
-//                        }
-//                    }
-//                    List<OsConstraint> constraints = OsConstraint.getOsList(ixmlElement);
-//                    compiler.addCustomListener(types[i], className, jarPath, constraints);
-//                }
-//            }
-//        }
+        addCompilerListener(instanciateCompilerListener());
+        for (Listener listener : izpackProjectInstaller.getListeners())
+        {
 
+        }
     }
 
     /**
-     * Returns the compiler listener which is defined in the xml element. As xml element a "listner"
-     * node will be expected. Additional it is expected, that either "findIzPackResource" returns an
-     * url based on "bin/customActions/[className].jar", or that the listener element has a jar
-     * attribute specifying the listener jar path. The class will be loaded via an URLClassLoader.
+     * Load and instanciate compiler listeners defined by the installer file
      *
-     * @param var the xml element of the "listener" node
      * @return instance of the defined compiler listener
-     * @throws Exception
      */
-    private Object[] getCompilerListenerInstance(IXMLElement var) throws Exception
+    private List<CompilerListener> instanciateCompilerListener()
     {
+        ArrayList<CompilerListener> result = new ArrayList<CompilerListener>();
         for (Listener listener : izpackProjectInstaller.getListeners())
         {
             if (listener.getStage().equals(Stage.compiler))
             {
-
+                listener.getOs();
+                Class<? extends CompilerListener> clazz = pathResolver.searchFullClassNameInClassPath(listener.getClassname());
+                if (clazz != null)
+                {
+                    compilerContainer.addComponent(clazz);
+                    result.add(compilerContainer.getComponent(clazz));
+                }
             }
         }
-
-        String className = var.getAttribute("compiler");
-        Class listener = null;
-        Object instance = null;
-        if (className == null)
-        {
-            return (null);
-        }
-
-        // CustomAction files come in jars packaged IzPack, or they can be
-        // specified via a jar attribute on the listener
-        String jarPath = var.getAttribute("jar");
-        jarPath = variableSubstitutor.substitute(jarPath, SubstitutionType.TYPE_AT);
-        if (jarPath == null)
-        {
-            jarPath = "bin/customActions/" + className + ".jar";
-        }
-        URL url = findIzPackResource(jarPath, "CustomAction jar file", var);
-        String fullName = compilerHelper.getFullClassName(url, className);
-        if (fullName == null)
-        {
-            // class not found
-            return null;
-        }
-        if (url != null)
-        {
-            if (getClass().getResource("/" + jarPath) != null)
-            { // Oops, standalone, URLClassLoader will not work ...
-                // Write the jar to a temp file.
-                InputStream in = null;
-                FileOutputStream outFile = null;
-                byte[] buffer = new byte[5120];
-                File tf = null;
-                try
-                {
-                    tf = File.createTempFile("izpj", ".jar");
-                    tf.deleteOnExit();
-                    outFile = new FileOutputStream(tf);
-                    in = getClass().getResourceAsStream("/" + jarPath);
-                    long bytesCopied = 0;
-                    int bytesInBuffer;
-                    while ((bytesInBuffer = in.read(buffer)) != -1)
-                    {
-                        outFile.write(buffer, 0, bytesInBuffer);
-                        bytesCopied += bytesInBuffer;
-                    }
-                }
-                finally
-                {
-                    if (in != null)
-                    {
-                        in.close();
-                    }
-                    if (outFile != null)
-                    {
-                        outFile.close();
-                    }
-                }
-                url = tf.toURL();
-
-            }
-            // Use the class loader of the interface as parent, else
-            // compile will fail at using it via an Ant task.
-            URLClassLoader ucl = new URLClassLoader(new URL[]{url}, CompilerListener.class
-                    .getClassLoader());
-            listener = ucl.loadClass(fullName);
-        }
-        if (listener != null)
-        {
-            instance = listener.newInstance();
-        }
-        else
-        {
-            assertionHelper.parseError(var, "Cannot find defined compiler listener " + className);
-        }
-        if (!CompilerListener.class.isInstance(instance))
-        {
-            assertionHelper.parseError(var, "'" + className + "' must be implemented "
-                    + CompilerListener.class.toString());
-        }
-        List<OsConstraint> constraints = OsConstraint.getOsList(var);
-        return (new Object[]{instance, className, constraints});
+        return result;
     }
 
     /**
      * Add a CompilerListener. A registered CompilerListener will be called at every enhancmend
      * point of compiling.
      *
-     * @param pe CompilerListener which should be added
+     * @param compilerListeners CompilerListener which should be added
      */
-    private void addCompilerListener(CompilerListener pe)
+    private void addCompilerListener(List<CompilerListener> compilerListeners)
     {
-        compilerListeners.add(pe);
+        this.compilerListeners.addAll(compilerListeners);
     }
 
     /**
