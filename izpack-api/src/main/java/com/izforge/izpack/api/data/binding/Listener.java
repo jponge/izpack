@@ -1,5 +1,6 @@
 package com.izforge.izpack.api.data.binding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,12 +18,18 @@ public class Listener
 
     private String jar;
 
+    /**
+     * Files necessary for the listener. Filled by the compiler during installation generation.
+     */
+    private List<String> files;
+
     public Listener(String classname, Stage stage, List<OsModel> os, String jar)
     {
         this.classname = classname;
         this.stage = stage;
         this.os = os;
         this.jar = jar;
+        files = new ArrayList<String>();
     }
 
     public String getClassname()
@@ -53,5 +60,15 @@ public class Listener
                 ", stage=" + stage +
                 ", os=" + os +
                 '}';
+    }
+
+    public List<String> getFiles()
+    {
+        return files;
+    }
+
+    public void setFiles(List<String> files)
+    {
+        this.files = files;
     }
 }

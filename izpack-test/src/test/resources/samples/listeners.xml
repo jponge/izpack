@@ -15,8 +15,16 @@
         <langpack iso3="eng" />
     </locale>
 
+    <!-- The listeners section for CustomActions -->
     <listeners>
-        <listener installer="SummaryLoggerInstallerListener" />
+        <listener classname="SummaryLoggerInstallerListener" stage="install" />
+        <listener classname="RegistryInstallerListener" stage="install">
+            <os family="windows" />
+            <os arch="ppc" />
+        </listener>
+        <listener className="RegistryUninstallerListener" stage="uninstall">
+            <os family="windows" />
+        </listener>
     </listeners>
 
     <panels>

@@ -200,7 +200,7 @@ public class CompilerConfig extends Thread
         loadPackagingInformation(data);
 
         // Listeners to various events
-        addCustomListeners(data);
+        addCustomListeners();
 
         // Read the properties and perform replacement on the rest of the tree
         substituteProperties(data);
@@ -2170,14 +2170,28 @@ public class CompilerConfig extends Thread
      * install.xml like : <listeners> <listener compiler="PermissionCompilerListener"
      * installer="PermissionInstallerListener"/> </<listeners>
      *
-     * @param data the XML data
      * @throws Exception Description of the Exception
      */
-    private void addCustomListeners(IXMLElement data) throws Exception
+    public void addCustomListeners() throws Exception
     {
         addCompilerListener(instanciateCompilerListener());
         for (Listener listener : izpackProjectInstaller.getListeners())
         {
+            final Stage stage = listener.getStage();
+            if (Stage.isInInstaller(stage))
+            {
+                // If a jar is defined, add it
+                if (listener.getJar() != null)
+                {
+                    mergeManager.addResourceToMerge(listener.getJar());
+                }
+                else
+                {
+                    // Merge the package containing the listener class
+                    Class aClass = pathResolver.searchFullClassNameInClassPath(listener.getClassname());
+                    mergeManager.addResourceToMerge(aClass.getPackage().getName());
+                }
+            }
 
         }
     }

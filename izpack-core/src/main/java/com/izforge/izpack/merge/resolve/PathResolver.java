@@ -72,7 +72,7 @@ public class PathResolver
         {
             return result;
         }
-        throw new IzPackException("The path " + sourcePath + " is not present inside the classpath.\n The current classpath is :" + getCurrentClasspath("com/izforge/izpack/uninstaller/"));
+        throw new IzPackException("The path " + sourcePath + " is not present inside the classpath.\n The current classpath is :" + getCurrentClasspath(sourcePath));
     }
 
     public PanelMerge getPanelMerge(String className)
@@ -259,6 +259,14 @@ public class PathResolver
     }
 
 
+    /**
+     * Simply return the left side of the last .<br />
+     * com.izpack.Aclass return com.izpack <br />
+     * If the is no '.' in the charsequence, return the default package for panels.
+     *
+     * @param className className to process.
+     * @return Extracted package from classname or the default package
+     */
     public String getPackagePathFromClassName(String className)
     {
         if (className.contains("."))

@@ -1,7 +1,5 @@
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.compiler.container.CompilerContainer;
-import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.matcher.MergeMatcher;
 import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.merge.MergeManagerImpl;
@@ -9,11 +7,8 @@ import com.izforge.izpack.merge.resolve.PathResolver;
 import org.apache.maven.shared.jar.JarAnalyzer;
 import org.apache.maven.shared.jar.classes.JarClasses;
 import org.apache.maven.shared.jar.classes.JarClassesAnalysis;
-import org.hamcrest.core.Is;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,27 +18,11 @@ import static org.testng.Assert.fail;
 /**
  * Test for an Izpack compilation
  */
-public class CompilationTest
+public class CompilationTest extends AbstractCompilationTest
 {
-
-    private File baseDir = new File(getClass().getClassLoader().getResource("samples").getFile());
-    private File installerFile = new File(getClass().getClassLoader().getResource("samples/helloAndFinish.xml").getFile());
-    private File out = new File(baseDir, "out.jar");
-
-    private CompilerContainer compilerContainer;
-
-    private CompilerData data;
-
-    @BeforeMethod
-    public void cleanFiles()
+    String getInstallFileName()
     {
-        assertThat(baseDir.exists(), Is.is(true));
-        out.delete();
-        data = new CompilerData(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), out.getAbsolutePath());
-        compilerContainer = new CompilerContainer();
-        compilerContainer.initBindings();
-        compilerContainer.addConfig("installFile", installerFile.getAbsolutePath());
-        compilerContainer.addComponent(CompilerData.class, data);
+        return "samples/helloAndFinish.xml";
     }
 
     @Test
