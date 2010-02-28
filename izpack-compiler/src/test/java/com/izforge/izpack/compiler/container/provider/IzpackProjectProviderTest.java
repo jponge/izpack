@@ -50,8 +50,10 @@ public class IzpackProjectProviderTest
                         HasPropertyWithValue.<Listener>hasProperty("classname", Is.is("RegistryInstallerListener")),
                         HasPropertyWithValue.<Listener>hasProperty("stage", Is.is(Stage.install)),
                         HasPropertyWithValue.<Listener>hasProperty("os",
-                                HasPropertyWithValue.<OsModel>hasProperty("family", Is.is("windows"))))
-        ));
+                                IsCollectionContaining.hasItems(
+                                        HasPropertyWithValue.<OsModel>hasProperty("family", Is.is("windows")),
+                                        HasPropertyWithValue.<OsModel>hasProperty("arch", Is.is("ppc"))
+                                )))));
 
 
     }

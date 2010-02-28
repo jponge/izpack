@@ -13,15 +13,15 @@ public class Listener
 
     private Stage stage;
 
-    private List<OsModel> osList;
+    private List<OsModel> os;
 
     private String jar;
 
-    public Listener(String classname, Stage stage, List<OsModel> osList, String jar)
+    public Listener(String classname, Stage stage, List<OsModel> os, String jar)
     {
         this.classname = classname;
         this.stage = stage;
-        this.osList = osList;
+        this.os = os;
         this.jar = jar;
     }
 
@@ -40,9 +40,9 @@ public class Listener
         return stage;
     }
 
-    public List<OsModel> getOsList()
+    public List<OsModel> getOs()
     {
-        return osList;
+        return os;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class Listener
         return "Listener{" +
                 "classname='" + classname + '\'' +
                 ", stage=" + stage +
-                ", osList=" + osList +
+                ", os=" + os +
                 '}';
     }
 }

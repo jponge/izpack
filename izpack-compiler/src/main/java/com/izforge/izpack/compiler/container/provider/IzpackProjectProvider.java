@@ -67,6 +67,8 @@ public class IzpackProjectProvider implements Provider
         {
             xStream.aliasAttribute(Listener.class, listenerAttribute, listenerAttribute);
         }
+        // Implicit collection for os list in listener
+        xStream.addImplicitCollection(Listener.class, "os", OsModel.class);
         for (String osAttribute : OS_ATTRIBUTE)
         {
             xStream.aliasAttribute(OsModel.class, osAttribute, osAttribute);
