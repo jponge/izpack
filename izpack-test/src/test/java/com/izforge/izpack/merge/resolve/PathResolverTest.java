@@ -163,5 +163,10 @@ public class PathResolverTest
         assertThat(pathFromClassName, Is.is("com/izforge/izpack/panels/"));
     }
 
-
+    @Test
+    public void testSearchForFullClassName() throws Exception
+    {
+        String fullClassName = pathResolver.searchFullClassNameInClassPath(PathResolver.class.getSimpleName());
+        assertThat(fullClassName, Is.is(PathResolver.class.getCanonicalName()));
+    }
 }

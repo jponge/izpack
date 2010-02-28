@@ -2,12 +2,14 @@ package com.izforge.izpack.merge.resolve;
 
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.exception.MergeException;
+import com.izforge.izpack.merge.ClassResolver;
 import com.izforge.izpack.merge.Mergeable;
 import com.izforge.izpack.merge.file.FileMerge;
 import com.izforge.izpack.merge.jar.JarMerge;
 import com.izforge.izpack.merge.panel.PanelMerge;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
@@ -202,7 +204,7 @@ public class PathResolver
     {
         if (!isJar(url))
         {
-            throw new MergeException("Only a jar can be merge with an URL in  parameter. The current url is " + url);
+            return new FileMerge(url, mergeContent);
         }
         return new JarMerge(url, processUrlToJarPath(url), mergeContent);
     }
@@ -264,6 +266,37 @@ public class PathResolver
             return className.substring(0, className.lastIndexOf(".")).replaceAll("\\.", "/") + "/";
         }
         return BASE_CLASSNAME_PATH;
+    }
+
+    public String searchFullClassNameInClassPath(final String className)
+    {
+        final String fileToSearch = className + ".class";
+        try
+        {
+            Enumeration<URL> urlEnumeration = ClassLoader.getSystemResources("");
+            while (urlEnumeration.hasMoreElements())
+            {
+                URL url = urlEnumeration.nextElement();
+                Mergeable mergeable = getMergeableFromURL(url);
+                final File file = mergeable.find(new FileFilter()
+                {
+                    public boolean accept(File pathname)
+                    {
+
+                        return pathname.isDirectory() || pathname.getName().equals(fileToSearch);
+                    }
+                });
+                if (file != null)
+                {
+                    return ClassResolver.processFileToClassName(file);
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            throw new MergeException(e);
+        }
+        return null;
     }
 
 }

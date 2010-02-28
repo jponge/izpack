@@ -1,13 +1,13 @@
 package com.izforge.izpack.merge.panel;
 
 import com.izforge.izpack.api.exception.MergeException;
+import com.izforge.izpack.merge.ClassResolver;
 import com.izforge.izpack.merge.Mergeable;
 import org.apache.tools.zip.ZipOutputStream;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.OutputStream;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -20,9 +20,7 @@ public class PanelMerge implements Mergeable
 {
 
     // TODO Externalize this field in a property
-    private final List<String> packageBegin = Arrays.asList("com/", "org/", "net/");
     private List<Mergeable> packageMerge;
-    private Map<OutputStream, List<String>> mergeContent;
     private String panelName;
     private FileFilter fileFilter;
 
@@ -30,7 +28,6 @@ public class PanelMerge implements Mergeable
     {
         this.panelName = panelName;
         packageMerge = packageMergeable;
-        this.mergeContent = mergeContent;
         fileFilter = new FileFilter()
         {
             public boolean accept(File pathname)
@@ -86,29 +83,10 @@ public class PanelMerge implements Mergeable
             File file = mergeable.find(fileFilter);
             if (file != null)
             {
-                return processFileToClassName(file);
+                return ClassResolver.processFileToClassName(file);
             }
         }
         throw new MergeException("Panel file " + panelName + " not found");
     }
 
-    /**
-     * Search for a standard package begin like com/ org/ net/
-     *
-     * @param file File to process
-     * @return Full className
-     */
-    private String processFileToClassName(File file)
-    {
-        String absolutePath = file.getAbsolutePath();
-        for (String packageString : packageBegin)
-        {
-            if (!absolutePath.contains(packageString))
-            {
-                continue;
-            }
-            return absolutePath.substring(absolutePath.lastIndexOf(packageString)).replaceAll("\\.class", "").replaceAll("/", ".");
-        }
-        throw new MergeException("No standard package begin found in " + file.getPath());
-    }
 }
