@@ -13,16 +13,24 @@ public class Listener
 
     private OsModel os;
 
-    public Listener(String classname, Stage stage, OsModel os)
+    private String jar;
+
+    public Listener(String classname, Stage stage, OsModel os, String jar)
     {
         this.classname = classname;
         this.stage = stage;
         this.os = os;
+        this.jar = jar;
     }
 
     public String getClassname()
     {
         return classname;
+    }
+
+    public String getJar()
+    {
+        return jar;
     }
 
     public Stage getStage()

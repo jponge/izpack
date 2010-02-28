@@ -33,6 +33,8 @@ import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
 import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
+import com.izforge.izpack.api.data.binding.Listener;
+import com.izforge.izpack.api.data.binding.Stage;
 import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.rules.Condition;
@@ -2215,6 +2217,14 @@ public class CompilerConfig extends Thread
      */
     private Object[] getCompilerListenerInstance(IXMLElement var) throws Exception
     {
+        for (Listener listener : izpackProjectInstaller.getListeners())
+        {
+            if (listener.getStage().equals(Stage.compiler))
+            {
+
+            }
+        }
+
         String className = var.getAttribute("compiler");
         Class listener = null;
         Object instance = null;

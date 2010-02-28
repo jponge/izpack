@@ -7,7 +7,7 @@ package com.izforge.izpack.api.data.binding;
  */
 public enum Stage
 {
-    install, uninstall, both
+    install, uninstall, compiler
 
 
 }
