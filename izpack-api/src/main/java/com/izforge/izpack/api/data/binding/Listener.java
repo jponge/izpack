@@ -1,5 +1,7 @@
 package com.izforge.izpack.api.data.binding;
 
+import java.util.List;
+
 /**
  * Listener entity
  *
@@ -11,15 +13,15 @@ public class Listener
 
     private Stage stage;
 
-    private OsModel os;
+    private List<OsModel> osList;
 
     private String jar;
 
-    public Listener(String classname, Stage stage, OsModel os, String jar)
+    public Listener(String classname, Stage stage, List<OsModel> osList, String jar)
     {
         this.classname = classname;
         this.stage = stage;
-        this.os = os;
+        this.osList = osList;
         this.jar = jar;
     }
 
@@ -38,9 +40,9 @@ public class Listener
         return stage;
     }
 
-    public OsModel getOs()
+    public List<OsModel> getOsList()
     {
-        return os;
+        return osList;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class Listener
         return "Listener{" +
                 "classname='" + classname + '\'' +
                 ", stage=" + stage +
-                ", os=" + os +
+                ", osList=" + osList +
                 '}';
     }
 }
