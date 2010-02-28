@@ -42,6 +42,7 @@ public class CompilationTest
         data = new CompilerData(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), out.getAbsolutePath());
         compilerContainer = new CompilerContainer();
         compilerContainer.initBindings();
+        compilerContainer.addConfig("installFile", installerFile.getAbsolutePath());
         compilerContainer.addComponent(CompilerData.class, data);
     }
 
