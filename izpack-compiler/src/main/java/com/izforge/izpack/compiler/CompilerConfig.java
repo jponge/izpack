@@ -2189,7 +2189,7 @@ public class CompilerConfig extends Thread
                 {
                     // Merge the package containing the listener class
                     Class aClass = pathResolver.searchFullClassNameInClassPath(listener.getClassname());
-                    mergeManager.addResourceToMerge(aClass.getPackage().getName());
+                    mergeManager.addResourceToMerge(aClass.getPackage().getName().replaceAll("\\.", "/") + "/");
                 }
             }
 

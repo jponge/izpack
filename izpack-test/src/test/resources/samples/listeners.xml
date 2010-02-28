@@ -22,7 +22,7 @@
             <os family="windows" />
             <os arch="ppc" />
         </listener>
-        <listener className="RegistryUninstallerListener" stage="uninstall">
+        <listener classname="RegistryUninstallerListener" stage="uninstall">
             <os family="windows" />
         </listener>
     </listeners>

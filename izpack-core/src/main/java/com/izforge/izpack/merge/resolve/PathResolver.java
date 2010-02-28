@@ -290,7 +290,6 @@ public class PathResolver
                 {
                     public boolean accept(File pathname)
                     {
-
                         return pathname.isDirectory() || pathname.getName().equals(fileToSearch);
                     }
                 });
