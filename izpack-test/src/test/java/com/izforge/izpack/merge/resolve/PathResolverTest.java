@@ -166,7 +166,7 @@ public class PathResolverTest
     @Test
     public void testSearchForFullClassName() throws Exception
     {
-        String fullClassName = pathResolver.searchFullClassNameInClassPath(PathResolver.class.getSimpleName());
-        assertThat(fullClassName, Is.is(PathResolver.class.getCanonicalName()));
+        Class fullClassName = pathResolver.searchFullClassNameInClassPath(PathResolver.class.getSimpleName());
+        assertThat(fullClassName.getName(), Is.is(PathResolver.class.getName()));
     }
 }

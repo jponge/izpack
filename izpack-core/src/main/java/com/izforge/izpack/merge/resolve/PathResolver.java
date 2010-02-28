@@ -268,7 +268,7 @@ public class PathResolver
         return BASE_CLASSNAME_PATH;
     }
 
-    public String searchFullClassNameInClassPath(final String className)
+    public Class searchFullClassNameInClassPath(final String className)
     {
         final String fileToSearch = className + ".class";
         try
@@ -288,11 +288,11 @@ public class PathResolver
                 });
                 if (file != null)
                 {
-                    return ClassResolver.processFileToClassName(file);
+                    return Class.forName(ClassResolver.processFileToClassName(file));
                 }
             }
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             throw new MergeException(e);
         }
