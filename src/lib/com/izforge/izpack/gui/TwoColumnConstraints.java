@@ -1,22 +1,19 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
  * 
- * http://izpack.org/
- * http://izpack.codehaus.org/
+ * http://izpack.org/ http://izpack.codehaus.org/
  * 
  * Copyright 2002 Elmar Grom
  * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- *     
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package com.izforge.izpack.gui;
@@ -25,7 +22,7 @@ import java.awt.Component;
 
 /**
  * The constraints class to use with <code>TwoColumnLayout</code>.
- *
+ * 
  * @author Elmar Grom
  * @version 0.0.1 / 11/15/02
  * @see com.izforge.izpack.gui.TwoColumnLayout
@@ -55,18 +52,16 @@ public class TwoColumnConstraints implements Cloneable
 
     /**
      * Indicates where to place the associated component. <code>NORTH</code> will place the
-     * component in the title margin. </code>WEST</code> will place the component in the left
-     * column and <code>EAST</code> will place it in the right column. If <code>BOTH</code> is
-     * used, the component will straddle both columns. <code>WESTONLY</code> and <code>EASTONLY</code>
-     * will place the element accordingly but make sure that nothing is placed in the opposite
-     * column.
+     * component in the title margin. </code>WEST</code> will place the component in the left column
+     * and <code>EAST</code> will place it in the right column. If <code>BOTH</code> is used, the
+     * component will straddle both columns. <code>WESTONLY</code> and <code>EASTONLY</code> will
+     * place the element accordingly but make sure that nothing is placed in the opposite column.
      */
     public int position = WEST;
 
     /**
      * How to align the associated component, <code>LEFT</code>, <code>CENTER</code> or
-     * <code>RIGHT</code>. Note that this setting only taks effect in the component is placed in
-     * the title margin.
+     * <code>RIGHT</code>.
      */
     public int align = LEFT;
 
@@ -88,9 +83,10 @@ public class TwoColumnConstraints implements Cloneable
 
     /**
      * Creates a copy of this two column constraint.
-     *
+     * 
      * @return a copy of this <code>TwoColumnConstraints</code>
      */
+    @Override
     public Object clone()
     {
         TwoColumnConstraints newObject = new TwoColumnConstraints();

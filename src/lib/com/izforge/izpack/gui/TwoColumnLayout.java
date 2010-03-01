@@ -1,27 +1,31 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
  * 
- * http://izpack.org/
- * http://izpack.codehaus.org/
+ * http://izpack.org/ http://izpack.codehaus.org/
  * 
  * Copyright 2002 Elmar Grom
  * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- *     
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package com.izforge.izpack.gui;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.LayoutManager2;
+import java.awt.Stroke;
 import java.util.Vector;
 
 /**
@@ -73,19 +77,19 @@ import java.util.Vector;
  * The location of the rules is determined based on the alignment strategy as follows:<br>
  * <ul>
  * <li>The right rule is always located at the edge of the right margin.
- * <li><b>Left Alignment:</b> The left rule is located the edge of the left margin. The center
- * rule is located far enough to the right to clear the widest component in the left column.
- * <li><b>Center Alignment:</b> The center rule is located at the center of the panel. The left
- * rule is located far enough to the left to make the widest component in the left column fit.
- * <li><b>Right Alignment</b> The center rule is located far enough to the left of the right rule
- * to make the widest component in the right column fit. The left rule is located far enough to the
+ * <li><b>Left Alignment:</b> The left rule is located the edge of the left margin. The center rule
+ * is located far enough to the right to clear the widest component in the left column.
+ * <li><b>Center Alignment:</b> The center rule is located at the center of the panel. The left rule
+ * is located far enough to the left to make the widest component in the left column fit.
+ * <li><b>Right Alignment</b> The center rule is located far enough to the left of the right rule to
+ * make the widest component in the right column fit. The left rule is located far enough to the
  * left to make the widest component in the left column fit.
  * </ul>
  * All components clump together vertically and are positioned right beneath the title margin. This
  * is of course not a very appealing presentation. By setting how the remaining vertical space is
  * distributed above and below the cluster of components the cluster can be positioned more
  * favorably (see the shaded area in the illustration).
- *
+ * 
  * @author Elmar Grom
  * @version 0.0.1 / 11/14/02
  * @see com.izforge.izpack.gui.TwoColumnConstraints
@@ -102,7 +106,9 @@ public class TwoColumnLayout implements LayoutManager2
     /**
      * holds all the components and layout constraints.
      */
-    private Vector[] components = {new Vector(), new Vector()};
+    @SuppressWarnings("unchecked")
+    private Vector<TwoColumnConstraints>[] components = new Vector[] { new Vector<TwoColumnConstraints>(),
+            new Vector<TwoColumnConstraints>() };
 
     /**
      * holds the component to be placed in the title region, including layout constraints.
@@ -129,6 +135,8 @@ public class TwoColumnLayout implements LayoutManager2
      */
     private int gap = 5;
 
+    private int colWidth;
+
     private int alignment = LEFT;
 
     private int leftRule;
@@ -142,20 +150,23 @@ public class TwoColumnLayout implements LayoutManager2
     /**
      * Constructs a <code>TwoColumnLayout</code> layout manager. To add components use the
      * container's <code>add(comp, constraints)</code> method with a TwoColumnConstraints object.
-     *
-     * @param margin    the margin width to use on the left and right side in % of the total container
-     *                  width. Values less than 0% and greater than 50% are not accepted.
-     * @param gap       the gap between the two columns.
-     * @param indent    the indent to use for components that have that constraint set. This is a value
-     *                  in pixels.
+     * 
+     * @param margin the margin width to use on the left and right side in % of the total container
+     *            width. Values less than 0% and greater than 50% are not accepted.
+     * @param gap the gap between the two columns.
+     * @param indent the indent to use for components that have that constraint set. This is a value
+     *            in pixels.
      * @param topBuffer the percentage of left over vertical space to place on top of the component
-     *                  cluster. Values between 0% and 100% are accepted.
+     *            cluster. Values between 0% and 100% are accepted.
+     * @param colWidth with of the left column in percent of the whole panel. Set to 0 for automatic
+     *            width.
      * @param alignment how to align the overall layout. Legal values are LEFT, CENTER, RIGHT.
      */
-    public TwoColumnLayout(int margin, int gap, int indent, int topBuffer, int alignment)
+    public TwoColumnLayout(int margin, int gap, int indent, int topBuffer, int colWidth, int alignment)
     {
         this.indent = indent;
         this.gap = gap;
+        this.colWidth = colWidth;
 
         if ((margin >= 0) && (margin <= 50))
         {
@@ -172,10 +183,28 @@ public class TwoColumnLayout implements LayoutManager2
     }
 
     /**
-     * Sets the constraints for the specified component in this layout. <code>null</code> is a
-     * legal value for a component, but not for a constraints object.
-     *
-     * @param comp        the component to be modified.
+     * Constructs a <code>TwoColumnLayout</code> layout manager. To add components use the
+     * container's <code>add(comp, constraints)</code> method with a TwoColumnConstraints object.
+     * 
+     * @param margin the margin width to use on the left and right side in % of the total container
+     *            width. Values less than 0% and greater than 50% are not accepted.
+     * @param gap the gap between the two columns.
+     * @param indent the indent to use for components that have that constraint set. This is a value
+     *            in pixels.
+     * @param topBuffer the percentage of left over vertical space to place on top of the component
+     *            cluster. Values between 0% and 100% are accepted.
+     * @param alignment how to align the overall layout. Legal values are LEFT, CENTER, RIGHT.
+     */
+    public TwoColumnLayout(int margin, int gap, int indent, int topBuffer, int alignment)
+    {
+        this(margin, gap, indent, topBuffer, 0, alignment);
+    }
+
+    /**
+     * Sets the constraints for the specified component in this layout. <code>null</code> is a legal
+     * value for a component, but not for a constraints object.
+     * 
+     * @param comp the component to be modified.
      * @param constraints the constraints to be applied.
      */
     public void addLayoutComponent(Component comp, Object constraints)
@@ -310,7 +339,7 @@ public class TwoColumnLayout implements LayoutManager2
 
     /**
      * Lays out the container in the specified panel.
-     *
+     * 
      * @param parent the component which needs to be laid out.
      */
     public void layoutContainer(Container parent)
@@ -327,7 +356,7 @@ public class TwoColumnLayout implements LayoutManager2
      * <li><code>rightRule</code>
      * <li><code>centerRule</code>
      * </ul>
-     *
+     * 
      * @param parent the component which needs to be laid out.
      */
     private void positionRules(Container parent)
@@ -337,29 +366,41 @@ public class TwoColumnLayout implements LayoutManager2
         if (alignment == LEFT)
         {
             leftRule = margin;
-            centerRule = leftRule + minimumColumnWidth(LEFT, parent) + gap;
             rightRule = parent.getWidth() - margin;
+            if (colWidth > 0)
+            {
+                centerRule = leftRule + (rightRule - leftRule) / 100 * colWidth + gap;
+            }
+            else
+            {
+                centerRule = leftRule + minimumColumnWidth(LEFT, parent) + gap;
+            }
         }
-
         else if (alignment == CENTER)
         {
             centerRule = (int) (parent.getMinimumSize().getWidth() / 2);
             leftRule = centerRule - minimumColumnWidth(LEFT, parent) - gap;
             rightRule = parent.getWidth() - margin;
         }
-
         else if (alignment == RIGHT)
         {
             rightRule = parent.getWidth() - margin;
-            centerRule = rightRule - minimumColumnWidth(RIGHT, parent);
             leftRule = centerRule - minimumColumnWidth(LEFT, parent) - gap;
+            if (colWidth > 0)
+            {
+                centerRule = rightRule - (rightRule - leftRule) / 100 * colWidth;
+            }
+            else
+            {
+                centerRule = rightRule - minimumColumnWidth(RIGHT, parent);
+            }
         }
     }
 
     /**
      * Positions the title component and sets the variable <code>titleHeight</code>. <b>Note:</b>
      * this method depends on the fact that the rules are set to their correct layout position.
-     *
+     * 
      * @param parent the component which needs to be laid out.
      */
     private void positionTitle(Container parent)
@@ -400,7 +441,7 @@ public class TwoColumnLayout implements LayoutManager2
 
     /**
      * Positions all components in the container.
-     *
+     * 
      * @param parent the component which needs to be laid out.
      */
     private void positionComponents(Container parent)
@@ -451,12 +492,12 @@ public class TwoColumnLayout implements LayoutManager2
     }
 
     /**
-     * Positiones one component as instructed. Constraints for each component, such as
-     * <code>stretch</code>, <code>BOTH</code> and <code>indent</code> are taken into
-     * account. In addition, empty comonents are handled properly.
-     *
-     * @param y      the y location within the continer, where the component should be positioned.
-     * @param row    the row of the component
+     * Positions one component as instructed. Constraints for each component, such as
+     * <code>stretch</code>, <code>BOTH</code> and <code>indent</code> are taken into account. In
+     * addition, empty components are handled properly.
+     * 
+     * @param y the y location within the container, where the component should be positioned.
+     * @param row the row of the component
      * @param column the column of the component
      * @param parent the container which needs to be laid out.
      */
@@ -466,7 +507,7 @@ public class TwoColumnLayout implements LayoutManager2
 
         try
         {
-            constraints = (TwoColumnConstraints) (components[column].elementAt(row));
+            constraints = components[column].elementAt(row);
         }
         catch (Throwable exception)
         {
@@ -485,70 +526,94 @@ public class TwoColumnLayout implements LayoutManager2
             // set x to the appropriate rule. The only need to
             // modify this is for indent
             // --------------------------------------------------
-            if (column == LEFT)
+            boolean stretchBool = constraints.stretch;
+            boolean indentBool = constraints.indent;
+            int align = constraints.align;
+            if (constraints.position == TwoColumnConstraints.BOTH)
             {
-                x = leftRule;
+                width = getWidth(leftRule, rightRule, stretchBool, indentBool, width);
+                if (width > (rightRule - leftRule))
+                {
+                    stretchBool = true;
+                }
+                x = getPosition(leftRule, rightRule, stretchBool, indentBool, width, align);
+            }
+            else if (column == LEFT)
+            {
+                width = getWidth(leftRule, centerRule, stretchBool, indentBool, width);
+                x = getPosition(leftRule, centerRule, stretchBool, indentBool, width, align);
             }
             else
             {
-                x = centerRule;
+                width = getWidth(centerRule, rightRule, stretchBool, indentBool, width);
+                x = getPosition(centerRule, rightRule, stretchBool, indentBool, width, align);
             }
 
             if (component != null)
             {
-                // --------------------------------------------------
-                // set the width for stretch based on BOTH, LEFT and
-                // RIGHT positionsing
-                // --------------------------------------------------
-                if ((constraints.stretch) && (constraints.position == TwoColumnConstraints.BOTH))
-                {
-                    width = rightRule - leftRule;
-                    x = leftRule;
-                }
-                else if ((constraints.stretch) && (column == LEFT))
-                {
-                    width = centerRule - leftRule;
-                }
-                else if ((constraints.stretch) && (column == RIGHT))
-                {
-                    width = rightRule - centerRule;
-                }
-
-                // --------------------------------------------------
-                // if we straddle both columns but are not stretching
-                // use the preferred width as long as it is less then
-                // the width of both columns combined. Also set the x
-                // position to left, just to be sure.
-                // --------------------------------------------------
-                else if (constraints.position == TwoColumnConstraints.BOTH)
-                {
-                    if (width > (rightRule - leftRule))
-                    {
-                        width = rightRule - leftRule;
-                    }
-                    x = leftRule;
-                }
-
-                // --------------------------------------------------
-                // correct for indent if this option is set
-                // --------------------------------------------------
-                if (constraints.indent)
-                {
-                    width -= indent;
-                    x += indent;
-                }
-
                 component.setBounds(x, y, width, height);
             }
         }
     }
 
+    private int getWidth(int left, int right, boolean stretch, boolean indent, int componentWidth)
+    {
+        int width = componentWidth;
+        // --------------------------------------------------
+        // set the width for stretch based on BOTH, LEFT and
+        // RIGHT positioning
+        // --------------------------------------------------
+        if (stretch)
+        {
+            width = right - left;
+        }
+
+        // --------------------------------------------------
+        // correct for indent if this option is set
+        // --------------------------------------------------
+        if (indent)
+        {
+            width -= this.indent;
+        }
+        return width;
+    }
+
+    private int getPosition(int left, int right, boolean stretch, boolean indent, int componentWidth, int align)
+    {
+        int position = left;
+
+        // --------------------------------------------------
+        // Correct position with alignment parameters
+        // --------------------------------------------------
+        if (align == TwoColumnConstraints.LEFT)
+        {
+            position = left;
+        }
+        else if (align == TwoColumnConstraints.CENTER)
+        {
+            position += (right - left) / 2 - componentWidth / 2 - this.gap / 2;
+        }
+        else if (align == TwoColumnConstraints.RIGHT)
+        {
+            position = right - componentWidth - this.gap;
+        }
+
+        // --------------------------------------------------
+        // correct for indent if this option is set
+        // --------------------------------------------------
+        if (indent)
+        {
+            position += this.indent;
+        }
+        return position;
+    }
+
     /**
      * Returns the minimum width of the column requested.
-     *
+     * 
      * @param column the columns to measure (LEFT / RIGHT)
      * @param parent the component which needs to be laid out.
-     * @return the minimum width required to fis the components in this column
+     * @return the minimum width required to fits the components in this column
      */
     private int minimumColumnWidth(int column, Container parent)
     {
@@ -559,7 +624,7 @@ public class TwoColumnLayout implements LayoutManager2
 
         for (int i = 0; i < components[column].size(); i++)
         {
-            constraints = (TwoColumnConstraints) components[column].elementAt(i);
+            constraints = components[column].elementAt(i);
 
             if ((constraints != null) && (constraints.position != TwoColumnConstraints.BOTH))
             {
@@ -584,7 +649,7 @@ public class TwoColumnLayout implements LayoutManager2
     /**
      * Retrunds the minimum width both columns together should have based on the minimum widths of
      * all the components that straddle both columns and the minimum width of the title component.
-     *
+     * 
      * @param parent the component which needs to be laid out.
      * @return the minimum width required to fis the components in this column
      */
@@ -603,7 +668,7 @@ public class TwoColumnLayout implements LayoutManager2
 
         for (int i = 0; i < components[LEFT].size(); i++)
         {
-            constraints = (TwoColumnConstraints) components[LEFT].elementAt(i);
+            constraints = components[LEFT].elementAt(i);
 
             if ((constraints != null) && (constraints.position == TwoColumnConstraints.BOTH))
             {
@@ -661,7 +726,7 @@ public class TwoColumnLayout implements LayoutManager2
     /**
      * Measures and returns the minimum height required to render the components in the indicated
      * row.
-     *
+     * 
      * @param row the index of the row to measure
      */
     private int rowHeight(int row)
@@ -688,10 +753,10 @@ public class TwoColumnLayout implements LayoutManager2
     /**
      * Measures and returns the minimum height required to render the component in the indicated row
      * and column.
-     *
-     * @param row    the index of the row to measure
-     * @param column the column of the component to measure (<code>LEFT</code> or
-     *               <code>RIGHT</code>)
+     * 
+     * @param row the index of the row to measure
+     * @param column the column of the component to measure (<code>LEFT</code> or <code>RIGHT</code>
+     *            )
      */
     private int height(int row, int column)
     {
@@ -702,7 +767,7 @@ public class TwoColumnLayout implements LayoutManager2
 
         try
         {
-            constraints = (TwoColumnConstraints) components[column].elementAt(row);
+            constraints = components[column].elementAt(row);
             if (constraints != null)
             {
                 component = constraints.component;
@@ -749,7 +814,7 @@ public class TwoColumnLayout implements LayoutManager2
 
     /**
      * Computes the margin value based on the container width and the margin setting.
-     *
+     * 
      * @param parent the component which needs to be laid out.
      */
     private int margin(Container parent)
@@ -761,10 +826,10 @@ public class TwoColumnLayout implements LayoutManager2
 
     /**
      * Computes the top buffer value based on the container width and the setting for the top buffer
-     *
+     * 
      * @param usedHeight the amount of the parent component's height that is already in use (height
-     *                   of the title and the combined height of all rows).
-     * @param parent     the component which needs to be laid out.
+     *            of the title and the combined height of all rows).
+     * @param parent the component which needs to be laid out.
      */
     private int topBuffer(int usedHeight, Container parent)
     {
@@ -777,7 +842,7 @@ public class TwoColumnLayout implements LayoutManager2
     /*--------------------------------------------------------------------------*/
     /**
      * Computes the indent value based on the container width and the indent setting.
-     *
+     * 
      * @param parent the component which needs to be laid out.
      */
     /*--------------------------------------------------------------------------*/
@@ -790,7 +855,7 @@ public class TwoColumnLayout implements LayoutManager2
     /**
      * Calculates the preferred size dimensions for the specified panel given the components in the
      * specified parent container.
-     *
+     * 
      * @param parent the component to be laid out
      */
     public Dimension preferredLayoutSize(Container parent)
@@ -801,7 +866,7 @@ public class TwoColumnLayout implements LayoutManager2
     /**
      * Calculates the minimum size dimensions for the specified panel given the components in the
      * specified parent container.
-     *
+     * 
      * @param parent the component to be laid out
      */
     public Dimension minimumLayoutSize(Container parent)
@@ -817,7 +882,7 @@ public class TwoColumnLayout implements LayoutManager2
     /**
      * Calculates the maximum size dimensions for the specified panel given the components in the
      * specified parent container.
-     *
+     * 
      * @param parent the component to be laid out
      */
     public Dimension maximumLayoutSize(Container parent)
@@ -830,7 +895,7 @@ public class TwoColumnLayout implements LayoutManager2
      * aligned relative to other components. The value should be a number between 0 and 1 where 0
      * represents alignment along the origin, 1 is aligned the furthest away from the origin, 0.5 is
      * centered, etc.
-     *
+     * 
      * @param parent the component to be laid out
      */
     public float getLayoutAlignmentX(Container parent)
@@ -843,7 +908,7 @@ public class TwoColumnLayout implements LayoutManager2
      * aligned relative to other components. The value should be a number between 0 and 1 where 0
      * represents alignment along the origin, 1 is aligned the furthest away from the origin, 0.5 is
      * centered, etc.
-     *
+     * 
      * @param parent the component to be laid out
      */
     public float getLayoutAlignmentY(Container parent)
@@ -854,7 +919,7 @@ public class TwoColumnLayout implements LayoutManager2
     /**
      * Invalidates the layout, indicating that if the layout manager has cached information it
      * should be discarded.
-     *
+     * 
      * @param parent the component to be laid out
      */
     public void invalidateLayout(Container parent)
@@ -868,7 +933,7 @@ public class TwoColumnLayout implements LayoutManager2
     /**
      * Adds the specified component with the specified name to the layout. This version is not
      * supported, use <code>addLayoutComponent</code> with layout contsraints.
-     *
+     * 
      * @param name the component name
      * @param comp the component to be added
      */
@@ -877,20 +942,19 @@ public class TwoColumnLayout implements LayoutManager2
     }
 
     /**
-     * This functionality removes the TwoColumnConstraints from Vectors
-     * so that alignment of components on UserInputPanel doesn't get
-     * dirty
-     *
+     * This functionality removes the TwoColumnConstraints from Vectors so that alignment of
+     * components on UserInputPanel doesn't get dirty
+     * 
      * @param comp the component to be removed
      */
     public void removeLayoutComponent(Component comp)
     {
-        Vector left = components[LEFT];
-        Vector right = components[RIGHT];
+        Vector<TwoColumnConstraints> left = components[LEFT];
+        Vector<TwoColumnConstraints> right = components[RIGHT];
 
         for (int i = 0; i < left.size(); i++)
         {
-            TwoColumnConstraints constraints = (TwoColumnConstraints) left.get(i);
+            TwoColumnConstraints constraints = left.get(i);
             if (constraints == null)
             {
                 continue;
@@ -898,7 +962,8 @@ public class TwoColumnLayout implements LayoutManager2
             Component ctemp = constraints.component;
             if (ctemp != null && ctemp.equals(comp))
             {
-                if (constraints.position == TwoColumnConstraints.BOTH || constraints.position == TwoColumnConstraints.WESTONLY)
+                if (constraints.position == TwoColumnConstraints.BOTH
+                        || constraints.position == TwoColumnConstraints.WESTONLY)
                 {
                     right.remove(i);
                 }
@@ -908,7 +973,7 @@ public class TwoColumnLayout implements LayoutManager2
 
         for (int j = 0; j < right.size(); j++)
         {
-            TwoColumnConstraints constraints = (TwoColumnConstraints) right.get(j);
+            TwoColumnConstraints constraints = right.get(j);
             if (constraints == null)
             {
                 continue;
@@ -916,7 +981,8 @@ public class TwoColumnLayout implements LayoutManager2
             Component ctemp = constraints.component;
             if (ctemp != null && ctemp.equals(comp))
             {
-                if (constraints.position == TwoColumnConstraints.BOTH || constraints.position == TwoColumnConstraints.EASTONLY)
+                if (constraints.position == TwoColumnConstraints.BOTH
+                        || constraints.position == TwoColumnConstraints.EASTONLY)
                 {
                     left.remove(j);
                 }
@@ -940,9 +1006,9 @@ public class TwoColumnLayout implements LayoutManager2
      * <b>Note:</b> cast the graphics object received in the <code>paint()</code> method to
      * <code>Graphics2D</code> when making the call.<br>
      * <br>
-     *
+     * 
      * @param graphics the graphics context used for drawing.
-     * @param color    the color to use for rendering the layout grid
+     * @param color the color to use for rendering the layout grid
      */
     public void showRules(Graphics2D graphics, Color color)
     {
@@ -951,8 +1017,7 @@ public class TwoColumnLayout implements LayoutManager2
         Stroke currentStroke = graphics.getStroke();
         Color currentColor = graphics.getColor();
 
-        Stroke stroke = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 1.5f,
-                new float[]{10, 5}, 5);
+        Stroke stroke = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 1.5f, new float[] { 10, 5 }, 5);
         graphics.setColor(color);
 
         graphics.drawLine(leftRule, 0, leftRule, height);

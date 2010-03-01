@@ -21,17 +21,25 @@
 
 package com.izforge.izpack.panels;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.util.Debug;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.List;
 
 public class FileInputField extends JPanel implements ActionListener
 {
@@ -62,14 +70,14 @@ public class FileInputField extends JPanel implements ActionListener
 
     protected static final int INVALID = 0, EMPTY = 1;
 
-    public FileInputField(IzPanel parent, InstallData data, boolean directory, String set,
-                          int size, List<ValidatorContainer> validatorConfig)
+    public FileInputField(IzPanel parent, InstallData data, boolean directory, String set, int size,
+            List<ValidatorContainer> validatorConfig)
     {
         this(parent, data, directory, set, size, validatorConfig, null, null);
     }
 
-    public FileInputField(IzPanel parent, InstallData data, boolean directory, String set,
-                          int size, List<ValidatorContainer> validatorConfig, String fileExt, String fileExtDesc)
+    public FileInputField(IzPanel parent, InstallData data, boolean directory, String set, int size,
+            List<ValidatorContainer> validatorConfig, String fileExt, String fileExtDesc)
     {
         this.parent = parent;
         this.parentFrame = parent.getInstallerFrame();
@@ -87,12 +95,24 @@ public class FileInputField extends JPanel implements ActionListener
         filetxt = new JTextField(set, size);
         filetxt.setCaretPosition(0);
 
+        GridBagLayout layout = new GridBagLayout();
+        setLayout(layout);
+        GridBagConstraints fileTextConstraint = new GridBagConstraints();
+        GridBagConstraints fileButtonConstraint = new GridBagConstraints();
+        fileTextConstraint.gridx = 0;
+        fileTextConstraint.gridy = 0;
+        fileTextConstraint.anchor = GridBagConstraints.WEST;
+        fileTextConstraint.insets = new Insets(0, 0, 0, 5);
+        fileButtonConstraint.gridx = 1;
+        fileButtonConstraint.gridy = 0;
+        fileButtonConstraint.anchor = GridBagConstraints.WEST;
+
         // TODO: use separate key for button text
-        browseBtn = ButtonFactory.createButton(data.langpack
-                .getString("UserInputPanel.search.browse"), data.buttonsHColor);
+        browseBtn = ButtonFactory.createButton(data.langpack.getString("UserInputPanel.search.browse"),
+                data.buttonsHColor);
         browseBtn.addActionListener(this);
-        this.add(filetxt);
-        this.add(browseBtn);
+        this.add(filetxt, fileTextConstraint);
+        this.add(browseBtn, fileButtonConstraint);
     }
 
     public void setFile(String filename)
@@ -158,9 +178,9 @@ public class FileInputField extends JPanel implements ActionListener
 
     protected void showMessage(String messageType)
     {
-        JOptionPane.showMessageDialog(parentFrame, parentFrame.langpack.getString("UserInputPanel."
-                + messageType + ".message"), parentFrame.langpack.getString("UserInputPanel."
-                + messageType + ".caption"), JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(parentFrame, parentFrame.langpack.getString("UserInputPanel." + messageType
+                + ".message"), parentFrame.langpack.getString("UserInputPanel." + messageType + ".caption"),
+                JOptionPane.WARNING_MESSAGE);
     }
 
     public boolean validateField()
@@ -194,15 +214,13 @@ public class FileInputField extends JPanel implements ActionListener
             }
             else
             {
-                StringInputProcessingClient processingClient = new StringInputProcessingClient(
-                        input, validators);
+                StringInputProcessingClient processingClient = new StringInputProcessingClient(input, validators);
                 boolean success = processingClient.validate();
                 if (!success)
                 {
                     JOptionPane
-                            .showMessageDialog(parentFrame,
-                                    processingClient.getValidationMessage(), parentFrame.langpack
-                                            .getString("UserInputPanel.error.caption"),
+                            .showMessageDialog(parentFrame, processingClient.getValidationMessage(),
+                                    parentFrame.langpack.getString("UserInputPanel.error.caption"),
                                     JOptionPane.WARNING_MESSAGE);
                 }
                 result = success;
