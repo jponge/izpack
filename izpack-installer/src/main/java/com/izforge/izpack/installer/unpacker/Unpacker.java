@@ -94,7 +94,7 @@ public class Unpacker extends UnpackerBase
             int npacks = packs.size();
             handler.startAction("Unpacking", npacks);
             // Custom action listener stuff --- load listeners ----
-            List<InstallerListener> customActions = idata.getCustomActions();
+            List<InstallerListener> customActions = idata.getInstallerListener();
             // Custom action listener stuff --- beforePacks ----
             informListeners(customActions, InstallerListener.BEFORE_PACKS, idata, npacks, handler);
             packs = idata.getSelectedPacks();

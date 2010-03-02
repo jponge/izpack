@@ -97,7 +97,7 @@
 //            Debug.trace("Unpacker starting");
 //            handler.startAction("Unpacking", npacks);
 //            // Custom action listener stuff --- load listeners ----
-//            List[] customActions = getCustomActions();
+//            List[] customActions = getInstallerListener();
 //            // Custom action listener stuff --- beforePacks ----
 //            informListeners(customActions, InstallerListener.BEFORE_PACKS, idata, npacks, handler);
 //            // vs = new VariableSubstitutor(installData.getVariables());

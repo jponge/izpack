@@ -3,6 +3,7 @@ package com.izforge.izpack.installer.container.provider;
 import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
+import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
@@ -205,7 +206,7 @@ public abstract class AbstractInstallDataProvider implements Provider
     protected void loadCustomData(AutomatedInstallData installdata, CustomDataContainer customDataContainer, PathResolver pathResolver) throws IOException, InstallerException, ClassNotFoundException
     {
         IzpackProjectInstaller izpackModel = (IzpackProjectInstaller) readObject("izpackInstallModel");
-        List<Listener> customActions = new ArrayList<Listener>();
+        List<InstallerListener> customActions = new ArrayList<InstallerListener>();
         for (Listener listener : izpackModel.getListeners())
         {
             if (!OsConstraintHelper.oneMatchesCurrentSystem(listener.getOs()))
@@ -217,12 +218,12 @@ public abstract class AbstractInstallDataProvider implements Provider
                 case install:
                     Class aClass = pathResolver.searchFullClassNameInClassPath(listener.getClassname());
                     customDataContainer.addComponent(aClass);
-                    customActions.add((Listener) customDataContainer.getComponent(aClass));
+                    customActions.add((InstallerListener) customDataContainer.getComponent(aClass));
                     break;
                 case uninstall:
             }
         }
-        installdata.setCustomActions(customActions);
+        installdata.setInstallerListener(customActions);
         // uninstallerLib list if exist
 
     }
