@@ -25,13 +25,13 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.data.UpdateCheck;
-import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.OsConstraintHelper;
 
 import java.io.File;
@@ -362,7 +362,7 @@ public class WebRepositoryAccessor
                 String target = p.getAttribute("targetfile", null);
                 SubstitutionType type = SubstitutionType.lookup(p.getAttribute("type", "plain"));
                 String encoding = p.getAttribute("encoding", null);
-                List<OsConstraint> osList = OsConstraintHelper.getOsList(p); // TODO: unverified
+                List<OsModel> osList = OsConstraintHelper.getOsList(p); // TODO: unverified
                 if (target != null)
                 {
                     pack.addParsable(new ParsableFile(target, type, encoding, osList));

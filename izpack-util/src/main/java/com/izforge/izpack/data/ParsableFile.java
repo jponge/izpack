@@ -21,8 +21,8 @@
 
 package com.izforge.izpack.data;
 
+import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.util.OsConstraint;
 
 import java.io.Serializable;
 import java.util.List;
@@ -56,7 +56,7 @@ public class ParsableFile implements Serializable
     /**
      * The list of OS constraints limiting file installation.
      */
-    public List<OsConstraint> osConstraints = null;
+    public List<OsModel> osConstraints = null;
 
     /**
      * condition for this Parsable
@@ -71,7 +71,7 @@ public class ParsableFile implements Serializable
      * @param encoding      the file encoding (or null for default)
      * @param osConstraints the OS constraint (or null for any OS)
      */
-    public ParsableFile(String path, SubstitutionType type, String encoding, List<OsConstraint> osConstraints)
+    public ParsableFile(String path, SubstitutionType type, String encoding, List<OsModel> osConstraints)
     {
         this.path = path;
         this.type = type;

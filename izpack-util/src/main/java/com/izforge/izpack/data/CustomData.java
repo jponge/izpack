@@ -21,7 +21,8 @@
 
 package com.izforge.izpack.data;
 
-import com.izforge.izpack.util.OsConstraint;
+
+import com.izforge.izpack.api.data.binding.OsModel;
 
 import java.io.Serializable;
 import java.util.List;
@@ -73,7 +74,7 @@ public class CustomData implements Serializable
     /**
      * The target operation system of this custom action
      */
-    public List<OsConstraint> osConstraints = null;
+    public List<OsModel> osConstraints = null;
 
     /**
      * Type of this custom action data; possible are INSTALLER_LISTENER, UNINSTALLER_LISTENER,
@@ -93,7 +94,7 @@ public class CustomData implements Serializable
      * @param osConstraints target operation system of this custom action
      * @param type          type of this custom data
      */
-    public CustomData(String listenerName, List<String> contents, List<OsConstraint> osConstraints, int type)
+    public CustomData(String listenerName, List<String> contents, List<OsModel> osConstraints, int type)
     {
         this.listenerName = listenerName;
         this.contents = contents;

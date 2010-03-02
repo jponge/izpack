@@ -21,7 +21,8 @@
 
 package com.izforge.izpack.data;
 
-import com.izforge.izpack.util.OsConstraint;
+
+import com.izforge.izpack.api.data.binding.OsModel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -58,7 +59,7 @@ public class PackFile implements Serializable
     /**
      * The target operating system constraints of this file
      */
-    private List<OsConstraint> osConstraints = null;
+    private List<OsModel> osConstraints = null;
 
     /**
      * The length of the file in bytes
@@ -119,7 +120,7 @@ public class PackFile implements Serializable
      * @param override what to do when the file already exists
      * @throws FileNotFoundException if the specified file does not exist.
      */
-    public PackFile(File baseDir, File src, String target, List<OsConstraint> osList, OverrideType override, Blockable blockable)
+    public PackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override, Blockable blockable)
             throws FileNotFoundException
     {
         this(src, computeRelativePathFrom(baseDir, src), target, osList, override, blockable, null);
@@ -136,7 +137,7 @@ public class PackFile implements Serializable
      * @param additionals        additional attributes
      * @throws FileNotFoundException if the specified file does not exist.
      */
-    public PackFile(File src, String relativeSourcePath, String target, List<OsConstraint> osList, OverrideType override, Blockable blockable, Map additionals)
+    public PackFile(File src, String relativeSourcePath, String target, List<OsModel> osList, OverrideType override, Blockable blockable, Map additionals)
             throws FileNotFoundException
     {
         if (!src.exists()) // allows cleaner client co
@@ -186,7 +187,7 @@ public class PackFile implements Serializable
      * @param additionals additional attributes
      * @throws FileNotFoundException if the specified file does not exist.
      */
-    public PackFile(File baseDir, File src, String target, List<OsConstraint> osList, OverrideType override, Blockable blockable, Map additionals)
+    public PackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override, Blockable blockable, Map additionals)
             throws FileNotFoundException
     {
         this(src, computeRelativePathFrom(baseDir, src), target, osList, override, blockable, additionals);
@@ -232,7 +233,7 @@ public class PackFile implements Serializable
     /**
      * The target operating system constraints of this file
      */
-    public final List<OsConstraint> osConstraints()
+    public final List<OsModel> osConstraints()
     {
         return osConstraints;
     }

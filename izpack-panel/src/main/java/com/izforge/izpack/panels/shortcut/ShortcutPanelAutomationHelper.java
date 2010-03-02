@@ -24,6 +24,7 @@ package com.izforge.izpack.panels.shortcut;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.data.UninstallData;
@@ -290,7 +291,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
 
                     // String directoryName = shortcut.getDirectoryCreated ();
                     execFiles.add(new ExecutableFile(fileName, ExecutableFile.UNINSTALL,
-                            ExecutableFile.IGNORE, new ArrayList<OsConstraint>(), false));
+                            ExecutableFile.IGNORE, new ArrayList<OsModel>(), false));
 
                     files.add(fileName);
 

@@ -23,7 +23,7 @@ package com.izforge.izpack.data;
 
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackColor;
-import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.api.data.binding.OsModel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -113,12 +113,12 @@ public class PackInfo implements Serializable
         pack.excludeGroup = group;
     }
 
-    public void setOsConstraints(List<OsConstraint> osConstraints)
+    public void setOsConstraints(List<OsModel> osConstraints)
     {
         pack.osConstraints = osConstraints;
     }
 
-    public List<OsConstraint> getOsConstraints(List osConstraints)
+    public List<OsModel> getOsConstraints(List osConstraints)
     {
         return pack.osConstraints;
     }
@@ -232,7 +232,7 @@ public class PackInfo implements Serializable
      * until the {@link Packager#createInstaller} is invoked, thus a FileNotFoundEception will occur
      * then, if the file is deleted in between.
      */
-    public void addFile(File baseDir, File file, String targetfile, List<OsConstraint> osList, OverrideType override, Blockable blockable, Map additionals, String condition)
+    public void addFile(File baseDir, File file, String targetfile, List<OsModel> osList, OverrideType override, Blockable blockable, Map additionals, String condition)
             throws FileNotFoundException
     {
         if (!file.exists())

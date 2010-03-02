@@ -6,6 +6,7 @@ import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -140,7 +141,7 @@ public class ProcessPanelWorker implements Runnable
             }
 
             // first check OS constraints - skip jobs not suited for this OS
-            List<OsConstraint> constraints = OsConstraintHelper.getOsList(job_el);
+            List<OsModel> constraints = OsConstraintHelper.getOsList(job_el);
 
             if (OsConstraintHelper.oneMatchesCurrentSystem(constraints))
             {

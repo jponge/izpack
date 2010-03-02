@@ -34,6 +34,7 @@ import com.izforge.izpack.api.adaptator.impl.XMLWriter;
 import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
+import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.data.binding.Stage;
 import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.api.installer.DataValidator;
@@ -55,7 +56,6 @@ import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.OsConstraintHelper;
 import org.apache.commons.lang.StringUtils;
 import org.apache.tools.ant.DirectoryScanner;
@@ -434,7 +434,7 @@ public class CompilerConfig extends Thread
             // observed
             // for the uninstaller.
             String stage = ixmlElement.getAttribute("stage");
-            List<OsConstraint> constraints = OsConstraintHelper.getOsList(ixmlElement);
+            List<OsModel> constraints = OsConstraintHelper.getOsList(ixmlElement);
             if (stage != null
                     && ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage)))
             {
@@ -579,7 +579,7 @@ public class CompilerConfig extends Thread
                 String target = xmlCompilerHelper.requireAttribute(parsableNode, "targetfile");
                 SubstitutionType type = SubstitutionType.lookup(parsableNode.getAttribute("type", "plain"));
                 String encoding = parsableNode.getAttribute("encoding", null);
-                List<OsConstraint> osList = OsConstraintHelper.getOsList(parsableNode); // TODO: unverified
+                List<OsModel> osList = OsConstraintHelper.getOsList(parsableNode); // TODO: unverified
                 String condition = parsableNode.getAttribute("condition");
                 if (target != null)
                 {
@@ -689,7 +689,7 @@ public class CompilerConfig extends Thread
             {
                 String src = xmlCompilerHelper.requireAttribute(fileNode, "src");
                 String targetdir = xmlCompilerHelper.requireAttribute(fileNode, "targetdir");
-                List<OsConstraint> osList = OsConstraintHelper.getOsList(fileNode); // TODO: unverified
+                List<OsModel> osList = OsConstraintHelper.getOsList(fileNode); // TODO: unverified
                 OverrideType override = getOverrideValue(fileNode);
                 Blockable blockable = getBlockableValue(fileNode, osList);
                 Map additionals = getAdditionals(fileNode);
@@ -734,7 +734,7 @@ public class CompilerConfig extends Thread
             {
                 String src = xmlCompilerHelper.requireAttribute(singleFileNode, "src");
                 String target = xmlCompilerHelper.requireAttribute(singleFileNode, "target");
-                List<OsConstraint> osList = OsConstraintHelper.getOsList(singleFileNode); // TODO: unverified
+                List<OsModel> osList = OsConstraintHelper.getOsList(singleFileNode); // TODO: unverified
                 OverrideType override = getOverrideValue(singleFileNode);
                 Blockable blockable = getBlockableValue(singleFileNode, osList);
                 Map additionals = getAdditionals(singleFileNode);
@@ -779,7 +779,7 @@ public class CompilerConfig extends Thread
 
                 String[] includedFiles = getFilesetIncludedFiles(fileSetNode);
                 String targetdir = xmlCompilerHelper.requireAttribute(fileSetNode, "targetdir");
-                List<OsConstraint> osList = OsConstraintHelper.getOsList(fileSetNode); // TODO: unverified
+                List<OsModel> osList = OsConstraintHelper.getOsList(fileSetNode); // TODO: unverified
                 OverrideType override = getOverrideValue(fileSetNode);
                 Blockable blockable = getBlockableValue(fileSetNode, osList);
                 Map additionals = getAdditionals(fileSetNode);
@@ -1114,7 +1114,7 @@ public class CompilerConfig extends Thread
      * @param condition
      */
     protected void addArchiveContent(File baseDir, File archive, String targetdir,
-                                     List<OsConstraint> osList, OverrideType override, Blockable blockable,
+                                     List<OsModel> osList, OverrideType override, Blockable blockable,
                                      PackInfo pack, Map additionals,
                                      String condition) throws IOException
     {
@@ -1182,7 +1182,7 @@ public class CompilerConfig extends Thread
      * @throws FileNotFoundException if the file does not exist
      */
     protected void addRecursively(File baseDir, File file, String targetdir,
-                                  List<OsConstraint> osList, OverrideType override, Blockable blockable,
+                                  List<OsModel> osList, OverrideType override, Blockable blockable,
                                   PackInfo pack, Map additionals, String condition) throws IOException
     {
         String targetfile = targetdir + "/" + file.getName();
@@ -2010,7 +2010,7 @@ public class CompilerConfig extends Thread
      * @return blockable level
      * @throws CompilerException
      */
-    protected Blockable getBlockableValue(IXMLElement f, List<OsConstraint> osList) throws CompilerException
+    protected Blockable getBlockableValue(IXMLElement f, List<OsModel> osList) throws CompilerException
     {
         String blockable_val = f.getAttribute("blockable");
         if (blockable_val == null)
@@ -2026,7 +2026,7 @@ public class CompilerConfig extends Thread
         if (blockable != Blockable.BLOCKABLE_NONE)
         {
             boolean found = false;
-            for (OsConstraint anOsList : osList)
+            for (OsModel anOsList : osList)
             {
                 if ("windows".equals(anOsList.getFamily()))
                 {
@@ -2039,7 +2039,7 @@ public class CompilerConfig extends Thread
                 // We cannot add this constraint here explicitely, because it
                 // the copied files might be multi-platform.
                 // Print out a warning to inform the user about this fact.
-                //osList.add(new OsConstraint("windows", null, null, null));
+                //osList.add(new OsModel("windows", null, null, null));
                 assertionHelper.parseWarn(f, "'blockable' will implicitely apply only on Windows target systems");
             }
         }

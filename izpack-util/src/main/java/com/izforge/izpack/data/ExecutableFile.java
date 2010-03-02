@@ -21,7 +21,8 @@
 
 package com.izforge.izpack.data;
 
-import com.izforge.izpack.util.OsConstraint;
+
+import com.izforge.izpack.api.data.binding.OsModel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -99,7 +100,7 @@ public class ExecutableFile implements Serializable
     /**
      * List of operating systems to run on
      */
-    public List<OsConstraint> osList = null;
+    public List<OsModel> osList = null;
 
     /**
      * Indicates the file should be kept after executing. Default is false for backward
@@ -122,7 +123,7 @@ public class ExecutableFile implements Serializable
         mainClass = null;
         type = BIN;
         onFailure = ASK;
-        osList = new ArrayList<OsConstraint>();
+        osList = new ArrayList<OsModel>();
         argList = new ArrayList<String>();
         keepFile = false;
     }
@@ -135,7 +136,7 @@ public class ExecutableFile implements Serializable
      * @param onFailure      what to do if execution fails
      * @param osList         list of operating systems to run on
      */
-    public ExecutableFile(String path, int executionStage, int onFailure, List<OsConstraint> osList,
+    public ExecutableFile(String path, int executionStage, int onFailure, List<OsModel> osList,
                           boolean keepFile)
     {
         this.path = path;
@@ -146,7 +147,7 @@ public class ExecutableFile implements Serializable
     }
 
     public ExecutableFile(String path, int type, String mainClass, int executionStage,
-                          int onFailure, List<String> argList, List<OsConstraint> osList, boolean keepFile)
+                          int onFailure, List<String> argList, List<OsModel> osList, boolean keepFile)
     {
         this.path = path;
         this.mainClass = mainClass;
@@ -186,7 +187,7 @@ public class ExecutableFile implements Serializable
         retval.append("\n");
         if (osList != null)
         {
-            for (OsConstraint anOsList : osList)
+            for (OsModel anOsList : osList)
             {
                 retval.append("\tos: ").append(anOsList);
                 retval.append("\n");

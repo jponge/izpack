@@ -4,7 +4,6 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.binding.OsModel;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -74,15 +73,15 @@ public class OsConstraintHelper
      * Extract a list of OS constraints from given element.
      *
      * @param element parent IXMLElement
-     * @return List of OsConstraint (or empty List if no constraints found)
+     * @return List of OsModel (or empty List if no constraints found)
      */
-    public static List<OsConstraint> getOsList(IXMLElement element)
+    public static List<OsModel> getOsList(IXMLElement element)
     {
         // get os info on this executable
-        ArrayList<OsConstraint> osList = new ArrayList<OsConstraint>();
+        ArrayList<OsModel> osList = new ArrayList<OsModel>();
         for (IXMLElement osElement : element.getChildrenNamed("os"))
         {
-            osList.add(new OsConstraint(
+            osList.add(
                     new OsModel(
                             osElement.getAttribute("family",
                                     null),
@@ -94,17 +93,17 @@ public class OsConstraintHelper
                                     null),
                             osElement.getAttribute("jre",
                                     null))
-            ));
+            );
         }
         // backward compatibility: still support os attribute
         String osattr = element.getAttribute("os");
         if ((osattr != null) && (osattr.length() > 0))
         {
             // add the "os" attribute as a family constraint
-            osList.add(new OsConstraint(
+            osList.add(
                     new OsModel(osattr,
                             null, null, null, null)
-            ));
+            );
         }
 
         return osList;
@@ -113,37 +112,19 @@ public class OsConstraintHelper
     /**
      * Helper function: Scan a list of OsConstraints for a match.
      *
-     * @param constraint_list List of OsConstraint to check
+     * @param constraint_list List of OsModel to check
      * @return true if one of the OsConstraints matched the current system or constraint_list is
      *         null (no constraints), false if none of the OsConstraints matched
      */
-    public static boolean oneMatchesCurrentSystem(List<OsConstraint> constraint_list)
+    public static boolean oneMatchesCurrentSystem(List<OsModel> constraint_list)
     {
-        if (constraint_list == null)
+        for (OsModel osModel : constraint_list)
         {
-            return true;
-        }    // end if
-
-        Iterator<OsConstraint> constraint_it = constraint_list.iterator();
-
-        // no constraints at all - matches!
-        if (!constraint_it.hasNext())
-        {
-            return true;
-        }    // end if
-
-        while (constraint_it.hasNext())
-        {
-            OsConstraint osc = constraint_it.next();
-
-
-            Debug.trace("checking if os constraints " + osc + " match current OS");
-
+            Debug.trace("checking if os constraints " + osModel + " match current OS");
             // check for match
-            if (matchCurrentSystem(osc.osModel))
+            if (matchCurrentSystem(osModel))
             {
                 Debug.trace("matched current OS.");
-
                 return true;    // bail out on first match
             }    // end if
         }    // end while

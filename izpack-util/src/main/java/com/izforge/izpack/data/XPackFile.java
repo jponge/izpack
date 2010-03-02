@@ -18,7 +18,8 @@
 
 package com.izforge.izpack.data;
 
-import com.izforge.izpack.util.OsConstraint;
+
+import com.izforge.izpack.api.data.binding.OsModel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,7 +43,7 @@ public class XPackFile extends PackFile implements Comparable<XPackFile>
      * @param override
      * @throws FileNotFoundException
      */
-    public XPackFile(File baseDir, File src, String target, List<OsConstraint> osList, OverrideType override, Blockable blockable)
+    public XPackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override, Blockable blockable)
             throws FileNotFoundException
     {
         super(baseDir, src, target, osList, override, blockable);
@@ -57,7 +58,7 @@ public class XPackFile extends PackFile implements Comparable<XPackFile>
      * @param additionals
      * @throws FileNotFoundException
      */
-    public XPackFile(File baseDir, File src, String target, List<OsConstraint> osList, OverrideType override, Blockable blockable, Map additionals)
+    public XPackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override, Blockable blockable, Map additionals)
             throws FileNotFoundException
     {
         super(baseDir, src, target, osList, override, blockable, additionals);

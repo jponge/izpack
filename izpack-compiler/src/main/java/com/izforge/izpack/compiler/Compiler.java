@@ -27,6 +27,7 @@ package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackColor;
+import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -37,7 +38,6 @@ import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.OsConstraint;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -430,7 +430,7 @@ public class Compiler extends Thread
      * @param constraints The list of constraints.
      * @throws Exception Thrown in case an error occurs.
      */
-    public void addCustomListener(int type, String className, String jarPath, List<OsConstraint> constraints) throws Exception
+    public void addCustomListener(int type, String className, String jarPath, List<OsModel> constraints) throws Exception
     {
         jarPath = propertySubstitutor.substitute(jarPath, SubstitutionType.TYPE_AT);
         String fullClassName = className;

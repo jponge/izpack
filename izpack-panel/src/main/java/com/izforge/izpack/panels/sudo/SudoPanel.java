@@ -22,6 +22,7 @@
 package com.izforge.izpack.panels.sudo;
 
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.gui.LabelFactory;
@@ -30,7 +31,6 @@ import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.OsConstraint;
 
 import javax.swing.*;
 import java.awt.*;
@@ -148,8 +148,8 @@ public class SudoPanel extends IzPanel implements ActionListener
             Properties vars = new Properties();
             vars.put("password", pass);
 
-            List<OsConstraint> oses = new ArrayList<OsConstraint>();
-            oses.add(new OsConstraint("unix", null, null, null));
+            List<OsModel> oses = new ArrayList<OsModel>();
+            oses.add(new OsModel("unix", null, null, null, null));
 
             ArrayList<ParsableFile> plist = new ArrayList<ParsableFile>();
             ParsableFile pf = new ParsableFile(file.getAbsolutePath(), null, null, oses);

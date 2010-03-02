@@ -25,6 +25,7 @@ import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.panels.IShortcuPanel;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
@@ -1569,7 +1570,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
                         // String directoryName = shortcut.getDirectoryCreated ();
                         execFiles.add(new ExecutableFile(fileName, ExecutableFile.UNINSTALL,
-                                ExecutableFile.IGNORE, new ArrayList<OsConstraint>(), false));
+                                ExecutableFile.IGNORE, new ArrayList<OsModel>(), false));
 
                         files.add(fileName);
 
