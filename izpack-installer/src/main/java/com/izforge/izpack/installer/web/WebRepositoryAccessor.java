@@ -32,6 +32,7 @@ import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsConstraintHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -323,7 +324,7 @@ public class WebRepositoryAccessor
             }
 
             PackInfo pack = new PackInfo(name, id, description, required, loose, excludeGroup, uninstall);
-            pack.setOsConstraints(OsConstraint.getOsList(el)); // TODO:
+            pack.setOsConstraints(OsConstraintHelper.getOsList(el)); // TODO:
             pack.setParent(parent);
 
             // unverified
@@ -361,7 +362,7 @@ public class WebRepositoryAccessor
                 String target = p.getAttribute("targetfile", null);
                 SubstitutionType type = SubstitutionType.lookup(p.getAttribute("type", "plain"));
                 String encoding = p.getAttribute("encoding", null);
-                List<OsConstraint> osList = OsConstraint.getOsList(p); // TODO: unverified
+                List<OsConstraint> osList = OsConstraintHelper.getOsList(p); // TODO: unverified
                 if (target != null)
                 {
                     pack.addParsable(new ParsableFile(target, type, encoding, osList));
@@ -425,7 +426,7 @@ public class WebRepositoryAccessor
                     }
                 }
 
-                executable.osList = OsConstraint.getOsList(e); // TODO:
+                executable.osList = OsConstraintHelper.getOsList(e); // TODO:
                 // unverified
 
                 pack.addExecutable(executable);

@@ -97,7 +97,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         {
             Pack pk = (Pack) objIn.readObject();
             allPacks.add(pk);
-            if (OsConstraint.oneMatchesCurrentSystem(pk.osConstraints))
+            if (OsConstraintHelper.oneMatchesCurrentSystem(pk.osConstraints))
             {
                 availablePacks.add(pk);
             }
@@ -220,7 +220,7 @@ public abstract class AbstractInstallDataProvider implements Provider
 
         for (Listener listener : izpackModel.getListeners())
         {
-            listener.getOs();            
+            listener.getOs();
         }
 
         in = resourceManager.getInputStream("customData");
@@ -235,7 +235,7 @@ public abstract class AbstractInstallDataProvider implements Provider
             {
                 CustomData ca = (CustomData) keys.next();
                 if (ca.osConstraints != null
-                        && !OsConstraint.oneMatchesCurrentSystem(ca.osConstraints))
+                        && !OsConstraintHelper.oneMatchesCurrentSystem(ca.osConstraints))
                 { // OS constraint defined, but not matched; therefore ignore
                     // it.
                     continue;

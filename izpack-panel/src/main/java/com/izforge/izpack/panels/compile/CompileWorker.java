@@ -33,6 +33,7 @@ import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsConstraintHelper;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -322,9 +323,9 @@ public class CompileWorker implements Runnable
 
             if (value != null)
             {
-                List<OsConstraint> osconstraints = OsConstraint.getOsList(choice);
+                List<OsConstraint> osconstraints = OsConstraintHelper.getOsList(choice);
 
-                if (OsConstraint.oneMatchesCurrentSystem(osconstraints))
+                if (OsConstraintHelper.oneMatchesCurrentSystem(osconstraints))
                 {
                     if (value.equalsIgnoreCase(ECLIPSE_COMPILER_NAME))
                     {

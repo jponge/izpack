@@ -23,7 +23,7 @@ package com.izforge.izpack.installer.unpacker;
 
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.data.ParsableFile;
-import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsConstraintHelper;
 
 import java.io.*;
 import java.util.Collection;
@@ -85,7 +85,7 @@ public class ScriptParser
             ParsableFile pfile = iter.next();
 
             // check whether the OS matches
-            if (!OsConstraint.oneMatchesCurrentSystem(pfile.osConstraints))
+            if (!OsConstraintHelper.oneMatchesCurrentSystem(pfile.osConstraints))
             {
                 continue;
             }

@@ -40,7 +40,7 @@ import com.izforge.izpack.installer.manager.PanelActionFactory;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
-import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsConstraintHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -180,7 +180,7 @@ public class AutomatedInstaller extends InstallerBase
                     continue;
                 }
 
-                if (!OsConstraint.oneMatchesCurrentSystem(p.osConstraints))
+                if (!OsConstraintHelper.oneMatchesCurrentSystem(p.osConstraints))
                 {
                     continue;
                 }

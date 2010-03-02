@@ -1133,7 +1133,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             // System.out.println( "Processing shortcut: " + i );
             shortcutSpec = shortcutSpecs.elementAt(i);
 
-            if (!OsConstraint.oneMatchesCurrentSystem(shortcutSpec))
+            if (!OsConstraintHelper.oneMatchesCurrentSystem(shortcutSpec))
             {
                 continue;
             }

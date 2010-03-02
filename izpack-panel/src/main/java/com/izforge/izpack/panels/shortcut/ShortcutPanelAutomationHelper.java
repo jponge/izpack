@@ -120,7 +120,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
             return;
         }
 
-        if (!OsConstraint.oneMatchesCurrentSystem(panelRoot))
+        if (!OsConstraintHelper.oneMatchesCurrentSystem(panelRoot))
         {
             Debug.log("Shortcuts Not oneMatchesCurrentSystem");
 

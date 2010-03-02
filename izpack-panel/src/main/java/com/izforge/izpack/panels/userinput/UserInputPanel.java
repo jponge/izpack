@@ -23,7 +23,7 @@ import com.izforge.izpack.panels.userinput.processorclient.TextInputField;
 import com.izforge.izpack.panels.userinput.validator.ValidatorContainer;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.HyperlinkHandler;
-import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsConstraintHelper;
 import com.izforge.izpack.util.OsVersion;
 
 import javax.swing.*;
@@ -2725,7 +2725,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             {
                 IXMLElement choice_el = choices.elementAt(i);
 
-                if (!OsConstraint.oneMatchesCurrentSystem(choice_el))
+                if (!OsConstraintHelper.oneMatchesCurrentSystem(choice_el))
                 {
                     continue;
                 }
@@ -3962,7 +3962,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 }
             }
             // are there any OS-Constraints?
-            if (OsConstraint.oneMatchesCurrentSystem(variable))
+            if (OsConstraintHelper.oneMatchesCurrentSystem(variable))
             {
                 if (vname == null)
                 {

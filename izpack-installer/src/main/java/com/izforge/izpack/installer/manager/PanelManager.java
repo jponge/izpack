@@ -13,7 +13,7 @@ import com.izforge.izpack.merge.panel.PanelMerge;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
-import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsConstraintHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +60,7 @@ public class PanelManager
         for (Panel panel : panelsOrder)
         {
             System.out.println(panel.getClassName());
-            if (OsConstraint.oneMatchesCurrentSystem(panel.osConstraints))
+            if (OsConstraintHelper.oneMatchesCurrentSystem(panel.osConstraints))
             {
                 Class<? extends IzPanel> aClass = resolveClassName(panel.getClassName());
                 installerContainer.addComponent(aClass);
@@ -83,7 +83,7 @@ public class PanelManager
         int count = 0;
         for (Panel panel : panelsOrder)
         {
-            if (OsConstraint.oneMatchesCurrentSystem(panel.osConstraints))
+            if (OsConstraintHelper.oneMatchesCurrentSystem(panel.osConstraints))
             {
                 Class<? extends IzPanel> aClass = resolveClassName(panel.getClassName());
                 executePreBuildActions(panel);

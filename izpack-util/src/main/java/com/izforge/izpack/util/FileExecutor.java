@@ -268,7 +268,7 @@ public class FileExecutor
 
             // skip file if not for current OS (it might not have been installed
             // at all)
-            if (!OsConstraint.oneMatchesCurrentSystem(efile.osList))
+            if (!OsConstraintHelper.oneMatchesCurrentSystem(efile.osList))
             {
                 continue;
             }

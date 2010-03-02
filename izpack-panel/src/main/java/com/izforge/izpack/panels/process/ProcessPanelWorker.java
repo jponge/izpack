@@ -140,9 +140,9 @@ public class ProcessPanelWorker implements Runnable
             }
 
             // first check OS constraints - skip jobs not suited for this OS
-            List<OsConstraint> constraints = OsConstraint.getOsList(job_el);
+            List<OsConstraint> constraints = OsConstraintHelper.getOsList(job_el);
 
-            if (OsConstraint.oneMatchesCurrentSystem(constraints))
+            if (OsConstraintHelper.oneMatchesCurrentSystem(constraints))
             {
                 List<ProcessPanelWorker.Processable> ef_list = new ArrayList<ProcessPanelWorker.Processable>();
 

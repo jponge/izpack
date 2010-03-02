@@ -167,7 +167,7 @@ public class Unpacker extends UnpackerBase
                             continue;
                         }
                     }
-                    if (OsConstraint.oneMatchesCurrentSystem(pf.osConstraints()))
+                    if (OsConstraintHelper.oneMatchesCurrentSystem(pf.osConstraints()))
                     {
                         // We translate & build the path
                         String path = IoHelper.translatePath(pf.getTargetPath(), variableSubstitutor);

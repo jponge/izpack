@@ -56,6 +56,7 @@ import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsConstraintHelper;
 import org.apache.commons.lang.StringUtils;
 import org.apache.tools.ant.DirectoryScanner;
 
@@ -433,7 +434,7 @@ public class CompilerConfig extends Thread
             // observed
             // for the uninstaller.
             String stage = ixmlElement.getAttribute("stage");
-            List<OsConstraint> constraints = OsConstraint.getOsList(ixmlElement);
+            List<OsConstraint> constraints = OsConstraintHelper.getOsList(ixmlElement);
             if (stage != null
                     && ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage)))
             {
@@ -533,7 +534,7 @@ public class CompilerConfig extends Thread
 
             PackInfo pack = new PackInfo(name, id, description, required, loose, excludeGroup,
                     uninstall);
-            pack.setOsConstraints(OsConstraint.getOsList(packElement)); // TODO:
+            pack.setOsConstraints(OsConstraintHelper.getOsList(packElement)); // TODO:
             pack.setParent(parent);
             pack.setCondition(conditionid);
             pack.setHidden(hidden);
@@ -578,7 +579,7 @@ public class CompilerConfig extends Thread
                 String target = xmlCompilerHelper.requireAttribute(parsableNode, "targetfile");
                 SubstitutionType type = SubstitutionType.lookup(parsableNode.getAttribute("type", "plain"));
                 String encoding = parsableNode.getAttribute("encoding", null);
-                List<OsConstraint> osList = OsConstraint.getOsList(parsableNode); // TODO: unverified
+                List<OsConstraint> osList = OsConstraintHelper.getOsList(parsableNode); // TODO: unverified
                 String condition = parsableNode.getAttribute("condition");
                 if (target != null)
                 {
@@ -677,7 +678,7 @@ public class CompilerConfig extends Thread
                     }
                 }
 
-                executable.osList = OsConstraint.getOsList(executableNode); // TODO:
+                executable.osList = OsConstraintHelper.getOsList(executableNode); // TODO:
                 // unverified
 
                 pack.addExecutable(executable);
@@ -688,7 +689,7 @@ public class CompilerConfig extends Thread
             {
                 String src = xmlCompilerHelper.requireAttribute(fileNode, "src");
                 String targetdir = xmlCompilerHelper.requireAttribute(fileNode, "targetdir");
-                List<OsConstraint> osList = OsConstraint.getOsList(fileNode); // TODO: unverified
+                List<OsConstraint> osList = OsConstraintHelper.getOsList(fileNode); // TODO: unverified
                 OverrideType override = getOverrideValue(fileNode);
                 Blockable blockable = getBlockableValue(fileNode, osList);
                 Map additionals = getAdditionals(fileNode);
@@ -733,7 +734,7 @@ public class CompilerConfig extends Thread
             {
                 String src = xmlCompilerHelper.requireAttribute(singleFileNode, "src");
                 String target = xmlCompilerHelper.requireAttribute(singleFileNode, "target");
-                List<OsConstraint> osList = OsConstraint.getOsList(singleFileNode); // TODO: unverified
+                List<OsConstraint> osList = OsConstraintHelper.getOsList(singleFileNode); // TODO: unverified
                 OverrideType override = getOverrideValue(singleFileNode);
                 Blockable blockable = getBlockableValue(singleFileNode, osList);
                 Map additionals = getAdditionals(singleFileNode);
@@ -778,7 +779,7 @@ public class CompilerConfig extends Thread
 
                 String[] includedFiles = getFilesetIncludedFiles(fileSetNode);
                 String targetdir = xmlCompilerHelper.requireAttribute(fileSetNode, "targetdir");
-                List<OsConstraint> osList = OsConstraint.getOsList(fileSetNode); // TODO: unverified
+                List<OsConstraint> osList = OsConstraintHelper.getOsList(fileSetNode); // TODO: unverified
                 OverrideType override = getOverrideValue(fileSetNode);
                 Blockable blockable = getBlockableValue(fileSetNode, osList);
                 Map additionals = getAdditionals(fileSetNode);
@@ -1235,7 +1236,7 @@ public class CompilerConfig extends Thread
 
             // create the serialized Panel data
             Panel panel = new Panel();
-            panel.osConstraints = OsConstraint.getOsList(panelElement);
+            panel.osConstraints = OsConstraintHelper.getOsList(panelElement);
             String className = panelElement.getAttribute("classname");
 
             // add an id

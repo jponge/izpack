@@ -27,7 +27,7 @@ import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsConstraintHelper;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -83,7 +83,7 @@ public class InstallationGroupPanel extends IzPanel
         this.installData.setAvailablePacks(new ArrayList());
         for (Pack p : this.installData.getAllPacks())
         {
-            if (OsConstraint.oneMatchesCurrentSystem(p.osConstraints))
+            if (OsConstraintHelper.oneMatchesCurrentSystem(p.osConstraints))
             {
                 this.installData.getAvailablePacks().add(p);
             }
