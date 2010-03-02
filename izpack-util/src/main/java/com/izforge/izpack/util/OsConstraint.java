@@ -89,9 +89,10 @@ public class OsConstraint
     /**
      * Matches OS specification in this class against current system properties.
      *
+     * @param osModel
      * @return Description of the Return Value
      */
-    public boolean matchCurrentSystem()
+    public boolean matchCurrentSystem(OsModel osModel)
     {
         boolean match = true;
         String osName = System.getProperty("os.name").toLowerCase();
@@ -209,7 +210,7 @@ public class OsConstraint
             Debug.trace("checking if os constraints " + osc + " match current OS");
 
             // check for match
-            if (osc.matchCurrentSystem())
+            if (osc.matchCurrentSystem(osc.osModel))
             {
                 Debug.trace("matched current OS.");
 
