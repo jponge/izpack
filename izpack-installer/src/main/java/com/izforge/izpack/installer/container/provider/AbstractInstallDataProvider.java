@@ -1,6 +1,8 @@
 package com.izforge.izpack.installer.container.provider;
 
 import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
+import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
@@ -30,7 +32,6 @@ public abstract class AbstractInstallDataProvider implements Provider
     protected ResourceManager resourceManager;
     protected VariableSubstitutor variableSubstitutor;
 
-
     /**
      * Loads the installation data. Also sets environment variables to <code>installdata</code>.
      * All system properties are available as $SYSTEM_<variable> where <variable> is the actual
@@ -49,17 +50,10 @@ public abstract class AbstractInstallDataProvider implements Provider
         int i;
 
         // We load the variables
-        Properties variables;
-        in = resourceManager.getInputStream("vars");
-        objIn = new ObjectInputStream(in);
-        variables = (Properties) objIn.readObject();
-        objIn.close();
+        Properties variables = (Properties) readObject("vars");
 
         // We load the Info data
-        in = resourceManager.getInputStream("info");
-        objIn = new ObjectInputStream(in);
-        Info inf = (Info) objIn.readObject();
-        objIn.close();
+        Info inf = (Info) readObject("vars");
 
         checkForPrivilegedExecution(inf);
 
@@ -90,11 +84,7 @@ public abstract class AbstractInstallDataProvider implements Provider
 
 
         // We read the panels order data
-        in = resourceManager.getInputStream("panelsOrder");
-        objIn = new ObjectInputStream(in);
-        List<Panel> panelsOrder = (List<Panel>) objIn.readObject();
-        objIn.close();
-
+        List<Panel> panelsOrder = (List<Panel>) readObject("panelsOrder");
 
         // We read the packs data
         in = resourceManager.getInputStream("packs.info");
@@ -102,6 +92,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         size = objIn.readInt();
         ArrayList<Pack> availablePacks = new ArrayList<Pack>();
         ArrayList<Pack> allPacks = new ArrayList<Pack>();
+
         for (i = 0; i < size; i++)
         {
             Pack pk = (Pack) objIn.readObject();
@@ -224,9 +215,18 @@ public abstract class AbstractInstallDataProvider implements Provider
         {
             out[i] = new ArrayList();
         }
+
+        IzpackProjectInstaller izpackModel = (IzpackProjectInstaller) readObject("izpackInstallModel");
+
+        for (Listener listener : izpackModel.getListeners())
+        {
+            listener.getOs();            
+        }
+
         in = resourceManager.getInputStream("customData");
         if (in != null)
         {
+
             objIn = new ObjectInputStream(in);
             Object listeners = objIn.readObject();
             objIn.close();
@@ -497,4 +497,14 @@ public abstract class AbstractInstallDataProvider implements Provider
         automatedInstallData.setAndProcessLocal(selectedPack, new LocaleDatabase(in));
         resourceManager.setLocale(selectedPack);
     }
+
+    public Object readObject(String resourceId) throws IOException, ClassNotFoundException
+    {
+        InputStream inputStream = resourceManager.getInputStream(resourceId);
+        ObjectInputStream objIn = new ObjectInputStream(inputStream);
+        Object model = objIn.readObject();
+        objIn.close();
+        return model;
+    }
+
 }
