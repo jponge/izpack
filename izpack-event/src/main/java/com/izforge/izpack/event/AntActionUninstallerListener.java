@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.event;
 
-import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.util.IoHelper;
 
 import java.io.ByteArrayInputStream;
@@ -63,7 +63,7 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.uninstaller.UninstallerListener#beforeDeletion(java.util.List,
-     * com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
     public void beforeDeletion(List files, AbstractUIProgressHandler handler) throws Exception
@@ -169,7 +169,7 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.uninstaller.UninstallerListener#afterDeletion(java.util.List,
-     * com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
     public void afterDeletion(List files, AbstractUIProgressHandler handler) throws Exception

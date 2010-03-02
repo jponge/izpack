@@ -23,8 +23,8 @@ package com.izforge.izpack.event;
 
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.api.exception.WrappedNativeLibException;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.core.os.RegistryHandler;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.TargetFactory;
 
 import java.io.InputStream;
@@ -53,7 +53,7 @@ public class RegistryUninstallerListener extends NativeUninstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.uninstaller.UninstallerListener#afterDeletion(java.util.List,
-     * com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
     public void beforeDeletion(List files, AbstractUIProgressHandler handler) throws Exception

@@ -6,8 +6,8 @@ import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
-import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.installer.container.impl.CustomDataContainer;
+import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.*;
 import org.picocontainer.injectors.Provider;
 
@@ -202,76 +202,27 @@ public abstract class AbstractInstallDataProvider implements Provider
      * @param customDataContainer
      * @throws Exception
      */
-    protected void loadCustomData(AutomatedInstallData installdata, CustomDataContainer customDataContainer) throws IOException, InstallerException, ClassNotFoundException
+    protected void loadCustomData(AutomatedInstallData installdata, CustomDataContainer customDataContainer, PathResolver pathResolver) throws IOException, InstallerException, ClassNotFoundException
     {
-        // Usefull variables
-        InputStream in;
-        ObjectInputStream objIn;
-        int i;
-        // Load listeners if exist.
-        String[] streamNames = AutomatedInstallData.CUSTOM_ACTION_TYPES;
-        List[] out = new List[streamNames.length];
-        for (i = 0; i < streamNames.length; ++i)
-        {
-            out[i] = new ArrayList();
-        }
-
         IzpackProjectInstaller izpackModel = (IzpackProjectInstaller) readObject("izpackInstallModel");
-
+        List<Listener> customActions = new ArrayList<Listener>();
         for (Listener listener : izpackModel.getListeners())
         {
-            listener.getOs();
-        }
-
-        in = resourceManager.getInputStream("customData");
-        if (in != null)
-        {
-
-            objIn = new ObjectInputStream(in);
-            Object listeners = objIn.readObject();
-            objIn.close();
-            Iterator keys = ((List) listeners).iterator();
-            while (keys != null && keys.hasNext())
+            if (!OsConstraintHelper.oneMatchesCurrentSystem(listener.getOs()))
             {
-                CustomData ca = (CustomData) keys.next();
-                if (ca.osConstraints != null
-                        && !OsConstraintHelper.oneMatchesCurrentSystem(ca.osConstraints))
-                { // OS constraint defined, but not matched; therefore ignore
-                    // it.
-                    continue;
-                }
-                switch (ca.type)
-                {
-                    case CustomData.INSTALLER_LISTENER:
-                        Class clazz;
-                        try
-                        {
-                            clazz = Class.forName(ca.listenerName);
-                            customDataContainer.addComponent(clazz);
-                        }
-                        catch (ClassNotFoundException e)
-                        {
-                            Debug.trace("Warning, class" + ca.listenerName + " not found.");
-                            continue;
-                        }
-//                        out[ca.type].add(clazz.newInstance());
-                        break;
-                    case CustomData.UNINSTALLER_LISTENER:
-                    case CustomData.UNINSTALLER_JAR:
-                        out[ca.type].add(ca);
-                        break;
-                    case CustomData.UNINSTALLER_LIB:
-                        out[ca.type].add(ca.contents);
-                        break;
-                }
-
+                continue;
             }
-            // Add the current custem action data to the installdata hash map.
-            for (i = 0; i < streamNames.length; ++i)
+            switch (listener.getStage())
             {
-                installdata.getCustomData().put(streamNames[i], out[i]);
+                case install:
+                    Class aClass = pathResolver.searchFullClassNameInClassPath(listener.getClassname());
+                    customDataContainer.addComponent(aClass);
+                    customActions.add((Listener) customDataContainer.getComponent(aClass));
+                    break;
+                case uninstall:
             }
         }
+        installdata.setCustomActions(customActions);
         // uninstallerLib list if exist
 
     }
@@ -506,5 +457,4 @@ public abstract class AbstractInstallDataProvider implements Provider
         objIn.close();
         return model;
     }
-
 }

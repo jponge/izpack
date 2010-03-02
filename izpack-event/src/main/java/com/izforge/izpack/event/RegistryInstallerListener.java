@@ -26,13 +26,13 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.api.exception.WrappedNativeLibException;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.api.unpacker.IDiscardInterruptable;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.os.RegistryHandler;
 import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.CleanupClient;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
@@ -107,7 +107,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#beforePacks(com.izforge.izpack.installer.AutomatedInstallData,
-     * int, com.izforge.izpack.util.AbstractUIProgressHandler)
+     * int, com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
     public void beforePacks(AutomatedInstallData installData, Integer npacks,
@@ -122,7 +122,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
-     * com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)

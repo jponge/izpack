@@ -24,9 +24,9 @@ package com.izforge.izpack.panels.process;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.handler.AbstractUIProcessHandler;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.automation.PanelAutomationHelper;
-import com.izforge.izpack.util.AbstractUIProcessHandler;
 
 /**
  * Functions to support automated usage of the CompilePanel
@@ -89,7 +89,7 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
     /**
      * Reports progress on System.out
      *
-     * @see com.izforge.izpack.util.AbstractUIProcessHandler#startProcessing(int)
+     * @see com.izforge.izpack.api.handler.AbstractUIProcessHandler#startProcessing(int)
      */
     public void startProcessing(int noOfJobs)
     {
@@ -98,7 +98,7 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
     }
 
     /**
-     * @see com.izforge.izpack.util.AbstractUIProcessHandler#finishProcessing
+     * @see com.izforge.izpack.api.handler.AbstractUIProcessHandler#finishProcessing
      */
     public void finishProcessing(boolean unlockPrev, boolean unlockNext)
     {

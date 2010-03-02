@@ -7,6 +7,7 @@ import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.container.impl.CustomDataContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;
 
@@ -29,7 +30,7 @@ import java.util.TreeMap;
 public class GUIInstallDataProvider extends AbstractInstallDataProvider
 {
 
-    public GUIInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer, VariableSubstitutor variableSubstitutor, Properties variables) throws Exception
+    public GUIInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer, VariableSubstitutor variableSubstitutor, Properties variables, PathResolver pathResolver) throws Exception
     {
         this.resourceManager = resourceManager;
         this.variableSubstitutor = variableSubstitutor;
@@ -37,7 +38,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         // Loads the installation data
         loadInstallData(guiInstallData);
         // Load custom action data.
-        loadCustomData(guiInstallData, customDataContainer);
+        loadCustomData(guiInstallData, customDataContainer, pathResolver);
 
         loadGUIInstallData(guiInstallData);
         loadInstallerRequirements(guiInstallData);

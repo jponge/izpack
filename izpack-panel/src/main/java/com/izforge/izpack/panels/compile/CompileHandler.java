@@ -21,18 +21,20 @@
 
 package com.izforge.izpack.panels.compile;
 
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+
 /**
  * Interface for monitoring compilation progress.
  * <p/>
  * This is used by <code>CompilePanel</code>, <code>CompileWorker</code> and
  * <code>CompilePanelAutomationHelper</code> to display the progress of the compilation. Most of
  * the functionality, however, is inherited from interface
- * com.izforge.izpack.util.AbstractUIProgressHandler
+ * com.izforge.izpack.api.handler.AbstractUIProgressHandler
  *
  * @author Tino Schwarze
- * @see com.izforge.izpack.util.AbstractUIProgressHandler
+ * @see com.izforge.izpack.api.handler.AbstractUIProgressHandler
  */
-public interface CompileHandler extends com.izforge.izpack.util.AbstractUIProgressHandler
+public interface CompileHandler extends AbstractUIProgressHandler
 {
 
     /**

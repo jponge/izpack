@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util;
+package com.izforge.izpack.api.handler;
 
 /**
  * Interface for UIs which need to interface to external processes.

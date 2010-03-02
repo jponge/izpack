@@ -4,6 +4,8 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.container.IInstallerContainer;
@@ -11,8 +13,6 @@ import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.merge.panel.PanelMerge;
 import com.izforge.izpack.merge.resolve.PathResolver;
-import com.izforge.izpack.util.AbstractUIHandler;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.OsConstraintHelper;
 
 import java.util.ArrayList;

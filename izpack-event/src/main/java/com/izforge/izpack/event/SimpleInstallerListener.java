@@ -25,9 +25,9 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.core.event.InstallerListener;
 import com.izforge.izpack.data.PackFile;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.helper.SpecHelper;
 
 import java.io.File;
@@ -116,7 +116,7 @@ public class SimpleInstallerListener implements InstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
-     * com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
@@ -130,7 +130,7 @@ public class SimpleInstallerListener implements InstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#afterPack(com.izforge.izpack.Pack, int,
-     * com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
     public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
@@ -143,7 +143,7 @@ public class SimpleInstallerListener implements InstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#beforePacks(com.izforge.izpack.installer.AutomatedInstallData,
-     * int, com.izforge.izpack.util.AbstractUIProgressHandler)
+     * int, com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
     public void beforePacks(AutomatedInstallData idata, Integer npacks,
@@ -173,7 +173,7 @@ public class SimpleInstallerListener implements InstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#beforePack(com.izforge.izpack.Pack, int,
-     * com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
     public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler)

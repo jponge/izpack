@@ -21,6 +21,7 @@ package com.izforge.izpack.api.data;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
@@ -181,6 +182,7 @@ public class AutomatedInstallData implements Serializable
     public final static String ISO3_ATTRIBUTE = "iso3";
     public final static String SRC_ATTRIBUTE = "src";
     private VariableSubstitutor variableSubstitutor;
+    private List<Listener> customActions;
 
     /**
      * Returns the one possible object of this class.
@@ -562,5 +564,15 @@ public class AutomatedInstallData implements Serializable
     public List<InstallerRequirement> getInstallerrequirements()
     {
         return installerrequirements;
+    }
+
+    public List getCustomActions()
+    {
+        return customActions;
+    }
+
+    public void setCustomActions(List<Listener> customActions)
+    {
+        this.customActions = customActions;
     }
 }

@@ -7,11 +7,15 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.binding.OsModel;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.handler.AbstractUIProcessHandler;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.OsConstraintHelper;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.*;

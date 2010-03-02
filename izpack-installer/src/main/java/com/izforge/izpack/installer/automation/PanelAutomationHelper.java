@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.installer.automation;
 
-import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.util.Housekeeper;
 
 /**
@@ -33,7 +33,7 @@ abstract public class PanelAutomationHelper implements AbstractUIHandler
 {
 
     /*
-     * @see com.izforge.izpack.util.AbstractUIHandler#emitNotification(java.lang.String)
+     * @see com.izforge.izpack.api.handler.AbstractUIHandler#emitNotification(java.lang.String)
      */
 
     public void emitNotification(String message)
@@ -42,7 +42,7 @@ abstract public class PanelAutomationHelper implements AbstractUIHandler
     }
 
     /*
-     * @see com.izforge.izpack.util.AbstractUIHandler#emitWarning(java.lang.String,
+     * @see com.izforge.izpack.api.handler.AbstractUIHandler#emitWarning(java.lang.String,
      * java.lang.String)
      */
 
@@ -54,7 +54,7 @@ abstract public class PanelAutomationHelper implements AbstractUIHandler
     }
 
     /*
-     * @see com.izforge.izpack.util.AbstractUIHandler#emitError(java.lang.String, java.lang.String)
+     * @see com.izforge.izpack.api.handler.AbstractUIHandler#emitError(java.lang.String, java.lang.String)
      */
 
     public void emitError(String title, String message)
@@ -63,7 +63,7 @@ abstract public class PanelAutomationHelper implements AbstractUIHandler
     }
 
     /*
-    * @see com.izforge.izpack.util.AbstractUIHandler#emitErrorAndBlockNext(java.lang.String,
+    * @see com.izforge.izpack.api.handler.AbstractUIHandler#emitErrorAndBlockNext(java.lang.String,
     * java.lang.String)
     */
 
@@ -74,7 +74,7 @@ abstract public class PanelAutomationHelper implements AbstractUIHandler
     }
 
     /*
-     * @see com.izforge.izpack.util.AbstractUIHandler#askQuestion(java.lang.String,
+     * @see com.izforge.izpack.api.handler.AbstractUIHandler#askQuestion(java.lang.String,
      * java.lang.String, int)
      */
 
@@ -85,7 +85,7 @@ abstract public class PanelAutomationHelper implements AbstractUIHandler
     }
 
     /*
-     * @see com.izforge.izpack.util.AbstractUIHandler#askQuestion(java.lang.String,
+     * @see com.izforge.izpack.api.handler.AbstractUIHandler#askQuestion(java.lang.String,
      * java.lang.String, int, int)
      */
 

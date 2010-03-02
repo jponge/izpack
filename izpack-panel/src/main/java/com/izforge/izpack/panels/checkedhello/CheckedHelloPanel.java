@@ -22,12 +22,12 @@ package com.izforge.izpack.panels.checkedhello;
 import com.coi.tools.os.win.MSWinConstants;
 import com.coi.tools.os.win.RegDataContainer;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.os.RegistryHandler;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.hello.HelloPanel;
-import com.izforge.izpack.util.AbstractUIHandler;
 
 /**
  * An extended hello panel class which detects whether the product was already installed or not.

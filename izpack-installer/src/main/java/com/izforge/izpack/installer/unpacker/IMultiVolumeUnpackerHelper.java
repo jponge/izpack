@@ -1,7 +1,7 @@
 package com.izforge.izpack.installer.unpacker;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 
 import java.io.File;
 

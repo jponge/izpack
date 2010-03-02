@@ -134,7 +134,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
     /**
      * Reports progress on System.out
      *
-     * @see com.izforge.izpack.util.AbstractUIProgressHandler#startAction(String, int)
+     * @see com.izforge.izpack.api.handler.AbstractUIProgressHandler#startAction(String, int)
      */
     public void startAction(String name, int noOfJobs)
     {
@@ -165,7 +165,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
     /**
      * Sets state variable for thread sync.
      *
-     * @see com.izforge.izpack.util.AbstractUIProgressHandler#stopAction()
+     * @see com.izforge.izpack.api.handler.AbstractUIProgressHandler#stopAction()
      */
     public void stopAction()
     {
@@ -191,7 +191,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
      *
      * @param val
      * @param msg
-     * @see com.izforge.izpack.util.AbstractUIProgressHandler#progress(int, String)
+     * @see com.izforge.izpack.api.handler.AbstractUIProgressHandler#progress(int, String)
      */
     public void progress(int val, String msg)
     {
@@ -217,7 +217,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
      * @param jobName The next job's name.
      * @param max     unused
      * @param jobNo   The next job's number.
-     * @see com.izforge.izpack.util.AbstractUIProgressHandler#nextStep(String, int, int)
+     * @see com.izforge.izpack.api.handler.AbstractUIProgressHandler#nextStep(String, int, int)
      */
     public void nextStep(String jobName, int max, int jobNo)
     {

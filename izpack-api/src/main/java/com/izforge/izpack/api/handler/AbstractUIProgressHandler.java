@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util;
+package com.izforge.izpack.api.handler;
 
 /**
  * This interface is used by functions which need to notify the user of some progress.

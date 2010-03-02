@@ -23,8 +23,8 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.panels.IShortcuPanel;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
 
 /**
  * Creates the Shortcuts after files have been installed.

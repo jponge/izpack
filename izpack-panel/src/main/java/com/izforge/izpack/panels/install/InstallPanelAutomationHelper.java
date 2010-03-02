@@ -24,11 +24,11 @@ package com.izforge.izpack.panels.install;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.automation.PanelAutomationHelper;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
 
 /**
  * Functions to support automated usage of the InstallPanel
@@ -101,7 +101,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
     /**
      * Sets state variable for thread sync.
      *
-     * @see com.izforge.izpack.util.AbstractUIProgressHandler#stopAction()
+     * @see com.izforge.izpack.api.handler.AbstractUIProgressHandler#stopAction()
      */
     public void stopAction()
     {
@@ -114,7 +114,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
      *
      * @param val
      * @param msg
-     * @see com.izforge.izpack.util.AbstractUIProgressHandler#progress(int, String)
+     * @see com.izforge.izpack.api.handler.AbstractUIProgressHandler#progress(int, String)
      */
     public void progress(int val, String msg)
     {
@@ -128,7 +128,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
      * @param packName The currently installing pack.
      * @param stepno   The number of the pack
      * @param stepsize unused
-     * @see com.izforge.izpack.util.AbstractUIProgressHandler#nextStep(String, int, int)
+     * @see com.izforge.izpack.api.handler.AbstractUIProgressHandler#nextStep(String, int, int)
      */
     public void nextStep(String packName, int stepno, int stepsize)
     {

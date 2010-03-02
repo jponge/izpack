@@ -26,6 +26,8 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.event.InstallerListener;
@@ -83,16 +85,16 @@ public class Unpacker extends UnpackerBase
         {
             //
             // Initialisations
-            FileOutputStream out = null;
+            FileOutputStream out;
             FileQueue fq = null;
             ArrayList<ParsableFile> parsables = new ArrayList<ParsableFile>();
             ArrayList<ExecutableFile> executables = new ArrayList<ExecutableFile>();
             ArrayList<UpdateCheck> updatechecks = new ArrayList<UpdateCheck>();
-            List packs = idata.getSelectedPacks();
+            List<Pack> packs = idata.getSelectedPacks();
             int npacks = packs.size();
             handler.startAction("Unpacking", npacks);
             // Custom action listener stuff --- load listeners ----
-            List[] customActions = getCustomActions();
+            List<InstallerListener> customActions = idata.getCustomActions();
             // Custom action listener stuff --- beforePacks ----
             informListeners(customActions, InstallerListener.BEFORE_PACKS, idata, npacks, handler);
             packs = idata.getSelectedPacks();
@@ -103,7 +105,7 @@ public class Unpacker extends UnpackerBase
             {
                 // We get the pack stream
                 //int n = installData.allPacks.indexOf(packs.get(i));
-                Pack p = (Pack) packs.get(i);
+                Pack p = packs.get(i);
 
                 // evaluate condition
                 if (p.hasCondition())
@@ -131,7 +133,7 @@ public class Unpacker extends UnpackerBase
                 int nfiles = objIn.readInt();
 
                 // We get the internationalized name of the pack
-                final Pack pack = ((Pack) packs.get(i));
+                final Pack pack = (packs.get(i));
                 String stepname = pack.name;// the message to be passed to the
 
                 // installpanel
@@ -183,12 +185,12 @@ public class Unpacker extends UnpackerBase
                             // If there are custom actions which would be called
                             // at
                             // creating a directory, create it recursively.
-                            List fileListeners = customActions[customActions.length - 1];
-                            if (fileListeners != null && fileListeners.size() > 0)
-                            {
-                                mkDirsWithEnhancement(dest, pf, customActions);
-                            }
-                            else
+//                            List fileListeners = customActions[customActions.length - 1];
+//                            if (fileListeners != null && fileListeners.size() > 0)
+//                            {
+//                                mkDirsWithEnhancement(dest, pf, customActions);
+//                            }
+//                            else
                             // Create it in on step.
                             {
                                 if (!dest.mkdirs())
@@ -268,7 +270,7 @@ public class Unpacker extends UnpackerBase
 
                             if (!overwritefile)
                             {
-                                if (!pf.isBackReference() && !((Pack) packs.get(i)).loose)
+                                if (!pf.isBackReference() && !(packs.get(i)).loose)
                                 {
                                     if (pf.isPack200Jar())
                                     {
@@ -298,7 +300,7 @@ public class Unpacker extends UnpackerBase
                             // but the stream header is now already read (== 4
                             // bytes)
                         }
-                        else if (((Pack) packs.get(i)).loose)
+                        else if ((packs.get(i)).loose)
                         {
                             /* Old way of doing the job by using the (absolute) sourcepath.
                             * Since this is very likely to fail and does not confirm to the documentation,
@@ -493,7 +495,7 @@ public class Unpacker extends UnpackerBase
                     }
                 }
                 // Custom action listener stuff --- uninstall data ----
-                handleAdditionalUninstallData(udata, customActions);
+//                handleAdditionalUninstallData(udata, customActions);
 
                 // Load information about updatechecks
                 int numUpdateChecks = objIn.readInt();
@@ -558,7 +560,7 @@ public class Unpacker extends UnpackerBase
             }
 
             // Custom action listener stuff --- afterPacks ----
-            informListeners(customActions, InstallerListener.AFTER_PACKS, idata, handler, null);
+//            informListeners(customActions, InstallerListener.AFTER_PACKS, idata, handler, null);
             if (performInterrupted())
             { // Interrupt was initiated; perform it.
                 return;

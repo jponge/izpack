@@ -23,6 +23,7 @@ package com.izforge.izpack.installer.base;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.installer.ISummarisable;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -31,7 +32,6 @@ import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
 import com.izforge.izpack.gui.MultiLineLabel;
 import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 

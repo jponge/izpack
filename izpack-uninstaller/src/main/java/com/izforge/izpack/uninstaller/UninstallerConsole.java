@@ -22,7 +22,8 @@
 package com.izforge.izpack.uninstaller;
 
 import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -81,7 +82,7 @@ public class UninstallerConsole
      * rid of the InstallListener - implement generic Listener
      */
     private final class DestroyerHandler implements
-            com.izforge.izpack.util.AbstractUIProgressHandler
+            AbstractUIProgressHandler
     {
         private int AUTO_ANSWER_MODE = -2;
 

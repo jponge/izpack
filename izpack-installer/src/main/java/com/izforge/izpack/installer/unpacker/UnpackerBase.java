@@ -24,6 +24,7 @@ package com.izforge.izpack.installer.unpacker;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -35,7 +36,6 @@ import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.merge.Mergeable;
 import com.izforge.izpack.merge.resolve.PathResolver;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsVersion;
@@ -447,119 +447,75 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
     /**
      * Informs all listeners which would be informed at the given action type.
      *
-     * @param customActions array of lists with the custom action objects
-     * @param action        identifier for which callback should be called
-     * @param firstParam    first parameter for the call
-     * @param secondParam   second parameter for the call
-     * @param thirdParam    third parameter for the call
+     * @param customActions             array of lists with the custom action objects
+     * @param action                    identifier for which callback should be called
+     * @param file                      first parameter for the call
+     * @param packFile                  second parameter for the call
+     * @param abstractUIProgressHandler third parameter for the call
      */
-    protected void informListeners(List[] customActions, int action, Object firstParam,
-                                   Object secondParam, Object thirdParam) throws Exception
+    protected void informListeners(List<InstallerListener> customActions, int action, File file,
+                                   PackFile packFile, AbstractUIProgressHandler abstractUIProgressHandler) throws Exception
     {
-        List listener = null;
-        // select the right action list.
-        switch (action)
-        {
-            case InstallerListener.BEFORE_FILE:
-            case InstallerListener.AFTER_FILE:
-            case InstallerListener.BEFORE_DIR:
-            case InstallerListener.AFTER_DIR:
-                listener = customActions[customActions.length - 1];
-                break;
-            default:
-                listener = customActions[0];
-                break;
-        }
-        if (listener == null)
-        {
-            return;
-        }
         // Iterate the action list.
-        Iterator iter = listener.iterator();
-        while (iter.hasNext())
+        for (InstallerListener installerListener : customActions)
         {
             if (shouldInterrupt())
             {
                 return;
             }
-            InstallerListener installerListener = (InstallerListener) iter.next();
             switch (action)
             {
                 case InstallerListener.BEFORE_FILE:
-                    installerListener.beforeFile((File) firstParam, (PackFile) secondParam);
+                    installerListener.beforeFile(file, packFile);
                     break;
                 case InstallerListener.AFTER_FILE:
-                    installerListener.afterFile((File) firstParam, (PackFile) secondParam);
+                    installerListener.afterFile(file, packFile);
                     break;
                 case InstallerListener.BEFORE_DIR:
-                    installerListener.beforeDir((File) firstParam, (PackFile) secondParam);
+                    installerListener.beforeDir(file, packFile);
                     break;
                 case InstallerListener.AFTER_DIR:
-                    installerListener.afterDir((File) firstParam, (PackFile) secondParam);
+                    installerListener.afterDir(file, packFile);
                     break;
+            }
+        }
+    }
+
+    protected void informListeners(List<InstallerListener> customActions, int action, Pack pack,
+                                   Integer integer, AbstractUIProgressHandler abstractUIProgressHandler) throws Exception
+    {
+        for (InstallerListener customAction : customActions)
+        {
+            switch (action)
+            {
                 case InstallerListener.BEFORE_PACK:
-                    installerListener.beforePack((Pack) firstParam, (Integer) secondParam,
-                            (AbstractUIProgressHandler) thirdParam);
+                    customAction.beforePack(pack, integer,
+                            abstractUIProgressHandler);
                     break;
                 case InstallerListener.AFTER_PACK:
-                    installerListener.afterPack((Pack) firstParam, (Integer) secondParam,
-                            (AbstractUIProgressHandler) thirdParam);
+                    customAction.afterPack(pack, integer,
+                            abstractUIProgressHandler);
                     break;
+            }
+        }
+    }
+
+    protected void informListeners(List<InstallerListener> customActions, int action, AutomatedInstallData pack,
+                                   Integer integer, AbstractUIProgressHandler abstractUIProgressHandler) throws Exception
+    {
+        for (InstallerListener customAction : customActions)
+        {
+            switch (action)
+            {
                 case InstallerListener.BEFORE_PACKS:
-                    installerListener.beforePacks((AutomatedInstallData) firstParam, (Integer) secondParam,
-                            (AbstractUIProgressHandler) thirdParam);
+                    customAction.beforePacks(pack, integer, abstractUIProgressHandler);
                     break;
                 case InstallerListener.AFTER_PACKS:
-                    installerListener.afterPacks((AutomatedInstallData) firstParam,
-                            (AbstractUIProgressHandler) secondParam);
+                    customAction.afterPacks(pack, abstractUIProgressHandler);
                     break;
-
             }
         }
     }
-
-    /**
-     * Returns the defined custom actions split into types including a constructed type for the file
-     * related installer listeners.
-     *
-     * @return array of lists of custom action data like listeners
-     */
-    protected List[] getCustomActions()
-    {
-        String[] listenerNames = AutomatedInstallData.CUSTOM_ACTION_TYPES;
-        List[] retval = new List[listenerNames.length + 1];
-        int i;
-        for (i = 0; i < listenerNames.length; ++i)
-        {
-            retval[i] = idata.getCustomData().get(listenerNames[i]);
-            if (retval[i] == null)
-            // Make a dummy list, then iterator is ever callable.
-            {
-                retval[i] = new ArrayList();
-            }
-        }
-        if (retval[AutomatedInstallData.INSTALLER_LISTENER_INDEX].size() > 0)
-        { // Installer listeners exist
-            // Create file related installer listener list in the last
-            // element of custom action array.
-            i = retval.length - 1; // Should be so, but safe is safe ...
-            retval[i] = new ArrayList();
-            for (Object o : retval[AutomatedInstallData.INSTALLER_LISTENER_INDEX])
-            {
-                // If we get a class cast exception many is wrong and
-                // we must fix it.
-                InstallerListener li = (InstallerListener) o;
-                if (li.isFileListener())
-                {
-                    retval[i].add(li);
-                }
-            }
-
-        }
-        return (retval);
-    }
-
-    // This method is only used if a file related custom action exist.
 
     /**
      * Creates the given directory recursive and calls the method "afterDir" of each listener with
@@ -571,7 +527,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
      * @return false on error, true else
      * @throws Exception
      */
-    protected boolean mkDirsWithEnhancement(File dest, PackFile pf, List[] customActions)
+    protected boolean mkDirsWithEnhancement(File dest, PackFile pf, List<InstallerListener> customActions)
             throws Exception
     {
         String path = "unknown";

@@ -20,12 +20,12 @@
 package com.izforge.izpack.panels.install;
 
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
 
 import javax.swing.*;
 import java.awt.*;

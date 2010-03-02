@@ -22,7 +22,7 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 
@@ -49,7 +49,7 @@ public class ProgressBarInstallerListener extends SimpleInstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
-     * com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)

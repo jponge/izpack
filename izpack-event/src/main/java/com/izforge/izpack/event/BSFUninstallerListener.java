@@ -23,7 +23,7 @@
 
 package com.izforge.izpack.event;
 
-import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 
 import java.io.File;
 import java.io.InputStream;

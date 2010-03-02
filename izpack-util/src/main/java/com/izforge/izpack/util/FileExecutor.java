@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.util;
 
+import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.data.ExecutableFile;
 
 import java.io.*;

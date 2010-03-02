@@ -404,7 +404,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
     }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.util.AbstractUIProgressHandler#startAction(java.lang.String, int)
+     * @see com.izforge.izpack.api.handler.AbstractUIProgressHandler#startAction(java.lang.String, int)
      */
 
     public void startAction(String name, int noOfJobs1)

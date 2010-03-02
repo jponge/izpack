@@ -26,9 +26,9 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 import com.izforge.izpack.util.helper.SpecHelper;
@@ -94,7 +94,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.installer.InstallerListener#beforePacks(com.izforge.izpack.installer.AutomatedInstallData,
-     * java.lang.Integer, com.izforge.izpack.util.AbstractUIProgressHandler)
+     * java.lang.Integer, com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
     public void beforePacks(AutomatedInstallData idata, Integer npacks,
@@ -164,7 +164,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.installer.InstallerListener#beforePack(com.izforge.izpack.Pack,
-     * java.lang.Integer, com.izforge.izpack.util.AbstractUIProgressHandler)
+     * java.lang.Integer, com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
     public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler)
@@ -177,7 +177,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.installer.InstallerListener#afterPack(com.izforge.izpack.Pack,
-     * java.lang.Integer, com.izforge.izpack.util.AbstractUIProgressHandler)
+     * java.lang.Integer, com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
     public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
@@ -189,7 +189,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
-     * com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)

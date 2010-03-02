@@ -1,8 +1,8 @@
 package com.izforge.izpack.installer.multiunpacker;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.installer.unpacker.IMultiVolumeUnpackerHelper;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 
 import java.io.BufferedReader;

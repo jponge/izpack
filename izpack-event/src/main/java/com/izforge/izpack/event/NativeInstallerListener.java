@@ -23,7 +23,7 @@ package com.izforge.izpack.event;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.exception.WrappedNativeLibException;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 
 /**
  * This class implements some methods which are needed by installer custom actions with native
@@ -57,7 +57,7 @@ public class NativeInstallerListener extends SimpleInstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#beforePacks(com.izforge.izpack.installer.AutomatedInstallData,
-     * int, com.izforge.izpack.util.AbstractUIProgressHandler)
+     * int, com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
     public void beforePacks(AutomatedInstallData idata, Integer npacks,

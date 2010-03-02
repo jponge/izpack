@@ -20,9 +20,10 @@
 package com.izforge.izpack.uninstaller;
 
 import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IconsDatabase;
-import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Housekeeper;
 
 import javax.swing.*;
@@ -328,7 +329,7 @@ public class UninstallerFrame extends JFrame
      * @author Tino Schwarze
      */
     private final class DestroyerHandler implements
-            com.izforge.izpack.util.AbstractUIProgressHandler
+            AbstractUIProgressHandler
     {
 
         /**
@@ -451,7 +452,7 @@ public class UninstallerFrame extends JFrame
          * @param question The question.
          * @param choices  The set of choices to present.
          * @return The user's choice.
-         * @see AbstractUIHandler#askQuestion(String, String, int)
+         * @see com.izforge.izpack.api.handler.AbstractUIHandler#askQuestion(String, String, int)
          */
         public int askQuestion(String title, String question, int choices)
         {
@@ -466,7 +467,7 @@ public class UninstallerFrame extends JFrame
          * @param choices        The set of choices to present.
          * @param default_choice The default choice. (-1 = no default choice)
          * @return The user's choice.
-         * @see AbstractUIHandler#askQuestion(String, String, int, int)
+         * @see com.izforge.izpack.api.handler.AbstractUIHandler#askQuestion(String, String, int, int)
          */
         public int askQuestion(String title, String question, int choices, int default_choice)
         {
