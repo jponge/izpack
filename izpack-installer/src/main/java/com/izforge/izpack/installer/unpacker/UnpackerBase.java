@@ -22,12 +22,12 @@
 package com.izforge.izpack.installer.unpacker;
 
 import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.api.unpacker.IDiscardInterruptable;
-import com.izforge.izpack.core.event.InstallerListener;
 import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.merge.Mergeable;

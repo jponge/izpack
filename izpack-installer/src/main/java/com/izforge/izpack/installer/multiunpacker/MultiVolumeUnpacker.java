@@ -23,7 +23,7 @@
 //import com.izforge.izpack.api.data.ResourceManager;
 //import com.izforge.izpack.api.rules.RulesEngine;
 //import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-//import com.izforge.izpack.core.event.InstallerListener;
+//import com.izforge.izpack.api.event.InstallerListener;
 //import com.izforge.izpack.core.io.CorruptVolumeException;
 //import com.izforge.izpack.core.io.FileSpanningInputStream;
 //import com.izforge.izpack.core.io.FileSpanningOutputStream;

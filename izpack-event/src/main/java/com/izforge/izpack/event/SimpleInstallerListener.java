@@ -22,8 +22,8 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.core.event.InstallerListener;
 import com.izforge.izpack.util.helper.SpecHelper;
 
 import java.io.File;
