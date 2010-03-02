@@ -26,6 +26,7 @@ import com.izforge.izpack.api.data.DynamicVariable;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.InstallerRequirement;
 import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
@@ -61,15 +62,17 @@ public abstract class PackagerBase implements IPackager
 
     protected CompilerContainer compilerContainer;
     private PathResolver pathResolver;
+    private IzpackProjectInstaller izpackInstallModel;
 
 
-    public PackagerBase(Properties properties, CompilerContainer compilerContainer, PackagerListener listener, MergeManager mergeManager, PathResolver pathResolver)
+    public PackagerBase(Properties properties, CompilerContainer compilerContainer, PackagerListener listener, MergeManager mergeManager, PathResolver pathResolver, IzpackProjectInstaller izpackInstallModel)
     {
         this.properties = properties;
         this.compilerContainer = compilerContainer;
         this.listener = listener;
         this.mergeManager = mergeManager;
         this.pathResolver = pathResolver;
+        this.izpackInstallModel = izpackInstallModel;
     }
 
     /**
@@ -339,6 +342,7 @@ public abstract class PackagerBase implements IPackager
         // an included jar
         writeSkeletonInstaller();
 
+        writeInstallerObject("izpackInstallModel", izpackInstallModel);
         writeInstallerObject("info", info);
         writeInstallerObject("vars", properties);
         writeInstallerObject("GUIPrefs", guiPrefs);

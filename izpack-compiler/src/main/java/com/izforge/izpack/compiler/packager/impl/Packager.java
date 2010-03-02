@@ -23,6 +23,7 @@ package com.izforge.izpack.compiler.packager.impl;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
@@ -75,9 +76,9 @@ public class Packager extends PackagerBase
      * @throws com.izforge.izpack.api.exception.CompilerException
      *
      */
-    public Packager(Properties properties, CompilerData compilerData, CompilerContainer compilerContainer, PackagerListener listener, JarOutputStream jarOutputStream, PackCompressor packCompressor, OutputStream outputStream, MergeManager mergeManager, PathResolver pathResolver) throws CompilerException
+    public Packager(Properties properties, CompilerData compilerData, CompilerContainer compilerContainer, PackagerListener listener, JarOutputStream jarOutputStream, PackCompressor packCompressor, OutputStream outputStream, MergeManager mergeManager, PathResolver pathResolver, IzpackProjectInstaller izpackInstallModel) throws CompilerException
     {
-        super(properties, compilerContainer, listener, mergeManager, pathResolver);
+        super(properties, compilerContainer, listener, mergeManager, pathResolver, izpackInstallModel);
         this.compilerData = compilerData;
         this.primaryJarStream = jarOutputStream;
         this.compressor = packCompressor;
