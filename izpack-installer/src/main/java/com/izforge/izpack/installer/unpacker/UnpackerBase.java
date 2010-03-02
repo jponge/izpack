@@ -21,17 +21,13 @@
 
 package com.izforge.izpack.installer.unpacker;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.Pack;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.api.unpacker.IDiscardInterruptable;
 import com.izforge.izpack.core.event.InstallerListener;
-import com.izforge.izpack.data.Blockable;
-import com.izforge.izpack.data.PackFile;
 import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.merge.Mergeable;

@@ -21,8 +21,7 @@
 
 package com.izforge.izpack.data;
 
-import com.izforge.izpack.api.data.Pack;
-import com.izforge.izpack.api.data.PackColor;
+import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.data.binding.OsModel;
 
 import java.io.File;

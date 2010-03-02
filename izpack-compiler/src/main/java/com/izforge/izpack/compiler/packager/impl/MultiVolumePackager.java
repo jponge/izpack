@@ -25,9 +25,9 @@
 //import com.izforge.izpack.compiler.data.CompilerData;
 //import com.izforge.izpack.compiler.stream.JarOutputStream;
 //import com.izforge.izpack.core.io.FileSpanningOutputStream;
-//import com.izforge.izpack.data.PackFile;
+//import com.izforge.izpack.api.data.PackFile;
 //import com.izforge.izpack.data.PackInfo;
-//import com.izforge.izpack.data.XPackFile;
+//import com.izforge.izpack.api.data.XPackFile;
 //import com.izforge.izpack.util.Debug;
 //import com.izforge.izpack.util.FileUtil;
 //import org.apache.tools.zip.ZipEntry;

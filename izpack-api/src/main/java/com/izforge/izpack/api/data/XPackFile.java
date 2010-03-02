@@ -16,7 +16,7 @@
  * the License.
  */
 
-package com.izforge.izpack.data;
+package com.izforge.izpack.api.data;
 
 
 import com.izforge.izpack.api.data.binding.OsModel;
