@@ -19,6 +19,8 @@
 
 package com.izforge.izpack.api.data;
 
+import com.izforge.izpack.api.data.binding.OsModel;
+
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -90,7 +92,7 @@ public class Pack implements Serializable
     /**
      * The target operation system of this pack
      */
-    public List osConstraints = null;
+    public List<OsModel> osConstraints = null;
 
     /**
      * Condition for this pack *
@@ -153,7 +155,7 @@ public class Pack implements Serializable
      * @param excludegroup  associated exclude group
      * @param uninstall     If true, pack must be uninstalled.
      */
-    public Pack(String name, String id, String description, List osConstraints, List<String> dependencies,
+    public Pack(String name, String id, String description, List<OsModel> osConstraints, List<String> dependencies,
                 boolean required, boolean preselected, boolean loose, String excludegroup, boolean uninstall)
     {
         this.name = name;
