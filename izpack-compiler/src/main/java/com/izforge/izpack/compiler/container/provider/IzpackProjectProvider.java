@@ -57,6 +57,7 @@ public class IzpackProjectProvider implements Provider
             inputStream = new FileInputStream(new File(installFile));
         }
         izpackProjectInstaller = (IzpackProjectInstaller) xStream.fromXML(inputStream);
+        izpackProjectInstaller.fillWithDefault();
         return izpackProjectInstaller;
     }
 

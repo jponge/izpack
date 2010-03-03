@@ -2,6 +2,7 @@ package com.izforge.izpack.api.data.binding;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,5 +23,13 @@ public class IzpackProjectInstaller implements Serializable
     public List<Listener> getListeners()
     {
         return listeners;
+    }
+
+    public void fillWithDefault()
+    {
+        if (listeners == null)
+        {
+            listeners = Collections.emptyList();
+        }
     }
 }
