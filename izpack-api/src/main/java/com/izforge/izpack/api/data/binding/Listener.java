@@ -1,5 +1,6 @@
 package com.izforge.izpack.api.data.binding;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  *
  * @author Anthonin Bonnefoy
  */
-public class Listener
+public class Listener implements Serializable
 {
     private String classname;
 

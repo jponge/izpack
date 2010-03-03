@@ -18,10 +18,12 @@ public class CustomDataTest extends AbstractCompilationTest
     }
 
     @Test
-    public void testCustomData() throws Exception
+    public void testCustomDataArePresent() throws Exception
     {
         CompilerConfig c = compilerContainer.getComponent(CompilerConfig.class);
         c.executeCompiler();
         assertThat(out, ZipMatcher.isZipContainingFile("com/izforge/izpack/event/SummaryLoggerInstallerListener.class"));
     }
+
+
 }
