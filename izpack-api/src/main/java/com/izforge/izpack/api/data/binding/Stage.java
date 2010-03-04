@@ -12,7 +12,7 @@ public enum Stage
 
     public static boolean isInInstaller(Stage stage)
     {
-        return stage.equals(uninstall) || stage.equals(install);
+        return uninstall.equals(stage) || install.equals(stage);
     }
 
 }

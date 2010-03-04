@@ -1,7 +1,6 @@
 package com.izforge.izpack.api.data.binding;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -13,7 +12,7 @@ import java.util.List;
 public class IzpackProjectInstaller implements Serializable
 {
 
-    private List<Listener> listeners = new ArrayList<Listener>();
+    private List<Listener> listeners;
 
     public void add(Listener listener)
     {
