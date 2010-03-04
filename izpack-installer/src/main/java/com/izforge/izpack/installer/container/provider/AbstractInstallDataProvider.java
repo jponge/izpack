@@ -54,7 +54,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         Properties variables = (Properties) readObject("vars");
 
         // We load the Info data
-        Info inf = (Info) readObject("vars");
+        Info inf = (Info) readObject("info");
 
         checkForPrivilegedExecution(inf);
 
