@@ -2190,6 +2190,11 @@ public class CompilerConfig extends Thread
                 {
                     // Merge the package containing the listener class
                     Class aClass = pathResolver.searchFullClassNameInClassPath(listener.getClassname());
+                    if (aClass == null)
+                    {
+                        System.err.println("Warning : Class " + listener.getClassname() + " was not found");
+                        continue;
+                    }
                     mergeManager.addResourceToMerge(aClass.getPackage().getName().replaceAll("\\.", "/") + "/");
                 }
             }
@@ -2207,7 +2212,7 @@ public class CompilerConfig extends Thread
         ArrayList<CompilerListener> result = new ArrayList<CompilerListener>();
         for (Listener listener : izpackProjectInstaller.getListeners())
         {
-            if (listener.getStage().equals(Stage.compiler))
+            if (Stage.compiler.equals(listener.getStage()))
             {
                 listener.getOs();
                 Class<? extends CompilerListener> clazz = pathResolver.searchFullClassNameInClassPath(listener.getClassname());

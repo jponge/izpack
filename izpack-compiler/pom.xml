@@ -27,6 +27,10 @@
             <groupId>${groupId}</groupId>
             <artifactId>izpack-panel</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-event</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>${groupId}</groupId>

@@ -16,8 +16,15 @@
     <dependencies>
         <dependency>
             <groupId>${groupId}</groupId>
-            <artifactId>izpack-compiler</artifactId>
-            <version>${version}</version>
+            <artifactId>izpack-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-installer</artifactId>
         </dependency>
         <dependency>
             <groupId>bsf</groupId>
