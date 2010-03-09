@@ -70,8 +70,8 @@ Here's an example 3 panel userInputSpec.xml file. You specify the use of this XM
 		            <pwd txt="Keystore Password:" size="25" set=""/>
 		            <pwd txt="Retype Password:" size="25" set=""/>
 		          </spec>
-		          <validator class="com.izforge.izpack.util.PasswordEqualityValidator" txt="Both keystore passwords must match." id="key for the error text"/>
-		          <validator class="com.izforge.izpack.util.PasswordKeystoreValidator" txt="Could not validate keystore with password and alias provided." id="key for the error text">
+		          <validator class="com.izforge.izpack.panels.userinput.validator.PasswordEqualityValidator" txt="Both keystore passwords must match." id="key for the error text"/>
+		          <validator class="com.izforge.izpack.panels.userinput.validator.PasswordKeystoreValidator" txt="Could not validate keystore with password and alias provided." id="key for the error text">
 		            <param name="keystoreFile" value="${existing.ssl.keystore}"/>
 		            <param name="keystoreType" value="${existing.ssl.keystore.type}"/>
 		            <param name="keystoreAlias" value="${keystore.key.alias}"/>
@@ -94,8 +94,8 @@ Here's an example 3 panel userInputSpec.xml file. You specify the use of this XM
 		            <pwd txt="Truststore Password:" size="25" set=""/>
 		            <pwd txt="Retype Password:" size="25" set=""/>
 		          </spec>
-		          <validator class="com.izforge.izpack.util.PasswordEqualityValidator" txt="Both truststore passwords must match." id="key for the error text"/>
-		          <validator class="com.izforge.izpack.util.PasswordKeystoreValidator" txt="Could not validate keystore with password and alias provided." id="key for the error text">
+		          <validator class="com.izforge.izpack.panels.userinput.validator.PasswordEqualityValidator" txt="Both truststore passwords must match." id="key for the error text"/>
+		          <validator class="com.izforge.izpack.panels.userinput.validator.PasswordKeystoreValidator" txt="Could not validate keystore with password and alias provided." id="key for the error text">
 		            <param name="keystoreFile" value="${existing.ssl.truststore}"/>
 		            <param name="keystoreType" value="${existing.ssl.truststore.type}"/>
 		            <param name="skipValidation" value="${skip.keystore.validation}"/>
@@ -128,8 +128,8 @@ Here's an example 3 panel userInputSpec.xml file. You specify the use of this XM
 		            <pwd txt="Keystore Password:" size="20" set=""/>
 		            <pwd txt="Retype Password:" size="20" set=""/>
 		          </spec>
-		          <validator class="com.izforge.izpack.util.PasswordEqualityValidator" txt="Both signing keystore passwords must match." id="key for the error text"/>
-		          <validator class="com.izforge.izpack.util.PasswordKeystoreValidator" txt="Could not access keystore with password provided." id="key for the error text">
+		          <validator class="com.izforge.izpack.panels.userinput.validator.PasswordEqualityValidator" txt="Both signing keystore passwords must match." id="key for the error text"/>
+		          <validator class="com.izforge.izpack.panels.userinput.validator.PasswordKeystoreValidator" txt="Could not access keystore with password provided." id="key for the error text">
 		            <param name="keystoreFile" value="${existing.signing.keystore}"/>
 		            <param name="keystoreType" value="${existing.signing.keystore.type}"/>
 		            <param name="skipValidation" value="${skip.keystore.validation}"/>
@@ -145,8 +145,8 @@ Here's an example 3 panel userInputSpec.xml file. You specify the use of this XM
 		            <pwd txt="First Signing Password:" size="20" set=""/>
 		            <pwd txt="Retype Password:" size="20" set=""/>
 		          </spec>
-		          <validator class="com.izforge.izpack.util.PasswordEqualityValidator" txt="Both first signing key passwords must match." id="key for the error text"/>
-		          <validator class="com.izforge.izpack.util.PasswordKeystoreValidator" txt="Could not validate keystore with password and first signing alias provided." id="key for the error text">
+		          <validator class="com.izforge.izpack.panels.userinput.validator.PasswordEqualityValidator" txt="Both first signing key passwords must match." id="key for the error text"/>
+		          <validator class="com.izforge.izpack.panels.userinput.validator.PasswordKeystoreValidator" txt="Could not validate keystore with password and first signing alias provided." id="key for the error text">
 		            <param name="keystoreFile" value="${existing.signing.keystore}"/>
 		            <param name="keystoreType" value="${existing.signing.keystore.type}"/>
 		            <param name="keystorePassword" value="${signing.keystore.password}"/>
@@ -164,8 +164,8 @@ Here's an example 3 panel userInputSpec.xml file. You specify the use of this XM
 		            <pwd txt="Second Signing Password:" size="20" set=""/>
 		            <pwd txt="Retype Password:" size="20" set=""/>
 		          </spec>
-		          <validator class="com.izforge.izpack.util.PasswordEqualityValidator" txt="Both second signing key passwords must match." id="key for the error text"/>
-		          <validator class="com.izforge.izpack.util.PasswordKeystoreValidator" txt="Could not validate keystore with password and second signing alias provided." id="key for the error text">
+		          <validator class="com.izforge.izpack.panels.userinput.validator.PasswordEqualityValidator" txt="Both second signing key passwords must match." id="key for the error text"/>
+		          <validator class="com.izforge.izpack.panels.userinput.validator.PasswordKeystoreValidator" txt="Could not validate keystore with password and second signing alias provided." id="key for the error text">
 		            <param name="keystoreFile" value="${existing.signing.keystore}"/>
 		            <param name="keystoreType" value="${existing.signing.keystore.type}"/>
 		            <param name="keystorePassword" value="${signing.keystore.password}"/>

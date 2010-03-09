@@ -1,3 +1,10 @@
 /_build
 /_dist
 /eclipse-bin
+*.iml
+*.ipr
+target/
+*.iws
+*~
+*.orig
+*.jar

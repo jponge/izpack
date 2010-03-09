@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<!-- The Finnish langpack -->
+
+<langpack>
+
+    <!-- Heading messages START -->
+    <str id="CheckedHelloPanel.headline" txt="Tervetuloa" />
+    <str id="CompilePanel.headline" txt="K��nn� Java-l�hdekoodit" />
+    <str id="ConditionalUserInputPanel.headline" txt="K�ytt�j�n data" />
+    <str id="ExtendedInstallPanel.headline" txt="Asennus ja asetukset" />
+    <str id="FinishPanel.headline" txt="Asennus on p��ttynyt" />
+    <str id="HelloPanel.headline" txt="Tervetuloa" />
+    <str id="HTMLInfoPanel.headline" txt="Tiedot" />
+    <str id="HTMLLicencePanel.headline" txt="K�ytt�oikeussopimukset" />
+    <str id="ImgPacksPanel.headline" txt="Valitse asennuspaketit" />
+    <str id="InfoPanel.headline" txt="Tiedot" />
+    <str id="InstallPanel.headline" txt="Asennus" />
+    <str id="JDKPathPanel.headline" txt="JDK polku" />
+    <str id="LicencePanel.headline" txt="K�ytt�oikeussopimukset" />
+    <str id="PacksPanel.headline" txt="Valitse asennuspaketit" />
+    <str id="ProcessPanel.headline" txt="Suoritetaan ulkopuolisia komentoja" />
+    <str id="ShortcutPanel.headline" txt="Pikalinkit" />
+    <str id="SimpleFinishPanel.headline" txt="Asennus on p��ttynyt" />
+    <str id="SummaryPanel.headline" txt="Yhteenveto asetustiedoista" />
+    <str id="TargetPanel.headline" txt="Kohdepolku" />
+    <str id="UserInputPanel.headline" txt="K�ytt�j�n data" />
+    <str id="UserPathPanel.headline" txt="Valitse polku" />
+    <str id="InstallationTypePanel.headline" txt="Asennuksen tyyppi" />
+
+    <!-- General installer strings -->
+    <str id="installer.title" txt="IzPack - Asennetaan: " />
+    <str id="installer.next" txt="Seuraava" />
+    <str id="installer.prev" txt="Edellinen" />
+    <str id="installer.quit" txt="Lopeta" />
+    <str id="installer.madewith" txt="(Tehty IzPackilla - http://izpack.org/)" />
+    <str id="installer.reboot.ask.title" txt="Uudelleen k�ynnistys vaaditaan" />
+    <str id="installer.reboot.ask.message"
+         txt="Tietokoneen uudelleen k�ynnistys vaaditaan, jotta jotkut muutokset tulevat voimaan. Haluatko k�ynnist�� uudelleen nyt?" />
+    <str id="installer.reboot.notice.title" txt="Uudelleen k�ynnistys suositeltua" />
+    <str id="installer.reboot.notice.message"
+         txt="On suositeltavaa k�ynnist�� tietokone uudelleen, jotta jotkut muutokset tulevat voimaan." />
+    <str id="installer.quit.title" txt="Haluatko varmasti lopettaa?" />
+    <str id="installer.quit.message" txt="T�m� keskeytt�� asennuksen!" />
+    <str id="installer.warning" txt="Varoitus!" />
+    <str id="installer.yes" txt="Kyll�" />
+    <str id="installer.no" txt="En" />
+    <str id="installer.cancel" txt="Peruuta" />
+    <str id="installer.error" txt="Virhe" />
+    <str id="installer.help" txt="Apua" />
+    <str id="installer.step" txt="Vaihe" />
+    <str id="installer.of" txt="/" />
+    <str id="installer.Message" txt="Viesti" />
+
+    <!-- Uninstaller specific strings -->
+    <str id="uninstaller.warning" txt="T�m� poistaa asennetun sovelluksen/asennetut sovellukset!" />
+    <str id="uninstaller.destroytarget" txt=" Poista v�kisin " />
+    <str id="uninstaller.uninstall" txt="Poista asennus" />
+
+    <!-- The strings for the 'official' IzPack plugins -->
+    <!-- HelloPanel strings -->
+    <str id="HelloPanel.welcome1" txt="Tervetuloa asentamaan sovellusta " />
+    <str id="HelloPanel.welcome2" txt="!" />
+    <str id="HelloPanel.authors" txt="T�m�n ohjelmiston on tehnyt: " />
+    <str id="HelloPanel.url" txt="Ohjelmiston kotisivu: " />
+
+    <!-- LicensePanel strings -->
+    <str id="LicencePanel.info" txt="Ole hyv� ja lue huolellisesti seuraava k�ytt�oikeussopimus:" />
+    <str id="LicencePanel.agree" txt="Hyv�ksyn t�m�n k�ytt�oikeussopimuksen ehdot." />
+    <str id="LicencePanel.notagree" txt="En hyv�ksy t�m�n k�ytt�oikeussopimuksen ehtoja." />
+    <str id="LicencePanel.yes" txt="Kyll�" />
+    <str id="LicencePanel.no" txt="En" />
+
+    <!-- PrinterSelect Panel -->
+    <str id="PrinterSelectPanel.select_printer" txt="Valitse kirjoitin asennukseen ja testaukseen." />
+
+    <!-- InfoPanel strings -->
+    <str id="InfoPanel.info" txt="Ole hyv� ja lue seuraavat tiedotteet: " />
+
+    <!-- PathInputPanel strings -->
+    <str id="PathInputPanel.required" txt="Valitun hakemiston on oltava olemassa." />
+    <str id="PathInputPanel.required.forModificationInstallation" txt="Valitun hakemiston on oltava olemassa." />
+    <str id="PathInputPanel.notValid" txt="Valittu hakemisto ei sis�ll� vaadittua tuotetta." />
+
+    <!-- TargetPanel strings -->
+    <str id="TargetPanel.info" txt="Valitse asennushakemisto:" />
+    <str id="TargetPanel.browse" txt="Selaa..." />
+    <str id="TargetPanel.warn"
+         txt="Hakemisto on jo olemassa! Haluatko varmasti asentaa kyseiseen hakemistoon ja mahdollisesti korvata olemassa olevat tiedostot?" />
+    <str id="TargetPanel.empty_target" txt="Et ole antanut asennushakemistoa! Onko t�m� oikein?" />
+    <str id="TargetPanel.createdir" txt="Luodaan asennushakemisto: " />
+    <str id="TargetPanel.nodir" txt="Valittu tiedosto ei ole hakemisto! Ole hyv� ja valitse hakemisto!" />
+    <str id="TargetPanel.notwritable" txt="Hakemistoon ei voi kirjoittaa! Ole hyv� ja valitse toinen hakemisto!" />
+
+    <!-- JDKPathPanel strings -->
+    <str id="JDKPathPanel.extendedIntro"
+         txt="Asennettu ohjelmisto tarvitsee JDK:n (Java Development Kit), jonka version on oltava ${JDKPathPanel.minVersion}...${JDKPathPanel.maxVersion}. Javan ajonaikainen ymp�rist� (Java runtime environment; JRE) ei riit�." />
+    <str id="JDKPathPanel.intro"
+         txt="Asennettu sovellus tarvitsee JDK:n (Java Development Kit). Javan ajonaikainen ymp�rist� (Java runtime environment; JRE) ei riit�." />
+    <str id="JDKPathPanel.info" txt="Valitse JDK:n polku:" />
+    <str id="JDKPathPanel.badVersion1" txt="Valitun JDK:n versio on v��r� (valittavana on: " />
+    <str id="JDKPathPanel.badVersion2" txt=" vaadittu versio: " />
+    <str id="JDKPathPanel.badVersion3" txt=") k�ytet��nk� t�t� JDK:ta silti?" />
+    <str id="JDKPathPanel.nonValidPathInReg"
+         txt="Windowsin rekisteriss� on ep�kelpo polku t�lle JDK:lle. K�ytet��nk� t�t� JDK:ta silti?" />
+
+    <!-- PacksPanel strings -->
+    <str id="PacksPanel.info" txt="Valitse paketit, jotka haluat asentaa:" />
+    <str id="PacksPanel.tip" txt="Huomaa: harmaa valintaruutu tarkoittaa, ett� paketti on pakollinen." />
+    <str id="PacksPanel.space" txt="Vaadittava levytila: " />
+    <str id="PacksPanel.freespace" txt="Vapaana oleva tila: " />
+    <str id="PacksPanel.description" txt="Kuvaus" />
+    <str id="PacksPanel.dependencyList" txt="Valittu paketti tarvitsee seuraavia paketteja asennettavaksi" />
+    <str id="PacksPanel.dependencies" txt="Riippuvuudet: " />
+    <str id="PacksPanel.excludes" txt="Poisj�tetyt: " />
+    <str id="PacksPanel.notEnoughSpace" txt="Asennus vaatii enemm�n tilaa kuin mit� levyasemassa on." />
+    <str id="PacksPanel.notAscertainable" txt="ei todettu" />
+
+    <!-- InstallPanel strings -->
+    <str id="InstallPanel.info" txt="Paina 'Asenna!' aloittaaksesi asennuksen" />
+    <str id="InstallPanel.install" txt="Asenna!" />
+    <str id="InstallPanel.tip" txt="Asennuksen eteneminen:" />
+    <str id="InstallPanel.begin" txt="[Ei toimenpiteit�]" />
+    <str id="InstallPanel.finished" txt="[P��ttynyt]" />
+    <str id="InstallPanel.progress" txt="Kokonaisasennuksen tila:" />
+    <str id="InstallPanel.overwrite.title" txt="Tiedosto on jo olemassa" />
+    <str id="InstallPanel.overwrite.question" txt="Tiedosto on jo olemassa. Korvataanko olemassa oleva?" />
+
+    <!-- InstallationGroupPanel strings -->
+    <str id="InstallationGroupPanel.colNameSelected" txt="Valittu" />
+    <str id="InstallationGroupPanel.colNameInstallType" txt="Asennustyyppi" />
+    <str id="InstallationGroupPanel.colNameSize" txt="Koko" />
+
+    <!-- InstallationTypePanel strings -->
+    <str id="InstallationTypePanel.info" txt="Valitse asennuksen tyyppi:" />
+    <str id="InstallationTypePanel.normal" txt="Uusi asennus" />
+    <str id="InstallationTypePanel.modify" txt="Asennuksen muutos" />
+
+    <!-- FinishPanel strings -->
+    <str id="FinishPanel.success" txt="Asennus on p��ttynyt onnistuneesti!" />
+    <str id="FinishPanel.done" txt="Valmis" />
+    <str id="FinishPanel.fail" txt="Asennus ep�onnistui!" />
+    <str id="FinishPanel.uninst.info" txt="Asennuksen purkuohjelma l�ytyy hakemistosta: " />
+    <str id="FinishPanel.auto" txt="Luo automaattisen asennuksen komentotiedosto" />
+    <str id="FinishPanel.auto.tip"
+         txt="T�t� komentotiedostoa voit k�ytt�� toistaaksesi asennuksen toisella koneella." />
+    <str id="FinishPanel.auto.dialog.filterdesc" txt="XML tiedostot" />
+
+    <!-- ImgPacksPanel strings -->
+    <str id="ImgPacksPanel.dependencyList" txt="Riippuvuudet ja/tai poisj�tetyt" />
+    <str id="ImgPacksPanel.packs" txt="Seuraavat paketit ovat saatavilla:" />
+    <str id="ImgPacksPanel.snap" txt="Pakettin�kym�:" />
+    <str id="ImgPacksPanel.checkbox" txt=" Asenna t�m� paketti" />
+
+    <!-- ShortcutPanel strings -->
+    <str id="ShortcutPanel.regular.list" txt="Valitse ohjelmaryhm� pikalinkeille:" />
+    <str id="ShortcutPanel.regular.default" txt="Oletus" />
+    <str id="ShortcutPanel.regular.desktop" txt="Luo pikalinkit my�s ty�p�yd�lle" />
+    <str id="ShortcutPanel.regular.create" txt="Luo pikalinkit aloitusvalikkoon" />
+    <str id="ShortcutPanel.regular.userIntro" txt="Luo pikalinkki:" />
+    <str id="ShortcutPanel.regular.currentUser" txt="kirjautuneena olevalle k�ytt�j�lle" />
+    <str id="ShortcutPanel.regular.allUsers" txt="kaikille k�ytt�jille" />
+    <str id="ShortcutPanel.alternate.apology"
+         txt="Valitettavasti IzPack ei tue pikalinkkien tekemist� t�ss� k�ytt�j�rjestelm�ss�. Pikalinkkien tekemiseksi tutustu k�ytt�j�rjestelm�si k�ytt�ohjeeseen." />
+    <str id="ShortcutPanel.alternate.targetsLabel"
+         txt="T�m�n ohjelmiston tekij� haluaa, ett� sinulla on p��sy seuraaviin tiedostoihin:" />
+    <str id="ShortcutPanel.alternate.textFileExplanation"
+         txt="Voit tallentaa yksityiskohtaista tietoa ohjelmiston kohdetiedostoista tekstitiedostoon my�hemp�� tarkastelua varten." />
+    <str id="ShortcutPanel.alternate.saveButton" txt="Tallenna tekstitiedosto" />
+    <str id="ShortcutPanel.textFile.header"
+         txt="Pikalinkkitiedot\n========================\n\nSeuraavassa on listaus kaikista asiaankuuluvista tiedoista, jotka liittyv�t\nsuunniteltuihin pikalinkkeihin. N�iden tietojen avulla pikalinkit on mahdollista luoda k�sin.\n" />
+    <str id="ShortcutPanel.textFile.name" txt="Pikalinkki          : " />
+    <str id="ShortcutPanel.textFile.location" txt="Aiottu paikka       : " />
+    <str id="ShortcutPanel.textFile.description" txt="Kuvaus              : " />
+    <str id="ShortcutPanel.textFile.target" txt="Pikalinkin kohde    : " />
+    <str id="ShortcutPanel.textFile.command" txt="Komentorivi         : " />
+    <str id="ShortcutPanel.textFile.iconName" txt="Kuvaketiedosto      : " />
+    <str id="ShortcutPanel.textFile.iconIndex" txt="Kuvakeindeksi       : " />
+    <str id="ShortcutPanel.textFile.work" txt="Ty�skentelyhakemisto: " />
+    <str id="ShortcutPanel.location.desktop" txt="Ty�p�yt�" />
+    <str id="ShortcutPanel.location.applications" txt="Sovellusten valikko" />
+    <str id="ShortcutPanel.location.startMenu" txt="Aloitusvalikko" />
+    <str id="ShortcutPanel.location.startup" txt="K�ynnistyksen ohjelmaryhm�" />
+    <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="Aloitusvalikko" />
+    <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="XDG-Valikko" />
+
+    <!-- UserInputPanel strings -->
+    <str id="UserInputPanel.error.caption" txt="Sy�tt�ongelma" />
+    <str id="UserInputPanel.dir.nodirectory.message" txt="Sinun t�ytyy valita kelvollinen hakemisto." />
+    <str id="UserInputPanel.dir.nodirectory.caption" txt="Hakemistoa ei valittu" />
+    <str id="UserInputPanel.dir.notdirectory.message"
+         txt="Valitsemasi hakemisto ei ole olemassa tai ei ole k�ytt�kelpoinen." />
+    <str id="UserInputPanel.dir.notdirectory.caption" txt="Kelvoton hakemisto" />
+    <str id="UserInputPanel.file.nofile.message" txt="Sinun t�ytyy valita kelvollinen tiedosto." />
+    <str id="UserInputPanel.file.nofile.caption" txt="Tiedostoa ei valittu" />
+    <str id="UserInputPanel.file.notfile.message"
+         txt="Valitsemasi tiedosto ei ole olemassa tai ei ole k�ytt�kelpoinen." />
+    <str id="UserInputPanel.file.notfile.caption" txt="Kelvoton tiedosto" />
+
+    <!-- more descriptive error message would be cool, like specifying what file we looked for -->
+    <str id="UserInputPanel.search.autodetect" txt="Automaattinen tunnistus" />
+    <str id="UserInputPanel.search.autodetect.failed.message" txt="Automaattinen tunnistus ep�onnistui." />
+    <str id="UserInputPanel.search.autodetect.failed.caption" txt="Automaattinen tunnistus" />
+    <str id="UserInputPanel.search.autodetect.tooltip"
+         txt="Tarkista yll�olevissa poluissa oleva hakemisto tai tiedosto." />
+    <str id="UserInputPanel.search.location" txt="Anna sijainti: {0}." />
+    <str id="UserInputPanel.search.location.checkedfile" txt="Tiedoston {0} olemassaolo on tarkistettu." />
+    <str id="UserInputPanel.search.browse" txt="Selaa..." />
+    <str id="UserInputPanel.search.wrongselection.message"
+         txt="Valitsemasi tiedosto tai hakemisto ei ole olemassa tai ei ole k�ytt�kelpoinen." />
+    <str id="UserInputPanel.search.wrongselection.caption" txt="V��r� valinta." />
+
+    <!-- UserPathPanel strings -->
+    <str id="UserPathPanel.required" txt="Valitun hakemiston on oltava olemassa." />
+    <str id="UserPathPanel.info" txt="Valitse polku: " />
+    <str id="UserPathPanel.browse" txt="Selaa" />
+    <str id="UserPathPanel.exists_warn"
+         txt="Hakemisto on jo olemassa! Haluatko varmasti asentaa kyseiseen hakemistoon ja mahdollisesti korvata olemassa olevat tiedostot?" />
+    <str id="UserPathPanel.empty_target" txt="Et ole antanut asennushakemistoa! Onko t�m� oikein?" />
+    <str id="UserPathPanel.createdir" txt="Luodaan asennushakemisto: " />
+    <str id="UserPathPanel.nodir" txt="Valittu tiedosto ei ole hakemisto! Ole hyv� ja valitse hakemisto!" />
+    <str id="UserPathPanel.notwritable" txt="Hakemistoon ei voi kirjoittaa! Ole hyv� ja valitse toinen hakemisto!" />
+
+    <!-- CompilePanel strings -->
+    <str id="CompilePanel.heading" txt="K��nn�s" />
+    <str id="CompilePanel.tip" txt="K��nn�ksen tila:" />
+    <str id="CompilePanel.browse" txt="Selaa..." />
+    <str id="CompilePanel.browse.approve" txt="K�yt� k��nt�j�n�" />
+    <str id="CompilePanel.start" txt="Aloita" />
+    <str id="CompilePanel.progress.initial" txt="[Paina Aloita-painiketta]" />
+    <str id="CompilePanel.progress.finished" txt="[P��ttynyt]" />
+    <str id="CompilePanel.progress.overall" txt="K��nn�ksen kokonaistila:" />
+    <str id="CompilePanel.error" txt="K��nn�s ep�onnistui" />
+    <str id="CompilePanel.error.reconfigure" txt="Uudet asetukset" />
+    <str id="CompilePanel.error.ignore" txt="Hylk��" />
+    <str id="CompilePanel.error.abort" txt="Keskeyt�" />
+    <str id="CompilePanel.error.seebelow" txt="Alapuolella on ep�onnistunut komento ja sen tuloste." />
+    <str id="CompilePanel.error.nofiles" txt="Virhe k��nn�kseen otettavien tiedostojen etsinn�ss�." />
+    <str id="CompilePanel.error.compilernotfound" txt="K��nt�j�� ei voitu ajaa." />
+    <str id="CompilePanel.error.invalidarguments" txt="V��ri� parametreja annettu k��nt�j�lle." />
+    <str id="CompilePanel.error.noclassfile" txt="K��nt�j� ei tuottanut luokkatiedostoa l�hdekooditiedostolle " />
+    <str id="CompilePanel.choose_compiler" txt="Valitse k��nt�j�:" />
+    <str id="CompilePanel.additional_arguments" txt="K��nt�j�n lis�parametrit:" />
+
+    <!-- ProcessPanel strings -->
+    <str id="ProcessPanel.heading" txt="K�sittely menossa..." />
+
+    <!-- SummaryPanel strings -->
+    <str id="SummaryPanel.info"
+         txt="Valmis asennukseen. T�rke�t tiedot on listattu alla. Paina &quot;Seuraava&quot; aloittaaksesi asennuksen." />
+    <str id="TargetPanel.summaryCaption" txt="Asennuspolku" />
+    <str id="JDKPathPanel.summaryCaption" txt="JDK polku" />
+    <str id="PacksPanel.summaryCaption" txt="Valitut asennuspaketit" />
+    <str id="ImgPacksPanel.summaryCaption" txt="Valitut asennuspaketit" />
+    <str id="TreePacksPanel.summaryCaption" txt="Valitut asennuspaketit" />
+    <str id="UserPathPanel.summaryCaption" txt="Valittu polku" />
+    <str id="DefaultTargetPanel.summaryCaption" txt="Asennuspolku" />
+
+    <!-- Strings for the Registry -->
+    <str id="functionFailed.RegOpenKeyEx" txt="Ei voida avata rekisteriavainta {0}\\{1}." />
+
+    <!-- CheckedHelloPanel strings -->
+    <str id="CheckedHelloPanel.productAlreadyExist0" txt="T�m� tuote on jo asennettu t�h�n koneeseen polun " />
+    <str id="CheckedHelloPanel.productAlreadyExist1" txt=" alle. Oletko varma, ett� haluat asentaa toisen kopion?" />
+    <str id="CheckedHelloPanel.infoOverUninstallKey" txt="Poistoavain on nimelt��n: " />
+
+    <!-- Next Media Strings -->
+    <str id="nextmedia.title" txt="Seuraava asennusmedia" />
+    <str id="nextmedia.msg" txt="Valitse seuraava asennusmedia." />
+    <str id="nextmedia.browsebtn" txt="Selaa" />
+    <str id="nextmedia.okbtn" txt="Hyv�ksy" />
+    <str id="nextmedia.cancelbtn" txt="Peruuta" />
+    <str id="nextmedia.choosertitle" txt="Valitse asennusmedia" />
+    <str id="nextmedia.filedesc" txt="asennuspaketit (.pak*)" />
+
+    <!-- This string defines the time stamp format in the installation report.
+         The format details are documented in java.text.SimpleDateFormat -->
+    <str id="log.timeStamp" txt="d.M.yyyy [HH.mm.ss] Z" />
+
+    <!-- Strings for various purposes in the logging/reporting system  -->
+    <str id="log.reportHeading" txt="                           IzPack ASENNUSRAPORTTI" />
+    <str id="log.installFailed" txt="VAROITUS!!! Asennus ei onnistunut!" />
+    <str id="log.partialInstall" txt="VAROITUS!!! Asennus ei ole onnistunut kokonaan!" />
+    <str id="log.messageCount" txt="T�m� raportti sis�lt�� {0} yleist� viesti�, {1} varoitusta ja {2} virhett�" />
+    <str id="log.application" txt="Asennusraportti : {0} versio {1}" />
+    <str id="log.timePrefix" txt="Asennusaika     : {0}" />
+    <str id="log.pathPrefix" txt="Asennushakemisto: {0}" />
+    <str id="log.messageHeading" txt="                 --- Asennusviestit ---" />
+    <str id="log.warningHeading" txt="                   --- Varoitukset ---" />
+    <str id="log.errorHeading" txt="                     --- Virheet ---" />
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; Poikkeus: {0}" />
+    <str id="log.messagePrefix" txt="Viesti  [{0}] - " />
+    <str id="log.warningPrefix" txt="Varoitus [{0}] - " />
+    <str id="log.errorPrefix" txt="Virhe [{0}] - " />
+    <str id="log.reportWriteErrorTitle" txt="Virhe raportin kirjoituksessa" />
+    <str id="log.reportWriteError" txt="Asennusraporttia ei voi kirjoittaa: ''{0}''" />
+    <str id="log.informUserTitle" txt="Asennusongelmat" />
+    <str id="log.saveLogTitle" txt="Tallenna lokitiedosto" />
+    <str id="log.LogFileName" txt="installLog.txt" />
+    <str id="log.informUserFail"
+         txt="&lt;html&gt;Asennus ei onnistunut!&lt;br&gt;Haluatko kirjoittaa lokitiedoston?&lt;/html&gt;" />
+    <str id="log.informUserPartial"
+         txt="&lt;html&gt;Asennus ei ole onnistunut kokonaan!&lt;br&gt;Haluatko kirjoittaa lokitiedoston?&lt;/html&gt;" />
+
+    <!-- Strings for individual messages in the logging/reporting system.
+         Numbers for each category (message/warning/error) start at 0  -->
+    <str id="log.message_" txt="" />
+    <str id="log.warning_" txt="" />
+    <str id="log.error_0" txt="ei voi kirjoittaa: ''{0}''" />
+    <str id="debug.changevariable" txt="muuta arvo" />
+
+</langpack>

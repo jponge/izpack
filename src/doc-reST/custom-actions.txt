@@ -89,8 +89,8 @@ time and at uninstallation time. The interfaces are:
 Custom action type  Interface name
 =================== =============================================
 Packaging           com.izforge.izpack.event.CompilerListener
-Installation        com.izforge.izpack.event.InstallerListener
-Uninstallation      com.izforge.izpack.event.UninstallerListener
+Installation        com.izforge.izpack.core.event.InstallerListener
+Uninstallation      com.izforge.izpack.core.event.UninstallerListener
 =================== =============================================
 
 
