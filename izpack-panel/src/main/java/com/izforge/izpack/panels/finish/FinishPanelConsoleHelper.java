@@ -18,14 +18,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.finish;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
-
-package com.izforge.izpack.panels;
-
 
 import java.io.PrintWriter;
 import java.util.Properties;
@@ -49,7 +47,7 @@ public class FinishPanelConsoleHelper extends PanelConsoleHelper implements Pane
 
     public boolean runConsole(AutomatedInstallData idata)
     {
-        if (idata.installSuccess)
+        if (idata.isInstallSuccess())
         {
             System.out.println("Installation was successful");
             System.out.println("application installed on " + idata.getInstallPath());

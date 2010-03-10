@@ -35,12 +35,12 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
+
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.Properties;
 import java.util.Properties;
 
 /**
@@ -345,7 +345,7 @@ public class ConsoleInstaller extends InstallerBase
         }
         else
         {
-            if (!rules.canShowPanel(panelid, this.installdata.variables))
+            if (!rules.canShowPanel(panelid, this.installdata.getVariables()))
             {
                 // skip panel, if conditions for panel aren't met
                 Debug.trace("Skip panel with panelid=" + panelid);
@@ -427,7 +427,6 @@ public class ConsoleInstaller extends InstallerBase
             if (reboot)
             {
                 System.out.println("[ Rebooting now automatically ]");
-            }
             }
         }
         Housekeeper.getInstance().shutDown(this.result ? 0 : 1, reboot);

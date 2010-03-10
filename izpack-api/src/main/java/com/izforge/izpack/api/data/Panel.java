@@ -18,10 +18,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.api.data;
 
-import com.izforge.izpack.installer.PanelActionConfiguration;
-import com.izforge.izpack.util.OsConstraint;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,7 +31,8 @@ import java.util.List;
  * @author Jan Blok
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
-public class Panel implements Serializable {
+public class Panel implements Serializable
+{
 
     static final long serialVersionUID = 8886445274940938809L;
 
@@ -94,101 +94,126 @@ public class Panel implements Serializable {
      */
     private HashMap<String, String> configuration = null;
 
-    public String getClassName() {
+    public String getClassName()
+    {
         return this.className;
     }
 
-    public void setClassName(String className) {
+    public void setClassName(String className)
+    {
         this.className = className;
     }
 
-    public String getPanelid() {
-        if (this.panelid == null) {
+    public String getPanelid()
+    {
+        if (this.panelid == null)
+        {
             this.panelid = "UNKNOWN (" + className + ")";
         }
         return this.panelid;
     }
 
-    public void setPanelid(String panelid) {
+    public void setPanelid(String panelid)
+    {
         this.panelid = panelid;
     }
 
     /**
      * @return the condition
      */
-    public String getCondition() {
+    public String getCondition()
+    {
         return this.condition;
     }
 
     /**
      * @param condition the condition to set
      */
-    public void setCondition(String condition) {
+    public void setCondition(String condition)
+    {
         this.condition = condition;
     }
 
-    public boolean hasCondition() {
+    public boolean hasCondition()
+    {
         return this.condition != null;
     }
 
-    public String getValidator() {
+    public String getValidator()
+    {
         return validator;
     }
 
-    public void setValidator(String validator) {
+    public void setValidator(String validator)
+    {
         this.validator = validator;
     }
 
-    public void addHelp(String isoCode, String url) {
-        if (this.helps == null) {
+    public void addHelp(String isoCode, String url)
+    {
+        if (this.helps == null)
+        {
             this.helps = new HashMap<String, String>();
         }
         this.helps.put(isoCode, url);
     }
 
-    public HashMap<String, String> getHelpsMap() {
+    public HashMap<String, String> getHelpsMap()
+    {
         return this.helps;
     }
 
-    public List<String> getPreConstructionActions() {
+    public List<String> getPreConstructionActions()
+    {
         return preConstructionActions;
     }
 
-    public void addPreConstructionActions(String preConstructionAction) {
-        if (this.preConstructionActions == null) {
+    public void addPreConstructionActions(String preConstructionAction)
+    {
+        if (this.preConstructionActions == null)
+        {
             this.preConstructionActions = new ArrayList<String>();
         }
         this.preConstructionActions.add(preConstructionAction);
     }
 
-    public List<String> getPreActivationActions() {
+    public List<String> getPreActivationActions()
+    {
         return preActivationActions;
     }
 
-    public void addPreActivationAction(String preActivationAction) {
-        if (this.preActivationActions == null) {
+    public void addPreActivationAction(String preActivationAction)
+    {
+        if (this.preActivationActions == null)
+        {
             this.preActivationActions = new ArrayList<String>();
         }
         this.preActivationActions.add(preActivationAction);
     }
 
-    public List<String> getPreValidationActions() {
+    public List<String> getPreValidationActions()
+    {
         return preValidationActions;
     }
 
-    public void addPreValidationAction(String preValidationAction) {
-        if (this.preValidationActions == null) {
+    public void addPreValidationAction(String preValidationAction)
+    {
+        if (this.preValidationActions == null)
+        {
             this.preValidationActions = new ArrayList<String>();
         }
         this.preValidationActions.add(preValidationAction);
     }
 
-    public List<String> getPostValidationActions() {
+    public List<String> getPostValidationActions()
+    {
         return postValidationActions;
     }
 
-    public void addPostValidationAction(String postValidationAction) {
-        if (this.postValidationActions == null) {
+    public void addPostValidationAction(String postValidationAction)
+    {
+        if (this.postValidationActions == null)
+        {
             this.postValidationActions = new ArrayList<String>();
         }
         this.postValidationActions.add(postValidationAction);

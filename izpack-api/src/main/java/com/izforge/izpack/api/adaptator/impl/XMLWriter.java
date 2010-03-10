@@ -35,7 +35,8 @@ import java.io.OutputStream;
  * @author Anthonin Bonnefoy
  * @author David Duponchel
  */
-public class XMLWriter implements IXMLWriter {
+public class XMLWriter implements IXMLWriter
+{
 
     /**
      * OutputStream of the xml
@@ -50,7 +51,8 @@ public class XMLWriter implements IXMLWriter {
     /**
      * Default constructor
      */
-    public XMLWriter() {
+    public XMLWriter()
+    {
     }
 
     /**
@@ -58,36 +60,44 @@ public class XMLWriter implements IXMLWriter {
      *
      * @param outputStream outputStream to use
      */
-    public XMLWriter(OutputStream outputStream) {
+    public XMLWriter(OutputStream outputStream)
+    {
         this.outputStream = outputStream;
     }
 
-    public void write(IXMLElement element) {
-        try {
+    public void write(IXMLElement element)
+    {
+        try
+        {
             Source source = new DOMSource(element.getElement().getOwnerDocument());
             TransformerFactory fabrique = TransformerFactory.newInstance();
             Transformer transformer = fabrique.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
             Result result;
-            if (outputStream != null) {
+            if (outputStream != null)
+            {
                 result = new StreamResult(outputStream);
             }
             else
+            {
                 result = new StreamResult(systemId);
             }
             transformer.transform(source, result);
         }
-        catch (TransformerException e) {
+        catch (TransformerException e)
+        {
             throw new XMLException(e);
         }
     }
 
-    public void setOutput(OutputStream outputStream) {
+    public void setOutput(OutputStream outputStream)
+    {
         this.outputStream = outputStream;
     }
 
-    public void setOutput(String systemId) {
+    public void setOutput(String systemId)
+    {
         this.systemId = systemId;
     }
 }

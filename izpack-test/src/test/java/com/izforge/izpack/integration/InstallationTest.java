@@ -167,6 +167,7 @@ public class InstallationTest extends AbstractInstallationTest
         // Hello panel
         Thread.sleep(100);
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        Thread.sleep(99000);
         // Chack Panel
         Thread.sleep(100);
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();

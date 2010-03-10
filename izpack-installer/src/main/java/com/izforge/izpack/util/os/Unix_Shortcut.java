@@ -71,7 +71,8 @@ import java.util.*;
  *
  * @author marc.eppelmann&#064;reddot.de
  */
-public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
+public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
+{
 
     // ~ Static fields/initializers
     // *******************************************************************************************************************************
@@ -126,7 +127,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
 
     private static ShellScript uninstallScript = null;
 
-    private List users;
+    private static ArrayList users = UnixUsers.getUsersWithValidShellsExistingHomesAndDesktops();
 
     // private static ArrayList tempfiles = new ArrayList();
 
@@ -205,6 +206,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
     public String myXdgDesktopIconScript;
 
     public String myXdgDesktopIconCmd;
+    private AutomatedInstallData idata;
 
     // ~ Constructors ***********************************************************************
 
@@ -214,7 +216,9 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
     /**
      * Creates a new Unix_Shortcut object.
      */
-    public Unix_Shortcut() {
+    public Unix_Shortcut(AutomatedInstallData automatedInstallData)
+    {
+        idata = automatedInstallData;
         hlp = new StringBuffer();
 
         String userLanguage = System.getProperty("user.language", "en");
@@ -264,13 +268,16 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
 
         initProps();
 
-        if (rootScript == null) {
+        if (rootScript == null)
+        {
             rootScript = new ShellScript();
         }
-        if (uninstallScript == null) {
+        if (uninstallScript == null)
+        {
             uninstallScript = new ShellScript();
         }
-        if (myInstallScript == null) {
+        if (myInstallScript == null)
+        {
             myInstallScript = new ShellScript();
         }
 
@@ -284,14 +291,16 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
     /**
      * This initialisizes all Properties Values with &quot;&quot;.
      */
-    private void initProps() {
+    private void initProps()
+    {
         String[] propsArray = {$Comment, $$LANG_Comment, $Encoding, $Exec, $Arguments,
                 $GenericName, $$LANG_GenericName, $MimeType, $Name, $$LANG_Name, $Path,
                 $ServiceTypes, $SwallowExec, $SwallowTitle, $Terminal, $Options_For_Terminal,
                 $Type, $X_KDE_SubstituteUID, $X_KDE_Username, $Icon, $URL, $E_QUOT, $P_QUOT,
                 $Categories, $TryExec};
 
-        for (String aPropsArray : propsArray) {
+        for (String aPropsArray : propsArray)
+        {
             props.put(aPropsArray, "");
         }
     }
@@ -301,7 +310,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#initialize(int, java.lang.String)
      */
-    public void initialize(int aType, String aName) throws Exception {
+    public void initialize(int aType, String aName) throws Exception
+    {
         this.itsName = aName;
         props.put($Name, aName);
     }
@@ -311,7 +321,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#supported()
      */
-    public boolean supported() {
+    public boolean supported()
+    {
         return true;
     }
 
@@ -320,7 +331,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#getDirectoryCreated()
      */
-    public String getDirectoryCreated() {
+    public String getDirectoryCreated()
+    {
         return this.createdDirectory; // while not stored...
     }
 
@@ -329,7 +341,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#getFileName()
      */
-    public String getFileName() {
+    public String getFileName()
+    {
         return (this.itsFileName);
     }
 
@@ -338,21 +351,26 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#getProgramGroups(int)
      */
-    public Vector<String> getProgramGroups(int userType) {
+    public Vector<String> getProgramGroups(int userType)
+    {
         Vector<String> groups = new Vector<String>();
 
         File kdeShareApplnk = getKdeShareApplnkFolder(userType);
 
-        try {
+        try
+        {
             File[] listing = kdeShareApplnk.listFiles();
 
-            for (File aListing : listing) {
-                if (aListing.isDirectory()) {
+            for (File aListing : listing)
+            {
+                if (aListing.isDirectory())
+                {
                     groups.add(aListing.getName());
                 }
             }
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             // ignore and return an empty vector.
         }
 
@@ -364,7 +382,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#getProgramsFolder(int)
      */
-    public String getProgramsFolder(int current_user) {
+    public String getProgramsFolder(int current_user)
+    {
         String result = "";
 
         // 
@@ -379,12 +398,16 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      * @param userType to get for.
      * @return handle to the directory
      */
-    private File getKdeShareApplnkFolder(int userType) {
+    private File getKdeShareApplnkFolder(int userType)
+    {
 
-        if (userType == Shortcut.ALL_USERS) {
+        if (userType == Shortcut.ALL_USERS)
+        {
             return new File(File.separator + "usr" + File.separator + "share" + File.separator
                     + "applications");
-        } else {
+        }
+        else
+        {
             return new File(System.getProperty("user.home") + File.separator + ".local"
                     + File.separator + "share" + File.separator + "applications");
         }
@@ -397,14 +420,17 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @return result
      */
-    private String getKdeApplinkFolderName() {
+    private String getKdeApplinkFolderName()
+    {
         String applinkFolderName = "applnk";
 
-        if (OsVersion.IS_REDHAT_LINUX) {
+        if (OsVersion.IS_REDHAT_LINUX)
+        {
             applinkFolderName = "applnk-redhat";
         }
 
-        if (OsVersion.IS_MANDRAKE_LINUX) {
+        if (OsVersion.IS_MANDRAKE_LINUX)
+        {
             applinkFolderName = "applnk-mdk";
         }
 
@@ -417,10 +443,12 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      * @param userType one of root or regular user
      * @return the basedir
      */
-    private File getKdeBase(int userType) {
+    private File getKdeBase(int userType)
+    {
         File result = null;
 
-        if (userType == Shortcut.ALL_USERS) {
+        if (userType == Shortcut.ALL_USERS)
+        {
             FileExecutor fe = new FileExecutor();
 
             String[] execOut = new String[2];
@@ -429,7 +457,9 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
                     "--prefix"}, execOut);
 
             result = new File(execOut[0].trim());
-        } else {
+        }
+        else
+        {
             result = new File(System.getProperty("user.home") + File.separator + ".kde");
         }
 
@@ -442,7 +472,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      * @return true
      * @see com.izforge.izpack.util.os.Shortcut#multipleUsers()
      */
-    public boolean multipleUsers() {
+    public boolean multipleUsers()
+    {
         // EVER true for UNIXes ;-)
         return (true);
     }
@@ -452,7 +483,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#save()
      */
-    public void save() throws Exception {
+    public void save() throws Exception
+    {
 
         String target = null;
 
@@ -462,11 +494,10 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
         boolean create4All = this.getCreateForAll();
 
         // Create The Desktop Shortcuts
-        if ("".equals(this.itsGroupName) && (this.getLinkType() == Shortcut.DESKTOP)) {
+        if ("".equals(this.itsGroupName) && (this.getLinkType() == Shortcut.DESKTOP))
+        {
 
             this.itsFileName = target;
-            AutomatedInstallData idata;
-            idata = AutomatedInstallData.getInstance();
 
             // read the userdefined / overridden / wished Shortcut Location
             // This can be an absolute Path name or a relative Path to the InstallPath
@@ -477,10 +508,12 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
              * <-- Put in Docu and in Un/InstallerConstantsClass
              */
             );
-            if (null != ApplicationShortcutPathName && !ApplicationShortcutPathName.equals("")) {
+            if (null != ApplicationShortcutPathName && !ApplicationShortcutPathName.equals(""))
+            {
                 ApplicationShortcutPath = new File(ApplicationShortcutPathName);
 
-                if (ApplicationShortcutPath.isAbsolute()) {
+                if (ApplicationShortcutPath.isAbsolute())
+                {
                     // I know :-) Can be m"ORed" elegant :)
                     if (!ApplicationShortcutPath.exists() && ApplicationShortcutPath.mkdirs()
                             && ApplicationShortcutPath.canWrite())
@@ -493,12 +526,15 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
                         shortCutLocation = ApplicationShortcutPath;
                     }
                 }
+                else
+                {
                     File relativePath = new File(idata.getInstallPath() + FS
                             + ApplicationShortcutPath);
                     relativePath.mkdirs();
                     shortCutLocation = new File(relativePath.toString());
                 }
-            } else
+            }
+            else
             {
                 shortCutLocation = new File(idata.getInstallPath());
             }
@@ -511,7 +547,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
             // Now install my Own with xdg-if available // Note the The reverse Uninstall-Task is on
             // TODO: "WHICH another place"
 
-            if (xdgDesktopIconCmd != null) {
+            if (xdgDesktopIconCmd != null)
+            {
                 createExtXdgDesktopIconCmd(shortCutLocation);
                 // / TODO: DELETE the ScriptFiles
                 myInstallScript.appendln(new String[]{myXdgDesktopIconCmd, "install",
@@ -520,10 +557,13 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
                 myUninstallScript.appendln(new String[]{myXdgDesktopIconCmd, "uninstall",
                         "--novendor", StringTool.escapeSpaces(writtenDesktopFile.toString())});
                 uninstaller.addUninstallScript(myUninstallScript.getContentAsString());
-            } else {
+            }
+            else
+            {
                 // otherwise copy to my desktop and add to uninstaller
                 File myDesktopFile;
-                do {
+                do
+                {
                     myDesktopFile = new File(myHome + FS + "Desktop" + writtenDesktopFile.getName()
                             + "-" + System.currentTimeMillis() + DESKTOP_EXT);
                 }
@@ -534,10 +574,13 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
             }
 
             // If I'm root and this Desktop.ShortCut should be for all other users
-            if (rootUser4All && create4All) {
-                if (xdgDesktopIconCmd != null) {
+            if (rootUser4All && create4All)
+            {
+                if (xdgDesktopIconCmd != null)
+                {
                     installDesktopFileToAllUsersDesktop(writtenDesktopFile);
-                } else
+                }
+                else
                 // OLD ( Backward-Compatible/hardwired-"Desktop"-Foldername Styled Mechanic )
                 {
                     copyDesktopFileToAllUsersDesktop(writtenDesktopFile);
@@ -546,7 +589,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
         }
 
         // This is - or should be only a Link in the [K?]-Menu
-        else {
+        else
+        {
             // the following is for backwards compatibility to older versions of KDE!
             // on newer versions of KDE the icons will appear duplicated unless you set
             // the category=""
@@ -562,18 +606,21 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
              * uninstaller.addFile(kdemenufile.toString(), true); }
              */
 
-            if (rootUser4All && create4All) {
+            if (rootUser4All && create4All)
+            {
                 {
                     // write the icon pixmaps into /usr/share/pixmaps
 
                     File theIcon = new File(this.getIconLocation());
                     File commonIcon = new File("/usr/share/pixmaps/" + theIcon.getName());
 
-                    try {
+                    try
+                    {
                         copyTo(theIcon, commonIcon);
                         uninstaller.addFile(commonIcon.toString(), true);
                     }
-                    catch (Exception cnc) {
+                    catch (Exception cnc)
+                    {
                         Debug.log("Could Not Copy: " + theIcon + " to " + commonIcon + "( "
                                 + cnc.getMessage() + " )");
                     }
@@ -587,21 +634,24 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
                     uninstaller.addFile(writtenFile.toString(), true);
 
                 }
-            } else
+            }
+            else
             // create local XDG shortcuts
             {
                 // System.out.println("Creating gnome shortcut");
                 String localApps = myHome + "/.local/share/applications/";
                 String localPixmaps = myHome + "/.local/share/pixmaps/";
                 // System.out.println("Creating "+localApps);
-                try {
+                try
+                {
                     java.io.File f = new java.io.File(localApps);
                     f.mkdirs();
 
                     f = new java.io.File(localPixmaps);
                     f.mkdirs();
                 }
-                catch (Exception ignore) {
+                catch (Exception ignore)
+                {
                     // System.out.println("Failed creating "+localApps + " or " + localPixmaps);
                     Debug.log("Failed creating " + localApps + " or " + localPixmaps);
                 }
@@ -611,11 +661,13 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
                 File theIcon = new File(this.getIconLocation());
                 File commonIcon = new File(localPixmaps + theIcon.getName());
 
-                try {
+                try
+                {
                     copyTo(theIcon, commonIcon);
                     uninstaller.addFile(commonIcon.toString(), true);
                 }
-                catch (Exception cnc) {
+                catch (Exception cnc)
+                {
                     Debug.log("Could Not Copy: " + theIcon + " to " + commonIcon + "( "
                             + cnc.getMessage() + " )");
                 }
@@ -643,14 +695,15 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      * @throws ResourceNotFoundException
      */
     public void createExtXdgDesktopIconCmd(File shortCutLocation) throws IOException,
-            ResourceNotFoundException {
+            ResourceNotFoundException
+    {
         ShellScript myXdgDesktopIconScript = new ShellScript(null);
         String lines = "";
 
         ResourceManager m = ResourceManager.getInstance();
         m.setDefaultOrResourceBasePath("");
 
-        lines = m.getTextResource("/com/izforge/izpack/util/unix/xdgdesktopiconscript.sh");
+        lines = m.getTextResource("/com/izforge/izpack/util/os/unix/xdgdesktopiconscript.sh");
 
         m.setDefaultOrResourceBasePath(null);
 
@@ -669,15 +722,19 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @param writtenDesktopFile An applications desktop file, which should be installed.
      */
-    private void installDesktopFileToAllUsersDesktop(File writtenDesktopFile) {
-        for (Object user1 : getUsers()) {
+    private void installDesktopFileToAllUsersDesktop(File writtenDesktopFile)
+    {
+        for (Object user1 : users)
+        {
             UnixUser user = ((UnixUser) user1);
 
-            if (user.getHome().equals(myHome)) {
+            if (user.getHome().equals(myHome))
+            {
                 Debug.log("need not to copy for itself: " + user.getHome() + "==" + myHome);
                 continue;
             }
-            try {
+            try
+            {
                 // / THE Following does such as #> su username -c "xdg-desktopicon install
                 // --novendor /Path/to/Filename\ with\ or\ without\ Space.desktop"
                 rootScript.append(new String[]{su, user.getName(), "-c"});
@@ -689,7 +746,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
                         .appendln(new String[]{"\"" + myXdgDesktopIconCmd, "uninstall", "--novendor",
                                 StringTool.escapeSpaces(writtenDesktopFile.toString()) + "\""});
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Debug.log(e.getMessage());
                 Debug.log(e.toString());
             }
@@ -702,7 +760,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      * @param writtenDesktopFile
      * @throws IOException
      */
-    private void copyDesktopFileToAllUsersDesktop(File writtenDesktopFile) throws IOException {
+    private void copyDesktopFileToAllUsersDesktop(File writtenDesktopFile) throws IOException
+    {
         String chmod = UnixHelper.getCustomCommand("chmod");
         String chown = UnixHelper.getCustomCommand("chown");
         String rm = UnixHelper.getRmCommand();
@@ -724,14 +783,17 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
         // su marc.eppelmann -c "/bin/cp /home/marc.eppelmann/backup.job.out.txt
         // /home/marc.eppelmann/backup.job.out2.txt"
 
-        for (Object user1 : getUsers()) {
+        for (Object user1 : users)
+        {
             UnixUser user = ((UnixUser) user1);
 
-            if (user.getHome().equals(myHome)) {
+            if (user.getHome().equals(myHome))
+            {
                 Debug.log("need not to copy for itself: " + user.getHome() + "==" + myHome);
                 continue;
             }
-            try {
+            try
+            {
                 // aHomePath = userHomesList[idx];
                 dest = new File(user.getHome() + FS + "Desktop" + FS + writtenDesktopFile.getName());
                 //
@@ -788,7 +850,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
                 uninstallScript.appendln();
                 // Debug.log("Uninstall will exec: " + uninstallScript.toString());
             }
-            catch (Exception rex) {
+            catch (Exception rex)
+            {
                 System.out.println("Error while su Copy: " + rex.getLocalizedMessage() + "\n\n");
                 rex.printStackTrace();
 
@@ -809,17 +872,20 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      * Post Exec Action especially for the Unix Root User. which executes the Root ShortCut
      * Shellscript. to copy all ShellScripts to the users Desktop.
      */
-    public void execPostAction() {
+    public void execPostAction()
+    {
         Debug.log("Call of Impl. execPostAction Method in " + this.getClass().getName());
 
         String pseudoUnique = this.getClass().getName() + Long.toString(System.currentTimeMillis());
 
         String scriptFilename = null;
 
-        try {
+        try
+        {
             scriptFilename = File.createTempFile(pseudoUnique, ".sh").toString();
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             scriptFilename = System.getProperty("java.io.tmpdir", "/tmp") + "/" + pseudoUnique
                     + ".sh";
             e.printStackTrace();
@@ -832,10 +898,12 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
 
         // Quick an dirty copy & paste code - will be cleanup in one of 4.1.1++
         pseudoUnique = this.getClass().getName() + Long.toString(System.currentTimeMillis());
-        try {
+        try
+        {
             scriptFilename = File.createTempFile(pseudoUnique, ".sh").toString();
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             scriptFilename = System.getProperty("java.io.tmpdir", "/tmp") + "/" + pseudoUnique
                     + ".sh";
             e.printStackTrace();
@@ -860,7 +928,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      * @param outFile The targetFile to write to.
      * @throws IOException If an IO Error occurs
      */
-    public static void copyTo(File inFile, File outFile) throws IOException {
+    public static void copyTo(File inFile, File outFile) throws IOException
+    {
         char[] cbuff = new char[32768];
         BufferedReader reader = new BufferedReader(new FileReader(inFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
@@ -868,7 +937,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
         int readedBytes = 0;
         long absWrittenBytes = 0;
 
-        while ((readedBytes = reader.read(cbuff, 0, cbuff.length)) != -1) {
+        while ((readedBytes = reader.read(cbuff, 0, cbuff.length)) != -1)
+        {
             writer.write(cbuff, 0, readedBytes);
             absWrittenBytes += readedBytes;
         }
@@ -879,11 +949,13 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
 
     private String writtenFileName;
 
-    public String getWrittenFileName() {
+    public String getWrittenFileName()
+    {
         return writtenFileName;
     }
 
-    protected void setWrittenFileName(String s) {
+    protected void setWrittenFileName(String s)
+    {
         writtenFileName = s;
     }
 
@@ -896,7 +968,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      * @param shortcutDef  The Shortcut FileContent
      * @return The written File
      */
-    private File writeAppShortcut(String targetPath, String shortcutName, String shortcutDef) {
+    private File writeAppShortcut(String targetPath, String shortcutName, String shortcutDef)
+    {
         return writeAppShortcutWithSimpleSpacehandling(targetPath, shortcutName, shortcutDef, false);
     }
 
@@ -910,7 +983,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      * @return The written File
      */
     private File writeAppShortcutWithOutSpace(String targetPath, String shortcutName,
-                                              String shortcutDef) {
+                                              String shortcutDef)
+    {
         return writeAppShortcutWithSimpleSpacehandling(targetPath, shortcutName, shortcutDef, true);
     }
 
@@ -919,9 +993,10 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      * TargetPath. If the given replaceSpaces was true ALSO all WhiteSpaces in the ShortCutName will
      * be replaced with "-"
      *
-     * @param targetPath   The Path in which the files should be written.
-     * @param shortcutName The Name for the File
-     * @param shortcutDef  The Shortcut FileContent
+     * @param targetPath    The Path in which the files should be written.
+     * @param shortcutName  The Name for the File
+     * @param shortcutDef   The Shortcut FileContent
+     * @param replaceSpaces Replaces Spaces in the Filename if true was given
      * @return The written File
      */
     private File writeAppShortcutWithSimpleSpacehandling(String targetPath, String shortcutName,
@@ -934,7 +1009,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
 
         File shortcutFile;
 
-        do {
+        do
+        {
             shortcutFile = new File(targetPath
                     + (replaceSpacesWithMinus == true ? StringTool
                     .replaceSpacesWithMinus(shortcutName) : shortcutName) + "-"
@@ -944,24 +1020,30 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
 
         FileWriter fileWriter = null;
 
-        try {
+        try
+        {
             fileWriter = new FileWriter(shortcutFile);
         }
-        catch (IOException e1) {
+        catch (IOException e1)
+        {
             System.out.println(e1.getMessage());
         }
 
-        try {
+        try
+        {
             fileWriter.write(shortcutDef);
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
 
-        try {
+        try
+        {
             fileWriter.close();
         }
-        catch (IOException e2) {
+        catch (IOException e2)
+        {
             e2.printStackTrace();
         }
         return shortcutFile;
@@ -975,10 +1057,12 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      * @param shortCutDef
      * @return the File of the written shortcut.
      */
-    private File writeShortCut(String target, String shortCutDef) {
+    private File writeShortCut(String target, String shortCutDef)
+    {
         File targetPath = new File(target.substring(0, target.lastIndexOf(File.separatorChar)));
 
-        if (!targetPath.exists()) {
+        if (!targetPath.exists())
+        {
             targetPath.mkdirs();
             this.createdDirectory = targetPath.toString();
         }
@@ -987,13 +1071,16 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
         File backupFile = new File(targetPath + File.separator + "." + targetFileName.getName()
                 + System.currentTimeMillis());
 
-        if (targetFileName.exists()) {
-            try {
+        if (targetFileName.exists())
+        {
+            try
+            {
                 // create a hidden backup.file of the existing shortcut with a timestamp name.
                 copyTo(targetFileName, backupFile); // + System.e );
                 targetFileName.delete();
             }
-            catch (IOException e3) {
+            catch (IOException e3)
+            {
                 System.out.println("cannot create backup file " + backupFile + " of "
                         + targetFileName); // e3.printStackTrace();
             }
@@ -1001,24 +1088,30 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
 
         FileWriter fileWriter = null;
 
-        try {
+        try
+        {
             fileWriter = new FileWriter(targetFileName);
         }
-        catch (IOException e1) {
+        catch (IOException e1)
+        {
             System.out.println(e1.getMessage());
         }
 
-        try {
+        try
+        {
             fileWriter.write(shortCutDef);
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
 
-        try {
+        try
+        {
             fileWriter.close();
         }
-        catch (IOException e2) {
+        catch (IOException e2)
+        {
             e2.printStackTrace();
         }
 
@@ -1030,7 +1123,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#setArguments(java.lang.String)
      */
-    public void setArguments(String args) {
+    public void setArguments(String args)
+    {
         props.put($Arguments, args);
     }
 
@@ -1039,7 +1133,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#setDescription(java.lang.String)
      */
-    public void setDescription(String description) {
+    public void setDescription(String description)
+    {
         props.put($Comment, description);
     }
 
@@ -1048,7 +1143,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#setIconLocation(java.lang.String, int)
      */
-    public void setIconLocation(String path, int index) {
+    public void setIconLocation(String path, int index)
+    {
         props.put($Icon, path);
     }
 
@@ -1057,7 +1153,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#setLinkName(java.lang.String)
      */
-    public void setLinkName(String aName) {
+    public void setLinkName(String aName)
+    {
         this.itsName = aName;
         props.put($Name, aName);
     }
@@ -1068,7 +1165,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      * @see com.izforge.izpack.util.os.Shortcut#setLinkType(int)
      */
     public void setLinkType(int aType) throws IllegalArgumentException,
-            UnsupportedEncodingException {
+            UnsupportedEncodingException
+    {
         ShortcutType = aType;
     }
 
@@ -1077,7 +1175,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#setProgramGroup(java.lang.String)
      */
-    public void setProgramGroup(String aGroupName) {
+    public void setProgramGroup(String aGroupName)
+    {
         this.itsGroupName = aGroupName;
     }
 
@@ -1086,7 +1185,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#setShowCommand(int)
      */
-    public void setShowCommand(int show) {
+    public void setShowCommand(int show)
+    {
     }
 
     /**
@@ -1094,10 +1194,12 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#setTargetPath(java.lang.String)
      */
-    public void setTargetPath(String aPath) {
+    public void setTargetPath(String aPath)
+    {
         StringTokenizer whiteSpaceTester = new StringTokenizer(aPath);
 
-        if (whiteSpaceTester.countTokens() > 1) {
+        if (whiteSpaceTester.countTokens() > 1)
+        {
             props.put($E_QUOT, QM);
         }
 
@@ -1109,7 +1211,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#setUserType(int)
      */
-    public void setUserType(int aUserType) {
+    public void setUserType(int aUserType)
+    {
         this.itsUserType = aUserType;
     }
 
@@ -1118,7 +1221,15 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#setWorkingDirectory(java.lang.String)
      */
-    public void setWorkingDirectory(String aDirectory) {
+    public void setWorkingDirectory(String aDirectory)
+    {
+        StringTokenizer whiteSpaceTester = new StringTokenizer(aDirectory);
+
+        if (whiteSpaceTester.countTokens() > 1)
+        {
+            props.put($P_QUOT, QM);
+        }
+
         props.put($Path, aDirectory);
     }
 
@@ -1127,7 +1238,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see java.lang.Object#toString()
      */
-    public String toString() {
+    public String toString()
+    {
         return this.itsName + N + template;
     }
 
@@ -1136,11 +1248,13 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @return contents of the shortcut file
      */
-    public String replace() {
+    public String replace()
+    {
         String result = template;
         Enumeration enumeration = props.keys();
 
-        while (enumeration.hasMoreElements()) {
+        while (enumeration.hasMoreElements())
+        {
             String key = (String) enumeration.nextElement();
 
             result = StringTool.replace(result, key, props.getProperty(key));
@@ -1149,39 +1263,14 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
         return result;
     }
 
-    /**
-     * Test Method
-     *
-     * @param args
-     * @throws IOException
-     * @throws ResourceNotFoundException
-     */
-    public static void main(String[] args) throws IOException, ResourceNotFoundException {
-
-        Unix_Shortcut aSample = new Unix_Shortcut();
-        System.out.println(">>" + aSample.getClass().getName() + "- Test Main Program\n\n");
-
-        try {
-            aSample.initialize(APPLICATIONS, "Start Tomcat");
-        }
-        catch (Exception exc) {
-            System.err.println("Could not init Unix_Shourtcut");
-        }
-
-        aSample.replace();
-        System.out.println(aSample);
-
-        aSample.createExtXdgDesktopIconCmd(new File(System.getProperty("user.home")));
-
-        System.out.println("DONE.\n");
-    }
 
     /**
      * Sets The Encoding
      *
      * @see com.izforge.izpack.util.os.Shortcut#setEncoding(java.lang.String)
      */
-    public void setEncoding(String aEncoding) {
+    public void setEncoding(String aEncoding)
+    {
         props.put($Encoding, aEncoding);
     }
 
@@ -1190,7 +1279,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#setKdeSubstUID(java.lang.String)
      */
-    public void setKdeSubstUID(String trueFalseOrNothing) {
+    public void setKdeSubstUID(String trueFalseOrNothing)
+    {
         props.put($X_KDE_SubstituteUID, trueFalseOrNothing);
     }
 
@@ -1199,7 +1289,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#setKdeSubstUID(java.lang.String)
      */
-    public void setKdeUserName(String aUserName) {
+    public void setKdeUserName(String aUserName)
+    {
         props.put($X_KDE_Username, aUserName);
     }
 
@@ -1208,7 +1299,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#setMimetype(java.lang.String)
      */
-    public void setMimetype(String aMimetype) {
+    public void setMimetype(String aMimetype)
+    {
         props.put($MimeType, aMimetype);
     }
 
@@ -1217,7 +1309,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#setTerminal(java.lang.String)
      */
-    public void setTerminal(String trueFalseOrNothing) {
+    public void setTerminal(String trueFalseOrNothing)
+    {
         props.put($Terminal, trueFalseOrNothing);
     }
 
@@ -1226,7 +1319,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#setTerminalOptions(java.lang.String)
      */
-    public void setTerminalOptions(String someTerminalOptions) {
+    public void setTerminalOptions(String someTerminalOptions)
+    {
         props.put($Options_For_Terminal, someTerminalOptions);
     }
 
@@ -1235,7 +1329,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#setType(java.lang.String)
      */
-    public void setType(String aType) {
+    public void setType(String aType)
+    {
         props.put($Type, aType);
     }
 
@@ -1244,7 +1339,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#setURL(java.lang.String)
      */
-    public void setURL(String anUrl) {
+    public void setURL(String anUrl)
+    {
         props.put($URL, anUrl);
     }
 
@@ -1253,7 +1349,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @see com.izforge.izpack.util.os.Shortcut#getUserType()
      */
-    public int getUserType() {
+    public int getUserType()
+    {
         return itsUserType;
     }
 
@@ -1262,7 +1359,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @param theCategories the categories
      */
-    public void setCategories(String theCategories) {
+    public void setCategories(String theCategories)
+    {
         props.put($Categories, theCategories);
     }
 
@@ -1271,21 +1369,14 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants {
      *
      * @param aTryExec the try exec command
      */
-    public void setTryExec(String aTryExec) {
+    public void setTryExec(String aTryExec)
+    {
         props.put($TryExec, aTryExec);
     }
 
-    public int getLinkType() {
+    public int getLinkType()
+    {
         return ShortcutType;
         // return Shortcut.DESKTOP;
-    }
-
-    private List getUsers()
-    {
-        if (users == null)
-        {
-            users = UnixUsers.getUsersWithValidShellsExistingHomesAndDesktops();
-        }
-        return users;
     }
 }

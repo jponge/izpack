@@ -18,18 +18,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.target;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
-
-import com.izforge.izpack.installer.AutomatedInstallData;
-import com.izforge.izpack.installer.PanelConsole;
-import com.izforge.izpack.installer.PanelConsoleHelper;
-import com.izforge.izpack.installer.ScriptParser;
-import com.izforge.izpack.util.VariableSubstitutor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,31 +37,39 @@ import java.util.Properties;
  *
  * @author Mounir El Hajj
  */
-public class TargetPanelConsoleHelper extends PanelConsoleHelper implements PanelConsole {
+public class TargetPanelConsoleHelper extends PanelConsoleHelper implements PanelConsole
+{
     private VariableSubstitutor variableSubstitutor;
 
-    public TargetPanelConsoleHelper(VariableSubstitutor variableSubstitutor) {
+    public TargetPanelConsoleHelper(VariableSubstitutor variableSubstitutor)
+    {
         this.variableSubstitutor = variableSubstitutor;
     }
 
-    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter) {
+    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
+    {
         printWriter.println(AutomatedInstallData.INSTALL_PATH + "=");
         return true;
     }
 
-    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p) {
+    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p)
+    {
         String strTargetPath = p.getProperty(AutomatedInstallData.INSTALL_PATH);
-        if (strTargetPath == null || "".equals(strTargetPath.trim())) {
+        if (strTargetPath == null || "".equals(strTargetPath.trim()))
+        {
             System.err.println("Missing mandatory target path!");
             return false;
-        } else {
+        }
+        else
+        {
             strTargetPath = variableSubstitutor.substitute(strTargetPath);
             installData.setInstallPath(strTargetPath);
             return true;
         }
     }
 
-    public boolean runConsole(AutomatedInstallData idata) {
+    public boolean runConsole(AutomatedInstallData idata)
+    {
 
         String strTargetPath = "";
         String strDefaultPath = idata.getVariable("SYSTEM_user_dir"); // this is a special
@@ -75,15 +78,20 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
         // current location
         System.out.println("Select target path [" + strDefaultPath + "] ");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        try {
+        try
+        {
             String strIn = br.readLine();
-            if (!strIn.trim().equals("")) {
+            if (!strIn.trim().equals(""))
+            {
                 strTargetPath = strIn;
-            } else {
+            }
+            else
+            {
                 strTargetPath = strDefaultPath;
             }
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
 
             e.printStackTrace();
         }
@@ -92,11 +100,16 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
 
         idata.setInstallPath(strTargetPath);
         int i = askEndOfConsolePanel();
-        if (i == 1) {
+        if (i == 1)
+        {
             return true;
-        } else if (i == 2) {
+        }
+        else if (i == 2)
+        {
             return false;
-        } else {
+        }
+        else
+        {
             return runConsole(idata);
         }
 

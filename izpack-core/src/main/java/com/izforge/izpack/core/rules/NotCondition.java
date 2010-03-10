@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.core.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -27,7 +28,8 @@ import com.izforge.izpack.util.Debug;
 /**
  * @author Dennis Reil, <izpack@reil-online.de>
  */
-public class NotCondition extends Condition {
+public class NotCondition extends Condition
+{
 
     private static final long serialVersionUID = 3194843222487006309L;
     protected Condition operand;
@@ -35,7 +37,8 @@ public class NotCondition extends Condition {
     /**
      *
      */
-    public NotCondition() {
+    public NotCondition()
+    {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -43,7 +46,8 @@ public class NotCondition extends Condition {
     /**
      *
      */
-    public NotCondition(Condition operand) {
+    public NotCondition(Condition operand)
+    {
         this.operand = operand;
         if (operand != null)
         {
@@ -69,15 +73,19 @@ public class NotCondition extends Condition {
      * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.api.adaptator.IXMLElement)
      */
 
-    public void readFromXML(IXMLElement xmlcondition) {
-        try {
-            if (xmlcondition.getChildrenCount() != 1) {
+    public void readFromXML(IXMLElement xmlcondition)
+    {
+        try
+        {
+            if (xmlcondition.getChildrenCount() != 1)
+            {
                 Debug.log("not-condition needs one condition as operand");
                 return;
             }
             this.operand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(0));
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.log("missing element in not-condition");
         }
     }
@@ -89,7 +97,8 @@ public class NotCondition extends Condition {
     }
     */
 
-    public boolean isTrue() {
+    public boolean isTrue()
+    {
         if ((this.operand == null))
         {
             Debug.trace("Operand of condition " + this.id + " not initialized correctly.");
@@ -103,7 +112,8 @@ public class NotCondition extends Condition {
      * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
      */
 
-    public String getDependenciesDetails() {
+    public String getDependenciesDetails()
+    {
         StringBuffer details = new StringBuffer();
         details.append(this.id);
         details.append(" depends on:<ul><li>NOT ");
@@ -113,9 +123,9 @@ public class NotCondition extends Condition {
     }
 
     @Override
-    public void makeXMLData(IXMLElement conditionRoot) {
+    public void makeXMLData(IXMLElement conditionRoot)
+    {
         IXMLElement op = RulesEngineImpl.createConditionElement(this.operand, conditionRoot);
-        IXMLElement op = RulesEngine.createConditionElement(this.operand, conditionRoot);
         this.operand.makeXMLData(op);
         conditionRoot.addChild(op);
     }
