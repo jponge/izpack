@@ -127,7 +127,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
     private static ShellScript uninstallScript = null;
 
-    private static ArrayList users = UnixUsers.getUsersWithValidShellsExistingHomesAndDesktops();
+    private List<UnixUser> users;
 
     // private static ArrayList tempfiles = new ArrayList();
 
@@ -206,7 +206,6 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     public String myXdgDesktopIconScript;
 
     public String myXdgDesktopIconCmd;
-    private AutomatedInstallData idata;
 
     // ~ Constructors ***********************************************************************
 
@@ -216,10 +215,10 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     /**
      * Creates a new Unix_Shortcut object.
      */
-    public Unix_Shortcut(AutomatedInstallData automatedInstallData)
+    public Unix_Shortcut()
     {
-        idata = automatedInstallData;
         hlp = new StringBuffer();
+        users = UnixUsers.getUsersWithValidShellsExistingHomesAndDesktops();
 
         String userLanguage = System.getProperty("user.language", "en");
 
@@ -498,6 +497,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         {
 
             this.itsFileName = target;
+            AutomatedInstallData idata;
+            idata = AutomatedInstallData.getInstance();
 
             // read the userdefined / overridden / wished Shortcut Location
             // This can be an absolute Path name or a relative Path to the InstallPath
@@ -703,7 +704,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         ResourceManager m = ResourceManager.getInstance();
         m.setDefaultOrResourceBasePath("");
 
-        lines = m.getTextResource("/com/izforge/izpack/util/os/unix/xdgdesktopiconscript.sh");
+        lines = m.getTextResource("/com/izforge/izpack/util/unix/xdgdesktopiconscript.sh");
 
         m.setDefaultOrResourceBasePath(null);
 
@@ -724,10 +725,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     private void installDesktopFileToAllUsersDesktop(File writtenDesktopFile)
     {
-        for (Object user1 : users)
+        for (UnixUser user : users)
         {
-            UnixUser user = ((UnixUser) user1);
-
             if (user.getHome().equals(myHome))
             {
                 Debug.log("need not to copy for itself: " + user.getHome() + "==" + myHome);
@@ -783,10 +782,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         // su marc.eppelmann -c "/bin/cp /home/marc.eppelmann/backup.job.out.txt
         // /home/marc.eppelmann/backup.job.out2.txt"
 
-        for (Object user1 : users)
+        for (UnixUser user : users)
         {
-            UnixUser user = ((UnixUser) user1);
-
             if (user.getHome().equals(myHome))
             {
                 Debug.log("need not to copy for itself: " + user.getHome() + "==" + myHome);
@@ -993,10 +990,9 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      * TargetPath. If the given replaceSpaces was true ALSO all WhiteSpaces in the ShortCutName will
      * be replaced with "-"
      *
-     * @param targetPath    The Path in which the files should be written.
-     * @param shortcutName  The Name for the File
-     * @param shortcutDef   The Shortcut FileContent
-     * @param replaceSpaces Replaces Spaces in the Filename if true was given
+     * @param targetPath   The Path in which the files should be written.
+     * @param shortcutName The Name for the File
+     * @param shortcutDef  The Shortcut FileContent
      * @return The written File
      */
     private File writeAppShortcutWithSimpleSpacehandling(String targetPath, String shortcutName,
@@ -1263,6 +1259,68 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         return result;
     }
 
+    /**
+     * Test Method
+     *
+     * @param args
+     * @throws IOException
+     * @throws ResourceNotFoundException
+     */
+    public static void main(String[] args) throws IOException, ResourceNotFoundException
+    {
+
+        Unix_Shortcut aSample = new Unix_Shortcut();
+        System.out.println(">>" + aSample.getClass().getName() + "- Test Main Program\n\n");
+
+        try
+        {
+            aSample.initialize(APPLICATIONS, "Start Tomcat");
+        }
+        catch (Exception exc)
+        {
+            System.err.println("Could not init Unix_Shourtcut");
+        }
+
+        aSample.replace();
+        System.out.println(aSample);
+        //        
+        //       
+        //
+        // File targetFileName = new File(System.getProperty("user.home") + File.separator
+        // + "Start Tomcat" + DESKTOP_EXT);
+        // FileWriter fileWriter = null;
+        //
+        // try
+        // {
+        // fileWriter = new FileWriter(targetFileName);
+        // }
+        // catch (IOException e1)
+        // {
+        // e1.printStackTrace();
+        // }
+        //
+        // try
+        // {
+        // fileWriter.write( aSample.toString() );
+        // }
+        // catch (IOException e)
+        // {
+        // e.printStackTrace();
+        // }
+        //
+        // try
+        // {
+        // fileWriter.close();
+        // }
+        // catch (IOException e2)
+        // {
+        // e2.printStackTrace();
+        // }
+
+        aSample.createExtXdgDesktopIconCmd(new File(System.getProperty("user.home")));
+
+        System.out.println("DONE.\n");
+    }
 
     /**
      * Sets The Encoding

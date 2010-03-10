@@ -5,7 +5,6 @@ import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -21,20 +20,21 @@ public class Unix_ShortcutTest
     @Ignore
     public void main() throws IOException, ResourceNotFoundException
     {
-        Unix_Shortcut aSample = new Unix_Shortcut(idata);
-        System.out.println(">>" + aSample.getClass().getName() + "- Test Main Program\n\n");
+//        Unix_Shortcut aSample = new Unix_Shortcut(idata);
+//        System.out.println(">>" + aSample.getClass().getName() + "- Test Main Program\n\n");
 
-        try
-        {
-            aSample.initialize(Unix_Shortcut.APPLICATIONS, "Start Tomcat");
-        }
-        catch (Exception exc)
-        {
-            System.err.println("Could not init Unix_Shourtcut");
-        }
+//        try
+//        {
+//            aSample.initialize(Unix_Shortcut.APPLICATIONS, "Start Tomcat");
+//        }
+//        catch (Exception exc)
+//        {
+//            System.err.println("Could not init Unix_Shourtcut");
+//        }
+//
+//        aSample.replace();
+//        System.out.println(aSample);
 
-        aSample.replace();
-        System.out.println(aSample);
         //
         //
         //
@@ -69,9 +69,8 @@ public class Unix_ShortcutTest
         // e2.printStackTrace();
         // }
 
-        aSample.createExtXdgDesktopIconCmd(new File(System.getProperty("user.home")));
-
-        System.out.println("DONE.\n");
+//        aSample.createExtXdgDesktopIconCmd(new File(System.getProperty("user.home")));
+//        System.out.println("DONE.\n");
     }
 
 }
