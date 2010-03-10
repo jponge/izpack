@@ -298,7 +298,6 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 {
                     // check if condition is fulfilled
                     if (!idata.getRules().isConditionTrue(conditionid, idata.getVariables()))
-                    if (!rules.isConditionTrue(conditionid, idata.getVariables()))
                     {
                         continue;
                     }

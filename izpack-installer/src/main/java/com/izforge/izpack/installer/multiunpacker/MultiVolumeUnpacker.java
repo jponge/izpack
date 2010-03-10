@@ -45,9 +45,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
-import java.util.List;
-import java.util.Properties;
-
 /**
  * Unpacker class for a multi volume installation.
  *
@@ -427,7 +424,6 @@ public class MultiVolumeUnpacker extends UnpackerBase
                             {
                                 pathFile.setLastModified(pf.lastModified());
                             }
-                            }
                         }
 
                         if (blockableForCurrentOs(pf))
@@ -618,7 +614,11 @@ public class MultiVolumeUnpacker extends UnpackerBase
             handler.stopAction();
             Debug.trace("Installation complete");
         }
-        catch (Exception err)
+
+        catch (
+                Exception err
+                )
+
         {
             // TODO: finer grained error handling with useful error messages
             handler.stopAction();
@@ -638,10 +638,13 @@ public class MultiVolumeUnpacker extends UnpackerBase
             }
             this.result = false;
         }
+
         finally
+
         {
             removeFromInstances();
         }
+
     }
 
     protected void writeConfigInformation()

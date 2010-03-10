@@ -128,7 +128,6 @@ public class FileQueueCopy implements FileQueueOperation
         {
             this.copyStyle |= WinSetupAPIBase.SP_COPY_NOOVERWRITE;
         }
-        }
     }
 
     public void addTo(WinSetupFileQueue filequeue) throws IOException

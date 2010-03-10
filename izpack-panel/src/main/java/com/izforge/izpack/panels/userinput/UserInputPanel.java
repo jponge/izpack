@@ -30,7 +30,6 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
@@ -4079,38 +4078,3 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
 } // public class UserInputPanel
-
-class UserInputFileFilter extends FileFilter
-{
-
-    String fileext = "";
-
-    String description = "";
-
-    public void setFileExt(String fileext)
-    {
-        this.fileext = fileext;
-    }
-
-    public void setFileExtDesc(String desc)
-    {
-        this.description = desc;
-    }
-
-    public boolean accept(File pathname)
-    {
-        if (pathname.isDirectory())
-        {
-            return true;
-        }
-        else
-        {
-            return pathname.getAbsolutePath().endsWith(this.fileext);
-        }
-    }
-
-    public String getDescription()
-    {
-        return this.description;
-    }
-}

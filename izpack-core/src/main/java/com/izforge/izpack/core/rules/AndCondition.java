@@ -70,12 +70,12 @@ public class AndCondition extends Condition
     *
     * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.api.adaptator.IXMLElement)
     */
+
     public void readFromXML(IXMLElement xmlcondition)
     {
         try
         {
             if (xmlcondition.getChildrenCount() != 2)
-            {
             {
                 Debug.log("and-condition needs two conditions as operands");
                 return;
@@ -83,6 +83,7 @@ public class AndCondition extends Condition
             this.leftoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(0));
             this.rightoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(1));
         }
+
         catch (Exception e)
         {
             Debug.log("missing element in and-condition");

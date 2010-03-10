@@ -1303,7 +1303,6 @@ public class ShellLink implements NativeLibraryClient
         {
             srcFileObj.renameTo(destFileObj);
         }
-        }
     }
 
     /*--------------------------------------------------------------------------*/
@@ -1341,5 +1340,4 @@ public class ShellLink implements NativeLibraryClient
     }
 
 }
-/*---------------------------------------------------------------------------*/
 
