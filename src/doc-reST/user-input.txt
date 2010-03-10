@@ -115,13 +115,22 @@ specify the details for one panel instance. The tag name for this is
 The ``<panel>`` tag uses the following attributes:
 
 
-**order** ``- required``
+**order** ``- required / optional``
 
 
 This is the order number of the user input panel for which this specification
 should be used. Counting starts at 0 and increments by 1 for each instance of
 the user input panel. So if a spec should be used for the second occurrence
-of the user input panel use ``order="1"``.
+of the user input panel use ``order="1"``. This attribute is required if no
+``id="unique.identifier"`` is set.
+
+
+**id** ``- optional / required``
+
+
+This is the id of the user input panel for which this specification
+should be used. This id links to the panel specification in the install.xml file.
+If no ``order`` attribute is specified the ``id`` attribute is required.
 
 
 **layout** ``- optional``
@@ -131,6 +140,23 @@ There are three general layout rules this panel uses, they are ``left``,
 ``center`` and ``right``. While i think left is most commonly used, you might
 want to experiment with this attribute and see which you like best. The
 default is ``left``.
+
+
+**border** ``- optional``
+
+
+Normally the user input is shown with a small border. To prevent this border set this
+attribute to ``false``. The default is ``true``.
+
+
+**column_width** ``- optional``
+
+
+This can be used to set the column width of the two column layout. This value is in percent
+of the whole size.
+If it is set to ``0``, which is the default, the with will be set automatically.
+It it is set to ``50`` the gap between the left and right column is in the middle
+of the panel. This makes it possible to make a centered layout.
 
 
 
@@ -157,6 +183,45 @@ right.
 Each UI element is specified with a ``<field>`` tag. The ``type`` attribute
 is used to specify what kind of field you want to place. Obviously, the
 ``type`` attribute is not optional.
+In addition there are multiple layout attributes for the field tag.
+``label_position``
+Can be used to change the default position of the label which is usually ``west``
+It takes the arguments ``west``, ``westonly``, ``both``, ``eastonly``, ``east``
+``label_align``
+Can be used to change the default alignment of the label which is usually ``left``
+It takes the argument ``left``, ``center``, ``right``
+``label_indent``
+Controls the indent of the label which is usually ``false``.
+It takes the arguments ``true``, ``false``
+
+``control_position``
+Can be used to change the default position of the control which is usually ``east``
+It takes the arguments ``west``, ``westonly``, ``both``, ``eastonly``, ``east``
+``control_align``
+Can be used to change the default alignment of the control which is usually ``left``
+It takes the argument ``left``, ``center``, ``right``
+``control_indent``
+Controls the indent of the control which is usually ``false``.
+It takes the arguments ``true``, ``false``
+
+**Examples**
+
+In the following example, the the label and the control will be shown on it's own row.
+
+::
+
+    <field type="text" variable="value1">
+      <spec txt="The label" id="" size="20" set="default value" label_both="both" control_position="both" />
+    </field>
+
+In the following example, the label is right aligned to the control.
+
+::
+
+    <field type="text" variable="value1">
+      <spec txt="The label" id="" size="20" set="default value" label_align="right" />
+    </field>
+
 
 
 Each field that takes user input must also specify the variable that should

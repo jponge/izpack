@@ -22,7 +22,7 @@
 
 package com.izforge.izpack.gui;
 
-import javax.swing.*;
+import javax.swing.SwingConstants;
 
 /**
  * Interface with some constants used by or for the IzPanelLayout.

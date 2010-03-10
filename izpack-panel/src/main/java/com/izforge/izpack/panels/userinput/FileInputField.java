@@ -30,6 +30,7 @@ import com.izforge.izpack.panels.userinput.validator.ValidatorContainer;
 import com.izforge.izpack.util.Debug;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -89,12 +90,24 @@ public class FileInputField extends JPanel implements ActionListener
         filetxt = new JTextField(set, size);
         filetxt.setCaretPosition(0);
 
+        GridBagLayout layout = new GridBagLayout();
+        setLayout(layout);
+        GridBagConstraints fileTextConstraint = new GridBagConstraints();
+        GridBagConstraints fileButtonConstraint = new GridBagConstraints();
+        fileTextConstraint.gridx = 0;
+        fileTextConstraint.gridy = 0;
+        fileTextConstraint.anchor = GridBagConstraints.WEST;
+        fileTextConstraint.insets = new Insets(0, 0, 0, 5);
+        fileButtonConstraint.gridx = 1;
+        fileButtonConstraint.gridy = 0;
+        fileButtonConstraint.anchor = GridBagConstraints.WEST;
+
         // TODO: use separate key for button text
         browseBtn = ButtonFactory.createButton(installDataGUI.getLangpack()
                 .getString("UserInputPanel.search.browse"), installDataGUI.buttonsHColor);
         browseBtn.addActionListener(this);
-        this.add(filetxt);
-        this.add(browseBtn);
+        this.add(filetxt, fileTextConstraint);
+        this.add(browseBtn, fileButtonConstraint);
     }
 
     public void setFile(String filename)
@@ -160,9 +173,9 @@ public class FileInputField extends JPanel implements ActionListener
 
     protected void showMessage(String messageType)
     {
-        JOptionPane.showMessageDialog(parentFrame, parentFrame.langpack.getString("UserInputPanel."
-                + messageType + ".message"), parentFrame.langpack.getString("UserInputPanel."
-                + messageType + ".caption"), JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(parentFrame, parentFrame.langpack.getString("UserInputPanel." + messageType
+                + ".message"), parentFrame.langpack.getString("UserInputPanel." + messageType + ".caption"),
+                JOptionPane.WARNING_MESSAGE);
     }
 
     public boolean validateField()
@@ -196,15 +209,13 @@ public class FileInputField extends JPanel implements ActionListener
             }
             else
             {
-                StringInputProcessingClient processingClient = new StringInputProcessingClient(
-                        input, validators);
+                StringInputProcessingClient processingClient = new StringInputProcessingClient(input, validators);
                 boolean success = processingClient.validate();
                 if (!success)
                 {
                     JOptionPane
-                            .showMessageDialog(parentFrame,
-                                    processingClient.getValidationMessage(), parentFrame.langpack
-                                            .getString("UserInputPanel.error.caption"),
+                            .showMessageDialog(parentFrame, processingClient.getValidationMessage(),
+                                    parentFrame.langpack.getString("UserInputPanel.error.caption"),
                                     JOptionPane.WARNING_MESSAGE);
                 }
                 result = success;

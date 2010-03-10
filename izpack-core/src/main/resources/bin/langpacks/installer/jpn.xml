@@ -35,255 +35,255 @@
 <langpack>
 
     <!-- Heading messages START -->
-    <str id="CheckedHelloPanel.headline" txt="‚æ‚¤‚±‚»" />
-    <str id="CompilePanel.headline" txt="Java ‚Ìƒ\[ƒX‚ðƒRƒ“ƒpƒCƒ‹" />
-    <str id="ConditionalUserInputPanel.headline" txt="ƒ†[ƒUƒf[ƒ^" />
-    <str id="ExtendedInstallPanel.headline" txt="ƒCƒ“ƒXƒg[ƒ‹‚ÆÝ’è" />
-    <str id="FinishPanel.headline" txt="ƒCƒ“ƒXƒg[ƒ‹Š®—¹" />
-    <str id="HelloPanel.headline" txt="‚æ‚¤‚±‚»" />
-    <str id="HTMLInfoPanel.headline" txt="î•ñ" />
-    <str id="HTMLLicencePanel.headline" txt="ƒ‰ƒCƒZƒ“ƒXŒ_–ñ" />
-    <str id="ImgPacksPanel.headline" txt="ƒCƒ“ƒXƒg[ƒ‹ƒpƒbƒP[ƒW‚Ì‘I‘ð" />
-    <str id="InfoPanel.headline" txt="î•ñ" />
-    <str id="InstallPanel.headline" txt="ƒCƒ“ƒXƒg[ƒ‹" />
-    <str id="JDKPathPanel.headline" txt="JDK ƒpƒX" />
-    <str id="LicencePanel.headline" txt="ƒ‰ƒCƒZƒ“ƒXŒ_–ñ" />
-    <str id="PacksPanel.headline" txt="ƒCƒ“ƒXƒg[ƒ‹ƒpƒbƒP[ƒW‚Ì‘I‘ð" />
-    <str id="ProcessPanel.headline" txt="ŠO•”ƒvƒƒZƒX‚ÌŽÀs" />
-    <str id="ShortcutPanel.headline" txt="ƒVƒ‡[ƒgƒJƒbƒg‚ÌƒZƒbƒgƒAƒbƒv" />
-    <str id="SimpleFinishPanel.headline" txt="ƒCƒ“ƒXƒg[ƒ‹Š®—¹" />
-    <str id="SummaryPanel.headline" txt="Ý’èƒf[ƒ^‚ÌƒTƒ}ƒŠ" />
-    <str id="TargetPanel.headline" txt="ƒCƒ“ƒXƒg[ƒ‹æ" />
-    <str id="UserInputPanel.headline" txt="ƒ†[ƒUƒf[ƒ^" />
-    <str id="UserPathPanel.headline" txt="ƒpƒX‚Ì‘I‘ð" />
-    <str id="InstallationTypePanel.headline" txt="ƒCƒ“ƒXƒg[ƒ‹‚ÌŽí—Þ" />
+    <str id="CheckedHelloPanel.headline" txt="ï¿½æ‚¤ï¿½ï¿½ï¿½ï¿½" />
+    <str id="CompilePanel.headline" txt="Java ï¿½Ìƒ\ï¿½[ï¿½Xï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½pï¿½Cï¿½ï¿½" />
+    <str id="ConditionalUserInputPanel.headline" txt="ï¿½ï¿½ï¿½[ï¿½Uï¿½fï¿½[ï¿½^" />
+    <str id="ExtendedInstallPanel.headline" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ÆÝ’ï¿½" />
+    <str id="FinishPanel.headline" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" />
+    <str id="HelloPanel.headline" txt="ï¿½æ‚¤ï¿½ï¿½ï¿½ï¿½" />
+    <str id="HTMLInfoPanel.headline" txt="ï¿½ï¿½ï¿½ï¿½" />
+    <str id="HTMLLicencePanel.headline" txt="ï¿½ï¿½ï¿½Cï¿½Zï¿½ï¿½ï¿½Xï¿½_ï¿½ï¿½" />
+    <str id="ImgPacksPanel.headline" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½pï¿½bï¿½Pï¿½[ï¿½Wï¿½Ì‘Iï¿½ï¿½" />
+    <str id="InfoPanel.headline" txt="ï¿½ï¿½ï¿½ï¿½" />
+    <str id="InstallPanel.headline" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½" />
+    <str id="JDKPathPanel.headline" txt="JDK ï¿½pï¿½X" />
+    <str id="LicencePanel.headline" txt="ï¿½ï¿½ï¿½Cï¿½Zï¿½ï¿½ï¿½Xï¿½_ï¿½ï¿½" />
+    <str id="PacksPanel.headline" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½pï¿½bï¿½Pï¿½[ï¿½Wï¿½Ì‘Iï¿½ï¿½" />
+    <str id="ProcessPanel.headline" txt="ï¿½Oï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Zï¿½Xï¿½ÌŽï¿½s" />
+    <str id="ShortcutPanel.headline" txt="ï¿½Vï¿½ï¿½ï¿½[ï¿½gï¿½Jï¿½bï¿½gï¿½ÌƒZï¿½bï¿½gï¿½Aï¿½bï¿½v" />
+    <str id="SimpleFinishPanel.headline" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" />
+    <str id="SummaryPanel.headline" txt="ï¿½Ý’ï¿½ï¿½fï¿½[ï¿½^ï¿½ÌƒTï¿½}ï¿½ï¿½" />
+    <str id="TargetPanel.headline" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½" />
+    <str id="UserInputPanel.headline" txt="ï¿½ï¿½ï¿½[ï¿½Uï¿½fï¿½[ï¿½^" />
+    <str id="UserPathPanel.headline" txt="ï¿½pï¿½Xï¿½Ì‘Iï¿½ï¿½" />
+    <str id="InstallationTypePanel.headline" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ÌŽï¿½ï¿½ï¿½" />
 
     <!-- General installer strings -->
     <!-- Notice! more natural Japanese requires string after product name -->
-    <str id="installer.title" txt="IzPack - ƒCƒ“ƒXƒg[ƒ‹ - " />
-    <str id="installer.next" txt="ŽŸ‚Ö" />
-    <str id="installer.prev" txt="‘O‚Ö" />
-    <str id="installer.quit" txt="I—¹" />
-    <str id="installer.madewith" txt="(IzPack‚É‚Äì¬‚³‚ê‚Ü‚µ‚½ - http://izpack.org/)" />
-    <str id="installer.quit.title" txt="ƒCƒ“ƒXƒg[ƒ‹‚Ì’†Ž~" />
-    <str id="installer.quit.message" txt="ƒCƒ“ƒXƒg[ƒ‰‚ðI—¹‚µ‚Ü‚·!" />
-    <str id="installer.warning" txt="Œx !" />
-    <str id="installer.yes" txt="‚Í‚¢" />
-    <str id="installer.no" txt="‚¢‚¢‚¦" />
-    <str id="installer.cancel" txt="ƒLƒƒƒ“ƒZƒ‹" />
-    <str id="installer.error" txt="ƒGƒ‰[" />
-    <str id="installer.help" txt="ƒwƒ‹ƒv" />
-    <str id="installer.step" txt="ƒXƒeƒbƒv" />
+    <str id="installer.title" txt="IzPack - ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ - " />
+    <str id="installer.next" txt="ï¿½ï¿½ï¿½ï¿½" />
+    <str id="installer.prev" txt="ï¿½Oï¿½ï¿½" />
+    <str id="installer.quit" txt="ï¿½Iï¿½ï¿½" />
+    <str id="installer.madewith" txt="(IzPackï¿½É‚Äì¬ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ - http://izpack.org/)" />
+    <str id="installer.quit.title" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½Ì’ï¿½ï¿½~" />
+    <str id="installer.quit.message" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½!" />
+    <str id="installer.warning" txt="ï¿½xï¿½ï¿½ !" />
+    <str id="installer.yes" txt="ï¿½Í‚ï¿½" />
+    <str id="installer.no" txt="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" />
+    <str id="installer.cancel" txt="ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½" />
+    <str id="installer.error" txt="ï¿½Gï¿½ï¿½ï¿½[" />
+    <str id="installer.help" txt="ï¿½wï¿½ï¿½ï¿½v" />
+    <str id="installer.step" txt="ï¿½Xï¿½eï¿½bï¿½v" />
     <str id="installer.of" txt="/" />
-    <str id="installer.Message" txt="ƒƒbƒZ[ƒW" />
+    <str id="installer.Message" txt="ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½W" />
 
     <!-- Uninstaller specific strings -->
-    <str id="uninstaller.warning" txt="‚±‚Ì‘€ì‚ÍAƒCƒ“ƒXƒg[ƒ‹Ï‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ðíœ‚µ‚Ü‚·!" />
-    <str id="uninstaller.destroytarget" txt=" ‹­§íœ - " />
-    <str id="uninstaller.uninstall" txt="ƒAƒ“ƒCƒ“ƒXƒg[ƒ‹" />
+    <str id="uninstaller.warning" txt="ï¿½ï¿½ï¿½Ì‘ï¿½ï¿½ï¿½ï¿½ÍAï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½Ï‚ÌƒAï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½íœï¿½ï¿½ï¿½Ü‚ï¿½!" />
+    <str id="uninstaller.destroytarget" txt=" ï¿½ï¿½ï¿½ï¿½ï¿½íœ - " />
+    <str id="uninstaller.uninstall" txt="ï¿½Aï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½" />
 
     <!-- The strings for the 'official' IzPack plugins -->
     <str id="HelloPanel.welcome1" txt="" />
-    <str id="HelloPanel.welcome2" txt="‚ÌƒCƒ“ƒXƒg[ƒ‹‚Ö‚æ‚¤‚±‚» !" />
-    <str id="HelloPanel.authors" txt="‚±‚Ìƒ\ƒtƒgƒEƒFƒA‚Ì’˜ŽÒ : " />
-    <str id="HelloPanel.url" txt="‚±‚Ìƒ\ƒtƒgƒEƒFƒA‚ÌƒEƒFƒuƒTƒCƒg : " />
+    <str id="HelloPanel.welcome2" txt="ï¿½ÌƒCï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½Ö‚æ‚¤ï¿½ï¿½ï¿½ï¿½ !" />
+    <str id="HelloPanel.authors" txt="ï¿½ï¿½ï¿½Ìƒ\ï¿½tï¿½gï¿½Eï¿½Fï¿½Aï¿½Ì’ï¿½ï¿½ï¿½ : " />
+    <str id="HelloPanel.url" txt="ï¿½ï¿½ï¿½Ìƒ\ï¿½tï¿½gï¿½Eï¿½Fï¿½Aï¿½ÌƒEï¿½Fï¿½uï¿½Tï¿½Cï¿½g : " />
 
-    <str id="LicencePanel.info" txt="ˆÈ‰º‚Ìƒ‰ƒCƒZƒ“ƒX—˜—p‹–‘ø‚ð‚¨“Ç‚Ý‚­‚¾‚³‚¢ :" />
-    <str id="LicencePanel.agree" txt="ƒ‰ƒCƒZƒ“ƒX—˜—p‹–‘ø‚É“¯ˆÓ‚µ‚Ü‚·" />
-    <str id="LicencePanel.notagree" txt="ƒ‰ƒCƒZƒ“ƒX—˜—p‹–‘ø‚É“¯ˆÓ‚µ‚Ü‚¹‚ñ" />
-    <str id="LicencePanel.yes" txt="‚Í‚¢" />
-    <str id="LicencePanel.no" txt="‚¢‚¢‚¦" />
+    <str id="LicencePanel.info" txt="ï¿½È‰ï¿½ï¿½Ìƒï¿½ï¿½Cï¿½Zï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‚Ý‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ :" />
+    <str id="LicencePanel.agree" txt="ï¿½ï¿½ï¿½Cï¿½Zï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½É“ï¿½ï¿½Ó‚ï¿½ï¿½Ü‚ï¿½" />
+    <str id="LicencePanel.notagree" txt="ï¿½ï¿½ï¿½Cï¿½Zï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½É“ï¿½ï¿½Ó‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½" />
+    <str id="LicencePanel.yes" txt="ï¿½Í‚ï¿½" />
+    <str id="LicencePanel.no" txt="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" />
 
     <!-- PrinterSelect Panel -->
-    <str id="PrinterSelectPanel.select_printer" txt="‰ŠúÝ’è‚¨‚æ‚ÑƒeƒXƒg‚ÉŽg—p‚·‚éƒvƒŠƒ“ƒ^‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢B" />
+    <str id="PrinterSelectPanel.select_printer" txt="ï¿½ï¿½ï¿½ï¿½ï¿½Ý’è‚¨ï¿½ï¿½ï¿½Ñƒeï¿½Xï¿½gï¿½ÉŽgï¿½pï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½Iï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B" />
 
-    <str id="InfoPanel.info" txt="ˆÈ‰º‚Ìî•ñ‚ð‚¨“Ç‚Ý‚­‚¾‚³‚¢ :" />
+    <str id="InfoPanel.info" txt="ï¿½È‰ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½Ç‚Ý‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ :" />
 
     <!-- PathInputPanel strings -->
-    <str id="PathInputPanel.required" txt="‘¶Ý‚·‚éƒfƒBƒŒƒNƒgƒŠ‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢B" />
-    <str id="PathInputPanel.required.forModificationInstallation" txt="‘¶Ý‚·‚éƒfƒBƒŒƒNƒgƒŠ‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢B" />
-    <str id="PathInputPanel.notValid" txt="‘I‘ð‚µ‚½ƒfƒBƒŒƒNƒgƒŠ‚É‚Í•K—v‚È»•i‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚¹‚ñB" />
+    <str id="PathInputPanel.required" txt="ï¿½ï¿½ï¿½Ý‚ï¿½ï¿½ï¿½ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B" />
+    <str id="PathInputPanel.required.forModificationInstallation" txt="ï¿½ï¿½ï¿½Ý‚ï¿½ï¿½ï¿½ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B" />
+    <str id="PathInputPanel.notValid" txt="ï¿½Iï¿½ï¿½ï¿½ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½É‚Í•Kï¿½vï¿½Èï¿½ï¿½iï¿½ï¿½ï¿½Ü‚Ü‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B" />
 
-    <str id="TargetPanel.info" txt="ƒCƒ“ƒXƒg[ƒ‹‚·‚éƒpƒX‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢ :" />
-    <str id="TargetPanel.browse" txt="ŽQÆ ..." />
+    <str id="TargetPanel.info" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½Xï¿½ï¿½ï¿½Iï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ :" />
+    <str id="TargetPanel.browse" txt="ï¿½Qï¿½ï¿½ ..." />
     <str id="TargetPanel.warn"
-         txt="Žw’è‚³‚ê‚½ƒfƒBƒŒƒNƒgƒŠ‚ÍŠù‚É‘¶Ý‚µ‚Ü‚·! ‚±‚Ì‚Ü‚Ü‘±‚¯‚é‚Æƒtƒ@ƒCƒ‹‚ðã‘‚«‚·‚é‚©‚à‚µ‚ê‚Ü‚¹‚ñ‚ª‚¢‚¢‚Å‚·‚©?" />
+         txt="ï¿½wï¿½è‚³ï¿½ê‚½ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ÍŠï¿½ï¿½É‘ï¿½ï¿½Ý‚ï¿½ï¿½Ü‚ï¿½! ï¿½ï¿½ï¿½Ì‚Ü‚Ü‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ã‘ï¿½ï¿½ï¿½ï¿½ï¿½é‚©ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ñ‚ª‚ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½?" />
     <str id="TargetPanel.empty_target"
-         txt="³‚µ‚¢ƒCƒ“ƒXƒg[ƒ‹æ‚ðŽw’è‚µ‚Ä‚­‚¾‚³‚¢! ‚±‚ÌƒpƒX‚Í–{“–‚É‘¶Ý‚µ‚Ä‚¢‚Ü‚·‚©?" />
-    <str id="TargetPanel.createdir" txt="ƒCƒ“ƒXƒg[ƒ‹æƒfƒBƒŒƒNƒgƒŠ‚ðì¬‚µ‚Ü‚·: " />
-    <str id="TargetPanel.nodir" txt="‚±‚ÌƒpƒX‚ÍƒfƒBƒŒƒNƒgƒŠ‚Å‚Í‚ ‚è‚Ü‚¹‚ñ! ƒfƒBƒŒƒNƒgƒŠ‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢!" />
-    <str id="TargetPanel.notwritable" txt="‚±‚ÌƒfƒBƒŒƒNƒgƒŠ‚É‘‚«ž‚Þ‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñ! •Ê‚ÌƒfƒBƒŒƒNƒgƒŠ‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢!" />
+         txt="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½wï¿½è‚µï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½! ï¿½ï¿½ï¿½Ìƒpï¿½Xï¿½Í–{ï¿½ï¿½ï¿½É‘ï¿½ï¿½Ý‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½?" />
+    <str id="TargetPanel.createdir" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½Ü‚ï¿½: " />
+    <str id="TargetPanel.nodir" txt="ï¿½ï¿½ï¿½Ìƒpï¿½Xï¿½Íƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½Å‚Í‚ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½! ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!" />
+    <str id="TargetPanel.notwritable" txt="ï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ‚ï¿½ï¿½Æ‚ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½! ï¿½Ê‚Ìƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!" />
 
     <!-- JDKPathPanel strings -->
     <str id="JDKPathPanel.extendedIntro"
-         txt="ƒCƒ“ƒXƒg[ƒ‹‚·‚éƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚É‚Í JDK ${JDKPathPanel.minVersion} - ${JDKPathPanel.maxVersion} ‚ª•K—v‚Å‚·BJava ŽÀsŠÂ‹« (JRE) ‚Å‚Í•s\•ª‚Å‚·B" />
-    <str id="JDKPathPanel.intro" txt="ƒCƒ“ƒXƒg[ƒ‹‚·‚éƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚É‚Í JDK ‚ª•K—v‚Å‚·BJava ŽÀsŠÂ‹« (JRE) ‚Å‚Í•s\•ª‚Å‚·B" />
-    <str id="JDKPathPanel.info" txt="JDK ƒpƒX‚Ì‘I‘ð:" />
-    <str id="JDKPathPanel.badVersion1" txt="‘I‘ð‚µ‚½ JDK ‚Ìƒo[ƒWƒ‡ƒ“‚ªŠÔˆá‚Á‚Ä‚¢‚Ü‚· (—˜—p‰Â”\: " />
-    <str id="JDKPathPanel.badVersion2" txt=" •K{: " />
-    <str id="JDKPathPanel.badVersion3" txt=") ‚±‚Ì JDK ‚ðŽg—p‚µ‚Ü‚·‚©?" />
+         txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½ JDK ${JDKPathPanel.minVersion} - ${JDKPathPanel.maxVersion} ï¿½ï¿½ï¿½Kï¿½vï¿½Å‚ï¿½ï¿½BJava ï¿½ï¿½sï¿½Â‹ï¿½ (JRE) ï¿½Å‚Í•sï¿½\ï¿½ï¿½ï¿½Å‚ï¿½ï¿½B" />
+    <str id="JDKPathPanel.intro" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½ JDK ï¿½ï¿½ï¿½Kï¿½vï¿½Å‚ï¿½ï¿½BJava ï¿½ï¿½sï¿½Â‹ï¿½ (JRE) ï¿½Å‚Í•sï¿½\ï¿½ï¿½ï¿½Å‚ï¿½ï¿½B" />
+    <str id="JDKPathPanel.info" txt="JDK ï¿½pï¿½Xï¿½Ì‘Iï¿½ï¿½:" />
+    <str id="JDKPathPanel.badVersion1" txt="ï¿½Iï¿½ï¿½ï¿½ JDK ï¿½Ìƒoï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôˆï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ (ï¿½ï¿½ï¿½pï¿½Â”\: " />
+    <str id="JDKPathPanel.badVersion2" txt=" ï¿½Kï¿½{: " />
+    <str id="JDKPathPanel.badVersion3" txt=") ï¿½ï¿½ï¿½ï¿½ JDK ï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½?" />
     <str id="JDKPathPanel.nonValidPathInReg"
-         txt="Windows ƒŒƒWƒXƒgƒŠ‚ª—LŒø‚Å‚Í‚È‚¢ JDK ‚ÌƒpƒX‚ðŠÜ‚ñ‚Å‚¢‚Ü‚·B‚±‚Ì JDK ‚ðŽg—p‚µ‚Ü‚·‚©?" />
+         txt="Windows ï¿½ï¿½ï¿½Wï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½Å‚Í‚È‚ï¿½ JDK ï¿½Ìƒpï¿½Xï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½ JDK ï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½?" />
 
-    <str id="PacksPanel.info" txt="ƒCƒ“ƒXƒg[ƒ‹‚µ‚½‚¢€–Ú‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢ :" />
-    <str id="PacksPanel.tip" txt="’ˆÓ: ŠDF‚Å•\Ž¦‚³‚ê‚Ä‚¢‚é€–Ú‚ÍA•K{€–Ú‚Å‚·B" />
-    <str id="PacksPanel.space" txt="•K—v‚ÈƒfƒBƒXƒN—e—Ê: " />
-    <str id="PacksPanel.freespace" txt="‹ó‚«ƒfƒBƒXƒN—e—Ê: " />
-    <str id="PacksPanel.description" txt="à–¾" />
-    <str id="PacksPanel.dependencyList" txt="‘I‘ð‚µ‚½€–Ú‚ÍˆÈ‰º‚ÌˆË‘¶‚Ü‚½‚ÍœŠO€–Ú‚ðŠÜ‚ñ‚Å‚¢‚Ü‚·" />
-    <str id="PacksPanel.dependencies" txt="ˆË‘¶€–Ú: " />
-    <str id="PacksPanel.excludes" txt="œŠO€–Ú: " />
-    <str id="PacksPanel.notEnoughSpace" txt="•K—v‚ÈƒfƒBƒXƒN—e—Ê‚ª‹ó‚«ƒfƒBƒXƒN—e—Ê‚ð‰z‚¦‚Ä‚¢‚Ü‚·B" />
-    <str id="PacksPanel.notAscertainable" txt="•s–¾" />
+    <str id="PacksPanel.info" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú‚ï¿½ï¿½Iï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ :" />
+    <str id="PacksPanel.tip" txt="ï¿½ï¿½ï¿½ï¿½: ï¿½Dï¿½Fï¿½Å•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é€ï¿½Ú‚ÍAï¿½Kï¿½{ï¿½ï¿½ï¿½Ú‚Å‚ï¿½ï¿½B" />
+    <str id="PacksPanel.space" txt="ï¿½Kï¿½vï¿½Èƒfï¿½Bï¿½Xï¿½Nï¿½eï¿½ï¿½: " />
+    <str id="PacksPanel.freespace" txt="ï¿½ó‚«ƒfï¿½Bï¿½Xï¿½Nï¿½eï¿½ï¿½: " />
+    <str id="PacksPanel.description" txt="ï¿½ï¿½" />
+    <str id="PacksPanel.dependencyList" txt="ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú‚ÍˆÈ‰ï¿½ï¿½ÌˆË‘ï¿½ï¿½Ü‚ï¿½ï¿½Íï¿½ï¿½Oï¿½ï¿½ï¿½Ú‚ï¿½ï¿½Ü‚ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½" />
+    <str id="PacksPanel.dependencies" txt="ï¿½Ë‘ï¿½ï¿½ï¿½ï¿½ï¿½: " />
+    <str id="PacksPanel.excludes" txt="ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½: " />
+    <str id="PacksPanel.notEnoughSpace" txt="ï¿½Kï¿½vï¿½Èƒfï¿½Bï¿½Xï¿½Nï¿½eï¿½Ê‚ï¿½ï¿½ó‚«ƒfï¿½Bï¿½Xï¿½Nï¿½eï¿½Ê‚ï¿½ï¿½zï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½B" />
+    <str id="PacksPanel.notAscertainable" txt="ï¿½sï¿½ï¿½" />
 
-    <str id="InstallPanel.info" txt="ƒCƒ“ƒXƒg[ƒ‹‚ðŠJŽn‚·‚é‚É‚ÍA'ƒCƒ“ƒXƒg[ƒ‹!'‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢" />
-    <str id="InstallPanel.install" txt="ƒCƒ“ƒXƒg[ƒ‹!" />
-    <str id="InstallPanel.tip" txt="ƒCƒ“ƒXƒg[ƒ‹ó‹µ :" />
-    <str id="InstallPanel.begin" txt="[–¢ƒCƒ“ƒXƒg[ƒ‹]" />
-    <str id="InstallPanel.finished" txt="[Š®—¹]" />
-    <str id="InstallPanel.progress" txt="‘S‘Ì‚ÌƒCƒ“ƒXƒg[ƒ‹i’»ó‹µ:" />
-    <str id="InstallPanel.overwrite.title" txt="ƒtƒ@ƒCƒ‹‚ªŠù‚É‘¶Ý‚µ‚Ä‚¢‚Ü‚·" />
-    <str id="InstallPanel.overwrite.question" txt="ˆÈ‰º‚Ìƒtƒ@ƒCƒ‹‚ªŠù‚É‘¶Ý‚µ‚Ä‚¢‚Ü‚·Bã‘‚«‚µ‚Ü‚·‚©?" />
+    <str id="InstallPanel.info" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½nï¿½ï¿½ï¿½ï¿½ï¿½É‚ÍA'ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½!'ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" />
+    <str id="InstallPanel.install" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½!" />
+    <str id="InstallPanel.tip" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ :" />
+    <str id="InstallPanel.begin" txt="[ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½]" />
+    <str id="InstallPanel.finished" txt="[ï¿½ï¿½ï¿½ï¿½]" />
+    <str id="InstallPanel.progress" txt="ï¿½Sï¿½Ì‚ÌƒCï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:" />
+    <str id="InstallPanel.overwrite.title" txt="ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‘ï¿½ï¿½Ý‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½" />
+    <str id="InstallPanel.overwrite.question" txt="ï¿½È‰ï¿½ï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‘ï¿½ï¿½Ý‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½ã‘ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½?" />
 
     <!-- InstallationGroupPanel strings -->
-    <str id="InstallationGroupPanel.colNameSelected" txt="‘I‘ð" />
-    <str id="InstallationGroupPanel.colNameInstallType" txt="ƒCƒ“ƒXƒg[ƒ‹‚ÌŽí—Þ" />
-    <str id="InstallationGroupPanel.colNameSize" txt="ƒTƒCƒY" />
+    <str id="InstallationGroupPanel.colNameSelected" txt="ï¿½Iï¿½ï¿½" />
+    <str id="InstallationGroupPanel.colNameInstallType" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ÌŽï¿½ï¿½ï¿½" />
+    <str id="InstallationGroupPanel.colNameSize" txt="ï¿½Tï¿½Cï¿½Y" />
 
     <!-- InstallationTypePanel strings -->
-    <str id="InstallationTypePanel.info" txt="ƒCƒ“ƒXƒg[ƒ‹‚ÌŽí—Þ‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢:" />
-    <str id="InstallationTypePanel.normal" txt="V‹KƒCƒ“ƒXƒg[ƒ‹" />
-    <str id="InstallationTypePanel.modify" txt="C³ƒCƒ“ƒXƒg[ƒ‹" />
+    <str id="InstallationTypePanel.info" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ÌŽï¿½ï¿½Þ‚ï¿½ï¿½Iï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:" />
+    <str id="InstallationTypePanel.normal" txt="ï¿½Vï¿½Kï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½" />
+    <str id="InstallationTypePanel.modify" txt="ï¿½Cï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½" />
 
-    <str id="FinishPanel.success" txt="ƒCƒ“ƒXƒg[ƒ‹‚Í³í‚ÉI—¹‚µ‚Ü‚µ‚½B" />
-    <str id="FinishPanel.done" txt="Š®—¹" />
-    <str id="FinishPanel.fail" txt="ƒCƒ“ƒXƒg[ƒ‹‚ÉŽ¸”s‚µ‚Ü‚µ‚½!" />
-    <str id="FinishPanel.uninst.info" txt="ƒAƒ“ƒCƒ“ƒXƒg[ƒ‰‚ªˆÈ‰º‚ÌêŠ‚Éì¬‚³‚ê‚Ü‚µ‚½:" />
-    <str id="FinishPanel.auto" txt="Ž©“®ƒCƒ“ƒXƒg[ƒ‹ƒXƒNƒŠƒvƒg‚ð¶¬‚µ‚Ü‚·" />
+    <str id="FinishPanel.success" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½Íï¿½ï¿½ï¿½ï¿½ÉIï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B" />
+    <str id="FinishPanel.done" txt="ï¿½ï¿½ï¿½ï¿½" />
+    <str id="FinishPanel.fail" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ÉŽï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½!" />
+    <str id="FinishPanel.uninst.info" txt="ï¿½Aï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½È‰ï¿½ï¿½ÌêŠï¿½Éì¬ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½:" />
+    <str id="FinishPanel.auto" txt="ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½vï¿½gï¿½ð¶ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½" />
     <str id="FinishPanel.auto.tip"
-         txt="“¯‚¶“à—e‚ÌƒCƒ“ƒXƒg[ƒ‹‚ð‘¼‚ÌƒRƒ“ƒsƒ…[ƒ^‚ÅŒJ‚è•Ô‚µ‚½‚¢‚Æ‚«‚ÉA‚±‚ÌƒXƒNƒŠƒvƒg‚ªŽg‚¦‚Ü‚·B" />
-    <str id="FinishPanel.auto.dialog.filterdesc" txt="XML ƒtƒ@ƒCƒ‹" />
+         txt="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ÌƒCï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ð‘¼‚ÌƒRï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^ï¿½ÅŒJï¿½ï¿½ï¿½Ô‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ÉAï¿½ï¿½ï¿½ÌƒXï¿½Nï¿½ï¿½ï¿½vï¿½gï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B" />
+    <str id="FinishPanel.auto.dialog.filterdesc" txt="XML ï¿½tï¿½@ï¿½Cï¿½ï¿½" />
 
     <!-- ImgPacksPanel strings -->
-    <str id="ImgPacksPanel.dependencyList" txt="ˆË‘¶‚Ü‚½‚ÍœŠO€–Ú" />
-    <str id="ImgPacksPanel.packs" txt="ˆÈ‰º‚Ì€–Ú‚ð‘I‘ð‚Å‚«‚Ü‚· :" />
-    <str id="ImgPacksPanel.snap" txt="ƒpƒbƒP[ƒW‚ÌƒXƒiƒbƒvƒVƒ‡ƒbƒg  :" />
-    <str id="ImgPacksPanel.checkbox" txt=" ‚±‚Ì€–Ú‚ðƒCƒ“ƒXƒg[ƒ‹" />
+    <str id="ImgPacksPanel.dependencyList" txt="ï¿½Ë‘ï¿½ï¿½Ü‚ï¿½ï¿½Íï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½" />
+    <str id="ImgPacksPanel.packs" txt="ï¿½È‰ï¿½ï¿½Ìï¿½ï¿½Ú‚ï¿½ï¿½Iï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ :" />
+    <str id="ImgPacksPanel.snap" txt="ï¿½pï¿½bï¿½Pï¿½[ï¿½Wï¿½ÌƒXï¿½iï¿½bï¿½vï¿½Vï¿½ï¿½ï¿½bï¿½g  :" />
+    <str id="ImgPacksPanel.checkbox" txt=" ï¿½ï¿½ï¿½Ìï¿½ï¿½Ú‚ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½" />
 
-    <str id="ShortcutPanel.regular.list" txt="ƒXƒ^[ƒgƒƒjƒ…[‚ÌƒtƒHƒ‹ƒ_‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢:" />
-    <str id="ShortcutPanel.regular.default" txt="ƒŠƒZƒbƒg" />
-    <str id="ShortcutPanel.regular.desktop" txt="ƒfƒXƒNƒgƒbƒv‚ÉƒVƒ‡[ƒgƒJƒbƒg‚ðì¬‚µ‚Ü‚·" />
-    <str id="ShortcutPanel.regular.create" txt="StartMenu‚ÉƒVƒ‡[ƒgƒJƒbƒg‚ðì¬‚µ‚Ü‚·" />
-    <str id="ShortcutPanel.regular.userIntro" txt="ƒVƒ‡[ƒgƒJƒbƒg‚ðì¬‚·‚éƒ†[ƒU:" />
-    <str id="ShortcutPanel.regular.currentUser" txt="Œ»Ý‚Ìƒ†[ƒU" />
-    <str id="ShortcutPanel.regular.allUsers" txt="‚·‚×‚Ä‚Ìƒ†[ƒU" />
+    <str id="ShortcutPanel.regular.list" txt="ï¿½Xï¿½^ï¿½[ï¿½gï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½Ìƒtï¿½Hï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½Iï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:" />
+    <str id="ShortcutPanel.regular.default" txt="ï¿½ï¿½ï¿½Zï¿½bï¿½g" />
+    <str id="ShortcutPanel.regular.desktop" txt="ï¿½fï¿½Xï¿½Nï¿½gï¿½bï¿½vï¿½ÉƒVï¿½ï¿½ï¿½[ï¿½gï¿½Jï¿½bï¿½gï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½Ü‚ï¿½" />
+    <str id="ShortcutPanel.regular.create" txt="StartMenuï¿½ÉƒVï¿½ï¿½ï¿½[ï¿½gï¿½Jï¿½bï¿½gï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½Ü‚ï¿½" />
+    <str id="ShortcutPanel.regular.userIntro" txt="ï¿½Vï¿½ï¿½ï¿½[ï¿½gï¿½Jï¿½bï¿½gï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½éƒ†ï¿½[ï¿½U:" />
+    <str id="ShortcutPanel.regular.currentUser" txt="ï¿½ï¿½ï¿½Ý‚Ìƒï¿½ï¿½[ï¿½U" />
+    <str id="ShortcutPanel.regular.allUsers" txt="ï¿½ï¿½ï¿½×‚Ä‚Ìƒï¿½ï¿½[ï¿½U" />
 
     <str id="ShortcutPanel.alternate.apology"
-         txt="IzPack‚Å‚ÍA‚¨Žg‚¢‚ÌƒIƒyƒŒ[ƒeƒBƒ“ƒOƒVƒXƒeƒ€‚Å‚ÌƒVƒ‡[ƒgƒJƒbƒg‚Ìì¬‚ðƒTƒ|[ƒg‚µ‚Ä‚¢‚Ü‚¹‚ñBƒVƒ‡[ƒgƒJƒbƒg‚ðì¬‚·‚é‚É‚ÍA‚¨Žg‚¢‚ÌƒIƒyƒŒ[ƒeƒBƒ“ƒOƒVƒXƒeƒ€‚Ìƒ}ƒjƒ…ƒAƒ‹‚ðŽQÆ‚µ‚Ä‚­‚¾‚³‚¢B" />
-    <str id="ShortcutPanel.alternate.targetsLabel" txt="ˆÈ‰º‚ÍA‚±‚Ìƒ\ƒtƒgƒEƒFƒA‚Ì»‘¢Œ³‚ªAƒ\ƒtƒgƒEƒFƒA‚ª“®ì‚·‚é‚½‚ß‚É•K—v‚Èƒtƒ@ƒCƒ‹‚Ö‚ÌƒAƒNƒZƒX‚ð—ñ‹“‚µ‚½‚à‚Ì‚Å‚·B" />
-    <str id="ShortcutPanel.alternate.textFileExplanation" txt="‚ ‚Æ‚ÅŽQÆ‚·‚é‚½‚ß‚ÉAƒ^[ƒQƒbƒgƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ÌÚ×î•ñ‚ðƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚É•Û‘¶‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B" />
-    <str id="ShortcutPanel.alternate.saveButton" txt="ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚É•Û‘¶" />
+         txt="IzPackï¿½Å‚ÍAï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ÌƒIï¿½yï¿½ï¿½ï¿½[ï¿½eï¿½Bï¿½ï¿½ï¿½Oï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½Å‚ÌƒVï¿½ï¿½ï¿½[ï¿½gï¿½Jï¿½bï¿½gï¿½Ìì¬ï¿½ï¿½ï¿½Tï¿½|ï¿½[ï¿½gï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½Bï¿½Vï¿½ï¿½ï¿½[ï¿½gï¿½Jï¿½bï¿½gï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½ï¿½ï¿½É‚ÍAï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ÌƒIï¿½yï¿½ï¿½ï¿½[ï¿½eï¿½Bï¿½ï¿½ï¿½Oï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½Ìƒ}ï¿½jï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½Æ‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B" />
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="ï¿½È‰ï¿½ï¿½ÍAï¿½ï¿½ï¿½Ìƒ\ï¿½tï¿½gï¿½Eï¿½Fï¿½Aï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½\ï¿½tï¿½gï¿½Eï¿½Fï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ì‚·ï¿½é‚½ï¿½ß‚É•Kï¿½vï¿½Èƒtï¿½@ï¿½Cï¿½ï¿½ï¿½Ö‚ÌƒAï¿½Nï¿½Zï¿½Xï¿½ï¿½ï¿½ñ‹“‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚Å‚ï¿½ï¿½B" />
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="ï¿½ï¿½ï¿½Æ‚ÅŽQï¿½Æ‚ï¿½ï¿½é‚½ï¿½ß‚ÉAï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½Aï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ÌÚ×ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½Lï¿½Xï¿½gï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½É•Û‘ï¿½ï¿½ï¿½ï¿½é‚±ï¿½Æ‚ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½B" />
+    <str id="ShortcutPanel.alternate.saveButton" txt="ï¿½eï¿½Lï¿½Xï¿½gï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½É•Û‘ï¿½" />
 
     <str id="ShortcutPanel.textFile.header"
-         txt="ƒVƒ‡[ƒgƒJƒbƒgî•ñ\n====================\n\nˆÈ‰º‚ÍAˆÈ‰º‚ÍAì¬‚³‚ê‚é‚×‚«ƒVƒ‡[ƒgƒJƒbƒg‚ÉŠÖ‚·‚éî•ñ‚Å‚·B\n‚±‚Ìî•ñ‚É‚æ‚Á‚ÄAŽè“®‚Å‘Š“–‚·‚éƒVƒ‡[ƒgƒJƒbƒg‚ðì¬‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B\n" />
+         txt="ï¿½Vï¿½ï¿½ï¿½[ï¿½gï¿½Jï¿½bï¿½gï¿½ï¿½ï¿½ï¿½\n====================\n\nï¿½È‰ï¿½ï¿½ÍAï¿½È‰ï¿½ï¿½ÍAï¿½ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×‚ï¿½ï¿½Vï¿½ï¿½ï¿½[ï¿½gï¿½Jï¿½bï¿½gï¿½ÉŠÖ‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½B\nï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½ÄAï¿½è“®ï¿½Å‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Vï¿½ï¿½ï¿½[ï¿½gï¿½Jï¿½bï¿½gï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½é‚±ï¿½Æ‚ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½B\n" />
 
-    <str id="ShortcutPanel.textFile.name" txt="ƒVƒ‡[ƒgƒJƒbƒg    : " />
-    <str id="ShortcutPanel.textFile.location" txt="–Ú“I‚ÌƒpƒX        : " />
-    <str id="ShortcutPanel.textFile.description" txt="à–¾              : " />
-    <str id="ShortcutPanel.textFile.target" txt="ƒVƒ‡[ƒgƒJƒbƒgæ  : " />
-    <str id="ShortcutPanel.textFile.command" txt="ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“    : " />
-    <str id="ShortcutPanel.textFile.iconName" txt="ƒAƒCƒRƒ“ƒtƒ@ƒCƒ‹  : " />
-    <str id="ShortcutPanel.textFile.iconIndex" txt="ƒAƒCƒRƒ“ƒCƒ“ƒfƒNƒX: " />
-    <str id="ShortcutPanel.textFile.work" txt="ì‹ÆƒfƒBƒŒƒNƒgƒŠ  : " />
+    <str id="ShortcutPanel.textFile.name" txt="ï¿½Vï¿½ï¿½ï¿½[ï¿½gï¿½Jï¿½bï¿½g    : " />
+    <str id="ShortcutPanel.textFile.location" txt="ï¿½Ú“Iï¿½Ìƒpï¿½X        : " />
+    <str id="ShortcutPanel.textFile.description" txt="ï¿½ï¿½              : " />
+    <str id="ShortcutPanel.textFile.target" txt="ï¿½Vï¿½ï¿½ï¿½[ï¿½gï¿½Jï¿½bï¿½gï¿½ï¿½  : " />
+    <str id="ShortcutPanel.textFile.command" txt="ï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Cï¿½ï¿½    : " />
+    <str id="ShortcutPanel.textFile.iconName" txt="ï¿½Aï¿½Cï¿½Rï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½  : " />
+    <str id="ShortcutPanel.textFile.iconIndex" txt="ï¿½Aï¿½Cï¿½Rï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½fï¿½Nï¿½X: " />
+    <str id="ShortcutPanel.textFile.work" txt="ï¿½ï¿½ï¿½Æƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½  : " />
 
-    <str id="ShortcutPanel.location.desktop" txt="ƒfƒXƒNƒgƒbƒv" />
-    <str id="ShortcutPanel.location.applications" txt="ƒvƒƒOƒ‰ƒ€" />
-    <str id="ShortcutPanel.location.startMenu" txt="ƒXƒ^[ƒg ƒƒjƒ…[" />
-    <str id="ShortcutPanel.location.startup" txt="ƒXƒ^[ƒgƒAƒbƒv" />
+    <str id="ShortcutPanel.location.desktop" txt="ï¿½fï¿½Xï¿½Nï¿½gï¿½bï¿½v" />
+    <str id="ShortcutPanel.location.applications" txt="ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½" />
+    <str id="ShortcutPanel.location.startMenu" txt="ï¿½Xï¿½^ï¿½[ï¿½g ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[" />
+    <str id="ShortcutPanel.location.startup" txt="ï¿½Xï¿½^ï¿½[ï¿½gï¿½Aï¿½bï¿½v" />
 
-    <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="ƒXƒ^[ƒg ƒƒjƒ…[" />
-    <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="K ƒƒjƒ…[" />
+    <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="ï¿½Xï¿½^ï¿½[ï¿½g ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[" />
+    <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="K ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[" />
 
     <!-- UserInputPanel strings -->
-    <str id="UserInputPanel.error.caption" txt="“ü—Í‚ÌŒë‚è" />
-    <str id="UserInputPanel.dir.nodirectory.message" txt="—LŒø‚ÈƒfƒBƒŒƒNƒgƒŠ‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢B" />
-    <str id="UserInputPanel.dir.nodirectory.caption" txt="ƒfƒBƒŒƒNƒgƒŠ‚ð‘I‘ð‚µ‚Ä‚¢‚Ü‚¹‚ñ" />
-    <str id="UserInputPanel.dir.notdirectory.message" txt="‘I‘ð‚µ‚½ƒfƒBƒŒƒNƒgƒŠ‚Í‘¶Ý‚µ‚È‚¢‚©A‚Ü‚½‚Í–³Œø‚Å‚·B" />
-    <str id="UserInputPanel.dir.notdirectory.caption" txt="–³Œø‚ÈƒfƒBƒŒƒNƒgƒŠ" />
-    <str id="UserInputPanel.file.nofile.message" txt="—LŒø‚Èƒtƒ@ƒCƒ‹‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢B" />
-    <str id="UserInputPanel.file.nofile.caption" txt="ƒtƒ@ƒCƒ‹‚ð‘I‘ð‚µ‚Ä‚¢‚Ü‚¹‚ñ" />
-    <str id="UserInputPanel.file.notfile.message" txt="‘I‘ð‚µ‚½ƒtƒ@ƒCƒ‹‚Í‘¶Ý‚µ‚È‚¢‚©A‚Ü‚½‚Í–³Œø‚Å‚·B" />
-    <str id="UserInputPanel.file.notfile.caption" txt="–³Œø‚Èƒtƒ@ƒCƒ‹" />
+    <str id="UserInputPanel.error.caption" txt="ï¿½ï¿½ï¿½Í‚ÌŒï¿½ï¿½ï¿½" />
+    <str id="UserInputPanel.dir.nodirectory.message" txt="ï¿½Lï¿½ï¿½ï¿½Èƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B" />
+    <str id="UserInputPanel.dir.nodirectory.caption" txt="ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½" />
+    <str id="UserInputPanel.dir.notdirectory.message" txt="ï¿½Iï¿½ï¿½ï¿½ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½Í‘ï¿½ï¿½Ý‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Aï¿½Ü‚ï¿½ï¿½Í–ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½B" />
+    <str id="UserInputPanel.dir.notdirectory.caption" txt="ï¿½ï¿½ï¿½ï¿½ï¿½Èƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½" />
+    <str id="UserInputPanel.file.nofile.message" txt="ï¿½Lï¿½ï¿½ï¿½Èƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B" />
+    <str id="UserInputPanel.file.nofile.caption" txt="ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½" />
+    <str id="UserInputPanel.file.notfile.message" txt="ï¿½Iï¿½ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Í‘ï¿½ï¿½Ý‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Aï¿½Ü‚ï¿½ï¿½Í–ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½B" />
+    <str id="UserInputPanel.file.notfile.caption" txt="ï¿½ï¿½ï¿½ï¿½ï¿½Èƒtï¿½@ï¿½Cï¿½ï¿½" />
     <!-- more descriptive error message would be cool, like specifying what file we looked for -->
-    <str id="UserInputPanel.search.autodetect" txt="Ž©“®ŒŸo" />
-    <str id="UserInputPanel.search.autodetect.failed.message" txt="Ž©“®ŒŸo‚ÉŽ¸”s‚µ‚Ü‚µ‚½B" />
-    <str id="UserInputPanel.search.autodetect.failed.caption" txt="Ž©“®ŒŸoŽ¸”s" />
-    <str id="UserInputPanel.search.autodetect.tooltip" txt="ã‹LƒpƒX‚Ìƒtƒ@ƒCƒ‹‚Ü‚½‚ÍƒfƒBƒŒƒNƒgƒŠ‚ðŠm”F‚µ‚Ä‚­‚¾‚³‚¢B" />
-    <str id="UserInputPanel.search.location" txt="{0} ‚ÌêŠ‚ð“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B" />
-    <str id="UserInputPanel.search.location.checkedfile" txt="{0} ‚Ì‘¶Ý‚ðŠm”F‚µ‚Ü‚·B" />
-    <str id="UserInputPanel.search.browse" txt="ŽQÆ ..." />
-    <str id="UserInputPanel.search.wrongselection.message" txt="‘I‘ð‚µ‚½ƒtƒ@ƒCƒ‹‚Ü‚½‚ÍƒfƒBƒŒƒNƒgƒŠ‚Í‘¶Ý‚µ‚È‚¢‚©A“KØ‚Å‚Í‚ ‚è‚Ü‚¹‚ñB" />
-    <str id="UserInputPanel.search.wrongselection.caption" txt="–³Œø‚È‘I‘ð" />
+    <str id="UserInputPanel.search.autodetect" txt="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½o" />
+    <str id="UserInputPanel.search.autodetect.failed.message" txt="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ÉŽï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B" />
+    <str id="UserInputPanel.search.autodetect.failed.caption" txt="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½s" />
+    <str id="UserInputPanel.search.autodetect.tooltip" txt="ï¿½ï¿½ï¿½Lï¿½pï¿½Xï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Íƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½mï¿½Fï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B" />
+    <str id="UserInputPanel.search.location" txt="{0} ï¿½ÌêŠï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B" />
+    <str id="UserInputPanel.search.location.checkedfile" txt="{0} ï¿½Ì‘ï¿½ï¿½Ý‚ï¿½ï¿½mï¿½Fï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B" />
+    <str id="UserInputPanel.search.browse" txt="ï¿½Qï¿½ï¿½ ..." />
+    <str id="UserInputPanel.search.wrongselection.message" txt="ï¿½Iï¿½ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Íƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½Í‘ï¿½ï¿½Ý‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Aï¿½Kï¿½Ø‚Å‚Í‚ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B" />
+    <str id="UserInputPanel.search.wrongselection.caption" txt="ï¿½ï¿½ï¿½ï¿½ï¿½È‘Iï¿½ï¿½" />
 
     <!-- UserPathPanel strings -->
-    <str id="UserPathPanel.required" txt="‘¶Ý‚·‚éƒfƒBƒŒƒNƒgƒŠ‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢B" />
-    <str id="UserPathPanel.info" txt="ƒpƒX‚Ì‘I‘ð: " />
-    <str id="UserPathPanel.browse" txt="ŽQÆ ..." />
-    <str id="UserPathPanel.exists_warn" txt="Šù‚É‘¶Ý‚·‚éƒfƒBƒŒƒNƒgƒŠ‚Å‚·! ‚±‚ÌƒfƒBƒŒƒNƒgƒŠ‚ÉƒCƒ“ƒXƒg[ƒ‹‚µAŠù‘¶‚Ìƒtƒ@ƒCƒ‹‚ðã‘‚«‚µ‚Ä‚à‚æ‚¢‚Å‚·‚©?" />
-    <str id="UserPathPanel.empty_target" txt="ƒfƒBƒŒƒNƒgƒŠ‚ðŽw’è‚µ‚Ä‚¢‚Ü‚¹‚ñ! ‚±‚ÌŽw’è‚Í³‚µ‚¢‚Å‚·‚©?" />
-    <str id="UserPathPanel.createdir" txt="‘I‘ð‚µ‚½ƒfƒBƒŒƒNƒgƒŠ‚ðì¬‚µ‚Ü‚·: " />
-    <str id="UserPathPanel.nodir" txt="‘I‘ð‚µ‚½ƒpƒX‚ÍƒfƒBƒŒƒNƒgƒŠ‚Å‚Í‚ ‚è‚Ü‚¹‚ñ! ƒfƒBƒŒƒNƒgƒŠ‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢!" />
-    <str id="UserPathPanel.notwritable" txt="‚±‚ÌƒfƒBƒŒƒNƒgƒŠ‚É‘‚­‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñ! ‘¼‚ÌƒfƒBƒŒƒNƒgƒŠ‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢!" />
+    <str id="UserPathPanel.required" txt="ï¿½ï¿½ï¿½Ý‚ï¿½ï¿½ï¿½ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B" />
+    <str id="UserPathPanel.info" txt="ï¿½pï¿½Xï¿½Ì‘Iï¿½ï¿½: " />
+    <str id="UserPathPanel.browse" txt="ï¿½Qï¿½ï¿½ ..." />
+    <str id="UserPathPanel.exists_warn" txt="ï¿½ï¿½ï¿½É‘ï¿½ï¿½Ý‚ï¿½ï¿½ï¿½ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½Å‚ï¿½! ï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ÉƒCï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ã‘ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½æ‚¢ï¿½Å‚ï¿½ï¿½ï¿½?" />
+    <str id="UserPathPanel.empty_target" txt="ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½wï¿½è‚µï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½! ï¿½ï¿½ï¿½ÌŽwï¿½ï¿½ï¿½Íï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½?" />
+    <str id="UserPathPanel.createdir" txt="ï¿½Iï¿½ï¿½ï¿½ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½Ü‚ï¿½: " />
+    <str id="UserPathPanel.nodir" txt="ï¿½Iï¿½ï¿½ï¿½ï¿½pï¿½Xï¿½Íƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½Å‚Í‚ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½! ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!" />
+    <str id="UserPathPanel.notwritable" txt="ï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½! ï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!" />
 
     <!-- CompilePanel strings -->
-    <str id="CompilePanel.heading" txt="ƒRƒ“ƒpƒCƒ‹" />
-    <str id="CompilePanel.tip" txt="ƒRƒ“ƒpƒCƒ‹‚Ìi’»:" />
-    <str id="CompilePanel.browse" txt="ŽQÆ ..." />
-    <str id="CompilePanel.browse.approve" txt="ƒRƒ“ƒpƒCƒ‰‚Æ‚µ‚ÄŽg—p" />
-    <str id="CompilePanel.start" txt="ŠJŽn" />
-    <str id="CompilePanel.progress.initial" txt="[ŠJŽnƒ{ƒ^ƒ“‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢]" />
-    <str id="CompilePanel.progress.finished" txt="[Š®—¹]" />
-    <str id="CompilePanel.progress.overall" txt="‘S‘Ì‚ÌƒRƒ“ƒpƒCƒ‹i’»:" />
-    <str id="CompilePanel.error" txt="ƒRƒ“ƒpƒCƒ‹‚ÉŽ¸”s‚µ‚Ü‚µ‚½" />
-    <str id="CompilePanel.error.reconfigure" txt="ÄÝ’è" />
-    <str id="CompilePanel.error.ignore" txt="–³Ž‹" />
-    <str id="CompilePanel.error.abort" txt="’†Ž~" />
-    <str id="CompilePanel.error.seebelow" txt="ˆÈ‰º‚ÌŽ¸”s‚µ‚½ƒRƒ}ƒ“ƒh‚ÆA‚»‚Ìo—Í‚ðŽQÆ‚µ‚Ä‚­‚¾‚³‚¢B" />
-    <str id="CompilePanel.error.nofiles" txt="ƒRƒ“ƒpƒCƒ‹‚·‚éƒtƒ@ƒCƒ‹‚ÌƒXƒLƒƒƒjƒ“ƒO’†‚ÌƒGƒ‰[‚Å‚·B" />
-    <str id="CompilePanel.error.compilernotfound" txt="ƒRƒ“ƒpƒCƒ‰‚ðŽÀs‚Å‚«‚Ü‚¹‚ñB" />
-    <str id="CompilePanel.error.invalidarguments" txt="–³Œø‚Èˆø”‚ðƒRƒ“ƒpƒCƒ‰‚É“n‚µ‚Ä‚¢‚Ü‚·B" />
-    <str id="CompilePanel.error.noclassfile" txt="ƒRƒ“ƒpƒCƒ‰‚Íƒ\[ƒXƒtƒ@ƒCƒ‹‚É‘Î‚·‚éƒNƒ‰ƒXƒtƒ@ƒCƒ‹‚ð¶¬‚µ‚Ü‚¹‚ñ‚Å‚µ‚½ " />
-    <str id="CompilePanel.choose_compiler" txt="Žg—p‚µ‚½ƒRƒ“ƒpƒCƒ‰:" />
-    <str id="CompilePanel.additional_arguments" txt="’Ç‰ÁƒRƒ“ƒpƒCƒ‹ˆø”:" />
+    <str id="CompilePanel.heading" txt="ï¿½Rï¿½ï¿½ï¿½pï¿½Cï¿½ï¿½" />
+    <str id="CompilePanel.tip" txt="ï¿½Rï¿½ï¿½ï¿½pï¿½Cï¿½ï¿½ï¿½Ìiï¿½ï¿½:" />
+    <str id="CompilePanel.browse" txt="ï¿½Qï¿½ï¿½ ..." />
+    <str id="CompilePanel.browse.approve" txt="ï¿½Rï¿½ï¿½ï¿½pï¿½Cï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ÄŽgï¿½p" />
+    <str id="CompilePanel.start" txt="ï¿½Jï¿½n" />
+    <str id="CompilePanel.progress.initial" txt="[ï¿½Jï¿½nï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]" />
+    <str id="CompilePanel.progress.finished" txt="[ï¿½ï¿½ï¿½ï¿½]" />
+    <str id="CompilePanel.progress.overall" txt="ï¿½Sï¿½Ì‚ÌƒRï¿½ï¿½ï¿½pï¿½Cï¿½ï¿½ï¿½iï¿½ï¿½:" />
+    <str id="CompilePanel.error" txt="ï¿½Rï¿½ï¿½ï¿½pï¿½Cï¿½ï¿½ï¿½ÉŽï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½" />
+    <str id="CompilePanel.error.reconfigure" txt="ï¿½ÄÝ’ï¿½" />
+    <str id="CompilePanel.error.ignore" txt="ï¿½ï¿½ï¿½ï¿½" />
+    <str id="CompilePanel.error.abort" txt="ï¿½ï¿½ï¿½~" />
+    <str id="CompilePanel.error.seebelow" txt="ï¿½È‰ï¿½ï¿½ÌŽï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½ÆAï¿½ï¿½ï¿½Ìoï¿½Í‚ï¿½ï¿½Qï¿½Æ‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B" />
+    <str id="CompilePanel.error.nofiles" txt="ï¿½Rï¿½ï¿½ï¿½pï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ÌƒXï¿½Lï¿½ï¿½ï¿½jï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ÌƒGï¿½ï¿½ï¿½[ï¿½Å‚ï¿½ï¿½B" />
+    <str id="CompilePanel.error.compilernotfound" txt="ï¿½Rï¿½ï¿½ï¿½pï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B" />
+    <str id="CompilePanel.error.invalidarguments" txt="ï¿½ï¿½ï¿½ï¿½ï¿½Èˆï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½pï¿½Cï¿½ï¿½ï¿½É“nï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½B" />
+    <str id="CompilePanel.error.noclassfile" txt="ï¿½Rï¿½ï¿½ï¿½pï¿½Cï¿½ï¿½ï¿½Íƒ\ï¿½[ï¿½Xï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½É‘Î‚ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ð¶ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ " />
+    <str id="CompilePanel.choose_compiler" txt="ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½pï¿½Cï¿½ï¿½:" />
+    <str id="CompilePanel.additional_arguments" txt="ï¿½Ç‰ï¿½Rï¿½ï¿½ï¿½pï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:" />
 
     <!-- ProcessPanel strings -->
-    <str id="ProcessPanel.heading" txt="ˆ—" />
+    <str id="ProcessPanel.heading" txt="ï¿½ï¿½ï¿½ï¿½" />
 
     <!-- SummaryPanel strings -->
-    <str id="SummaryPanel.info" txt="ŽŸ‚ÌÝ’è‚ÅƒCƒ“ƒXƒg[ƒ‹‚µ‚Ü‚·B‚æ‚¯‚ê‚ÎŽŸ‚Öƒ{ƒ^ƒ“‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B" />
-    <str id="TargetPanel.summaryCaption" txt="ƒCƒ“ƒXƒg[ƒ‹ƒpƒX" />
-    <str id="JDKPathPanel.summaryCaption" txt="JDK ƒpƒX" />
-    <str id="PacksPanel.summaryCaption" txt="‘I‘ð‚µ‚½ƒCƒ“ƒXƒg[ƒ‹€–Ú" />
-    <str id="ImgPacksPanel.summaryCaption" txt="‘I‘ð‚µ‚½ƒCƒ“ƒXƒg[ƒ‹€–Ú" />
-    <str id="TreePacksPanel.summaryCaption" txt="‘I‘ð‚µ‚½ƒCƒ“ƒXƒg[ƒ‹€–Ú" />
-    <str id="UserPathPanel.summaryCaption" txt="‘I‘ð‚µ‚½ƒpƒX" />
+    <str id="SummaryPanel.info" txt="ï¿½ï¿½ï¿½ÌÝ’ï¿½ï¿½ÅƒCï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½æ‚¯ï¿½ï¿½ï¿½ÎŽï¿½ï¿½Öƒ{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B" />
+    <str id="TargetPanel.summaryCaption" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½pï¿½X" />
+    <str id="JDKPathPanel.summaryCaption" txt="JDK ï¿½pï¿½X" />
+    <str id="PacksPanel.summaryCaption" txt="ï¿½Iï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" />
+    <str id="ImgPacksPanel.summaryCaption" txt="ï¿½Iï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" />
+    <str id="TreePacksPanel.summaryCaption" txt="ï¿½Iï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" />
+    <str id="UserPathPanel.summaryCaption" txt="ï¿½Iï¿½ï¿½ï¿½ï¿½pï¿½X" />
 
     <!-- Strings for the Registry -->
-    <str id="functionFailed.RegOpenKeyEx" txt="ƒŒƒWƒXƒgƒŠƒL[‚ðŠJ‚¯‚Ü‚¹‚ñ: {0}\\{1}." />
+    <str id="functionFailed.RegOpenKeyEx" txt="ï¿½ï¿½ï¿½Wï¿½Xï¿½gï¿½ï¿½ï¿½Lï¿½[ï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½: {0}\\{1}." />
 
     <!-- CheckedHelloPanel strings -->
-    <str id="CheckedHelloPanel.productAlreadyExist0" txt="‚±‚ÌƒRƒ“ƒsƒ…[ƒ^‚ÌƒpƒX " />
-    <str id="CheckedHelloPanel.productAlreadyExist1" txt=" ‚É»•i‚ðŠù‚ÉƒCƒ“ƒXƒg[ƒ‹‚µ‚Ä‚¢‚Ü‚·B‚³‚ç‚ÉƒCƒ“ƒXƒg[ƒ‹‚µ‚Ü‚·‚©?" />
-    <str id="CheckedHelloPanel.infoOverUninstallKey" txt="ƒAƒ“ƒCƒ“ƒXƒg[ƒ‹ƒL[‚Ì–¼Ì: " />
+    <str id="CheckedHelloPanel.productAlreadyExist0" txt="ï¿½ï¿½ï¿½ÌƒRï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^ï¿½Ìƒpï¿½X " />
+    <str id="CheckedHelloPanel.productAlreadyExist1" txt=" ï¿½Éï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ÉƒCï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½ï¿½ÉƒCï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½?" />
+    <str id="CheckedHelloPanel.infoOverUninstallKey" txt="ï¿½Aï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½Lï¿½[ï¿½Ì–ï¿½ï¿½ï¿½: " />
 
     <!-- Next Media Strings -->
-    <str id="nextmedia.title" txt="ŽŸ‚ÌƒCƒ“ƒXƒg[ƒ‹ƒƒfƒBƒA" />
-    <str id="nextmedia.msg" txt="ŽŸ‚ÌƒCƒ“ƒXƒg[ƒ‹ƒƒfƒBƒA‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢B" />
-    <str id="nextmedia.browsebtn" txt="ŽQÆ ..." />
-    <str id="nextmedia.okbtn" txt="“K—p" />
-    <str id="nextmedia.cancelbtn" txt="ƒLƒƒƒ“ƒZƒ‹" />
-    <str id="nextmedia.choosertitle" txt="ƒCƒ“ƒXƒg[ƒ‹ƒƒfƒBƒA‚Ì‘I‘ð" />
-    <str id="nextmedia.filedesc" txt="ƒCƒ“ƒXƒg[ƒ‹€–Ú (.pak*)" />
+    <str id="nextmedia.title" txt="ï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½Bï¿½A" />
+    <str id="nextmedia.msg" txt="ï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½Bï¿½Aï¿½ï¿½ï¿½Iï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B" />
+    <str id="nextmedia.browsebtn" txt="ï¿½Qï¿½ï¿½ ..." />
+    <str id="nextmedia.okbtn" txt="ï¿½Kï¿½p" />
+    <str id="nextmedia.cancelbtn" txt="ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½" />
+    <str id="nextmedia.choosertitle" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½Bï¿½Aï¿½Ì‘Iï¿½ï¿½" />
+    <str id="nextmedia.filedesc" txt="ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (.pak*)" />
 
     <!-- This string defines the time stamp format in the installation report.
          The format details are documented in java.text.SimpleDateFormat -->

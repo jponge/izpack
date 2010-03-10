@@ -226,7 +226,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
                 //if 'ShowCreateDirectoryMessage' variable set to 'false'
                 // then don't show "directory will be created" dialog:
                 final String vStr =
-                        this.installData.getVariable("ShowCreateDirectoryMessage");
+                        installData.getVariable("ShowCreateDirectoryMessage");
                 if (vStr == null || Boolean.getBoolean(vStr))
                 {
                     ok = this.emitNotificationFeedback(getI18nStringForClass(

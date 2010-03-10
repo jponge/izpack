@@ -55,6 +55,10 @@ abstract public class PanelConsoleHelper
                 {
                     return 3;
                 }
+                else if (strIn.equals("3"))
+                {
+                    return 3;
+                }
             }
 
         }

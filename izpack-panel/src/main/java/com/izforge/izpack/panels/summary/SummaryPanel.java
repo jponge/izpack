@@ -28,7 +28,8 @@ import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.helper.SummaryProcessor;
 
-import javax.swing.*;
+import javax.swing.JEditorPane;
+import javax.swing.JScrollPane;
 
 /**
  * Summary panel to use before InstallPanel. This panel calls the {@link SummaryProcessor} which

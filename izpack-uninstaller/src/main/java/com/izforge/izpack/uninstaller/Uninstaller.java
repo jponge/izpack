@@ -24,7 +24,9 @@ import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.PrivilegedRunner;
 import com.izforge.izpack.util.SelfModifier;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import java.lang.reflect.Method;
 
 /**

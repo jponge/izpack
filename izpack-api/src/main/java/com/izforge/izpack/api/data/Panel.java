@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.api.data;
 
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;

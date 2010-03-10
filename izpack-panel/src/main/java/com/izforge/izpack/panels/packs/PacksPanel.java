@@ -27,8 +27,10 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.IoHelper;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JScrollPane;
+import java.awt.Dimension;
 
 /**
  * The packs selection panel class. This class handles only the layout. Common stuff are handled by

@@ -154,6 +154,10 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
                 {
                     return 3;
                 }
+                else if (strIn.equals("3"))
+                {
+                    return 3;
+                }
             }
 
         }

@@ -27,7 +27,10 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 
-import javax.swing.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JEditorPane;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import java.awt.event.ActionEvent;

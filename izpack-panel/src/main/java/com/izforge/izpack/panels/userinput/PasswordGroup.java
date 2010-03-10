@@ -28,7 +28,7 @@ import com.izforge.izpack.panels.userinput.validator.Validator;
 import com.izforge.izpack.panels.userinput.validator.ValidatorContainer;
 import com.izforge.izpack.util.Debug;
 
-import javax.swing.*;
+import javax.swing.JPasswordField;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;

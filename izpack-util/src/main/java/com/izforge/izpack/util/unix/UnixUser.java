@@ -23,6 +23,8 @@ package com.izforge.izpack.util.unix;
 
 import com.izforge.izpack.util.FileExecutor;
 
+import com.izforge.izpack.util.FileExecutor;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.StringTokenizer;
@@ -272,6 +274,7 @@ public class UnixUser
         else
         {
             return getHome() + File.separator + "Desktop";
+        }
         }
     }
 

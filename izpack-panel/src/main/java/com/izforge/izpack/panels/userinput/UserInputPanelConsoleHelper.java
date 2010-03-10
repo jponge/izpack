@@ -19,13 +19,12 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.panels.userinput;
+package com.izforge.izpack.panels;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
@@ -33,6 +32,7 @@ import com.izforge.izpack.panels.userinput.processor.Processor;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.helper.SpecHelper;
+import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -129,11 +129,9 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     private static Input DIVIDER_INPUT_FIELD = new Input(DIVIDER, null, null, DIVIDER, "------------------------------------------", 0);
 
     public List<Input> listInputs;
-    private VariableSubstitutor variableSubstitutor;
 
-    public UserInputPanelConsoleHelper(VariableSubstitutor substitutor)
+    public UserInputPanelConsoleHelper()
     {
-        variableSubstitutor = substitutor;
         instanceNumber = instanceCount++;
         listInputs = new ArrayList<Input>();
 
@@ -299,7 +297,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 if (conditionid != null)
                 {
                     // check if condition is fulfilled
-                    RulesEngine rules = (RulesEngine) idata.getRules();
+                    if (!idata.getRules().isConditionTrue(conditionid, idata.getVariables()))
                     if (!rules.isConditionTrue(conditionid, idata.getVariables()))
                     {
                         continue;
@@ -317,7 +315,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
     boolean processSimpleField(Input input, AutomatedInstallData idata)
     {
-        System.out.println(variableSubstitutor.substitute(input.strText));
+        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+        System.out.println(vs.substitute(input.strText, null));
         return true;
     }
 
@@ -368,7 +367,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
         if (set != null && !"".equals(set))
         {
-            set = variableSubstitutor.substitute(set);
+            VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+            set = vs.substitute(set, null);
         }
 
         fieldText = input.listChoices.get(0).strText;
@@ -443,7 +443,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 {
                     if (set != null && !"".equals(set))
                     {
-                        set = variableSubstitutor.substitute(set);
+                        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+                        set = vs.substitute(set, null);
                     }
                     if (set.equals(TRUE))
                     {
@@ -529,7 +530,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 {
                     if (set != null && !"".equals(set))
                     {
-                        set = variableSubstitutor.substitute(set);
+                        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+                        set = vs.substitute(set, null);
                     }
                     if (set.equals(TRUE))
                     {
@@ -731,7 +733,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     }
                     if (set != null && !"".equals(set))
                     {
-                        set = variableSubstitutor.substitute(set);
+                        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+                        set = vs.substitute(set, null);
                     }
 
                     StringTokenizer tokenizer = new StringTokenizer(choiceValues, ":");
@@ -763,7 +766,9 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     {
                         if (set != null && !"".equals(set))
                         {
-                            set = variableSubstitutor.substitute(set);
+                            VariableSubstitutor vs = new VariableSubstitutorImpl(idata
+                                    .getVariables());
+                            set = vs.substitute(set, null);
                         }
                         if (set.equalsIgnoreCase(TRUE))
                         {
@@ -900,7 +905,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     /*
      * $ @design
      *
-     * The information about the installed packs comes from GUIInstallData.selectedPacks. This assumes
+     * The information about the installed packs comes from InstallData.selectedPacks. This assumes
      * that this panel is presented to the user AFTER the PacksPanel.
      * --------------------------------------------------------------------------
      */

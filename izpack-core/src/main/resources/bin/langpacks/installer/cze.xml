@@ -6,164 +6,164 @@
 
     <!-- General installer strings -->
     <str id="installer.title" txt="IzPack - Instalace " />
-    <str id="installer.next" txt="Dal¹í" />
-    <str id="installer.prev" txt="Pøedcházející" />
+    <str id="installer.next" txt="Dalï¿½ï¿½" />
+    <str id="installer.prev" txt="Pï¿½edchï¿½zejï¿½cï¿½" />
     <str id="installer.quit" txt="Konec" />
-    <str id="installer.madewith" txt="(Vytvoøené pomocí IzPack - http://izpack.org/)" />
-    <str id="installer.reboot.ask.title" txt="Po¾adován reboot" />
+    <str id="installer.madewith" txt="(Vytvoï¿½enï¿½ pomocï¿½ IzPack - http://izpack.org/)" />
+    <str id="installer.reboot.ask.title" txt="Poï¿½adovï¿½n reboot" />
     <str id="installer.reboot.ask.message"
-         txt="Reboot je po¾adovaný pro ukonèení instalace. Chcete nyní restartovat poèitaè?" />
-    <str id="installer.reboot.notice.title" txt="Doporuèen reboot" />
-    <str id="installer.reboot.notice.message" txt="Reboot je doporuèený pro ukonèení instalace." />
-    <str id="installer.quit.title" txt="Skuteènì chcete ukonèit instalaci ?" />
-    <str id="installer.quit.message" txt="Tato operace ukonèí instalaci !" />
-    <str id="installer.warning" txt="Varování !" />
+         txt="Reboot je poï¿½adovanï¿½ pro ukonï¿½enï¿½ instalace. Chcete nynï¿½ restartovat poï¿½itaï¿½?" />
+    <str id="installer.reboot.notice.title" txt="Doporuï¿½en reboot" />
+    <str id="installer.reboot.notice.message" txt="Reboot je doporuï¿½enï¿½ pro ukonï¿½enï¿½ instalace." />
+    <str id="installer.quit.title" txt="Skuteï¿½nï¿½ chcete ukonï¿½it instalaci ?" />
+    <str id="installer.quit.message" txt="Tato operace ukonï¿½ï¿½ instalaci !" />
+    <str id="installer.warning" txt="Varovï¿½nï¿½ !" />
     <str id="installer.yes" txt="Ano" />
     <str id="installer.no" txt="Ne" />
-    <str id="installer.cancel" txt="Zru¹it" />
+    <str id="installer.cancel" txt="Zruï¿½it" />
     <str id="installer.error" txt="Chyba" />
 
     <!-- Uninstaller specific strings -->
-    <str id="uninstaller.warning" txt="Tato operace odstraní nainstalovanou aplikaci !" />
+    <str id="uninstaller.warning" txt="Tato operace odstranï¿½ nainstalovanou aplikaci !" />
     <str id="uninstaller.destroytarget" txt=" Odstranit " />
     <str id="uninstaller.uninstall" txt="Odinstalovat" />
 
     <!-- The strings for the 'official' IzPack plugins -->
-    <str id="HelloPanel.welcome1" txt="Vítejte v instalaci " />
+    <str id="HelloPanel.welcome1" txt="Vï¿½tejte v instalaci " />
     <str id="HelloPanel.welcome2" txt=" !" />
-    <str id="HelloPanel.authors" txt="Autoøi tohoto softwaru jsou : " />
-    <str id="HelloPanel.url" txt="Domovská stránka projektu je : " />
+    <str id="HelloPanel.authors" txt="Autoï¿½i tohoto softwaru jsou : " />
+    <str id="HelloPanel.url" txt="Domovskï¿½ strï¿½nka projektu je : " />
 
-    <str id="LicencePanel.info" txt="Pozornì si preèetìte následující licenèní podmínky:" />
-    <str id="LicencePanel.agree" txt="Souhlasím s licenèními podmímkami." />
-    <str id="LicencePanel.notagree" txt="Nesouhlasím s licenèními podmímkami." />
+    <str id="LicencePanel.info" txt="Pozornï¿½ si preï¿½etï¿½te nï¿½sledujï¿½cï¿½ licenï¿½nï¿½ podmï¿½nky:" />
+    <str id="LicencePanel.agree" txt="Souhlasï¿½m s licenï¿½nï¿½mi podmï¿½mkami." />
+    <str id="LicencePanel.notagree" txt="Nesouhlasï¿½m s licenï¿½nï¿½mi podmï¿½mkami." />
     <str id="LicencePanel.yes" txt="Ano" />
     <str id="LicencePanel.no" txt="Ne" />
 
-    <str id="InfoPanel.info" txt="Preètìte si nasledující informace :" />
+    <str id="InfoPanel.info" txt="Preï¿½tï¿½te si nasledujï¿½cï¿½ informace :" />
 
-    <str id="PathInputPanel.required" txt="Vybraný adresáø by mìl existovat." />
-    <str id="PathInputPanel.notValid" txt="Vybraný adresáø neobsahuje po¾adavaný produkt." />
+    <str id="PathInputPanel.required" txt="Vybranï¿½ adresï¿½ï¿½ by mï¿½l existovat." />
+    <str id="PathInputPanel.notValid" txt="Vybranï¿½ adresï¿½ï¿½ neobsahuje poï¿½adavanï¿½ produkt." />
 
-    <str id="TargetPanel.info" txt="Vyberte instalaèní adresáø :" />
+    <str id="TargetPanel.info" txt="Vyberte instalaï¿½nï¿½ adresï¿½ï¿½ :" />
     <str id="TargetPanel.browse" txt="Prohledat ..." />
     <str id="TargetPanel.warn"
-         txt="Adresáø existuje ! Jste si jistý ,¾e chcete nainstalovat software do tohoto adresáøe ? Souèasné verze souborù budou pøepsány?" />
+         txt="Adresï¿½ï¿½ existuje ! Jste si jistï¿½ ,ï¿½e chcete nainstalovat software do tohoto adresï¿½ï¿½e ? Souï¿½asnï¿½ verze souborï¿½ budou pï¿½epsï¿½ny?" />
     <str id="TargetPanel.empty_target"
-         txt="Nevybrali jste cílový adresáø! Je to správnì?" />
-    <str id="TargetPanel.createdir" txt="Bude vytvoøen cílový adresáø :" />
+         txt="Nevybrali jste cï¿½lovï¿½ adresï¿½ï¿½! Je to sprï¿½vnï¿½?" />
+    <str id="TargetPanel.createdir" txt="Bude vytvoï¿½en cï¿½lovï¿½ adresï¿½ï¿½ :" />
     <str id="TargetPanel.nodir"
-         txt="Tento soubor není adresáø! Zvolte adresáø!" />
+         txt="Tento soubor nenï¿½ adresï¿½ï¿½! Zvolte adresï¿½ï¿½!" />
     <str id="TargetPanel.notwritable"
-         txt="Tento adresáø nelze vytvoøit! Zvolte jiný adresáø!" />
+         txt="Tento adresï¿½ï¿½ nelze vytvoï¿½it! Zvolte jinï¿½ adresï¿½ï¿½!" />
 
     <str id="JDKPathPanel.intro"
-         txt="Nainstalovaná aplikace potøebuje JDK. Java runtime environment (JRE) není postaèující." />
+         txt="Nainstalovanï¿½ aplikace potï¿½ebuje JDK. Java runtime environment (JRE) nenï¿½ postaï¿½ujï¿½cï¿½." />
     <str id="JDKPathPanel.info" txt="Select the JDK path:" />
-    <str id="JDKPathPanel.badVersion1" txt="Zvolena ¹patná verze JDK (dostupné: " />
-    <str id="JDKPathPanel.badVersion2" txt=" vy¾adované: " />
-    <str id="JDKPathPanel.badVersion3" txt=") má být toto JDK i pøesto pou¾ito?" />
+    <str id="JDKPathPanel.badVersion1" txt="Zvolena ï¿½patnï¿½ verze JDK (dostupnï¿½: " />
+    <str id="JDKPathPanel.badVersion2" txt=" vyï¿½adovanï¿½: " />
+    <str id="JDKPathPanel.badVersion3" txt=") mï¿½ bï¿½t toto JDK i pï¿½esto pouï¿½ito?" />
 
-    <str id="PacksPanel.info" txt="Vyberte balíky ktéré budou instalované :" />
-    <str id="PacksPanel.tip" txt="Poznámka: za¹edìné balíky jsou vy¾adované." />
-    <str id="PacksPanel.space" txt="Potøebné místo na disku: " />
-    <str id="PacksPanel.freespace" txt="Volné místo na disku: " />
-    <str id="PacksPanel.description" txt="Poznámka" />
+    <str id="PacksPanel.info" txt="Vyberte balï¿½ky ktï¿½rï¿½ budou instalovanï¿½ :" />
+    <str id="PacksPanel.tip" txt="Poznï¿½mka: zaï¿½edï¿½nï¿½ balï¿½ky jsou vyï¿½adovanï¿½." />
+    <str id="PacksPanel.space" txt="Potï¿½ebnï¿½ mï¿½sto na disku: " />
+    <str id="PacksPanel.freespace" txt="Volnï¿½ mï¿½sto na disku: " />
+    <str id="PacksPanel.description" txt="Poznï¿½mka" />
     <str id="PacksPanel.dependencyList"
-         txt="Pro instalaci zvolených balíèkù je nutné nainstalovat i následující balíèky" />
+         txt="Pro instalaci zvolenï¿½ch balï¿½ï¿½kï¿½ je nutnï¿½ nainstalovat i nï¿½sledujï¿½cï¿½ balï¿½ï¿½ky" />
     <str id="ImgPacksPanel.dependencyList" txt="Dependencies" />
     <str id="PacksPanel.notEnoughSpace"
-         txt="Po¾adované místo na disku pro instalaci je vìt¹í ne¾ dostupné volné místo." />
+         txt="Poï¿½adovanï¿½ mï¿½sto na disku pro instalaci je vï¿½tï¿½ï¿½ neï¿½ dostupnï¿½ volnï¿½ mï¿½sto." />
     <str id="PacksPanel.notAscertainable" txt="not ascertainable" />
 
-    <str id="InstallPanel.info" txt="Kliknutím na tlaèítko 'Instalovat !' zaènete instalaci" />
+    <str id="InstallPanel.info" txt="Kliknutï¿½m na tlaï¿½ï¿½tko 'Instalovat !' zaï¿½nete instalaci" />
     <str id="InstallPanel.install" txt="Instalovat !" />
-    <str id="InstallPanel.tip" txt="Probíhá instalace:" />
+    <str id="InstallPanel.tip" txt="Probï¿½hï¿½ instalace:" />
     <str id="InstallPanel.begin" txt="[Nic]" />
-    <str id="InstallPanel.finished" txt="[Ukonèené]" />
-    <str id="InstallPanel.progress" txt="Celkový stav instalace :" />
-    <str id="InstallPanel.overwrite.title" txt="Soubor u¾ existuje" />
-    <str id="InstallPanel.overwrite.question" txt="Soubor u¾ existuje. Pøepsat soubor?" />
+    <str id="InstallPanel.finished" txt="[Ukonï¿½enï¿½]" />
+    <str id="InstallPanel.progress" txt="Celkovï¿½ stav instalace :" />
+    <str id="InstallPanel.overwrite.title" txt="Soubor uï¿½ existuje" />
+    <str id="InstallPanel.overwrite.question" txt="Soubor uï¿½ existuje. Pï¿½epsat soubor?" />
 
-    <str id="FinishPanel.success" txt="Instalace probìhla úspì¹nì." />
+    <str id="FinishPanel.success" txt="Instalace probï¿½hla ï¿½spï¿½ï¿½nï¿½." />
     <str id="FinishPanel.fail" txt="Chyba instalace!" />
     <str id="FinishPanel.done" txt="Hotovo" />
-    <str id="FinishPanel.uninst.info" txt="Odinstalaèní program byl vytvoøený v:" />
-    <str id="FinishPanel.auto" txt="Vytvoøit automatický instalaèní script" />
+    <str id="FinishPanel.uninst.info" txt="Odinstalaï¿½nï¿½ program byl vytvoï¿½enï¿½ v:" />
+    <str id="FinishPanel.auto" txt="Vytvoï¿½it automatickï¿½ instalaï¿½nï¿½ script" />
     <str id="FinishPanel.auto.tip"
-         txt="Pou¾ijte tento script v pøípadì instalace na jiný poèítaè." />
+         txt="Pouï¿½ijte tento script v pï¿½ï¿½padï¿½ instalace na jinï¿½ poï¿½ï¿½taï¿½." />
 
-    <str id="ImgPacksPanel.packs" txt="Následující balíky jsou k dispozici :" />
-    <str id="ImgPacksPanel.snap" txt="Náhled balíku  :" />
-    <str id="ImgPacksPanel.checkbox" txt=" Instalovat tento balík" />
+    <str id="ImgPacksPanel.packs" txt="Nï¿½sledujï¿½cï¿½ balï¿½ky jsou k dispozici :" />
+    <str id="ImgPacksPanel.snap" txt="Nï¿½hled balï¿½ku  :" />
+    <str id="ImgPacksPanel.checkbox" txt=" Instalovat tento balï¿½k" />
 
-    <str id="ShortcutPanel.regular.list" txt="Vyberte skupinu programù pro Zástupce:" />
+    <str id="ShortcutPanel.regular.list" txt="Vyberte skupinu programï¿½ pro Zï¿½stupce:" />
     <str id="ShortcutPanel.regular.default" txt="Obnovit" />
-    <str id="ShortcutPanel.regular.desktop" txt="Vytvoøit zástupce na plo¹e" />
-    <str id="ShortcutPanel.regular.create" txt="Vytvoøit zástupce" />
-    <str id="ShortcutPanel.regular.userIntro" txt="vytvoøit zástupce pro:" />
-    <str id="ShortcutPanel.regular.currentUser" txt="aktuálního u¾icatele" />
-    <str id="ShortcutPanel.regular.allUsers" txt="v¹ech u¾ivatelù" />
+    <str id="ShortcutPanel.regular.desktop" txt="Vytvoï¿½it zï¿½stupce na ploï¿½e" />
+    <str id="ShortcutPanel.regular.create" txt="Vytvoï¿½it zï¿½stupce" />
+    <str id="ShortcutPanel.regular.userIntro" txt="vytvoï¿½it zï¿½stupce pro:" />
+    <str id="ShortcutPanel.regular.currentUser" txt="aktuï¿½lnï¿½ho uï¿½icatele" />
+    <str id="ShortcutPanel.regular.allUsers" txt="vï¿½ech uï¿½ivatelï¿½" />
 
     <str id="ShortcutPanel.alternate.apology"
-         txt="Litujeme, ale IzPack nepodporuje vytvoøení zástupcù pro tento operaèní systém. Vytvoøit zástupce musíte sami." />
-    <str id="ShortcutPanel.alternate.targetsLabel" txt="Toto je seznam zástupcù, ke kterým by ste mìli mít pøístup." />
+         txt="Litujeme, ale IzPack nepodporuje vytvoï¿½enï¿½ zï¿½stupcï¿½ pro tento operaï¿½nï¿½ systï¿½m. Vytvoï¿½it zï¿½stupce musï¿½te sami." />
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="Toto je seznam zï¿½stupcï¿½, ke kterï¿½m by ste mï¿½li mï¿½t pï¿½ï¿½stup." />
     <str id="ShortcutPanel.alternate.textFileExplanation"
-         txt="Mù¾ete ulo¾it detailní informace o prùbehu instalace do textového souboru pro budoucí pou¾ití." />
-    <str id="ShortcutPanel.alternate.saveButton" txt="Ulo¾it textový soubor" />
+         txt="Mï¿½ï¿½ete uloï¿½it detailnï¿½ informace o prï¿½behu instalace do textovï¿½ho souboru pro budoucï¿½ pouï¿½itï¿½." />
+    <str id="ShortcutPanel.alternate.saveButton" txt="Uloï¿½it textovï¿½ soubor" />
 
     <str id="ShortcutPanel.textFile.header"
-         txt="Informace o zástupcích\n====================\n\nToto je seznam zástupcù, ke kterým by ste mìli mít pøístup.\n  Vytvoøit zástupce musíte sami.\n" />
+         txt="Informace o zï¿½stupcï¿½ch\n====================\n\nToto je seznam zï¿½stupcï¿½, ke kterï¿½m by ste mï¿½li mï¿½t pï¿½ï¿½stup.\n  Vytvoï¿½it zï¿½stupce musï¿½te sami.\n" />
 
-    <str id="ShortcutPanel.textFile.name" txt="Zástupce        : " />
-    <str id="ShortcutPanel.textFile.location" txt="Umístìní        : " />
-    <str id="ShortcutPanel.textFile.description" txt="Poznámka        : " />
-    <str id="ShortcutPanel.textFile.target" txt="Cíl zástupcù    : " />
-    <str id="ShortcutPanel.textFile.command" txt="Pøíkaz          : " />
+    <str id="ShortcutPanel.textFile.name" txt="Zï¿½stupce        : " />
+    <str id="ShortcutPanel.textFile.location" txt="Umï¿½stï¿½nï¿½        : " />
+    <str id="ShortcutPanel.textFile.description" txt="Poznï¿½mka        : " />
+    <str id="ShortcutPanel.textFile.target" txt="Cï¿½l zï¿½stupcï¿½    : " />
+    <str id="ShortcutPanel.textFile.command" txt="Pï¿½ï¿½kaz          : " />
     <str id="ShortcutPanel.textFile.iconName" txt="Soubor ikony    : " />
-    <str id="ShortcutPanel.textFile.iconIndex" txt="Èíslo ikony     : " />
-    <str id="ShortcutPanel.textFile.work" txt="Pracovní adresáø: " />
+    <str id="ShortcutPanel.textFile.iconIndex" txt="ï¿½ï¿½slo ikony     : " />
+    <str id="ShortcutPanel.textFile.work" txt="Pracovnï¿½ adresï¿½ï¿½: " />
 
     <str id="ShortcutPanel.location.desktop" txt="Plocha" />
-    <str id="ShortcutPanel.location.applications" txt="Menu programù" />
-    <str id="ShortcutPanel.location.startMenu" txt="Startovní Menu" />
+    <str id="ShortcutPanel.location.applications" txt="Menu programï¿½" />
+    <str id="ShortcutPanel.location.startMenu" txt="Startovnï¿½ Menu" />
     <str id="ShortcutPanel.location.startup" txt="Skupina Autostart" />
 
-    <str id="UserInputPanel.error.caption" txt="Problém pøi spou¹tìní" />
-    <str id="UserInputPanel.search.autodetect" txt="Automatická detekce" />
+    <str id="UserInputPanel.error.caption" txt="Problï¿½m pï¿½i spouï¿½tï¿½nï¿½" />
+    <str id="UserInputPanel.search.autodetect" txt="Automatickï¿½ detekce" />
 
     <!-- more descriptive error message would be cool, like specifying what file we looked for -->
-    <str id="UserInputPanel.search.autodetect.failed.message" txt="Automatická detekce selhala." />
-    <str id="UserInputPanel.search.autodetect.failed.caption" txt="Automatická detekce selhala." />
-    <str id="UserInputPanel.search.autodetect.tooltip" txt="Zkontrolujte soubor nebo adre¹áø v zadané cestì." />
+    <str id="UserInputPanel.search.autodetect.failed.message" txt="Automatickï¿½ detekce selhala." />
+    <str id="UserInputPanel.search.autodetect.failed.caption" txt="Automatickï¿½ detekce selhala." />
+    <str id="UserInputPanel.search.autodetect.tooltip" txt="Zkontrolujte soubor nebo adreï¿½ï¿½ï¿½ v zadanï¿½ cestï¿½." />
     <str id="UserInputPanel.search.location" txt="Zadejte cestu " />
-    <str id="UserInputPanel.search.location.checkedfile" txt="Zkontrolovaná existence {0} ." />
+    <str id="UserInputPanel.search.location.checkedfile" txt="Zkontrolovanï¿½ existence {0} ." />
     <str id="UserInputPanel.search.browse" txt="Prohledat..." />
     <str id="UserInputPanel.search.wrongselection.message"
-         txt="Vybraný soubor èi adresáø neexistuje nebo není správný." />
-    <str id="UserInputPanel.search.wrongselection.caption" txt="Nesprávný výbìr." />
+         txt="Vybranï¿½ soubor ï¿½i adresï¿½ï¿½ neexistuje nebo nenï¿½ sprï¿½vnï¿½." />
+    <str id="UserInputPanel.search.wrongselection.caption" txt="Nesprï¿½vnï¿½ vï¿½bï¿½r." />
 
     <str id="CompilePanel.heading" txt="Kompilace" />
-    <str id="CompilePanel.tip" txt="Prùbìh kompilace úlohy:" />
+    <str id="CompilePanel.tip" txt="Prï¿½bï¿½h kompilace ï¿½lohy:" />
     <str id="CompilePanel.browse" txt="Prohledat..." />
-    <str id="CompilePanel.browse.approve" txt="Pou¾ít jako pøekladaè" />
+    <str id="CompilePanel.browse.approve" txt="Pouï¿½ï¿½t jako pï¿½ekladaï¿½" />
     <str id="CompilePanel.start" txt="Start" />
-    <str id="CompilePanel.progress.initial" txt="[Stisknìte tlaèítko Start]" />
-    <str id="CompilePanel.progress.finished" txt="[Ukonèené]" />
-    <str id="CompilePanel.progress.overall" txt="Celkový stav kompilace:" />
+    <str id="CompilePanel.progress.initial" txt="[Stisknï¿½te tlaï¿½ï¿½tko Start]" />
+    <str id="CompilePanel.progress.finished" txt="[Ukonï¿½enï¿½]" />
+    <str id="CompilePanel.progress.overall" txt="Celkovï¿½ stav kompilace:" />
     <str id="CompilePanel.error" txt="Chyba kompilace" />
     <str id="CompilePanel.error.reconfigure" txt="Rekonfigurace" />
     <str id="CompilePanel.error.ignore" txt="Ignorovat" />
-    <str id="CompilePanel.error.abort" txt="Zru¹it" />
-    <str id="CompilePanel.error.seebelow" txt="Detaily selhané kompilace si prohlédnìte dole." />
-    <str id="CompilePanel.error.nofiles" txt="Chyba v prùbìhu hledání souborù pro kompilaci." />
-    <str id="CompilePanel.error.compilernotfound" txt="Kompilace nemù¾e být spu¹tìna." />
-    <str id="CompilePanel.error.invalidarguments" txt="Pøekladaè nepoznal pou¾ité argumenty ." />
-    <str id="CompilePanel.error.noclassfile" txt="Pøekladaè nevytvoril tøídu pro zdrojový soubor " />
-    <str id="CompilePanel.choose_compiler" txt="Pøekladaè :" />
-    <str id="CompilePanel.additional_arguments" txt="Pøídavné argumenty pro pøekladaè:" />
+    <str id="CompilePanel.error.abort" txt="Zruï¿½it" />
+    <str id="CompilePanel.error.seebelow" txt="Detaily selhanï¿½ kompilace si prohlï¿½dnï¿½te dole." />
+    <str id="CompilePanel.error.nofiles" txt="Chyba v prï¿½bï¿½hu hledï¿½nï¿½ souborï¿½ pro kompilaci." />
+    <str id="CompilePanel.error.compilernotfound" txt="Kompilace nemï¿½ï¿½e bï¿½t spuï¿½tï¿½na." />
+    <str id="CompilePanel.error.invalidarguments" txt="Pï¿½ekladaï¿½ nepoznal pouï¿½itï¿½ argumenty ." />
+    <str id="CompilePanel.error.noclassfile" txt="Pï¿½ekladaï¿½ nevytvoril tï¿½ï¿½du pro zdrojovï¿½ soubor " />
+    <str id="CompilePanel.choose_compiler" txt="Pï¿½ekladaï¿½ :" />
+    <str id="CompilePanel.additional_arguments" txt="Pï¿½ï¿½davnï¿½ argumenty pro pï¿½ekladaï¿½:" />
 
-    <str id="ProcessPanel.heading" txt="Probíhá" />
+    <str id="ProcessPanel.heading" txt="Probï¿½hï¿½" />
 
     <!-- Add your own panels specific strings here if you need -->
 

@@ -29,6 +29,10 @@ import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 
+import com.izforge.izpack.installer.*;
+import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.util.AbstractUIProgressHandler;
+
 import java.io.PrintWriter;
 import java.util.Properties;
 

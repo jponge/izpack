@@ -45,6 +45,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Unpacker class for a multi volume installation.
@@ -424,6 +426,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
                             else
                             {
                                 pathFile.setLastModified(pf.lastModified());
+                            }
                             }
                         }
 

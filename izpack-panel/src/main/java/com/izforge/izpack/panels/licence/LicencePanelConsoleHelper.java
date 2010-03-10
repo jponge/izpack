@@ -151,6 +151,10 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
                 {
                     return 3;
                 }
+                else if (strIn.equals("3"))
+                {
+                    return 3;
+                }
             }
 
         }

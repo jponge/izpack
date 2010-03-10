@@ -35,6 +35,9 @@ import com.izforge.izpack.util.OsVersion;
 import java.io.*;
 import java.util.*;
 
+import java.io.*;
+import java.util.*;
+
 /**
  * The Target panel console helper class.
  *

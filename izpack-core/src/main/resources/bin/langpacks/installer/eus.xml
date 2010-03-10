@@ -91,7 +91,7 @@
 
     <!-- JDKPathPanel strings -->
 
-    <!--La instalación instalada necesita un JDK cuya versión esté comprendida entre la ${JDKPathPanel.minVersion} y la ${JDKPathPanel.maxVersion}. Un entorno de ejecución de Java (JRE) no es suficiente."/>-->
+    <!--La instalaciï¿½n instalada necesita un JDK cuya versiï¿½n estï¿½ comprendida entre la ${JDKPathPanel.minVersion} y la ${JDKPathPanel.maxVersion}. Un entorno de ejecuciï¿½n de Java (JRE) no es suficiente."/>-->
 
     <str id="JDKPathPanel.extendedIntro"
          txt="Instalaturiko aplikazioak JDK-ren bertsioa ${JDKPathPanel.minVersion} eta ${JDKPathPanel.maxVersion} tartean egon behar du, Java runtime environment (JRE)-a soilik ez da nahiko izango." />
