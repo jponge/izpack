@@ -65,23 +65,37 @@ public class TestFinishPanel
     }
 
     @Test
-    public void finishPanelShouldDisplay() throws Exception
+    public void helloThenFinishPanelShouldDisplay() throws Exception
     {
         guiInstallData.setUninstallOutJar(Mockito.mock(ZipOutputStream.class));
+        addPanelAndShow("com.izforge.izpack.panels.hello.HelloPanel",
+                "com.izforge.izpack.panels.simplefinish.SimpleFinishPanel");
+        String welcomLabel = frameFixture.label(GuiId.HELLO_PANEL_LABEL.id).text();
+        assertThat(welcomLabel, StringContains.containsString("Welcome to the installation of"));
+        frameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        String uninstallLabel = frameFixture.label(GuiId.SIMPLE_FINISH_UNINSTALL_LABEL.id).text();
+        assertThat(uninstallLabel, StringContains.containsString("An uninstaller program has been created in"));
+    }
+
+    @Test
+    public void finishPanelShouldDisplay() throws Exception
+    {
         addPanelAndShow("com.izforge.izpack.panels.finish.FinishPanel");
         String text = frameFixture.label(GuiId.FINISH_PANEL_LABEL.id).text();
         assertThat(text, StringContains.containsString("Installation has completed"));
-
         // Is automatic installation xml button visible?
         frameFixture.button(GuiId.FINISH_PANEL_AUTO_BUTTON.id).requireVisible();
     }
 
-    private void addPanelAndShow(String className)
+    private void addPanelAndShow(String... classNames)
             throws ClassNotFoundException
     {
-        Panel checked = new Panel();
-        checked.setClassName(className);
-        guiInstallData.getPanelsOrder().add(checked);
+        for (String className : classNames)
+        {
+            Panel panel = new Panel();
+            panel.setClassName(className);
+            guiInstallData.getPanelsOrder().add(panel);
+        }
         installerFrame.loadPanels();
         installerFrame.enableFrame();
     }
