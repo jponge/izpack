@@ -14,4 +14,5 @@ public interface IInstallerContainer
 
     Object getComponent(Object componentKeyOrType);
 
+    void initBindings() throws Exception;
 }
