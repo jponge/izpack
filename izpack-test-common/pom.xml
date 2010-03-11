@@ -11,8 +11,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>izpack-test-common</artifactId>
-    <dependencies>
+    <name>IzPack test commons module</name>
 
+    <dependencies>
         <dependency>
             <groupId>org.apache.ant</groupId>
             <artifactId>ant</artifactId>
