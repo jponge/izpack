@@ -19,6 +19,7 @@
  * limitations under the License.
  */
 
+
 package com.izforge.izpack.panels.userinput.validator;
 
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;

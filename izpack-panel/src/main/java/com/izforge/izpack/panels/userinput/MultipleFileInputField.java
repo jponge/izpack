@@ -56,7 +56,7 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
 
     String set;
     int size;
-    GUIInstallData installDataGUI;
+    GUIInstallData data;
     String fileExtension;
     String fileExtensionDescription;
 
@@ -69,10 +69,10 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
 
     String labeltext;
 
-    public MultipleFileInputField(InstallerFrame parent, GUIInstallData installDataGUI, boolean directory, String set, int size, List<ValidatorContainer> validatorConfig, String fileExt, String fileExtDesc, boolean createMultipleVariables, int visibleRows, int preferredXSize, int preferredYSize, String labelText)
+    public MultipleFileInputField(InstallerFrame parent, GUIInstallData data, boolean directory, String set, int size, List<ValidatorContainer> validatorConfig, String fileExt, String fileExtDesc, boolean createMultipleVariables, int visibleRows, int preferredXSize, int preferredYSize, String labelText)
     {
         this.parentFrame = parent;
-        this.installDataGUI = installDataGUI;
+        this.data = data;
         this.validators = validatorConfig;
         this.set = set;
         this.size = size;
@@ -122,10 +122,10 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
-        browseBtn = ButtonFactory.createButton(installDataGUI.getLangpack().getString("UserInputPanel.button.browse"), installDataGUI.buttonsHColor);
+        browseBtn = ButtonFactory.createButton(data.getLangpack().getString("UserInputPanel.button.browse"), data.buttonsHColor);
         browseBtn.addActionListener(this);
 
-        deleteBtn = ButtonFactory.createButton(installDataGUI.getLangpack().getString("UserInputPanel.button.delete"), installDataGUI.buttonsHColor);
+        deleteBtn = ButtonFactory.createButton(data.getLangpack().getString("UserInputPanel.button.delete"), data.buttonsHColor);
         deleteBtn.addActionListener(this);
 
         JScrollPane scroller = new JScrollPane(fileList);

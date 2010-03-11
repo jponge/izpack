@@ -20,7 +20,7 @@
 package com.izforge.izpack.panels.userinput;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-
+import java.util.Vector;
 import javax.swing.*;
 import java.util.Vector;
 

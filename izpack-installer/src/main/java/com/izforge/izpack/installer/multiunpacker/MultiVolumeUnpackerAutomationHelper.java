@@ -27,6 +27,7 @@ public class MultiVolumeUnpackerAutomationHelper implements IMultiVolumeUnpacker
         {
             System.err.println(" [ " + idata.getLangpack().getString("nextmedia.corruptmedia.title") + " ] ");
             System.err.println(idata.getLangpack().getString("nextmedia.corruptmedia"));
+            System.err.println(idata.getLangpack().getString("nextmedia.corruptmedia"));
         }
         Debug.trace("Enter next media: " + volumename);
 

@@ -127,7 +127,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
     private static ShellScript uninstallScript = null;
 
-    private List users;
+    private List<UnixUser> users;
 
     // private static ArrayList tempfiles = new ArrayList();
 
@@ -218,6 +218,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     public Unix_Shortcut()
     {
         hlp = new StringBuffer();
+        users = UnixUsers.getUsersWithValidShellsExistingHomesAndDesktops();
 
         String userLanguage = System.getProperty("user.language", "en");
 
@@ -724,10 +725,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     private void installDesktopFileToAllUsersDesktop(File writtenDesktopFile)
     {
-        for (Object user1 : getUsers())
+        for (UnixUser user : users)
         {
-            UnixUser user = ((UnixUser) user1);
-
             if (user.getHome().equals(myHome))
             {
                 Debug.log("need not to copy for itself: " + user.getHome() + "==" + myHome);
@@ -783,10 +782,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         // su marc.eppelmann -c "/bin/cp /home/marc.eppelmann/backup.job.out.txt
         // /home/marc.eppelmann/backup.job.out2.txt"
 
-        for (Object user1 : getUsers())
+        for (UnixUser user : users)
         {
-            UnixUser user = ((UnixUser) user1);
-
             if (user.getHome().equals(myHome))
             {
                 Debug.log("need not to copy for itself: " + user.getHome() + "==" + myHome);
@@ -1222,6 +1219,13 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     public void setWorkingDirectory(String aDirectory)
     {
+        StringTokenizer whiteSpaceTester = new StringTokenizer(aDirectory);
+
+        if (whiteSpaceTester.countTokens() > 1)
+        {
+            props.put($P_QUOT, QM);
+        }
+
         props.put($Path, aDirectory);
     }
 
@@ -1279,6 +1283,39 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
         aSample.replace();
         System.out.println(aSample);
+        //        
+        //       
+        //
+        // File targetFileName = new File(System.getProperty("user.home") + File.separator
+        // + "Start Tomcat" + DESKTOP_EXT);
+        // FileWriter fileWriter = null;
+        //
+        // try
+        // {
+        // fileWriter = new FileWriter(targetFileName);
+        // }
+        // catch (IOException e1)
+        // {
+        // e1.printStackTrace();
+        // }
+        //
+        // try
+        // {
+        // fileWriter.write( aSample.toString() );
+        // }
+        // catch (IOException e)
+        // {
+        // e.printStackTrace();
+        // }
+        //
+        // try
+        // {
+        // fileWriter.close();
+        // }
+        // catch (IOException e2)
+        // {
+        // e2.printStackTrace();
+        // }
 
         aSample.createExtXdgDesktopIconCmd(new File(System.getProperty("user.home")));
 
@@ -1399,14 +1436,5 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     {
         return ShortcutType;
         // return Shortcut.DESKTOP;
-    }
-
-    private List getUsers()
-    {
-        if (users == null)
-        {
-            users = UnixUsers.getUsersWithValidShellsExistingHomesAndDesktops();
-        }
-        return users;
     }
 }

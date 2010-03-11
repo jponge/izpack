@@ -34,6 +34,7 @@ import com.izforge.izpack.util.Debug;
 import java.io.OutputStream;
 import java.util.*;
 
+
 /**
  * The rules engine class is the central point for checking conditions
  *

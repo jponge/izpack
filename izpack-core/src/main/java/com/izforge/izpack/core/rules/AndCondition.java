@@ -83,6 +83,7 @@ public class AndCondition extends Condition
             this.leftoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(0));
             this.rightoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(1));
         }
+
         catch (Exception e)
         {
             Debug.log("missing element in and-condition");

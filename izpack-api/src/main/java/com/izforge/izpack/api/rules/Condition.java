@@ -26,6 +26,8 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 
 import java.io.Serializable;
 
+import java.io.Serializable;
+
 /**
  * Abstract base class for all conditions. Implementations of custom conditions
  * have to derive from this class.

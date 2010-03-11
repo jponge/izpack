@@ -96,8 +96,7 @@ public class OrCondition extends Condition
      * selectedpacks); }
      */
 
-    public boolean isTrue()
-    {
+    public boolean isTrue() {
         if ((this.leftoperand == null) || (this.rightoperand == null))
         {
             Debug.trace("Operands of condition " + this.id + " not initialized correctly.");

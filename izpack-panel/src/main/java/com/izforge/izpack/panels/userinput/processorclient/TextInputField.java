@@ -24,7 +24,8 @@ package com.izforge.izpack.panels.userinput.processorclient;
 import com.izforge.izpack.panels.userinput.validator.Validator;
 import com.izforge.izpack.util.Debug;
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JTextField;
 import java.util.Map;
 
 /*---------------------------------------------------------------------------*/

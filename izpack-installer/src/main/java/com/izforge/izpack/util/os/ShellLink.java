@@ -1340,5 +1340,4 @@ public class ShellLink implements NativeLibraryClient
     }
 
 }
-/*---------------------------------------------------------------------------*/
 

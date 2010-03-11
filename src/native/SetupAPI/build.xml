@@ -1,0 +1,73 @@
+<project name="compile" default="makeDLL">
+
+    <property name="cppDir" value="C:\Borland\bcc55" />
+    <property name="cppCompilerDir" value="${cppDir}\Bin" />
+
+    <property name="jdkDir" value="C:\Program Files\Java\jdk1.5.0_17" />
+
+    <macrodef name="call-compiler">
+        <element name="call-compiler-elements" implicit="yes" />
+        <sequential>
+            <exec executable="wine" failonerror="true">
+                <arg line="cmd /C set PATH=${cppCompilerDir} &amp;&amp; cd ${cppCompilerDir} &amp;&amp; bcc32.exe" />
+                <call-compiler-elements />
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="call-linker">
+        <element name="call-linker-elements" implicit="yes" />
+        <sequential>
+            <exec executable="wine" failonerror="true">
+                <arg line="cmd /C set PATH=${cppCompilerDir} &amp;&amp; cd ${cppCompilerDir} &amp;&amp; ilink32.exe" />
+                <call-linker-elements />
+            </exec>
+        </sequential>
+    </macrodef>
+
+
+    <target name="makeDLL" description="build the header file from the class file, then compile the DLL">
+
+        <delete quiet="true" file="WinSetupAPI.dll" />
+
+        <!-- now execute the borland C++ compiler.
+NB I had to play around with the env key to make sure it set the
+path correctly (in particular the case of the key).
+I'm not convinced this will work in all cases -->
+        <call-compiler>
+            <arg value="-I${cppDir}\Include" />
+            <arg value="-I${jdkDir}\include" />
+            <arg value="-I${jdkDir}\include\win32" />
+            <arg value="-WM" />
+            <arg value="-WD" />
+            <arg value="-c" />
+            <arg value="util.cpp" />
+            <arg value="WinSetupAPIBase.cpp" />
+        </call-compiler>
+
+        <call-linker>
+            <arg value="-L${cppDir}\Lib" />
+            <arg value="-L${cppDir}\Lib\PSDK" />
+            <arg value="-Tpd" />
+            <arg value="-ap" />
+            <arg value="-Gn" />
+            <arg value="-c" />
+            <arg value="-x" />
+            <arg value="c0d32" />
+            <arg value="util" />
+            <arg value="WinSetupAPIBase,WinSetupAPI,,import32" />
+            <arg value="cw32" />
+            <arg value="kernel32" />
+            <arg value="setupapi,," />
+        </call-linker>
+
+        <delete quiet="true">
+            <fileset dir="${basedir}">
+                <include name="*.obj" />
+                <include name="*.tds" />
+            </fileset>
+        </delete>
+
+    </target>
+
+</project>

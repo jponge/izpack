@@ -150,7 +150,6 @@ public class CompareNumericsCondition extends Condition
     /* (non-Javadoc)
      * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
      */
-
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();
