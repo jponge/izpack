@@ -1,4 +1,4 @@
-package org.codehaus.izpack;
+package org.codehaus.izpack.test.container;
 
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -15,9 +15,11 @@ import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.codehaus.izpack.test.provider.GUIInstallDataMockProvider;
+import org.fest.swing.fixture.FrameFixture;
 import org.picocontainer.Characteristics;
 import org.picocontainer.PicoBuilder;
 import org.picocontainer.injectors.ProviderAdapter;
+import org.picocontainer.parameters.ComponentParameter;
 
 /**
  * Container for injecting mock for individual panel testing
@@ -40,15 +42,16 @@ public class TestContainer extends AbstractContainer implements IInstallerContai
                 .addComponent(UninstallDataWriter.class)
                 .addComponent(AutomatedInstaller.class)
                 .addComponent(PathResolver.class)
+                .addComponent(FrameFixture.class, FrameFixture.class, new ComponentParameter(InstallerFrame.class))
                 .addComponent(PanelManager.class)
                 .addComponent(IInstallerContainer.class, this)
                 .addConfig("title", "testPanel");
-
         pico
                 .addAdapter(new ProviderAdapter(new GUIInstallDataMockProvider()))
                 .addAdapter(new ProviderAdapter(new IconsProvider()))
                 .addAdapter(new ProviderAdapter(new RulesProvider()))
                 .as(Characteristics.USE_NAMES).addComponent(InstallerFrame.class);
     }
+
 
 }

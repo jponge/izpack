@@ -30,9 +30,7 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedOutputStream;
@@ -87,8 +85,10 @@ public class FinishPanel extends IzPanel implements ActionListener
         if (this.installData.isInstallSuccess())
         {
             // We set the information
-            add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.success"),
-                    parent.icons.getImageIcon("preferences"), LEADING), NEXT_LINE);
+            JLabel jLabel = LabelFactory.create(installData.getLangpack().getString("FinishPanel.success"),
+                    parent.icons.getImageIcon("preferences"), LEADING);
+            jLabel.setName(GuiId.FINISH_PANEL_LABEL.id);
+            add(jLabel, NEXT_LINE);
             add(IzPanelLayout.createVerticalStrut(5));
             if (this.installData.getUninstallOutJar() != null)
             {
