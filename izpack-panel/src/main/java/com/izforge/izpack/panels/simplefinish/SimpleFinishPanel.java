@@ -19,6 +19,7 @@
 
 package com.izforge.izpack.panels.simplefinish;
 
+import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.gui.IzPanelLayout;
@@ -28,6 +29,7 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 
+import javax.swing.*;
 import java.io.File;
 
 /**
@@ -84,8 +86,10 @@ public class SimpleFinishPanel extends IzPanel
             // We set the information
             add(LabelFactory.create(parent.icons.getImageIcon("check")));
             add(IzPanelLayout.createVerticalStrut(5));
-            add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.success"),
-                    parent.icons.getImageIcon("preferences"), LEADING), NEXT_LINE);
+            JLabel jLabel = LabelFactory.create(installData.getLangpack().getString("FinishPanel.success"),
+                    parent.icons.getImageIcon("preferences"), LEADING);
+            jLabel.setName(GuiId.SIMPLE_FINISH_LABEL.id);
+            add(jLabel, NEXT_LINE);
             add(IzPanelLayout.createVerticalStrut(5));
             if (this.installData.getUninstallOutJar() != null)
             {
