@@ -29,10 +29,6 @@ import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 
-import com.izforge.izpack.installer.*;
-import com.izforge.izpack.util.AbstractUIHandler;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
-
 import java.io.PrintWriter;
 import java.util.Properties;
 
