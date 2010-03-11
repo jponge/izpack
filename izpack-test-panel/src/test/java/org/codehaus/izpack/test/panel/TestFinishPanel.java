@@ -1,57 +1,81 @@
 package org.codehaus.izpack.test.panel;
 
+import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
-import org.codehaus.izpack.TestContainer;
-import org.junit.Before;
-import org.junit.Ignore;
+import org.codehaus.izpack.test.container.TestContainer;
+import org.codehaus.izpack.test.customrunner.Container;
+import org.codehaus.izpack.test.customrunner.PicoRunner;
+import org.fest.swing.fixture.FrameFixture;
+import org.hamcrest.text.StringContains;
+import org.junit.After;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Manual test for finish panel
  */
+@RunWith(PicoRunner.class)
+@Container(TestContainer.class)
 public class TestFinishPanel
 {
 
-    private TestContainer testContainer;
+    private GUIInstallData guiInstallData;
+    private FrameFixture frameFixture;
+    private ResourceManager resourceManager;
+    private InstallerFrame installerFrame;
 
-    @Before
-    public void setUp() throws Exception
+    public TestFinishPanel(GUIInstallData guiInstallData, InstallerFrame installerFrame, ResourceManager resourceManager, FrameFixture frameFixture)
     {
-        testContainer = new TestContainer();
-        testContainer.initBindings();
+        this.guiInstallData = guiInstallData;
+        this.installerFrame = installerFrame;
+        this.resourceManager = resourceManager;
+        this.frameFixture = frameFixture;
+    }
+
+    @After
+    public void after()
+    {
+        frameFixture.cleanUp();
     }
 
 
-    @Ignore
     @Test
-    public void launchTest() throws Exception
+    public void htmlInfoPanelShouldDisplayText() throws Exception
     {
-        InstallerFrame installerFrame = testContainer.getComponent(InstallerFrame.class);
-        GUIInstallData guiInstallData = testContainer.getComponent(GUIInstallData.class);
-        ResourceManager resourceManager = testContainer.getComponent(ResourceManager.class);
-
         resourceManager.setResourceBasePath("/org/codehaus/izpack/test/panel/");
-//        Panel helloPanel = new Panel();
-//        helloPanel.setClassName("com.izforge.izpack.panels.hello.HelloPanel");
-//        guiInstallData.getPanelsOrder().add(helloPanel);
+        addPanelAndShow("com.izforge.izpack.panels.htmlinfo.HTMLInfoPanel");
+        String textArea = frameFixture.textBox(GuiId.HTML_INFO_PANEL_TEXT.id).text();
+        assertThat(textArea, StringContains.containsString("This is a test"));
+    }
 
+    @Test
+    public void simpleFinishPanelShouldDisplayFinishingText() throws Exception
+    {
+        addPanelAndShow("com.izforge.izpack.panels.simplefinish.SimpleFinishPanel");
+        String text = frameFixture.label(GuiId.SIMPLE_FINISH_LABEL.id).text();
+        assertThat(text, StringContains.containsString("Installation has completed"));
+    }
+
+    @Test
+    public void finishPanelShouldDisplay() throws Exception
+    {
+        addPanelAndShow("com.izforge.izpack.panels.finish.FinishPanel");
+        String text = frameFixture.label(GuiId.FINISH_PANEL_LABEL.id).text();
+        assertThat(text, StringContains.containsString("Installation has completed"));
+    }
+
+    private void addPanelAndShow(String className)
+            throws ClassNotFoundException
+    {
         Panel checked = new Panel();
-        checked.setClassName("com.izforge.izpack.panels.htmlinfo.HTMLInfoPanel");
+        checked.setClassName(className);
         guiInstallData.getPanelsOrder().add(checked);
-
-        Panel finishPanel = new Panel();
-        finishPanel.setClassName("com.izforge.izpack.panels.simplefinish.SimpleFinishPanel");
-        guiInstallData.getPanelsOrder().add(finishPanel);
-
         installerFrame.loadPanels();
         installerFrame.enableFrame();
-
-//        SimpleFinishPanel panel = testContainer.getComponent(SimpleFinishPanel.class);
-//        panel.setVisible(true);
-
-        Thread.sleep(10000);
     }
 }
