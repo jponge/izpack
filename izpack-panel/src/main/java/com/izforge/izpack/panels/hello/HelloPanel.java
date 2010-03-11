@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.panels.hello;
 
+import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
@@ -30,8 +31,8 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 
-import javax.swing.JLabel;
-import java.awt.LayoutManager2;
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -82,6 +83,7 @@ public class HelloPanel extends IzPanel
         str = installData.getLangpack().getString("HelloPanel.welcome1") + idata.getInfo().getAppName() + " "
                 + idata.getInfo().getAppVersion() + installData.getLangpack().getString("HelloPanel.welcome2");
         JLabel welcomeLabel = LabelFactory.create(str, parent.icons.getImageIcon("host"), LEADING);
+        welcomeLabel.setName(GuiId.HELLO_PANEL_LABEL.id);
         // IzPanelLayout is a constraint orientated layout manager. But if no constraint is
         // given, a default will be used. It starts in the first line.
         // NEXT_LINE have to insert also in the first line!!

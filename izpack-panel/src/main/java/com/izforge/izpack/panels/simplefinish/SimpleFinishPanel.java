@@ -21,7 +21,6 @@ package com.izforge.izpack.panels.simplefinish;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.log.Log;
@@ -44,11 +43,6 @@ public class SimpleFinishPanel extends IzPanel
      *
      */
     private static final long serialVersionUID = 3689911781942572085L;
-
-    /**
-     * The variables substitutor.
-     */
-    private VariableSubstitutor vs;
 
     /**
      * The constructor.
@@ -96,9 +90,11 @@ public class SimpleFinishPanel extends IzPanel
                 // We prepare a message for the uninstaller feature
                 String path = translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
 
-                add(LabelFactory.create(installData.getLangpack()
+                JLabel uninstallJLabel = LabelFactory.create(installData.getLangpack()
                         .getString("FinishPanel.uninst.info"), parent.icons
-                        .getImageIcon("preferences"), LEADING), NEXT_LINE);
+                        .getImageIcon("preferences"), LEADING);
+                uninstallJLabel.setName(GuiId.SIMPLE_FINISH_UNINSTALL_LABEL.id);
+                add(uninstallJLabel, NEXT_LINE);
                 add(LabelFactory.create(path, parent.icons.getImageIcon("empty"),
                         LEADING), NEXT_LINE);
             }
