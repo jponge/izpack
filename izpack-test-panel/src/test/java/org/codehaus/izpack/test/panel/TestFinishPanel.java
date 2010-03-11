@@ -13,6 +13,9 @@ import org.hamcrest.text.StringContains;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+
+import java.util.zip.ZipOutputStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -64,9 +67,13 @@ public class TestFinishPanel
     @Test
     public void finishPanelShouldDisplay() throws Exception
     {
+        guiInstallData.setUninstallOutJar(Mockito.mock(ZipOutputStream.class));
         addPanelAndShow("com.izforge.izpack.panels.finish.FinishPanel");
         String text = frameFixture.label(GuiId.FINISH_PANEL_LABEL.id).text();
         assertThat(text, StringContains.containsString("Installation has completed"));
+
+        // Is automatic installation xml button visible?
+        frameFixture.button(GuiId.FINISH_PANEL_AUTO_BUTTON.id).requireVisible();
     }
 
     private void addPanelAndShow(String className)
