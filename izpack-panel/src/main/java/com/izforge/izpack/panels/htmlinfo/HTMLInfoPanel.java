@@ -19,6 +19,7 @@
 
 package com.izforge.izpack.panels.htmlinfo;
 
+import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
@@ -121,6 +122,7 @@ public class HTMLInfoPanel extends IzPanel
                             parsedStr.getBytes());
                 }
             };
+            textArea.setName(GuiId.HTML_INFO_PANEL_TEXT.id);
             textArea.setContentType("text/html; charset=utf-8");
             textArea.setEditable(false);
             textArea.addHyperlinkListener(new HyperlinkHandler());
