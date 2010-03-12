@@ -24,6 +24,7 @@ package com.izforge.izpack.api.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class Panel implements Serializable
     /**
      * The target operation system of this panel
      */
-    public List osConstraints = null;
+    public List osConstraints = Collections.emptyList();
 
     /**
      * the unique id of this panel

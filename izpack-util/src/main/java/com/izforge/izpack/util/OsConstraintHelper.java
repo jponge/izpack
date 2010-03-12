@@ -118,6 +118,10 @@ public class OsConstraintHelper
      */
     public static boolean oneMatchesCurrentSystem(List<OsModel> constraint_list)
     {
+        if (constraint_list.isEmpty())
+        {
+            return true;
+        }
         for (OsModel osModel : constraint_list)
         {
             Debug.trace("checking if os constraints " + osModel + " match current OS");

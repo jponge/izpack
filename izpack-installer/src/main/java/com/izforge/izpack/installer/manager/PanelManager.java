@@ -59,7 +59,6 @@ public class PanelManager
         java.util.List<Panel> panelsOrder = installdata.getPanelsOrder();
         for (Panel panel : panelsOrder)
         {
-            System.out.println(panel.getClassName());
             if (OsConstraintHelper.oneMatchesCurrentSystem(panel.osConstraints))
             {
                 Class<? extends IzPanel> aClass = resolveClassName(panel.getClassName());
