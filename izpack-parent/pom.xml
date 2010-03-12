@@ -8,7 +8,7 @@
     <packaging>pom</packaging>
     <name>IzPack parent</name>
 
-    <description>IZpack parent module</description>
+    <description>IzPack parent module</description>
 
     <distributionManagement>
         <site>
