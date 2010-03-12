@@ -2,11 +2,11 @@
 
 import string
 
-from optparse import OptionParser
+from glob import glob
 from xml.etree.ElementTree import ElementTree, tostring
 
 def warn_missing(element):
-    #if element.tag not in action: print '============( %s )============' % element.tag
+    if element.tag not in action: print '============( %s )============' % element.tag
     pass
 
 action = {
@@ -56,6 +56,8 @@ def convert(source, target):
     tree = ElementTree()
     tree.parse(source)
     
+    out = open(target, "w")
+    
     def walk(element, context):
         
         warn_missing(element)
@@ -63,7 +65,8 @@ def convert(source, target):
         if element.tag in action:
             output, walk_children = action[element.tag](element, context)
             if output is not None:
-                print output,
+                print output
+                out.write(output)
             if not walk_children:
                 return
         
@@ -85,9 +88,10 @@ def convert(source, target):
     for child in tree.getroot().getchildren():
         walk(child, initial_context)
     
-if __name__ == '__main__':
+    out.close()
     
-    parser = OptionParser()
-    options, args = parser.parse_args()
-    convert(args[0], args[1])
+if __name__ == '__main__':
+
+    for xml_file in glob('xml/*.xml'):
+        convert(xml_file, xml_file[0:-4] + '.txt')
     
