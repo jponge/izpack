@@ -231,6 +231,14 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <configuration>
+                    <workspace>${basedir}</workspace>
+                    <workspaceCodeStylesURL>file://../src/eclipse-code-formatter.xml</workspaceCodeStylesURL>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
