@@ -111,7 +111,7 @@ public class HTMLInfoPanel extends IzPanel
                             new ByteArrayOutputStream();
                     int b;         //copy contents to output stream:
                     final byte[] buff = new byte[2048];
-                    while ((b = inStm.read(buff, 0, buff.length)) > 0) {
+                    while ((b = inStm.read(buff, 0, buff.length)) > 0)
                     {
                         btArrOutStm.write(buff, 0, b);
                     }
@@ -186,13 +186,15 @@ public class HTMLInfoPanel extends IzPanel
     }
 
     public void panelActivate()
+    {
         // Clear this property to get the document to reload and perform variable substitution.
         // See JEditorPane.setPage javadoc.
         textArea.getDocument().putProperty(Document.StreamDescriptionProperty, null);
-        try {
+        try
+        {
             textArea.setPage(loadHTMLInfoContent());
             textArea.setCaretPosition(0);
-        } catch (IOException e) {
+        }
         catch (IOException e)
         {
             e.printStackTrace();
