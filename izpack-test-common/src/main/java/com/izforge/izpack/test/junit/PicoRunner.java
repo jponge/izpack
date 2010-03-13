@@ -1,6 +1,7 @@
-package org.codehaus.izpack.test.customrunner;
+package com.izforge.izpack.test.junit;
 
-import com.izforge.izpack.installer.container.IInstallerContainer;
+import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.test.Container;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 
@@ -11,7 +12,8 @@ import java.util.List;
  *
  * @author Anthonin Bonnefoy
  */
-public class PicoRunner extends BlockJUnit4ClassRunner
+public class
+        PicoRunner extends BlockJUnit4ClassRunner
 {
     private Class<?> klass;
 
@@ -30,8 +32,8 @@ public class PicoRunner extends BlockJUnit4ClassRunner
     @Override
     protected Object createTest() throws Exception
     {
-        Class<? extends IInstallerContainer> containerClass = getTestClass().getJavaClass().getAnnotation(Container.class).value();
-        IInstallerContainer installerContainer = containerClass.newInstance();
+        Class<? extends BindeableContainer> containerClass = getTestClass().getJavaClass().getAnnotation(Container.class).value();
+        BindeableContainer installerContainer = containerClass.newInstance();
         installerContainer.initBindings();
         installerContainer.addComponent(klass);
         Object component = installerContainer.getComponent(klass);

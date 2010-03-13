@@ -1,6 +1,6 @@
-package org.codehaus.izpack.test.customrunner;
+package com.izforge.izpack.test;
 
-import com.izforge.izpack.installer.container.IInstallerContainer;
+import com.izforge.izpack.api.container.BindeableContainer;
 
 import java.lang.annotation.*;
 
@@ -17,5 +17,5 @@ public @interface Container
     /**
      * @return the container class
      */
-    public abstract Class<? extends IInstallerContainer> value();
+    public abstract Class<? extends BindeableContainer> value();
 }
