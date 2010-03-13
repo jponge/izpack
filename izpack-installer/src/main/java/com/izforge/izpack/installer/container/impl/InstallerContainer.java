@@ -34,7 +34,7 @@ import java.util.Properties;
  * Application Component. <br />
  * Encapsulate the pico provider for application level component.
  */
-public class ApplicationContainer extends AbstractContainer
+public class InstallerContainer extends AbstractContainer
 {
 
     public void initBindings() throws Exception

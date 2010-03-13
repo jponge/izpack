@@ -6,7 +6,7 @@ import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.container.impl.ApplicationContainer;
+import com.izforge.izpack.installer.container.impl.InstallerContainer;
 import com.izforge.izpack.installer.language.LanguageDialog;
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.fixture.DialogFixture;
@@ -53,7 +53,7 @@ public class AbstractIntegrationTest
 
     public void initInstallerContainer() throws Exception
     {
-        applicationContainer = new ApplicationContainer();
+        applicationContainer = new InstallerContainer();
         applicationContainer.initBindings();
         resourceManager = applicationContainer.getComponent(ResourceManager.class);
     }

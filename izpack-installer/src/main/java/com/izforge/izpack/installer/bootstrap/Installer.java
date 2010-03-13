@@ -25,7 +25,7 @@ import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.console.ConsoleInstaller;
-import com.izforge.izpack.installer.container.impl.ApplicationContainer;
+import com.izforge.izpack.installer.container.impl.InstallerContainer;
 import com.izforge.izpack.installer.language.LanguageDialog;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.StringTool;
@@ -47,7 +47,7 @@ public class Installer
     public static final int CONSOLE_INSTALL = 0, CONSOLE_GEN_TEMPLATE = 1, CONSOLE_FROM_TEMPLATE = 2,
             CONSOLE_FROM_SYSTEMPROPERTIES = 3, CONSOLE_FROM_SYSTEMPROPERTIESMERGE = 4;
 
-    private ApplicationContainer applicationComponent;
+    private InstallerContainer applicationComponent;
 
 
     /*
@@ -73,7 +73,7 @@ public class Installer
 
     private void initContainer() throws Exception
     {
-        applicationComponent = new ApplicationContainer();
+        applicationComponent = new InstallerContainer();
         applicationComponent.initBindings();
     }
 

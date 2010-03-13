@@ -8,7 +8,7 @@ import com.izforge.izpack.core.container.AbstractContainer;
 public class CustomDataContainer extends AbstractContainer
 {
 
-    public CustomDataContainer(ApplicationContainer parent) throws ClassNotFoundException
+    public CustomDataContainer(InstallerContainer parent) throws ClassNotFoundException
     {
         pico = parent.makeChildContainer();
     }
