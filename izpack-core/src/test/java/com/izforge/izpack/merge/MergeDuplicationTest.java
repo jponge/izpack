@@ -4,8 +4,8 @@ import com.izforge.izpack.matcher.DuplicateMatcher;
 import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import org.apache.tools.zip.ZipOutputStream;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,7 +23,7 @@ public class MergeDuplicationTest
 {
     private PathResolver pathResolver;
 
-    @BeforeMethod
+    @Before
     public void setUp()
     {
         this.pathResolver = new PathResolver();

@@ -1,10 +1,13 @@
 package com.izforge.izpack.merge;
 
 import com.izforge.izpack.matcher.MergeMatcher;
+import com.izforge.izpack.merge.container.TestMergeContainer;
 import com.izforge.izpack.merge.resolve.PathResolver;
+import com.izforge.izpack.test.Container;
+import com.izforge.izpack.test.junit.PicoRunner;
 import org.hamcrest.core.Is;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.net.URL;
 
@@ -15,16 +18,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Anthonin Bonnefoy
  */
+@RunWith(PicoRunner.class)
+@Container(TestMergeContainer.class)
 public class MergeManagerTest
 {
     private MergeManagerImpl mergeManager;
     private PathResolver pathResolver;
 
-    @BeforeMethod
-    public void setUp()
+    public MergeManagerTest(MergeManagerImpl mergeManager, PathResolver pathResolver)
     {
-        pathResolver = new PathResolver();
-        mergeManager = new MergeManagerImpl(pathResolver);
+        this.mergeManager = mergeManager;
+        this.pathResolver = pathResolver;
     }
 
     @Test
@@ -37,10 +41,10 @@ public class MergeManagerTest
     }
 
     @Test
-    public void testAddNativeLibrary() throws Exception
+    public void testAddDirectoryWithFile() throws Exception
     {
-        mergeManager.addResourceToMerge("bin/native/");
-        assertThat(mergeManager, MergeMatcher.isMergeableContainingFiles("bin/native/izpack/ShellLink.dll"));
+        mergeManager.addResourceToMerge("dtd/");
+        assertThat(mergeManager, MergeMatcher.isMergeableContainingFiles("dtd/conditions.dtd"));
     }
 
     @Test

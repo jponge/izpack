@@ -3,8 +3,8 @@ package com.izforge.izpack.merge.panel;
 import com.izforge.izpack.matcher.MergeMatcher;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import org.hamcrest.core.Is;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -19,7 +19,7 @@ public class PanelMergeTest
 
     private PathResolver pathResolver;
 
-    @BeforeMethod
+    @Before
     public void setUp()
     {
         pathResolver = new PathResolver();

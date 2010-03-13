@@ -2,7 +2,7 @@ package com.izforge.izpack.merge.file;
 
 import com.izforge.izpack.matcher.MergeMatcher;
 import org.hamcrest.core.Is;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.FileFilter;

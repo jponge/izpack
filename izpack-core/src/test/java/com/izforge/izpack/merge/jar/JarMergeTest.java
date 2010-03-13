@@ -5,8 +5,8 @@ import com.izforge.izpack.merge.Mergeable;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import org.hamcrest.core.Is;
 import org.hamcrest.text.StringContains;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -25,7 +25,7 @@ public class JarMergeTest
 {
     private PathResolver pathResolver;
 
-    @BeforeMethod
+    @Before
     public void setUp()
     {
         this.pathResolver = new PathResolver();
