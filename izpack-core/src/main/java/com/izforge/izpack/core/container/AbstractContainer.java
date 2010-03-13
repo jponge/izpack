@@ -45,4 +45,8 @@ public abstract class AbstractContainer implements BindeableContainer
         return pico.makeChildContainer();
     }
 
+    public MutablePicoContainer getContainer()
+    {
+        return pico;
+    }
 }
