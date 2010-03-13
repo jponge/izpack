@@ -51,7 +51,6 @@ public class PanelTest extends AbstractIntegrationTest
         TargetPanel targetPanel = applicationContainer.getComponent(TargetPanel.class);
         targetPanel.loadDefaultDir();
         String defaultDir = installData.getInstallPath();
-        System.out.println(installData.getInstallPath());
 
         File file = new File(defaultDir);
         if (file.exists())

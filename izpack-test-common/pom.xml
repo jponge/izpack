@@ -21,6 +21,7 @@
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>izpack-api</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
