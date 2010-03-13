@@ -1,5 +1,7 @@
 package com.izforge.izpack.api.container;
 
+import org.picocontainer.MutablePicoContainer;
+
 /**
  * Interface for applcation container using Pico
  *
@@ -18,4 +20,6 @@ public interface BindeableContainer
     void initBindings() throws Exception;
 
     void dispose();
+
+    MutablePicoContainer getContainer();
 }

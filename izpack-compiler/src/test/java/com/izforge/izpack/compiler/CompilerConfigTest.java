@@ -1,134 +1,104 @@
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.adaptator.impl.XMLParser;
-import com.izforge.izpack.api.data.DynamicVariable;
-import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
-import com.izforge.izpack.api.exception.CompilerException;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.compiler.container.CompilerContainer;
-import com.izforge.izpack.compiler.data.CompilerData;
-import com.izforge.izpack.compiler.data.PropertyManager;
-import com.izforge.izpack.compiler.helper.AssertionHelper;
-import com.izforge.izpack.compiler.helper.CompilerHelper;
-import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
-import com.izforge.izpack.compiler.packager.IPackager;
+import com.izforge.izpack.compiler.container.TestCompilerContainer;
+import com.izforge.izpack.matcher.MergeMatcher;
+import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.merge.MergeManagerImpl;
 import com.izforge.izpack.merge.resolve.PathResolver;
-import org.junit.Before;
+import com.izforge.izpack.test.BaseDir;
+import com.izforge.izpack.test.Container;
+import com.izforge.izpack.test.InstallFile;
+import com.izforge.izpack.test.junit.PicoRunner;
+import org.apache.maven.shared.jar.JarAnalyzer;
+import org.apache.maven.shared.jar.classes.JarClasses;
+import org.apache.maven.shared.jar.classes.JarClassesAnalysis;
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.junit.runner.RunWith;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Created by IntelliJ IDEA.
- *
- * @author Anthonin Bonnefoy
+ * Test for an Izpack compilation
  */
+@RunWith(PicoRunner.class)
+@Container(TestCompilerContainer.class)
+@BaseDir("samples")
+@InstallFile("samples/helloAndFinish.xml")
 public class CompilerConfigTest
 {
-    private XMLParser xmlParser;
+    private File out;
     private CompilerConfig compilerConfig;
-    private CompilerData data;
-    private VariableSubstitutor variableSubstitutor;
-    private Compiler compiler;
-    private CompilerHelper compilerHelper;
-    private PropertyManager propertyManager;
-    private XmlCompilerHelper xmlCompilerHerlper;
-    private Map<String, List<DynamicVariable>> mapStringListDyn;
-    private MergeManagerImpl mergeManager;
-    private IPackager packager;
 
-    @Before
-    public void setUp()
+    public CompilerConfigTest(File out, CompilerConfig compilerConfig)
     {
-        data = Mockito.mock(CompilerData.class);
-        variableSubstitutor = Mockito.mock(VariableSubstitutor.class);
-        compiler = Mockito.mock(Compiler.class);
-        propertyManager = Mockito.mock(PropertyManager.class);
-        compilerHelper = Mockito.mock(CompilerHelper.class);
-        AssertionHelper assertionHelper = Mockito.mock(AssertionHelper.class);
-        xmlCompilerHerlper = new XmlCompilerHelper(data.getInstallFile(), assertionHelper);
-        mapStringListDyn = Mockito.mock(Map.class);
-        packager = Mockito.mock(IPackager.class);
+        this.out = out;
+        this.compilerConfig = compilerConfig;
+    }
+
+    @Test
+    public void installerShouldContainInstallerClassResourcesAndImages() throws Exception
+    {
+        compilerConfig.executeCompiler();
+        assertThat(out, ZipMatcher.isZipContainingFile("com/izforge/izpack/installer/bootstrap/Installer.class"));
+        assertThat(out, ZipMatcher.isZipContainingFile("com/izforge/izpack/panels/hello/HelloPanel.class"));
+        assertThat(out, ZipMatcher.isZipContainingFile("resources/vars"));
+        assertThat(out, ZipMatcher.isZipContainingFile("img/JFrameIcon.png"));
+    }
+
+    @Test
+    public void mergeManagerShouldGetTheMergeableFromPanel() throws Exception
+    {
         PathResolver pathResolver = new PathResolver();
-        mergeManager = new MergeManagerImpl(pathResolver);
-        IzpackProjectInstaller izpackProject = new IzpackProjectInstaller();
-        CompilerContainer compilerContainer = Mockito.mock(CompilerContainer.class);
-        compilerConfig = new CompilerConfig(data, variableSubstitutor, compiler, compilerHelper, xmlCompilerHerlper, propertyManager, packager, mergeManager, izpackProject, assertionHelper, pathResolver, compilerContainer);
-        xmlParser = new XMLParser();
+        MergeManagerImpl mergeManager = new MergeManagerImpl(pathResolver);
+        mergeManager.addResourceToMerge(pathResolver.getPanelMerge("HelloPanel"));
+        mergeManager.addResourceToMerge(pathResolver.getPanelMerge("CheckedHelloPanel"));
+
+        assertThat(mergeManager, MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/panels/hello/HelloPanelConsoleHelper.class",
+                "com/izforge/izpack/panels/hello/HelloPanel.class",
+                "com/izforge/izpack/panels/checkedhello/CheckedHelloPanel.class"));
     }
 
     @Test
-    public void testAddTwoVariables() throws Exception
+    @Ignore
+    public void testImportAreResolved() throws Exception
     {
-        Mockito.when(mapStringListDyn.containsKey("myPath")).thenReturn(false);
-        Mockito.when(packager.getDynamicVariables()).thenReturn(mapStringListDyn);
-        Properties variable = new Properties();
-        Mockito.when(packager.getVariables()).thenReturn(variable);
-
-        IXMLElement element = xmlParser.parse("<root><dynamicvariables><variable name=\"myPath\" value=\"$INSTALLPATH / test\"/></dynamicvariables></root>");
-        compilerConfig.addDynamicVariables(element);
-        element = xmlParser.parse("<root><variables><variable name=\"INSTALLPATH\" value=\"thePath\"/></variables></root>");
-        compilerConfig.addVariables(element);
-
-        verifyCallToMap(mapStringListDyn, "myPath", "thePath/test");
+        JarAnalyzer jarAnalyzer = new JarAnalyzer(out);
+        JarClassesAnalysis jarClassAnalyzer = new JarClassesAnalysis();
+        JarClasses jarClasses = jarClassAnalyzer.analyze(jarAnalyzer);
+        List<String> imports = jarClasses.getImports();
+        List<String> listFromZip = ZipMatcher.getFileNameListFromZip(out);
+        ArrayList<String> result = new ArrayList<String>();
+        List<String> ignorePackage = Arrays.asList("java/", "org/w3c/", "org/xml/", "javax/", "text/html", "packs/pack", "com/thoughtworks");
+        for (String anImport : imports)
+        {
+            if (anImport.matches("([a-z]+\\.)+[a-zA-Z]+"))
+            {
+                String currentClass = anImport.replaceAll("\\.", "/") + ".class";
+                if (ignorePackage.contains(currentClass))
+                {
+                    continue;
+                }
+                if (!listFromZip.contains(currentClass))
+                {
+                    result.add(currentClass);
+                }
+            }
+            if (!result.isEmpty())
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (String s : result)
+                {
+                    stringBuilder.append(s).append('\n');
+                }
+                Assert.fail("Missing imports : " + stringBuilder);
+            }
+        }
     }
-
-    @Test
-    public void testAddDynamicVariable() throws CompilerException
-    {
-        Mockito.when(mapStringListDyn.containsKey("myPath")).thenReturn(false);
-        Mockito.when(packager.getDynamicVariables()).thenReturn(mapStringListDyn);
-
-        IXMLElement element = xmlParser.parse("<root><dynamicvariables><variable name=\"myPath\" value=\"$INSTALLPATH / test\"/></dynamicvariables></root>");
-        compilerConfig.addDynamicVariables(element);
-
-        verifyCallToMap(mapStringListDyn, "myPath", "$INSTALLPATH/test");
-    }
-
-    private void verifyCallToMap(Map<String, List<DynamicVariable>> mapStringListDyn, String name, String value)
-    {
-        DynamicVariable dyn = new DynamicVariable();
-        dyn.setName(name);
-        dyn.setValue(value);
-        ArrayList<DynamicVariable> list = new ArrayList<DynamicVariable>();
-        list.add(dyn);
-        Mockito.verify(mapStringListDyn).put(name, list);
-    }
-
-    @Test
-    public void compilerShouldAddVariable() throws Exception
-    {
-        IXMLElement xmlData = xmlParser.parse("<root><variables><variable name=\"scriptFile\" value=\"script.bat\"/></variables></root>");
-        Properties variable = Mockito.mock(Properties.class);
-        Mockito.when(packager.getVariables()).thenReturn(variable);
-        compilerConfig.addVariables(xmlData);
-        Mockito.verify(variable).setProperty("scriptFile", "script.bat");
-    }
-
-    @Test
-    public void shouldAddDynamicVariable() throws Exception
-    {
-        IXMLElement xmlData = xmlParser.parse("<root><dynamicvariables><variable name='myPath' value='$INSTALLPATH/test'/></dynamicvariables></root>");
-        Map variable = Mockito.mock(Map.class);
-
-        Mockito.when(variable.containsKey("myPath")).thenReturn(false);
-        Mockito.when(packager.getDynamicVariables()).thenReturn(variable);
-
-        compilerConfig.addDynamicVariables(xmlData);
-
-        new ArrayList();
-        DynamicVariable dyn = new DynamicVariable();
-        dyn.setName("myPath");
-        dyn.setValue("$INSTALLPATH/test");
-        ArrayList<DynamicVariable> list = new ArrayList<DynamicVariable>();
-        list.add(dyn);
-        Mockito.verify(variable).put("myPath", list);
-    }
-
 }

@@ -31,6 +31,7 @@ import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.IXMLWriter;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
+import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
@@ -41,7 +42,6 @@ import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
@@ -127,14 +127,14 @@ public class CompilerConfig extends Thread
     private IzpackProjectInstaller izpackProjectInstaller;
     private AssertionHelper assertionHelper;
     private PathResolver pathResolver;
-    private CompilerContainer compilerContainer;
+    private BindeableContainer compilerContainer;
 
     /**
      * Constructor
      *
      * @param compilerData Object containing all informations found in command line
      */
-    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller, AssertionHelper assertionHelper, PathResolver pathResolver, CompilerContainer compilerContainer)
+    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller, AssertionHelper assertionHelper, PathResolver pathResolver, BindeableContainer compilerContainer)
     {
         this.assertionHelper = assertionHelper;
         this.compilerData = compilerData;
