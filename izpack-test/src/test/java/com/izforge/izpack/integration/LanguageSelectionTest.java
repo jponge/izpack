@@ -2,7 +2,6 @@ package com.izforge.izpack.integration;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.language.LanguageDialog;
 import org.hamcrest.core.Is;
 import org.testng.annotations.AfterMethod;
@@ -32,8 +31,7 @@ public class LanguageSelectionTest extends AbstractIntegrationTest
     public void langpackFraShouldBeSet() throws Exception
     {
         compileInstallJar("fraInstaller.xml", getWorkingDirectory("samples"));
-        installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
-        installerContainer.getComponent(LanguageDialog.class).initLangPack();
+        applicationContainer.getComponent(LanguageDialog.class).initLangPack();
         ResourceManager resourceManager = applicationContainer.getComponent(ResourceManager.class);
         assertThat(resourceManager.getLocale(), Is.is("fra"));
     }
@@ -43,7 +41,6 @@ public class LanguageSelectionTest extends AbstractIntegrationTest
     {
         compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         ClassLoader.getSystemResource("langpacks/fra.xml");
-        installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         dialogFrameFixture = prepareDialogFixture();
         assertThat(dialogFrameFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).contents(), Is.is(new String[]{"eng", "fra"}));
         dialogFrameFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).selectItem(1);

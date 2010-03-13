@@ -1,12 +1,11 @@
 package com.izforge.izpack.integration;
 
+import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.container.IApplicationContainer;
-import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.container.impl.ApplicationContainer;
 import com.izforge.izpack.installer.language.LanguageDialog;
 import org.apache.commons.io.FileUtils;
@@ -34,8 +33,7 @@ public class AbstractIntegrationTest
 
     public static final String APPNAME = "Test Installation";
 
-    protected IApplicationContainer applicationContainer;
-    protected IInstallerContainer installerContainer;
+    protected BindeableContainer applicationContainer;
     protected CompilerContainer compilerContainer;
     protected ResourceManager resourceManager;
 
@@ -47,12 +45,17 @@ public class AbstractIntegrationTest
     public void initBinding() throws Throwable
     {
         out = File.createTempFile("izpack", ".jar");
-        applicationContainer = new ApplicationContainer();
-        applicationContainer.initBindings();
+
         compilerContainer = new CompilerContainer();
         compilerContainer.initBindings();
-        resourceManager = applicationContainer.getComponent(ResourceManager.class);
         deleteLock();
+    }
+
+    public void initInstallerContainer() throws Exception
+    {
+        applicationContainer = new ApplicationContainer();
+        applicationContainer.initBindings();
+        resourceManager = applicationContainer.getComponent(ResourceManager.class);
     }
 
     private void deleteLock() throws IOException
@@ -74,7 +77,7 @@ public class AbstractIntegrationTest
      */
     protected FrameFixture prepareFrameFixture() throws Exception
     {
-        InstallerFrame installerFrame = installerContainer.getComponent(InstallerFrame.class);
+        InstallerFrame installerFrame = applicationContainer.getComponent(InstallerFrame.class);
         FrameFixture installerFrameFixture = new FrameFixture(installerFrame);
         installerFrame.loadPanels();
         installerFrameFixture.show();
@@ -89,7 +92,7 @@ public class AbstractIntegrationTest
      */
     protected DialogFixture prepareDialogFixture()
     {
-        LanguageDialog languageDialog = installerContainer.getComponent(LanguageDialog.class);
+        LanguageDialog languageDialog = applicationContainer.getComponent(LanguageDialog.class);
         DialogFixture dialogFixture = new DialogFixture(languageDialog);
         dialogFixture.show();
         return dialogFixture;
@@ -122,11 +125,12 @@ public class AbstractIntegrationTest
     public void compileInstallJar(CompilerData compilerData) throws Exception
     {
         CompilerData data = compilerData;
-        compilerContainer.addConfig("installFile",compilerData.getInstallFile());
+        compilerContainer.addConfig("installFile", compilerData.getInstallFile());
         compilerContainer.addComponent(CompilerData.class, data);
         CompilerConfig compilerConfig = compilerContainer.getComponent(CompilerConfig.class);
         compilerConfig.executeCompiler();
         loadJarInSystemClassLoader(out);
+        initInstallerContainer();
     }
 
     @AfterMethod

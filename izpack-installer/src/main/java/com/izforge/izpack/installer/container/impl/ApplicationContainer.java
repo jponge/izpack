@@ -1,35 +1,43 @@
 package com.izforge.izpack.installer.container.impl;
 
+import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
+import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.console.ConsoleInstaller;
-import com.izforge.izpack.installer.container.IApplicationContainer;
-import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.container.provider.GUIInstallDataProvider;
 import com.izforge.izpack.installer.container.provider.IconsProvider;
 import com.izforge.izpack.installer.container.provider.RulesProvider;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.language.ConditionCheck;
+import com.izforge.izpack.installer.language.LanguageDialog;
+import com.izforge.izpack.installer.manager.PanelManager;
+import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.merge.MergeManagerImpl;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
+import org.picocontainer.Characteristics;
 import org.picocontainer.PicoBuilder;
 import org.picocontainer.injectors.ConstructorInjection;
 import org.picocontainer.injectors.ProviderAdapter;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.Properties;
 
 /**
  * Application Component. <br />
  * Encapsulate the pico provider for application level component.
  */
-public class ApplicationContainer extends AbstractContainer implements IApplicationContainer
+public class ApplicationContainer extends AbstractContainer
 {
 
-    public void initBindings()
+    public void initBindings() throws Exception
     {
         pico = new PicoBuilder(new ConstructorInjection())
                 .withCaching()
@@ -40,7 +48,7 @@ public class ApplicationContainer extends AbstractContainer implements IApplicat
                 .addAdapter(new ProviderAdapter(new IconsProvider()))
                 .addAdapter(new ProviderAdapter(new RulesProvider()));
         pico
-                .addComponent(IInstallerContainer.class, InstallerContainer.class)
+                .addComponent(PanelManager.class)
                 .addComponent(ConditionCheck.class)
                 .addComponent(MergeManagerImpl.class)
                 .addComponent(PathResolver.class)
@@ -52,7 +60,63 @@ public class ApplicationContainer extends AbstractContainer implements IApplicat
                 .addComponent(ConsoleInstaller.class)
                 .addComponent(UninstallDataWriter.class)
                 .addComponent(AutomatedInstaller.class)
-                .addComponent(IApplicationContainer.class, this);
+                .addComponent(BindeableContainer.class, this);
+
+        AutomatedInstallData installdata = pico.getComponent(AutomatedInstallData.class);
+        VariableSubstitutor substitutor = pico.getComponent(VariableSubstitutor.class);
+        String unpackerclassname = installdata.getInfo().getUnpackerClassName();
+        Class<IUnpacker> unpackerclass = (Class<IUnpacker>) Class.forName(unpackerclassname);
+        pico
+                // Configuration of title parameter in InstallerFrame
+                .addConfig("title", getTitle(installdata, substitutor))
+                        // Configuration of frame parameter in languageDialog
+                .addConfig("frame", initFrame());
+        pico
+                .addComponent(IUnpacker.class, unpackerclass)
+                .as(Characteristics.USE_NAMES).addComponent(InstallerFrame.class)
+                .as(Characteristics.USE_NAMES).addComponent(LanguageDialog.class);
+    }
+
+
+    private JFrame initFrame()
+    {
+        ResourceManager resourceManager = pico.getComponent(ResourceManager.class);
+        // Dummy Frame
+        JFrame frame = new JFrame();
+        ImageIcon imageIcon = null;
+        try
+        {
+            imageIcon = resourceManager.getImageIconResource("JFrameIcon");
+        }
+        catch (ResourceNotFoundException e)
+        {
+            imageIcon = new ImageIcon(this.getClass().getResource("/img/JFrameIcon.png"));
+        }
+        frame.setIconImage(imageIcon.getImage());
+
+        Dimension frameSize = frame.getSize();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation((screenSize.width - frameSize.width) / 2,
+                (screenSize.height - frameSize.height) / 2 - 10);
+        return frame;
+    }
+
+    private String getTitle(AutomatedInstallData automatedInstallData, VariableSubstitutor vs)
+    {
+        // Use a alternate message if defined.
+        final String key = "installer.reversetitle";
+        String message = automatedInstallData.getLangpack().getString(key);
+        // message equal to key -> no message defined.
+        if (message.indexOf(key) > -1)
+        {
+            return automatedInstallData.getLangpack().getString("installer.title")
+                    + automatedInstallData.getInfo().getAppName();
+        }
+        else
+        { // Attention! The alternate message has to contain the whole message including
+            // $APP_NAME and may be $APP_VER.
+            return vs.substitute(message);
+        }
     }
 
 }

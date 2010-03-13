@@ -2,13 +2,13 @@ package com.izforge.izpack.installer.manager;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.merge.panel.PanelMerge;
@@ -24,7 +24,7 @@ import java.util.List;
 public class PanelManager
 {
     private GUIInstallData installdata;
-    private IInstallerContainer installerContainer;
+    private BindeableContainer installerContainer;
     private int lastVis;
 
     /**
@@ -33,7 +33,7 @@ public class PanelManager
     protected ArrayList<Integer> visiblePanelMapping;
     private PathResolver pathResolver;
 
-    public PanelManager(GUIInstallData installDataGUI, IInstallerContainer installerContainer, PathResolver pathResolver) throws ClassNotFoundException
+    public PanelManager(GUIInstallData installDataGUI, BindeableContainer installerContainer, PathResolver pathResolver) throws ClassNotFoundException
     {
         this.installdata = installDataGUI;
         this.installerContainer = installerContainer;

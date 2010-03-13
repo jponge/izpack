@@ -21,10 +21,10 @@
 
 package com.izforge.izpack.installer.bootstrap;
 
+import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.console.ConsoleInstaller;
-import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.container.impl.ApplicationContainer;
 import com.izforge.izpack.installer.language.LanguageDialog;
 import com.izforge.izpack.util.Debug;
@@ -58,12 +58,20 @@ public class Installer
 
     public static void main(String[] args)
     {
-        Installer installer = new Installer();
-        installer.initContainer();
-        installer.start(args);
+        try
+        {
+            Installer installer = new Installer();
+            installer.initContainer();
+            installer.start(args);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
-    private void initContainer()
+    private void initContainer() throws Exception
     {
         applicationComponent = new ApplicationContainer();
         applicationComponent.initBindings();
@@ -158,7 +166,7 @@ public class Installer
         switch (type)
         {
             case INSTALLER_GUI:
-                IInstallerContainer installerContainer = applicationComponent.getComponent(IInstallerContainer.class);
+                BindeableContainer installerContainer = applicationComponent.getComponent(BindeableContainer.class);
 
                 installerContainer.getComponent(LanguageDialog.class).initLangPack();
                 installerContainer.getComponent(InstallerFrame.class).loadPanels().launchGUI();

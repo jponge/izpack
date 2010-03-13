@@ -11,7 +11,9 @@ public class CustomDataContainer extends AbstractContainer
     public CustomDataContainer(ApplicationContainer parent) throws ClassNotFoundException
     {
         pico = parent.makeChildContainer();
-
     }
 
+    public void initBindings() throws Exception
+    {
+    }
 }

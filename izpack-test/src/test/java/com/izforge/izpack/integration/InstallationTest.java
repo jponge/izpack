@@ -2,7 +2,6 @@ package com.izforge.izpack.integration;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.compiler.data.CompilerData;
-import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.language.LanguageDialog;
@@ -54,8 +53,7 @@ public class InstallationTest extends AbstractIntegrationTest
         Image image = resourceManager.getImageIconResource("/img/JFrameIcon.png").getImage();
         assertThat(image, IsNull.<Object>notNullValue());
 
-        installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
-        installerContainer.getComponent(LanguageDialog.class).initLangPack();
+        applicationContainer.getComponent(LanguageDialog.class).initLangPack();
         installerFrameFixture = prepareFrameFixture();
 
         // Hello panel
@@ -77,8 +75,7 @@ public class InstallationTest extends AbstractIntegrationTest
         data.setComprFormat("bzip2");
         data.setComprLevel(2);
         compileInstallJar(data);
-        installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
-        installerContainer.getComponent(LanguageDialog.class).initLangPack();
+        applicationContainer.getComponent(LanguageDialog.class).initLangPack();
         installerFrameFixture = prepareFrameFixture();
 
         // Hello panel
@@ -147,7 +144,6 @@ public class InstallationTest extends AbstractIntegrationTest
 
     private File prepareInstallation(GUIInstallData installData) throws IOException
     {
-        installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         File installPath = new File(installData.getInstallPath());
         FileUtils.deleteDirectory(installPath);
         assertThat(installPath.exists(), Is.is(false));

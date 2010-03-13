@@ -1,8 +1,8 @@
 package com.izforge.izpack.test;
 
+import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.merge.MergeManagerImpl;
@@ -24,7 +24,7 @@ public class PanelManagerTest
     @Mock
     private GUIInstallData installDataGUI;
     @Mock
-    private IInstallerContainer installerContainer;
+    private BindeableContainer installerContainer;
     private MergeManagerImpl mergeManager;
     private PanelManager panelManager;
 
@@ -51,8 +51,8 @@ public class PanelManagerTest
     {
         Class<?> aClass = panelManager.resolveClassName("com.izforge.izpack.panels.hello.HelloPanel");
         assertThat(aClass.getName(), Is.is("com.izforge.izpack.panels.hello.HelloPanel"));
-        aClass = panelManager.resolveClassName("com.izforge.izpack.installer.container.impl.InstallerContainer");
-        assertThat(aClass.getName(), Is.is("com.izforge.izpack.installer.container.impl.InstallerContainer"));
+        aClass = panelManager.resolveClassName("com.izforge.izpack.api.container.BindeableContainer");
+        assertThat(aClass.getName(), Is.is("com.izforge.izpack.api.container.BindeableContainer"));
     }
 
     @Test

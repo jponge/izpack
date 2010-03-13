@@ -2,7 +2,6 @@ package com.izforge.izpack.unpacker;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.integration.AbstractIntegrationTest;
@@ -27,16 +26,15 @@ public class UnpackerTest extends AbstractIntegrationTest
     public void testUnpackerPutUninstaller() throws Exception
     {
         compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
-        installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
-        PanelManager panelManager = installerContainer.getComponent(PanelManager.class);
+        PanelManager panelManager = applicationContainer.getComponent(PanelManager.class);
         panelManager.loadPanelsInContainer().instanciatePanels();
-        IUnpacker unpacker = installerContainer.getComponent(IUnpacker.class);
+        IUnpacker unpacker = applicationContainer.getComponent(IUnpacker.class);
         assertThat(unpacker, IsNull.notNullValue());
 
         unpacker.putUninstaller();
 
-        AutomatedInstallData idata = installerContainer.getComponent(AutomatedInstallData.class);
-        VariableSubstitutor variableSubstitutor = installerContainer.getComponent(VariableSubstitutor.class);
+        AutomatedInstallData idata = applicationContainer.getComponent(AutomatedInstallData.class);
+        VariableSubstitutor variableSubstitutor = applicationContainer.getComponent(VariableSubstitutor.class);
         String dest = IoHelper.translatePath(idata.getInfo().getUninstallerPath(), variableSubstitutor);
         String jar = dest + File.separator + idata.getInfo().getUninstallerName();
         File uninstallJar = new File(jar);

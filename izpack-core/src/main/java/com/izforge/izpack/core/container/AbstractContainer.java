@@ -1,11 +1,12 @@
 package com.izforge.izpack.core.container;
 
+import com.izforge.izpack.api.container.BindeableContainer;
 import org.picocontainer.MutablePicoContainer;
 
 /**
  * Abstract container for commons methods
  */
-public class AbstractContainer
+public abstract class AbstractContainer implements BindeableContainer
 {
     protected MutablePicoContainer pico;
 
