@@ -31,6 +31,10 @@
             <groupId>org.easytesting</groupId>
             <artifactId>fest-swing</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.maven.shared</groupId>
+            <artifactId>maven-shared-jar</artifactId>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -195,6 +199,13 @@
                 <groupId>org.easytesting</groupId>
                 <artifactId>fest-swing</artifactId>
                 <version>1.2a4</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.maven.shared</groupId>
+                <artifactId>maven-shared-jar</artifactId>
+                <version>1.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
