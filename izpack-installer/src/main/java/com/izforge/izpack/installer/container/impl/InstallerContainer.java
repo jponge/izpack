@@ -4,7 +4,7 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.container.AbstractChildContainer;
+import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.container.IInstallerContainer;
 import com.izforge.izpack.installer.language.LanguageDialog;
@@ -18,12 +18,12 @@ import java.awt.*;
 /**
  * Container for panel level component
  */
-public class InstallerContainer extends AbstractChildContainer implements IInstallerContainer
+public class InstallerContainer extends AbstractContainer implements IInstallerContainer
 {
 
     public InstallerContainer(ApplicationContainer parent) throws ClassNotFoundException
     {
-        super(parent);
+        pico = parent.makeChildContainer();
         initBindings();
     }
 

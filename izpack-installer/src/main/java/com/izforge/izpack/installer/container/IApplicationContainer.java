@@ -7,7 +7,6 @@ import org.picocontainer.MutablePicoContainer;
  */
 public interface IApplicationContainer
 {
-
     <T> T getComponent(final Class<T> componentType);
 
     void dispose();

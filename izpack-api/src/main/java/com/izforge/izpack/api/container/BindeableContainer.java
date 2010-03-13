@@ -15,7 +15,7 @@ public interface BindeableContainer
 
     Object getComponent(Object componentKeyOrType);
 
-    void initBindings();
+    void initBindings() throws Exception;
 
     void dispose();
 }
