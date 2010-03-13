@@ -33,6 +33,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+import javax.swing.text.Document;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -81,6 +82,7 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
         {
             textArea = new JEditorPane();
             textArea.setEditable(false);
+            textArea.getDocument().putProperty(Document.StreamDescriptionProperty, null);            
             textArea.addHyperlinkListener(this);
             JScrollPane scroller = new JScrollPane(textArea);
             textArea.setPage(loadLicence());

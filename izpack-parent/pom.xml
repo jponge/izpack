@@ -8,7 +8,7 @@
     <packaging>pom</packaging>
     <name>IzPack parent</name>
 
-    <description>IZpack parent module</description>
+    <description>IzPack parent module</description>
 
     <distributionManagement>
         <site>
@@ -197,22 +197,12 @@
                 <version>1.2a4</version>
                 <scope>test</scope>
             </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>1.5.8</version>
-            </dependency>
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>1.2.15</version>
             </dependency>
 
             <dependency>
                 <groupId>com.thoughtworks.xstream</groupId>
                 <artifactId>xstream</artifactId>
                 <version>1.3.1</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -245,6 +235,14 @@
                     <excludes>
                         <exclude>**/Abstract*</exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <configuration>
+                    <workspace>${basedir}</workspace>
+                    <workspaceCodeStylesURL>file://../src/eclipse-code-formatter.xml</workspaceCodeStylesURL>
                 </configuration>
             </plugin>
         </plugins>
