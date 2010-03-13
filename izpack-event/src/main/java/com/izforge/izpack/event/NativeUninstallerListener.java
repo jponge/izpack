@@ -22,7 +22,6 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.api.exception.WrappedNativeLibException;
 
 /**
  * This class implements some methods which are needed by installer custom actions with native
@@ -36,37 +35,14 @@ public class NativeUninstallerListener extends SimpleUninstallerListener
     /**
      * The packs locale database.
      */
-    protected static LocaleDatabase langpack = null;
+    protected static LocaleDatabase langpack;
 
     /**
      * Default constructor.
      */
-    public NativeUninstallerListener()
+    public NativeUninstallerListener(LocaleDatabase langpack)
     {
         super();
-        // Create langpack for error messages.
-        if (langpack == null)
-        {
-            // Load langpack. Do not stop uninstall if not found.
-            try
-            {
-                NativeUninstallerListener.langpack = new LocaleDatabase(
-                        NativeUninstallerListener.class.getResourceAsStream("/langpack.xml"));
-                WrappedNativeLibException.setLangpack(NativeUninstallerListener.langpack);
-            }
-            catch (Throwable exception)
-            {
-            }
-        }
-    }
-
-    /**
-     * Returns the langpack.
-     *
-     * @return Returns the langpack.
-     */
-    public static LocaleDatabase getLangpack()
-    {
-        return langpack;
+        this.langpack = langpack;
     }
 }

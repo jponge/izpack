@@ -26,7 +26,6 @@ import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.helper.SummaryProcessor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,11 +42,13 @@ public class SummaryLoggerInstallerListener extends SimpleInstallerListener
 
     /**
      * Default constructor.
+     *
+     * @param variableSubstitutor
      */
-    public SummaryLoggerInstallerListener()
+    public SummaryLoggerInstallerListener(VariableSubstitutor variableSubstitutor)
     {
         super(false);
-        variableSubstitutor = new VariableSubstitutorImpl(getInstalldata().getVariables());
+        this.variableSubstitutor = variableSubstitutor;
     }
 
     /*
