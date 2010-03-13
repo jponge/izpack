@@ -5,6 +5,8 @@ import com.izforge.izpack.test.Container;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -33,10 +35,30 @@ public class
     protected Object createTest() throws Exception
     {
         Class<? extends BindeableContainer> containerClass = getTestClass().getJavaClass().getAnnotation(Container.class).value();
-        BindeableContainer installerContainer = containerClass.newInstance();
+        BindeableContainer installerContainer = getContainerInstance(containerClass);
         installerContainer.initBindings();
         installerContainer.addComponent(klass);
         Object component = installerContainer.getComponent(klass);
         return component;
+    }
+
+    private BindeableContainer getContainerInstance(Class<? extends BindeableContainer> containerClass) throws InvocationTargetException, IllegalAccessException, InstantiationException
+    {
+        Constructor<? extends BindeableContainer> constructor = getUniqueConstructor(containerClass);
+        if (constructor.getParameterTypes().length == 1)
+        {
+            return constructor.newInstance(klass);
+        }
+        return constructor.newInstance();
+    }
+
+    private Constructor<? extends BindeableContainer> getUniqueConstructor(Class<? extends BindeableContainer> containerClass)
+    {
+        Constructor<?>[] constructors = containerClass.getConstructors();
+        if (constructors.length > 1)
+        {
+            throw new IllegalArgumentException("There should be only one constructor for " + containerClass);
+        }
+        return (Constructor<? extends BindeableContainer>) constructors[0];
     }
 }
