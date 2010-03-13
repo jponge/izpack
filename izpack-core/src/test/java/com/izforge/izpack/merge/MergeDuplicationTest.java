@@ -2,10 +2,13 @@ package com.izforge.izpack.merge;
 
 import com.izforge.izpack.matcher.DuplicateMatcher;
 import com.izforge.izpack.matcher.ZipMatcher;
+import com.izforge.izpack.merge.container.TestMergeContainer;
 import com.izforge.izpack.merge.resolve.PathResolver;
+import com.izforge.izpack.test.Container;
+import com.izforge.izpack.test.junit.PicoRunner;
 import org.apache.tools.zip.ZipOutputStream;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,16 +22,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Anthonin Bonnefoy
  */
+@RunWith(PicoRunner.class)
+@Container(TestMergeContainer.class)
 public class MergeDuplicationTest
 {
     private PathResolver pathResolver;
 
-    @Before
-    public void setUp()
+    public MergeDuplicationTest(PathResolver pathResolver)
     {
-        this.pathResolver = new PathResolver();
+        this.pathResolver = pathResolver;
     }
-
 
     @Test
     public void testAddJarDuplicated() throws Exception

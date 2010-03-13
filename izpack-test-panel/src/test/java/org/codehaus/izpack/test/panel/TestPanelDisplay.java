@@ -1,6 +1,7 @@
 package org.codehaus.izpack.test.panel;
 
 import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -24,7 +25,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 @RunWith(PicoRunner.class)
 @Container(TestContainer.class)
-public class TestFinishPanel
+public class TestPanelDisplay
 {
 
     private GUIInstallData guiInstallData;
@@ -32,7 +33,7 @@ public class TestFinishPanel
     private ResourceManager resourceManager;
     private InstallerFrame installerFrame;
 
-    public TestFinishPanel(GUIInstallData guiInstallData, InstallerFrame installerFrame, ResourceManager resourceManager, FrameFixture frameFixture)
+    public TestPanelDisplay(GUIInstallData guiInstallData, InstallerFrame installerFrame, ResourceManager resourceManager, FrameFixture frameFixture, BindeableContainer container)
     {
         this.guiInstallData = guiInstallData;
         this.installerFrame = installerFrame;
@@ -54,6 +55,15 @@ public class TestFinishPanel
         addPanelAndShow("com.izforge.izpack.panels.htmlinfo.HTMLInfoPanel");
         String textArea = frameFixture.textBox(GuiId.HTML_INFO_PANEL_TEXT.id).text();
         assertThat(textArea, StringContains.containsString("This is a test"));
+    }
+
+    @Test
+    public void licencePanelShouldDisplayText() throws Exception
+    {
+        resourceManager.setResourceBasePath("/org/codehaus/izpack/test/panel/");
+        addPanelAndShow("com.izforge.izpack.panels.licence.LicencePanel");
+        String textArea = frameFixture.textBox(GuiId.LICENCE_TEXT_AREA.id).text();
+        assertThat(textArea, StringContains.containsString("This is a licenSe panel"));
     }
 
     @Test
