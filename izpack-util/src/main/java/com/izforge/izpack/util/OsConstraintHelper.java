@@ -118,7 +118,7 @@ public class OsConstraintHelper
      */
     public static boolean oneMatchesCurrentSystem(List<OsModel> constraint_list)
     {
-        if (constraint_list.isEmpty())
+        if (constraint_list == null || constraint_list.isEmpty())
         {
             return true;
         }
