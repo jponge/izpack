@@ -123,7 +123,7 @@ public class PathResolverTest
     @Test
     public void testIsJarWithURL() throws Exception
     {
-        URL fileResource = ClassLoader.getSystemResource("com/izforge/izpack/merge/Mergeable.class");
+        URL fileResource = ClassLoader.getSystemResource("com/izforge/izpack/merge/AbstractMerge.class");
         URL jarResource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
         assertThat(pathResolver.isJar(
                 fileResource),
@@ -136,7 +136,7 @@ public class PathResolverTest
     @Test
     public void testIsJarWithFile() throws Exception
     {
-        File fileResource = new File(ClassLoader.getSystemResource("com/izforge/izpack/merge/Mergeable.class").getFile());
+        File fileResource = new File(ClassLoader.getSystemResource("com/izforge/izpack/merge/AbstractMerge.class").getFile());
         File jarResource = new File(ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar").getFile());
         assertThat(pathResolver.isJar(
                 fileResource),

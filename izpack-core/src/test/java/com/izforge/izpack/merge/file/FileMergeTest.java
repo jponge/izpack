@@ -44,7 +44,7 @@ public class FileMergeTest
         URL url = ClassLoader.getSystemResource("com/izforge/izpack/merge/test");
         FileMerge fileMerge = new FileMerge(url, "my/dest/path/", mergeContent);
         assertThat(fileMerge,
-                MergeMatcher.isMergeableContainingFiles("my/dest/path/.placeholder", "my/dest/path/test/izpack-panel-5.0.0-SNAPSHOT.jar"));
+                MergeMatcher.isMergeableContainingFiles("my/dest/path/.placeholder", "my/dest/path/izpack-panel-5.0.0-SNAPSHOT.jar"));
     }
 
     @Test
