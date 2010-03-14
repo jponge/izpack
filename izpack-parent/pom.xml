@@ -275,4 +275,24 @@
             <url>http://fest.googlecode.com/svn/trunk/fest/m2/repository/</url>
         </repository>
     </repositories>
+
+    <profiles>
+        <profile>
+            <id>bamboo</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/Abstract*</exclude>
+                                <exclude>**/LanguageDialogTest.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

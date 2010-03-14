@@ -1,6 +1,6 @@
 package com.izforge.izpack.matcher;
 
-import com.izforge.izpack.merge.Mergeable;
+import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.mock.MockOutputStream;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

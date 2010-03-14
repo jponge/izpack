@@ -1,5 +1,7 @@
 package com.izforge.izpack.merge;
 
+import com.izforge.izpack.api.merge.Mergeable;
+
 /**
  * Manager for all the merging logic.
  *

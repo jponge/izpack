@@ -1,5 +1,6 @@
 package com.izforge.izpack.merge;
 
+import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.matcher.DuplicateMatcher;
 import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.merge.container.TestMergeContainer;

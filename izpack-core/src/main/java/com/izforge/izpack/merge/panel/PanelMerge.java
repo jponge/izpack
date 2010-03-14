@@ -1,8 +1,8 @@
 package com.izforge.izpack.merge.panel;
 
 import com.izforge.izpack.api.exception.MergeException;
+import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.merge.ClassResolver;
-import com.izforge.izpack.merge.Mergeable;
 import org.apache.tools.zip.ZipOutputStream;
 
 import java.io.File;

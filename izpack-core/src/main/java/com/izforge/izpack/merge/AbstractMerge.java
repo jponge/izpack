@@ -1,5 +1,7 @@
 package com.izforge.izpack.merge;
 
+import com.izforge.izpack.api.merge.Mergeable;
+
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.izforge.izpack.merge.resolve;
 
+import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.matcher.MergeMatcher;
-import com.izforge.izpack.merge.Mergeable;
 import com.izforge.izpack.merge.jar.JarMerge;
 import org.hamcrest.collection.IsCollectionContaining;
 import org.hamcrest.core.Is;
@@ -69,7 +69,6 @@ public class PathResolverTest
     public void testResolvePathOfDirectory() throws Exception
     {
         List<URL> urlList = pathResolver.resolvePath("com/izforge/izpack/merge/");
-        assertThat(urlList.size(), Is.is(1));
         assertThat(getListPathFromListURL(urlList), IsCollectionContaining.hasItems(
                 IsNot.not(StringContains.containsString("jar!")),
                 StringContains.containsString("target/classes")
@@ -99,9 +98,8 @@ public class PathResolverTest
     public void testGetMergeableFromDirectory() throws Exception
     {
         List<Mergeable> mergeables = pathResolver.getMergeableFromPath("com/izforge/izpack/merge/");
-        assertThat(mergeables.size(), Is.is(1));
-        Mergeable mergeable = mergeables.get(0);
-        assertThat(mergeable, MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/merge/resolve/PathResolver.class"));
+        assertThat(mergeables, IsCollectionContaining.hasItem(
+                MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/merge/resolve/PathResolver.class")));
     }
 
     @Test

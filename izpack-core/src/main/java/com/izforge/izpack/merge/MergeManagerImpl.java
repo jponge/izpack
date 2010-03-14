@@ -1,5 +1,6 @@
 package com.izforge.izpack.merge;
 
+import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import org.apache.tools.zip.ZipOutputStream;
 

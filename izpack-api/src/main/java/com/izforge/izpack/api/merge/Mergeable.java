@@ -1,4 +1,4 @@
-package com.izforge.izpack.merge;
+package com.izforge.izpack.api.merge;
 
 import org.apache.tools.zip.ZipOutputStream;
 

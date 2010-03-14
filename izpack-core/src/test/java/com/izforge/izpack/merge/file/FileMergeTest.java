@@ -33,17 +33,18 @@ public class FileMergeTest
     @Test
     public void testMergeDirectory() throws Exception
     {
-        URL url = ClassLoader.getSystemResource("com/izforge/izpack/merge/");
+        URL url = ClassLoader.getSystemResource("com/izforge/izpack/merge/test");
         FileMerge fileMerge = new FileMerge(url, mergeContent);
-        assertThat(fileMerge, MergeMatcher.isMergeableContainingFile("merge/test/.placeholder"));
+        assertThat(fileMerge, MergeMatcher.isMergeableContainingFile("test/.placeholder"));
     }
 
     @Test
     public void testMergeDirectoryWithDestination() throws Exception
     {
-        URL url = ClassLoader.getSystemResource("com/izforge/izpack/merge/");
+        URL url = ClassLoader.getSystemResource("com/izforge/izpack/merge/test");
         FileMerge fileMerge = new FileMerge(url, "my/dest/path/", mergeContent);
-        assertThat(fileMerge, MergeMatcher.isMergeableContainingFiles("my/dest/path/MergeManagerTest.class", "my/dest/path/test/.placeholder"));
+        assertThat(fileMerge,
+                MergeMatcher.isMergeableContainingFiles("my/dest/path/.placeholder", "my/dest/path/test/izpack-panel-5.0.0-SNAPSHOT.jar"));
     }
 
     @Test
