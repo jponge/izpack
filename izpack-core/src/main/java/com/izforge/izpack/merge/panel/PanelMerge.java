@@ -18,8 +18,6 @@ import java.util.Map;
  */
 public class PanelMerge implements Mergeable
 {
-
-    // TODO Externalize this field in a property
     private List<Mergeable> packageMerge;
     private String panelName;
     private FileFilter fileFilter;

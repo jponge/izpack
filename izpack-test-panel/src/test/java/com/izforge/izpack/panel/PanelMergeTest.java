@@ -1,6 +1,7 @@
-package com.izforge.izpack.merge.panel;
+package com.izforge.izpack.panel;
 
 import com.izforge.izpack.matcher.MergeMatcher;
+import com.izforge.izpack.merge.panel.PanelMerge;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import org.hamcrest.core.Is;
 import org.junit.Before;

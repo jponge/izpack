@@ -244,6 +244,7 @@
                 <configuration>
                     <excludes>
                         <exclude>**/Abstract*</exclude>
+                        <exclude>**/Test*Container*</exclude>
                     </excludes>
                 </configuration>
             </plugin>
