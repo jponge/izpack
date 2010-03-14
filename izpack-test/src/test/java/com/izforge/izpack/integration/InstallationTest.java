@@ -1,8 +1,8 @@
 package com.izforge.izpack.integration;
 
 import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.compiler.data.CompilerData;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.language.LanguageDialog;
 import org.apache.commons.io.FileUtils;

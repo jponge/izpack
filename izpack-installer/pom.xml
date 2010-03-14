@@ -20,6 +20,10 @@
             <artifactId>izpack-gui</artifactId>
         </dependency>
         <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-test-common</artifactId>
+        </dependency>
+        <dependency>
             <groupId>jakarta-regexp</groupId>
             <artifactId>jakarta-regexp</artifactId>
         </dependency>

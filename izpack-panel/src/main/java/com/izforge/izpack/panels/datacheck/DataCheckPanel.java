@@ -28,16 +28,13 @@
 
 package com.izforge.izpack.panels.datacheck;
 
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
 
-import javax.swing.BoxLayout;
-import javax.swing.JEditorPane;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;

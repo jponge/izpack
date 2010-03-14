@@ -2,10 +2,10 @@ package org.codehaus.izpack.test.panel;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.junit.PicoRunner;
 import org.codehaus.izpack.test.container.TestPanelContainer;

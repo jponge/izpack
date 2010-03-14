@@ -21,9 +21,9 @@
 
 package com.izforge.izpack.panels.extendedinstall;
 
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.install.InstallPanel;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 

@@ -1,10 +1,10 @@
 package com.izforge.izpack.installer.language;
 
 import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Debug;
 
 import javax.swing.*;

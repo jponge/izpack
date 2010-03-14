@@ -1,12 +1,12 @@
 package com.izforge.izpack.installer.container.provider;
 
+import com.izforge.izpack.api.data.GUIInstallData;
+import com.izforge.izpack.api.data.GUIPrefs;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.container.impl.CustomDataContainer;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;

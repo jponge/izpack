@@ -21,15 +21,14 @@
 
 package com.izforge.izpack.panels.summary;
 
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.helper.SummaryProcessor;
 
-import javax.swing.JEditorPane;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
 /**
  * Summary panel to use before InstallPanel. This panel calls the {@link SummaryProcessor} which

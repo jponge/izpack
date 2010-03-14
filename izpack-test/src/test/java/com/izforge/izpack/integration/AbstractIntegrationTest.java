@@ -52,14 +52,8 @@ public class AbstractIntegrationTest
 
     private void deleteLock() throws IOException
     {
-        File file = new File(System.getProperty("java.io.tmpdir"), "iz-" + LanguageSelectionTest.APPNAME + ".tmp");
+        File file = new File(System.getProperty("java.io.tmpdir"), "iz-" + APPNAME + ".tmp");
         FileUtils.deleteQuietly(file);
-    }
-
-    @AfterMethod
-    public void deleteTempJar() throws IOException
-    {
-//        FileUtils.forceDelete(out);
     }
 
     /**

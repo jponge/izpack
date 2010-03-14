@@ -22,16 +22,13 @@
 package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.gui.IzPanelConstraints;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LayoutConstants;
-import com.izforge.izpack.installer.data.GUIInstallData;
 
-import javax.swing.JComponent;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.LayoutManager2;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * This class manages the layout for IzPanels. The layout related methods in IzPanel delegates the

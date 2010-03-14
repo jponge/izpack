@@ -1,9 +1,9 @@
 package com.izforge.izpack.test;
 
 import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.merge.MergeManagerImpl;
 import com.izforge.izpack.merge.resolve.PathResolver;

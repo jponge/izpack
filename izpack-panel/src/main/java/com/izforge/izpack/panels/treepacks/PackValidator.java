@@ -24,8 +24,8 @@
 
 package com.izforge.izpack.panels.treepacks;
 
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.installer.data.GUIInstallData;
 
 
 /**

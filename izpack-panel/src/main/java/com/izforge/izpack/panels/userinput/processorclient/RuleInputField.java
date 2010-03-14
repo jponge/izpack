@@ -21,8 +21,8 @@
 
 package com.izforge.izpack.panels.userinput.processorclient;
 
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.userinput.RuleTextField;
 import com.izforge.izpack.panels.userinput.processor.Processor;
 import com.izforge.izpack.panels.userinput.validator.Validator;
@@ -30,12 +30,10 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.apache.regexp.RE;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;

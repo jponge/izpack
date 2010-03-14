@@ -21,8 +21,8 @@
 
 package com.izforge.izpack.panels.userinput;
 
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.userinput.validator.ValidatorContainer;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;

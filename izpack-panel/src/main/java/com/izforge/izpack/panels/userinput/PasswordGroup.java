@@ -21,14 +21,14 @@
 
 package com.izforge.izpack.panels.userinput;
 
-import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.panels.userinput.processor.Processor;
 import com.izforge.izpack.panels.userinput.processorclient.ProcessingClient;
 import com.izforge.izpack.panels.userinput.validator.Validator;
 import com.izforge.izpack.panels.userinput.validator.ValidatorContainer;
 import com.izforge.izpack.util.Debug;
 
-import javax.swing.JPasswordField;
+import javax.swing.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;

@@ -17,12 +17,9 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer.data;
+package com.izforge.izpack.api.data;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.data.GUIPrefs;
 
 import javax.swing.*;
 import java.awt.*;

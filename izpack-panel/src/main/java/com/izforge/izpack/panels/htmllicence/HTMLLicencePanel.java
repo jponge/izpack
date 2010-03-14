@@ -20,17 +20,14 @@
 package com.izforge.izpack.panels.htmllicence;
 
 import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JEditorPane;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.Document;
@@ -82,7 +79,7 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
         {
             textArea = new JEditorPane();
             textArea.setEditable(false);
-            textArea.getDocument().putProperty(Document.StreamDescriptionProperty, null);            
+            textArea.getDocument().putProperty(Document.StreamDescriptionProperty, null);
             textArea.addHyperlinkListener(this);
             JScrollPane scroller = new JScrollPane(textArea);
             textArea.setPage(loadLicence());
