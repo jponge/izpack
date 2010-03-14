@@ -83,7 +83,7 @@ public class InstallerContainer extends AbstractContainer
         ResourceManager resourceManager = pico.getComponent(ResourceManager.class);
         // Dummy Frame
         JFrame frame = new JFrame();
-        ImageIcon imageIcon = null;
+        ImageIcon imageIcon;
         try
         {
             imageIcon = resourceManager.getImageIconResource("JFrameIcon");

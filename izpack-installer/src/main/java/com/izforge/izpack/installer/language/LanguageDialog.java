@@ -114,10 +114,10 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
         contentPane.add(label1);
 
         gbConstraints.insets = new Insets(5, 5, 5, 5);
-        Object[] items = resourceManager.getAvailableLangPacks().toArray();
-        items = reviseItems(items);
+        Object[] listAvaibleLangPacks = resourceManager.getAvailableLangPacks().toArray();
+        listAvaibleLangPacks = reviseItems(listAvaibleLangPacks);
 
-        comboBox = new JComboBox(items);
+        comboBox = new JComboBox(listAvaibleLangPacks);
         comboBox.setName(GuiId.COMBO_BOX_LANG_FLAG.id);
         if (useFlags())
         {
