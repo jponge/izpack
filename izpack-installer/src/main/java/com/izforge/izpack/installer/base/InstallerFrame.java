@@ -641,44 +641,7 @@ public class InstallerFrame extends JFrame
             // oldPanel.makeXMLData(installdata.xmlData.getChildAtIndex(oldIndex));
             // No previos button in the first visible newPanel
 
-            if (panelManager.isVisible(installdata.getCurPanelNumber()))
-            {
-                prevButton.setVisible(false);
-                lockPrevButton();
-                unlockNextButton(); // if we push the button back at the license
-                // newPanel
-            }
-            // Only the exit button in the oldIndex newPanel.
-            else if (panelManager.isLast(installdata.getCurPanelNumber()))
-            {
-                prevButton.setVisible(false);
-                nextButton.setVisible(false);
-                lockNextButton();
-            }
-            else
-            {
-                if (hasNavigatePrevious(installdata.getCurPanelNumber(), true) != -1)
-                {
-                    prevButton.setVisible(true);
-                    unlockPrevButton();
-                }
-                else
-                {
-                    lockPrevButton();
-                    prevButton.setVisible(false);
-                }
-                if (hasNavigateNext(installdata.getCurPanelNumber(), true) != -1)
-                {
-                    nextButton.setVisible(true);
-                    unlockNextButton();
-                }
-                else
-                {
-                    lockNextButton();
-                    nextButton.setVisible(false);
-                }
-
-            }
+            configureButtonVisibility();
             // With VM version >= 1.5 setting default button one time will not work.
             // Therefore we set it every newPanel switch and that also later. But in
             // the moment it seems so that the quit button will not used as default button.
@@ -775,6 +738,48 @@ public class InstallerFrame extends JFrame
         catch (Exception err)
         {
             err.printStackTrace();
+        }
+    }
+
+    private void configureButtonVisibility()
+    {
+        if (panelManager.isVisible(installdata.getCurPanelNumber()))
+        {
+            prevButton.setVisible(false);
+            lockPrevButton();
+            unlockNextButton(); // if we push the button back at the license panel
+        }
+        // Only the exit button in the last panel.
+        else if (panelManager.isLast(installdata.getCurPanelNumber()))
+        {
+            prevButton.setVisible(false);
+            nextButton.setVisible(false);
+            lockNextButton();
+        }
+        else
+        {
+            if (hasNavigatePrevious(installdata.getCurPanelNumber(), true) != -1)
+            {
+                prevButton.setVisible(true);
+                unlockPrevButton();
+            }
+            else
+            {
+                lockPrevButton();
+                prevButton.setVisible(false);
+            }
+
+            if (hasNavigateNext(installdata.getCurPanelNumber(), true) != -1)
+            {
+                nextButton.setVisible(true);
+                unlockNextButton();
+            }
+            else
+            {
+                lockNextButton();
+                nextButton.setVisible(false);
+            }
+
         }
     }
 
