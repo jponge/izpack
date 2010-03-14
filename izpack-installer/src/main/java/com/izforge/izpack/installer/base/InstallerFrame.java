@@ -716,7 +716,7 @@ public class InstallerFrame extends JFrame
                 }
             }
             performHeading(newPanel);
-            performHeadingCounter(newPanel);
+            performHeadingCounter();
             newPanel.executePreActivationActions();
             newPanel.panelActivate();
             panelsContainer.setVisible(true);
@@ -1875,7 +1875,7 @@ public class InstallerFrame extends JFrame
 
     }
 
-    private void performHeadingCounter(IzPanel panel)
+    private void performHeadingCounter()
     {
         if (headingCounterComponent != null)
         {
