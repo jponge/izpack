@@ -18,6 +18,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Test of unpacker
  */
+@Test(groups = "integration")
 public class UnpackerTest extends AbstractIntegrationTest
 {
 
