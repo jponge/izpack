@@ -22,11 +22,10 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.helper.SummaryProcessor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,42 +36,51 @@ import java.io.FileOutputStream;
  *
  * @author Klaus Bartz
  */
-public class SummaryLoggerInstallerListener extends SimpleInstallerListener {
+public class SummaryLoggerInstallerListener extends SimpleInstallerListener
+{
     private VariableSubstitutor variableSubstitutor;
 
     /**
      * Default constructor.
+     *
+     * @param variableSubstitutor
      */
-    public SummaryLoggerInstallerListener() {
+    public SummaryLoggerInstallerListener(VariableSubstitutor variableSubstitutor)
+    {
         super(false);
-        variableSubstitutor = new VariableSubstitutorImpl(getInstalldata().getVariables());
+        this.variableSubstitutor = variableSubstitutor;
     }
 
     /*
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
-     * com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
-            throws Exception {
-        if (!getInstalldata().isInstallSuccess()) {
+            throws Exception
+    {
+        if (!getInstalldata().isInstallSuccess())
+        {
             return;
         }
         // No logfile at automated installation because panels are not
         // involved.
-        if (getInstalldata().getPanels() == null || getInstalldata().getPanels().size() < 1) {
+        if (getInstalldata().getPanels() == null || getInstalldata().getPanels().size() < 1)
+        {
             return;
         }
         String path = getInstalldata().getInfo().getSummaryLogFilePath();
-        if (path == null) {
+        if (path == null)
+        {
             return;
         }
         path = IoHelper.translatePath(path, variableSubstitutor);
         File parent = new File(path).getParentFile();
 
-        if (!parent.exists()) {
+        if (!parent.exists())
+        {
             parent.mkdirs();
         }
 

@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.core.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -31,7 +32,8 @@ import com.izforge.izpack.util.Debug;
  *
  * @author Dennis Reil,<izpack@reil-online.de>
  */
-public class VariableExistenceCondition extends Condition {
+public class VariableExistenceCondition extends Condition
+{
     private static final long serialVersionUID = -7424383017678759732L;
 
     private String variable;
@@ -43,7 +45,8 @@ public class VariableExistenceCondition extends Condition {
 
 
     @Override
-    public boolean isTrue() {
+    public boolean isTrue()
+    {
         boolean result = false;
         String value = this.installdata.getVariable(this.variable);
         if (value != null)
@@ -54,7 +57,8 @@ public class VariableExistenceCondition extends Condition {
     }
 
     @Override
-    public void readFromXML(IXMLElement xmlcondition) {
+    public void readFromXML(IXMLElement xmlcondition)
+    {
         if (xmlcondition != null)
         {
             IXMLElement variableElement = xmlcondition.getFirstChildNamed("variable");

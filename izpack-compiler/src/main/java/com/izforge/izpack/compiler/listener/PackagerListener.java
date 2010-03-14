@@ -24,7 +24,8 @@ package com.izforge.izpack.compiler.listener;
  *
  * @author Julien Ponge
  */
-public interface PackagerListener {
+public interface PackagerListener
+{
 
     /**
      * Message priority of "debug".

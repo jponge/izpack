@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.core.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -38,11 +39,15 @@ public class UserCondition extends Condition
     private String requiredUsername;
 
     @Override
-    public boolean isTrue() {
+    public boolean isTrue()
+    {
         boolean result = false;
-        if (this.requiredUsername == null) {
+        if (this.requiredUsername == null)
+        {
             Debug.log("Expected user name not set in user condition. Condition will return false.");
-        } else {
+        }
+        else
+        {
             String actualUsername = System.getProperty("user.name");
             if ((actualUsername != null) || (actualUsername.length() >= 0))
             {
@@ -57,18 +62,23 @@ public class UserCondition extends Condition
     }
 
     @Override
-    public void readFromXML(IXMLElement xmlcondition) {
+    public void readFromXML(IXMLElement xmlcondition)
+    {
         IXMLElement userElement = xmlcondition.getFirstChildNamed("requiredusername");
 
-        if (userElement == null) {
+        if (userElement == null)
+        {
             Debug.log("Condition or type \"user\" requires child element: user");
-        } else {
+        }
+        else
+        {
             this.requiredUsername = userElement.getContent();
         }
     }
 
     @Override
-    public void makeXMLData(IXMLElement conditionRoot) {
+    public void makeXMLData(IXMLElement conditionRoot)
+    {
         XMLElementImpl requiredUserEl = new XMLElementImpl("requiredusername", conditionRoot);
         requiredUserEl.setContent(this.requiredUsername);
         conditionRoot.addChild(requiredUserEl);

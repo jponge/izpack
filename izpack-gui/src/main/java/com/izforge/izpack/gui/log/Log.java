@@ -113,7 +113,8 @@ import java.util.*;
  */
 /*---------------------------------------------------------------------------*/
 
-public class Log implements LogError, LogWarning, LogMessage {
+public class Log implements LogError, LogWarning, LogMessage
+{
 
     // --------------------------------------------------------------------------
     // Constant Definitions
@@ -229,7 +230,8 @@ public class Log implements LogError, LogWarning, LogMessage {
      * <code>getInstance()</code> to get an instance.
      */
     /*--------------------------------------------------------------------------*/
-    private Log() {
+    private Log()
+    {
         // ----------------------------------------------------
         // gain access to the install data
         // ----------------------------------------------------
@@ -239,18 +241,21 @@ public class Log implements LogError, LogWarning, LogMessage {
         // get the debug setting
         // ----------------------------------------------------
         String temp = System.getProperty(DEBUG_SWITCH);
-        if ((temp != null) && (temp.toUpperCase().equals("ON"))) {
+        if ((temp != null) && (temp.toUpperCase().equals("ON")))
+        {
             debugActive = true;
         }
 
-        if (debugActive) {
+        if (debugActive)
+        {
             // ----------------------------------------------------
             // get the list of debug channels requested
             // ----------------------------------------------------
             recordedChannels = new Hashtable<String, String>();
             channels = new Vector<String>();
             temp = System.getProperty(CHANNEL_LIST);
-            if ((temp != null) && (temp.toUpperCase().equals("ON"))) {
+            if ((temp != null) && (temp.toUpperCase().equals("ON")))
+            {
                 dumpChannels = true;
             }
 
@@ -258,7 +263,8 @@ public class Log implements LogError, LogWarning, LogMessage {
             // get the list of debug channels requested
             // ----------------------------------------------------
             temp = System.getProperty(CHANNEL_SPEC);
-            if (temp != null) {
+            if (temp != null)
+            {
                 String[] channelList = temp.split(",");
 
                 channels.addAll(Arrays.asList(channelList));
@@ -274,8 +280,10 @@ public class Log implements LogError, LogWarning, LogMessage {
      * @return the only instance of <code>Log</code>
      */
     /*--------------------------------------------------------------------------*/
-    public static Log getInstance() {
-        if (me == null) {
+    public static Log getInstance()
+    {
+        if (me == null)
+        {
             me = new Log();
         }
 
@@ -292,8 +300,10 @@ public class Log implements LogError, LogWarning, LogMessage {
      * @param detail  a string array of variable fields that should be inserted into the message text
      */
     /*--------------------------------------------------------------------------*/
-    public void addMessage(int message, String[] detail) {
-        if ((message >= LogMessage.MESSAGE_BASE) && (message < LogMessage.MAX_MESSAGE)) {
+    public void addMessage(int message, String[] detail)
+    {
+        if ((message >= LogMessage.MESSAGE_BASE) && (message < LogMessage.MAX_MESSAGE))
+        {
             messages.add(new Record(message, detail));
         }
     }
@@ -311,7 +321,8 @@ public class Log implements LogError, LogWarning, LogMessage {
      * @see java.text.MessageFormat#format(java.lang.String, java.lang.Object[])
      */
     /*--------------------------------------------------------------------------*/
-    public void addCustomMessage(String template, String[] detail) {
+    public void addCustomMessage(String template, String[] detail)
+    {
         messages.add(new Record(template, detail));
     }
 
@@ -329,8 +340,10 @@ public class Log implements LogError, LogWarning, LogMessage {
      * @see java.text.MessageFormat#format(java.lang.String, java.lang.Object[])
      */
     /*--------------------------------------------------------------------------*/
-    public void addWarning(int message, String[] detail, Throwable exception) {
-        if ((message >= LogWarning.WARNING_BASE) && (message < LogWarning.MAX_WARNING)) {
+    public void addWarning(int message, String[] detail, Throwable exception)
+    {
+        if ((message >= LogWarning.WARNING_BASE) && (message < LogWarning.MAX_WARNING))
+        {
             warnings.add(new Record(message, detail, exception));
         }
     }
@@ -350,7 +363,8 @@ public class Log implements LogError, LogWarning, LogMessage {
      * @see java.text.MessageFormat#format(java.lang.String, java.lang.Object[])
      */
     /*--------------------------------------------------------------------------*/
-    public void addCustomWarning(String template, String[] detail, Throwable exception) {
+    public void addCustomWarning(String template, String[] detail, Throwable exception)
+    {
         warnings.add(new Record(template, detail, exception));
     }
 
@@ -368,8 +382,10 @@ public class Log implements LogError, LogWarning, LogMessage {
      * @see java.text.MessageFormat#format(java.lang.String, java.lang.Object[])
      */
     /*--------------------------------------------------------------------------*/
-    public void addError(int message, String[] detail, Throwable exception) {
-        if ((message >= LogError.ERROR_BASE) && (message < LogError.MAX_ERROR)) {
+    public void addError(int message, String[] detail, Throwable exception)
+    {
+        if ((message >= LogError.ERROR_BASE) && (message < LogError.MAX_ERROR))
+        {
             errors.add(new Record(message, detail, exception));
             installData.setInstallSuccess(false);
         }
@@ -390,7 +406,8 @@ public class Log implements LogError, LogWarning, LogMessage {
      * @see java.text.MessageFormat#format(java.lang.String, java.lang.Object[])
      */
     /*--------------------------------------------------------------------------*/
-    public void addCustomError(String template, String[] detail, Throwable exception) {
+    public void addCustomError(String template, String[] detail, Throwable exception)
+    {
         errors.add(new Record(template, detail, exception));
     }
 
@@ -422,11 +439,14 @@ public class Log implements LogError, LogWarning, LogMessage {
      */
     /*--------------------------------------------------------------------------*/
     public void addDebugMessage(String template, String[] detail, String channel,
-                                Throwable exception) {
-        if (debugActive) {
+                                Throwable exception)
+    {
+        if (debugActive)
+        {
             recordedChannels.put(channel, channel);
 
-            if ((channel == null) || (channel.length() == 0) || channels.contains(channel)) {
+            if ((channel == null) || (channel.length() == 0) || channels.contains(channel))
+            {
                 Record record = new Record(template, detail, exception, channel);
 
                 debug.add(record);
@@ -443,7 +463,8 @@ public class Log implements LogError, LogWarning, LogMessage {
      * @return true if any messages have been recorded
      */
     /*--------------------------------------------------------------------------*/
-    public boolean messagesRecorded() {
+    public boolean messagesRecorded()
+    {
         return (!messages.isEmpty());
     }
 
@@ -455,7 +476,8 @@ public class Log implements LogError, LogWarning, LogMessage {
      * @return true if any warnings have been recorded
      */
     /*--------------------------------------------------------------------------*/
-    public boolean warningsRecorded() {
+    public boolean warningsRecorded()
+    {
         return (!warnings.isEmpty());
     }
 
@@ -467,7 +489,8 @@ public class Log implements LogError, LogWarning, LogMessage {
      * @return true if any errors have been recorded
      */
     /*--------------------------------------------------------------------------*/
-    public boolean errorsRecorded() {
+    public boolean errorsRecorded()
+    {
         return (!errors.isEmpty());
     }
 
@@ -478,7 +501,8 @@ public class Log implements LogError, LogWarning, LogMessage {
      * occurred during installation. If nothing has been recorded, this method returns immediately.
      */
     /*--------------------------------------------------------------------------*/
-    public void informUser() {
+    public void informUser()
+    {
         String message = "";
         int messageType = JOptionPane.WARNING_MESSAGE;
 
@@ -486,13 +510,18 @@ public class Log implements LogError, LogWarning, LogMessage {
         // fins out if there are any warnings or errors,
         // otherwise return with no action
         // ----------------------------------------------------
-        if (errorsRecorded()) {
+        if (errorsRecorded())
+        {
             messageType = JOptionPane.ERROR_MESSAGE;
             message = installData.getLangpack().getString(RESOURCE_PREFIX + "informUserFail");
-        } else if (warningsRecorded()) {
+        }
+        else if (warningsRecorded())
+        {
             messageType = JOptionPane.WARNING_MESSAGE;
             message = installData.getLangpack().getString(RESOURCE_PREFIX + "informUserPartial");
-        } else {
+        }
+        else
+        {
             return;
         }
 
@@ -507,7 +536,8 @@ public class Log implements LogError, LogWarning, LogMessage {
         // if the user has elected to write the report, present
         // the file selection dialog.
         // ----------------------------------------------------
-        if (userChoice == JOptionPane.OK_OPTION) {
+        if (userChoice == JOptionPane.OK_OPTION)
+        {
             writeReport();
         }
     }
@@ -519,7 +549,8 @@ public class Log implements LogError, LogWarning, LogMessage {
      * writes a report contianing all messages to the user selected file.
      */
     /*--------------------------------------------------------------------------*/
-    public void writeReport() {
+    public void writeReport()
+    {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser
                 .setDialogTitle(installData.getLangpack().getString(RESOURCE_PREFIX + "saveLogTitle"));
@@ -527,7 +558,8 @@ public class Log implements LogError, LogWarning, LogMessage {
                 + "LogFileName")));
         int choice = fileChooser.showSaveDialog(null);
 
-        if (choice == JFileChooser.APPROVE_OPTION) {
+        if (choice == JFileChooser.APPROVE_OPTION)
+        {
             writeReport(fileChooser.getSelectedFile().getAbsolutePath());
         }
     }
@@ -540,8 +572,10 @@ public class Log implements LogError, LogWarning, LogMessage {
      * @param file the fully qualifies name of the file to write to.
      */
     /*--------------------------------------------------------------------------*/
-    public void writeReport(String file) {
-        try {
+    public void writeReport(String file)
+    {
+        try
+        {
             FileWriter writer = new FileWriter(file);
             String text = compileReport();
 
@@ -550,14 +584,17 @@ public class Log implements LogError, LogWarning, LogMessage {
             writer.flush();
             writer.close();
         }
-        catch (Throwable exception) {
-            try {
+        catch (Throwable exception)
+        {
+            try
+            {
                 JOptionPane.showMessageDialog(null, installData.getLangpack().getString(
                         (RESOURCE_PREFIX + "reportWriteError"), new String[]{file}),
                         installData.getLangpack().getString(RESOURCE_PREFIX + "reportWriteErrorTitle"),
                         JOptionPane.ERROR_MESSAGE);
             }
-            catch (Throwable exception2) {
+            catch (Throwable exception2)
+            {
                 // What todo if writing log report fails?? We can ignore
                 // or write it exceptionally on stderr.
                 exception2.printStackTrace();
@@ -573,7 +610,8 @@ public class Log implements LogError, LogWarning, LogMessage {
      * @return the installation report
      */
     /*--------------------------------------------------------------------------*/
-    private String compileReport() {
+    private String compileReport()
+    {
         StringBuffer report = new StringBuffer();
         String dateFormat = installData.getLangpack().getString(DATE_FORMAT);
         int count;
@@ -593,11 +631,14 @@ public class Log implements LogError, LogWarning, LogMessage {
         // ----------------------------------------------------
         // insert a general warning message if appropriate
         // ----------------------------------------------------
-        if (errorsRecorded()) {
+        if (errorsRecorded())
+        {
             report.append(newline);
             report.append(installData.getLangpack().getString(RESOURCE_PREFIX + "installFailed"));
             report.append(newline);
-        } else if (warningsRecorded()) {
+        }
+        else if (warningsRecorded())
+        {
             report.append(newline);
             report.append(installData.getLangpack().getString(RESOURCE_PREFIX + "partialInstall"));
             report.append(newline);
@@ -628,7 +669,8 @@ public class Log implements LogError, LogWarning, LogMessage {
         // ----------------------------------------------------
         // insert the recorded mnessages
         // ----------------------------------------------------
-        if (messagesRecorded()) {
+        if (messagesRecorded())
+        {
             report.append(newline);
             report.append(installData.getLangpack().getString(RESOURCE_PREFIX + "messageHeading"));
             report.append(newline);
@@ -636,14 +678,16 @@ public class Log implements LogError, LogWarning, LogMessage {
 
             count = messages.size();
 
-            for (int i = 0; i < count; i++) {
+            for (int i = 0; i < count; i++)
+            {
                 report.append(buildMessage(i));
             }
         }
         // ----------------------------------------------------
         // insert the recorded warning messages
         // ----------------------------------------------------
-        if (warningsRecorded()) {
+        if (warningsRecorded())
+        {
             report.append(newline);
             report.append(installData.getLangpack().getString(RESOURCE_PREFIX + "warningHeading"));
             report.append(newline);
@@ -651,14 +695,16 @@ public class Log implements LogError, LogWarning, LogMessage {
 
             count = warnings.size();
 
-            for (int i = 0; i < count; i++) {
+            for (int i = 0; i < count; i++)
+            {
                 report.append(buildWarning(i));
             }
         }
         // ----------------------------------------------------
         // insert the recorded error messages
         // ----------------------------------------------------
-        if (errorsRecorded()) {
+        if (errorsRecorded())
+        {
             report.append(newline);
             report.append(installData.getLangpack().getString(RESOURCE_PREFIX + "errorHeading"));
             report.append(newline);
@@ -666,7 +712,8 @@ public class Log implements LogError, LogWarning, LogMessage {
 
             count = errors.size();
 
-            for (int i = 0; i < count; i++) {
+            for (int i = 0; i < count; i++)
+            {
                 report.append(buildError(i));
             }
         }
@@ -674,7 +721,8 @@ public class Log implements LogError, LogWarning, LogMessage {
         // ----------------------------------------------------
         // insert the debug messages
         // ----------------------------------------------------
-        if (debugActive) {
+        if (debugActive)
+        {
             report.append(newline);
             report.append(installData.getLangpack().getString(RESOURCE_PREFIX + "debugHeading"));
             report.append(newline);
@@ -682,7 +730,8 @@ public class Log implements LogError, LogWarning, LogMessage {
 
             count = errors.size();
 
-            for (int i = 0; i < count; i++) {
+            for (int i = 0; i < count; i++)
+            {
                 report.append(buildDebug(i));
             }
         }
@@ -702,7 +751,8 @@ public class Log implements LogError, LogWarning, LogMessage {
      * @param index the index of the requested message entry
      */
     /*--------------------------------------------------------------------------*/
-    private String buildMessage(int index) {
+    private String buildMessage(int index)
+    {
         Record record = messages.get(index);
         StringBuffer message = new StringBuffer();
 
@@ -712,12 +762,15 @@ public class Log implements LogError, LogWarning, LogMessage {
         message.append(installData.getLangpack().getString(RESOURCE_PREFIX + "messagePrefix",
                 new String[]{Integer.toString(index)}));
 
-        if (record.message >= 0) {
+        if (record.message >= 0)
+        {
             message
                     .append(installData.getLangpack().getString(MESSAGE_PREFIX
                             + Integer.toString(record.message),
                             record.variables));
-        } else {
+        }
+        else
+        {
             message.append(MessageFormat.format(record.template, (Object[]) record.variables));
         }
 
@@ -733,7 +786,8 @@ public class Log implements LogError, LogWarning, LogMessage {
      * @param index the index of the requested warning entry
      */
     /*--------------------------------------------------------------------------*/
-    private String buildWarning(int index) {
+    private String buildWarning(int index)
+    {
         Record record = warnings.get(index);
         StringBuffer message = new StringBuffer();
 
@@ -743,19 +797,23 @@ public class Log implements LogError, LogWarning, LogMessage {
         message.append(installData.getLangpack().getString(RESOURCE_PREFIX + "warningPrefix",
                 new String[]{Integer.toString(index)}));
 
-        if (record.message >= 0) {
+        if (record.message >= 0)
+        {
             message
                     .append(installData.getLangpack().getString(WARNING_PREFIX
                             + Integer.toString(record.message - LogWarning.WARNING_BASE),
                             record.variables));
-        } else {
+        }
+        else
+        {
             message.append(MessageFormat.format(record.template, (Object[]) record.variables));
         }
 
         // ----------------------------------------------------
         // append the exception
         // ----------------------------------------------------
-        if (record.exception != null) {
+        if (record.exception != null)
+        {
             message.append(newline);
             message.append(installData.getLangpack().getString(RESOURCE_PREFIX + "exceptionPrefix",
                     new String[]{record.exception.toString()}));
@@ -773,7 +831,8 @@ public class Log implements LogError, LogWarning, LogMessage {
      * @param index the index of the requested error entry
      */
     /*--------------------------------------------------------------------------*/
-    private String buildError(int index) {
+    private String buildError(int index)
+    {
         Record record = errors.get(index);
         StringBuffer message = new StringBuffer();
 
@@ -783,17 +842,21 @@ public class Log implements LogError, LogWarning, LogMessage {
         message.append(installData.getLangpack().getString(RESOURCE_PREFIX + "errorPrefix",
                 new String[]{Integer.toString(index)}));
 
-        if (record.message >= 0) {
+        if (record.message >= 0)
+        {
             message.append(installData.getLangpack().getString(ERROR_PREFIX
                     + Integer.toString(record.message - LogError.ERROR_BASE), record.variables));
-        } else {
+        }
+        else
+        {
             message.append(MessageFormat.format(record.template, (Object[]) record.variables));
         }
 
         // ----------------------------------------------------
         // append the exception
         // ----------------------------------------------------
-        if (record.exception != null) {
+        if (record.exception != null)
+        {
             message.append(newline);
             message.append(installData.getLangpack().getString(RESOURCE_PREFIX + "exceptionPrefix",
                     new String[]{record.exception.toString()}));
@@ -811,7 +874,8 @@ public class Log implements LogError, LogWarning, LogMessage {
      * @param index the index of the requested debug entry
      */
     /*--------------------------------------------------------------------------*/
-    private String buildDebug(int index) {
+    private String buildDebug(int index)
+    {
         Record record = debug.get(index);
 
         return (buildDebug(record));
@@ -825,15 +889,19 @@ public class Log implements LogError, LogWarning, LogMessage {
      * @param record the debug record
      */
     /*--------------------------------------------------------------------------*/
-    private String buildDebug(Record record) {
+    private String buildDebug(Record record)
+    {
         StringBuffer message = new StringBuffer();
 
         // ----------------------------------------------------
         // append the message text
         // ----------------------------------------------------
-        if ((record.channel == null) || (record.channel.length() == 0)) {
+        if ((record.channel == null) || (record.channel.length() == 0))
+        {
             message.append("Debug - general: ");
-        } else {
+        }
+        else
+        {
             message.append("Debug - ").append(record.channel).append(": ");
         }
 
@@ -842,7 +910,8 @@ public class Log implements LogError, LogWarning, LogMessage {
         // ----------------------------------------------------
         // append the exception
         // ----------------------------------------------------
-        if (record.exception != null) {
+        if (record.exception != null)
+        {
             message.append(newline);
             message.append(installData.getLangpack().getString(RESOURCE_PREFIX + "exceptionPrefix",
                     new String[]{record.exception.toString()}));
@@ -858,15 +927,18 @@ public class Log implements LogError, LogWarning, LogMessage {
      * Dumps the list of debug channels to stdout that have recorded messages
      */
     /*--------------------------------------------------------------------------*/
-    public void dumpRecordedChannels() {
-        if (debugActive && dumpChannels) {
+    public void dumpRecordedChannels()
+    {
+        if (debugActive && dumpChannels)
+        {
             System.out.println();
             System.out.println("The following debug channels did record messages:");
             System.out.println();
 
             Enumeration<String> list = recordedChannels.keys();
 
-            while (list.hasMoreElements()) {
+            while (list.hasMoreElements())
+            {
                 System.out.println(" - " + list.nextElement().toString());
             }
 
@@ -878,7 +950,8 @@ public class Log implements LogError, LogWarning, LogMessage {
     // class definition to handle individual entries
     // --------------------------------------------------------------------------
 
-    private class Record {
+    private class Record
+    {
 
         String channel;
 
@@ -894,31 +967,36 @@ public class Log implements LogError, LogWarning, LogMessage {
         // Constructors
         // ----------------------------------------------------
 
-        Record(int message, String[] variables) {
+        Record(int message, String[] variables)
+        {
             this.message = message;
             this.variables = variables;
         }
 
-        Record(String template, String[] variables) {
+        Record(String template, String[] variables)
+        {
             this.message = -1;
             this.template = template;
             this.variables = variables;
         }
 
-        Record(int message, String[] variables, Throwable exception) {
+        Record(int message, String[] variables, Throwable exception)
+        {
             this.message = message;
             this.variables = variables;
             this.exception = exception;
         }
 
-        Record(String template, String[] variables, Throwable exception) {
+        Record(String template, String[] variables, Throwable exception)
+        {
             this.message = -1;
             this.template = template;
             this.variables = variables;
             this.exception = exception;
         }
 
-        Record(String template, String[] variables, Throwable exception, String channel) {
+        Record(String template, String[] variables, Throwable exception, String channel)
+        {
             this.message = -1;
             this.template = template;
             this.variables = variables;

@@ -4,7 +4,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Vector;
 
-public class WinSetupDefaultCallbackHandler implements WinSetupQueueCallbackInterface {
+public class WinSetupDefaultCallbackHandler implements WinSetupQueueCallbackInterface
+{
 
     private List<SystemErrorException> exceptions;
 
@@ -20,31 +21,37 @@ public class WinSetupDefaultCallbackHandler implements WinSetupQueueCallbackInte
         return FILEOP_ABORT;
     }
 
-    public int handleCopyError(String source, String target, int errCode, String errMsg) {
+    public int handleCopyError(String source, String target, int errCode, String errMsg)
+    {
         addException(errCode, "Aborting copying " + source + " -> " + target + ": " + errMsg);
         return FILEOP_ABORT;
     }
 
-    public int handleDeleteError(String target, int errCode, String errMsg) {
+    public int handleDeleteError(String target, int errCode, String errMsg)
+    {
         addException(errCode, "Skipping deleting " + target + ": " + errMsg);
         // Skip any file delete errors
         return FILEOP_SKIP;
     }
 
-    public int handleRenameError(String source, String target, int errCode, String errMsg) {
+    public int handleRenameError(String source, String target, int errCode, String errMsg)
+    {
         addException(errCode, "Aborting renaming " + source + " -> " + target + ": " + errMsg);
         return FILEOP_ABORT;
     }
 
-    public List<SystemErrorException> getExceptions() {
+    public List<SystemErrorException> getExceptions()
+    {
         return exceptions;
     }
 
-    private void addException(String errMsg) {
+    private void addException(String errMsg)
+    {
         addException(0, errMsg);
     }
 
-    private void addException(int errCode, String errMsg) {
+    private void addException(int errCode, String errMsg)
+    {
         if (exceptions == null)
         {
             exceptions = new Vector<SystemErrorException>();

@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.userinput.processorclient;
 
 import com.izforge.izpack.panels.userinput.validator.Validator;
@@ -27,7 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StringInputProcessingClient implements ProcessingClient {
+public class StringInputProcessingClient implements ProcessingClient
+{
 
     private String input;
 
@@ -37,32 +39,39 @@ public class StringInputProcessingClient implements ProcessingClient {
 
     private String message;
 
-    public StringInputProcessingClient(String input, List<ValidatorContainer> validators) {
+    public StringInputProcessingClient(String input, List<ValidatorContainer> validators)
+    {
         this.input = input;
         this.validators = validators;
     }
 
-    public String getFieldContents(int index) {
+    public String getFieldContents(int index)
+    {
         return input;
     }
 
-    public int getNumFields() {
+    public int getNumFields()
+    {
         return 1;
     }
 
-    public String getText() {
+    public String getText()
+    {
         return this.input;
     }
 
-    public Map<String, String> getValidatorParams() {
+    public Map<String, String> getValidatorParams()
+    {
         return (currentValidator != null) ? currentValidator.getValidatorParams() : new HashMap<String, String>();
     }
 
-    public boolean hasParams() {
+    public boolean hasParams()
+    {
         return (currentValidator != null) ? currentValidator.hasParams() : false;
     }
 
-    public boolean validate() {
+    public boolean validate()
+    {
         boolean success = true;
 
         if (validators != null)

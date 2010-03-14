@@ -32,9 +32,11 @@ import java.net.ServerSocket;
  *
  * @author Thorsten Kamann <thorsten.kamann@planetes.de>
  */
-public class PortProcessor implements Processor {
+public class PortProcessor implements Processor
+{
 
-    public String process(ProcessingClient client) {
+    public String process(ProcessingClient client)
+    {
         String retValue = "";
         String host = "localhost";
         int port = 0;
@@ -43,41 +45,56 @@ public class PortProcessor implements Processor {
         InetAddress inet = null;
         ServerSocket socket = null;
 
-        try {
-            if (client.getNumFields() > 1) {
+        try
+        {
+            if (client.getNumFields() > 1)
+            {
                 host = client.getFieldContents(0);
                 oPort = Integer.parseInt(client.getFieldContents(1));
-            } else {
+            }
+            else
+            {
                 oPort = Integer.parseInt(client.getFieldContents(0));
             }
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             return getReturnValue(client, null, null);
         }
 
         port = oPort;
-        while (!found) {
-            try {
+        while (!found)
+        {
+            try
+            {
                 inet = InetAddress.getByName(host);
                 socket = new ServerSocket(port, 0, inet);
-                if (socket.getLocalPort() > 0) {
+                if (socket.getLocalPort() > 0)
+                {
                     found = true;
                     retValue = getReturnValue(client, null, String.valueOf(port));
-                } else {
+                }
+                else
+                {
                     port++;
                 }
             }
-            catch (java.net.BindException ex) {
+            catch (java.net.BindException ex)
+            {
                 port++;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return getReturnValue(client, null, null);
             }
-            finally {
-                try {
+            finally
+            {
+                try
+                {
                     socket.close();
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                 }
             }
         }
@@ -89,16 +106,20 @@ public class PortProcessor implements Processor {
      *
      * @param client The ProcessingClient
      */
-    private String getReturnValue(ProcessingClient client, String host, String port) {
+    private String getReturnValue(ProcessingClient client, String host, String port)
+    {
         String retValue = "";
         String _host = "";
         String _port = "";
 
-        if (client.getNumFields() > 1) {
+        if (client.getNumFields() > 1)
+        {
             _host = (host == null) ? client.getFieldContents(0) : host;
             _port = (port == null) ? client.getFieldContents(1) : port;
             retValue = _host + "*" + _port;
-        } else {
+        }
+        else
+        {
             _port = (port == null) ? client.getFieldContents(0) : port;
             retValue = _port;
         }

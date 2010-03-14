@@ -27,18 +27,17 @@ package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackColor;
+import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
-import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.OsConstraint;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -61,7 +60,8 @@ import java.util.zip.ZipEntry;
  * @author Chadwick McHenry
  * @see CompilerConfig
  */
-public class Compiler extends Thread {
+public class Compiler extends Thread
+{
     /**
      * Collects and packs files into installation jars, as told.
      */
@@ -85,7 +85,8 @@ public class Compiler extends Thread {
      *
      * @throws CompilerException
      */
-    public Compiler(VariableSubstitutor variableSubstitutor, PropertyManager propertyManager, CompilerHelper compilerHelper, IPackager packager) throws CompilerException {
+    public Compiler(VariableSubstitutor variableSubstitutor, PropertyManager propertyManager, CompilerHelper compilerHelper, IPackager packager) throws CompilerException
+    {
         this.propertyManager = propertyManager;
         this.propertySubstitutor = variableSubstitutor;
         this.compilerHelper = compilerHelper;
@@ -96,18 +97,25 @@ public class Compiler extends Thread {
     /**
      * The run() method.
      */
-    public void run() {
-        try {
+    public void run()
+    {
+        try
+        {
             createInstaller(); // Execute the compiler - may send info to
             // System.out
         }
-        catch (CompilerException ce) {
+        catch (CompilerException ce)
+        {
             System.out.println(ce.getMessage() + "\n");
         }
-        catch (Exception e) {
-            if (Debug.stackTracing()) {
+        catch (Exception e)
+        {
+            if (Debug.stackTracing())
+            {
                 e.printStackTrace();
-            } else {
+            }
+            else
+            {
                 System.out.println("ERROR: " + e.getMessage());
             }
         }
@@ -118,7 +126,8 @@ public class Compiler extends Thread {
      *
      * @throws Exception Description of the Exception
      */
-    public void createInstaller() throws Exception {
+    public void createInstaller() throws Exception
+    {
         // We ask the packager to create the installer
         packager.createInstaller();
         this.compileFailed = false;
@@ -129,7 +138,8 @@ public class Compiler extends Thread {
      *
      * @return whether the installation was successful or not
      */
-    public boolean wasSuccessful() {
+    public boolean wasSuccessful()
+    {
         return !this.compileFailed;
     }
 
@@ -140,7 +150,8 @@ public class Compiler extends Thread {
      *
      * @throws CompilerException
      */
-    public void checkDependencies() throws CompilerException {
+    public void checkDependencies() throws CompilerException
+    {
         checkDependencies(packager.getPacksList());
     }
 
@@ -149,7 +160,8 @@ public class Compiler extends Thread {
      *
      * @throws CompilerException
      */
-    public void checkExcludes() throws CompilerException {
+    public void checkExcludes() throws CompilerException
+    {
         checkExcludes(packager.getPacksList());
     }
 
@@ -159,17 +171,23 @@ public class Compiler extends Thread {
      * @param packs list of packs which should be checked
      * @throws CompilerException
      */
-    public void checkExcludes(List<PackInfo> packs) throws CompilerException {
-        for (int q = 0; q < packs.size(); q++) {
+    public void checkExcludes(List<PackInfo> packs) throws CompilerException
+    {
+        for (int q = 0; q < packs.size(); q++)
+        {
             PackInfo packinfo1 = packs.get(q);
             Pack pack1 = packinfo1.getPack();
-            for (int w = 0; w < q; w++) {
+            for (int w = 0; w < q; w++)
+            {
 
                 PackInfo packinfo2 = packs.get(w);
                 Pack pack2 = packinfo2.getPack();
-                if (pack1.excludeGroup != null && pack2.excludeGroup != null) {
-                    if (pack1.excludeGroup.equals(pack2.excludeGroup)) {
-                        if (pack1.preselected && pack2.preselected) {
+                if (pack1.excludeGroup != null && pack2.excludeGroup != null)
+                {
+                    if (pack1.excludeGroup.equals(pack2.excludeGroup))
+                    {
+                        if (pack1.preselected && pack2.preselected)
+                        {
                             parseError("Packs " + pack1.name + " and " + pack2.name +
                                     " belong to the same excludeGroup " + pack1.excludeGroup +
                                     " and are both preselected. This is not allowed.");
@@ -189,18 +207,23 @@ public class Compiler extends Thread {
      * @param packs - List<Pack> representing the packs in the installation
      * @throws CompilerException
      */
-    public void checkDependencies(List<PackInfo> packs) throws CompilerException {
+    public void checkDependencies(List<PackInfo> packs) throws CompilerException
+    {
         // Because we use package names in the configuration file we assosiate
         // the names with the objects
         Map<String, PackInfo> names = new HashMap<String, PackInfo>();
-        for (PackInfo pack : packs) {
+        for (PackInfo pack : packs)
+        {
             names.put(pack.getPack().name, pack);
         }
         int result = dfs(packs, names);
         // @todo More informative messages to include the source of the error
-        if (result == -2) {
+        if (result == -2)
+        {
             parseError("Circular dependency detected");
-        } else if (result == -1) {
+        }
+        else if (result == -1)
+        {
             parseError("A dependency doesn't exist");
         }
     }
@@ -214,11 +237,15 @@ public class Compiler extends Thread {
      * @param names The name map
      * @return -2 if back edges exist, else 0
      */
-    private int dfs(List<PackInfo> packs, Map<String, PackInfo> names) {
+    private int dfs(List<PackInfo> packs, Map<String, PackInfo> names)
+    {
         Map<Edge, PackColor> edges = new HashMap<Edge, PackColor>();
-        for (PackInfo pack : packs) {
-            if (pack.colour == PackColor.WHITE) {
-                if (dfsVisit(pack, names, edges) != 0) {
+        for (PackInfo pack : packs)
+        {
+            if (pack.colour == PackColor.WHITE)
+            {
+                if (dfsVisit(pack, names, edges) != 0)
+                {
                     return -1;
                 }
             }
@@ -233,11 +260,14 @@ public class Compiler extends Thread {
      * @param edges map to be checked
      * @return -2 if back edges exist, else 0
      */
-    private int checkBackEdges(Map<Edge, PackColor> edges) {
+    private int checkBackEdges(Map<Edge, PackColor> edges)
+    {
         Set<Edge> keys = edges.keySet();
-        for (final Edge key : keys) {
+        for (final Edge key : keys)
+        {
             PackColor color = edges.get(key);
-            if (color == PackColor.GREY) {
+            if (color == PackColor.GREY)
+            {
                 return -2;
             }
         }
@@ -245,40 +275,54 @@ public class Compiler extends Thread {
 
     }
 
+    public static void parseWarn(String message)
+    {
+        System.out.println("Warning: " + message);
+    }
+
     /**
      * This class is used for the classification of the edges
      */
-    private class Edge {
+    private class Edge
+    {
 
         PackInfo u;
 
         PackInfo v;
 
-        Edge(PackInfo u, PackInfo v) {
+        Edge(PackInfo u, PackInfo v)
+        {
             this.u = u;
             this.v = v;
         }
     }
 
-    private int dfsVisit(PackInfo u, Map<String, PackInfo> names, Map<Edge, PackColor> edges) {
+    private int dfsVisit(PackInfo u, Map<String, PackInfo> names, Map<Edge, PackColor> edges)
+    {
         u.colour = PackColor.GREY;
         List<String> deps = u.getDependencies();
-        if (deps != null) {
-            for (String name : deps) {
+        if (deps != null)
+        {
+            for (String name : deps)
+            {
                 PackInfo v = names.get(name);
-                if (v == null) {
+                if (v == null)
+                {
                     System.out.println("Failed to find dependency: " + name);
                     return -1;
                 }
                 Edge edge = new Edge(u, v);
-                if (edges.get(edge) == null) {
+                if (edges.get(edge) == null)
+                {
                     edges.put(edge, v.colour);
                 }
 
-                if (v.colour == PackColor.WHITE) {
+                if (v.colour == PackColor.WHITE)
+                {
 
                     final int result = dfsVisit(v, names, edges);
-                    if (result != 0) {
+                    if (result != 0)
+                    {
                         return result;
                     }
                 }
@@ -288,7 +332,8 @@ public class Compiler extends Thread {
         return 0;
     }
 
-    public URL findIzPackResource(String path, String desc) throws CompilerException {
+    public URL findIzPackResource(String path, String desc) throws CompilerException
+    {
         return findIzPackResource(path, desc, false);
     }
 
@@ -305,25 +350,36 @@ public class Compiler extends Thread {
      * @throws CompilerException
      */
     public URL findIzPackResource(String path, String desc, boolean ignoreWhenNotFound)
-            throws CompilerException {
+            throws CompilerException
+    {
         URL url = getClass().getResource("/" + path);
-        if (url == null) {
+        if (url == null)
+        {
             File resource = new File(path);
-            if (!resource.isAbsolute()) {
+            if (!resource.isAbsolute())
+            {
                 resource = new File(CompilerData.IZPACK_HOME, path);
             }
 
-            if (!resource.exists()) {
-                if (ignoreWhenNotFound) {
-                    AssertionHelper.parseWarn(desc + " not found: " + resource);
-                } else {
+            if (!resource.exists())
+            {
+                if (ignoreWhenNotFound)
+                {
+                    parseWarn(desc + " not found: " + resource);
+                }
+                else
+                {
                     parseError(desc + " not found: " + resource); // fatal
                 }
-            } else {
-                try {
+            }
+            else
+            {
+                try
+                {
                     url = resource.toURI().toURL();
                 }
-                catch (MalformedURLException how) {
+                catch (MalformedURLException how)
+                {
                     parseError(desc + "(" + resource + ")", how);
                 }
             }
@@ -339,7 +395,8 @@ public class Compiler extends Thread {
      * @param message Brief message explaining error
      * @throws CompilerException
      */
-    public void parseError(String message) throws CompilerException {
+    public void parseError(String message) throws CompilerException
+    {
         this.compileFailed = true;
         throw new CompilerException(message);
     }
@@ -352,7 +409,8 @@ public class Compiler extends Thread {
      * @param how     throwable which was catched
      * @throws CompilerException
      */
-    public void parseError(String message, Throwable how) throws CompilerException {
+    public void parseError(String message, Throwable how) throws CompilerException
+    {
         this.compileFailed = true;
         throw new CompilerException(message, how);
     }
@@ -372,15 +430,18 @@ public class Compiler extends Thread {
      * @param constraints The list of constraints.
      * @throws Exception Thrown in case an error occurs.
      */
-    public void addCustomListener(int type, String className, String jarPath, List<OsConstraint> constraints) throws Exception {
+    public void addCustomListener(int type, String className, String jarPath, List<OsModel> constraints) throws Exception
+    {
         jarPath = propertySubstitutor.substitute(jarPath, SubstitutionType.TYPE_AT);
         String fullClassName = className;
         List<String> filePaths = null;
         URL url = findIzPackResource(jarPath, "CustomAction jar file", true);
 
-        if (url != null) {
+        if (url != null)
+        {
             fullClassName = getFullClassName(url, className);
-            if (fullClassName == null) {
+            if (fullClassName == null)
+            {
                 throw new CompilerException("CustomListener class '" + className + "' not found in '"
                         + url + "'. The class and listener name must match");
             }
@@ -400,18 +461,22 @@ public class Compiler extends Thread {
      * @return full qualified class name
      * @throws Exception
      */
-    private String getFullClassName(URL url, String className) throws Exception {
+    private String getFullClassName(URL url, String className) throws Exception
+    {
         JarInputStream jis = new JarInputStream(url.openStream());
         ZipEntry zentry;
-        while ((zentry = jis.getNextEntry()) != null) {
+        while ((zentry = jis.getNextEntry()) != null)
+        {
             String name = zentry.getName();
             int lastPos = name.lastIndexOf(".class");
-            if (lastPos < 0) {
+            if (lastPos < 0)
+            {
                 continue; // No class file.
             }
             name = name.replace('/', '.');
             int pos;
-            if (className != null) {
+            if (className != null)
+            {
                 pos = name.indexOf(className);
                 if (pos >= 0 && name.length() == pos + className.length() + 6) // "Main" class
                 // found

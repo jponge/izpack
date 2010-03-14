@@ -1,6 +1,7 @@
 package com.izforge.izpack.util.os;
 
-public interface WinSetupQueueCallbackInterface {
+public interface WinSetupQueueCallbackInterface
+{
 
     // ------------------------ Callback return codes --------------------------
 

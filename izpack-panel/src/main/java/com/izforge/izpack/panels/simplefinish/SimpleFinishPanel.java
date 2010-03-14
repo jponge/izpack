@@ -19,15 +19,16 @@
 
 package com.izforge.izpack.panels.simplefinish;
 
+import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
 
+import javax.swing.*;
 import java.io.File;
 
 /**
@@ -35,7 +36,8 @@ import java.io.File;
  *
  * @author Julien Ponge
  */
-public class SimpleFinishPanel extends IzPanel {
+public class SimpleFinishPanel extends IzPanel
+{
 
     /**
      *
@@ -43,17 +45,13 @@ public class SimpleFinishPanel extends IzPanel {
     private static final long serialVersionUID = 3689911781942572085L;
 
     /**
-     * The variables substitutor.
-     */
-    private VariableSubstitutor vs;
-
-    /**
      * The constructor.
      *
      * @param parent The parent.
      * @param idata  The installation installDataGUI.
      */
-    public SimpleFinishPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public SimpleFinishPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, new IzPanelLayout(), resourceManager);
     }
 
@@ -62,37 +60,47 @@ public class SimpleFinishPanel extends IzPanel {
      *
      * @return true if the panel has been validated.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         return true;
     }
 
     /**
      * Called when the panel becomes active.
      */
-    public void panelActivate() {
+    public void panelActivate()
+    {
         parent.lockNextButton();
         parent.lockPrevButton();
         parent.setQuitButtonText(installData.getLangpack().getString("FinishPanel.done"));
         parent.setQuitButtonIcon("done");
-        if (this.installData.isInstallSuccess()) {
+        if (this.installData.isInstallSuccess())
+        {
 
             // We set the information
             add(LabelFactory.create(parent.icons.getImageIcon("check")));
             add(IzPanelLayout.createVerticalStrut(5));
-            add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.success"),
-                    parent.icons.getImageIcon("preferences"), LEADING), NEXT_LINE);
+            JLabel jLabel = LabelFactory.create(installData.getLangpack().getString("FinishPanel.success"),
+                    parent.icons.getImageIcon("preferences"), LEADING);
+            jLabel.setName(GuiId.SIMPLE_FINISH_LABEL.id);
+            add(jLabel, NEXT_LINE);
             add(IzPanelLayout.createVerticalStrut(5));
-            if (this.installData.getUninstallOutJar() != null) {
+            if (this.installData.getUninstallOutJar() != null)
+            {
                 // We prepare a message for the uninstaller feature
                 String path = translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
 
-                add(LabelFactory.create(installData.getLangpack()
+                JLabel uninstallJLabel = LabelFactory.create(installData.getLangpack()
                         .getString("FinishPanel.uninst.info"), parent.icons
-                        .getImageIcon("preferences"), LEADING), NEXT_LINE);
+                        .getImageIcon("preferences"), LEADING);
+                uninstallJLabel.setName(GuiId.SIMPLE_FINISH_UNINSTALL_LABEL.id);
+                add(uninstallJLabel, NEXT_LINE);
                 add(LabelFactory.create(path, parent.icons.getImageIcon("empty"),
                         LEADING), NEXT_LINE);
             }
-        } else {
+        }
+        else
+        {
             add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.fail"),
                     parent.icons.getImageIcon("stop"), LEADING));
         }
@@ -106,7 +114,8 @@ public class SimpleFinishPanel extends IzPanel {
      * @param destination The path to translate.
      * @return The translated path.
      */
-    private String translatePath(String destination) {
+    private String translatePath(String destination)
+    {
         // Parse for variables
         destination = variableSubstitutor.substitute(destination);
 

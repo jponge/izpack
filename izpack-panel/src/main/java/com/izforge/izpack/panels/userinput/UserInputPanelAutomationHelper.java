@@ -40,7 +40,8 @@ import java.util.Vector;
  * @author Jonathan Halliday
  * @author Elmar Grom
  */
-public class UserInputPanelAutomationHelper implements PanelAutomation {
+public class UserInputPanelAutomationHelper implements PanelAutomation
+{
 
     // ------------------------------------------------------
     // automatic script section keys
@@ -67,7 +68,8 @@ public class UserInputPanelAutomationHelper implements PanelAutomation {
      *
      * @param variableSubstitutor
      */
-    public UserInputPanelAutomationHelper(VariableSubstitutor variableSubstitutor) {
+    public UserInputPanelAutomationHelper(VariableSubstitutor variableSubstitutor)
+    {
         this.variableSubstitutor = variableSubstitutor;
         this.entries = null;
     }
@@ -76,7 +78,8 @@ public class UserInputPanelAutomationHelper implements PanelAutomation {
      * @param entries             String-String key-value pairs representing the state of the Panel
      * @param variableSubstitutor
      */
-    public UserInputPanelAutomationHelper(Map<String, String> entries, VariableSubstitutor variableSubstitutor) {
+    public UserInputPanelAutomationHelper(Map<String, String> entries, VariableSubstitutor variableSubstitutor)
+    {
         this.entries = entries;
         this.variableSubstitutor = variableSubstitutor;
     }
@@ -87,7 +90,8 @@ public class UserInputPanelAutomationHelper implements PanelAutomation {
      * @param idata     The installation installDataGUI.
      * @param panelRoot The XML root element of the panels blackbox tree.
      */
-    public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot) {
+    public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot)
+    {
         IXMLElement userInput;
         IXMLElement dataElement;
 
@@ -101,7 +105,8 @@ public class UserInputPanelAutomationHelper implements PanelAutomation {
         // add all entries
         // ----------------------------------------------------
         Iterator<String> keys = this.entries.keySet().iterator();
-        while (keys.hasNext()) {
+        while (keys.hasNext())
+        {
             String key = keys.next();
             String value = this.entries.get(key);
             dataElement = new XMLElementImpl(AUTO_KEY_ENTRY, userInput);
@@ -119,7 +124,8 @@ public class UserInputPanelAutomationHelper implements PanelAutomation {
      * @param panelRoot The XML root element of the panels blackbox tree.
      * @throws InstallerException if some elements are missing.
      */
-    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException {
+    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException
+    {
         IXMLElement userInput;
         IXMLElement dataElement;
         String variable;
@@ -130,13 +136,15 @@ public class UserInputPanelAutomationHelper implements PanelAutomation {
         // ----------------------------------------------------
         userInput = panelRoot.getFirstChildNamed(AUTO_KEY_USER_INPUT);
 
-        if (userInput == null) {
+        if (userInput == null)
+        {
             throw new InstallerException("Missing userInput element on line " + panelRoot.getLineNr());
         }
 
         Vector<IXMLElement> userEntries = userInput.getChildrenNamed(AUTO_KEY_ENTRY);
 
-        if (userEntries == null) {
+        if (userEntries == null)
+        {
             throw new InstallerException("Missing entry element(s) on line " + panelRoot.getLineNr());
         }
 
@@ -144,7 +152,8 @@ public class UserInputPanelAutomationHelper implements PanelAutomation {
         // retieve each entry and substitute the associated
         // variable
         // ----------------------------------------------------
-        for (int i = 0; i < userEntries.size(); i++) {
+        for (int i = 0; i < userEntries.size(); i++)
+        {
             dataElement = userEntries.elementAt(i);
             variable = dataElement.getAttribute(AUTO_ATTRIBUTE_KEY);
 

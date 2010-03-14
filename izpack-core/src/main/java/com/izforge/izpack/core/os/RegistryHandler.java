@@ -43,7 +43,8 @@ import java.util.Map;
  *
  * @author Klaus Bartz
  */
-public class RegistryHandler extends OSClassHelper implements MSWinConstants {
+public class RegistryHandler extends OSClassHelper implements MSWinConstants
+{
 
     public static final String UNINSTALL_ROOT = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
 
@@ -55,7 +56,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
 
     private static RegistryHandler defaultHandler = null;
 
-    static {
+    static
+    {
         ROOT_KEY_MAP.put("HKCR", HKEY_CLASSES_ROOT);
         ROOT_KEY_MAP.put("HKEY_CLASSES_ROOT", HKEY_CLASSES_ROOT);
         ROOT_KEY_MAP.put("HKCU", HKEY_CURRENT_USER);
@@ -76,7 +78,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
     /**
      * Default constructor.
      */
-    public RegistryHandler() {
+    public RegistryHandler()
+    {
         super();
     }
 
@@ -85,7 +88,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      *
      * @param className full qualified class name of the class which should be used as worker
      */
-    public RegistryHandler(String className) {
+    public RegistryHandler(String className)
+    {
         super(className);
         setDefault();
     }
@@ -93,8 +97,10 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
     /**
      * Set this object as default handler if it is not done earlier.
      */
-    private synchronized void setDefault() {
-        if (defaultHandler == null) {
+    private synchronized void setDefault()
+    {
+        if (defaultHandler == null)
+        {
             defaultHandler = this;
         }
     }
@@ -109,10 +115,12 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      * @param contents the contents for the value
      * @throws NativeLibException
      */
-    public void setValue(String key, String value, String contents) throws NativeLibException {
+    public void setValue(String key, String value, String contents) throws NativeLibException
+    {
     }
 
-    public void setValue(String key, String value, String[] contents) throws NativeLibException {
+    public void setValue(String key, String value, String[] contents) throws NativeLibException
+    {
     }
 
     /**
@@ -125,7 +133,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      * @param contents the contents for the value
      * @throws NativeLibException
      */
-    public void setValue(String key, String value, byte[] contents) throws NativeLibException {
+    public void setValue(String key, String value, byte[] contents) throws NativeLibException
+    {
     }
 
     /**
@@ -138,7 +147,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      * @param contents the contents for the value
      * @throws NativeLibException
      */
-    public void setValue(String key, String value, long contents) throws NativeLibException {
+    public void setValue(String key, String value, long contents) throws NativeLibException
+    {
     }
 
     /**
@@ -150,7 +160,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      * @return requested value if exist, else the default value
      * @throws NativeLibException
      */
-    public RegDataContainer getValue(String key, String value, RegDataContainer defaultVal) throws NativeLibException {
+    public RegDataContainer getValue(String key, String value, RegDataContainer defaultVal) throws NativeLibException
+    {
         return (null);
     }
 
@@ -161,7 +172,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      * @return whether a key exist or not
      * @throws NativeLibException
      */
-    public boolean keyExist(String key) throws NativeLibException {
+    public boolean keyExist(String key) throws NativeLibException
+    {
         return (false);
     }
 
@@ -173,7 +185,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      * @return whether a the given value under the given key exist or not
      * @throws NativeLibException
      */
-    public boolean valueExist(String key, String value) throws NativeLibException {
+    public boolean valueExist(String key, String value) throws NativeLibException
+    {
         return (false);
     }
 
@@ -184,7 +197,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      * @return all keys which are defined under the given key
      * @throws NativeLibException
      */
-    public String[] getSubkeys(String key) throws NativeLibException {
+    public String[] getSubkeys(String key) throws NativeLibException
+    {
         return (null);
     }
 
@@ -195,7 +209,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      * @return all value names which are defined under the given key
      * @throws NativeLibException
      */
-    public String[] getValueNames(String key) throws NativeLibException {
+    public String[] getValueNames(String key) throws NativeLibException
+    {
         return (null);
     }
 
@@ -207,7 +222,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      * @return requested value if exist, else an exception
      * @throws NativeLibException
      */
-    public RegDataContainer getValue(String key, String value) throws NativeLibException {
+    public RegDataContainer getValue(String key, String value) throws NativeLibException
+    {
         return (null);
     }
 
@@ -217,7 +233,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      * @param key key to be created
      * @throws NativeLibException
      */
-    public void createKey(String key) throws NativeLibException {
+    public void createKey(String key) throws NativeLibException
+    {
     }
 
     /**
@@ -226,7 +243,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      * @param key key to be deleted
      * @throws NativeLibException
      */
-    public void deleteKey(String key) throws NativeLibException {
+    public void deleteKey(String key) throws NativeLibException
+    {
     }
 
     /**
@@ -235,7 +253,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      * @param key key to be deleted
      * @throws NativeLibException
      */
-    public void deleteKeyIfEmpty(String key) throws NativeLibException {
+    public void deleteKeyIfEmpty(String key) throws NativeLibException
+    {
     }
 
     /**
@@ -245,7 +264,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      * @param value value name to be deleted
      * @throws NativeLibException
      */
-    public void deleteValue(String key, String value) throws NativeLibException {
+    public void deleteValue(String key, String value) throws NativeLibException
+    {
     }
 
     /**
@@ -254,7 +274,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      * @param i an integer which refers to a HKEY
      * @throws NativeLibException
      */
-    public void setRoot(int i) throws NativeLibException {
+    public void setRoot(int i) throws NativeLibException
+    {
     }
 
     /**
@@ -263,7 +284,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      * @return the root as integer
      * @throws NativeLibException
      */
-    public int getRoot() throws NativeLibException {
+    public int getRoot() throws NativeLibException
+    {
         return (0);
     }
 
@@ -278,7 +300,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      * @param flagVal true to have the previous contents of registry
      *                values logged by the 'setValue()' method.
      */
-    public void setLogPrevSetValueFlag(boolean flagVal) {
+    public void setLogPrevSetValueFlag(boolean flagVal)
+    {
     }
 
     /**
@@ -288,7 +311,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      * @return true if the previous contents of registry values will be
      *         logged by the 'setValue()' method.
      */
-    public boolean getLogPrevSetValueFlag() {
+    public boolean getLogPrevSetValueFlag()
+    {
         return (true);
     }
 
@@ -297,7 +321,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      *
      * @throws NativeLibException
      */
-    public void activateLogging() throws NativeLibException {
+    public void activateLogging() throws NativeLibException
+    {
     }
 
     /**
@@ -305,7 +330,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      *
      * @throws NativeLibException
      */
-    public void suspendLogging() throws NativeLibException {
+    public void suspendLogging() throws NativeLibException
+    {
     }
 
     /**
@@ -313,35 +339,45 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      *
      * @throws NativeLibException
      */
-    public void resetLogging() throws NativeLibException {
+    public void resetLogging() throws NativeLibException
+    {
     }
 
-    public List<Object> getLoggingInfo() throws NativeLibException {
+    public List<Object> getLoggingInfo() throws NativeLibException
+    {
         return (null);
     }
 
-    public void setLoggingInfo(List info) throws NativeLibException {
+    public void setLoggingInfo(List info) throws NativeLibException
+    {
     }
 
-    public void addLoggingInfo(List info) throws NativeLibException {
+    public void addLoggingInfo(List info) throws NativeLibException
+    {
     }
 
-    public void rewind() throws NativeLibException {
+    public void rewind() throws NativeLibException
+    {
     }
 
-    public String getUninstallName() {
-        if (uninstallName != null) {
+    public String getUninstallName()
+    {
+        if (uninstallName != null)
+        {
             return (uninstallName);
         }
-        if (installdata == null) {
+        if (installdata == null)
+        {
             return (null);
         }
         return (installdata.getVariable("APP_NAME") + " " + installdata.getVariable("APP_VER"));
     }
 
-    public boolean isProductRegistered() throws NativeLibException {
+    public boolean isProductRegistered() throws NativeLibException
+    {
         String uninstallName = getUninstallName();
-        if (uninstallName == null) {
+        if (uninstallName == null)
+        {
             return (false);
         }
         String keyName = UNINSTALL_ROOT + uninstallName;
@@ -354,13 +390,16 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
         return (retval);
     }
 
-    public void setUninstallName(String name) {
+    public void setUninstallName(String name)
+    {
         uninstallName = name;
     }
 
-    public void registerUninstallKey() throws NativeLibException {
+    public void registerUninstallKey() throws NativeLibException
+    {
         String uninstallName = getUninstallName();
-        if (uninstallName == null) {
+        if (uninstallName == null)
+        {
             return;
         }
         String keyName = UNINSTALL_ROOT + uninstallName;
@@ -370,22 +409,26 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
         String appUrl = installdata.getVariable("APP_URL");
 
         int oldVal = getRoot();
-        try {
+        try
+        {
             setRoot(HKEY_LOCAL_MACHINE);
             setValue(keyName, "DisplayName", uninstallName);
         }
-        catch (NativeLibException exception) { // Users without administrative rights should be able to install the app for themselves
+        catch (NativeLibException exception)
+        { // Users without administrative rights should be able to install the app for themselves
             Debug.trace("Failed to register uninstaller in HKEY_LOCAL_MACHINE hive, trying HKEY_CURRENT_USER: " + exception.getMessage());
             setRoot(HKEY_CURRENT_USER);
             setValue(keyName, "DisplayName", uninstallName);
         }
         setValue(keyName, "UninstallString", cmd);
         setValue(keyName, "DisplayVersion", appVersion);
-        if (appUrl != null && appUrl.length() > 0) {
+        if (appUrl != null && appUrl.length() > 0)
+        {
             setValue(keyName, "HelpLink", appUrl);
         }
         // Try to write the uninstaller icon out.
-        try {
+        try
+        {
             InputStream input = ResourceManager.getInstance().getInputStream(UNINSTALLER_ICON);
             String iconPath = installdata.getVariable("INSTALL_PATH") + File.separator
                     + "Uninstaller" + File.separator + "UninstallerIcon.ico";
@@ -393,7 +436,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
             byte[] buffer = new byte[5120];
             long bytesCopied = 0;
             int bytesInBuffer;
-            while ((bytesInBuffer = input.read(buffer)) != -1) {
+            while ((bytesInBuffer = input.read(buffer)) != -1)
+            {
                 out.write(buffer, 0, bytesInBuffer);
                 bytesCopied += bytesInBuffer;
             }
@@ -401,7 +445,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
             out.close();
             setValue(keyName, "DisplayIcon", iconPath);
         }
-        catch (Exception exception) { // May be no icon resource defined; ignore it
+        catch (Exception exception)
+        { // May be no icon resource defined; ignore it
             Debug.trace(exception);
         }
         setRoot(oldVal);
@@ -410,7 +455,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
     /**
      * @param idata
      */
-    public boolean verify(AutomatedInstallData idata) throws Exception {
+    public boolean verify(AutomatedInstallData idata) throws Exception
+    {
         super.verify(idata);
         return (true);
 
@@ -421,7 +467,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      *
      * @return always true
      */
-    public boolean doPerform() {
+    public boolean doPerform()
+    {
         return true;
     }
 
@@ -430,7 +477,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants {
      *
      * @return Returns the default handler.
      */
-    public RegistryHandler getDefaultHandler() {
+    public RegistryHandler getDefaultHandler()
+    {
         return defaultHandler;
     }
 

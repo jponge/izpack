@@ -15,6 +15,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.installer.multiunpacker;
 
 import com.izforge.izpack.installer.bootstrap.Installer;
@@ -30,7 +31,8 @@ import java.lang.reflect.Method;
  *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
-public class MultiVolumeInstaller {
+public class MultiVolumeInstaller
+{
 
     // where is the installer looking for media files
     protected static String mediadirectory;
@@ -38,7 +40,8 @@ public class MultiVolumeInstaller {
     /**
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         ProgressDialog progressDialog = null;
 
         try
@@ -54,19 +57,26 @@ public class MultiVolumeInstaller {
         }
         // default is to look in the current directory
         MultiVolumeInstaller.setMediadirectory(new File(".").getParent());
-        if ((args.length > 0) && ("-direct".equals(args[0]))) {
+        if ((args.length > 0) && ("-direct".equals(args[0])))
+        {
             String[] newargs;
-            if (args.length > 1) {
+            if (args.length > 1)
+            {
                 // cut out the direct parameter
                 newargs = new String[args.length - 1];
                 System.arraycopy(args, 1, newargs, 0, args.length - 1);
-            } else {
+            }
+            else
+            {
                 // set arguments to empty string array
                 newargs = new String[0];
             }
             MultiVolumeInstaller.install(newargs);
-        } else {
-            try {
+        }
+        else
+        {
+            try
+            {
                 long maxmem = Runtime.getRuntime().maxMemory() / (1024 * 1024);
                 Debug.trace("Currently using maximum memory of " + maxmem + "m");
                 // just use a static fraction of memory for perm gen size.
@@ -88,7 +98,8 @@ public class MultiVolumeInstaller {
                 new SelfModifier(target, maxmem, maxpermgensize).invoke(newargs);
 
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Debug.trace(e);
             }
         }
@@ -98,24 +109,31 @@ public class MultiVolumeInstaller {
         }
     }
 
-    public static String getMediadirectory() {
+    public static String getMediadirectory()
+    {
         return MultiVolumeInstaller.mediadirectory;
     }
 
-    public static void setMediadirectory(String mediadirectory) {
+    public static void setMediadirectory(String mediadirectory)
+    {
         MultiVolumeInstaller.mediadirectory = mediadirectory;
     }
 
-    public static void install(String[] args) {
-        if ((args.length >= 2) && ("-mediadir".equals(args[0]))) {
+    public static void install(String[] args)
+    {
+        if ((args.length >= 2) && ("-mediadir".equals(args[0])))
+        {
             // mediadir option given
             MultiVolumeInstaller.setMediadirectory(args[1]);
-            if (args.length > 2) {
+            if (args.length > 2)
+            {
                 // cut out this option
                 String[] newargs = new String[args.length - 2];
                 System.arraycopy(args, 2, newargs, 0, args.length - 2);
                 args = newargs;
-            } else {
+            }
+            else
+            {
                 // put in an empty string array
                 args = new String[0];
             }

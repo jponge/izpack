@@ -27,7 +27,8 @@ package com.izforge.izpack.gui.log;
  *
  * @author Elmar Grom
  */
-public interface LogMessage {
+public interface LogMessage
+{
     /**
      * First index for warning messages
      */

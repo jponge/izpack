@@ -3,24 +3,28 @@ package com.izforge.izpack.installer.container.provider;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.installer.container.CustomDataContainer;
+import com.izforge.izpack.installer.container.impl.CustomDataContainer;
+import com.izforge.izpack.merge.resolve.PathResolver;
 
 import java.util.Properties;
 
 /**
  * Install data loader
  */
-public class AutomatedInstallDataProvider extends AbstractInstallDataProvider {
+public class AutomatedInstallDataProvider extends AbstractInstallDataProvider
+{
 
-    public AutomatedInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer, VariableSubstitutor variableSubstitutor, Properties variables) {
-        try {
+    public AutomatedInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer, VariableSubstitutor variableSubstitutor, Properties variables, PathResolver pathResolver)
+    {
+        try
+        {
             this.resourceManager = resourceManager;
             this.variableSubstitutor = variableSubstitutor;
             final AutomatedInstallData automatedInstallData = new AutomatedInstallData(variables, variableSubstitutor);
             // Loads the installation data
             loadInstallData(automatedInstallData);
             // Load custom action data.
-            loadCustomData(automatedInstallData, customDataContainer);
+            loadCustomData(automatedInstallData, customDataContainer, pathResolver);
 
             // Load custom langpack if exist.
             addCustomLangpack(automatedInstallData);
@@ -28,7 +32,9 @@ public class AutomatedInstallDataProvider extends AbstractInstallDataProvider {
             loadDynamicVariables(automatedInstallData);
             loadInstallerRequirements(automatedInstallData);
             return automatedInstallData;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             // TODO little workaround to get pico message. Should find a better way in the future            
             throw new RuntimeException(e);
         }

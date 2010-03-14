@@ -21,20 +21,19 @@
 
 package com.izforge.izpack.panels.sudo;
 
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.OsConstraint;
 
 import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -49,7 +48,8 @@ import java.util.Properties;
  * @author Jan Blok
  * @since November 27, 2003
  */
-public class SudoPanel extends IzPanel implements ActionListener {
+public class SudoPanel extends IzPanel implements ActionListener
+{
 
     /**
      *
@@ -66,7 +66,8 @@ public class SudoPanel extends IzPanel implements ActionListener {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public SudoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public SudoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, resourceManager);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -109,7 +110,8 @@ public class SudoPanel extends IzPanel implements ActionListener {
     /**
      * Called when the panel becomes active.
      */
-    public void panelActivate() {
+    public void panelActivate()
+    {
         passwordField.requestFocus();
     }
 
@@ -118,18 +120,21 @@ public class SudoPanel extends IzPanel implements ActionListener {
      *
      * @param e The event.
      */
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
         doSudoCmd();
     }
 
     // check if sudo password is correct (so sudo can be used in all other
     // scripts, even without password, lasts for 5 minutes)
 
-    private void doSudoCmd() {
+    private void doSudoCmd()
+    {
         String pass = passwordField.getText();
 
         File file = null;
-        try {
+        try
+        {
             // write file in /tmp
             file = new File("/tmp/cmd_sudo.sh");// ""c:/temp/run.bat""
             FileOutputStream fos = new FileOutputStream(file);
@@ -143,8 +148,8 @@ public class SudoPanel extends IzPanel implements ActionListener {
             Properties vars = new Properties();
             vars.put("password", pass);
 
-            List<OsConstraint> oses = new ArrayList<OsConstraint>();
-            oses.add(new OsConstraint("unix", null, null, null));
+            List<OsModel> oses = new ArrayList<OsModel>();
+            oses.add(new OsModel("unix", null, null, null, null));
 
             ArrayList<ParsableFile> plist = new ArrayList<ParsableFile>();
             ParsableFile pf = new ParsableFile(file.getAbsolutePath(), null, null, oses);
@@ -158,7 +163,8 @@ public class SudoPanel extends IzPanel implements ActionListener {
             elist.add(ef);
             FileExecutor fe = new FileExecutor(elist);
             int retval = fe.executeFiles(ExecutableFile.POSTINSTALL, this);
-            if (retval == 0) {
+            if (retval == 0)
+            {
                 this.installData.setVariable("password", pass);
                 isValid = true;
             }
@@ -168,14 +174,17 @@ public class SudoPanel extends IzPanel implements ActionListener {
             // check your password", "Error", JOptionPane.ERROR_MESSAGE);
             // }
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             // JOptionPane.showMessageDialog(this, "Cannot execute 'sudo' cmd,
             // check your password", "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
             isValid = false;
         }
-        try {
-            if (file != null && file.exists()) {
+        try
+        {
+            if (file != null && file.exists())
+            {
                 file.delete();// you don't
             }
             // want the file
@@ -184,7 +193,8 @@ public class SudoPanel extends IzPanel implements ActionListener {
             // in case of
             // error
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             // ignore
         }
     }
@@ -194,11 +204,14 @@ public class SudoPanel extends IzPanel implements ActionListener {
      *
      * @return Always true.
      */
-    public boolean isValidated() {
-        if (!isValid) {
+    public boolean isValidated()
+    {
+        if (!isValid)
+        {
             doSudoCmd();
         }
-        if (!isValid) {
+        if (!isValid)
+        {
             JOptionPane.showInternalMessageDialog(this, "Password", "Password is not valid",
                     JOptionPane.ERROR_MESSAGE);
         }

@@ -31,7 +31,8 @@ import java.util.Properties;
  *
  * @author Chad McHenry
  */
-public class Property extends org.apache.tools.ant.taskdefs.Property {
+public class Property extends org.apache.tools.ant.taskdefs.Property
+{
     /**
      * Store the property[s] of this Property tag.
      */
@@ -40,11 +41,13 @@ public class Property extends org.apache.tools.ant.taskdefs.Property {
     /**
      * Creates new IZPackTask
      */
-    public Property() {
+    public Property()
+    {
         super(false);
     }
 
-    public Properties getProperties() {
+    public Properties getProperties()
+    {
         return props;
     }
 
@@ -54,10 +57,14 @@ public class Property extends org.apache.tools.ant.taskdefs.Property {
      * @param n name of property
      * @param v value to set
      */
-    protected void addProperty(String n, String v) {
-        if (props.get(n) == null) {
+    protected void addProperty(String n, String v)
+    {
+        if (props.get(n) == null)
+        {
             props.put(n, v);
-        } else {
+        }
+        else
+        {
             log("Override ignored for " + n, Project.MSG_VERBOSE);
         }
     }

@@ -16,7 +16,8 @@ import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSp
 /**
  * Base class for xinclude tests.
  */
-public abstract class BaseXIncludeTestCase {
+public abstract class BaseXIncludeTestCase
+{
 
     /**
      * This method takes the fileBase name and attempts to find two files
@@ -34,15 +35,18 @@ public abstract class BaseXIncludeTestCase {
      * @param fileBase the base name of the input file.
      * @throws Exception
      */
-    public void ensureFailure(String fileBase) throws Exception {
-        try {
+    public void ensureFailure(String fileBase) throws Exception
+    {
+        try
+        {
             URL baseURL = getClass().getResource(fileBase + "-input.xml");
             // set up a new parser to parse the input xml (with includes)
             IXMLParser parser = new XMLParser();
             parser.parse(baseURL);
             fail("an exception should have been thrown");
         }
-        catch (Throwable t) {
+        catch (Throwable t)
+        {
             // success
         }
     }
@@ -50,12 +54,14 @@ public abstract class BaseXIncludeTestCase {
     /**
      * Perform a deep equality check on the two nodes.
      */
-    public void deepEqual(IXMLElement a, IXMLElement b) {
+    public void deepEqual(IXMLElement a, IXMLElement b)
+    {
 
         assertEquals("element names ", a.getName(), b.getName());
 //        assertEquals("element attributes for " + a.getName(),
 //                a.getAttributes(), b.getAttributes());
-        if (null != b.getContent() && null != a.getContent()) {
+        if (null != b.getContent() && null != a.getContent())
+        {
             assertThat(a.getContent(), equalToIgnoringWhiteSpace(b.getContent()));
         }
         assertEquals("equal number of children " + a.getName(),
@@ -63,7 +69,8 @@ public abstract class BaseXIncludeTestCase {
 
         Vector<IXMLElement> aChildren = a.getChildren();
         Vector<IXMLElement> bChildren = b.getChildren();
-        for (int i = 0; i < bChildren.size(); i++) {
+        for (int i = 0; i < bChildren.size(); i++)
+        {
             IXMLElement aChild = aChildren.elementAt(i);
             IXMLElement bChild = bChildren.elementAt(i);
             deepEqual(aChild, bChild);
@@ -77,7 +84,8 @@ public abstract class BaseXIncludeTestCase {
      * @throws Exception
      */
     @Test
-    public void testIncludeOnly() throws Exception {
+    public void testIncludeOnly() throws Exception
+    {
         doTest("include-only");
     }
 
@@ -87,7 +95,8 @@ public abstract class BaseXIncludeTestCase {
      * @throws Exception
      */
     @Test
-    public void testIncludeSubdirectoryOnly() throws Exception {
+    public void testIncludeSubdirectoryOnly() throws Exception
+    {
         doTest("include-subdirectory-only");
     }
 
@@ -98,7 +107,8 @@ public abstract class BaseXIncludeTestCase {
      * @throws Exception
      */
     @Test
-    public void testIncludeFragmentOnly() throws Exception {
+    public void testIncludeFragmentOnly() throws Exception
+    {
         doTest("include-fragment-only");
     }
 
@@ -109,7 +119,8 @@ public abstract class BaseXIncludeTestCase {
      * @throws Exception
      */
     @Test
-    public void testIncludeInElement() throws Exception {
+    public void testIncludeInElement() throws Exception
+    {
         doTest("include-in-element");
     }
 
@@ -120,7 +131,8 @@ public abstract class BaseXIncludeTestCase {
      * @throws Exception
      */
     @Test
-    public void testIncludeFragmentInElement() throws Exception {
+    public void testIncludeFragmentInElement() throws Exception
+    {
         doTest("include-fragment-in-element");
     }
 
@@ -130,7 +142,8 @@ public abstract class BaseXIncludeTestCase {
      * @throws Exception
      */
     @Test
-    public void _testIncludeTextInElement() throws Exception {
+    public void _testIncludeTextInElement() throws Exception
+    {
         doTest("include-fragment-in-element");
     }
 
@@ -140,7 +153,8 @@ public abstract class BaseXIncludeTestCase {
      * @throws Exception
      */
     @Test
-    public void testParseAttributeText() throws Exception {
+    public void testParseAttributeText() throws Exception
+    {
         doTest("include-xml-as-text");
     }
 
@@ -152,7 +166,8 @@ public abstract class BaseXIncludeTestCase {
      * @throws Exception
      */
     @Test
-    public void testParseAttributeXML() throws Exception {
+    public void testParseAttributeXML() throws Exception
+    {
         doTest("include-xml-as-xml");
     }
 
@@ -163,7 +178,8 @@ public abstract class BaseXIncludeTestCase {
      * @throws Exception
      */
     @Test
-    public void testParseInvalidAttribute() throws Exception {
+    public void testParseInvalidAttribute() throws Exception
+    {
         ensureFailure("invalid-parse-attrib");
     }
 
@@ -173,7 +189,8 @@ public abstract class BaseXIncludeTestCase {
      * @throws Exception
      */
     @Test
-    public void testFallback() throws Exception {
+    public void testFallback() throws Exception
+    {
         doTest("fallback");
     }
 
@@ -184,7 +201,8 @@ public abstract class BaseXIncludeTestCase {
      * @throws Exception
      */
     @Test
-    public void testEmptyFallback() throws Exception {
+    public void testEmptyFallback() throws Exception
+    {
         doTest("empty-fallback");
     }
 
@@ -194,7 +212,8 @@ public abstract class BaseXIncludeTestCase {
      * @throws Exception
      */
     @Test
-    public void testMultipleIncludes() throws Exception {
+    public void testMultipleIncludes() throws Exception
+    {
         doTest("multiple-include");
-	}
+    }
 }

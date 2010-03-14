@@ -21,9 +21,9 @@
 
 package com.izforge.izpack.panels.extendedinstall;
 
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.install.InstallPanel;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 
@@ -32,7 +32,8 @@ import com.izforge.izpack.util.ExtendedUIProgressHandler;
  *
  * @author Klaus Bartz
  */
-public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProgressHandler {
+public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProgressHandler
+{
 
     private static final long serialVersionUID = 3257291344052500789L;
 
@@ -44,7 +45,8 @@ public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProg
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public ExtendedInstallPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public ExtendedInstallPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, resourceManager);
     }
 
@@ -55,7 +57,8 @@ public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProg
      * java.lang.String, java.lang.String, int)
      */
 
-    public void restartAction(String name, String overallMsg, String tipMsg, int no_of_steps) {
+    public void restartAction(String name, String overallMsg, String tipMsg, int no_of_steps)
+    {
         overallOpLabel.setText(overallMsg);
         tipLabel.setText(tipMsg);
         currentStep = 0;
@@ -68,7 +71,8 @@ public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProg
      * @param val The progression value.
      * @param msg The progression message.
      */
-    public void progress(int val, String msg) {
+    public void progress(int val, String msg)
+    {
         packProgressBar.setValue(val + 1);
         packOpLabel.setText(msg);
         currentStep++;
@@ -81,7 +85,8 @@ public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProg
      * java.lang.String)
      */
 
-    public void progress(String stepMessage) {
+    public void progress(String stepMessage)
+    {
         packOpLabel.setText(stepMessage);
         currentStep++;
         packProgressBar.setValue(currentStep);
@@ -94,7 +99,8 @@ public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProg
      * @param stepno   The number of the pack.
      * @param max      The new maximum progress.
      */
-    public void nextStep(String packName, int stepno, int max) {
+    public void nextStep(String packName, int stepno, int max)
+    {
         currentStep = 0;
         super.nextStep(packName, stepno, max);
     }

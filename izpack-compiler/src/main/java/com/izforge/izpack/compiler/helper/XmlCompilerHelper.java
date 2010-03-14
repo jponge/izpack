@@ -11,12 +11,16 @@ import java.net.URL;
  *
  * @author Anthonin Bonnefoy
  */
-public class XmlCompilerHelper {
+public class XmlCompilerHelper
+{
 
     private final String installFile;
+    private AssertionHelper assertionHelper;
 
-    public XmlCompilerHelper(String installFile) {
+    public XmlCompilerHelper(String installFile, AssertionHelper assertionHelper)
+    {
         this.installFile = installFile;
+        this.assertionHelper = assertionHelper;
     }
 
     /**
@@ -25,10 +29,12 @@ public class XmlCompilerHelper {
      *
      * @param element The element to get content of
      */
-    public String requireContent(IXMLElement element) throws CompilerException {
+    public String requireContent(IXMLElement element) throws CompilerException
+    {
         String content = element.getContent();
-        if (content == null || content.length() == 0) {
-            AssertionHelper.parseError(element, "<" + element.getName() + "> requires content", installFile);
+        if (content == null || content.length() == 0)
+        {
+            assertionHelper.parseError(element, "<" + element.getName() + "> requires content");
         }
         return content;
     }
@@ -39,13 +45,16 @@ public class XmlCompilerHelper {
      *
      * @param element The element to get content of
      */
-    public URL requireURLContent(IXMLElement element) throws CompilerException {
+    public URL requireURLContent(IXMLElement element) throws CompilerException
+    {
         URL url = null;
-        try {
+        try
+        {
             url = new URL(requireContent(element));
         }
-        catch (MalformedURLException x) {
-            AssertionHelper.parseError(element, "<" + element.getName() + "> requires valid URL", x, installFile);
+        catch (MalformedURLException x)
+        {
+            assertionHelper.parseError(element, "<" + element.getName() + "> requires valid URL", x);
         }
         return url;
     }
@@ -57,10 +66,12 @@ public class XmlCompilerHelper {
      * @param parent The element to search for a child
      * @param name   Name of the child element to get
      */
-    public IXMLElement requireChildNamed(IXMLElement parent, String name) throws CompilerException {
+    public IXMLElement requireChildNamed(IXMLElement parent, String name) throws CompilerException
+    {
         IXMLElement child = parent.getFirstChildNamed(name);
-        if (child == null) {
-            AssertionHelper.parseError(parent, "<" + parent.getName() + "> requires child <" + name + ">", installFile);
+        if (child == null)
+        {
+            assertionHelper.parseError(parent, "<" + parent.getName() + "> requires child <" + name + ">");
         }
         return child;
     }
@@ -70,22 +81,25 @@ public class XmlCompilerHelper {
      * is generated as a CompilerException if not present or parseable as an int. It is an error for
      * 'element' or 'attribute' to be null.
      *
-     * @param element     The element to get the attribute value of
-     * @param attribute   The name of the attribute to get
-     * @param installFile
+     * @param element   The element to get the attribute value of
+     * @param attribute The name of the attribute to get
      */
-    public int requireIntAttribute(IXMLElement element, String attribute, String installFile)
-            throws CompilerException {
+    public int requireIntAttribute(IXMLElement element, String attribute)
+            throws CompilerException
+    {
         String value = element.getAttribute(attribute);
-        if (value == null || value.length() == 0) {
-            AssertionHelper.parseError(element, "<" + element.getName() + "> requires attribute '" + attribute
-                    + "'", installFile);
+        if (value == null || value.length() == 0)
+        {
+            assertionHelper.parseError(element, "<" + element.getName() + "> requires attribute '" + attribute
+                    + "'");
         }
-        try {
+        try
+        {
             return Integer.parseInt(value);
         }
-        catch (NumberFormatException x) {
-            AssertionHelper.parseError(element, "'" + attribute + "' must be an integer", installFile);
+        catch (NumberFormatException x)
+        {
+            assertionHelper.parseError(element, "'" + attribute + "' must be an integer");
         }
         return 0; // never happens
     }
@@ -94,22 +108,24 @@ public class XmlCompilerHelper {
      * Call getAttribute on an element, producing a meaningful error message if not present, or one
      * of "yes" or "no". It is an error for 'element' or 'attribute' to be null.
      *
-     * @param element     The element to get the attribute value of
-     * @param attribute   The name of the attribute to get
-     * @param installFile
+     * @param element   The element to get the attribute value of
+     * @param attribute The name of the attribute to get
      */
-    public boolean requireYesNoAttribute(IXMLElement element, String attribute, String installFile)
-            throws CompilerException {
-        String value = requireAttribute(element, attribute, installFile);
-        if ("yes".equalsIgnoreCase(value)) {
+    public boolean requireYesNoAttribute(IXMLElement element, String attribute)
+            throws CompilerException
+    {
+        String value = requireAttribute(element, attribute);
+        if ("yes".equalsIgnoreCase(value))
+        {
             return true;
         }
-        if ("no".equalsIgnoreCase(value)) {
+        if ("no".equalsIgnoreCase(value))
+        {
             return false;
         }
 
-        AssertionHelper.parseError(element, "<" + element.getName() + "> invalid attribute '" + attribute
-                + "': Expected (yes|no)", installFile);
+        assertionHelper.parseError(element, "<" + element.getName() + "> invalid attribute '" + attribute
+                + "': Expected (yes|no)");
 
         return false; // never happens
     }
@@ -121,26 +137,29 @@ public class XmlCompilerHelper {
      * @param element      The element to get the attribute value of
      * @param attribute    The name of the attribute to get
      * @param defaultValue Value returned if attribute not present or invalid
-     * @param installFile
      */
     public boolean validateYesNoAttribute(IXMLElement element, String attribute,
-                                          boolean defaultValue, String installFile) {
-        if (element == null) {
+                                          boolean defaultValue)
+    {
+        if (element == null)
+        {
             return defaultValue;
         }
 
         String value = element.getAttribute(attribute, (defaultValue ? "yes" : "no"));
-        if ("yes".equalsIgnoreCase(value)) {
+        if ("yes".equalsIgnoreCase(value))
+        {
             return true;
         }
-        if ("no".equalsIgnoreCase(value)) {
+        if ("no".equalsIgnoreCase(value))
+        {
             return false;
         }
 
         // TODO: should this be an error if it's present but "none of the
         // above"?
-        AssertionHelper.parseWarn(element, "<" + element.getName() + "> invalid attribute '" + attribute
-                + "': Expected (yes|no) if present", installFile);
+        assertionHelper.parseWarn(element, "<" + element.getName() + "> invalid attribute '" + attribute
+                + "': Expected (yes|no) if present");
 
         return defaultValue;
     }
@@ -149,16 +168,17 @@ public class XmlCompilerHelper {
      * Call getAttribute on an element, producing a meaningful error message if not present, or
      * empty. It is an error for 'element' or 'attribute' to be null.
      *
-     * @param element     The element to get the attribute value of
-     * @param attribute   The name of the attribute to get
-     * @param installFile
+     * @param element   The element to get the attribute value of
+     * @param attribute The name of the attribute to get
      */
-    public String requireAttribute(IXMLElement element, String attribute, String installFile)
-            throws CompilerException {
+    public String requireAttribute(IXMLElement element, String attribute)
+            throws CompilerException
+    {
         String value = element.getAttribute(attribute);
-        if (value == null) {
-            AssertionHelper.parseError(element, "<" + element.getName() + "> requires attribute '" + attribute
-                    + "'", installFile);
+        if (value == null)
+        {
+            assertionHelper.parseError(element, "<" + element.getName() + "> requires attribute '" + attribute
+                    + "'");
         }
         return value;
     }

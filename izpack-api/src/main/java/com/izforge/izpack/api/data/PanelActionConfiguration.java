@@ -15,13 +15,15 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.api.data;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PanelActionConfiguration implements Serializable {
+public class PanelActionConfiguration implements Serializable
+{
     private Map<String, String> properties;
 
     public PanelActionConfiguration()
@@ -49,12 +51,14 @@ public class PanelActionConfiguration implements Serializable {
         return result;
     }
 
-    public Map<String, String> getProperties() {
+    public Map<String, String> getProperties()
+    {
         return properties;
     }
 
 
-    public void setProperties(Map<String, String> properties) {
+    public void setProperties(Map<String, String> properties)
+    {
         this.properties = properties;
     }
 }

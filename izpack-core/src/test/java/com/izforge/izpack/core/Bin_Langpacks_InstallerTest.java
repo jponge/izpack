@@ -38,7 +38,8 @@ import java.io.FileInputStream;
  */
 @Ignore
 @RunWith(Theories.class)
-public class Bin_Langpacks_InstallerTest {
+public class Bin_Langpacks_InstallerTest
+{
     private final static String referencePack = "eng.xml";
     private final static String basePath = "." + File.separator +
             "bin" + File.separator +
@@ -88,27 +89,33 @@ public class Bin_Langpacks_InstallerTest {
      * @throws Exception
      */
     @Theory
-    public void testLangs(String lang) throws Exception {
+    public void testLangs(String lang) throws Exception
+    {
         Bin_Langpacks_InstallerTest.reference = new LocaleDatabase(new FileInputStream(basePath + referencePack));
         this.checkLangpack(lang);
     }
 
-    private void checkLangpack(String langpack) throws Exception {
+    private void checkLangpack(String langpack) throws Exception
+    {
         this.check = new LocaleDatabase(new FileInputStream(basePath + langpack));
         // all keys in the English langpack should be present in the foreign langpack
-        for (Object o : reference.keySet()) {
+        for (Object o : reference.keySet())
+        {
             // Locale Database uses the id strings as keys
             String id = (String) o;
-            if (this.check.containsKey(id)) {
+            if (this.check.containsKey(id))
+            {
                 collector.addError(new Throwable("Missing translation for id:" + id));
             }
         }
         // there should be no keys in the foreign langpack which don't exist in the 
         // english langpack
-        for (Object o : this.check.keySet()) {
+        for (Object o : this.check.keySet())
+        {
             // LocaleDatabase uses the id strings as keys
             String id = (String) o;
-            if (reference.containsKey(id)) {
+            if (reference.containsKey(id))
+            {
                 collector.addError(new Throwable("Superfluous translation for id:" + id));
             }
         }

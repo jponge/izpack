@@ -36,12 +36,14 @@ import java.util.Map;
  *
  * @author Klaus Bartz
  */
-public class SimpleCompilerListener implements CompilerListener {
+public class SimpleCompilerListener implements CompilerListener
+{
 
     /**
      * Creates a newly object.
      */
-    public SimpleCompilerListener() {
+    public SimpleCompilerListener()
+    {
         super();
     }
 
@@ -53,7 +55,8 @@ public class SimpleCompilerListener implements CompilerListener {
      */
 
     public Map reviseAdditionalDataMap(Map existentDataMap, IXMLElement element)
-            throws CompilerException {
+            throws CompilerException
+    {
         return null;
     }
 
@@ -64,7 +67,8 @@ public class SimpleCompilerListener implements CompilerListener {
      * int, com.izforge.izpack.compiler.packager.impl.Packager)
      */
 
-    public void afterPack(PackInfo pack, int packNumber, IPackager packager) {
+    public void afterPack(PackInfo pack, int packNumber, IPackager packager)
+    {
     }
 
     /*
@@ -74,7 +78,8 @@ public class SimpleCompilerListener implements CompilerListener {
      * int, com.izforge.izpack.compiler.packager.impl.Packager)
      */
 
-    public void beforePack(PackInfo pack, int packNumber, IPackager packager) {
+    public void beforePack(PackInfo pack, int packNumber, IPackager packager)
+    {
     }
 
     /*
@@ -84,7 +89,8 @@ public class SimpleCompilerListener implements CompilerListener {
      * com.izforge.izpack.api.adaptator.IXMLElement, com.izforge.izpack.compiler.packager.impl.Packager)
      */
 
-    public void notify(String position, int state, IXMLElement data, IPackager packager) {
+    public void notify(String position, int state, IXMLElement data, IPackager packager)
+    {
     }
 
 }

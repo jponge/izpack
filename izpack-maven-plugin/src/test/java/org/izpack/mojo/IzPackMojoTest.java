@@ -10,11 +10,13 @@ import java.util.Collections;
  *
  * @author Anthonin Bonnefoy
  */
-public class IzPackMojoTest extends AbstractMojoTestCase {
+public class IzPackMojoTest extends AbstractMojoTestCase
+{
     /**
      * @see junit.framework.TestCase#setUp()
      */
-    protected void setUp() throws Exception {
+    protected void setUp() throws Exception
+    {
 
         // required for mojo lookups to work
         super.setUp();
@@ -23,7 +25,8 @@ public class IzPackMojoTest extends AbstractMojoTestCase {
     /**
      * @throws Exception
      */
-    public void testMojoGoal() throws Exception {
+    public void testMojoGoal() throws Exception
+    {
         File testPom = new File(getBasedir(),
                 "target/test-classes/basic-pom.xml");
 
@@ -34,7 +37,8 @@ public class IzPackMojoTest extends AbstractMojoTestCase {
 //        assertNotNull(mojo);
     }
 
-    private void initIzpackMojo(IzPackMojo mojo) throws IllegalAccessException {
+    private void initIzpackMojo(IzPackMojo mojo) throws IllegalAccessException
+    {
         File installFile = new File("target/test-classes/helloAndFinish.xml");
         File customPanel = new File("target/test-classes/panels");
         setVariableValueToObject(mojo, "installerFile", installFile);

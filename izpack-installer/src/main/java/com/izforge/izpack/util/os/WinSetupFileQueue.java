@@ -5,7 +5,8 @@ import com.izforge.izpack.util.Debug;
 import java.io.File;
 import java.io.IOException;
 
-public class WinSetupFileQueue extends WinSetupAPIBase {
+public class WinSetupFileQueue extends WinSetupAPIBase
+{
     private int reboot = 0;
 
     /**
@@ -17,7 +18,8 @@ public class WinSetupFileQueue extends WinSetupAPIBase {
      * Creates a new file queue which uses the default setup callback handler from the Windows Setup
      * API.
      */
-    public WinSetupFileQueue() throws Exception {
+    public WinSetupFileQueue() throws Exception
+    {
         this(null);
     }
 
@@ -27,7 +29,8 @@ public class WinSetupFileQueue extends WinSetupAPIBase {
      *
      * @param handler Java callback handler
      */
-    public WinSetupFileQueue(WinSetupQueueCallbackInterface handler) throws Exception {
+    public WinSetupFileQueue(WinSetupQueueCallbackInterface handler) throws Exception
+    {
         super();
         this.handle = SetupOpenFileQueue((Object) handler);
     }
@@ -39,7 +42,8 @@ public class WinSetupFileQueue extends WinSetupAPIBase {
      * @param targetfile Copy target file
      * @param style      A bitwise 'or-ed' combination of copy styles
      */
-    protected void addCopy(File sourcefile, File targetfile, int /* DWORD */copyStyle) throws IOException {
+    protected void addCopy(File sourcefile, File targetfile, int /* DWORD */copyStyle) throws IOException
+    {
         SetupQueueCopy(this.handle, sourcefile.getParent(), null, sourcefile.getName(), null, null,
                 targetfile.getParent(), targetfile.getName(), copyStyle);
     }
@@ -50,7 +54,8 @@ public class WinSetupFileQueue extends WinSetupAPIBase {
      * @param sourcefile Copy source file
      * @param targetfile Copy target file
      */
-    public void addCopy(File sourcefile, File targetfile) throws IOException {
+    public void addCopy(File sourcefile, File targetfile) throws IOException
+    {
         addCopy(sourcefile, targetfile, false);
     }
 
@@ -61,7 +66,8 @@ public class WinSetupFileQueue extends WinSetupAPIBase {
      * @param targetfile Copy target file
      * @param forceInUse Whether to force target-in-use behavior
      */
-    public void addCopy(File sourcefile, File targetfile, boolean forceInUse) throws IOException {
+    public void addCopy(File sourcefile, File targetfile, boolean forceInUse) throws IOException
+    {
         int style = 0 /*SP_COPY_IN_USE_NEEDS_REBOOT*/;
         if (forceInUse)
         {
@@ -75,7 +81,8 @@ public class WinSetupFileQueue extends WinSetupAPIBase {
      *
      * @param file File to delete.
      */
-    public void addDelete(File file) throws IOException {
+    public void addDelete(File file) throws IOException
+    {
         SetupQueueDelete(this.handle, file.getParent(), file.getName());
     }
 
@@ -87,7 +94,8 @@ public class WinSetupFileQueue extends WinSetupAPIBase {
      * @param sourcefile Rename source file
      * @param targetfile Rename target file
      */
-    public void addRename(File sourcefile, File targetfile) throws IOException {
+    public void addRename(File sourcefile, File targetfile) throws IOException
+    {
         SetupQueueRename(this.handle, sourcefile.getParent(), sourcefile.getName(), targetfile
                 .getParent(), targetfile.getName());
     }
@@ -99,7 +107,8 @@ public class WinSetupFileQueue extends WinSetupAPIBase {
      * @param sourcefile Move source file
      * @param targetfile Move target file
      */
-    public void addMove(File sourcefile, File targetfile) throws IOException {
+    public void addMove(File sourcefile, File targetfile) throws IOException
+    {
         addCopy(sourcefile, targetfile, false);
     }
 
@@ -111,7 +120,8 @@ public class WinSetupFileQueue extends WinSetupAPIBase {
      * @param targetfile Move target file
      * @param forceInUse Whether to force target-in-use behavior
      */
-    public void addMove(File sourcefile, File targetfile, boolean forceInUse) throws IOException {
+    public void addMove(File sourcefile, File targetfile, boolean forceInUse) throws IOException
+    {
         int style = SP_COPY_DELETESOURCE /* | SP_COPY_IN_USE_NEEDS_REBOOT*/;
         if (forceInUse)
         {
@@ -123,16 +133,20 @@ public class WinSetupFileQueue extends WinSetupAPIBase {
     /**
      * Commits the enqueued operations in the file queue.
      */
-    public boolean commit() throws Exception {
+    public boolean commit() throws Exception
+    {
         boolean result = SetupCommitFileQueue(this.handle);
 
-        if (result) {
+        if (result)
+        {
             reboot = SetupPromptReboot(this.handle, true);
 
-            if ((reboot & SPFILEQ_FILE_IN_USE) != 0) {
+            if ((reboot & SPFILEQ_FILE_IN_USE) != 0)
+            {
                 Debug.log("There are file operations pending");
             }
-            if ((reboot & SPFILEQ_REBOOT_RECOMMENDED) != 0) {
+            if ((reboot & SPFILEQ_REBOOT_RECOMMENDED) != 0)
+            {
                 Debug.log("System reboot is recommended");
             }
             if ((reboot & SPFILEQ_REBOOT_IN_PROGRESS) != 0)
@@ -147,7 +161,8 @@ public class WinSetupFileQueue extends WinSetupAPIBase {
     /**
      * Closes the file queue.
      */
-    public void close() {
+    public void close()
+    {
         SetupCloseFileQueue(this.handle);
         this.handle = INVALID_HANDLE_VALUE;
     }
@@ -159,7 +174,8 @@ public class WinSetupFileQueue extends WinSetupAPIBase {
      *
      * @return true - if reboot is necessary to apply committed changes
      */
-    public boolean isRebootNecessary() {
+    public boolean isRebootNecessary()
+    {
         return reboot > 0;
     }
 

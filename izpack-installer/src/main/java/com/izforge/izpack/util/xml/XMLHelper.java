@@ -30,7 +30,8 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
  * @author marc.eppelmann&#064;gmx.de
  * @version $Revision: 1.1 $
  */
-public class XMLHelper {
+public class XMLHelper
+{
     //~ Static fields/initializers *********************************************************
 
     /**
@@ -78,7 +79,8 @@ public class XMLHelper {
     /**
      * Creates a new XMLHelper object.
      */
-    public XMLHelper() {
+    public XMLHelper()
+    {
         super();
     }
 
@@ -113,16 +115,24 @@ public class XMLHelper {
      */
 
     /*--------------------------------------------------------------------------*/
-    public static boolean attributeIsTrue(IXMLElement element, String name) {
+    public static boolean attributeIsTrue(IXMLElement element, String name)
+    {
         String value = element.getAttribute(name, "").toUpperCase();
 
-        if (value.equals(YES)) {
+        if (value.equals(YES))
+        {
             return (true);
-        } else if (value.equals(TRUE)) {
+        }
+        else if (value.equals(TRUE))
+        {
             return (true);
-        } else if (value.equals(ON)) {
+        }
+        else if (value.equals(ON))
+        {
             return (true);
-        } else if (value.equals(_1)) {
+        }
+        else if (value.equals(_1))
+        {
             return (true);
         }
 
@@ -136,16 +146,24 @@ public class XMLHelper {
      * @param name    the attribute to inspect
      * @return returns true if name attribute of the given element contains &quot;false&quot;
      */
-    public static boolean attributeIsFalse(IXMLElement element, String name) {
+    public static boolean attributeIsFalse(IXMLElement element, String name)
+    {
         String value = element.getAttribute(name, "").toUpperCase();
 
-        if (value.equals("NO")) {
+        if (value.equals("NO"))
+        {
             return (true);
-        } else if (value.equals("FALSE")) {
+        }
+        else if (value.equals("FALSE"))
+        {
             return (true);
-        } else if (value.equals("OFF")) {
+        }
+        else if (value.equals("OFF"))
+        {
             return (true);
-        } else if (value.equals("0")) {
+        }
+        else if (value.equals("0"))
+        {
             return (true);
         }
 

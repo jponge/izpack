@@ -21,15 +21,14 @@
 
 package com.izforge.izpack.panels.summary;
 
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.helper.SummaryProcessor;
 
-import javax.swing.JEditorPane;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
 /**
  * Summary panel to use before InstallPanel. This panel calls the {@link SummaryProcessor} which
@@ -38,7 +37,8 @@ import javax.swing.JScrollPane;
  *
  * @author Klaus Bartz
  */
-public class SummaryPanel extends IzPanel {
+public class SummaryPanel extends IzPanel
+{
 
     /**
      *
@@ -56,17 +56,20 @@ public class SummaryPanel extends IzPanel {
      * @param parent The parent.
      * @param idata  The installation installDataGUI.
      */
-    public SummaryPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public SummaryPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, new IzPanelLayout(), resourceManager);
         add(createMultiLineLabelLang("SummaryPanel.info"));
-        try {
+        try
+        {
             textArea = new JEditorPane();
             textArea.setContentType("text/html");
             textArea.setEditable(false);
             JScrollPane scroller = new JScrollPane(textArea);
             add(scroller, NEXT_LINE);
         }
-        catch (Exception err) {
+        catch (Exception err)
+        {
             err.printStackTrace();
         }
         getLayoutHelper().completeLayout();
@@ -78,7 +81,8 @@ public class SummaryPanel extends IzPanel {
      * @see com.izforge.izpack.installer.IzPanel#panelActivate()
      */
 
-    public void panelActivate() {
+    public void panelActivate()
+    {
         super.panelActivate();
         textArea.setText(SummaryProcessor.getSummary(this.installData));
         textArea.setCaretPosition(0);

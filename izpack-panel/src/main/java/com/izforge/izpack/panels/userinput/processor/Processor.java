@@ -33,7 +33,8 @@ import com.izforge.izpack.panels.userinput.processorclient.ProcessingClient;
  * @see ProcessingClient
  */
 /*---------------------------------------------------------------------------*/
-public interface Processor {
+public interface Processor
+{
 
     /*--------------------------------------------------------------------------*/
 

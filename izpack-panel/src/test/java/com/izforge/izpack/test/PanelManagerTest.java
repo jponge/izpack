@@ -1,11 +1,12 @@
 package com.izforge.izpack.test;
 
+import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.container.IInstallerContainer;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.merge.MergeManagerImpl;
+import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.panels.checkedhello.CheckedHelloPanel;
 import org.hamcrest.core.Is;
 import org.junit.Before;
@@ -18,23 +19,27 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Test for panel manager
  */
-public class PanelManagerTest {
+public class PanelManagerTest
+{
     @Mock
     private GUIInstallData installDataGUI;
     @Mock
-    private IInstallerContainer installerContainer;
+    private BindeableContainer installerContainer;
     private MergeManagerImpl mergeManager;
     private PanelManager panelManager;
 
     @Before
-    public void initMock() throws ClassNotFoundException {
+    public void initMock() throws ClassNotFoundException
+    {
         MockitoAnnotations.initMocks(getClass());
-        mergeManager = new MergeManagerImpl();
-        panelManager = new PanelManager(installDataGUI, installerContainer, mergeManager);
+        PathResolver pathResolver = new PathResolver();
+        mergeManager = new MergeManagerImpl(pathResolver);
+        panelManager = new PanelManager(installDataGUI, installerContainer, pathResolver);
     }
 
     @Test
-    public void resolveClassNameShouldAddDefaultPrefix() throws Exception {
+    public void resolveClassNameShouldAddDefaultPrefix() throws Exception
+    {
         Class<?> aClass = panelManager.resolveClassName("HelloPanel");
         assertThat(aClass.getName(), Is.is("com.izforge.izpack.panels.hello.HelloPanel"));
         aClass = panelManager.resolveClassName("FinishPanel");
@@ -42,21 +47,24 @@ public class PanelManagerTest {
     }
 
     @Test
-    public void resolveClassNameShouldNotAddPrefixWithCompleteClass() throws Exception {
+    public void resolveClassNameShouldNotAddPrefixWithCompleteClass() throws Exception
+    {
         Class<?> aClass = panelManager.resolveClassName("com.izforge.izpack.panels.hello.HelloPanel");
         assertThat(aClass.getName(), Is.is("com.izforge.izpack.panels.hello.HelloPanel"));
-        aClass = panelManager.resolveClassName("com.izforge.izpack.installer.container.InstallerContainer");
-        assertThat(aClass.getName(), Is.is("com.izforge.izpack.installer.container.InstallerContainer"));
+        aClass = panelManager.resolveClassName("com.izforge.izpack.api.container.BindeableContainer");
+        assertThat(aClass.getName(), Is.is("com.izforge.izpack.api.container.BindeableContainer"));
     }
 
     @Test
-    public void shouldSearchAutomaticallyInPackage() throws Exception {
+    public void shouldSearchAutomaticallyInPackage() throws Exception
+    {
         Class<? extends IzPanel> aClass = panelManager.resolveClassName("CheckedHelloPanel");
         assertThat(aClass.getName(), Is.is(CheckedHelloPanel.class.getName()));
     }
 
     @Test(expected = MergeException.class)
-    public void resolveClassNameShouldThrowException() throws Exception {
+    public void resolveClassNameShouldThrowException() throws Exception
+    {
         panelManager.resolveClassName("unknown");
     }
 }

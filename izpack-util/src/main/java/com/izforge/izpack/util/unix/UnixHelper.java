@@ -15,6 +15,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.util.unix;
 
 import com.izforge.izpack.util.FileExecutor;
@@ -28,7 +29,8 @@ import java.util.ArrayList;
  * @author marc.eppelmann&#064;reddot.de
  * @version $Revision$
  */
-public class UnixHelper {
+public class UnixHelper
+{
 
     // ~ Static fields/initializers *********************************************************
 
@@ -47,29 +49,37 @@ public class UnixHelper {
      *
      * @return the /etc/passwd as String ArrayList
      */
-    public static ArrayList<String> getEtcPasswdArray() {
+    public static ArrayList<String> getEtcPasswdArray()
+    {
         ArrayList<String> result = new ArrayList<String>();
 
         String line = "";
         BufferedReader reader = null;
 
-        try {
+        try
+        {
             reader = new BufferedReader(new FileReader(UnixConstants.etcPasswd));
 
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null)
+            {
                 result.add(line);
             }
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             // ignore - there are maybe no users
         }
-        finally {
-            try {
-                if (reader != null) {
+        finally
+        {
+            try
+            {
+                if (reader != null)
+                {
                     reader.close();
                 }
             }
-            catch (Exception ignore) {
+            catch (Exception ignore)
+            {
                 // ignore
             }
         }
@@ -85,33 +95,42 @@ public class UnixHelper {
      *
      * @return the /etc/passwd as String ArrayList
      */
-    public static ArrayList<String> getYpPasswdArray() {
+    public static ArrayList<String> getYpPasswdArray()
+    {
         ArrayList<String> result = new ArrayList<String>();
 
         String line = "";
         BufferedReader reader = null;
         String ypcommand = getYpCatCommand();
 
-        if (ypcommand != null && ypcommand.length() > 0) {
+        if (ypcommand != null && ypcommand.length() > 0)
+        {
 
-            try {
+            try
+            {
                 reader = new BufferedReader(new StringReader(FileExecutor
                         .getExecOutput(new String[]{ypcommand, "passwd"})));
-                while ((line = reader.readLine()) != null) {
+                while ((line = reader.readLine()) != null)
+                {
                     result.add(line);
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 // ignore - there are maybe no users
             }
-            finally {
-                try {
-                    if (reader != null) {
+            finally
+            {
+                try
+                {
+                    if (reader != null)
+                    {
                         reader.close();
                     }
 
                 }
-                catch (Exception i) {
+                catch (Exception i)
+                {
                     // ignore
                 }
             }
@@ -126,7 +145,8 @@ public class UnixHelper {
      *
      * @return true if kde is installed otherwise false.
      */
-    public static boolean kdeIsInstalled() {
+    public static boolean kdeIsInstalled()
+    {
         FileExecutor fe = new FileExecutor();
 
         String[] execOut = new String[2];
@@ -143,7 +163,8 @@ public class UnixHelper {
      *
      * @return /bin/which on linux /usr/bin/which on solaris
      */
-    public static String getWhichCommand() {
+    public static String getWhichCommand()
+    {
         return whichCommand;
     }
 
@@ -153,7 +174,8 @@ public class UnixHelper {
      *
      * @return /bin/cp on linux /usr/bin/cp on solaris
      */
-    public static String getCpCommand() {
+    public static String getCpCommand()
+    {
         return FileExecutor.getExecOutput(new String[]{getWhichCommand(), "cp"}).trim();
     }
 
@@ -163,7 +185,8 @@ public class UnixHelper {
      *
      * @return /bin/su on linux /usr/bin/su on solaris
      */
-    public static String getSuCommand() {
+    public static String getSuCommand()
+    {
         return FileExecutor.getExecOutput(new String[]{getWhichCommand(), "su"}).trim();
     }
 
@@ -173,7 +196,8 @@ public class UnixHelper {
      *
      * @return /bin/rm on linux /usr/bin/rm on solaris
      */
-    public static String getRmCommand() {
+    public static String getRmCommand()
+    {
         return FileExecutor.getExecOutput(new String[]{whichCommand, "rm"}).trim();
     }
 
@@ -183,7 +207,8 @@ public class UnixHelper {
      *
      * @return /bin/ypcat on linux /usr/bin/ypcat on solaris
      */
-    public static String getYpCatCommand() {
+    public static String getYpCatCommand()
+    {
         return FileExecutor.getExecOutput(new String[]{whichCommand, "ypcat"}).trim();
     }
 
@@ -195,7 +220,8 @@ public class UnixHelper {
      * @param aCommand a Custom Command
      * @return /bin/aCommand on linux /usr/bin/aCommand on solaris
      */
-    public static String getCustomCommand(String aCommand) {
+    public static String getCustomCommand(String aCommand)
+    {
         return FileExecutor.getExecOutput(new String[]{whichCommand, aCommand}).trim();
     }
 
@@ -205,7 +231,8 @@ public class UnixHelper {
      *
      * @param args commandline args
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         System.out.println("Hallo from " + UnixHelper.class.getName() + VERSION);
 
         // System.out.println( StringTool.stringArrayListToString(UnixUsers.getUsersAsArrayList())
@@ -223,12 +250,14 @@ public class UnixHelper {
 
         File tempFile = null;
 
-        try {
+        try
+        {
             tempFile = File.createTempFile(UnixHelper.class.getName(), Long.toString(System
                     .currentTimeMillis())
                     + ".tmp");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
 
@@ -244,19 +273,25 @@ public class UnixHelper {
 
         // System.out.println("Your Name: " + username);
         // so try:
-        if ("root".equals(username)) {
-            try {
+        if ("root".equals(username))
+        {
+            try
+            {
                 BufferedWriter w = new BufferedWriter(new FileWriter(tempFile));
                 w.write("Hallo");
                 w.flush();
                 w.close();
-                if (tempFile.exists()) {
+                if (tempFile.exists())
+                {
                     System.out.println("Wrote: " + tempFile + ">>Hallo");
-                } else {
+                }
+                else
+                {
                     System.out.println("Could not Wrote: " + tempFile + "Hallo");
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 e.printStackTrace();
             }
 
@@ -271,11 +306,13 @@ public class UnixHelper {
                     + getCpCommand() + " " + tempFile.toString() + " " + destfilename + "\"");
 
             String shLocation = "/tmp/x.21.21";
-            try {
+            try
+            {
                 shLocation = File.createTempFile(UnixHelper.class.getName(),
                         Long.toString(System.currentTimeMillis()) + ".sh").toString();
             }
-            catch (Exception x) {
+            catch (Exception x)
+            {
                 x.printStackTrace();
             }
             s.write(shLocation);
@@ -283,7 +320,9 @@ public class UnixHelper {
 
             // File deleteMe = new File( shLocation ); deleteMe.delete();
 
-        } else {
+        }
+        else
+        {
             System.out.println("Your name: '" + username
                     + "' is not 'root'. But this is a test for the user root.");
         }

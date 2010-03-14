@@ -27,7 +27,8 @@ import javax.swing.plaf.ColorUIResource;
  * @author Julien Ponge
  */
 @Deprecated
-public class IzPackKMetalTheme extends IzPackMetalTheme {
+public class IzPackKMetalTheme extends IzPackMetalTheme
+{
 
     /**
      * Primary color.
@@ -62,7 +63,8 @@ public class IzPackKMetalTheme extends IzPackMetalTheme {
     /**
      * The constructor.
      */
-    public IzPackKMetalTheme() {
+    public IzPackKMetalTheme()
+    {
         super();
     }
 
@@ -71,7 +73,8 @@ public class IzPackKMetalTheme extends IzPackMetalTheme {
      *
      * @return The wished color.
      */
-    public ColorUIResource getPrimary1() {
+    public ColorUIResource getPrimary1()
+    {
         return primary1;
     }
 
@@ -80,7 +83,8 @@ public class IzPackKMetalTheme extends IzPackMetalTheme {
      *
      * @return The wished color.
      */
-    public ColorUIResource getPrimary2() {
+    public ColorUIResource getPrimary2()
+    {
         return primary2;
     }
 
@@ -89,7 +93,8 @@ public class IzPackKMetalTheme extends IzPackMetalTheme {
      *
      * @return The wished color.
      */
-    public ColorUIResource getPrimary3() {
+    public ColorUIResource getPrimary3()
+    {
         return primary3;
     }
 
@@ -98,7 +103,8 @@ public class IzPackKMetalTheme extends IzPackMetalTheme {
      *
      * @return The wished color.
      */
-    public ColorUIResource getSecondary1() {
+    public ColorUIResource getSecondary1()
+    {
         return secondary1;
     }
 
@@ -107,7 +113,8 @@ public class IzPackKMetalTheme extends IzPackMetalTheme {
      *
      * @return The wished color.
      */
-    public ColorUIResource getSecondary2() {
+    public ColorUIResource getSecondary2()
+    {
         return secondary2;
     }
 
@@ -116,7 +123,8 @@ public class IzPackKMetalTheme extends IzPackMetalTheme {
      *
      * @return The wished color.
      */
-    public ColorUIResource getSecondary3() {
+    public ColorUIResource getSecondary3()
+    {
         return secondary3;
     }
 }

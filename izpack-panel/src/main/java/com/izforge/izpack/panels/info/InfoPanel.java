@@ -20,22 +20,22 @@
 package com.izforge.izpack.panels.info;
 
 import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
 
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
 /**
  * The info panel class. Displays some raw-text informations.
  *
  * @author Julien Ponge
  */
-public class InfoPanel extends IzPanel {
+public class InfoPanel extends IzPanel
+{
 
     private static final long serialVersionUID = 3833748780590905399L;
 
@@ -50,7 +50,8 @@ public class InfoPanel extends IzPanel {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public InfoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public InfoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, new IzPanelLayout(), resourceManager);
         // We load the text.
         loadInfo();
@@ -71,12 +72,15 @@ public class InfoPanel extends IzPanel {
     /**
      * Loads the info text.
      */
-    private void loadInfo() {
-        try {
+    private void loadInfo()
+    {
+        try
+        {
             String resNamePrifix = "InfoPanel.info";
             info = resourceManager.getTextResource(resNamePrifix);
         }
-        catch (Exception err) {
+        catch (Exception err)
+        {
             info = "Error : could not load the info text !";
         }
     }
@@ -86,7 +90,8 @@ public class InfoPanel extends IzPanel {
      *
      * @return Always true.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         return true;
     }
 }

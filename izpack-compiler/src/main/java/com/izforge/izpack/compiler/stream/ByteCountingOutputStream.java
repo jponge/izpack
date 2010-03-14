@@ -28,40 +28,48 @@ import java.io.OutputStream;
 /**
  * Stream which countes the bytes written through it. Be sure to flush before checking size.
  */
-public class ByteCountingOutputStream extends OutputStream {
+public class ByteCountingOutputStream extends OutputStream
+{
 
     private long count;
 
     private OutputStream os;
 
-    public ByteCountingOutputStream(OutputStream os) {
+    public ByteCountingOutputStream(OutputStream os)
+    {
         this.os = os;
     }
 
-    public void write(byte[] b, int off, int len) throws IOException {
+    public void write(byte[] b, int off, int len) throws IOException
+    {
         os.write(b, off, len);
         count += len;
     }
 
-    public void write(byte[] b) throws IOException {
+    public void write(byte[] b) throws IOException
+    {
         os.write(b);
         count += b.length;
     }
 
-    public void write(int b) throws IOException {
+    public void write(int b) throws IOException
+    {
         os.write(b);
         count += 4;
     }
 
-    public void close() throws IOException {
+    public void close() throws IOException
+    {
         os.close();
     }
 
-    public void flush() throws IOException {
+    public void flush() throws IOException
+    {
         os.flush();
     }
 
-    public long getByteCount() {
+    public long getByteCount()
+    {
         return count;
     }
 }

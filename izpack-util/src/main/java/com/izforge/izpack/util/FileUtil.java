@@ -32,13 +32,15 @@ import java.util.Iterator;
  *
  * @author marc.eppelmann
  */
-public class FileUtil {
+public class FileUtil
+{
     //~ Constructors ***********************************************************************
 
     /**
      * Creates a new FileUtil object.
      */
-    public FileUtil() {
+    public FileUtil()
+    {
     }
 
     //~ Methods ****************************************************************************
@@ -52,22 +54,26 @@ public class FileUtil {
      * @throws IOException
      */
     public static ArrayList getFileContent(String fileName)
-            throws IOException {
+            throws IOException
+    {
         ArrayList result = new ArrayList();
 
         File aFile = new File(fileName);
 
-        if (!aFile.isFile()) {
+        if (!aFile.isFile())
+        {
             //throw new IOException( fileName + " is not a regular File" );
             return result; // None
         }
 
         BufferedReader reader = null;
 
-        try {
+        try
+        {
             reader = new BufferedReader(new FileReader(aFile));
         }
-        catch (FileNotFoundException e1) {
+        catch (FileNotFoundException e1)
+        {
             // TODO handle Exception
             e1.printStackTrace();
 
@@ -76,7 +82,8 @@ public class FileUtil {
 
         String aLine = null;
 
-        while ((aLine = reader.readLine()) != null) {
+        while ((aLine = reader.readLine()) != null)
+        {
             result.add(aLine + "\n");
         }
 
@@ -93,7 +100,8 @@ public class FileUtil {
      * @param aSearchString the string search for
      * @return true if found in the file otherwise false
      */
-    public static boolean fileContains(String aFileName, String aSearchString) {
+    public static boolean fileContains(String aFileName, String aSearchString)
+    {
         return (fileContains(aFileName, aSearchString, false));
     }
 
@@ -106,7 +114,8 @@ public class FileUtil {
      * @return true if found in the file otherwise false
      */
     public static boolean fileContains(String aFileName, String aSearchString,
-                                       boolean caseInSensitiveSearch) {
+                                       boolean caseInSensitiveSearch)
+    {
         boolean result = false;
 
         String searchString = caseInSensitiveSearch
@@ -114,24 +123,29 @@ public class FileUtil {
 
         ArrayList fileContent = new ArrayList();
 
-        try {
+        try
+        {
             fileContent = getFileContent(aFileName);
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             // TODO handle Exception
             e.printStackTrace();
         }
 
         Iterator linesIter = fileContent.iterator();
 
-        while (linesIter.hasNext()) {
+        while (linesIter.hasNext())
+        {
             String currentline = (String) linesIter.next();
 
-            if (caseInSensitiveSearch) {
+            if (caseInSensitiveSearch)
+            {
                 currentline = currentline.toLowerCase();
             }
 
-            if (currentline.indexOf(searchString) > -1) {
+            if (currentline.indexOf(searchString) > -1)
+            {
                 result = true;
 
                 break;
@@ -148,41 +162,53 @@ public class FileUtil {
      * @return Returns long value which is the date and time of the file. If any error
      *         occures returns -1 (=no file date and time available).
      */
-    public static long getFileDateTime(URL url) {
-        if (url == null) {
+    public static long getFileDateTime(URL url)
+    {
+        if (url == null)
+        {
             return -1;
         }
 
         String fileName = url.getFile();
-        if (fileName.charAt(0) == '/' || fileName.charAt(0) == '\\') {
+        if (fileName.charAt(0) == '/' || fileName.charAt(0) == '\\')
+        {
             fileName = fileName.substring(1, fileName.length());
         }
 
-        try {
+        try
+        {
             File file = new File(fileName);
             // File name must be a file or a directory.
-            if (!file.isDirectory() && !file.isFile()) {
+            if (!file.isDirectory() && !file.isFile())
+            {
                 return -1;
             }
 
             return file.lastModified();
         }
-        catch (java.lang.Exception e) {   // Trap all Exception based exceptions and return -1.
+        catch (java.lang.Exception e)
+        {   // Trap all Exception based exceptions and return -1.
             return -1;
         }
     }
 
-    public static String[] getFileNames(String dirPath) throws Exception {
+    public static String[] getFileNames(String dirPath) throws Exception
+    {
         return getFileNames(dirPath, null);
     }
 
-    public static String[] getFileNames(String dirPath, FilenameFilter fileNameFilter) throws Exception {
+    public static String[] getFileNames(String dirPath, FilenameFilter fileNameFilter) throws Exception
+    {
         String fileNames[] = null;
         File dir = new File(dirPath);
-        if (dir.isDirectory()) {
-            if (fileNameFilter != null) {
+        if (dir.isDirectory())
+        {
+            if (fileNameFilter != null)
+            {
                 fileNames = dir.list(fileNameFilter);
-            } else {
+            }
+            else
+            {
                 fileNames = dir.list();
             }
         }
@@ -194,6 +220,7 @@ public class FileUtil {
      *
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
     }
 }

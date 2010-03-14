@@ -5,7 +5,8 @@ package com.izforge.izpack.panels.process;
  *
  * @author Anthonin Bonnefoy
  */
-class ButtonConfig {
+class ButtonConfig
+{
     private final String conditionid;
     private final boolean unlockPrev;
     private final boolean unlockNext;
@@ -15,7 +16,8 @@ class ButtonConfig {
      * @param unlockPrev
      * @param unlockNext
      */
-    public ButtonConfig(String conditionid, boolean unlockPrev, boolean unlockNext) {
+    public ButtonConfig(String conditionid, boolean unlockPrev, boolean unlockNext)
+    {
         this.conditionid = conditionid;
         this.unlockPrev = unlockPrev;
         this.unlockNext = unlockNext;
@@ -24,14 +26,16 @@ class ButtonConfig {
     /**
      * @return the unlockPrev
      */
-    public boolean isUnlockPrev() {
+    public boolean isUnlockPrev()
+    {
         return unlockPrev;
     }
 
     /**
      * @return the unlockNext
      */
-    public boolean isUnlockNext() {
+    public boolean isUnlockNext()
+    {
         return unlockNext;
     }
 
@@ -39,7 +43,8 @@ class ButtonConfig {
     /**
      * @return the conditionid
      */
-    public String getConditionid() {
+    public String getConditionid()
+    {
         return conditionid;
     }
 }

@@ -29,7 +29,8 @@ import java.awt.Color;
 /**
  * This class makes it possible to use default buttons on macosx platform
  */
-public class ButtonFactory {
+public class ButtonFactory
+{
 
     private static boolean useHighlightButtons = false;
 
@@ -38,7 +39,8 @@ public class ButtonFactory {
     /**
      * Enable icons for buttons This setting has no effect on OSX
      */
-    public static void useButtonIcons() {
+    public static void useButtonIcons()
+    {
         useButtonIcons(true);
     }
 
@@ -47,8 +49,10 @@ public class ButtonFactory {
      *
      * @param useit flag which determines the behavior
      */
-    public static void useButtonIcons(boolean useit) {
-        if (System.getProperty("mrj.version") == null) {
+    public static void useButtonIcons(boolean useit)
+    {
+        if (System.getProperty("mrj.version") == null)
+        {
             useButtonIcons = useit;
         }
     }
@@ -56,7 +60,8 @@ public class ButtonFactory {
     /**
      * Enable highlight buttons This setting has no effect on OSX
      */
-    public static void useHighlightButtons() {
+    public static void useHighlightButtons()
+    {
         useHighlightButtons(true);
     }
 
@@ -65,58 +70,88 @@ public class ButtonFactory {
      *
      * @param useit flag which determines the behavior
      */
-    public static void useHighlightButtons(boolean useit) {
-        if (System.getProperty("mrj.version") == null) {
+    public static void useHighlightButtons(boolean useit)
+    {
+        if (System.getProperty("mrj.version") == null)
+        {
             useHighlightButtons = useit;
         }
         useButtonIcons(useit);
     }
 
-    public static JButton createButton(Icon icon, Color color) {
-        if (useHighlightButtons) {
-            if (useButtonIcons) {
+    public static JButton createButton(Icon icon, Color color)
+    {
+        if (useHighlightButtons)
+        {
+            if (useButtonIcons)
+            {
                 return new HighlightJButton(icon, color);
-            } else {
+            }
+            else
+            {
                 return new HighlightJButton("", color);
             }
 
-        } else {
-            if (useButtonIcons) {
+        }
+        else
+        {
+            if (useButtonIcons)
+            {
                 return new JButton(icon);
-            } else {
+            }
+            else
+            {
                 return new JButton();
             }
         }
     }
 
-    public static JButton createButton(String text, Color color) {
-        if (useHighlightButtons) {
+    public static JButton createButton(String text, Color color)
+    {
+        if (useHighlightButtons)
+        {
             return new HighlightJButton(text, color);
-        } else {
+        }
+        else
+        {
             return new JButton(text);
         }
     }
 
-    public static JButton createButton(String text, Icon icon, Color color) {
-        if (useHighlightButtons) {
-            if (useButtonIcons) {
+    public static JButton createButton(String text, Icon icon, Color color)
+    {
+        if (useHighlightButtons)
+        {
+            if (useButtonIcons)
+            {
                 return new HighlightJButton(text, icon, color);
-            } else {
+            }
+            else
+            {
                 return new HighlightJButton(text, color);
             }
-        } else {
-            if (useButtonIcons) {
+        }
+        else
+        {
+            if (useButtonIcons)
+            {
                 return new JButton(text, icon);
-            } else {
+            }
+            else
+            {
                 return new JButton(text);
             }
         }
     }
 
-    public static JButton createButton(Action a, Color color) {
-        if (useHighlightButtons) {
+    public static JButton createButton(Action a, Color color)
+    {
+        if (useHighlightButtons)
+        {
             return new HighlightJButton(a, color);
-        } else {
+        }
+        else
+        {
             return new JButton(a);
         }
     }

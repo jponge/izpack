@@ -25,24 +25,24 @@ package com.izforge.izpack.installer.base;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLWriter;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.gui.log.Log;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.debugger.Debugger;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.installer.unpacker.Unpacker;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
@@ -952,7 +952,8 @@ public class InstallerFrame extends JFrame
         }
 
         // Wipe the files that had been installed
-        for (String p : uninstallData.getInstalledFilesList()) {
+        for (String p : uninstallData.getInstalledFilesList())
+        {
             File f = new File(p);
             f.delete();
         }

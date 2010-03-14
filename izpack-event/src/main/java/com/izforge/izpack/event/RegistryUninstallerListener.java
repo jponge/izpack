@@ -21,10 +21,11 @@
 
 package com.izforge.izpack.event;
 
+import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.api.exception.WrappedNativeLibException;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.core.os.RegistryHandler;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.TargetFactory;
 
 import java.io.InputStream;
@@ -38,64 +39,81 @@ import java.util.List;
  *
  * @author Klaus Bartz
  */
-public class RegistryUninstallerListener extends NativeUninstallerListener {
+public class RegistryUninstallerListener extends NativeUninstallerListener
+{
 
     /**
      * Default constructor
+     *
+     * @param langPack
      */
-    public RegistryUninstallerListener() {
-        super();
+    public RegistryUninstallerListener(LocaleDatabase langPack)
+    {
+        super(langPack);
     }
 
     /*
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.uninstaller.UninstallerListener#afterDeletion(java.util.List,
-     * com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
-    public void beforeDeletion(List files, AbstractUIProgressHandler handler) throws Exception {
+    public void beforeDeletion(List files, AbstractUIProgressHandler handler) throws Exception
+    {
         // Load the defined actions.
         InputStream in = getClass().getResourceAsStream("/registryEntries");
-        if (in == null) { // No actions, nothing todo.
+        if (in == null)
+        { // No actions, nothing todo.
             return;
         }
         ObjectInputStream objIn = new ObjectInputStream(in);
         List allActions = (List) objIn.readObject();
         objIn.close();
         in.close();
-        if (allActions == null || allActions.size() < 1) {
+        if (allActions == null || allActions.size() < 1)
+        {
             return;
         }
-        try {
+        try
+        {
             RegistryHandler registryHandler = initializeRegistryHandler();
-            if (registryHandler == null) {
+            if (registryHandler == null)
+            {
                 return;
             }
             registryHandler.activateLogging();
             registryHandler.setLoggingInfo(allActions);
             registryHandler.rewind();
         }
-        catch (Exception e) {
-            if (e instanceof NativeLibException) {
+        catch (Exception e)
+        {
+            if (e instanceof NativeLibException)
+            {
                 throw new WrappedNativeLibException(e);
-            } else {
+            }
+            else
+            {
                 throw e;
             }
         }
     }
 
-    private RegistryHandler initializeRegistryHandler() throws Exception {
+    private RegistryHandler initializeRegistryHandler() throws Exception
+    {
         RegistryHandler registryHandler = null;
-        try {
+        try
+        {
             registryHandler = (RegistryHandler) (TargetFactory.getInstance()
                     .makeObject("com.izforge.izpack.core.os.RegistryHandler"));
         }
-        catch (Throwable exception) {
+        catch (Throwable exception)
+        {
             exception.printStackTrace();
             registryHandler = null; // Do nothing, do not set permissions ...
         }
-        if (registryHandler != null && (!registryHandler.good() || !registryHandler.doPerform())) {
+        if (registryHandler != null && (!registryHandler.good() || !registryHandler.doPerform()))
+        {
             System.out.println("initializeRegistryHandler is Bad " + registryHandler.good()
                     + registryHandler.doPerform());
             registryHandler = null;

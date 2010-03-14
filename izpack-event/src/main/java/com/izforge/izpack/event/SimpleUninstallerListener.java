@@ -21,8 +21,8 @@
 
 package com.izforge.izpack.event;
 
-import com.izforge.izpack.core.event.UninstallerListener;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.api.event.UninstallerListener;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 
 import java.io.File;
 import java.util.List;
@@ -35,12 +35,14 @@ import java.util.List;
  *
  * @author Klaus Bartz
  */
-public class SimpleUninstallerListener implements UninstallerListener {
+public class SimpleUninstallerListener implements UninstallerListener
+{
 
     /**
      *
      */
-    public SimpleUninstallerListener() {
+    public SimpleUninstallerListener()
+    {
         super();
     }
 
@@ -48,10 +50,11 @@ public class SimpleUninstallerListener implements UninstallerListener {
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.uninstaller.UninstallerListener#beforeDeletion(java.util.List,
-     * com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
-    public void beforeDeletion(List files, AbstractUIProgressHandler handler) throws Exception {
+    public void beforeDeletion(List files, AbstractUIProgressHandler handler) throws Exception
+    {
         // Do nothing
     }
 
@@ -59,10 +62,11 @@ public class SimpleUninstallerListener implements UninstallerListener {
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.uninstaller.UninstallerListener#beforeDelete(java.io.File,
-     * com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
-    public void beforeDelete(File file, AbstractUIProgressHandler handler) throws Exception {
+    public void beforeDelete(File file, AbstractUIProgressHandler handler) throws Exception
+    {
         // Do nothing
     }
 
@@ -70,10 +74,11 @@ public class SimpleUninstallerListener implements UninstallerListener {
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.uninstaller.UninstallerListener#afterDelete(java.io.File,
-     * com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
-    public void afterDelete(File file, AbstractUIProgressHandler handler) throws Exception {
+    public void afterDelete(File file, AbstractUIProgressHandler handler) throws Exception
+    {
         // Do nothing
     }
 
@@ -81,10 +86,11 @@ public class SimpleUninstallerListener implements UninstallerListener {
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.uninstaller.UninstallerListener#afterDeletion(java.util.List,
-     * com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
-    public void afterDeletion(List files, AbstractUIProgressHandler handler) throws Exception {
+    public void afterDeletion(List files, AbstractUIProgressHandler handler) throws Exception
+    {
         // Do nothing
     }
 
@@ -94,7 +100,8 @@ public class SimpleUninstallerListener implements UninstallerListener {
      * @see com.izforge.izpack.uninstaller.UninstallerListener#isFileListener()
      */
 
-    public boolean isFileListener() {
+    public boolean isFileListener()
+    {
         return false;
     }
 

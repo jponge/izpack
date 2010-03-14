@@ -23,7 +23,7 @@ package com.izforge.izpack.event;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.exception.WrappedNativeLibException;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 
 /**
  * This class implements some methods which are needed by installer custom actions with native
@@ -31,12 +31,14 @@ import com.izforge.izpack.util.AbstractUIProgressHandler;
  *
  * @author Klaus Bartz
  */
-public class NativeInstallerListener extends SimpleInstallerListener {
+public class NativeInstallerListener extends SimpleInstallerListener
+{
 
     /**
      * Default constructor
      */
-    public NativeInstallerListener() {
+    public NativeInstallerListener()
+    {
         super();
     }
 
@@ -46,7 +48,8 @@ public class NativeInstallerListener extends SimpleInstallerListener {
      *
      * @param useSpecHelper
      */
-    public NativeInstallerListener(boolean useSpecHelper) {
+    public NativeInstallerListener(boolean useSpecHelper)
+    {
         super(useSpecHelper);
     }
 
@@ -54,14 +57,16 @@ public class NativeInstallerListener extends SimpleInstallerListener {
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#beforePacks(com.izforge.izpack.installer.AutomatedInstallData,
-     * int, com.izforge.izpack.util.AbstractUIProgressHandler)
+     * int, com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
     public void beforePacks(AutomatedInstallData idata, Integer npacks,
-                            AbstractUIProgressHandler handler) throws Exception {
+                            AbstractUIProgressHandler handler) throws Exception
+    {
         super.beforePacks(idata, npacks, handler);
 
-        if (SimpleInstallerListener.langpack != null) { // Initialize WrappedNativeLibException with the langpack for error messages.
+        if (SimpleInstallerListener.langpack != null)
+        { // Initialize WrappedNativeLibException with the langpack for error messages.
             WrappedNativeLibException.setLangpack(SimpleInstallerListener.langpack);
         }
 

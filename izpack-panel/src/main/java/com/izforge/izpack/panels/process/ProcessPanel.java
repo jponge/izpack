@@ -22,16 +22,14 @@
 package com.izforge.izpack.panels.process;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.handler.AbstractUIProcessHandler;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.util.AbstractUIProcessHandler;
 
 import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -44,7 +42,8 @@ import java.io.IOException;
  * @author Tino Schwarze
  * @author Julien Ponge
  */
-public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
+public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
+{
 
     /**
      *
@@ -92,7 +91,8 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
      * @param parent             The parent window.
      * @param idata              The installation installDataGUI.
      */
-    public ProcessPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, ProcessPanelWorker processPanelWorker) throws IOException {
+    public ProcessPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, ProcessPanelWorker processPanelWorker) throws IOException
+    {
         super(parent, idata, resourceManager);
 
         this.worker = processPanelWorker;
@@ -140,14 +140,16 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
      *
      * @return The validation state.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         return validated;
     }
 
     /**
      * The compiler starts.
      */
-    public void startProcessing(int no_of_jobs) {
+    public void startProcessing(int no_of_jobs)
+    {
         this.noOfJobs = no_of_jobs;
         overallProgressBar.setMaximum(no_of_jobs);
         overallProgressBar.setIndeterminate(true);
@@ -157,7 +159,8 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
     /**
      * The compiler stops.
      */
-    public void finishProcessing(boolean unlockPrev, boolean unlockNext) {
+    public void finishProcessing(boolean unlockPrev, boolean unlockNext)
+    {
         overallProgressBar.setIndeterminate(false);
         String no_of_jobs = Integer.toString(this.noOfJobs);
         overallProgressBar.setString(no_of_jobs + " / " + no_of_jobs);
@@ -167,7 +170,8 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
 
         validated = true;
         this.installData.setInstallSuccess(worker.getResult());
-        if (this.installData.getPanels().indexOf(this) != (this.installData.getPanels().size() - 1)) {
+        if (this.installData.getPanels().indexOf(this) != (this.installData.getPanels().size() - 1))
+        {
             if (unlockNext)
             {
                 parent.unlockNextButton();
@@ -188,13 +192,16 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
      * @param message The message.
      * @param stderr  Whether the message came from stderr or stdout.
      */
-    public void logOutput(String message, boolean stderr) {
+    public void logOutput(String message, boolean stderr)
+    {
         // TODO: make it colored
         this.outputPane.append(message + '\n');
 
-        SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable()
+        {
 
-            public void run() {
+            public void run()
+            {
                 outputPane.setCaretPosition(outputPane.getText().length());
             }
         });
@@ -205,7 +212,8 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
      *
      * @param jobName The job name.
      */
-    public void startProcess(String jobName) {
+    public void startProcess(String jobName)
+    {
         processLabel.setText(jobName);
 
         this.currentJob++;
@@ -214,14 +222,16 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
                 + Integer.toString(this.noOfJobs));
     }
 
-    public void finishProcess() {
+    public void finishProcess()
+    {
 
     }
 
     /**
      * Called when the panel becomes active.
      */
-    public void panelActivate() {
+    public void panelActivate()
+    {
         // We clip the panel
         Dimension dim = parent.getPanelsContainerSize();
         dim.width -= (dim.width / 4);
@@ -233,7 +243,8 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
         parent.lockNextButton();
 
         // only let the process start if the weren't finished before.
-        if (!finishedWork) {
+        if (!finishedWork)
+        {
             this.worker.startThread();
         }
     }
@@ -241,7 +252,8 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
     /**
      * Create XML installDataGUI for automated installation.
      */
-    public void makeXMLData(IXMLElement panelRoot) {
+    public void makeXMLData(IXMLElement panelRoot)
+    {
         // does nothing (no state to save)
     }
 

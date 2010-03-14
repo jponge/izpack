@@ -30,7 +30,8 @@ import java.util.*;
  *
  * @author Klaus Bartz
  */
-public class NativeLibException extends Exception {
+public class NativeLibException extends Exception
+{
 
     private static final long serialVersionUID = 3257002172494721080L;
 
@@ -64,7 +65,8 @@ public class NativeLibException extends Exception {
      */
     private ArrayList<String> args = new ArrayList<String>();
 
-    static {
+    static
+    {
         // add the first resource bundle
         addResourceBundle("com.coi.tools.os.win.resources.NativeLibErr");
     }
@@ -79,15 +81,19 @@ public class NativeLibException extends Exception {
      *
      * @param bundlePath path of bundle without locale
      */
-    public static void addResourceBundle(String bundlePath) {
+    public static void addResourceBundle(String bundlePath)
+    {
         ResourceBundle bd = null;
-        if (messageResourceBundles.containsKey(bundlePath)) {
+        if (messageResourceBundles.containsKey(bundlePath))
+        {
             return;
         }
-        try {
+        try
+        {
             bd = ResourceBundle.getBundle(bundlePath);
         }
-        catch (MissingResourceException mre) {
+        catch (MissingResourceException mre)
+        {
             mre.printStackTrace();
         }
         messageResourceBundles.put(bundlePath, bd);
@@ -97,7 +103,8 @@ public class NativeLibException extends Exception {
     /**
      * The constructor.
      */
-    public NativeLibException() {
+    public NativeLibException()
+    {
         super();
     }
 
@@ -106,7 +113,8 @@ public class NativeLibException extends Exception {
      *
      * @param message to be used
      */
-    public NativeLibException(String message) {
+    public NativeLibException(String message)
+    {
         super(message);
     }
 
@@ -115,7 +123,8 @@ public class NativeLibException extends Exception {
      *
      * @param cause to be used
      */
-    public NativeLibException(Throwable cause) {
+    public NativeLibException(Throwable cause)
+    {
         super(cause);
     }
 
@@ -125,7 +134,8 @@ public class NativeLibException extends Exception {
      * @param message message to be used
      * @param cause   cause to be used
      */
-    public NativeLibException(String message, Throwable cause) {
+    public NativeLibException(String message, Throwable cause)
+    {
         super(message, cause);
     }
 
@@ -137,7 +147,8 @@ public class NativeLibException extends Exception {
      * @param libString message for the internal handled error
      * @param osString  system error message
      */
-    public NativeLibException(int libErr, int osErr, String libString, String osString) {
+    public NativeLibException(int libErr, int osErr, String libString, String osString)
+    {
         super();
         this.libErr = libErr;
         this.osErr = osErr;
@@ -151,35 +162,45 @@ public class NativeLibException extends Exception {
      * @see java.lang.Throwable#getMessage()
      */
 
-    public String getMessage() {
+    public String getMessage()
+    {
         StringBuffer retval = new StringBuffer();
         boolean next = false;
-        if (libErrString != null) {
+        if (libErrString != null)
+        {
             retval.append(getLocalizedLibMessage());
             next = true;
-        } else if (libErr != 0) {
-            if (next) {
+        }
+        else if (libErr != 0)
+        {
+            if (next)
+            {
                 retval.append("\n");
             }
             next = true;
             retval.append(getMsg("libErrNumber." + Integer.toString(libErr)));
         }
-        if (osErr != 0) {
-            if (next) {
+        if (osErr != 0)
+        {
+            if (next)
+            {
                 retval.append("\n");
             }
             next = true;
             retval.append(getMsg("libInternal.OsErrNumPraefix")).append(Integer.toString(osErr));
         }
-        if (osErrString != null) {
-            if (next) {
+        if (osErrString != null)
+        {
+            if (next)
+            {
                 retval.append("\n");
             }
             next = true;
             // Message self should be localized in the native part
             retval.append(getMsg("libInternal.OsErrStringPraefix")).append(getOsMessage());
         }
-        if (retval.length() > 0) {
+        if (retval.length() > 0)
+        {
             return (reviseMsgWithArgs(retval.toString()));
         }
         return null;
@@ -190,7 +211,8 @@ public class NativeLibException extends Exception {
      *
      * @return the number of the internal handled error
      */
-    public int getLibErr() {
+    public int getLibErr()
+    {
         return libErr;
     }
 
@@ -199,7 +221,8 @@ public class NativeLibException extends Exception {
      *
      * @return the messager of the internal handled error
      */
-    public String getLibMessage() {
+    public String getLibMessage()
+    {
         return libErrString;
     }
 
@@ -208,7 +231,8 @@ public class NativeLibException extends Exception {
      *
      * @return the localized message of the internal handled error
      */
-    public String getLocalizedLibMessage() {
+    public String getLocalizedLibMessage()
+    {
         return (getMsg(libErrString));
     }
 
@@ -217,7 +241,8 @@ public class NativeLibException extends Exception {
      *
      * @return the number of the system error
      */
-    public int getOsErr() {
+    public int getOsErr()
+    {
         return (osErr);
     }
 
@@ -226,7 +251,8 @@ public class NativeLibException extends Exception {
      *
      * @return the messager of the system error
      */
-    public String getOsMessage() {
+    public String getOsMessage()
+    {
         return (osErrString);
     }
 
@@ -235,7 +261,8 @@ public class NativeLibException extends Exception {
      *
      * @param arg string to be added to the internal argument list
      */
-    public void addArgument(String arg) {
+    public void addArgument(String arg)
+    {
         args.add(arg);
     }
 
@@ -244,7 +271,8 @@ public class NativeLibException extends Exception {
      *
      * @return the internal argument list
      */
-    public ArrayList<String> getArguments() {
+    public ArrayList<String> getArguments()
+    {
         return (args);
     }
 
@@ -254,8 +282,10 @@ public class NativeLibException extends Exception {
      * @param msg message to be revised
      * @return revised message
      */
-    public String reviseMsgWithArgs(String msg) {
-        for (int i = 0; i < args.size(); ++i) {
+    public String reviseMsgWithArgs(String msg)
+    {
+        for (int i = 0; i < args.size(); ++i)
+        {
             String key = "{" + Integer.toString(i) + "}";
             msg = replaceString(msg, key, args.get(i));
         }
@@ -269,13 +299,17 @@ public class NativeLibException extends Exception {
      * @return the founded message as int value
      */
 
-    private String getMsg(String s) {
+    private String getMsg(String s)
+    {
         Iterator<ResourceBundle> it = messageResourceBundles.values().iterator();
-        while (it.hasNext()) {
-            try {
+        while (it.hasNext())
+        {
+            try
+            {
                 return ((it.next()).getString(s));
             }
-            catch (MissingResourceException missingresourceexception) { // do not throw, else look in next bundle.
+            catch (MissingResourceException missingresourceexception)
+            { // do not throw, else look in next bundle.
             }
         }
         return (s);
@@ -291,22 +325,27 @@ public class NativeLibException extends Exception {
      * @param with        with what string what should be replaced
      * @return a new String object if what was found in the given string, else the given string self
      */
-    private static String replaceString(String destination, String what, String with) {
-        if (destination.indexOf(what) >= 0) { // what found, with (placeholder) not included in destination ->
+    private static String replaceString(String destination, String what, String with)
+    {
+        if (destination.indexOf(what) >= 0)
+        { // what found, with (placeholder) not included in destination ->
             // perform changing.
             StringBuffer buf = new StringBuffer();
             int last = 0;
             int current = destination.indexOf(what);
             int whatLength = what.length();
-            while (current >= 0) { // Do not use Methods from JRE 1.4 and higher ...
-                if (current > 0) {
+            while (current >= 0)
+            { // Do not use Methods from JRE 1.4 and higher ...
+                if (current > 0)
+                {
                     buf.append(destination.substring(last, current));
                 }
                 buf.append(with);
                 last = current + whatLength;
                 current = destination.indexOf(what, last);
             }
-            if (destination.length() > last) {
+            if (destination.length() > last)
+            {
                 buf.append(destination.substring(last));
             }
             return buf.toString();

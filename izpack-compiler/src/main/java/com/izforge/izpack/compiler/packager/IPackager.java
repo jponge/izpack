@@ -16,16 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.compiler.packager;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.DynamicVariable;
-import com.izforge.izpack.api.data.Info;
-import com.izforge.izpack.api.data.InstallerRequirement;
-import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.data.CustomData;
-import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.PackInfo;
 
 import java.net.URL;
@@ -38,7 +35,8 @@ import java.util.Properties;
  *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
-public interface IPackager {
+public interface IPackager
+{
 
     /**
      * Create the installer, beginning with the specified jar. If the name specified does not end in

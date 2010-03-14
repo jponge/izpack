@@ -26,7 +26,8 @@ package com.izforge.izpack.util;
  *
  * @author Klaus Bartz
  */
-public interface ExtendedUIProgressHandler {
+public interface ExtendedUIProgressHandler
+{
 
     static final int BEFORE = 0;
 

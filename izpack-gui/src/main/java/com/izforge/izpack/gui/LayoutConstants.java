@@ -29,7 +29,8 @@ import javax.swing.SwingConstants;
  *
  * @author Klaus Bartz
  */
-public interface LayoutConstants extends SwingConstants {
+public interface LayoutConstants extends SwingConstants
+{
 
     /**
      * Identifier for gaps between labels.

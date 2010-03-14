@@ -33,7 +33,8 @@ import java.io.Serializable;
  *
  * @author Klaus Bartz
  */
-public class RegDataContainer implements Cloneable, Serializable, MSWinConstants {
+public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
+{
 
     private static final long serialVersionUID = 3979265850388066865L;
 
@@ -52,7 +53,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
     /**
      * Default constructor.
      */
-    public RegDataContainer() {
+    public RegDataContainer()
+    {
         super();
     }
 
@@ -62,9 +64,11 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      * @param type
      * @throws IllegalArgumentException if the type is not valid
      */
-    public RegDataContainer(int type) throws IllegalArgumentException {
+    public RegDataContainer(int type) throws IllegalArgumentException
+    {
         super();
-        if (!isValidType(type)) {
+        if (!isValidType(type))
+        {
             throw new IllegalArgumentException("Type is not valid");
         }
 
@@ -76,7 +80,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      *
      * @param data data which should be used with this object
      */
-    public RegDataContainer(long data) {
+    public RegDataContainer(long data)
+    {
         super();
         type = REG_DWORD;
         dwordData = data;
@@ -87,7 +92,8 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      *
      * @param data data which should be used with this object
      */
-    public RegDataContainer(String data) {
+    public RegDataContainer(String data)
+    {
         super();
         if (containsPlaceholder(data))
         {

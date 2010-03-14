@@ -117,9 +117,11 @@
 
     <!-- The listeners section for CustomActions -->
     <listeners>
-        <listener installer="SummaryLoggerInstallerListener" />
-        <listener installer="RegistryInstallerListener"
-                  uninstaller="RegistryUninstallerListener">
+        <listener classname="SummaryLoggerInstallerListener" stage="install" />
+        <listener classname="RegistryInstallerListener" stage="install">
+            <os family="windows" />
+        </listener>
+        <listener classname="RegistryUninstallerListener" stage="uninstall">
             <os family="windows" />
         </listener>
     </listeners>

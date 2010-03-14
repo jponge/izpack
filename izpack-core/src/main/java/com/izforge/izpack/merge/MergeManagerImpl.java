@@ -1,5 +1,6 @@
 package com.izforge.izpack.merge;
 
+import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import org.apache.tools.zip.ZipOutputStream;
 
@@ -14,45 +15,59 @@ import java.util.List;
  *
  * @author Anthonin Bonnefoy
  */
-public class MergeManagerImpl implements MergeManager {
+public class MergeManagerImpl implements MergeManager
+{
 
 
     private List<Mergeable> mergeableList;
+    private PathResolver pathResolver;
 
-    public MergeManagerImpl() {
+    public MergeManagerImpl(PathResolver pathResolver)
+    {
+        this.pathResolver = pathResolver;
         mergeableList = new ArrayList<Mergeable>();
     }
 
-    public void addResourceToMerge(Mergeable mergeable) {
+    public void addResourceToMerge(Mergeable mergeable)
+    {
         mergeableList.add(mergeable);
     }
 
-    public void addResourceToMerge(String resourcePath) {
-        mergeableList.addAll(PathResolver.getMergeableFromPath(resourcePath));
+    public void addResourceToMerge(String resourcePath)
+    {
+        mergeableList.addAll(pathResolver.getMergeableFromPath(resourcePath));
     }
 
-    public void addResourceToMerge(String resourcePath, String destination) {
-        mergeableList.addAll(PathResolver.getMergeableFromPath(resourcePath, destination));
+    public void addResourceToMerge(String resourcePath, String destination)
+    {
+        mergeableList.addAll(pathResolver.getMergeableFromPath(resourcePath, destination));
     }
 
-    public void merge(ZipOutputStream outputStream) {
-        for (Mergeable mergeable : mergeableList) {
+    public void merge(ZipOutputStream outputStream)
+    {
+        for (Mergeable mergeable : mergeableList)
+        {
             mergeable.merge(outputStream);
         }
         mergeableList.clear();
     }
 
-    public void merge(java.util.zip.ZipOutputStream outputStream) {
-        for (Mergeable mergeable : mergeableList) {
+    public void merge(java.util.zip.ZipOutputStream outputStream)
+    {
+        for (Mergeable mergeable : mergeableList)
+        {
             mergeable.merge(outputStream);
         }
         mergeableList.clear();
     }
 
-    public File find(FileFilter fileFilter) {
-        for (Mergeable mergeable : mergeableList) {
+    public File find(FileFilter fileFilter)
+    {
+        for (Mergeable mergeable : mergeableList)
+        {
             File file = mergeable.find(fileFilter);
-            if (file != null) {
+            if (file != null)
+            {
                 return file;
             }
         }

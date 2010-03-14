@@ -37,7 +37,8 @@ import java.util.Vector;
  * @author Scott Stark
  * @version $Revision$
  */
-public class ConfigHolder {
+public class ConfigHolder
+{
     /**
      * The parent element project
      */
@@ -66,44 +67,56 @@ public class ConfigHolder {
      *                        closing }
      */
     static void parseCompileProperties(String value, Vector<String> fragments, Vector<String> propertyRefs)
-            throws BuildException {
+            throws BuildException
+    {
         int prev = 0;
         int pos;
         // search for the next instance of $ from the 'prev' position
-        while ((pos = value.indexOf("@", prev)) >= 0) {
+        while ((pos = value.indexOf("@", prev)) >= 0)
+        {
 
             // if there was any text before this, add it as a fragment
             // TODO, this check could be modified to go if pos>prev;
             // seems like this current version could stick empty strings
             // into the list
-            if (pos > 0) {
+            if (pos > 0)
+            {
                 fragments.addElement(value.substring(prev, pos));
             }
             // if we are at the end of the string, we tack on a $
             // then move past it
-            if (pos == (value.length() - 1)) {
+            if (pos == (value.length() - 1))
+            {
                 fragments.addElement("@");
                 prev = pos + 1;
-            } else if (value.charAt(pos + 1) != '{') {
+            }
+            else if (value.charAt(pos + 1) != '{')
+            {
                 // peek ahead to see if the next char is a property or not
                 // not a property: insert the char as a literal
                 /*
                  * fragments.addElement(value.substring(pos + 1, pos + 2)); prev = pos + 2;
                  */
-                if (value.charAt(pos + 1) == '@') {
+                if (value.charAt(pos + 1) == '@')
+                {
                     // backwards compatibility two $ map to one mode
                     fragments.addElement("@");
                     prev = pos + 2;
-                } else {
+                }
+                else
+                {
                     // new behaviour: $X maps to $X for all values of X!='$'
                     fragments.addElement(value.substring(pos, pos + 2));
                     prev = pos + 2;
                 }
 
-            } else {
+            }
+            else
+            {
                 // property found, extract its name or bail on a typo
                 int endName = value.indexOf('}', pos);
-                if (endName < 0) {
+                if (endName < 0)
+                {
                     throw new BuildException("Syntax error in property: " + value);
                 }
                 String propertyName = value.substring(pos + 2, endName);
@@ -114,12 +127,14 @@ public class ConfigHolder {
         }
         // no more @ signs found
         // if there is any tail to the file, append it
-        if (prev < value.length()) {
+        if (prev < value.length())
+        {
             fragments.addElement(value.substring(prev));
         }
     }
 
-    ConfigHolder(Project project) {
+    ConfigHolder(Project project)
+    {
         this.project = project;
     }
 
@@ -130,7 +145,8 @@ public class ConfigHolder {
      *
      * @param rawText - the raw config element body text.
      */
-    public void addText(String rawText) {
+    public void addText(String rawText)
+    {
         // Locate the @{x} references
         Vector<String> fragments = new Vector<String>();
         Vector<String> propertyRefs = new Vector<String>();
@@ -141,24 +157,31 @@ public class ConfigHolder {
         Enumeration<String> i = fragments.elements();
         Enumeration<String> j = propertyRefs.elements();
 
-        while (i.hasMoreElements()) {
+        while (i.hasMoreElements())
+        {
             String fragment = i.nextElement();
-            if (fragment == null) {
+            if (fragment == null)
+            {
                 String propertyName = j.nextElement();
                 Object replacement = null;
 
                 // try to get it from the project
-                if (replacement == null) {
+                if (replacement == null)
+                {
                     replacement = project.getProperty(propertyName);
                 }
 
-                if (replacement == null) {
+                if (replacement == null)
+                {
                     project.log("Property @{" + propertyName + "} has not been set",
                             Project.MSG_VERBOSE);
                 }
-                if (replacement != null) {
+                if (replacement != null)
+                {
                     fragment = replacement.toString();
-                } else {
+                }
+                else
+                {
                     fragment = "@{" + propertyName + "}";
                 }
             }
@@ -173,7 +196,8 @@ public class ConfigHolder {
      *
      * @return the processed config element body text.
      */
-    public String getText() {
+    public String getText()
+    {
         return installText;
     }
 

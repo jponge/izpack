@@ -43,7 +43,8 @@ import java.util.List;
  * @phase package
  * @requiresDependencyResolution test
  */
-public class IzPackMojo extends AbstractMojo {
+public class IzPackMojo extends AbstractMojo
+{
 
     /**
      * IzPack descriptor file.  This plugin interpolates and saves this file to
@@ -164,31 +165,37 @@ public class IzPackMojo extends AbstractMojo {
     private CompilerContainer compilerContainer;
 
     public void execute()
-            throws MojoExecutionException, MojoFailureException {
+            throws MojoExecutionException, MojoFailureException
+    {
         init();
 
         buildInstaller();
     }
 
     private void init()
-            throws MojoFailureException {
+            throws MojoFailureException
+    {
         classifier = this.kind;
         compilerContainer = new CompilerContainer();
         compilerContainer.initBindings();
 
-        if (installerFile == null) {
+        if (installerFile == null)
+        {
             installerFile = new File(project.getBuild().getDirectory(), project.getBuild().getFinalName() + "-"
                     + classifier + "." + fileExtension);
         }
 
         File dir = installerFile.getParentFile();
-        if (!dir.exists()) {
-            if (!dir.mkdirs()) {
+        if (!dir.exists())
+        {
+            if (!dir.mkdirs())
+            {
                 throw new MojoFailureException("Could not create directory " + dir);
             }
         }
 
-        if (this.attach) {
+        if (this.attach)
+        {
             checkForDuplicateAttachArtifact();
         }
     }
@@ -200,7 +207,8 @@ public class IzPackMojo extends AbstractMojo {
      * @throws MojoExecutionException
      */
     private File interpolateDescriptorFile()
-            throws MavenFilteringException {
+            throws MavenFilteringException
+    {
         //TODO use the MavenFileFilter instead
 
         Resource resource = new Resource();
@@ -236,11 +244,13 @@ public class IzPackMojo extends AbstractMojo {
     }
 
     private void buildInstaller()
-            throws MojoExecutionException {
+            throws MojoExecutionException
+    {
         ClassLoader parentClassLoader = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(getClassLoader(parentClassLoader));
 
-        try {
+        try
+        {
             String config = this.interpolateDescriptorFile().getAbsolutePath();
             String basedir = izpackBasedir.getAbsolutePath();
 
@@ -253,47 +263,58 @@ public class IzPackMojo extends AbstractMojo {
 
             c.executeCompiler();
 
-            if (!c.wasSuccessful()) {
+            if (!c.wasSuccessful())
+            {
                 throw new MojoExecutionException("IzPack compilation ERROR");
             }
         }
-        catch (Exception ce) {
+        catch (Exception ce)
+        {
             throw new MojoExecutionException("IzPack compilation ERROR", ce);
         }
-        finally {
-            if (parentClassLoader != null) {
+        finally
+        {
+            if (parentClassLoader != null)
+            {
                 Thread.currentThread().setContextClassLoader(parentClassLoader);
             }
         }
 
-        if (this.attach) {
+        if (this.attach)
+        {
             projectHelper.attachArtifact(project, fileExtension, classifier, installerFile);
         }
     }
 
     private void checkForDuplicateAttachArtifact()
-            throws MojoFailureException {
+            throws MojoFailureException
+    {
         List attachedArtifacts = project.getAttachedArtifacts();
 
-        for (Object attachedArtifact : attachedArtifacts) {
+        for (Object attachedArtifact : attachedArtifacts)
+        {
             Artifact artifact = (Artifact) attachedArtifact;
-            if (installerFile.equals(artifact.getFile())) {
+            if (installerFile.equals(artifact.getFile()))
+            {
                 throw new MojoFailureException("Duplicate installers found: " + installerFile);
             }
         }
     }
 
     private ClassLoader getClassLoader(ClassLoader classLoader)
-            throws MojoExecutionException {
+            throws MojoExecutionException
+    {
         List<URL> classpathURLs = new ArrayList<URL>();
 
-        try {
+        try
+        {
             //make user's custom panel jar files available in the classpath
             URL customerPanelUrl = this.customPanelDirectory.toURI().toURL();
             classpathURLs.add(customerPanelUrl);
             getLog().debug("Added to classpath " + customPanelDirectory);
 
-            for (Object classpathElement : classpathElements) {
+            for (Object classpathElement : classpathElements)
+            {
                 String element = (String) classpathElement;
                 File f = new File(element);
                 URL newURL = f.toURI().toURL();
@@ -301,7 +322,8 @@ public class IzPackMojo extends AbstractMojo {
                 getLog().debug("Added to classpath " + element);
             }
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             throw new MojoExecutionException("Error parsing classpath: ", e);
         }
 

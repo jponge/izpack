@@ -21,13 +21,13 @@ package com.izforge.izpack.panels.checkedhello;
 
 import com.coi.tools.os.win.MSWinConstants;
 import com.coi.tools.os.win.RegDataContainer;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.os.RegistryHandler;
 import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.hello.HelloPanel;
-import com.izforge.izpack.util.AbstractUIHandler;
 
 /**
  * An extended hello panel class which detects whether the product was already installed or not.
@@ -37,7 +37,8 @@ import com.izforge.izpack.util.AbstractUIHandler;
  *
  * @author Klaus Bartz
  */
-public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
+public class CheckedHelloPanel extends HelloPanel implements MSWinConstants
+{
 
     /**
      * Required (serializable)
@@ -54,7 +55,8 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
      * @param parent The parent.
      * @param idata  The installation installDataGUI.
      */
-    public CheckedHelloPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public CheckedHelloPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, resourceManager);
         abortInstallation = isRegistered();
     }
@@ -67,7 +69,8 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
      * @return whether a multiple Install should be performed or not.
      * @throws Exception
      */
-    protected boolean multipleInstall() throws Exception {
+    protected boolean multipleInstall() throws Exception
+    {
         // Let us play a little bit with the regstry...
         // Just for fun we would resolve the path of the already
         // installed application.
@@ -83,7 +86,8 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
         while (true) // My goto alternative :-)
         {
 
-            if (uninstallName == null) {
+            if (uninstallName == null)
+            {
                 break; // Should never be...
             }
             // First we "create" the reg key.
@@ -116,7 +120,8 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
             // types.
             RegDataContainer val = rh.getValue(keyName, "UninstallString");
             int typeOfVal = val.getType();
-            switch (typeOfVal) {
+            switch (typeOfVal)
+            {
                 case REG_EXPAND_SZ:
                 case REG_SZ:
                     valString = val.getStringData();
@@ -139,7 +144,8 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
                 break;
             }
             String uPath = valString.substring(start).trim();
-            if (uPath.startsWith("\"")) {
+            if (uPath.startsWith("\""))
+            {
                 uPath = uPath.substring(1).trim();
             }
             int end = uPath.indexOf("uninstaller");
@@ -172,12 +178,15 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
      *
      * @return wether the handled application is already registered or not
      */
-    protected boolean isRegistered() {
+    protected boolean isRegistered()
+    {
         boolean retval = false;
-        try {
+        try
+        {
             // Get the default registry handler.
             RegistryHandler rh = RegistryDefaultHandler.getInstance();
-            if (rh != null) {
+            if (rh != null)
+            {
                 rh.verify(installData);
                 retval = rh.isProductRegistered();
 
@@ -187,7 +196,8 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
             // both cases we forget the "already exist" check.
 
         }
-        catch (Exception e) { // Will only be happen if registry handler is good, but an
+        catch (Exception e)
+        { // Will only be happen if registry handler is good, but an
             // exception at performing was thrown. This is an error...
             e.printStackTrace();
         }
@@ -199,7 +209,8 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
      *
      * @return true if the internal abort flag is not set, else false
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         return (!abortInstallation);
     }
 
@@ -209,24 +220,30 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
      * @see com.izforge.izpack.installer.IzPanel#panelActivate()
      */
 
-    public void panelActivate() {
-        if (abortInstallation) {
+    public void panelActivate()
+    {
+        if (abortInstallation)
+        {
             parent.lockNextButton();
-            try {
-                if (multipleInstall()) {
+            try
+            {
+                if (multipleInstall())
+                {
                     setUniqueUninstallKey();
                     abortInstallation = false;
                     parent.unlockNextButton();
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
         }
         RegistryHandler rh = RegistryDefaultHandler.getInstance();
-        if (rh != null) {
+        if (rh != null)
+        {
             installData.setVariable("UNINSTALL_NAME", rh.getUninstallName());
         }
     }
@@ -234,7 +251,8 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
     /**
      * @throws Exception
      */
-    private void setUniqueUninstallKey() throws Exception {
+    private void setUniqueUninstallKey() throws Exception
+    {
         // Let us play a little bit with the regstry again...
         // Now we search for an unique uninstall key.
         // First we need a handler. There is no overhead at a
@@ -251,8 +269,10 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
         }
         String uninstallName = rh.getUninstallName();
         int uninstallModifier = 1;
-        while (true) {
-            if (uninstallName == null) {
+        while (true)
+        {
+            if (uninstallName == null)
+            {
                 break; // Should never be...
             }
             // Now we define a new uninstall name.
@@ -261,7 +281,8 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
             // Then we "create" the reg key with it.
             String keyName = RegistryHandler.UNINSTALL_ROOT + newUninstallName;
             rh.setRoot(HKEY_LOCAL_MACHINE);
-            if (!rh.keyExist(keyName)) { // That's the name for which we searched.
+            if (!rh.keyExist(keyName))
+            { // That's the name for which we searched.
                 // Change the uninstall name in the reg helper.
                 rh.setUninstallName(newUninstallName);
                 // Now let us inform the user.

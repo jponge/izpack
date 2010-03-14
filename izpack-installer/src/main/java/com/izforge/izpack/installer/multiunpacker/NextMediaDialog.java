@@ -15,6 +15,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.installer.multiunpacker;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
@@ -36,7 +37,8 @@ import java.io.File;
  *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
-public class NextMediaDialog extends JDialog implements ActionListener {
+public class NextMediaDialog extends JDialog implements ActionListener
+{
     private static final String NEXTMEDIA_MSG_ID = "nextmedia.msg";
     private static final String NEXTMEDIA_TITLE_ID = "nextmedia.title";
     private static final String BROWSEBTN_ID = "nextmedia.browsebtn";
@@ -63,7 +65,8 @@ public class NextMediaDialog extends JDialog implements ActionListener {
     /**
      * @throws HeadlessException
      */
-    public NextMediaDialog(InstallerFrame main, String nextmedia) throws HeadlessException {
+    public NextMediaDialog(InstallerFrame main, String nextmedia) throws HeadlessException
+    {
         this(null, main, nextmedia);
     }
 
@@ -71,11 +74,13 @@ public class NextMediaDialog extends JDialog implements ActionListener {
      * @param owner
      * @throws HeadlessException
      */
-    public NextMediaDialog(Frame owner, InstallerFrame main, String nextmedia) throws HeadlessException {
+    public NextMediaDialog(Frame owner, InstallerFrame main, String nextmedia) throws HeadlessException
+    {
         this(owner, main.langpack, main.icons, nextmedia);
     }
 
-    public NextMediaDialog(Frame owner, LocaleDatabase languagepack, IconsDatabase icons, String nextmedia) throws HeadlessException {
+    public NextMediaDialog(Frame owner, LocaleDatabase languagepack, IconsDatabase icons, String nextmedia) throws HeadlessException
+    {
         super(owner, languagepack.getString(NEXTMEDIA_TITLE_ID), true);
         this.owner = owner;
         this.langpack = languagepack;
@@ -86,17 +91,22 @@ public class NextMediaDialog extends JDialog implements ActionListener {
         this.initUI();
     }
 
-    public NextMediaDialog(Frame owner, AutomatedInstallData idata, String nextmedia) throws HeadlessException {
+    public NextMediaDialog(Frame owner, AutomatedInstallData idata, String nextmedia) throws HeadlessException
+    {
         this(owner, idata.getLangpack(), null, nextmedia);
     }
 
-    protected void initUI() {
-        if (this.icons != null) {
+    protected void initUI()
+    {
+        if (this.icons != null)
+        {
             this.msg = LabelFactory.create(this.langpack.getString(NEXTMEDIA_MSG_ID), this.icons.getImageIcon("warning"), JLabel.LEFT);
             this.browsebtn = ButtonFactory.createButton(this.langpack.getString(BROWSEBTN_ID), this.icons.getImageIcon("open"), new Color(230, 230, 230));
             this.okbtn = ButtonFactory.createButton(this.langpack.getString(OKBTN_ID), this.icons.getImageIcon("ok"), new Color(230, 230, 230));
             this.cancelbtn = ButtonFactory.createButton(this.langpack.getString(CANCELBTN_ID), this.icons.getImageIcon("cancel"), new Color(230, 230, 230));
-        } else {
+        }
+        else
+        {
             this.msg = new JLabel(this.langpack.getString(NEXTMEDIA_MSG_ID), JLabel.LEFT);
             this.browsebtn = new JButton(this.langpack.getString(BROWSEBTN_ID));
             this.okbtn = new JButton(this.langpack.getString(OKBTN_ID));
@@ -134,7 +144,8 @@ public class NextMediaDialog extends JDialog implements ActionListener {
 
         this.pack();
         // set location
-        if (this.owner != null) {
+        if (this.owner != null)
+        {
             Dimension mysize = this.getSize();
             Dimension ownersize = this.owner.getSize();
             Point position = this.owner.getLocationOnScreen();
@@ -146,33 +157,45 @@ public class NextMediaDialog extends JDialog implements ActionListener {
         }
     }
 
-    public String getNextMedia() {
+    public String getNextMedia()
+    {
         return this.nextmediainput;
     }
 
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == this.browsebtn) {
+    public void actionPerformed(ActionEvent e)
+    {
+        if (e.getSource() == this.browsebtn)
+        {
             JFileChooser jfc;
-            if (this.path.getText() != null) {
+            if (this.path.getText() != null)
+            {
                 jfc = new JFileChooser(this.path.getText());
-            } else {
+            }
+            else
+            {
                 jfc = new JFileChooser();
             }
             jfc.setFileFilter(new NextMediaFileFilter(this.nextmedianame, this.langpack));
             jfc.setDialogTitle(this.langpack.getString("nextmedia.choosertitle"));
             jfc.setDialogType(JFileChooser.OPEN_DIALOG);
             jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            if (jfc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            if (jfc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+            {
                 this.nextmediainput = jfc.getSelectedFile().getAbsolutePath();
                 this.path.setText(this.nextmediainput);
             }
-        } else if (e.getSource() == this.okbtn) {
+        }
+        else if (e.getSource() == this.okbtn)
+        {
             this.nextmediainput = this.path.getText();
             // close this dialog
             this.setVisible(false);
-        } else if (e.getSource() == this.cancelbtn) {
+        }
+        else if (e.getSource() == this.cancelbtn)
+        {
             int option = JOptionPane.showConfirmDialog(this, this.langpack.getString("installer.quit.message"), this.langpack.getString("installer.quit.title"), JOptionPane.YES_NO_OPTION);
-            if (option == JOptionPane.YES_OPTION) {
+            if (option == JOptionPane.YES_OPTION)
+            {
                 // exit
                 System.exit(-1);
             }

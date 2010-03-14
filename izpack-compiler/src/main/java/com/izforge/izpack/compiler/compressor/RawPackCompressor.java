@@ -19,6 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.compiler.compressor;
 
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -33,13 +34,15 @@ import java.io.OutputStream;
  *
  * @author Klaus Bartz
  */
-public class RawPackCompressor extends PackCompressorBase {
+public class RawPackCompressor extends PackCompressorBase
+{
     private static final String[] THIS_FORMAT_NAMES = {"raw", "uncompressed"};
 
     /**
      *
      */
-    public RawPackCompressor(VariableSubstitutor variableSubstitutor) {
+    public RawPackCompressor(VariableSubstitutor variableSubstitutor)
+    {
         super(variableSubstitutor);
         formatNames = THIS_FORMAT_NAMES;
     }
@@ -48,7 +51,8 @@ public class RawPackCompressor extends PackCompressorBase {
      * @see com.izforge.izpack.compressor.PackCompressor#getOutputStream(java.io.OutputStream)
      */
 
-    public OutputStream getOutputStream(OutputStream os) {
+    public OutputStream getOutputStream(OutputStream os)
+    {
         // In this pack compressor we must not use reflection because
         // the neede class will be always present (a base class of the VM).
         return (new BufferedOutputStream(os));

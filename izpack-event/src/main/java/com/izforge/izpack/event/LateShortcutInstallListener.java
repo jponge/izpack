@@ -23,8 +23,8 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.panels.IShortcuPanel;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
 
 /**
  * Creates the Shortcuts after files have been installed.
@@ -32,17 +32,20 @@ import com.izforge.izpack.util.AbstractUIProgressHandler;
  *
  * @author Marcus Schlegel, Pulinco
  */
-public class LateShortcutInstallListener extends SimpleInstallerListener {
+public class LateShortcutInstallListener extends SimpleInstallerListener
+{
 
     private IShortcuPanel IShortcuPanel;
 
-    public LateShortcutInstallListener(IShortcuPanel IShortcuPanel) {
+    public LateShortcutInstallListener(IShortcuPanel IShortcuPanel)
+    {
         this.IShortcuPanel = IShortcuPanel;
         IShortcuPanel.setCreateImmediately(false);
     }
 
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
-            throws Exception {
+            throws Exception
+    {
         //now it's time to write down the shortcuts...
         IShortcuPanel.createAndRegisterShortcuts();
     }

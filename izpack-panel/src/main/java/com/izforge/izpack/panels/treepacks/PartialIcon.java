@@ -10,12 +10,15 @@ import java.awt.*;
  * @author <a href="vralev@redhat.com">Vladimir Ralev</a>
  * @version $Revision: 1.1 $
  */
-class PartialIcon implements Icon {
-    protected int getControlSize() {
+class PartialIcon implements Icon
+{
+    protected int getControlSize()
+    {
         return 13;
     }
 
-    public void paintIcon(Component c, Graphics g, int x, int y) {
+    public void paintIcon(Component c, Graphics g, int x, int y)
+    {
         int controlSize = getControlSize();
         g.setColor(MetalLookAndFeel.getControlShadow());
         g.fillRect(x, y, controlSize - 1, controlSize - 1);
@@ -25,7 +28,8 @@ class PartialIcon implements Icon {
         drawCheck(c, g, x, y);
     }
 
-    private void drawBorder(Graphics g, int x, int y, int w, int h) {
+    private void drawBorder(Graphics g, int x, int y, int w, int h)
+    {
         g.translate(x, y);
 
         // outer frame rectangle
@@ -49,18 +53,21 @@ class PartialIcon implements Icon {
         g.translate(-x, -y);
     }
 
-    protected void drawCheck(Component c, Graphics g, int x, int y) {
+    protected void drawCheck(Component c, Graphics g, int x, int y)
+    {
         int controlSize = getControlSize();
         g.setColor(new Color(0.0f, 0.7f, 0.0f));
 
         g.fillOval(x + controlSize / 2 - 2, y + controlSize / 2 - 2, 6, 6);
     }
 
-    public int getIconWidth() {
+    public int getIconWidth()
+    {
         return getControlSize();
     }
 
-    public int getIconHeight() {
+    public int getIconHeight()
+    {
         return getControlSize();
     }
 }

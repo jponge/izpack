@@ -159,7 +159,7 @@
                 <include name="utils/**/*" ln="159" />
             </fileset>
             <executable targetfile="$INSTALL_PATH/utils/wrappers/..."
-                        stage="never" ln="162"/>
+                        stage="never" ln="162" />
         </pack>
 
         <!-- A trivial sample to get started -->

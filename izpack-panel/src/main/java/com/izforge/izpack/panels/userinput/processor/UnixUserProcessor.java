@@ -27,13 +27,15 @@ import com.izforge.izpack.util.unix.UnixUsers;
 /**
  * @author thorsten-kamann
  */
-public class UnixUserProcessor implements Processor {
+public class UnixUserProcessor implements Processor
+{
 
 
     /**
      * Overridden Method returns a list of users in the /etc/passwd
      */
-    public String process(ProcessingClient client) {
+    public String process(ProcessingClient client)
+    {
         return UnixUsers.getUsersColonString();
     }
 

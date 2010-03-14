@@ -15,13 +15,14 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.test;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import junit.framework.TestCase;
 import org.w3c.dom.Document;
@@ -32,7 +33,8 @@ import java.util.Properties;
 /**
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
-public class ConditionTest extends TestCase {
+public class ConditionTest extends TestCase
+{
 
     protected static GUIInstallData idata = new GUIInstallData(new Properties(), new VariableSubstitutorImpl(new Properties()));
 
@@ -41,7 +43,8 @@ public class ConditionTest extends TestCase {
     /**
      * @param arg0
      */
-    public ConditionTest(String arg0) {
+    public ConditionTest(String arg0)
+    {
         super(arg0);
     }
 
@@ -49,7 +52,8 @@ public class ConditionTest extends TestCase {
      * @see junit.framework.TestCase#setUp()
      */
 
-    protected void setUp() throws Exception {
+    protected void setUp() throws Exception
+    {
         super.setUp();
         IXMLElement conditionspec = new XMLElementImpl("conditions");
 
@@ -65,14 +69,17 @@ public class ConditionTest extends TestCase {
      * @see junit.framework.TestCase#tearDown()
      */
 
-    protected void tearDown() throws Exception {
+    protected void tearDown() throws Exception
+    {
         super.tearDown();
-        if (idata != null) {
+        if (idata != null)
+        {
             idata.getVariables().clear();
         }
     }
 
-    protected IXMLElement createNotCondition(String id, IXMLElement condition, Document ownerDocument) {
+    protected IXMLElement createNotCondition(String id, IXMLElement condition, Document ownerDocument)
+    {
         IXMLElement not = new XMLElementImpl("condition", ownerDocument);
         not.setAttribute("type", "not");
         not.setAttribute("id", id);
@@ -81,7 +88,8 @@ public class ConditionTest extends TestCase {
         return not;
     }
 
-    protected IXMLElement createVariableCondition(String id, String variable, String expvalue, Document ownerDocument) {
+    protected IXMLElement createVariableCondition(String id, String variable, String expvalue, Document ownerDocument)
+    {
         IXMLElement variablecondition = new XMLElementImpl("condition", ownerDocument);
         variablecondition.setAttribute("type", "variable");
         variablecondition.setAttribute("id", id);
@@ -96,7 +104,8 @@ public class ConditionTest extends TestCase {
         return variablecondition;
     }
 
-    protected IXMLElement createRefCondition(String id, String refid, Document ownerDocument) {
+    protected IXMLElement createRefCondition(String id, String refid, Document ownerDocument)
+    {
         IXMLElement refcondition = new XMLElementImpl("condition", ownerDocument);
         refcondition.setAttribute("type", "ref");
         refcondition.setAttribute("refid", refid);
@@ -105,7 +114,8 @@ public class ConditionTest extends TestCase {
         return refcondition;
     }
 
-    public void testNotCondition() {
+    public void testNotCondition()
+    {
         assertNull(RulesEngineImpl.getCondition("test.not"));
         assertNotNull(RulesEngineImpl.getCondition("test.not.true"));
         assertTrue(rules.isConditionTrue("test.not.true", idata.getVariables()));
@@ -115,7 +125,8 @@ public class ConditionTest extends TestCase {
         assertFalse(rules.isConditionTrue("!test.not.true", idata.getVariables()));
     }
 
-    public void testVariableCondition() {
+    public void testVariableCondition()
+    {
         assertNotNull(RulesEngineImpl.getCondition("test.true"));
         assertNotNull(RulesEngineImpl.getCondition("test.true2"));
 

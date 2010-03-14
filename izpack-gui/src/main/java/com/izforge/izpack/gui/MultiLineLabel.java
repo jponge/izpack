@@ -51,7 +51,8 @@ import java.util.Vector;
  * make it a JComponent and I hope it behaves like a reasonably good mannered
  * swing component.
  *---------------------------------------------------------------------------*/
-public class MultiLineLabel extends JComponent {
+public class MultiLineLabel extends JComponent
+{
 
     /**
      *
@@ -128,7 +129,8 @@ public class MultiLineLabel extends JComponent {
     /*-------------------------------------------------------------------*
      * <detailed description / implementation details if applicable>
      *-------------------------------------------------------------------*/
-    public MultiLineLabel(String text, int horMargin, int vertMargin, int maxWidth, int justify) {
+    public MultiLineLabel(String text, int horMargin, int vertMargin, int maxWidth, int justify)
+    {
         this.labelText = text;
         this.marginWidth = horMargin;
         this.marginHeight = vertMargin;
@@ -149,7 +151,8 @@ public class MultiLineLabel extends JComponent {
     /*-------------------------------------------------------------------*
      * <detailed description / implementation details if applicable>
      *-------------------------------------------------------------------*/
-    public MultiLineLabel(String label, int marginWidth, int marginHeight) {
+    public MultiLineLabel(String label, int marginWidth, int marginHeight)
+    {
         this.labelText = label;
         this.marginWidth = marginWidth;
         this.marginHeight = marginHeight;
@@ -166,7 +169,8 @@ public class MultiLineLabel extends JComponent {
     /*-------------------------------------------------------------------*
      * <detailed description / implementation details if applicable>
      *-------------------------------------------------------------------*/
-    public MultiLineLabel(String label, int alignment) {
+    public MultiLineLabel(String label, int alignment)
+    {
         this.labelText = label;
         this.alignment = alignment;
     }
@@ -181,7 +185,8 @@ public class MultiLineLabel extends JComponent {
     /*-------------------------------------------------------------------*
      * <detailed description / implementation details if applicable>
      *-------------------------------------------------------------------*/
-    public MultiLineLabel(String label) {
+    public MultiLineLabel(String label)
+    {
         this.labelText = label;
     }
 
@@ -202,7 +207,8 @@ public class MultiLineLabel extends JComponent {
     /*-------------------------------------------------------------------*
      * <detailed description / implementation details if applicable>
      *-------------------------------------------------------------------*/
-    int getPosition(String target, int start, char[] source, int mode) {
+    int getPosition(String target, int start, char[] source, int mode)
+    {
         int status;
         int position;
         int scan;
@@ -214,9 +220,11 @@ public class MultiLineLabel extends JComponent {
         sourceLength = source.length;
         position = start;
 
-        if (mode == FOUND) {
+        if (mode == FOUND)
+        {
             status = NOT_DONE;
-            while (status != DONE) {
+            while (status != DONE)
+            {
                 position++;
                 if (!(position < targetEnd)) // end of string reached, the
                 // next
@@ -227,15 +235,19 @@ public class MultiLineLabel extends JComponent {
                 for (scan = 0; scan < sourceLength; scan++) // walk through the
                 // source
                 { // string and compare each char
-                    if (source[scan] == temp) {
+                    if (source[scan] == temp)
+                    {
                         status = DONE;
                     }
                 }
             }
             return (position);
-        } else if (mode == NOT_FOUND) {
+        }
+        else if (mode == NOT_FOUND)
+        {
             status = NOT_DONE;
-            while (status != DONE) {
+            while (status != DONE)
+            {
                 position++;
                 if (!(position < targetEnd)) // end of string reached, the
                 // next
@@ -247,7 +259,8 @@ public class MultiLineLabel extends JComponent {
                 for (scan = 0; scan < sourceLength; scan++) // walk through the
                 // source
                 { // string and compare each char
-                    if (source[scan] == temp) {
+                    if (source[scan] == temp)
+                    {
                         status = NOT_DONE;
                     }
                 }
@@ -269,7 +282,8 @@ public class MultiLineLabel extends JComponent {
     /*-------------------------------------------------------------------*
      * <detailed description / implementation details if applicable>
      *-------------------------------------------------------------------*/
-    int breakWord(String word, FontMetrics fm) {
+    int breakWord(String word, FontMetrics fm)
+    {
         int width;
         int currentPos;
         int endPos;
@@ -279,17 +293,20 @@ public class MultiLineLabel extends JComponent {
         endPos = word.length() - 1;
 
         // make sure we don't end up with a negative position
-        if (endPos <= 0) {
+        if (endPos <= 0)
+        {
             return (currentPos);
         }
         // seek the position where the word first is longer than allowed
-        while ((width < maxAllowed) && (currentPos < endPos)) {
+        while ((width < maxAllowed) && (currentPos < endPos))
+        {
             currentPos++;
             width = fm.stringWidth(labelText.substring(0, currentPos));
         }
         // adjust to get the chatacter just before (this should make it a bit
         // shorter than allowed!)
-        if (currentPos != endPos) {
+        if (currentPos != endPos)
+        {
             currentPos--;
         }
         return (currentPos);
@@ -304,7 +321,8 @@ public class MultiLineLabel extends JComponent {
      * single word happens to be longer than one line.
      */
     /*-------------------------------------------------------------------*/
-    private void divideLabel() {
+    private void divideLabel()
+    {
         int width;
         int startPos;
         int currentPos;
@@ -319,7 +337,8 @@ public class MultiLineLabel extends JComponent {
         lastPos = currentPos;
         endPos = (labelText.length() - 1);
 
-        while (currentPos < endPos) {
+        while (currentPos < endPos)
+        {
             width = 0;
             // ----------------------------------------------------------------
             // find the first substring that occupies more than the granted
@@ -327,7 +346,8 @@ public class MultiLineLabel extends JComponent {
             // Break at the end of the string or a line break
             // ----------------------------------------------------------------
             while ((width < maxAllowed) && (currentPos < endPos)
-                    && (labelText.charAt(currentPos) != NEW_LINE)) {
+                    && (labelText.charAt(currentPos) != NEW_LINE))
+            {
                 lastPos = currentPos;
                 currentPos = getPosition(labelText, currentPos, WHITE_SPACE, FOUND);
                 width = fm.stringWidth(labelText.substring(startPos, currentPos));
@@ -336,7 +356,8 @@ public class MultiLineLabel extends JComponent {
             // if we have a line break we want to copy everything up to
             // currentPos
             // ----------------------------------------------------------------
-            if (labelText.charAt(currentPos) == NEW_LINE) {
+            if (labelText.charAt(currentPos) == NEW_LINE)
+            {
                 lastPos = currentPos;
             }
             // ----------------------------------------------------------------
@@ -348,7 +369,8 @@ public class MultiLineLabel extends JComponent {
             // character
             // we have to call a different substring function than normal.
             // ----------------------------------------------------------------
-            if (currentPos == endPos && width <= maxAllowed) {
+            if (currentPos == endPos && width <= maxAllowed)
+            {
                 lastPos = currentPos;
                 String s = labelText.substring(startPos);
                 line.addElement(s);
@@ -358,13 +380,15 @@ public class MultiLineLabel extends JComponent {
             // and
             // add it as a new line of text to the line vector.
             // ----------------------------------------------------------------
-            else {
+            else
+            {
                 // ------------------------------------------------------------
                 // make sure it's not a single word. If so we must break it at
                 // the
                 // proper location.
                 // ------------------------------------------------------------
-                if (lastPos == startPos) {
+                if (lastPos == startPos)
+                {
                     lastPos = startPos + breakWord(labelText.substring(startPos, currentPos), fm);
                 }
                 String s = labelText.substring(startPos, lastPos);
@@ -390,20 +414,24 @@ public class MultiLineLabel extends JComponent {
      * This method finds the font size, each line width and the widest line.
      */
     /*-------------------------------------------------------------------*/
-    protected void measure() {
-        if (!maxAllowedSet) {
+    protected void measure()
+    {
+        if (!maxAllowedSet)
+        {
             maxAllowed = getParent().getSize().width;
         }
 
         // return if width is too small
-        if (maxAllowed < (20)) {
+        if (maxAllowed < (20))
+        {
             return;
         }
 
         FontMetrics fm = this.getFontMetrics(this.getFont());
 
         // return if no font metrics available
-        if (fm == null) {
+        if (fm == null)
+        {
             return;
         }
 
@@ -413,9 +441,11 @@ public class MultiLineLabel extends JComponent {
         this.lineDescent = fm.getDescent();
         this.maxWidth = 0;
 
-        for (int i = 0; i < numLines; i++) {
+        for (int i = 0; i < numLines; i++)
+        {
             this.lineWidth[i] = fm.stringWidth(this.line.elementAt(i));
-            if (this.lineWidth[i] > this.maxWidth) {
+            if (this.lineWidth[i] > this.maxWidth)
+            {
                 this.maxWidth = this.lineWidth[i];
             }
         }
@@ -429,7 +459,8 @@ public class MultiLineLabel extends JComponent {
      * @param graphics the device context
      */
     /*-------------------------------------------------------------------*/
-    public void paint(Graphics graphics) {
+    public void paint(Graphics graphics)
+    {
         int x;
         int y;
 
@@ -438,9 +469,11 @@ public class MultiLineLabel extends JComponent {
 
         y = lineAscent + (d.height - (numLines * lineHeight)) / 2;
 
-        for (int i = 0; i < numLines; i++) {
+        for (int i = 0; i < numLines; i++)
+        {
             y += lineHeight;
-            switch (alignment) {
+            switch (alignment)
+            {
                 case LEFT:
                     x = marginWidth;
                     break;
@@ -465,7 +498,8 @@ public class MultiLineLabel extends JComponent {
      * @param labelText the text to be displayed
      */
     /*-------------------------------------------------------------------*/
-    public void setText(String labelText) {
+    public void setText(String labelText)
+    {
         this.labelText = labelText;
         repaint();
     }
@@ -478,7 +512,8 @@ public class MultiLineLabel extends JComponent {
      * @param font font to be used within the label
      */
     /*-------------------------------------------------------------------*/
-    public void setFont(Font font) {
+    public void setFont(Font font)
+    {
         super.setFont(font);
         repaint();
     }
@@ -491,7 +526,8 @@ public class MultiLineLabel extends JComponent {
      * @param color the text color
      */
     /*-------------------------------------------------------------------*/
-    public void setColor(Color color) {
+    public void setColor(Color color)
+    {
         super.setForeground(color);
         repaint();
     }
@@ -504,7 +540,8 @@ public class MultiLineLabel extends JComponent {
      * @param alignment the alignment, possible values are LEFT, CENTER, RIGHT
      */
     /*-------------------------------------------------------------------*/
-    public void setJustify(int alignment) {
+    public void setJustify(int alignment)
+    {
         this.alignment = alignment;
         repaint();
     }
@@ -517,7 +554,8 @@ public class MultiLineLabel extends JComponent {
      * @param width the max allowed line width in pixels
      */
     /*-------------------------------------------------------------------*/
-    public void setMaxWidth(int width) {
+    public void setMaxWidth(int width)
+    {
         this.maxAllowed = width;
         this.maxAllowedSet = true;
         repaint();
@@ -531,7 +569,8 @@ public class MultiLineLabel extends JComponent {
      * @param margin the margin to the left and to the right of the label
      */
     /*-------------------------------------------------------------------*/
-    public void setMarginWidth(int margin) {
+    public void setMarginWidth(int margin)
+    {
         this.marginWidth = margin;
         repaint();
     }
@@ -544,7 +583,8 @@ public class MultiLineLabel extends JComponent {
      * @param margin the margin on the top and bottom of the label
      */
     /*-------------------------------------------------------------------*/
-    public void setMarginHeight(int margin) {
+    public void setMarginHeight(int margin)
+    {
         this.marginHeight = margin;
         repaint();
     }
@@ -562,7 +602,8 @@ public class MultiLineLabel extends JComponent {
      * @param height The new height of this component.
      */
     /*-------------------------------------------------------------------*/
-    public void setBounds(int x, int y, int width, int height) {
+    public void setBounds(int x, int y, int width, int height)
+    {
         super.setBounds(x, y, width, height);
         this.maxAllowed = width;
         this.maxAllowedSet = true;
@@ -576,7 +617,8 @@ public class MultiLineLabel extends JComponent {
      * @return alignment the text alignment currently in use for the label
      */
     /*-------------------------------------------------------------------*/
-    public int getAlignment() {
+    public int getAlignment()
+    {
         return (this.alignment);
     }
 
@@ -588,7 +630,8 @@ public class MultiLineLabel extends JComponent {
      * @return marginWidth the margin currently in use to the left and right of the label
      */
     /*-------------------------------------------------------------------*/
-    public int getMarginWidth() {
+    public int getMarginWidth()
+    {
         return (this.marginWidth);
     }
 
@@ -600,7 +643,8 @@ public class MultiLineLabel extends JComponent {
      * @return marginHeight the margin currently in use on the top and bottom of the label
      */
     /*-------------------------------------------------------------------*/
-    public int getMarginHeight() {
+    public int getMarginHeight()
+    {
         return (this.marginHeight);
     }
 
@@ -611,7 +655,8 @@ public class MultiLineLabel extends JComponent {
      * display the label comfortably.
      */
     /*-------------------------------------------------------------------*/
-    public Dimension getPreferredSize() {
+    public Dimension getPreferredSize()
+    {
         measure();
         return (new Dimension(maxAllowed, (numLines * (lineHeight + lineAscent + lineDescent))
                 + (2 * marginHeight)));
@@ -624,7 +669,8 @@ public class MultiLineLabel extends JComponent {
      * required to display the entire label.
      */
     /*-------------------------------------------------------------------*/
-    public Dimension getMinimumSize() {
+    public Dimension getMinimumSize()
+    {
         measure();
         return (new Dimension(maxAllowed, (numLines * (lineHeight + lineAscent + lineDescent))
                 + (2 * marginHeight)));
@@ -636,7 +682,8 @@ public class MultiLineLabel extends JComponent {
      * This method is called by the system after this object is first created.
      */
     /*-------------------------------------------------------------------*/
-    public void addNotify() {
+    public void addNotify()
+    {
         super.addNotify(); // invoke the superclass
     }
 }

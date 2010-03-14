@@ -41,7 +41,8 @@ import java.util.List;
  *
  * @author Tino Schwarze
  */
-public class CompileResult {
+public class CompileResult
+{
 
     // -------- public constants ---------------
     // arbitrary values
@@ -85,7 +86,8 @@ public class CompileResult {
     /**
      * constructor, create a new successful result
      */
-    public CompileResult() {
+    public CompileResult()
+    {
         this.status = SUCCESS;
         this.action = ACTION_CONTINUE;
     }
@@ -95,7 +97,8 @@ public class CompileResult {
      *
      * @param anException The exception.
      */
-    public CompileResult(Exception anException) {
+    public CompileResult(Exception anException)
+    {
         StringWriter writer = new StringWriter();
         anException.printStackTrace(new PrintWriter(writer));
         this.message = writer.toString();
@@ -111,7 +114,8 @@ public class CompileResult {
      * @param stdout  standard output of failed command
      * @param stderr  standard error of failed command
      */
-    public CompileResult(String message, List<String> cmdline, String stdout, String stderr) {
+    public CompileResult(String message, List<String> cmdline, String stdout, String stderr)
+    {
         this.message = message;
         this.status = FAILED;
         this.cmdline = cmdline;
@@ -119,39 +123,47 @@ public class CompileResult {
         this.stderr = stderr;
     }
 
-    public void setStatus(int status) {
-        if ((status == SUCCESS) || (status == FAILED)) {
+    public void setStatus(int status)
+    {
+        if ((status == SUCCESS) || (status == FAILED))
+        {
             this.status = status;
         }
     }
 
-    public int getStatus() {
+    public int getStatus()
+    {
         return this.status;
     }
 
-    public void setAction(int action) {
+    public void setAction(int action)
+    {
         if ((action == ACTION_ABORT) || (action == ACTION_CONTINUE)
-                || (action == ACTION_RECONFIGURE)) {
+                || (action == ACTION_RECONFIGURE))
+        {
             this.action = action;
         }
 
     }
 
-    public int getAction() {
+    public int getAction()
+    {
         return this.action;
     }
 
     /**
      * check for success (convenience function)
      */
-    public boolean isSuccess() {
+    public boolean isSuccess()
+    {
         return (this.status == SUCCESS);
     }
 
     /**
      * check whether to abort (convenience function)
      */
-    public boolean isAbort() {
+    public boolean isAbort()
+    {
         return ((this.status == FAILED) && (this.action == ACTION_ABORT));
     }
 
@@ -160,14 +172,16 @@ public class CompileResult {
      *
      * @return true if status is SUCCESS or action is CONTINUE
      */
-    public boolean isContinue() {
+    public boolean isContinue()
+    {
         return ((this.status == SUCCESS) || (this.action == ACTION_CONTINUE));
     }
 
     /**
      * check whether to reconfigure (convenience function)
      */
-    public boolean isReconfigure() {
+    public boolean isReconfigure()
+    {
         return ((this.status == FAILED) && (this.action == ACTION_RECONFIGURE));
     }
 
@@ -176,7 +190,8 @@ public class CompileResult {
      *
      * @return the error message describing the action that failed (might be null)
      */
-    public String getMessage() {
+    public String getMessage()
+    {
         return this.message;
     }
 
@@ -185,10 +200,13 @@ public class CompileResult {
      *
      * @return command line of failed command
      */
-    public String getCmdline() {
+    public String getCmdline()
+    {
         StringBuffer sb = new StringBuffer();
-        for (String aCmdline : this.cmdline) {
-            if (sb.length() > 0) {
+        for (String aCmdline : this.cmdline)
+        {
+            if (sb.length() > 0)
+            {
                 sb.append(' ');
             }
             sb.append(aCmdline);
@@ -196,11 +214,13 @@ public class CompileResult {
         return sb.toString();
     }
 
-    public String getStdout() {
+    public String getStdout()
+    {
         return this.stdout;
     }
 
-    public String getStderr() {
+    public String getStderr()
+    {
         return this.stderr;
     }
 

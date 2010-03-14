@@ -21,29 +21,34 @@ package com.izforge.izpack.api.data;
 
 import junit.framework.TestCase;
 
-public class LocaleDatabaseTest extends TestCase {
+public class LocaleDatabaseTest extends TestCase
+{
 
     LocaleDatabase _db = null;
 
     @Override
-    public void setUp() throws Exception {
+    public void setUp() throws Exception
+    {
         _db = new LocaleDatabase(LocaleDatabaseTest.class
                 .getResourceAsStream("testing-langpack.xml"));
 
     }
 
-    public void testGetString() throws Exception {
+    public void testGetString() throws Exception
+    {
 
         assertEquals("String Text", _db.getString("string"));
         assertEquals("none", _db.getString("none"));
     }
 
-    public void testNpeHandling() {
+    public void testNpeHandling()
+    {
         assertEquals("Argument1: one, Argument2: N/A", _db.getString(
                 "string.with.arguments", new String[]{"one", null}));
     }
 
-    public void testQuotedPlaceholder() {
+    public void testQuotedPlaceholder()
+    {
         assertEquals("Argument1: 'one', Argument2: 'N/A'", _db.getString(
                 "string.with.quoted.arguments", new String[]{"one", null}));
     }

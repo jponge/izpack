@@ -37,7 +37,8 @@ import java.util.Map;
  * @author Piotr Skowronek
  */
 /*---------------------------------------------------------------------------*/
-public class TextInputField extends JComponent implements ProcessingClient {
+public class TextInputField extends JComponent implements ProcessingClient
+{
 
     /**
      *
@@ -78,7 +79,8 @@ public class TextInputField extends JComponent implements ProcessingClient {
      * @param validatorParams validator parameters.
      */
     /*--------------------------------------------------------------------------*/
-    public TextInputField(String set, int size, String validator, Map<String, String> validatorParams) {
+    public TextInputField(String set, int size, String validator, Map<String, String> validatorParams)
+    {
         this(set, size, validator);
         this.validatorParams = validatorParams;
         this.hasParams = true;
@@ -98,17 +100,21 @@ public class TextInputField extends JComponent implements ProcessingClient {
      *                  validation will be performed.
      */
     /*--------------------------------------------------------------------------*/
-    public TextInputField(String set, int size, String validator) {
+    public TextInputField(String set, int size, String validator)
+    {
         // ----------------------------------------------------
         // attempt to create an instance of the Validator
         // ----------------------------------------------------
-        try {
-            if (validator != null) {
+        try
+        {
+            if (validator != null)
+            {
                 Debug.trace("Making Validator for: " + validator);
                 validationService = (Validator) Class.forName(validator).newInstance();
             }
         }
-        catch (Throwable exception) {
+        catch (Throwable exception)
+        {
             validationService = null;
             Debug.trace(exception);
         }
@@ -135,7 +141,8 @@ public class TextInputField extends JComponent implements ProcessingClient {
      *
      * @return a java.util.Map containing the validator parameters.
      */
-    public Map<String, String> getValidatorParams() {
+    public Map<String, String> getValidatorParams()
+    {
         return validatorParams;
     }
 
@@ -147,25 +154,29 @@ public class TextInputField extends JComponent implements ProcessingClient {
      * @return the field contents
      */
     /*--------------------------------------------------------------------------*/
-    public String getText() {
+    public String getText()
+    {
         return (field.getText());
     }
 
     // javadoc inherited
 
-    public void setText(String value) {
+    public void setText(String value)
+    {
         field.setText(value);
     }
 
     // javadoc inherited
 
-    public String getFieldContents(int index) {
+    public String getFieldContents(int index)
+    {
         return field.getText();
     }
 
     // javadoc inherited
 
-    public int getNumFields() {
+    public int getNumFields()
+    {
         // We've got only one field
         return 1;
     }
@@ -180,11 +191,15 @@ public class TextInputField extends JComponent implements ProcessingClient {
      *         rule exists. Otherwise <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
-    public boolean validateContents() {
-        if (validationService != null) {
+    public boolean validateContents()
+    {
+        if (validationService != null)
+        {
             Debug.trace("Validating contents");
             return (validationService.validate(this));
-        } else {
+        }
+        else
+        {
             Debug.trace("Not validating contents");
             return (true);
         }
@@ -192,7 +207,8 @@ public class TextInputField extends JComponent implements ProcessingClient {
 
     // javadoc inherited
 
-    public boolean hasParams() {
+    public boolean hasParams()
+    {
         return hasParams;
     }
 

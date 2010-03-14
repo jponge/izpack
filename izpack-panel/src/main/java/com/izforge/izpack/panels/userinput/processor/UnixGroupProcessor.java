@@ -29,24 +29,30 @@ import java.io.FileReader;
 /**
  * @author thorsten-kamann
  */
-public class UnixGroupProcessor implements Processor {
+public class UnixGroupProcessor implements Processor
+{
 
-    public String process(ProcessingClient client) {
+    public String process(ProcessingClient client)
+    {
         String retValue = "";
         String filepath = "/etc/group";
         BufferedReader reader = null;
         String line = "";
 
-        try {
+        try
+        {
             reader = new BufferedReader(new FileReader(filepath));
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null)
+            {
                 retValue += line.substring(0, line.indexOf(":")) + ":";
             }
-            if (retValue.endsWith(":")) {
+            if (retValue.endsWith(":"))
+            {
                 retValue = retValue.substring(0, retValue.length() - 1);
             }
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             retValue = "";
         }
 

@@ -10,68 +10,61 @@ import java.io.File;
  *
  * @author Anthonin Bonnefoy
  */
-public class AssertionHelper {
+public class AssertionHelper
+{
+    private String installFile;
+
+    public AssertionHelper(String installFile)
+    {
+        this.installFile = installFile;
+    }
 
     /**
      * Create parse error with consistent messages. Includes file name. For use When parent is
      * unknown.
      *
-     * @param message     Brief message explaining error
-     * @param installFile
+     * @param message Brief message explaining error
      */
-    public static void parseError(String message, String installFile) throws CompilerException {
-        throw new CompilerException(installFile + ":" + message);
+    public void parseError(String message) throws CompilerException
+    {
+        throw new CompilerException(this.installFile + ":" + message);
     }
 
     /**
      * Create parse error with consistent messages. Includes file name and line # of parent. It is
      * an error for 'parent' to be null.
      *
-     * @param parent      The element in which the error occured
-     * @param message     Brief message explaining error
-     * @param installFile
+     * @param parent  The element in which the error occured
+     * @param message Brief message explaining error
      */
-    public static void parseError(IXMLElement parent, String message, String installFile) throws CompilerException {
-        throw new CompilerException(installFile + ":" + parent.getLineNr() + ": " + message);
+    public void parseError(IXMLElement parent, String message) throws CompilerException
+    {
+        throw new CompilerException(this.installFile + ":" + parent.getLineNr() + ": " + message);
     }
 
     /**
      * Create a chained parse error with consistent messages. Includes file name and line # of
      * parent. It is an error for 'parent' to be null.
      *
-     * @param installFile
-     * @param parent      The element in which the error occured
-     * @param message     Brief message explaining error
-     */
-    public static void parseError(IXMLElement parent, String message, Throwable cause, String installFile)
-            throws CompilerException {
-        throw new CompilerException(installFile + ":" + parent.getLineNr() + ": " + message, cause);
-    }
-
-    /**
-     * Create parse error with consistent messages.
-     *
+     * @param parent  The element in which the error occured
      * @param message Brief message explaining error
-     * @throws CompilerException
      */
-    public static void parseError(String message) throws CompilerException {
-        throw new CompilerException(message);
+    public void parseError(IXMLElement parent, String message, Throwable cause)
+            throws CompilerException
+    {
+        throw new CompilerException(this.installFile + ":" + parent.getLineNr() + ": " + message, cause);
     }
 
     /**
      * Create a parse warning with consistent messages. Includes file name and line # of parent. It
      * is an error for 'parent' to be null.
      *
-     * @param parent      The element in which the warning occured
-     * @param message     Warning message
-     * @param installFile
+     * @param parent  The element in which the warning occured
+     * @param message Warning message
      */
-    public static void parseWarn(IXMLElement parent, String message, String installFile) {
-        System.out.println("Warning: " + installFile + ":" + parent.getLineNr() + ": " + message);
-    }
-
-    public static void parseWarn(String message) {
-        System.out.println("Warning: " + message);
+    public void parseWarn(IXMLElement parent, String message)
+    {
+        System.out.println("Warning: " + this.installFile + ":" + parent.getLineNr() + ": " + message);
     }
 
     /**
@@ -82,18 +75,23 @@ public class AssertionHelper {
      *          if the file is either not existing, not a regular file or not
      *          readable.
      */
-    public static void assertIsNormalReadableFile(File fileToCheck, String fileDescription)
-            throws CompilerException {
-        if (fileToCheck != null) {
-            if (!fileToCheck.exists()) {
+    public void assertIsNormalReadableFile(File fileToCheck, String fileDescription)
+            throws CompilerException
+    {
+        if (fileToCheck != null)
+        {
+            if (!fileToCheck.exists())
+            {
                 throw new CompilerException(fileDescription
                         + " does not exist: " + fileToCheck);
             }
-            if (!fileToCheck.isFile()) {
+            if (!fileToCheck.isFile())
+            {
                 throw new CompilerException(fileDescription
                         + " is not a regular file: " + fileToCheck);
             }
-            if (!fileToCheck.canRead()) {
+            if (!fileToCheck.canRead())
+            {
                 throw new CompilerException(fileDescription
                         + " is not readable by application: " + fileToCheck);
             }

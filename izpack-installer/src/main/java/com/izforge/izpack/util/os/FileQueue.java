@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Vector;
 
 
-public class FileQueue {
+public class FileQueue
+{
 
     private Vector<FileQueueOperation> operations = new Vector<FileQueueOperation>();
 
@@ -19,33 +20,41 @@ public class FileQueue {
      *
      * @param op the operation (copy/move/delete)
      */
-    public void add(FileQueueOperation op) {
+    public void add(FileQueueOperation op)
+    {
         operations.addElement(op);
     }
 
-    public void execute() throws Exception {
+    public void execute() throws Exception
+    {
         WinSetupDefaultCallbackHandler handler = new WinSetupDefaultCallbackHandler();
-        try {
+        try
+        {
             filequeue = new WinSetupFileQueue(handler);
         }
-        catch (IOException ioe) {
+        catch (IOException ioe)
+        {
             throw new IOException("Failed to open a file queue due to " + ioe.getMessage());
         }
-        try {
+        try
+        {
             Enumeration<FileQueueOperation> ops = operations.elements();
-            while (ops.hasMoreElements()) {
+            while (ops.hasMoreElements())
+            {
                 Object op = ops.nextElement();
                 ((FileQueueOperation) op).addTo(filequeue);
             }
             filequeue.commit();
 
             List<SystemErrorException> exceptions = handler.getExceptions();
-            if (exceptions != null) {
+            if (exceptions != null)
+            {
                 StringBuffer buf = new StringBuffer();
                 buf.append(
                         "The following system errors occured during committing the file queue:\n");
                 Iterator<SystemErrorException> it = exceptions.iterator();
-                while (it.hasNext()) {
+                while (it.hasNext())
+                {
                     buf.append('\t');
                     buf.append(((SystemErrorException) it.next()).toString());
                     buf.append('\n');
@@ -54,17 +63,22 @@ public class FileQueue {
             }
 
         }
-        catch (IOException ioe) {
+        catch (IOException ioe)
+        {
             throw new IOException("File queue operation failed due to " + ioe.getMessage());
         }
-        finally {
+        finally
+        {
             filequeue.close();
         }
     }
 
-    public boolean isRebootNecessary() {
+    public boolean isRebootNecessary()
+    {
         if (filequeue != null)
+        {
             return filequeue.isRebootNecessary();
+        }
 
         return false;
     }

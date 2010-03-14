@@ -29,7 +29,8 @@ import java.util.ArrayList;
  *
  * @author marc.eppelmann&#064;gmx.de
  */
-public class StringTool {
+public class StringTool
+{
 
     // ~ Constructors
     // *********************************************************************************
@@ -37,7 +38,8 @@ public class StringTool {
     /**
      * Default Constructor
      */
-    public StringTool() {
+    public StringTool()
+    {
         super();
     }
 
@@ -49,7 +51,8 @@ public class StringTool {
      *
      * @param args Commandline Args
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         System.out.println("Test: string.replace(abc$defg,$de ,null ):"
                 + StringTool.replace("abc$defg", "$de", null, true));
     }
@@ -62,7 +65,8 @@ public class StringTool {
      * @param to    Replace with this
      * @return the replaced String
      */
-    public static String replace(String value, String from, String to) {
+    public static String replace(String value, String from, String to)
+    {
         return replace(value, from, to, true);
     }
 
@@ -75,16 +79,20 @@ public class StringTool {
      * @param aCaseSensitiveFlag set to true be case sensitive.
      * @return the replaced String
      */
-    public static String replace(String value, String from, String to, boolean aCaseSensitiveFlag) {
-        if ((value == null) || (value.length() == 0) || (from == null) || (from.length() == 0)) {
+    public static String replace(String value, String from, String to, boolean aCaseSensitiveFlag)
+    {
+        if ((value == null) || (value.length() == 0) || (from == null) || (from.length() == 0))
+        {
             return value;
         }
 
-        if (to == null) {
+        if (to == null)
+        {
             to = "";
         }
 
-        if (!aCaseSensitiveFlag) {
+        if (!aCaseSensitiveFlag)
+        {
             from = from.toLowerCase();
         }
 
@@ -92,10 +100,12 @@ public class StringTool {
         int lastIndex = 0;
         int index = value.indexOf(from);
 
-        if (index != -1) {
+        if (index != -1)
+        {
             StringBuffer buffer = new StringBuffer();
 
-            while (index != -1) {
+            while (index != -1)
+            {
                 buffer.append(value.substring(lastIndex, index)).append(to);
                 lastIndex = index + from.length();
                 index = value.indexOf(from, lastIndex);
@@ -115,7 +125,8 @@ public class StringTool {
      * @param apathString
      * @return
      */
-    public static String escapeSpaces(String aPathString) {
+    public static String escapeSpaces(String aPathString)
+    {
         return replaceOrEscapeAll(aPathString, null, null, true);
     }
 
@@ -126,7 +137,8 @@ public class StringTool {
      * @param apathString
      * @return
      */
-    public static String replaceSpacesWithMinus(String aPathString) {
+    public static String replaceSpacesWithMinus(String aPathString)
+    {
         return replaceSpaces(aPathString, "-");
     }
 
@@ -136,7 +148,8 @@ public class StringTool {
      * @param apathString
      * @return
      */
-    public static String replaceSpaces(String aPathString, String replaceWith) {
+    public static String replaceSpaces(String aPathString, String replaceWith)
+    {
         return replaceOrEscapeAll(aPathString, replaceWith, null, false);
     }
 
@@ -151,7 +164,8 @@ public class StringTool {
      * @param replaceWhat         The atring array with the Characters, which should be replaced
      * @param escape              The flag, wihch indeicates, how to handle the given replaceOrEscapeWith String.
      */
-    public static String replaceOrEscapeAll(String aPathString, String replaceOrEscapeWith, String[] replaceWhat, boolean escape) {
+    public static String replaceOrEscapeAll(String aPathString, String replaceOrEscapeWith, String[] replaceWhat, boolean escape)
+    {
         if (replaceWhat == null)
 
         {
@@ -163,7 +177,8 @@ public class StringTool {
             replaceOrEscapeWith = "\\";
         }
 
-        for (int i = 0; i < replaceWhat.length; i++) {
+        for (int i = 0; i < replaceWhat.length; i++)
+        {
 
             aPathString = replace(aPathString, replaceWhat[i], escape == true ? replaceOrEscapeWith + replaceWhat[i] : replaceOrEscapeWith);
         }
@@ -182,7 +197,8 @@ public class StringTool {
      * @param fileSeparator a target-system fileseparator
      * @return the normalized path
      */
-    public static String normalizePath(String destination, String fileSeparator) {
+    public static String normalizePath(String destination, String fileSeparator)
+    {
         String FILESEP = (fileSeparator == null) ? File.separator : fileSeparator;
 
         destination = StringTool.replace(destination, "\\", "/");
@@ -195,7 +211,8 @@ public class StringTool {
 
         destination = StringTool.replace(destination, "/", FILESEP);
 
-        if ("\\".equals(FILESEP)) {
+        if ("\\".equals(FILESEP))
+        {
             destination = StringTool.replace(destination, ":", ";");
 
             // results in "C;\" instead of "C:\"
@@ -214,7 +231,8 @@ public class StringTool {
      * @param destination accepted mixed form by java.File like "C:/a/mixed\path\accepted/by\Java"
      * @return the normalized Path
      */
-    public static String normalizePath(String destination) {
+    public static String normalizePath(String destination)
+    {
         return (normalizePath(destination, null));
     }
 
@@ -224,20 +242,24 @@ public class StringTool {
      * @param args The StringArray
      * @return the space separated result.
      */
-    public static String stringArrayToSpaceSeparatedString(String[] args) {
+    public static String stringArrayToSpaceSeparatedString(String[] args)
+    {
         String result = "";
-        for (String arg : args) {
+        for (String arg : args)
+        {
             result += arg + " ";
         }
         return result;
     }
 
-    public static String getPlatformEncoding() {
+    public static String getPlatformEncoding()
+    {
         // TODO Auto-generated method stub
         return System.getProperty("file.encoding");
     }
 
-    public static String UTF16() {
+    public static String UTF16()
+    {
         return "UTF-16";
     }
 
@@ -247,7 +269,8 @@ public class StringTool {
      * @param aStringList
      * @return a printable list
      */
-    public static String stringArrayListToString(ArrayList aStringList) {
+    public static String stringArrayListToString(ArrayList aStringList)
+    {
         return stringArrayListToString(aStringList, null);
     }
 
@@ -257,15 +280,18 @@ public class StringTool {
      * @param aStringList
      * @return a printable list
      */
-    public static String stringArrayListToString(ArrayList aStringList, String aLineSeparator) {
+    public static String stringArrayListToString(ArrayList aStringList, String aLineSeparator)
+    {
         String LineSeparator = aLineSeparator;
-        if (LineSeparator == null) {
+        if (LineSeparator == null)
+        {
             LineSeparator = System.getProperty("line.separator", "\n");
         }
 
         StringBuffer temp = new StringBuffer();
 
-        for (Object anAStringList : aStringList) {
+        for (Object anAStringList : aStringList)
+        {
             temp.append(anAStringList).append(LineSeparator);
         }
 
@@ -279,7 +305,8 @@ public class StringTool {
      * @param prefix The string to search for
      * @return True if str starts with prefix
      */
-    public static boolean startsWith(String str, String prefix) {
+    public static boolean startsWith(String str, String prefix)
+    {
         return (str != null) && str.startsWith(prefix);
     }
 
@@ -290,7 +317,8 @@ public class StringTool {
      * @param prefix The string to search for
      * @return rue if str starts with prefix
      */
-    public static boolean startsWithIgnoreCase(String str, String prefix) {
+    public static boolean startsWithIgnoreCase(String str, String prefix)
+    {
         return (str != null) && (prefix != null)
                 && str.toUpperCase().startsWith(prefix.toUpperCase());
     }

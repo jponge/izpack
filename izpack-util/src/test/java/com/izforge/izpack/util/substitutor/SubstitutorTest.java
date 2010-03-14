@@ -34,7 +34,8 @@ import junit.framework.TestCase;
  * @note This test will create VariableSubstitutor object with null parameter!
  * There won't be Properties object available!
  */
-public class SubstitutorTest extends TestCase {
+public class SubstitutorTest extends TestCase
+{
     private final String umlautString = "ÄöäÖüÜ";
     private final String cyrillicString = "Закончить";
     private final String japanesString = "ƒCƒ“ƒXƒg[ƒ‹‚Ì’†Ž~";
@@ -46,7 +47,8 @@ public class SubstitutorTest extends TestCase {
      *
      * @param arg0 Parameter string for the constructor.
      */
-    public SubstitutorTest(String arg0) {
+    public SubstitutorTest(String arg0)
+    {
         super(arg0);
     }
 
@@ -55,7 +57,8 @@ public class SubstitutorTest extends TestCase {
      *
      * @see junit.framework.TestCase#setUp()
      */
-    protected void setUp() throws Exception {
+    protected void setUp() throws Exception
+    {
         super.setUp();
     }
 
@@ -64,7 +67,8 @@ public class SubstitutorTest extends TestCase {
      *
      * @see junit.framework.TestCase#tearDown()
      */
-    protected void tearDown() throws Exception {
+    protected void tearDown() throws Exception
+    {
         super.tearDown();
     }
 
@@ -72,7 +76,8 @@ public class SubstitutorTest extends TestCase {
     /**
      * Tests return value of substitute for string containing umlaut characters.
      */
-    public void testUmlautString() {
+    public void testUmlautString()
+    {
         String returnStr = subst.substitute(umlautString, SubstitutionType.TYPE_PLAIN);
         assertEquals(umlautString, returnStr);
     }
@@ -80,7 +85,8 @@ public class SubstitutorTest extends TestCase {
     /**
      * Tests return value of substitute for Cyrillic string.
      */
-    public void testCyrillicString() {
+    public void testCyrillicString()
+    {
         String returnStr = subst.substitute(cyrillicString, SubstitutionType.TYPE_PLAIN);
         assertEquals(cyrillicString, returnStr);
     }
@@ -88,7 +94,8 @@ public class SubstitutorTest extends TestCase {
     /**
      * Tests return value of substitute for Japanese string.
      */
-    public void testJapaneseString() {
+    public void testJapaneseString()
+    {
         String returnStr = subst.substitute(japanesString, SubstitutionType.TYPE_PLAIN);
         assertEquals(japanesString, returnStr);
     }

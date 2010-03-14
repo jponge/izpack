@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.jdkpath;
 
 import com.coi.tools.os.win.MSWinConstants;
@@ -42,35 +43,43 @@ import java.util.*;
  *
  * @author Mounir El Hajj
  */
-public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements PanelConsole {
+public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements PanelConsole
+{
     private String minVersion;
     private String maxVersion;
     private String variableName;
     private String detectedVersion;
     private VariableSubstitutor variableSubstitutor;
 
-    public JDKPathPanelConsoleHelper(VariableSubstitutor variableSubstitutor) {
+    public JDKPathPanelConsoleHelper(VariableSubstitutor variableSubstitutor)
+    {
         this.variableSubstitutor = variableSubstitutor;
     }
 
-    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter) {
+    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
+    {
         printWriter.println(AutomatedInstallData.INSTALL_PATH + "=");
         return true;
     }
 
-    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p) {
+    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p)
+    {
         String strTargetPath = p.getProperty(AutomatedInstallData.INSTALL_PATH);
-        if (strTargetPath == null || "".equals(strTargetPath.trim())) {
+        if (strTargetPath == null || "".equals(strTargetPath.trim()))
+        {
             System.err.println("Missing mandatory target path!");
             return false;
-        } else {
+        }
+        else
+        {
             strTargetPath = variableSubstitutor.substitute(strTargetPath);
             installData.setInstallPath(strTargetPath);
             return true;
         }
     }
 
-    public boolean runConsole(AutomatedInstallData idata) {
+    public boolean runConsole(AutomatedInstallData idata)
+    {
         minVersion = idata.getVariable("JDKPathPanel.minVersion");
         maxVersion = idata.getVariable("JDKPathPanel.maxVersion");
         variableName = "JDKPath";
@@ -90,27 +99,35 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
             }
         }
 
-        if (!pathIsValid(strDefaultPath) || !verifyVersion(minVersion, maxVersion, strDefaultPath)) {
+        if (!pathIsValid(strDefaultPath) || !verifyVersion(minVersion, maxVersion, strDefaultPath))
+        {
             strDefaultPath = resolveInRegistry(minVersion, maxVersion);
-            if (!pathIsValid(strDefaultPath) || !verifyVersion(minVersion, maxVersion, strDefaultPath)) {
+            if (!pathIsValid(strDefaultPath) || !verifyVersion(minVersion, maxVersion, strDefaultPath))
+            {
                 strDefaultPath = "";
             }
         }
 
         boolean bKeepAsking = true;
 
-        while (bKeepAsking) {
+        while (bKeepAsking)
+        {
             System.out.println("Select JDK path [" + strDefaultPath + "] ");
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            try {
+            try
+            {
                 String strIn = br.readLine();
-                if (!strIn.trim().equals("")) {
+                if (!strIn.trim().equals(""))
+                {
                     strPath = strIn.trim();
-                } else {
+                }
+                else
+                {
                     strPath = strDefaultPath;
                 }
             }
-            catch (IOException e) {
+            catch (IOException e)
+            {
 
                 e.printStackTrace();
             }
@@ -123,14 +140,16 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
                 System.out.println("The chosen JDK has the wrong version (available: " + detectedVersion + " required: " + minVersion + " - " + maxVersion + ").");
                 System.out.println("Continue anyway? [no]");
                 br = new BufferedReader(new InputStreamReader(System.in));
-                try {
+                try
+                {
                     String strIn = br.readLine();
                     if (strIn.trim().toLowerCase().equals("y") || strIn.trim().toLowerCase().equals("yes"))
                     {
                         bKeepAsking = false;
                     }
                 }
-                catch (IOException e) {
+                catch (IOException e)
+                {
 
                     e.printStackTrace();
                 }
@@ -143,11 +162,16 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
         }
 
         int i = askEndOfConsolePanel();
-        if (i == 1) {
+        if (i == 1)
+        {
             return true;
-        } else if (i == 2) {
+        }
+        else if (i == 2)
+        {
             return false;
-        } else {
+        }
+        else
+        {
             return runConsole(idata);
         }
 
@@ -160,20 +184,25 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
      *
      * @return true if existFiles are exist or not defined, else false
      */
-    private static boolean pathIsValid(String strPath) {
-        for (String existFile : JDKPathPanel.testFiles) {
+    private static boolean pathIsValid(String strPath)
+    {
+        for (String existFile : JDKPathPanel.testFiles)
+        {
             File path = new File(strPath, existFile).getAbsoluteFile();
-            if (!path.exists()) {
+            if (!path.exists())
+            {
                 return false;
             }
         }
         return true;
     }
 
-    private boolean verifyVersion(String min, String max, String path) {
+    private boolean verifyVersion(String min, String max, String path)
+    {
         boolean retval = true;
         // No min and max, version always ok.
-        if (min == null && max == null) {
+        if (min == null && max == null)
+        {
             return (true);
         }
         // Now get the version ...
@@ -203,13 +232,17 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
         fe.executeCommand(params, output);
         // "My" VM writes the version on stderr :-(
         String vs = (output[0].length() > 0) ? output[0] : output[1];
-        if (min != null) {
-            if (!compareVersions(vs, min, true, 4, 4, "__NO_NOT_IDENTIFIER_")) {
+        if (min != null)
+        {
+            if (!compareVersions(vs, min, true, 4, 4, "__NO_NOT_IDENTIFIER_"))
+            {
                 retval = false;
             }
         }
-        if (max != null) {
-            if (!compareVersions(vs, max, false, 4, 4, "__NO_NOT_IDENTIFIER_")) {
+        if (max != null)
+        {
+            if (!compareVersions(vs, max, false, 4, 4, "__NO_NOT_IDENTIFIER_"))
+            {
                 retval = false;
             }
         }
@@ -223,54 +256,66 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
         int i;
         int currentRange = 0;
         String[] interestedEntries = new String[halfRange + halfRange];
-        for (i = 0; i < assumedPlace - halfRange; ++i) {
-            if (st.hasMoreTokens()) {
+        for (i = 0; i < assumedPlace - halfRange; ++i)
+        {
+            if (st.hasMoreTokens())
+            {
                 st.nextToken(); // Forget this entries.
             }
         }
 
-        for (i = 0; i < halfRange + halfRange; ++i) { // Put the interesting Strings into an intermediaer array.
-            if (st.hasMoreTokens()) {
+        for (i = 0; i < halfRange + halfRange; ++i)
+        { // Put the interesting Strings into an intermediaer array.
+            if (st.hasMoreTokens())
+            {
                 interestedEntries[i] = st.nextToken();
                 currentRange++;
             }
         }
 
-        for (i = 0; i < currentRange; ++i) {
-            if (useNotIdentifier != null && interestedEntries[i].indexOf(useNotIdentifier) > -1) {
+        for (i = 0; i < currentRange; ++i)
+        {
+            if (useNotIdentifier != null && interestedEntries[i].indexOf(useNotIdentifier) > -1)
+            {
                 continue;
             }
-            if (Character.getType(interestedEntries[i].charAt(0)) != Character.DECIMAL_DIGIT_NUMBER) {
+            if (Character.getType(interestedEntries[i].charAt(0)) != Character.DECIMAL_DIGIT_NUMBER)
+            {
                 continue;
             }
             break;
         }
-        if (i == currentRange) {
+        if (i == currentRange)
+        {
             detectedVersion = "<not found>";
             return (false);
         }
         detectedVersion = interestedEntries[i];
         StringTokenizer current = new StringTokenizer(interestedEntries[i], "._-");
         StringTokenizer needed = new StringTokenizer(template, "._-");
-        while (needed.hasMoreTokens()) {
+        while (needed.hasMoreTokens())
+        {
             // Current can have no more tokens if needed has more
             // and if a privious token was not accepted as good version.
             // e.g. 1.4.2_02 needed, 1.4.2 current. The false return
             // will be right here. Only if e.g. needed is 1.4.2_00 the
             // return value will be false, but zero should not b e used
             // at the last version part.
-            if (!current.hasMoreTokens()) {
+            if (!current.hasMoreTokens())
+            {
                 return (false);
             }
             String cur = current.nextToken();
             String nee = needed.nextToken();
             int curVal = 0;
             int neededVal = 0;
-            try {
+            try
+            {
                 curVal = Integer.parseInt(cur);
                 neededVal = Integer.parseInt(nee);
             }
-            catch (NumberFormatException nfe) { // A number format exception will be raised if
+            catch (NumberFormatException nfe)
+            { // A number format exception will be raised if
                 // there is a non numeric part in the version,
                 // e.g. 1.5.0_beta. The verification runs only into
                 // this deep area of version number (fourth sub place)
@@ -279,14 +324,18 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
                 // the minimal needed version will be 1.5.0.2.
                 return (false);
             }
-            if (curVal < neededVal) {
-                if (isMin) {
+            if (curVal < neededVal)
+            {
+                if (isMin)
+                {
                     return (false);
                 }
                 return (true);
             }
-            if (curVal > neededVal) {
-                if (isMin) {
+            if (curVal > neededVal)
+            {
+                if (isMin)
+                {
                     return (true);
                 }
                 return (false);
@@ -303,12 +352,14 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
      * @return the path to the needed JDK if found in the windows registry
      */
 
-    private String resolveInRegistry(String min, String max) {
+    private String resolveInRegistry(String min, String max)
+    {
         String retval = "";
         int oldVal = 0;
         RegistryHandler rh = null;
         Set<String> badRegEntries = new HashSet<String>();
-        try {
+        try
+        {
             // Get the default registry handler.
             rh = RegistryDefaultHandler.getInstance();
             if (rh == null)
@@ -321,7 +372,8 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
             oldVal = rh.getRoot(); // Only for security...
             rh.setRoot(MSWinConstants.HKEY_LOCAL_MACHINE);
             String[] keys = rh.getSubkeys(JDKPathPanel.JDK_ROOT_KEY);
-            if (keys == null || keys.length == 0) {
+            if (keys == null || keys.length == 0)
+            {
                 return (retval);
             }
             Arrays.sort(keys);
@@ -338,9 +390,12 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
                         String path = rh.getValue(cv, JDKPathPanel.JDK_VALUE_NAME).getStringData();
                         // Use it only if the path is valid.
                         // Set the path for method pathIsValid ...
-                        if (!pathIsValid(path)) {
+                        if (!pathIsValid(path))
+                        {
                             badRegEntries.add(keys[i]);
-                        } else if ("".equals(retval)) {
+                        }
+                        else if ("".equals(retval))
+                        {
                             retval = path;
                         }
                     }
@@ -348,16 +403,21 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
                 i--;
             }
         }
-        catch (Exception e) { // Will only be happen if registry handler is good, but an
+        catch (Exception e)
+        { // Will only be happen if registry handler is good, but an
             // exception at performing was thrown. This is an error...
             e.printStackTrace();
         }
-        finally {
-            if (rh != null && oldVal != 0) {
-                try {
+        finally
+        {
+            if (rh != null && oldVal != 0)
+            {
+                try
+                {
                     rh.setRoot(MSWinConstants.HKEY_LOCAL_MACHINE);
                 }
-                catch (NativeLibException e) {
+                catch (NativeLibException e)
+                {
                     e.printStackTrace();
                 }
             }

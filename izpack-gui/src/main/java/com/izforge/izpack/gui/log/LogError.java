@@ -27,7 +27,8 @@ package com.izforge.izpack.gui.log;
  *
  * @author Elmar Grom
  */
-public interface LogError {
+public interface LogError
+{
     /**
      * First index for error messages
      */

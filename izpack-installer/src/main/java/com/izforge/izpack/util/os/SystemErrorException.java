@@ -1,6 +1,7 @@
 package com.izforge.izpack.util.os;
 
-public class SystemErrorException extends Exception {
+public class SystemErrorException extends Exception
+{
 
     /**
      * System error code
@@ -10,7 +11,8 @@ public class SystemErrorException extends Exception {
     /**
      * Constructs a system error exception with no descriptive information.
      */
-    public SystemErrorException() {
+    public SystemErrorException()
+    {
         super();
     }
 
@@ -20,7 +22,8 @@ public class SystemErrorException extends Exception {
      * @param message A description of or information about the exception. Should not be
      *                <code>null</code>.
      */
-    public SystemErrorException(String message) {
+    public SystemErrorException(String message)
+    {
         super(message);
     }
 
@@ -31,12 +34,14 @@ public class SystemErrorException extends Exception {
      * @param message   A description of or information about the exception. Should not be
      *                  <code>null</code> unless a cause is specified.
      */
-    public SystemErrorException(int errorCode, String message) {
+    public SystemErrorException(int errorCode, String message)
+    {
         super(message);
         this.errorCode = errorCode;
     }
 
-    public String toString() {
+    public String toString()
+    {
         return super.toString();
     }
 
@@ -45,7 +50,8 @@ public class SystemErrorException extends Exception {
      *
      * @param errorCode the system error cod.
      */
-    public void setErrorCode(int errorCode) {
+    public void setErrorCode(int errorCode)
+    {
         this.errorCode = errorCode;
     }
 
@@ -54,7 +60,8 @@ public class SystemErrorException extends Exception {
      *
      * @return the system error code.
      */
-    public int getErrorCode() {
+    public int getErrorCode()
+    {
         return errorCode;
     }
 

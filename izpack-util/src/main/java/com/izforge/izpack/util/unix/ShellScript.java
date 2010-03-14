@@ -15,6 +15,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.util.unix;
 
 import com.izforge.izpack.util.FileExecutor;
@@ -30,7 +31,8 @@ import java.util.Date;
  *
  * @author marc.eppelmann&#064;reddot.de
  */
-public class ShellScript {
+public class ShellScript
+{
 
     // ~ Static fields/initializers *********************************************************
 
@@ -129,9 +131,11 @@ public class ShellScript {
      *
      * @param aShell "sh", "bash", "ksh", "csh" and so an...
      */
-    public ShellScript(String aShell) {
+    public ShellScript(String aShell)
+    {
         // Null was given the Header has to be self created 
-        if (null != aShell) {
+        if (null != aShell)
+        {
             setShell(aShell);
             content.append("#!/usr/bin/env ").append(getShell());
             content.append(header);
@@ -141,7 +145,8 @@ public class ShellScript {
     /**
      * Creates and initializes the ShellScript for running on the bourne shell: "sh".
      */
-    public ShellScript() {
+    public ShellScript()
+    {
         this(SH);
     }
 
@@ -151,7 +156,8 @@ public class ShellScript {
      *
      * @param aShell The Shell which should set and used.
      */
-    public void setShell(String aShell) {
+    public void setShell(String aShell)
+    {
         itsShell = aShell;
     }
 
@@ -160,7 +166,8 @@ public class ShellScript {
      *
      * @return the Shell
      */
-    public String getShell() {
+    public String getShell()
+    {
         return itsShell;
     }
 
@@ -173,7 +180,8 @@ public class ShellScript {
      *
      * @param anObject the Object to append
      */
-    public void append(Object anObject) {
+    public void append(Object anObject)
+    {
         content.append(anObject);
     }
 
@@ -182,7 +190,8 @@ public class ShellScript {
      *
      * @param aChar a char to append
      */
-    public void append(char aChar) {
+    public void append(char aChar)
+    {
         content.append(aChar);
     }
 
@@ -193,8 +202,10 @@ public class ShellScript {
      *
      * @param anArray
      */
-    public void append(String[] anArray) {
-        for (int i = 0; i < anArray.length; i++) {
+    public void append(String[] anArray)
+    {
+        for (int i = 0; i < anArray.length; i++)
+        {
             String string = anArray[i];
 
             append(string);
@@ -213,8 +224,10 @@ public class ShellScript {
      *
      * @param anArray
      */
-    public void appendln(String[] anArray) {
-        for (int i = 0; i < anArray.length; i++) {
+    public void appendln(String[] anArray)
+    {
+        for (int i = 0; i < anArray.length; i++)
+        {
             String string = anArray[i];
 
             append(string);
@@ -232,7 +245,8 @@ public class ShellScript {
      *
      * @param anObject the Object to append
      */
-    public void appendln(Object anObject) {
+    public void appendln(Object anObject)
+    {
         append(anObject);
         append(lf);
     }
@@ -242,7 +256,8 @@ public class ShellScript {
      *
      * @param aChar a char to append
      */
-    public void appendln(char aChar) {
+    public void appendln(char aChar)
+    {
         append(aChar);
         append(lf);
     }
@@ -250,7 +265,8 @@ public class ShellScript {
     /**
      * Appends an unix linefeed to this script ("\n").
      */
-    public void appendln() {
+    public void appendln()
+    {
         append(lf);
     }
 
@@ -259,7 +275,8 @@ public class ShellScript {
      *
      * @return the Content
      */
-    public StringBuffer getContent() {
+    public StringBuffer getContent()
+    {
         return content;
     }
 
@@ -268,7 +285,8 @@ public class ShellScript {
      *
      * @return the script as String
      */
-    public String getContentAsString() {
+    public String getContentAsString()
+    {
         return content.toString();
     }
 
@@ -278,7 +296,8 @@ public class ShellScript {
      *
      * @return The ShellScript as Object dump.
      */
-    public String toString() {
+    public String toString()
+    {
         StringBuffer result = new StringBuffer();
         result.append(getClass().getName());
         result.append('\n');
@@ -294,17 +313,20 @@ public class ShellScript {
      *
      * @param aDestination a destination filename
      */
-    public void write(String aDestination) {
+    public void write(String aDestination)
+    {
         itsLocation = aDestination;
 
-        try {
+        try
+        {
             BufferedWriter writer = new BufferedWriter(new FileWriter(aDestination));
             writer.write(content.toString());
             writer.write(lh + aDestination + lf);
             writer.flush();
             writer.close();
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
     }
@@ -324,13 +346,17 @@ public class ShellScript {
      * @param itsParams
      * @return the output from stdout of the execution.
      */
-    public String exec(String itsParams) {
+    public String exec(String itsParams)
+    {
         FileExecutor.getExecOutput(new String[]{UnixHelper.getCustomCommand("chmod"), "+x",
                 itsLocation});
 
-        if (itsParams != null) {
+        if (itsParams != null)
+        {
             return FileExecutor.getExecOutput(new String[]{itsLocation, itsParams});
-        } else {
+        }
+        else
+        {
             return FileExecutor.getExecOutput(new String[]{itsLocation});
         }
     }
@@ -340,7 +366,8 @@ public class ShellScript {
      *
      * @return the output from stdout of the execution.
      */
-    public String exec() {
+    public String exec()
+    {
         return exec(null);
     }
 
@@ -380,7 +407,8 @@ public class ShellScript {
      * @return the exec result
      */
     public static String execute(String aShell, StringBuffer lines, String aLocation,
-                                 String itsParams) {
+                                 String itsParams)
+    {
         ShellScript s = new ShellScript((aShell == null) ? "sh" : aShell);
         s.append(lines);
         s.write(aLocation);
@@ -395,7 +423,8 @@ public class ShellScript {
      * @param aLocation where to store
      * @return the stdout of the script.
      */
-    public static String execute(StringBuffer lines, String aLocation) {
+    public static String execute(StringBuffer lines, String aLocation)
+    {
         return ShellScript.execute(null, lines, aLocation, null);
     }
 
@@ -412,14 +441,17 @@ public class ShellScript {
      * @return the stdout.
      */
     public static String execAndDelete(String aShell, StringBuffer lines, String aLocation,
-                                       String itsParams) {
+                                       String itsParams)
+    {
         String result = execute(aShell, lines, aLocation, itsParams);
         File location = new File(aLocation);
 
-        try {
+        try
+        {
             location.delete();
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             location.deleteOnExit();
         }
 
@@ -433,7 +465,8 @@ public class ShellScript {
      * @param aLocation where to store.
      * @return the sdtout.
      */
-    public static String execAndDelete(StringBuffer lines, String aLocation) {
+    public static String execAndDelete(StringBuffer lines, String aLocation)
+    {
         return execAndDelete(null, lines, aLocation, null);
     }
 
@@ -442,7 +475,8 @@ public class ShellScript {
      *
      * @param args Arguments from Commandline
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         /*
          * ShellScript s = new ShellScript( ); s.append( "ls $HOME" ); s.write( System.getProperty(
          * "user.home", "." ) + File.separator + "test.sh" );
@@ -458,14 +492,18 @@ public class ShellScript {
     /**
      * Deletes only  if Location is not null.
      */
-    public void delete() {
-        if (itsLocation != null) {
+    public void delete()
+    {
+        if (itsLocation != null)
+        {
             File location = new File(itsLocation);
 
-            try {
+            try
+            {
                 location.delete();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 location.deleteOnExit();
             }
         }

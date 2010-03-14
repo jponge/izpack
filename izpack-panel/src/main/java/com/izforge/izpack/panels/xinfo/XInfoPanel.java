@@ -21,26 +21,22 @@
 
 package com.izforge.izpack.panels.xinfo;
 
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
 
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * The XInfo panel class - shows some adaptative text (ie by parsing for some variables.
  *
  * @author Julien Ponge
  */
-public class XInfoPanel extends IzPanel {
+public class XInfoPanel extends IzPanel
+{
 
     /**
      *
@@ -63,7 +59,8 @@ public class XInfoPanel extends IzPanel {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public XInfoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public XInfoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, resourceManager);
 
         // We initialize our layout
@@ -86,7 +83,8 @@ public class XInfoPanel extends IzPanel {
         textArea.setEditable(false);
 
         String textAreaFont = idata.getVariable("XInfoPanel.font");
-        if (textAreaFont != null && textAreaFont.length() > 0) {
+        if (textAreaFont != null && textAreaFont.length() > 0)
+        {
             Font font = Font.decode(textAreaFont);
             textArea.setFont(font);
         }
@@ -101,12 +99,15 @@ public class XInfoPanel extends IzPanel {
     /**
      * Loads the info text.
      */
-    private void loadInfo() {
-        try {
+    private void loadInfo()
+    {
+        try
+        {
             // We read it
             info = resourceManager.getTextResource("XInfoPanel.info");
         }
-        catch (Exception err) {
+        catch (Exception err)
+        {
             info = "Error : could not load the info text !";
         }
     }
@@ -114,12 +115,15 @@ public class XInfoPanel extends IzPanel {
     /**
      * Parses the text for special variables.
      */
-    private void parseText() {
-        try {
+    private void parseText()
+    {
+        try
+        {
             // Parses the info text
             info = variableSubstitutor.substitute(info);
         }
-        catch (Exception err) {
+        catch (Exception err)
+        {
             err.printStackTrace();
         }
     }
@@ -127,7 +131,8 @@ public class XInfoPanel extends IzPanel {
     /**
      * Called when the panel becomes active.
      */
-    public void panelActivate() {
+    public void panelActivate()
+    {
         // Text handling
         loadInfo();
         parseText();
@@ -142,7 +147,8 @@ public class XInfoPanel extends IzPanel {
      *
      * @return Always true.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         return true;
     }
 }

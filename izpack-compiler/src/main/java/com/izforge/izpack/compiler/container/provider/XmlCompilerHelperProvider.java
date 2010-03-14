@@ -1,6 +1,6 @@
 package com.izforge.izpack.compiler.container.provider;
 
-import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
 import org.picocontainer.injectors.Provider;
 
@@ -9,9 +9,11 @@ import org.picocontainer.injectors.Provider;
  *
  * @author Anthonin Bonnefoy
  */
-public class XmlCompilerHelperProvider implements Provider {
+public class XmlCompilerHelperProvider implements Provider
+{
 
-    public XmlCompilerHelper provide(CompilerData compilerData) {
-        return new XmlCompilerHelper(compilerData.getInstallFile());
+    public XmlCompilerHelper provide(String installFile, AssertionHelper assertionHelper)
+    {
+        return new XmlCompilerHelper(installFile, assertionHelper);
     }
 }

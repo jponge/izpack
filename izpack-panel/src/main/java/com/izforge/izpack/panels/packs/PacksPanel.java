@@ -22,15 +22,13 @@
 
 package com.izforge.izpack.panels.packs;
 
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.IoHelper;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JScrollPane;
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * The packs selection panel class. This class handles only the layout. Common stuff are handled by
@@ -40,7 +38,8 @@ import java.awt.Dimension;
  * @author Jan Blok
  * @author Klaus Bartz
  */
-public class PacksPanel extends PacksPanelBase {
+public class PacksPanel extends PacksPanelBase
+{
 
     /**
      *
@@ -53,7 +52,8 @@ public class PacksPanel extends PacksPanelBase {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public PacksPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public PacksPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, resourceManager);
     }
 
@@ -63,7 +63,8 @@ public class PacksPanel extends PacksPanelBase {
      * @see com.izforge.izpack.panels.packs.PacksPanelBase#createNormalLayout()
      */
 
-    protected void createNormalLayout() {
+    protected void createNormalLayout()
+    {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         createLabel("PacksPanel.info", "preferences", null, null);
         add(Box.createRigidArea(new Dimension(0, 3)));
@@ -71,13 +72,15 @@ public class PacksPanel extends PacksPanelBase {
         add(Box.createRigidArea(new Dimension(0, 5)));
         tableScroller = new JScrollPane();
         packsTable = createPacksTable(300, tableScroller, null, null);
-        if (dependenciesExist) {
+        if (dependenciesExist)
+        {
             dependencyArea = createTextArea("PacksPanel.dependencyList", null, null, null);
         }
         descriptionArea = createTextArea("PacksPanel.description", null, null, null);
         spaceLabel = createPanelWithLabel("PacksPanel.space", null, null);
 
-        if (IoHelper.supported("getFreeSpace")) {
+        if (IoHelper.supported("getFreeSpace"))
+        {
             add(Box.createRigidArea(new Dimension(0, 3)));
             freeSpaceLabel = createPanelWithLabel("PacksPanel.freespace", null, null);
         }

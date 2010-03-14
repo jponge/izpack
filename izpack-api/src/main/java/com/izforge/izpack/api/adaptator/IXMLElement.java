@@ -35,7 +35,8 @@ import java.util.Vector;
  * @author Anthonin Bonnefoy
  * @author David Duponchel
  */
-public interface IXMLElement extends Serializable {
+public interface IXMLElement extends Serializable
+{
 
     /**
      * No line number defined.

@@ -19,6 +19,8 @@
 
 package com.izforge.izpack.api.data;
 
+import com.izforge.izpack.api.data.binding.OsModel;
+
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -31,7 +33,8 @@ import java.util.Set;
  *
  * @author Julien Ponge
  */
-public class Pack implements Serializable {
+public class Pack implements Serializable
+{
 
     static final long serialVersionUID = -5458360562175088671L;
 
@@ -89,7 +92,7 @@ public class Pack implements Serializable {
     /**
      * The target operation system of this pack
      */
-    public List osConstraints = null;
+    public List<OsModel> osConstraints = null;
 
     /**
      * Condition for this pack *
@@ -152,8 +155,9 @@ public class Pack implements Serializable {
      * @param excludegroup  associated exclude group
      * @param uninstall     If true, pack must be uninstalled.
      */
-    public Pack(String name, String id, String description, List osConstraints, List<String> dependencies,
-                boolean required, boolean preselected, boolean loose, String excludegroup, boolean uninstall) {
+    public Pack(String name, String id, String description, List<OsModel> osConstraints, List<String> dependencies,
+                boolean required, boolean preselected, boolean loose, String excludegroup, boolean uninstall)
+    {
         this.name = name;
         this.id = id;
         this.description = description;
@@ -175,7 +179,8 @@ public class Pack implements Serializable {
      *
      * @return The String representation of the pack.
      */
-    public String toString() {
+    public String toString()
+    {
         return name + " (" + description + ")";
     }
 
@@ -184,7 +189,8 @@ public class Pack implements Serializable {
      *
      * @return the dependencies list
      */
-    public List<String> getDependencies() {
+    public List<String> getDependencies()
+    {
         return dependencies;
     }
 
@@ -195,8 +201,10 @@ public class Pack implements Serializable {
      *
      * @param name0 The name of the pack that depents to this pack
      */
-    public void addRevDep(String name0) {
-        if (revDependencies == null) {
+    public void addRevDep(String name0)
+    {
+        if (revDependencies == null)
+        {
             revDependencies = new ArrayList<String>();
         }
         revDependencies.add(name0);
@@ -207,13 +215,16 @@ public class Pack implements Serializable {
      *
      * @return the created text
      */
-    public String depString() {
+    public String depString()
+    {
         String text = "";
-        if (dependencies == null) {
+        if (dependencies == null)
+        {
             return text;
         }
         String name0;
-        for (int i = 0; i < dependencies.size() - 1; i++) {
+        for (int i = 0; i < dependencies.size() - 1; i++)
+        {
             name0 = dependencies.get(i);
             text += name0 + ",";
         }
@@ -249,16 +260,24 @@ public class Pack implements Serializable {
      * @param bytes A number of bytes to convert to a String.
      * @return The String-converted value.
      */
-    public static String toByteUnitsString(long bytes) {
-        if (bytes < KILOBYTES) {
+    public static String toByteUnitsString(long bytes)
+    {
+        if (bytes < KILOBYTES)
+        {
             return String.valueOf(bytes) + " bytes";
-        } else if (bytes < (MEGABYTES)) {
+        }
+        else if (bytes < (MEGABYTES))
+        {
             double value = bytes / KILOBYTES;
             return formatter.format(value) + " KB";
-        } else if (bytes < (GIGABYTES)) {
+        }
+        else if (bytes < (GIGABYTES))
+        {
             double value = bytes / MEGABYTES;
             return formatter.format(value) + " MB";
-        } else {
+        }
+        else
+        {
             double value = bytes / GIGABYTES;
             return formatter.format(value) + " GB";
         }
@@ -268,7 +287,8 @@ public class Pack implements Serializable {
     /**
      * @return the condition
      */
-    public String getCondition() {
+    public String getCondition()
+    {
         return this.condition;
     }
 
@@ -276,29 +296,35 @@ public class Pack implements Serializable {
     /**
      * @param condition the condition to set
      */
-    public void setCondition(String condition) {
+    public void setCondition(String condition)
+    {
         this.condition = condition;
     }
 
-    public boolean hasCondition() {
+    public boolean hasCondition()
+    {
         return this.condition != null;
     }
 
-    public void addValidator(String validatorClassName) {
+    public void addValidator(String validatorClassName)
+    {
         validators.add(validatorClassName);
     }
 
-    public List<String> getValidators() {
+    public List<String> getValidators()
+    {
         return validators;
     }
 
 
-    public boolean isHidden() {
+    public boolean isHidden()
+    {
         return hidden;
     }
 
 
-    public void setHidden(boolean hidden) {
+    public void setHidden(boolean hidden)
+    {
         this.hidden = hidden;
     }
 }

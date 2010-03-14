@@ -70,6 +70,7 @@ public class AndCondition extends Condition
     *
     * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.api.adaptator.IXMLElement)
     */
+
     public void readFromXML(IXMLElement xmlcondition)
     {
         try
@@ -82,6 +83,7 @@ public class AndCondition extends Condition
             this.leftoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(0));
             this.rightoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(1));
         }
+
         catch (Exception e)
         {
             Debug.log("missing element in and-condition");
@@ -105,7 +107,8 @@ public class AndCondition extends Condition
      * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
      */
 
-    public String getDependenciesDetails() {
+    public String getDependenciesDetails()
+    {
         StringBuffer details = new StringBuffer();
         details.append(this.id);
         details.append(" depends on:<ul><li>");
@@ -117,7 +120,8 @@ public class AndCondition extends Condition
     }
 
     @Override
-    public void makeXMLData(IXMLElement root) {
+    public void makeXMLData(IXMLElement root)
+    {
         IXMLElement left = RulesEngineImpl.createConditionElement(this.leftoperand, root);
         this.leftoperand.makeXMLData(left);
         root.addChild(left);

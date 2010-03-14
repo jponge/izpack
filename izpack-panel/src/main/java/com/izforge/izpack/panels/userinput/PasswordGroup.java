@@ -18,16 +18,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.userinput;
 
-import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.panels.userinput.processor.Processor;
 import com.izforge.izpack.panels.userinput.processorclient.ProcessingClient;
 import com.izforge.izpack.panels.userinput.validator.Validator;
 import com.izforge.izpack.panels.userinput.validator.ValidatorContainer;
 import com.izforge.izpack.util.Debug;
 
-import javax.swing.JPasswordField;
+import javax.swing.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -44,7 +45,8 @@ import java.util.Vector;
  * @see UserInputPanel
  */
 /*---------------------------------------------------------------------------*/
-public class PasswordGroup implements ProcessingClient {
+public class PasswordGroup implements ProcessingClient
+{
 
     // ------------------------------------------------------------------------
     // Variable Declarations
@@ -71,15 +73,18 @@ public class PasswordGroup implements ProcessingClient {
      * @param processor           the processor
      */
     /*--------------------------------------------------------------------------*/
-    public PasswordGroup(GUIInstallData idata, List<ValidatorContainer> validatorContainers, String processor) {
+    public PasswordGroup(GUIInstallData idata, List<ValidatorContainer> validatorContainers, String processor)
+    {
         // ----------------------------------------------------
         // attempt to create an instance of the Validator
         // ----------------------------------------------------
-        try {
+        try
+        {
             this.idata = idata;
             this.validatorContainers = validatorContainers;
         }
-        catch (Throwable exception) {
+        catch (Throwable exception)
+        {
             Debug.trace("Failed in PasswordGroup constructor: " + exception);
             this.validatorContainers = null;
         }
@@ -87,16 +92,19 @@ public class PasswordGroup implements ProcessingClient {
         // ----------------------------------------------------
         // attempt to create an instance of the Processor
         // ----------------------------------------------------
-        try {
+        try
+        {
             this.processor = (Processor) Class.forName(processor).newInstance();
         }
-        catch (Throwable exception) {
+        catch (Throwable exception)
+        {
             Debug.trace("Failed in PasswordGroup constructor making processor: " + exception);
             this.processor = null;
         }
     }
 
-    public GUIInstallData getIdata() {
+    public GUIInstallData getIdata()
+    {
         return idata;
     }
 
@@ -108,7 +116,8 @@ public class PasswordGroup implements ProcessingClient {
      * @return the number of sub-fields
      */
     /*--------------------------------------------------------------------------*/
-    public int getNumFields() {
+    public int getNumFields()
+    {
         return (fields.size());
     }
 
@@ -122,8 +131,10 @@ public class PasswordGroup implements ProcessingClient {
      * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
     /*--------------------------------------------------------------------------*/
-    public String getFieldContents(int index) throws IndexOutOfBoundsException {
-        if ((index < 0) || (index >= fields.size())) {
+    public String getFieldContents(int index) throws IndexOutOfBoundsException
+    {
+        if ((index < 0) || (index >= fields.size()))
+        {
             throw (new IndexOutOfBoundsException());
         }
 
@@ -139,8 +150,10 @@ public class PasswordGroup implements ProcessingClient {
      * @param field <code>JPasswordField</code> to add
      */
     /*--------------------------------------------------------------------------*/
-    public void addField(JPasswordField field) {
-        if (field != null) {
+    public void addField(JPasswordField field)
+    {
+        if (field != null)
+        {
             fields.add(field);
         }
     }
@@ -155,93 +168,117 @@ public class PasswordGroup implements ProcessingClient {
      *         rule exists. Otherwise <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
-    public boolean validateContents(int i) {
+    public boolean validateContents(int i)
+    {
         boolean returnValue = true;
-        try {
+        try
+        {
             currentValidator = i;
             ValidatorContainer container = getValidatorContainer(i);
             Validator validator = container.getValidator();
-            if (validator != null) {
+            if (validator != null)
+            {
                 returnValue = validator.validate(this);
             }
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.trace("validateContents(" + i + ") failed: " + e);
             // just return true
         }
         return returnValue;
     }
 
-    public String getValidatorMessage(int i) {
+    public String getValidatorMessage(int i)
+    {
         String returnValue = null;
-        try {
+        try
+        {
             ValidatorContainer container = getValidatorContainer(i);
-            if (container != null) {
+            if (container != null)
+            {
                 returnValue = container.getMessage();
             }
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.trace("getValidatorMessage(" + i + ") failed: " + e);
             // just return true
         }
         return returnValue;
     }
 
-    public int validatorSize() {
+    public int validatorSize()
+    {
         int size = 0;
-        if (validatorContainers != null) {
+        if (validatorContainers != null)
+        {
             size = validatorContainers.size();
         }
         return size;
     }
 
-    public ValidatorContainer getValidatorContainer() {
+    public ValidatorContainer getValidatorContainer()
+    {
         return getValidatorContainer(currentValidator);
     }
 
-    public ValidatorContainer getValidatorContainer(int i) {
+    public ValidatorContainer getValidatorContainer(int i)
+    {
         ValidatorContainer container = null;
-        try {
+        try
+        {
             container = validatorContainers.get(i);
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             container = null;
         }
         return container;
     }
 
-    public boolean hasParams() {
+    public boolean hasParams()
+    {
         return hasParams(currentValidator);
     }
 
-    public boolean hasParams(int i) {
+    public boolean hasParams(int i)
+    {
         boolean returnValue = false;
-        try {
+        try
+        {
             ValidatorContainer container = getValidatorContainer(i);
-            if (container != null) {
+            if (container != null)
+            {
                 returnValue = container.hasParams();
             }
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.trace("hasParams(" + i + ") failed: " + e);
             // just return true
         }
         return returnValue;
     }
 
-    public Map<String, String> getValidatorParams() {
+    public Map<String, String> getValidatorParams()
+    {
         return getValidatorParams(currentValidator);
     }
 
-    public Map<String, String> getValidatorParams(int i) {
+    public Map<String, String> getValidatorParams(int i)
+    {
         Map<String, String> returnValue = null;
-        try {
+        try
+        {
             ValidatorContainer container = getValidatorContainer(i);
-            if (container != null) {
+            if (container != null)
+            {
                 returnValue = container.getValidatorParams();
             }
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.trace("getValidatorParams(" + i + ") failed: " + e);
             // just return true
         }
@@ -251,11 +288,13 @@ public class PasswordGroup implements ProcessingClient {
     // This method was added to support changes to ProcessingClient interface
     // it's use is non-deterministic in the newly implemented text validators.
 
-    public String getText() {
+    public String getText()
+    {
         return getValidatorMessage(currentValidator);
     }
 
-    public void setModifiedPassword(String value) {
+    public void setModifiedPassword(String value)
+    {
         modifiedPassword = value;
     }
 
@@ -271,16 +310,23 @@ public class PasswordGroup implements ProcessingClient {
      * @return the password
      */
     /*--------------------------------------------------------------------------*/
-    public String getPassword() {
+    public String getPassword()
+    {
         String returnValue = "";
-        if (modifiedPassword != null) {
+        if (modifiedPassword != null)
+        {
             returnValue = modifiedPassword;
-            if (processor != null) {
+            if (processor != null)
+            {
                 Debug.trace("Validator changed password, PROCESSOR WILL NOT RUN!");
             }
-        } else if (processor != null) {
+        }
+        else if (processor != null)
+        {
             returnValue = processor.process(this);
-        } else if (fields.size() > 0) {
+        }
+        else if (fields.size() > 0)
+        {
             returnValue = new String(((JPasswordField) fields.elementAt(0)).getPassword());
         }
         return returnValue;

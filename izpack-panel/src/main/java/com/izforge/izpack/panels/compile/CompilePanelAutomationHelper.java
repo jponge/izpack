@@ -39,7 +39,8 @@ import java.io.PrintStream;
  * @author Tino Schwarze
  */
 public class CompilePanelAutomationHelper extends PanelAutomationHelper implements PanelAutomation,
-        CompileHandler {
+        CompileHandler
+{
 
     private CompileWorker worker = null;
 
@@ -54,7 +55,8 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
     private PrintStream stderr;
     private VariableSubstitutor variableSubstitutor;
 
-    public CompilePanelAutomationHelper(VariableSubstitutor variableSubstitutor) {
+    public CompilePanelAutomationHelper(VariableSubstitutor variableSubstitutor)
+    {
         this.variableSubstitutor = variableSubstitutor;
     }
 
@@ -64,7 +66,8 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
      * @param installData installation parameters
      * @param panelRoot   unused.
      */
-    public void makeXMLData(AutomatedInstallData installData, IXMLElement panelRoot) {
+    public void makeXMLData(AutomatedInstallData installData, IXMLElement panelRoot)
+    {
         // not used here - during automatic installation, no automatic
         // installation information is generated
     }
@@ -75,16 +78,19 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
      * @param panelRoot The panel XML tree root.
      * @throws InstallerException if something went wrong.
      */
-    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException {
+    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException
+    {
         IXMLElement compiler_xml = panelRoot.getFirstChildNamed("compiler");
 
         String compiler = null;
 
-        if (compiler_xml != null) {
+        if (compiler_xml != null)
+        {
             compiler = compiler_xml.getContent();
         }
 
-        if (compiler == null) {
+        if (compiler == null)
+        {
             throw new InstallerException("invalid automation installDataGUI: could not find compiler");
         }
 
@@ -92,15 +98,18 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
 
         String args = null;
 
-        if (args_xml != null) {
+        if (args_xml != null)
+        {
             args = args_xml.getContent();
         }
 
-        if (args_xml == null) {
+        if (args_xml == null)
+        {
             throw new InstallerException("invalid automation installDataGUI: could not find compiler arguments");
         }
 
-        try {
+        try
+        {
 
             this.worker = new CompileWorker(idata, this, variableSubstitutor);
             this.worker.setCompiler(compiler);
@@ -116,7 +125,8 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
                 throw new InstallerException("Compilation failed (xml line " + panelRoot.getLineNr() + ")");
             }
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             throw new InstallerException(e);
         }
     }
@@ -124,9 +134,10 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
     /**
      * Reports progress on System.out
      *
-     * @see com.izforge.izpack.util.AbstractUIProgressHandler#startAction(String, int)
+     * @see com.izforge.izpack.api.handler.AbstractUIProgressHandler#startAction(String, int)
      */
-    public void startAction(String name, int noOfJobs) {
+    public void startAction(String name, int noOfJobs)
+    {
         this.stdout.println("[ Starting compilation ]");
         this.job_name = "";
     }
@@ -137,7 +148,8 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
      * @param error the error
      * @see CompileHandler#handleCompileError(CompileResult)
      */
-    public void handleCompileError(CompileResult error) {
+    public void handleCompileError(CompileResult error)
+    {
         this.stdout.println();
         this.stdout.println("[ Compilation failed ]");
         this.stderr.println("Command line: " + error.getCmdline());
@@ -153,19 +165,23 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
     /**
      * Sets state variable for thread sync.
      *
-     * @see com.izforge.izpack.util.AbstractUIProgressHandler#stopAction()
+     * @see com.izforge.izpack.api.handler.AbstractUIProgressHandler#stopAction()
      */
-    public void stopAction() {
-        if ((this.job_name != null) && (this.last_line_len > 0)) {
+    public void stopAction()
+    {
+        if ((this.job_name != null) && (this.last_line_len > 0))
+        {
             String line = this.job_name + ": done.";
             this.stdout.print("\r" + line);
-            for (int i = line.length(); i < this.last_line_len; i++) {
+            for (int i = line.length(); i < this.last_line_len; i++)
+            {
                 this.stdout.print(' ');
             }
             this.stdout.println();
         }
 
-        if (this.worker.getResult().isSuccess()) {
+        if (this.worker.getResult().isSuccess())
+        {
             this.stdout.println("[ Compilation successful ]");
         }
     }
@@ -175,9 +191,10 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
      *
      * @param val
      * @param msg
-     * @see com.izforge.izpack.util.AbstractUIProgressHandler#progress(int, String)
+     * @see com.izforge.izpack.api.handler.AbstractUIProgressHandler#progress(int, String)
      */
-    public void progress(int val, String msg) {
+    public void progress(int val, String msg)
+    {
         double percentage = ((double) val) * 100.0d / (double) this.job_max;
 
         String percent = (new Integer((int) percentage)).toString() + '%';
@@ -186,7 +203,8 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
         int line_len = line.length();
 
         this.stdout.print("\r" + line);
-        for (int i = line_len; i < this.last_line_len; i++) {
+        for (int i = line_len; i < this.last_line_len; i++)
+        {
             this.stdout.print(' ');
         }
 
@@ -199,13 +217,16 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
      * @param jobName The next job's name.
      * @param max     unused
      * @param jobNo   The next job's number.
-     * @see com.izforge.izpack.util.AbstractUIProgressHandler#nextStep(String, int, int)
+     * @see com.izforge.izpack.api.handler.AbstractUIProgressHandler#nextStep(String, int, int)
      */
-    public void nextStep(String jobName, int max, int jobNo) {
-        if ((this.job_name != null) && (this.last_line_len > 0)) {
+    public void nextStep(String jobName, int max, int jobNo)
+    {
+        if ((this.job_name != null) && (this.last_line_len > 0))
+        {
             String line = this.job_name + ": done.";
             this.stdout.print("\r" + line);
-            for (int i = line.length(); i < this.last_line_len; i++) {
+            for (int i = line.length(); i < this.last_line_len; i++)
+            {
                 this.stdout.print(' ');
             }
             this.stdout.println();
@@ -219,7 +240,8 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
     /**
      * {@inheritDoc}
      */
-    public void setSubStepNo(int no_of_substeps) {
+    public void setSubStepNo(int no_of_substeps)
+    {
         this.job_max = no_of_substeps;
     }
 }

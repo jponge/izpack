@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * This class represents a MS-Windows shell link, aka shortcut. It supports creation, modification
  * and deletion as well as reporting on details of shell links. This class uses a number of native
@@ -51,7 +52,8 @@ import java.io.UnsupportedEncodingException;
  * @version 0.0.1 / 1/21/02
  */
 /*---------------------------------------------------------------------------*/
-public class ShellLink implements NativeLibraryClient {
+public class ShellLink implements NativeLibraryClient
+{
 
     // ------------------------------------------------------------------------
     // Constant Definitions
@@ -284,6 +286,7 @@ public class ShellLink implements NativeLibraryClient {
     // ------------------------------------------------------------------------
     // For documentation on these methods see ShellLink.cpp
     // ------------------------------------------------------------------------
+
     private native int initializeCOM();
 
     private native int releaseCOM();
@@ -360,12 +363,15 @@ public class ShellLink implements NativeLibraryClient {
      *                                  linkPaths are returned.
      * @throws Exception                if problems are encountered in initializing the native interface
      */
-    public ShellLink(int type, String name) throws Exception, IllegalArgumentException {
-        if ((type < MIN_TYPE) || (type > MAX_TYPE)) {
+    public ShellLink(int type, String name) throws Exception, IllegalArgumentException
+    {
+        if ((type < MIN_TYPE) || (type > MAX_TYPE))
+        {
             throw (new IllegalArgumentException(
                     "the type parameter used an illegal value"));
         }
-        if (name == null) {
+        if (name == null)
+        {
             throw (new IllegalArgumentException("the name parameter was null"));
         }
 
@@ -379,6 +385,7 @@ public class ShellLink implements NativeLibraryClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Creates an instance of <code>ShellLink</code> from an existing shell link on disk.
      *
@@ -389,8 +396,10 @@ public class ShellLink implements NativeLibraryClient {
      * @see #CURRENT_USER
      * @see #ALL_USERS
      */
-    public ShellLink(String name, int userType) throws Exception, IllegalArgumentException {
-        if (name == null) {
+    public ShellLink(String name, int userType) throws Exception, IllegalArgumentException
+    {
+        if (name == null)
+        {
             throw (new IllegalArgumentException("the name parameter was null"));
         }
 
@@ -402,19 +411,24 @@ public class ShellLink implements NativeLibraryClient {
         int pathEnd = name.lastIndexOf(File.separator);
         int nameStart = pathEnd + 1;
         int nameEnd = name.lastIndexOf('.');
-        if (nameEnd < 0) {
+        if (nameEnd < 0)
+        {
             throw (new Exception("illegal file name"));
         }
         linkName = name.substring(nameStart, nameEnd);
 
-        if (userType == CURRENT_USER) {
+        if (userType == CURRENT_USER)
+        {
             currentUserLinkPath = name.substring(0, pathEnd);
-        } else {
+        }
+        else
+        {
             allUsersLinkPath = name.substring(0, pathEnd);
         }
 
         linkFileName = fullLinkName(userType);
-        if (loadLink(linkFileName) != SL_OK) {
+        if (loadLink(linkFileName) != SL_OK)
+        {
             throw (new Exception(
                     "reading of the file did not succeed"));
         }
@@ -424,6 +438,7 @@ public class ShellLink implements NativeLibraryClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Creates an instance of <code>ShellLink</code> from an existing shell link on disk.
      *
@@ -444,12 +459,15 @@ public class ShellLink implements NativeLibraryClient {
      * @see #ALL_USERS
      */
     public ShellLink(int type, int userType, String group, String name) throws Exception,
-            IllegalArgumentException {
-        if ((type < MIN_TYPE) || (type > MAX_TYPE)) {
+            IllegalArgumentException
+    {
+        if ((type < MIN_TYPE) || (type > MAX_TYPE))
+        {
             throw (new IllegalArgumentException(
                     "the type parameter used an illegal value"));
         }
-        if (name == null) {
+        if (name == null)
+        {
             throw (new IllegalArgumentException("the name parameter was null"));
         }
 
@@ -460,14 +478,16 @@ public class ShellLink implements NativeLibraryClient {
         // set the variables for currentUserLinkPath and allUsersLinkPath
         setAllLinkPaths();
 
-        if (group != null) {
+        if (group != null)
+        {
             groupName = group;
         }
         linkName = name;
 
         // load the link
         linkFileName = fullLinkName(userType);
-        if (loadLink(linkFileName) != SL_OK) {
+        if (loadLink(linkFileName) != SL_OK)
+        {
             throw (new Exception(
                     "reading of the file did not succeed"));
         }
@@ -477,39 +497,52 @@ public class ShellLink implements NativeLibraryClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Initializes COM and gets an instance of the IShellLink interface.
      *
      * @throws Exception if problems are encountered
      */
-    private void initialize() throws Exception {
-        try {
+    private void initialize() throws Exception
+    {
+        try
+        {
             Librarian.getInstance().loadLibrary("ShellLink", this);
         }
-        catch (UnsatisfiedLinkError exception) {
+        catch (UnsatisfiedLinkError exception)
+        {
             throw (new Exception("could not locate native library"));
         }
 
-        try {
-            if (initializeCOM() != SL_OK) {
+        try
+        {
+            if (initializeCOM() != SL_OK)
+            {
                 throw (new Exception("could not initialize COM"));
-            } else {
+            }
+            else
+            {
                 initializeSucceeded = true;
             }
         }
-        catch (Throwable exception) {
+        catch (Throwable exception)
+        {
             throw (new Exception("unidentified problem initializing COM\n" + exception.toString()));
         }
 
         int successCode = getInterface();
-        if (successCode != SL_OK) {
+        if (successCode != SL_OK)
+        {
             releaseCOM();
             initializeSucceeded = false;
 
-            if (successCode == SL_OUT_OF_HANDLES) {
+            if (successCode == SL_OUT_OF_HANDLES)
+            {
                 throw (new Exception(
                         "could not get an instance of IShellLink, no more handles available"));
-            } else {
+            }
+            else
+            {
                 throw (new Exception(
                         "could not get an instance of IShellLink, failed to co-create instance"));
             }
@@ -517,13 +550,16 @@ public class ShellLink implements NativeLibraryClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Destructor, releases COM and frees native resources.
      */
-    protected void finalize() throws Throwable {
+    protected void finalize() throws Throwable
+    {
         releaseInterface();
 
-        if (initializeSucceeded) {
+        if (initializeSucceeded)
+        {
             releaseCOM();
             initializeSucceeded = false;
         }
@@ -531,6 +567,7 @@ public class ShellLink implements NativeLibraryClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method is used to free the library at the end of progam execution. After this call, any
      * instance of this calss will not be usable any more! <b><i><u>Note that this method does NOT
@@ -544,10 +581,12 @@ public class ShellLink implements NativeLibraryClient {
      *             path.
      * @see com.izforge.izpack.util.NativeLibraryClient#freeLibrary
      */
-    public void freeLibrary(String name) {
+    public void freeLibrary(String name)
+    {
         int result = releaseInterface();
 
-        if (initializeSucceeded) {
+        if (initializeSucceeded)
+        {
             result = releaseCOM();
             initializeSucceeded = false;
         }
@@ -556,6 +595,7 @@ public class ShellLink implements NativeLibraryClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Constructs and returns the full path for the link file.
      *
@@ -564,19 +604,24 @@ public class ShellLink implements NativeLibraryClient {
      * @see #CURRENT_USER
      * @see #ALL_USERS
      */
-    private String fullLinkPath(int userType) {
+    private String fullLinkPath(int userType)
+    {
         StringBuffer path = new StringBuffer();
 
         // ----------------------------------------------------
         // build the complete name
         // ----------------------------------------------------
-        if (userType == CURRENT_USER) {
+        if (userType == CURRENT_USER)
+        {
             path.append(currentUserLinkPath);
-        } else {
+        }
+        else
+        {
             path.append(allUsersLinkPath);
         }
 
-        if ((groupName != null) && (groupName.length() > 0)) {
+        if ((groupName != null) && (groupName.length() > 0))
+        {
             path.append(File.separator);
             path.append(groupName);
         }
@@ -585,6 +630,7 @@ public class ShellLink implements NativeLibraryClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Constructs and returns the fully qualified name for the link file.
      *
@@ -593,7 +639,8 @@ public class ShellLink implements NativeLibraryClient {
      * @see #CURRENT_USER
      * @see #ALL_USERS
      */
-    private String fullLinkName(int userType) {
+    private String fullLinkName(int userType)
+    {
         StringBuffer name = new StringBuffer();
 
         name.append(fullLinkPath(userType));
@@ -606,31 +653,40 @@ public class ShellLink implements NativeLibraryClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets all members on the native side.
      *
      * @throws Exception if any problem is encountered during this operation.
      */
-    private void set() throws Exception {
-        if (SetArguments() != SL_OK) {
+    private void set() throws Exception
+    {
+        if (SetArguments() != SL_OK)
+        {
             throw (new Exception("could not set arguments"));
         }
-        if (SetDescription() != SL_OK) {
+        if (SetDescription() != SL_OK)
+        {
             throw (new Exception("could not set description"));
         }
-        if (SetHotkey() != SL_OK) {
+        if (SetHotkey() != SL_OK)
+        {
             throw (new Exception("could not set hotkey"));
         }
-        if (SetIconLocation() != SL_OK) {
+        if (SetIconLocation() != SL_OK)
+        {
             throw (new Exception("could not set icon location"));
         }
-        if (SetPath() != SL_OK) {
+        if (SetPath() != SL_OK)
+        {
             throw (new Exception("could not set target path"));
         }
-        if (SetShowCommand() != SL_OK) {
+        if (SetShowCommand() != SL_OK)
+        {
             throw (new Exception("could not set show command"));
         }
-        if (SetWorkingDirectory() != SL_OK) {
+        if (SetWorkingDirectory() != SL_OK)
+        {
             throw (new Exception(
                     "could not set working directory"));
         }
@@ -638,69 +694,85 @@ public class ShellLink implements NativeLibraryClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Gets all members from the native side.
      *
      * @throws Exception if any problem is encountered during this operation.
      */
-    private void get() throws Exception {
-        if (GetArguments() != SL_OK) {
+    private void get() throws Exception
+    {
+        if (GetArguments() != SL_OK)
+        {
             throw (new Exception("could not get arguments"));
         }
-        if (GetDescription() != SL_OK) {
+        if (GetDescription() != SL_OK)
+        {
             throw (new Exception("could not get description"));
         }
-        if (GetHotkey() != SL_OK) {
+        if (GetHotkey() != SL_OK)
+        {
             throw (new Exception("could not get hotkey"));
         }
-        if (GetIconLocation() != SL_OK) {
+        if (GetIconLocation() != SL_OK)
+        {
             throw (new Exception("could not get icon location"));
         }
-        if (GetPath() != SL_OK) {
+        if (GetPath() != SL_OK)
+        {
             throw (new Exception("could not get target ath"));
         }
-        if (GetShowCommand() != SL_OK) {
+        if (GetShowCommand() != SL_OK)
+        {
             throw (new Exception("could not get show command"));
         }
-        if (GetWorkingDirectory() != SL_OK) {
+        if (GetWorkingDirectory() != SL_OK)
+        {
             throw (new Exception(
                     "could not get working directory"));
         }
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the name of the program group this ShellLinbk should be placed in.
      *
      * @param groupName the name of the program group
      */
-    public void setProgramGroup(String groupName) {
+    public void setProgramGroup(String groupName)
+    {
         this.groupName = groupName;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the command line arguments that will be passed to the target when the link is activated.
      *
      * @param arguments the command line arguments
      * @see #getArguments
      */
-    public void setArguments(String arguments) {
+    public void setArguments(String arguments)
+    {
         this.arguments = arguments;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the description string that is used to identify the link in a menu or on the desktop.
      *
      * @param description the descriptiojn string
      * @see #getDescription
      */
-    public void setDescription(String description) {
+    public void setDescription(String description)
+    {
         this.description = description;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the hotkey that can be used to activate the link.
      *
@@ -708,11 +780,13 @@ public class ShellLink implements NativeLibraryClient {
      *               added in the upper byte. Note that only the lower 16 bits for tis parameter are used.
      * @see #getHotkey
      */
-    public void setHotkey(int hotkey) {
+    public void setHotkey(int hotkey)
+    {
         this.hotkey = hotkey;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the location of the icon that is shown for the shortcut on the desktop.
      *
@@ -721,23 +795,27 @@ public class ShellLink implements NativeLibraryClient {
      *              the file, use an index of 0.
      * @see #getIconLocation
      */
-    public void setIconLocation(String path, int index) {
+    public void setIconLocation(String path, int index)
+    {
         this.iconPath = path;
         this.iconIndex = index;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the absolute path to the shortcut target.
      *
      * @param path the fully qualified file name of the target
      * @see #getTargetPath
      */
-    public void setTargetPath(String path) {
+    public void setTargetPath(String path)
+    {
         this.targetPath = path;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the show command that is passed to the target application when the link is activated.
      * The show command determines if the the window will be restored to the previous size,
@@ -760,8 +838,10 @@ public class ShellLink implements NativeLibraryClient {
      *             </ul>
      * @see #getShowCommand
      */
-    public void setShowCommand(int show) {
-        if ((show < MIN_SHOW) || (show > MAX_SHOW)) {
+    public void setShowCommand(int show)
+    {
+        if ((show < MIN_SHOW) || (show > MAX_SHOW))
+        {
             throw (new IllegalArgumentException(
                     "illegal value for show command " + show));
         }
@@ -770,28 +850,33 @@ public class ShellLink implements NativeLibraryClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the working directory for the link target.
      *
      * @param dir the working directory
      * @see #getWorkingDirectory
      */
-    public void setWorkingDirectory(String dir) {
+    public void setWorkingDirectory(String dir)
+    {
         this.workingDirectory = dir;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the name shown in a menu or on the desktop for the link.
      *
      * @param name The name that the link should display on a menu or on the desktop. Do not include
      *             a file extension.
      */
-    public void setLinkName(String name) {
+    public void setLinkName(String name)
+    {
         linkName = name;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the type of link
      *
@@ -805,8 +890,10 @@ public class ShellLink implements NativeLibraryClient {
      * @throws IllegalArgumentException     if an an invalid type is passed
      * @throws UnsupportedEncodingException
      */
-    public void setLinkType(int type) throws IllegalArgumentException, UnsupportedEncodingException {
-        if ((type < MIN_TYPE) || (type > MAX_TYPE)) {
+    public void setLinkType(int type) throws IllegalArgumentException, UnsupportedEncodingException
+    {
+        if ((type < MIN_TYPE) || (type > MAX_TYPE))
+        {
             throw (new IllegalArgumentException(
                     "illegal value for type"));
         }
@@ -829,11 +916,13 @@ public class ShellLink implements NativeLibraryClient {
      *
      * @see #setLinkType
      */
-    public int getLinkType() {
+    public int getLinkType()
+    {
         return linkType;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the (ShellLink) user type for link
      *
@@ -842,26 +931,33 @@ public class ShellLink implements NativeLibraryClient {
      * @see #CURRENT_USER
      * @see #ALL_USERS
      */
-    public void setUserType(int type) throws IllegalArgumentException {
-        if ((type == CURRENT_USER) || (type == ALL_USERS)) {
+    public void setUserType(int type) throws IllegalArgumentException
+    {
+        if ((type == CURRENT_USER) || (type == ALL_USERS))
+        {
             userType = type;
-        } else {
+        }
+        else
+        {
             throw (new IllegalArgumentException(type + " is not a recognized user type"));
         }
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the (ShellLink) user type for the link. Either {@link #CURRENT_USER} or
      * {@link #ALL_USERS}
      *
      * @see #setUserType
      */
-    public int getUserType() {
+    public int getUserType()
+    {
         return userType;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the path where the links of the selected type are stroed. This method is useful for
      * discovering which program groups already exist.
@@ -870,50 +966,61 @@ public class ShellLink implements NativeLibraryClient {
      *                 {@link #ALL_USERS}
      * @return the path to the type of link set for this instance.
      */
-    public String getLinkPath(int userType) {
+    public String getLinkPath(int userType)
+    {
         String result = null;
-        if (userType == CURRENT_USER) {
+        if (userType == CURRENT_USER)
+        {
             result = currentUserLinkPath;
-        } else {
+        }
+        else
+        {
             result = allUsersLinkPath;
         }
         return result;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the command line that the link passes to the target.
      *
      * @return the command line
      * @see #setArguments
      */
-    public String getArguments() {
+    public String getArguments()
+    {
         return (arguments);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the description for the link.
      *
      * @return the description
      * @see #setDescription
      */
-    public String getDescription() {
+    public String getDescription()
+    {
         return (description);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Retruns the hotkey that can be used to activate the link.
      *
      * @return the virtual keycode for the hotkey
      * @see #setHotkey
      */
-    public int getHotkey() {
+    public int getHotkey()
+    {
         return (hotkey);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the path and file name of the file that contains the icon that is associated with the
      * link.
@@ -921,55 +1028,65 @@ public class ShellLink implements NativeLibraryClient {
      * @return the path to the icon
      * @see #setIconLocation
      */
-    public String getIconLocation() {
+    public String getIconLocation()
+    {
         return (iconPath);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the index of the icon with the icon or resource file
      *
      * @return the index
      * @see #setIconLocation
      */
-    public int getIconIndex() {
+    public int getIconIndex()
+    {
         return (iconIndex);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Retruns the absolute path of the link target
      *
      * @return the path
      * @see #setTargetPath
      */
-    public String getTargetPath() {
+    public String getTargetPath()
+    {
         return (targetPath);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the initial condition of the target window (HIDE, NORMAL, MINIMIZED, MAXIMIZED).
      *
      * @return the target show command
      * @see #setShowCommand
      */
-    public int getShowCommand() {
+    public int getShowCommand()
+    {
         return (showCommand);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Retruns the working deirectory for the link target.
      *
      * @return the working directory
      * @see #setWorkingDirectory
      */
-    public String getWorkingDirectory() {
+    public String getWorkingDirectory()
+    {
         return (workingDirectory);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the fully qualified file name under which the link is saved on disk. <b>Note:</b>
      * this method returns valid results only if the instance was created from a file on disk or
@@ -977,11 +1094,13 @@ public class ShellLink implements NativeLibraryClient {
      *
      * @return the fully qualified file name for the shell link
      */
-    public String getFileName() {
+    public String getFileName()
+    {
         return (linkFileName);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the path of the directory where the link file is stored, if it was necessary during
      * the previous save operation to create the directory. This method returns <code>null</code>
@@ -992,64 +1111,77 @@ public class ShellLink implements NativeLibraryClient {
      *         save operation was carried out or there was no need to create a directory during the previous
      *         save operation.
      */
-    public String getDirectoryCreated() {
+    public String getDirectoryCreated()
+    {
         return (linkDirectory);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the name shown in a menu or on the desktop for the link.
      *
      * @return the name
      */
-    public String getLinkName() {
+    public String getLinkName()
+    {
         return (linkName);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the path for currentusersLink
      *
      * @return currentUsersLinkPath
      */
-    public String getcurrentUserLinkPath() {
+    public String getcurrentUserLinkPath()
+    {
         return currentUserLinkPath;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the path for allusersLink
      *
      * @return allusersLinkPath
      */
-    public String getallUsersLinkPath() {
+    public String getallUsersLinkPath()
+    {
         return allUsersLinkPath;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Saves this link.
      *
      * @throws Exception if problems are encountered
      */
-    public void save() throws Exception {
+    public void save() throws Exception
+    {
         // set all values on the native side
         set();
 
         // make sure the target actually resolves
         int result = Resolve();
 
-        if (result != SL_OK) {
+        if (result != SL_OK)
+        {
             throw (new Exception("cannot resolve target"));
         }
 
         // make sure the directory exists
         File directory = new File(fullLinkPath(userType));
 
-        if (!directory.exists()) {
+        if (!directory.exists())
+        {
             directory.mkdirs();
             linkDirectory = directory.getPath();
-        } else {
+        }
+        else
+        {
             linkDirectory = "";
         }
 
@@ -1059,7 +1191,8 @@ public class ShellLink implements NativeLibraryClient {
         // all-users location and check file last-modification time:
         File allUsersFileObj = null;
         long aufLastModVal = 0;
-        if (userType == CURRENT_USER) {  //link is for current user; setup file obj for all-users location
+        if (userType == CURRENT_USER)
+        {  //link is for current user; setup file obj for all-users location
             allUsersFileObj = new File(fullLinkName(ALL_USERS));
             //get last-modified time (or 0 if no file):
             aufLastModVal = allUsersFileObj.lastModified();
@@ -1070,9 +1203,12 @@ public class ShellLink implements NativeLibraryClient {
 
         result = saveLink(saveTo);
 
-        if (result == SL_NO_IPERSIST) {
+        if (result == SL_NO_IPERSIST)
+        {
             throw (new Exception("could not get handle for IPesist"));
-        } else if (result == SL_NO_SAVE) {
+        }
+        else if (result == SL_NO_SAVE)
+        {
             throw (new Exception("the save operation failed"));
         }
 
@@ -1101,6 +1237,7 @@ public class ShellLink implements NativeLibraryClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Saves this link to any desired location.
      *
@@ -1108,8 +1245,10 @@ public class ShellLink implements NativeLibraryClient {
      * @throws IllegalArgumentException if the parameter was null
      * @throws Exception                if the save operation could not be carried out
      */
-    public void save(String name) throws Exception {
-        if (name == null) {
+    public void save(String name) throws Exception
+    {
+        if (name == null)
+        {
             throw (new IllegalArgumentException("name was null"));
         }
 
@@ -1117,21 +1256,26 @@ public class ShellLink implements NativeLibraryClient {
         set();
 
         // make sure the target actually resolves
-        if (Resolve() != SL_OK) {
+        if (Resolve() != SL_OK)
+        {
             throw (new Exception("cannot resolve target"));
         }
 
         // make sure the directory exists
         File directory = new File(name.substring(0, name.lastIndexOf(File.separatorChar)));
-        if (!directory.exists()) {
+        if (!directory.exists())
+        {
             directory.mkdirs();
             linkDirectory = directory.getPath();
-        } else {
+        }
+        else
+        {
             linkDirectory = null;
         }
 
         // perform the save operation
-        if (saveLink(name) != SL_OK) {
+        if (saveLink(name) != SL_OK)
+        {
             throw (new Exception("the save operation failed"));
         }
 
@@ -1145,20 +1289,24 @@ public class ShellLink implements NativeLibraryClient {
      * @param srcFileObj  source file to be moved.
      * @param destFileObj destination file object.
      */
-    protected void moveFileTo(File srcFileObj, File destFileObj) {
-        if (destFileObj.exists()) {  //destination file currently exists
+    protected void moveFileTo(File srcFileObj, File destFileObj)
+    {
+        if (destFileObj.exists())
+        {  //destination file currently exists
             final File tempFileObj =       //create new, unique target filename
                     new File(destFileObj.getPath() + System.currentTimeMillis());
             destFileObj.renameTo(tempFileObj);  //rename dest to temp name
             srcFileObj.renameTo(destFileObj);   //move source file to dest
             tempFileObj.delete();               //remove renamed original file
-        } else    //destination file does not exist
+        }
+        else    //destination file does not exist
         {
             srcFileObj.renameTo(destFileObj);
         }
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * sets currentUsersLinkPath and allUsersLinkPath. If the path is empty, resets userType to a
      * valid userType for this type of link. If no linkPaths are valid, an IllegalArgumentException
@@ -1167,7 +1315,8 @@ public class ShellLink implements NativeLibraryClient {
      * @throws IllegalArgumentException
      * @throws UnsupportedEncodingException
      */
-    private void setAllLinkPaths() throws IllegalArgumentException {
+    private void setAllLinkPaths() throws IllegalArgumentException
+    {
         // (re)sets currentUsersLinkPath and allUsersLinkPath
         currentUserLinkPath = "";
         allUsersLinkPath = "";
@@ -1175,17 +1324,20 @@ public class ShellLink implements NativeLibraryClient {
         GetFullLinkPath(ALL_USERS, linkType);
 
         // be sure userType is valid. Override initial choice if not.
-        if (userType == CURRENT_USER && currentUserLinkPath.length() == 0) {
+        if (userType == CURRENT_USER && currentUserLinkPath.length() == 0)
+        {
             userType = ALL_USERS;
-        } else if (userType == ALL_USERS && allUsersLinkPath.length() == 0) {
+        }
+        else if (userType == ALL_USERS && allUsersLinkPath.length() == 0)
+        {
             userType = CURRENT_USER;
         }
 
-        if (allUsersLinkPath.length() == 0 && currentUserLinkPath.length() == 0) {
+        if (allUsersLinkPath.length() == 0 && currentUserLinkPath.length() == 0)
+        {
             throw (new IllegalArgumentException("linkType " + linkType + " is invalid."));
         }
     }
 
 }
-/*---------------------------------------------------------------------------*/
 

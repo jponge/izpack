@@ -10,10 +10,12 @@ import java.util.List;
  *
  * @author Anthonin Bonnefoy
  */
-public class IzPackMavenProjectStub extends MavenProject {
+public class IzPackMavenProjectStub extends MavenProject
+{
 
     @Override
-    public List getAttachedArtifacts() {
+    public List getAttachedArtifacts()
+    {
         return Collections.emptyList();
     }
 }

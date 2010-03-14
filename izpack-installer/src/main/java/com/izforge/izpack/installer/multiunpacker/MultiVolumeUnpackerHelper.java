@@ -1,30 +1,35 @@
 package com.izforge.izpack.installer.multiunpacker;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.unpacker.IMultiVolumeUnpackerHelper;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
-public class MultiVolumeUnpackerHelper implements IMultiVolumeUnpackerHelper {
+public class MultiVolumeUnpackerHelper implements IMultiVolumeUnpackerHelper
+{
 
     private AutomatedInstallData idata;
 
     private AbstractUIProgressHandler handler;
 
-    public MultiVolumeUnpackerHelper() {
+    public MultiVolumeUnpackerHelper()
+    {
 
     }
 
-    public File enterNextMediaMessage(String volumename, boolean lastcorrupt) {
-        if (lastcorrupt) {
+    public File enterNextMediaMessage(String volumename, boolean lastcorrupt)
+    {
+        if (lastcorrupt)
+        {
             Component parent = null;
-            if ((this.handler != null) && (this.handler instanceof IzPanel)) {
+            if ((this.handler != null) && (this.handler instanceof IzPanel))
+            {
                 parent = ((IzPanel) this.handler).getInstallerFrame();
             }
             JOptionPane.showMessageDialog(parent, idata.getLangpack()
@@ -36,34 +41,44 @@ public class MultiVolumeUnpackerHelper implements IMultiVolumeUnpackerHelper {
         File nextvolume = new File(volumename);
         NextMediaDialog nmd = null;
 
-        while (!nextvolume.exists() || lastcorrupt) {
-            if ((this.handler != null) && (this.handler instanceof IzPanel)) {
+        while (!nextvolume.exists() || lastcorrupt)
+        {
+            if ((this.handler != null) && (this.handler instanceof IzPanel))
+            {
                 InstallerFrame installframe = ((IzPanel) this.handler).getInstallerFrame();
                 nmd = new NextMediaDialog(installframe, idata, volumename);
-            } else {
+            }
+            else
+            {
                 nmd = new NextMediaDialog(null, idata, volumename);
             }
             nmd.setVisible(true);
             String nextmediainput = nmd.getNextMedia();
-            if (nextmediainput != null) {
+            if (nextmediainput != null)
+            {
                 nextvolume = new File(nextmediainput);
-            } else {
+            }
+            else
+            {
                 Debug.trace("Input from NextMediaDialog was null");
                 nextvolume = new File(volumename);
             }
             // selection equal to last selected which was corrupt?
-            if (!(volumename.equals(nextvolume.getAbsolutePath()) && lastcorrupt)) {
+            if (!(volumename.equals(nextvolume.getAbsolutePath()) && lastcorrupt))
+            {
                 lastcorrupt = false;
             }
         }
         return nextvolume;
     }
 
-    public File enterNextMediaMessage(String volumename) {
+    public File enterNextMediaMessage(String volumename)
+    {
         return enterNextMediaMessage(volumename, false);
     }
 
-    public void init(AutomatedInstallData idata, AbstractUIProgressHandler handler) {
+    public void init(AutomatedInstallData idata, AbstractUIProgressHandler handler)
+    {
         this.idata = idata;
         this.handler = handler;
     }

@@ -21,17 +21,16 @@
 
 package com.izforge.izpack.installer.debugger;
 
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IconsDatabase;
-import com.izforge.izpack.installer.data.GUIInstallData;
 
 import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.Container;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -47,7 +46,8 @@ import java.util.Properties;
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  * @version $Id: $
  */
-public class Debugger {
+public class Debugger
+{
     private RulesEngine rules;
     private GUIInstallData idata;
 
@@ -64,7 +64,8 @@ public class Debugger {
     private ConditionHistoryTableModel conditionhistorymodel;
     private ConditionHistoryTableCellRenderer conditionhistoryrenderer;
 
-    public Debugger(GUIInstallData installdata, IconsDatabase icons, RulesEngine rules) {
+    public Debugger(GUIInstallData installdata, IconsDatabase icons, RulesEngine rules)
+    {
         idata = installdata;
         this.rules = rules;
         lasttimevariables = (Properties) idata.getVariables().clone();
@@ -75,15 +76,18 @@ public class Debugger {
     }
 
 
-    private void init() {
+    private void init()
+    {
         String[] variablekeys = (String[]) lasttimevariables.keySet().toArray(new String[lasttimevariables.size()]);
-        for (String variablename : variablekeys) {
+        for (String variablename : variablekeys)
+        {
             VariableHistory vh = new VariableHistory(variablename);
             vh.addValue(lasttimevariables.getProperty(variablename), "initial value");
             variableshistory.put(variablename, vh);
         }
         String[] conditionids = this.rules.getKnownConditionIds();
-        for (String conditionid : conditionids) {
+        for (String conditionid : conditionids)
+        {
             Condition currentcondition = RulesEngineImpl.getCondition(conditionid);
             boolean result = this.rules.isConditionTrue(currentcondition);
 
@@ -96,26 +100,33 @@ public class Debugger {
         }
     }
 
-    private void debugVariables(Panel nextpanelmetadata, Panel lastpanelmetadata) {
+    private void debugVariables(Panel nextpanelmetadata, Panel lastpanelmetadata)
+    {
         getChangedVariables(nextpanelmetadata, lastpanelmetadata);
         lasttimevariables = (Properties) idata.getVariables().clone();
     }
 
-    private void debugConditions(Panel nextpanelmetadata, com.izforge.izpack.api.data.Panel lastpanelmetadata) {
+    private void debugConditions(Panel nextpanelmetadata, com.izforge.izpack.api.data.Panel lastpanelmetadata)
+    {
         conditionhistoryrenderer.clearState();
         updateChangedConditions("changed after panel switch from " + lastpanelmetadata.getPanelid() + " to " + nextpanelmetadata.getPanelid());
     }
 
-    private void updateChangedConditions(String comment) {
+    private void updateChangedConditions(String comment)
+    {
         String[] conditionids = this.rules.getKnownConditionIds();
-        for (String conditionid : conditionids) {
+        for (String conditionid : conditionids)
+        {
             Condition currentcondition = RulesEngineImpl.getCondition(conditionid);
             ConditionHistory ch = null;
-            if (!conditionhistory.containsKey(conditionid)) {
+            if (!conditionhistory.containsKey(conditionid))
+            {
                 // new condition
                 ch = new ConditionHistory(currentcondition);
                 conditionhistory.put(conditionid, ch);
-            } else {
+            }
+            else
+            {
                 ch = conditionhistory.get(conditionid);
             }
             ch.addValue(this.rules.isConditionTrue(currentcondition), comment);
@@ -123,7 +134,8 @@ public class Debugger {
         conditionhistorymodel.fireTableDataChanged();
     }
 
-    private Properties getChangedVariables(Panel nextpanelmetadata, Panel lastpanelmetadata) {
+    private Properties getChangedVariables(Panel nextpanelmetadata, Panel lastpanelmetadata)
+    {
         Properties currentvariables = (Properties) idata.getVariables().clone();
         Properties changedvariables = new Properties();
 
@@ -131,19 +143,24 @@ public class Debugger {
         // check for changed and new variables        
         Enumeration currentvariableskeys = currentvariables.keys();
         boolean changes = false;
-        while (currentvariableskeys.hasMoreElements()) {
+        while (currentvariableskeys.hasMoreElements())
+        {
             String key = (String) currentvariableskeys.nextElement();
             String currentvalue = currentvariables.getProperty(key);
             String oldvalue = lasttimevariables.getProperty(key);
 
-            if ((oldvalue == null)) {
+            if ((oldvalue == null))
+            {
                 VariableHistory vh = new VariableHistory(key);
                 vh.addValue(currentvalue, "new after panel " + lastpanelmetadata.getPanelid());
                 variableshistory.put(key, vh);
                 changes = true;
                 changedvariables.put(key, currentvalue);
-            } else {
-                if (!currentvalue.equals(oldvalue)) {
+            }
+            else
+            {
+                if (!currentvalue.equals(oldvalue))
+                {
                     VariableHistory vh = variableshistory.get(key);
                     vh.addValue(currentvalue, "changed value after panel " + lastpanelmetadata.getPanelid());
                     changes = true;
@@ -151,23 +168,27 @@ public class Debugger {
                 }
             }
         }
-        if (changes) {
+        if (changes)
+        {
             variablesmodel.fireTableDataChanged();
         }
         return changedvariables;
     }
 
-    private void modifyVariableManually(String varnametxt, String varvaluetxt) {
+    private void modifyVariableManually(String varnametxt, String varvaluetxt)
+    {
         lasttimevariables = (Properties) idata.getVariables().clone();
         VariableHistory vh = variableshistory.get(varnametxt);
-        if (vh != null) {
+        if (vh != null)
+        {
             vh.addValue(varvaluetxt, "modified manually");
         }
         variablesmodel.fireTableDataChanged();
         updateChangedConditions("after manual modification of variable " + varnametxt);
     }
 
-    public JPanel getDebugPanel() {
+    public JPanel getDebugPanel()
+    {
         JPanel debugpanel = new JPanel();
         debugpanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
         debugpanel.setLayout(new BorderLayout());
@@ -193,28 +214,37 @@ public class Debugger {
         final JTextField varvalue = new JTextField();
         varchangepanel.add(varvalue);
         JButton changevarbtn = ButtonFactory.createButton(idata.getLangpack().getString("debug.changevariable"), icons.getImageIcon("debug.changevariable"), idata.buttonsHColor);
-        changevarbtn.addActionListener(new ActionListener() {
+        changevarbtn.addActionListener(new ActionListener()
+        {
 
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
                 String varnametxt = varname.getText();
                 String varvaluetxt = varvalue.getText();
-                if ((varnametxt != null) && (varnametxt.length() > 0)) {
-                    if ((varvaluetxt != null) && (varvaluetxt.length() > 0)) {
+                if ((varnametxt != null) && (varnametxt.length() > 0))
+                {
+                    if ((varvaluetxt != null) && (varvaluetxt.length() > 0))
+                    {
                         idata.setVariable(varnametxt, varvaluetxt);
                         modifyVariableManually(varnametxt, varvaluetxt);
                     }
                 }
             }
         });
-        variablestable.addMouseListener(new MouseListener() {
+        variablestable.addMouseListener(new MouseListener()
+        {
 
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(MouseEvent e)
+            {
                 int selectedrow = variablestable.getSelectedRow();
                 String selectedvariable = (String) variablesmodel.getValueAt(selectedrow, 0);
 
-                if (e.getClickCount() == 1) {
+                if (e.getClickCount() == 1)
+                {
                     varname.setText(selectedvariable);
-                } else {
+                }
+                else
+                {
                     VariableHistory vh = variableshistory.get(selectedvariable);
 
                     JFrame variabledetails = new JFrame("Details");
@@ -234,22 +264,26 @@ public class Debugger {
                 }
             }
 
-            public void mouseEntered(MouseEvent e) {
+            public void mouseEntered(MouseEvent e)
+            {
                 // TODO Auto-generated method stub
 
             }
 
-            public void mouseExited(MouseEvent e) {
+            public void mouseExited(MouseEvent e)
+            {
                 // TODO Auto-generated method stub
 
             }
 
-            public void mousePressed(MouseEvent e) {
+            public void mousePressed(MouseEvent e)
+            {
                 // TODO Auto-generated method stub
 
             }
 
-            public void mouseReleased(MouseEvent e) {
+            public void mouseReleased(MouseEvent e)
+            {
                 // TODO Auto-generated method stub
 
             }
@@ -267,14 +301,17 @@ public class Debugger {
         conditiontable.setDefaultRenderer(ConditionHistory.class, conditionhistoryrenderer);
         conditiontable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         conditiontable.setRowSelectionAllowed(true);
-        conditiontable.addMouseListener(new MouseListener() {
+        conditiontable.addMouseListener(new MouseListener()
+        {
 
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(MouseEvent e)
+            {
                 int selectedrow = conditiontable.getSelectedRow();
 
                 String selectedcondition = (String) conditiontable.getModel().getValueAt(selectedrow, 0);
 
-                if (e.getClickCount() == 2) {
+                if (e.getClickCount() == 2)
+                {
 
                     ConditionHistory ch = conditionhistory.get(selectedcondition);
 
@@ -296,22 +333,26 @@ public class Debugger {
 
             }
 
-            public void mouseEntered(MouseEvent e) {
+            public void mouseEntered(MouseEvent e)
+            {
                 // TODO Auto-generated method stub
 
             }
 
-            public void mouseExited(MouseEvent e) {
+            public void mouseExited(MouseEvent e)
+            {
                 // TODO Auto-generated method stub
 
             }
 
-            public void mousePressed(MouseEvent e) {
+            public void mousePressed(MouseEvent e)
+            {
                 // TODO Auto-generated method stub
 
             }
 
-            public void mouseReleased(MouseEvent e) {
+            public void mouseReleased(MouseEvent e)
+            {
                 // TODO Auto-generated method stub
 
             }
@@ -336,12 +377,14 @@ public class Debugger {
      * @param nextpanelmetadata
      * @param lastpanelmetadata
      */
-    public void switchPanel(Panel nextpanelmetadata, Panel lastpanelmetadata) {
+    public void switchPanel(Panel nextpanelmetadata, Panel lastpanelmetadata)
+    {
         this.debugVariables(nextpanelmetadata, lastpanelmetadata);
         this.debugConditions(nextpanelmetadata, lastpanelmetadata);
     }
 
-    public void packSelectionChanged(String comment) {
+    public void packSelectionChanged(String comment)
+    {
         this.updateChangedConditions(comment);
     }
 }

@@ -14,16 +14,12 @@
     <name>IzPack dist module</name>
 
     <dependencies>
-
-
         <dependency>
             <groupId>org.apache.maven.plugin-testing</groupId>
             <artifactId>maven-plugin-testing-harness</artifactId>
             <version>1.2</version>
             <scope>test</scope>
         </dependency>
-
-
     </dependencies>
 
     <build>

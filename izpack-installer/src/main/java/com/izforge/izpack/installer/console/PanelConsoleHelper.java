@@ -32,6 +32,8 @@ import java.io.InputStreamReader;
  */
 abstract public class PanelConsoleHelper
 {
+
+
     public int askEndOfConsolePanel()
     {
         try

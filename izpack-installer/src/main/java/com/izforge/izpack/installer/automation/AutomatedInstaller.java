@@ -26,6 +26,7 @@ import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.installer.DataValidator.Status;
 import com.izforge.izpack.api.rules.RulesEngine;
@@ -37,10 +38,9 @@ import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.language.ConditionCheck;
 import com.izforge.izpack.installer.manager.DataValidatorFactory;
 import com.izforge.izpack.installer.manager.PanelActionFactory;
-import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
-import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsConstraintHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -180,7 +180,7 @@ public class AutomatedInstaller extends InstallerBase
                     continue;
                 }
 
-                if (!OsConstraint.oneMatchesCurrentSystem(p.osConstraints))
+                if (!OsConstraintHelper.oneMatchesCurrentSystem(p.osConstraints))
                 {
                     continue;
                 }

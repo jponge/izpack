@@ -15,6 +15,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.core.io;
 
 import com.izforge.izpack.util.Debug;
@@ -33,7 +34,8 @@ import java.util.zip.GZIPOutputStream;
  *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
-public class FileSpanningOutputStream extends OutputStream {
+public class FileSpanningOutputStream extends OutputStream
+{
 
     public static final long KB = 1000;
 
@@ -90,7 +92,8 @@ public class FileSpanningOutputStream extends OutputStream {
      * @param maxvolumesize - the maximum volume size
      * @throws IOException
      */
-    public FileSpanningOutputStream(String volumename, long maxvolumesize) throws IOException {
+    public FileSpanningOutputStream(String volumename, long maxvolumesize) throws IOException
+    {
         this(new File(volumename), maxvolumesize);
     }
 
@@ -101,7 +104,8 @@ public class FileSpanningOutputStream extends OutputStream {
      * @param maxvolumesize - the maximum volume size
      * @throws IOException
      */
-    public FileSpanningOutputStream(File volume, long maxvolumesize) throws IOException {
+    public FileSpanningOutputStream(File volume, long maxvolumesize) throws IOException
+    {
         this(volume, maxvolumesize, 0);
     }
 
@@ -114,14 +118,17 @@ public class FileSpanningOutputStream extends OutputStream {
      * @throws IOException
      */
     protected FileSpanningOutputStream(File volume, long maxvolumesize, int currentvolume)
-            throws IOException {
+            throws IOException
+    {
         this.generateMagicNumber();
         this.createVolumeOutputStream(volume, maxvolumesize, currentvolume);
     }
 
-    private void generateMagicNumber() {
+    private void generateMagicNumber()
+    {
         // only create a magic number, if not already done
-        if (magicnumber == null) {
+        if (magicnumber == null)
+        {
             // create empty magic number
             magicnumber = new byte[MAGIC_NUMER_LENGTH];
             Date currenttime = new Date();
@@ -131,7 +138,8 @@ public class FileSpanningOutputStream extends OutputStream {
             random.nextBytes(magicnumber);
             Debug.trace("created new magic number for FileOutputstream: "
                     + new String(magicnumber));
-            for (int i = 0; i < magicnumber.length; i++) {
+            for (int i = 0; i < magicnumber.length; i++)
+            {
                 Debug.trace(i + " - " + magicnumber[i]);
             }
         }
@@ -147,7 +155,8 @@ public class FileSpanningOutputStream extends OutputStream {
      * @throws IOException
      */
     private void createVolumeOutputStream(File volume, long maxvolumesize, int currentvolume)
-            throws IOException {
+            throws IOException
+    {
         fileoutputstream = new FileOutputStream(volume);
         zippedoutputstream = new GZIPOutputStream(fileoutputstream, 256);
         currentfile = volume;
@@ -157,9 +166,12 @@ public class FileSpanningOutputStream extends OutputStream {
         // the first volume has no suffix, additional volumes have a .INDEX# suffix
         String volumesuffix = "." + currentvolume;
         String volabsolutePath = volume.getAbsolutePath();
-        if (volabsolutePath.endsWith(volumesuffix)) {
+        if (volabsolutePath.endsWith(volumesuffix))
+        {
             volumename = volabsolutePath.substring(0, volabsolutePath.indexOf(volumesuffix));
-        } else {
+        }
+        else
+        {
             volumename = volabsolutePath;
         }
         long oldfilepointer = filepointer;
@@ -173,7 +185,8 @@ public class FileSpanningOutputStream extends OutputStream {
      * @param volume
      * @throws IOException
      */
-    public FileSpanningOutputStream(File volume) throws IOException {
+    public FileSpanningOutputStream(File volume) throws IOException
+    {
         this(volume.getAbsolutePath(), DEFAULT_VOLUME_SIZE);
     }
 
@@ -181,14 +194,16 @@ public class FileSpanningOutputStream extends OutputStream {
      * @param volumename
      * @throws IOException
      */
-    public FileSpanningOutputStream(String volumename) throws IOException {
+    public FileSpanningOutputStream(String volumename) throws IOException
+    {
         this(volumename, DEFAULT_VOLUME_SIZE);
     }
 
     /**
      * @throws IOException
      */
-    public FileSpanningOutputStream() throws IOException {
+    public FileSpanningOutputStream() throws IOException
+    {
         this(DEFAULT_VOLUME_NAME, DEFAULT_VOLUME_SIZE);
     }
 
@@ -197,24 +212,31 @@ public class FileSpanningOutputStream extends OutputStream {
      *
      * @return the size of the current volume FILE_NOT_AVAILABLE, if there's no current volume
      */
-    protected long getCurrentVolumeSize() {
-        if (currentfile == null) {
+    protected long getCurrentVolumeSize()
+    {
+        if (currentfile == null)
+        {
             return FILE_NOT_AVAILABLE;
         }
-        try {
+        try
+        {
             flush();
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
         // create a new instance
         currentfile = new File(currentfile.getAbsolutePath());
-        if (currentvolumeindex == 0) {
+        if (currentvolumeindex == 0)
+        {
             // this is the first volume, add the additional free space
             // and add a reserve for overhead and not yet written data
             return currentfile.length() + this.firstvolumefreespacesize
                     + Math.round(0.001 * currentfile.length());
-        } else {
+        }
+        else
+        {
             // not the first volume, just return the actual length
             // and add a reserve for overhead and not yet written data
             return currentfile.length() + Math.round(0.001 * currentfile.length());
@@ -226,7 +248,8 @@ public class FileSpanningOutputStream extends OutputStream {
      *
      * @throws IOException
      */
-    protected void createStreamToNextVolume() throws IOException {
+    protected void createStreamToNextVolume() throws IOException
+    {
         // close current stream
         close();
         totalbytesofpreviousvolumes = currentfile.length();
@@ -241,7 +264,8 @@ public class FileSpanningOutputStream extends OutputStream {
     /**
      * @see java.io.OutputStream#close()
      */
-    public void close() throws IOException {
+    public void close() throws IOException
+    {
         this.flush();
         zippedoutputstream.close();
         fileoutputstream.close();
@@ -252,8 +276,10 @@ public class FileSpanningOutputStream extends OutputStream {
     /**
      * @see java.io.OutputStream#write(byte[], int, int)
      */
-    public void write(byte[] b, int off, int len) throws IOException {
-        if (len > maxvolumesize) {
+    public void write(byte[] b, int off, int len) throws IOException
+    {
+        if (len > maxvolumesize)
+        {
             throw new IOException(
                     "file can't be written. buffer length exceeded maxvolumesize (" + " > "
                             + maxvolumesize + ")");
@@ -263,7 +289,8 @@ public class FileSpanningOutputStream extends OutputStream {
         // calculate the available bytes
         long available = maxvolumesize - currentsize;
 
-        if (available < len) {
+        if (available < len)
+        {
             Debug.trace("Not enough space left on volume. available: " + available);
             Debug.trace("current size is: " + currentsize);
             // there's not enough space available
@@ -279,20 +306,25 @@ public class FileSpanningOutputStream extends OutputStream {
     /**
      * @see java.io.OutputStream#write(byte[])
      */
-    public void write(byte[] b) throws IOException {
+    public void write(byte[] b) throws IOException
+    {
         this.write(b, 0, b.length);
     }
 
     /**
      * @see java.io.OutputStream#write(int)
      */
-    public void write(int b) throws IOException {
+    public void write(int b) throws IOException
+    {
         long availablebytes = maxvolumesize - getCurrentVolumeSize();
-        if (availablebytes >= 1) {
+        if (availablebytes >= 1)
+        {
             zippedoutputstream.write(b);
             // increase filepointer by written byte
             filepointer++;
-        } else {
+        }
+        else
+        {
             // create next volume
             this.createStreamToNextVolume();
             zippedoutputstream.write(b);
@@ -304,7 +336,8 @@ public class FileSpanningOutputStream extends OutputStream {
     /**
      * @see java.io.OutputStream#flush()
      */
-    public void flush() throws IOException {
+    public void flush() throws IOException
+    {
         zippedoutputstream.flush();
         fileoutputstream.flush();
     }
@@ -314,21 +347,24 @@ public class FileSpanningOutputStream extends OutputStream {
      *
      * @return the amount of created volumes
      */
-    public int getVolumeCount() {
+    public int getVolumeCount()
+    {
         return this.currentvolumeindex + 1;
     }
 
     /**
      * @return
      */
-    public long getFirstvolumefreespacesize() {
+    public long getFirstvolumefreespacesize()
+    {
         return firstvolumefreespacesize;
     }
 
     /**
      * @param firstvolumefreespacesize
      */
-    public void setFirstvolumefreespacesize(long firstvolumefreespacesize) {
+    public void setFirstvolumefreespacesize(long firstvolumefreespacesize)
+    {
         this.firstvolumefreespacesize = firstvolumefreespacesize;
     }
 
@@ -338,13 +374,15 @@ public class FileSpanningOutputStream extends OutputStream {
      * @return the position in this file
      * @throws IOException
      */
-    public long getCompressedFilepointer() throws IOException {
+    public long getCompressedFilepointer() throws IOException
+    {
         this.flush();
         // return filepointer;
         return totalbytesofpreviousvolumes + currentfile.length();
     }
 
-    public long getFilepointer() {
+    public long getFilepointer()
+    {
         return filepointer;
     }
 }

@@ -34,7 +34,8 @@ import java.util.Map;
  *
  * @author Klaus Bartz
  */
-public interface CompilerListener {
+public interface CompilerListener
+{
 
     public final static int BEGIN = 1;
 

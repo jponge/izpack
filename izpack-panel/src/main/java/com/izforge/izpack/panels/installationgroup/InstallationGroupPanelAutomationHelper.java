@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.installationgroup;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -39,19 +40,23 @@ import java.util.Vector;
  * @version $Revision:$
  */
 public class InstallationGroupPanelAutomationHelper
-        implements PanelAutomation {
+        implements PanelAutomation
+{
     /**
      *
      */
-    public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot) {
+    public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot)
+    {
         GroupData[] rows = (GroupData[]) idata.getAttribute("GroupData");
         HashMap packsByName = (HashMap) idata.getAttribute("packsByName");
         // Write out the group to pack mappings
-        for (GroupData gd : rows) {
+        for (GroupData gd : rows)
+        {
             IXMLElement xgroup = new XMLElementImpl("group", panelRoot);
             xgroup.setAttribute("name", gd.name);
             Iterator<String> names = gd.packNames.iterator();
-            while (names.hasNext()) {
+            while (names.hasNext())
+            {
                 String name = names.next();
                 Pack pack = (Pack) packsByName.get(name);
                 int index = idata.getAvailablePacks().indexOf(pack);
@@ -73,22 +78,27 @@ public class InstallationGroupPanelAutomationHelper
     {
         String installGroup = idata.getVariable("INSTALL_GROUP");
         Debug.trace("InstallationGroupPanelAutomationHelper: runAutomated, INSTALL_GROUP: " + installGroup);
-        if (installGroup != null) {
+        if (installGroup != null)
+        {
             Vector<IXMLElement> groups = panelRoot.getChildrenNamed("group");
-            for (IXMLElement group : groups) {
+            for (IXMLElement group : groups)
+            {
                 String name = group.getAttribute("name");
                 Debug.trace("InstallationGroupPanelAutomationHelper: Checking INSTALL_GROUP against: " + name);
-                if (name.equalsIgnoreCase(installGroup)) {
+                if (name.equalsIgnoreCase(installGroup))
+                {
                     Debug.trace("Found INSTALL_GROUP match for: " + installGroup);
                     idata.getSelectedPacks().clear();
                     Vector<IXMLElement> packs = group.getChildrenNamed("pack");
                     Debug.trace(name + " pack count: " + packs.size());
                     Debug.trace("Available pack count: " + idata.getAvailablePacks().size());
-                    for (IXMLElement xpack : packs) {
+                    for (IXMLElement xpack : packs)
+                    {
                         String pname = xpack.getAttribute("name");
                         String indexStr = xpack.getAttribute("index");
                         int index = Integer.parseInt(indexStr);
-                        if (index >= 0) {
+                        if (index >= 0)
+                        {
                             Pack pack = (Pack) idata.getAvailablePacks().get(index);
                             idata.getSelectedPacks().add(pack);
                             Debug.trace("Added pack: " + pack.name);

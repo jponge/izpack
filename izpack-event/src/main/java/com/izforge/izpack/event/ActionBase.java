@@ -29,7 +29,8 @@ import java.util.HashSet;
  *
  * @author Klaus Bartz
  */
-public class ActionBase implements Serializable {
+public class ActionBase implements Serializable
+{
 
     // --- String constants for parsing the XML specification -----------------
     // --- These definitions are placed here because the const strings are -----
@@ -157,7 +158,8 @@ public class ActionBase implements Serializable {
 
     protected String messageID = null;
 
-    static {
+    static
+    {
         installOrders.add(ActionBase.BEFOREPACK);
         installOrders.add(ActionBase.AFTERPACK);
         installOrders.add(ActionBase.BEFOREPACKS);
@@ -169,7 +171,8 @@ public class ActionBase implements Serializable {
     /**
      * Default constructor
      */
-    public ActionBase() {
+    public ActionBase()
+    {
         super();
     }
 
@@ -178,7 +181,8 @@ public class ActionBase implements Serializable {
      *
      * @return the order
      */
-    public String getOrder() {
+    public String getOrder()
+    {
         return order;
     }
 
@@ -188,8 +192,10 @@ public class ActionBase implements Serializable {
      *
      * @param order order to be set
      */
-    public void setOrder(String order) throws Exception {
-        if (!installOrders.contains(order)) {
+    public void setOrder(String order) throws Exception
+    {
+        if (!installOrders.contains(order))
+        {
             throw new Exception("Bad value for order.");
         }
         this.order = order;
@@ -200,7 +206,8 @@ public class ActionBase implements Serializable {
      *
      * @return the order for uninstallation
      */
-    public String getUninstallOrder() {
+    public String getUninstallOrder()
+    {
         return uninstallOrder;
     }
 
@@ -210,8 +217,10 @@ public class ActionBase implements Serializable {
      *
      * @param order order to be set
      */
-    public void setUninstallOrder(String order) throws Exception {
-        if (!uninstallOrders.contains(order)) {
+    public void setUninstallOrder(String order) throws Exception
+    {
+        if (!uninstallOrders.contains(order))
+        {
             throw new Exception("Bad value for order.");
         }
         this.uninstallOrder = order;
@@ -222,7 +231,8 @@ public class ActionBase implements Serializable {
      *
      * @return the defined message ID
      */
-    public String getMessageID() {
+    public String getMessageID()
+    {
         return messageID;
     }
 
@@ -231,7 +241,8 @@ public class ActionBase implements Serializable {
      *
      * @param string string to be used as message ID
      */
-    public void setMessageID(String string) {
+    public void setMessageID(String string)
+    {
         messageID = string;
     }
 

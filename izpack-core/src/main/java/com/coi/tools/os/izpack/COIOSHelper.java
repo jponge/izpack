@@ -31,7 +31,8 @@ import com.izforge.izpack.util.NativeLibraryClient;
  *
  * @author Klaus Bartz
  */
-public class COIOSHelper {
+public class COIOSHelper
+{
 
     private static COIOSHelper self = null;
 
@@ -53,7 +54,8 @@ public class COIOSHelper {
     /**
      * Default constructor, do not use
      */
-    private COIOSHelper() {
+    private COIOSHelper()
+    {
         super();
     }
 
@@ -62,8 +64,10 @@ public class COIOSHelper {
      *
      * @return the one existent object of this class
      */
-    public static synchronized COIOSHelper getInstance() {
-        if (self == null) {
+    public static synchronized COIOSHelper getInstance()
+    {
+        if (self == null)
+        {
             self = new COIOSHelper();
         }
         return (self);
@@ -87,12 +91,15 @@ public class COIOSHelper {
      * @see com.izforge.izpack.util.NativeLibraryClient#freeLibrary
      */
     /*--------------------------------------------------------------------------*/
+
     /**
      * @param name
      */
-    public void freeLibrary(String name) {
+    public void freeLibrary(String name)
+    {
         used--;
-        if (!destroyed) {
+        if (!destroyed)
+        {
             FreeLibrary(name);
             destroyed = true;
         }
@@ -105,19 +112,24 @@ public class COIOSHelper {
      * @param dependant to be added
      * @throws Exception if loadLibrary for the needed lib fails
      */
-    public void addDependant(NativeLibraryClient dependant) throws Exception {
+    public void addDependant(NativeLibraryClient dependant) throws Exception
+    {
         used++;
-        if (failed) {
+        if (failed)
+        {
             throw (new Exception("load native library failed"));
         }
-        try {
+        try
+        {
             Librarian.getInstance().loadLibrary("COIOSHelper", dependant);
         }
-        catch (UnsatisfiedLinkError exception) {
+        catch (UnsatisfiedLinkError exception)
+        {
             failed = true;
             throw (new Exception("could not locate native library"));
         }
-        catch (Throwable t) {
+        catch (Throwable t)
+        {
             failed = true;
             throw (new Exception(t));
         }

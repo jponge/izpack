@@ -33,10 +33,12 @@ import com.izforge.izpack.installer.automation.PanelAutomation;
  * @author Jonathan Halliday
  * @author Julien Ponge
  */
-public class TargetPanelAutomationHelper implements PanelAutomation {
+public class TargetPanelAutomationHelper implements PanelAutomation
+{
     private VariableSubstitutor variableSubstitutor;
 
-    public TargetPanelAutomationHelper(VariableSubstitutor variableSubstitutor) {
+    public TargetPanelAutomationHelper(VariableSubstitutor variableSubstitutor)
+    {
         this.variableSubstitutor = variableSubstitutor;
     }
 
@@ -46,7 +48,8 @@ public class TargetPanelAutomationHelper implements PanelAutomation {
      * @param idata     The installation installDataGUI.
      * @param panelRoot The tree to put the installDataGUI in.
      */
-    public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot) {
+    public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot)
+    {
         // Installation path markup
         IXMLElement ipath = new XMLElementImpl("installpath", panelRoot);
         // check this writes even if value is the default,
@@ -55,7 +58,8 @@ public class TargetPanelAutomationHelper implements PanelAutomation {
 
         // Checkings to fix bug #1864
         IXMLElement prev = panelRoot.getFirstChildNamed("installpath");
-        if (prev != null) {
+        if (prev != null)
+        {
             panelRoot.removeChild(prev);
         }
         panelRoot.addChild(ipath);
@@ -67,7 +71,8 @@ public class TargetPanelAutomationHelper implements PanelAutomation {
      * @param idata     The installation installDataGUI.
      * @param panelRoot The XML tree to read the installDataGUI from.
      */
-    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) {
+    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot)
+    {
         // We set the installation path
         IXMLElement ipath = panelRoot.getFirstChildNamed("installpath");
 

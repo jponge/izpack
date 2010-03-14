@@ -16,6 +16,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.panels.userinput;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -28,7 +29,8 @@ import java.util.Vector;
  *
  * @author Dennis Reil
  */
-public class UIElement {
+public class UIElement
+{
 
     boolean displayed;
 
@@ -50,91 +52,113 @@ public class UIElement {
 
     String message;
 
-    public UIElement() {
+    public UIElement()
+    {
 
     }
 
-    public boolean hasVariableAssignment() {
+    public boolean hasVariableAssignment()
+    {
         return this.associatedVariable != null;
     }
 
-    public String getMessage() {
+    public String getMessage()
+    {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(String message)
+    {
         this.message = message;
     }
 
-    public UIElementType getType() {
+    public UIElementType getType()
+    {
         return type;
     }
 
-    public void setType(UIElementType type) {
+    public void setType(UIElementType type)
+    {
         this.type = type;
     }
 
-    public String getAssociatedVariable() {
+    public String getAssociatedVariable()
+    {
         return associatedVariable;
     }
 
-    public void setAssociatedVariable(String associatedVariable) {
+    public void setAssociatedVariable(String associatedVariable)
+    {
         this.associatedVariable = associatedVariable;
     }
 
-    public JComponent getComponent() {
+    public JComponent getComponent()
+    {
         return component;
     }
 
-    public void setComponent(JComponent component) {
+    public void setComponent(JComponent component)
+    {
         this.component = component;
     }
 
-    public Object getConstraints() {
+    public Object getConstraints()
+    {
         return constraints;
     }
 
-    public void setConstraints(Object constraints) {
+    public void setConstraints(Object constraints)
+    {
         this.constraints = constraints;
     }
 
-    public Vector<IXMLElement> getForPacks() {
+    public Vector<IXMLElement> getForPacks()
+    {
         return forPacks;
     }
 
-    public void setForPacks(Vector<IXMLElement> forPacks) {
+    public void setForPacks(Vector<IXMLElement> forPacks)
+    {
         this.forPacks = forPacks;
     }
 
-    public Vector<IXMLElement> getForOs() {
+    public Vector<IXMLElement> getForOs()
+    {
         return forOs;
     }
 
-    public void setForOs(Vector<IXMLElement> forOs) {
+    public void setForOs(Vector<IXMLElement> forOs)
+    {
         this.forOs = forOs;
     }
 
-    public String getTrueValue() {
+    public String getTrueValue()
+    {
         return trueValue;
     }
 
-    public void setTrueValue(String trueValue) {
+    public void setTrueValue(String trueValue)
+    {
         this.trueValue = trueValue;
     }
 
-    public String getFalseValue() {
+    public String getFalseValue()
+    {
         return falseValue;
     }
 
-    public void setFalseValue(String falseValue) {
+    public void setFalseValue(String falseValue)
+    {
         this.falseValue = falseValue;
     }
 
-    public boolean isDisplayed() {
+    public boolean isDisplayed()
+    {
         return displayed;
     }
 
-    public void setDisplayed(boolean displayed) {
+    public void setDisplayed(boolean displayed)
+    {
         this.displayed = displayed;
     }
 

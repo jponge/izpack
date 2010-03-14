@@ -38,7 +38,8 @@ import java.util.Locale;
  * @author <a href="vralev@redhat.com">Vladimir Ralev</a>
  * @version 1.0
  */
-public class WebAccessor {
+public class WebAccessor
+{
 
     private Thread openerThread = null;
 
@@ -79,7 +80,8 @@ public class WebAccessor {
      *
      * @throws UnsupportedOperationException
      */
-    public WebAccessor() {
+    public WebAccessor()
+    {
         // the class should probably be rearranged to do this.
         throw new UnsupportedOperationException();
     }
@@ -90,10 +92,12 @@ public class WebAccessor {
      * @param parent determines the frame in which the dialog is displayed; if the parentComponent
      *               has no Frame, a default Frame is used
      */
-    public WebAccessor(Component parent) {
+    public WebAccessor(Component parent)
+    {
         this.parent = parent;
         Locale l = null;
-        if (parent != null) {
+        if (parent != null)
+        {
             parent.getLocale();
         }
         soloCancelOption = UIManager.get("OptionPane.cancelButtonText", l);// TODO:
@@ -107,22 +111,27 @@ public class WebAccessor {
      * @param url the url to open the stream to.
      * @return an input stream ready to read, or null on failure
      */
-    public InputStream openInputStream(URL url) {
+    public InputStream openInputStream(URL url)
+    {
         setUrl(url.toExternalForm());
         OPEN_URL:
-        while (true) {
+        while (true)
+        {
             startOpening(url); // this starts a thread
 
             Thread.yield();
 
             // Wait a bit to see if the stream comes up
             int retry = 28;
-            while (exception == null && iStream == null && retry > 0) {
-                try {
+            while (exception == null && iStream == null && retry > 0)
+            {
+                try
+                {
                     Thread.sleep(200);
                     retry--;
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
                     System.out.println("In openInputStream: " + e);
                 }
             }
@@ -130,12 +139,14 @@ public class WebAccessor {
             /* Try to find a proxy if that failed */
 
             // success!
-            if (iStream != null) {
+            if (iStream != null)
+            {
                 break;
             }
 
             // an exception we don't expect setting a proxy to fix
-            if (!tryProxy) {
+            if (!tryProxy)
+            {
                 break;
             }
 
@@ -143,7 +154,8 @@ public class WebAccessor {
             // show proxy dialog until valid values or cancel
             JPanel panel = getProxyPanel();
             errorLabel.setText("Unable to connect: " + exception.getMessage());
-            while (true) {
+            while (true)
+            {
                 int result = JOptionPane.showConfirmDialog(parent, panel, "Proxy Configuration",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (result != JOptionPane.OK_OPTION) // canceled
@@ -154,26 +166,32 @@ public class WebAccessor {
                 String host = null;
                 String port = null;
 
-                try {
+                try
+                {
                     InetAddress addr = InetAddress.getByName(hostField.getText());
                     host = addr.getHostName();
                 }
-                catch (Exception x) {
+                catch (Exception x)
+                {
                     errorLabel.setText("Unable to resolve Host");
                     Toolkit.getDefaultToolkit().beep();
                 }
 
-                try {
-                    if (host != null) {
+                try
+                {
+                    if (host != null)
+                    {
                         port = Integer.valueOf(portField.getText()).toString();
                     }
                 }
-                catch (NumberFormatException x) {
+                catch (NumberFormatException x)
+                {
                     errorLabel.setText("Invalid Port");
                     Toolkit.getDefaultToolkit().beep();
                 }
 
-                if (host != null && port != null) {
+                if (host != null && port != null)
+                {
                     // System.err.println ("Setting http proxy: "+ host
                     // +":"+ port);
                     System.getProperties().put("proxySet", "true");
@@ -184,24 +202,30 @@ public class WebAccessor {
             }
         }
 
-        if (iStream == null) {
+        if (iStream == null)
+        {
             openerThread.interrupt();
         }
 
         return iStream;
     }
 
-    private void startOpening(final URL url) {
+    private void startOpening(final URL url)
+    {
         final WebAccessor wa = this;
-        openerThread = new Thread() {
-            public void run() {
+        openerThread = new Thread()
+        {
+            public void run()
+            {
                 iStream = null;
-                try {
+                try
+                {
                     tryProxy = false;
 
                     URLConnection connection = url.openConnection();
 
-                    if (connection instanceof HttpURLConnection) {
+                    if (connection instanceof HttpURLConnection)
+                    {
                         HttpURLConnection htc = (HttpURLConnection) connection;
                         contentLength = htc.getContentLength();
                     }
@@ -211,24 +235,28 @@ public class WebAccessor {
                     iStream = new LoggedInputStream(i, wa); // just to make
 
                 }
-                catch (ConnectException x) { // could be an incorrect proxy
+                catch (ConnectException x)
+                { // could be an incorrect proxy
                     tryProxy = true;
                     exception = x;
 
                 }
-                catch (Exception x) {
+                catch (Exception x)
+                {
                     // Exceptions that get here are considered cancels or
                     // missing
                     // pages, eg 401 if user finally cancels auth
                     exception = x;
 
                 }
-                finally {
+                finally
+                {
                     // if dialog is in use, allow it to become visible /before/
                     // closing
                     // it, else on /fast/ connectinos, it may open later and
                     // hang!
-                    if (dialog != null) {
+                    if (dialog != null)
+                    {
                         Thread.yield();
                         dialog.setVisible(false);
                     }
@@ -241,8 +269,10 @@ public class WebAccessor {
     /**
      * Only to be called after an initial error has indicated a connection problem
      */
-    private JPanel getProxyPanel() {
-        if (proxyPanel == null) {
+    private JPanel getProxyPanel()
+    {
+        if (proxyPanel == null)
+        {
             proxyPanel = new JPanel(new BorderLayout(5, 5));
 
             errorLabel = new JLabel();
@@ -270,8 +300,10 @@ public class WebAccessor {
         return proxyPanel;
     }
 
-    private JPanel getPasswordPanel() {
-        if (passwordPanel == null) {
+    private JPanel getPasswordPanel()
+    {
+        if (passwordPanel == null)
+        {
             passwordPanel = new JPanel(new BorderLayout(5, 5));
 
             promptLabel = new JLabel();
@@ -297,20 +329,24 @@ public class WebAccessor {
     /**
      * Authenticates via dialog when needed.
      */
-    private class MyDialogAuthenticator extends Authenticator {
+    private class MyDialogAuthenticator extends Authenticator
+    {
 
-        public PasswordAuthentication getPasswordAuthentication() {
+        public PasswordAuthentication getPasswordAuthentication()
+        {
             // TODO: i18n
             JPanel p = getPasswordPanel();
             String prompt = getRequestingPrompt();
             InetAddress addr = getRequestingSite();
-            if (addr != null) {
+            if (addr != null)
+            {
                 prompt += " (" + addr.getHostName() + ")";
             }
             promptLabel.setText(prompt);
             int result = JOptionPane.showConfirmDialog(parent, p, "Enter Password", JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
-            if (result != JOptionPane.OK_OPTION) {
+            if (result != JOptionPane.OK_OPTION)
+            {
                 return null;
             }
 
@@ -318,15 +354,18 @@ public class WebAccessor {
         }
     }
 
-    public String getUrl() {
+    public String getUrl()
+    {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(String url)
+    {
         this.url = url;
     }
 
-    public int getContentLength() {
+    public int getContentLength()
+    {
         return contentLength;
     }
 }

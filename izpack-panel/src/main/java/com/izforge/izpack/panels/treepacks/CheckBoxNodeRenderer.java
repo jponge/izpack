@@ -13,7 +13,8 @@ import java.awt.*;
  * @author <a href="vralev@redhat.com">Vladimir Ralev</a>
  * @version $Revision: 1.1 $
  */
-class CheckBoxNodeRenderer implements TreeCellRenderer {
+class CheckBoxNodeRenderer implements TreeCellRenderer
+{
     private static final JPanel rendererPanel = new JPanel();
     private static final JLabel packSizeLabel = new JLabel();
     private static final JCheckBox checkbox = new JCheckBox();
@@ -33,7 +34,8 @@ class CheckBoxNodeRenderer implements TreeCellRenderer {
 
     TreePacksPanel treePacksPanel;
 
-    public CheckBoxNodeRenderer(TreePacksPanel t) {
+    public CheckBoxNodeRenderer(TreePacksPanel t)
+    {
         selectionForeground = UIManager.getColor("Tree.selectionForeground");
         selectionBackground = UIManager.getColor("Tree.selectionBackground");
         textForeground = UIManager.getColor("Tree.textForeground");
@@ -62,16 +64,20 @@ class CheckBoxNodeRenderer implements TreeCellRenderer {
 
     public Component getTreeCellRendererComponent(JTree tree, Object value,
                                                   boolean selected, boolean expanded, boolean leaf, int row,
-                                                  boolean hasFocus) {
+                                                  boolean hasFocus)
+    {
         treePacksPanel.fromModel();
 
-        if (selected) {
+        if (selected)
+        {
             checkbox.setForeground(selectionForeground);
             checkbox.setBackground(selectionBackground);
             rendererPanel.setForeground(selectionForeground);
             rendererPanel.setBackground(selectionBackground);
             packSizeLabel.setBackground(selectionBackground);
-        } else {
+        }
+        else
+        {
             checkbox.setForeground(textForeground);
             checkbox.setBackground(textBackground);
             rendererPanel.setForeground(textForeground);
@@ -79,15 +85,22 @@ class CheckBoxNodeRenderer implements TreeCellRenderer {
             packSizeLabel.setBackground(textBackground);
         }
 
-        if ((value != null) && (value instanceof CheckBoxNode)) {
+        if ((value != null) && (value instanceof CheckBoxNode))
+        {
             CheckBoxNode node = (CheckBoxNode) value;
 
-            if (node.isTotalSizeChanged()) {
+            if (node.isTotalSizeChanged())
+            {
                 packSizeLabel.setForeground(changedColor);
-            } else {
-                if (selected) {
+            }
+            else
+            {
+                if (selected)
+                {
                     packSizeLabel.setForeground(selectionForeground);
-                } else {
+                }
+                else
+                {
                     packSizeLabel.setForeground(annotationColor);
                 }
             }
@@ -96,33 +109,43 @@ class CheckBoxNodeRenderer implements TreeCellRenderer {
 
             packSizeLabel.setText(Pack.toByteUnitsString(node.getTotalSize()));
 
-            if (node.isPartial()) {
+            if (node.isPartial())
+            {
                 checkbox.setSelected(false);
-            } else {
+            }
+            else
+            {
                 checkbox.setSelected(node.isSelected());
             }
 
             checkbox.setEnabled(node.isEnabled());
             packSizeLabel.setEnabled(node.isEnabled());
 
-            if (node.getChildCount() > 0) {
+            if (node.getChildCount() > 0)
+            {
                 checkbox.setFont(boldFont);
                 packSizeLabel.setFont(boldFont);
-            } else {
+            }
+            else
+            {
                 checkbox.setFont(normalFont);
                 packSizeLabel.setFont(plainFont);
             }
 
-            if (node.isPartial()) {
+            if (node.isPartial())
+            {
                 checkbox.setIcon(new PartialIcon());
-            } else {
+            }
+            else
+            {
                 checkbox.setIcon(normalCheckBox.getIcon());
             }
         }
         return rendererPanel;
     }
 
-    public Component getCheckRenderer() {
+    public Component getCheckRenderer()
+    {
         return rendererPanel;
     }
 

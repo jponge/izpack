@@ -33,7 +33,7 @@ import com.izforge.izpack.installer.language.ConditionCheck;
 import com.izforge.izpack.installer.manager.DataValidatorFactory;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
-import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsConstraintHelper;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import java.io.FileInputStream;
@@ -119,7 +119,7 @@ public class ConsoleInstaller extends InstallerBase
                 {
                     praefix = "";
                 }
-                if (!OsConstraint.oneMatchesCurrentSystem(p.osConstraints))
+                if (!OsConstraintHelper.oneMatchesCurrentSystem(p.osConstraints))
                 {
                     continue;
                 }

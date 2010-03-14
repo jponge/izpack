@@ -34,7 +34,8 @@ import com.izforge.izpack.panels.userinput.processorclient.ProcessingClient;
  * @version 0.0.1 / 02/19/03
  */
 /*---------------------------------------------------------------------------*/
-public class PWDEncryptor implements Processor {
+public class PWDEncryptor implements Processor
+{
     /*--------------------------------------------------------------------------*/
 
     /**
@@ -50,8 +51,10 @@ public class PWDEncryptor implements Processor {
      * @return the encryption result.
      */
     /*--------------------------------------------------------------------------*/
-    public String process(ProcessingClient client) {
-        if (client.getNumFields() < 1) {
+    public String process(ProcessingClient client)
+    {
+        if (client.getNumFields() < 1)
+        {
             return ("");
         }
 
@@ -59,16 +62,20 @@ public class PWDEncryptor implements Processor {
         char[] result = new char[password.length];
         int temp;
 
-        for (int i = 0; i < password.length; i++) {
+        for (int i = 0; i < password.length; i++)
+        {
             temp = password[i] - 57;
-            if (i > 0) {
+            if (i > 0)
+            {
                 temp = temp + password[i - 1];
             }
 
-            if ((temp % 3) == 0) {
+            if ((temp % 3) == 0)
+            {
                 temp = temp + 13;
             }
-            if (temp < 0) {
+            if (temp < 0)
+            {
                 temp = temp + 193;
             }
 

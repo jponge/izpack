@@ -13,18 +13,22 @@ import java.util.zip.Deflater;
  *
  * @author Anthonin Bonnefoy
  */
-public class JarOutputStreamProvider implements Provider {
+public class JarOutputStreamProvider implements Provider
+{
 
-    public JarOutputStream provide(CompilerData compilerData) throws IOException {
+    public JarOutputStream provide(CompilerData compilerData) throws IOException
+    {
         JarOutputStream jarOutputStream;
         File file = new File(compilerData.getOutput());
-        if (file.exists()) {
+        if (file.exists())
+        {
             file.delete();
         }
         jarOutputStream = new JarOutputStream(file);
         int level = compilerData.getComprLevel();
         jarOutputStream.setLevel(Deflater.BEST_COMPRESSION);
-        if (level >= 0 && level < 10) {
+        if (level >= 0 && level < 10)
+        {
             jarOutputStream.setLevel(level);
         }
         jarOutputStream.setPreventClose(true); // Needed at using FilterOutputStreams which calls close

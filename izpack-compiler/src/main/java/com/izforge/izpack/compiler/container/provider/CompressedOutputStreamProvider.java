@@ -15,12 +15,15 @@ import java.io.OutputStream;
  *
  * @author Anthonin Bonnefoy
  */
-public class CompressedOutputStreamProvider implements Provider {
+public class CompressedOutputStreamProvider implements Provider
+{
 
-    public OutputStream provide(CompilerData compilerData, JarOutputStream jarOutputStream) throws CompressorException, IOException {
+    public OutputStream provide(CompilerData compilerData, JarOutputStream jarOutputStream) throws CompressorException, IOException
+    {
         OutputStream outputStream = jarOutputStream;
         String comprFormat = compilerData.getComprFormat();
-        if (comprFormat.equals("bzip2")) {
+        if (comprFormat.equals("bzip2"))
+        {
             ZipEntry entry = new ZipEntry("bzip2");
             entry.setMethod(ZipEntry.STORED);
             entry.setComment("bzip2");

@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.userpath;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -33,10 +34,12 @@ import com.izforge.izpack.installer.automation.PanelAutomation;
  * @author Julien Ponge
  * @author Jeff Gordon
  */
-public class UserPathPanelAutomationHelper implements PanelAutomation {
+public class UserPathPanelAutomationHelper implements PanelAutomation
+{
     private VariableSubstitutor variableSubstitutor;
 
-    public UserPathPanelAutomationHelper(VariableSubstitutor variableSubstitutor) {
+    public UserPathPanelAutomationHelper(VariableSubstitutor variableSubstitutor)
+    {
         this.variableSubstitutor = variableSubstitutor;
     }
 
@@ -46,7 +49,8 @@ public class UserPathPanelAutomationHelper implements PanelAutomation {
      * @param idata     The installation installDataGUI.
      * @param panelRoot The tree to put the installDataGUI in.
      */
-    public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot) {
+    public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot)
+    {
         // Installation path markup
         IXMLElement ipath = new XMLElementImpl(UserPathPanel.pathElementName, panelRoot);
         // check this writes even if value is the default,
@@ -55,7 +59,8 @@ public class UserPathPanelAutomationHelper implements PanelAutomation {
 
         // Checkings to fix bug #1864
         IXMLElement prev = panelRoot.getFirstChildNamed(UserPathPanel.pathElementName);
-        if (prev != null) {
+        if (prev != null)
+        {
             panelRoot.removeChild(prev);
         }
         panelRoot.addChild(ipath);
@@ -67,7 +72,8 @@ public class UserPathPanelAutomationHelper implements PanelAutomation {
      * @param idata     The installation installDataGUI.
      * @param panelRoot The XML tree to read the installDataGUI from.
      */
-    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) {
+    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot)
+    {
         // We set the installation path
         IXMLElement ipath = panelRoot.getFirstChildNamed(UserPathPanel.pathElementName);
 

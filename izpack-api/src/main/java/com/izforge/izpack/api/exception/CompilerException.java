@@ -26,7 +26,8 @@ package com.izforge.izpack.api.exception;
  *
  * @author Marcus Stursberg
  */
-public class CompilerException extends java.io.IOException {
+public class CompilerException extends java.io.IOException
+{
 
     static final long serialVersionUID = 6247426753392546734L;
 
@@ -43,7 +44,8 @@ public class CompilerException extends java.io.IOException {
      *
      * @param message Description of the error
      */
-    public CompilerException(String message) {
+    public CompilerException(String message)
+    {
         super(message);
     }
 
@@ -53,7 +55,8 @@ public class CompilerException extends java.io.IOException {
      * @param message Description of the error
      * @param cause   Throwable
      */
-    public CompilerException(String message, Throwable cause) {
+    public CompilerException(String message, Throwable cause)
+    {
         super(message);
         this._cause = cause;
     }
@@ -77,11 +80,14 @@ public class CompilerException extends java.io.IOException {
      *                                  #CompilerException(String,Throwable)}, or this method has already been called on this
      *                                  throwable.
      */
-    public synchronized Throwable initCause(Throwable cause) {
-        if (this._cause != this) {
+    public synchronized Throwable initCause(Throwable cause)
+    {
+        if (this._cause != this)
+        {
             throw new IllegalStateException("Can't overwrite cause");
         }
-        if (cause == this) {
+        if (cause == this)
+        {
             throw new IllegalArgumentException("Self-causation not permitted");
         }
         this._cause = cause;
@@ -105,7 +111,8 @@ public class CompilerException extends java.io.IOException {
      * @return the cause of this throwable or <code>null</code> if the cause is nonexistent or
      *         unknown.
      */
-    public Throwable getCause() {
+    public Throwable getCause()
+    {
         return (_cause == this ? null : _cause);
     }
 }

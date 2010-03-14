@@ -29,7 +29,8 @@ import java.util.ArrayList;
  *
  * @author Tino Schwarze <tino.schwarze@community4you.de>
  */
-public class UpdateCheck implements Serializable {
+public class UpdateCheck implements Serializable
+{
 
     static final long serialVersionUID = -3721254065037691999L;
 
@@ -51,7 +52,8 @@ public class UpdateCheck implements Serializable {
     /**
      * Constructs a new uninitialized instance.
      */
-    public UpdateCheck() {
+    public UpdateCheck()
+    {
     }
 
     /**
@@ -60,7 +62,8 @@ public class UpdateCheck implements Serializable {
      * @param includes The patterns to include in the check.
      * @param excludes The patterns to exclude from the check.
      */
-    public UpdateCheck(ArrayList<String> includes, ArrayList<String> excludes) {
+    public UpdateCheck(ArrayList<String> includes, ArrayList<String> excludes)
+    {
         this.includesList = includes;
         this.excludesList = excludes;
     }
@@ -72,7 +75,8 @@ public class UpdateCheck implements Serializable {
      * @param excludes      The patterns to exclude from the check.
      * @param casesensitive If "yes", matches are performed case sensitive.
      */
-    public UpdateCheck(ArrayList<String> includes, ArrayList<String> excludes, String casesensitive) {
+    public UpdateCheck(ArrayList<String> includes, ArrayList<String> excludes, String casesensitive)
+    {
         this.includesList = includes;
         this.excludesList = excludes;
         this.caseSensitive = ((casesensitive != null) && "yes".equalsIgnoreCase(casesensitive));

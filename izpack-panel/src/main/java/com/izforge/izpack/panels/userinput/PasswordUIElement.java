@@ -16,6 +16,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.panels.userinput;
 
 /**
@@ -23,19 +24,23 @@ package com.izforge.izpack.panels.userinput;
  *
  * @author Dennis Reil
  */
-public class PasswordUIElement extends UIElement {
+public class PasswordUIElement extends UIElement
+{
 
-    public PasswordUIElement() {
+    public PasswordUIElement()
+    {
         super();
     }
 
     PasswordGroup passwordGroup;
 
-    public PasswordGroup getPasswordGroup() {
+    public PasswordGroup getPasswordGroup()
+    {
         return passwordGroup;
     }
 
-    public void setPasswordGroup(PasswordGroup passwordGroup) {
+    public void setPasswordGroup(PasswordGroup passwordGroup)
+    {
         this.passwordGroup = passwordGroup;
     }
 }

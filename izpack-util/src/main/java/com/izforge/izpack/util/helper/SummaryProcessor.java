@@ -33,7 +33,8 @@ import java.util.Iterator;
  *
  * @author Klaus Bartz
  */
-public class SummaryProcessor {
+public class SummaryProcessor
+{
 
     private static String HTML_HEADER;
 
@@ -47,7 +48,8 @@ public class SummaryProcessor {
 
     private static String HEAD_END = "</h1>\n";
 
-    static {
+    static
+    {
         // Initialize HTML header and footer.
         StringBuffer sb = new StringBuffer(256);
         sb.append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n").append(
@@ -67,16 +69,19 @@ public class SummaryProcessor {
      * @param idata AutomatedInstallData which contains the panel references
      * @return a HTML formated string with the summary of all panels
      */
-    public static String getSummary(AutomatedInstallData idata) {
+    public static String getSummary(AutomatedInstallData idata)
+    {
         Iterator<ISummarisable> iter = idata.getPanels().iterator();
         StringBuffer sb = new StringBuffer(2048);
         sb.append(HTML_HEADER);
-        while (iter.hasNext()) {
+        while (iter.hasNext())
+        {
             ISummarisable panel = iter.next();
             String caption = panel.getSummaryCaption();
             String msg = panel.getSummaryBody();
             // If no caption or/and message, ignore it.
-            if (caption == null || msg == null) {
+            if (caption == null || msg == null)
+            {
                 continue;
             }
             sb.append(HEAD_START).append(caption).append(HEAD_END);

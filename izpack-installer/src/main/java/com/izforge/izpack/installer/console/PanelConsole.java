@@ -35,7 +35,8 @@ import java.util.Properties;
  * @author Mounir El Hajj
  */
 
-public interface PanelConsole {
+public interface PanelConsole
+{
 
     /**
      * Asks the panel to return all inputed fields/variables in a string with a properties file

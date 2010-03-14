@@ -7,7 +7,8 @@ import java.net.URL;
 /**
  * Data for compiler
  */
-public class CompilerData {
+public class CompilerData
+{
 
     /**
      * The IzPack home directory.
@@ -67,27 +68,34 @@ public class CompilerData {
     private final static String IZ_TEST_FILE = "ShellLink.dll";
     private final static String IZ_TEST_SUBDIR = "bin" + File.separator + "native" + File.separator + "izpack";
 
-    private CompilerData() {
+    private CompilerData()
+    {
         // We get the IzPack home directory
         String izHome = System.getProperty("izpack.home");
-        if (izHome != null) {
+        if (izHome != null)
+        {
             IZPACK_HOME = izHome;
-        } else {
+        }
+        else
+        {
             izHome = System.getenv("IZPACK_HOME");
-            if (izHome != null) {
+            if (izHome != null)
+            {
                 IZPACK_HOME = izHome;
             }
         }
     }
 
-    public CompilerData(String installFile, String basedir, String output) {
+    public CompilerData(String installFile, String basedir, String output)
+    {
         this();
         this.installFile = installFile;
         this.basedir = basedir;
         this.output = output;
     }
 
-    public CompilerData(String comprFormat, String kind, String installFile, String installText, String basedir, String output, int comprLevel) {
+    public CompilerData(String comprFormat, String kind, String installFile, String installText, String basedir, String output, int comprLevel)
+    {
         this();
         this.comprFormat = comprFormat;
         this.kind = kind;
@@ -103,7 +111,8 @@ public class CompilerData {
      *
      * @param izHome - the izpack home directory
      */
-    public static void setIzpackHome(String izHome) {
+    public static void setIzpackHome(String izHome)
+    {
         IZPACK_HOME = izHome;
     }
 
@@ -112,72 +121,74 @@ public class CompilerData {
      *
      * @return the installation kind.
      */
-    public String getKind() {
+    public String getKind()
+    {
         return kind;
     }
 
-    public void setKind(String kind) {
+    public void setKind(String kind)
+    {
         this.kind = kind;
     }
 
-    public String getInstallFile() {
+    public String getInstallFile()
+    {
         return installFile;
     }
 
-    public void setInstallFile(String installFile) {
-        this.installFile = installFile;
-    }
-
-    public String getInstallText() {
+    public String getInstallText()
+    {
         return installText;
     }
 
-    public void setInstallText(String installText) {
-        this.installText = installText;
-    }
-
-    public String getBasedir() {
+    public String getBasedir()
+    {
         return basedir;
     }
 
-    public void setBasedir(String basedir) {
+    public void setBasedir(String basedir)
+    {
         this.basedir = basedir;
     }
 
-    public String getOutput() {
+    public String getOutput()
+    {
         return output;
     }
 
-    public void setOutput(String output) {
-        this.output = output;
-    }
-
-    public String getComprFormat() {
+    public String getComprFormat()
+    {
         return comprFormat;
     }
 
-    public void setComprFormat(String comprFormat) {
+    public void setComprFormat(String comprFormat)
+    {
         this.comprFormat = comprFormat;
     }
 
-    public int getComprLevel() {
+    public int getComprLevel()
+    {
         return comprLevel;
     }
 
-    public void setComprLevel(int comprLevel) {
+    public void setComprLevel(int comprLevel)
+    {
         this.comprLevel = comprLevel;
     }
 
     /**
      * Try to resolve IzPack home from IZPACK_HOME value
      */
-    public void resolveIzpackHome() {
+    public void resolveIzpackHome()
+    {
         IZPACK_HOME = resolveIzPackHome(IZPACK_HOME);
     }
 
-    private static String resolveIzPackHome(String home) {
+    private static String resolveIzPackHome(String home)
+    {
         File test = new File(home, IZ_TEST_SUBDIR + File.separator + IZ_TEST_FILE);
-        if (test.exists()) {
+        if (test.exists())
+        {
             return (home);
         }
         // Try to resolve the path using compiler.jar which also should be under
@@ -189,28 +200,36 @@ public class CompilerData {
         String np = url.getFile();
         int start = np.indexOf(self);
         np = np.substring(0, start);
-        if (np.endsWith("!")) { // Where shut IZPACK_HOME at the standalone-compiler be??
+        if (np.endsWith("!"))
+        { // Where shut IZPACK_HOME at the standalone-compiler be??
             // No idea.
             if (np.endsWith("standalone-compiler.jar!")
                     || np.endsWith("standalone-compiler-4.0.0.jar!")
-                    || np.matches("standalone-compiler-[\\d\\.]+.jar!")) {
+                    || np.matches("standalone-compiler-[\\d\\.]+.jar!"))
+            {
                 return (".");
             }
             np = np.substring(0, np.length() - 1);
         }
         File root;
-        if (URI.create(np).isAbsolute()) {
+        if (URI.create(np).isAbsolute())
+        {
             root = new File(URI.create(np));
-        } else {
+        }
+        else
+        {
             root = new File(np);
         }
-        while (true) {
-            if (root == null) {
+        while (true)
+        {
+            if (root == null)
+            {
                 throw new IllegalArgumentException(
                         "No valid IzPack home directory found");
             }
             test = new File(root, IZ_TEST_SUBDIR + File.separator + IZ_TEST_FILE);
-            if (test.exists()) {
+            if (test.exists())
+            {
                 return (root.getAbsolutePath());
             }
             root = root.getParentFile();

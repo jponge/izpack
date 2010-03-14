@@ -21,6 +21,8 @@
 
 package com.izforge.izpack.panels.hello;
 
+import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
@@ -28,10 +30,9 @@ import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
 
-import javax.swing.JLabel;
-import java.awt.LayoutManager2;
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -39,7 +40,8 @@ import java.util.ArrayList;
  *
  * @author Julien Ponge
  */
-public class HelloPanel extends IzPanel {
+public class HelloPanel extends IzPanel
+{
 
     /**
      *
@@ -52,7 +54,8 @@ public class HelloPanel extends IzPanel {
      * @param parent The parent.
      * @param idata  The installation installDataGUI.
      */
-    public HelloPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public HelloPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         this(parent, idata, new IzPanelLayout(), resourceManager);
     }
 
@@ -66,7 +69,8 @@ public class HelloPanel extends IzPanel {
      * @param layout layout manager to be used with this IzPanel
      */
 
-    public HelloPanel(InstallerFrame parent, GUIInstallData idata, LayoutManager2 layout, ResourceManager resourceManager) {
+    public HelloPanel(InstallerFrame parent, GUIInstallData idata, LayoutManager2 layout, ResourceManager resourceManager)
+    {
         // Layout handling. This panel was changed from a mixed layout handling
         // with GridBagLayout and BoxLayout to IzPanelLayout. It can be used as an
         // example how to use the IzPanelLayout. For this there are some comments
@@ -79,6 +83,7 @@ public class HelloPanel extends IzPanel {
         str = installData.getLangpack().getString("HelloPanel.welcome1") + idata.getInfo().getAppName() + " "
                 + idata.getInfo().getAppVersion() + installData.getLangpack().getString("HelloPanel.welcome2");
         JLabel welcomeLabel = LabelFactory.create(str, parent.icons.getImageIcon("host"), LEADING);
+        welcomeLabel.setName(GuiId.HELLO_PANEL_LABEL.id);
         // IzPanelLayout is a constraint orientated layout manager. But if no constraint is
         // given, a default will be used. It starts in the first line.
         // NEXT_LINE have to insert also in the first line!!
@@ -93,7 +98,8 @@ public class HelloPanel extends IzPanel {
 
         ArrayList<Info.Author> authors = idata.getInfo().getAuthors();
         int size = authors.size();
-        if (size > 0) {
+        if (size > 0)
+        {
             str = installData.getLangpack().getString("HelloPanel.authors");
             JLabel appAuthorsLabel = LabelFactory.create(str, parent.icons
                     .getImageIcon("information"), LEADING);
@@ -109,7 +115,8 @@ public class HelloPanel extends IzPanel {
             add(appAuthorsLabel, LayoutConstants.NEXT_LINE);
 
             JLabel label;
-            for (int i = 0; i < size; i++) {
+            for (int i = 0; i < size; i++)
+            {
                 Info.Author a = authors.get(i);
                 String email = (a.getEmail() != null && a.getEmail().length() > 0) ? (" <"
                         + a.getEmail() + ">") : "";
@@ -120,7 +127,8 @@ public class HelloPanel extends IzPanel {
             add(IzPanelLayout.createParagraphGap());
         }
 
-        if (idata.getInfo().getAppURL() != null) {
+        if (idata.getInfo().getAppURL() != null)
+        {
             str = installData.getLangpack().getString("HelloPanel.url") + idata.getInfo().getAppURL();
             JLabel appURLLabel = LabelFactory.create(str, parent.icons.getImageIcon("bookmark"),
                     LEADING);
@@ -135,7 +143,8 @@ public class HelloPanel extends IzPanel {
      *
      * @return Always true.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         return true;
     }
 }

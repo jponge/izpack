@@ -22,6 +22,7 @@
 package com.izforge.izpack.util;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * Any class in IzPack that uses native libraries must implement this interface. See the package
  * documentation for more details on requirements relating to the use of native libraries within
@@ -31,9 +32,11 @@ package com.izforge.izpack.util;
  * @version 0.0.1 / 2/6/2002
  */
 /*---------------------------------------------------------------------------*/
-public interface NativeLibraryClient {
+public interface NativeLibraryClient
+{
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method is used to free the library at the end of progam execution. After this call, any
      * instance of this calss will not be usable any more! <b><i><u>This method is very likely NOT

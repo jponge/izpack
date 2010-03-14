@@ -27,7 +27,8 @@ import java.awt.Component;
  * @version 0.0.1 / 11/15/02
  * @see com.izforge.izpack.gui.TwoColumnLayout
  */
-public class TwoColumnConstraints implements Cloneable {
+public class TwoColumnConstraints implements Cloneable
+{
 
     // these numbers are arbitrary - this way, there's a lower chance
     // of somebody using the number instead of the symbolic name

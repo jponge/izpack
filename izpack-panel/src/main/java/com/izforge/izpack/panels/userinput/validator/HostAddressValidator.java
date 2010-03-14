@@ -34,29 +34,35 @@ import java.net.ServerSocket;
  *
  * @author thorque
  */
-public class HostAddressValidator implements Validator {
+public class HostAddressValidator implements Validator
+{
 
-    public boolean validate(ProcessingClient client) {
+    public boolean validate(ProcessingClient client)
+    {
         InetAddress inet = null;
         String host = "";
         int port = 0;
         boolean retValue = false;
 
-        try {
+        try
+        {
             host = client.getFieldContents(0);
             port = Integer.parseInt(client.getFieldContents(1));
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             return false;
         }
 
-        try {
+        try
+        {
             inet = InetAddress.getByName(host);
             ServerSocket socket = new ServerSocket(port, 0, inet);
             retValue = socket.getLocalPort() > 0;
             socket.close();
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             retValue = false;
         }
         return retValue;

@@ -19,16 +19,17 @@
 
 package com.izforge.izpack.panels.htmlhello;
 
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.htmlinfo.HTMLInfoPanel;
 
 /**
  * Class HTMLHelloPanel is a version of the hello panel that displays
  * HTML content.
  */
-public class HTMLHelloPanel extends HTMLInfoPanel {
+public class HTMLHelloPanel extends HTMLInfoPanel
+{
     private static final long serialVersionUID = -7671648991830935148L;
 
     /**
@@ -37,7 +38,8 @@ public class HTMLHelloPanel extends HTMLInfoPanel {
      * @param parent The parent.
      * @param idata  The installation installDataGUI.
      */
-    public HTMLHelloPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public HTMLHelloPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, "HTMLHelloPanel", false, resourceManager);
     }
 
@@ -46,7 +48,8 @@ public class HTMLHelloPanel extends HTMLInfoPanel {
      *
      * @return Always true.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         return true;
     }
 }

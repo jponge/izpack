@@ -21,6 +21,7 @@ package com.izforge.izpack.api.data;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
@@ -34,7 +35,8 @@ import java.util.zip.ZipOutputStream;
  * @author Julien Ponge <julien@izforge.com>
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
-public class AutomatedInstallData implements Serializable {
+public class AutomatedInstallData implements Serializable
+{
 
     // --- Static members -------------------------------------------------
     public static final String MODIFY_INSTALLATION = "modify.izpack.install";
@@ -180,13 +182,15 @@ public class AutomatedInstallData implements Serializable {
     public final static String ISO3_ATTRIBUTE = "iso3";
     public final static String SRC_ATTRIBUTE = "src";
     private VariableSubstitutor variableSubstitutor;
+    private List<InstallerListener> installerListener;
 
     /**
      * Returns the one possible object of this class.
      *
      * @return the one possible object of this class
      */
-    public static AutomatedInstallData getInstance() {
+    public static AutomatedInstallData getInstance()
+    {
         return (self);
     }
 
@@ -198,7 +202,8 @@ public class AutomatedInstallData implements Serializable {
      * @param variables
      * @param variableSubstitutor
      */
-    public AutomatedInstallData(Properties variables, VariableSubstitutor variableSubstitutor) {
+    public AutomatedInstallData(Properties variables, VariableSubstitutor variableSubstitutor)
+    {
         this.variableSubstitutor = variableSubstitutor;
         setAvailablePacks(new ArrayList<Pack>());
         setSelectedPacks(new ArrayList<Pack>());
@@ -217,7 +222,8 @@ public class AutomatedInstallData implements Serializable {
      *
      * @return the map of variable values
      */
-    public Properties getVariables() {
+    public Properties getVariables()
+    {
         return variables;
     }
 
@@ -229,7 +235,8 @@ public class AutomatedInstallData implements Serializable {
      * @param val the new value of the variable
      * @see #getVariable
      */
-    public void setVariable(String var, String val) {
+    public void setVariable(String var, String val)
+    {
         getVariables().setProperty(var, val);
     }
 
@@ -241,7 +248,8 @@ public class AutomatedInstallData implements Serializable {
      * @return the value of the variable or null if not set
      * @see #setVariable
      */
-    public String getVariable(String var) {
+    public String getVariable(String var)
+    {
         return getVariables().getProperty(var);
     }
 
@@ -251,7 +259,8 @@ public class AutomatedInstallData implements Serializable {
      * @param path the new install path
      * @see #getInstallPath
      */
-    public void setInstallPath(String path) {
+    public void setInstallPath(String path)
+    {
         setVariable(INSTALL_PATH, path);
     }
 
@@ -261,7 +270,8 @@ public class AutomatedInstallData implements Serializable {
      * @return the current install path or null if none set yet
      * @see #setInstallPath
      */
-    public String getInstallPath() {
+    public String getInstallPath()
+    {
         return getVariable(INSTALL_PATH);
     }
 
@@ -272,7 +282,8 @@ public class AutomatedInstallData implements Serializable {
      * @return the value of the attribute or null if not set
      * @see #setAttribute
      */
-    public Object getAttribute(String attr) {
+    public Object getAttribute(String attr)
+    {
         return getAttributes().get(attr);
     }
 
@@ -287,10 +298,14 @@ public class AutomatedInstallData implements Serializable {
      * @param val  the value of the attribute or null to unset the attribute
      * @see #getAttribute
      */
-    public void setAttribute(String attr, Object val) {
-        if (val == null) {
+    public void setAttribute(String attr, Object val)
+    {
+        if (val == null)
+        {
             getAttributes().remove(attr);
-        } else {
+        }
+        else
+        {
             getAttributes().put(attr, val);
         }
     }
@@ -299,27 +314,36 @@ public class AutomatedInstallData implements Serializable {
     /**
      * Refreshes Dynamic Variables.
      */
-    public void refreshDynamicVariables() {
+    public void refreshDynamicVariables()
+    {
 //        Debug.log("refreshing dyamic variables.");
-        if (dynamicvariables != null) {
-            for (String dynvarname : dynamicvariables.keySet()) {
+        if (dynamicvariables != null)
+        {
+            for (String dynvarname : dynamicvariables.keySet())
+            {
 //                Debug.log("Variable: " + dynvarname);
-                for (DynamicVariable dynvar : dynamicvariables.get(dynvarname)) {
+                for (DynamicVariable dynvar : dynamicvariables.get(dynvarname))
+                {
                     boolean refresh = false;
                     String conditionid = dynvar.getConditionid();
 //                    Debug.log("condition: " + conditionid);
-                    if ((conditionid != null) && (conditionid.length() > 0)) {
-                        if ((rules != null) && rules.isConditionTrue(conditionid)) {
+                    if ((conditionid != null) && (conditionid.length() > 0))
+                    {
+                        if ((rules != null) && rules.isConditionTrue(conditionid))
+                        {
 //                            Debug.log("refresh condition");
                             // condition for this rule is true
                             refresh = true;
                         }
-                    } else {
+                    }
+                    else
+                    {
 //                        Debug.log("refresh condition");
                         // empty condition
                         refresh = true;
                     }
-                    if (refresh) {
+                    if (refresh)
+                    {
                         String newvalue = variableSubstitutor.substitute(dynvar.getValue());
 //                        Debug.log("newvalue: " + newvalue);
                         getVariables().setProperty(dynvar.getName(), newvalue);
@@ -336,7 +360,8 @@ public class AutomatedInstallData implements Serializable {
      * @param localeDatabase LocaleDatabse containing the desired locale
      * @throws Exception
      */
-    public void setAndProcessLocal(String locale, LocaleDatabase localeDatabase) throws Exception {
+    public void setAndProcessLocal(String locale, LocaleDatabase localeDatabase) throws Exception
+    {
         // We add an xml data information
         getXmlData().setAttribute("langpack", locale);
         // We load the langpack
@@ -345,160 +370,209 @@ public class AutomatedInstallData implements Serializable {
         this.langpack = localeDatabase;
     }
 
-    public RulesEngine getRules() {
+    public RulesEngine getRules()
+    {
         return rules;
     }
 
 
-    public void setRules(RulesEngine rules) {
+    public void setRules(RulesEngine rules)
+    {
         this.rules = rules;
     }
 
-    public String getLocaleISO3() {
+    public String getLocaleISO3()
+    {
         return localeISO3;
     }
 
-    public void setLocaleISO3(String localeISO3) {
+    public void setLocaleISO3(String localeISO3)
+    {
         this.localeISO3 = localeISO3;
     }
 
-    public Locale getLocale() {
+    public Locale getLocale()
+    {
         return locale;
     }
 
-    public void setLocale(Locale locale) {
+    public void setLocale(Locale locale)
+    {
         this.locale = locale;
     }
 
-    public LocaleDatabase getLangpack() {
+    public LocaleDatabase getLangpack()
+    {
         return langpack;
     }
 
-    public void setLangpack(LocaleDatabase langpack) {
+    public void setLangpack(LocaleDatabase langpack)
+    {
         this.langpack = langpack;
     }
 
-    public ZipOutputStream getUninstallOutJar() {
+    public ZipOutputStream getUninstallOutJar()
+    {
         return uninstallOutJar;
     }
 
-    public void setUninstallOutJar(ZipOutputStream uninstallOutJar) {
+    public void setUninstallOutJar(ZipOutputStream uninstallOutJar)
+    {
         this.uninstallOutJar = uninstallOutJar;
     }
 
-    public Info getInfo() {
+    public Info getInfo()
+    {
         return info;
     }
 
-    public void setInfo(Info info) {
+    public void setInfo(Info info)
+    {
         this.info = info;
     }
 
-    public List<Pack> getAllPacks() {
+    public List<Pack> getAllPacks()
+    {
         return allPacks;
     }
 
-    public void setAllPacks(List<Pack> allPacks) {
+    public void setAllPacks(List<Pack> allPacks)
+    {
         this.allPacks = allPacks;
     }
 
-    public List<Pack> getAvailablePacks() {
+    public List<Pack> getAvailablePacks()
+    {
         return availablePacks;
     }
 
-    public void setAvailablePacks(List<Pack> availablePacks) {
+    public void setAvailablePacks(List<Pack> availablePacks)
+    {
         this.availablePacks = availablePacks;
     }
 
-    public List<Pack> getSelectedPacks() {
+    public List<Pack> getSelectedPacks()
+    {
         return selectedPacks;
     }
 
-    public void setSelectedPacks(List<Pack> selectedPacks) {
+    public void setSelectedPacks(List<Pack> selectedPacks)
+    {
         this.selectedPacks = selectedPacks;
     }
 
-    public List getPanels() {
+    public List getPanels()
+    {
         return panels;
     }
 
-    public List<Panel> getPanelsOrder() {
+    public List<Panel> getPanelsOrder()
+    {
         return panelsOrder;
     }
 
-    public void setPanelsOrder(List<Panel> panelsOrder) {
+    public void setPanelsOrder(List<Panel> panelsOrder)
+    {
         this.panelsOrder = panelsOrder;
     }
 
-    public int getCurPanelNumber() {
+    public int getCurPanelNumber()
+    {
         return curPanelNumber;
     }
 
-    public void setCurPanelNumber(int curPanelNumber) {
+    public void setCurPanelNumber(int curPanelNumber)
+    {
         this.curPanelNumber = curPanelNumber;
     }
 
-    public boolean isCanClose() {
+    public boolean isCanClose()
+    {
         return canClose;
     }
 
-    public void setCanClose(boolean canClose) {
+    public void setCanClose(boolean canClose)
+    {
         this.canClose = canClose;
     }
 
-    public boolean isInstallSuccess() {
+    public boolean isInstallSuccess()
+    {
         return installSuccess;
     }
 
-    public void setInstallSuccess(boolean installSuccess) {
+    public void setInstallSuccess(boolean installSuccess)
+    {
         this.installSuccess = installSuccess;
     }
 
-    public boolean isRebootNecessary() {
+    public boolean isRebootNecessary()
+    {
         return rebootNecessary;
     }
 
-    public void setRebootNecessary(boolean rebootNecessary) {
+    public void setRebootNecessary(boolean rebootNecessary)
+    {
         this.rebootNecessary = rebootNecessary;
     }
 
-    public IXMLElement getXmlData() {
+    public IXMLElement getXmlData()
+    {
         return xmlData;
     }
 
-    public void setXmlData(IXMLElement xmlData) {
+    public void setXmlData(IXMLElement xmlData)
+    {
         this.xmlData = xmlData;
     }
 
-    public Map<String, List> getCustomData() {
+    public Map<String, List> getCustomData()
+    {
         return customData;
     }
 
-    public void setCustomData(Map<String, List> customData) {
+    public void setCustomData(Map<String, List> customData)
+    {
         this.customData = customData;
     }
 
-    public void setVariables(Properties variables) {
+    public void setVariables(Properties variables)
+    {
         this.variables = variables;
     }
 
-    public Map<String, Object> getAttributes() {
+    public Map<String, Object> getAttributes()
+    {
         return attributes;
     }
 
-    public void setAttributes(Map<String, Object> attributes) {
+    public void setAttributes(Map<String, Object> attributes)
+    {
         this.attributes = attributes;
     }
 
-    public void setDynamicvariables(Map<String, List<DynamicVariable>> dynamicvariables) {
+    public void setDynamicvariables(Map<String, List<DynamicVariable>> dynamicvariables)
+    {
         this.dynamicvariables = dynamicvariables;
     }
 
-    public void setInstallerrequirements(List<InstallerRequirement> installerrequirements) {
+    public void setInstallerrequirements(List<InstallerRequirement> installerrequirements)
+    {
         this.installerrequirements = installerrequirements;
     }
 
-    public List<InstallerRequirement> getInstallerrequirements() {
+    public List<InstallerRequirement> getInstallerrequirements()
+    {
         return installerrequirements;
+    }
+
+    public List<InstallerListener> getInstallerListener()
+    {
+        return installerListener;
+    }
+
+    public void setInstallerListener(List<InstallerListener> installerListener)
+    {
+        this.installerListener = installerListener;
     }
 }

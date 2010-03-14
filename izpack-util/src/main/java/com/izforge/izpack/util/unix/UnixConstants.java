@@ -18,13 +18,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.util.unix;
 
 
 /**
  * @author marc.eppelmann
  */
-public class UnixConstants {
+public class UnixConstants
+{
     /**
      * etcPasswd = "/etc/passwd"
      */
@@ -34,14 +36,16 @@ public class UnixConstants {
     /**
      *
      */
-    public UnixConstants() {
+    public UnixConstants()
+    {
         // TODO Auto-generated constructor stub
     }
 
     /**
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         // TODO Auto-generated method stub
 
     }

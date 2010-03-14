@@ -18,10 +18,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.treepacks;
 
 import com.izforge.izpack.panels.packs.PacksPanelAutomationHelper;
 
-public class TreePacksPanelAutomationHelper extends PacksPanelAutomationHelper {
+public class TreePacksPanelAutomationHelper extends PacksPanelAutomationHelper
+{
 
 }

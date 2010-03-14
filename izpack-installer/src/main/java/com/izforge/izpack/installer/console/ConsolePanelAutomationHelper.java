@@ -23,6 +23,7 @@ package com.izforge.izpack.installer.console;
 
 import com.izforge.izpack.installer.automation.PanelAutomationHelper;
 
-public class ConsolePanelAutomationHelper extends PanelAutomationHelper {
+public class ConsolePanelAutomationHelper extends PanelAutomationHelper
+{
 
 }

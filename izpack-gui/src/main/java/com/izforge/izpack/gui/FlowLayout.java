@@ -83,7 +83,8 @@ import java.awt.*;
  * @version 1.39, 11/29/02
  */
 /*---------------------------------------------------------------------------*/
-public class FlowLayout implements LayoutManager {
+public class FlowLayout implements LayoutManager
+{
 
     /**
      * This value indicates that each row of components should be left-justified.
@@ -173,7 +174,8 @@ public class FlowLayout implements LayoutManager {
      * vertical gap.
      */
     /*--------------------------------------------------------------------------*/
-    public FlowLayout() {
+    public FlowLayout()
+    {
         this(CENTER, 5, 5);
     }
 
@@ -187,7 +189,8 @@ public class FlowLayout implements LayoutManager {
      * @param align the alignment value
      */
     /*--------------------------------------------------------------------------*/
-    public FlowLayout(int align) {
+    public FlowLayout(int align)
+    {
         this(align, 5, 5);
     }
 
@@ -205,7 +208,8 @@ public class FlowLayout implements LayoutManager {
      * @param vgap  the vertical gap between components.
      */
     /*--------------------------------------------------------------------------*/
-    public FlowLayout(int align, int hgap, int vgap) {
+    public FlowLayout(int align, int hgap, int vgap)
+    {
         this.hgap = hgap;
         this.vgap = vgap;
         setAlignment(align);
@@ -221,7 +225,8 @@ public class FlowLayout implements LayoutManager {
      * @see java.awt.FlowLayout#setAlignment
      */
     /*--------------------------------------------------------------------------*/
-    public int getAlignment() {
+    public int getAlignment()
+    {
         return (newAlign);
     }
 
@@ -235,14 +240,16 @@ public class FlowLayout implements LayoutManager {
      * @see #getAlignment()
      */
     /*--------------------------------------------------------------------------*/
-    public void setAlignment(int align) {
+    public void setAlignment(int align)
+    {
         this.newAlign = align;
 
         // this.align is used only for serialization compatibility,
         // so set it to a value compatible with the 1.1 version
         // of the class
 
-        switch (align) {
+        switch (align)
+        {
             case LEADING:
                 this.align = LEFT;
                 break;
@@ -264,7 +271,8 @@ public class FlowLayout implements LayoutManager {
      * @see #setHgap(int)
      */
     /*--------------------------------------------------------------------------*/
-    public int getHgap() {
+    public int getHgap()
+    {
         return (hgap);
     }
 
@@ -277,7 +285,8 @@ public class FlowLayout implements LayoutManager {
      * @see #getHgap()
      */
     /*--------------------------------------------------------------------------*/
-    public void setHgap(int hgap) {
+    public void setHgap(int hgap)
+    {
         this.hgap = hgap;
     }
 
@@ -290,7 +299,8 @@ public class FlowLayout implements LayoutManager {
      * @see #setVgap(int)
      */
     /*--------------------------------------------------------------------------*/
-    public int getVgap() {
+    public int getVgap()
+    {
         return (vgap);
     }
 
@@ -303,7 +313,8 @@ public class FlowLayout implements LayoutManager {
      * @see #getVgap()
      */
     /*--------------------------------------------------------------------------*/
-    public void setVgap(int vgap) {
+    public void setVgap(int vgap)
+    {
         this.vgap = vgap;
     }
 
@@ -316,7 +327,8 @@ public class FlowLayout implements LayoutManager {
      * @param comp the component to be added
      */
     /*--------------------------------------------------------------------------*/
-    public void addLayoutComponent(String name, Component comp) {
+    public void addLayoutComponent(String name, Component comp)
+    {
     }
 
     /*--------------------------------------------------------------------------*/
@@ -327,7 +339,8 @@ public class FlowLayout implements LayoutManager {
      * @param comp the component to remove
      */
     /*--------------------------------------------------------------------------*/
-    public void removeLayoutComponent(Component comp) {
+    public void removeLayoutComponent(Component comp)
+    {
     }
 
     /*--------------------------------------------------------------------------*/
@@ -341,20 +354,27 @@ public class FlowLayout implements LayoutManager {
      * @see #minimumLayoutSize(Container)
      */
     /*--------------------------------------------------------------------------*/
-    public Dimension preferredLayoutSize(Container target) {
-        synchronized (target.getTreeLock()) {
+    public Dimension preferredLayoutSize(Container target)
+    {
+        synchronized (target.getTreeLock())
+        {
             Dimension dim = new Dimension(0, 0);
             int nmembers = target.getComponentCount();
             boolean firstVisibleComponent = true;
 
-            for (int i = 0; i < nmembers; i++) {
+            for (int i = 0; i < nmembers; i++)
+            {
                 Component m = target.getComponent(i);
-                if (m.isVisible()) {
+                if (m.isVisible())
+                {
                     Dimension d = m.getPreferredSize();
                     dim.height = Math.max(dim.height, d.height);
-                    if (firstVisibleComponent) {
+                    if (firstVisibleComponent)
+                    {
                         firstVisibleComponent = false;
-                    } else {
+                    }
+                    else
+                    {
                         dim.width += hgap;
                     }
                     dim.width += d.width;
@@ -380,17 +400,22 @@ public class FlowLayout implements LayoutManager {
      * @see #preferredLayoutSize(Container)
      */
     /*--------------------------------------------------------------------------*/
-    public Dimension minimumLayoutSize(Container target) {
-        synchronized (target.getTreeLock()) {
+    public Dimension minimumLayoutSize(Container target)
+    {
+        synchronized (target.getTreeLock())
+        {
             Dimension dim = new Dimension(0, 0);
             int nmembers = target.getComponentCount();
 
-            for (int i = 0; i < nmembers; i++) {
+            for (int i = 0; i < nmembers; i++)
+            {
                 Component m = target.getComponent(i);
-                if (m.isVisible()) {
+                if (m.isVisible())
+                {
                     Dimension d = m.getMinimumSize();
                     dim.height = Math.max(dim.height, d.height);
-                    if (i > 0) {
+                    if (i > 0)
+                    {
                         dim.width += hgap;
                     }
                     dim.width += d.width;
@@ -420,9 +445,12 @@ public class FlowLayout implements LayoutManager {
      */
     /*--------------------------------------------------------------------------*/
     private void moveComponents(Container target, int x, int y, int width, int height,
-                                int rowStart, int rowEnd, boolean ltr) {
-        synchronized (target.getTreeLock()) {
-            switch (newAlign) {
+                                int rowStart, int rowEnd, boolean ltr)
+    {
+        synchronized (target.getTreeLock())
+        {
+            switch (newAlign)
+            {
                 case LEFT:
                     x += ltr ? 0 : width;
                     break;
@@ -439,13 +467,18 @@ public class FlowLayout implements LayoutManager {
                     break;
             }
 
-            for (int i = rowStart; i < rowEnd; i++) {
+            for (int i = rowStart; i < rowEnd; i++)
+            {
                 Component m = target.getComponent(i);
 
-                if (m.isVisible()) {
-                    if (ltr) {
+                if (m.isVisible())
+                {
+                    if (ltr)
+                    {
                         m.setLocation(x, y + (height - m.getSize().height) / 2);
-                    } else {
+                    }
+                    else
+                    {
                         m.setLocation(target.getSize().width - x - m.getSize().width, y
                                 + (height - m.getSize().height) / 2);
                     }
@@ -466,8 +499,10 @@ public class FlowLayout implements LayoutManager {
      * @param target the specified component being laid out.
      */
     /*--------------------------------------------------------------------------*/
-    public void layoutContainer(Container target) {
-        synchronized (target.getTreeLock()) {
+    public void layoutContainer(Container target)
+    {
+        synchronized (target.getTreeLock())
+        {
             Insets insets = target.getInsets();
             int maxWidth = target.getSize().width - (insets.left + insets.right + hgap * 2);
             int nMembers = target.getComponentCount();
@@ -478,20 +513,26 @@ public class FlowLayout implements LayoutManager {
 
             boolean ltr = target.getComponentOrientation().isLeftToRight();
 
-            for (int i = 0; i < nMembers; i++) {
+            for (int i = 0; i < nMembers; i++)
+            {
                 Component m = target.getComponent(i);
 
-                if (m.isVisible()) {
+                if (m.isVisible())
+                {
                     Dimension d = m.getPreferredSize();
                     m.setSize(d.width, d.height);
 
-                    if ((x == 0) || ((x + d.width) <= maxWidth)) {
-                        if (x > 0) {
+                    if ((x == 0) || ((x + d.width) <= maxWidth))
+                    {
+                        if (x > 0)
+                        {
                             x += hgap;
                         }
                         x += d.width;
                         rowh = Math.max(rowh, d.height);
-                    } else {
+                    }
+                    else
+                    {
                         moveComponents(target, insets.left, y, maxWidth - x, rowh, start, i, ltr);
                         x = d.width;
                         y += vgap + rowh;
@@ -513,10 +554,12 @@ public class FlowLayout implements LayoutManager {
      * @return a string representation of this layout.
      */
     /*--------------------------------------------------------------------------*/
-    public String toString() {
+    public String toString()
+    {
         String str = "";
 
-        switch (align) {
+        switch (align)
+        {
             case LEFT:
                 str = ",align=left";
                 break;

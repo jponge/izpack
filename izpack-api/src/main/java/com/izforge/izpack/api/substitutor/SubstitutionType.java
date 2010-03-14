@@ -9,7 +9,8 @@ import java.util.Map;
  *
  * @author Anthonin Bonnefoy
  */
-public enum SubstitutionType {
+public enum SubstitutionType
+{
 
     /**
      * Plain file.
@@ -48,20 +49,24 @@ public enum SubstitutionType {
 
     private String type;
 
-    SubstitutionType(String type) {
+    SubstitutionType(String type)
+    {
         this.type = type;
     }
 
     private static Map<String, SubstitutionType> lookup;
 
-    static {
+    static
+    {
         lookup = new HashMap<String, SubstitutionType>();
-        for (SubstitutionType substitutionType : EnumSet.allOf(SubstitutionType.class)) {
+        for (SubstitutionType substitutionType : EnumSet.allOf(SubstitutionType.class))
+        {
             lookup.put(substitutionType.getType(), substitutionType);
         }
     }
 
-    public String getType() {
+    public String getType()
+    {
         return type;
     }
 
@@ -71,8 +76,10 @@ public enum SubstitutionType {
      * @param typeString Type of substitution in a string form
      * @return Type of substitution from enum. Default is plain.
      */
-    public static SubstitutionType lookup(String typeString) {
-        if (lookup.containsKey(typeString)) {
+    public static SubstitutionType lookup(String typeString)
+    {
+        if (lookup.containsKey(typeString))
+        {
             return lookup.get(typeString);
         }
         return TYPE_PLAIN;

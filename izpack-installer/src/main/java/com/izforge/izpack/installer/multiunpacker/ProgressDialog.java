@@ -9,7 +9,8 @@ import java.awt.*;
  *
  * @author Anthonin Bonnefoy
  */
-public class ProgressDialog extends JWindow {
+public class ProgressDialog extends JWindow
+{
     private static final long serialVersionUID = -6558347134501630050L;
     private JProgressBar progressBar;
     private ProgressDialogThread thread;
@@ -76,7 +77,8 @@ class ProgressDialogThread extends Thread
         super("ProgressThread");
     }
 
-    public void requestStop() {
+    public void requestStop()
+    {
         stopRequested = true;
     }
 
@@ -110,10 +112,12 @@ class ProgressDialogThread extends Thread
                 }
             }
             this.progressBar.setValue(count);
-            try {
+            try
+            {
                 Thread.sleep(100);
             }
-            catch (InterruptedException e) {
+            catch (InterruptedException e)
+            {
                 e.printStackTrace();
             }
         }

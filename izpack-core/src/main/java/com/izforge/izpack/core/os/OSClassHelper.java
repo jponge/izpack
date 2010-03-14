@@ -33,7 +33,8 @@ import com.izforge.izpack.util.Debug;
  * @author Klaus Bartz
  */
 /*---------------------------------------------------------------------------*/
-public class OSClassHelper {
+public class OSClassHelper
+{
 
     protected AutomatedInstallData installdata;
 
@@ -44,7 +45,8 @@ public class OSClassHelper {
     /**
      * Default constructor
      */
-    public OSClassHelper() {
+    public OSClassHelper()
+    {
         super();
     }
 
@@ -55,24 +57,30 @@ public class OSClassHelper {
      *
      * @param className full qualified class name of the needed worker
      */
-    public OSClassHelper(String className) {
+    public OSClassHelper(String className)
+    {
         super();
 
-        try {
+        try
+        {
             workerClass = Class.forName(className);
             worker = workerClass.newInstance();
         }
-        catch (InstantiationException e) {
+        catch (InstantiationException e)
+        {
             e.printStackTrace();
         }
-        catch (IllegalAccessException e) {
+        catch (IllegalAccessException e)
+        {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e) {
+        catch (ClassNotFoundException e)
+        {
             e.printStackTrace();
             // Do nothing, class not bound.
         }
-        catch (Exception e4) {   // If the native lib is not found an unqualified Exception will be raised.
+        catch (Exception e4)
+        {   // If the native lib is not found an unqualified Exception will be raised.
             Debug.trace("Ctor OSClassHelper for " + className + ": worker not available (" + e4.getMessage() + ").");
             return;
         }
@@ -85,7 +93,8 @@ public class OSClassHelper {
      *
      * @return whether the helper can do the work or not
      */
-    public boolean good() {
+    public boolean good()
+    {
         return (worker != null);
     }
 
@@ -96,7 +105,8 @@ public class OSClassHelper {
      * @return whether the helper is good or not
      * @throws Exception
      */
-    public boolean verify(AutomatedInstallData idata) throws Exception {
+    public boolean verify(AutomatedInstallData idata) throws Exception
+    {
         installdata = idata;
         return (false);
     }

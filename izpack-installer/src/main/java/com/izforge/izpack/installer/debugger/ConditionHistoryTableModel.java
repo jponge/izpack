@@ -30,35 +30,44 @@ import java.util.Map;
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  * @version $Id: $
  */
-public class ConditionHistoryTableModel extends AbstractTableModel {
+public class ConditionHistoryTableModel extends AbstractTableModel
+{
     private static final long serialVersionUID = 5966543100431588652L;
 
     public static final String[] columnheader = {"Id", "Value"};
     private Map<String, ConditionHistory> conditionvalues;
 
-    public ConditionHistoryTableModel(Map<String, ConditionHistory> values) {
+    public ConditionHistoryTableModel(Map<String, ConditionHistory> values)
+    {
         this.conditionvalues = values;
     }
 
     /* (non-Javadoc)
     * @see javax.swing.table.TableModel#getColumnCount()
     */
-    public int getColumnCount() {
+
+    public int getColumnCount()
+    {
         return columnheader.length;
     }
 
     /* (non-Javadoc)
      * @see javax.swing.table.TableModel#getRowCount()
      */
-    public int getRowCount() {
+
+    public int getRowCount()
+    {
         return this.conditionvalues == null ? 0 : this.conditionvalues.keySet().size();
     }
 
     /* (non-Javadoc)
      * @see javax.swing.table.TableModel#getValueAt(int, int)
      */
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        switch (columnIndex) {
+
+    public Object getValueAt(int rowIndex, int columnIndex)
+    {
+        switch (columnIndex)
+        {
             case 0:
                 String[] keys = (String[]) this.conditionvalues.keySet().toArray(new String[this.conditionvalues.keySet().size()]);
                 Arrays.sort(keys);
@@ -75,24 +84,33 @@ public class ConditionHistoryTableModel extends AbstractTableModel {
     /* (non-Javadoc)
      * @see javax.swing.table.AbstractTableModel#getColumnName(int)
      */
-    public String getColumnName(int column) {
+
+    public String getColumnName(int column)
+    {
         return columnheader[column];
     }
 
     /* (non-Javadoc)
      * @see javax.swing.table.AbstractTableModel#isCellEditable(int, int)
      */
-    public boolean isCellEditable(int rowIndex, int columnIndex) {
+
+    public boolean isCellEditable(int rowIndex, int columnIndex)
+    {
         return false;
     }
 
     /* (non-Javadoc)
      * @see javax.swing.table.AbstractTableModel#getColumnClass(int)
      */
-    public Class getColumnClass(int columnIndex) {
-        if (columnIndex == 1) {
+
+    public Class getColumnClass(int columnIndex)
+    {
+        if (columnIndex == 1)
+        {
             return ConditionHistory.class;
-        } else {
+        }
+        else
+        {
             return String.class;
         }
     }

@@ -1,5 +1,6 @@
 package org.izpack.mojo;
 
+import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
@@ -15,7 +16,8 @@ import org.apache.maven.plugin.MojoFailureException;
  * @phase package
  * @requiresDependencyResolution test
  */
-public class IzPackNewMojo extends AbstractMojo {
+public class IzPackNewMojo extends AbstractMojo
+{
 
     /**
      * Format compression. Choices are bzip2, default
@@ -46,9 +48,9 @@ public class IzPackNewMojo extends AbstractMojo {
     private String baseDir;
 
     /**
-     * The output compilation file name
+     * Output where compilation result will be situate
      *
-     * @parameter default-value="${project.build.directory}/${project.build.finalName)-izpack.jar"
+     * @parameter default-value="${project.build.directory}/${project.build.finalName}-izpack.jar"
      */
     private String output;
 
@@ -60,21 +62,28 @@ public class IzPackNewMojo extends AbstractMojo {
     private int comprLevel;
 
 
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoExecutionException, MojoFailureException
+    {
         CompilerData compilerData = initCompilerData();
         CompilerContainer compilerContainer = new CompilerContainer();
         compilerContainer.initBindings();
+        compilerContainer.addConfig("installFile", installFile);
+        compilerContainer.getComponent(IzpackProjectInstaller.class);
         compilerContainer.addComponent(CompilerData.class, compilerData);
 
         CompilerConfig compilerConfig = compilerContainer.getComponent(CompilerConfig.class);
-        try {
+        try
+        {
             compilerConfig.executeCompiler();
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             throw new AssertionError(e);
         }
     }
 
-    private CompilerData initCompilerData() {
+    private CompilerData initCompilerData()
+    {
         return new CompilerData(comprFormat, kind, installFile, null, baseDir, output, comprLevel);
     }
 }

@@ -102,6 +102,10 @@
             <artifactId>izpack-uninstaller</artifactId>
         </dependency>
         <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-event</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.maven.plugin-testing</groupId>
             <artifactId>maven-plugin-testing-harness</artifactId>
             <version>1.2</version>

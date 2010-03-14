@@ -37,26 +37,30 @@ import java.util.Vector;
  * @author Anthonin Bonnefoy
  * @author David Duponchel
  */
-public class XMLElementTest {
+public class XMLElementTest
+{
     private static final String filename = "partial.xml";
 
     private IXMLElement root;
 
     @Before
-    public void setUp() throws FileNotFoundException {
+    public void setUp() throws FileNotFoundException
+    {
         /* méthode DOM */
         IXMLParser parser = new XMLParser();
         root = parser.parse(XMLElementTest.class.getResourceAsStream(filename));
     }
 
     @Test
-    public void testGetName() throws NoSuchMethodException {
+    public void testGetName() throws NoSuchMethodException
+    {
         Assert.assertEquals(root.getName(), "installation");
         Assert.assertEquals(root.getChildAtIndex(0).getName(), "info");
     }
 
     @Test
-    public void testAddChild() throws NoSuchMethodException {
+    public void testAddChild() throws NoSuchMethodException
+    {
         IXMLElement element = new XMLElementImpl("child", root);
         root.addChild(element);
         element = root.getChildAtIndex(root.getChildrenCount() - 1);
@@ -64,7 +68,8 @@ public class XMLElementTest {
     }
 
     @Test
-    public void testRemoveChild() throws NoSuchMethodException {
+    public void testRemoveChild() throws NoSuchMethodException
+    {
         IXMLElement element = new XMLElementImpl("child", root);
         root.addChild(element);
         element = root.getChildAtIndex(root.getChildrenCount() - 1);
@@ -73,36 +78,42 @@ public class XMLElementTest {
     }
 
     @Test
-    public void testHasChildrenIfTrue() {
+    public void testHasChildrenIfTrue()
+    {
         Assert.assertTrue(root.hasChildren());
     }
 
     @Test
-    public void testHasChildrenIfFalse() {
+    public void testHasChildrenIfFalse()
+    {
         IXMLElement element = new XMLElementImpl("test");
         Assert.assertFalse(element.hasChildren());
     }
 
     @Test
-    public void testGetChildrenCount() {
+    public void testGetChildrenCount()
+    {
         IXMLElement element = root.getChildAtIndex(0);
         Assert.assertEquals(element.getChildrenCount(), 9);
     }
 
     @Test
-    public void testGetChildAtIndex() {
+    public void testGetChildAtIndex()
+    {
         IXMLElement element = root.getChildAtIndex(1);
         Assert.assertEquals(element.getName(), "guiprefs");
     }
 
     @Test
-    public void testGetFirstChildNamed() {
+    public void testGetFirstChildNamed()
+    {
         IXMLElement element = root.getFirstChildNamed("locale");
         Assert.assertEquals(element.getName(), "locale");
     }
 
     @Test
-    public void testGetChildrenNamed() {
+    public void testGetChildrenNamed()
+    {
         IXMLElement element = root.getChildAtIndex(1);
         Vector<IXMLElement> list = element.getChildrenNamed("modifier");
         Assert.assertEquals(list.size(), 7);

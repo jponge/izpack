@@ -30,7 +30,8 @@ import java.awt.Font;
  * @author Julien Ponge
  */
 @Deprecated
-public class IzPackMetalTheme extends DefaultMetalTheme {
+public class IzPackMetalTheme extends DefaultMetalTheme
+{
 
     /**
      * The fonts color.
@@ -46,7 +47,8 @@ public class IzPackMetalTheme extends DefaultMetalTheme {
     /**
      * The constructor.
      */
-    public IzPackMetalTheme() {
+    public IzPackMetalTheme()
+    {
         color = new ColorUIResource(0, 0, 0);
 
         Font font1 = createFont("Tahoma", Font.PLAIN, 11);
@@ -57,7 +59,8 @@ public class IzPackMetalTheme extends DefaultMetalTheme {
         windowTitleFont = new FontUIResource(font2);
     }
 
-    private Font createFont(String name, int style, int size) {
+    private Font createFont(String name, int style, int size)
+    {
         Font font = new Font(name, style, size);
         return ((font == null) ? new Font("Dialog", style, size) : font);
     }
@@ -67,7 +70,8 @@ public class IzPackMetalTheme extends DefaultMetalTheme {
      *
      * @return The color.
      */
-    public ColorUIResource getControlTextColor() {
+    public ColorUIResource getControlTextColor()
+    {
         return color;
     }
 
@@ -76,7 +80,8 @@ public class IzPackMetalTheme extends DefaultMetalTheme {
      *
      * @return The color.
      */
-    public ColorUIResource getMenuTextColor() {
+    public ColorUIResource getMenuTextColor()
+    {
         return color;
     }
 
@@ -85,7 +90,8 @@ public class IzPackMetalTheme extends DefaultMetalTheme {
      *
      * @return The color.
      */
-    public ColorUIResource getSystemTextColor() {
+    public ColorUIResource getSystemTextColor()
+    {
         return color;
     }
 
@@ -94,42 +100,48 @@ public class IzPackMetalTheme extends DefaultMetalTheme {
      *
      * @return The color.
      */
-    public ColorUIResource getUserTextColor() {
+    public ColorUIResource getUserTextColor()
+    {
         return color;
     }
 
     /**
      * The Font of Labels in many cases
      */
-    public FontUIResource getControlTextFont() {
+    public FontUIResource getControlTextFont()
+    {
         return controlFont;
     }
 
     /**
      * The Font of Menus and MenuItems
      */
-    public FontUIResource getMenuTextFont() {
+    public FontUIResource getMenuTextFont()
+    {
         return menuFont;
     }
 
     /**
      * The Font of Nodes in JTrees
      */
-    public FontUIResource getSystemTextFont() {
+    public FontUIResource getSystemTextFont()
+    {
         return controlFont;
     }
 
     /**
      * The Font in TextFields, EditorPanes, etc.
      */
-    public FontUIResource getUserTextFont() {
+    public FontUIResource getUserTextFont()
+    {
         return controlFont;
     }
 
     /**
      * The Font of the Title of JInternalFrames
      */
-    public FontUIResource getWindowTitleFont() {
+    public FontUIResource getWindowTitleFont()
+    {
         return windowTitleFont;
     }
 

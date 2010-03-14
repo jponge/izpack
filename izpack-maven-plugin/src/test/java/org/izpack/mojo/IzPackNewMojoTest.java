@@ -16,11 +16,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Anthonin Bonnefoy
  */
-public class IzPackNewMojoTest extends AbstractMojoTestCase {
+public class IzPackNewMojoTest extends AbstractMojoTestCase
+{
 
     @Test
-    public void testExecute() throws Exception {
-        File testPom = new File(getBasedir(), "target/test-classes/basic-pom.xml");
+    public void testExecute() throws Exception
+    {
+        File testPom = new File(
+                Thread.currentThread().getContextClassLoader().getResource("basic-pom.xml").toURI()
+        );
         IzPackNewMojo mojo = (IzPackNewMojo) lookupMojo("compile", testPom);
         assertThat(mojo, IsNull.notNullValue());
         initIzpackMojo(mojo);
@@ -40,7 +44,9 @@ public class IzPackNewMojoTest extends AbstractMojoTestCase {
         )));
     }
 
-    private void initIzpackMojo(IzPackNewMojo mojo) throws IllegalAccessException {
+
+    private void initIzpackMojo(IzPackNewMojo mojo) throws IllegalAccessException
+    {
         File installFile = new File("target/test-classes/helloAndFinish.xml");
         setVariableValueToObject(mojo, "comprFormat", "default");
         setVariableValueToObject(mojo, "installFile", installFile.getAbsolutePath());

@@ -18,10 +18,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.userinput;
 
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.userinput.validator.ValidatorContainer;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
@@ -32,7 +33,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class DirInputField extends FileInputField {
+public class DirInputField extends FileInputField
+{
 
     private static final long serialVersionUID = 8494549823214831160L;
 
@@ -41,44 +43,60 @@ public class DirInputField extends FileInputField {
     private final boolean canCreate;
 
     public DirInputField(IzPanel parent, GUIInstallData installDataGUI, boolean directory, String set, int size,
-                         List<ValidatorContainer> validatorConfig, boolean mustExist, boolean canCreate) {
+                         List<ValidatorContainer> validatorConfig, boolean mustExist, boolean canCreate)
+    {
         super(parent, installDataGUI, directory, set, size, validatorConfig, null, null);
         this.mustExist = mustExist;
         this.canCreate = canCreate;
     }
 
     @Override
-    protected void prepareFileChooser(JFileChooser filechooser) {
+    protected void prepareFileChooser(JFileChooser filechooser)
+    {
         filechooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
     }
 
     @Override
-    protected boolean _validate(File dir) {
+    protected boolean _validate(File dir)
+    {
         System.err.println(dir.getAbsolutePath() + " - isDir: " + dir.isDirectory()
                 + " - mustExist: " + mustExist + " - canCreate: " + canCreate);
-        if (dir.isDirectory()) {
+        if (dir.isDirectory())
+        {
             return true;
-        } else if (mustExist) {
+        }
+        else if (mustExist)
+        {
             return false;
-        } else if (canCreate) {
+        }
+        else if (canCreate)
+        {
             // try to create the directory, if requested
             return verifyCreateOK(dir);
-        } else {
+        }
+        else
+        {
             return true;
         }
     }
 
     @Override
-    protected void showMessage(int k) {
-        if (k == INVALID) {
+    protected void showMessage(int k)
+    {
+        if (k == INVALID)
+        {
             showMessage("dir.notdirectory");
-        } else if (k == EMPTY) {
+        }
+        else if (k == EMPTY)
+        {
             showMessage("dir.nodirectory");
         }
     }
 
-    private boolean verifyCreateOK(File path) {
-        if (!path.exists()) {
+    private boolean verifyCreateOK(File path)
+    {
+        if (!path.exists())
+        {
             if (!parent.emitNotificationFeedback(parent.getI18nStringForClass("createdir",
                     "TargetPanel")
                     + "\n" + path.getAbsolutePath()))
@@ -88,7 +106,8 @@ public class DirInputField extends FileInputField {
         }
 
         // We assume, that we would install something into this dir
-        if (!isWriteable(path)) {
+        if (!isWriteable(path))
+        {
             parent.emitError(parentFrame.langpack.getString("installer.error"), parent
                     .getI18nStringForClass("notwritable", "TargetPanel"));
             return false;
@@ -101,7 +120,8 @@ public class DirInputField extends FileInputField {
      *
      * @return whether the chosen dir is writeable or not
      */
-    private static boolean isWriteable(File path) {
+    private static boolean isWriteable(File path)
+    {
         File existParent = IoHelper.existingParent(path);
         if (existParent == null)
         {
@@ -111,13 +131,16 @@ public class DirInputField extends FileInputField {
         // On windows we cannot use canWrite because
         // it looks to the dos flags which are not valid
         // on NT or 2k XP or ...
-        if (OsVersion.IS_WINDOWS) {
+        if (OsVersion.IS_WINDOWS)
+        {
             File tmpFile;
-            try {
+            try
+            {
                 tmpFile = File.createTempFile("izWrTe", ".tmp", existParent);
                 tmpFile.deleteOnExit();
             }
-            catch (IOException e) {
+            catch (IOException e)
+            {
                 Debug.trace(e.toString());
                 return false;
             }

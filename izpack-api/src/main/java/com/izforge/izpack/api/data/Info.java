@@ -28,7 +28,8 @@ import java.util.ArrayList;
  *
  * @author Julien Ponge
  */
-public class Info implements Serializable {
+public class Info implements Serializable
+{
 
     static final long serialVersionUID = 13288410782044775L;
 
@@ -132,50 +133,61 @@ public class Info implements Serializable {
 
     private String rebootActionConditionID = null;
 
-    public boolean isPrivilegedExecutionRequired() {
+    public boolean isPrivilegedExecutionRequired()
+    {
         return requirePrivilegedExecution;
     }
 
-    public void setRequirePrivilegedExecution(boolean requirePrivilegedExecution) {
+    public void setRequirePrivilegedExecution(boolean requirePrivilegedExecution)
+    {
         this.requirePrivilegedExecution = requirePrivilegedExecution;
     }
 
-    public boolean isPrivilegedExecutionRequiredUninstaller() {
+    public boolean isPrivilegedExecutionRequiredUninstaller()
+    {
         return requirePrivilegedExecutionUninstaller;
     }
 
-    public void setRequirePrivilegedExecutionUninstaller(boolean required) {
+    public void setRequirePrivilegedExecutionUninstaller(boolean required)
+    {
         this.requirePrivilegedExecutionUninstaller = required;
     }
 
-    public String getPrivilegedExecutionConditionID() {
+    public String getPrivilegedExecutionConditionID()
+    {
         return privilegedExecutionConditionID;
     }
 
-    public void setPrivilegedExecutionConditionID(String privilegedExecutionConditionID) {
+    public void setPrivilegedExecutionConditionID(String privilegedExecutionConditionID)
+    {
         this.privilegedExecutionConditionID = privilegedExecutionConditionID;
     }
 
-    public int getRebootAction() {
+    public int getRebootAction()
+    {
         return rebootAction;
     }
 
-    public void setRebootAction(int rebootAction) {
+    public void setRebootAction(int rebootAction)
+    {
         this.rebootAction = rebootAction;
     }
 
-    public String getRebootActionConditionID() {
+    public String getRebootActionConditionID()
+    {
         return rebootActionConditionID;
     }
 
-    public void setRebootActionConditionID(String rebootActionConditionID) {
+    public void setRebootActionConditionID(String rebootActionConditionID)
+    {
         this.rebootActionConditionID = rebootActionConditionID;
     }
 
     /**
      * The constructor, deliberatly void.
      */
-    public Info() {
+    public Info()
+    {
     }
 
     /**
@@ -183,7 +195,8 @@ public class Info implements Serializable {
      *
      * @param appName The new application name.
      */
-    public void setAppName(String appName) {
+    public void setAppName(String appName)
+    {
         this.appName = appName;
     }
 
@@ -192,7 +205,8 @@ public class Info implements Serializable {
      *
      * @return The application name.
      */
-    public String getAppName() {
+    public String getAppName()
+    {
         return appName;
     }
 
@@ -201,7 +215,8 @@ public class Info implements Serializable {
      *
      * @param appVersion The application version.
      */
-    public void setAppVersion(String appVersion) {
+    public void setAppVersion(String appVersion)
+    {
         this.appVersion = appVersion;
     }
 
@@ -210,7 +225,8 @@ public class Info implements Serializable {
      *
      * @return The application version.
      */
-    public String getAppVersion() {
+    public String getAppVersion()
+    {
         return appVersion;
     }
 
@@ -219,7 +235,8 @@ public class Info implements Serializable {
      *
      * @param author The author to add.
      */
-    public void addAuthor(Author author) {
+    public void addAuthor(Author author)
+    {
         authors.add(author);
     }
 
@@ -228,7 +245,8 @@ public class Info implements Serializable {
      *
      * @return The authors list.
      */
-    public ArrayList<Author> getAuthors() {
+    public ArrayList<Author> getAuthors()
+    {
         return authors;
     }
 
@@ -237,7 +255,8 @@ public class Info implements Serializable {
      *
      * @param appURL The application URL.
      */
-    public void setAppURL(String appURL) {
+    public void setAppURL(String appURL)
+    {
         this.appURL = appURL;
     }
 
@@ -246,7 +265,8 @@ public class Info implements Serializable {
      *
      * @return The application URL.
      */
-    public String getAppURL() {
+    public String getAppURL()
+    {
         return appURL;
     }
 
@@ -255,7 +275,8 @@ public class Info implements Serializable {
      *
      * @param javaVersion The Java version.
      */
-    public void setJavaVersion(String javaVersion) {
+    public void setJavaVersion(String javaVersion)
+    {
         this.javaVersion = javaVersion;
     }
 
@@ -264,7 +285,8 @@ public class Info implements Serializable {
      *
      * @return The Java version.
      */
-    public String getJavaVersion() {
+    public String getJavaVersion()
+    {
         return javaVersion;
     }
 
@@ -273,7 +295,8 @@ public class Info implements Serializable {
      *
      * @param installerBase The new installer name.
      */
-    public void setInstallerBase(String installerBase) {
+    public void setInstallerBase(String installerBase)
+    {
         this.installerBase = installerBase;
     }
 
@@ -282,7 +305,8 @@ public class Info implements Serializable {
      *
      * @return The name of the installer file, without the jar suffix.
      */
-    public String getInstallerBase() {
+    public String getInstallerBase()
+    {
         return installerBase;
     }
 
@@ -291,7 +315,8 @@ public class Info implements Serializable {
      *
      * @param url The application URL.
      */
-    public void setWebDirURL(String url) {
+    public void setWebDirURL(String url)
+    {
         this.webDirURL = url;
     }
 
@@ -301,7 +326,8 @@ public class Info implements Serializable {
      * @return The webDir URL from which the installer is retrieved, or <tt>null</tt> if non has
      *         been set.
      */
-    public String getWebDirURL() {
+    public String getWebDirURL()
+    {
         return webDirURL;
     }
 
@@ -310,7 +336,8 @@ public class Info implements Serializable {
      *
      * @param name the name of the uninstaller.
      */
-    public void setUninstallerName(String name) {
+    public void setUninstallerName(String name)
+    {
         this.uninstallerName = name;
     }
 
@@ -319,7 +346,8 @@ public class Info implements Serializable {
      *
      * @return the name of the uninstaller.
      */
-    public String getUninstallerName() {
+    public String getUninstallerName()
+    {
         return this.uninstallerName;
     }
 
@@ -343,19 +371,23 @@ public class Info implements Serializable {
         return this.uninstallerPath;
     }
 
-    public boolean isJdkRequired() {
+    public boolean isJdkRequired()
+    {
         return jdkRequired;
     }
 
-    public void setJdkRequired(boolean jdkRequired) {
+    public void setJdkRequired(boolean jdkRequired)
+    {
         this.jdkRequired = jdkRequired;
     }
 
-    public void setPack200Compression(boolean pack200Support) {
+    public void setPack200Compression(boolean pack200Support)
+    {
         this.pack200Compression = pack200Support;
     }
 
-    public boolean isPack200Compression() {
+    public boolean isPack200Compression()
+    {
         return pack200Compression;
     }
 
@@ -364,7 +396,8 @@ public class Info implements Serializable {
      *
      * @author Julien Ponge
      */
-    public static class Author implements Serializable {
+    public static class Author implements Serializable
+    {
 
         static final long serialVersionUID = -3090178155004960243L;
 
@@ -383,7 +416,8 @@ public class Info implements Serializable {
          *
          * @return The author name.
          */
-        public String getName() {
+        public String getName()
+        {
             return name;
         }
 
@@ -392,7 +426,8 @@ public class Info implements Serializable {
          *
          * @return The author email.
          */
-        public String getEmail() {
+        public String getEmail()
+        {
             return email;
         }
 
@@ -402,7 +437,8 @@ public class Info implements Serializable {
          * @param name  The author name.
          * @param email The author email.
          */
-        public Author(String name, String email) {
+        public Author(String name, String email)
+        {
             this.name = name;
             this.email = email;
         }
@@ -412,7 +448,8 @@ public class Info implements Serializable {
          *
          * @return The String representation of the author, in the form : name <email> .
          */
-        public String toString() {
+        public String toString()
+        {
             return name + " <" + email + ">";
         }
 
@@ -423,7 +460,8 @@ public class Info implements Serializable {
      *
      * @return the installation subpath
      */
-    public String getInstallationSubPath() {
+    public String getInstallationSubPath()
+    {
         return installationSubPath;
     }
 
@@ -432,7 +470,8 @@ public class Info implements Serializable {
      *
      * @param string subpath to be set
      */
-    public void setInstallationSubPath(String string) {
+    public void setInstallationSubPath(String string)
+    {
         installationSubPath = string;
     }
 
@@ -441,7 +480,8 @@ public class Info implements Serializable {
      *
      * @return the summary log file path
      */
-    public String getSummaryLogFilePath() {
+    public String getSummaryLogFilePath()
+    {
         return summaryLogFilePath;
     }
 
@@ -450,7 +490,8 @@ public class Info implements Serializable {
      *
      * @param summaryLogFilePath the summary log file path to set
      */
-    public void setSummaryLogFilePath(String summaryLogFilePath) {
+    public void setSummaryLogFilePath(String summaryLogFilePath)
+    {
         this.summaryLogFilePath = summaryLogFilePath;
     }
 
@@ -460,7 +501,8 @@ public class Info implements Serializable {
      *
      * @return Returns the packDecoderClassName.
      */
-    public String getPackDecoderClassName() {
+    public String getPackDecoderClassName()
+    {
         return packDecoderClassName;
     }
 
@@ -470,37 +512,44 @@ public class Info implements Serializable {
      *
      * @param packDecoderClassName The packDecoderClassName to set.
      */
-    public void setPackDecoderClassName(String packDecoderClassName) {
+    public void setPackDecoderClassName(String packDecoderClassName)
+    {
         this.packDecoderClassName = packDecoderClassName;
     }
 
 
-    public String getUnpackerClassName() {
+    public String getUnpackerClassName()
+    {
         return unpackerClassName;
     }
 
 
-    public void setUnpackerClassName(String unpackerClassName) {
+    public void setUnpackerClassName(String unpackerClassName)
+    {
         this.unpackerClassName = unpackerClassName;
     }
 
 
-    public boolean isWriteInstallationInformation() {
+    public boolean isWriteInstallationInformation()
+    {
         return writeInstallationInformation;
     }
 
 
-    public void setWriteInstallationInformation(boolean writeInstallationInformation) {
+    public void setWriteInstallationInformation(boolean writeInstallationInformation)
+    {
         this.writeInstallationInformation = writeInstallationInformation;
     }
 
 
-    public String getUninstallerCondition() {
+    public String getUninstallerCondition()
+    {
         return uninstallerCondition;
     }
 
 
-    public void setUninstallerCondition(String uninstallerCondition) {
+    public void setUninstallerCondition(String uninstallerCondition)
+    {
         this.uninstallerCondition = uninstallerCondition;
     }
 }

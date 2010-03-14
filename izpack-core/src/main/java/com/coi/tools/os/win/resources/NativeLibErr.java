@@ -28,7 +28,8 @@ import java.util.ListResourceBundle;
  *
  * @author Klaus Bartz
  */
-public class NativeLibErr extends ListResourceBundle {
+public class NativeLibErr extends ListResourceBundle
+{
 
     private static final Object[][] contents = {
             {"libInternal.OsErrNumPraefix", " System error number is: "},
@@ -57,7 +58,8 @@ public class NativeLibErr extends ListResourceBundle {
     /**
      * Default constructor.
      */
-    public NativeLibErr() {
+    public NativeLibErr()
+    {
         super();
     }
 
@@ -66,7 +68,8 @@ public class NativeLibErr extends ListResourceBundle {
      *
      * @return contents array
      */
-    protected Object[][] getContents() {
+    protected Object[][] getContents()
+    {
         return contents;
     }
 

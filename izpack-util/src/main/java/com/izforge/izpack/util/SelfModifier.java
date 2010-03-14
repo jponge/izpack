@@ -21,8 +21,6 @@
 
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.util.OsVersion;
-
 import java.io.*;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -122,7 +120,8 @@ import java.util.zip.ZipEntry;
  * @author Chadwick McHenry
  * @version 1.0
  */
-public class SelfModifier {
+public class SelfModifier
+{
 
     /**
      * System property name of base for log and sandbox of secondary processes.
@@ -192,12 +191,14 @@ public class SelfModifier {
     private long maxpermgensize = 16;
     private boolean useMemorySettings = false;
 
-    public static void test(String[] args) {
+    public static void test(String[] args)
+    {
         // open a File for random access in the sandbox, which will cause
         // deletion
         // of the file and its parent directories to fail until it is closed (by
         // virtue of this java process halting)
-        try {
+        try
+        {
             File sandbox = new File(System.getProperty(BASE_KEY) + ".d");
             File randFile = new File(sandbox, "RandomAccess.tmp");
             RandomAccessFile rand = new RandomAccessFile(randFile, "rw");
@@ -207,32 +208,38 @@ public class SelfModifier {
             deleteTree(sandbox);
             System.err.println(sandbox.exists() ? "FAILED" : "SUCCEEDED");
         }
-        catch (Exception x) {
+        catch (Exception x)
+        {
             System.err.println(x.getMessage());
             x.printStackTrace();
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         // phase 1 already set up the sandbox and spawned phase 2.
         // phase 2 creates the log, spawns phase 3 and waits
         // phase 3 invokes method and returns. method must kill all it's threads
 
-        try {
+        try
+        {
             // all it's attributes are retrieved from system properties
             SelfModifier selfModifier = new SelfModifier();
 
             // phase 2: invoke a process for phase 3, wait, and clean up
-            if (selfModifier.phase == 2) {
+            if (selfModifier.phase == 2)
+            {
                 selfModifier.invoke2(args);
             }
 
             // phase 3: invoke method and die
-            else if (selfModifier.phase == 3) {
+            else if (selfModifier.phase == 3)
+            {
                 selfModifier.invoke3(args);
             }
         }
-        catch (IOException ioe) {
+        catch (IOException ioe)
+        {
             System.err.println("Error invoking a secondary phase");
             System.err.println("Note that this program is only intended as a secondary process");
             ioe.printStackTrace();
@@ -245,7 +252,8 @@ public class SelfModifier {
      * @throws IOException       for errors getting to the sandbox.
      * @throws SecurityException if access to the target method is denied
      */
-    private SelfModifier() throws IOException {
+    private SelfModifier() throws IOException
+    {
         phase = Integer.parseInt(System.getProperty(PHASE_KEY));
 
         String cName = System.getProperty(CLASS_KEY);
@@ -259,16 +267,19 @@ public class SelfModifier {
         this.maxpermgensize = this.maxmemory / 4;
 
         // retrieve refrence to target method
-        try {
+        try
+        {
             Class clazz = Class.forName(cName);
             Method method = clazz.getMethod(tName, new Class[]{String[].class});
 
             initMethod(method);
         }
-        catch (ClassNotFoundException x1) {
+        catch (ClassNotFoundException x1)
+        {
             log("No class found for " + cName);
         }
-        catch (NoSuchMethodException x2) {
+        catch (NoSuchMethodException x2)
+        {
             log("No method " + tName + " found in " + cName);
         }
     }
@@ -291,7 +302,8 @@ public class SelfModifier {
      * @throws IOException              if java is unable to be executed as a separte process
      * @throws SecurityException        if access to the method, or creation of a subprocess is denied
      */
-    public SelfModifier(Method method) throws IOException {
+    public SelfModifier(Method method) throws IOException
+    {
         phase = 1;
         initJavaExec();
         initMethod(method);
@@ -313,21 +325,25 @@ public class SelfModifier {
      *                                  String array as it's only argument, or of it's declaring class is not public.
      * @throws SecurityException        if access to the method is denied
      */
-    private void initMethod(Method method) {
+    private void initMethod(Method method)
+    {
         int mod = method.getModifiers();
-        if ((mod & Modifier.PUBLIC) == 0 || (mod & Modifier.STATIC) == 0) {
+        if ((mod & Modifier.PUBLIC) == 0 || (mod & Modifier.STATIC) == 0)
+        {
             throw new IllegalArgumentException("Method not public and static");
         }
 
         Class[] params = method.getParameterTypes();
         if (params.length != 1 || !params[0].isArray()
-                || !"java.lang.String".equals(params[0].getComponentType().getName())) {
+                || !"java.lang.String".equals(params[0].getComponentType().getName()))
+        {
             throw new IllegalArgumentException("Method must accept String array");
         }
 
         Class clazz = method.getDeclaringClass();
         mod = clazz.getModifiers();
-        if ((mod & Modifier.PUBLIC) == 0 || (mod & Modifier.INTERFACE) != 0) {
+        if ((mod & Modifier.PUBLIC) == 0 || (mod & Modifier.INTERFACE) != 0)
+        {
             throw new IllegalArgumentException("Method must be in a public class");
         }
 
@@ -341,8 +357,10 @@ public class SelfModifier {
      * @throws SecurityException if a security manager exists and doesn't allow creation of a
      *                           subprocess
      */
-    private void initJavaExec() throws IOException {
-        try {
+    private void initJavaExec() throws IOException
+    {
+        try
+        {
             Process p = Runtime.getRuntime().exec(javaCommand());
 
             new StreamProxy(p.getErrorStream(), "err").start();
@@ -352,7 +370,8 @@ public class SelfModifier {
             // even if it returns an error code, it was at least found
             p.waitFor();
         }
-        catch (InterruptedException ie) {
+        catch (InterruptedException ie)
+        {
             throw new IOException("Unable to create a java subprocess");
         }
     }
@@ -379,21 +398,25 @@ public class SelfModifier {
      * @throws IOException           for lots of things
      * @throws IllegalStateException if method's class was not loaded from a jar
      */
-    public void invoke(String[] args) throws IOException {
+    public void invoke(String[] args) throws IOException
+    {
         // Initialize sandbox and log file to be unique, but similarly named
-        while (true) {
+        while (true)
+        {
             logFile = File.createTempFile(prefix, ".log");
             String f = logFile.toString();
             sandbox = new File(f.substring(0, f.length() - 4) + ".d");
 
             // check if the similarly named directory is free
-            if (!sandbox.exists()) {
+            if (!sandbox.exists())
+            {
                 break;
             }
 
             logFile.delete();
         }
-        if (!sandbox.mkdir()) {
+        if (!sandbox.mkdir())
+        {
             throw new RuntimeException("Failed to create temp dir: " + sandbox);
         }
 
@@ -401,14 +424,16 @@ public class SelfModifier {
         logFile = logFile.getCanonicalFile();
 
         jarFile = findJarFile((Class<?>) method.getDeclaringClass()).getCanonicalFile();
-        if (jarFile == null) {
+        if (jarFile == null)
+        {
             throw new IllegalStateException("SelfModifier must be in a jar file");
         }
         log("JarFile: " + jarFile);
 
         extractJarFile();
 
-        if (args == null) {
+        if (args == null)
+        {
             args = new String[0];
         }
         spawn(args, 2);
@@ -423,7 +448,8 @@ public class SelfModifier {
      *
      * @throws IOException if there is an error getting the cononical name of a path
      */
-    private Process spawn(String[] args, int nextPhase) throws IOException {
+    private Process spawn(String[] args, int nextPhase) throws IOException
+    {
         String base = logFile.getAbsolutePath();
         base = base.substring(0, base.length() - 4);
 
@@ -456,7 +482,8 @@ public class SelfModifier {
 
         StringBuffer sb = new StringBuffer("Spawning phase ");
         sb.append(nextPhase).append(": ");
-        for (String anEntireCmd : command) {
+        for (String anEntireCmd : command)
+        {
             sb.append("\n\t").append(anEntireCmd);
         }
         log(sb.toString());
@@ -472,11 +499,13 @@ public class SelfModifier {
      * @return null if file was not loaded from a jar file
      * @throws SecurityException if access to is denied by SecurityManager
      */
-    public static File findJarFile(Class<?> clazz) {
+    public static File findJarFile(Class<?> clazz)
+    {
         String resource = clazz.getName().replace('.', '/') + ".class";
 
         URL url = ClassLoader.getSystemResource(resource);
-        if (!"jar".equals(url.getProtocol())) {
+        if (!"jar".equals(url.getProtocol()))
+        {
             return null;
         }
 
@@ -491,9 +520,12 @@ public class SelfModifier {
         // Constructed w/ it will expect "%20" in path. URI and File(URI)
         // properly
         // deal with escaping back and forth, but didn't exist until 1.4
-        if (JAVA_SPECIFICATION_VERSION < 1.4) {
+        if (JAVA_SPECIFICATION_VERSION < 1.4)
+        {
             file = new File(fromURI(path));
-        } else {
+        }
+        else
+        {
             file = new File(URI.create(path));
         }
 
@@ -503,7 +535,8 @@ public class SelfModifier {
     /**
      * @throws IOException
      */
-    private void extractJarFile() throws IOException {
+    private void extractJarFile() throws IOException
+    {
         byte[] buf = new byte[5120];
         int extracted = 0;
         InputStream in = null;
@@ -512,16 +545,20 @@ public class SelfModifier {
 
         JarFile jar = new JarFile(jarFile, true);
 
-        try {
+        try
+        {
             Enumeration<JarEntry> entries = jar.entries();
-            while (entries.hasMoreElements()) {
+            while (entries.hasMoreElements())
+            {
                 ZipEntry entry = entries.nextElement();
-                if (entry.isDirectory()) {
+                if (entry.isDirectory())
+                {
                     continue;
                 }
 
                 String pathname = entry.getName();
-                if (MANIFEST.equals(pathname.toUpperCase())) {
+                if (MANIFEST.equals(pathname.toUpperCase()))
+                {
                     continue;
                 }
 
@@ -529,14 +566,16 @@ public class SelfModifier {
 
                 File outFile = new File(sandbox, pathname);
                 File parent = outFile.getParentFile();
-                if (parent != null && !parent.exists()) {
+                if (parent != null && !parent.exists())
+                {
                     parent.mkdirs();
                 }
 
                 out = new BufferedOutputStream(new FileOutputStream(outFile));
 
                 int n;
-                while ((n = in.read(buf, 0, buf.length)) > 0) {
+                while ((n = in.read(buf, 0, buf.length)) > 0)
+                {
                     out.write(buf, 0, n);
                 }
 
@@ -548,24 +587,33 @@ public class SelfModifier {
             log("Extracted " + extracted + " file" + (extracted > 1 ? "s" : "") + " into "
                     + sandbox.getPath());
         }
-        finally {
-            try {
+        finally
+        {
+            try
+            {
                 jar.close();
             }
-            catch (IOException ioe) {
+            catch (IOException ioe)
+            {
             }
-            if (out != null) {
-                try {
+            if (out != null)
+            {
+                try
+                {
                     out.close();
                 }
-                catch (IOException ioe) {
+                catch (IOException ioe)
+                {
                 }
             }
-            if (in != null) {
-                try {
+            if (in != null)
+            {
+                try
+                {
                     in.close();
                 }
-                catch (IOException ioe) {
+                catch (IOException ioe)
+                {
                 }
             }
         }
@@ -583,20 +631,24 @@ public class SelfModifier {
      * and wait for that process to complete. Even worse, resources in the jar may be locked by the
      * target process, which would prevent the sandbox from being deleted as well.
      */
-    private void invoke2(String[] args) {
+    private void invoke2(String[] args)
+    {
 
         int retVal = -1;
-        try {
+        try
+        {
             // TODO: in jre 1.2, Phs1 consistently needs more time to unlock the
             // original jar. Phs2 should wait to invoke Phs3 until it knows its
             // parent (Phs1) has died, but Process.waitFor() only works on
             // children. Can we see when a parent dies, or /this/ Process
             // becomes
             // orphaned?
-            try {
+            try
+            {
                 Thread.sleep(1000);
             }
-            catch (Exception x) {
+            catch (Exception x)
+            {
             }
 
 
@@ -607,10 +659,12 @@ public class SelfModifier {
             new StreamProxy(p.getInputStream(), "out", log).start();
             p.getOutputStream().close();
 
-            try {
+            try
+            {
                 retVal = p.waitFor();
             }
-            catch (InterruptedException e) {
+            catch (InterruptedException e)
+            {
                 log(e);
             }
 
@@ -618,7 +672,8 @@ public class SelfModifier {
             log("deleteing sandbox");
             deleteTree(sandbox);
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             log(e);
         }
         log("Phase 3 return value = " + retVal);
@@ -627,10 +682,13 @@ public class SelfModifier {
     /**
      * Recursively delete a file structure.
      */
-    public static boolean deleteTree(File file) {
-        if (file.isDirectory()) {
+    public static boolean deleteTree(File file)
+    {
+        if (file.isDirectory())
+        {
             File[] files = file.listFiles();
-            for (File file1 : files) {
+            for (File file1 : files)
+            {
                 deleteTree(file1);
             }
         }
@@ -646,15 +704,18 @@ public class SelfModifier {
     /**
      * Invoke the target method and let it run free!
      */
-    private void invoke3(String[] args) {
+    private void invoke3(String[] args)
+    {
         // std io is being redirected to the log
-        try {
+        try
+        {
             errlog("Invoking method: " + method.getDeclaringClass().getName() + "."
                     + method.getName() + "(String[] args)");
 
             method.invoke(null, new Object[]{args});
         }
-        catch (Throwable t) {
+        catch (Throwable t)
+        {
             errlog(t.getMessage());
             t.printStackTrace();
             errlog("exiting");
@@ -675,18 +736,23 @@ public class SelfModifier {
 
     PrintStream log = null;
 
-    private void errlog(String msg) {
+    private void errlog(String msg)
+    {
         date.setTime(System.currentTimeMillis());
         System.err.println(isoPoint.format(date) + " Phase " + phase + ": " + msg);
     }
 
-    private PrintStream checkLog() {
-        try {
-            if (log == null) {
+    private PrintStream checkLog()
+    {
+        try
+        {
+            if (log == null)
+            {
                 log = new PrintStream(new FileOutputStream(logFile.toString(), true));
             }
         }
-        catch (IOException x) {
+        catch (IOException x)
+        {
             System.err.println("Phase " + phase + " log err: " + x.getMessage());
             x.printStackTrace();
         }
@@ -694,20 +760,25 @@ public class SelfModifier {
         return log;
     }
 
-    private void log(Throwable t) {
-        if (checkLog() != null) {
+    private void log(Throwable t)
+    {
+        if (checkLog() != null)
+        {
             log.println(isoPoint.format(date) + " Phase " + phase + ": " + t.getMessage());
             t.printStackTrace(log);
         }
     }
 
-    private void log(String msg) {
-        if (checkLog() != null) {
+    private void log(String msg)
+    {
+        if (checkLog() != null)
+        {
             log.println(isoPoint.format(date) + " Phase " + phase + ": " + msg);
         }
     }
 
-    public static class StreamProxy extends Thread {
+    public static class StreamProxy extends Thread
+    {
 
         InputStream in;
 
@@ -715,36 +786,45 @@ public class SelfModifier {
 
         OutputStream out;
 
-        public StreamProxy(InputStream in, String name) {
+        public StreamProxy(InputStream in, String name)
+        {
             this(in, name, null);
         }
 
-        public StreamProxy(InputStream in, String name, OutputStream out) {
+        public StreamProxy(InputStream in, String name, OutputStream out)
+        {
             this.in = in;
             this.name = name;
             this.out = out;
         }
 
-        public void run() {
-            try {
+        public void run()
+        {
+            try
+            {
                 PrintWriter pw = null;
-                if (out != null) {
+                if (out != null)
+                {
                     pw = new PrintWriter(out);
                 }
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
                 String line;
-                while ((line = br.readLine()) != null) {
-                    if (pw != null) {
+                while ((line = br.readLine()) != null)
+                {
+                    if (pw != null)
+                    {
                         pw.println(line);
                     }
                     // System.out.println(name + ">" + line);
                 }
-                if (pw != null) {
+                if (pw != null)
+                {
                     pw.flush();
                 }
             }
-            catch (IOException ioe) {
+            catch (IOException ioe)
+            {
                 ioe.printStackTrace();
             }
         }
@@ -777,37 +857,49 @@ public class SelfModifier {
      * @param uri the URI designating a file in the local filesystem.
      * @return the local file system path for the file.
      */
-    public static String fromURI(String uri) {
-        if (!uri.startsWith("file:")) {
+    public static String fromURI(String uri)
+    {
+        if (!uri.startsWith("file:"))
+        {
             throw new IllegalArgumentException("Can only handle file: URIs");
         }
 
-        if (uri.startsWith("file://")) {
+        if (uri.startsWith("file://"))
+        {
             uri = uri.substring(7);
-        } else {
+        }
+        else
+        {
             uri = uri.substring(5);
         }
 
         uri = uri.replace('/', File.separatorChar);
         if (File.pathSeparatorChar == ';' && uri.startsWith("\\") && uri.length() > 2
-                && Character.isLetter(uri.charAt(1)) && uri.lastIndexOf(':') > -1) {
+                && Character.isLetter(uri.charAt(1)) && uri.lastIndexOf(':') > -1)
+        {
             uri = uri.substring(1);
         }
 
         StringBuffer sb = new StringBuffer();
         CharacterIterator iter = new StringCharacterIterator(uri);
-        for (char c = iter.first(); c != CharacterIterator.DONE; c = iter.next()) {
-            if (c == '%') {
+        for (char c = iter.first(); c != CharacterIterator.DONE; c = iter.next())
+        {
+            if (c == '%')
+            {
                 char c1 = iter.next();
-                if (c1 != CharacterIterator.DONE) {
+                if (c1 != CharacterIterator.DONE)
+                {
                     int i1 = Character.digit(c1, 16);
                     char c2 = iter.next();
-                    if (c2 != CharacterIterator.DONE) {
+                    if (c2 != CharacterIterator.DONE)
+                    {
                         int i2 = Character.digit(c2, 16);
                         sb.append((char) ((i1 << 4) + i2));
                     }
                 }
-            } else {
+            }
+            else
+            {
                 sb.append(c);
             }
         }
@@ -816,13 +908,15 @@ public class SelfModifier {
         return path;
     }
 
-    private static String addExtension(String command) {
+    private static String addExtension(String command)
+    {
         // This is the most common extension case - exe for windows and OS/2,
         // nothing for *nix.
         return command + (OsVersion.IS_WINDOWS || OsVersion.IS_OS2 ? ".exe" : "");
     }
 
-    private static String javaCommand() {
+    private static String javaCommand()
+    {
         // This was stolen (and specialized from much more modular code) from
         // the
         // jakarta ant classes Os & JavaEnvUtils. Also see the following
@@ -840,7 +934,8 @@ public class SelfModifier {
         // Unfortunately on Windows java.home doesn't always refer
         // to the correct location, so we need to fall back to
         // assuming java is somewhere on the PATH.
-        if (!jExecutable.exists()) {
+        if (!jExecutable.exists())
+        {
             return executable;
         }
         return jExecutable.getAbsolutePath();

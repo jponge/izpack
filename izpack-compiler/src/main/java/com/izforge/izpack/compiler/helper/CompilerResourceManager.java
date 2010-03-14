@@ -5,5 +5,6 @@ package com.izforge.izpack.compiler.helper;
  *
  * @author Anthonin Bonnefoy
  */
-public class CompilerResourceManager {
+public class CompilerResourceManager
+{
 }

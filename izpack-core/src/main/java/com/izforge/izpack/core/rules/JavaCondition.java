@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.core.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -205,6 +206,7 @@ public class JavaCondition extends Condition
     /* (non-Javadoc)
      * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
      */
+
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();

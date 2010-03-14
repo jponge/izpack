@@ -26,10 +26,10 @@
     </info>
 
     <variables>
-        <variable name="scriptFile" value="script.bat"/>
+        <variable name="scriptFile" value="script.bat" />
     </variables>
     <dynamicvariables>
-        <variable name="myPath" value="$INSTALL_PATH/test"/>
+        <variable name="myPath" value="$INSTALL_PATH/test" />
     </dynamicvariables>
 
     <!-- 
@@ -77,10 +77,10 @@
     <packs>
         <pack name="Base" required="yes">
             <description>The base files</description>
-            <file src="Readme.txt" targetdir="$INSTALL_PATH"/>
-            <file src="Licence.txt" targetdir="$INSTALL_PATH"/>
-            <file src="script.bat" targetdir="$myPath"/>
-            <parsable targetfile="$INSTALL_PATH/test/$scriptFile"/>
+            <file src="Readme.txt" targetdir="$INSTALL_PATH" />
+            <file src="Licence.txt" targetdir="$INSTALL_PATH" />
+            <file src="script.bat" targetdir="$myPath" />
+            <parsable targetfile="$INSTALL_PATH/test/$scriptFile" />
             <!-- The file will be parsed -->
         </pack>
         <pack name="Docs" required="no">

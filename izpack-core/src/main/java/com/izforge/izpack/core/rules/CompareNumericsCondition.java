@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.core.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -38,37 +39,44 @@ public class CompareNumericsCondition extends Condition
     protected String value;
     protected String operator;
 
-    public CompareNumericsCondition(String variablename, String value, HashMap packstoremove) {
+    public CompareNumericsCondition(String variablename, String value, HashMap packstoremove)
+    {
         super();
         this.variablename = variablename;
         this.value = value;
         this.operator = "eq";
     }
 
-    public CompareNumericsCondition(String variablename, String value) {
+    public CompareNumericsCondition(String variablename, String value)
+    {
         super();
         this.variablename = variablename;
         this.value = value;
         this.operator = "eq";
     }
 
-    public CompareNumericsCondition() {
+    public CompareNumericsCondition()
+    {
         super();
     }
 
-    public String getValue() {
+    public String getValue()
+    {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(String value)
+    {
         this.value = value;
     }
 
-    public String getVariablename() {
+    public String getVariablename()
+    {
         return variablename;
     }
 
-    public void setVariablename(String variablename) {
+    public void setVariablename(String variablename)
+    {
         this.variablename = variablename;
     }
 
@@ -78,19 +86,23 @@ public class CompareNumericsCondition extends Condition
      * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.api.adaptator.IXMLElement)
      */
 
-    public void readFromXML(IXMLElement xmlcondition) {
-        try {
+    public void readFromXML(IXMLElement xmlcondition)
+    {
+        try
+        {
             this.variablename = xmlcondition.getFirstChildNamed("name").getContent();
             this.value = xmlcondition.getFirstChildNamed("value").getContent();
             this.operator = xmlcondition.getFirstChildNamed("operator").getContent();
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.log("missing element in <condition type=\"variable\"/>");
         }
 
     }
 
-    public boolean isTrue() {
+    public boolean isTrue()
+    {
         boolean result = false;
         if (this.installdata != null)
         {

@@ -18,19 +18,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.install;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
-import com.izforge.izpack.util.AbstractUIHandler;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
-
-import com.izforge.izpack.installer.*;
-import com.izforge.izpack.util.AbstractUIHandler;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
 
 import java.io.PrintWriter;
 import java.util.Properties;
@@ -41,7 +38,8 @@ import java.util.Properties;
  * @author Mounir el hajj
  */
 public class InstallPanelConsoleHelper extends PanelConsoleHelper implements PanelConsole,
-        AbstractUIProgressHandler {
+        AbstractUIProgressHandler
+{
 
     private int noOfPacks = 0;
 
@@ -51,11 +49,13 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
         return true;
     }
 
-    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p) {
+    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p)
+    {
         return runConsole(installData);
     }
 
-    public boolean runConsole(AutomatedInstallData idata) {
+    public boolean runConsole(AutomatedInstallData idata)
+    {
 
         //REFACTOR : Use container to get unpacker
 //        IUnpacker unpacker = UnpackerFactory.getUnpacker(idata.getInfo().getUnpackerClassName(), idata, this);
@@ -65,11 +65,14 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
         unpacker.setRules((RulesEngine) idata.getRules());
         unpackerthread.start();
         boolean done = false;
-        while (!done && unpackerthread.isAlive()) {
-            try {
+        while (!done && unpackerthread.isAlive())
+        {
+            try
+            {
                 Thread.sleep(100);
             }
-            catch (InterruptedException e) {
+            catch (InterruptedException e)
+            {
 
             }
         }
@@ -78,48 +81,58 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
     }
 
 
-    public void emitNotification(String message) {
+    public void emitNotification(String message)
+    {
         System.out.println(message);
     }
 
-    public boolean emitWarning(String title, String message) {
+    public boolean emitWarning(String title, String message)
+    {
         System.err.println("[ WARNING: " + message + " ]");
 
         return true;
     }
 
-    public void emitError(String title, String message) {
+    public void emitError(String title, String message)
+    {
         System.err.println("[ ERROR: " + message + " ]");
     }
 
-    public void emitErrorAndBlockNext(String title, String message) {
+    public void emitErrorAndBlockNext(String title, String message)
+    {
         System.err.println("[ ERROR: " + message + " ]");
     }
 
-    public int askQuestion(String title, String question, int choices) {
+    public int askQuestion(String title, String question, int choices)
+    {
         // don't know what to answer
         return AbstractUIHandler.ANSWER_CANCEL;
     }
 
-    public int askQuestion(String title, String question, int choices, int default_choice) {
+    public int askQuestion(String title, String question, int choices, int default_choice)
+    {
         return default_choice;
     }
 
-    public void startAction(String name, int no_of_steps) {
+    public void startAction(String name, int no_of_steps)
+    {
         System.out.println("[ Starting to unpack ]");
         this.noOfPacks = no_of_steps;
     }
 
-    public void stopAction() {
+    public void stopAction()
+    {
         System.out.println("[ Unpacking finished ]");
         boolean done = true;
     }
 
-    public void progress(int val, String msg) {
+    public void progress(int val, String msg)
+    {
 
     }
 
-    public void nextStep(String packName, int stepno, int stepsize) {
+    public void nextStep(String packName, int stepno, int stepsize)
+    {
         System.out.print("[ Processing package: " + packName + " (");
         System.out.print(stepno);
         System.out.print('/');
@@ -127,7 +140,8 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
         System.out.println(") ]");
     }
 
-    public void setSubStepNo(int no_of_substeps) {
+    public void setSubStepNo(int no_of_substeps)
+    {
 
     }
 }

@@ -18,19 +18,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.gui.IzPanelConstraints;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LayoutConstants;
-import com.izforge.izpack.installer.data.GUIInstallData;
 
-import javax.swing.JComponent;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.LayoutManager2;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * This class manages the layout for IzPanels. The layout related methods in IzPanel delegates the
@@ -42,7 +40,8 @@ import java.awt.LayoutManager2;
  *
  * @author Klaus Bartz
  */
-public class LayoutHelper implements LayoutConstants {
+public class LayoutHelper implements LayoutConstants
+{
 
     JComponent parent;
 
@@ -123,7 +122,8 @@ public class LayoutHelper implements LayoutConstants {
      *
      * @param parent for which this layout manager will be used
      */
-    public LayoutHelper(JComponent parent) {
+    public LayoutHelper(JComponent parent)
+    {
         this();
         this.parent = parent;
         izPanelLayout = new GridBagLayout();
@@ -134,7 +134,8 @@ public class LayoutHelper implements LayoutConstants {
     /**
      * The default constructor is only useable by derived classes.
      */
-    protected LayoutHelper() {
+    protected LayoutHelper()
+    {
         super();
     }
 
@@ -143,7 +144,8 @@ public class LayoutHelper implements LayoutConstants {
      *
      * @return whether the used layout is a GridBagLayout or not
      */
-    private boolean isGridBag() {
+    private boolean isGridBag()
+    {
         return (izPanelLayout instanceof GridBagLayout);
     }
 
@@ -152,7 +154,8 @@ public class LayoutHelper implements LayoutConstants {
      *
      * @return whether the used layout is an IzPanelLayout or not
      */
-    private boolean isIzPanel() {
+    private boolean isIzPanel()
+    {
         return (izPanelLayout instanceof IzPanelLayout);
     }
 
@@ -166,17 +169,21 @@ public class LayoutHelper implements LayoutConstants {
      *
      * @param layout layout to be used by this layout helper
      */
-    public void startLayout(LayoutManager2 layout) {
-        if (layoutStarted) {
+    public void startLayout(LayoutManager2 layout)
+    {
+        if (layoutStarted)
+        {
             return;
         }
         izPanelLayout = layout;
-        if (isGridBag()) {
+        if (isGridBag())
+        {
             startGridBagLayout();
             return;
         }
         // TODO: impl for IzPanelLayout
-        if (isIzPanel()) {
+        if (isIzPanel())
+        {
             startIzPanelLayout();
         }
     }
@@ -184,7 +191,8 @@ public class LayoutHelper implements LayoutConstants {
     /**
      * Special start method for IzPanelLayout. Called from <code>startLayout</code>.
      */
-    private void startIzPanelLayout() {
+    private void startIzPanelLayout()
+    {
         IzPanelLayout.setAnchor(getAnchor());
         IzPanelLayout.setXStretchType(getXStretchType());
         IzPanelLayout.setYStretchType(getYStretchType());
@@ -202,8 +210,10 @@ public class LayoutHelper implements LayoutConstants {
      * "NORTH" or "NORTHWEST". The earlier used value "TOP" and the declaration via the IzPack
      * variable <code>IzPanel.LayoutType</code> are also supported.
      */
-    public void completeLayout() {
-        if (isGridBag()) {
+    public void completeLayout()
+    {
+        if (isGridBag())
+        {
             completeGridBagLayout();
         }
         // TODO: impl for IzPanelLayout
@@ -214,7 +224,8 @@ public class LayoutHelper implements LayoutConstants {
      *
      * @return the default constraints of this panel
      */
-    public Object getDefaultConstraints() {
+    public Object getDefaultConstraints()
+    {
         startLayout(izPanelLayout);
         return defaultConstraints;
     }
@@ -224,11 +235,13 @@ public class LayoutHelper implements LayoutConstants {
      *
      * @param constraints which should be set as default for this object
      */
-    public void setDefaultConstraints(Object constraints) {
+    public void setDefaultConstraints(Object constraints)
+    {
 
         startLayout(izPanelLayout);
         if ((isGridBag() && !(constraints instanceof GridBagConstraints))
-                || (isIzPanel() && !(constraints instanceof IzPanelConstraints))) {
+                || (isIzPanel() && !(constraints instanceof IzPanelConstraints)))
+        {
             throw new IllegalArgumentException(
                     "Layout and constraints have to be from the same type.");
         }
@@ -238,7 +251,8 @@ public class LayoutHelper implements LayoutConstants {
     /**
      * Resets the grid counters which are used at getNextXConstraints and getNextYConstraints.
      */
-    public void resetGridCounter() {
+    public void resetGridCounter()
+    {
         gridxCounter = -1;
         gridyCounter = -1;
     }
@@ -252,15 +266,18 @@ public class LayoutHelper implements LayoutConstants {
      * @return newly created constraints with the given values and the values from the default
      *         constraints for the other parameters
      */
-    public Object getNewConstraints(int gridx, int gridy) {
-        if (isGridBag()) {
+    public Object getNewConstraints(int gridx, int gridy)
+    {
+        if (isGridBag())
+        {
             GridBagConstraints retval = (GridBagConstraints) ((GridBagConstraints) getDefaultConstraints())
                     .clone();
             retval.gridx = gridx;
             retval.gridy = gridy;
             return (retval);
         }
-        if (isIzPanel()) {
+        if (isIzPanel())
+        {
             IzPanelConstraints retval = (IzPanelConstraints) ((IzPanelConstraints) getDefaultConstraints())
                     .clone();
             retval.setXPos(gridx);
@@ -281,14 +298,17 @@ public class LayoutHelper implements LayoutConstants {
      * @return newly created constraints with the given values and the values from the default
      *         constraints for the other parameters
      */
-    public Object getNewConstraints(int gridx, int gridy, int gridwidth, int gridheight) {
+    public Object getNewConstraints(int gridx, int gridy, int gridwidth, int gridheight)
+    {
         Object retval = getNewConstraints(gridx, gridy);
-        if (isGridBag()) {
+        if (isGridBag())
+        {
             GridBagConstraints gbc = (GridBagConstraints) retval;
             gbc.gridwidth = gridwidth;
             gbc.gridheight = gridheight;
         }
-        if (isIzPanel()) {
+        if (isIzPanel())
+        {
             IzPanelConstraints gbc = (IzPanelConstraints) retval;
             gbc.setXWeight(gridwidth);
             gbc.setYWeight(gridheight);
@@ -301,7 +321,8 @@ public class LayoutHelper implements LayoutConstants {
      *
      * @return a newly created constraints for the next column of the current layout row
      */
-    public Object getNextXConstraints() {
+    public Object getNextXConstraints()
+    {
         gridxCounter++;
         return (getNewConstraints(gridxCounter, gridyCounter));
     }
@@ -311,7 +332,8 @@ public class LayoutHelper implements LayoutConstants {
      *
      * @return a newly created constraints with column 0 for the next row
      */
-    public Object getNextYConstraints() {
+    public Object getNextYConstraints()
+    {
         gridyCounter++;
         gridxCounter = 0;
         return (getNewConstraints(0, gridyCounter));
@@ -325,7 +347,8 @@ public class LayoutHelper implements LayoutConstants {
      * @param gridheight height for this constraint
      * @return a newly created constraints with column 0 for the next row using the given parameters
      */
-    public Object getNextYConstraints(int gridwidth, int gridheight) {
+    public Object getNextYConstraints(int gridwidth, int gridheight)
+    {
         gridyCounter++;
         gridxCounter = 0;
         return (getNewConstraints(0, gridyCounter, gridwidth, gridheight));
@@ -341,12 +364,15 @@ public class LayoutHelper implements LayoutConstants {
      * "SOUTH" or "SOUTHWEST". The earlier used value "BOTTOM" and the declaration via the IzPack
      * variable <code>IzPanel.LayoutType</code> are also supported.
      */
-    private void startGridBagLayout() {
-        if (layoutStarted) {
+    private void startGridBagLayout()
+    {
+        if (layoutStarted)
+        {
             return;
         }
         layoutStarted = true;
-        if (izPanelLayout == null || !(izPanelLayout instanceof GridBagLayout)) {
+        if (izPanelLayout == null || !(izPanelLayout instanceof GridBagLayout))
+        {
             izPanelLayout = new GridBagLayout();
         }
         GridBagConstraints dgbc = new GridBagConstraints();
@@ -354,7 +380,8 @@ public class LayoutHelper implements LayoutConstants {
         dgbc.anchor = GridBagConstraints.WEST;
         defaultConstraints = dgbc;
         parent.setLayout(izPanelLayout);
-        switch (getAnchor()) {
+        switch (getAnchor())
+        {
             case SOUTH:
             case SOUTH_WEST:
                 // Make a header to push the rest to the bottom.
@@ -377,8 +404,10 @@ public class LayoutHelper implements LayoutConstants {
      * "NORTH" or "NORTHWEST". The earlier used value "TOP" and the declaration via the IzPack
      * variable <code>IzPanel.LayoutType</code> are also supported.
      */
-    private void completeGridBagLayout() {
-        switch (getAnchor()) {
+    private void completeGridBagLayout()
+    {
+        switch (getAnchor())
+        {
             case NORTH:
             case NORTH_WEST:
                 // Make a footer to push the rest to the top.
@@ -402,38 +431,61 @@ public class LayoutHelper implements LayoutConstants {
      *
      * @return the anchor defined in the IzPanel.LayoutType variable.
      */
-    public static int getAnchor() {
-        if (ANCHOR >= 0) {
+    public static int getAnchor()
+    {
+        if (ANCHOR >= 0)
+        {
             return (ANCHOR);
         }
         AutomatedInstallData idata = AutomatedInstallData.getInstance();
         String todo;
         if (idata instanceof GUIInstallData
-                && ((GUIInstallData) idata).guiPrefs.modifier.containsKey("layoutAnchor")) {
+                && ((GUIInstallData) idata).guiPrefs.modifier.containsKey("layoutAnchor"))
+        {
             todo = ((GUIInstallData) idata).guiPrefs.modifier.get("layoutAnchor");
-        } else {
+        }
+        else
+        {
             todo = idata.getVariable("IzPanel.LayoutType");
         }
         if (todo == null) // No command, no work.
         {
             ANCHOR = CENTER;
-        } else if ("EAST".equalsIgnoreCase(todo)) {
+        }
+        else if ("EAST".equalsIgnoreCase(todo))
+        {
             ANCHOR = EAST;
-        } else if ("WEST".equalsIgnoreCase(todo)) {
+        }
+        else if ("WEST".equalsIgnoreCase(todo))
+        {
             ANCHOR = WEST;
-        } else if ("TOP".equalsIgnoreCase(todo) || "NORTH".equalsIgnoreCase(todo)) {
+        }
+        else if ("TOP".equalsIgnoreCase(todo) || "NORTH".equalsIgnoreCase(todo))
+        {
             ANCHOR = NORTH;
-        } else if ("BOTTOM".equalsIgnoreCase(todo) || "SOUTH".equalsIgnoreCase(todo)) {
+        }
+        else if ("BOTTOM".equalsIgnoreCase(todo) || "SOUTH".equalsIgnoreCase(todo))
+        {
             ANCHOR = SOUTH;
-        } else if ("SOUTHWEST".equalsIgnoreCase(todo) || "SOUTH_WEST".equalsIgnoreCase(todo)) {
+        }
+        else if ("SOUTHWEST".equalsIgnoreCase(todo) || "SOUTH_WEST".equalsIgnoreCase(todo))
+        {
             ANCHOR = SOUTH_WEST;
-        } else if ("SOUTHEAST".equalsIgnoreCase(todo) || "SOUTH_EAST".equalsIgnoreCase(todo)) {
+        }
+        else if ("SOUTHEAST".equalsIgnoreCase(todo) || "SOUTH_EAST".equalsIgnoreCase(todo))
+        {
             ANCHOR = SOUTH_EAST;
-        } else if ("NORTHWEST".equalsIgnoreCase(todo) || "NORTH_WEST".equalsIgnoreCase(todo)) {
+        }
+        else if ("NORTHWEST".equalsIgnoreCase(todo) || "NORTH_WEST".equalsIgnoreCase(todo))
+        {
             ANCHOR = NORTH_WEST;
-        } else if ("NORTHEAST".equalsIgnoreCase(todo) || "NORTH_EAST".equalsIgnoreCase(todo)) {
+        }
+        else if ("NORTHEAST".equalsIgnoreCase(todo) || "NORTH_EAST".equalsIgnoreCase(todo))
+        {
             ANCHOR = NORTH_EAST;
-        } else if ("CENTER".equalsIgnoreCase(todo)) {
+        }
+        else if ("CENTER".equalsIgnoreCase(todo))
+        {
             ANCHOR = CENTER;
         }
         return (ANCHOR);
@@ -448,39 +500,52 @@ public class LayoutHelper implements LayoutConstants {
      * @param gapId index in array GAP_NAME_LOOK_UP for the needed gap
      * @return the gap depend on the xml-configurable guiprefs modifier
      */
-    public static int getXGap(int gapId) {
+    public static int getXGap(int gapId)
+    {
         gapId = IzPanelLayout.verifyGapId(gapId);
-        if (IzPanelLayout.getDefaultXGap(GAP_LOAD_MARKER) >= 0) {
+        if (IzPanelLayout.getDefaultXGap(GAP_LOAD_MARKER) >= 0)
+        {
             return (IzPanelLayout.getDefaultXGap(gapId));
         }
         AutomatedInstallData idata = AutomatedInstallData.getInstance();
-        if (!(idata instanceof GUIInstallData)) {
+        if (!(idata instanceof GUIInstallData))
+        {
             return (IzPanelLayout.getDefaultXGap(gapId));
         }
         String var = null;
         GUIInstallData id = (GUIInstallData) idata;
         int commonDefault = -1;
-        if (id.guiPrefs.modifier.containsKey(ALL_X_GAP)) {
-            try {
+        if (id.guiPrefs.modifier.containsKey(ALL_X_GAP))
+        {
+            try
+            {
                 commonDefault = Integer.parseInt(id.guiPrefs.modifier.get(ALL_X_GAP));
             }
-            catch (NumberFormatException nfe) {
+            catch (NumberFormatException nfe)
+            {
                 // Do nothing else use the default value.
                 // Need to set it again at this position??
             }
 
         }
-        for (int i = 0; i < X_GAP_NAME_LOOK_UP.length; ++i) {
+        for (int i = 0; i < X_GAP_NAME_LOOK_UP.length; ++i)
+        {
             int currentDefault = 0;
-            if (commonDefault >= 0) {
+            if (commonDefault >= 0)
+            {
                 currentDefault = commonDefault;
-            } else {
+            }
+            else
+            {
                 var = id.guiPrefs.modifier.get(X_GAP_NAME_LOOK_UP[i]);
-                if (var != null) {
-                    try {
+                if (var != null)
+                {
+                    try
+                    {
                         currentDefault = Integer.parseInt(var);
                     }
-                    catch (NumberFormatException nfe) {
+                    catch (NumberFormatException nfe)
+                    {
                         // Do nothing else use the default value.
                         // Need to set it again at this position??
                     }
@@ -502,39 +567,52 @@ public class LayoutHelper implements LayoutConstants {
      * @param gapId index in array GAP_NAME_LOOK_UP for the needed gap
      * @return the gap depend on the xml-configurable guiprefs modifier
      */
-    public static int getYGap(int gapId) {
+    public static int getYGap(int gapId)
+    {
         gapId = IzPanelLayout.verifyGapId(gapId);
-        if (IzPanelLayout.getDefaultYGap(GAP_LOAD_MARKER) >= 0) {
+        if (IzPanelLayout.getDefaultYGap(GAP_LOAD_MARKER) >= 0)
+        {
             return (IzPanelLayout.getDefaultYGap(gapId));
         }
         AutomatedInstallData idata = AutomatedInstallData.getInstance();
-        if (!(idata instanceof GUIInstallData)) {
+        if (!(idata instanceof GUIInstallData))
+        {
             return (IzPanelLayout.getDefaultYGap(gapId));
         }
         String var = null;
         GUIInstallData id = (GUIInstallData) idata;
         int commonDefault = -1;
-        if (id.guiPrefs.modifier.containsKey(ALL_Y_GAP)) {
-            try {
+        if (id.guiPrefs.modifier.containsKey(ALL_Y_GAP))
+        {
+            try
+            {
                 commonDefault = Integer.parseInt(id.guiPrefs.modifier.get(ALL_Y_GAP));
             }
-            catch (NumberFormatException nfe) {
+            catch (NumberFormatException nfe)
+            {
                 // Do nothing else use the default value.
                 // Need to set it again at this position??
             }
 
         }
-        for (int i = 0; i < Y_GAP_NAME_LOOK_UP.length; ++i) {
+        for (int i = 0; i < Y_GAP_NAME_LOOK_UP.length; ++i)
+        {
             int currentDefault = 0;
-            if (commonDefault >= 0) {
+            if (commonDefault >= 0)
+            {
                 currentDefault = commonDefault;
-            } else {
+            }
+            else
+            {
                 var = id.guiPrefs.modifier.get(Y_GAP_NAME_LOOK_UP[i]);
-                if (var != null) {
-                    try {
+                if (var != null)
+                {
+                    try
+                    {
                         currentDefault = Integer.parseInt(var);
                     }
-                    catch (NumberFormatException nfe) {
+                    catch (NumberFormatException nfe)
+                    {
                         // Do nothing else use the default value.
                         // Need to set it again at this position??
                     }
@@ -559,19 +637,27 @@ public class LayoutHelper implements LayoutConstants {
      *
      * @return used stretch type
      */
-    public static int getXStretchType() {
-        if (X_STRETCH_TYPE > -1) {
+    public static int getXStretchType()
+    {
+        if (X_STRETCH_TYPE > -1)
+        {
             return (X_STRETCH_TYPE);
         }
         X_STRETCH_TYPE = ABSOLUTE_STRETCH;
         String var = ((String) getModifierValue(null, "RELATIVE_STRETCH", null,
                 "layoutXStretchType"));
-        if (var != null) {
-            if ("RELATIVE_STRETCH".equalsIgnoreCase(var) || "RELATIVE".equalsIgnoreCase(var)) {
+        if (var != null)
+        {
+            if ("RELATIVE_STRETCH".equalsIgnoreCase(var) || "RELATIVE".equalsIgnoreCase(var))
+            {
                 X_STRETCH_TYPE = RELATIVE_STRETCH;
-            } else if ("ABSOLUTE_STRETCH".equalsIgnoreCase(var) || "ABSOLUTE".equalsIgnoreCase(var)) {
+            }
+            else if ("ABSOLUTE_STRETCH".equalsIgnoreCase(var) || "ABSOLUTE".equalsIgnoreCase(var))
+            {
                 X_STRETCH_TYPE = ABSOLUTE_STRETCH;
-            } else if ("NO_STRETCH".equalsIgnoreCase(var) || "NO".equalsIgnoreCase(var)) {
+            }
+            else if ("NO_STRETCH".equalsIgnoreCase(var) || "NO".equalsIgnoreCase(var))
+            {
                 X_STRETCH_TYPE = NO_STRETCH;
             }
         }
@@ -590,19 +676,27 @@ public class LayoutHelper implements LayoutConstants {
      *
      * @return used stretch type
      */
-    public static int getYStretchType() {
-        if (Y_STRETCH_TYPE > -1) {
+    public static int getYStretchType()
+    {
+        if (Y_STRETCH_TYPE > -1)
+        {
             return (Y_STRETCH_TYPE);
         }
         Y_STRETCH_TYPE = ABSOLUTE_STRETCH;
         String var = ((String) getModifierValue(null, "RELATIVE_STRETCH", null,
                 "layoutYStretchType"));
-        if (var != null) {
-            if ("RELATIVE_STRETCH".equalsIgnoreCase(var) || "RELATIVE".equalsIgnoreCase(var)) {
+        if (var != null)
+        {
+            if ("RELATIVE_STRETCH".equalsIgnoreCase(var) || "RELATIVE".equalsIgnoreCase(var))
+            {
                 Y_STRETCH_TYPE = RELATIVE_STRETCH;
-            } else if ("ABSOLUTE_STRETCH".equalsIgnoreCase(var) || "ABSOLUTE".equalsIgnoreCase(var)) {
+            }
+            else if ("ABSOLUTE_STRETCH".equalsIgnoreCase(var) || "ABSOLUTE".equalsIgnoreCase(var))
+            {
                 Y_STRETCH_TYPE = ABSOLUTE_STRETCH;
-            } else if ("NO_STRETCH".equalsIgnoreCase(var) || "NO".equalsIgnoreCase(var)) {
+            }
+            else if ("NO_STRETCH".equalsIgnoreCase(var) || "NO".equalsIgnoreCase(var))
+            {
                 Y_STRETCH_TYPE = NO_STRETCH;
             }
         }
@@ -618,7 +712,8 @@ public class LayoutHelper implements LayoutConstants {
      * @return the default value for stretching to a full line
      */
 
-    public static double getFullLineStretch() {
+    public static double getFullLineStretch()
+    {
         FULL_LINE_STRETCH_DEFAULT = (Double) getModifierValue(
                 FULL_LINE_STRETCH_DEFAULT, INITIAL_STRETCH_DEFAULT, DOUBLE_ZERO,
                 "layoutFullLineStretch");
@@ -634,43 +729,56 @@ public class LayoutHelper implements LayoutConstants {
      * @return the default value for stretching to a full column
      */
 
-    public static double getFullColumnStretch() {
+    public static double getFullColumnStretch()
+    {
         FULL_COLUMN_STRETCH_DEFAULT = (Double) getModifierValue(FULL_COLUMN_STRETCH_DEFAULT, INITIAL_STRETCH_DEFAULT, DOUBLE_ZERO,
                 "layoutFullColumnStretch");
         return (FULL_COLUMN_STRETCH_DEFAULT);
     }
 
     private static Object getModifierValue(Object currentVal, Object defaultVal, Object readLimit,
-                                           String key) {
-        if (defaultVal instanceof Integer) {
-            if ((Integer) currentVal >= (Integer) readLimit) {
+                                           String key)
+    {
+        if (defaultVal instanceof Integer)
+        {
+            if ((Integer) currentVal >= (Integer) readLimit)
+            {
                 return (currentVal);
             }
         }
-        if (defaultVal instanceof Double) {
-            if ((Double) currentVal >= (Double) readLimit) {
+        if (defaultVal instanceof Double)
+        {
+            if ((Double) currentVal >= (Double) readLimit)
+            {
                 return (currentVal);
             }
         }
         Object retval = defaultVal;
         AutomatedInstallData idata = AutomatedInstallData.getInstance();
-        if (!(idata instanceof GUIInstallData)) {
+        if (!(idata instanceof GUIInstallData))
+        {
             return (retval);
         }
         String var = null;
-        if (((GUIInstallData) idata).guiPrefs.modifier.containsKey(key)) {
+        if (((GUIInstallData) idata).guiPrefs.modifier.containsKey(key))
+        {
             var = ((GUIInstallData) idata).guiPrefs.modifier.get(key);
-            if (var != null) {
-                try {
-                    if (defaultVal instanceof Integer) {
+            if (var != null)
+            {
+                try
+                {
+                    if (defaultVal instanceof Integer)
+                    {
                         return (Integer.parseInt(var));
                     }
-                    if (defaultVal instanceof Double) {
+                    if (defaultVal instanceof Double)
+                    {
                         return (Double.parseDouble(var));
                     }
                     return (var);
                 }
-                catch (NumberFormatException nfe) {
+                catch (NumberFormatException nfe)
+                {
                     // Do nothing else use the default value.
                     // Need to set it again at this position??
                 }
@@ -685,7 +793,8 @@ public class LayoutHelper implements LayoutConstants {
      *
      * @return current used layout manager
      */
-    public LayoutManager2 getLayout() {
+    public LayoutManager2 getLayout()
+    {
         return izPanelLayout;
     }
 
@@ -694,7 +803,8 @@ public class LayoutHelper implements LayoutConstants {
      *
      * @param izPanelLayout layout manager to be used
      */
-    public void setLayout(LayoutManager2 izPanelLayout) {
+    public void setLayout(LayoutManager2 izPanelLayout)
+    {
         this.izPanelLayout = izPanelLayout;
     }
 

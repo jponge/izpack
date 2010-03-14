@@ -21,10 +21,10 @@
 
 package com.izforge.izpack.panels.userinput;
 
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.userinput.processorclient.StringInputProcessingClient;
 import com.izforge.izpack.panels.userinput.validator.ValidatorContainer;
 import com.izforge.izpack.util.Debug;

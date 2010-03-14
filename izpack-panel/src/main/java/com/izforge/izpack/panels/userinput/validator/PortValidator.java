@@ -34,31 +34,38 @@ import java.net.ServerSocket;
  *
  * @author thorque
  */
-public class PortValidator implements Validator {
+public class PortValidator implements Validator
+{
 
-    public boolean validate(ProcessingClient client) {
+    public boolean validate(ProcessingClient client)
+    {
         InetAddress inet = null;
         String host = "localhost";
         boolean retValue = false;
         int numfields = client.getNumFields();
 
-        for (int i = 0; i < numfields; i++) {
+        for (int i = 0; i < numfields; i++)
+        {
             String value = client.getFieldContents(i);
 
-            if ((value == null) || (value.length() == 0)) {
+            if ((value == null) || (value.length() == 0))
+            {
                 return false;
             }
 
-            try {
+            try
+            {
                 inet = InetAddress.getByName(host);
                 ServerSocket socket = new ServerSocket(Integer.parseInt(value), 0, inet);
                 retValue = socket.getLocalPort() > 0;
-                if (!retValue) {
+                if (!retValue)
+                {
                     break;
                 }
                 socket.close();
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 retValue = false;
             }
         }

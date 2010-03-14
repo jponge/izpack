@@ -31,7 +31,8 @@ package com.izforge.izpack.panels.shortcut;
  * @version 0.0.1 / 4/1/02
  */
 /*---------------------------------------------------------------------------*/
-public class ShortcutData implements Cloneable {
+public class ShortcutData implements Cloneable
+{
 
     public String name;
 
@@ -95,7 +96,8 @@ public class ShortcutData implements Cloneable {
      * @throws OutOfMemoryError
      */
     /*--------------------------------------------------------------------------*/
-    public Object clone() throws OutOfMemoryError {
+    public Object clone() throws OutOfMemoryError
+    {
         ShortcutData result = new ShortcutData();
 
         result.type = type;
@@ -138,10 +140,14 @@ public class ShortcutData implements Cloneable {
      * @return a clone of the original
      */
     /*--------------------------------------------------------------------------*/
-    private String cloneString(String original) {
-        if (original == null) {
+    private String cloneString(String original)
+    {
+        if (original == null)
+        {
             return ("");
-        } else {
+        }
+        else
+        {
             return (original);
         }
     }

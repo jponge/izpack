@@ -29,6 +29,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Vector;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * This is the Microsoft Windows specific implementation of <code>Shortcut</code>.
  *
@@ -36,7 +37,8 @@ import java.util.Vector;
  * @version 0.0.1 / 3/4/02
  */
 /*---------------------------------------------------------------------------*/
-public class Win_Shortcut extends Shortcut {
+public class Win_Shortcut extends Shortcut
+{
 
     // ------------------------------------------------------------------------
     // Constant Definitions
@@ -57,6 +59,7 @@ public class Win_Shortcut extends Shortcut {
     private static final boolean SUPPORTED = true;
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method initializes the object. It is used as a replacement for the constructor because
      * of the way it is instantiated through the <code>TargetFactory</code>.
@@ -71,26 +74,33 @@ public class Win_Shortcut extends Shortcut {
      *             </ul>
      * @param name the name of the shortcut.
      */
-    public void initialize(int type, String name) throws Exception {
+    public void initialize(int type, String name) throws Exception
+    {
         Debug.log(CLASS + myClass + ".initialize() '" + Integer.toString(type) + "', '" + name + "'");
-        switch (type) {
-            case APPLICATIONS: {
+        switch (type)
+        {
+            case APPLICATIONS:
+            {
                 shortcut = new ShellLink(ShellLink.PROGRAM_MENU, name);
                 break;
             }
-            case START_MENU: {
+            case START_MENU:
+            {
                 shortcut = new ShellLink(ShellLink.START_MENU, name);
                 break;
             }
-            case DESKTOP: {
+            case DESKTOP:
+            {
                 shortcut = new ShellLink(ShellLink.DESKTOP, name);
                 break;
             }
-            case START_UP: {
+            case START_UP:
+            {
                 shortcut = new ShellLink(ShellLink.STARTUP, name);
                 break;
             }
-            default: {
+            default:
+            {
                 shortcut = new ShellLink(ShellLink.PROGRAM_MENU, name);
                 break;
             }
@@ -98,6 +108,7 @@ public class Win_Shortcut extends Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the base path of the shortcut depending on type. The base path is the directory that
      * the short cut, (or its program group) will be created in. For instance, on Windows NT, a
@@ -109,7 +120,8 @@ public class Win_Shortcut extends Shortcut {
      *      <p/>
      *      translates from ShellLink-UserTypes to Shortcut-UserTypes.
      */
-    public String getBasePath() throws Exception {
+    public String getBasePath() throws Exception
+    {
         String result = shortcut.getLinkPath(shortcut.getUserType());
         Debug.log(CLASS + myClass + ".getBasePath() '" + result + "'");
         return result;
@@ -126,7 +138,8 @@ public class Win_Shortcut extends Shortcut {
      * @see #APPLICATIONS
      * @see #START_MENU
      */
-    public Vector<String> getProgramGroups(int userType) {
+    public Vector<String> getProgramGroups(int userType)
+    {
         int logentry = 0;
         Debug.log(CLASS + myClass + ".getProgramGroups()-" + logentry++ + " '" + Integer.toString(userType) + "'");
         // ----------------------------------------------------
@@ -134,9 +147,12 @@ public class Win_Shortcut extends Shortcut {
         // ----------------------------------------------------
         int type = ShellLink.CURRENT_USER;
 
-        if (userType == ALL_USERS) {
+        if (userType == ALL_USERS)
+        {
             type = ShellLink.ALL_USERS;
-        } else {
+        }
+        else
+        {
             type = ShellLink.CURRENT_USER;
         }
 
@@ -151,7 +167,8 @@ public class Win_Shortcut extends Shortcut {
         // in case there is a problem obtaining a path return
         // an empty vector (there are no preexisting program
         // groups)
-        if (linkPath == null) {
+        if (linkPath == null)
+        {
             return (new Vector<String>());
         }
 
@@ -164,14 +181,19 @@ public class Win_Shortcut extends Shortcut {
         // ----------------------------------------------------
         Vector<String> groups = new Vector<String>();
 
-        if (file != null) {
-            for (File aFile : file) {
+        if (file != null)
+        {
+            for (File aFile : file)
+            {
                 String aFilename = aFile.getName();
-                if (aFile.isDirectory()) {
+                if (aFile.isDirectory())
+                {
 
                     Debug.log(CLASS + myClass + ".getProgramGroups()-" + logentry++ + " '" + aFilename + "'");
                     groups.add(aFilename);
-                } else {
+                }
+                else
+                {
                     Debug.log(CLASS + myClass + ".getProgramGroups()-" + logentry++ + " Skip (NoDirectory): '" + aFilename + "'");
                 }
             }
@@ -181,6 +203,7 @@ public class Win_Shortcut extends Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the fully qualified file name under which the link is saved on disk. <b>Note: </b>
      * this method returns valid results only if the instance was created from a file on disk or
@@ -188,13 +211,15 @@ public class Win_Shortcut extends Shortcut {
      *
      * @return the fully qualified file name for the shell link
      */
-    public String getFileName() {
+    public String getFileName()
+    {
         String aFilename = shortcut.getFileName();
         Debug.log(CLASS + myClass + ".getFileName() '" + aFilename + "'");
         return (aFilename);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the path of the directory where the link file is stored, if it was necessary during
      * the previous save operation to create the directory. This method returns <code>null</code>
@@ -205,19 +230,22 @@ public class Win_Shortcut extends Shortcut {
      *         save operation was carried out or there was no need to create a directory during the previous
      *         save operation.
      */
-    public String getDirectoryCreated() {
+    public String getDirectoryCreated()
+    {
         String directoryCreated = shortcut.getDirectoryCreated();
         Debug.log(CLASS + myClass + ".getDirectoryCreated() '" + directoryCreated + "'");
         return (directoryCreated);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns <code>true</code> if the target OS supports current user and all users.
      *
      * @return <code>true</code> if the target OS supports current and all users.
      */
-    public boolean multipleUsers() {
+    public boolean multipleUsers()
+    {
         boolean result = false;
         // Win NT4 won't have PROGRAMS for CURRENT_USER.
         // Win 98 may not have 'Start Menu\Programs' for ALL_USERS
@@ -228,9 +256,12 @@ public class Win_Shortcut extends Shortcut {
         String currentUsers = shortcut.getcurrentUserLinkPath();
         Debug.log(CLASS + myClass + ".multipleUsers()-2 '" + currentUsers + "'");
 
-        if (allUsers == null || currentUsers == null) {
+        if (allUsers == null || currentUsers == null)
+        {
             result = false;
-        } else {
+        }
+        else
+        {
             result = allUsers.length() > 0 && currentUsers.length() > 0;
         }
 
@@ -239,40 +270,47 @@ public class Win_Shortcut extends Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Signals that this flavor of <code>{@link com.izforge.izpack.util.os.Shortcut}</code>
      * supports the creation of shortcuts.
      *
      * @return always <code>true</code>
      */
-    public boolean supported() {
+    public boolean supported()
+    {
         Debug.log(CLASS + myClass + ".supported() '" + SUPPORTED + "'");
         return (SUPPORTED);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the command line arguments that will be passed to the target when the link is activated.
      *
      * @param arguments the command line arguments
      */
-    public void setArguments(String arguments) {
+    public void setArguments(String arguments)
+    {
         Debug.log(CLASS + myClass + ".setArguments() '" + arguments + "'");
         shortcut.setArguments(arguments);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the description string that is used to identify the link in a menu or on the desktop.
      *
      * @param description the descriptiojn string
      */
-    public void setDescription(String description) {
+    public void setDescription(String description)
+    {
         Debug.log(CLASS + myClass + ".setDescription() '" + description + "'");
         shortcut.setDescription(description);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the location of the icon that is shown for the shortcut on the desktop.
      *
@@ -280,35 +318,41 @@ public class Win_Shortcut extends Shortcut {
      * @param index the index of the specific icon to use in the file. If there is only one icon in
      *              the file, use an index of 0.
      */
-    public void setIconLocation(String path, int index) {
+    public void setIconLocation(String path, int index)
+    {
         Debug.log(CLASS + myClass + ".setIconLocation() '" + path + "', '" + Integer.toString(index) + "'");
         shortcut.setIconLocation(path, index);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * returns icon Location
      *
      * @return iconLocation
      */
-    public String getIconLocation() {
+    public String getIconLocation()
+    {
         String result = shortcut.getIconLocation();
         Debug.log(CLASS + myClass + ".getIconLocation() '" + result + "'");
         return result;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the name of the program group this ShellLinbk should be placed in.
      *
      * @param groupName the name of the program group
      */
-    public void setProgramGroup(String groupName) {
+    public void setProgramGroup(String groupName)
+    {
         Debug.log(CLASS + myClass + ".setProgramGroup() '" + groupName + "'");
         shortcut.setProgramGroup(groupName);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the show command that is passed to the target application when the link is activated.
      * The show command determines if the the window will be restored to the previous size,
@@ -328,26 +372,33 @@ public class Win_Shortcut extends Shortcut {
      *             </ul>
      * @see #getShowCommand internally maps from Shortcut. to ShellLink.
      */
-    public void setShowCommand(int show) throws IllegalArgumentException {
+    public void setShowCommand(int show) throws IllegalArgumentException
+    {
         Debug.log(CLASS + myClass + ".setShowCommand() '" + Integer.toString(show) + "'");
-        switch (show) {
-            case HIDE: {
+        switch (show)
+        {
+            case HIDE:
+            {
                 shortcut.setShowCommand(ShellLink.MINNOACTIVE);
                 break;
             }
-            case NORMAL: {
+            case NORMAL:
+            {
                 shortcut.setShowCommand(ShellLink.NORMAL);
                 break;
             }
-            case MINIMIZED: {
+            case MINIMIZED:
+            {
                 shortcut.setShowCommand(ShellLink.MINNOACTIVE);
                 break;
             }
-            case MAXIMIZED: {
+            case MAXIMIZED:
+            {
                 shortcut.setShowCommand(ShellLink.MAXIMIZED);
                 break;
             }
-            default: {
+            default:
+            {
                 throw (new IllegalArgumentException(show + "is not recognized as a show command"));
             }
         }
@@ -357,12 +408,15 @@ public class Win_Shortcut extends Shortcut {
      * returns current showCommand. internally maps from ShellLink. to Shortcut.
      *  
      */
-    public int getShowCommand() {
+
+    public int getShowCommand()
+    {
         int showCommand = shortcut.getShowCommand();
 
         Debug.log(CLASS + myClass + ".getShowCommand() '" + Integer.toString(showCommand) + "'");
 
-        switch (showCommand) {
+        switch (showCommand)
+        {
             case ShellLink.NORMAL:
                 showCommand = NORMAL;
                 break;
@@ -382,52 +436,61 @@ public class Win_Shortcut extends Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the absolute path to the shortcut target.
      *
      * @param path the fully qualified file name of the target
      */
-    public void setTargetPath(String path) {
+    public void setTargetPath(String path)
+    {
         Debug.log(CLASS + myClass + ".setTargetPath() '" + path + "'");
         shortcut.setTargetPath(path);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the working directory for the link target.
      *
      * @param dir the working directory
      */
-    public void setWorkingDirectory(String dir) {
+    public void setWorkingDirectory(String dir)
+    {
         Debug.log(CLASS + myClass + ".setWorkingDirectory() '" + dir + "'");
         shortcut.setWorkingDirectory(dir);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Gets the working directory for the link target.
      *
      * @return the working directory.
      */
-    public String getWorkingDirectory() {
+    public String getWorkingDirectory()
+    {
         String result = shortcut.getWorkingDirectory();
         Debug.log(CLASS + myClass + ".getWorkingDirectory() '" + result + "'");
         return result;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the name shown in a menu or on the desktop for the link.
      *
      * @param name The name that the link should display on a menu or on the desktop. Do not include
      *             a file extension.
      */
-    public void setLinkName(String name) {
+    public void setLinkName(String name)
+    {
         Debug.log(CLASS + myClass + ".setLinkName() '" + name + "'");
         shortcut.setLinkName(name);
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Gets the type of link types are: <br>
      * <ul>
@@ -438,10 +501,12 @@ public class Win_Shortcut extends Shortcut {
      * </ul>
      * maps from ShellLink-types to Shortcut-types.
      */
-    public int getLinkType() {
+    public int getLinkType()
+    {
         int typ = shortcut.getLinkType();
         Debug.log(CLASS + myClass + ".getLinkType() '" + typ + "'");
-        switch (typ) {
+        switch (typ)
+        {
             case ShellLink.DESKTOP:
                 typ = DESKTOP;
                 break;
@@ -462,6 +527,7 @@ public class Win_Shortcut extends Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the type of link
      *
@@ -476,32 +542,40 @@ public class Win_Shortcut extends Shortcut {
      * @throws IllegalArgumentException     if an an invalid type is passed
      * @throws UnsupportedEncodingException
      */
-    public void setLinkType(int type) throws IllegalArgumentException, UnsupportedEncodingException {
+    public void setLinkType(int type) throws IllegalArgumentException, UnsupportedEncodingException
+    {
         Debug.log(CLASS + myClass + ".setLinkType() '" + type + "'");
-        switch (type) {
-            case DESKTOP: {
+        switch (type)
+        {
+            case DESKTOP:
+            {
                 shortcut.setLinkType(ShellLink.DESKTOP);
                 break;
             }
-            case APPLICATIONS: {
+            case APPLICATIONS:
+            {
                 shortcut.setLinkType(ShellLink.PROGRAM_MENU);
                 break;
             }
-            case START_MENU: {
+            case START_MENU:
+            {
                 shortcut.setLinkType(ShellLink.START_MENU);
                 break;
             }
-            case START_UP: {
+            case START_UP:
+            {
                 shortcut.setLinkType(ShellLink.STARTUP);
                 break;
             }
-            default: {
+            default:
+            {
                 throw (new IllegalArgumentException(type + "is not recognized as a valid link type"));
             }
         }
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Gets the user type for the link
      *
@@ -509,12 +583,14 @@ public class Win_Shortcut extends Shortcut {
      * @see #CURRENT_USER
      * @see #ALL_USERS
      */
-    public int getUserType() {
+    public int getUserType()
+    {
         int utype = shortcut.getUserType();
 
         Debug.log(CLASS + myClass + ".getUserType() '" + utype + "'");
 
-        switch (utype) {
+        switch (utype)
+        {
             case ShellLink.ALL_USERS:
                 utype = ALL_USERS;
                 break;
@@ -528,6 +604,7 @@ public class Win_Shortcut extends Shortcut {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the user type for the link
      *
@@ -538,43 +615,54 @@ public class Win_Shortcut extends Shortcut {
      *      if the linkPath for that type is empty, refuse to set.
      */
     /*--------------------------------------------------------------------------*/
-    public void setUserType(int type) {
+    public void setUserType(int type)
+    {
         Debug.log(CLASS + myClass + ".setUserType() '" + type + "'");
-        if (type == CURRENT_USER) {
-            if (shortcut.getcurrentUserLinkPath().length() > 0) {
+        if (type == CURRENT_USER)
+        {
+            if (shortcut.getcurrentUserLinkPath().length() > 0)
+            {
                 shortcut.setUserType(ShellLink.CURRENT_USER);
             }
-        } else if (type == ALL_USERS) {
-            if (shortcut.getallUsersLinkPath().length() > 0) {
+        }
+        else if (type == ALL_USERS)
+        {
+            if (shortcut.getallUsersLinkPath().length() > 0)
+            {
                 shortcut.setUserType(ShellLink.ALL_USERS);
             }
         }
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Saves this link.
      *
      * @throws Exception if problems are encountered
      */
-    public void save() throws Exception {
+    public void save() throws Exception
+    {
 
         shortcut.save();
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Gets the link hotKey
      *
      * @return int hotKey
      */
-    public int getHotkey() {
+    public int getHotkey()
+    {
         int result = shortcut.getHotkey();
         Debug.log(CLASS + myClass + ".getHotkey() '" + result + "'");
         return result;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the link hotKey
      *
@@ -583,7 +671,8 @@ public class Win_Shortcut extends Shortcut {
      *               <p/>
      *               lower byte contains ascii letter. ie 0x0278 represents CTRL+x 0x068a represents CTRL+ALT+z
      */
-    public void setHotkey(int hotkey) {
+    public void setHotkey(int hotkey)
+    {
         Debug.log(CLASS + myClass + ".setHotkey() '" + hotkey + "'");
         shortcut.setHotkey(hotkey);
     }
@@ -594,21 +683,27 @@ public class Win_Shortcut extends Shortcut {
      *
      * @see com.izforge.izpack.util.os.Shortcut#getProgramsFolder(int)
      */
-    public String getProgramsFolder(int current_user) {
+    public String getProgramsFolder(int current_user)
+    {
         /** CURRENT_USER = 0; the constant to use for selecting the current user. */
         int USER = 0;
 
-        if (current_user == Shortcut.CURRENT_USER) {
+        if (current_user == Shortcut.CURRENT_USER)
+        {
             USER = ShellLink.CURRENT_USER;
-        } else if (current_user == Shortcut.ALL_USERS) {
+        }
+        else if (current_user == Shortcut.ALL_USERS)
+        {
             USER = ShellLink.ALL_USERS;
         }
 
         String result = null;
-        try {
+        try
+        {
             result = new String(shortcut.getLinkPath(USER).getBytes(StringTool.getPlatformEncoding()), StringTool.getPlatformEncoding());
         }
-        catch (UnsupportedEncodingException e) {
+        catch (UnsupportedEncodingException e)
+        {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

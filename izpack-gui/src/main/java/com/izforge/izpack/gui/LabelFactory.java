@@ -33,7 +33,8 @@ import java.awt.*;
  *
  * @author Klaus Bartz
  */
-public class LabelFactory implements SwingConstants {
+public class LabelFactory implements SwingConstants
+{
 
     private static boolean useLabelIcons = true;
     private static float labelFontSizeVal = 1.0f;
@@ -44,7 +45,8 @@ public class LabelFactory implements SwingConstants {
      *
      * @return whether the factory creates labels with icons or without icons
      */
-    public static boolean isUseLabelIcons() {
+    public static boolean isUseLabelIcons()
+    {
         return useLabelIcons;
     }
 
@@ -53,7 +55,8 @@ public class LabelFactory implements SwingConstants {
      *
      * @param b flag for the icon state
      */
-    public static void setUseLabelIcons(boolean b) {
+    public static void setUseLabelIcons(boolean b)
+    {
         useLabelIcons = b;
     }
 
@@ -63,7 +66,8 @@ public class LabelFactory implements SwingConstants {
      * @return the current label-font-size multiplier (or 1.0 if none
      *         has been entered).
      */
-    public static float getLabelFontSize() {
+    public static float getLabelFontSize()
+    {
         return labelFontSizeVal;
     }
 
@@ -73,8 +77,10 @@ public class LabelFactory implements SwingConstants {
      *
      * @param val label-font-size multiplier value to use.
      */
-    public static void setLabelFontSize(float val) {
-        if (val > 0.0f && val <= 5.0f && val != labelFontSizeVal) {
+    public static void setLabelFontSize(float val)
+    {
+        if (val > 0.0f && val <= 5.0f && val != labelFontSizeVal)
+        {
             labelFontSizeVal = val;
             final Font fontObj = (new JLabel()).getFont();
             customLabelFontObj =
@@ -89,7 +95,8 @@ public class LabelFactory implements SwingConstants {
      * @param image the image to be used as label icon
      * @return new JLabel with the given parameters
      */
-    public static JLabel create(Icon image) {
+    public static JLabel create(Icon image)
+    {
         return (create(image, CENTER));
 
     }
@@ -102,7 +109,8 @@ public class LabelFactory implements SwingConstants {
      * @param horizontalAlignment horizontal alignment of the label
      * @return new JLabel with the given parameters
      */
-    public static JLabel create(Icon image, int horizontalAlignment) {
+    public static JLabel create(Icon image, int horizontalAlignment)
+    {
         return (create(null, image, horizontalAlignment));
 
     }
@@ -113,7 +121,8 @@ public class LabelFactory implements SwingConstants {
      * @param text the text to be set
      * @return new JLabel with the given parameters
      */
-    public static JLabel create(String text) {
+    public static JLabel create(String text)
+    {
         return (create(text, CENTER));
 
     }
@@ -125,7 +134,8 @@ public class LabelFactory implements SwingConstants {
      * @param isFullLine determines whether a FullLineLabel or a JLabel should be created
      * @return new JLabel or FullLineLabel with the given parameters
      */
-    public static JLabel create(String text, boolean isFullLine) {
+    public static JLabel create(String text, boolean isFullLine)
+    {
         return (create(text, CENTER, isFullLine));
 
     }
@@ -137,7 +147,8 @@ public class LabelFactory implements SwingConstants {
      * @param horizontalAlignment horizontal alignment of the label
      * @return new JLabel with the given parameters
      */
-    public static JLabel create(String text, int horizontalAlignment) {
+    public static JLabel create(String text, int horizontalAlignment)
+    {
         return (create(text, null, horizontalAlignment));
 
     }
@@ -150,7 +161,8 @@ public class LabelFactory implements SwingConstants {
      * @param isFullLine          determines whether a FullLineLabel or a JLabel should be created
      * @return new JLabel or FullLineLabel with the given parameters
      */
-    public static JLabel create(String text, int horizontalAlignment, boolean isFullLine) {
+    public static JLabel create(String text, int horizontalAlignment, boolean isFullLine)
+    {
         return (create(text, null, horizontalAlignment, isFullLine));
 
     }
@@ -165,7 +177,8 @@ public class LabelFactory implements SwingConstants {
      * @param horizontalAlignment horizontal alignment of the label
      * @return new JLabel with the given parameters
      */
-    public static JLabel create(String text, Icon image, int horizontalAlignment) {
+    public static JLabel create(String text, Icon image, int horizontalAlignment)
+    {
         return (create(text, image, horizontalAlignment, false));
     }
 
@@ -180,25 +193,37 @@ public class LabelFactory implements SwingConstants {
      * @param isFullLine          determines whether a FullLineLabel or a JLabel should be created
      * @return new JLabel or FullLineLabel with the given parameters
      */
-    public static JLabel create(String text, Icon image, int horizontalAlignment, boolean isFullLine) {
+    public static JLabel create(String text, Icon image, int horizontalAlignment, boolean isFullLine)
+    {
         JLabel retval = null;
-        if (image != null && isUseLabelIcons()) {
-            if (isFullLine) {
+        if (image != null && isUseLabelIcons())
+        {
+            if (isFullLine)
+            {
                 retval = new FullLineLabel(image);
-            } else {
+            }
+            else
+            {
                 retval = new JLabel(image);
             }
-        } else {
-            if (isFullLine) {
+        }
+        else
+        {
+            if (isFullLine)
+            {
                 retval = new FullLineLabel();
-            } else {
+            }
+            else
+            {
                 retval = new JLabel();
             }
         }
-        if (text != null) {
+        if (text != null)
+        {
             retval.setText(text);
         }
-        if (customLabelFontObj != null) {
+        if (customLabelFontObj != null)
+        {
             retval.setFont(customLabelFontObj);
         }
         retval.setHorizontalAlignment(horizontalAlignment);
@@ -214,7 +239,8 @@ public class LabelFactory implements SwingConstants {
      *
      * @author Klaus Bartz
      */
-    public static class FullLineLabel extends JLabel {
+    public static class FullLineLabel extends JLabel
+    {
 
         /**
          * Required (serializable)
@@ -228,14 +254,16 @@ public class LabelFactory implements SwingConstants {
          *
          * @param image The image to be displayed by the label.
          */
-        public FullLineLabel(Icon image) {
+        public FullLineLabel(Icon image)
+        {
             super(image);
         }
 
         /**
          * Default constructor.
          */
-        public FullLineLabel() {
+        public FullLineLabel()
+        {
             super();
         }
     }

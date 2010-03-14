@@ -32,7 +32,8 @@ import com.izforge.izpack.panels.userinput.processorclient.ProcessingClient;
  * @version 0.0.1 / 10/26/02
  */
 /*---------------------------------------------------------------------------*/
-public interface Validator {
+public interface Validator
+{
 
     /*--------------------------------------------------------------------------*/
 

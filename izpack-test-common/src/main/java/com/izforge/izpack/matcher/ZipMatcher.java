@@ -20,45 +20,64 @@ import java.util.zip.ZipInputStream;
  *
  * @author Anthonin Bonnefoy
  */
-public class ZipMatcher extends TypeSafeMatcher<File> {
+public class ZipMatcher extends TypeSafeMatcher<File>
+{
     private Matcher<Iterable<String>> listMatcher;
 
-    ZipMatcher(Matcher<Iterable<String>> listMatcher) {
+    ZipMatcher(Matcher<Iterable<String>> listMatcher)
+    {
         this.listMatcher = listMatcher;
     }
 
     @Override
-    public boolean matchesSafely(File file) {
-        try {
-            List<String> fileList = new ArrayList<String>();
-            FileInputStream fis = new FileInputStream(file);
-            ZipInputStream zis = new ZipInputStream(fis);
-            ZipEntry ze;
-            while ((ze = zis.getNextEntry()) != null) {
-                fileList.add(ze.getName());
-                zis.closeEntry();
-            }
-            zis.close();
+    public boolean matchesSafely(File file)
+    {
+        try
+        {
+            List<String> fileList = getFileNameListFromZip(file);
             MatcherAssert.assertThat(fileList, listMatcher);
             return true;
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             throw new AssertionError(e);
         }
     }
 
-    public void describeTo(Description description) {
+
+    public static List<String> getFileNameListFromZip(File file)
+            throws IOException
+    {
+        List<String> fileList = new ArrayList<String>();
+        FileInputStream fis = new FileInputStream(file);
+        ZipInputStream zis = new ZipInputStream(fis);
+        ZipEntry ze;
+        while ((ze = zis.getNextEntry()) != null)
+        {
+            fileList.add(ze.getName());
+            zis.closeEntry();
+        }
+        zis.close();
+        return fileList;
+    }
+
+    public void describeTo(Description description)
+    {
         description.appendText("Excepting collection containing ").appendValue(listMatcher);
     }
 
-    public static ZipMatcher isZipContainingFile(String fileName) {
+    public static ZipMatcher isZipContainingFile(String fileName)
+    {
         return new ZipMatcher(IsCollectionContaining.hasItem(Is.is(fileName)));
     }
 
-    public static ZipMatcher isZipContainingFiles(String... fileName) {
+    public static ZipMatcher isZipContainingFiles(String... fileName)
+    {
         return new ZipMatcher(IsCollectionContaining.hasItems(fileName));
     }
 
-    public static ZipMatcher isZipMatching(Matcher<Iterable<String>> matcher) {
+    public static ZipMatcher isZipMatching(Matcher<Iterable<String>> matcher)
+    {
         return new ZipMatcher(matcher);
     }
 

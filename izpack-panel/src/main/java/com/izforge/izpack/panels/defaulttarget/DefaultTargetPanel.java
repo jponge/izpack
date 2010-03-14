@@ -22,10 +22,10 @@
 package com.izforge.izpack.panels.defaulttarget;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.path.PathInputPanel;
 
 /**
@@ -34,7 +34,8 @@ import com.izforge.izpack.panels.path.PathInputPanel;
  * @author Julien Ponge
  * @author Jeff Gordon
  */
-public class DefaultTargetPanel extends PathInputPanel {
+public class DefaultTargetPanel extends PathInputPanel
+{
 
     private static final long serialVersionUID = 3256443616359329170L;
     private PanelAutomation defaultTargetPanelAutomationHelper;
@@ -47,11 +48,13 @@ public class DefaultTargetPanel extends PathInputPanel {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public DefaultTargetPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, DefaultTargetPanelAutomationHelper defaultTargetPanelAutomationHelper) {
+    public DefaultTargetPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, DefaultTargetPanelAutomationHelper defaultTargetPanelAutomationHelper)
+    {
         super(parent, idata, resourceManager);
         // load the default directory info (if present)
         loadDefaultInstallDir(parent);
-        if (getDefaultInstallDir() != null) {
+        if (getDefaultInstallDir() != null)
+        {
             // override the system default that uses app name (which is set in
             // the Installer class)
             idata.setInstallPath(getDefaultInstallDir());
@@ -62,7 +65,8 @@ public class DefaultTargetPanel extends PathInputPanel {
     /**
      * Called when the panel becomes active.
      */
-    public void panelActivate() {
+    public void panelActivate()
+    {
         // Resolve the default for chosenPath
 //        super.panelActivate();
         // Set the default or old value to the path selection panel.
@@ -74,7 +78,8 @@ public class DefaultTargetPanel extends PathInputPanel {
      * This method simple delegates to <code>PathInputPanel.loadDefaultInstallDir</code> with the
      * current parent as installer frame.
      */
-    public void loadDefaultDir() {
+    public void loadDefaultDir()
+    {
         super.loadDefaultInstallDir(parent);
     }
 
@@ -83,7 +88,8 @@ public class DefaultTargetPanel extends PathInputPanel {
      *
      * @return Whether the panel has been validated or not.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         // Standard behavior of PathInputPanel.
         //if (!super.isValidated()) return (false);
         //installData.setInstallPath(pathSelectionPanel.getPath());
@@ -96,7 +102,8 @@ public class DefaultTargetPanel extends PathInputPanel {
      *
      * @return the default install directory
      */
-    public String getDefaultDir() {
+    public String getDefaultDir()
+    {
         return getDefaultInstallDir();
     }
 
@@ -106,7 +113,8 @@ public class DefaultTargetPanel extends PathInputPanel {
      *
      * @param defaultDir path to be used for the install directory
      */
-    public void setDefaultDir(String defaultDir) {
+    public void setDefaultDir(String defaultDir)
+    {
         setDefaultInstallDir(defaultDir);
     }
 
@@ -115,7 +123,8 @@ public class DefaultTargetPanel extends PathInputPanel {
      *
      * @param panelRoot The tree to put the installDataGUI in.
      */
-    public void makeXMLData(IXMLElement panelRoot) {
+    public void makeXMLData(IXMLElement panelRoot)
+    {
         defaultTargetPanelAutomationHelper.makeXMLData(this.installData, panelRoot);
     }
 
@@ -125,7 +134,8 @@ public class DefaultTargetPanel extends PathInputPanel {
      * @see com.izforge.izpack.installer.IzPanel#getSummaryBody()
      */
 
-    public String getSummaryBody() {
+    public String getSummaryBody()
+    {
         return (this.installData.getInstallPath());
     }
 

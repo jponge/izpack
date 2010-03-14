@@ -28,6 +28,7 @@
         <module>izpack-utils</module>
         <module>izpack-ant</module>
         <module>izpack-test-common</module>
+        <module>izpack-test-panel</module>
     </modules>
 
 </project>

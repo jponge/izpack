@@ -37,7 +37,8 @@ import com.izforge.izpack.installer.debugger.Debugger;
 /*
  * @todo evaluate whether we want to eliminate this interface with inheritance
  */
-public interface PacksPanelInterface {
+public interface PacksPanelInterface
+{
 
     public LocaleDatabase getLangpack();
 

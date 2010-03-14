@@ -30,7 +30,8 @@ import java.util.ArrayList;
  *
  * @author Klaus Bartz
  */
-public class AccessControlList extends java.util.ArrayList {
+public class AccessControlList extends java.util.ArrayList
+{
 
     /**
      * Required (serializable)
@@ -41,7 +42,8 @@ public class AccessControlList extends java.util.ArrayList {
     /**
      * Default constructor.
      */
-    public AccessControlList() {
+    public AccessControlList()
+    {
         super();
     }
 
@@ -52,7 +54,8 @@ public class AccessControlList extends java.util.ArrayList {
      * @param allowed access allowed mask
      * @param denied  access denied mask
      */
-    public void setACE(String owner, int allowed, int denied) {
+    public void setACE(String owner, int allowed, int denied)
+    {
         AccessControlEntry ace = new AccessControlEntry(owner, allowed, denied);
         permissions.add(ace);
     }
@@ -63,7 +66,8 @@ public class AccessControlList extends java.util.ArrayList {
      * @param num id in the internal permisson array.
      * @return the access control entry for the given id
      */
-    public AccessControlEntry getACE(int num) {
+    public AccessControlEntry getACE(int num)
+    {
         return ((AccessControlEntry) ((permissions.get(num)).clone()));
     }
 
@@ -72,7 +76,8 @@ public class AccessControlList extends java.util.ArrayList {
      *
      * @return number of access control entries
      */
-    public int getACECount() {
+    public int getACECount()
+    {
         return (permissions.size());
     }
 
@@ -81,7 +86,8 @@ public class AccessControlList extends java.util.ArrayList {
      *
      * @author Klaus Bartz
      */
-    public static class AccessControlEntry implements Cloneable {
+    public static class AccessControlEntry implements Cloneable
+    {
 
         private String owner;
 
@@ -92,7 +98,8 @@ public class AccessControlList extends java.util.ArrayList {
         /**
          * Default constructor.
          */
-        public AccessControlEntry() {
+        public AccessControlEntry()
+        {
             super();
         }
 
@@ -103,7 +110,8 @@ public class AccessControlList extends java.util.ArrayList {
          * @param allowed access allowed mask
          * @param denied  access denied mask
          */
-        public AccessControlEntry(String owner2, int allowed, int denied) {
+        public AccessControlEntry(String owner2, int allowed, int denied)
+        {
             owner = owner2;
             accessAllowdMask = allowed;
             accessDeniedMask = denied;
@@ -114,7 +122,8 @@ public class AccessControlList extends java.util.ArrayList {
          *
          * @return the owner
          */
-        public String getOwner() {
+        public String getOwner()
+        {
             return owner;
         }
 
@@ -123,7 +132,8 @@ public class AccessControlList extends java.util.ArrayList {
          *
          * @param owner The owner to set.
          */
-        public void setOwner(String owner) {
+        public void setOwner(String owner)
+        {
             this.owner = owner;
         }
 
@@ -132,7 +142,8 @@ public class AccessControlList extends java.util.ArrayList {
          *
          * @return the accessAllowdMask
          */
-        public int getAccessAllowdMask() {
+        public int getAccessAllowdMask()
+        {
             return accessAllowdMask;
         }
 
@@ -141,7 +152,8 @@ public class AccessControlList extends java.util.ArrayList {
          *
          * @param accessAllowdMask The accessAllowdMask to set.
          */
-        public void setAccessAllowdMask(int accessAllowdMask) {
+        public void setAccessAllowdMask(int accessAllowdMask)
+        {
             this.accessAllowdMask = accessAllowdMask;
         }
 
@@ -150,7 +162,8 @@ public class AccessControlList extends java.util.ArrayList {
          *
          * @return the accessDeniedMask
          */
-        public int getAccessDeniedMask() {
+        public int getAccessDeniedMask()
+        {
             return accessDeniedMask;
         }
 
@@ -159,7 +172,8 @@ public class AccessControlList extends java.util.ArrayList {
          *
          * @param accessDeniedMask The accessDeniedMask to set.
          */
-        public void setAccessDeniedMask(int accessDeniedMask) {
+        public void setAccessDeniedMask(int accessDeniedMask)
+        {
             this.accessDeniedMask = accessDeniedMask;
         }
 
@@ -168,11 +182,15 @@ public class AccessControlList extends java.util.ArrayList {
          * 
          * @see java.lang.Object#clone()
          */
-        public Object clone() {
-            try {
+
+        public Object clone()
+        {
+            try
+            {
                 return (super.clone());
             }
-            catch (CloneNotSupportedException e) {
+            catch (CloneNotSupportedException e)
+            {
                 e.printStackTrace();
             }
             return (null);

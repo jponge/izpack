@@ -64,15 +64,19 @@ import java.util.Vector;
  * &quot;myenv.PATH&quot; and &quot;myenv.TERM&quot;.
  * <p/>
  */
-public class PropertyManager {
+public class PropertyManager
+{
 
     private Properties properties;
 
     private CompilerData compilerData;
     private VariableSubstitutor variableSubstitutor;
     private PackagerListener packagerListener;
+    private AssertionHelper assertionHelper;
 
-    public PropertyManager(Properties properties, VariableSubstitutor variableSubstitutor, CompilerData compilerData, PackagerListener packagerListener) {
+    public PropertyManager(Properties properties, VariableSubstitutor variableSubstitutor, CompilerData compilerData, PackagerListener packagerListener, AssertionHelper assertionHelper)
+    {
+        this.assertionHelper = assertionHelper;
         this.properties = properties;
         this.variableSubstitutor = variableSubstitutor;
         this.compilerData = compilerData;
@@ -90,8 +94,10 @@ public class PropertyManager {
      * @param value the value to set
      * @return true if the property was not already set
      */
-    public boolean addProperty(String name, String value) {
-        if (properties.containsKey(name)) {
+    public boolean addProperty(String name, String value)
+    {
+        if (properties.containsKey(name))
+        {
             return false;
         }
         addPropertySubstitute(name, value);
@@ -105,8 +111,10 @@ public class PropertyManager {
      * @param value the value to set
      * @return an indicator if the name value pair was added.
      */
-    public boolean setProperty(String name, String value) {
-        if (System.getProperties().containsKey(name)) {
+    public boolean setProperty(String name, String value)
+    {
+        if (System.getProperties().containsKey(name))
+        {
             return false;
         }
         addPropertySubstitute(name, value);
@@ -119,7 +127,8 @@ public class PropertyManager {
      * @param name the name of the property
      * @return the value of the property, or null
      */
-    public String getProperty(String name) {
+    public String getProperty(String name)
+    {
         return properties.getProperty(name);
     }
 
@@ -129,45 +138,60 @@ public class PropertyManager {
      *
      * @param xmlProp
      */
-    public void execute(IXMLElement xmlProp) throws CompilerException {
+    public void execute(IXMLElement xmlProp) throws CompilerException
+    {
         File file = null;
         String name = xmlProp.getAttribute("name");
         String value = xmlProp.getAttribute("value");
         String env = xmlProp.getAttribute("environment");
-        if (env != null && !env.endsWith(".")) {
+        if (env != null && !env.endsWith("."))
+        {
             env += ".";
         }
 
         String prefix = xmlProp.getAttribute("prefix");
-        if (prefix != null && !prefix.endsWith(".")) {
+        if (prefix != null && !prefix.endsWith("."))
+        {
             prefix += ".";
         }
 
         String filename = xmlProp.getAttribute("file");
 
-        if (filename != null) {
+        if (filename != null)
+        {
             file = new File(filename);
         }
-        if (name != null) {
-            if (value == null) {
-                AssertionHelper.parseError(xmlProp, "You must specify a value with the name attribute", compilerData.getInstallFile());
+        if (name != null)
+        {
+            if (value == null)
+            {
+                assertionHelper.parseError(xmlProp, "You must specify a value with the name attribute");
             }
-        } else {
-            if (file == null && env == null) {
-                AssertionHelper.parseError(xmlProp,
-                        "You must specify file, or environment when not using the name attribute", compilerData.getInstallFile());
+        }
+        else
+        {
+            if (file == null && env == null)
+            {
+                assertionHelper.parseError(xmlProp,
+                        "You must specify file, or environment when not using the name attribute");
             }
         }
 
-        if (file == null && prefix != null) {
-            AssertionHelper.parseError(xmlProp, "Prefix is only valid when loading from a file ", compilerData.getInstallFile());
+        if (file == null && prefix != null)
+        {
+            assertionHelper.parseError(xmlProp, "Prefix is only valid when loading from a file ");
         }
 
-        if ((name != null) && (value != null)) {
+        if ((name != null) && (value != null))
+        {
             addProperty(name, value);
-        } else if (file != null) {
+        }
+        else if (file != null)
+        {
             loadFile(file, xmlProp, prefix);
-        } else if (env != null) {
+        }
+        else if (env != null)
+        {
             loadEnvironment(env, xmlProp, file);
         }
     }
@@ -179,28 +203,36 @@ public class PropertyManager {
      * @param xmlProp
      * @param prefix
      */
-    private void loadFile(File file, IXMLElement xmlProp, String prefix) throws CompilerException {
+    private void loadFile(File file, IXMLElement xmlProp, String prefix) throws CompilerException
+    {
         Properties props = new Properties();
         packagerListener.packagerMsg("Loading " + file.getAbsolutePath(),
                 PackagerListener.MSG_VERBOSE);
-        try {
-            if (file.exists()) {
+        try
+        {
+            if (file.exists())
+            {
                 FileInputStream fis = new FileInputStream(file);
-                try {
+                try
+                {
                     props.load(fis);
                 }
-                finally {
+                finally
+                {
                     fis.close();
                 }
                 addProperties(props, xmlProp, file, prefix);
-            } else {
+            }
+            else
+            {
                 packagerListener.packagerMsg(
                         "Unable to find property file: " + file.getAbsolutePath(),
                         PackagerListener.MSG_VERBOSE);
             }
         }
-        catch (IOException ex) {
-            AssertionHelper.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(), ex, compilerData.getInstallFile());
+        catch (IOException ex)
+        {
+            assertionHelper.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(), ex);
         }
     }
 
@@ -211,18 +243,23 @@ public class PropertyManager {
      * @param xmlProp
      * @param file
      */
-    protected void loadEnvironment(String prefix, IXMLElement xmlProp, File file) throws CompilerException {
+    protected void loadEnvironment(String prefix, IXMLElement xmlProp, File file) throws CompilerException
+    {
         Properties props = new Properties();
         packagerListener.packagerMsg("Loading Environment " + prefix,
                 PackagerListener.MSG_VERBOSE);
         Vector osEnv = Execute.getProcEnvironment();
-        for (Enumeration e = osEnv.elements(); e.hasMoreElements();) {
+        for (Enumeration e = osEnv.elements(); e.hasMoreElements();)
+        {
             String entry = (String) e.nextElement();
             int pos = entry.indexOf('=');
-            if (pos == -1) {
+            if (pos == -1)
+            {
                 packagerListener.packagerMsg("Ignoring " + prefix,
                         PackagerListener.MSG_WARN);
-            } else {
+            }
+            else
+            {
                 props.put(prefix + entry.substring(0, pos), entry.substring(pos + 1));
             }
         }
@@ -237,14 +274,17 @@ public class PropertyManager {
      * @param file
      * @param prefix
      */
-    public void addProperties(Properties props, IXMLElement xmlProp, File file, String prefix) throws CompilerException {
+    public void addProperties(Properties props, IXMLElement xmlProp, File file, String prefix) throws CompilerException
+    {
         resolveAllProperties(props, xmlProp, file);
         Enumeration e = props.keys();
-        while (e.hasMoreElements()) {
+        while (e.hasMoreElements())
+        {
             String name = (String) e.nextElement();
             String value = props.getProperty(name);
 
-            if (prefix != null) {
+            if (prefix != null)
+            {
                 name = prefix + name;
             }
             addPropertySubstitute(name, value);
@@ -257,7 +297,8 @@ public class PropertyManager {
      * @param name  name of property
      * @param value value to set
      */
-    private void addPropertySubstitute(String name, String value) {
+    private void addPropertySubstitute(String name, String value)
+    {
         value = variableSubstitutor.substitute(value, SubstitutionType.TYPE_AT);
         properties.put(name, value);
     }
@@ -269,28 +310,33 @@ public class PropertyManager {
      * @param xmlProp
      * @param file
      */
-    private void resolveAllProperties(Properties props, IXMLElement xmlProp, File file) throws CompilerException {
+    private void resolveAllProperties(Properties props, IXMLElement xmlProp, File file) throws CompilerException
+    {
         variableSubstitutor.setBracesRequired(true);
 
-        for (Enumeration e = props.keys(); e.hasMoreElements();) {
+        for (Enumeration e = props.keys(); e.hasMoreElements();)
+        {
             String name = (String) e.nextElement();
             String value = props.getProperty(name);
 
             int mods = -1;
-            do {
+            do
+            {
                 StringReader read = new StringReader(value);
                 StringWriter write = new StringWriter();
 
-                try {
+                try
+                {
                     mods = variableSubstitutor.substitute(read, write, SubstitutionType.TYPE_AT);
                     // TODO: check for circular references. We need to know
                     // which
                     // variables were substituted to do that
                     props.put(name, value);
                 }
-                catch (IOException ex) {
-                    AssertionHelper.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(),
-                            ex, compilerData.getInstallFile());
+                catch (IOException ex)
+                {
+                    assertionHelper.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(),
+                            ex);
                 }
             }
             while (mods != 0);

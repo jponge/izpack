@@ -31,6 +31,7 @@ import java.text.StringCharacterIterator;
 import java.util.Vector;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * This class handles loading of native libraries. There must only be one instance of
  * <code>Librarian</code> per Java runtime, therefore this class is implemented as a 'Singleton'.
@@ -45,7 +46,8 @@ import java.util.Vector;
  * @version 1.0 / 1/30/02
  */
 /*---------------------------------------------------------------------------*/
-public class Librarian implements CleanupClient {
+public class Librarian implements CleanupClient
+{
 
     // ------------------------------------------------------------------------
     // Constant Definitions
@@ -129,6 +131,7 @@ public class Librarian implements CleanupClient {
     private String nativeDirectory = NATIVE;
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This class is implemented as a 'Singleton'. Therefore the constructor is private to prevent
      * instantiation of this class. Use <code>getInstance()</code> to obtain an instance for use.
@@ -138,36 +141,44 @@ public class Librarian implements CleanupClient {
      * Patterns by Gamma, Helm, Johnson and Vlissides ISBN 0-201-63361-2.
      */
     /*--------------------------------------------------------------------------*/
-    private Librarian() {
+    private Librarian()
+    {
         Housekeeper.getInstance().registerForCleanup(this);
         extension = '.' + TargetFactory.getInstance().getNativeLibraryExtension();
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns an instance of <code>Librarian</code> to use.
      *
      * @return an instance of <code>Librarian</code>.
      */
     /*--------------------------------------------------------------------------*/
-    public static Librarian getInstance() {
-        if (me == null) {
+    public static Librarian getInstance()
+    {
+        if (me == null)
+        {
             me = new Librarian();
         }
 
         return (me);
     }
 
-    public synchronized void loadLibrary(String name, NativeLibraryClient client) throws Exception {
-        try {
+    public synchronized void loadLibrary(String name, NativeLibraryClient client) throws Exception
+    {
+        try
+        {
             loadArchSpecificLibrary(name, client);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             loadArchSpecificLibrary(name + "_x64", client);
         }
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Loads the requested library. If the library is already loaded, this method returns
      * immediately, without an attempt to load the library again. <br>
@@ -206,19 +217,22 @@ public class Librarian implements CleanupClient {
      * @see #setNativeDirectory
      */
     /*--------------------------------------------------------------------------*/
-    public synchronized void loadArchSpecificLibrary(String name, NativeLibraryClient client) throws Exception {
+    public synchronized void loadArchSpecificLibrary(String name, NativeLibraryClient client) throws Exception
+    {
         String libraryName = strip(name);
         String tempFileName = "";
 
         // ----------------------------------------------------
         // Return if the library is already loaded
         // ----------------------------------------------------
-        if (loaded(libraryName)) {
+        if (loaded(libraryName))
+        {
             return;
         }
 
 
-        if (System.getProperty("DLL_PATH") != null) {
+        if (System.getProperty("DLL_PATH") != null)
+        {
             String path = System.getProperty("DLL_PATH") + "/" + name + extension;
             path = path.replace('/', File.separatorChar);
             Debug.trace("Try to load library " + path);
@@ -229,13 +243,16 @@ public class Librarian implements CleanupClient {
         // ----------------------------------------------------
         // First try a straight load
         // ----------------------------------------------------
-        try {
+        try
+        {
             System.loadLibrary(libraryName);
             return;
         }
-        catch (UnsatisfiedLinkError exception) {
+        catch (UnsatisfiedLinkError exception)
+        {
         }
-        catch (SecurityException exception) {
+        catch (SecurityException exception)
+        {
         }
 
         // ----------------------------------------------------
@@ -246,7 +263,8 @@ public class Librarian implements CleanupClient {
         int nameStart = resourceName.lastIndexOf('.') + 1;
         resourceName = resourceName.substring(nameStart, resourceName.length()) + CLIENT_EXTENSION;
         URL url = clientClass.getResource(resourceName);
-        if (url == null) {
+        if (url == null)
+        {
             throw (new Exception("can't identify load protocol for " + libraryName
                     + extension));
         }
@@ -255,15 +273,20 @@ public class Librarian implements CleanupClient {
         // ----------------------------------------------------
         // If it's a local file, load it from the current location
         // ----------------------------------------------------
-        if (protocol.equalsIgnoreCase(FILE_PROTOCOL)) {
-            try {
+        if (protocol.equalsIgnoreCase(FILE_PROTOCOL))
+        {
+            try
+            {
                 System.load(getClientPath(name, url));
             }
-            catch (Throwable exception) {
-                try {
+            catch (Throwable exception)
+            {
+                try
+                {
                     System.load(getNativePath(name, client));
                 }
-                catch (Throwable exception2) {
+                catch (Throwable exception2)
+                {
                     throw (new Exception("error loading library"));
                 }
             }
@@ -273,9 +296,11 @@ public class Librarian implements CleanupClient {
         // If it is in a *.jar file, extract it to 'java.io.tmpdir'
         // ----------------------------------------------------
 
-        else if (protocol.equalsIgnoreCase(JAR_PROTOCOL)) {
+        else if (protocol.equalsIgnoreCase(JAR_PROTOCOL))
+        {
             tempFileName = getTempFileName(libraryName);
-            try {
+            try
+            {
                 extractFromJar(libraryName, tempFileName, client);
 
                 clients.add(client);
@@ -288,13 +313,15 @@ public class Librarian implements CleanupClient {
                 // --------------------------------------------------
                 System.load(tempFileName);
             }
-            catch (Throwable exception) {
+            catch (Throwable exception)
+            {
                 throw (new Exception("error loading library\n" + exception.toString()));
             }
         }
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Verifies if the library has already been loaded and keeps track of all libraries that are
      * verified.
@@ -304,16 +331,21 @@ public class Librarian implements CleanupClient {
      *         <code>false</code>.
      */
     /*--------------------------------------------------------------------------*/
-    private boolean loaded(String name) {
-        if (trackList.contains(name)) {
+    private boolean loaded(String name)
+    {
+        if (trackList.contains(name))
+        {
             return (true);
-        } else {
+        }
+        else
+        {
             trackList.add(name);
             return (false);
         }
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Strips the extension of the library name, if it has one.
      *
@@ -321,19 +353,24 @@ public class Librarian implements CleanupClient {
      * @return the name without an extension
      */
     /*--------------------------------------------------------------------------*/
-    private String strip(String name) {
+    private String strip(String name)
+    {
         int extensionStart = name.lastIndexOf('.');
         int nameStart = name.lastIndexOf('/');
-        if (nameStart < 0) {
+        if (nameStart < 0)
+        {
             nameStart = name.lastIndexOf('\\');
         }
         nameStart++;
 
         String shortName;
 
-        if (extensionStart > 0) {
+        if (extensionStart > 0)
+        {
             shortName = name.substring(nameStart, extensionStart);
-        } else {
+        }
+        else
+        {
             shortName = name.substring(nameStart, name.length());
         }
 
@@ -341,6 +378,7 @@ public class Librarian implements CleanupClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Makes an attempt to extract the named library from the jar file and to store it on the local
      * file system for temporary use. If the attempt is successful, the fully qualified file name of
@@ -355,7 +393,8 @@ public class Librarian implements CleanupClient {
      */
     /*--------------------------------------------------------------------------*/
     private void extractFromJar(String name, String destination, NativeLibraryClient client)
-            throws Exception {
+            throws Exception
+    {
         int bytesRead = 0;
         OutputStream output = null;
 
@@ -367,18 +406,22 @@ public class Librarian implements CleanupClient {
         // ----------------------------------------------------
         // open an output stream for the temporary file
         // ----------------------------------------------------
-        try {
+        try
+        {
             output = new FileOutputStream(destination);
         }
-        catch (FileNotFoundException exception) {
+        catch (FileNotFoundException exception)
+        {
             input.close();
             throw (new Exception("can't create destination file"));
         }
-        catch (SecurityException exception) {
+        catch (SecurityException exception)
+        {
             input.close();
             throw (new Exception("creation of destination file denied"));
         }
-        catch (Throwable exception) {
+        catch (Throwable exception)
+        {
             input.close();
             throw (new Exception("unknown problem creating destination file\n"
                     + exception.toString()));
@@ -388,23 +431,28 @@ public class Librarian implements CleanupClient {
         // pump the data
         // ----------------------------------------------------
         byte[] buffer = new byte[BLOCK_SIZE];
-        try {
-            do {
+        try
+        {
+            do
+            {
                 bytesRead = input.read(buffer);
-                if (bytesRead > 0) {
+                if (bytesRead > 0)
+                {
                     output.write(buffer, 0, bytesRead);
                 }
             }
             while (bytesRead > 0);
         }
-        catch (Throwable exception) {
+        catch (Throwable exception)
+        {
             throw (new Exception("error writing to destination file\n" + exception.toString()));
         }
 
         // ----------------------------------------------------
         // flush the data and close both streams
         // ----------------------------------------------------
-        finally {
+        finally
+        {
             input.close();
             output.flush();
             output.close();
@@ -412,6 +460,7 @@ public class Librarian implements CleanupClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the complete path (including file name) for the native library, assuming the native
      * library is located in the same directory from which the client was loaded.
@@ -421,7 +470,8 @@ public class Librarian implements CleanupClient {
      * @return the path to the client
      */
     /*--------------------------------------------------------------------------*/
-    private String getClientPath(String name, URL clientURL) {
+    private String getClientPath(String name, URL clientURL)
+    {
         String path = clientURL.getFile();
 
         int nameStart = path.lastIndexOf('/') + 1;
@@ -438,6 +488,7 @@ public class Librarian implements CleanupClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the complete path (including file name) for the native library, assuming the native
      * library is located in a directory where native libraries are ordinarily expected.
@@ -447,7 +498,8 @@ public class Librarian implements CleanupClient {
      * @return the path to the location of the native libraries.
      */
     /*--------------------------------------------------------------------------*/
-    private String getNativePath(String name, NativeLibraryClient client) {
+    private String getNativePath(String name, NativeLibraryClient client)
+    {
         ProtectionDomain domain = client.getClass().getProtectionDomain();
         CodeSource codeSource = domain.getCodeSource();
         URL url = codeSource.getLocation();
@@ -463,6 +515,7 @@ public class Librarian implements CleanupClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Revises the given path to a file compatible path. In fact this method replaces URI-like
      * entries with it chars (e.g. %20 with a space).
@@ -471,23 +524,30 @@ public class Librarian implements CleanupClient {
      * @return revised path
      */
     /*--------------------------------------------------------------------------*/
-    private String revisePath(String in) {
+    private String revisePath(String in)
+    {
         // This was "stolen" from com.izforge.izpack.util.SelfModifier
 
         StringBuffer sb = new StringBuffer();
         CharacterIterator iter = new StringCharacterIterator(in);
-        for (char c = iter.first(); c != CharacterIterator.DONE; c = iter.next()) {
-            if (c == '%') {
+        for (char c = iter.first(); c != CharacterIterator.DONE; c = iter.next())
+        {
+            if (c == '%')
+            {
                 char c1 = iter.next();
-                if (c1 != CharacterIterator.DONE) {
+                if (c1 != CharacterIterator.DONE)
+                {
                     int i1 = Character.digit(c1, 16);
                     char c2 = iter.next();
-                    if (c2 != CharacterIterator.DONE) {
+                    if (c2 != CharacterIterator.DONE)
+                    {
                         int i2 = Character.digit(c2, 16);
                         sb.append((char) ((i1 << 4) + i2));
                     }
                 }
-            } else {
+            }
+            else
+            {
                 sb.append(c);
             }
         }
@@ -496,6 +556,7 @@ public class Librarian implements CleanupClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Opens an <code>InputStream</code> to the native library.
      *
@@ -505,7 +566,8 @@ public class Librarian implements CleanupClient {
      * @throws Exception if the library can not be located.
      */
     /*--------------------------------------------------------------------------*/
-    private InputStream openInputStream(String name, NativeLibraryClient client) throws Exception {
+    private InputStream openInputStream(String name, NativeLibraryClient client) throws Exception
+    {
         Class clientClass = client.getClass();
         // ----------------------------------------------------
         // try to open an input stream, assuming the library
@@ -518,21 +580,26 @@ public class Librarian implements CleanupClient {
         // location where all native libraries are supposed
         // to be located.
         // ----------------------------------------------------
-        if (input == null) {
+        if (input == null)
+        {
             input = clientClass.getResourceAsStream('/' + nativeDirectory + '/' + name + extension);
         }
 
         // ----------------------------------------------------
         // if this fails as well, throw an exception
         // ----------------------------------------------------
-        if (input == null) {
+        if (input == null)
+        {
             throw (new Exception("can't locate library"));
-        } else {
+        }
+        else
+        {
             return (input);
         }
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Builds a temporary file name for the native library.
      *
@@ -549,17 +616,20 @@ public class Librarian implements CleanupClient {
      * version is found that is unique on the system and thus won't interfere.
      * --------------------------------------------------------------------------
      */
-    private String getTempFileName(String name) {
+    private String getTempFileName(String name)
+    {
         StringBuffer fileName = new StringBuffer();
         String path = System.getProperty(TEMP_LOCATION_KEY);
-        if (path.charAt(path.length() - 1) == File.separatorChar) {
+        if (path.charAt(path.length() - 1) == File.separatorChar)
+        {
             path = path.substring(0, (path.length() - 1));
         }
         String modifier = "";
         int counter = 0;
         File file = null;
 
-        do {
+        do
+        {
             fileName.delete(0, fileName.length());
             fileName.append(path);
             fileName.append(File.separatorChar);
@@ -578,6 +648,7 @@ public class Librarian implements CleanupClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets the directory where <code>Librarian</code> will search for native files. Directories
      * are denoted relative to the root, where the root is the same location where the top level
@@ -587,15 +658,20 @@ public class Librarian implements CleanupClient {
      * @param directory the directory where native files are located.
      */
     /*--------------------------------------------------------------------------*/
-    public void setNativeDirectory(String directory) {
-        if (directory == null) {
+    public void setNativeDirectory(String directory)
+    {
+        if (directory == null)
+        {
             nativeDirectory = "";
-        } else {
+        }
+        else
+        {
             nativeDirectory = directory;
         }
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method attempts to remove all native libraries that have been temporarily created from
      * the system.
@@ -614,15 +690,18 @@ public class Librarian implements CleanupClient {
      * VMs which are compatible with it.  (Klaus Bartz 2006.06.20)
      */
     /*--------------------------------------------------------------------------*/
-    public void cleanUp() {
+    public void cleanUp()
+    {
         // This method will be used the SelfModifier stuff of uninstall
         // instead of killing the thread in the dlls which provokes a
         // segmentation violation with a 1.5 (also known as 5.0) VM.
 
-        try {
+        try
+        {
             LibraryRemover.invoke(temporaryFileNames);
         }
-        catch (IOException e1) {
+        catch (IOException e1)
+        {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }

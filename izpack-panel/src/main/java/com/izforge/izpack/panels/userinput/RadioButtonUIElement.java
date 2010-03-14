@@ -16,6 +16,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.izforge.izpack.panels.userinput;
 
 import javax.swing.*;
@@ -25,19 +26,23 @@ import javax.swing.*;
  *
  * @author Dennis Reil
  */
-public class RadioButtonUIElement extends UIElement {
+public class RadioButtonUIElement extends UIElement
+{
 
-    public RadioButtonUIElement() {
+    public RadioButtonUIElement()
+    {
         super();
     }
 
     ButtonGroup buttonGroup;
 
-    public ButtonGroup getButtonGroup() {
+    public ButtonGroup getButtonGroup()
+    {
         return buttonGroup;
     }
 
-    public void setButtonGroup(ButtonGroup buttonGroup) {
+    public void setButtonGroup(ButtonGroup buttonGroup)
+    {
         this.buttonGroup = buttonGroup;
     }
 }

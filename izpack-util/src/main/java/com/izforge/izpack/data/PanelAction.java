@@ -5,11 +5,12 @@
  *
  * Version: $Id: PanelAction.java,v 1.1.2.1 2009/02/12 12:21:01 blf Exp $
  */
+
 package com.izforge.izpack.data;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.PanelActionConfiguration;
-import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
 
 /*
  * IzPack - Copyright 2001-2009 Julien Ponge, All Rights Reserved.
@@ -30,7 +31,8 @@ import com.izforge.izpack.util.AbstractUIHandler;
  * the License.
  */
 
-public interface PanelAction {
+public interface PanelAction
+{
 
     /**
      * tag-name of the panel action

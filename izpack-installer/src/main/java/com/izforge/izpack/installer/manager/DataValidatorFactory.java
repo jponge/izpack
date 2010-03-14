@@ -18,26 +18,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.installer.manager;
 
 import com.izforge.izpack.api.installer.DataValidator;
 
-public final class DataValidatorFactory {
+public final class DataValidatorFactory
+{
 
-    public static DataValidator createDataValidator(String className) {
+    public static DataValidator createDataValidator(String className)
+    {
         DataValidator validator = null;
-        if (className != null) {
+        if (className != null)
+        {
 
-            try {
+            try
+            {
                 validator = (DataValidator) Class.forName(className).newInstance();
             }
-            catch (InstantiationException e) {
+            catch (InstantiationException e)
+            {
                 e.printStackTrace();
             }
-            catch (IllegalAccessException e) {
+            catch (IllegalAccessException e)
+            {
                 e.printStackTrace();
             }
-            catch (ClassNotFoundException e) {
+            catch (ClassNotFoundException e)
+            {
                 e.printStackTrace();
             }
         }

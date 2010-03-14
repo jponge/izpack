@@ -36,7 +36,8 @@ import com.izforge.izpack.api.exception.InstallerException;
  * @author Julien Ponge
  * @see AutomatedInstaller
  */
-public interface PanelAutomation {
+public interface PanelAutomation
+{
 
     /**
      * Asks the panel to set its own XML data that can be brought back for an automated installation

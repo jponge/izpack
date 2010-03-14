@@ -27,14 +27,16 @@ package com.izforge.izpack.api.exception;
  * @author Marcus Stursberg
  */
 
-public class ResourceNotFoundException extends RuntimeException {
+public class ResourceNotFoundException extends RuntimeException
+{
 
     private static final long serialVersionUID = 3258688827575906353L;
 
     /**
      * creates a new ResourceNotFoundException
      */
-    public ResourceNotFoundException() {
+    public ResourceNotFoundException()
+    {
         super();
     }
 
@@ -43,7 +45,8 @@ public class ResourceNotFoundException extends RuntimeException {
      *
      * @param s description of the exception
      */
-    public ResourceNotFoundException(String s) {
+    public ResourceNotFoundException(String s)
+    {
         super(s);
     }
 }

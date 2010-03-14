@@ -19,10 +19,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.shortcut;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.data.UninstallData;
@@ -41,10 +43,12 @@ import java.util.Vector;
  * @author Marc Eppelmann (marc.eppelmann&#064;gmx.de)
  * @version $Revision: 1540 $
  */
-public class ShortcutPanelAutomationHelper implements PanelAutomation {
+public class ShortcutPanelAutomationHelper implements PanelAutomation
+{
     private UninstallData uninstallData;
 
-    public ShortcutPanelAutomationHelper(UninstallData uninstallData) {
+    public ShortcutPanelAutomationHelper(UninstallData uninstallData)
+    {
         this.uninstallData = uninstallData;
     }
 
@@ -56,7 +60,8 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation {
      * @param idata     DOCUMENT ME!
      * @param panelRoot DOCUMENT ME!
      */
-    public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot) {
+    public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot)
+    {
         Debug.log(this.getClass().getName() + "::entering makeXMLData()");
 
         // not used here - during automatic installation, no automatic
@@ -69,7 +74,8 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation {
      * @param installData DOCUMENT ME!
      * @param panelRoot   DOCUMENT ME!
      */
-    public void runAutomated(AutomatedInstallData installData, IXMLElement panelRoot) {
+    public void runAutomated(AutomatedInstallData installData, IXMLElement panelRoot)
+    {
         Shortcut shortcut;
 
         /**
@@ -89,12 +95,14 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation {
 
         Debug.log(this.getClass().getName() + " Entered runAutomated()");
 
-        try {
+        try
+        {
             shortcut = (Shortcut) (TargetFactory.getInstance()
                     .makeObject("com.izforge.izpack.util.os.Shortcut"));
             shortcut.initialize(Shortcut.APPLICATIONS, "-");
         }
-        catch (Throwable exception) {
+        catch (Throwable exception)
+        {
             Debug.log("Could not create shortcut instance");
             exception.printStackTrace();
 
@@ -106,13 +114,15 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation {
         // create shortcuts, even if there was any install
         // installDataGUI. Just return.
         // ----------------------------------------------------
-        if (!shortcut.supported()) {
+        if (!shortcut.supported())
+        {
             Debug.log("shortcuts not supported here");
 
             return;
         }
 
-        if (!OsConstraint.oneMatchesCurrentSystem(panelRoot)) {
+        if (!OsConstraintHelper.oneMatchesCurrentSystem(panelRoot))
+        {
             Debug.log("Shortcuts Not oneMatchesCurrentSystem");
 
             return;
@@ -130,11 +140,13 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation {
         dataElement = panelRoot.getFirstChildNamed(ShortcutPanel.AUTO_KEY_PROGRAM_GROUP);
         String groupName = null;
 
-        if (dataElement != null) {
+        if (dataElement != null)
+        {
             groupName = dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_NAME);
         }
 
-        if (groupName == null) {
+        if (groupName == null)
+        {
             groupName = "";
         }
 
@@ -143,7 +155,8 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation {
         // ----------------------------------------------------
         shortcutElements = panelRoot.getChildrenNamed(ShortcutPanel.AUTO_KEY_SHORTCUT);
 
-        for (int i = 0; i < shortcutElements.size(); i++) {
+        for (int i = 0; i < shortcutElements.size(); i++)
+        {
             Debug.log(this.getClass().getName() + "runAutomated:shortcutElements " + i);
             data = new ShortcutData();
             dataElement = shortcutElements.elementAt(i);
@@ -152,10 +165,13 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation {
             data.addToGroup = Boolean.valueOf(
                     dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_GROUP));
 
-            if (OsVersion.IS_WINDOWS) {
+            if (OsVersion.IS_WINDOWS)
+            {
                 data.type = Integer.valueOf(
                         dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_TYPE));
-            } else {
+            }
+            else
+            {
                 Debug.log("WARN: On Linux installDataGUI.type is NOT an int. Ignored.");
             }
 
@@ -208,17 +224,21 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation {
         System.out.print("[ Creating shortcuts ");
 
         // ShortcutData installDataGUI;
-        for (int i = 0; i < shortcuts.size(); i++) {
+        for (int i = 0; i < shortcuts.size(); i++)
+        {
             data = shortcuts.elementAt(i);
 
-            try {
-                if (data.subgroup != null) {
+            try
+            {
+                if (data.subgroup != null)
+                {
                     groupName = groupName + data.subgroup;
                 }
                 shortcut.setUserType(data.userType);
                 shortcut.setLinkName(data.name);
 
-                if (OsVersion.IS_WINDOWS) {
+                if (OsVersion.IS_WINDOWS)
+                {
                     shortcut.setLinkType(data.type);
                 }
 
@@ -235,7 +255,8 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation {
                 shortcut.setTerminal(data.deskTopEntryLinux_Terminal);
                 shortcut.setTerminalOptions(data.deskTopEntryLinux_TerminalOptions);
 
-                if (!OsVersion.IS_WINDOWS) {
+                if (!OsVersion.IS_WINDOWS)
+                {
                     shortcut.setType(data.deskTopEntryLinux_Type);
                 }
 
@@ -243,13 +264,17 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation {
                 shortcut.setURL(data.deskTopEntryLinux_URL);
                 shortcut.setCreateForAll(data.createForAll);
 
-                if (data.addToGroup) {
+                if (data.addToGroup)
+                {
                     shortcut.setProgramGroup(groupName);
-                } else {
+                }
+                else
+                {
                     shortcut.setProgramGroup("");
                 }
 
-                try {
+                try
+                {
                     // save the shortcut
                     System.out.print(".");
                     System.out.flush();
@@ -266,37 +291,45 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation {
 
                     // String directoryName = shortcut.getDirectoryCreated ();
                     execFiles.add(new ExecutableFile(fileName, ExecutableFile.UNINSTALL,
-                            ExecutableFile.IGNORE, new ArrayList<OsConstraint>(), false));
+                            ExecutableFile.IGNORE, new ArrayList<OsModel>(), false));
 
                     files.add(fileName);
 
-                    while ((file = file.getParentFile()) != null) {
-                        if (file.equals(base)) {
+                    while ((file = file.getParentFile()) != null)
+                    {
+                        if (file.equals(base))
+                        {
                             break;
                         }
 
                         intermediates.add(file);
                     }
 
-                    if (file != null) {
+                    if (file != null)
+                    {
                         Enumeration<File> filesEnum = intermediates.elements();
 
-                        while (filesEnum.hasMoreElements()) {
+                        while (filesEnum.hasMoreElements())
+                        {
                             files.add(0, filesEnum.nextElement().toString());
                         }
                     }
                 }
-                catch (Exception exception) {
+                catch (Exception exception)
+                {
                 }
             }
-            catch (Throwable exception) {
+            catch (Throwable exception)
+            {
             }
         }
 
         // }
         //
-        try {
-            if (execFiles != null) {
+        try
+        {
+            if (execFiles != null)
+            {
                 FileExecutor executor = new FileExecutor(execFiles);
 
                 // 
@@ -309,17 +342,20 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation {
                 // evaluate executor.executeFiles( ExecutableFile.NEVER, null );
             }
         }
-        catch (NullPointerException nep) {
+        catch (NullPointerException nep)
+        {
             nep.printStackTrace();
         }
-        catch (RuntimeException cannot) {
+        catch (RuntimeException cannot)
+        {
             cannot.printStackTrace();
         }
 
         System.out.println(" done. ]");
         System.out.print("[ Add shortcuts to uninstaller ");
 
-        for (int i = 0; i < files.size(); i++) {
+        for (int i = 0; i < files.size(); i++)
+        {
             uninstallData.addFile(files.elementAt(i), true);
             System.out.print(".");
             System.out.flush();

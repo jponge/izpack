@@ -18,26 +18,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.installer.manager;
 
 import com.izforge.izpack.data.PanelAction;
 
-public class PanelActionFactory {
+public class PanelActionFactory
+{
 
-    public static PanelAction createPanelAction(String className) {
+    public static PanelAction createPanelAction(String className)
+    {
         PanelAction action = null;
-        if (className != null) {
+        if (className != null)
+        {
 
-            try {
+            try
+            {
                 action = (PanelAction) Class.forName(className).newInstance();
             }
-            catch (InstantiationException e) {
+            catch (InstantiationException e)
+            {
                 e.printStackTrace();
             }
-            catch (IllegalAccessException e) {
+            catch (IllegalAccessException e)
+            {
                 e.printStackTrace();
             }
-            catch (ClassNotFoundException e) {
+            catch (ClassNotFoundException e)
+            {
                 e.printStackTrace();
             }
         }

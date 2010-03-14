@@ -22,7 +22,7 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 
@@ -33,12 +33,14 @@ import com.izforge.izpack.util.ExtendedUIProgressHandler;
  *
  * @author Klaus Bartz
  */
-public class ProgressBarInstallerListener extends SimpleInstallerListener {
+public class ProgressBarInstallerListener extends SimpleInstallerListener
+{
 
     /**
      *
      */
-    public ProgressBarInstallerListener() {
+    public ProgressBarInstallerListener()
+    {
         super(false);
         // TODO Auto-generated constructor stub
     }
@@ -47,15 +49,18 @@ public class ProgressBarInstallerListener extends SimpleInstallerListener {
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
-     * com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
-            throws Exception {
-        if (handler instanceof ExtendedUIProgressHandler && getProgressBarCallerCount() > 0) {
+            throws Exception
+    {
+        if (handler instanceof ExtendedUIProgressHandler && getProgressBarCallerCount() > 0)
+        {
             String progress = getMsg("CustomActions.progress");
             String tip = getMsg("CustomActions.tip");
-            if ("CustomActions.tip".equals(tip) || "CustomActions.progress".equals(progress)) {
+            if ("CustomActions.tip".equals(tip) || "CustomActions.progress".equals(progress))
+            {
                 Debug
                         .trace("No messages found for custom action progress bar interactions; skiped.");
                 return;

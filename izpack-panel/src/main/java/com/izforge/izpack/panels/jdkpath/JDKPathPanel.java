@@ -23,14 +23,14 @@
 package com.izforge.izpack.panels.jdkpath;
 
 import com.coi.tools.os.win.MSWinConstants;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.NativeLibException;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.os.RegistryHandler;
 import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.path.PathInputPanel;
-import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
 
@@ -45,7 +45,8 @@ import java.util.StringTokenizer;
  *
  * @author Klaus Bartz
  */
-public class JDKPathPanel extends PathInputPanel {
+public class JDKPathPanel extends PathInputPanel
+{
 
     private static final long serialVersionUID = 3257006553327810104L;
 
@@ -79,10 +80,12 @@ public class JDKPathPanel extends PathInputPanel {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public JDKPathPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public JDKPathPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         super(parent, idata, resourceManager);
         setMustExist(true);
-        if (!OsVersion.IS_OSX) {
+        if (!OsVersion.IS_OSX)
+        {
             setExistFiles(JDKPathPanel.testFiles);
         }
         setMinVersion(idata.getVariable("JDKPathPanel.minVersion"));
@@ -95,17 +98,21 @@ public class JDKPathPanel extends PathInputPanel {
      *
      * @return Wether the panel has been validated or not.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         boolean retval = false;
-        if (super.isValidated()) {
-            switch (verifyVersionEx()) {
+        if (super.isValidated())
+        {
+            switch (verifyVersionEx())
+            {
                 case OK:
                     this.installData.setVariable(getVariableName(), pathSelectionPanel.getPath());
                     retval = true;
                     break;
                 case BAD_REG_PATH:
                     if (askQuestion(installData.getLangpack().getString("installer.warning"), installData.getLangpack().getString("JDKPathPanel.nonValidPathInReg"),
-                            AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_NO) == AbstractUIHandler.ANSWER_YES) {
+                            AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_NO) == AbstractUIHandler.ANSWER_YES)
+                    {
                         this.installData.setVariable(getVariableName(), pathSelectionPanel.getPath());
                         retval = true;
                     }
@@ -119,17 +126,23 @@ public class JDKPathPanel extends PathInputPanel {
                     message.append(installData.getLangpack().getString("JDKPathPanel.badVersion1")).append(
                             getDetectedVersion()).append(
                             installData.getLangpack().getString("JDKPathPanel.badVersion2"));
-                    if (min != null && max != null) {
+                    if (min != null && max != null)
+                    {
                         message.append(min).append(" - ").append(max);
-                    } else if (min != null) {
+                    }
+                    else if (min != null)
+                    {
                         message.append(" >= ").append(min);
-                    } else if (max != null) {
+                    }
+                    else if (max != null)
+                    {
                         message.append(" <= ").append(max);
                     }
 
                     message.append(installData.getLangpack().getString("JDKPathPanel.badVersion3"));
                     if (askQuestion(installData.getLangpack().getString("installer.warning"), message.toString(),
-                            AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_NO) == AbstractUIHandler.ANSWER_YES) {
+                            AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_NO) == AbstractUIHandler.ANSWER_YES)
+                    {
                         this.installData.setVariable(getVariableName(), pathSelectionPanel.getPath());
                         retval = true;
                     }
@@ -145,19 +158,26 @@ public class JDKPathPanel extends PathInputPanel {
     /**
      * Called when the panel becomes active.
      */
-    public void panelActivate() {
+    public void panelActivate()
+    {
         // Resolve the default for chosenPath
         super.panelActivate();
         String chosenPath;
         // The variable will be exist if we enter this panel
         // second time. We would maintain the previos
         // selected path.
-        if (this.installData.getVariable(getVariableName()) != null) {
+        if (this.installData.getVariable(getVariableName()) != null)
+        {
             chosenPath = this.installData.getVariable(getVariableName());
-        } else {
-            if (OsVersion.IS_OSX) {
+        }
+        else
+        {
+            if (OsVersion.IS_OSX)
+            {
                 chosenPath = OSX_JDK_HOME;
-            } else {
+            }
+            else
+            {
                 // Try the JAVA_HOME as child dir of the jdk path
                 chosenPath = (new File(this.installData.getVariable("JAVA_HOME"))).getParent();
             }
@@ -165,9 +185,11 @@ public class JDKPathPanel extends PathInputPanel {
         // Set the path for method pathIsValid ...
         pathSelectionPanel.setPath(chosenPath);
 
-        if (!pathIsValid() || !verifyVersion()) {
+        if (!pathIsValid() || !verifyVersion())
+        {
             chosenPath = resolveInRegistry();
-            if (!pathIsValid() || !verifyVersion()) {
+            if (!pathIsValid() || !verifyVersion())
+            {
                 chosenPath = "";
             }
         }
@@ -175,7 +197,8 @@ public class JDKPathPanel extends PathInputPanel {
         pathSelectionPanel.setPath(chosenPath);
         String var = this.installData.getVariable("JDKPathPanel.skipIfValid");
         // Should we skip this panel?
-        if (chosenPath.length() > 0 && var != null && "yes".equalsIgnoreCase(var)) {
+        if (chosenPath.length() > 0 && var != null && "yes".equalsIgnoreCase(var))
+        {
             this.installData.setVariable(getVariableName(), chosenPath);
             parent.skipPanel();
         }
@@ -189,12 +212,14 @@ public class JDKPathPanel extends PathInputPanel {
      *
      * @return the path to the needed JDK if found in the windows registry
      */
-    private String resolveInRegistry() {
+    private String resolveInRegistry()
+    {
         String retval = "";
         int oldVal = 0;
         RegistryHandler rh = null;
         badRegEntries = new HashSet<String>();
-        try {
+        try
+        {
             // Get the default registry handler.
             rh = RegistryDefaultHandler.getInstance();
             if (rh == null)
@@ -208,7 +233,8 @@ public class JDKPathPanel extends PathInputPanel {
             oldVal = rh.getRoot(); // Only for security...
             rh.setRoot(MSWinConstants.HKEY_LOCAL_MACHINE);
             String[] keys = rh.getSubkeys(JDK_ROOT_KEY);
-            if (keys == null || keys.length == 0) {
+            if (keys == null || keys.length == 0)
+            {
                 return (retval);
             }
             Arrays.sort(keys);
@@ -216,18 +242,24 @@ public class JDKPathPanel extends PathInputPanel {
             String min = getMinVersion();
             String max = getMaxVersion();
             // We search for the highest allowd version, therefore retrograde
-            while (i > 0) {
-                if (compareVersions(keys[i], max, false, 4, 4, "__NO_NOT_IDENTIFIER_")) { // First allowd version found, now we have to test that the min value
+            while (i > 0)
+            {
+                if (compareVersions(keys[i], max, false, 4, 4, "__NO_NOT_IDENTIFIER_"))
+                { // First allowd version found, now we have to test that the min value
                     // also allows this version.
-                    if (compareVersions(keys[i], min, true, 4, 4, "__NO_NOT_IDENTIFIER_")) {
+                    if (compareVersions(keys[i], min, true, 4, 4, "__NO_NOT_IDENTIFIER_"))
+                    {
                         String cv = JDK_ROOT_KEY + "\\" + keys[i];
                         String path = rh.getValue(cv, JDK_VALUE_NAME).getStringData();
                         // Use it only if the path is valid.
                         // Set the path for method pathIsValid ...
                         pathSelectionPanel.setPath(path);
-                        if (!pathIsValid()) {
+                        if (!pathIsValid())
+                        {
                             badRegEntries.add(keys[i]);
-                        } else if ("".equals(retval)) {
+                        }
+                        else if ("".equals(retval))
+                        {
                             retval = path;
                         }
                         pathSelectionPanel.setPath(retval);
@@ -236,16 +268,21 @@ public class JDKPathPanel extends PathInputPanel {
                 i--;
             }
         }
-        catch (Exception e) { // Will only be happen if registry handler is good, but an
+        catch (Exception e)
+        { // Will only be happen if registry handler is good, but an
             // exception at performing was thrown. This is an error...
             e.printStackTrace();
         }
-        finally {
-            if (rh != null && oldVal != 0) {
-                try {
+        finally
+        {
+            if (rh != null && oldVal != 0)
+            {
+                try
+                {
                     rh.setRoot(MSWinConstants.HKEY_LOCAL_MACHINE);
                 }
-                catch (NativeLibException e) {
+                catch (NativeLibException e)
+                {
                     e.printStackTrace();
                 }
             }
@@ -253,16 +290,19 @@ public class JDKPathPanel extends PathInputPanel {
         return (retval);
     }
 
-    private int verifyVersionEx() {
+    private int verifyVersionEx()
+    {
         String min = getMinVersion();
         String max = getMaxVersion();
         int retval = OK;
         // No min and max, version always ok.
-        if (min == null && max == null) {
+        if (min == null && max == null)
+        {
             return (OK);
         }
 
-        if (!pathIsValid()) {
+        if (!pathIsValid())
+        {
             return (BAD_REAL_PATH);
         }
         // No get the version ...
@@ -292,18 +332,24 @@ public class JDKPathPanel extends PathInputPanel {
         fe.executeCommand(params, output);
         // "My" VM writes the version on stderr :-(
         String vs = (output[0].length() > 0) ? output[0] : output[1];
-        if (min != null) {
-            if (!compareVersions(vs, min, true, 4, 4, "__NO_NOT_IDENTIFIER_")) {
+        if (min != null)
+        {
+            if (!compareVersions(vs, min, true, 4, 4, "__NO_NOT_IDENTIFIER_"))
+            {
                 retval = BAD_VERSION;
             }
         }
-        if (max != null) {
-            if (!compareVersions(vs, max, false, 4, 4, "__NO_NOT_IDENTIFIER_")) {
+        if (max != null)
+        {
+            if (!compareVersions(vs, max, false, 4, 4, "__NO_NOT_IDENTIFIER_"))
+            {
                 retval = BAD_VERSION;
             }
         }
-        if (retval == OK && badRegEntries != null && badRegEntries.size() > 0) {   // Test for bad registry entry.
-            if (badRegEntries.contains(getDetectedVersion())) {
+        if (retval == OK && badRegEntries != null && badRegEntries.size() > 0)
+        {   // Test for bad registry entry.
+            if (badRegEntries.contains(getDetectedVersion()))
+            {
                 retval = BAD_REG_PATH;
             }
         }
@@ -311,7 +357,8 @@ public class JDKPathPanel extends PathInputPanel {
 
     }
 
-    private boolean verifyVersion() {
+    private boolean verifyVersion()
+    {
         return (verifyVersionEx() <= 0);
     }
 
@@ -322,54 +369,66 @@ public class JDKPathPanel extends PathInputPanel {
         int i;
         int currentRange = 0;
         String[] interestedEntries = new String[halfRange + halfRange];
-        for (i = 0; i < assumedPlace - halfRange; ++i) {
-            if (st.hasMoreTokens()) {
+        for (i = 0; i < assumedPlace - halfRange; ++i)
+        {
+            if (st.hasMoreTokens())
+            {
                 st.nextToken(); // Forget this entries.
             }
         }
 
-        for (i = 0; i < halfRange + halfRange; ++i) { // Put the interesting Strings into an intermediaer array.
-            if (st.hasMoreTokens()) {
+        for (i = 0; i < halfRange + halfRange; ++i)
+        { // Put the interesting Strings into an intermediaer array.
+            if (st.hasMoreTokens())
+            {
                 interestedEntries[i] = st.nextToken();
                 currentRange++;
             }
         }
 
-        for (i = 0; i < currentRange; ++i) {
-            if (useNotIdentifier != null && interestedEntries[i].indexOf(useNotIdentifier) > -1) {
+        for (i = 0; i < currentRange; ++i)
+        {
+            if (useNotIdentifier != null && interestedEntries[i].indexOf(useNotIdentifier) > -1)
+            {
                 continue;
             }
-            if (Character.getType(interestedEntries[i].charAt(0)) != Character.DECIMAL_DIGIT_NUMBER) {
+            if (Character.getType(interestedEntries[i].charAt(0)) != Character.DECIMAL_DIGIT_NUMBER)
+            {
                 continue;
             }
             break;
         }
-        if (i == currentRange) {
+        if (i == currentRange)
+        {
             detectedVersion = "<not found>";
             return (false);
         }
         detectedVersion = interestedEntries[i];
         StringTokenizer current = new StringTokenizer(interestedEntries[i], "._-");
         StringTokenizer needed = new StringTokenizer(template, "._-");
-        while (needed.hasMoreTokens()) {
+        while (needed.hasMoreTokens())
+        {
             // Current can have no more tokens if needed has more
             // and if a privious token was not accepted as good version.
             // e.g. 1.4.2_02 needed, 1.4.2 current. The false return
             // will be right here. Only if e.g. needed is 1.4.2_00 the
             // return value will be false, but zero should not b e used
             // at the last version part.
-            if (!current.hasMoreTokens()) {
+            if (!current.hasMoreTokens())
+            {
                 return (false);
             }
             String cur = current.nextToken();
             String nee = needed.nextToken();
             int curVal = 0;
             int neededVal = 0;
-            try {
+            try
+            {
                 curVal = Integer.parseInt(cur);
                 neededVal = Integer.parseInt(nee);
             }
-            catch (NumberFormatException nfe) { // A number format exception will be raised if
+            catch (NumberFormatException nfe)
+            { // A number format exception will be raised if
                 // there is a non numeric part in the version,
                 // e.g. 1.5.0_beta. The verification runs only into
                 // this deep area of version number (fourth sub place)
@@ -378,14 +437,18 @@ public class JDKPathPanel extends PathInputPanel {
                 // the minimal needed version will be 1.5.0.2.
                 return (false);
             }
-            if (curVal < neededVal) {
-                if (isMin) {
+            if (curVal < neededVal)
+            {
+                if (isMin)
+                {
                     return (false);
                 }
                 return (true);
             }
-            if (curVal > neededVal) {
-                if (isMin) {
+            if (curVal > neededVal)
+            {
+                if (isMin)
+                {
                     return (true);
                 }
                 return (false);
@@ -399,7 +462,8 @@ public class JDKPathPanel extends PathInputPanel {
      *
      * @return the current detected version
      */
-    public String getDetectedVersion() {
+    public String getDetectedVersion()
+    {
         return detectedVersion;
     }
 
@@ -408,7 +472,8 @@ public class JDKPathPanel extends PathInputPanel {
      *
      * @return the current used maximum version
      */
-    public String getMaxVersion() {
+    public String getMaxVersion()
+    {
         return maxVersion;
     }
 
@@ -417,7 +482,8 @@ public class JDKPathPanel extends PathInputPanel {
      *
      * @return the current used minimum version
      */
-    public String getMinVersion() {
+    public String getMinVersion()
+    {
         return minVersion;
     }
 
@@ -426,7 +492,8 @@ public class JDKPathPanel extends PathInputPanel {
      *
      * @param string version string to be used as detected version
      */
-    protected void setDetectedVersion(String string) {
+    protected void setDetectedVersion(String string)
+    {
         detectedVersion = string;
     }
 
@@ -435,10 +502,14 @@ public class JDKPathPanel extends PathInputPanel {
      *
      * @param string version string to be used as maximum
      */
-    protected void setMaxVersion(String string) {
-        if (string != null && string.length() > 0) {
+    protected void setMaxVersion(String string)
+    {
+        if (string != null && string.length() > 0)
+        {
             maxVersion = string;
-        } else {
+        }
+        else
+        {
             maxVersion = "99.0.0";
         }
     }
@@ -448,10 +519,14 @@ public class JDKPathPanel extends PathInputPanel {
      *
      * @param string version string to be used as minimum
      */
-    protected void setMinVersion(String string) {
-        if (string != null && string.length() > 0) {
+    protected void setMinVersion(String string)
+    {
+        if (string != null && string.length() > 0)
+        {
             minVersion = string;
-        } else {
+        }
+        else
+        {
             minVersion = "1.0.0";
         }
     }
@@ -461,7 +536,8 @@ public class JDKPathPanel extends PathInputPanel {
      *
      * @return the name of the variable which should be used for the path
      */
-    public String getVariableName() {
+    public String getVariableName()
+    {
         return variableName;
     }
 
@@ -470,7 +546,8 @@ public class JDKPathPanel extends PathInputPanel {
      *
      * @param string variable name to be used
      */
-    public void setVariableName(String string) {
+    public void setVariableName(String string)
+    {
         variableName = string;
     }
 
@@ -480,7 +557,8 @@ public class JDKPathPanel extends PathInputPanel {
      * @see com.izforge.izpack.installer.IzPanel#getSummaryBody()
      */
 
-    public String getSummaryBody() {
+    public String getSummaryBody()
+    {
         return (this.installData.getVariable(getVariableName()));
     }
 }

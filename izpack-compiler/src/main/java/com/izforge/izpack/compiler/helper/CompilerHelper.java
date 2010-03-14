@@ -13,14 +13,16 @@ import java.util.zip.ZipEntry;
 /**
  * Helper for compiler
  */
-public class CompilerHelper {
+public class CompilerHelper
+{
     /**
      * Given an event class, return the jar path
      *
      * @param name Name of the event class
      * @return Path to the jar
      */
-    public String resolveCustomActionsJarPath(String name) {
+    public String resolveCustomActionsJarPath(String name)
+    {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("bin/customActions/");
         stringBuilder.append("izpack");
@@ -35,9 +37,11 @@ public class CompilerHelper {
      * @param name Class name
      * @return minuscule separate dashe name
      */
-    public StringBuilder convertNameToDashSeparated(String name) {
+    public StringBuilder convertNameToDashSeparated(String name)
+    {
         StringBuilder res = new StringBuilder();
-        for (String part : StringUtils.splitByCharacterTypeCamelCase(name)) {
+        for (String part : StringUtils.splitByCharacterTypeCamelCase(name))
+        {
             res.append('-');
             res.append(part.toLowerCase());
         }
@@ -53,19 +57,23 @@ public class CompilerHelper {
      * @return full qualified class name
      * @throws java.io.IOException
      */
-    public String getFullClassName(URL url, String className) throws IOException {
+    public String getFullClassName(URL url, String className) throws IOException
+    {
         JarInputStream jis = new JarInputStream(url.openStream());
         ZipEntry zentry;
-        while ((zentry = jis.getNextEntry()) != null) {
+        while ((zentry = jis.getNextEntry()) != null)
+        {
             String name = zentry.getName();
             int lastPos = name.lastIndexOf(".class");
-            if (lastPos < 0) {
+            if (lastPos < 0)
+            {
                 continue; // No class file.
             }
             name = name.replace('/', '.');
             int pos = -1;
             int nonCasePos = -1;
-            if (className != null) {
+            if (className != null)
+            {
                 pos = name.indexOf(className);
                 nonCasePos = name.toLowerCase().indexOf(className.toLowerCase());
             }
@@ -95,14 +103,17 @@ public class CompilerHelper {
      * @return full qualified paths of the contained files
      * @throws Exception
      */
-    public List<String> getContainedFilePaths(URL url) throws Exception {
+    public List<String> getContainedFilePaths(URL url) throws Exception
+    {
         JarInputStream jis = new JarInputStream(url.openStream());
         ZipEntry zentry;
         ArrayList<String> fullNames = new ArrayList<String>();
-        while ((zentry = jis.getNextEntry()) != null) {
+        while ((zentry = jis.getNextEntry()) != null)
+        {
             String name = zentry.getName();
             // Add only files, no directory entries.
-            if (!zentry.isDirectory()) {
+            if (!zentry.isDirectory())
+            {
                 fullNames.add(name);
             }
         }

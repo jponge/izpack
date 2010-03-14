@@ -34,7 +34,8 @@ import java.util.Map;
  * @see com.izforge.izpack.panels.userinput.validator.Validator
  */
 /*---------------------------------------------------------------------------*/
-public interface ProcessingClient {
+public interface ProcessingClient
+{
 
     /*--------------------------------------------------------------------------*/
 

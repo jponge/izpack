@@ -20,6 +20,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.api.data;
 
 import java.io.Serializable;
@@ -29,13 +30,15 @@ import java.io.Serializable;
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  * @version $Id: $
  */
-public class DynamicVariable implements Serializable {
+public class DynamicVariable implements Serializable
+{
     private static final long serialVersionUID = -7985397187206803090L;
     private String name;
     private String value;
     private String conditionid;
 
-    public DynamicVariable() {
+    public DynamicVariable()
+    {
         name = "";
         value = "";
         conditionid = "";
@@ -44,15 +47,18 @@ public class DynamicVariable implements Serializable {
     /**
      * @return the name
      */
-    public String getName() {
+    public String getName()
+    {
         return this.name;
     }
 
     /**
      * @param name the name to set
      */
-    public void setName(String name) {
-        if (name != null) {
+    public void setName(String name)
+    {
+        if (name != null)
+        {
             this.name = name;
         }
     }
@@ -60,15 +66,18 @@ public class DynamicVariable implements Serializable {
     /**
      * @return the value
      */
-    public String getValue() {
+    public String getValue()
+    {
         return this.value;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(String value) {
-        if (value != null) {
+    public void setValue(String value)
+    {
+        if (value != null)
+        {
             this.value = value;
         }
     }
@@ -76,22 +85,27 @@ public class DynamicVariable implements Serializable {
     /**
      * @return the conditionid
      */
-    public String getConditionid() {
+    public String getConditionid()
+    {
         return this.conditionid;
     }
 
     /**
      * @param conditionid the conditionid to set
      */
-    public void setConditionid(String conditionid) {
-        if (conditionid != null) {
+    public void setConditionid(String conditionid)
+    {
+        if (conditionid != null)
+        {
             this.conditionid = conditionid;
         }
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if ((obj == null) || !(obj instanceof DynamicVariable)) {
+    public boolean equals(Object obj)
+    {
+        if ((obj == null) || !(obj instanceof DynamicVariable))
+        {
             return false;
         }
         DynamicVariable compareObj = (DynamicVariable) obj;
@@ -99,7 +113,8 @@ public class DynamicVariable implements Serializable {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         // TODO: check if this always correct
         return name.hashCode() ^ conditionid.hashCode();
     }

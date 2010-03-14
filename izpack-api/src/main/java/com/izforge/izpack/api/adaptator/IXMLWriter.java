@@ -31,7 +31,8 @@ import java.io.OutputStream;
  * @author Anthonin Bonnefoy
  * @author David Duponchel
  */
-public interface IXMLWriter {
+public interface IXMLWriter
+{
 
     /**
      * Write the xml in the writer output

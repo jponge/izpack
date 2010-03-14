@@ -33,37 +33,49 @@ import java.util.regex.Pattern;
  *
  * @author Mike Cunneen <mike dot cunneen at screwfix dot com>
  */
-public class RegularExpressionValidator implements Validator {
+public class RegularExpressionValidator implements Validator
+{
 
     public static final String STR_PATTERN_DEFAULT = "[a-zA-Z0-9._-]{3,}@[a-zA-Z0-9._-]+([.][a-zA-Z0-9_-]+)*[.][a-zA-Z0-9._-]{2,4}";
 
     private static final String PATTERN_PARAM = "pattern";
 
-    public boolean validate(ProcessingClient client) {
+    public boolean validate(ProcessingClient client)
+    {
 
         String patternString;
 
-        if (client.hasParams()) {
+        if (client.hasParams())
+        {
             Map<String, String> paramMap = client.getValidatorParams();
             patternString = paramMap.get(PATTERN_PARAM);
-        } else {
+        }
+        else
+        {
             patternString = STR_PATTERN_DEFAULT;
         }
         Pattern pattern = Pattern.compile(patternString);
         return pattern.matcher(getString(client)).matches();
     }
 
-    private String getString(ProcessingClient client) {
+    private String getString(ProcessingClient client)
+    {
         String returnValue = "";
-        if (client instanceof PasswordGroup) {
+        if (client instanceof PasswordGroup)
+        {
             int numFields = client.getNumFields();
-            if (numFields > 0) {
+            if (numFields > 0)
+            {
                 returnValue = client.getFieldContents(0);
-            } else {
+            }
+            else
+            {
                 // Should never get here, but might as well try and grab some text
                 returnValue = client.getText();
             }
-        } else {
+        }
+        else
+        {
             // Original way to retrieve text for validation
             returnValue = client.getText();
         }

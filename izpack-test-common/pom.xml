@@ -19,6 +19,16 @@
             <artifactId>ant</artifactId>
         </dependency>
         <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
             <scope>compile</scope>

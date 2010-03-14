@@ -27,7 +27,8 @@ package com.coi.tools.os.win;
  *
  * @author Klaus Bartz
  */
-public interface MSWinConstants {
+public interface MSWinConstants
+{
     /*
      * Registry root values, extracted from winreg.h
      */

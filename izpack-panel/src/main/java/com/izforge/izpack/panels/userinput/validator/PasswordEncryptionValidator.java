@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.panels.userinput.validator;
 
 import com.izforge.izpack.panels.userinput.PasswordGroup;
@@ -34,53 +35,67 @@ import java.util.Map;
 /**
  * @author Jeff Gordon
  */
-public class PasswordEncryptionValidator implements Validator {
+public class PasswordEncryptionValidator implements Validator
+{
     private Cipher encryptCipher;
 
-    public boolean validate(ProcessingClient client) {
+    public boolean validate(ProcessingClient client)
+    {
         boolean returnValue = true;
         String encryptedPassword = null;
         String key = null;
         String algorithm = null;
         Map params = getParams(client);
-        try {
+        try
+        {
             key = (String) params.get("encryptionKey");
             algorithm = (String) params.get("algorithm");
-            if (key != null && algorithm != null) {
+            if (key != null && algorithm != null)
+            {
                 initialize(key, algorithm);
                 encryptedPassword = encryptString(client.getFieldContents(0));
-                if (encryptedPassword != null) {
+                if (encryptedPassword != null)
+                {
                     PasswordGroup group = (PasswordGroup) client;
                     group.setModifiedPassword(encryptedPassword);
-                } else {
+                }
+                else
+                {
                     returnValue = false;
                 }
             }
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.trace("Password Encryption Failed: " + e);
             returnValue = false;
         }
         return (returnValue);
     }
 
-    private Map getParams(ProcessingClient client) {
+    private Map getParams(ProcessingClient client)
+    {
         PasswordGroup group = null;
         Map params = null;
-        try {
+        try
+        {
             group = (PasswordGroup) client;
-            if (group.hasParams()) {
+            if (group.hasParams())
+            {
                 params = group.getValidatorParams();
             }
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.trace("getParams() Failed: " + e);
         }
         return (params);
     }
 
-    private void initialize(String key, String algorithm) throws Exception {
-        try {
+    private void initialize(String key, String algorithm) throws Exception
+    {
+        try
+        {
             //Generate the key bytes
             KeyGenerator keygen = KeyGenerator.getInstance(algorithm);
             keygen.init(new SecureRandom(key.getBytes()));
@@ -90,20 +105,24 @@ public class PasswordEncryptionValidator implements Validator {
             encryptCipher = Cipher.getInstance(algorithm);
             encryptCipher.init(Cipher.ENCRYPT_MODE, specKey);
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.trace("Error initializing password encryption " + e.getMessage());
             throw e;
         }
     }
 
-    public String encryptString(String string) throws Exception {
+    public String encryptString(String string) throws Exception
+    {
         String result = null;
-        try {
+        try
+        {
             byte[] cryptedbytes = null;
             cryptedbytes = encryptCipher.doFinal(string.getBytes("UTF-8"));
             result = (new BASE64Encoder()).encode(cryptedbytes);
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.trace("Error encrypting string: " + e.getMessage());
             throw e;
         }

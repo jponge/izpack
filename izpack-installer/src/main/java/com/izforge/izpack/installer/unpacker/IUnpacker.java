@@ -18,11 +18,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.izforge.izpack.installer.unpacker;
 
 import com.izforge.izpack.api.rules.RulesEngine;
 
-public interface IUnpacker extends Runnable {
+public interface IUnpacker extends Runnable
+{
     /**
      * Return the state of the operation.
      *

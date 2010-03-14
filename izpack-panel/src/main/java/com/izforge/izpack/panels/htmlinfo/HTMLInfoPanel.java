@@ -19,12 +19,13 @@
 
 package com.izforge.izpack.panels.htmlinfo;
 
+import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.HyperlinkHandler;
 
 import javax.swing.*;
@@ -40,7 +41,8 @@ import java.net.URL;
  *
  * @author Julien Ponge
  */
-public class HTMLInfoPanel extends IzPanel {
+public class HTMLInfoPanel extends IzPanel
+{
 
     private static final long serialVersionUID = 3257008769514025270L;
 
@@ -65,7 +67,8 @@ public class HTMLInfoPanel extends IzPanel {
      * @param parent The parent.
      * @param idata  The installation installDataGUI.
      */
-    public HTMLInfoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+    public HTMLInfoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    {
         this(parent, idata, "HTMLInfoPanel", true, resourceManager);
     }
 
@@ -80,7 +83,8 @@ public class HTMLInfoPanel extends IzPanel {
      *                          above content.
      */
     public HTMLInfoPanel(InstallerFrame parent, GUIInstallData idata,
-                         String resPrefixStr, boolean showInfoLabelFlag, ResourceManager resourceManager) {
+                         String resPrefixStr, boolean showInfoLabelFlag, ResourceManager resourceManager)
+    {
         super(parent, idata, new IzPanelLayout(), resourceManager);
         //setup given resource prefix and name:
         panelResourcePrefixStr = resPrefixStr;
@@ -88,22 +92,27 @@ public class HTMLInfoPanel extends IzPanel {
 
         // We add the components
 
-        if (showInfoLabelFlag) {  //flag is set; add label above content
+        if (showInfoLabelFlag)
+        {  //flag is set; add label above content
             add(LabelFactory.create(installData.getLangpack().getString("InfoPanel.info"), parent.icons
                     .getImageIcon("edit"), LEADING), NEXT_LINE);
         }
-        try {
-            textArea = new JEditorPane() {       //override get-stream method to parse variable
+        try
+        {
+            textArea = new JEditorPane()
+            {       //override get-stream method to parse variable
 
                 // declarations in HTML content:
                 protected InputStream getStream(URL urlObj)
-                        throws IOException {                  //get original stream contents:
+                        throws IOException
+                {                  //get original stream contents:
                     final InputStream inStm = super.getStream(urlObj);
                     final ByteArrayOutputStream btArrOutStm =
                             new ByteArrayOutputStream();
                     int b;         //copy contents to output stream:
                     final byte[] buff = new byte[2048];
-                    while ((b = inStm.read(buff, 0, buff.length)) > 0) {
+                    while ((b = inStm.read(buff, 0, buff.length)) > 0)
+                    {
                         btArrOutStm.write(buff, 0, b);
                     }
                     //convert to string and parse variables:
@@ -114,6 +123,7 @@ public class HTMLInfoPanel extends IzPanel {
                             parsedStr.getBytes());
                 }
             };
+            textArea.setName(GuiId.HTML_INFO_PANEL_TEXT.id);
             textArea.setContentType("text/html; charset=utf-8");
             textArea.setEditable(false);
             textArea.addHyperlinkListener(new HyperlinkHandler());
@@ -123,7 +133,8 @@ public class HTMLInfoPanel extends IzPanel {
             textArea.setCaretPosition(0);
             add(scroller, NEXT_LINE);
         }
-        catch (Exception err) {
+        catch (Exception err)
+        {
             err.printStackTrace();
         }
         getLayoutHelper().completeLayout();
@@ -133,24 +144,31 @@ public class HTMLInfoPanel extends IzPanel {
     * loads the content of the info resource as text so that it can be parsed afterwards
     */
 
-    private URL loadHTMLInfoContent() {
-        if (getMetadata() != null && getMetadata().getPanelid() != null) {
-            try {
+    private URL loadHTMLInfoContent()
+    {
+        if (getMetadata() != null && getMetadata().getPanelid() != null)
+        {
+            try
+            {
                 String panelSpecificResName = panelResourcePrefixStr + '.' + this.getMetadata().getPanelid();
                 String panelspecificResContent = resourceManager.getTextResource(panelSpecificResName);
-                if (panelspecificResContent != null) {
+                if (panelspecificResContent != null)
+                {
                     panelResourceNameStr = panelSpecificResName;
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 // Those ones can be skipped
             }
         }
 
-        try {
+        try
+        {
             return resourceManager.getURL(panelResourceNameStr);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
 
@@ -162,18 +180,23 @@ public class HTMLInfoPanel extends IzPanel {
      *
      * @return Always true.
      */
-    public boolean isValidated() {
+    public boolean isValidated()
+    {
         return true;
     }
 
-    public void panelActivate() {
+    public void panelActivate()
+    {
         // Clear this property to get the document to reload and perform variable substitution.
         // See JEditorPane.setPage javadoc.
         textArea.getDocument().putProperty(Document.StreamDescriptionProperty, null);
-        try {
+        try
+        {
             textArea.setPage(loadHTMLInfoContent());
             textArea.setCaretPosition(0);
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
     }

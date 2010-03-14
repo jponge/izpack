@@ -7,7 +7,8 @@ import java.util.Properties;
 /**
  * Interface of rulesEngine
  */
-public interface RulesEngine extends Serializable {
+public interface RulesEngine extends Serializable
+{
     String[] getKnownConditionIds();
 
     boolean isConditionTrue(String id, Properties variables);
