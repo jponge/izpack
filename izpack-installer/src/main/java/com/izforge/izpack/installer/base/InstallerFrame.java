@@ -609,46 +609,46 @@ public class InstallerFrame extends JFrame
     /**
      * Switches the current panel.
      *
-     * @param last Description of the Parameter
+     * @param oldIndex Description of the Parameter
      */
-    protected void switchPanel(int last)
+    protected void switchPanel(int oldIndex)
     {
         // refresh dynamic variables every time, a panel switch is done
         installdata.refreshDynamicVariables();
         try
         {
-            if (installdata.getCurPanelNumber() < last)
+            if (installdata.getCurPanelNumber() < oldIndex)
             {
                 isBack = true;
             }
             panelsContainer.setVisible(false);
-            IzPanel panel = (IzPanel) installdata.getPanels().get(installdata.getCurPanelNumber());
-            IzPanel l_panel = (IzPanel) installdata.getPanels().get(last);
-            showHelpButton(panel.canShowHelp());
+            IzPanel newPanel = (IzPanel) installdata.getPanels().get(installdata.getCurPanelNumber());
+            IzPanel oldPanel = (IzPanel) installdata.getPanels().get(oldIndex);
+            showHelpButton(newPanel.canShowHelp());
             if (Debug.isTRACE())
             {
-                debugger.switchPanel(panel.getMetadata(), l_panel.getMetadata());
+                debugger.switchPanel(newPanel.getMetadata(), oldPanel.getMetadata());
             }
             Log.getInstance().addDebugMessage(
-                    "InstallerFrame.switchPanel: try switching panel from {0} to {1} ({2} to {3})",
-                    new String[]{l_panel.getClass().getName(), panel.getClass().getName(),
-                            Integer.toString(last), Integer.toString(installdata.getCurPanelNumber())},
+                    "InstallerFrame.switchPanel: try switching newPanel from {0} to {1} ({2} to {3})",
+                    new String[]{oldPanel.getClass().getName(), newPanel.getClass().getName(),
+                            Integer.toString(oldIndex), Integer.toString(installdata.getCurPanelNumber())},
                     Log.PANEL_TRACE, null);
 
             // instead of writing data here which leads to duplicated entries in
             // auto-installation script (bug # 4551), let's make data only immediately before
             // writing out that script.
-            // l_panel.makeXMLData(installdata.xmlData.getChildAtIndex(last));
-            // No previos button in the first visible panel
+            // oldPanel.makeXMLData(installdata.xmlData.getChildAtIndex(oldIndex));
+            // No previos button in the first visible newPanel
 
             if (panelManager.isVisible(installdata.getCurPanelNumber()))
             {
                 prevButton.setVisible(false);
                 lockPrevButton();
                 unlockNextButton(); // if we push the button back at the license
-                // panel
+                // newPanel
             }
-            // Only the exit button in the last panel.
+            // Only the exit button in the oldIndex newPanel.
             else if (panelManager.isLast(installdata.getCurPanelNumber()))
             {
                 prevButton.setVisible(false);
@@ -680,7 +680,7 @@ public class InstallerFrame extends JFrame
 
             }
             // With VM version >= 1.5 setting default button one time will not work.
-            // Therefore we set it every panel switch and that also later. But in
+            // Therefore we set it every newPanel switch and that also later. But in
             // the moment it seems so that the quit button will not used as default button.
             // No idea why... (Klaus Bartz, 06.09.25)
             SwingUtilities.invokeLater(new Runnable()
@@ -713,16 +713,16 @@ public class InstallerFrame extends JFrame
             });
 
             // Change panels container to the current one.
-            panelsContainer.remove(l_panel);
-            l_panel.panelDeactivate();
-            panelsContainer.add(panel);
+            panelsContainer.remove(oldPanel);
+            oldPanel.panelDeactivate();
+            panelsContainer.add(newPanel);
 
-            if (panel.getInitialFocus() != null)
-            { // Initial focus hint should be performed after current panel
+            if (newPanel.getInitialFocus() != null)
+            { // Initial focus hint should be performed after current newPanel
                 // was added to the panels container, else the focus hint will
                 // be ignored.
                 // Give a hint for the initial focus to the system.
-                final Component inFoc = panel.getInitialFocus();
+                final Component inFoc = newPanel.getInitialFocus();
                 if (JAVA_SPECIFICATION_VERSION < 1.35)
                 {
                     inFoc.requestFocus();
@@ -752,12 +752,12 @@ public class InstallerFrame extends JFrame
                     }
                 }
             }
-            performHeading(panel);
-            performHeadingCounter(panel);
-            panel.executePreActivationActions();
-            panel.panelActivate();
+            performHeading(newPanel);
+            performHeadingCounter(newPanel);
+            newPanel.executePreActivationActions();
+            newPanel.panelActivate();
             panelsContainer.setVisible(true);
-            com.izforge.izpack.api.data.Panel metadata = panel.getMetadata();
+            com.izforge.izpack.api.data.Panel metadata = newPanel.getMetadata();
             if ((metadata != null) && (!"UNKNOWN".equals(metadata.getPanelid())))
             {
                 loadAndShowImage(panelManager.getPanelVisibilityNumber(installdata.getCurPanelNumber()), metadata
