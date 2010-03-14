@@ -7,7 +7,6 @@ import com.izforge.izpack.api.data.binding.Stage;
 import com.izforge.izpack.compiler.container.TestCompilerContainer;
 import com.izforge.izpack.matcher.ObjectInputMatcher;
 import com.izforge.izpack.matcher.ZipMatcher;
-import com.izforge.izpack.test.BaseDir;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
@@ -30,7 +29,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 @RunWith(PicoRunner.class)
 @Container(TestCompilerContainer.class)
-@BaseDir("samples")
 @InstallFile("samples/listeners.xml")
 public class CompilerConfigCustomDataTest
 {

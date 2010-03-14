@@ -2,8 +2,8 @@ package com.izforge.izpack.compiler.container;
 
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.core.container.AbstractContainer;
-import com.izforge.izpack.test.BaseDir;
 import com.izforge.izpack.test.InstallFile;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 
@@ -28,9 +28,8 @@ public class TestCompilerContainer extends AbstractContainer
         pico = compilerContainer.getContainer();
 
         String installFileName = ((InstallFile) klass.getAnnotation(InstallFile.class)).value();
-        String baseDirName = ((BaseDir) klass.getAnnotation(BaseDir.class)).value();
 
-        File baseDir = new File(getClass().getClassLoader().getResource(baseDirName).getFile());
+        File baseDir = new TemporaryFolder().newFolder("baseDirTemp");
         File installerFile = new File(getClass().getClassLoader().getResource(installFileName).getFile());
 
         File out = new File(baseDir, "out.jar");
