@@ -295,6 +295,7 @@
                         <configuration>
                             <excludes>
                                 <exclude>**/Abstract*</exclude>
+                                <exclude>**/Test*Container*</exclude>
                                 <exclude>**/LanguageDialogTest.java</exclude>
                             </excludes>
                         </configuration>
