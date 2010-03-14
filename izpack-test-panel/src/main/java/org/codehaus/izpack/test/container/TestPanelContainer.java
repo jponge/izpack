@@ -24,7 +24,7 @@ import org.picocontainer.parameters.ComponentParameter;
 /**
  * Container for injecting mock for individual panel testing
  */
-public class TestContainer extends AbstractContainer
+public class TestPanelContainer extends AbstractContainer
 {
 
     /**

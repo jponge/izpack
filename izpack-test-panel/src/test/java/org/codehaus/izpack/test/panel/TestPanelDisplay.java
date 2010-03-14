@@ -8,7 +8,7 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.junit.PicoRunner;
-import org.codehaus.izpack.test.container.TestContainer;
+import org.codehaus.izpack.test.container.TestPanelContainer;
 import org.fest.swing.fixture.FrameFixture;
 import org.hamcrest.text.StringContains;
 import org.junit.After;
@@ -24,7 +24,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Manual test for finish panel
  */
 @RunWith(PicoRunner.class)
-@Container(TestContainer.class)
+@Container(TestPanelContainer.class)
 public class TestPanelDisplay
 {
 
