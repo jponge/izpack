@@ -1573,11 +1573,10 @@ public class InstallerFrame extends JFrame
     /**
      * Creates heading panel counter.
      *
-     * @param back             background color
      * @param navPanel         navi JPanel
      * @param leftHeadingPanel left heading JPanel
      */
-    private void createHeadingCounter(Color back, JPanel navPanel, JPanel leftHeadingPanel)
+    private void createHeadingCounter(JPanel navPanel, JPanel leftHeadingPanel)
     {
         int i;
         String counterPos = "inHeading";
@@ -1731,7 +1730,7 @@ public class InstallerFrame extends JFrame
         // Try to create counter if no heading should be used.
         if (!isHeading(null))
         {
-            createHeadingCounter(back, navPanel, null);
+            createHeadingCounter(navPanel, null);
             return;
         }
         // See if we should switch the header image to the left side
@@ -1763,7 +1762,7 @@ public class InstallerFrame extends JFrame
         // HeadingPanel counter: this is a label or a progress bar which can be placed
         // in the leftHeadingPanel or in the navigation bar. It is facultative. If
         // exist, it shows the current panel number and the amount of panels.
-        createHeadingCounter(back, navPanel, leftHeadingPanel);
+        createHeadingCounter(navPanel, leftHeadingPanel);
         // It is possible to place an icon on the right side of the heading panel.
         JPanel imgPanel = createHeadingIcon(back);
 
