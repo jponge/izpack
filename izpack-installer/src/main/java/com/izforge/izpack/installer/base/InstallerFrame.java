@@ -273,9 +273,7 @@ public class InstallerFrame extends JFrame
      */
     private void buildGUI()
     {
-        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); // patch 06/07/2005,
-        // Fabrice Mirabile
-        // Sets the frame icon
+        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         try
         {
             ImageIcon jframeIcon = ResourceManager.getInstance().getImageIconResource("JFrameIcon");
