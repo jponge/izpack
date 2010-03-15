@@ -1110,6 +1110,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
         JScrollPane scroller = new JScrollPane(panel);
         Border emptyBorder = BorderFactory.createEmptyBorder();
+        scroller.setBorder(emptyBorder);
         scroller.setViewportBorder(emptyBorder);
         scroller.getVerticalScrollBar().setBorder(emptyBorder);
         scroller.getHorizontalScrollBar().setBorder(emptyBorder);
