@@ -258,9 +258,19 @@ public class InstallerFrame extends JFrame
 
     public void enableFrame()
     {
-        // We show the frame
         showFrame();
-        switchPanel(0);
+        switchToFirstEnabledPanel();
+    }
+
+    private void switchToFirstEnabledPanel()
+    {
+        int firstPanel = hasNavigateNext(-1, false);
+        if (firstPanel > -1) 
+        {
+            showFrame();
+            installdata.setCurPanelNumber(firstPanel);
+            switchPanel(firstPanel);
+        }
     }
 
     public Debugger getDebugger()
