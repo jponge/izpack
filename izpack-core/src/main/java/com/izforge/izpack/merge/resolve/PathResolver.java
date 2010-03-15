@@ -130,8 +130,7 @@ public class PathResolver
     public String getCurrentClasspath()
     {
         StringBuilder stringBuilder = new StringBuilder();
-        java.net.URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
-        for (URL url : loader.getURLs())
+        for (URL url : getClassPathUrl())
         {
             stringBuilder.append(url.getPath());
             stringBuilder.append('\n');
@@ -306,6 +305,8 @@ public class PathResolver
         try
         {
             Enumeration<URL> urlEnumeration = loader.getResources("");
+            result.addAll(Collections.list(urlEnumeration));
+            urlEnumeration = loader.getResources("META-INF/");
             result.addAll(Collections.list(urlEnumeration));
         }
         catch (IOException ignored)
