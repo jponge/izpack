@@ -179,21 +179,21 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     /**
      * Creates a new IzPanel object with the given layout manager. Valid layout manager are the
-     * IzPanelLayout and the GridBagLayout. New panels should be use the IzPanelLaout. If lm is
+     * IzPanelLayout and the GridBagLayout. New panels should be use the IzPanelLaout. If layoutManager is
      * null, no layout manager will be created or initialized.
      *
      * @param parent          The parent IzPack installer frame.
      * @param installData     The installer internal data.
-     * @param lm              layout manager to be used with this IzPanel
+     * @param layoutManager   layout manager to be used with this IzPanel
      * @param resourceManager
      */
-    public IzPanel(InstallerFrame parent, GUIInstallData installData, LayoutManager2 lm, ResourceManager resourceManager)
+    public IzPanel(InstallerFrame parent, GUIInstallData installData, LayoutManager2 layoutManager, ResourceManager resourceManager)
     {
         super();
         init(parent, installData, resourceManager);
-        if (lm != null)
+        if (layoutManager != null)
         {
-            getLayoutHelper().startLayout(lm);
+            getLayoutHelper().startLayout(layoutManager);
         }
         variableSubstitutor = new VariableSubstitutorImpl(this.installData.getVariables());
     }
