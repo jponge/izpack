@@ -86,7 +86,7 @@ public class InstallationTest extends AbstractIntegrationTest
     }
 
 
-    @Test(invocationCount = 2, successPercentage = 75)
+    @Test
     public void testBasicInstall() throws Exception
     {
         compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
