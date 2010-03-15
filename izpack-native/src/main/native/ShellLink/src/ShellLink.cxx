@@ -678,6 +678,22 @@ JNIEXPORT jint JNICALL Java_com_izforge_izpack_util_os_ShellLink_GetWorkingDirec
   }
 }
 
+int isWindows7Checked = -1;
+BOOL isWindows7()
+{
+    // don't check it twice
+    if( -1 == isWindows7Checked)
+    {
+        OSVERSIONINFO osvi;
+        ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
+        osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+        GetVersionEx(&osvi);
+        isWindows7Checked = (6 == osvi.dwMajorVersion && 1 == osvi.dwMinorVersion) ? 1 : 0;
+    }
+        
+    return 1 == isWindows7Checked;
+}
+
 // --------------------------------------------------------------------------
 // Resolves a shell link by searching for the shell link object and
 // updating the shell link path and its list of identifiers (if necessary).
@@ -698,9 +714,18 @@ JNIEXPORT jint JNICALL Java_com_izforge_izpack_util_os_ShellLink_Resolve	(JNIEnv
   jfieldID    handleID  = (env)->GetFieldID      (cls, "nativeHandle", "I");
   jint        handle    = (env)->GetIntField     (obj, handleID);
 
-  hres = p_shellLink [handle]->Resolve (NULL,
+// skip resolving for Win7,
+// if attribute 'path' and 'arguments' are set, resolve restores every
+// 'path' to the first one used by caller
+  if (isWindows7())
+  {
+    hres = S_OK;
+  }
+  else
+  {
+    hres = p_shellLink [handle]->Resolve (NULL,
                                         SLR_NO_UI | SLR_UPDATE | SLR_NOSEARCH);
-
+  }
   if (SUCCEEDED (hres))
   {
     return (SL_OK);
