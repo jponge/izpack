@@ -27,7 +27,7 @@ public class UnpackerTest extends AbstractIntegrationTest
     {
         compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         PanelManager panelManager = applicationContainer.getComponent(PanelManager.class);
-        panelManager.loadPanelsInContainer().instanciatePanels();
+        panelManager.loadPanelsInContainer().instantiatePanels();
         IUnpacker unpacker = applicationContainer.getComponent(IUnpacker.class);
         assertThat(unpacker, IsNull.notNullValue());
 

@@ -250,7 +250,7 @@ public class InstallerFrame extends JFrame
     public InstallerFrame loadPanels() throws ClassNotFoundException
     {
         panelManager.loadPanelsInContainer();
-        panelManager.instanciatePanels();
+        panelManager.instantiatePanels();
         buildGUI();
         sizeFrame();
         return this;

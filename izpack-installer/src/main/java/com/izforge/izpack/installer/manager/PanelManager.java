@@ -74,7 +74,7 @@ public class PanelManager
      *
      * @throws ClassNotFoundException
      */
-    public void instanciatePanels() throws ClassNotFoundException
+    public void instantiatePanels() throws ClassNotFoundException
     {
         java.util.List<Panel> panelsOrder = installdata.getPanelsOrder();
         int curVisPanelNumber = 0;
