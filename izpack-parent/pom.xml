@@ -299,6 +299,7 @@
                                 <exclude>**/Abstract*</exclude>
                                 <exclude>**/Test*Container*</exclude>
                                 <exclude>**/LanguageDialogTest.java</exclude>
+                                <exclude>**/TestPanelDisplay.java</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
