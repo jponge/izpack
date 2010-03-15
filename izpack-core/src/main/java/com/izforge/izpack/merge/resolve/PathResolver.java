@@ -303,7 +303,7 @@ public class PathResolver
         {
             throw new MergeException(e);
         }
-        return null;
+        throw new IzPackException("Could not find class " + className + " : Current classpath is " + getCurrentClasspath(""));
     }
 
 }
