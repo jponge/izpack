@@ -62,7 +62,7 @@ public class CliAnalyzer {
         System.out.println("");
         System.out.println("< compiler specifications version: " + CompilerData.VERSION + " >");
         System.out.println("");
-        System.out.println("- Copyright (c) 2001-2008 Julien Ponge");
+        System.out.println("- Copyright (c) 2001-2010 Julien Ponge and others. All Rights Reserved.");
         System.out.println("- Visit http://izpack.org/ for the latest releases");
         System.out
                 .println("- Released under the terms of the Apache Software License version 2.0.");
