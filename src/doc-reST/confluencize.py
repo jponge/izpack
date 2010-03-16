@@ -13,7 +13,7 @@ action = {
     'title': lambda element, context: ('\nh%s. %s\n\n' % (context['header_depth'], decode_inline(element, context)), False),
     'paragraph': lambda element, context: ('%s%s' % (decode_inline(element, context), context['paragraph_newlines']), False),
     'list_item': lambda element, context: ('%s ' % context['list_prefix'], True),
-    'reference': lambda element, context: ('[%s|%s]' % (element.text, element.attrib['refuri']), True),
+    'reference': lambda element, context: ('[%s|%s]' % (element.text, element.get('refuri', '')), True),
     'literal_block': lambda element, context: ('\n{code}\n%s\n{code}\n\n' % element.text, False),
     'block_quote': lambda element, context: ('\n{quote}\n%s\n{quote}\n\n' % element.text, True),
     'strong': lambda element, context: ('*%s*' % element.text, True),
