@@ -5,9 +5,11 @@ import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
+import com.izforge.izpack.test.Container;
+import com.izforge.izpack.test.junit.PicoRunner;
 import org.hamcrest.core.IsNull;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Properties;
 
@@ -18,15 +20,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Anthonin Bonnefoy
  */
+@RunWith(PicoRunner.class)
+@Container(CompilerContainer.class)
 public class CompilerLauncherTest
 {
     private CompilerContainer compilerContainer;
 
-    @Before
-    public void initContainer()
+    public CompilerLauncherTest(CompilerContainer compilerContainer)
     {
-        compilerContainer = new CompilerContainer();
-        compilerContainer.initBindings();
+        this.compilerContainer = compilerContainer;
     }
 
     @Test

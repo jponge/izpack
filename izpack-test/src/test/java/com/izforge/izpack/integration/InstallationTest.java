@@ -86,7 +86,7 @@ public class InstallationTest extends AbstractIntegrationTest
     }
 
 
-    @Test(dependsOnMethods = "testHelloAndFinishPanels")
+    @Test
     public void testBasicInstall() throws Exception
     {
         compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));

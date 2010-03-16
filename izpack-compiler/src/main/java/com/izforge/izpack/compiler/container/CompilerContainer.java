@@ -15,6 +15,8 @@ import com.izforge.izpack.compiler.packager.impl.Packager;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.MergeManagerImpl;
+import com.izforge.izpack.merge.resolve.ClassPathCrawler;
+import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.picocontainer.Characteristics;
@@ -39,6 +41,8 @@ public class CompilerContainer extends AbstractContainer
         pico.addComponent(CliAnalyzer.class);
         pico.addComponent(CmdlinePackagerListener.class);
         pico.addComponent(Compiler.class);
+        pico.addComponent(ClassPathCrawler.class);
+        pico.addComponent(MergeableResolver.class);
         pico.addComponent(PathResolver.class);
         pico.addComponent(CompilerConfig.class);
         pico.as(Characteristics.USE_NAMES).addComponent(AssertionHelper.class);

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.*;
 import java.util.zip.ZipFile;
 
@@ -28,9 +29,11 @@ public class PathResolver
     public static final String BASE_CLASSNAME_PATH = CLASSNAME_PREFIX.replaceAll("\\.", "/") + "/";
 
     public Map<OutputStream, List<String>> mergeContent;
+    private MergeableResolver mergeableResolver;
 
-    public PathResolver()
+    public PathResolver(MergeableResolver mergeableResolver)
     {
+        this.mergeableResolver = mergeableResolver;
         mergeContent = new HashMap<OutputStream, List<String>>();
     }
 
@@ -72,7 +75,7 @@ public class PathResolver
         {
             return result;
         }
-        throw new IzPackException("The path " + sourcePath + " is not present inside the classpath.\n The current classpath is :" + getCurrentClasspath(sourcePath));
+        throw new IzPackException("The path " + sourcePath + " is not present inside the classpath.\n The current classpath is :" + getCurrentClasspath());
     }
 
     public PanelMerge getPanelMerge(String className)
@@ -126,24 +129,15 @@ public class PathResolver
         return isJar(classFile);
     }
 
-    public String getCurrentClasspath(String packagePath)
+    public String getCurrentClasspath()
     {
-        try
+        StringBuilder stringBuilder = new StringBuilder();
+        for (URL url : getClassPathUrl())
         {
-            StringBuilder stringBuilder = new StringBuilder();
-            Enumeration<URL> urlEnumeration = Thread.currentThread().getContextClassLoader().getResources(packagePath);
-            while (urlEnumeration.hasMoreElements())
-            {
-                URL url = urlEnumeration.nextElement();
-                stringBuilder.append(url.getPath());
-                stringBuilder.append('\n');
-            }
-            return stringBuilder.toString();
+            stringBuilder.append(url.getPath());
+            stringBuilder.append('\n');
         }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
+        return stringBuilder.toString();
     }
 
 
@@ -281,10 +275,9 @@ public class PathResolver
         final String fileToSearch = className + ".class";
         try
         {
-            Enumeration<URL> urlEnumeration = ClassLoader.getSystemResources("");
-            while (urlEnumeration.hasMoreElements())
+            Collection<URL> urls = getClassPathUrl();
+            for (URL url : urls)
             {
-                URL url = urlEnumeration.nextElement();
                 Mergeable mergeable = getMergeableFromURL(url);
                 final File file = mergeable.find(new FileFilter()
                 {
@@ -303,7 +296,25 @@ public class PathResolver
         {
             throw new MergeException(e);
         }
-        return null;
+        throw new IzPackException("Could not find class " + className + " : Current classpath is " + getCurrentClasspath());
+    }
+
+    private Collection<URL> getClassPathUrl()
+    {
+        Collection<URL> result = new HashSet<URL>();
+        java.net.URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
+        result.addAll(Arrays.asList(loader.getURLs()));
+        try
+        {
+            Enumeration<URL> urlEnumeration = loader.getResources("");
+            result.addAll(Collections.list(urlEnumeration));
+            urlEnumeration = loader.getResources("META-INF/");
+            result.addAll(Collections.list(urlEnumeration));
+        }
+        catch (IOException ignored)
+        {
+        }
+        return result;
     }
 
 }

@@ -1,4 +1,4 @@
-package org.codehaus.izpack.test.container;
+package com.izforge.izpack.test.container;
 
 import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.ResourceManager;
@@ -12,6 +12,8 @@ import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.language.ConditionCheck;
 import com.izforge.izpack.installer.manager.PanelManager;
+import com.izforge.izpack.merge.resolve.ClassPathCrawler;
+import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.codehaus.izpack.test.provider.GUIInstallDataMockProvider;
@@ -41,6 +43,8 @@ public class TestPanelContainer extends AbstractContainer
                 .addComponent(UninstallData.class)
                 .addComponent(UninstallDataWriter.class)
                 .addComponent(AutomatedInstaller.class)
+                .addComponent(MergeableResolver.class)
+                .addComponent(ClassPathCrawler.class)
                 .addComponent(PathResolver.class)
                 .addComponent(FrameFixture.class, FrameFixture.class, new ComponentParameter(InstallerFrame.class))
                 .addComponent(PanelManager.class)

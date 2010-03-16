@@ -1,12 +1,15 @@
 package com.izforge.izpack.merge.jar;
 
 import com.izforge.izpack.api.merge.Mergeable;
+import com.izforge.izpack.container.TestMergeContainer;
 import com.izforge.izpack.matcher.MergeMatcher;
 import com.izforge.izpack.merge.resolve.PathResolver;
+import com.izforge.izpack.test.Container;
+import com.izforge.izpack.test.junit.PicoRunner;
 import org.hamcrest.core.Is;
 import org.hamcrest.text.StringContains;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -21,14 +24,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Anthonin Bonnefoy
  */
+@RunWith(PicoRunner.class)
+@Container(TestMergeContainer.class)
 public class JarMergeTest
 {
     private PathResolver pathResolver;
 
-    @Before
-    public void setUp()
+    public JarMergeTest(PathResolver pathResolver)
     {
-        this.pathResolver = new PathResolver();
+        this.pathResolver = pathResolver;
     }
 
     @Test
