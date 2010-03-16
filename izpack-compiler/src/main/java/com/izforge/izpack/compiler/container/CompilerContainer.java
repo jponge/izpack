@@ -36,30 +36,29 @@ public class CompilerContainer extends AbstractContainer
      */
     public void initBindings()
     {
-        pico = new PicoBuilder().withConstructorInjection().withCaching().build();
-        pico.addComponent(CompilerContainer.class, this);
-        pico.addComponent(CliAnalyzer.class);
-        pico.addComponent(CmdlinePackagerListener.class);
-        pico.addComponent(Compiler.class);
-        pico.addComponent(ClassPathCrawler.class);
-        pico.addComponent(MergeableResolver.class);
-        pico.addComponent(PathResolver.class);
-        pico.addComponent(CompilerConfig.class);
-        pico.as(Characteristics.USE_NAMES).addComponent(AssertionHelper.class);
-        pico.addComponent(CompilerHelper.class);
-        pico.addComponent(PropertyManager.class);
-        pico.addComponent(CompilerResourceManager.class);
-        pico.addComponent(MergeManager.class, MergeManagerImpl.class);
-        pico.addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class);
-        pico.addComponent(IPackager.class, Packager.class);
+        pico = new PicoBuilder().withConstructorInjection().withCaching().build()
+                .addComponent(CompilerContainer.class, this)
+                .addComponent(CliAnalyzer.class)
+                .addComponent(CmdlinePackagerListener.class)
+                .addComponent(Compiler.class)
+                .addComponent(ClassPathCrawler.class)
+                .addComponent(MergeableResolver.class)
+                .addComponent(PathResolver.class)
+                .addComponent(CompilerConfig.class)
+                .as(Characteristics.USE_NAMES).addComponent(AssertionHelper.class)
+                .addComponent(CompilerHelper.class)
+                .addComponent(PropertyManager.class)
+                .addComponent(CompilerResourceManager.class)
+                .addComponent(MergeManager.class, MergeManagerImpl.class)
+                .addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
+                .addComponent(IPackager.class, Packager.class);
 
-
-        pico.addAdapter(new ProviderAdapter(new IzpackProjectProvider()));
-        pico.addAdapter(new ProviderAdapter(new XmlCompilerHelperProvider()));
-        pico.addAdapter(new ProviderAdapter(new PropertiesProvider()));
-        pico.addAdapter(new ProviderAdapter(new JarOutputStreamProvider()));
-        pico.addAdapter(new ProviderAdapter(new CompressedOutputStreamProvider()));
-        pico.addAdapter(new ProviderAdapter(new PackCompressorProvider()));
+        pico.addAdapter(new ProviderAdapter(new IzpackProjectProvider()))
+                .addAdapter(new ProviderAdapter(new XmlCompilerHelperProvider()))
+                .addAdapter(new ProviderAdapter(new PropertiesProvider()))
+                .addAdapter(new ProviderAdapter(new JarOutputStreamProvider()))
+                .addAdapter(new ProviderAdapter(new CompressedOutputStreamProvider()))
+                .addAdapter(new ProviderAdapter(new PackCompressorProvider()));
     }
 
     /**
