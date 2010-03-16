@@ -38,29 +38,29 @@ public class TestCompilerContainerMock extends AbstractContainer
      */
     public void initBindings()
     {
-        pico = new PicoBuilder().withConstructorInjection().build();
-        pico.addComponent(Mockito.mock(CliAnalyzer.class));
-        pico.addComponent(Mockito.mock(CmdlinePackagerListener.class));
-        pico.addComponent(Mockito.mock(Compiler.class));
-        pico.addComponent(Mockito.mock(PathResolver.class));
-        pico.addComponent(Mockito.mock(CompilerHelper.class));
-        pico.addComponent(Mockito.mock(PropertyManager.class));
-        pico.addComponent(Mockito.mock(CompilerResourceManager.class));
-        pico.addComponent(Mockito.mock(MergeManager.class));
-        pico.addComponent(Mockito.mock(VariableSubstitutor.class));
-        pico.addComponent(Mockito.mock(IPackager.class));
-        pico.addComponent(Mockito.mock(CompilerData.class));
-        pico.addComponent(Mockito.mock(AssertionHelper.class));
-        pico.addComponent(Mockito.mock(Map.class));
-        pico.addComponent("installFile", "installFile");
-        pico.addComponent(BindeableContainer.class, this);
-        pico.addComponent(CompilerConfig.class);
-        pico.addComponent(IzpackProjectInstaller.class);
-        pico.addComponent(XmlCompilerHelper.class);
-        pico.addComponent(XMLParser.class);
-        pico.addComponent(PathResolver.class);
-        pico.addComponent(MergeableResolver.class);
-        pico.addComponent(ClassPathCrawler.class);
+        pico = new PicoBuilder().withConstructorInjection().build()
+                .addComponent(Mockito.mock(CliAnalyzer.class))
+                .addComponent(Mockito.mock(CmdlinePackagerListener.class))
+                .addComponent(Mockito.mock(Compiler.class))
+                .addComponent(Mockito.mock(PathResolver.class))
+                .addComponent(Mockito.mock(CompilerHelper.class))
+                .addComponent(Mockito.mock(PropertyManager.class))
+                .addComponent(Mockito.mock(CompilerResourceManager.class))
+                .addComponent(Mockito.mock(MergeManager.class))
+                .addComponent(Mockito.mock(VariableSubstitutor.class))
+                .addComponent(Mockito.mock(IPackager.class))
+                .addComponent(Mockito.mock(CompilerData.class))
+                .addComponent(Mockito.mock(AssertionHelper.class))
+                .addComponent(Mockito.mock(Map.class))
+                .addComponent("installFile", "installFile")
+                .addComponent(BindeableContainer.class, this)
+                .addComponent(CompilerConfig.class)
+                .addComponent(IzpackProjectInstaller.class)
+                .addComponent(XmlCompilerHelper.class)
+                .addComponent(XMLParser.class)
+                .addComponent(PathResolver.class)
+                .addComponent(MergeableResolver.class)
+                .addComponent(ClassPathCrawler.class);
 
     }
 }

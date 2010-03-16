@@ -25,13 +25,13 @@ public class TestPanelManagerContainer extends AbstractContainer
      */
     public void initBindings()
     {
-        pico = new PicoBuilder().withConstructorInjection().build();
-        pico.addComponent(Mockito.mock(GUIInstallData.class));
-        pico.addComponent(Mockito.mock(BindeableContainer.class));
-        pico.addComponent(ClassPathCrawler.class);
-        pico.addComponent(MergeableResolver.class);
-        pico.addComponent(PathResolver.class);
-        pico.addComponent(MergeManager.class, MergeManagerImpl.class);
-        pico.addComponent(PanelManager.class);
+        pico = new PicoBuilder().withConstructorInjection().build()
+                .addComponent(Mockito.mock(GUIInstallData.class))
+                .addComponent(Mockito.mock(BindeableContainer.class))
+                .addComponent(ClassPathCrawler.class)
+                .addComponent(MergeableResolver.class)
+                .addComponent(PathResolver.class)
+                .addComponent(MergeManager.class, MergeManagerImpl.class)
+                .addComponent(PanelManager.class);
     }
 }

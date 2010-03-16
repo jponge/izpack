@@ -18,10 +18,10 @@ public class TestMergeContainer extends AbstractContainer
 
     public void initBindings() throws Exception
     {
-        pico = new PicoBuilder().withConstructorInjection().withCaching().build();
-        pico.addComponent(PathResolver.class);
-        pico.addComponent(MergeableResolver.class);
-        pico.addComponent(ClassPathCrawler.class);
-        pico.addComponent(MergeManager.class, MergeManagerImpl.class);
+        pico = new PicoBuilder().withConstructorInjection().withCaching().build()
+                .addComponent(PathResolver.class)
+                .addComponent(MergeableResolver.class)
+                .addComponent(ClassPathCrawler.class)
+                .addComponent(MergeManager.class, MergeManagerImpl.class);
     }
 }
