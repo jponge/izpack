@@ -21,7 +21,6 @@ import java.util.*;
 public class ClassPathCrawler
 {
 
-
     public String getCurrentClasspath()
     {
         StringBuilder stringBuilder = new StringBuilder();

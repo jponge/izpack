@@ -6,7 +6,6 @@ import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.merge.ClassResolver;
 import com.izforge.izpack.merge.file.FileMerge;
 import com.izforge.izpack.merge.jar.JarMerge;
-import com.izforge.izpack.merge.panel.PanelMerge;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -25,7 +24,7 @@ public class PathResolver
 {
 
     public Map<OutputStream, List<String>> mergeContent;
-    private MergeableResolver mergeableResolver;
+    public MergeableResolver mergeableResolver;
 
     public PathResolver(MergeableResolver mergeableResolver, Map<OutputStream, List<String>> mergeContent)
     {
@@ -68,11 +67,6 @@ public class PathResolver
             return result;
         }
         throw new IzPackException("The path " + sourcePath + " is not present inside the classpath.\n The current classpath is :" + ResolveUtils.getCurrentClasspath());
-    }
-
-    public PanelMerge getPanelMerge(String className)
-    {
-        return new PanelMerge(className, getMergeableFromPath(ResolveUtils.getPackagePathFromClassName(className)), mergeContent);
     }
 
     /**

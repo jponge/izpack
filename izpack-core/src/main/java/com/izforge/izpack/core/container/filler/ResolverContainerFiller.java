@@ -23,7 +23,7 @@ public class ResolverContainerFiller implements DependenciesFillerContainer
                 picoContainer
                         .as(Characteristics.USE_NAMES).addComponent(ClassPathCrawler.class)
                         .as(Characteristics.USE_NAMES).addComponent(PathResolver.class)
-                        .addComponent(MergeableResolver.class)
+                        .as(Characteristics.USE_NAMES).addComponent(MergeableResolver.class)
                         .addComponent("mergeContent", HashMap.class, ComponentParameter.ZERO)
                 ;
     }
