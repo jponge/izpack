@@ -17,6 +17,8 @@ import com.izforge.izpack.compiler.listener.CmdlinePackagerListener;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.merge.MergeManager;
+import com.izforge.izpack.merge.resolve.ClassPathCrawler;
+import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import org.mockito.Mockito;
 import org.picocontainer.PicoBuilder;
@@ -57,6 +59,8 @@ public class TestCompilerContainerMock extends AbstractContainer
         pico.addComponent(XmlCompilerHelper.class);
         pico.addComponent(XMLParser.class);
         pico.addComponent(PathResolver.class);
+        pico.addComponent(MergeableResolver.class);
+        pico.addComponent(ClassPathCrawler.class);
 
     }
 }

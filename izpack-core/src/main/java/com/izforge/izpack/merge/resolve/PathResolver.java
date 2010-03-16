@@ -29,9 +29,11 @@ public class PathResolver
     public static final String BASE_CLASSNAME_PATH = CLASSNAME_PREFIX.replaceAll("\\.", "/") + "/";
 
     public Map<OutputStream, List<String>> mergeContent;
+    private MergeableResolver mergeableResolver;
 
-    public PathResolver()
+    public PathResolver(MergeableResolver mergeableResolver)
     {
+        this.mergeableResolver = mergeableResolver;
         mergeContent = new HashMap<OutputStream, List<String>>();
     }
 

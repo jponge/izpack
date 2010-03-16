@@ -1,15 +1,17 @@
-package com.izforge.izpack.panel;
+package com.izforge.izpack.merge.panel;
 
 import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.matcher.DuplicateMatcher;
 import com.izforge.izpack.matcher.MergeMatcher;
 import com.izforge.izpack.matcher.ZipMatcher;
-import com.izforge.izpack.merge.panel.PanelMerge;
+import com.izforge.izpack.merge.panel.container.TestPanelMergeContainer;
 import com.izforge.izpack.merge.resolve.PathResolver;
+import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.MergeUtils;
+import com.izforge.izpack.test.junit.PicoRunner;
 import org.hamcrest.core.Is;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.File;
 
@@ -20,16 +22,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Anthonin Bonnefoy
  */
+@RunWith(PicoRunner.class)
+@Container(TestPanelMergeContainer.class)
 public class PanelMergeTest
 {
     private PanelMerge panelMerge;
 
     private PathResolver pathResolver;
 
-    @Before
-    public void setUp()
+    public PanelMergeTest(PathResolver pathResolver)
     {
-        pathResolver = new PathResolver();
+        this.pathResolver = pathResolver;
     }
 
     @Test

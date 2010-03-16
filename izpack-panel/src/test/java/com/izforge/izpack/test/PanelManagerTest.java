@@ -1,40 +1,30 @@
 package com.izforge.izpack.test;
 
-import com.izforge.izpack.api.container.BindeableContainer;
-import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.manager.PanelManager;
-import com.izforge.izpack.merge.MergeManagerImpl;
-import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.panels.checkedhello.CheckedHelloPanel;
+import com.izforge.izpack.test.container.TestPanelManagerContainer;
+import com.izforge.izpack.test.junit.PicoRunner;
 import org.hamcrest.core.Is;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.junit.runner.RunWith;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Test for panel manager
  */
+
+@RunWith(PicoRunner.class)
+@Container(TestPanelManagerContainer.class)
 public class PanelManagerTest
 {
-    @Mock
-    private GUIInstallData installDataGUI;
-    @Mock
-    private BindeableContainer installerContainer;
-    private MergeManagerImpl mergeManager;
     private PanelManager panelManager;
 
-    @Before
-    public void initMock() throws ClassNotFoundException
+    public PanelManagerTest(PanelManager panelManager)
     {
-        MockitoAnnotations.initMocks(getClass());
-        PathResolver pathResolver = new PathResolver();
-        mergeManager = new MergeManagerImpl(pathResolver);
-        panelManager = new PanelManager(installDataGUI, installerContainer, pathResolver);
+        this.panelManager = panelManager;
     }
 
     @Test

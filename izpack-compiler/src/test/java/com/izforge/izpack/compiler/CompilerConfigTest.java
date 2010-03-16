@@ -33,11 +33,15 @@ public class CompilerConfigTest
 {
     private File out;
     private CompilerConfig compilerConfig;
+    private PathResolver pathResolver;
+    private MergeManagerImpl mergeManager;
 
-    public CompilerConfigTest(File out, CompilerConfig compilerConfig)
+    public CompilerConfigTest(File out, CompilerConfig compilerConfig, PathResolver pathResolver, MergeManagerImpl mergeManager)
     {
         this.out = out;
         this.compilerConfig = compilerConfig;
+        this.pathResolver = pathResolver;
+        this.mergeManager = mergeManager;
     }
 
     @Test
@@ -53,8 +57,6 @@ public class CompilerConfigTest
     @Test
     public void mergeManagerShouldGetTheMergeableFromPanel() throws Exception
     {
-        PathResolver pathResolver = new PathResolver();
-        MergeManagerImpl mergeManager = new MergeManagerImpl(pathResolver);
         mergeManager.addResourceToMerge(pathResolver.getPanelMerge("HelloPanel"));
         mergeManager.addResourceToMerge(pathResolver.getPanelMerge("CheckedHelloPanel"));
 

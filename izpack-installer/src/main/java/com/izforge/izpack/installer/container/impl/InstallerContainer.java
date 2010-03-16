@@ -19,6 +19,7 @@ import com.izforge.izpack.installer.language.LanguageDialog;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.merge.MergeManagerImpl;
+import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.picocontainer.Characteristics;
@@ -52,6 +53,7 @@ public class InstallerContainer extends AbstractContainer
                 .addComponent(ConditionCheck.class)
                 .addComponent(MergeManagerImpl.class)
                 .addComponent(PathResolver.class)
+                .addComponent(MergeableResolver.class)
                 .addComponent(UninstallData.class)
                 .addComponent(CustomDataContainer.class)
                 .addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
