@@ -16,7 +16,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
-import java.util.zip.ZipFile;
 
 /**
  * Try to resolve paths by searching inside the classpath or files with the corresponding name
@@ -71,71 +70,13 @@ public class PathResolver
         {
             return result;
         }
-        throw new IzPackException("The path " + sourcePath + " is not present inside the classpath.\n The current classpath is :" + getCurrentClasspath());
+        throw new IzPackException("The path " + sourcePath + " is not present inside the classpath.\n The current classpath is :" + ResolveUtils.getCurrentClasspath());
     }
 
     public PanelMerge getPanelMerge(String className)
     {
         return new PanelMerge(className, getMergeableFromPath(getPackagePathFromClassName(className)), mergeContent);
     }
-
-    public boolean isJar(File classFile)
-    {
-        ZipFile zipFile = null;
-        try
-        {
-            zipFile = new ZipFile(classFile);
-            zipFile.getName();
-        }
-        catch (IOException e)
-        {
-            return false;
-        }
-        finally
-        {
-            if (zipFile != null)
-            {
-                try
-                {
-                    zipFile.close();
-                }
-                catch (IOException ignored)
-                {
-                }
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Extract file name from url and test jar file
-     *
-     * @param url url to test. If it is a jar content, the jar file is extracted and treated as a jar
-     * @return true if the file is a jar
-     */
-    public boolean isJar(URL url)
-    {
-        String file = url.getFile();
-        file = file.substring(file.indexOf(":") + 1);
-        if (file.contains("!"))
-        {
-            file = file.substring(0, file.lastIndexOf('!'));
-        }
-        File classFile = new File(file);
-        return isJar(classFile);
-    }
-
-    public String getCurrentClasspath()
-    {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (URL url : getClassPathUrl())
-        {
-            stringBuilder.append(url.getPath());
-            stringBuilder.append('\n');
-        }
-        return stringBuilder.toString();
-    }
-
 
     /**
      * Search if the given path exist in the classpath and return it. If nothing is found,
@@ -180,7 +121,7 @@ public class PathResolver
 
     public Mergeable getMergeableFromURLWithDestination(URL url, String destination)
     {
-        if (isJar(url))
+        if (ResolveUtils.isJar(url))
         {
             return new JarMerge(processUrlToJarPath(url), processUrlToJarPackage(url), destination, mergeContent);
         }
@@ -192,7 +133,7 @@ public class PathResolver
 
     public Mergeable getMergeableFromURL(URL url)
     {
-        if (!isJar(url))
+        if (!ResolveUtils.isJar(url))
         {
             return new FileMerge(url, mergeContent);
         }
@@ -201,7 +142,7 @@ public class PathResolver
 
     public Mergeable getMergeableFromURL(URL url, String resourcePath)
     {
-        if (isJar(url))
+        if (ResolveUtils.isJar(url))
         {
             return new JarMerge(url, processUrlToJarPath(url), mergeContent);
         }
@@ -271,7 +212,7 @@ public class PathResolver
         final String fileToSearch = className + ".class";
         try
         {
-            Collection<URL> urls = getClassPathUrl();
+            Collection<URL> urls = ResolveUtils.getClassPathUrl();
             for (URL url : urls)
             {
                 Mergeable mergeable = getMergeableFromURL(url);
@@ -292,25 +233,7 @@ public class PathResolver
         {
             throw new MergeException(e);
         }
-        throw new IzPackException("Could not find class " + className + " : Current classpath is " + getCurrentClasspath());
-    }
-
-    private Collection<URL> getClassPathUrl()
-    {
-        Collection<URL> result = new HashSet<URL>();
-        java.net.URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
-        result.addAll(Arrays.asList(loader.getURLs()));
-        try
-        {
-            Enumeration<URL> urlEnumeration = loader.getResources("");
-            result.addAll(Collections.list(urlEnumeration));
-            urlEnumeration = loader.getResources("META-INF/");
-            result.addAll(Collections.list(urlEnumeration));
-        }
-        catch (IOException ignored)
-        {
-        }
-        return result;
+        throw new IzPackException("Could not find class " + className + " : Current classpath is " + ResolveUtils.getCurrentClasspath());
     }
 
 }

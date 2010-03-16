@@ -128,10 +128,10 @@ public class PathResolverTest
     {
         URL fileResource = ClassLoader.getSystemResource("com/izforge/izpack/merge/AbstractMerge.class");
         URL jarResource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
-        assertThat(pathResolver.isJar(
+        assertThat(ResolveUtils.isJar(
                 fileResource),
                 Is.is(false));
-        assertThat(pathResolver.isJar(
+        assertThat(ResolveUtils.isJar(
                 jarResource),
                 Is.is(true));
     }
@@ -141,10 +141,10 @@ public class PathResolverTest
     {
         File fileResource = new File(ClassLoader.getSystemResource("com/izforge/izpack/merge/AbstractMerge.class").getFile());
         File jarResource = new File(ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar").getFile());
-        assertThat(pathResolver.isJar(
+        assertThat(ResolveUtils.isJar(
                 fileResource),
                 Is.is(false));
-        assertThat(pathResolver.isJar(
+        assertThat(ResolveUtils.isJar(
                 jarResource),
                 Is.is(true));
     }
