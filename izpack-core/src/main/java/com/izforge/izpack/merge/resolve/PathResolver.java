@@ -273,7 +273,7 @@ public class PathResolver
         final String fileToSearch = className + ".class";
         try
         {
-            List<URL> urls = getClassPathUrl();
+            Collection<URL> urls = getClassPathUrl();
             for (URL url : urls)
             {
                 Mergeable mergeable = getMergeableFromURL(url);
@@ -297,9 +297,9 @@ public class PathResolver
         throw new IzPackException("Could not find class " + className + " : Current classpath is " + getCurrentClasspath());
     }
 
-    private List<URL> getClassPathUrl()
+    private Collection<URL> getClassPathUrl()
     {
-        List<URL> result = new ArrayList<URL>();
+        Collection<URL> result = new HashSet<URL>();
         java.net.URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
         result.addAll(Arrays.asList(loader.getURLs()));
         try
