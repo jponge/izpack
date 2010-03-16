@@ -13,11 +13,9 @@ import com.izforge.izpack.compiler.listener.CmdlinePackagerListener;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.compiler.packager.impl.Packager;
 import com.izforge.izpack.core.container.AbstractContainer;
+import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.MergeManagerImpl;
-import com.izforge.izpack.merge.resolve.ClassPathCrawler;
-import com.izforge.izpack.merge.resolve.MergeableResolver;
-import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.picocontainer.Characteristics;
 import org.picocontainer.PicoBuilder;
@@ -41,9 +39,6 @@ public class CompilerContainer extends AbstractContainer
                 .addComponent(CliAnalyzer.class)
                 .addComponent(CmdlinePackagerListener.class)
                 .addComponent(Compiler.class)
-                .addComponent(ClassPathCrawler.class)
-                .addComponent(MergeableResolver.class)
-                .addComponent(PathResolver.class)
                 .addComponent(CompilerConfig.class)
                 .as(Characteristics.USE_NAMES).addComponent(AssertionHelper.class)
                 .addComponent(CompilerHelper.class)
@@ -52,6 +47,8 @@ public class CompilerContainer extends AbstractContainer
                 .addComponent(MergeManager.class, MergeManagerImpl.class)
                 .addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
                 .addComponent(IPackager.class, Packager.class);
+
+        fillContainer(new ResolverContainerFiller());
 
         pico.addAdapter(new ProviderAdapter(new IzpackProjectProvider()))
                 .addAdapter(new ProviderAdapter(new XmlCompilerHelperProvider()))

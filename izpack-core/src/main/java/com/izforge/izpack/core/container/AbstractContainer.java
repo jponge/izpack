@@ -1,6 +1,7 @@
 package com.izforge.izpack.core.container;
 
 import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.api.container.DependenciesFillerContainer;
 import org.picocontainer.MutablePicoContainer;
 
 /**
@@ -38,6 +39,11 @@ public abstract class AbstractContainer implements BindeableContainer
     public void dispose()
     {
         pico.dispose();
+    }
+
+    public MutablePicoContainer fillContainer(DependenciesFillerContainer fillerContainer)
+    {
+        return fillerContainer.fillContainer(pico);
     }
 
     public MutablePicoContainer makeChildContainer()

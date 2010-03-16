@@ -27,10 +27,10 @@ public class PathResolver
     public Map<OutputStream, List<String>> mergeContent;
     private MergeableResolver mergeableResolver;
 
-    public PathResolver(MergeableResolver mergeableResolver)
+    public PathResolver(MergeableResolver mergeableResolver, Map<OutputStream, List<String>> mergeContent)
     {
         this.mergeableResolver = mergeableResolver;
-        mergeContent = new HashMap<OutputStream, List<String>>();
+        this.mergeContent = mergeContent;
     }
 
     /**

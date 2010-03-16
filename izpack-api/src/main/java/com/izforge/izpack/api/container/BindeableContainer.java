@@ -22,4 +22,6 @@ public interface BindeableContainer
     void dispose();
 
     MutablePicoContainer getContainer();
+
+    MutablePicoContainer fillContainer(DependenciesFillerContainer fillerContainer);
 }
