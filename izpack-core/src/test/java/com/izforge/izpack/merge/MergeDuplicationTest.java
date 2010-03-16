@@ -1,7 +1,7 @@
 package com.izforge.izpack.merge;
 
 import com.izforge.izpack.api.merge.Mergeable;
-import com.izforge.izpack.container.TestMergeDuplicationContainer;
+import com.izforge.izpack.container.TestMergeContainer;
 import com.izforge.izpack.matcher.DuplicateMatcher;
 import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.merge.resolve.PathResolver;
@@ -22,7 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * @author Anthonin Bonnefoy
  */
 @RunWith(PicoRunner.class)
-@Container(TestMergeDuplicationContainer.class)
+@Container(TestMergeContainer.class)
 public class MergeDuplicationTest
 {
     private PathResolver pathResolver;

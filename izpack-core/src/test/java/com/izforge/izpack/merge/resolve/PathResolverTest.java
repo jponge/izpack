@@ -56,9 +56,6 @@ public class PathResolverTest
     {
         List<URL> urlList = pathResolver.resolvePath("com/izforge");
         assertThat(urlList.size(), new IsGreaterThan<Integer>(1));
-        assertThat(getListPathFromListURL(urlList), IsNot.not(IsCollectionContaining.hasItem(
-                StringContains.containsString("test-classes"))
-        ));
     }
 
     @Test
@@ -76,8 +73,7 @@ public class PathResolverTest
     {
         List<URL> urlList = pathResolver.resolvePath("com/izforge/izpack/merge/");
         assertThat(getListPathFromListURL(urlList), IsCollectionContaining.hasItems(
-                IsNot.not(StringContains.containsString("jar!")),
-                StringContains.containsString("target/classes")
+                IsNot.not(StringContains.containsString("jar!"))
         ));
     }
 
@@ -112,8 +108,9 @@ public class PathResolverTest
     public void testGetMergeableFromDirectoryWithDestination() throws Exception
     {
         List<Mergeable> mergeables = pathResolver.getMergeableFromPath("com/izforge/izpack/merge/", "a/dest/");
-        Mergeable mergeable = mergeables.get(0);
-        assertThat(mergeable, MergeMatcher.isMergeableContainingFiles("a/dest/resolve/PathResolver.class"));
+        assertThat(mergeables,
+                IsCollectionContaining.hasItem(
+                        MergeMatcher.isMergeableContainingFiles("a/dest/resolve/PathResolver.class")));
     }
 
     private List<String> getListPathFromListURL(List<URL> urlList)

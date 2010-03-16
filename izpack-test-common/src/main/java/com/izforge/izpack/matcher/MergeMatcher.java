@@ -11,8 +11,6 @@ import org.hamcrest.core.Is;
 import java.io.IOException;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
 /**
  * Matcher for mergeable
  *
@@ -35,7 +33,7 @@ public class MergeMatcher extends TypeSafeMatcher<Mergeable>
             MockOutputStream outputStream = new MockOutputStream();
             mergeable.merge(outputStream);
             List<String> entryName = outputStream.getListEntryName();
-            assertThat(entryName, listMatcher);
+            listMatcher.matches(entryName);
         }
         catch (IOException e)
         {

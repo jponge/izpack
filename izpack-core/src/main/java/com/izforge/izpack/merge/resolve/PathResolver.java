@@ -54,15 +54,11 @@ public class PathResolver
         }
         try
         {
-            ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-            Enumeration<URL> urlEnumeration = contextClassLoader.getResources(sourcePath);
+            java.net.URLClassLoader contextClassLoader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
+            Enumeration<URL> urlEnumeration = contextClassLoader.findResources(sourcePath);
             while (urlEnumeration.hasMoreElements())
             {
                 URL url = urlEnumeration.nextElement();
-                if (url.getPath().contains("test-classes"))
-                {
-                    continue;
-                }
                 result.add(url);
             }
         }
