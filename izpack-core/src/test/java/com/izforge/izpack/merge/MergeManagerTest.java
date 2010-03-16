@@ -3,6 +3,7 @@ package com.izforge.izpack.merge;
 import com.izforge.izpack.container.TestMergeContainer;
 import com.izforge.izpack.matcher.MergeMatcher;
 import com.izforge.izpack.merge.resolve.PathResolver;
+import com.izforge.izpack.merge.resolve.ResolveUtils;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.junit.PicoRunner;
 import org.hamcrest.core.Is;
@@ -35,7 +36,7 @@ public class MergeManagerTest
     public void testProcessJarPath() throws Exception
     {
         URL resource = new URL("file:/home/test/unjar.jar!com/package/in/jar");
-        String jarPath = pathResolver.processUrlToJarPath(resource);
+        String jarPath = ResolveUtils.processUrlToJarPath(resource);
         System.out.println(jarPath);
         assertThat(jarPath, Is.is("/home/test/unjar.jar"));
     }

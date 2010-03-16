@@ -1,7 +1,10 @@
 package com.izforge.izpack.merge.resolve;
 
+import com.izforge.izpack.api.exception.IzPackException;
+
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
@@ -14,6 +17,9 @@ import java.util.zip.ZipFile;
  */
 public class ResolveUtils
 {
+    public static final String CLASSNAME_PREFIX = "com.izforge.izpack.panels";
+    public static final String BASE_CLASSNAME_PATH = CLASSNAME_PREFIX.replaceAll("\\.", "/") + "/";
+
     /**
      * Extract file name from url and test jar file
      *
@@ -87,5 +93,64 @@ public class ResolveUtils
         {
         }
         return result;
+    }
+
+    /**
+     * Search if the given path exist in the classpath and return it. If nothing is found,
+     * try to load it as a file and return it if exists.
+     *
+     * @param path The path of File to load.
+     * @return The file or null if nothing found.
+     */
+    public static URL getFileFromPath(String path)
+    {
+        try
+        {
+            File file = new File(path);
+            if (file.exists())
+            {
+                return file.toURI().toURL();
+            }
+        }
+        catch (MalformedURLException e)
+        {
+            throw new IzPackException(e);
+        }
+        return null;
+    }
+
+    public static String processUrlToJarPath(URL resource)
+    {
+        String res = resource.getPath();
+        res = res.replaceAll("file:", "");
+        if (res.contains("!"))
+        {
+            return res.substring(0, res.lastIndexOf("!"));
+        }
+        return res;
+    }
+
+    public static String processUrlToJarPackage(URL resource)
+    {
+        String res = resource.getPath();
+        res = res.replaceAll("file:", "");
+        return res.substring(res.lastIndexOf("!") + 2, res.length());
+    }
+
+    /**
+     * Simply return the left side of the last .<br />
+     * com.izpack.Aclass return com.izpack <br />
+     * If the is no '.' in the charsequence, return the default package for panels.
+     *
+     * @param className className to process.
+     * @return Extracted package from classname or the default package
+     */
+    public static String getPackagePathFromClassName(String className)
+    {
+        if (className.contains("."))
+        {
+            return className.substring(0, className.lastIndexOf(".")).replaceAll("\\.", "/") + "/";
+        }
+        return BASE_CLASSNAME_PATH;
     }
 }
