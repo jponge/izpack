@@ -12,7 +12,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 
 /**
- * Created by IntelliJ IDEA.
+ * Utils methods for tests purpose
  *
  * @author Anthonin Bonnefoy
  */

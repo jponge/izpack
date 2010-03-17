@@ -153,14 +153,14 @@ public class PathResolverTest
     @Test
     public void pathResolverShouldTransformClassNameToPackagePath() throws Exception
     {
-        String pathFromClassName = ResolveUtils.getPackagePathFromClassName("com.test.sora.UneClasse");
+        String pathFromClassName = ResolveUtils.getPanelsPackagePathFromClassName("com.test.sora.UneClasse");
         assertThat(pathFromClassName, Is.is("com/test/sora/"));
     }
 
     @Test
     public void pathResolverShouldReturnDefaultPackagePath() throws Exception
     {
-        String pathFromClassName = ResolveUtils.getPackagePathFromClassName("UneClasse");
+        String pathFromClassName = ResolveUtils.getPanelsPackagePathFromClassName("UneClasse");
         assertThat(pathFromClassName, Is.is("com/izforge/izpack/panels/"));
     }
 

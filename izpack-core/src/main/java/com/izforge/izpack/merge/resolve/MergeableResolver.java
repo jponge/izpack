@@ -26,7 +26,7 @@ public class MergeableResolver
 
     public PanelMerge getPanelMerge(String className, PathResolver pathResolver)
     {
-        return new PanelMerge(className, pathResolver.getMergeableFromPath(ResolveUtils.getPackagePathFromClassName(className)), mergeContent);
+        return new PanelMerge(className, pathResolver.getMergeableFromPath(ResolveUtils.getPanelsPackagePathFromClassName(className)), mergeContent);
     }
 
     public Mergeable getMergeableFromURL(URL url)

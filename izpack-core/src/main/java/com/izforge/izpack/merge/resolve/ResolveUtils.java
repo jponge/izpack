@@ -145,7 +145,7 @@ public class ResolveUtils
      * @param className className to process.
      * @return Extracted package from classname or the default package
      */
-    public static String getPackagePathFromClassName(String className)
+    public static String getPanelsPackagePathFromClassName(String className)
     {
         if (className.contains("."))
         {

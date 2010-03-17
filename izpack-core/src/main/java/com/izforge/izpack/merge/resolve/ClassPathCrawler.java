@@ -52,16 +52,19 @@ public class ClassPathCrawler
             for (URL url : urls)
             {
                 Mergeable mergeable = mergeableResolver.getMergeableFromURL(url);
-                final File file = mergeable.find(new FileFilter()
+                final List<File> files = mergeable.recursivelyListFiles(new FileFilter()
                 {
                     public boolean accept(File pathname)
                     {
                         return true;
                     }
                 });
-                if (file != null)
+                if (files != null)
                 {
-                    getOrCreateList(classPathContentCache, file.getName()).add(file.toURI().toURL());
+                    for (File file : files)
+                    {
+                        getOrCreateList(classPathContentCache, file.getName()).add(file.toURI().toURL());
+                    }
                 }
             }
         }
@@ -80,14 +83,14 @@ public class ClassPathCrawler
         return classPathContentCache.get(key);
     }
 
-    public Class searchFullClassNameInClassPath(final String className)
+    public Class searchFullClassNameInClassPath(final String className) throws ClassNotFoundException
     {
         final String fileToSearch = className + ".class";
         processClassPath();
         List<URL> urlList = classPathContentCache.get(fileToSearch);
-        if (urlList.size() == 1)
+        if (urlList != null)
         {
-            System.out.println(urlList.get(0));
+            return Class.forName(className);
         }
         throw new IzPackException("Could not find class " + className + " : Current classpath is " + getCurrentClasspath());
     }

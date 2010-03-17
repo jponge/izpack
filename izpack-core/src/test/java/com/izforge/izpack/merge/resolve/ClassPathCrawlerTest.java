@@ -28,7 +28,7 @@ public class ClassPathCrawlerTest
     @Test
     public void testSearchFullClassNameInClassPath() throws Exception
     {
-        Class aClass = classPathCrawler.searchFullClassNameInClassPath(ClassPathCrawlerTest.class.getName());
+        Class aClass = classPathCrawler.searchFullClassNameInClassPath(ClassPathCrawlerTest.class.getSimpleName());
         assertThat(aClass, Is.is(ClassPathCrawler.class));
     }
 
