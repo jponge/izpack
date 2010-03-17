@@ -98,7 +98,7 @@ public class ClassPathCrawler
     }
 
 
-    public Collection<URL> searchPackageInClassPath(final String packageName)
+    public List<URL> searchPackageInClassPath(final String packageName)
     {
         processClassPath();
         return classPathContentCache.get(packageName);

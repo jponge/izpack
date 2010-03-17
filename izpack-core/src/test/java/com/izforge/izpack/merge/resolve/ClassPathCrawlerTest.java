@@ -3,9 +3,15 @@ package com.izforge.izpack.merge.resolve;
 import com.izforge.izpack.core.container.TestMergeContainer;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.junit.PicoRunner;
+import org.hamcrest.beans.HasPropertyWithValue;
 import org.hamcrest.core.Is;
+import org.hamcrest.text.StringContains;
 import org.junit.Test;
+import org.junit.internal.matchers.IsCollectionContaining;
 import org.junit.runner.RunWith;
+
+import java.net.URL;
+import java.util.Collection;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -39,5 +45,23 @@ public class ClassPathCrawlerTest
         assertThat(aClass.getName(), Is.is(Is.class.getName()));
     }
 
+    @Test
+    public void searchPackageInClassPathForFile() throws Exception
+    {
+        Collection<URL> urls = classPathCrawler.searchPackageInClassPath("resolve");
+        assertThat(urls,
+                IsCollectionContaining.hasItem(
+                        HasPropertyWithValue.<URL>hasProperty("path", StringContains.containsString("com/izforge/izpack/merge/resolve")))
+        );
+    }
 
+    @Test
+    public void searchPackageInClassPathForJar() throws Exception
+    {
+        Collection<URL> urls = classPathCrawler.searchPackageInClassPath("hamcrest");
+        assertThat(urls,
+                IsCollectionContaining.hasItem(
+                        HasPropertyWithValue.<URL>hasProperty("path", StringContains.containsString("org/hamcrest")))
+        );
+    }
 }

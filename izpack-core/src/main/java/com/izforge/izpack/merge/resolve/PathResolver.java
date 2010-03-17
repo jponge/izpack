@@ -23,13 +23,16 @@ import java.util.*;
 public class PathResolver
 {
 
-    public Map<OutputStream, List<String>> mergeContent;
-    public MergeableResolver mergeableResolver;
+    private Map<OutputStream, List<String>> mergeContent;
+    private MergeableResolver mergeableResolver;
+    private ClassPathCrawler classPathCrawler;
 
-    public PathResolver(MergeableResolver mergeableResolver, Map<OutputStream, List<String>> mergeContent)
+
+    public PathResolver(MergeableResolver mergeableResolver, Map<OutputStream, List<String>> mergeContent, ClassPathCrawler classPathCrawler)
     {
         this.mergeableResolver = mergeableResolver;
         this.mergeContent = mergeContent;
+        this.classPathCrawler = classPathCrawler;
     }
 
     /**
@@ -65,6 +68,12 @@ public class PathResolver
         if (!result.isEmpty())
         {
             return result;
+        }
+        // No chance with get resource, use classpath crawler from here
+        List<URL> urlList = classPathCrawler.searchPackageInClassPath(sourcePath);
+        if (urlList != null)
+        {
+            return urlList;
         }
         throw new IzPackException("The path " + sourcePath + " is not present inside the classpath.\n The current classpath is :" + ResolveUtils.getCurrentClasspath());
     }
