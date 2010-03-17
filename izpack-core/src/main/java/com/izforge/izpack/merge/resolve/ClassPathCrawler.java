@@ -1,6 +1,5 @@
 package com.izforge.izpack.merge.resolve;
 
-import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.merge.ClassResolver;
@@ -84,17 +83,23 @@ public class ClassPathCrawler
         return classPathContentCache.get(key);
     }
 
-    public Class searchClassInClassPath(final String className) throws ClassNotFoundException
+    public Class searchClassInClassPath(final String className)
     {
-        final String fileToSearch = className + ".class";
-        processClassPath();
-        List<URL> urlList = classPathContentCache.get(fileToSearch);
-        if (urlList != null)
+        try
         {
-            String fullClassName = ClassResolver.processURLToClassName(urlList.get(0));
-            return Class.forName(fullClassName);
+            final String fileToSearch = className + ".class";
+            processClassPath();
+            List<URL> urlList = classPathContentCache.get(fileToSearch);
+            if (urlList != null)
+            {
+                String fullClassName = ClassResolver.processURLToClassName(urlList.get(0));
+                return Class.forName(fullClassName);
+            }
         }
-        throw new IzPackException("Could not find class " + className + " : Current classpath is " + getCurrentClasspath());
+        catch (ClassNotFoundException ignored)
+        {
+        }
+        throw new MergeException("Could not find class " + className + " : Current classpath is " + getCurrentClasspath());
     }
 
 
