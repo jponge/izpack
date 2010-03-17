@@ -9,6 +9,7 @@ import org.hamcrest.text.StringContains;
 import org.junit.Test;
 import org.junit.internal.matchers.IsCollectionContaining;
 import org.junit.runner.RunWith;
+import org.picocontainer.PicoContainer;
 
 import java.net.URL;
 import java.util.Collection;
@@ -41,8 +42,8 @@ public class ClassPathCrawlerTest
     @Test
     public void searchClassInJar() throws Exception
     {
-        Class aClass = classPathCrawler.searchClassInClassPath(Is.class.getSimpleName());
-        assertThat(aClass.getName(), Is.is(Is.class.getName()));
+        Class aClass = classPathCrawler.searchClassInClassPath(PicoContainer.class.getSimpleName());
+        assertThat(aClass.getName(), Is.is(PicoContainer.class.getName()));
     }
 
     @Test
