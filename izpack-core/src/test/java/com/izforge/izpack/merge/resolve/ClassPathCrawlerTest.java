@@ -1,6 +1,6 @@
 package com.izforge.izpack.merge.resolve;
 
-import com.izforge.izpack.container.TestMergeContainer;
+import com.izforge.izpack.core.container.TestMergeContainer;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.junit.PicoRunner;
 import org.hamcrest.core.Is;

@@ -1,7 +1,7 @@
 package com.izforge.izpack.merge.jar;
 
 import com.izforge.izpack.api.merge.Mergeable;
-import com.izforge.izpack.container.TestMergeContainer;
+import com.izforge.izpack.core.container.TestMergeContainer;
 import com.izforge.izpack.matcher.MergeMatcher;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;

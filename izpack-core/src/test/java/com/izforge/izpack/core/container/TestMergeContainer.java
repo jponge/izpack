@@ -1,6 +1,5 @@
-package com.izforge.izpack.container;
+package com.izforge.izpack.core.container;
 
-import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.MergeManagerImpl;
