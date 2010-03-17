@@ -26,6 +26,7 @@
         <resources>
             <resource>
                 <directory>src/main/izpack</directory>
+                <filtering>true</filtering>
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
