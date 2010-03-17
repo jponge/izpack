@@ -8,6 +8,7 @@ import org.apache.tools.zip.ZipOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +43,16 @@ public class PanelMerge implements Mergeable
         {
             mergeable.merge(outputStream);
         }
+    }
+
+    public List<File> recursivelyListFiles(FileFilter fileFilter)
+    {
+        ArrayList<File> result = new ArrayList<File>();
+        for (Mergeable mergeable : packageMerge)
+        {
+            result.addAll(mergeable.recursivelyListFiles(fileFilter));
+        }
+        return result;
     }
 
     public File find(FileFilter fileFilter)

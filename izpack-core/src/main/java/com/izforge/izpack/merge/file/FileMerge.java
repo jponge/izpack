@@ -8,6 +8,7 @@ import org.apache.tools.zip.ZipOutputStream;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +48,13 @@ public class FileMerge extends AbstractMerge
         return findRecursivelyForFile(fileFilter, fileToCopy);
     }
 
+    public List<File> recursivelyListFiles(FileFilter fileFilter)
+    {
+        List<File> result = new ArrayList<File>();
+        findRecursivelyForFiles(fileFilter, fileToCopy, result);
+        return result;
+    }
+
     /**
      * Recursively search a file matching the fileFilter
      *
@@ -72,6 +80,29 @@ public class FileMerge extends AbstractMerge
             return currentFile;
         }
         return null;
+    }
+
+    /**
+     * Recursively search a all files matching the fileFilter
+     *
+     * @param fileFilter  Filter accepting directory and file matching a classname pattern
+     * @param currentFile Current directory
+     * @return the first found file or null
+     */
+    private void findRecursivelyForFiles(FileFilter fileFilter, File currentFile, List<File> result)
+    {
+        if (currentFile.isDirectory())
+        {
+            for (File files : currentFile.listFiles(fileFilter))
+            {
+                result.add(currentFile);
+                findRecursivelyForFiles(fileFilter, files, result);
+            }
+        }
+        else
+        {
+            result.add(currentFile);
+        }
     }
 
     public void merge(ZipOutputStream outputStream)

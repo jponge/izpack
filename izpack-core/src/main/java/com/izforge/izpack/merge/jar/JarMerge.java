@@ -67,6 +67,11 @@ public class JarMerge extends AbstractMerge
         return null;
     }
 
+    public List<File> recursivelyListFiles(FileFilter fileFilter)
+    {
+        return null;
+    }
+
     public ArrayList<String> getFileNameInZip() throws IOException
     {
         ZipInputStream inputStream = new ZipInputStream(new FileInputStream(jarPath));
