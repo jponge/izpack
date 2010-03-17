@@ -49,7 +49,7 @@ public class PathResolver
         }
         try
         {
-            java.net.URLClassLoader contextClassLoader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
+            URLClassLoader contextClassLoader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
             Enumeration<URL> urlEnumeration = contextClassLoader.findResources(sourcePath);
             while (urlEnumeration.hasMoreElements())
             {
@@ -98,15 +98,6 @@ public class PathResolver
         }
     }
 
-    public Mergeable getMergeableFromURL(URL url)
-    {
-        if (!ResolveUtils.isJar(url))
-        {
-            return new FileMerge(url, mergeContent);
-        }
-        return new JarMerge(url, ResolveUtils.processUrlToJarPath(url), mergeContent);
-    }
-
     public Mergeable getMergeableFromURL(URL url, String resourcePath)
     {
         if (ResolveUtils.isJar(url))
@@ -146,7 +137,7 @@ public class PathResolver
             Collection<URL> urls = ResolveUtils.getClassPathUrl();
             for (URL url : urls)
             {
-                Mergeable mergeable = getMergeableFromURL(url);
+                Mergeable mergeable = mergeableResolver.getMergeableFromURL(url);
                 final File file = mergeable.find(new FileFilter()
                 {
                     public boolean accept(File pathname)

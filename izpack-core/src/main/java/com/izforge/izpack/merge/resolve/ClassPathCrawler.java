@@ -21,6 +21,14 @@ import java.util.*;
 public class ClassPathCrawler
 {
 
+    private MergeableResolver mergeableResolver;
+
+    public ClassPathCrawler(MergeableResolver mergeableResolver)
+    {
+        this.mergeableResolver = mergeableResolver;
+    }
+
+
     public String getCurrentClasspath()
     {
         StringBuilder stringBuilder = new StringBuilder();
@@ -40,8 +48,7 @@ public class ClassPathCrawler
             Collection<URL> urls = getClassPathUrl();
             for (URL url : urls)
             {
-                Mergeable mergeable = null;
-//                Mergeable mergeable = getMergeableFromURL(url);
+                Mergeable mergeable = mergeableResolver.getMergeableFromURL(url);
                 final File file = mergeable.find(new FileFilter()
                 {
                     public boolean accept(File pathname)
@@ -68,8 +75,7 @@ public class ClassPathCrawler
         Collection<URL> result = new HashSet<URL>();
         for (URL url : getClassPathUrl())
         {
-            Mergeable mergeable = null;
-//            Mergeable mergeable = getMergeableFromURL(url);
+            Mergeable mergeable = mergeableResolver.getMergeableFromURL(url);
             final File file = mergeable.find(new FileFilter()
             {
                 public boolean accept(File pathname)
