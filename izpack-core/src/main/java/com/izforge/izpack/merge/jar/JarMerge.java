@@ -69,7 +69,20 @@ public class JarMerge extends AbstractMerge
 
     public List<File> recursivelyListFiles(FileFilter fileFilter)
     {
-        return null;
+        try
+        {
+            ArrayList<String> fileNameInZip = getFileNameInZip();
+            ArrayList<File> result = new ArrayList<File>();
+            for (String fileName : fileNameInZip)
+            {
+                result.add(new File(jarPath + "!" + fileName));
+            }
+            return result;
+        }
+        catch (IOException e)
+        {
+            throw new MergeException(e);
+        }
     }
 
     public ArrayList<String> getFileNameInZip() throws IOException
