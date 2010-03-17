@@ -26,14 +26,18 @@ public class ClassPathCrawlerTest
     }
 
     @Test
-    public void testSearchFullClassNameInClassPath() throws Exception
+    public void testSearchClassInFile() throws Exception
     {
-        Class aClass = classPathCrawler.searchFullClassNameInClassPath(ClassPathCrawlerTest.class.getSimpleName());
-        assertThat(aClass, Is.is(ClassPathCrawler.class));
+        Class aClass = classPathCrawler.searchClassInClassPath(ClassPathCrawlerTest.class.getSimpleName());
+        assertThat(aClass.getName(), Is.is(ClassPathCrawlerTest.class.getName()));
     }
 
     @Test
-    public void testSearchPackageInClassPath() throws Exception
+    public void searchClassInJar() throws Exception
     {
+        Class aClass = classPathCrawler.searchClassInClassPath(Is.class.getSimpleName());
+        assertThat(aClass.getName(), Is.is(Is.class.getName()));
     }
+
+
 }
