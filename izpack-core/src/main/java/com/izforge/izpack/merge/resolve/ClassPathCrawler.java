@@ -21,6 +21,8 @@ public class ClassPathCrawler
 
     private MergeableResolver mergeableResolver;
     private HashMap<String, List<URL>> classPathContentCache;
+    private static final List<String> excludedJar = Arrays.asList("alt-rt.jar", "rt.jar", "charsets.jar", "deploy.jar",
+            "javaws.jar", "jce.jar", "jsse.jar", "management-agent.jar", "plugin.jar", "resources.jar");
 
     public ClassPathCrawler(MergeableResolver mergeableResolver)
     {
@@ -120,6 +122,7 @@ public class ClassPathCrawler
             result.addAll(Collections.list(urlEnumeration));
             urlEnumeration = loader.getResources("META-INF/");
             result.addAll(Collections.list(urlEnumeration));
+            removeExcludedJar(result, excludedJar);
         }
         catch (IOException ignored)
         {
@@ -127,4 +130,20 @@ public class ClassPathCrawler
         return result;
     }
 
+
+    private void removeExcludedJar(Collection<URL> result, List<String> excludedJar)
+    {
+        HashSet<URL> toRemove = new HashSet<URL>();
+        for (URL url : result)
+        {
+            for (String s : excludedJar)
+            {
+                if (url.getPath().contains(s))
+                {
+                    toRemove.add(url);
+                }
+            }
+        }
+        result.removeAll(toRemove);
+    }
 }
