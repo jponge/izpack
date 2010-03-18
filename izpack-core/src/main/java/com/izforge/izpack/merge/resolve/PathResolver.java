@@ -4,8 +4,6 @@ import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.merge.ClassResolver;
-import com.izforge.izpack.merge.file.FileMerge;
-import com.izforge.izpack.merge.jar.JarMerge;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -95,18 +93,6 @@ public class PathResolver
         return result;
     }
 
-    public Mergeable getMergeableFromURLWithDestination(URL url, String destination)
-    {
-        if (ResolveUtils.isJar(url))
-        {
-            return new JarMerge(ResolveUtils.processUrlToJarPath(url), ResolveUtils.processUrlToJarPackage(url), destination, mergeContent);
-        }
-        else
-        {
-            return new FileMerge(url, destination, mergeContent);
-        }
-    }
-
     /**
      * Return the mergeable from the given path.
      *
@@ -121,7 +107,7 @@ public class PathResolver
 //        String fileDestination = (destination + "/" + resourcePath).replaceAll("//", "/");
         for (URL url : urlList)
         {
-            result.add(getMergeableFromURLWithDestination(url, destination));
+            result.add(mergeableResolver.getMergeableFromURLWithDestination(url, destination));
         }
         return result;
     }

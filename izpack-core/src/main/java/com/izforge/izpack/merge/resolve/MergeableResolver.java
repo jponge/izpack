@@ -49,4 +49,16 @@ public class MergeableResolver
             return new FileMerge(url, resourcePath, mergeContent);
         }
     }
+
+    public Mergeable getMergeableFromURLWithDestination(URL url, String destination)
+    {
+        if (ResolveUtils.isJar(url))
+        {
+            return new JarMerge(ResolveUtils.processUrlToJarPath(url), ResolveUtils.processUrlToJarPackage(url), destination, mergeContent);
+        }
+        else
+        {
+            return new FileMerge(url, destination, mergeContent);
+        }
+    }
 }
