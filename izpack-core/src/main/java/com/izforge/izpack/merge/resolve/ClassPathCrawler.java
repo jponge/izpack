@@ -22,9 +22,9 @@ public class ClassPathCrawler
     private MergeableResolver mergeableResolver;
 
     private HashMap<String, List<URL>> classPathContentCache;
-    private static final List<String> excludedJar = Arrays.asList("alt-rt.jar", "rt.jar", "charsets.jar", "deploy.jar",
-            "javaws.jar", "jce.jar", "jsse.jar", "management-agent.jar", "plugin.jar", "resources.jar",
-            "dnsns.jar", "localedata.jar", "sunjce_provider.jar", "sunpkcs11.jar");
+
+
+    private static final List<String> acceptedJar = Arrays.asList(".*event.*", ".*panel.*", ".*izpack.*");
 
     public ClassPathCrawler(MergeableResolver mergeableResolver)
     {
@@ -89,6 +89,18 @@ public class ClassPathCrawler
 
     public Class searchClassInClassPath(final String className)
     {
+        if (ClassResolver.isFullClassName(className))
+        {
+            try
+            {
+                return Class.forName(className);
+            }
+            catch (ClassNotFoundException e)
+            {
+                throw new MergeException("The class name " + className + " is not a valid", e);
+            }
+        }
+
         try
         {
             final String fileToSearch = className + ".class";
@@ -124,28 +136,28 @@ public class ClassPathCrawler
             result.addAll(Collections.list(urlEnumeration));
             urlEnumeration = loader.getResources("META-INF/");
             result.addAll(Collections.list(urlEnumeration));
-            removeExcludedJar(result, excludedJar);
         }
         catch (IOException ignored)
         {
         }
-        return result;
+        return filterUrl(result, acceptedJar);
     }
 
 
-    private void removeExcludedJar(Collection<URL> result, List<String> excludedJar)
+    private Collection<URL> filterUrl(Collection<URL> urlCollection, List<String> acceptedRegexp)
     {
-        HashSet<URL> toRemove = new HashSet<URL>();
-        for (URL url : result)
+        HashSet<URL> result = new HashSet<URL>();
+        for (URL url : urlCollection)
         {
-            for (String s : excludedJar)
+            for (String regexp : acceptedRegexp)
             {
-                if (url.getPath().contains(s))
+                if (url.getPath().matches(regexp))
                 {
-                    toRemove.add(url);
+                    result.add(url);
+                    continue;
                 }
             }
         }
-        result.removeAll(toRemove);
+        return result;
     }
 }
