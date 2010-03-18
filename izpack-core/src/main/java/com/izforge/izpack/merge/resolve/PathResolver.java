@@ -24,7 +24,7 @@ public class PathResolver
 {
 
     private Map<OutputStream, List<String>> mergeContent;
-    private MergeableResolver mergeableResolver;
+    public MergeableResolver mergeableResolver;
     private ClassPathCrawler classPathCrawler;
 
 
@@ -90,7 +90,7 @@ public class PathResolver
         List<Mergeable> result = new ArrayList<Mergeable>();
         for (URL url : urlList)
         {
-            result.add(getMergeableFromURL(url, resourcePath));
+            result.add(mergeableResolver.getMergeableFromURL(url, resourcePath));
         }
         return result;
     }
@@ -104,18 +104,6 @@ public class PathResolver
         else
         {
             return new FileMerge(url, destination, mergeContent);
-        }
-    }
-
-    public Mergeable getMergeableFromURL(URL url, String resourcePath)
-    {
-        if (ResolveUtils.isJar(url))
-        {
-            return new JarMerge(url, ResolveUtils.processUrlToJarPath(url), mergeContent);
-        }
-        else
-        {
-            return new FileMerge(url, resourcePath, mergeContent);
         }
     }
 

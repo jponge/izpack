@@ -20,9 +20,11 @@ public class ClassPathCrawler
 {
 
     private MergeableResolver mergeableResolver;
+
     private HashMap<String, List<URL>> classPathContentCache;
     private static final List<String> excludedJar = Arrays.asList("alt-rt.jar", "rt.jar", "charsets.jar", "deploy.jar",
-            "javaws.jar", "jce.jar", "jsse.jar", "management-agent.jar", "plugin.jar", "resources.jar");
+            "javaws.jar", "jce.jar", "jsse.jar", "management-agent.jar", "plugin.jar", "resources.jar",
+            "dnsns.jar", "localedata.jar", "sunjce_provider.jar", "sunpkcs11.jar");
 
     public ClassPathCrawler(MergeableResolver mergeableResolver)
     {

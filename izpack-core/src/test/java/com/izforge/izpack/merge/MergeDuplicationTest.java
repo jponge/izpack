@@ -49,7 +49,7 @@ public class MergeDuplicationTest
     @Test
     public void testMergeDuplicateFile() throws Exception
     {
-        Mergeable mergeable = pathResolver.getMergeableFromURL(getClass().getResource("MergeDuplicationTest.class"), "destFile");
+        Mergeable mergeable = mergeableResolver.getMergeableFromURL(getClass().getResource("MergeDuplicationTest.class"), "destFile");
         File tempFile = MergeUtils.doDoubleMerge(mergeable);
         assertThat(tempFile, ZipMatcher.isZipMatching(
                 DuplicateMatcher.isEntryUnique("destFile")
