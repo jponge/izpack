@@ -67,7 +67,14 @@ public class ClassPathCrawler
                 {
                     for (File file : files)
                     {
-                        getOrCreateList(classPathContentCache, file.getName()).add(file.toURI().toURL());
+                        if (file.isDirectory())
+                        {
+                            getOrCreateList(classPathContentCache, file.getName()).add(file.toURI().toURL());
+                        }
+                        else
+                        {
+                            getOrCreateList(classPathContentCache, file.getName()).add(file.toURI().toURL());
+                        }
                     }
                 }
             }

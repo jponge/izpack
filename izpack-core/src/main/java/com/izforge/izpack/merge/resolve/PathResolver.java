@@ -1,9 +1,7 @@
 package com.izforge.izpack.merge.resolve;
 
 import com.izforge.izpack.api.exception.IzPackException;
-import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.api.merge.Mergeable;
-import com.izforge.izpack.merge.ClassResolver;
 import com.izforge.izpack.merge.panel.PanelMerge;
 
 import java.io.IOException;
@@ -116,19 +114,8 @@ public class PathResolver
 
     public PanelMerge getPanelMerge(String className)
     {
-        if (ClassResolver.isFullClassName(className))
-        {
-            try
-            {
-                Class<?> panelClass = Class.forName(className);
-                return getPanelMerge(panelClass);
-            }
-            catch (ClassNotFoundException e)
-            {
-                throw new MergeException("The class " + className + " is not a full class name", e);
-            }
-        }
-        return getPanelMerge(classPathCrawler.searchClassInClassPath(className));
+        Class aClass = classPathCrawler.searchClassInClassPath(className);
+        return getPanelMerge(aClass);
 
     }
 
@@ -139,7 +126,15 @@ public class PathResolver
 
     private List<Mergeable> getMergeablePackageFromClass(Class aClass)
     {
-
-        return null;
+        List<Mergeable> mergeables = new ArrayList<Mergeable>();
+        Package aPackage = aClass.getPackage();
+        String destination = aPackage.getName().replaceAll("\\.", "/") + "/";
+        String[] listPart = aPackage.getName().split("\\.");
+        List<URL> obtainPackages = classPathCrawler.searchPackageInClassPath(listPart[listPart.length - 1]);
+        for (URL obtainPackage : obtainPackages)
+        {
+            mergeables.add(mergeableResolver.getMergeableFromURLWithDestination(obtainPackage, destination));
+        }
+        return mergeables;
     }
 }
