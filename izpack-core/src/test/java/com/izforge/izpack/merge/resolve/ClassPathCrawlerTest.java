@@ -40,6 +40,12 @@ public class ClassPathCrawlerTest
     }
 
     @Test
+    public void testSearchClassInJar() throws Exception
+    {
+
+    }
+
+    @Test
     public void searchPackageInClassPathForFile() throws Exception
     {
         Collection<URL> urls = classPathCrawler.searchPackageInClassPath("resolve");
