@@ -17,7 +17,9 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -54,14 +56,14 @@ public class PathResolverTest
     @Test
     public void testResolvePathOfJar()
     {
-        List<URL> urlList = pathResolver.resolvePath("com/izforge");
+        Set<URL> urlList = pathResolver.resolvePath("com/izforge");
         assertThat(urlList.size(), new IsGreaterThan<Integer>(1));
     }
 
     @Test
     public void testResolvePathOfFileAndJar() throws Exception
     {
-        List<URL> urlList = pathResolver.resolvePath("META-INF/MANIFEST.MF");
+        Set<URL> urlList = pathResolver.resolvePath("META-INF/MANIFEST.MF");
         assertThat(getListPathFromListURL(urlList), IsCollectionContaining.hasItems(
                 StringContains.containsString("jar!"),
                 IsNot.not(StringContains.containsString("jar!"))
@@ -71,7 +73,7 @@ public class PathResolverTest
     @Test
     public void testResolvePathOfDirectory() throws Exception
     {
-        List<URL> urlList = pathResolver.resolvePath("com/izforge/izpack/merge/");
+        Collection<URL> urlList = pathResolver.resolvePath("com/izforge/izpack/merge/");
         assertThat(getListPathFromListURL(urlList), IsCollectionContaining.hasItems(
                 IsNot.not(StringContains.containsString("jar!"))
         ));
@@ -113,7 +115,7 @@ public class PathResolverTest
                         MergeMatcher.isMergeableContainingFiles("a/dest/resolve/PathResolver.class")));
     }
 
-    private List<String> getListPathFromListURL(List<URL> urlList)
+    private Collection<String> getListPathFromListURL(Collection<URL> urlList)
     {
         ArrayList<String> arrayList = new ArrayList<String>();
         for (URL url : urlList)

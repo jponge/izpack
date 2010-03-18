@@ -21,7 +21,7 @@ public class ClassPathCrawler
 
     private MergeableResolver mergeableResolver;
 
-    private HashMap<String, List<URL>> classPathContentCache;
+    private HashMap<String, Set<URL>> classPathContentCache;
 
 
     private static final List<String> acceptedJar = Arrays.asList(".*event.*", ".*panel.*", ".*izpack.*");
@@ -49,7 +49,7 @@ public class ClassPathCrawler
         {
             return;
         }
-        classPathContentCache = new HashMap<String, List<URL>>();
+        classPathContentCache = new HashMap<String, Set<URL>>();
         try
         {
             Collection<URL> urls = getClassPathUrl();
@@ -85,11 +85,11 @@ public class ClassPathCrawler
         }
     }
 
-    private List<URL> getOrCreateList(HashMap<String, List<URL>> classPathContentCache, String key)
+    private Set<URL> getOrCreateList(HashMap<String, Set<URL>> classPathContentCache, String key)
     {
         if (!classPathContentCache.containsKey(key))
         {
-            classPathContentCache.put(key, new ArrayList<URL>());
+            classPathContentCache.put(key, new HashSet<URL>());
         }
         return classPathContentCache.get(key);
     }
@@ -112,10 +112,10 @@ public class ClassPathCrawler
         {
             final String fileToSearch = className + ".class";
             processClassPath();
-            List<URL> urlList = classPathContentCache.get(fileToSearch);
+            Set<URL> urlList = classPathContentCache.get(fileToSearch);
             if (urlList != null)
             {
-                String fullClassName = ClassResolver.processURLToClassName(urlList.get(0));
+                String fullClassName = ClassResolver.processURLToClassName(urlList.iterator().next());
                 return Class.forName(fullClassName);
             }
         }
@@ -126,10 +126,20 @@ public class ClassPathCrawler
     }
 
 
-    public List<URL> searchPackageInClassPath(final String packageName)
+    public Set<URL> searchPackageInClassPath(final String packageName)
     {
         processClassPath();
-        return classPathContentCache.get(packageName);
+        String[] parts = packageName.split("\\.");
+        if (parts.length == 1)
+        {
+            return classPathContentCache.get(packageName);
+        }
+        Set<URL> set = classPathContentCache.get(parts[0]);
+        for (String part : parts)
+        {
+            set.retainAll(classPathContentCache.get(part));
+        }
+        return set;
     }
 
     private Collection<URL> getClassPathUrl()

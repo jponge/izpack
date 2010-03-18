@@ -8,10 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Try to resolve paths by searching inside the classpath or files with the corresponding name
@@ -40,9 +37,9 @@ public class PathResolver
      * @param sourcePath Source path to search
      * @return url list
      */
-    public List<URL> resolvePath(String sourcePath)
+    public Set<URL> resolvePath(String sourcePath)
     {
-        List<URL> result = new ArrayList<URL>();
+        HashSet<URL> result = new HashSet<URL>();
         URL path = ResolveUtils.getFileFromPath(sourcePath);
         if (path != null)
         {
@@ -68,7 +65,7 @@ public class PathResolver
             return result;
         }
         // No chance with get resource, use classpath crawler from here
-        List<URL> urlList = classPathCrawler.searchPackageInClassPath(sourcePath);
+        Set<URL> urlList = classPathCrawler.searchPackageInClassPath(sourcePath);
         if (urlList != null)
         {
             return urlList;
@@ -84,7 +81,7 @@ public class PathResolver
      */
     public List<Mergeable> getMergeableFromPath(String resourcePath)
     {
-        List<URL> urlList = resolvePath(resourcePath);
+        Set<URL> urlList = resolvePath(resourcePath);
         List<Mergeable> result = new ArrayList<Mergeable>();
         for (URL url : urlList)
         {
@@ -102,7 +99,7 @@ public class PathResolver
      */
     public List<Mergeable> getMergeableFromPath(String resourcePath, String destination)
     {
-        List<URL> urlList = resolvePath(resourcePath);
+        Set<URL> urlList = resolvePath(resourcePath);
         List<Mergeable> result = new ArrayList<Mergeable>();
 //        String fileDestination = (destination + "/" + resourcePath).replaceAll("//", "/");
         for (URL url : urlList)
@@ -130,7 +127,7 @@ public class PathResolver
         Package aPackage = aClass.getPackage();
         String destination = aPackage.getName().replaceAll("\\.", "/") + "/";
         String[] listPart = aPackage.getName().split("\\.");
-        List<URL> obtainPackages = classPathCrawler.searchPackageInClassPath(listPart[listPart.length - 1]);
+        Set<URL> obtainPackages = classPathCrawler.searchPackageInClassPath(listPart[listPart.length - 1]);
         for (URL obtainPackage : obtainPackages)
         {
             mergeables.add(mergeableResolver.getMergeableFromURLWithDestination(obtainPackage, destination));
