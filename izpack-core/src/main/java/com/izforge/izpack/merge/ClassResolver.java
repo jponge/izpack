@@ -3,11 +3,12 @@ package com.izforge.izpack.merge;
 import com.izforge.izpack.api.exception.MergeException;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
+ * Helper methods for class
  *
  * @author Anthonin Bonnefoy
  */
@@ -33,5 +34,10 @@ public class ClassResolver
             return absolutePath.substring(absolutePath.lastIndexOf(packageString)).replaceAll("\\.class", "").replaceAll("/", ".");
         }
         throw new MergeException("No standard package begin found in " + file.getPath());
+    }
+
+    public static String processURLToClassName(URL url)
+    {
+        return processFileToClassName(new File(url.getFile()));
     }
 }

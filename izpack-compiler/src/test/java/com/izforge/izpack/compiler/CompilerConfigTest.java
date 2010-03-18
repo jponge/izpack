@@ -4,6 +4,7 @@ import com.izforge.izpack.compiler.container.TestCompilerContainer;
 import com.izforge.izpack.matcher.MergeMatcher;
 import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.merge.MergeManagerImpl;
+import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
@@ -35,13 +36,15 @@ public class CompilerConfigTest
     private CompilerConfig compilerConfig;
     private PathResolver pathResolver;
     private MergeManagerImpl mergeManager;
+    private MergeableResolver mergeableResolver;
 
-    public CompilerConfigTest(File out, CompilerConfig compilerConfig, PathResolver pathResolver, MergeManagerImpl mergeManager)
+    public CompilerConfigTest(File out, CompilerConfig compilerConfig, PathResolver pathResolver, MergeManagerImpl mergeManager, MergeableResolver mergeableResolver)
     {
         this.out = out;
         this.compilerConfig = compilerConfig;
         this.pathResolver = pathResolver;
         this.mergeManager = mergeManager;
+        this.mergeableResolver = mergeableResolver;
     }
 
     @Test
@@ -57,8 +60,8 @@ public class CompilerConfigTest
     @Test
     public void mergeManagerShouldGetTheMergeableFromPanel() throws Exception
     {
-        mergeManager.addResourceToMerge(pathResolver.getPanelMerge("HelloPanel"));
-        mergeManager.addResourceToMerge(pathResolver.getPanelMerge("CheckedHelloPanel"));
+        mergeManager.addResourceToMerge(mergeableResolver.getPanelMerge("HelloPanel", pathResolver));
+        mergeManager.addResourceToMerge(mergeableResolver.getPanelMerge("CheckedHelloPanel", pathResolver));
 
         assertThat(mergeManager, MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/panels/hello/HelloPanelConsoleHelper.class",
                 "com/izforge/izpack/panels/hello/HelloPanel.class",

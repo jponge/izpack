@@ -8,7 +8,6 @@ import com.izforge.izpack.merge.ClassResolver;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
@@ -20,6 +19,14 @@ import java.util.*;
  */
 public class ClassPathCrawler
 {
+
+    private MergeableResolver mergeableResolver;
+    private HashMap<String, List<URL>> classPathContentCache;
+
+    public ClassPathCrawler(MergeableResolver mergeableResolver)
+    {
+        this.mergeableResolver = mergeableResolver;
+    }
 
 
     public String getCurrentClasspath()
@@ -33,26 +40,32 @@ public class ClassPathCrawler
         return stringBuilder.toString();
     }
 
-    public Class searchFullClassNameInClassPath(final String className)
+    public void processClassPath()
     {
-        final String fileToSearch = className + ".class";
+        if (classPathContentCache != null)
+        {
+            return;
+        }
+        classPathContentCache = new HashMap<String, List<URL>>();
         try
         {
             Collection<URL> urls = getClassPathUrl();
             for (URL url : urls)
             {
-                Mergeable mergeable = null;
-//                Mergeable mergeable = getMergeableFromURL(url);
-                final File file = mergeable.find(new FileFilter()
+                Mergeable mergeable = mergeableResolver.getMergeableFromURL(url);
+                final List<File> files = mergeable.recursivelyListFiles(new FileFilter()
                 {
                     public boolean accept(File pathname)
                     {
-                        return pathname.isDirectory() || pathname.getName().equals(fileToSearch);
+                        return true;
                     }
                 });
-                if (file != null)
+                if (files != null)
                 {
-                    return Class.forName(ClassResolver.processFileToClassName(file));
+                    for (File file : files)
+                    {
+                        getOrCreateList(classPathContentCache, file.getName()).add(file.toURI().toURL());
+                    }
                 }
             }
         }
@@ -60,36 +73,35 @@ public class ClassPathCrawler
         {
             throw new MergeException(e);
         }
+    }
+
+    private List<URL> getOrCreateList(HashMap<String, List<URL>> classPathContentCache, String key)
+    {
+        if (!classPathContentCache.containsKey(key))
+        {
+            classPathContentCache.put(key, new ArrayList<URL>());
+        }
+        return classPathContentCache.get(key);
+    }
+
+    public Class searchClassInClassPath(final String className) throws ClassNotFoundException
+    {
+        final String fileToSearch = className + ".class";
+        processClassPath();
+        List<URL> urlList = classPathContentCache.get(fileToSearch);
+        if (urlList != null)
+        {
+            String fullClassName = ClassResolver.processURLToClassName(urlList.get(0));
+            return Class.forName(fullClassName);
+        }
         throw new IzPackException("Could not find class " + className + " : Current classpath is " + getCurrentClasspath());
     }
 
 
-    public Collection<URL> searchPackageInClassPath(final String packageName)
+    public List<URL> searchPackageInClassPath(final String packageName)
     {
-        Collection<URL> result = new HashSet<URL>();
-        for (URL url : getClassPathUrl())
-        {
-            Mergeable mergeable = null;
-//            Mergeable mergeable = getMergeableFromURL(url);
-            final File file = mergeable.find(new FileFilter()
-            {
-                public boolean accept(File pathname)
-                {
-                    return pathname.isDirectory() || pathname.getAbsolutePath().contains(packageName);
-                }
-            });
-            if (file != null)
-            {
-                try
-                {
-                    result.add(file.toURI().toURL());
-                }
-                catch (MalformedURLException ignored)
-                {
-                }
-            }
-        }
-        return result;
+        processClassPath();
+        return classPathContentCache.get(packageName);
     }
 
     private Collection<URL> getClassPathUrl()

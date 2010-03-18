@@ -61,6 +61,16 @@ public class MergeManagerImpl implements MergeManager
         mergeableList.clear();
     }
 
+    public List<File> recursivelyListFiles(FileFilter fileFilter)
+    {
+        ArrayList<File> result = new ArrayList<File>();
+        for (Mergeable mergeable : mergeableList)
+        {
+            result.addAll(mergeable.recursivelyListFiles(fileFilter));
+        }
+        return result;
+    }
+
     public File find(FileFilter fileFilter)
     {
         for (Mergeable mergeable : mergeableList)

@@ -6,6 +6,7 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
+import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.console.ConsoleInstaller;
@@ -19,8 +20,6 @@ import com.izforge.izpack.installer.language.LanguageDialog;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.merge.MergeManagerImpl;
-import com.izforge.izpack.merge.resolve.MergeableResolver;
-import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.picocontainer.Characteristics;
 import org.picocontainer.PicoBuilder;
@@ -52,8 +51,6 @@ public class InstallerContainer extends AbstractContainer
                 .addComponent(PanelManager.class)
                 .addComponent(ConditionCheck.class)
                 .addComponent(MergeManagerImpl.class)
-                .addComponent(PathResolver.class)
-                .addComponent(MergeableResolver.class)
                 .addComponent(UninstallData.class)
                 .addComponent(CustomDataContainer.class)
                 .addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
@@ -63,6 +60,8 @@ public class InstallerContainer extends AbstractContainer
                 .addComponent(UninstallDataWriter.class)
                 .addComponent(AutomatedInstaller.class)
                 .addComponent(BindeableContainer.class, this);
+
+        fillContainer(new ResolverContainerFiller());
 
         AutomatedInstallData installdata = pico.getComponent(AutomatedInstallData.class);
         VariableSubstitutor substitutor = pico.getComponent(VariableSubstitutor.class);

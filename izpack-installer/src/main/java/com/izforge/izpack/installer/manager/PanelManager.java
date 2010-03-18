@@ -12,6 +12,7 @@ import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.merge.panel.PanelMerge;
+import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.OsConstraintHelper;
 
@@ -32,18 +33,20 @@ public class PanelManager
      */
     protected ArrayList<Integer> visiblePanelMapping;
     private PathResolver pathResolver;
+    private MergeableResolver mergeableResolver;
 
-    public PanelManager(GUIInstallData installDataGUI, BindeableContainer installerContainer, PathResolver pathResolver) throws ClassNotFoundException
+    public PanelManager(GUIInstallData installDataGUI, BindeableContainer installerContainer, PathResolver pathResolver, MergeableResolver mergeableResolver) throws ClassNotFoundException
     {
         this.installdata = installDataGUI;
         this.installerContainer = installerContainer;
         this.pathResolver = pathResolver;
+        this.mergeableResolver = mergeableResolver;
         visiblePanelMapping = new ArrayList<Integer>();
     }
 
     public Class<? extends IzPanel> resolveClassName(final String className) throws ClassNotFoundException
     {
-        PanelMerge panelMerge = pathResolver.getPanelMerge(className);
+        PanelMerge panelMerge = mergeableResolver.getPanelMerge(className, pathResolver);
         return (Class<? extends IzPanel>) Class.forName(panelMerge.getFullClassNameFromPanelName());
     }
 

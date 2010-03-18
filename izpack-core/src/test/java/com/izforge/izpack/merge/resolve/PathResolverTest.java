@@ -1,7 +1,7 @@
 package com.izforge.izpack.merge.resolve;
 
 import com.izforge.izpack.api.merge.Mergeable;
-import com.izforge.izpack.container.TestMergeContainer;
+import com.izforge.izpack.core.container.TestMergeContainer;
 import com.izforge.izpack.matcher.MergeMatcher;
 import com.izforge.izpack.merge.jar.JarMerge;
 import com.izforge.izpack.test.Container;
@@ -128,10 +128,10 @@ public class PathResolverTest
     {
         URL fileResource = ClassLoader.getSystemResource("com/izforge/izpack/merge/AbstractMerge.class");
         URL jarResource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
-        assertThat(pathResolver.isJar(
+        assertThat(ResolveUtils.isJar(
                 fileResource),
                 Is.is(false));
-        assertThat(pathResolver.isJar(
+        assertThat(ResolveUtils.isJar(
                 jarResource),
                 Is.is(true));
     }
@@ -141,10 +141,10 @@ public class PathResolverTest
     {
         File fileResource = new File(ClassLoader.getSystemResource("com/izforge/izpack/merge/AbstractMerge.class").getFile());
         File jarResource = new File(ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar").getFile());
-        assertThat(pathResolver.isJar(
+        assertThat(ResolveUtils.isJar(
                 fileResource),
                 Is.is(false));
-        assertThat(pathResolver.isJar(
+        assertThat(ResolveUtils.isJar(
                 jarResource),
                 Is.is(true));
     }
@@ -153,14 +153,14 @@ public class PathResolverTest
     @Test
     public void pathResolverShouldTransformClassNameToPackagePath() throws Exception
     {
-        String pathFromClassName = pathResolver.getPackagePathFromClassName("com.test.sora.UneClasse");
+        String pathFromClassName = ResolveUtils.getPanelsPackagePathFromClassName("com.test.sora.UneClasse");
         assertThat(pathFromClassName, Is.is("com/test/sora/"));
     }
 
     @Test
     public void pathResolverShouldReturnDefaultPackagePath() throws Exception
     {
-        String pathFromClassName = pathResolver.getPackagePathFromClassName("UneClasse");
+        String pathFromClassName = ResolveUtils.getPanelsPackagePathFromClassName("UneClasse");
         assertThat(pathFromClassName, Is.is("com/izforge/izpack/panels/"));
     }
 

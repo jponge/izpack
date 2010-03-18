@@ -32,6 +32,7 @@ import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.merge.MergeManager;
+import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
 
 import java.io.FilterOutputStream;
@@ -59,9 +60,10 @@ public abstract class PackagerBase implements IPackager
     protected CompilerContainer compilerContainer;
     private PathResolver pathResolver;
     private IzpackProjectInstaller izpackInstallModel;
+    private MergeableResolver mergeableResolver;
 
 
-    public PackagerBase(Properties properties, CompilerContainer compilerContainer, PackagerListener listener, MergeManager mergeManager, PathResolver pathResolver, IzpackProjectInstaller izpackInstallModel)
+    public PackagerBase(Properties properties, CompilerContainer compilerContainer, PackagerListener listener, MergeManager mergeManager, PathResolver pathResolver, IzpackProjectInstaller izpackInstallModel, MergeableResolver mergeableResolver)
     {
         this.properties = properties;
         this.compilerContainer = compilerContainer;
@@ -69,6 +71,7 @@ public abstract class PackagerBase implements IPackager
         this.mergeManager = mergeManager;
         this.pathResolver = pathResolver;
         this.izpackInstallModel = izpackInstallModel;
+        this.mergeableResolver = mergeableResolver;
     }
 
     /**
@@ -210,7 +213,7 @@ public abstract class PackagerBase implements IPackager
     public void addJarContent(URL jarURL)
     {
         sendMsg("Adding content of jar: " + jarURL.getFile(), PackagerListener.MSG_VERBOSE);
-        mergeManager.addResourceToMerge(pathResolver.getMergeableFromURL(jarURL));
+        mergeManager.addResourceToMerge(mergeableResolver.getMergeableFromURL(jarURL));
     }
 
     public void addLangPack(String iso3, URL xmlURL, URL flagURL)
@@ -257,7 +260,7 @@ public abstract class PackagerBase implements IPackager
     public void addPanel(Panel panel)
     {
         panelList.add(panel); // serialized to keep order/variables correct
-        mergeManager.addResourceToMerge(pathResolver.getPanelMerge(panel.getClassName()));
+        mergeManager.addResourceToMerge(mergeableResolver.getPanelMerge(panel.getClassName(), pathResolver));
     }
 
     /* (non-Javadoc)
