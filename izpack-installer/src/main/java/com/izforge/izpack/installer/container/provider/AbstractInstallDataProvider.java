@@ -8,6 +8,7 @@ import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.installer.container.impl.CustomDataContainer;
+import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.*;
 import org.picocontainer.injectors.Provider;
@@ -32,6 +33,7 @@ public abstract class AbstractInstallDataProvider implements Provider
     protected static final String LANG_FILE_NAME = "CustomLangpack.xml";
     protected ResourceManager resourceManager;
     protected VariableSubstitutor variableSubstitutor;
+    protected ClassPathCrawler classPathCrawler;
 
     /**
      * Loads the installation data. Also sets environment variables to <code>installdata</code>.
@@ -216,7 +218,7 @@ public abstract class AbstractInstallDataProvider implements Provider
             switch (listener.getStage())
             {
                 case install:
-                    Class aClass = pathResolver.searchFullClassNameInClassPath(listener.getClassname());
+                    Class aClass = classPathCrawler.searchClassInClassPath(listener.getClassname());
                     customDataContainer.addComponent(aClass);
                     customActions.add((InstallerListener) customDataContainer.getComponent(aClass));
                     break;

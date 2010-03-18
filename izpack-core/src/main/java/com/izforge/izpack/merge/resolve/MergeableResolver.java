@@ -3,7 +3,6 @@ package com.izforge.izpack.merge.resolve;
 import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.merge.file.FileMerge;
 import com.izforge.izpack.merge.jar.JarMerge;
-import com.izforge.izpack.merge.panel.PanelMerge;
 
 import java.io.OutputStream;
 import java.net.URL;
@@ -22,11 +21,6 @@ public class MergeableResolver
     public MergeableResolver(Map<OutputStream, List<String>> mergeContent)
     {
         this.mergeContent = mergeContent;
-    }
-
-    public PanelMerge getPanelMerge(String className, PathResolver pathResolver)
-    {
-        return new PanelMerge(className, pathResolver.getMergeableFromPath(ResolveUtils.getPanelsPackagePathFromClassName(className)), mergeContent);
     }
 
     public Mergeable getMergeableFromURL(URL url)

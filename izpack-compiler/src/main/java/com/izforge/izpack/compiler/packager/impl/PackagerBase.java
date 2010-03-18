@@ -260,7 +260,7 @@ public abstract class PackagerBase implements IPackager
     public void addPanel(Panel panel)
     {
         panelList.add(panel); // serialized to keep order/variables correct
-        mergeManager.addResourceToMerge(mergeableResolver.getPanelMerge(panel.getClassName(), pathResolver));
+        mergeManager.addResourceToMerge(pathResolver.getPanelMerge(panel.getClassName()));
     }
 
     /* (non-Javadoc)

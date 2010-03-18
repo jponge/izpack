@@ -4,14 +4,16 @@ import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.merge.ClassResolver;
+import com.izforge.izpack.merge.panel.PanelMerge;
 
-import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Try to resolve paths by searching inside the classpath or files with the corresponding name
@@ -112,33 +114,32 @@ public class PathResolver
         return result;
     }
 
-    public Class searchFullClassNameInClassPath(final String className)
+    public PanelMerge getPanelMerge(String className)
     {
-        final String fileToSearch = className + ".class";
-        try
+        if (ClassResolver.isFullClassName(className))
         {
-            Collection<URL> urls = ResolveUtils.getClassPathUrl();
-            for (URL url : urls)
+            try
             {
-                Mergeable mergeable = mergeableResolver.getMergeableFromURL(url);
-                final File file = mergeable.find(new FileFilter()
-                {
-                    public boolean accept(File pathname)
-                    {
-                        return pathname.isDirectory() || pathname.getName().equals(fileToSearch);
-                    }
-                });
-                if (file != null)
-                {
-                    return Class.forName(ClassResolver.processFileToClassName(file));
-                }
+                Class<?> panelClass = Class.forName(className);
+                return getPanelMerge(panelClass);
+            }
+            catch (ClassNotFoundException e)
+            {
+                throw new MergeException("The class " + className + " is not a full class name", e);
             }
         }
-        catch (Exception e)
-        {
-            throw new MergeException(e);
-        }
-        throw new IzPackException("Could not find class " + className + " : Current classpath is " + ResolveUtils.getCurrentClasspath());
+        return getPanelMerge(classPathCrawler.searchClassInClassPath(className));
+
     }
 
+    public PanelMerge getPanelMerge(Class panelClass)
+    {
+        return new PanelMerge(panelClass, getMergeablePackageFromClass(panelClass));
+    }
+
+    private List<Mergeable> getMergeablePackageFromClass(Class aClass)
+    {
+
+        return null;
+    }
 }

@@ -4,6 +4,7 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.container.impl.CustomDataContainer;
+import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
 
 import java.util.Properties;
@@ -14,12 +15,13 @@ import java.util.Properties;
 public class AutomatedInstallDataProvider extends AbstractInstallDataProvider
 {
 
-    public AutomatedInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer, VariableSubstitutor variableSubstitutor, Properties variables, PathResolver pathResolver)
+    public AutomatedInstallData provide(ResourceManager resourceManager, CustomDataContainer customDataContainer, VariableSubstitutor variableSubstitutor, Properties variables, PathResolver pathResolver, ClassPathCrawler classPathCrawler)
     {
         try
         {
             this.resourceManager = resourceManager;
             this.variableSubstitutor = variableSubstitutor;
+            this.classPathCrawler = classPathCrawler;
             final AutomatedInstallData automatedInstallData = new AutomatedInstallData(variables, variableSubstitutor);
             // Loads the installation data
             loadInstallData(automatedInstallData);
