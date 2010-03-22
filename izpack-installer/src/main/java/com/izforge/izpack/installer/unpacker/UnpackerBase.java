@@ -658,7 +658,6 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
         List<Mergeable> langPack = pathResolver.getMergeableFromPath("resources/langpacks/" + idata.getLocaleISO3() + ".xml", "langpack.xml");
         for (Mergeable mergeable : langPack)
         {
-            System.out.println(mergeable.getClass().getCanonicalName());
             mergeable.merge(outJar);
         }
         outJar.close();

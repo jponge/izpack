@@ -134,7 +134,9 @@ public class ResolveUtils
     {
         String res = resource.getPath();
         res = res.replaceAll("file:", "");
-        return res.substring(res.lastIndexOf("!") + 1);
+        res = res.substring(res.lastIndexOf("!") + 1);
+        res = res.replaceAll("^/", "");
+        return res;
     }
 
     /**
@@ -152,5 +154,10 @@ public class ResolveUtils
             return className.substring(0, className.lastIndexOf(".")).replaceAll("\\.", "/") + "/";
         }
         return BASE_CLASSNAME_PATH;
+    }
+
+    public static boolean isFile(URL url)
+    {
+        return !new File(url.getFile()).isDirectory();
     }
 }

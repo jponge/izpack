@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by IntelliJ IDEA.
+ * Abstract classes for all mergeable element.
+ * Contains helper methods to managed the mergeContent map.
  *
  * @author Anthonin Bonnefoy
  */
