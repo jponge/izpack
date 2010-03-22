@@ -57,9 +57,9 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>${groupId}</groupId>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>izpack-maven-plugin</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
                 <executions>
                     <execution>
                         <phase>package</phase>

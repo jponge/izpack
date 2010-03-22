@@ -17,7 +17,7 @@
             <plugin>
                 <groupId>org.codehaus.izpack</groupId>
                 <artifactId>izpack-maven-plugin</artifactId>
-                <version>${version}</version>
+        <version>${project.version}</version>
                 <executions>
                     <execution>
                         <id>standard-installer</id>
