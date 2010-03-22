@@ -56,11 +56,14 @@ public class ClassPathCrawlerTest
     @Test
     public void searchPackageInJar() throws Exception
     {
-        File jarResource = new File(ClassLoader.getSystemResource("com/izforge/izpack/merge/test/vim-panel-1.0-SNAPSHOT.jar").getFile());
+        URL jarUrl = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/vim-panel-1.0-SNAPSHOT.jar");
+        File jarResource = new File(jarUrl.getFile());
         ClassUtils.loadJarInSystemClassLoader(jarResource);
         Set<URL> urlList = classPathCrawler.searchPackageInClassPath("com.sora.panel");
-        assertThat(urlList.size(), Is.is(1));
-        assertThat(urlList.iterator().next().getPath(), StringEndsWith.endsWith("com/sora/panel/"));
+        assertThat(urlList, IsCollectionContaining.hasItems(
+                new File(jarUrl.getFile() + "!com/sora/panel").toURI().toURL()
+        ));
+        assertThat(urlList.iterator().next().getPath(), StringEndsWith.endsWith("com/sora/panel"));
         ClassUtils.unloadLastJar();
     }
 

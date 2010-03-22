@@ -67,14 +67,7 @@ public class ClassPathCrawler
                 {
                     for (File file : files)
                     {
-                        if (file.isDirectory())
-                        {
-                            getOrCreateList(classPathContentCache, file.getName()).add(file.toURI().toURL());
-                        }
-                        else
-                        {
-                            getOrCreateList(classPathContentCache, file.getName()).add(file.toURI().toURL());
-                        }
+                        getOrCreateList(classPathContentCache, file.getName()).add(file.toURI().toURL());
                     }
                 }
             }
@@ -87,11 +80,16 @@ public class ClassPathCrawler
 
     private Set<URL> getOrCreateList(HashMap<String, Set<URL>> classPathContentCache, String key)
     {
-        if (!classPathContentCache.containsKey(key))
+        String newKey = key;
+        if (key.contains("jar!"))
         {
-            classPathContentCache.put(key, new HashSet<URL>());
+            newKey = key.substring(key.indexOf("!") + 1);
         }
-        return classPathContentCache.get(key);
+        if (!classPathContentCache.containsKey(newKey))
+        {
+            classPathContentCache.put(newKey, new HashSet<URL>());
+        }
+        return classPathContentCache.get(newKey);
     }
 
     public Class searchClassInClassPath(final String className)
@@ -129,17 +127,35 @@ public class ClassPathCrawler
     public Set<URL> searchPackageInClassPath(final String packageName)
     {
         processClassPath();
+        String expectedEndPath = packageName.replaceAll("\\.", "/");
         String[] parts = packageName.split("\\.");
         if (parts.length == 1)
         {
             return classPathContentCache.get(packageName);
         }
-        Set<URL> set = classPathContentCache.get(parts[0]);
-        for (String part : parts)
+        Set<URL> result = getAndFilterUrlList(packageName, expectedEndPath);
+        return result;
+    }
+
+    private Set<URL> getAndFilterUrlList(String packageName, String expectedEndPath)
+    {
+        Set<URL> elligibleList = getUrlsForLastPackage(packageName);
+        Set<URL> result = new HashSet<URL>();
+        for (URL url : elligibleList)
         {
-            set.retainAll(classPathContentCache.get(part));
+            if (url.getPath().endsWith(expectedEndPath))
+            {
+                result.add(url);
+            }
         }
-        return set;
+        return result;
+    }
+
+
+    public Set<URL> getUrlsForLastPackage(String packageName)
+    {
+        String[] packages = packageName.split("\\.");
+        return classPathContentCache.get(packages[packages.length - 1]);
     }
 
     private Collection<URL> getClassPathUrl()
@@ -171,7 +187,6 @@ public class ClassPathCrawler
                 if (url.getPath().matches(regexp))
                 {
                     result.add(url);
-                    continue;
                 }
             }
         }
