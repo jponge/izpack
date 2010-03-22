@@ -42,7 +42,7 @@ public class JarMerge extends AbstractMerge
         this.jarPath = jarPath;
         this.destination = destination;
         this.mergeContent = mergeContent;
-        regexp = new StringBuilder().append(jarPackage).append("(.*)").toString();
+        regexp = new StringBuilder().append(jarPackage).append('/').append("(.*)").toString();
     }
 
 
