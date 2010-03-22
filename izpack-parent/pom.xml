@@ -145,11 +145,6 @@
                 <version>${version}</version>
             </dependency>
             <dependency>
-                <artifactId>izpack-installer</artifactId>
-                <groupId>${groupId}</groupId>
-                <version>${version}</version>
-            </dependency>
-            <dependency>
                 <artifactId>izpack-listener</artifactId>
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>
