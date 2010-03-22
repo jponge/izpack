@@ -1,14 +1,9 @@
 package com.izforge.izpack.merge.resolve;
 
 import com.izforge.izpack.api.exception.IzPackException;
-import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.api.merge.Mergeable;
-import com.izforge.izpack.merge.ClassResolver;
-import com.izforge.izpack.merge.file.FileMerge;
-import com.izforge.izpack.merge.jar.JarMerge;
+import com.izforge.izpack.merge.panel.PanelMerge;
 
-import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
@@ -24,7 +19,7 @@ public class PathResolver
 {
 
     private Map<OutputStream, List<String>> mergeContent;
-    private MergeableResolver mergeableResolver;
+    public MergeableResolver mergeableResolver;
     private ClassPathCrawler classPathCrawler;
 
 
@@ -42,9 +37,9 @@ public class PathResolver
      * @param sourcePath Source path to search
      * @return url list
      */
-    public List<URL> resolvePath(String sourcePath)
+    public Set<URL> resolvePath(String sourcePath)
     {
-        List<URL> result = new ArrayList<URL>();
+        HashSet<URL> result = new HashSet<URL>();
         URL path = ResolveUtils.getFileFromPath(sourcePath);
         if (path != null)
         {
@@ -70,7 +65,7 @@ public class PathResolver
             return result;
         }
         // No chance with get resource, use classpath crawler from here
-        List<URL> urlList = classPathCrawler.searchPackageInClassPath(sourcePath);
+        Set<URL> urlList = classPathCrawler.searchPackageInClassPath(sourcePath);
         if (urlList != null)
         {
             return urlList;
@@ -86,37 +81,13 @@ public class PathResolver
      */
     public List<Mergeable> getMergeableFromPath(String resourcePath)
     {
-        List<URL> urlList = resolvePath(resourcePath);
+        Set<URL> urlList = resolvePath(resourcePath);
         List<Mergeable> result = new ArrayList<Mergeable>();
         for (URL url : urlList)
         {
-            result.add(getMergeableFromURL(url, resourcePath));
+            result.add(mergeableResolver.getMergeableFromURL(url, resourcePath));
         }
         return result;
-    }
-
-    public Mergeable getMergeableFromURLWithDestination(URL url, String destination)
-    {
-        if (ResolveUtils.isJar(url))
-        {
-            return new JarMerge(ResolveUtils.processUrlToJarPath(url), ResolveUtils.processUrlToJarPackage(url), destination, mergeContent);
-        }
-        else
-        {
-            return new FileMerge(url, destination, mergeContent);
-        }
-    }
-
-    public Mergeable getMergeableFromURL(URL url, String resourcePath)
-    {
-        if (ResolveUtils.isJar(url))
-        {
-            return new JarMerge(url, ResolveUtils.processUrlToJarPath(url), mergeContent);
-        }
-        else
-        {
-            return new FileMerge(url, resourcePath, mergeContent);
-        }
     }
 
     /**
@@ -128,43 +99,39 @@ public class PathResolver
      */
     public List<Mergeable> getMergeableFromPath(String resourcePath, String destination)
     {
-        List<URL> urlList = resolvePath(resourcePath);
+        Set<URL> urlList = resolvePath(resourcePath);
         List<Mergeable> result = new ArrayList<Mergeable>();
 //        String fileDestination = (destination + "/" + resourcePath).replaceAll("//", "/");
         for (URL url : urlList)
         {
-            result.add(getMergeableFromURLWithDestination(url, destination));
+            result.add(mergeableResolver.getMergeableFromURLWithDestination(url, destination));
         }
         return result;
     }
 
-    public Class searchFullClassNameInClassPath(final String className)
+    public PanelMerge getPanelMerge(String className)
     {
-        final String fileToSearch = className + ".class";
-        try
-        {
-            Collection<URL> urls = ResolveUtils.getClassPathUrl();
-            for (URL url : urls)
-            {
-                Mergeable mergeable = mergeableResolver.getMergeableFromURL(url);
-                final File file = mergeable.find(new FileFilter()
-                {
-                    public boolean accept(File pathname)
-                    {
-                        return pathname.isDirectory() || pathname.getName().equals(fileToSearch);
-                    }
-                });
-                if (file != null)
-                {
-                    return Class.forName(ClassResolver.processFileToClassName(file));
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            throw new MergeException(e);
-        }
-        throw new IzPackException("Could not find class " + className + " : Current classpath is " + ResolveUtils.getCurrentClasspath());
+        Class aClass = classPathCrawler.searchClassInClassPath(className);
+        return getPanelMerge(aClass);
+
     }
 
+    public PanelMerge getPanelMerge(Class panelClass)
+    {
+        return new PanelMerge(panelClass, getMergeablePackageFromClass(panelClass));
+    }
+
+    private List<Mergeable> getMergeablePackageFromClass(Class aClass)
+    {
+        List<Mergeable> mergeables = new ArrayList<Mergeable>();
+        Package aPackage = aClass.getPackage();
+        String destination = aPackage.getName().replaceAll("\\.", "/") + "/";
+        String[] listPart = aPackage.getName().split("\\.");
+        Set<URL> obtainPackages = classPathCrawler.searchPackageInClassPath(listPart[listPart.length - 1]);
+        for (URL obtainPackage : obtainPackages)
+        {
+            mergeables.add(mergeableResolver.getMergeableFromURLWithDestination(obtainPackage, destination));
+        }
+        return mergeables;
+    }
 }

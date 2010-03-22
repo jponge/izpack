@@ -205,4 +205,13 @@ public class FileMerge extends AbstractMerge
         }
         return !destination.endsWith("/");
     }
+
+    @Override
+    public String toString()
+    {
+        return "FileMerge{" +
+                "fileToCopy=" + fileToCopy +
+                ", destination='" + destination + '\'' +
+                '}';
+    }
 }

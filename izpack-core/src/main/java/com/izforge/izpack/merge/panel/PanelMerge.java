@@ -1,16 +1,12 @@
 package com.izforge.izpack.merge.panel;
 
-import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.api.merge.Mergeable;
-import com.izforge.izpack.merge.ClassResolver;
 import org.apache.tools.zip.ZipOutputStream;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Merge for a panel
@@ -20,19 +16,19 @@ import java.util.Map;
 public class PanelMerge implements Mergeable
 {
     private List<Mergeable> packageMerge;
-    private String panelName;
+    private Class panelClass;
     private FileFilter fileFilter;
 
-    public PanelMerge(final String panelName, List<Mergeable> packageMergeable, Map<OutputStream, List<String>> mergeContent)
+    public PanelMerge(final Class panelClass, List<Mergeable> packageMergeable)
     {
-        this.panelName = panelName;
+        this.panelClass = panelClass;
         packageMerge = packageMergeable;
         fileFilter = new FileFilter()
         {
             public boolean accept(File pathname)
             {
                 return pathname.isDirectory() ||
-                        pathname.getAbsolutePath().contains("/" + panelName + ".class");
+                        pathname.getAbsolutePath().contains("/" + panelClass + ".class");
             }
         };
     }
@@ -76,26 +72,18 @@ public class PanelMerge implements Mergeable
         }
     }
 
-
-    public String getFullClassNameFromPanelName()
+    public Class getPanelClass()
     {
-        if (packageMerge.isEmpty())
-        {
-            throw new MergeException("No mergeable found for panel " + panelName);
-        }
-        if (panelName.contains("."))
-        {
-            return panelName;
-        }
-        for (Mergeable mergeable : packageMerge)
-        {
-            File file = mergeable.find(fileFilter);
-            if (file != null)
-            {
-                return ClassResolver.processFileToClassName(file);
-            }
-        }
-        throw new MergeException("Panel file " + panelName + " not found");
+        return panelClass;
     }
 
+    @Override
+    public String toString()
+    {
+        return "PanelMerge{" +
+                "packageMerge=" + packageMerge +
+                ", panelClass=" + panelClass +
+                ", fileFilter=" + fileFilter +
+                '}';
+    }
 }

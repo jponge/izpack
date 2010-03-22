@@ -41,35 +41,35 @@ public class PanelMergeTest
     @Test
     public void testResolvePanelNameFromFile() throws Exception
     {
-        panelMerge = mergeableResolver.getPanelMerge("HelloPanelTestClass", pathResolver);
+        panelMerge = pathResolver.getPanelMerge("HelloPanelTestClass");
         assertThat(panelMerge, MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/panels/hello/HelloPanelTestClass.class"));
     }
 
     @Test
     public void testResolvePanelWithCompleteNameFromFile() throws Exception
     {
-        panelMerge = mergeableResolver.getPanelMerge("com.izforge.izpack.panels.hello.HelloPanelTestClass", pathResolver);
+        panelMerge = pathResolver.getPanelMerge("com.izforge.izpack.panels.hello.HelloPanelTestClass");
         assertThat(panelMerge, MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/panels/hello/HelloPanelTestClass.class"));
     }
 
     @Test
     public void testGetClassNameFromPanelMergeWithFullClassGiven() throws Exception
     {
-        panelMerge = mergeableResolver.getPanelMerge("com.izforge.izpack.panels.hello.HelloPanelTestClass", pathResolver);
-        assertThat(panelMerge.getFullClassNameFromPanelName(), Is.is("com.izforge.izpack.panels.hello.HelloPanelTestClass"));
+        panelMerge = pathResolver.getPanelMerge("com.izforge.izpack.panels.hello.HelloPanelTestClass");
+        assertThat(panelMerge.getPanelClass().getName(), Is.is("com.izforge.izpack.panels.hello.HelloPanelTestClass"));
     }
 
     @Test
     public void testGetClassNameFromPanelMergeWithOnlyPanelName() throws Exception
     {
-        panelMerge = mergeableResolver.getPanelMerge("HelloPanelTestClass", pathResolver);
-        assertThat(panelMerge.getFullClassNameFromPanelName(), Is.is("com.izforge.izpack.panels.hello.HelloPanelTestClass"));
+        panelMerge = pathResolver.getPanelMerge("HelloPanelTestClass");
+        assertThat(panelMerge.getPanelClass().getName(), Is.is("com.izforge.izpack.panels.hello.HelloPanelTestClass"));
     }
 
     @Test
     public void testMergeDuplicatePanel() throws Exception
     {
-        Mergeable mergeable = mergeableResolver.getPanelMerge("com.izforge.izpack.panels.hello.HelloPanelTestClass", pathResolver);
+        Mergeable mergeable = pathResolver.getPanelMerge("com.izforge.izpack.panels.hello.HelloPanelTestClass");
         File tempFile = MergeUtils.doDoubleMerge(mergeable);
         assertThat(tempFile, ZipMatcher.isZipMatching(
                 DuplicateMatcher.isEntryUnique("com/izforge/izpack/panels/hello/HelloPanelTestClass.class")

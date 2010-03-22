@@ -53,6 +53,7 @@ import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.data.PanelAction.ActionStage;
 import com.izforge.izpack.merge.MergeManager;
+import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
@@ -128,13 +129,14 @@ public class CompilerConfig extends Thread
     private AssertionHelper assertionHelper;
     private PathResolver pathResolver;
     private BindeableContainer compilerContainer;
+    private ClassPathCrawler classPathCrawler;
 
     /**
      * Constructor
      *
      * @param compilerData Object containing all informations found in command line
      */
-    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller, AssertionHelper assertionHelper, PathResolver pathResolver, BindeableContainer compilerContainer)
+    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller, AssertionHelper assertionHelper, PathResolver pathResolver, BindeableContainer compilerContainer, ClassPathCrawler classPathCrawler)
     {
         this.assertionHelper = assertionHelper;
         this.compilerData = compilerData;
@@ -148,6 +150,7 @@ public class CompilerConfig extends Thread
         this.izpackProjectInstaller = izpackProjectInstaller;
         this.pathResolver = pathResolver;
         this.compilerContainer = compilerContainer;
+        this.classPathCrawler = classPathCrawler;
     }
 
     /**
@@ -2189,7 +2192,7 @@ public class CompilerConfig extends Thread
                 else
                 {
                     // Merge the package containing the listener class
-                    Class aClass = pathResolver.searchFullClassNameInClassPath(listener.getClassname());
+                    Class aClass = classPathCrawler.searchClassInClassPath(listener.getClassname());
                     if (aClass == null)
                     {
                         System.err.println("Warning : Class " + listener.getClassname() + " was not found");
@@ -2215,7 +2218,7 @@ public class CompilerConfig extends Thread
             if (Stage.compiler.equals(listener.getStage()))
             {
                 listener.getOs();
-                Class<? extends CompilerListener> clazz = pathResolver.searchFullClassNameInClassPath(listener.getClassname());
+                Class<? extends CompilerListener> clazz = classPathCrawler.searchClassInClassPath(listener.getClassname());
                 if (clazz != null)
                 {
                     compilerContainer.addComponent(clazz);

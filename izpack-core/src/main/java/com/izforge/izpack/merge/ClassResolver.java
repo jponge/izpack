@@ -40,4 +40,9 @@ public class ClassResolver
     {
         return processFileToClassName(new File(url.getFile()));
     }
+
+    public static boolean isFullClassName(String className)
+    {
+        return className.contains(".");
+    }
 }

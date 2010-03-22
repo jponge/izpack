@@ -60,8 +60,8 @@ public class CompilerConfigTest
     @Test
     public void mergeManagerShouldGetTheMergeableFromPanel() throws Exception
     {
-        mergeManager.addResourceToMerge(mergeableResolver.getPanelMerge("HelloPanel", pathResolver));
-        mergeManager.addResourceToMerge(mergeableResolver.getPanelMerge("CheckedHelloPanel", pathResolver));
+        mergeManager.addResourceToMerge(pathResolver.getPanelMerge("HelloPanel"));
+        mergeManager.addResourceToMerge(pathResolver.getPanelMerge("CheckedHelloPanel"));
 
         assertThat(mergeManager, MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/panels/hello/HelloPanelConsoleHelper.class",
                 "com/izforge/izpack/panels/hello/HelloPanel.class",

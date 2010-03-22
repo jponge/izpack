@@ -8,6 +8,7 @@ import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.container.impl.InstallerContainer;
 import com.izforge.izpack.installer.language.LanguageDialog;
+import com.izforge.izpack.test.ClassUtils;
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;

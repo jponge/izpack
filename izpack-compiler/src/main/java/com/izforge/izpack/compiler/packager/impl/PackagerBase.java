@@ -32,6 +32,7 @@ import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.merge.MergeManager;
+import com.izforge.izpack.merge.panel.PanelMerge;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
 
@@ -259,8 +260,10 @@ public abstract class PackagerBase implements IPackager
 
     public void addPanel(Panel panel)
     {
+        sendMsg("Adding panel: " + panel.getPanelid() + " :: Classname : " + panel.getClassName());
         panelList.add(panel); // serialized to keep order/variables correct
-        mergeManager.addResourceToMerge(mergeableResolver.getPanelMerge(panel.getClassName(), pathResolver));
+        PanelMerge mergeable = pathResolver.getPanelMerge(panel.getClassName());
+        mergeManager.addResourceToMerge(mergeable);
     }
 
     /* (non-Javadoc)

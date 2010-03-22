@@ -11,7 +11,7 @@ import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
-import com.izforge.izpack.merge.panel.PanelMerge;
+import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.OsConstraintHelper;
@@ -27,27 +27,21 @@ public class PanelManager
     private GUIInstallData installdata;
     private BindeableContainer installerContainer;
     private int lastVis;
+    private ClassPathCrawler classPathCrawler;
 
     /**
      * Mapping from "raw" panel number to visible panel number.
      */
     protected ArrayList<Integer> visiblePanelMapping;
     private PathResolver pathResolver;
-    private MergeableResolver mergeableResolver;
 
-    public PanelManager(GUIInstallData installDataGUI, BindeableContainer installerContainer, PathResolver pathResolver, MergeableResolver mergeableResolver) throws ClassNotFoundException
+    public PanelManager(GUIInstallData installDataGUI, BindeableContainer installerContainer, PathResolver pathResolver, MergeableResolver mergeableResolver, ClassPathCrawler classPathCrawler) throws ClassNotFoundException
     {
         this.installdata = installDataGUI;
         this.installerContainer = installerContainer;
         this.pathResolver = pathResolver;
-        this.mergeableResolver = mergeableResolver;
+        this.classPathCrawler = classPathCrawler;
         visiblePanelMapping = new ArrayList<Integer>();
-    }
-
-    public Class<? extends IzPanel> resolveClassName(final String className) throws ClassNotFoundException
-    {
-        PanelMerge panelMerge = mergeableResolver.getPanelMerge(className, pathResolver);
-        return (Class<? extends IzPanel>) Class.forName(panelMerge.getFullClassNameFromPanelName());
     }
 
     /**
@@ -64,7 +58,7 @@ public class PanelManager
         {
             if (OsConstraintHelper.oneMatchesCurrentSystem(panel.osConstraints))
             {
-                Class<? extends IzPanel> aClass = resolveClassName(panel.getClassName());
+                Class<? extends IzPanel> aClass = classPathCrawler.searchClassInClassPath(panel.getClassName());
                 installerContainer.addComponent(aClass);
             }
         }
@@ -87,7 +81,7 @@ public class PanelManager
         {
             if (OsConstraintHelper.oneMatchesCurrentSystem(panel.osConstraints))
             {
-                Class<? extends IzPanel> aClass = resolveClassName(panel.getClassName());
+                Class<? extends IzPanel> aClass = classPathCrawler.searchClassInClassPath(panel.getClassName());
                 executePreBuildActions(panel);
                 IzPanel izPanel = installerContainer.getComponent(aClass);
                 izPanel.setMetadata(panel);

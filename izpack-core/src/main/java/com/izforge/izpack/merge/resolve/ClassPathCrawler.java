@@ -1,6 +1,5 @@
 package com.izforge.izpack.merge.resolve;
 
-import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.merge.ClassResolver;
@@ -21,7 +20,11 @@ public class ClassPathCrawler
 {
 
     private MergeableResolver mergeableResolver;
-    private HashMap<String, List<URL>> classPathContentCache;
+
+    private HashMap<String, Set<URL>> classPathContentCache;
+
+
+    private static final List<String> acceptedJar = Arrays.asList(".*event.*", ".*panel.*", ".*izpack.*");
 
     public ClassPathCrawler(MergeableResolver mergeableResolver)
     {
@@ -46,7 +49,7 @@ public class ClassPathCrawler
         {
             return;
         }
-        classPathContentCache = new HashMap<String, List<URL>>();
+        classPathContentCache = new HashMap<String, Set<URL>>();
         try
         {
             Collection<URL> urls = getClassPathUrl();
@@ -75,33 +78,84 @@ public class ClassPathCrawler
         }
     }
 
-    private List<URL> getOrCreateList(HashMap<String, List<URL>> classPathContentCache, String key)
+    private Set<URL> getOrCreateList(HashMap<String, Set<URL>> classPathContentCache, String key)
     {
-        if (!classPathContentCache.containsKey(key))
+        String newKey = key;
+        if (key.contains("jar!"))
         {
-            classPathContentCache.put(key, new ArrayList<URL>());
+            newKey = key.substring(key.indexOf("!") + 1);
         }
-        return classPathContentCache.get(key);
+        if (!classPathContentCache.containsKey(newKey))
+        {
+            classPathContentCache.put(newKey, new HashSet<URL>());
+        }
+        return classPathContentCache.get(newKey);
     }
 
-    public Class searchClassInClassPath(final String className) throws ClassNotFoundException
+    public Class searchClassInClassPath(final String className)
     {
-        final String fileToSearch = className + ".class";
-        processClassPath();
-        List<URL> urlList = classPathContentCache.get(fileToSearch);
-        if (urlList != null)
+        if (ClassResolver.isFullClassName(className))
         {
-            String fullClassName = ClassResolver.processURLToClassName(urlList.get(0));
-            return Class.forName(fullClassName);
+            try
+            {
+                return Class.forName(className);
+            }
+            catch (ClassNotFoundException e)
+            {
+                throw new MergeException("The class name " + className + " is not a valid", e);
+            }
         }
-        throw new IzPackException("Could not find class " + className + " : Current classpath is " + getCurrentClasspath());
+
+        try
+        {
+            final String fileToSearch = className + ".class";
+            processClassPath();
+            Set<URL> urlList = classPathContentCache.get(fileToSearch);
+            if (urlList != null)
+            {
+                String fullClassName = ClassResolver.processURLToClassName(urlList.iterator().next());
+                return Class.forName(fullClassName);
+            }
+        }
+        catch (ClassNotFoundException ignored)
+        {
+        }
+        throw new MergeException("Could not find class " + className + " : Current classpath is " + getCurrentClasspath());
     }
 
 
-    public List<URL> searchPackageInClassPath(final String packageName)
+    public Set<URL> searchPackageInClassPath(final String packageName)
     {
         processClassPath();
-        return classPathContentCache.get(packageName);
+        String expectedEndPath = packageName.replaceAll("\\.", "/");
+        String[] parts = packageName.split("\\.");
+        if (parts.length == 1)
+        {
+            return classPathContentCache.get(packageName);
+        }
+        Set<URL> result = getAndFilterUrlList(packageName, expectedEndPath);
+        return result;
+    }
+
+    private Set<URL> getAndFilterUrlList(String packageName, String expectedEndPath)
+    {
+        Set<URL> elligibleList = getUrlsForLastPackage(packageName);
+        Set<URL> result = new HashSet<URL>();
+        for (URL url : elligibleList)
+        {
+            if (url.getPath().endsWith(expectedEndPath))
+            {
+                result.add(url);
+            }
+        }
+        return result;
+    }
+
+
+    public Set<URL> getUrlsForLastPackage(String packageName)
+    {
+        String[] packages = packageName.split("\\.");
+        return classPathContentCache.get(packages[packages.length - 1]);
     }
 
     private Collection<URL> getClassPathUrl()
@@ -119,7 +173,23 @@ public class ClassPathCrawler
         catch (IOException ignored)
         {
         }
-        return result;
+        return filterUrl(result, acceptedJar);
     }
 
+
+    private Collection<URL> filterUrl(Collection<URL> urlCollection, List<String> acceptedRegexp)
+    {
+        HashSet<URL> result = new HashSet<URL>();
+        for (URL url : urlCollection)
+        {
+            for (String regexp : acceptedRegexp)
+            {
+                if (url.getPath().matches(regexp))
+                {
+                    result.add(url);
+                }
+            }
+        }
+        return result;
+    }
 }

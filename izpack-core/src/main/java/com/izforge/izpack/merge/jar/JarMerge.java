@@ -42,7 +42,7 @@ public class JarMerge extends AbstractMerge
         this.jarPath = jarPath;
         this.destination = destination;
         this.mergeContent = mergeContent;
-        regexp = new StringBuilder().append(jarPackage).append("(.*)").toString();
+        regexp = new StringBuilder().append(jarPackage).append('/').append("(.*)").toString();
     }
 
 
@@ -69,7 +69,20 @@ public class JarMerge extends AbstractMerge
 
     public List<File> recursivelyListFiles(FileFilter fileFilter)
     {
-        return null;
+        try
+        {
+            ArrayList<String> fileNameInZip = getFileNameInZip();
+            ArrayList<File> result = new ArrayList<File>();
+            for (String fileName : fileNameInZip)
+            {
+                result.add(new File(jarPath + "!" + fileName));
+            }
+            return result;
+        }
+        catch (IOException e)
+        {
+            throw new MergeException(e);
+        }
     }
 
     public ArrayList<String> getFileNameInZip() throws IOException
@@ -152,5 +165,15 @@ public class JarMerge extends AbstractMerge
         {
             throw new MergeException(e);
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return "JarMerge{" +
+                "jarPath='" + jarPath + '\'' +
+                ", regexp='" + regexp + '\'' +
+                ", destination='" + destination + '\'' +
+                '}';
     }
 }
