@@ -57,7 +57,7 @@ public class JarMerge extends AbstractMerge
         this.jarPath = jarPath;
         this.destination = destination;
         this.mergeContent = mergeContent;
-        regexp = new StringBuilder().append(pathInsideJar).append("(/)?").append("(.*)").toString();
+        regexp = new StringBuilder().append(pathInsideJar).append("/*").append("(.*)").toString();
     }
 
 
@@ -175,8 +175,13 @@ public class JarMerge extends AbstractMerge
                         continue;
                     }
                     mergeList.add(zentry.getName());
-                    String dest = destination + matcher.group(1);
-                    IoHelper.copyStreamToJar(jarInputStream, outJar, dest, zentry.getTime());
+                    String matchFile = matcher.group(1);
+                    StringBuilder dest = new StringBuilder(destination);
+                    if (matchFile != null)
+                    {
+                        dest.append(matchFile);
+                    }
+                    IoHelper.copyStreamToJar(jarInputStream, outJar, dest.toString(), zentry.getTime());
                 }
 
             }
