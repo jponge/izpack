@@ -134,7 +134,7 @@ public class ResolveUtils
     {
         String res = resource.getPath();
         res = res.replaceAll("file:", "");
-        return res.substring(res.lastIndexOf("!") + 1, res.length());
+        return res.substring(res.lastIndexOf("!") + 1);
     }
 
     /**
