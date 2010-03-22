@@ -48,7 +48,7 @@ public class IzPackNewMojo extends AbstractMojo {
     /**
      * The output compilation file name
      *
-     * @parameter default-value="${project.build.directory}/${project.build.finalName)-izpack.jar"
+     * @parameter default-value="${project.build.directory}/${project.build.finalName}-izpack.jar"
      */
     private String output;
 
