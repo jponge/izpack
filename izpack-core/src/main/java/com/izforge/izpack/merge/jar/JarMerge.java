@@ -166,4 +166,14 @@ public class JarMerge extends AbstractMerge
             throw new MergeException(e);
         }
     }
+
+    @Override
+    public String toString()
+    {
+        return "JarMerge{" +
+                "jarPath='" + jarPath + '\'' +
+                ", regexp='" + regexp + '\'' +
+                ", destination='" + destination + '\'' +
+                '}';
+    }
 }

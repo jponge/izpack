@@ -76,4 +76,14 @@ public class PanelMerge implements Mergeable
     {
         return panelClass;
     }
+
+    @Override
+    public String toString()
+    {
+        return "PanelMerge{" +
+                "packageMerge=" + packageMerge +
+                ", panelClass=" + panelClass +
+                ", fileFilter=" + fileFilter +
+                '}';
+    }
 }
