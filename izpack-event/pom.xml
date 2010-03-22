@@ -15,7 +15,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>${groupId}</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>izpack-compiler</artifactId>
             <version>${version}</version>
         </dependency>

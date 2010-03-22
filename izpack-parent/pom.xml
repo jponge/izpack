@@ -84,79 +84,79 @@
             <!-- Internal -->
             <dependency>
                 <artifactId>izpack-utils</artifactId>
-                <groupId>${groupId}</groupId>
+                <groupId>${project.groupId}</groupId>
                 <version>${version}</version>
             </dependency>
             <dependency>
                 <artifactId>izpack-api</artifactId>
-                <groupId>${groupId}</groupId>
+                <groupId>${project.groupId}</groupId>
                 <version>${version}</version>
             </dependency>
             <dependency>
                 <artifactId>izpack-util</artifactId>
-                <groupId>${groupId}</groupId>
+                <groupId>${project.groupId}</groupId>
                 <version>${version}</version>
             </dependency>
             <dependency>
                 <artifactId>izpack-gui</artifactId>
-                <groupId>${groupId}</groupId>
+                <groupId>${project.groupId}</groupId>
                 <version>${version}</version>
             </dependency>
             <dependency>
                 <artifactId>izpack-test-common</artifactId>
-                <groupId>${groupId}</groupId>
+                <groupId>${project.groupId}</groupId>
                 <version>${version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <artifactId>izpack-event</artifactId>
-                <groupId>${groupId}</groupId>
+                <groupId>${project.groupId}</groupId>
                 <version>${version}</version>
             </dependency>
             <dependency>
                 <artifactId>izpack-compiler</artifactId>
-                <groupId>${groupId}</groupId>
+                <groupId>${project.groupId}</groupId>
                 <version>${version}</version>
             </dependency>
             <dependency>
                 <artifactId>izpack-test</artifactId>
-                <groupId>${groupId}</groupId>
+                <groupId>${project.groupId}</groupId>
                 <version>${version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <artifactId>izpack-panel</artifactId>
-                <groupId>${groupId}</groupId>
+                <groupId>${project.groupId}</groupId>
                 <version>${version}</version>
             </dependency>
             <dependency>
                 <artifactId>izpack-dist</artifactId>
-                <groupId>${groupId}</groupId>
+                <groupId>${project.groupId}</groupId>
                 <version>${version}</version>
             </dependency>
             <dependency>
                 <artifactId>izpack-uninstaller</artifactId>
-                <groupId>${groupId}</groupId>
+                <groupId>${project.groupId}</groupId>
                 <version>${version}</version>
             </dependency>
             <dependency>
                 <artifactId>izpack-installer</artifactId>
-                <groupId>${groupId}</groupId>
+                <groupId>${project.groupId}</groupId>
                 <version>${version}</version>
             </dependency>
             <dependency>
                 <artifactId>izpack-listener</artifactId>
-                <groupId>${groupId}</groupId>
+                <groupId>${project.groupId}</groupId>
                 <version>${version}</version>
             </dependency>
             <dependency>
                 <artifactId>izpack-native</artifactId>
-                <groupId>${groupId}</groupId>
+                <groupId>${project.groupId}</groupId>
                 <version>${version}</version>
             </dependency>
             <dependency>
                 <artifactId>izpack-core</artifactId>
-                <groupId>${groupId}</groupId>
+                <groupId>${project.groupId}</groupId>
                 <version>${version}</version>
             </dependency>
             <!-- Tests -->
