@@ -12,14 +12,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>${groupId}</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>izpack-compiler</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${groupId}</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>izpack-utils</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
 
     </dependencies>
@@ -75,9 +75,9 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>${groupId}</groupId>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>izpack-maven-plugin</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
                 <configuration>
                 </configuration>
             </plugin>

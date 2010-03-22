@@ -15,8 +15,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>izpack-api</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>izpack-compiler</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${groupId}</groupId>
