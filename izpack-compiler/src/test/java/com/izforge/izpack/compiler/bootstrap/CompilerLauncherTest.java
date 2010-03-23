@@ -34,7 +34,7 @@ public class CompilerLauncherTest
     @Test
     public void testPropertiesBinding() throws Exception
     {
-        Properties properties = compilerContainer.getComponent(Properties.class);
+        Properties properties = (Properties) compilerContainer.getComponent("properties");
         assertThat(properties, IsNull.notNullValue());
     }
 
