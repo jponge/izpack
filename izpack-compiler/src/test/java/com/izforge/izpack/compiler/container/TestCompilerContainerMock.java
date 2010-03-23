@@ -11,7 +11,6 @@ import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
-import com.izforge.izpack.compiler.helper.CompilerResourceManager;
 import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
 import com.izforge.izpack.compiler.listener.CmdlinePackagerListener;
 import com.izforge.izpack.compiler.packager.IPackager;
@@ -45,7 +44,6 @@ public class TestCompilerContainerMock extends AbstractContainer
                 .addComponent(Mockito.mock(PathResolver.class))
                 .addComponent(Mockito.mock(CompilerHelper.class))
                 .addComponent(Mockito.mock(PropertyManager.class))
-                .addComponent(Mockito.mock(CompilerResourceManager.class))
                 .addComponent(Mockito.mock(MergeManager.class))
                 .addComponent(Mockito.mock(VariableSubstitutor.class))
                 .addComponent(Mockito.mock(IPackager.class))
