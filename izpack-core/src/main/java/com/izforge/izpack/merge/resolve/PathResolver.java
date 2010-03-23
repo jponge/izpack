@@ -124,7 +124,7 @@ public class PathResolver
         if (panelDependencies.containsKey(panelClass.getSimpleName()))
         {
             String dependPackage = (String) panelDependencies.get(panelClass.getSimpleName());
-            getMergeableFromPackage(dependPackage);
+            mergeableForClass.addAll(getMergeableFromPackage(dependPackage));
         }
         return new PanelMerge(panelClass, mergeableForClass);
     }
