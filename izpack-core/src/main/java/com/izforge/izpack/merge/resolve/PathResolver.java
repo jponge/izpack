@@ -87,6 +87,11 @@ public class PathResolver
         return result;
     }
 
+    public List<Mergeable> getMergeableFromPackage(String dependPackage)
+    {
+        return getMergeableFromPath(dependPackage.replaceAll("\\.", "/") + "/");
+    }
+
     /**
      * Return the mergeable from the given path.
      *
@@ -116,12 +121,14 @@ public class PathResolver
     public PanelMerge getPanelMerge(Class panelClass)
     {
         List<Mergeable> mergeableForClass = getMergeablePackageFromClass(panelClass);
-        if (panelDependencies.containsKey(panelClass.getCanonicalName()))
+        if (panelDependencies.containsKey(panelClass.getSimpleName()))
         {
-
+            String dependPackage = (String) panelDependencies.get(panelClass.getSimpleName());
+            getMergeableFromPackage(dependPackage);
         }
         return new PanelMerge(panelClass, mergeableForClass);
     }
+
 
     private List<Mergeable> getMergeablePackageFromClass(Class aClass)
     {
