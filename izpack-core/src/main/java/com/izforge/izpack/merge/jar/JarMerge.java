@@ -25,7 +25,7 @@ public class JarMerge extends AbstractMerge
 {
     private String jarPath;
 
-    private String regexp = ".*";
+    private String regexp;
     private String destination;
 
 
@@ -40,8 +40,8 @@ public class JarMerge extends AbstractMerge
     {
         this.jarPath = jarPath;
         this.mergeContent = mergeContent;
-        destination = resource.getFile().replaceAll(this.jarPath, "").replaceAll("file:", "").replaceAll("!/", "");
-        regexp = new StringBuilder().append(destination).append("(.*)").toString();
+        destination = resource.getFile().replaceAll(this.jarPath, "").replaceAll("file:", "").replaceAll("!/?", "");
+        regexp = new StringBuilder().append(destination).append("/*(.*)").toString();
     }
 
     /**
@@ -137,8 +137,12 @@ public class JarMerge extends AbstractMerge
 
                     String matchFile = matcher.group(1);
                     StringBuilder dest = new StringBuilder(destination);
-                    if (matchFile != null)
+                    if (matchFile != null && matchFile.length() > 0)
                     {
+                        if (dest.length() > 0 && dest.charAt(dest.length() - 1) != '/')
+                        {
+                            dest.append('/');
+                        }
                         dest.append(matchFile);
                     }
                     IoHelper.copyStreamToJar(jarInputStream, outputStream, dest.toString(), zentry.getTime());
@@ -177,8 +181,12 @@ public class JarMerge extends AbstractMerge
                     mergeList.add(zentry.getName());
                     String matchFile = matcher.group(1);
                     StringBuilder dest = new StringBuilder(destination);
-                    if (matchFile != null)
+                    if (matchFile != null && matchFile.length() > 0)
                     {
+                        if (dest.length() > 0 && dest.charAt(dest.length() - 1) != '/')
+                        {
+                            dest.append('/');
+                        }
                         dest.append(matchFile);
                     }
                     IoHelper.copyStreamToJar(jarInputStream, outJar, dest.toString(), zentry.getTime());

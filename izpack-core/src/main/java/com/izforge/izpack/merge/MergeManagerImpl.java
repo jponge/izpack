@@ -83,4 +83,13 @@ public class MergeManagerImpl implements MergeManager
         }
         return null;
     }
+
+    @Override
+    public String toString()
+    {
+        return "MergeManagerImpl{" +
+                "mergeableList=" + mergeableList +
+                ", pathResolver=" + pathResolver +
+                '}';
+    }
 }

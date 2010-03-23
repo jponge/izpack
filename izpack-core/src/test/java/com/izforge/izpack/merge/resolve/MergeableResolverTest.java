@@ -52,7 +52,7 @@ public class MergeableResolverTest
     public void testGetMergeableFromURLWithDestination() throws Exception
     {
         Mergeable jarMerge = mergeableResolver.getMergeableFromURLWithDestination(resource, "ga");
-        assertThat(jarMerge, MergeMatcher.isMergeableContainingFiles("ga/jar/izforge/izpack/panels/hello/HelloPanel.class")
+        assertThat(jarMerge, MergeMatcher.isMergeableContainingFiles("ga/izpack/panels/hello/HelloPanel.class")
         );
     }
 
