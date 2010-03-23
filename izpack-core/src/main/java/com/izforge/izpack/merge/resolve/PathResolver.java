@@ -5,7 +5,6 @@ import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.merge.panel.PanelMerge;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
@@ -17,17 +16,15 @@ import java.util.*;
  */
 public class PathResolver
 {
-
-    private Map<OutputStream, List<String>> mergeContent;
     public MergeableResolver mergeableResolver;
     private ClassPathCrawler classPathCrawler;
+    private Properties panelDependencies;
 
-
-    public PathResolver(MergeableResolver mergeableResolver, Map<OutputStream, List<String>> mergeContent, ClassPathCrawler classPathCrawler)
+    public PathResolver(MergeableResolver mergeableResolver, ClassPathCrawler classPathCrawler, Properties panelDependencies) throws IOException
     {
         this.mergeableResolver = mergeableResolver;
-        this.mergeContent = mergeContent;
         this.classPathCrawler = classPathCrawler;
+        this.panelDependencies = panelDependencies;
     }
 
     /**
@@ -118,7 +115,12 @@ public class PathResolver
 
     public PanelMerge getPanelMerge(Class panelClass)
     {
-        return new PanelMerge(panelClass, getMergeablePackageFromClass(panelClass));
+        List<Mergeable> mergeableForClass = getMergeablePackageFromClass(panelClass);
+        if (panelDependencies.containsKey(panelClass.getCanonicalName()))
+        {
+
+        }
+        return new PanelMerge(panelClass, mergeableForClass);
     }
 
     private List<Mergeable> getMergeablePackageFromClass(Class aClass)

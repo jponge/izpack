@@ -53,6 +53,16 @@ public class PanelMergeTest
     }
 
     @Test
+    public void testResolvePanelWithDependencies() throws Exception
+    {
+        panelMerge = pathResolver.getPanelMerge("com.izforge.izpack.panels.hello.HelloPanelTestWithDependenciesClass");
+        assertThat(panelMerge, MergeMatcher.isMergeableContainingFiles(
+                "com/izforge/izpack/panels/hello/HelloPanelTestWithDependenciesClass.class",
+                "com/izforge/izpack/panels/depend/DependedClass.class"
+        ));
+    }
+
+    @Test
     public void testGetClassNameFromPanelMergeWithFullClassGiven() throws Exception
     {
         panelMerge = pathResolver.getPanelMerge("com.izforge.izpack.panels.hello.HelloPanelTestClass");

@@ -8,7 +8,9 @@ import org.picocontainer.Characteristics;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.parameters.ComponentParameter;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Properties;
 
 /**
  * Fill containter with resolver dependencies
@@ -25,6 +27,21 @@ public class ResolverContainerFiller implements DependenciesFillerContainer
                         .as(Characteristics.USE_NAMES).addComponent(PathResolver.class)
                         .as(Characteristics.USE_NAMES).addComponent(MergeableResolver.class)
                         .addComponent("mergeContent", HashMap.class, ComponentParameter.ZERO)
+                        .addComponent("panelDependencies", getPanelDependencies())
                 ;
+    }
+
+    private Properties getPanelDependencies()
+    {
+        Properties properties = new Properties();
+        try
+        {
+            properties.load(ClassLoader.getSystemResourceAsStream("panelDependencies.properties"));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return properties;
     }
 }
