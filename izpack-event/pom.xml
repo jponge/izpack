@@ -15,7 +15,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>${groupId}</groupId>
             <artifactId>izpack-api</artifactId>
         </dependency>
         <dependency>
