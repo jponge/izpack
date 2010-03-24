@@ -250,7 +250,7 @@ public class InstallerFrame extends JFrame
     public InstallerFrame loadPanels() throws ClassNotFoundException
     {
         panelManager.loadPanelsInContainer();
-        panelManager.instanciatePanels();
+        panelManager.instantiatePanels();
         buildGUI();
         sizeFrame();
         return this;
@@ -258,9 +258,19 @@ public class InstallerFrame extends JFrame
 
     public void enableFrame()
     {
-        // We show the frame
         showFrame();
-        switchPanel(0);
+        switchToFirstEnabledPanel();
+    }
+
+    private void switchToFirstEnabledPanel()
+    {
+        int firstPanel = hasNavigateNext(-1, false);
+        if (firstPanel > -1) 
+        {
+            showFrame();
+            installdata.setCurPanelNumber(firstPanel);
+            switchPanel(firstPanel);
+        }
     }
 
     public Debugger getDebugger()
@@ -273,9 +283,7 @@ public class InstallerFrame extends JFrame
      */
     private void buildGUI()
     {
-        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); // patch 06/07/2005,
-        // Fabrice Mirabile
-        // Sets the frame icon
+        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         try
         {
             ImageIcon jframeIcon = ResourceManager.getInstance().getImageIconResource("JFrameIcon");
