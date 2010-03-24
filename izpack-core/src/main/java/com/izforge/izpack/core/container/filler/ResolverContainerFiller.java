@@ -37,7 +37,7 @@ public class ResolverContainerFiller implements DependenciesFillerContainer
         Properties properties = new Properties();
         try
         {
-            InputStream inStream = getClass().getResourceAsStream("/panelDependencies.properties");
+            InputStream inStream = getClass().getResourceAsStream("panelDependencies.properties");
             properties.load(inStream);
         }
         catch (IOException e)
