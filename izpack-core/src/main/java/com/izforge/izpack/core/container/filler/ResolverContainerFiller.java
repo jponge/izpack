@@ -9,6 +9,7 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.parameters.ComponentParameter;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -36,7 +37,8 @@ public class ResolverContainerFiller implements DependenciesFillerContainer
         Properties properties = new Properties();
         try
         {
-            properties.load(ClassLoader.getSystemResourceAsStream("panelDependencies.properties"));
+            InputStream inStream = getClass().getResourceAsStream("/panelDependencies.properties");
+            properties.load(inStream);
         }
         catch (IOException e)
         {
