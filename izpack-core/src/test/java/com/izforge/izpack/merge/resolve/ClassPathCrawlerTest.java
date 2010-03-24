@@ -69,7 +69,7 @@ public class ClassPathCrawlerTest
     public void searchResourcePathInJar() throws Exception
     {
         URL jarUrl = loadVimPanel();
-        Set<URL> urlList = classPathCrawler.searchPackageInClassPath("com/sora/panel");
+        Set<URL> urlList = classPathCrawler.searchPackageInClassPath("com/sora/panel/");
         assertThat(urlList, IsCollectionContaining.hasItems(
                 new File(jarUrl.getFile() + "!com/sora/panel").toURI().toURL()
         ));
