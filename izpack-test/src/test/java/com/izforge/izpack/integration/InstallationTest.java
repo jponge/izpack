@@ -82,7 +82,8 @@ public class InstallationTest extends AbstractIntegrationTest
         installerFrameFixture.requireSize(new Dimension(640, 480));
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         installerFrameFixture.requireVisible();
-        // Finish panel
+        // Finish panel        
+        installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
     }
 
 
@@ -131,6 +132,7 @@ public class InstallationTest extends AbstractIntegrationTest
         Thread.sleep(300);
         installerFrameFixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).approve();
         assertThat(new File(installPath, "auto.xml").exists(), Is.is(true));
+        installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
     }
 
     private void clickDefaultLang()
@@ -188,7 +190,7 @@ public class InstallationTest extends AbstractIntegrationTest
         installerFrameFixture.checkBox(GuiId.SHORTCUT_CREATE_CHECK_BOX.id).click();
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Finish
-
+        installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
     }
 
     private void waitAndCheckInstallation(GUIInstallData installData, File installPath) throws InterruptedException
