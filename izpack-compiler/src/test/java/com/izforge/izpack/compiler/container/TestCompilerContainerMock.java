@@ -11,14 +11,12 @@ import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
-import com.izforge.izpack.compiler.helper.CompilerResourceManager;
 import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
 import com.izforge.izpack.compiler.listener.CmdlinePackagerListener;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.core.container.AbstractContainer;
+import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
 import com.izforge.izpack.merge.MergeManager;
-import com.izforge.izpack.merge.resolve.ClassPathCrawler;
-import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import org.mockito.Mockito;
 import org.picocontainer.PicoBuilder;
@@ -45,22 +43,20 @@ public class TestCompilerContainerMock extends AbstractContainer
                 .addComponent(Mockito.mock(PathResolver.class))
                 .addComponent(Mockito.mock(CompilerHelper.class))
                 .addComponent(Mockito.mock(PropertyManager.class))
-                .addComponent(Mockito.mock(CompilerResourceManager.class))
                 .addComponent(Mockito.mock(MergeManager.class))
                 .addComponent(Mockito.mock(VariableSubstitutor.class))
                 .addComponent(Mockito.mock(IPackager.class))
                 .addComponent(Mockito.mock(CompilerData.class))
                 .addComponent(Mockito.mock(AssertionHelper.class))
-                .addComponent(Mockito.mock(Map.class))
+                .addComponent("mapStringListDyn", Mockito.mock(Map.class))
                 .addComponent("installFile", "installFile")
                 .addComponent(BindeableContainer.class, this)
                 .addComponent(CompilerConfig.class)
                 .addComponent(IzpackProjectInstaller.class)
                 .addComponent(XmlCompilerHelper.class)
                 .addComponent(XMLParser.class)
-                .addComponent(PathResolver.class)
-                .addComponent(MergeableResolver.class)
-                .addComponent(ClassPathCrawler.class);
+                ;
+        fillContainer(new ResolverContainerFiller());
 
     }
 }

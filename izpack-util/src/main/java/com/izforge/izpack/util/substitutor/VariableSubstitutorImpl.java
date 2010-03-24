@@ -55,11 +55,11 @@ public class VariableSubstitutorImpl implements VariableSubstitutor
      * Constructs a new substitutor using the specified variable value mappings. The environment
      * hashtable is copied by reference. Braces are not required by default
      *
-     * @param variables the map with variable value mappings
+     * @param properties the map with variable value mappings
      */
-    public VariableSubstitutorImpl(Properties variables)
+    public VariableSubstitutorImpl(Properties properties)
     {
-        this.variables = variables;
+        this.variables = properties;
     }
 
     public void setBracesRequired(boolean braces)

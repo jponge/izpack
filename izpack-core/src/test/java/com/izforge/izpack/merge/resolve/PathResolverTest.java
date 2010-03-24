@@ -79,7 +79,6 @@ public class PathResolverTest
         ));
     }
 
-
     @Test
     public void ftestGetMergeableFromFile() throws Exception
     {
@@ -113,6 +112,14 @@ public class PathResolverTest
         assertThat(mergeables,
                 IsCollectionContaining.hasItem(
                         MergeMatcher.isMergeableContainingFiles("a/dest/resolve/PathResolver.class")));
+    }
+
+    @Test
+    public void testGetMergeableFromPackage() throws Exception
+    {
+        List<Mergeable> mergeables = pathResolver.getMergeableFromPackage("com.izforge.izpack.merge");
+        assertThat(mergeables, IsCollectionContaining.hasItem(
+                MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/merge/resolve/PathResolver.class")));
     }
 
     private Collection<String> getListPathFromListURL(Collection<URL> urlList)

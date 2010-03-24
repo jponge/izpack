@@ -27,7 +27,6 @@ import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.zip.ZipOutputStream;
 
 /**
  * Encloses information about the install process. This implementation is not thread safe.
@@ -41,25 +40,6 @@ public class AutomatedInstallData implements Serializable
     // --- Static members -------------------------------------------------
     public static final String MODIFY_INSTALLATION = "modify.izpack.install";
     public static final String INSTALLATION_INFORMATION = ".installationinformation";
-
-    /**
-     * Names of the custom actions types with which they are stored in the installer jar file. These
-     * names are also used to identify the type of custom action in the customData map. Slashes as
-     * first char are needed to use the names as "file" name in the installer jar.
-     */
-    // Attention !! Do not change the existent names and the order.
-    // Add a / as first char at new types. Add new type handling in
-    // Unpacker.
-    public static final String[] CUSTOM_ACTION_TYPES = new String[]{"/installerListeners",
-            "/uninstallerListeners", "/uninstallerLibs", "/uninstallerJars"};
-
-    public static final int INSTALLER_LISTENER_INDEX = 0;
-
-    public static final int UNINSTALLER_LISTENER_INDEX = 1;
-
-    public static final int UNINSTALLER_LIBS_INDEX = 2;
-
-    public static final int UNINSTALLER_JARS_INDEX = 3;
 
     // --- Instance members -----------------------------------------------
 
@@ -79,11 +59,6 @@ public class AutomatedInstallData implements Serializable
      * The language pack.
      */
     private LocaleDatabase langpack;
-
-    /**
-     * The uninstaller jar stream.
-     */
-    private ZipOutputStream uninstallOutJar;
 
     /**
      * The inforamtions.
@@ -409,16 +384,6 @@ public class AutomatedInstallData implements Serializable
     public void setLangpack(LocaleDatabase langpack)
     {
         this.langpack = langpack;
-    }
-
-    public ZipOutputStream getUninstallOutJar()
-    {
-        return uninstallOutJar;
-    }
-
-    public void setUninstallOutJar(ZipOutputStream uninstallOutJar)
-    {
-        this.uninstallOutJar = uninstallOutJar;
     }
 
     public Info getInfo()

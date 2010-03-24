@@ -33,13 +33,12 @@ public class MergeMatcher extends TypeSafeMatcher<Mergeable>
             MockOutputStream outputStream = new MockOutputStream();
             mergeable.merge(outputStream);
             List<String> entryName = outputStream.getListEntryName();
-            listMatcher.matches(entryName);
+            return listMatcher.matches(entryName);
         }
         catch (IOException e)
         {
             throw new RuntimeException(e);
         }
-        return true;
     }
 
     public void describeTo(Description description)

@@ -1,9 +1,8 @@
-package com.izforge.izpack.unpacker;
+package com.izforge.izpack.installer.data;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.manager.PanelManager;
-import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.integration.AbstractIntegrationTest;
 import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.util.IoHelper;
@@ -19,19 +18,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Test of unpacker
  */
 @Test(groups = "integration")
-public class UnpackerTest extends AbstractIntegrationTest
+public class UninstallWriteTest extends AbstractIntegrationTest
 {
 
     @Test
-    public void testUnpackerPutUninstaller() throws Exception
+    public void testWriteUninstaller() throws Exception
     {
         compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         PanelManager panelManager = applicationContainer.getComponent(PanelManager.class);
         panelManager.loadPanelsInContainer().instantiatePanels();
-        IUnpacker unpacker = applicationContainer.getComponent(IUnpacker.class);
-        assertThat(unpacker, IsNull.notNullValue());
+        UninstallDataWriter uninstallDataWriter = applicationContainer.getComponent(UninstallDataWriter.class);
+        assertThat(uninstallDataWriter, IsNull.notNullValue());
 
-        unpacker.putUninstaller();
+        uninstallDataWriter.write();
 
         AutomatedInstallData idata = applicationContainer.getComponent(AutomatedInstallData.class);
         VariableSubstitutor variableSubstitutor = applicationContainer.getComponent(VariableSubstitutor.class);

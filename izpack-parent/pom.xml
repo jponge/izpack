@@ -56,13 +56,23 @@
                 <artifactId>jakarta-regexp</artifactId>
                 <version>1.4</version>
             </dependency>
-
             <dependency>
                 <groupId>org.picocontainer</groupId>
                 <artifactId>picocontainer</artifactId>
                 <version>2.8</version>
             </dependency>
+            <dependency>
+                <groupId>xpp3</groupId>
+                <artifactId>xpp3</artifactId>
+                <version>1.1.4c</version>
+            </dependency>
+            <dependency>
+                <groupId>com.thoughtworks.xstream</groupId>
+                <artifactId>xstream</artifactId>
+                <version>1.3.1</version>
+            </dependency>
 
+            <!-- Commons apache -->
             <dependency>
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
@@ -85,6 +95,32 @@
                 <artifactId>commons-compress</artifactId>
                 <version>1.0</version>
             </dependency>
+
+            <!-- Maven plugins libs -->
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-plugin-api</artifactId>
+                <version>2.2.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-project</artifactId>
+                <version>2.2.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.maven.shared</groupId>
+                <artifactId>maven-filtering</artifactId>
+                <version>1.0-beta-2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-utils</artifactId>
+                <version>2.0.1</version>
+            </dependency>
+
             <!-- Internal -->
             <dependency>
                 <artifactId>izpack-utils</artifactId>
@@ -167,7 +203,7 @@
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.7</version>
+                <version>4.8.1</version>
                 <scope>test</scope>
             </dependency>
 
@@ -205,15 +241,12 @@
             </dependency>
 
             <dependency>
-                <groupId>xpp3</groupId>
-                <artifactId>xpp3</artifactId>
-                <version>1.1.4c</version>
+                <groupId>org.apache.maven.plugin-testing</groupId>
+                <artifactId>maven-plugin-testing-harness</artifactId>
+                <version>1.2</version>
+                <scope>test</scope>
             </dependency>
-            <dependency>
-                <groupId>com.thoughtworks.xstream</groupId>
-                <artifactId>xstream</artifactId>
-                <version>1.3.1</version>
-            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

@@ -16,6 +16,7 @@ import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.codehaus.izpack.test.provider.GUIInstallDataMockProvider;
 import org.fest.swing.fixture.FrameFixture;
+import org.mockito.Mockito;
 import org.picocontainer.Characteristics;
 import org.picocontainer.PicoBuilder;
 import org.picocontainer.injectors.ProviderAdapter;
@@ -39,7 +40,7 @@ public class TestPanelContainer extends AbstractContainer
                 .addComponent(ResourceManager.class)
                 .addComponent(ConditionCheck.class)
                 .addComponent(UninstallData.class)
-                .addComponent(UninstallDataWriter.class)
+                .addComponent(Mockito.mock(UninstallDataWriter.class))
                 .addComponent(AutomatedInstaller.class)
                 .addComponent(FrameFixture.class, FrameFixture.class, new ComponentParameter(InstallerFrame.class))
                 .addComponent(PanelManager.class)

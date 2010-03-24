@@ -28,6 +28,7 @@ import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.UninstallDataWriter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,15 +53,18 @@ public class FinishPanel extends IzPanel implements ActionListener
      */
     protected JButton autoButton;
 
+    private UninstallDataWriter uninstallDataWriter;
+
     /**
      * The constructor.
      *
      * @param parent The parent.
      * @param idata  The installation installDataGUI.
      */
-    public FinishPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    public FinishPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, UninstallDataWriter uninstallDataWriter)
     {
         super(parent, idata, new GridBagLayout(), resourceManager);
+        this.uninstallDataWriter = uninstallDataWriter;
     }
 
     /**
@@ -93,7 +97,7 @@ public class FinishPanel extends IzPanel implements ActionListener
             jLabel.setName(GuiId.FINISH_PANEL_LABEL.id);
             add(jLabel, constraints);
             constraints.gridy++;
-            if (this.installData.getUninstallOutJar() != null)
+            if (uninstallDataWriter.isUninstallShouldBeWriten())
             {
                 // We prepare a message for the uninstaller feature
                 String path = translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";

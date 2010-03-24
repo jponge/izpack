@@ -40,5 +40,4 @@ public interface IUnpacker extends Runnable
      */
     public void setRules(RulesEngine rules);
 
-    void putUninstaller() throws Exception;
 }

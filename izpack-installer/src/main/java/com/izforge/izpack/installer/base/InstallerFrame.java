@@ -178,9 +178,6 @@ public class InstallerFrame extends JFrame
      */
     protected RulesEngine rules;
 
-
-    private VariableSubstitutor substitutor;
-
     private Debugger debugger;
 
     // If a heading image is defined should it be displayed on the left
@@ -216,7 +213,6 @@ public class InstallerFrame extends JFrame
             throws Exception
     {
         super(title);
-        substitutor = variableSubstitutor;
         guiListener = new ArrayList<GUIListener>();
         this.installdata = installdata;
         this.langpack = installdata.getLangpack();
@@ -879,7 +875,7 @@ public class InstallerFrame extends JFrame
                 .isVisible() || !prevButton.isEnabled())))
         {
             // this does nothing if the uninstaller was not included
-            uninstallDataWriter.write(installdata);
+            uninstallDataWriter.write();
 
             boolean reboot = false;
             if (installdata.isRebootNecessary())

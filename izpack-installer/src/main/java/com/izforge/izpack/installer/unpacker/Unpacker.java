@@ -35,7 +35,6 @@ import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.web.WebAccessor;
 import com.izforge.izpack.installer.web.WebRepositoryAccessor;
-import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.FileQueue;
 import com.izforge.izpack.util.os.FileQueueMove;
@@ -65,13 +64,12 @@ public class Unpacker extends UnpackerBase
      *
      * @param variableSubstitutor
      * @param udata
-     * @param pathResolver
      * @param idata                     The installation data.
      * @param abstractUIProgressHandler The installation progress abstractUIProgressHandler.
      */
-    public Unpacker(AutomatedInstallData idata, ResourceManager resourceManager, AbstractUIProgressHandler abstractUIProgressHandler, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata, PathResolver pathResolver)
+    public Unpacker(AutomatedInstallData idata, ResourceManager resourceManager, AbstractUIProgressHandler abstractUIProgressHandler, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata)
     {
-        super(idata, abstractUIProgressHandler, resourceManager, rules, variableSubstitutor, udata, pathResolver);
+        super(idata, abstractUIProgressHandler, resourceManager, rules, variableSubstitutor, udata);
     }
 
     /* (non-Javadoc)
@@ -547,9 +545,6 @@ public class Unpacker extends UnpackerBase
             { // Interrupt was initiated; perform it.
                 return;
             }
-
-            // We put the uninstaller (it's not yet complete...)
-            putUninstaller();
 
             // update checks _after_ uninstaller was put, so we don't delete it
             performUpdateChecks(updatechecks);

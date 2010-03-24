@@ -1,10 +1,13 @@
 package com.izforge.izpack.installer.data;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.api.merge.Mergeable;
+import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.ExecutableFile;
+import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 
@@ -20,38 +23,40 @@ public class UninstallDataWriter
     private static final String LOGFILE_PATH = "InstallerFrame.logfilePath";
     private VariableSubstitutor variableSubstitutor;
     private UninstallData udata;
+    private AutomatedInstallData installdata;
+    private PathResolver pathResolver;
+    private BufferedOutputStream bos;
+    private FileOutputStream out;
+    private ZipOutputStream outJar;
+    private RulesEngine rules;
 
-    public UninstallDataWriter(VariableSubstitutor variableSubstitutor, UninstallData udata)
+
+    public UninstallDataWriter(VariableSubstitutor variableSubstitutor, UninstallData udata, AutomatedInstallData installdata, PathResolver pathResolver, RulesEngine rules)
     {
         this.variableSubstitutor = variableSubstitutor;
         this.udata = udata;
+        this.installdata = installdata;
+        this.pathResolver = pathResolver;
+        this.rules = rules;
     }
 
     /**
      * Write uninstall data.
      *
-     * @param installdata The install data to use.
      * @return true if the infos were successfuly written, false otherwise.
      */
-    public boolean write(AutomatedInstallData installdata)
+    public boolean write()
     {
-
-
-        BufferedWriter extLogWriter = getExternLogFile(installdata);
         try
         {
-            String condition = installdata.getVariable(UNINSTALLER_CONDITION);
-            if (condition != null)
+            if (!isUninstallShouldBeWriten())
             {
-                if (!RulesEngineImpl.getCondition(condition).isTrue())
-                {
-                    // condition for creating the uninstaller is not fulfilled.
-                    return false;
-                }
+                return false;
             }
+            BufferedWriter extLogWriter = getExternLogFile(installdata);
+            createOutputJar();
             // We get the data
             List<String> files = udata.getUninstalableFilesList();
-            ZipOutputStream outJar = installdata.getUninstallOutJar();
 
             if (outJar == null)
             {
@@ -59,6 +64,8 @@ public class UninstallDataWriter
             }
 
             System.out.println("[ Writing the uninstaller data ... ]");
+
+            writeJarSkeleton(installdata, pathResolver, outJar);
 
             writeFilesLog(installdata, extLogWriter, files, outJar);
 
@@ -73,6 +80,8 @@ public class UninstallDataWriter
             // Cleanup
             outJar.flush();
             outJar.close();
+            bos.close();
+            out.close();
             return true;
         }
         catch (Exception err)
@@ -80,6 +89,20 @@ public class UninstallDataWriter
             err.printStackTrace();
             return false;
         }
+    }
+
+    public boolean isUninstallShouldBeWriten()
+    {
+        String uninstallerCondition = installdata.getInfo().getUninstallerCondition();
+        if (uninstallerCondition == null)
+        {
+            return true;
+        }
+        if (uninstallerCondition.length() > 0)
+        {
+            return true;
+        }
+        return this.rules.isConditionTrue(uninstallerCondition);
     }
 
     // Show whether a separated logfile should be also written or not.
@@ -336,4 +359,75 @@ public class UninstallDataWriter
         }
 
     }
+
+
+    /**
+     * Puts the uninstaller skeleton.
+     *
+     * @param installdata
+     * @param pathResolver
+     * @param outJar
+     * @throws Exception Description of the Exception
+     */
+    public void writeJarSkeleton(AutomatedInstallData installdata, PathResolver pathResolver, ZipOutputStream outJar) throws Exception
+    {
+        // get the uninstaller base, returning if not found so that
+        // installData.uninstallOutJar remains null
+
+        List<Mergeable> uninstallerMerge = pathResolver.getMergeableFromPath("com/izforge/izpack/uninstaller/");
+
+        // The uninstaller extension is facultative; it will be exist only
+        // if a native library was marked for uninstallation.
+        // REFACTOR Change uninstaller methods of merge and get
+
+        // Me make the .uninstaller directory
+        // We copy the uninstallers
+        for (Mergeable mergeable : uninstallerMerge)
+        {
+            mergeable.merge(outJar);
+        }
+
+        // Should we relaunch the uninstaller with privileges?
+        if (installdata.getInfo().isPrivilegedExecutionRequiredUninstaller())
+        {
+            outJar.putNextEntry(new ZipEntry("exec-admin"));
+            outJar.closeEntry();
+        }
+
+        // We put the langpack
+        List<Mergeable> langPack = pathResolver.getMergeableFromPath("resources/langpacks/" + installdata.getLocaleISO3() + ".xml", "langpack.xml");
+        for (Mergeable mergeable : langPack)
+        {
+            mergeable.merge(outJar);
+        }
+    }
+
+    private void createOutputJar()
+    {
+        // Me make the .uninstaller directory
+        String dest = IoHelper.translatePath(installdata.getInfo().getUninstallerPath(), variableSubstitutor);
+        String jar = dest + File.separator + installdata.getInfo().getUninstallerName();
+        File pathMaker = new File(dest);
+        pathMaker.mkdirs();
+
+        // We log the uninstaller deletion information
+        udata.setUninstallerJarFilename(jar);
+        udata.setUninstallerPath(dest);
+
+        // We open our final jar file
+        try
+        {
+            out = new FileOutputStream(jar);
+        }
+        catch (FileNotFoundException e)
+        {
+            throw new IzPackException("Problem writing uninstaller jar", e);
+        }
+        // Intersect a buffer else byte for byte will be written to the file.
+        bos = new BufferedOutputStream(out);
+        outJar = new ZipOutputStream(bos);
+        outJar.setLevel(9);
+        udata.addFile(jar, true);
+    }
+
 }
