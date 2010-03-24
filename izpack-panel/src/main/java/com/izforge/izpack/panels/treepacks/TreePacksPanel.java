@@ -579,7 +579,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             if (!cbnode.isPartial())
             {
                 int childRowIndex = getRowIndex((Pack) nodePack);
-                if (childRowIndex > 0)
+                if (childRowIndex >= 0)
                 {
                     Integer state = (Integer) packsModel.getValueAt(childRowIndex, 0);
                     cbnode.setEnabled(state >= 0);
