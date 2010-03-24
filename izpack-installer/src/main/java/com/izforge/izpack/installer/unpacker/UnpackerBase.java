@@ -24,16 +24,13 @@ package com.izforge.izpack.installer.unpacker;
 import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.api.unpacker.IDiscardInterruptable;
 import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsVersion;
 import org.apache.regexp.RE;
 import org.apache.regexp.RECompiler;
@@ -42,8 +39,6 @@ import org.apache.regexp.RESyntaxException;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 /**
  * Abstract base class for all unpacker implementations.
@@ -112,7 +107,6 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
 
     protected ResourceManager resourceManager;
     protected VariableSubstitutor variableSubstitutor;
-    private PathResolver pathResolver;
 
     /**
      * The constructor.
@@ -123,13 +117,12 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
      * @param variableSubstitutor
      * @param udata
      */
-    public UnpackerBase(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata, PathResolver pathResolver)
+    public UnpackerBase(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata)
     {
         this.idata = idata;
         this.handler = handler;
         this.resourceManager = resourceManager;
         this.rules = rules;
-        this.pathResolver = pathResolver;
         // Initialize the variable substitutor
         this.variableSubstitutor = variableSubstitutor;
         this.udata = udata;
@@ -595,90 +588,6 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
     private static void setInterruptDesired(boolean interruptDesired)
     {
         UnpackerBase.interruptDesired = interruptDesired;
-    }
-
-    /**
-     * Puts the uninstaller.
-     *
-     * @throws Exception Description of the Exception
-     */
-    public void putUninstaller() throws Exception
-    {
-        String uninstallerCondition = idata.getInfo().getUninstallerCondition();
-        if ((uninstallerCondition != null) &&
-                (uninstallerCondition.length() > 0) &&
-                !this.rules.isConditionTrue(uninstallerCondition))
-        {
-            Debug.log("Uninstaller has a condition (" + uninstallerCondition + ") which is not fulfilled.");
-            Debug.log("Skipping creation of uninstaller.");
-            return;
-        }
-        // get the uninstaller base, returning if not found so that
-        // installData.uninstallOutJar remains null
-
-        List<Mergeable> uninstallerMerge = pathResolver.getMergeableFromPath("com/izforge/izpack/uninstaller/");
-
-        // The uninstaller extension is facultative; it will be exist only
-        // if a native library was marked for uninstallation.
-        // REFACTOR Change uninstaller methods of merge and get
-
-        // Me make the .uninstaller directory
-        String dest = IoHelper.translatePath(idata.getInfo().getUninstallerPath(), variableSubstitutor);
-        String jar = dest + File.separator + idata.getInfo().getUninstallerName();
-        File pathMaker = new File(dest);
-        pathMaker.mkdirs();
-
-        // We log the uninstaller deletion information
-        udata.setUninstallerJarFilename(jar);
-        udata.setUninstallerPath(dest);
-
-        // We open our final jar file
-        FileOutputStream out = new FileOutputStream(jar);
-        // Intersect a buffer else byte for byte will be written to the file.
-        BufferedOutputStream bos = new BufferedOutputStream(out);
-        ZipOutputStream outJar = new ZipOutputStream(bos);
-        idata.setUninstallOutJar(outJar);
-        outJar.setLevel(9);
-        udata.addFile(jar, true);
-
-        // We copy the uninstallers
-        for (Mergeable mergeable : uninstallerMerge)
-        {
-            mergeable.merge(outJar);
-        }
-
-        // Should we relaunch the uninstaller with privileges?
-        if (idata.getInfo().isPrivilegedExecutionRequiredUninstaller())
-        {
-            outJar.putNextEntry(new ZipEntry("exec-admin"));
-            outJar.closeEntry();
-        }
-
-        // We put the langpack
-        List<Mergeable> langPack = pathResolver.getMergeableFromPath("resources/langpacks/" + idata.getLocaleISO3() + ".xml", "langpack.xml");
-        for (Mergeable mergeable : langPack)
-        {
-            mergeable.merge(outJar);
-        }
-        outJar.close();
-        bos.close();
-        out.close();
-    }
-
-    /**
-     * Adds additional unistall data to the uninstall data object.
-     *
-     * @param udata      unistall data
-     * @param customData array of lists of custom action data like uninstaller listeners
-     */
-    protected void handleAdditionalUninstallData(UninstallData udata, List[] customData)
-    {
-        // Handle uninstall libs
-        udata.addAdditionalData("__uninstallLibs__", customData[AutomatedInstallData.UNINSTALLER_LIBS_INDEX]);
-        // Handle uninstaller listeners
-        udata.addAdditionalData("uninstallerListeners", customData[AutomatedInstallData.UNINSTALLER_LISTENER_INDEX]);
-        // Handle uninstaller jars
-        udata.addAdditionalData("uninstallerJars", customData[AutomatedInstallData.UNINSTALLER_JARS_INDEX]);
     }
 
     public abstract void run();

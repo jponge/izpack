@@ -203,7 +203,7 @@ public class AutomatedInstaller extends InstallerBase
             }
 
             // this does nothing if the uninstaller was not included
-            uninstallDataWriter.write(idata);
+            uninstallDataWriter.write();
 
             if (this.result)
             {

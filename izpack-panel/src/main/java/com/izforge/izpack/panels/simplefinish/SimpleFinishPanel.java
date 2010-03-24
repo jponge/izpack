@@ -27,6 +27,7 @@ import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.UninstallDataWriter;
 
 import javax.swing.*;
 import java.io.File;
@@ -43,16 +44,19 @@ public class SimpleFinishPanel extends IzPanel
      *
      */
     private static final long serialVersionUID = 3689911781942572085L;
+    private UninstallDataWriter uninstallDataWriter;
 
     /**
      * The constructor.
      *
-     * @param parent The parent.
-     * @param idata  The installation installDataGUI.
+     * @param parent              The parent.
+     * @param idata               The installation installDataGUI.
+     * @param uninstallDataWriter
      */
-    public SimpleFinishPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    public SimpleFinishPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, UninstallDataWriter uninstallDataWriter)
     {
         super(parent, idata, new IzPanelLayout(), resourceManager);
+        this.uninstallDataWriter = uninstallDataWriter;
     }
 
     /**
@@ -85,7 +89,7 @@ public class SimpleFinishPanel extends IzPanel
             jLabel.setName(GuiId.SIMPLE_FINISH_LABEL.id);
             add(jLabel, NEXT_LINE);
             add(IzPanelLayout.createVerticalStrut(5));
-            if (this.installData.getUninstallOutJar() != null)
+            if (uninstallDataWriter.isUninstallWriten())
             {
                 // We prepare a message for the uninstaller feature
                 String path = translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
