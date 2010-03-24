@@ -97,7 +97,7 @@ public class FinishPanel extends IzPanel implements ActionListener
             jLabel.setName(GuiId.FINISH_PANEL_LABEL.id);
             add(jLabel, constraints);
             constraints.gridy++;
-            if (uninstallDataWriter.isUninstallWriten())
+            if (uninstallDataWriter.isUninstallShouldBeWriten())
             {
                 // We prepare a message for the uninstaller feature
                 String path = translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";

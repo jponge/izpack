@@ -6,6 +6,7 @@ import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.container.TestPanelContainer;
 import com.izforge.izpack.test.junit.PicoRunner;
@@ -15,8 +16,6 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-
-import java.util.zip.ZipOutputStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -32,13 +31,15 @@ public class TestPanelDisplay
     private FrameFixture frameFixture;
     private ResourceManager resourceManager;
     private InstallerFrame installerFrame;
+    private UninstallDataWriter uninstallDataWriter;
 
-    public TestPanelDisplay(GUIInstallData guiInstallData, InstallerFrame installerFrame, ResourceManager resourceManager, FrameFixture frameFixture, BindeableContainer container)
+    public TestPanelDisplay(GUIInstallData guiInstallData, InstallerFrame installerFrame, ResourceManager resourceManager, FrameFixture frameFixture, BindeableContainer container, UninstallDataWriter uninstallDataWriter)
     {
         this.guiInstallData = guiInstallData;
         this.installerFrame = installerFrame;
         this.resourceManager = resourceManager;
         this.frameFixture = frameFixture;
+        this.uninstallDataWriter = uninstallDataWriter;
     }
 
     @After
@@ -77,7 +78,7 @@ public class TestPanelDisplay
     @Test
     public void helloThenFinishPanelShouldDisplay() throws Exception
     {
-        guiInstallData.setUninstallOutJar(Mockito.mock(ZipOutputStream.class));
+        Mockito.when(uninstallDataWriter.isUninstallShouldBeWriten()).thenReturn(true);
         addPanelAndShow("com.izforge.izpack.panels.hello.HelloPanel",
                 "com.izforge.izpack.panels.simplefinish.SimpleFinishPanel");
         String welcomLabel = frameFixture.label(GuiId.HELLO_PANEL_LABEL.id).text();

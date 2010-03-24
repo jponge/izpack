@@ -3,8 +3,8 @@ package com.izforge.izpack.installer.data;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.merge.Mergeable;
+import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.merge.resolve.PathResolver;
@@ -28,14 +28,16 @@ public class UninstallDataWriter
     private BufferedOutputStream bos;
     private FileOutputStream out;
     private ZipOutputStream outJar;
+    private RulesEngine rules;
 
 
-    public UninstallDataWriter(VariableSubstitutor variableSubstitutor, UninstallData udata, AutomatedInstallData installdata, PathResolver pathResolver)
+    public UninstallDataWriter(VariableSubstitutor variableSubstitutor, UninstallData udata, AutomatedInstallData installdata, PathResolver pathResolver, RulesEngine rules)
     {
         this.variableSubstitutor = variableSubstitutor;
         this.udata = udata;
         this.installdata = installdata;
         this.pathResolver = pathResolver;
+        this.rules = rules;
     }
 
     /**
@@ -45,14 +47,14 @@ public class UninstallDataWriter
      */
     public boolean write()
     {
-        createOutputJar();
-        BufferedWriter extLogWriter = getExternLogFile(installdata);
         try
         {
-            if (isUninstallWriten())
+            if (!isUninstallShouldBeWriten())
             {
                 return false;
             }
+            BufferedWriter extLogWriter = getExternLogFile(installdata);
+            createOutputJar();
             // We get the data
             List<String> files = udata.getUninstalableFilesList();
 
@@ -89,18 +91,18 @@ public class UninstallDataWriter
         }
     }
 
-    public boolean isUninstallWriten()
+    public boolean isUninstallShouldBeWriten()
     {
-        String condition = installdata.getVariable(UNINSTALLER_CONDITION);
-        if (condition != null)
+        String uninstallerCondition = installdata.getInfo().getUninstallerCondition();
+        if (uninstallerCondition == null)
         {
-            if (!RulesEngineImpl.getCondition(condition).isTrue())
-            {
-                // condition for creating the uninstaller is not fulfilled.
-                return true;
-            }
+            return true;
         }
-        return false;
+        if (uninstallerCondition.length() > 0)
+        {
+            return true;
+        }
+        return this.rules.isConditionTrue(uninstallerCondition);
     }
 
     // Show whether a separated logfile should be also written or not.
