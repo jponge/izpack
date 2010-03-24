@@ -122,10 +122,6 @@ public class JarMerge extends AbstractMerge
             JarInputStream jarInputStream = new JarInputStream(new FileInputStream(new File(jarPath)));
             while ((zentry = jarInputStream.getNextEntry()) != null)
             {
-                if (zentry.isDirectory())
-                {
-                    continue;
-                }
                 Matcher matcher = pattern.matcher(zentry.getName());
                 if (matcher.matches())
                 {
@@ -167,10 +163,6 @@ public class JarMerge extends AbstractMerge
             JarInputStream jarInputStream = new JarInputStream(new FileInputStream(new File(jarPath)));
             while ((zentry = jarInputStream.getNextEntry()) != null)
             {
-                if (zentry.isDirectory())
-                {
-                    continue;
-                }
                 Matcher matcher = pattern.matcher(zentry.getName());
                 if (matcher.matches())
                 {

@@ -66,7 +66,7 @@ public class ClassPathCrawlerTest
     }
 
     @Test
-    public void searchResourcePathInJar() throws Exception
+    public void searchPackageWithResourcePathInJar() throws Exception
     {
         URL jarUrl = loadVimPanel();
         Set<URL> urlList = classPathCrawler.searchPackageInClassPath("com/sora/panel/");
