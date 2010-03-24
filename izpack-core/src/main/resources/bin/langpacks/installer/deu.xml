@@ -203,7 +203,7 @@
          txt="In den verf�gbaren Pfaden nach der Datei oder dem Verzeichnis suchen." />
     <str id="UserInputPanel.search.location" txt="Position von {0} eingeben." />
     <str id="UserInputPanel.search.location.checkedfile" txt="Die Existenz von {0} wird gepr�ft." />
-    <str id="UserInputPanel.search.browse" txt="Durchsuchen..." />
+    <str id="UserInputPanel.search.browse" txt="Auswählen..." />
     <str id="UserInputPanel.search.wrongselection.message"
          txt="Die gew�hlte Datei oder das Verzeichnis existiert nicht oder ist unpassend." />
     <str id="UserInputPanel.search.wrongselection.caption" txt="Ung�ltige Auswahl." />
