@@ -12,8 +12,8 @@ import com.izforge.izpack.test.ClassUtils;
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.junit.After;
+import org.junit.Before;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class AbstractIntegrationTest
     protected DialogFixture dialogFrameFixture;
     protected File out;
 
-    @BeforeMethod
+    @Before
     public void initBinding() throws Throwable
     {
         out = File.createTempFile("izpack", ".jar");
@@ -120,7 +120,7 @@ public class AbstractIntegrationTest
         initInstallerContainer();
     }
 
-    @AfterMethod
+    @After
     public void unloadJarInSystemClassLoader() throws Exception
     {
         ClassUtils.unloadLastJar();

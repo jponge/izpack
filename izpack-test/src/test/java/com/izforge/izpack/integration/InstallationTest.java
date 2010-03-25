@@ -8,8 +8,9 @@ import com.izforge.izpack.installer.language.LanguageDialog;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.Test;
+import org.junit.After;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.awt.*;
 import java.io.File;
@@ -20,11 +21,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Test for an installation
  */
-@Test(groups = "integration")
 public class InstallationTest extends AbstractIntegrationTest
 {
 
-    @AfterMethod
+    @After
     public void tearBinding()
     {
         applicationContainer.dispose();
@@ -64,7 +64,8 @@ public class InstallationTest extends AbstractIntegrationTest
     }
 
 
-    @Test(dependsOnMethods = "testHelloAndFinishPanels", enabled = false)
+    @Test
+    @Ignore
     public void testHelloAndFinishPanelsCompressed() throws Exception
     {
         System.out.println("Using file " + out.getName());
@@ -153,7 +154,7 @@ public class InstallationTest extends AbstractIntegrationTest
     }
 
 
-    @Test(dependsOnMethods = "testBasicInstall")
+    @Test
     public void testIzpackInstallation() throws Exception
     {
         compileInstallJar("install.xml", getWorkingDirectory("samples/izpack"));

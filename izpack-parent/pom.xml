@@ -208,13 +208,6 @@
             </dependency>
 
             <dependency>
-                <groupId>org.testng</groupId>
-                <artifactId>testng</artifactId>
-                <version>5.11</version>
-                <classifier>jdk15</classifier>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-all</artifactId>
                 <version>1.8.1</version>
@@ -308,6 +301,7 @@
                                 <exclude>**/TestPanelDisplay.java</exclude>
                                 <exclude>**/InstallationTest.java</exclude>
                                 <exclude>**/UninstallDataWriter.java</exclude>
+                                <exclude>**/UninstallWriteTest.java</exclude>
                             </excludes>
                         </configuration>
                     </plugin>

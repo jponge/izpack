@@ -8,7 +8,7 @@ import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.util.IoHelper;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import java.io.File;
 
@@ -17,7 +17,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Test of unpacker
  */
-@Test(groups = "integration")
 public class UninstallWriteTest extends AbstractIntegrationTest
 {
 
