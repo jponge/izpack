@@ -1,7 +1,6 @@
 package com.izforge.izpack.compiler.container;
 
 import com.izforge.izpack.compiler.data.CompilerData;
-import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.test.InstallFile;
 import org.junit.rules.TemporaryFolder;
 
@@ -12,7 +11,7 @@ import java.io.File;
  *
  * @author Anthonin Bonnefoy
  */
-public class TestCompilerContainer extends AbstractContainer
+public class TestCompilerContainer extends CompilerContainer
 {
     private Class klass;
 
@@ -21,12 +20,9 @@ public class TestCompilerContainer extends AbstractContainer
         this.klass = klass;
     }
 
-    public void initBindings() throws Exception
+    public void initBindings()
     {
-        CompilerContainer compilerContainer = new CompilerContainer();
-        compilerContainer.initBindings();
-        pico = compilerContainer.getContainer();
-
+        super.initBindings();
         String installFileName = ((InstallFile) klass.getAnnotation(InstallFile.class)).value();
 
         File baseDir = new TemporaryFolder().newFolder("baseDirTemp");
