@@ -17,7 +17,7 @@ import org.codehaus.izpack.test.provider.GUIInstallDataMockProvider;
 import org.fest.swing.fixture.DialogFixture;
 import org.mockito.Mockito;
 import org.picocontainer.Characteristics;
-import org.picocontainer.PicoBuilder;
+import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.injectors.ProviderAdapter;
 import org.picocontainer.parameters.ComponentParameter;
 
@@ -36,9 +36,8 @@ public class TestLanguageContainer extends AbstractContainer
     /**
      * Init component bindings
      */
-    public void initBindings() throws Exception
+    public void fillContainer(MutablePicoContainer pico) throws Exception
     {
-        pico = new PicoBuilder().withConstructorInjection().withCaching().build();
         pico.addComponent(System.getProperties());
 
         ResourceManager resourceManager = Mockito.mock(ResourceManager.class);

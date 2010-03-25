@@ -19,7 +19,7 @@ import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import org.mockito.Mockito;
-import org.picocontainer.PicoBuilder;
+import org.picocontainer.MutablePicoContainer;
 
 import java.util.Map;
 
@@ -33,10 +33,12 @@ public class TestCompilerContainerMock extends AbstractContainer
 
     /**
      * Init component bindings
+     *
+     * @param pico
      */
-    public void initBindings()
+    public void fillContainer(MutablePicoContainer pico)
     {
-        pico = new PicoBuilder().withConstructorInjection().build()
+        pico
                 .addComponent(Mockito.mock(CliAnalyzer.class))
                 .addComponent(Mockito.mock(CmdlinePackagerListener.class))
                 .addComponent(Mockito.mock(Compiler.class))
@@ -56,7 +58,7 @@ public class TestCompilerContainerMock extends AbstractContainer
                 .addComponent(XmlCompilerHelper.class)
                 .addComponent(XMLParser.class)
                 ;
-        fillContainer(new ResolverContainerFiller());
+        new ResolverContainerFiller().fillContainer(pico);
 
     }
 }

@@ -22,8 +22,7 @@ import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.merge.MergeManagerImpl;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.picocontainer.Characteristics;
-import org.picocontainer.PicoBuilder;
-import org.picocontainer.injectors.ConstructorInjection;
+import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.injectors.ProviderAdapter;
 
 import javax.swing.*;
@@ -37,11 +36,8 @@ import java.util.Properties;
 public class InstallerContainer extends AbstractContainer
 {
 
-    public void initBindings() throws Exception
+    public void fillContainer(MutablePicoContainer pico) throws Exception
     {
-        pico = new PicoBuilder(new ConstructorInjection())
-                .withCaching()
-                .build();
         pico
 //                .addAdapter(new ProviderAdapter(new AutomatedInstallDataProvider()))
                 .addAdapter(new ProviderAdapter(new GUIInstallDataProvider()))
@@ -61,7 +57,7 @@ public class InstallerContainer extends AbstractContainer
                 .addComponent(AutomatedInstaller.class)
                 .addComponent(BindeableContainer.class, this);
 
-        fillContainer(new ResolverContainerFiller());
+        new ResolverContainerFiller().fillContainer(pico);
 
         AutomatedInstallData installdata = pico.getComponent(AutomatedInstallData.class);
         VariableSubstitutor substitutor = pico.getComponent(VariableSubstitutor.class);

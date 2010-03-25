@@ -1,8 +1,10 @@
 package com.izforge.izpack.compiler.container;
 
 import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.test.InstallFile;
 import org.junit.rules.TemporaryFolder;
+import org.picocontainer.MutablePicoContainer;
 
 import java.io.File;
 
@@ -11,7 +13,7 @@ import java.io.File;
  *
  * @author Anthonin Bonnefoy
  */
-public class TestCompilerContainer extends CompilerContainer
+public class TestCompilerContainer extends AbstractContainer
 {
     private Class klass;
 
@@ -20,9 +22,8 @@ public class TestCompilerContainer extends CompilerContainer
         this.klass = klass;
     }
 
-    public void initBindings()
+    public void fillContainer(MutablePicoContainer pico) throws Exception
     {
-        super.initBindings();
         String installFileName = ((InstallFile) klass.getAnnotation(InstallFile.class)).value();
 
         File baseDir = new TemporaryFolder().newFolder("baseDirTemp");
@@ -35,4 +36,5 @@ public class TestCompilerContainer extends CompilerContainer
         pico.addComponent(CompilerData.class, data);
         pico.addComponent(File.class, out);
     }
+
 }

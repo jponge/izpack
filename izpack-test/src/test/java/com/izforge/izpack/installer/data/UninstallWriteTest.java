@@ -2,13 +2,17 @@ package com.izforge.izpack.installer.data;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.installer.manager.PanelManager;
+import com.izforge.izpack.container.TestIntegrationContainer;
 import com.izforge.izpack.integration.AbstractIntegrationTest;
 import com.izforge.izpack.matcher.ZipMatcher;
+import com.izforge.izpack.test.Container;
+import com.izforge.izpack.test.InstallFile;
+import com.izforge.izpack.test.junit.PicoRunner;
 import com.izforge.izpack.util.IoHelper;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.File;
 
@@ -17,16 +21,22 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Test of unpacker
  */
+@RunWith(PicoRunner.class)
+@Container(TestIntegrationContainer.class)
+@InstallFile("samples/basicInstall/basicInstall.xml")
 public class UninstallWriteTest extends AbstractIntegrationTest
 {
+    private UninstallDataWriter uninstallDataWriter;
+
+    public UninstallWriteTest(UninstallDataWriter uninstallDataWriter)
+    {
+        this.uninstallDataWriter = uninstallDataWriter;
+    }
 
     @Test
     public void testWriteUninstaller() throws Exception
     {
-        compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
-        PanelManager panelManager = applicationContainer.getComponent(PanelManager.class);
-        panelManager.loadPanelsInContainer().instanciatePanels();
-        UninstallDataWriter uninstallDataWriter = applicationContainer.getComponent(UninstallDataWriter.class);
+//        panelManager.loadPanelsInContainer().instanciatePanels();
         assertThat(uninstallDataWriter, IsNull.notNullValue());
 
         uninstallDataWriter.write();
