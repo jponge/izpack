@@ -36,4 +36,5 @@
 
     <artifactId>izpack-installer</artifactId>
     <name>IzPack installer module</name>
+
 </project>
