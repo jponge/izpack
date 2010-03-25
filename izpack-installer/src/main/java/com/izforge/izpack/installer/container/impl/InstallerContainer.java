@@ -1,6 +1,5 @@
 package com.izforge.izpack.installer.container.impl;
 
-import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
@@ -38,6 +37,7 @@ public class InstallerContainer extends AbstractContainer
 
     public void fillContainer(MutablePicoContainer pico) throws Exception
     {
+        this.pico = pico;
         pico
 //                .addAdapter(new ProviderAdapter(new AutomatedInstallDataProvider()))
                 .addAdapter(new ProviderAdapter(new GUIInstallDataProvider()))
@@ -55,7 +55,7 @@ public class InstallerContainer extends AbstractContainer
                 .addComponent(ConsoleInstaller.class)
                 .addComponent(UninstallDataWriter.class)
                 .addComponent(AutomatedInstaller.class)
-                .addComponent(BindeableContainer.class, this);
+                .addComponent(this);
 
         new ResolverContainerFiller().fillContainer(pico);
 
