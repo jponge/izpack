@@ -1,5 +1,6 @@
 package com.izforge.izpack.container;
 
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
@@ -32,11 +33,19 @@ public class TestIntegrationContainer extends AbstractContainer
         this.frameworkMethod = frameworkMethod;
     }
 
-    public void fillContainer(MutablePicoContainer pico) throws Exception
+    public void fillContainer(MutablePicoContainer pico)
     {
-        launchCompilation();
-        InstallerContainer installerContainer = new InstallerContainer();
-        installerContainer.fillContainer(pico);
+        try
+        {
+            launchCompilation();
+            InstallerContainer installerContainer = new InstallerContainer();
+            installerContainer.fillContainer(pico);
+        }
+        catch (Exception e)
+        {
+            throw new IzPackException(e);
+        }
+
     }
 
     private void launchCompilation() throws Exception

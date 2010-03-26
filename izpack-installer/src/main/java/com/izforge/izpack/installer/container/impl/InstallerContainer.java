@@ -2,6 +2,7 @@ package com.izforge.izpack.installer.container.impl;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
@@ -35,7 +36,7 @@ import java.util.Properties;
 public class InstallerContainer extends AbstractContainer
 {
 
-    public void fillContainer(MutablePicoContainer pico) throws Exception
+    public void fillContainer(MutablePicoContainer pico)
     {
         this.pico = pico;
         pico
@@ -62,7 +63,15 @@ public class InstallerContainer extends AbstractContainer
         AutomatedInstallData installdata = pico.getComponent(AutomatedInstallData.class);
         VariableSubstitutor substitutor = pico.getComponent(VariableSubstitutor.class);
         String unpackerclassname = installdata.getInfo().getUnpackerClassName();
-        Class<IUnpacker> unpackerclass = (Class<IUnpacker>) Class.forName(unpackerclassname);
+        Class<IUnpacker> unpackerclass = null;
+        try
+        {
+            unpackerclass = (Class<IUnpacker>) Class.forName(unpackerclassname);
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw new IzPackException(e);
+        }
         pico
                 // Configuration of title parameter in InstallerFrame
                 .addConfig("title", getTitle(installdata, substitutor))

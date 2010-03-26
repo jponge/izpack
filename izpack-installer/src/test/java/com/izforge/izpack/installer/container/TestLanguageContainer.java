@@ -36,7 +36,7 @@ public class TestLanguageContainer extends AbstractContainer
     /**
      * Init component bindings
      */
-    public void fillContainer(MutablePicoContainer pico) throws Exception
+    public void fillContainer(MutablePicoContainer pico) 
     {
         pico.addComponent(System.getProperties());
 

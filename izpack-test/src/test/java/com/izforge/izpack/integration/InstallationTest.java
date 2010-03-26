@@ -2,15 +2,24 @@ package com.izforge.izpack.integration;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.GUIInstallData;
-import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.container.TestIntegrationContainer;
+import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.language.LanguageDialog;
+import com.izforge.izpack.test.ClassUtils;
+import com.izforge.izpack.test.Container;
+import com.izforge.izpack.test.InstallFile;
+import com.izforge.izpack.test.junit.PicoRunner;
 import org.apache.commons.io.FileUtils;
+import org.fest.swing.fixture.DialogFixture;
+import org.fest.swing.fixture.FrameFixture;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.awt.*;
 import java.io.File;
@@ -21,13 +30,30 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Test for an installation
  */
-public class InstallationTest extends AbstractIntegrationTest
+
+@RunWith(PicoRunner.class)
+@Container(TestIntegrationContainer.class)
+
+public class InstallationTest
 {
+    private DialogFixture dialogFrameFixture;
+    private FrameFixture installerFrameFixture;
+    private ResourceManager resourceManager;
+    private LanguageDialog languageDialog;
+    private InstallerFrame installerFrame;
+    private GUIInstallData installData;
+
+    public InstallationTest(ResourceManager resourceManager, LanguageDialog languageDialog, InstallerFrame installerFrame, GUIInstallData installData)
+    {
+        this.resourceManager = resourceManager;
+        this.languageDialog = languageDialog;
+        this.installData = installData;
+        this.installerFrame = installerFrame;
+    }
 
     @After
-    public void tearBinding()
+    public void tearBinding() throws NoSuchFieldException, IllegalAccessException
     {
-        applicationContainer.dispose();
         try
         {
             if (dialogFrameFixture != null)
@@ -44,16 +70,17 @@ public class InstallationTest extends AbstractIntegrationTest
                 installerFrameFixture = null;
             }
         }
+        ClassUtils.unloadLastJar();
     }
 
     @Test
+    @InstallFile("samples/helloAndFinish.xml")
     public void testHelloAndFinishPanels() throws Exception
     {
-        compileInstallJar("helloAndFinish.xml", getWorkingDirectory("samples"));
         Image image = resourceManager.getImageIconResource("/img/JFrameIcon.png").getImage();
         assertThat(image, IsNull.<Object>notNullValue());
 
-        applicationContainer.getComponent(LanguageDialog.class).initLangPack();
+        languageDialog.initLangPack();
         installerFrameFixture = prepareFrameFixture();
 
         // Hello panel
@@ -66,34 +93,33 @@ public class InstallationTest extends AbstractIntegrationTest
 
     @Test
     @Ignore
+    @InstallFile("samples/helloAndFinish.xml")
     public void testHelloAndFinishPanelsCompressed() throws Exception
     {
-        System.out.println("Using file " + out.getName());
-        File workingDirectory = getWorkingDirectory("samples");
-        File out = new File("out.jar");
-        File installerFile = new File(workingDirectory, "helloAndFinish.xml");
-        CompilerData data = new CompilerData(installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), out.getAbsolutePath());
-        data.setComprFormat("bzip2");
-        data.setComprLevel(2);
-        compileInstallJar(data);
-        applicationContainer.getComponent(LanguageDialog.class).initLangPack();
-        installerFrameFixture = prepareFrameFixture();
-
-        // Hello panel
-        installerFrameFixture.requireSize(new Dimension(640, 480));
-        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
-        installerFrameFixture.requireVisible();
-        // Finish panel        
-        installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
+//        System.out.println("Using file " + out.getName());
+//        File workingDirectory = getWorkingDirectory("samples");
+//        File out = new File("out.jar");
+//        File installerFile = new File(workingDirectory, "helloAndFinish.xml");
+//        CompilerData data = new CompilerData(installerFile.getAbsolutePath(), workingDirectory.getAbsolutePath(), out.getAbsolutePath());
+//        data.setComprFormat("bzip2");
+//        data.setComprLevel(2);
+//        compileInstallJar(data);
+//        applicationContainer.getComponent(LanguageDialog.class).initLangPack();
+//        installerFrameFixture = prepareFrameFixture();
+//
+//        // Hello panel
+//        installerFrameFixture.requireSize(new Dimension(640, 480));
+//        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+//        installerFrameFixture.requireVisible();
+//        // Finish panel
+//        installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
     }
 
 
     @Test
+    @InstallFile("samples/basicInstall/basicInstall.xml")
     public void testBasicInstall() throws Exception
     {
-        compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
-        GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
-
         File installPath = prepareInstallation(installData);
         // Lang picker
         clickDefaultLang();
@@ -155,11 +181,9 @@ public class InstallationTest extends AbstractIntegrationTest
 
 
     @Test
+    @InstallFile("samples/izpack/install.xml")
     public void testIzpackInstallation() throws Exception
     {
-        compileInstallJar("install.xml", getWorkingDirectory("samples/izpack"));
-        GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
-
         File installPath = prepareInstallation(installData);
         clickDefaultLang();
 
@@ -207,5 +231,31 @@ public class InstallationTest extends AbstractIntegrationTest
             File f = new File(p);
             assertThat(f.exists(), Is.is(true));
         }
+    }
+
+
+    /**
+     * Prepare fest fixture for installer frame
+     *
+     * @throws Exception
+     */
+    protected FrameFixture prepareFrameFixture() throws Exception
+    {
+        FrameFixture installerFrameFixture = new FrameFixture(installerFrame);
+        installerFrame.loadPanels();
+        installerFrameFixture.show();
+        installerFrame.sizeFrame();
+        // wait center
+        return installerFrameFixture;
+    }
+
+    /**
+     * Prepare fest fixture for lang selection
+     */
+    protected DialogFixture prepareDialogFixture()
+    {
+        DialogFixture dialogFixture = new DialogFixture(languageDialog);
+        dialogFixture.show();
+        return dialogFixture;
     }
 }

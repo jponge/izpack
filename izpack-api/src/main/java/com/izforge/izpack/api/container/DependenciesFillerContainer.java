@@ -9,5 +9,5 @@ import org.picocontainer.MutablePicoContainer;
  */
 public interface DependenciesFillerContainer
 {
-    void fillContainer(MutablePicoContainer picoContainer) throws Exception;
+    void fillContainer(MutablePicoContainer picoContainer);
 }

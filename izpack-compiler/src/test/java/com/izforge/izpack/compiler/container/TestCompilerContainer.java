@@ -25,7 +25,7 @@ public class TestCompilerContainer extends AbstractContainer
         this.frameworkMethod = frameworkMethod;
     }
 
-    public void fillContainer(MutablePicoContainer pico) throws Exception
+    public void fillContainer(MutablePicoContainer pico) 
     {
         String installFileName = ((InstallFile) frameworkMethod.getAnnotation(InstallFile.class)).value();
 
