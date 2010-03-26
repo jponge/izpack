@@ -21,7 +21,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 @RunWith(PicoRunner.class)
 @Container(TestIntegrationContainer.class)
-@InstallFile("samples/basicInstall/basicInstall.xml")
 public class UninstallWriteTest
 {
     private UninstallDataWriter uninstallDataWriter;
@@ -36,6 +35,7 @@ public class UninstallWriteTest
     }
 
     @Test
+    @InstallFile("samples/basicInstall/basicInstall.xml")
     public void testWriteUninstaller() throws Exception
     {
         uninstallDataWriter.write();

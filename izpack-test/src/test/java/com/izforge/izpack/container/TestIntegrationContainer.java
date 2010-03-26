@@ -8,6 +8,7 @@ import com.izforge.izpack.installer.container.impl.InstallerContainer;
 import com.izforge.izpack.test.ClassUtils;
 import com.izforge.izpack.test.InstallFile;
 import org.apache.commons.io.FileUtils;
+import org.junit.runners.model.FrameworkMethod;
 import org.picocontainer.MutablePicoContainer;
 
 import java.io.File;
@@ -21,12 +22,14 @@ import java.io.IOException;
 public class TestIntegrationContainer extends AbstractContainer
 {
     private Class klass;
+    private FrameworkMethod frameworkMethod;
 
     public static final String APPNAME = "Test Installation";
 
-    public TestIntegrationContainer(Class klass)
+    public TestIntegrationContainer(Class klass, FrameworkMethod frameworkMethod)
     {
         this.klass = klass;
+        this.frameworkMethod = frameworkMethod;
     }
 
     public void fillContainer(MutablePicoContainer pico) throws Exception
@@ -34,7 +37,6 @@ public class TestIntegrationContainer extends AbstractContainer
         launchCompilation();
         InstallerContainer installerContainer = new InstallerContainer();
         installerContainer.fillContainer(pico);
-
     }
 
     private void launchCompilation() throws Exception
@@ -43,7 +45,12 @@ public class TestIntegrationContainer extends AbstractContainer
         CompilerContainer compilerContainer = new CompilerContainer();
         compilerContainer.initBindings();
 
-        String installFileName = ((InstallFile) klass.getAnnotation(InstallFile.class)).value();
+        InstallFile installFile = (InstallFile) klass.getAnnotation(InstallFile.class);
+        if (installFile == null)
+        {
+            installFile = ((InstallFile) frameworkMethod.getAnnotation(InstallFile.class));
+        }
+        String installFileName = installFile.value();
 
         File installerFile = new File(getClass().getClassLoader().getResource(installFileName).getFile());
         File baseDir = installerFile.getParentFile();

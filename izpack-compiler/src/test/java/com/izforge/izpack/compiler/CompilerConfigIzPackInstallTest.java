@@ -20,7 +20,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 @RunWith(PicoRunner.class)
 @Container(TestCompilerContainer.class)
-@InstallFile("samples/izpack.xml")
 public class CompilerConfigIzPackInstallTest
 {
     private File out;
@@ -37,6 +36,7 @@ public class CompilerConfigIzPackInstallTest
     }
 
     @Test
+    @InstallFile("samples/izpack.xml")
     public void installerShouldContainInstallerClassResourcesAndImages() throws Exception
     {
         compilerConfig.executeCompiler();

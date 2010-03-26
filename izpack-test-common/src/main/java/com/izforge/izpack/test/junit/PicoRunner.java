@@ -3,7 +3,9 @@ package com.izforge.izpack.test.junit;
 import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.test.Container;
 import org.junit.runners.BlockJUnit4ClassRunner;
+import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
+import org.junit.runners.model.Statement;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -14,13 +16,12 @@ import java.util.List;
  *
  * @author Anthonin Bonnefoy
  */
-public class
-        PicoRunner extends BlockJUnit4ClassRunner
+public class PicoRunner extends BlockJUnit4ClassRunner
 {
     private Class<?> klass;
+    private FrameworkMethod method;
 
-    public PicoRunner(Class<?> klass)
-            throws InitializationError
+    public PicoRunner(Class<?> klass) throws InitializationError
     {
         super(klass);
         this.klass = klass;
@@ -29,6 +30,14 @@ public class
     @Override
     protected void validateConstructor(List<Throwable> errors)
     {
+    }
+
+
+    @Override
+    protected Statement methodBlock(FrameworkMethod method)
+    {
+        this.method = method;
+        return super.methodBlock(method);
     }
 
     @Override
@@ -48,6 +57,10 @@ public class
         if (constructor.getParameterTypes().length == 1)
         {
             return constructor.newInstance(klass);
+        }
+        if (constructor.getParameterTypes().length == 2)
+        {
+            return constructor.newInstance(klass, method);
         }
         return constructor.newInstance();
     }

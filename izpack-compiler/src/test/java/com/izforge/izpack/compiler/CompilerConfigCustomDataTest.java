@@ -29,7 +29,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 @RunWith(PicoRunner.class)
 @Container(TestCompilerContainer.class)
-@InstallFile("samples/listeners.xml")
 public class CompilerConfigCustomDataTest
 {
     private File out;
@@ -42,6 +41,7 @@ public class CompilerConfigCustomDataTest
     }
 
     @Test
+    @InstallFile("samples/listeners.xml")
     public void testCustomDataArePresent() throws Exception
     {
         CompilerConfig c = compilerContainer.getComponent(CompilerConfig.class);

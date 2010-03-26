@@ -4,6 +4,7 @@ import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.test.InstallFile;
 import org.junit.rules.TemporaryFolder;
+import org.junit.runners.model.FrameworkMethod;
 import org.picocontainer.MutablePicoContainer;
 
 import java.io.File;
@@ -16,15 +17,17 @@ import java.io.File;
 public class TestCompilerContainer extends AbstractContainer
 {
     private Class klass;
+    private FrameworkMethod frameworkMethod;
 
-    public TestCompilerContainer(Class klass)
+    public TestCompilerContainer(Class klass, FrameworkMethod frameworkMethod)
     {
         this.klass = klass;
+        this.frameworkMethod = frameworkMethod;
     }
 
     public void fillContainer(MutablePicoContainer pico) throws Exception
     {
-        String installFileName = ((InstallFile) klass.getAnnotation(InstallFile.class)).value();
+        String installFileName = ((InstallFile) frameworkMethod.getAnnotation(InstallFile.class)).value();
 
         File baseDir = new TemporaryFolder().newFolder("baseDirTemp");
         File installerFile = new File(getClass().getClassLoader().getResource(installFileName).getFile());
