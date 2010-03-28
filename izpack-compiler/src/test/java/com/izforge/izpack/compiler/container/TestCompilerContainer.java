@@ -8,6 +8,7 @@ import org.junit.runners.model.FrameworkMethod;
 import org.picocontainer.MutablePicoContainer;
 
 import java.io.File;
+import java.lang.annotation.Annotation;
 
 /**
  * Container for compilation test
@@ -25,9 +26,15 @@ public class TestCompilerContainer extends AbstractContainer
         this.frameworkMethod = frameworkMethod;
     }
 
-    public void fillContainer(MutablePicoContainer pico) 
+    public void fillContainer(MutablePicoContainer pico)
     {
-        String installFileName = ((InstallFile) frameworkMethod.getAnnotation(InstallFile.class)).value();
+//        new CompilerContainer()
+        Annotation annotation = frameworkMethod.getAnnotation(InstallFile.class);
+        if (annotation == null)
+        {
+            annotation = klass.getAnnotation(InstallFile.class);
+        }
+        String installFileName = ((InstallFile) annotation).value();
 
         File baseDir = new TemporaryFolder().newFolder("baseDirTemp");
         File installerFile = new File(getClass().getClassLoader().getResource(installFileName).getFile());

@@ -3,7 +3,7 @@ package com.izforge.izpack.integration;
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.container.TestIntegrationContainer;
+import com.izforge.izpack.compiler.container.TestIntegrationContainer;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.language.LanguageDialog;

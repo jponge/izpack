@@ -44,10 +44,10 @@ public class PicoRunner extends BlockJUnit4ClassRunner
     protected Object createTest() throws Exception
     {
         Class<? extends BindeableContainer> containerClass = getTestClass().getJavaClass().getAnnotation(Container.class).value();
-        BindeableContainer installerContainer = getContainerInstance(containerClass);
-        installerContainer.initBindings();
-        installerContainer.addComponent(klass);
-        Object component = installerContainer.getComponent(klass);
+        BindeableContainer testContainer = getContainerInstance(containerClass);
+        testContainer.initBindings();
+        testContainer.addComponent(klass);
+        Object component = testContainer.getComponent(klass);
         return component;
     }
 

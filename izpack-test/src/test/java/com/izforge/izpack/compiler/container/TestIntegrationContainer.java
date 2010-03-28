@@ -1,8 +1,7 @@
-package com.izforge.izpack.container;
+package com.izforge.izpack.compiler.container;
 
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.compiler.CompilerConfig;
-import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.installer.container.impl.InstallerContainer;
@@ -54,10 +53,10 @@ public class TestIntegrationContainer extends AbstractContainer
         CompilerContainer compilerContainer = new CompilerContainer();
         compilerContainer.initBindings();
 
-        InstallFile installFile = (InstallFile) klass.getAnnotation(InstallFile.class);
+        InstallFile installFile = ((InstallFile) frameworkMethod.getAnnotation(InstallFile.class));
         if (installFile == null)
         {
-            installFile = ((InstallFile) frameworkMethod.getAnnotation(InstallFile.class));
+            installFile = (InstallFile) klass.getAnnotation(InstallFile.class);
         }
         String installFileName = installFile.value();
 

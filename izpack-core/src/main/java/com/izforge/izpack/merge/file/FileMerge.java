@@ -6,7 +6,6 @@ import com.izforge.izpack.util.IoHelper;
 import org.apache.tools.zip.ZipOutputStream;
 
 import java.io.*;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,14 +31,8 @@ public class FileMerge extends AbstractMerge
     public FileMerge(URL url, String destination, Map<OutputStream, List<String>> mergeContent)
     {
         this.mergeContent = mergeContent;
-        try
-        {
-            this.fileToCopy = new File(url.toURI());
-        }
-        catch (URISyntaxException e)
-        {
-            throw new MergeException(e);
-        }
+        this.fileToCopy = new File(url.getFile());
+
         this.destination = destination;
     }
 

@@ -1,6 +1,7 @@
 package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.compiler.container.TestCompilerContainer;
+import com.izforge.izpack.compiler.container.TestIntegrationContainer;
 import com.izforge.izpack.matcher.MergeMatcher;
 import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.merge.MergeManagerImpl;
@@ -28,7 +29,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Test for an Izpack compilation
  */
 @RunWith(PicoRunner.class)
-@Container(TestCompilerContainer.class)
+@Container(TestIntegrationContainer.class)
 @InstallFile("samples/helloAndFinish.xml")
 public class CompilerConfigTest
 {
