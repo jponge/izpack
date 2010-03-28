@@ -7,7 +7,6 @@ import com.izforge.izpack.compiler.container.TestIntegrationContainer;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.language.LanguageDialog;
-import com.izforge.izpack.test.ClassUtils;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
@@ -33,7 +32,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(PicoRunner.class)
 @Container(TestIntegrationContainer.class)
-
 public class InstallationTest
 {
     private DialogFixture dialogFrameFixture;
@@ -70,7 +68,6 @@ public class InstallationTest
                 installerFrameFixture = null;
             }
         }
-        ClassUtils.unloadLastJar();
     }
 
     @Test
@@ -88,6 +85,7 @@ public class InstallationTest
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         installerFrameFixture.requireVisible();
         // Finish panel
+
     }
 
 
@@ -114,7 +112,6 @@ public class InstallationTest
 //        // Finish panel
 //        installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
     }
-
 
     @Test
     @InstallFile("samples/basicInstall/basicInstall.xml")
@@ -159,24 +156,7 @@ public class InstallationTest
         Thread.sleep(300);
         installerFrameFixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).approve();
         assertThat(new File(installPath, "auto.xml").exists(), Is.is(true));
-        installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
-    }
-
-    private void clickDefaultLang()
-    {
-        dialogFrameFixture = prepareDialogFixture();
-        dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
-        // Seems necessary to unlock window
-        dialogFrameFixture.cleanUp();
-        dialogFrameFixture = null;
-    }
-
-    private File prepareInstallation(GUIInstallData installData) throws IOException
-    {
-        File installPath = new File(installData.getInstallPath());
-        FileUtils.deleteDirectory(installPath);
-        assertThat(installPath.exists(), Is.is(false));
-        return installPath;
+//        installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
     }
 
 
@@ -215,7 +195,26 @@ public class InstallationTest
         installerFrameFixture.checkBox(GuiId.SHORTCUT_CREATE_CHECK_BOX.id).click();
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Finish
-        installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
+//        installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
+    }
+
+
+    private File prepareInstallation(GUIInstallData installData) throws IOException
+    {
+        File installPath = new File(installData.getInstallPath());
+        FileUtils.deleteDirectory(installPath);
+        assertThat(installPath.exists(), Is.is(false));
+        return installPath;
+    }
+
+
+    private void clickDefaultLang()
+    {
+        dialogFrameFixture = prepareDialogFixture();
+        dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
+        // Seems necessary to unlock window
+        dialogFrameFixture.cleanUp();
+        dialogFrameFixture = null;
     }
 
     private void waitAndCheckInstallation(GUIInstallData installData, File installPath) throws InterruptedException

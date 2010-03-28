@@ -63,7 +63,7 @@ public class InstallerContainer extends AbstractContainer
         AutomatedInstallData installdata = pico.getComponent(AutomatedInstallData.class);
         VariableSubstitutor substitutor = pico.getComponent(VariableSubstitutor.class);
         String unpackerclassname = installdata.getInfo().getUnpackerClassName();
-        Class<IUnpacker> unpackerclass = null;
+        Class<IUnpacker> unpackerclass;
         try
         {
             unpackerclass = (Class<IUnpacker>) Class.forName(unpackerclassname);
