@@ -16,10 +16,6 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>izpack-test-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>izpack-compiler</artifactId>
         </dependency>
         <dependency>
@@ -44,6 +40,17 @@
             <artifactId>jakarta-regexp</artifactId>
         </dependency>
 
+        <!-- test -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>izpack-test-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>izpack-compiler</artifactId>
+            <classifier>tests</classifier>
+        </dependency>
     </dependencies>
 
     <profiles>

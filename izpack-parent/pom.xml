@@ -199,6 +199,17 @@
                 <groupId>${project.groupId}</groupId>
                 <version>${project.version}</version>
             </dependency>
+
+            <!-- inner dependencies to test jar -->
+
+            <dependency>
+                <artifactId>izpack-compiler</artifactId>
+                <groupId>${project.groupId}</groupId>
+                <version>${project.version}</version>
+                <classifier>tests</classifier>
+                <scope>test</scope>
+            </dependency>
+
             <!-- Tests -->
             <dependency>
                 <groupId>junit</groupId>
@@ -282,6 +293,17 @@
                     <workspace>${basedir}</workspace>
                     <workspaceCodeStylesURL>file://../src/eclipse-code-formatter.xml</workspaceCodeStylesURL>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
             </plugin>
         </plugins>
     </build>
