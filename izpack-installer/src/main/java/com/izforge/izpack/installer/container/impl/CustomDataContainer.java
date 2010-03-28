@@ -1,6 +1,7 @@
 package com.izforge.izpack.installer.container.impl;
 
 import com.izforge.izpack.core.container.AbstractContainer;
+import org.picocontainer.MutablePicoContainer;
 
 /**
  * Container for custom data
@@ -13,7 +14,7 @@ public class CustomDataContainer extends AbstractContainer
         pico = parent.makeChildContainer();
     }
 
-    public void initBindings() throws Exception
+    public void fillContainer(MutablePicoContainer picoContainer)
     {
     }
 }

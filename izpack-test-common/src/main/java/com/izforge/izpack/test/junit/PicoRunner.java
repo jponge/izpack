@@ -1,9 +1,12 @@
 package com.izforge.izpack.test.junit;
 
 import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.test.Container;
+import org.junit.Rule;
+import org.junit.rules.MethodRule;
 import org.junit.runners.BlockJUnit4ClassRunner;
-import org.junit.runners.model.InitializationError;
+import org.junit.runners.model.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -14,13 +17,15 @@ import java.util.List;
  *
  * @author Anthonin Bonnefoy
  */
-public class
-        PicoRunner extends BlockJUnit4ClassRunner
+public class PicoRunner extends BlockJUnit4ClassRunner
 {
     private Class<?> klass;
+    private FrameworkMethod method;
+    private Object currentTestInstance;
+    private Class<? extends BindeableContainer> containerClass;
+    private BindeableContainer containerInstance;
 
-    public PicoRunner(Class<?> klass)
-            throws InitializationError
+    public PicoRunner(Class<?> klass) throws InitializationError
     {
         super(klass);
         this.klass = klass;
@@ -31,15 +36,38 @@ public class
     {
     }
 
+
+    @Override
+    protected Statement methodBlock(FrameworkMethod method)
+    {
+        this.method = method;
+        Statement statement = super.methodBlock(method);
+        List<FrameworkField> methodRules = new TestClass(containerClass).getAnnotatedFields(Rule.class);
+        try
+        {
+            for (FrameworkField methodField : methodRules)
+            {
+                MethodRule methodRule = (MethodRule) methodField.get(containerInstance);
+                statement = methodRule.apply(statement, method, currentTestInstance);
+            }
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new IzPackException(e);
+        }
+        return statement;
+    }
+
+
     @Override
     protected Object createTest() throws Exception
     {
-        Class<? extends BindeableContainer> containerClass = getTestClass().getJavaClass().getAnnotation(Container.class).value();
-        BindeableContainer installerContainer = getContainerInstance(containerClass);
-        installerContainer.initBindings();
-        installerContainer.addComponent(klass);
-        Object component = installerContainer.getComponent(klass);
-        return component;
+        containerClass = getTestClass().getJavaClass().getAnnotation(Container.class).value();
+        containerInstance = getContainerInstance(containerClass);
+        containerInstance.initBindings();
+        containerInstance.addComponent(klass);
+        currentTestInstance = containerInstance.getComponent(klass);
+        return currentTestInstance;
     }
 
     private BindeableContainer getContainerInstance(Class<? extends BindeableContainer> containerClass) throws InvocationTargetException, IllegalAccessException, InstantiationException
@@ -48,6 +76,10 @@ public class
         if (constructor.getParameterTypes().length == 1)
         {
             return constructor.newInstance(klass);
+        }
+        if (constructor.getParameterTypes().length == 2)
+        {
+            return constructor.newInstance(klass, method);
         }
         return constructor.newInstance();
     }

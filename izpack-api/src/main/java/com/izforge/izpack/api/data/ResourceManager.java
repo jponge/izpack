@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.api.data;
 
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 
 import javax.swing.*;
@@ -408,13 +409,21 @@ public class ResourceManager
      * @return The available langpacks list.
      * @throws Exception Description of the Exception
      */
-    public List<String> getAvailableLangPacks() throws Exception
+    public List<String> getAvailableLangPacks()
     {
-        // We read from the langpacks file in the jar
-        InputStream in = getInputStream("langpacks.info");
-        ObjectInputStream objIn = new ObjectInputStream(in);
-        List<String> available = (List<String>) objIn.readObject();
-        objIn.close();
+        List<String> available;
+        try
+        {
+            // We read from the langpacks file in the jar
+            InputStream in = getInputStream("langpacks.info");
+            ObjectInputStream objIn = new ObjectInputStream(in);
+            available = (List<String>) objIn.readObject();
+            objIn.close();
+        }
+        catch (Exception e)
+        {
+            throw new IzPackException("Could not read the langpack", e);
+        }
         return available;
     }
 

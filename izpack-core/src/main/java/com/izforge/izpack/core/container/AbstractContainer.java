@@ -2,15 +2,27 @@ package com.izforge.izpack.core.container;
 
 import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.container.DependenciesFillerContainer;
+import com.izforge.izpack.api.exception.IzPackException;
 import org.picocontainer.Characteristics;
 import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.PicoBuilder;
 
 /**
  * Abstract container for commons methods
  */
-public abstract class AbstractContainer implements BindeableContainer
+public abstract class AbstractContainer implements BindeableContainer, DependenciesFillerContainer
 {
+
     protected MutablePicoContainer pico;
+
+    /**
+     * Init component bindings
+     */
+    public void initBindings() throws IzPackException
+    {
+        pico = new PicoBuilder().withConstructorInjection().withCaching().build();
+        fillContainer(pico);
+    }
 
     public <T> void addComponent(Class<T> componentType)
     {
@@ -40,11 +52,6 @@ public abstract class AbstractContainer implements BindeableContainer
     public void dispose()
     {
         pico.dispose();
-    }
-
-    public MutablePicoContainer fillContainer(DependenciesFillerContainer fillerContainer)
-    {
-        return fillerContainer.fillContainer(pico);
     }
 
     public MutablePicoContainer makeChildContainer()

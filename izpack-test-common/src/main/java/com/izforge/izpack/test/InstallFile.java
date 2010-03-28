@@ -8,7 +8,7 @@ import java.lang.annotation.*;
  * @author Anthonin Bonnefoy
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Inherited
 public @interface InstallFile
 {

@@ -20,16 +20,15 @@ public class CompilerLauncher
      */
     public static void main(String[] args)
     {
-
-        CompilerContainer compilerContainer = new CompilerContainer();
-        compilerContainer.initBindings();
-        compilerContainer.processCompileDataFromArgs(args);
-
         // exit code 1 means: error
         int exitCode = 1;
-
         try
         {
+            CompilerContainer compilerContainer = new CompilerContainer();
+            compilerContainer.initBindings();
+            compilerContainer.processCompileDataFromArgs(args);
+
+
 //            CompilerConfig compiler = new CompilerConfig(filename, base, kind, output,compr_format, compr_level, listener, null);
             CompilerConfig compiler = compilerContainer.getComponent(CompilerConfig.class);
             compiler.executeCompiler();

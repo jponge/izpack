@@ -8,7 +8,7 @@ import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.MergeManagerImpl;
 import org.mockito.Mockito;
-import org.picocontainer.PicoBuilder;
+import org.picocontainer.MutablePicoContainer;
 
 /**
  * Container for panel manager
@@ -21,13 +21,13 @@ public class TestPanelManagerContainer extends AbstractContainer
     /**
      * Init component bindings
      */
-    public void initBindings()
+    public void fillContainer(MutablePicoContainer pico)
     {
-        pico = new PicoBuilder().withConstructorInjection().build()
+        pico
                 .addComponent(Mockito.mock(GUIInstallData.class))
                 .addComponent(Mockito.mock(BindeableContainer.class))
                 .addComponent(MergeManager.class, MergeManagerImpl.class)
                 .addComponent(PanelManager.class);
-        fillContainer(new ResolverContainerFiller());
+        new ResolverContainerFiller().fillContainer(pico);
     }
 }

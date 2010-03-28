@@ -199,6 +199,17 @@
                 <groupId>${project.groupId}</groupId>
                 <version>${project.version}</version>
             </dependency>
+
+            <!-- inner dependencies to test jar -->
+
+            <dependency>
+                <artifactId>izpack-compiler</artifactId>
+                <groupId>${project.groupId}</groupId>
+                <version>${project.version}</version>
+                <classifier>tests</classifier>
+                <scope>test</scope>
+            </dependency>
+
             <!-- Tests -->
             <dependency>
                 <groupId>junit</groupId>
@@ -207,13 +218,6 @@
                 <scope>test</scope>
             </dependency>
 
-            <dependency>
-                <groupId>org.testng</groupId>
-                <artifactId>testng</artifactId>
-                <version>5.11</version>
-                <classifier>jdk15</classifier>
-                <scope>test</scope>
-            </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-all</artifactId>
@@ -275,7 +279,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.5</version>
                 <configuration>
                     <excludes>
                         <exclude>**/Abstract*</exclude>
@@ -291,9 +294,43 @@
                     <workspaceCodeStylesURL>file://../src/eclipse-code-formatter.xml</workspaceCodeStylesURL>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+            </plugin>
         </plugins>
     </build>
-
+    <profiles>
+        <profile>
+            <id>bamboo</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/Abstract*</exclude>
+                                <exclude>**/Test*Container*</exclude>
+                                <exclude>**/LanguageDialogTest.java</exclude>
+                                <exclude>**/TestPanelDisplay.java</exclude>
+                                <exclude>**/InstallationTest.java</exclude>
+                                <exclude>**/UninstallDataWriter.java</exclude>
+                                <exclude>**/UninstallWriteTest.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <reporting>
         <plugins>
@@ -313,26 +350,5 @@
         </repository>
     </repositories>
 
-    <profiles>
-        <profile>
-            <id>bamboo</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
 
-                            <excludes>
-                                <exclude>**/Abstract*</exclude>
-                                <exclude>**/Test*Container*</exclude>
-                                <exclude>**/LanguageDialogTest.java</exclude>
-                                <exclude>**/TestPanelDisplay.java</exclude>
-                            </excludes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>

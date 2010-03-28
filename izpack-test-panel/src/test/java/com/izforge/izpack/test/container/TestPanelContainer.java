@@ -18,7 +18,7 @@ import org.codehaus.izpack.test.provider.GUIInstallDataMockProvider;
 import org.fest.swing.fixture.FrameFixture;
 import org.mockito.Mockito;
 import org.picocontainer.Characteristics;
-import org.picocontainer.PicoBuilder;
+import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.injectors.ProviderAdapter;
 import org.picocontainer.parameters.ComponentParameter;
 
@@ -31,9 +31,8 @@ public class TestPanelContainer extends AbstractContainer
     /**
      * Init component bindings
      */
-    public void initBindings() throws Exception
+    public void fillContainer(MutablePicoContainer pico) 
     {
-        pico = new PicoBuilder().withConstructorInjection().withCaching().build();
         pico.addComponent(System.getProperties());
 
         pico.addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
@@ -47,7 +46,7 @@ public class TestPanelContainer extends AbstractContainer
                 .addComponent(BindeableContainer.class, this)
                 .addConfig("title", "testPanel");
 
-        fillContainer(new ResolverContainerFiller());
+        new ResolverContainerFiller().fillContainer(pico);
 
         pico
                 .addAdapter(new ProviderAdapter(new GUIInstallDataMockProvider()))
