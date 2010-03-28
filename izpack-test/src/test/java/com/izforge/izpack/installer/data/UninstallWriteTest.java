@@ -35,7 +35,7 @@ public class UninstallWriteTest
     }
 
     @Test
-3    @InstallFile("samples/basicInstall/basicInstall.xml")
+    @InstallFile("samples/basicInstall/basicInstall.xml")
     public void testWriteUninstaller() throws Exception
     {
         uninstallDataWriter.write();
