@@ -45,7 +45,7 @@ public class InstallerContainer extends AbstractContainer
                 .addAdapter(new ProviderAdapter(new IconsProvider()))
                 .addAdapter(new ProviderAdapter(new RulesProvider()));
         pico
-                .addComponent(PanelManager.class)
+                .as(Characteristics.USE_NAMES).addComponent(PanelManager.class)
                 .addComponent(ConditionCheck.class)
                 .addComponent(MergeManagerImpl.class)
                 .addComponent(UninstallData.class)
@@ -56,7 +56,7 @@ public class InstallerContainer extends AbstractContainer
                 .addComponent(ConsoleInstaller.class)
                 .addComponent(UninstallDataWriter.class)
                 .addComponent(AutomatedInstaller.class)
-                .addComponent(this);
+                .addComponent("installerContainer", this);
 
         new ResolverContainerFiller().fillContainer(pico);
 

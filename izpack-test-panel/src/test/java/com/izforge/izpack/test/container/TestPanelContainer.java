@@ -1,6 +1,5 @@
 package com.izforge.izpack.test.container;
 
-import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
@@ -31,7 +30,7 @@ public class TestPanelContainer extends AbstractContainer
     /**
      * Init component bindings
      */
-    public void fillContainer(MutablePicoContainer pico) 
+    public void fillContainer(MutablePicoContainer pico)
     {
         pico.addComponent(System.getProperties());
 
@@ -42,8 +41,8 @@ public class TestPanelContainer extends AbstractContainer
                 .addComponent(Mockito.mock(UninstallDataWriter.class))
                 .addComponent(AutomatedInstaller.class)
                 .addComponent(FrameFixture.class, FrameFixture.class, new ComponentParameter(InstallerFrame.class))
-                .addComponent(PanelManager.class)
-                .addComponent(BindeableContainer.class, this)
+                .as(Characteristics.USE_NAMES).addComponent(PanelManager.class)
+                .addComponent("installerContainer", this)
                 .addConfig("title", "testPanel");
 
         new ResolverContainerFiller().fillContainer(pico);

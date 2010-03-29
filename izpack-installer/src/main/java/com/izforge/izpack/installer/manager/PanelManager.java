@@ -10,7 +10,6 @@ import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.container.impl.InstallerContainer;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
@@ -36,7 +35,7 @@ public class PanelManager
     protected ArrayList<Integer> visiblePanelMapping;
     private PathResolver pathResolver;
 
-    public PanelManager(GUIInstallData installDataGUI, InstallerContainer installerContainer, PathResolver pathResolver, MergeableResolver mergeableResolver, ClassPathCrawler classPathCrawler) throws ClassNotFoundException
+    public PanelManager(GUIInstallData installDataGUI, BindeableContainer installerContainer, PathResolver pathResolver, MergeableResolver mergeableResolver, ClassPathCrawler classPathCrawler) throws ClassNotFoundException
     {
         this.installdata = installDataGUI;
         this.installerContainer = installerContainer;
