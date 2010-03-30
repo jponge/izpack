@@ -167,13 +167,20 @@ public class IzPackMojo extends AbstractMojo
     public void execute()
             throws MojoExecutionException, MojoFailureException
     {
-        init();
+        try
+        {
+            init();
+            buildInstaller();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
-        buildInstaller();
     }
 
     private void init()
-            throws MojoFailureException
+            throws Exception
     {
         classifier = this.kind;
         compilerContainer = new CompilerContainer();

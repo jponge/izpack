@@ -1,6 +1,5 @@
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.data.binding.Stage;
@@ -29,23 +28,22 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 @RunWith(PicoRunner.class)
 @Container(TestCompilerContainer.class)
-@InstallFile("samples/listeners.xml")
 public class CompilerConfigCustomDataTest
 {
     private File out;
-    private BindeableContainer compilerContainer;
+    private CompilerConfig compilerConfig;
 
-    public CompilerConfigCustomDataTest(File out, BindeableContainer compilerContainer)
+    public CompilerConfigCustomDataTest(File out, CompilerConfig compilerConfig)
     {
         this.out = out;
-        this.compilerContainer = compilerContainer;
+        this.compilerConfig = compilerConfig;
     }
 
     @Test
+    @InstallFile("samples/listeners.xml")
     public void testCustomDataArePresent() throws Exception
     {
-        CompilerConfig c = compilerContainer.getComponent(CompilerConfig.class);
-        c.executeCompiler();
+        compilerConfig.executeCompiler();
         assertThat(out, ZipMatcher.isZipContainingFile("com/izforge/izpack/event/SummaryLoggerInstallerListener.class"));
         IzpackProjectInstaller izpackModel = (IzpackProjectInstaller) ObjectInputMatcher.getObjectFromZip(out, "resources/izpackInstallModel");
         List<Listener> listenerList = izpackModel.getListeners();

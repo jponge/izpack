@@ -3,6 +3,7 @@ package com.izforge.izpack.installer.container.impl;
 import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
@@ -22,8 +23,7 @@ import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.merge.MergeManagerImpl;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.picocontainer.Characteristics;
-import org.picocontainer.PicoBuilder;
-import org.picocontainer.injectors.ConstructorInjection;
+import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.injectors.ProviderAdapter;
 
 import javax.swing.*;
@@ -37,13 +37,11 @@ import java.util.Properties;
 public class InstallerContainer extends AbstractContainer
 {
 
-    public void initBindings() throws Exception
+    public void fillContainer(MutablePicoContainer pico)
     {
-        pico = new PicoBuilder(new ConstructorInjection())
-                .withCaching()
-                .build();
+        this.pico = pico;
         pico
-//                .addAdapter(new ProviderAdapter(new AutomatedInstallDataProvider()))
+//              .addAdapter(new ProviderAdapter(new AutomatedInstallDataProvider()))
                 .addAdapter(new ProviderAdapter(new GUIInstallDataProvider()))
                 .addAdapter(new ProviderAdapter(new IconsProvider()))
                 .addAdapter(new ProviderAdapter(new RulesProvider()));
@@ -52,7 +50,7 @@ public class InstallerContainer extends AbstractContainer
                 .addComponent(ConditionCheck.class)
                 .addComponent(MergeManagerImpl.class)
                 .addComponent(UninstallData.class)
-                .addComponent(CustomDataContainer.class)
+                .addComponent(CustomDataContainer.class, CustomDataContainer.class)
                 .addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
                 .addComponent(Properties.class)
                 .addComponent(ResourceManager.class)
@@ -61,12 +59,20 @@ public class InstallerContainer extends AbstractContainer
                 .addComponent(AutomatedInstaller.class)
                 .addComponent(BindeableContainer.class, this);
 
-        fillContainer(new ResolverContainerFiller());
+        new ResolverContainerFiller().fillContainer(pico);
 
         AutomatedInstallData installdata = pico.getComponent(AutomatedInstallData.class);
         VariableSubstitutor substitutor = pico.getComponent(VariableSubstitutor.class);
         String unpackerclassname = installdata.getInfo().getUnpackerClassName();
-        Class<IUnpacker> unpackerclass = (Class<IUnpacker>) Class.forName(unpackerclassname);
+        Class<IUnpacker> unpackerclass;
+        try
+        {
+            unpackerclass = (Class<IUnpacker>) Class.forName(unpackerclassname);
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw new IzPackException(e);
+        }
         pico
                 // Configuration of title parameter in InstallerFrame
                 .addConfig("title", getTitle(installdata, substitutor))

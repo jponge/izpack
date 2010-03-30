@@ -20,15 +20,14 @@ import java.util.Properties;
  */
 public class ResolverContainerFiller implements DependenciesFillerContainer
 {
-    public MutablePicoContainer fillContainer(MutablePicoContainer picoContainer)
+    public void fillContainer(MutablePicoContainer picoContainer)
     {
-        return
-                picoContainer
-                        .addComponent("panelDependencies", getPanelDependencies())
-                        .addComponent("mergeContent", HashMap.class, ComponentParameter.ZERO)
-                        .as(Characteristics.USE_NAMES).addComponent(ClassPathCrawler.class)
-                        .as(Characteristics.USE_NAMES).addComponent(PathResolver.class)
-                        .as(Characteristics.USE_NAMES).addComponent(MergeableResolver.class)
+        picoContainer
+                .addComponent("panelDependencies", getPanelDependencies())
+                .addComponent("mergeContent", HashMap.class, ComponentParameter.ZERO)
+                .as(Characteristics.USE_NAMES).addComponent(ClassPathCrawler.class)
+                .as(Characteristics.USE_NAMES).addComponent(PathResolver.class)
+                .as(Characteristics.USE_NAMES).addComponent(MergeableResolver.class)
                 ;
     }
 

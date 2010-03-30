@@ -2,13 +2,15 @@ package com.izforge.izpack.installer.data;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.installer.manager.PanelManager;
-import com.izforge.izpack.integration.AbstractIntegrationTest;
+import com.izforge.izpack.compiler.container.TestIntegrationContainer;
 import com.izforge.izpack.matcher.ZipMatcher;
+import com.izforge.izpack.test.Container;
+import com.izforge.izpack.test.InstallFile;
+import com.izforge.izpack.test.junit.PicoRunner;
 import com.izforge.izpack.util.IoHelper;
 import org.hamcrest.core.Is;
-import org.hamcrest.core.IsNull;
-import org.testng.annotations.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.File;
 
@@ -17,23 +19,27 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Test of unpacker
  */
-@Test(groups = "integration")
-public class UninstallWriteTest extends AbstractIntegrationTest
+@RunWith(PicoRunner.class)
+@Container(TestIntegrationContainer.class)
+public class UninstallWriteTest
 {
+    private UninstallDataWriter uninstallDataWriter;
+    private AutomatedInstallData idata;
+    private VariableSubstitutor variableSubstitutor;
+
+    public UninstallWriteTest(UninstallDataWriter uninstallDataWriter, VariableSubstitutor variableSubstitutor, AutomatedInstallData idata)
+    {
+        this.uninstallDataWriter = uninstallDataWriter;
+        this.variableSubstitutor = variableSubstitutor;
+        this.idata = idata;
+    }
 
     @Test
+    @InstallFile("samples/basicInstall/basicInstall.xml")
     public void testWriteUninstaller() throws Exception
     {
-        compileInstallJar("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
-        PanelManager panelManager = applicationContainer.getComponent(PanelManager.class);
-        panelManager.loadPanelsInContainer().instantiatePanels();
-        UninstallDataWriter uninstallDataWriter = applicationContainer.getComponent(UninstallDataWriter.class);
-        assertThat(uninstallDataWriter, IsNull.notNullValue());
-
         uninstallDataWriter.write();
 
-        AutomatedInstallData idata = applicationContainer.getComponent(AutomatedInstallData.class);
-        VariableSubstitutor variableSubstitutor = applicationContainer.getComponent(VariableSubstitutor.class);
         String dest = IoHelper.translatePath(idata.getInfo().getUninstallerPath(), variableSubstitutor);
         String jar = dest + File.separator + idata.getInfo().getUninstallerName();
         File uninstallJar = new File(jar);

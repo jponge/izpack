@@ -17,7 +17,7 @@ import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.MergeManagerImpl;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.picocontainer.Characteristics;
-import org.picocontainer.PicoBuilder;
+import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.injectors.ProviderAdapter;
 
 import java.util.Properties;
@@ -30,12 +30,10 @@ import java.util.Properties;
 public class CompilerContainer extends AbstractContainer
 {
 
-    /**
-     * Init component bindings
-     */
-    public void initBindings()
+
+    public void fillContainer(MutablePicoContainer pico)
     {
-        pico = new PicoBuilder().withConstructorInjection().withCaching().build()
+        pico
                 .addComponent("properties", new Properties(System.getProperties()))
                 .addComponent(CompilerContainer.class, this)
                 .addComponent(CliAnalyzer.class)
@@ -49,9 +47,7 @@ public class CompilerContainer extends AbstractContainer
                 .addComponent(CompilerHelper.class)
                 .addComponent(MergeManager.class, MergeManagerImpl.class)
                 ;
-
-        fillContainer(new ResolverContainerFiller());
-
+        new ResolverContainerFiller().fillContainer(pico);
         pico.addAdapter(new ProviderAdapter(new IzpackProjectProvider()))
                 .addAdapter(new ProviderAdapter(new XmlCompilerHelperProvider()))
                 .addAdapter(new ProviderAdapter(new JarOutputStreamProvider()))

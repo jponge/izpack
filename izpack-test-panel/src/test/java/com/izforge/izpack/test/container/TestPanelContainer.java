@@ -1,6 +1,5 @@
 package com.izforge.izpack.test.container;
 
-import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
@@ -18,7 +17,7 @@ import org.codehaus.izpack.test.provider.GUIInstallDataMockProvider;
 import org.fest.swing.fixture.FrameFixture;
 import org.mockito.Mockito;
 import org.picocontainer.Characteristics;
-import org.picocontainer.PicoBuilder;
+import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.injectors.ProviderAdapter;
 import org.picocontainer.parameters.ComponentParameter;
 
@@ -31,9 +30,8 @@ public class TestPanelContainer extends AbstractContainer
     /**
      * Init component bindings
      */
-    public void initBindings() throws Exception
+    public void fillContainer(MutablePicoContainer pico)
     {
-        pico = new PicoBuilder().withConstructorInjection().withCaching().build();
         pico.addComponent(System.getProperties());
 
         pico.addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
@@ -43,11 +41,11 @@ public class TestPanelContainer extends AbstractContainer
                 .addComponent(Mockito.mock(UninstallDataWriter.class))
                 .addComponent(AutomatedInstaller.class)
                 .addComponent(FrameFixture.class, FrameFixture.class, new ComponentParameter(InstallerFrame.class))
-                .addComponent(PanelManager.class)
-                .addComponent(BindeableContainer.class, this)
+                .as(Characteristics.USE_NAMES).addComponent(PanelManager.class)
+                .addComponent("installerContainer", this)
                 .addConfig("title", "testPanel");
 
-        fillContainer(new ResolverContainerFiller());
+        new ResolverContainerFiller().fillContainer(pico);
 
         pico
                 .addAdapter(new ProviderAdapter(new GUIInstallDataMockProvider()))

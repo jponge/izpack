@@ -1,12 +1,11 @@
 package com.izforge.izpack.test;
 
+import com.izforge.izpack.api.exception.IzPackException;
 import sun.misc.URLClassPath;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -19,28 +18,41 @@ import java.util.ArrayList;
 public class ClassUtils
 {
     public static void unloadLastJar()
-            throws NoSuchFieldException, IllegalAccessException
     {
-        URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-        Field ucpField = URLClassLoader.class.getDeclaredField("ucp");
-        ucpField.setAccessible(true);
-        URLClassPath ucp = (URLClassPath) ucpField.get(systemClassLoader);
-        Field pathField = URLClassPath.class.getDeclaredField("path");
-        pathField.setAccessible(true);
-        ArrayList<URL> path = (ArrayList) pathField.get(ucp);
-        path.remove(path.size() - 1);
+        try
+        {
+            URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+            Field ucpField = URLClassLoader.class.getDeclaredField("ucp");
+            ucpField.setAccessible(true);
+            URLClassPath ucp = (URLClassPath) ucpField.get(systemClassLoader);
+            Field pathField = URLClassPath.class.getDeclaredField("path");
+            pathField.setAccessible(true);
+            ArrayList<URL> path = (ArrayList) pathField.get(ucp);
+            path.remove(path.size() - 1);
 
-        Field loaderField = URLClassPath.class.getDeclaredField("loaders");
-        loaderField.setAccessible(true);
-        ArrayList loaders = (ArrayList) loaderField.get(ucp);
-        loaders.remove(loaders.size() - 1);
+            Field loaderField = URLClassPath.class.getDeclaredField("loaders");
+            loaderField.setAccessible(true);
+            ArrayList loaders = (ArrayList) loaderField.get(ucp);
+            loaders.remove(loaders.size() - 1);
+        }
+        catch (Exception e)
+        {
+            throw new IzPackException(e);
+        }
     }
 
-    public static void loadJarInSystemClassLoader(File out) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, MalformedURLException
+    public static void loadJarInSystemClassLoader(File out)
     {
-        URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-        Method declaredMethod = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});
-        declaredMethod.setAccessible(true);
-        declaredMethod.invoke(systemClassLoader, out.toURI().toURL());
+        try
+        {
+            URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+            Method declaredMethod = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});
+            declaredMethod.setAccessible(true);
+            declaredMethod.invoke(systemClassLoader, out.toURI().toURL());
+        }
+        catch (Exception e)
+        {
+            throw new IzPackException(e);
+        }
     }
 }
