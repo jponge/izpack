@@ -1,5 +1,6 @@
 package com.izforge.izpack.installer.container.impl;
 
+import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.IzPackException;
@@ -40,23 +41,23 @@ public class InstallerContainer extends AbstractContainer
     {
         this.pico = pico;
         pico
-//                .addAdapter(new ProviderAdapter(new AutomatedInstallDataProvider()))
+//              .addAdapter(new ProviderAdapter(new AutomatedInstallDataProvider()))
                 .addAdapter(new ProviderAdapter(new GUIInstallDataProvider()))
                 .addAdapter(new ProviderAdapter(new IconsProvider()))
                 .addAdapter(new ProviderAdapter(new RulesProvider()));
         pico
-                .as(Characteristics.USE_NAMES).addComponent(PanelManager.class)
+                .addComponent(PanelManager.class)
                 .addComponent(ConditionCheck.class)
                 .addComponent(MergeManagerImpl.class)
                 .addComponent(UninstallData.class)
-                .addComponent(CustomDataContainer.class)
+                .addComponent(CustomDataContainer.class, CustomDataContainer.class)
                 .addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
                 .addComponent(Properties.class)
                 .addComponent(ResourceManager.class)
                 .addComponent(ConsoleInstaller.class)
                 .addComponent(UninstallDataWriter.class)
                 .addComponent(AutomatedInstaller.class)
-                .addComponent("installerContainer", this);
+                .addComponent(BindeableContainer.class, this);
 
         new ResolverContainerFiller().fillContainer(pico);
 
