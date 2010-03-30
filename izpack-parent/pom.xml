@@ -313,6 +313,12 @@
         </repository>
     </repositories>
 
+    <scm>
+        <connection>scm:git:git://git.codehaus.org/izpack.git</connection>
+        <developerConnection>scm:git:ssh://git@git.codehaus.org/izpack.git</developerConnection>
+        <url>http://git.codehaus.org/gitweb.cgi?p=izpack.git</url>
+    </scm>
+
     <profiles>
         <profile>
             <id>bamboo</id>
