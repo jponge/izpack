@@ -54,7 +54,6 @@ import com.izforge.izpack.data.*;
 import com.izforge.izpack.data.PanelAction.ActionStage;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
-import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraintHelper;
@@ -108,7 +107,7 @@ public class CompilerConfig extends Thread
     /**
      * List of CompilerListeners which should be called at packaging
      */
-    protected List<CompilerListener> compilerListeners = new ArrayList<CompilerListener>();
+    private List<CompilerListener> compilerListeners = new ArrayList<CompilerListener>();
 
     /**
      * A list of packsLang-files that were defined by the user in the resource-section The key of
@@ -117,7 +116,7 @@ public class CompilerConfig extends Thread
      *
      * @see #mergePacksLangFiles()
      */
-    private HashMap<String, List<URL>> packsLangUrlMap = new HashMap<String, List<URL>>();
+    private Map<String, List<URL>> packsLangUrlMap = new HashMap<String, List<URL>>();
     private String unpackerClassname = "com.izforge.izpack.installer.unpacker.Unpacker";
     private String packagerClassname = "com.izforge.izpack.compiler.packager.impl.Packager";
     private VariableSubstitutor variableSubstitutor;
@@ -127,7 +126,6 @@ public class CompilerConfig extends Thread
     private MergeManager mergeManager;
     private IzpackProjectInstaller izpackProjectInstaller;
     private AssertionHelper assertionHelper;
-    private PathResolver pathResolver;
     private BindeableContainer compilerContainer;
     private ClassPathCrawler classPathCrawler;
 
@@ -136,7 +134,7 @@ public class CompilerConfig extends Thread
      *
      * @param compilerData Object containing all informations found in command line
      */
-    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller, AssertionHelper assertionHelper, PathResolver pathResolver, BindeableContainer compilerContainer, ClassPathCrawler classPathCrawler)
+    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller, AssertionHelper assertionHelper, BindeableContainer compilerContainer, ClassPathCrawler classPathCrawler)
     {
         this.assertionHelper = assertionHelper;
         this.compilerData = compilerData;
@@ -148,7 +146,6 @@ public class CompilerConfig extends Thread
         this.packager = packager;
         this.mergeManager = mergeManager;
         this.izpackProjectInstaller = izpackProjectInstaller;
-        this.pathResolver = pathResolver;
         this.compilerContainer = compilerContainer;
         this.classPathCrawler = classPathCrawler;
     }
@@ -1666,6 +1663,7 @@ public class CompilerConfig extends Thread
         {
             //REFACTOR Change the way uninstaller is created
             mergeManager.addResourceToMerge("com/izforge/izpack/uninstaller/");
+            mergeManager.addResourceToMerge("uninstaller-META-INF/");
 
             if (privileged != null)
             {

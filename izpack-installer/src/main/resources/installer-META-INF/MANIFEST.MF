@@ -1,4 +1,3 @@
 Manifest-Version: 1.0
 Main-Class: com.izforge.izpack.installer.bootstrap.Installer
-Class-Path: 
 

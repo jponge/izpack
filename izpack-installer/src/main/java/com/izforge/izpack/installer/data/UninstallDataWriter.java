@@ -375,6 +375,9 @@ public class UninstallDataWriter
         // installData.uninstallOutJar remains null
 
         List<Mergeable> uninstallerMerge = pathResolver.getMergeableFromPath("com/izforge/izpack/uninstaller/");
+        uninstallerMerge.addAll(pathResolver.getMergeableFromPath("uninstaller-META-INF/", "META-INF/"));
+        uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/api/"));
+        uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/util/"));
 
         // The uninstaller extension is facultative; it will be exist only
         // if a native library was marked for uninstallation.
