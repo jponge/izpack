@@ -115,10 +115,9 @@ public class Destroyer extends Thread
             if (OsVersion.IS_UNIX)
             {
                 ArrayList<String> rootScripts = getRootScripts();
-                Iterator<String> rsi = rootScripts.iterator();
-                while (rsi.hasNext())
+                for (String rootScript : rootScripts)
                 {
-                    execRootScript((String) rsi.next());
+                    execRootScript(rootScript);
                 }
 
             }
@@ -167,14 +166,19 @@ public class Destroyer extends Thread
      * @return The files list.
      * @throws Exception Description of the Exception
      */
-    private ArrayList<File> getFilesList() throws Exception
+    public ArrayList<File> getFilesList() throws Exception
     {
         // Initialisations
-        TreeSet<File> files = new TreeSet<File>(Collections.reverseOrder());
-        InputStream in = Destroyer.class.getResourceAsStream("/install.log");
+        InputStream in = getClass().getClassLoader().getResourceAsStream("install.log");
         InputStreamReader inReader = new InputStreamReader(in);
         BufferedReader reader = new BufferedReader(inReader);
+        return readBufferForFileList(reader);
+    }
 
+    public ArrayList<File> readBufferForFileList(BufferedReader reader)
+            throws IOException
+    {
+        TreeSet<File> files = new TreeSet<File>(Collections.reverseOrder());
         // We skip the first line (the installation path)
         reader.readLine();
 
@@ -199,8 +203,7 @@ public class Destroyer extends Thread
     private ArrayList<ExecutableFile> getExecutablesList() throws Exception
     {
         ArrayList<ExecutableFile> executables = new ArrayList<ExecutableFile>();
-        ObjectInputStream in = new ObjectInputStream(Destroyer.class
-                .getResourceAsStream("/executables"));
+        ObjectInputStream in = new ObjectInputStream(getClass().getClassLoader().getResourceAsStream("executables"));
         int num = in.readInt();
         for (int i = 0; i < num; i++)
         {
@@ -225,8 +228,8 @@ public class Destroyer extends Thread
         {
             try
             {
-                ObjectInputStream in = new ObjectInputStream(Destroyer.class.getResourceAsStream("/"
-                        + UninstallData.ROOTSCRIPT + Integer.toString(idx)));
+                ObjectInputStream in = new ObjectInputStream(
+                        getClass().getClassLoader().getResourceAsStream(UninstallData.ROOTSCRIPT + Integer.toString(idx)));
 
                 result.add(in.readUTF());
             }
