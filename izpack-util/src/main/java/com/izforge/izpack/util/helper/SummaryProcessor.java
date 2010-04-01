@@ -21,10 +21,10 @@
 
 package com.izforge.izpack.util.helper;
 
+import java.util.Iterator;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.installer.ISummarisable;
-
-import java.util.Iterator;
 
 /**
  * A helper class which creates a summary from all panels. This class calls all declared panels for

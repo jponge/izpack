@@ -21,13 +21,11 @@
 
 package com.izforge.izpack.data;
 
+import java.io.*;
+import java.util.*;
+
 import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.data.binding.OsModel;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * Temporary holding place for Pack information as the Packager is built. The packager is used by

@@ -21,10 +21,10 @@
 
 package com.izforge.izpack.util.unix;
 
-import com.izforge.izpack.util.StringTool;
-
 import java.io.File;
 import java.util.ArrayList;
+
+import com.izforge.izpack.util.StringTool;
 
 /**
  * Unix Users Collection Class and related static Helper Methods

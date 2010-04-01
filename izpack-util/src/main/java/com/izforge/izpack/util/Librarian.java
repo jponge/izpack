@@ -24,10 +24,8 @@ package com.izforge.izpack.util;
 
 import java.io.*;
 import java.net.URL;
-import java.security.CodeSource;
-import java.security.ProtectionDomain;
-import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
+import java.security.*;
+import java.text.*;
 import java.util.Vector;
 
 /*---------------------------------------------------------------------------*/

@@ -1,0 +1,16 @@
+#-1:include.txt
+1:include.txt
+#-2:include.txt
+<part1.txt>
+#-3:include.txt
+2:include.txt
+#-4:include.txt
+<? no such file or directory>
+#-5:include.txt
+3:include.txt
+#-6:include.txt
+  < ? part2.txt >
+#-7:include.txt
+4:include.txt
+#-8:include.txt
+

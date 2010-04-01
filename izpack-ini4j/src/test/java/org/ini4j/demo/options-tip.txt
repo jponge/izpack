@@ -1,0 +1,13 @@
+Here is some cut/paste code you can use in "Interpreter" tab to test test data file:
+
+print(data.size());
+
+print(data.keySet());
+
+print(data.get("doc.age",int.class));
+
+for(String s : data.keySet())
+{
+    print(s + " = " + data.get(s));
+}
+

@@ -23,8 +23,7 @@ package com.izforge.izpack.util;
 
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 
 
 /**

@@ -19,8 +19,27 @@
             <artifactId>izpack-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.ini4j</groupId>
+            <artifactId>izpack-ini4j</artifactId>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>jaxen</groupId>
+            <artifactId>jaxen</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.wutka</groupId>
+            <artifactId>dtdparser</artifactId>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

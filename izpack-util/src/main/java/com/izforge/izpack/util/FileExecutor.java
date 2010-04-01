@@ -21,14 +21,11 @@
 
 package com.izforge.izpack.util;
 
+import java.io.*;
+import java.util.*;
+
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.data.ExecutableFile;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Executes a bunch of files. This class is intended to do a system dependent installation

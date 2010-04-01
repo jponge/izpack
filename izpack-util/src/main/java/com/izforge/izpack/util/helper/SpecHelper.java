@@ -21,19 +21,14 @@
 
 package com.izforge.izpack.util.helper;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.adaptator.IXMLParser;
+import java.io.*;
+import java.util.*;
+
+import com.izforge.izpack.api.adaptator.*;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.util.Iterator;
-import java.util.Vector;
 
 /**
  * This class contains some helper methods to simplify handling of xml specification files.

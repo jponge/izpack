@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2005,2009 Ivan SZKIBA
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+    <properties>
+        <title>Search</title>
+    </properties>
+
+    <body>
+        <section name="Search">
+            <form action="" id="cse-search-box">
+                <div>
+                    <input type="hidden" name="cx" value="010584350824729490214:aye3mrhyyv0" />
+                    <input type="hidden" name="cof" value="FORID:9" />
+                    <input type="hidden" name="ie" value="UTF-8" />
+                    <input type="text" name="q" size="31" />
+                    <input type="submit" name="sa" value="Search" />
+                </div>
+            </form>
+            <script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=en"></script>
+
+            <div id="cse-search-results"></div>
+            <script type="text/javascript"><![CDATA[  var googleSearchIframeName = 'cse-search-results';  var googleSearchFormName = 'cse-search-box';  var googleSearchFrameWidth = 500;  var googleSearchDomain = 'www.google.com';  var googleSearchPath = '/cse';]]> </script>
+            <script type="text/javascript" src="http://www.google.com/afsonline/show_afs_search.js"></script>
+        </section>
+    </body>
+</document>

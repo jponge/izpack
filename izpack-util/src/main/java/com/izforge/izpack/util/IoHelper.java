@@ -21,15 +21,13 @@
 
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import org.apache.tools.zip.ZipOutputStream;
-
 import java.io.*;
 import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipInputStream;
+import java.util.zip.*;
+
+import org.apache.tools.zip.ZipOutputStream;
+
+import com.izforge.izpack.api.substitutor.*;
 
 /**
  * <p>

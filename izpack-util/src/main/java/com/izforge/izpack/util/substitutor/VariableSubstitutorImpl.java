@@ -21,12 +21,11 @@
 
 package com.izforge.izpack.util.substitutor;
 
-import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.IoHelper;
-
 import java.io.*;
 import java.util.Properties;
+
+import com.izforge.izpack.api.substitutor.*;
+import com.izforge.izpack.util.IoHelper;
 
 /**
  * Implementation of variable substitutor

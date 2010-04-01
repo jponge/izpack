@@ -21,11 +21,11 @@
 
 package com.izforge.izpack.data;
 
-import com.izforge.izpack.api.data.binding.OsModel;
-import com.izforge.izpack.api.substitutor.SubstitutionType;
-
 import java.io.Serializable;
 import java.util.List;
+
+import com.izforge.izpack.api.data.binding.OsModel;
+import com.izforge.izpack.api.substitutor.SubstitutionType;
 
 /**
  * Encloses information about a parsable file. This class abstracts the way the information is

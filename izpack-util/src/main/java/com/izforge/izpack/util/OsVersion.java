@@ -18,8 +18,7 @@
 
 package com.izforge.izpack.util;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * This is a convienient class, which helps you to detect / identify the running OS/Distribution
