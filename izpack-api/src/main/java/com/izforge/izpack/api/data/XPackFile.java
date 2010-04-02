@@ -43,10 +43,10 @@ public class XPackFile extends PackFile implements Comparable<XPackFile>
      * @param override
      * @throws FileNotFoundException
      */
-    public XPackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override, Blockable blockable)
+    public XPackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override, String overrideRenameTo, Blockable blockable)
             throws FileNotFoundException
     {
-        super(baseDir, src, target, osList, override, blockable);
+        super(baseDir, src, target, osList, override, overrideRenameTo, blockable);
         this.archivefileposition = 0;
     }
 
@@ -58,17 +58,17 @@ public class XPackFile extends PackFile implements Comparable<XPackFile>
      * @param additionals
      * @throws FileNotFoundException
      */
-    public XPackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override, Blockable blockable, Map additionals)
+    public XPackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override, String overrideRenameTo, Blockable blockable, Map additionals)
             throws FileNotFoundException
     {
-        super(baseDir, src, target, osList, override, blockable, additionals);
+        super(baseDir, src, target, osList, override, overrideRenameTo, blockable, additionals);
         this.archivefileposition = 0;
     }
 
     public XPackFile(PackFile packf) throws FileNotFoundException
     {
         super(new File(packf.sourcePath), packf.relativePath, packf.getTargetPath(), packf.osConstraints(), packf
-                .override(), packf.blockable(), packf.getAdditionals());
+                .override(), packf.overrideRenameTo(), packf.blockable(), packf.getAdditionals());
         this.archivefileposition = 0;
         this.setCondition(packf.getCondition());
     }
