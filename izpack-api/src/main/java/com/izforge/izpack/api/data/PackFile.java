@@ -87,6 +87,13 @@ public class PackFile implements Serializable
     private OverrideType override;
 
     /**
+     * Glob mapper expression for mapping the resulting file name if overriding is allowed and the
+     * file does already exist. This is similar like the Ant globmapper target expression when
+     * mapping from "*".
+     */
+    private String overrideRenameTo;
+
+    /**
      * Whether or not this file might be blocked by the operating system
      */
     private Blockable blockable = Blockable.BLOCKABLE_NONE;
@@ -120,10 +127,10 @@ public class PackFile implements Serializable
      * @param override what to do when the file already exists
      * @throws FileNotFoundException if the specified file does not exist.
      */
-    public PackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override, Blockable blockable)
+    public PackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override, String overrideRenameTo, Blockable blockable)
             throws FileNotFoundException
     {
-        this(src, computeRelativePathFrom(baseDir, src), target, osList, override, blockable, null);
+        this(src, computeRelativePathFrom(baseDir, src), target, osList, override, overrideRenameTo, blockable, null);
     }
 
     /**
@@ -137,7 +144,7 @@ public class PackFile implements Serializable
      * @param additionals        additional attributes
      * @throws FileNotFoundException if the specified file does not exist.
      */
-    public PackFile(File src, String relativeSourcePath, String target, List<OsModel> osList, OverrideType override, Blockable blockable, Map additionals)
+    public PackFile(File src, String relativeSourcePath, String target, List<OsModel> osList, OverrideType override, String overrideRenameTo, Blockable blockable, Map additionals)
             throws FileNotFoundException
     {
         if (!src.exists()) // allows cleaner client co
@@ -160,6 +167,7 @@ public class PackFile implements Serializable
         this.targetPath = (target != null) ? target.replace(File.separatorChar, '/') : target;
         this.osConstraints = osList;
         this.override = override;
+        this.overrideRenameTo = overrideRenameTo;
         this.blockable = blockable;
 
         this.length = src.length();
@@ -187,10 +195,10 @@ public class PackFile implements Serializable
      * @param additionals additional attributes
      * @throws FileNotFoundException if the specified file does not exist.
      */
-    public PackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override, Blockable blockable, Map additionals)
+    public PackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override, String overrideRenameTo, Blockable blockable, Map additionals)
             throws FileNotFoundException
     {
-        this(src, computeRelativePathFrom(baseDir, src), target, osList, override, blockable, additionals);
+        this(src, computeRelativePathFrom(baseDir, src), target, osList, override, overrideRenameTo, blockable, additionals);
     }
 
     /**
@@ -268,6 +276,18 @@ public class PackFile implements Serializable
     public final OverrideType override()
     {
         return override;
+    }
+
+    /**
+     * Returns globmapper expression for mapping the resulting file name if overriding is allowed
+     * and the file does already exist. This is similar like the Ant globmapper target expression
+     * when mapping from "*".
+     *
+     * @return
+     */
+    public final String overrideRenameTo()
+    {
+        return overrideRenameTo;
     }
 
     /**

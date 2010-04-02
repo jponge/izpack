@@ -44,20 +44,16 @@ import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
-import com.izforge.izpack.compiler.helper.AssertionHelper;
-import com.izforge.izpack.compiler.helper.CompilerHelper;
-import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
+import com.izforge.izpack.compiler.helper.*;
 import com.izforge.izpack.compiler.listener.CompilerListener;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.data.*;
-import com.izforge.izpack.data.PanelAction.ActionStage;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.OsConstraintHelper;
+import com.izforge.izpack.util.*;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.tools.ant.DirectoryScanner;
 
@@ -691,44 +687,78 @@ public class CompilerConfig extends Thread
             for (IXMLElement fileNode : packElement.getChildrenNamed("file"))
             {
                 String src = xmlCompilerHelper.requireAttribute(fileNode, "src");
-                String targetdir = xmlCompilerHelper.requireAttribute(fileNode, "targetdir");
-                List<OsModel> osList = OsConstraintHelper.getOsList(fileNode); // TODO: unverified
-                OverrideType override = getOverrideValue(fileNode);
-                Blockable blockable = getBlockableValue(fileNode, osList);
-                Map additionals = getAdditionals(fileNode);
                 boolean unpack = "true".equalsIgnoreCase(fileNode.getAttribute("unpack"));
-                String condition = fileNode.getAttribute("condition");
 
-                File file = new File(src);
-
-                // if the path does not exist, maybe it contains variables
-                if (!file.exists())
-                {
-                    file = new File(variableSubstitutor.substitute(src));
-                    // next existence check appears in pack.addFile
-                }
-
-                if (!file.isAbsolute())
-                {
-                    file = new File(compilerData.getBasedir(), file.getPath());
-                }
-
+                TargetFileSet fs = new TargetFileSet();
                 try
                 {
-                    if (unpack)
+                    File relsrcfile = new File(src);
+                    File abssrcfile = FileUtil.getAbsoluteFile(src, compilerData.getBasedir());
+                    if (relsrcfile.isDirectory())
                     {
-                        addArchiveContent(baseDir, file, targetdir, osList, override, blockable,
-                                pack, additionals, condition);
+                        fs.setDir(abssrcfile.getParentFile());
+                        fs.createInclude().setName(relsrcfile.getName() + "/**");
                     }
                     else
                     {
-                        addRecursively(baseDir, file, targetdir, osList, override, blockable,
-                                pack, additionals, condition);
+                        fs.setFile(abssrcfile);
+                    }
+                    fs.setTargetDir(xmlCompilerHelper.requireAttribute(fileNode, "targetdir"));
+                    List<OsModel> osList = OsConstraintHelper.getOsList(fileNode); // TODO: unverified
+                    fs.setOsList(osList);
+                    fs.setOverride(getOverrideValue(fileNode));
+                    fs.setOverrideRenameTo(getOverrideRenameToValue(fileNode));
+                    fs.setBlockable(getBlockableValue(fileNode, osList));
+                    fs.setAdditionals(getAdditionals(fileNode));
+                    fs.setCondition(fileNode.getAttribute("condition"));
+
+                    String boolval = fileNode.getAttribute("casesensitive");
+                    if (boolval != null) fs.setCaseSensitive(Boolean.parseBoolean(boolval));
+
+                    boolval = fileNode.getAttribute("defaultexcludes");
+                    if (boolval != null) fs.setDefaultexcludes(Boolean.parseBoolean(boolval));
+
+                    boolval = fileNode.getAttribute("followsymlinks");
+                    if (boolval != null) fs.setFollowSymlinks(Boolean.parseBoolean(boolval));
+
+                    LinkedList<String> srcfiles = new LinkedList<String>();
+                    for (String filePath : fs.getDirectoryScanner().getIncludedDirectories())
+                    {
+                        srcfiles.add(filePath);
+                    }
+                    for (String filePath : fs.getDirectoryScanner().getIncludedFiles())
+                    {
+                        srcfiles.add(filePath);
+                    }
+                    for (String filePath : srcfiles)
+                    {
+                        try
+                        {
+                            abssrcfile = new File(fs.getDir(), filePath);
+                            String absdestfilepath = fs.getTargetDir() + "/" + filePath;
+                            if (unpack)
+                            {
+                                addArchiveContent(baseDir, abssrcfile, absdestfilepath, fs
+                                        .getOsList(), fs.getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(), pack, fs
+                                        .getAdditionals(), fs.getCondition());
+                            }
+                            else
+                            {
+                                pack.addFile(baseDir, abssrcfile, absdestfilepath, fs.getOsList(),
+                                        fs.getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(), fs.getAdditionals(),
+                                        fs.getCondition());
+                            }
+
+                        }
+                        catch (FileNotFoundException x)
+                        {
+                            assertionHelper.parseError(packElement, x.getMessage(), x);
+                        }
                     }
                 }
-                catch (Exception x)
+                catch (Exception e)
                 {
-                    assertionHelper.parseError(fileNode, x.getMessage(), x);
+                    throw new CompilerException(e.getMessage());
                 }
             }
 
@@ -739,6 +769,7 @@ public class CompilerConfig extends Thread
                 String target = xmlCompilerHelper.requireAttribute(singleFileNode, "target");
                 List<OsModel> osList = OsConstraintHelper.getOsList(singleFileNode); // TODO: unverified
                 OverrideType override = getOverrideValue(singleFileNode);
+                String overrideRenameTo = getOverrideRenameToValue(singleFileNode);
                 Blockable blockable = getBlockableValue(singleFileNode, osList);
                 Map additionals = getAdditionals(singleFileNode);
                 String condition = singleFileNode.getAttribute("condition");
@@ -757,7 +788,7 @@ public class CompilerConfig extends Thread
 
                 try
                 {
-                    pack.addFile(baseDir, file, target, osList, override, blockable, additionals, condition);
+                    pack.addFile(baseDir, file, target, osList, override, overrideRenameTo, blockable, additionals, condition);
                 }
                 catch (FileNotFoundException x)
                 {
@@ -766,45 +797,33 @@ public class CompilerConfig extends Thread
             }
 
             // We get the fileset list
-            for (IXMLElement fileSetNode : packElement.getChildrenNamed("fileset"))
+            for (TargetFileSet fs : readFileSets(packElement))
             {
-                String dir_attr = xmlCompilerHelper.requireAttribute(fileSetNode, "dir");
-
-                File dir = new File(dir_attr);
-                if (!dir.isAbsolute())
+                try
                 {
-                    dir = new File(compilerData.getBasedir(), dir_attr);
-                }
-                if (!dir.isDirectory()) // also tests '.exists()'
-                {
-                    assertionHelper.parseError(fileSetNode, "Invalid directory 'dir': " + dir_attr);
-                }
-
-                String[] includedFiles = getFilesetIncludedFiles(fileSetNode);
-                String targetdir = xmlCompilerHelper.requireAttribute(fileSetNode, "targetdir");
-                List<OsModel> osList = OsConstraintHelper.getOsList(fileSetNode); // TODO: unverified
-                OverrideType override = getOverrideValue(fileSetNode);
-                Blockable blockable = getBlockableValue(fileSetNode, osList);
-                Map additionals = getAdditionals(fileSetNode);
-                String condition = fileSetNode.getAttribute("condition");
-
-
-                if (includedFiles != null)
-                {
-                    for (String filePath : includedFiles)
+                    String[] includedFiles = fs.getDirectoryScanner().getIncludedFiles();
+                    if (includedFiles != null)
                     {
-                        try
+                        for (String filePath : includedFiles)
                         {
-                            File file = new File(dir, filePath);
-                            String target = new File(targetdir, filePath).getPath();
-                            pack.addFile(baseDir, file, target, osList, override, blockable,
-                                    additionals, condition);
-                        }
-                        catch (FileNotFoundException x)
-                        {
-                            assertionHelper.parseError(fileSetNode, x.getMessage(), x);
+                            try
+                            {
+                                File file = new File(fs.getDir(), filePath);
+                                String target = new File(fs.getTargetDir(), filePath).getPath();
+                                pack.addFile(baseDir, file, target, fs.getOsList(), fs
+                                        .getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(), fs.getAdditionals(), fs
+                                        .getCondition());
+                            }
+                            catch (FileNotFoundException x)
+                            {
+                                assertionHelper.parseError(packElement, x.getMessage(), x);
+                            }
                         }
                     }
+                }
+                catch (Exception e)
+                {
+                    throw new CompilerException(e.getMessage());
                 }
             }
 
@@ -1117,8 +1136,8 @@ public class CompilerConfig extends Thread
      * @param condition
      */
     protected void addArchiveContent(File baseDir, File archive, String targetdir,
-                                     List<OsModel> osList, OverrideType override, Blockable blockable,
-                                     PackInfo pack, Map additionals,
+                                     List<OsModel> osList, OverrideType override, String overrideRenameTo,
+                                     Blockable blockable, PackInfo pack, Map additionals,
                                      String condition) throws IOException
     {
 
@@ -1151,7 +1170,7 @@ public class CompilerConfig extends Thread
                 out.close();
 
                 pack.addFile(baseDir, temp, targetdir + "/" + zentry.getName(), osList, override,
-                        blockable, additionals, condition);
+                        overrideRenameTo, blockable, additionals, condition);
             }
             catch (IOException e)
             {
@@ -1167,7 +1186,7 @@ public class CompilerConfig extends Thread
             tmp.mkdirs();
             tmp.deleteOnExit();
             pack.addFile(baseDir, tmp, targetdir + "/" + dirName, osList,
-                    override, blockable, additionals, condition);
+                    override, overrideRenameTo, blockable, additionals, condition);
         }
         fin.close();
     }
@@ -1185,27 +1204,27 @@ public class CompilerConfig extends Thread
      * @throws FileNotFoundException if the file does not exist
      */
     protected void addRecursively(File baseDir, File file, String targetdir,
-                                  List<OsModel> osList, OverrideType override, Blockable blockable,
-                                  PackInfo pack, Map additionals, String condition) throws IOException
+                                  List<OsModel> osList, OverrideType override, String overrideRenameTo,
+                                  Blockable blockable, PackInfo pack, Map additionals, String condition) throws IOException
     {
         String targetfile = targetdir + "/" + file.getName();
         if (!file.isDirectory())
         {
-            pack.addFile(baseDir, file, targetfile, osList, override, blockable, additionals, condition);
+            pack.addFile(baseDir, file, targetfile, osList, override, overrideRenameTo, blockable, additionals, condition);
         }
         else
         {
             File[] files = file.listFiles();
             if (files.length == 0) // The directory is empty so must be added
             {
-                pack.addFile(baseDir, file, targetfile, osList, override, blockable, additionals, condition);
+                pack.addFile(baseDir, file, targetfile, osList, override, overrideRenameTo, blockable, additionals, condition);
             }
             else
             {
                 // new targetdir = targetfile;
                 for (File file1 : files)
                 {
-                    addRecursively(baseDir, file1, targetfile, osList, override, blockable,
+                    addRecursively(baseDir, file1, targetfile, osList, override, overrideRenameTo, blockable,
                             pack, additionals, condition);
                 }
             }
@@ -2003,6 +2022,19 @@ public class CompilerConfig extends Thread
         return override;
     }
 
+    protected String getOverrideRenameToValue(IXMLElement f) throws CompilerException
+    {
+        String override_val = f.getAttribute("override");
+        String overrideRenameTo = f.getAttribute("overrideRenameTo");
+
+        if (overrideRenameTo != null && override_val == null)
+        {
+            assertionHelper.parseError(f, "Attribute \"overrideRenameTo\" requires attribute \"override\" to be set");
+        }
+
+        return overrideRenameTo;
+    }
+
     /**
      * Parses the blockable element value and adds automatically the OS constraint
      * family=windows if not already se in the given constraint list.
@@ -2429,7 +2461,7 @@ public class CompilerConfig extends Thread
                     }
                     try
                     {
-                        ActionStage actionStage = ActionStage.valueOf(stage);
+                        PanelAction.ActionStage actionStage = PanelAction.ActionStage.valueOf(stage);
                         switch (actionStage)
                         {
                             case preconstruct:
@@ -2458,6 +2490,104 @@ public class CompilerConfig extends Thread
                 assertionHelper.parseError(xmlActions, "<" + PanelAction.PANEL_ACTIONS_TAG + "> requires a <"
                         + PanelAction.PANEL_ACTION_TAG + ">");
             }
+        }
+    }
+
+    private List<TargetFileSet> readFileSets(IXMLElement parent) throws CompilerException
+    {
+        List<TargetFileSet> fslist = new ArrayList<TargetFileSet>();
+        for (IXMLElement fileSetNode : parent.getChildrenNamed("fileset"))
+        {
+            try
+            {
+                fslist.add(readFileSet(fileSetNode));
+            }
+            catch (Exception e)
+            {
+                throw new CompilerException(e.getMessage());
+            }
+        }
+        return fslist;
+    }
+
+    private TargetFileSet readFileSet(IXMLElement fileSetNode) throws CompilerException
+    {
+        TargetFileSet fs = new TargetFileSet();
+
+        fs.setTargetDir(xmlCompilerHelper.requireAttribute(fileSetNode, "targetdir"));
+        List<OsModel> osList = OsConstraintHelper.getOsList(fileSetNode); // TODO: unverified
+        fs.setOsList(osList);
+        fs.setOverride(getOverrideValue(fileSetNode));
+        fs.setOverrideRenameTo(getOverrideRenameToValue(fileSetNode));
+        fs.setBlockable(getBlockableValue(fileSetNode, osList));
+        fs.setAdditionals(getAdditionals(fileSetNode));
+        fs.setCondition(fileSetNode.getAttribute("condition"));
+
+        String dir_attr = xmlCompilerHelper.requireAttribute(fileSetNode, "dir");
+        try
+        {
+            if (dir_attr != null) {
+                fs.setDir(FileUtil.getAbsoluteFile(dir_attr, compilerData.getBasedir()));
+            }
+
+            dir_attr = fileSetNode.getAttribute("file");
+            if (dir_attr != null) {
+                fs.setFile(FileUtil.getAbsoluteFile(dir_attr, compilerData.getBasedir()));
+            } else {
+                if (fs.getDir() == null)
+                    throw new CompilerException("At least one of both attributes, 'dir' or 'file' required in fileset");
+            }
+        }
+        catch (Exception e)
+        {
+            throw new CompilerException(e.getMessage());
+        }
+
+        String attr = fileSetNode.getAttribute("includes");
+        if (attr != null) {
+            fs.setIncludes(attr);
+        }
+
+        attr = fileSetNode.getAttribute("excludes");
+        if (attr != null) {
+            fs.setExcludes(attr);
+        }
+
+        String boolval = fileSetNode.getAttribute("casesensitive");
+        if ( boolval != null )
+            fs.setCaseSensitive(Boolean.parseBoolean(boolval));
+
+        boolval = fileSetNode.getAttribute("defaultexcludes");
+        if ( boolval != null )
+            fs.setDefaultexcludes(Boolean.parseBoolean(boolval));
+
+        boolval = fileSetNode.getAttribute("followsymlinks");
+        if ( boolval != null )
+            fs.setFollowSymlinks(Boolean.parseBoolean(boolval));
+
+        readAndAddIncludes(fileSetNode, fs);
+        readAndAddExcludes(fileSetNode, fs);
+
+        return fs;
+    }
+
+    private void readAndAddIncludes(IXMLElement parent, TargetFileSet fileset)
+    throws CompilerException {
+        Iterator<IXMLElement> iter = parent.getChildrenNamed("include").iterator();
+        while (iter.hasNext())
+        {
+            IXMLElement f = iter.next();
+            fileset.createInclude().setName( xmlCompilerHelper.requireAttribute(f, "name") );
+        }
+    }
+
+    private void readAndAddExcludes(IXMLElement parent, TargetFileSet fileset)
+    throws CompilerException {
+        Iterator<IXMLElement> iter = parent.getChildrenNamed("exclude").iterator();
+        while (iter.hasNext())
+        {
+            IXMLElement f = iter.next();
+            fileset.createExclude().setName( xmlCompilerHelper.requireAttribute(f, "name") );
         }
     }
 

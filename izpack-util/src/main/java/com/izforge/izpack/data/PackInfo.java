@@ -229,7 +229,7 @@ public class PackInfo implements Serializable
      * until the {@link Packager#createInstaller} is invoked, thus a FileNotFoundEception will occur
      * then, if the file is deleted in between.
      */
-    public void addFile(File baseDir, File file, String targetfile, List<OsModel> osList, OverrideType override, Blockable blockable, Map additionals, String condition)
+    public void addFile(File baseDir, File file, String targetfile, List<OsModel> osList, OverrideType override, String overrideRenameTo,  Blockable blockable, Map additionals, String condition)
             throws FileNotFoundException
     {
         if (!file.exists())
@@ -237,7 +237,7 @@ public class PackInfo implements Serializable
             throw new FileNotFoundException(file.toString());
         }
 
-        PackFile packFile = new PackFile(baseDir, file, targetfile, osList, override, blockable, additionals);
+        PackFile packFile = new PackFile(baseDir, file, targetfile, osList, override, overrideRenameTo, blockable, additionals);
         packFile.setLoosePackInfo(pack.loose);
         packFile.setCondition(condition);
         files.put(packFile, file);
