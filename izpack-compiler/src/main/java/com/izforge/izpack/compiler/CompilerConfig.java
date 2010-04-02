@@ -26,6 +26,17 @@
 
 package com.izforge.izpack.compiler;
 
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.tools.ant.DirectoryScanner;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.IXMLWriter;
@@ -44,26 +55,26 @@ import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
-import com.izforge.izpack.compiler.helper.*;
+import com.izforge.izpack.compiler.helper.AssertionHelper;
+import com.izforge.izpack.compiler.helper.CompilerHelper;
+import com.izforge.izpack.compiler.helper.TargetFileSet;
+import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
 import com.izforge.izpack.compiler.listener.CompilerListener;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
-import com.izforge.izpack.data.*;
+import com.izforge.izpack.data.CustomData;
+import com.izforge.izpack.data.ExecutableFile;
+import com.izforge.izpack.data.PackInfo;
+import com.izforge.izpack.data.PanelAction;
+import com.izforge.izpack.data.ParsableFile;
+import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
-import com.izforge.izpack.util.*;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.tools.ant.DirectoryScanner;
-
-import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.FileUtil;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.OsConstraintHelper;
 
 
 /**
