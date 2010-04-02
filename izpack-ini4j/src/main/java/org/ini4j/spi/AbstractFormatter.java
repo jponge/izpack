@@ -29,7 +29,7 @@ abstract class AbstractFormatter implements HandlerBase
     private boolean _header = true;
     private PrintWriter _output;
 
-    @Override public void handleComment(String comment)
+    public void handleComment(String comment)
     {
         for (String line : comment.split(NEWLINE))
         {
@@ -45,7 +45,7 @@ abstract class AbstractFormatter implements HandlerBase
         }
     }
 
-    @Override public void handleOption(String optionName, String optionValue)
+    public void handleOption(String optionName, String optionValue)
     {
         if (getConfig().isStrictOperator())
         {

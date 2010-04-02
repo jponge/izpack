@@ -88,7 +88,7 @@ public abstract class AbstractBeanInvocationHandler implements InvocationHandler
     private Object _proxy;
     private VetoableChangeSupport _vcSupport;
 
-    @Override public Object invoke(Object proxy, Method method, Object[] args) throws PropertyVetoException
+    public Object invoke(Object proxy, Method method, Object[] args) throws PropertyVetoException
     {
         Object ret = null;
         Prefix prefix = Prefix.parse(method.getName());

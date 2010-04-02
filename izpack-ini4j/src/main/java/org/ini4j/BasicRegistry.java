@@ -15,8 +15,6 @@
  */
 package org.ini4j;
 
-import org.ini4j.Profile.Section;
-
 import org.ini4j.spi.IniHandler;
 import org.ini4j.spi.RegEscapeTool;
 import org.ini4j.spi.TypeValuesPair;
@@ -31,62 +29,62 @@ public class BasicRegistry extends BasicProfile implements Registry
         _version = VERSION;
     }
 
-    @Override public String getVersion()
+    public String getVersion()
     {
         return _version;
     }
 
-    @Override public void setVersion(String value)
+    public void setVersion(String value)
     {
         _version = value;
     }
 
-    @Override public Key add(String name)
+    public Key add(String name)
     {
         return (Key) super.add(name);
     }
 
-    @Override public Key get(Object key)
+    public Key get(Object key)
     {
         return (Key) super.get(key);
     }
 
-    @Override public Key get(Object key, int index)
+    public Key get(Object key, int index)
     {
         return (Key) super.get(key, index);
     }
 
-    @Override public Key put(String key, Section value)
+    public Key put(String key, Section value)
     {
         return (Key) super.put(key, value);
     }
 
-    @Override public Key put(String key, Section value, int index)
+    public Key put(String key, Section value, int index)
     {
         return (Key) super.put(key, value, index);
     }
 
-    @Override public Key remove(Section section)
+    public Key remove(Section section)
     {
         return (Key) super.remove(section);
     }
 
-    @Override public Key remove(Object key)
+    public Key remove(Object key)
     {
         return (Key) super.remove(key);
     }
 
-    @Override public Key remove(Object key, int index)
+    public Key remove(Object key, int index)
     {
         return (Key) super.remove(key, index);
     }
 
-    @Override Key newSection(String name)
+    Key newSection(String name)
     {
         return new BasicRegistryKey(this, name);
     }
 
-    @Override void store(IniHandler formatter, Section section, String option)
+    void store(IniHandler formatter, Section section, String option)
     {
         store(formatter, section.getComment(option));
         Type type = ((Key) section).getType(option, Type.REG_SZ);

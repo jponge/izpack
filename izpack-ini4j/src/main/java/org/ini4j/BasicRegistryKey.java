@@ -37,12 +37,12 @@ class BasicRegistryKey extends BasicProfileSection implements Registry.Key
         return (Key) super.getParent();
     }
 
-    @Override public Registry.Type getType(Object key)
+    public Registry.Type getType(Object key)
     {
         return (Registry.Type) getMeta(META_TYPE, key);
     }
 
-    @Override public Registry.Type getType(Object key, Registry.Type defaultType)
+    public Registry.Type getType(Object key, Registry.Type defaultType)
     {
         Registry.Type type = getType(key);
 
@@ -59,12 +59,12 @@ class BasicRegistryKey extends BasicProfileSection implements Registry.Key
         return (Key) super.lookup(path);
     }
 
-    @Override public Registry.Type putType(String key, Registry.Type type)
+    public Registry.Type putType(String key, Registry.Type type)
     {
         return (Registry.Type) putMeta(META_TYPE, key, type);
     }
 
-    @Override public Registry.Type removeType(Object key)
+    public Registry.Type removeType(Object key)
     {
         return (Registry.Type) removeMeta(META_TYPE, key);
     }

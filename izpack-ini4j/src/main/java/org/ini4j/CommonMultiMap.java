@@ -28,12 +28,12 @@ public class CommonMultiMap<K, V> extends BasicMultiMap<K, V> implements Comment
     private static final String META_COMMENT = "comment";
     private SortedMap<String, Object> _meta;
 
-    @Override public String getComment(Object key)
+    public String getComment(Object key)
     {
         return (String) getMeta(META_COMMENT, key);
     }
 
-    @Override public void clear()
+    public void clear()
     {
         super.clear();
         if (_meta != null)
@@ -43,7 +43,7 @@ public class CommonMultiMap<K, V> extends BasicMultiMap<K, V> implements Comment
     }
 
     @SuppressWarnings("unchecked")
-    @Override public void putAll(Map<? extends K, ? extends V> map)
+    public void putAll(Map<? extends K, ? extends V> map)
     {
         super.putAll(map);
         if (map instanceof CommonMultiMap)
@@ -57,12 +57,12 @@ public class CommonMultiMap<K, V> extends BasicMultiMap<K, V> implements Comment
         }
     }
 
-    @Override public String putComment(K key, String comment)
+    public String putComment(K key, String comment)
     {
         return (String) putMeta(META_COMMENT, key, comment);
     }
 
-    @Override public V remove(Object key)
+    public V remove(Object key)
     {
         V ret = super.remove(key);
 
@@ -71,7 +71,7 @@ public class CommonMultiMap<K, V> extends BasicMultiMap<K, V> implements Comment
         return ret;
     }
 
-    @Override public V remove(Object key, int index)
+    public V remove(Object key, int index)
     {
         V ret = super.remove(key, index);
 
@@ -83,7 +83,7 @@ public class CommonMultiMap<K, V> extends BasicMultiMap<K, V> implements Comment
         return ret;
     }
 
-    @Override public String removeComment(Object key)
+    public String removeComment(Object key)
     {
         return (String) removeMeta(META_COMMENT, key);
     }

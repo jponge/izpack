@@ -90,33 +90,33 @@ public interface Registry extends Profile
 
     void setVersion(String value);
 
-    @Override Key get(Object key);
+    Key get(Object key);
 
-    @Override Key get(Object key, int index);
+    Key get(Object key, int index);
 
-    @Override Key put(String key, Section value);
+    Key put(String key, Section value);
 
-    @Override Key put(String key, Section value, int index);
+    Key put(String key, Section value, int index);
 
-    @Override Key remove(Object key);
+    Key remove(Object key);
 
-    @Override Key remove(Object key, int index);
+    Key remove(Object key, int index);
 
     interface Key extends Section
     {
         String DEFAULT_NAME = "@";
 
-        @Override Key getChild(String key);
+        Key getChild(String key);
 
-        @Override Key getParent();
+        Key getParent();
 
         Type getType(Object key);
 
         Type getType(Object key, Type defaulType);
 
-        @Override Key addChild(String key);
+        Key addChild(String key);
 
-        @Override Key lookup(String... path);
+        Key lookup(String... path);
 
         Type putType(String key, Type type);
 

@@ -109,7 +109,7 @@ public class AbstractBeanInvocationHandlerTest
                 _property = property;
             }
 
-            @Override public void propertyChange(PropertyChangeEvent event)
+            public void propertyChange(PropertyChangeEvent event)
             {
                 if (_property.equals(event.getPropertyName()))
                 {
@@ -165,7 +165,7 @@ public class AbstractBeanInvocationHandlerTest
     {
         class HeightCheck implements VetoableChangeListener
         {
-            @Override public void vetoableChange(PropertyChangeEvent event) throws PropertyVetoException
+            public void vetoableChange(PropertyChangeEvent event) throws PropertyVetoException
             {
                 if (PROP_HEIGHT.equals(event.getPropertyName()))
                 {

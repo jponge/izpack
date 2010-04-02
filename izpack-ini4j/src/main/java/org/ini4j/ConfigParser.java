@@ -404,7 +404,7 @@ public class ConfigParser implements Serializable
 
         private ParsingException(Throwable cause)
         {
-            super(cause.getMessage(), cause);
+            super(cause.getMessage());
         }
     }
 

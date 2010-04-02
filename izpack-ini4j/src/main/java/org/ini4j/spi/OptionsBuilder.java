@@ -38,7 +38,7 @@ public class OptionsBuilder implements OptionsHandler
         _options = value;
     }
 
-    @Override public void endOptions()
+    public void endOptions()
     {
 
         // comment only .opt file ...
@@ -48,7 +48,7 @@ public class OptionsBuilder implements OptionsHandler
         }
     }
 
-    @Override public void handleComment(String comment)
+    public void handleComment(String comment)
     {
         if ((_lastComment != null) && _header && !getConfig().isNoHeader())
         {
@@ -59,7 +59,7 @@ public class OptionsBuilder implements OptionsHandler
         _lastComment = comment;
     }
 
-    @Override public void handleOption(String name, String value)
+    public void handleOption(String name, String value)
     {
         if (getConfig().isMultiOption())
         {
@@ -87,7 +87,7 @@ public class OptionsBuilder implements OptionsHandler
         _header = false;
     }
 
-    @Override public void startOptions()
+    public void startOptions()
     {
         _header = true;
     }

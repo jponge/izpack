@@ -50,17 +50,17 @@ public class BasicProfile extends CommonMultiMap<String, Profile.Section> implem
         _propertyFirstUpper = propertyFirstUpper;
     }
 
-    @Override public String getComment()
+    public String getComment()
     {
         return _comment;
     }
 
-    @Override public void setComment(String value)
+    public void setComment(String value)
     {
         _comment = value;
     }
 
-    @Override public Section add(String name)
+    public Section add(String name)
     {
         if (isTreeMode())
         {
@@ -84,61 +84,61 @@ public class BasicProfile extends CommonMultiMap<String, Profile.Section> implem
         return section;
     }
 
-    @Override public void add(String section, String option, Object value)
+    public void add(String section, String option, Object value)
     {
         getOrAdd(section).add(option, value);
     }
 
-    @Override public <T> T as(Class<T> clazz)
+    public <T> T as(Class<T> clazz)
     {
         return as(clazz, null);
     }
 
-    @Override public <T> T as(Class<T> clazz, String prefix)
+    public <T> T as(Class<T> clazz, String prefix)
     {
         return clazz.cast(Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[] { clazz },
                     new BeanInvocationHandler(prefix)));
     }
 
-    @Override public String fetch(Object sectionName, Object optionName)
+    public String fetch(Object sectionName, Object optionName)
     {
         Section sec = get(sectionName);
 
         return (sec == null) ? null : sec.fetch(optionName);
     }
 
-    @Override public <T> T fetch(Object sectionName, Object optionName, Class<T> clazz)
+    public <T> T fetch(Object sectionName, Object optionName, Class<T> clazz)
     {
         Section sec = get(sectionName);
 
         return (sec == null) ? BeanTool.getInstance().zero(clazz) : sec.fetch(optionName, clazz);
     }
 
-    @Override public String get(Object sectionName, Object optionName)
+    public String get(Object sectionName, Object optionName)
     {
         Section sec = get(sectionName);
 
         return (sec == null) ? null : sec.get(optionName);
     }
 
-    @Override public <T> T get(Object sectionName, Object optionName, Class<T> clazz)
+    public <T> T get(Object sectionName, Object optionName, Class<T> clazz)
     {
         Section sec = get(sectionName);
 
         return (sec == null) ? BeanTool.getInstance().zero(clazz) : sec.get(optionName, clazz);
     }
 
-    @Override public String put(String sectionName, String optionName, Object value)
+    public String put(String sectionName, String optionName, Object value)
     {
         return getOrAdd(sectionName).put(optionName, value);
     }
 
-    @Override public Section remove(Section section)
+    public Section remove(Section section)
     {
         return remove((Object) section.getName());
     }
 
-    @Override public String remove(Object sectionName, Object optionName)
+    public String remove(Object sectionName, Object optionName)
     {
         Section sec = get(sectionName);
 

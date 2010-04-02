@@ -81,27 +81,27 @@ public class Options extends BasicOptionMap implements Persistable, Configurable
         _comment = value;
     }
 
-    @Override public Config getConfig()
+    public Config getConfig()
     {
         return _config;
     }
 
-    @Override public void setConfig(Config value)
+    public void setConfig(Config value)
     {
         _config = value;
     }
 
-    @Override public File getFile()
+    public File getFile()
     {
         return _file;
     }
 
-    @Override public void setFile(File value)
+    public void setFile(File value)
     {
         _file = value;
     }
 
-    @Override public void load() throws IOException, InvalidFileFormatException
+    public void load() throws IOException, InvalidFileFormatException
     {
         if (_file == null)
         {
@@ -111,27 +111,27 @@ public class Options extends BasicOptionMap implements Persistable, Configurable
         load(_file);
     }
 
-    @Override public void load(InputStream input) throws IOException, InvalidFileFormatException
+    public void load(InputStream input) throws IOException, InvalidFileFormatException
     {
         load(new InputStreamReader(input, getConfig().getFileEncoding()));
     }
 
-    @Override public void load(Reader input) throws IOException, InvalidFileFormatException
+    public void load(Reader input) throws IOException, InvalidFileFormatException
     {
         OptionsParser.newInstance(getConfig()).parse(input, newBuilder());
     }
 
-    @Override public void load(URL input) throws IOException, InvalidFileFormatException
+    public void load(URL input) throws IOException, InvalidFileFormatException
     {
         OptionsParser.newInstance(getConfig()).parse(input, newBuilder());
     }
 
-    @Override public void load(File input) throws IOException, InvalidFileFormatException
+    public void load(File input) throws IOException, InvalidFileFormatException
     {
         load(input.toURI().toURL());
     }
 
-    @Override public void store() throws IOException
+    public void store() throws IOException
     {
         if (_file == null)
         {
@@ -141,17 +141,17 @@ public class Options extends BasicOptionMap implements Persistable, Configurable
         store(_file);
     }
 
-    @Override public void store(OutputStream output) throws IOException
+    public void store(OutputStream output) throws IOException
     {
         store(new OutputStreamWriter(output, getConfig().getFileEncoding()));
     }
 
-    @Override public void store(Writer output) throws IOException
+    public void store(Writer output) throws IOException
     {
         store(OptionsFormatter.newInstance(output, getConfig()));
     }
 
-    @Override public void store(File output) throws IOException
+    public void store(File output) throws IOException
     {
         OutputStream stream = new FileOutputStream(output);
 
@@ -184,7 +184,7 @@ public class Options extends BasicOptionMap implements Persistable, Configurable
         formatter.endOptions();
     }
 
-    @Override boolean isPropertyFirstUpper()
+    boolean isPropertyFirstUpper()
     {
         return getConfig().isPropertyFirstUpper();
     }

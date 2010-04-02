@@ -32,7 +32,7 @@ public class IniPreferencesFactory implements PreferencesFactory
     private Preferences _system;
     private Preferences _user;
 
-    @Override public synchronized Preferences systemRoot()
+    public synchronized Preferences systemRoot()
     {
         if (_system == null)
         {
@@ -42,7 +42,7 @@ public class IniPreferencesFactory implements PreferencesFactory
         return _system;
     }
 
-    @Override public synchronized Preferences userRoot()
+    public synchronized Preferences userRoot()
     {
         if (_user == null)
         {

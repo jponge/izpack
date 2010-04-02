@@ -384,32 +384,32 @@ public class BasicProfileTest
         private String[] _missing;
         private int[] _number;
 
-        @Override public URI[] getLocation()
+        public URI[] getLocation()
         {
             return _location;
         }
 
-        @Override public void setLocation(URI[] value)
+        public void setLocation(URI[] value)
         {
             _location = value;
         }
 
-        @Override public String[] getMissing()
+        public String[] getMissing()
         {
             return _missing;
         }
 
-        @Override public void setMissing(String[] value)
+        public void setMissing(String[] value)
         {
             _missing = value;
         }
 
-        @Override public int[] getNumber()
+        public int[] getNumber()
         {
             return _number;
         }
 
-        @Override public void setNumber(int[] value)
+        public void setNumber(int[] value)
         {
             _number = value;
         }

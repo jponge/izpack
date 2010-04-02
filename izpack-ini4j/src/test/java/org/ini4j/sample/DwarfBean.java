@@ -49,12 +49,12 @@ public class DwarfBean implements Dwarf
         _vcSupport = new VetoableChangeSupport(this);
     }
 
-    @Override public int getAge()
+    public int getAge()
     {
         return _age;
     }
 
-    @Override public void setAge(int value)
+    public void setAge(int value)
     {
         int old = _age;
 
@@ -63,22 +63,22 @@ public class DwarfBean implements Dwarf
         _pcSupport.firePropertyChange(PROP_AGE, old, value);
     }
 
-    @Override public int[] getFortuneNumber()
+    public int[] getFortuneNumber()
     {
         return _fortuneNumber;
     }
 
-    @Override public void setFortuneNumber(int[] value)
+    public void setFortuneNumber(int[] value)
     {
         _fortuneNumber = value;
     }
 
-    @Override public double getHeight()
+    public double getHeight()
     {
         return _height;
     }
 
-    @Override public void setHeight(double value) throws PropertyVetoException
+    public void setHeight(double value) throws PropertyVetoException
     {
         _vcSupport.fireVetoableChange(PROP_HEIGHT, _height, value);
         double old = _height;
@@ -88,12 +88,12 @@ public class DwarfBean implements Dwarf
         _pcSupport.firePropertyChange(PROP_HEIGHT, old, value);
     }
 
-    @Override public String getHomeDir()
+    public String getHomeDir()
     {
         return _homeDir;
     }
 
-    @Override public void setHomeDir(String value)
+    public void setHomeDir(String value)
     {
         String old = _homeDir;
 
@@ -102,12 +102,12 @@ public class DwarfBean implements Dwarf
         _pcSupport.firePropertyChange(PROP_HOME_DIR, old, value);
     }
 
-    @Override public URI getHomePage()
+    public URI getHomePage()
     {
         return _homePage;
     }
 
-    @Override public void setHomePage(URI value)
+    public void setHomePage(URI value)
     {
         URI old = _homePage;
 
@@ -116,12 +116,12 @@ public class DwarfBean implements Dwarf
         _pcSupport.firePropertyChange(PROP_HOME_PAGE, old, value);
     }
 
-    @Override public double getWeight()
+    public double getWeight()
     {
         return _weight;
     }
 
-    @Override public void setWeight(double value)
+    public void setWeight(double value)
     {
         double old = _weight;
 
@@ -130,42 +130,42 @@ public class DwarfBean implements Dwarf
         _pcSupport.firePropertyChange(PROP_WEIGHT, old, value);
     }
 
-    @Override public void addPropertyChangeListener(String property, PropertyChangeListener listener)
+    public void addPropertyChangeListener(String property, PropertyChangeListener listener)
     {
         _pcSupport.addPropertyChangeListener(property, listener);
     }
 
-    @Override public void addVetoableChangeListener(String property, VetoableChangeListener listener)
+    public void addVetoableChangeListener(String property, VetoableChangeListener listener)
     {
         _vcSupport.addVetoableChangeListener(property, listener);
     }
 
-    @Override public boolean hasAge()
+    public boolean hasAge()
     {
         return _age != 0;
     }
 
-    @Override public boolean hasHeight()
+    public boolean hasHeight()
     {
         return _height != 0.0;
     }
 
-    @Override public boolean hasHomePage()
+    public boolean hasHomePage()
     {
         return _homePage != null;
     }
 
-    @Override public boolean hasWeight()
+    public boolean hasWeight()
     {
         return _weight != 0.0;
     }
 
-    @Override public void removePropertyChangeListener(String property, PropertyChangeListener listener)
+    public void removePropertyChangeListener(String property, PropertyChangeListener listener)
     {
         _pcSupport.removePropertyChangeListener(property, listener);
     }
 
-    @Override public void removeVetoableChangeListener(String property, VetoableChangeListener listener)
+    public void removeVetoableChangeListener(String property, VetoableChangeListener listener)
     {
         _vcSupport.removeVetoableChangeListener(property, listener);
     }
