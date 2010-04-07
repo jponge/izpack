@@ -262,4 +262,15 @@ public class Panel implements Serializable
         }
         return result;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Panel{" +
+                "className='" + className + '\'' +
+                ", osConstraints=" + osConstraints +
+                ", panelid='" + panelid + '\'' +
+                ", condition='" + condition +
+                '}';
+    }
 }

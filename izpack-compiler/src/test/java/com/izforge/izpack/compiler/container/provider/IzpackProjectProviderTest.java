@@ -1,5 +1,6 @@
 package com.izforge.izpack.compiler.container.provider;
 
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.data.binding.OsModel;
@@ -23,21 +24,21 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class IzpackProjectProviderTest
 {
     private IzpackProjectProvider izpackProjectProvider;
+    private IzpackProjectInstaller izpackProjectInstaller;
 
     @Before
     public void setUp() throws Exception
     {
         izpackProjectProvider = new IzpackProjectProvider();
+        izpackProjectInstaller = izpackProjectProvider.provide(
+                "bindingTest.xml");
+        assertThat(izpackProjectInstaller, Is.is(IzpackProjectInstaller.class));
     }
 
     @Test
     public void bindingListener() throws Exception
     {
-        IzpackProjectInstaller izpackProjectInstaller = izpackProjectProvider.provide(
-                "bindingTest.xml");
-        assertThat(izpackProjectInstaller, Is.is(IzpackProjectInstaller.class));
         List<Listener> listenerList = izpackProjectInstaller.getListeners();
-
         assertThat(listenerList, IsCollectionContaining.hasItem(
                 AllOf.allOf(
                         HasPropertyWithValue.<Listener>hasProperty("classname", Is.is("SummaryLoggerInstallerListener")),
@@ -55,6 +56,26 @@ public class IzpackProjectProviderTest
                                         HasPropertyWithValue.<OsModel>hasProperty("arch", Is.is("ppc"))
                                 )))));
 
+
+    }
+
+    @Test
+    public void bindingPanel() throws Exception
+    {
+        List<Panel> panelList = izpackProjectInstaller.getPanels();
+
+        assertThat(panelList, IsCollectionContaining.hasItem(
+                AllOf.allOf(
+                        HasPropertyWithValue.<Panel>hasProperty("className", Is.is("CheckedHelloPanel")),
+                        HasPropertyWithValue.<Panel>hasProperty("panelid", Is.is("hellopanel"))
+                )
+        ));
+        assertThat(panelList, IsCollectionContaining.hasItem(
+                AllOf.allOf(
+                        HasPropertyWithValue.<Panel>hasProperty("className", Is.is("HTMLInfoPanel")),
+                        HasPropertyWithValue.<Panel>hasProperty("panelid", Is.is("infopanel"))
+                )
+        ));
 
     }
 }
