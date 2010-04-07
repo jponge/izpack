@@ -1,20 +1,20 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2002 Marcus Wolschon
  * Copyright 2002 Jan Blok
  * Copyright 2004 Klaus Bartz
  * Copyright 2007 Dennis Reil
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -188,7 +188,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.izforge.izpack.panels.packs.PacksPanelInterface#getLangpack()
      */
 
@@ -199,7 +199,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.izforge.izpack.panels.packs.PacksPanelInterface#getBytes()
      */
 
@@ -210,7 +210,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.izforge.izpack.panels.packs.PacksPanelInterface#setBytes(int)
      */
 
@@ -221,7 +221,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.izforge.izpack.panels.packs.PacksPanelInterface#showSpaceRequired()
      */
 
@@ -235,7 +235,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.izforge.izpack.panels.packs.PacksPanelInterface#showFreeSpace()
      */
 
@@ -281,7 +281,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                  * This will call
                  * public static boolean validate(AbstractUIHandler handler,
                  *   GUIInstallData installData, String packsId, boolean isSelected)
-                 * from the validator class  
+                 * from the validator class
                  */
 
                 PackValidator validatorInst;
@@ -332,7 +332,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
      */
 
@@ -355,7 +355,14 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 desc = pack.description;
             }
 
-            desc = variableSubstitutor.substitute(desc);
+            try
+            {
+                desc = variableSubstitutor.substitute(desc);
+            }
+            catch (Exception e1)
+            {
+                // ignore
+            }
             descriptionArea.setText(desc);
         }
         // Operation for the dependency listing
@@ -668,7 +675,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.izforge.izpack.installer.IzPanel#getSummaryBody()
      */
 

@@ -19,18 +19,18 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.variable;
+package com.izforge.izpack.core.variable;
 
-import java.io.*;
+import java.io.Serializable;
 
 import org.ini4j.Reg;
 
 import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.util.*;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorBase;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.OsVersion;
 
 
-public class RegistryValue extends Value implements Serializable
+public class RegistryValue extends ValueImpl implements Serializable
 {
     /**
      *
@@ -108,7 +108,7 @@ public class RegistryValue extends Value implements Serializable
     }
 
     @Override
-    public String resolve(VariableSubstitutorBase... substitutors) throws Exception
+    public String resolve(VariableSubstitutor... substitutors) throws Exception
     {
         if (!OsVersion.IS_WINDOWS)
             throw new Exception("Registry access allowed only on Windows OS");
@@ -117,7 +117,7 @@ public class RegistryValue extends Value implements Serializable
         Reg.Key regkey = null;
         if (root != null) {
             String _root_ = root;
-            for ( VariableSubstitutorBase substitutor : substitutors )
+            for ( VariableSubstitutor substitutor : substitutors )
                 _root_ = substitutor.substitute(_root_, (SubstitutionType)null);
             reg = new Reg(_root_);
         }
@@ -125,13 +125,13 @@ public class RegistryValue extends Value implements Serializable
         {
             if (reg == null) reg = new Reg();
             String _key_ = key;
-            for ( VariableSubstitutorBase substitutor : substitutors )
+            for ( VariableSubstitutor substitutor : substitutors )
                 _key_ = substitutor.substitute(_key_, (SubstitutionType)null);
             regkey = reg.get(_key_);
         }
         if (regkey != null) {
             String _value_ = value;
-            for ( VariableSubstitutorBase substitutor : substitutors )
+            for ( VariableSubstitutor substitutor : substitutors )
                 _value_ = substitutor.substitute(_value_, (SubstitutionType)null);
             return regkey.get(_value_);
         }

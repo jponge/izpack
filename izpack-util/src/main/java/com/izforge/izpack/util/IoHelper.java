@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2004 Elmar Klaus Bartz
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -188,7 +188,14 @@ public class IoHelper
         {
             BufferedInputStream bin = new BufferedInputStream(in, 5120);
             BufferedOutputStream bout = new BufferedOutputStream(out, 5120);
-            vs.substitute(bin, bout, type, null);
+            try
+            {
+                vs.substitute(bin, bout, type, null);
+            }
+            catch (Exception e)
+            {
+                throw new IOException("Substitution failed during copying a stream("+e.getMessage()+")");
+            }
             bin.close();
             bout.close();
         }
@@ -581,7 +588,14 @@ public class IoHelper
     public static String translatePath(String destination, VariableSubstitutor vs)
     {
         // Parse for variables
-        destination = vs.substitute(destination);
+        try
+        {
+            destination = vs.substitute(destination);
+        }
+        catch (Exception e)
+        {
+            // ignore
+        }
 
         // Convert the file separator characters
 

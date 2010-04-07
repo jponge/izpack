@@ -19,32 +19,35 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.variable;
+package com.izforge.izpack.core.variable;
 
+import com.izforge.izpack.api.data.Value;
+import com.izforge.izpack.api.regex.RegularExpressionFilter;
+import com.izforge.izpack.api.regex.RegularExpressionProcessor;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.util.regex.RegularExpressionProcessor;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorBase;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.regex.RegularExpressionProcessorImpl;
 
-public abstract class Value
+public abstract class ValueImpl implements Value
 {
     public abstract void validate() throws Exception;
     public abstract String resolve() throws Exception;
-    public abstract String resolve(VariableSubstitutorBase... substitutors) throws Exception;
+    public abstract String resolve(VariableSubstitutor... substitutors) throws Exception;
 
-    public String resolve(RegularExpressionFilter regexp, VariableSubstitutorBase... substitutors)
+    public String resolve(RegularExpressionFilter regexp, VariableSubstitutor... substitutors)
     throws Exception
     {
         String newValue = resolve(substitutors);
 
         if (regexp != null) {
             String replace = null, select = null, regex = null;
-            for ( VariableSubstitutorBase substitutor : substitutors )
+            for ( VariableSubstitutor substitutor : substitutors )
                 replace = substitutor.substitute(regexp.getReplace(), (SubstitutionType)null);
-            for ( VariableSubstitutorBase substitutor : substitutors )
+            for ( VariableSubstitutor substitutor : substitutors )
                 select = substitutor.substitute(regexp.getSelect(), (SubstitutionType)null);
-            for ( VariableSubstitutorBase substitutor : substitutors )
+            for ( VariableSubstitutor substitutor : substitutors )
                 regex = substitutor.substitute(regexp.getRegexp(), (SubstitutionType)null);
-            RegularExpressionProcessor processor = new RegularExpressionProcessor();
+            RegularExpressionProcessor processor = new RegularExpressionProcessorImpl();
             processor.setInput(newValue);
             processor.setRegexp(regex);
             processor.setCaseSensitive(regexp.getCasesensitive());

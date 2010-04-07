@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2003 Tino Schwarze
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,23 +21,20 @@
 
 package com.izforge.izpack.panels.compile;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.api.data.GUIInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.Iterator;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.util.Iterator;
+
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.gui.*;
+import com.izforge.izpack.installer.base.*;
 
 /**
  * The compile panel class.
@@ -125,7 +122,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
      * @param idata               The installation installDataGUI.
      * @throws IOException
      */
-    public CompilePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, VariableSubstitutorImpl variableSubstitutor) throws IOException
+    public CompilePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, VariableSubstitutor variableSubstitutor) throws IOException
     {
         super(parent, idata, resourceManager);
 

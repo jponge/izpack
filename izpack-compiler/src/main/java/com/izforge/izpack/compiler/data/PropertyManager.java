@@ -6,6 +6,8 @@ import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.listener.PackagerListener;
+
+import org.apache.commons.io.IOExceptionWithCause;
 import org.apache.tools.ant.taskdefs.Execute;
 
 import java.io.*;
@@ -299,7 +301,14 @@ public class PropertyManager
      */
     private void addPropertySubstitute(String name, String value)
     {
-        value = variableSubstitutor.substitute(value, SubstitutionType.TYPE_AT);
+        try
+        {
+            value = variableSubstitutor.substitute(value, SubstitutionType.TYPE_AT);
+        }
+        catch (Exception e)
+        {
+            // ignore
+        }
         properties.put(name, value);
     }
 
@@ -327,7 +336,14 @@ public class PropertyManager
 
                 try
                 {
-                    mods = variableSubstitutor.substitute(read, write, SubstitutionType.TYPE_AT);
+                    try
+                    {
+                        mods = variableSubstitutor.substitute(read, write, SubstitutionType.TYPE_AT);
+                    }
+                    catch (Exception e1)
+                    {
+                        throw new IOException(e1.getMessage());
+                    }
                     // TODO: check for circular references. We need to know
                     // which
                     // variables were substituted to do that

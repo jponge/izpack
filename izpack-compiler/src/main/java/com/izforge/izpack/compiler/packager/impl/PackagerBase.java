@@ -1,18 +1,18 @@
 /*
  * $Id:$
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2007 Klaus Bartz
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,24 +22,36 @@
 
 package com.izforge.izpack.compiler.packager.impl;
 
-import com.izforge.izpack.api.data.*;
+import java.io.FilterOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
+import com.izforge.izpack.api.data.DynamicConditionValidator;
+import com.izforge.izpack.api.data.DynamicVariable;
+import com.izforge.izpack.api.data.GUIPrefs;
+import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.data.InstallerRequirement;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.listener.PackagerListener;
 import com.izforge.izpack.compiler.packager.IPackager;
+import com.izforge.izpack.core.data.DynamicConditionValidatorImpl;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.panel.PanelMerge;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
-
-import java.io.FilterOutputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.util.*;
 
 
 /**
@@ -119,6 +131,11 @@ public abstract class PackagerBase implements IPackager
      * dynamic variables
      */
     protected Map<String, List<DynamicVariable>> dynamicvariables = new HashMap<String, List<DynamicVariable>>();
+
+    /**
+     * dynamic conditions
+     */
+    protected List<DynamicConditionValidator> dynamicConditions = new ArrayList<DynamicConditionValidator>();
 
     /**
      * Jar file URLs who's contents will be copied into the installer.
@@ -353,6 +370,7 @@ public abstract class PackagerBase implements IPackager
         writeInstallerObject("langpacks.info", langpackNameList);
         writeInstallerObject("rules", rules);
         writeInstallerObject("dynvariables", dynamicvariables);
+        writeInstallerObject("dynconditions", dynamicConditions);
         writeInstallerObject("installerrequirements", installerrequirements);
 
         writeInstallerResources();
@@ -374,13 +392,20 @@ public abstract class PackagerBase implements IPackager
 
 
     /**
-     * @return the dynamicvariables
+     * @return the dynamic variables
      */
     public Map<String, List<DynamicVariable>> getDynamicVariables()
     {
         return this.dynamicvariables;
     }
 
+    /**
+     * @return the dynamic conditions
+     */
+    public List<DynamicConditionValidator> getDynamicConditions()
+    {
+        return this.dynamicConditions;
+    }
 
     public void addInstallerRequirements(List<InstallerRequirement> conditions)
     {

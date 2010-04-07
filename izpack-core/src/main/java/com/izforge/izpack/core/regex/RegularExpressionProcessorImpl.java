@@ -19,9 +19,14 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.regex;
+package com.izforge.izpack.core.regex;
 
 import java.util.Vector;
+
+import com.izforge.izpack.api.regex.RegularExpressionProcessor;
+import com.izforge.izpack.util.regex.RegexUtil;
+import com.izforge.izpack.util.regex.Regexp;
+import com.izforge.izpack.util.regex.RegularExpression;
 
 /**
  * Regular expression utility adapted from and inspired by the PropertyRegEx Ant task
@@ -30,7 +35,7 @@ import java.util.Vector;
  * @see <a href='http://ant-contrib.sourceforge.net'>Ant Contrib project</a>
  * @author René Krell - changes against the original implementation ant-contrib 1.0b3
  */
-public class RegularExpressionProcessor
+public class RegularExpressionProcessorImpl implements RegularExpressionProcessor
 {
     private String input;
 

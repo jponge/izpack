@@ -19,16 +19,17 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.variable;
+package com.izforge.izpack.core.variable;
 
 import java.io.Serializable;
 
 import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.util.*;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorBase;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.OsVersion;
 
 
-public class ExecValue extends Value implements Serializable
+public class ExecValue extends ValueImpl implements Serializable
 {
     /**
      *
@@ -88,13 +89,13 @@ public class ExecValue extends Value implements Serializable
     }
 
     @Override
-    public String resolve(VariableSubstitutorBase... substitutors)
+    public String resolve(VariableSubstitutor... substitutors) throws Exception
     {
         String _cmd_[] = new String[cmd.length];
         for (int i = 0; i < cmd.length; i++)
         {
             String _cmdarg_ = cmd[i];
-            for ( VariableSubstitutorBase substitutor : substitutors )
+            for ( VariableSubstitutor substitutor : substitutors )
                 _cmdarg_ = substitutor.substitute(_cmdarg_, (SubstitutionType)null);
             _cmd_[i] = _cmdarg_;
         }

@@ -19,12 +19,13 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.variable;
+package com.izforge.izpack.core.variable;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.Serializable;
 
 import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorBase;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
 public class PlainConfigFileValue extends ConfigFileValue implements Serializable
 {
@@ -66,11 +67,11 @@ public class PlainConfigFileValue extends ConfigFileValue implements Serializabl
     }
 
     @Override
-    public String resolve(VariableSubstitutorBase... substitutors)
+    public String resolve(VariableSubstitutor... substitutors)
     throws Exception
     {
         String _location_ = location;
-        for ( VariableSubstitutorBase substitutor : substitutors )
+        for ( VariableSubstitutor substitutor : substitutors )
             _location_ = substitutor.substitute(_location_, (SubstitutionType)null);
         return resolve(new FileInputStream(_location_), substitutors);
     }

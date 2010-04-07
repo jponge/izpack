@@ -19,11 +19,13 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.variable;
+package com.izforge.izpack.core.regex;
 
 import java.io.Serializable;
 
-public class RegularExpressionFilter implements Serializable
+import com.izforge.izpack.api.regex.RegularExpressionFilter;
+
+public class RegularExpressionFilterImpl implements RegularExpressionFilter, Serializable
 {
     /**
      *
@@ -35,7 +37,8 @@ public class RegularExpressionFilter implements Serializable
     public String defaultValue;
     public Boolean casesensitive;
     public Boolean global;
-    public RegularExpressionFilter(String regexp, String select, String replace, String defaultValue,
+
+    public RegularExpressionFilterImpl(String regexp, String select, String replace, String defaultValue,
             Boolean casesensitive, Boolean global)
     {
         super();
@@ -46,12 +49,12 @@ public class RegularExpressionFilter implements Serializable
         this.casesensitive = casesensitive;
         this.global = global;
     }
-    public RegularExpressionFilter(String regexp, String select, String defaultValue,
+    public RegularExpressionFilterImpl(String regexp, String select, String defaultValue,
             Boolean casesensitive)
     {
         this(regexp, select, null, defaultValue, casesensitive, null);
     }
-    public RegularExpressionFilter(String regexp, String replace, String defaultValue,
+    public RegularExpressionFilterImpl(String regexp, String replace, String defaultValue,
             Boolean casesensitive, Boolean global)
     {
         this(regexp, null, replace, defaultValue, casesensitive, global);

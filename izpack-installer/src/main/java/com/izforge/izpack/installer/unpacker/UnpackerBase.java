@@ -323,7 +323,14 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
             if ((element != null) && (element.length() > 0))
             {
                 // substitute variables in the pattern
-                element = variableSubstitutor.substitute(element, SubstitutionType.TYPE_PLAIN);
+                try
+                {
+                    element = variableSubstitutor.substitute(element, SubstitutionType.TYPE_PLAIN);
+                }
+                catch (Exception e1)
+                {
+                    // ignore
+                }
 
                 // check whether the pattern is absolute or relative
                 File f = new File(element);

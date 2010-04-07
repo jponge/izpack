@@ -1,21 +1,25 @@
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.adaptator.impl.XMLParser;
-import com.izforge.izpack.api.data.DynamicVariable;
-import com.izforge.izpack.api.exception.CompilerException;
-import com.izforge.izpack.compiler.container.TestCompilerContainerMock;
-import com.izforge.izpack.compiler.packager.IPackager;
-import com.izforge.izpack.test.Container;
-import com.izforge.izpack.test.junit.PicoRunner;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.impl.XMLParser;
+import com.izforge.izpack.api.data.DynamicVariable;
+import com.izforge.izpack.api.data.Value;
+import com.izforge.izpack.api.exception.CompilerException;
+import com.izforge.izpack.compiler.container.TestCompilerContainerMock;
+import com.izforge.izpack.compiler.packager.IPackager;
+import com.izforge.izpack.core.data.DynamicVariableImpl;
+import com.izforge.izpack.core.variable.PlainValue;
+import com.izforge.izpack.test.Container;
+import com.izforge.izpack.test.junit.PicoRunner;
 
 /**
  * Test of compiler config with mock
@@ -52,7 +56,7 @@ public class CompilerConfigMockedTest
         element = xmlParser.parse("<root><variables><variable name=\"INSTALLPATH\" value=\"thePath\"/></variables></root>");
         compilerConfig.addVariables(element);
 
-        verifyCallToMap(mapStringListDyn, "myPath", "thePath/test");
+        verifyCallToMap(mapStringListDyn, "myPath", new PlainValue("thePath/test"));
     }
 
     @Test
@@ -64,12 +68,12 @@ public class CompilerConfigMockedTest
         IXMLElement element = xmlParser.parse("<root><dynamicvariables><variable name=\"myPath\" value=\"$INSTALLPATH / test\"/></dynamicvariables></root>");
         compilerConfig.addDynamicVariables(element);
 
-        verifyCallToMap(mapStringListDyn, "myPath", "$INSTALLPATH/test");
+        verifyCallToMap(mapStringListDyn, "myPath", new PlainValue("$INSTALLPATH/test"));
     }
 
-    private void verifyCallToMap(Map<String, List<DynamicVariable>> mapStringListDyn, String name, String value)
+    private void verifyCallToMap(Map<String, List<DynamicVariable>> mapStringListDyn, String name, Value value)
     {
-        DynamicVariable dyn = new DynamicVariable();
+        DynamicVariable dyn = new DynamicVariableImpl();
         dyn.setName(name);
         dyn.setValue(value);
         ArrayList<DynamicVariable> list = new ArrayList<DynamicVariable>();
@@ -99,9 +103,9 @@ public class CompilerConfigMockedTest
         compilerConfig.addDynamicVariables(xmlData);
 
         new ArrayList();
-        DynamicVariable dyn = new DynamicVariable();
+        DynamicVariable dyn = new DynamicVariableImpl();
         dyn.setName("myPath");
-        dyn.setValue("$INSTALLPATH/test");
+        dyn.setValue(new PlainValue("$INSTALLPATH/test"));
         ArrayList<DynamicVariable> list = new ArrayList<DynamicVariable>();
         list.add(dyn);
         Mockito.verify(variable).put("myPath", list);

@@ -5,7 +5,7 @@
  * http://izpack.org/
  * http://izpack.codehaus.org/
  *
- * Copyright 2007 Dennis Reil
+ * Copyright 2007 Dennis Reil, 2010 René Krell
  *
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,100 +23,67 @@
 
 package com.izforge.izpack.api.data;
 
-import java.io.Serializable;
-
+import com.izforge.izpack.api.regex.RegularExpressionFilter;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
 /**
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  * @version $Id: $
  */
-public class DynamicVariable implements Serializable
+public interface DynamicVariable
 {
-    private static final long serialVersionUID = -7985397187206803090L;
-    private String name;
-    private String value;
-    private String conditionid;
-
-    public DynamicVariable()
-    {
-        name = "";
-        value = "";
-        conditionid = "";
-    }
-
     /**
      * @return the name
      */
-    public String getName()
-    {
-        return this.name;
-    }
+    public String getName();
 
     /**
      * @param name the name to set
      */
-    public void setName(String name)
-    {
-        if (name != null)
-        {
-            this.name = name;
-        }
-    }
+    public void setName(String name);
 
     /**
      * @return the value
      */
-    public String getValue()
-    {
-        return this.value;
-    }
+    public Value getValue();
 
     /**
      * @param value the value to set
      */
-    public void setValue(String value)
-    {
-        if (value != null)
-        {
-            this.value = value;
-        }
-    }
+    public void setValue(Value value);
 
     /**
      * @return the conditionid
      */
-    public String getConditionid()
-    {
-        return this.conditionid;
-    }
+    public String getConditionid();
 
     /**
      * @param conditionid the conditionid to set
      */
-    public void setConditionid(String conditionid)
-    {
-        if (conditionid != null)
-        {
-            this.conditionid = conditionid;
-        }
-    }
+    public void setConditionid(String conditionid);
+
+    public void validate() throws Exception;
+
+    public String evaluate(VariableSubstitutor... substitutors) throws Exception;
+
+    public void setCheckonce(boolean checkonce);
+
+    public void setIgnoreFailure(boolean ignore);
+
+    /**
+     * @return the non-mandatory regular expression
+     */
+    public RegularExpressionFilter getRegularExpression();
+
+    /**
+     * @param expression the non-mandatory regular expression
+     */
+    public void setRegularExpression(RegularExpressionFilter expression);
 
     @Override
-    public boolean equals(Object obj)
-    {
-        if ((obj == null) || !(obj instanceof DynamicVariable))
-        {
-            return false;
-        }
-        DynamicVariable compareObj = (DynamicVariable) obj;
-        return (name.equals(compareObj.getName()) && conditionid.equals(compareObj.getConditionid()));
-    }
+    public boolean equals(Object obj);
 
     @Override
-    public int hashCode()
-    {
-        // TODO: check if this always correct
-        return name.hashCode() ^ conditionid.hashCode();
-    }
+    public int hashCode();
 }
 

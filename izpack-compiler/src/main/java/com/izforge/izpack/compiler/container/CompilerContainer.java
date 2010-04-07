@@ -1,10 +1,21 @@
 package com.izforge.izpack.compiler.container;
 
+import java.util.Properties;
+
+import org.picocontainer.Characteristics;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.injectors.ProviderAdapter;
+
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.Compiler;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.cli.CliAnalyzer;
-import com.izforge.izpack.compiler.container.provider.*;
+import com.izforge.izpack.compiler.container.provider.CompilerDataProvider;
+import com.izforge.izpack.compiler.container.provider.CompressedOutputStreamProvider;
+import com.izforge.izpack.compiler.container.provider.IzpackProjectProvider;
+import com.izforge.izpack.compiler.container.provider.JarOutputStreamProvider;
+import com.izforge.izpack.compiler.container.provider.PackCompressorProvider;
+import com.izforge.izpack.compiler.container.provider.XmlCompilerHelperProvider;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
@@ -13,14 +24,9 @@ import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.compiler.packager.impl.Packager;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.MergeManagerImpl;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
-import org.picocontainer.Characteristics;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.injectors.ProviderAdapter;
-
-import java.util.Properties;
 
 /**
  * Container for compiler

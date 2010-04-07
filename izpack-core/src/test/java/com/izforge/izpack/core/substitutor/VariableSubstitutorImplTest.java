@@ -1,4 +1,4 @@
-package com.izforge.izpack.util.substitutor;
+package com.izforge.izpack.core.substitutor;
 
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;

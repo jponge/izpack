@@ -19,21 +19,31 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.variable;
+package com.izforge.izpack.core.variable;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
 
-import javax.xml.parsers.*;
-import javax.xml.xpath.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
-import org.ini4j.*;
-import org.w3c.dom.*;
+import org.ini4j.Ini;
+import org.ini4j.Options;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorBase;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
-public abstract class ConfigFileValue extends Value implements Serializable
+public abstract class ConfigFileValue extends ValueImpl implements Serializable
 {
     /**
      *
@@ -114,11 +124,11 @@ public abstract class ConfigFileValue extends Value implements Serializable
         }
     }
 
-    protected String resolve(InputStream in, VariableSubstitutorBase... substitutors)
+    protected String resolve(InputStream in, VariableSubstitutor... substitutors)
     throws Exception
     {
         String _key_ = key;
-        for ( VariableSubstitutorBase substitutor : substitutors )
+        for ( VariableSubstitutor substitutor : substitutors )
             _key_ = substitutor.substitute(_key_, (SubstitutionType)null);
 
         switch (type)
@@ -130,7 +140,7 @@ public abstract class ConfigFileValue extends Value implements Serializable
         case CONFIGFILE_TYPE_INI:
             Ini ini;
             String _section_ = section;
-            for ( VariableSubstitutorBase substitutor : substitutors )
+            for ( VariableSubstitutor substitutor : substitutors )
                 _key_ = substitutor.substitute(_key_, (SubstitutionType)null);
             ini = new Ini(in);
             return ini.get(_section_, _key_);

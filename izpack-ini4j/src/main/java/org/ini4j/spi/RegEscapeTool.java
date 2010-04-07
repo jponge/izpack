@@ -41,6 +41,8 @@ public class RegEscapeTool extends EscapeTool
 
     public TypeValuesPair decode(String raw)
     {
+        TypeValuesPair returnPair = null;
+
         Type type = type(raw);
         String value = (type == Type.REG_SZ) ? unquote(raw) : raw.substring(type.toString()
                 .length() + 1);
@@ -48,42 +50,45 @@ public class RegEscapeTool extends EscapeTool
 
         switch (type)
         {
+            case REG_EXPAND_SZ:
+            case REG_MULTI_SZ:
+                byte[] bytes = binary(value);
 
-        case REG_EXPAND_SZ:
-        case REG_MULTI_SZ:
-            byte[] bytes = binary(value);
+                try
+                {
+                    value = new String(bytes, 0, bytes.length - 2, HEX_CHARSET_NAME);
+                }
+                catch (UnsupportedEncodingException e)
+                {
+                    value = null;
+                }
+                break;
 
-            try
-            {
-                value = new String(bytes, 0, bytes.length - 2, HEX_CHARSET_NAME);
-            }
-            catch (UnsupportedEncodingException e)
-            {
-                throw new RuntimeException(e);
-            }
-            break;
+            case REG_DWORD:
+                value = String.valueOf(Long.parseLong(value, HEX_RADIX));
+                break;
 
-        case REG_DWORD:
-            value = String.valueOf(Long.parseLong(value, HEX_RADIX));
-            break;
+            case REG_SZ:
+                break;
 
-        case REG_SZ:
-            break;
-
-        default:
-            break;
+            default:
+                break;
         }
 
-        if (type == Type.REG_MULTI_SZ)
+        if (value != null)
         {
-            values = splitMulti(value);
-        }
-        else
-        {
-            values = new String[] { value};
+            if (type == Type.REG_MULTI_SZ)
+            {
+                values = splitMulti(value);
+            }
+            else
+            {
+                values = new String[] { value};
+            }
+            returnPair = new TypeValuesPair(type, values);
         }
 
-        return new TypeValuesPair(type, values);
+        return returnPair;
     }
 
     public String encode(TypeValuesPair data)
@@ -145,30 +150,29 @@ public class RegEscapeTool extends EscapeTool
         buff.append(Type.SEPARATOR_CHAR);
         switch (type)
         {
+            case REG_EXPAND_SZ:
+                buff.append(hexadecimal(values[0]));
+                break;
 
-        case REG_EXPAND_SZ:
-            buff.append(hexadecimal(values[0]));
-            break;
+            case REG_DWORD:
+                buff.append(String.format("%08x", Long.parseLong(values[0])));
+                break;
 
-        case REG_DWORD:
-            buff.append(String.format("%08x", Long.parseLong(values[0])));
-            break;
+            case REG_MULTI_SZ:
+                int n = values.length;
 
-        case REG_MULTI_SZ:
-            int n = values.length;
+                for (int i = 0; i < n; i++)
+                {
+                    buff.append(hexadecimal(values[i]));
+                    buff.append(',');
+                }
 
-            for (int i = 0; i < n; i++)
-            {
-                buff.append(hexadecimal(values[i]));
-                buff.append(',');
-            }
+                buff.append("00,00");
+                break;
 
-            buff.append("00,00");
-            break;
-
-        default:
-            buff.append(values[0]);
-            break;
+            default:
+                buff.append(values[0]);
+                break;
         }
 
         return buff.toString();
@@ -196,7 +200,7 @@ public class RegEscapeTool extends EscapeTool
             }
             catch (UnsupportedEncodingException e)
             {
-                throw new RuntimeException(e);
+                buff.setLength(0);
             }
         }
 
@@ -284,7 +288,10 @@ public class RegEscapeTool extends EscapeTool
     private static byte[] copyOfRange(byte[] original, int from, int to)
     {
         int newLength = to - from;
-        if (newLength < 0) throw new IllegalArgumentException(from + " > " + to);
+        if (newLength < 0)
+        {
+            throw new IllegalArgumentException(from + " > " + to);
+        }
         byte[] copy = new byte[newLength];
         System.arraycopy(original, from, copy, 0, Math.min(original.length - from, newLength));
         return copy;

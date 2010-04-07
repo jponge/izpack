@@ -19,17 +19,15 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.substitutor;
+package com.izforge.izpack.core.substitutor;
 
-import java.io.*;
+import java.io.Serializable;
 import java.util.Properties;
 
-import com.izforge.izpack.util.variable.*;
+import com.izforge.izpack.api.data.Value;
+import com.izforge.izpack.core.variable.PlainValue;
 
-/**
- * Implementation of variable substitutor
- */
-public class VariableSubstitutorImpl extends VariableSubstitutorBase implements Serializable
+public class VariableSubstitutorImpl extends VariableSubstitutorBaseImpl implements Serializable
 {
     private static final long serialVersionUID = 3907213762447685687L;
 

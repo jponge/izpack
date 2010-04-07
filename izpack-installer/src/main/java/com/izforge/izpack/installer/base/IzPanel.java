@@ -1,16 +1,16 @@
 /*
  * $Id$
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,27 +20,37 @@
 
 package com.izforge.izpack.installer.base;
 
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.LayoutManager2;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.swing.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.DynamicConditionValidator;
 import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.installer.ISummarisable;
+import com.izforge.izpack.api.installer.DataValidator.Status;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
 import com.izforge.izpack.gui.MultiLineLabel;
 import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
-
-import javax.swing.*;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import java.awt.*;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Defines the base class for the IzPack panels. Any panel should be a subclass of it and should
@@ -626,17 +636,20 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             {
                 return (null);
             }
-            if (alternateClass == null)
-            {
-                return (null);
-            }
             buf.delete(0, buf.length());
             buf.append(alternateClass).append(".").append(subkey);
             retval = installData.getLangpack().getString(buf.toString());
         }
         if (retval != null && retval.indexOf('$') > -1)
         {
-            retval = variableSubstitutor.substitute(retval);
+            try
+            {
+                retval = variableSubstitutor.substitute(retval);
+            }
+            catch (Exception e)
+            {
+                // ignore
+            }
         }
         return (retval);
     }
@@ -1077,7 +1090,29 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     private final boolean validatePanel()
     {
         boolean returnValue = false;
-        if (this.validationService != null)
+
+        // Evaluate all global dynamic conditions
+        List<DynamicConditionValidator> dynConds = installData.getDynamicconditions();
+        if (dynConds != null)
+        {
+            Component guiComponent = getTopLevelAncestor();
+            Cursor originalCursor = guiComponent.getCursor();
+            Cursor newCursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
+            try
+            {
+                guiComponent.setCursor(newCursor);
+                for (DynamicConditionValidator validator : dynConds)
+                {
+                    returnValue = processValidationState(validator.validateData(installData));
+                }
+            }
+            finally
+            {
+                guiComponent.setCursor(originalCursor);
+            }
+        }
+
+        if (this.validationService != null && returnValue == true)
         {
             Component guiComponent = getTopLevelAncestor();
             Cursor originalCursor = guiComponent.getCursor();
@@ -1086,37 +1121,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             {
                 guiComponent.setCursor(newCursor);
                 // validating the data
-                DataValidator.Status returnStatus = this.validationService.validateData(this.installData);
-                if (returnStatus == DataValidator.Status.OK)
-                {
-                    returnValue = true;
-                }
-                else
-                {
-                    Debug.trace("Validation did not pass!");
-                    // try to parse the text, and substitute any variable it finds
-                    if (this.validationService.getWarningMessageId() != null
-                            && returnStatus == DataValidator.Status.WARNING)
-                    {
-
-                        String warningMessage = installData.getLangpack().getString(this.validationService
-                                .getWarningMessageId());
-                        if (this.emitWarning(getString("data.validation.warning.title"), variableSubstitutor
-                                .substitute(warningMessage)))
-                        {
-                            returnValue = true;
-                            Debug.trace("... but user decided to go on!");
-                        }
-                    }
-                    else
-                    {
-                        String errorMessage = installData.getLangpack().getString(this.validationService
-                                .getErrorMessageId());
-                        this.emitError(getString("data.validation.error.title"), variableSubstitutor.substitute(
-                                errorMessage, null));
-
-                    }
-                }
+                returnValue = processValidationState(this.validationService.validateData(this.installData));
             }
             finally
             {
@@ -1126,6 +1131,59 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         else
         {
             returnValue = true;
+        }
+        return returnValue;
+    }
+
+    private boolean processValidationState(Status state)
+    {
+        boolean returnValue = false;
+
+        if (state == DataValidator.Status.OK)
+        {
+            returnValue = true;
+        }
+        else
+        {
+            Debug.trace("Validation did not pass!");
+            // try to parse the text, and substitute any variable it finds
+            if (this.validationService.getWarningMessageId() != null
+                    && state == DataValidator.Status.WARNING)
+            {
+
+                String warningMessage;
+                try
+                {
+                    warningMessage = variableSubstitutor.substitute(installData.getLangpack()
+                            .getString(this.validationService.getWarningMessageId()));
+                }
+                catch (Exception e)
+                {
+                    warningMessage = installData.getLangpack().getString(
+                            this.validationService.getWarningMessageId());
+                }
+                if (this.emitWarning(getString("data.validation.warning.title"), warningMessage))
+                {
+                    returnValue = true;
+                    Debug.trace("... but user decided to go on!");
+                }
+            }
+            else
+            {
+                String errorMessage;
+                try
+                {
+                    errorMessage = variableSubstitutor.substitute(installData.getLangpack()
+                            .getString(this.validationService.getErrorMessageId()));
+                }
+                catch (Exception e)
+                {
+                    errorMessage = installData.getLangpack().getString(
+                            this.validationService.getErrorMessageId());
+                }
+                this.emitError(getString("data.validation.error.title"), errorMessage);
+
+            }
         }
         return returnValue;
     }

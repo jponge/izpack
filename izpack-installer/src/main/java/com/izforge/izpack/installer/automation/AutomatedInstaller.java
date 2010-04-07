@@ -31,6 +31,7 @@ import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.installer.DataValidator.Status;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.console.ConsolePanelAutomationHelper;
@@ -141,6 +142,12 @@ public class AutomatedInstaller extends InstallerBase
      */
     public void doInstall() throws Exception
     {
+        VariableSubstitutor subst = new VariableSubstitutorImpl(this.idata.getVariables());
+
+        // Get dynamic variables immediately for being able to use them as
+        // variable condition in installerrequirements
+        InstallerBase.refreshDynamicVariables(this.idata, subst);
+
         // check installer conditions
         if (!checkCondition.checkInstallerRequirements(this))
         {
@@ -199,7 +206,8 @@ public class AutomatedInstaller extends InstallerBase
 
                 // execute the installation logic for the current panel
                 installPanel(p, automationHelper, panelRoot);
-                idata.refreshDynamicVariables();
+
+                refreshDynamicVariables(this.idata, subst);
             }
 
             // this does nothing if the uninstaller was not included
@@ -361,6 +369,50 @@ public class AutomatedInstaller extends InstallerBase
      */
     private void validatePanel(final Panel p) throws InstallerException
     {
+        try
+        {
+            InstallerBase.refreshDynamicVariables(this.idata,
+                    new VariableSubstitutorImpl(this.idata.getVariables()));
+        }
+        catch (Exception e)
+        {
+            throw new InstallerException(e);
+        }
+
+        // Evaluate all global dynamic conditions
+        List<DynamicConditionValidator> dynConds = idata.getDynamicconditions();
+        if (dynConds != null)
+        {
+            for (DynamicConditionValidator validator : dynConds)
+            {
+                Status validationResult = validator.validateData(idata);
+                if (validationResult != DataValidator.Status.OK)
+                {
+                    String errorMessage;
+                    try
+                    {
+                        errorMessage = idata.getLangpack().getString("data.validation.error.title")
+                        +": "+variableSubstitutor.substitute(idata.getLangpack().getString(validator
+                                .getErrorMessageId()));
+                    }
+                    catch (Exception e)
+                    {
+                        throw new InstallerException(e);
+                    }
+                    // if defaultAnswer is true, result is ok
+                    if (validationResult == Status.WARNING && validator.getDefaultAnswer())
+                    {
+                        System.out.println(errorMessage +" - ignoring");
+                        return;
+                    }
+                    // make installation fail instantly
+                    this.result = false;
+                    throw new InstallerException(errorMessage);
+                }
+            }
+        }
+
+        // Evaluate panel condition
         String dataValidator = p.getValidator();
         if (dataValidator != null)
         {
@@ -368,16 +420,27 @@ public class AutomatedInstaller extends InstallerBase
             Status validationResult = validator.validateData(idata);
             if (validationResult != DataValidator.Status.OK)
             {
+                String errorMessage;
+                try
+                {
+                    errorMessage = idata.getLangpack().getString("data.validation.error.title")
+                    +": "+variableSubstitutor.substitute(idata.getLangpack().getString(validator
+                            .getErrorMessageId()));
+                }
+                catch (Exception e)
+                {
+                    throw new InstallerException(e);
+                }
+                // if defaultAnswer is true, result is ok
                 // if defaultAnswer is true, result is ok
                 if (validationResult == Status.WARNING && validator.getDefaultAnswer())
                 {
-                    System.out
-                            .println("Configuration said, it's ok to go on, if validation is not successfull");
+                    System.out.println(errorMessage +" - ignoring");
                     return;
                 }
                 // make installation fail instantly
                 this.result = false;
-                throw new InstallerException("Validating data for panel " + p.getPanelid() + " was not successfull");
+                throw new InstallerException(errorMessage);
             }
         }
     }

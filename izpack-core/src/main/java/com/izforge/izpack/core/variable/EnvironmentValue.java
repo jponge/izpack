@@ -19,59 +19,58 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.variable;
+package com.izforge.izpack.core.variable;
 
 import java.io.Serializable;
 
 import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorBase;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.IoHelper;
 
-
-public class PlainValue extends Value implements Serializable
+public class EnvironmentValue extends ValueImpl implements Serializable
 {
     /**
      *
      */
-    private static final long serialVersionUID = -8081979859867523421L;
+    private static final long serialVersionUID = -658114236595736672L;
 
-    public String value; // mandatory
-
-    public PlainValue(String value)
+    public String variable; // mandatory
+    public EnvironmentValue(String variable)
     {
         super();
-        this.value = value;
+        this.variable = variable;
+    }
+    public String getVariable()
+    {
+        return this.variable;
     }
 
-    public String getValue()
+    public void setVariable(String variable)
     {
-        return this.value;
-    }
-
-    public void setValue(String value)
-    {
-        this.value = value;
+        this.variable = variable;
     }
 
     @Override
     public void validate() throws Exception
     {
-        if (this.value == null || this.value.length() <= 0)
-            throw new Exception("None or empty plain value");
+        if (this.variable == null || this.variable.length() <= 0)
+            throw new Exception("No or empty environment variable name");
     }
 
     @Override
     public String resolve()
     {
-        return value;
+        return IoHelper.getenv(variable);
     }
 
     @Override
-    public String resolve(VariableSubstitutorBase... substitutors)
+    public String resolve(VariableSubstitutor... substitutors) throws Exception
     {
-        String _value_ = value;
-        for ( VariableSubstitutorBase substitutor : substitutors )
-            _value_ = substitutor.substitute(_value_, (SubstitutionType)null);
+        String _variable_ = variable;
+        for ( VariableSubstitutor substitutor : substitutors )
+            _variable_ = substitutor.substitute(_variable_, (SubstitutionType)null);
 
-        return _value_;
+        return IoHelper.getenv( _variable_ );
     }
+
 }

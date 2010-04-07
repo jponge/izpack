@@ -574,7 +574,14 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             {
                 if (set != null && !"".equals(set))
                 {
-                    set = variableSubstitutor.substitute(set);
+                    try
+                    {
+                        set = variableSubstitutor.substitute(set);
+                    }
+                    catch (Exception e)
+                    {
+                        // ignore
+                    }
 
                     this.installData.setVariable(variable, set);
                 }
@@ -676,7 +683,14 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             {
                 if (set != null && !"".equals(set))
                 {
-                    set = variableSubstitutor.substitute(set);
+                    try
+                    {
+                        set = variableSubstitutor.substitute(set);
+                    }
+                    catch (Exception e)
+                    {
+                        // ignore
+                    }
                 }
             }
 
@@ -811,7 +825,14 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             {
                 if (set != null && !"".equals(set))
                 {
-                    set = variableSubstitutor.substitute(set);
+                    try
+                    {
+                        set = variableSubstitutor.substitute(set);
+                    }
+                    catch (Exception e)
+                    {
+                        // ignore
+                    }
                     this.installData.setVariable(variable, set);
                 }
             }
@@ -911,7 +932,14 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     {
                         value = textf.getText();
                     }
-                    textf.setText(variableSubstitutor.substitute(value));
+                    try
+                    {
+                        textf.setText(variableSubstitutor.substitute(value));
+                    }
+                    catch (Exception e)
+                    {
+                        textf.setText(value);
+                    }
                 }
                 else if (element.getType() == UIElementType.PASSWORD)
                 {
@@ -922,7 +950,14 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     {
                         value = textf.getText();
                     }
-                    textf.setText(variableSubstitutor.substitute(value));
+                    try
+                    {
+                        textf.setText(variableSubstitutor.substitute(value));
+                    }
+                    catch (Exception e)
+                    {
+                        textf.setText(value);
+                    }
                 }
                 else if (element.getType() == UIElementType.RULE)
                 {
@@ -1700,7 +1735,14 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             {
                 if (set != null && !"".equals(set))
                 {
-                    set = variableSubstitutor.substitute(set);
+                    try
+                    {
+                        set = variableSubstitutor.substitute(set);
+                    }
+                    catch (Exception e)
+                    {
+                        // ignore
+                    }
                 }
             }
 
@@ -1944,7 +1986,14 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     }
                     if (set != null && !"".equals(set))
                     {
-                        set = variableSubstitutor.substitute(set);
+                        try
+                        {
+                            set = variableSubstitutor.substitute(set);
+                        }
+                        catch (Exception e)
+                        {
+                            // ignore
+                        }
                     }
 
                     StringTokenizer tokenizer = new StringTokenizer(choiceValues, ":");
@@ -1985,7 +2034,14 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                         {
                             if (set != null && !"".equals(set))
                             {
-                                set = variableSubstitutor.substitute(set);
+                                try
+                                {
+                                    set = variableSubstitutor.substitute(set);
+                                }
+                                catch (Exception e)
+                                {
+                                    // ignore
+                                }
                             }
                             if (set.equals(TRUE))
                             {
@@ -2174,7 +2230,14 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 {
                     if (set != null && !"".equals(set))
                     {
-                        set = variableSubstitutor.substitute(set);
+                        try
+                        {
+                            set = variableSubstitutor.substitute(set);
+                        }
+                        catch (Exception e)
+                        {
+                            // ignore
+                        }
                     }
                     if (set.equals(TRUE))
                     {
@@ -2342,7 +2405,14 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 String set = fieldSpec.getAttribute(SET);
                 if (set != null && !"".equals(set))
                 {
-                    set = variableSubstitutor.substitute(set);
+                    try
+                    {
+                        set = variableSubstitutor.substitute(set);
+                    }
+                    catch (Exception e)
+                    {
+                        // ignore
+                    }
                 }
                 JLabel label = new JLabel(getText(fieldSpec));
                 try
@@ -2520,7 +2590,14 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         {
             if (set != null && !"".equals(set))
             {
-                set = variableSubstitutor.substitute(set);
+                try
+                {
+                    set = variableSubstitutor.substitute(set);
+                }
+                catch (Exception e)
+                {
+                    // ignore
+                }
             }
             if (set.equals(FALSE))
             {
@@ -2739,7 +2816,14 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 {
                     if (set != null && !"".equals(set))
                     {
-                        set = variableSubstitutor.substitute(set);
+                        try
+                        {
+                            set = variableSubstitutor.substitute(set);
+                        }
+                        catch (Exception e)
+                        {
+                            // ignore
+                        }
                     }
                     if (set.equals(TRUE))
                     {
@@ -3225,7 +3309,16 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
         // try to parse the text, and substitute any variable it finds
 
-        return (variableSubstitutor.substitute(text));
+        try
+        {
+            return (variableSubstitutor.substitute(text));
+        }
+        catch (Exception e)
+        {
+            // ignore
+        }
+
+        return text;
     }
 
     /*--------------------------------------------------------------------------*/
@@ -3755,7 +3848,15 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             // /usr/lib/*/lib/tools.jar
             for (int i = 0; i < this.pathComboBox.getItemCount(); ++i)
             {
-                String path = variableSubstitutor.substitute((String) this.pathComboBox.getItemAt(i));
+                String path;
+                try
+                {
+                    path = variableSubstitutor.substitute((String) this.pathComboBox.getItemAt(i));
+                }
+                catch (Exception e)
+                {
+                    path = (String) this.pathComboBox.getItemAt(i);
+                }
                 // System.out.println ("autodetecting " + path);
 
                 if (path.endsWith("*"))
@@ -3792,7 +3893,15 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             this.pathComboBox.removeAllItems();
             for (String item : items)
             {
-                String res = variableSubstitutor.substitute(item, SubstitutionType.TYPE_PLAIN);
+                String res;
+                try
+                {
+                    res = variableSubstitutor.substitute(item, SubstitutionType.TYPE_PLAIN);
+                }
+                catch (Exception e)
+                {
+                    res = item;
+                }
                 // System.out.println ("substitution " + item + ", result " + res);
                 this.pathComboBox.addItem(res);
             }
@@ -3973,10 +4082,24 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     if (vvalue != null)
                     {
                         // try to substitute variables in value field
-                        vvalue = variableSubstitutor.substitute(vvalue);
+                        try
+                        {
+                            vvalue = variableSubstitutor.substitute(vvalue);
+                        }
+                        catch (Exception e)
+                        {
+                            // ignore
+                        }
                         // to cut out circular references
                         this.installData.setVariable(vname, "");
-                        vvalue = variableSubstitutor.substitute(vvalue);
+                        try
+                        {
+                            vvalue = variableSubstitutor.substitute(vvalue);
+                        }
+                        catch (Exception e)
+                        {
+                            // ignore
+                        }
                     }
                     // try to set variable
                     this.installData.setVariable(vname, vvalue);

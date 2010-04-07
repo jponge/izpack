@@ -61,7 +61,11 @@ import com.izforge.izpack.compiler.helper.TargetFileSet;
 import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
 import com.izforge.izpack.compiler.listener.CompilerListener;
 import com.izforge.izpack.compiler.packager.IPackager;
+import com.izforge.izpack.core.data.DynamicConditionValidatorImpl;
+import com.izforge.izpack.core.data.DynamicVariableImpl;
+import com.izforge.izpack.core.regex.RegularExpressionFilterImpl;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
+import com.izforge.izpack.core.variable.*;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.data.PackInfo;
@@ -219,6 +223,7 @@ public class CompilerConfig extends Thread
         // We add all the information
         addVariables(data);
         addDynamicVariables(data);
+        addDynamicConditions(data);
         addConditions(data);
         addInfo(data);
         addGUIPrefs(data);
@@ -793,7 +798,14 @@ public class CompilerConfig extends Thread
                 // if the path does not exist, maybe it contains variables
                 if (!file.exists())
                 {
-                    file = new File(variableSubstitutor.substitute(file.getAbsolutePath()));
+                    try
+                    {
+                        file = new File(variableSubstitutor.substitute(file.getAbsolutePath()));
+                    }
+                    catch (Exception e)
+                    {
+                        assertionHelper.parseWarn(singleFileNode, e.getMessage());
+                    }
                     // next existance checking appears in pack.addFile
                 }
 
@@ -1794,39 +1806,230 @@ public class CompilerConfig extends Thread
         notifyCompilerListener("addVariables", CompilerListener.END, data);
     }
 
+    private int getConfigFileType( String varname, String type )
+    throws CompilerException
+    {
+        int filetype = ConfigFileValue.CONFIGFILE_TYPE_OPTIONS;
+        if (type != null)
+        {
+            if (type.equalsIgnoreCase("options"))
+                filetype = ConfigFileValue.CONFIGFILE_TYPE_OPTIONS;
+            else if (type.equalsIgnoreCase("xml"))
+                filetype = ConfigFileValue.CONFIGFILE_TYPE_XML;
+            else if (type.equalsIgnoreCase("ini"))
+                filetype = ConfigFileValue.CONFIGFILE_TYPE_INI;
+            else assertionHelper.parseError("Error in definition of dynamic variable "+varname+": Unknown entry type "+type);
+        }
+        return filetype;
+    }
+
     protected void addDynamicVariables(IXMLElement data) throws CompilerException
     {
         notifyCompilerListener("addDynamicVariables", CompilerListener.BEGIN, data);
         // We get the dynamic variable list
         IXMLElement root = data.getFirstChildNamed("dynamicvariables");
-        if (root == null)
-        {
-            return;
-        }
+        if (root == null) { return; }
 
         Map<String, List<DynamicVariable>> dynamicvariables = packager.getDynamicVariables();
 
-        for (IXMLElement variableNode : root.getChildrenNamed("variable"))
+        Iterator<IXMLElement> iter = root.getChildrenNamed("variable").iterator();
+        while (iter.hasNext())
         {
-            String name = xmlCompilerHelper.requireAttribute(variableNode, "name");
-            String value = variableNode.getAttribute("value");
-            if (value == null)
-            {
-                IXMLElement valueElement = variableNode.getFirstChildNamed("value");
+            IXMLElement var = iter.next();
+            String name = xmlCompilerHelper.requireAttribute(var, "name");
+
+            DynamicVariable dynamicVariable = new DynamicVariableImpl();
+            dynamicVariable.setName(name);
+
+            // Check for plain value
+            String value = var.getAttribute("value");
+            if (value!=null) {
+                dynamicVariable.setValue(new PlainValue(value));
+            }
+            else {
+                IXMLElement valueElement = var.getFirstChildNamed("value");
                 if (valueElement != null)
                 {
                     value = valueElement.getContent();
-                    if (value == null)
+                    if (value == null){
+                        assertionHelper.parseError("Empty value element for dynamic variable "+name);
+                    }
+                    dynamicVariable.setValue(new PlainValue(value));
+                }
+            }
+            // Check for environment variable value
+            value = var.getAttribute("environment");
+            if (value!=null) {
+                if (dynamicVariable.getValue()==null) {
+                    dynamicVariable.setValue(new EnvironmentValue(value));
+                    try { dynamicVariable.validate(); }
+                    catch (Exception e)
                     {
-                        assertionHelper.parseError("A dynamic variable needs either a value attribute or a value element.");
+                        assertionHelper.parseError("Error in definition of dynamic variable "+name+": "+e.getMessage());
+                    }
+                }
+                else {
+                    // unexpected combination of variable attributes
+                    assertionHelper.parseError("Ambiguous environment value definition for dynamic variable "+name);
+                }
+            }
+            // Check for registry value
+            value = var.getAttribute("regkey");
+            if (value!=null) {
+                String regroot = var.getAttribute("regroot");
+                String regvalue = var.getAttribute("regvalue");
+                if (dynamicVariable.getValue()==null) {
+                    dynamicVariable.setValue(
+                            new RegistryValue(regroot, value, regvalue));
+                    try { dynamicVariable.validate(); }
+                    catch (Exception e)
+                    {
+                        assertionHelper.parseError("Error in definition of dynamic variable "+name+": "+e.getMessage());
+                    }
+                }
+                else {
+                    // unexpected combination of variable attributes
+                    assertionHelper.parseError("Ambiguous registry value definition for dynamic variable "+name);
+                }
+            }
+            // Check for value from plain config file
+            value = var.getAttribute("file");
+            if (value!=null) {
+                String stype = var.getAttribute("type");
+                String filesection = var.getAttribute("section");
+                String filekey = xmlCompilerHelper.requireAttribute(var, "key");
+                if (dynamicVariable.getValue()==null)
+                {
+                    dynamicVariable.setValue(new PlainConfigFileValue(value,
+                            getConfigFileType(name, stype), filesection, filekey));
+                    try { dynamicVariable.validate(); }
+                    catch (Exception e)
+                    {
+                        assertionHelper.parseError("Error in definition of dynamic variable "+name+": "+e.getMessage());
                     }
                 }
                 else
                 {
-                    assertionHelper.parseError("A dynamic variable needs either a value attribute or a value element. Variable name: " + name);
+                    // unexpected combination of variable attributes
+                    assertionHelper.parseError("Ambiguous file value definition for dynamic variable "+name);
                 }
             }
-            String conditionid = variableNode.getAttribute("condition");
+            // Check for value from config file entry in a zip file
+            value = var.getAttribute("zipfile");
+            if (value!=null) {
+                String entryname = xmlCompilerHelper.requireAttribute(var, "entry");
+                String stype = var.getAttribute("type");
+                String filesection = var.getAttribute("section");
+                String filekey = xmlCompilerHelper.requireAttribute(var, "key");
+                if (dynamicVariable.getValue()==null)
+                {
+                    dynamicVariable.setValue(new ZipEntryConfigFileValue(value, entryname,
+                            getConfigFileType(name, stype), filesection, filekey));
+                    try { dynamicVariable.validate(); }
+                    catch (Exception e)
+                    {
+                        assertionHelper.parseError("Error in definition of dynamic variable "+name+": "+e.getMessage());
+                    }
+                }
+                else
+                {
+                    // unexpected combination of variable attributes
+                    assertionHelper.parseError("Ambiguous file value definition for dynamic variable "+name);
+                }
+            }
+            // Check for value from config file entry in a jar file
+            value = var.getAttribute("jarfile");
+            if (value!=null) {
+                String entryname = xmlCompilerHelper.requireAttribute(var, "entry");
+                String stype = var.getAttribute("type");
+                String filesection = var.getAttribute("section");
+                String filekey = xmlCompilerHelper.requireAttribute(var, "key");
+                if (dynamicVariable.getValue()==null)
+                {
+                    dynamicVariable.setValue(new JarEntryConfigValue(value, entryname,
+                            getConfigFileType(name, stype), filesection, filekey));
+                    try { dynamicVariable.validate(); }
+                    catch (Exception e)
+                    {
+                        assertionHelper.parseError("Error in definition of dynamic variable "+name+": "+e.getMessage());
+                    }
+                }
+                else
+                {
+                    // unexpected combination of variable attributes
+                    assertionHelper.parseError("Ambiguous file value definition for dynamic variable "+name);
+                }
+            }
+            // Check for result of execution
+            value = var.getAttribute("executable");
+            if (value!=null) {
+                if (dynamicVariable.getValue()==null) {
+                    String exectype = var.getAttribute("type");
+
+                    if (value.length() <= 0)
+                        assertionHelper.parseError("No command given in definition of dynamic variable "+name);
+                    if (exectype.equalsIgnoreCase("process") || exectype == null)
+                        dynamicVariable.setValue(
+                                new ExecValue(new String[]{value}, false));
+                    else if (exectype.equalsIgnoreCase("shell"))
+                        dynamicVariable.setValue(
+                                new ExecValue(new String[]{value}, true));
+                    else
+                        assertionHelper.parseError("Bad execution type "+exectype+" given for dynamic variable "+name);
+                    try { dynamicVariable.validate(); }
+                    catch (Exception e)
+                    {
+                        assertionHelper.parseError("Error in definition of dynamic variable "+name+": "+e.getMessage());
+                    }
+                } else {
+                    // unexpected combination of variable attributes
+                    assertionHelper.parseError("Ambiguous execution output value definition for dynamic variable "+name);
+                }
+            }
+
+            if (dynamicVariable.getValue()==null) {
+                assertionHelper.parseError("No value specified at all for dynamic variable "+name);
+            }
+
+            // Check whether dynamic variable has to be evaluated only once during installation
+            value = var.getAttribute("checkonce");
+            if (value != null) {
+                dynamicVariable.setCheckonce(Boolean.valueOf(value));
+            }
+
+            // Check whether evaluation failures of the dynamic variable should be ignored
+            value = var.getAttribute("ignorefailure");
+            if (value != null) {
+                dynamicVariable.setIgnoreFailure(Boolean.valueOf(value));
+            }
+
+            // Nested regular expression filter
+            IXMLElement regexElement = var.getFirstChildNamed("regex");
+            if (regexElement != null) {
+                String expression = regexElement.getAttribute("regexp");
+                String selectexpr = regexElement.getAttribute("select");
+                String replaceexpr = regexElement.getAttribute("replace");
+                String defaultvalue = regexElement.getAttribute("defaultvalue");
+                String scasesensitive = regexElement.getAttribute("casesensitive");
+                String sglobal = regexElement.getAttribute("global");
+                if (dynamicVariable.getRegularExpression()==null) {
+                    dynamicVariable.setRegularExpression(
+                            new RegularExpressionFilterImpl( expression,
+                                    selectexpr,
+                                    replaceexpr,
+                                    defaultvalue,
+                                    Boolean.valueOf(scasesensitive!=null?scasesensitive:"true"),
+                                    Boolean.valueOf(sglobal!=null?sglobal:"false")));
+                    try { dynamicVariable.validate(); }
+                    catch (Exception e)
+                    {
+                        assertionHelper.parseError("Error in definition of dynamic variable "+name+": "+e.getMessage());
+                    }
+                }
+                else {
+                    assertionHelper.parseError("Ambiguous regular expression filter definition for dynamic variable "+name);
+                }
+            }
 
             List<DynamicVariable> dynamicValues = new ArrayList<DynamicVariable>();
             if (dynamicvariables.containsKey(name))
@@ -1838,17 +2041,36 @@ public class CompilerConfig extends Thread
                 dynamicvariables.put(name, dynamicValues);
             }
 
-            DynamicVariable dynamicVariable = new DynamicVariable();
-            dynamicVariable.setName(name);
-            dynamicVariable.setValue(value);
+            String conditionid = var.getAttribute("condition");
             dynamicVariable.setConditionid(conditionid);
             if (dynamicValues.remove(dynamicVariable))
             {
-                assertionHelper.parseWarn(variableNode, "Dynamic Variable '" + name + "' will be overwritten");
+                assertionHelper.parseWarn(var, "Dynamic Variable '" + name + "' will be overwritten");
             }
             dynamicValues.add(dynamicVariable);
         }
         notifyCompilerListener("addDynamicVariables", CompilerListener.END, data);
+    }
+
+    protected void addDynamicConditions(IXMLElement data) throws CompilerException
+    {
+        notifyCompilerListener("addDynamicConditions", CompilerListener.BEGIN, data);
+        // We get the dynamic variable list
+        IXMLElement root = data.getFirstChildNamed("dynamicconditions");
+        if (root == null) { return; }
+
+        List<DynamicConditionValidator> dynamicConds = packager.getDynamicConditions();
+
+        Iterator<IXMLElement> iter = root.getChildrenNamed("variable").iterator();
+        while (iter.hasNext())
+        {
+            IXMLElement condElement = iter.next();
+            dynamicConds.add(new DynamicConditionValidatorImpl(
+                    xmlCompilerHelper.requireAttribute(condElement, "id"),
+                    xmlCompilerHelper.requireAttribute(condElement, "errormessage")));
+        }
+
+        notifyCompilerListener("addDynamicConditions", CompilerListener.END, data);
     }
 
     /**
@@ -1956,14 +2178,30 @@ public class CompilerConfig extends Thread
         while (attributes.hasMoreElements())
         {
             String name = (String) attributes.nextElement();
-            String value = variableSubstitutor.substitute(element.getAttribute(name), SubstitutionType.TYPE_AT);
-            element.setAttribute(name, value);
+            try
+            {
+                String value = variableSubstitutor.substitute(element.getAttribute(name), SubstitutionType.TYPE_AT);
+                element.setAttribute(name, value);
+            }
+            catch (Exception e)
+            {
+                assertionHelper.parseWarn(element, "Value of attribute \""+name+"\" could not be substituted ("
+                        +e.getMessage()+")");
+            }
         }
 
         String content = element.getContent();
         if (content != null)
         {
-            element.setContent(variableSubstitutor.substitute(content, SubstitutionType.TYPE_AT));
+            try
+            {
+                element.setContent(variableSubstitutor.substitute(content, SubstitutionType.TYPE_AT));
+            }
+            catch (Exception e)
+            {
+                assertionHelper.parseWarn(element, "Embedded content could not be substituted ("
+                        +e.getMessage()+")");
+            }
         }
 
         for (int i = 0; i < element.getChildren().size(); i++)

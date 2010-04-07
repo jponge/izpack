@@ -1,18 +1,18 @@
 /*
  * $Id$
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2005 Klaus Bartz
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,15 +22,15 @@
 
 package com.izforge.izpack.util.os;
 
+import java.util.List;
+import java.util.Properties;
+
 import com.coi.tools.os.izpack.Registry;
 import com.coi.tools.os.win.RegDataContainer;
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.os.RegistryHandler;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
-
-import java.util.List;
-import java.util.Properties;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 
 /**
  * This is the Microsoft Windows specific implementation of <code>RegistryHandler</code>.
@@ -79,7 +79,14 @@ public class Win_RegistryHandler extends RegistryHandler
                 Properties props = new Properties();
                 props.put("OLD_KEY_VALUE", ob);
                 VariableSubstitutor vs = new VariableSubstitutorImpl(props);
-                contents = vs.substitute(contents);
+                try
+                {
+                    contents = vs.substitute(contents);
+                }
+                catch (Exception e)
+                {
+                    // ignore
+                }
             }
         }
         regWorker.setValue(key, value, contents);

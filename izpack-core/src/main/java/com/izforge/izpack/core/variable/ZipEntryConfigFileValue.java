@@ -1,10 +1,12 @@
-package com.izforge.izpack.util.variable;
+package com.izforge.izpack.core.variable;
 
 import java.io.InputStream;
-import java.util.zip.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
 
 import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorBase;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
 
 public class ZipEntryConfigFileValue extends ConfigFileValue
@@ -57,13 +59,13 @@ public class ZipEntryConfigFileValue extends ConfigFileValue
     }
 
     @Override
-    public String resolve(VariableSubstitutorBase... substitutors)
+    public String resolve(VariableSubstitutor... substitutors)
     throws Exception
     {
         String _filename_ = this.filename, _entryname_ = this.entryname;
-        for ( VariableSubstitutorBase substitutor : substitutors )
+        for ( VariableSubstitutor substitutor : substitutors )
             _filename_ = substitutor.substitute(_filename_, (SubstitutionType)null);
-        for ( VariableSubstitutorBase substitutor : substitutors )
+        for ( VariableSubstitutor substitutor : substitutors )
             _entryname_ = substitutor.substitute(_entryname_, (SubstitutionType)null);
         return super.resolve(getZipEntryInputStream(_filename_, _entryname_), substitutors);
     }
