@@ -9,7 +9,7 @@
             <author email="" name="The fantastic IzPack developers and contributors" />
         </authors>
         <url>http://izpack.org/</url>
-        <javaversion>1.5</javaversion>
+        <javaversion>1.6</javaversion>
         <requiresjdk>no</requiresjdk>
         <!--><pack200/>-->
         <run-privileged condition="izpack.windowsinstall.vista|izpack.windowsinstall.7" />
