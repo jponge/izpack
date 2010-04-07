@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.core.rules;
+package com.izforge.izpack.core.rules.process;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;

@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.core.rules;
+package com.izforge.izpack.core.rules.process;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
@@ -31,33 +31,31 @@ import java.util.HashMap;
 /**
  * @author Dennis Reil, <izpack@reil-online.de>
  */
-public class VariableCondition extends Condition
+public class CompareNumericsCondition extends Condition
 {
-
-    /**
-     *
-     */
-    private static final long serialVersionUID = 2881336115632480575L;
+    private static final long serialVersionUID = 5631805710151645907L;
 
     protected String variablename;
-
     protected String value;
+    protected String operator;
 
-    public VariableCondition(String variablename, String value, HashMap packstoremove)
+    public CompareNumericsCondition(String variablename, String value, HashMap packstoremove)
     {
         super();
         this.variablename = variablename;
         this.value = value;
+        this.operator = "eq";
     }
 
-    public VariableCondition(String variablename, String value)
+    public CompareNumericsCondition(String variablename, String value)
     {
         super();
         this.variablename = variablename;
         this.value = value;
+        this.operator = "eq";
     }
 
-    public VariableCondition()
+    public CompareNumericsCondition()
     {
         super();
     }
@@ -94,6 +92,7 @@ public class VariableCondition extends Condition
         {
             this.variablename = xmlcondition.getFirstChildNamed("name").getContent();
             this.value = xmlcondition.getFirstChildNamed("value").getContent();
+            this.operator = xmlcondition.getFirstChildNamed("operator").getContent();
         }
         catch (Exception e)
         {
@@ -104,22 +103,48 @@ public class VariableCondition extends Condition
 
     public boolean isTrue()
     {
+        boolean result = false;
         if (this.installdata != null)
         {
             String val = this.installdata.getVariable(variablename);
-            if (val == null)
+            if (val != null)
             {
-                return false;
-            }
-            else
-            {
-                return val.equals(value);
+                if (operator == null)
+                {
+                    operator = "eq";
+                }
+                try
+                {
+                    int currentValue = new Integer(val);
+                    int comparisonValue = new Integer(value);
+                    if ("eq".equalsIgnoreCase(operator))
+                    {
+                        result = currentValue == comparisonValue;
+                    }
+                    else if ("gt".equalsIgnoreCase(operator))
+                    {
+                        result = currentValue > comparisonValue;
+                    }
+                    else if ("lt".equalsIgnoreCase(operator))
+                    {
+                        result = currentValue < comparisonValue;
+                    }
+                    else if ("leq".equalsIgnoreCase(operator))
+                    {
+                        result = currentValue <= comparisonValue;
+                    }
+                    else if ("geq".equalsIgnoreCase(operator))
+                    {
+                        result = currentValue >= comparisonValue;
+                    }
+                }
+                catch (NumberFormatException nfe)
+                {
+                    Debug.log("The value of the associated variable is not a numeric value or the value which should be compared is not a number.");
+                }
             }
         }
-        else
-        {
-            return false;
-        }
+        return result;
     }
 
     /* (non-Javadoc)
@@ -137,19 +162,34 @@ public class VariableCondition extends Condition
         details.append(" (current value: ");
         details.append(this.installdata.getVariable(variablename));
         details.append(")");
+        details.append("This value has to be " + this.operator);
         details.append("</b><br/>");
         return details.toString();
+    }
+
+
+    public String getOperator()
+    {
+        return operator;
+    }
+
+
+    public void setOperator(String operator)
+    {
+        this.operator = operator;
     }
 
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {
-        XMLElementImpl nameEl = new XMLElementImpl("name", conditionRoot);
-        nameEl.setContent(this.variablename);
-        conditionRoot.addChild(nameEl);
-
-        XMLElementImpl valueEl = new XMLElementImpl("value", conditionRoot);
-        valueEl.setContent(this.value);
-        conditionRoot.addChild(valueEl);
+        XMLElementImpl nameXml = new XMLElementImpl("name", conditionRoot);
+        nameXml.setContent(this.variablename);
+        conditionRoot.addChild(nameXml);
+        XMLElementImpl valueXml = new XMLElementImpl("value", conditionRoot);
+        valueXml.setContent(this.value);
+        conditionRoot.addChild(valueXml);
+        XMLElementImpl opXml = new XMLElementImpl("op", conditionRoot);
+        opXml.setContent(this.operator);
+        conditionRoot.addChild(opXml);
     }
 }

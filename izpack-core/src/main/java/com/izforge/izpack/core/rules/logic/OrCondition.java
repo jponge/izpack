@@ -19,10 +19,11 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.core.rules;
+package com.izforge.izpack.core.rules.logic;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.rules.Condition;
+import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.util.Debug;
 
 /**
@@ -96,7 +97,8 @@ public class OrCondition extends Condition
      * selectedpacks); }
      */
 
-    public boolean isTrue() {
+    public boolean isTrue()
+    {
         if ((this.leftoperand == null) || (this.rightoperand == null))
         {
             Debug.trace("Operands of condition " + this.id + " not initialized correctly.");

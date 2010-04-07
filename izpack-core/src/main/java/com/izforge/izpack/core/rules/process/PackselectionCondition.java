@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.core.rules;
+package com.izforge.izpack.core.rules.process;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
@@ -126,4 +126,13 @@ public class PackselectionCondition extends Condition
         conditionRoot.addChild(packel);
     }
 
+    public String getPackid()
+    {
+        return packid;
+    }
+
+    public void setPackid(String packid)
+    {
+        this.packid = packid;
+    }
 }

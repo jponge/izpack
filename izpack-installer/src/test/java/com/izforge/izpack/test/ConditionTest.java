@@ -24,37 +24,35 @@ import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
-import junit.framework.TestCase;
+import org.hamcrest.Matcher;
+import org.hamcrest.core.Is;
+import org.hamcrest.core.IsNull;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.w3c.dom.Document;
 
 import java.util.Properties;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 
 /**
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
-public class ConditionTest extends TestCase
+public class ConditionTest
 {
 
     protected static GUIInstallData idata = new GUIInstallData(new Properties(), new VariableSubstitutorImpl(new Properties()));
 
     protected RulesEngine rules;
+    private static final Matcher<Boolean> IS_TRUE = Is.is(true);
+    private static final Matcher<Boolean> IS_FALSE = Is.is(false);
+    private static final Matcher<Object> IS_NULL = IsNull.<Object>notNullValue();
 
-    /**
-     * @param arg0
-     */
-    public ConditionTest(String arg0)
+    @Before
+    public void setUp() throws Exception
     {
-        super(arg0);
-    }
-
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#setUp()
-     */
-
-    protected void setUp() throws Exception
-    {
-        super.setUp();
         IXMLElement conditionspec = new XMLElementImpl("conditions");
 
         Document ownerDocument = conditionspec.getElement().getOwnerDocument();
@@ -65,20 +63,17 @@ public class ConditionTest extends TestCase
         rules = new RulesEngineImpl(conditionspec, idata);
     }
 
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#tearDown()
-     */
-
-    protected void tearDown() throws Exception
+    @After
+    public void tearDown() throws Exception
     {
-        super.tearDown();
         if (idata != null)
         {
             idata.getVariables().clear();
         }
     }
 
-    protected IXMLElement createNotCondition(String id, IXMLElement condition, Document ownerDocument)
+
+    public IXMLElement createNotCondition(String id, IXMLElement condition, Document ownerDocument)
     {
         IXMLElement not = new XMLElementImpl("condition", ownerDocument);
         not.setAttribute("type", "not");
@@ -88,7 +83,7 @@ public class ConditionTest extends TestCase
         return not;
     }
 
-    protected IXMLElement createVariableCondition(String id, String variable, String expvalue, Document ownerDocument)
+    public IXMLElement createVariableCondition(String id, String variable, String expvalue, Document ownerDocument)
     {
         IXMLElement variablecondition = new XMLElementImpl("condition", ownerDocument);
         variablecondition.setAttribute("type", "variable");
@@ -104,7 +99,7 @@ public class ConditionTest extends TestCase
         return variablecondition;
     }
 
-    protected IXMLElement createRefCondition(String id, String refid, Document ownerDocument)
+    public IXMLElement createRefCondition(String id, String refid, Document ownerDocument)
     {
         IXMLElement refcondition = new XMLElementImpl("condition", ownerDocument);
         refcondition.setAttribute("type", "ref");
@@ -114,40 +109,42 @@ public class ConditionTest extends TestCase
         return refcondition;
     }
 
+    @Test
     public void testNotCondition()
     {
-        assertNull(RulesEngineImpl.getCondition("test.not"));
-        assertNotNull(RulesEngineImpl.getCondition("test.not.true"));
-        assertTrue(rules.isConditionTrue("test.not.true", idata.getVariables()));
+        assertThat(RulesEngineImpl.getCondition("test.not"), IsNull.notNullValue());
+        assertThat(RulesEngineImpl.getCondition("test.not.true"), IsNull.notNullValue());
+        assertThat(rules.isConditionTrue("test.not.true", idata.getVariables()), IS_TRUE);
 
-        assertNotNull(RulesEngineImpl.getCondition("!test.not.true"));
+        assertThat(RulesEngineImpl.getCondition("!test.not.true"), IS_NULL);
 
-        assertFalse(rules.isConditionTrue("!test.not.true", idata.getVariables()));
+        assertThat(rules.isConditionTrue("!test.not.true", idata.getVariables()), IS_FALSE);
     }
 
+    @Test
     public void testVariableCondition()
     {
-        assertNotNull(RulesEngineImpl.getCondition("test.true"));
-        assertNotNull(RulesEngineImpl.getCondition("test.true2"));
+        assertThat(RulesEngineImpl.getCondition("test.true"), IS_NULL);
+        assertThat(RulesEngineImpl.getCondition("test.true2"), IS_NULL);
 
-        assertFalse(rules.isConditionTrue("test.true", idata.getVariables()));
-        assertFalse(rules.isConditionTrue("test.true2", idata.getVariables()));
+        assertThat(rules.isConditionTrue("test.true", idata.getVariables()), IS_FALSE);
+        assertThat(rules.isConditionTrue("test.true2", idata.getVariables()), IS_FALSE);
 
         idata.setVariable("TEST", "true");
 
-        assertTrue(rules.isConditionTrue("test.true", idata.getVariables()));
-        assertTrue(rules.isConditionTrue("test.true2", idata.getVariables()));
+        assertThat(rules.isConditionTrue("test.true", idata.getVariables()), IS_TRUE);
+        assertThat(rules.isConditionTrue("test.true2", idata.getVariables()), IS_TRUE);
 
-        assertFalse(rules.isConditionTrue("!test.true", idata.getVariables()));
-        assertFalse(rules.isConditionTrue("!test.true2", idata.getVariables()));
+        assertThat(rules.isConditionTrue("!test.true", idata.getVariables()), IS_FALSE);
+        assertThat(rules.isConditionTrue("!test.true2", idata.getVariables()), IS_FALSE);
 
-        assertTrue(rules.isConditionTrue("test.true+test.true2", idata.getVariables()));
-        assertTrue(rules.isConditionTrue("test.true2+test.true", idata.getVariables()));
+        assertThat(rules.isConditionTrue("test.true+test.true2", idata.getVariables()), IS_TRUE);
+        assertThat(rules.isConditionTrue("test.true2+test.true", idata.getVariables()), IS_TRUE);
 
-        assertFalse(rules.isConditionTrue("!test.true2+test.true", idata.getVariables()));
+        assertThat(rules.isConditionTrue("!test.true2+test.true", idata.getVariables()), IS_FALSE);
 
-        assertTrue(rules.isConditionTrue("test.true2|test.true", idata.getVariables()));
+        assertThat(rules.isConditionTrue("test.true2|test.true", idata.getVariables()), IS_TRUE);
 
-        assertFalse(rules.isConditionTrue("test.true2\\test.true", idata.getVariables()));
+        assertThat(rules.isConditionTrue("test.true2\\test.true", idata.getVariables()), IS_FALSE);
     }
 }

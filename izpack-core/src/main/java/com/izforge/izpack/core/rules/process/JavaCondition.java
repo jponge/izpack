@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.core.rules;
+package com.izforge.izpack.core.rules.process;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
@@ -54,7 +54,15 @@ public class JavaCondition extends Condition
 
     public JavaCondition()
     {
+    }
 
+    public JavaCondition(String classname, String fieldname, boolean complete, String returnvalue, String returnvaluetype)
+    {
+        this.classname = classname;
+        this.fieldname = fieldname;
+        this.complete = complete;
+        this.returnvalue = returnvalue;
+        this.returnvaluetype = returnvaluetype;
     }
 
     public boolean isTrue()

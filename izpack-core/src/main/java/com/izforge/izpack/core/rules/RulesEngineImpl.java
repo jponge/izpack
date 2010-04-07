@@ -29,6 +29,12 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.core.rules.logic.AndCondition;
+import com.izforge.izpack.core.rules.logic.NotCondition;
+import com.izforge.izpack.core.rules.logic.OrCondition;
+import com.izforge.izpack.core.rules.logic.XorCondition;
+import com.izforge.izpack.core.rules.process.JavaCondition;
+import com.izforge.izpack.core.rules.process.PackselectionCondition;
 import com.izforge.izpack.util.Debug;
 
 import java.io.OutputStream;
@@ -106,7 +112,7 @@ public class RulesEngineImpl implements RulesEngine
                     PackselectionCondition packselcond = new PackselectionCondition();
                     packselcond.setInstalldata(installdata);
                     packselcond.id = "izpack.selected." + pack.id;
-                    packselcond.packid = pack.id;
+                    packselcond.setPackid(pack.id);
                     conditionsmap.put(packselcond.id, packselcond);
 
                     Debug.trace("Pack.getCondition(): " + pack.getCondition() + " for pack "
@@ -125,14 +131,9 @@ public class RulesEngineImpl implements RulesEngine
 
     private static void createBuiltinOsCondition(String osVersionField, String conditionId)
     {
-        JavaCondition condition = new JavaCondition();
+        JavaCondition condition = new JavaCondition("com.izforge.izpack.util.OsVersion", osVersionField, true, "true", "boolean");
         condition.setInstalldata(installdata);
         condition.id = conditionId;
-        condition.classname = "com.izforge.izpack.util.OsVersion";
-        condition.fieldname = osVersionField;
-        condition.returnvalue = "true";
-        condition.returnvaluetype = "boolean";
-        condition.complete = true;
         conditionsmap.put(condition.id, condition);
     }
 

@@ -19,13 +19,13 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.core.rules;
+package com.izforge.izpack.core.rules.process;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.rules.Condition;
-
 import com.izforge.izpack.util.Debug;
+
 /**
  * Checks to see whether the user who is running the installer is the same as the user who should be
  * running the installer.

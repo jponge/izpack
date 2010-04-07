@@ -19,10 +19,11 @@
  * limitations under the License. 
  */
 
-package com.izforge.izpack.core.rules;
+package com.izforge.izpack.core.rules.logic;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.rules.Condition;
+import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.util.Debug;
 
 /**
@@ -102,7 +103,7 @@ public class XorCondition extends OrCondition
     /*
      * (non-Javadoc)
      * 
-     * @see com.izforge.izpack.core.rules.OrCondition#getDependenciesDetails()
+     * @see com.izforge.izpack.core.rules.logic.OrCondition#getDependenciesDetails()
      */
 
     public String getDependenciesDetails()
