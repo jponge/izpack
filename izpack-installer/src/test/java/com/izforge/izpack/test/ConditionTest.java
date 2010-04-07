@@ -27,7 +27,6 @@ import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.hamcrest.Matcher;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -43,18 +42,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ConditionTest
 {
 
-    protected static GUIInstallData idata = new GUIInstallData(new Properties(), new VariableSubstitutorImpl(new Properties()));
+    private static GUIInstallData idata;
 
-    protected RulesEngine rules;
+    private RulesEngine rules;
     private static final Matcher<Boolean> IS_TRUE = Is.is(true);
     private static final Matcher<Boolean> IS_FALSE = Is.is(false);
-    private static final Matcher<Object> IS_NULL = IsNull.<Object>notNullValue();
+    private static final Matcher<Object> IS_NULL = IsNull.nullValue();
+    private static final Matcher<Object> IS_NOT_NULL = IsNull.notNullValue();
 
     @Before
     public void setUp() throws Exception
     {
+        idata = new GUIInstallData(new Properties(), new VariableSubstitutorImpl(new Properties()));
         IXMLElement conditionspec = new XMLElementImpl("conditions");
-
         Document ownerDocument = conditionspec.getElement().getOwnerDocument();
         conditionspec.addChild(createVariableCondition("test.true", "TEST", "true", ownerDocument));
         conditionspec.addChild(createRefCondition("test.true2", "test.true", ownerDocument));
@@ -62,16 +62,6 @@ public class ConditionTest
         conditionspec.addChild(createNotCondition("test.not.true", createRefCondition("", "test.true", ownerDocument), ownerDocument));
         rules = new RulesEngineImpl(conditionspec, idata);
     }
-
-    @After
-    public void tearDown() throws Exception
-    {
-        if (idata != null)
-        {
-            idata.getVariables().clear();
-        }
-    }
-
 
     public IXMLElement createNotCondition(String id, IXMLElement condition, Document ownerDocument)
     {
@@ -112,11 +102,11 @@ public class ConditionTest
     @Test
     public void testNotCondition()
     {
-        assertThat(RulesEngineImpl.getCondition("test.not"), IsNull.notNullValue());
-        assertThat(RulesEngineImpl.getCondition("test.not.true"), IsNull.notNullValue());
+        assertThat(RulesEngineImpl.getCondition("test.not"), IS_NULL);
+        assertThat(RulesEngineImpl.getCondition("test.not.true"), IS_NOT_NULL);
         assertThat(rules.isConditionTrue("test.not.true", idata.getVariables()), IS_TRUE);
 
-        assertThat(RulesEngineImpl.getCondition("!test.not.true"), IS_NULL);
+        assertThat(RulesEngineImpl.getCondition("!test.not.true"), IS_NOT_NULL);
 
         assertThat(rules.isConditionTrue("!test.not.true", idata.getVariables()), IS_FALSE);
     }
@@ -124,8 +114,8 @@ public class ConditionTest
     @Test
     public void testVariableCondition()
     {
-        assertThat(RulesEngineImpl.getCondition("test.true"), IS_NULL);
-        assertThat(RulesEngineImpl.getCondition("test.true2"), IS_NULL);
+        assertThat(RulesEngineImpl.getCondition("test.true"), IS_NOT_NULL);
+        assertThat(RulesEngineImpl.getCondition("test.true2"), IS_NOT_NULL);
 
         assertThat(rules.isConditionTrue("test.true", idata.getVariables()), IS_FALSE);
         assertThat(rules.isConditionTrue("test.true2", idata.getVariables()), IS_FALSE);
