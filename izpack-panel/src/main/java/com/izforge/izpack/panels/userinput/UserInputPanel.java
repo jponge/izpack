@@ -3207,6 +3207,10 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             try
             {
                 text = langpack.getString(key);
+                if (text.equals(key))
+                {
+                    text = null;
+                }
             }
             catch (Throwable exception)
             {
