@@ -180,7 +180,7 @@ public class AutomatedInstaller extends InstallerBase
                     continue;
                 }
 
-                if (!OsConstraintHelper.oneMatchesCurrentSystem(p.osConstraints))
+                if (!OsConstraintHelper.oneMatchesCurrentSystem(p.getOsConstraints()))
                 {
                     continue;
                 }

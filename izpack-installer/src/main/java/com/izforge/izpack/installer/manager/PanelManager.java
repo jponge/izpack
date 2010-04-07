@@ -56,7 +56,7 @@ public class PanelManager
         java.util.List<Panel> panelsOrder = installdata.getPanelsOrder();
         for (Panel panel : panelsOrder)
         {
-            if (OsConstraintHelper.oneMatchesCurrentSystem(panel.osConstraints))
+            if (OsConstraintHelper.oneMatchesCurrentSystem(panel.getOsConstraints()))
             {
                 Class<? extends IzPanel> aClass = classPathCrawler.searchClassInClassPath(panel.getClassName());
                 installerContainer.addComponent(aClass);
@@ -79,7 +79,7 @@ public class PanelManager
         int count = 0;
         for (Panel panel : panelsOrder)
         {
-            if (OsConstraintHelper.oneMatchesCurrentSystem(panel.osConstraints))
+            if (OsConstraintHelper.oneMatchesCurrentSystem(panel.getOsConstraints()))
             {
                 Class<? extends IzPanel> aClass = classPathCrawler.searchClassInClassPath(panel.getClassName());
                 executePreBuildActions(panel);

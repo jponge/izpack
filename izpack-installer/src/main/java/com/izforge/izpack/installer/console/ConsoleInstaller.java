@@ -119,7 +119,7 @@ public class ConsoleInstaller extends InstallerBase
                 {
                     praefix = "";
                 }
-                if (!OsConstraintHelper.oneMatchesCurrentSystem(p.osConstraints))
+                if (!OsConstraintHelper.oneMatchesCurrentSystem(p.getOsConstraints()))
                 {
                     continue;
                 }
