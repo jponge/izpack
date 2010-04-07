@@ -8,15 +8,7 @@
     <packaging>pom</packaging>
     <name>IzPack parent</name>
 
-    <description>IzPack parent module</description>
-
-    <distributionManagement>
-        <site>
-            <id>codehaus.org</id>
-            <name>IzPack Website</name>
-            <url>dav:https://dav.codehaus.org/izpack/izpack-standalone-compiler</url>
-        </site>
-    </distributionManagement>
+    <description>IzPack parent module</description>    
 
     <dependencies>
         <dependency>
@@ -253,6 +245,10 @@
 
         </dependencies>
     </dependencyManagement>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <build>
         <plugins>
@@ -272,8 +268,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
             <plugin>
@@ -307,6 +304,7 @@
             </plugin>
         </plugins>
     </build>
+    
     <profiles>
         <profile>
             <id>bamboo</id>
@@ -331,6 +329,20 @@
             </build>
         </profile>
     </profiles>
+    
+    <scm>
+        <connection>scm:git:git://git.codehaus.org/izpack.git</connection>
+        <developerConnection>scm:git:ssh://git@git.codehaus.org/izpack.git</developerConnection>
+        <url>http://git.codehaus.org/gitweb.cgi?p=izpack.git</url>
+    </scm>
+    
+    <distributionManagement>
+        <site>
+            <id>codehaus.org</id>
+            <name>IzPack Website</name>
+            <url>dav:https://dav.codehaus.org/izpack/izpack-standalone-compiler</url>
+        </site>
+    </distributionManagement>
 
     <reporting>
         <plugins>

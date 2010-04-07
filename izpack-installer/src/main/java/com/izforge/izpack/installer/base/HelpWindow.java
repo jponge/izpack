@@ -26,11 +26,13 @@ import com.izforge.izpack.util.Debug;
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import java.awt.Frame;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
+
+import static java.awt.Desktop.getDesktop;
 
 /**
  * Common HTML Help Window (modal)
@@ -159,12 +161,22 @@ public class HelpWindow extends JDialog implements HyperlinkListener, ActionList
         {
             if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
             {
-                getHtmlHelp().setPage(e.getURL());
+                if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+    				String url = e.getURL().toString();
+    				if (url.startsWith("#"))
+                    {
+    					getHtmlHelp().setPage(e.getURL());
+    				}
+                    else
+                    {
+    					getDesktop().browse(e.getURL().toURI());
+    				}
+    			}
             }
         }
         catch (Exception err)
         {
-            // Ignore exceptions
+            Debug.log(err);
         }
     }
 
