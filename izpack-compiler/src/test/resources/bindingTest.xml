@@ -104,8 +104,10 @@
 
     <!-- The panels in a classic order -->
     <panels>
-        <panel classname="CheckedHelloPanel" id="hellopanel" />
-        <panel classname="HTMLInfoPanel" id="infopanel" encoding="ISO-8859-1" />
+        <panel classname="CheckedHelloPanel" id="hellopanel" condition="test.cond" />
+        <panel classname="HTMLInfoPanel" id="infopanel" encoding="ISO-8859-1">
+            <os arch="x666" family="BSD" />
+        </panel>
         <panel classname="HTMLLicencePanel" id="licensepanel" />
         <panel classname="TargetPanel" id="targetpanel" />
         <panel classname="PacksPanel" id="packspanel" />

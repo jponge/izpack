@@ -55,8 +55,6 @@ public class IzpackProjectProviderTest
                                         HasPropertyWithValue.<OsModel>hasProperty("family", Is.is("windows")),
                                         HasPropertyWithValue.<OsModel>hasProperty("arch", Is.is("ppc"))
                                 )))));
-
-
     }
 
     @Test
@@ -67,15 +65,18 @@ public class IzpackProjectProviderTest
         assertThat(panelList, IsCollectionContaining.hasItem(
                 AllOf.allOf(
                         HasPropertyWithValue.<Panel>hasProperty("className", Is.is("CheckedHelloPanel")),
-                        HasPropertyWithValue.<Panel>hasProperty("panelid", Is.is("hellopanel"))
+                        HasPropertyWithValue.<Panel>hasProperty("panelid", Is.is("hellopanel")),
+                        HasPropertyWithValue.<Panel>hasProperty("condition", Is.is("test.cond"))
                 )
         ));
         assertThat(panelList, IsCollectionContaining.hasItem(
                 AllOf.allOf(
                         HasPropertyWithValue.<Panel>hasProperty("className", Is.is("HTMLInfoPanel")),
-                        HasPropertyWithValue.<Panel>hasProperty("panelid", Is.is("infopanel"))
-                )
-        ));
-
+                        HasPropertyWithValue.<Panel>hasProperty("panelid", Is.is("infopanel")),
+                        HasPropertyWithValue.<Panel>hasProperty("osConstraints",
+                                IsCollectionContaining.hasItems(
+                                        HasPropertyWithValue.<OsModel>hasProperty("family", Is.is("BSD")),
+                                        HasPropertyWithValue.<OsModel>hasProperty("arch", Is.is("x666"))
+                                )))));
     }
 }

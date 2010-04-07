@@ -33,8 +33,10 @@ public class IzpackProjectProvider implements Provider
 
     static
     {
+        // Xml <-> Java field
         PANEL_ATTRIBUTE.put("classname", "className");
         PANEL_ATTRIBUTE.put("id", "panelid");
+        PANEL_ATTRIBUTE.put("condition", "condition");
     }
 
     public static List<String> LISTENER_ATTRIBUTE = Arrays.asList("classname", "stage", "jar");
@@ -82,7 +84,7 @@ public class IzpackProjectProvider implements Provider
             xStream.aliasAttribute(Panel.class, attributeEntry.getValue(), attributeEntry.getKey());
         }
         // Implicit collection for os list in panel
-        xStream.addImplicitCollection(Panel.class, "osConstraints", OsModel.class);
+        xStream.addImplicitCollection(Panel.class, "osConstraints", "os", OsModel.class);
         for (String osAttribute : OS_ATTRIBUTE)
         {
             xStream.aliasAttribute(OsModel.class, osAttribute, osAttribute);
