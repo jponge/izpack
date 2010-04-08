@@ -55,7 +55,7 @@ public class RefCondition extends Condition
     {
         this.referencedConditionId = xmlcondition.getAttribute("refid");
         this.referencedcondition = RulesEngineImpl.getCondition(this.referencedConditionId);
-        this.id = "ref." + this.referencedConditionId;
+        this.setId("ref." + this.referencedConditionId);
     }
 
     public boolean isTrue()
@@ -72,7 +72,7 @@ public class RefCondition extends Condition
             }
             if (this.referencedcondition != null)
             {
-                this.referencedcondition.setInstalldata(this.installdata);
+                this.referencedcondition.setInstalldata(this.getInstalldata());
             }
             return (this.referencedcondition != null) ? this.referencedcondition.isTrue() : false;
         }
@@ -85,7 +85,7 @@ public class RefCondition extends Condition
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();
-        details.append(this.id);
+        details.append(this.getId());
         details.append(" depends on:<ul><li>");
         details.append(referencedcondition.getDependenciesDetails());
         details.append("</li></ul>");

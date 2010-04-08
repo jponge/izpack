@@ -36,13 +36,15 @@ public abstract class Condition implements Serializable
 {
 
     private static final long serialVersionUID = 507592103321711123L;
-    public String id;
-    public AutomatedInstallData installdata;
+
+    private String id;
+
+    private AutomatedInstallData installdata;
 
     public Condition()
     {
-        this.id = "UNKNOWN";
-        this.installdata = null;
+        this.setId("UNKNOWN");
+        this.setInstalldata(null);
     }
 
     /**

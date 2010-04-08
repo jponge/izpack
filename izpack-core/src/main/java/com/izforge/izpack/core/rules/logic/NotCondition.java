@@ -52,7 +52,7 @@ public class NotCondition extends Condition
         this.operand = operand;
         if (operand != null)
         {
-            this.operand.setInstalldata(this.installdata);
+            this.operand.setInstalldata(this.getInstalldata());
         }
     }
 
@@ -102,10 +102,10 @@ public class NotCondition extends Condition
     {
         if ((this.operand == null))
         {
-            Debug.trace("Operand of condition " + this.id + " not initialized correctly.");
+            Debug.trace("Operand of condition " + this.getId() + " not initialized correctly.");
             return false;
         }
-        this.operand.setInstalldata(this.installdata);
+        this.operand.setInstalldata(this.getInstalldata());
         return !operand.isTrue();
     }
 
@@ -116,7 +116,7 @@ public class NotCondition extends Condition
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();
-        details.append(this.id);
+        details.append(this.getId());
         details.append(" depends on:<ul><li>NOT ");
         details.append(operand.getDependenciesDetails());
         details.append("</li></ul>");

@@ -55,13 +55,13 @@ public class AndCondition extends Condition
         this.leftoperand = operand1;
         if (this.leftoperand != null)
         {
-            this.leftoperand.setInstalldata(this.installdata);
+            this.leftoperand.setInstalldata(this.getInstalldata());
         }
 
         this.rightoperand = operand2;
         if (this.rightoperand != null)
         {
-            this.rightoperand.setInstalldata(this.installdata);
+            this.rightoperand.setInstalldata(this.getInstalldata());
         }
     }
 
@@ -96,11 +96,11 @@ public class AndCondition extends Condition
     {
         if ((this.leftoperand == null) || (this.rightoperand == null))
         {
-            Debug.trace("Operands of condition " + this.id + " not initialized correctly.");
+            Debug.trace("Operands of condition " + this.getId() + " not initialized correctly.");
             return false;
         }
-        this.leftoperand.setInstalldata(this.installdata);
-        this.rightoperand.setInstalldata(this.installdata);
+        this.leftoperand.setInstalldata(this.getInstalldata());
+        this.rightoperand.setInstalldata(this.getInstalldata());
         return leftoperand.isTrue() && rightoperand.isTrue();
     }
 
@@ -111,7 +111,7 @@ public class AndCondition extends Condition
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();
-        details.append(this.id);
+        details.append(this.getId());
         details.append(" depends on:<ul><li>");
         details.append(leftoperand.getDependenciesDetails());
         details.append("</li> AND <li>");

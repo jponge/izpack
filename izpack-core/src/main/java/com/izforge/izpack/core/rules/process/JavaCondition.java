@@ -218,7 +218,7 @@ public class JavaCondition extends Condition
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();
-        details.append(this.id);
+        details.append(this.getId());
         details.append(" depends on the ");
         if (this.fieldname != null)
         {

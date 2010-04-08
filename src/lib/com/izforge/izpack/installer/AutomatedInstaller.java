@@ -375,6 +375,7 @@ public class AutomatedInstaller extends InstallerBase
 
                 if (automationHelper == null)
                 {
+                    executePreActivateActions(p, uihelper);
                     executePreValidateActions(p, uihelper);
                     validatePanel(p);
                     executePostValidateActions(p, uihelper);
