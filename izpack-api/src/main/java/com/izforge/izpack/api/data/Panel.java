@@ -25,10 +25,7 @@ package com.izforge.izpack.api.data;
 import com.izforge.izpack.api.data.binding.OsModel;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Jan Blok
@@ -84,18 +81,18 @@ public class Panel implements Serializable
      */
     private List<String> postValidationActions = null;
 
-    private HashMap<String, PanelActionConfiguration> actionConfiguration = null;
+    private Map<String, PanelActionConfiguration> actionConfiguration = null;
 
 
     /**
      * A HashMap for URLs to Helpfiles, key should be iso3-code
      */
-    private HashMap<String, String> helps = null;
+    private Map<String, String> helps = null;
 
     /**
      * Contains configuration values for a panel.
      */
-    private HashMap<String, String> configuration = null;
+    private Map<String, String> configuration = null;
 
     public String getClassName()
     {
@@ -161,7 +158,7 @@ public class Panel implements Serializable
         this.helps.put(isoCode, url);
     }
 
-    public HashMap<String, String> getHelpsMap()
+    public Map<String, String> getHelpsMap()
     {
         return this.helps;
     }
