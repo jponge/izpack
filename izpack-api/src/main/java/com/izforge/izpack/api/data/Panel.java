@@ -273,6 +273,10 @@ public class Panel implements Serializable
 
     public String getHelpUrl(String localeISO3)
     {
+        if (helps == null)
+        {
+            return null;
+        }
         for (Help help : helps)
         {
             if (help.getIso3().equals(localeISO3))
