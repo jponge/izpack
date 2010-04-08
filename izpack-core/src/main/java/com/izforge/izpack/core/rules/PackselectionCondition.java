@@ -101,7 +101,7 @@ public class PackselectionCondition extends Condition
 
     public boolean isTrue()
     {
-        return this.isTrue(this.installdata.getVariables(), this.installdata.getSelectedPacks());
+        return this.isTrue(this.getInstalldata().getVariables(), this.getInstalldata().getSelectedPacks());
     }
 
     /* (non-Javadoc)
@@ -111,7 +111,7 @@ public class PackselectionCondition extends Condition
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();
-        details.append(this.id);
+        details.append(this.getId());
         details.append("depends on the selection of pack <b>");
         details.append(this.packid);
         details.append("</b><br/>");

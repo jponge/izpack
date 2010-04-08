@@ -105,9 +105,9 @@ public class RulesEngineImpl implements RulesEngine
                     // automatically add packselection condition
                     PackselectionCondition packselcond = new PackselectionCondition();
                     packselcond.setInstalldata(installdata);
-                    packselcond.id = "izpack.selected." + pack.id;
+                    packselcond.setId("izpack.selected." + pack.id);
                     packselcond.packid = pack.id;
-                    conditionsmap.put(packselcond.id, packselcond);
+                    conditionsmap.put(packselcond.getId(), packselcond);
 
                     Debug.trace("Pack.getCondition(): " + pack.getCondition() + " for pack "
                             + pack.id);
@@ -127,13 +127,13 @@ public class RulesEngineImpl implements RulesEngine
     {
         JavaCondition condition = new JavaCondition();
         condition.setInstalldata(installdata);
-        condition.id = conditionId;
+        condition.setId(conditionId);
         condition.classname = "com.izforge.izpack.util.OsVersion";
         condition.fieldname = osVersionField;
         condition.returnvalue = "true";
         condition.returnvaluetype = "boolean";
         condition.complete = true;
-        conditionsmap.put(condition.id, condition);
+        conditionsmap.put(condition.getId(), condition);
     }
 
     /**
@@ -555,13 +555,13 @@ public class RulesEngineImpl implements RulesEngine
     {
         if (condition != null)
         {
-            if (conditionsmap.containsKey(condition.id))
+            if (conditionsmap.containsKey(condition.getId()))
             {
                 Debug.error("Condition already registered.");
             }
             else
             {
-                conditionsmap.put(condition.id, condition);
+                conditionsmap.put(condition.getId(), condition);
             }
         }
         else

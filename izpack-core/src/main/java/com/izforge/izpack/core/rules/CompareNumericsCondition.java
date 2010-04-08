@@ -104,9 +104,9 @@ public class CompareNumericsCondition extends Condition
     public boolean isTrue()
     {
         boolean result = false;
-        if (this.installdata != null)
+        if (this.getInstalldata() != null)
         {
-            String val = this.installdata.getVariable(variablename);
+            String val = this.getInstalldata().getVariable(variablename);
             if (val != null)
             {
                 if (operator == null)
@@ -153,13 +153,13 @@ public class CompareNumericsCondition extends Condition
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();
-        details.append(this.id);
+        details.append(this.getId());
         details.append(" depends on a value of <b>");
         details.append(this.value);
         details.append("</b> on variable <b>");
         details.append(this.variablename);
         details.append(" (current value: ");
-        details.append(this.installdata.getVariable(variablename));
+        details.append(this.getInstalldata().getVariable(variablename));
         details.append(")");
         details.append("This value has to be " + this.operator);
         details.append("</b><br/>");

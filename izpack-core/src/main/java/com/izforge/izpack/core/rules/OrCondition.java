@@ -52,9 +52,9 @@ public class OrCondition extends Condition
     public OrCondition(Condition operand1, Condition operand2)
     {
         this.leftoperand = operand1;
-        this.leftoperand.setInstalldata(this.installdata);
+        this.leftoperand.setInstalldata(this.getInstalldata());
         this.rightoperand = operand2;
-        this.rightoperand.setInstalldata(this.installdata);
+        this.rightoperand.setInstalldata(this.getInstalldata());
     }
 
     /*
@@ -99,11 +99,11 @@ public class OrCondition extends Condition
     public boolean isTrue() {
         if ((this.leftoperand == null) || (this.rightoperand == null))
         {
-            Debug.trace("Operands of condition " + this.id + " not initialized correctly.");
+            Debug.trace("Operands of condition " + this.getId() + " not initialized correctly.");
             return false;
         }
-        this.leftoperand.setInstalldata(this.installdata);
-        this.rightoperand.setInstalldata(this.installdata);
+        this.leftoperand.setInstalldata(this.getInstalldata());
+        this.rightoperand.setInstalldata(this.getInstalldata());
         return this.leftoperand.isTrue() || this.rightoperand.isTrue();
     }
 
@@ -114,7 +114,7 @@ public class OrCondition extends Condition
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();
-        details.append(this.id);
+        details.append(this.getId());
         details.append(" depends on:<ul><li>");
         details.append(leftoperand.getDependenciesDetails());
         details.append("</li> OR <li>");
