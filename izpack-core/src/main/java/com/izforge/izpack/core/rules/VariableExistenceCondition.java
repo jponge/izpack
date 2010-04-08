@@ -48,7 +48,7 @@ public class VariableExistenceCondition extends Condition
     public boolean isTrue()
     {
         boolean result = false;
-        String value = this.installdata.getVariable(this.variable);
+        String value = this.getInstalldata().getVariable(this.variable);
         if (value != null)
         {
             result = true;

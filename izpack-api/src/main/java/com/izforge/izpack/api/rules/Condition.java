@@ -26,8 +26,6 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 
 import java.io.Serializable;
 
-import java.io.Serializable;
-
 /**
  * Abstract base class for all conditions. Implementations of custom conditions
  * have to derive from this class.
@@ -38,13 +36,15 @@ public abstract class Condition implements Serializable
 {
 
     private static final long serialVersionUID = 507592103321711123L;
-    public String id;
-    public AutomatedInstallData installdata;
+
+    private String id;
+
+    private AutomatedInstallData installdata;
 
     public Condition()
     {
-        this.id = "UNKNOWN";
-        this.installdata = null;
+        this.setId("UNKNOWN");
+        this.setInstalldata(null);
     }
 
     /**

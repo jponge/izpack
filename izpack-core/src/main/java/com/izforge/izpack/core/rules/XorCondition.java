@@ -82,11 +82,11 @@ public class XorCondition extends OrCondition
     {
         if ((this.leftoperand == null) || (this.rightoperand == null))
         {
-            Debug.trace("Operands of condition " + this.id + " not initialized correctly.");
+            Debug.trace("Operands of condition " + this.getId() + " not initialized correctly.");
             return false;
         }
-        this.leftoperand.setInstalldata(this.installdata);
-        this.rightoperand.setInstalldata(this.installdata);
+        this.leftoperand.setInstalldata(this.getInstalldata());
+        this.rightoperand.setInstalldata(this.getInstalldata());
 
         boolean op1true = leftoperand.isTrue();
         boolean op2true = rightoperand.isTrue();
@@ -108,7 +108,7 @@ public class XorCondition extends OrCondition
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();
-        details.append(this.id);
+        details.append(this.getId());
         details.append(" depends on:<ul><li>");
         details.append(leftoperand.getDependenciesDetails());
         details.append("</li> XOR <li>");
