@@ -316,7 +316,7 @@ public class RulesEngineImpl implements RulesEngine
         }
     }
 
-    public Condition getCondition(String id)
+    public static Condition getCondition(String id)
     {
         Condition result = conditionsmap.get(id);
         if (result == null)
