@@ -10,12 +10,18 @@ import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.container.TestPanelContainer;
 import com.izforge.izpack.test.junit.PicoRunner;
+import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
 import org.hamcrest.text.StringContains;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -42,6 +48,13 @@ public class TestPanelDisplay
         this.uninstallDataWriter = uninstallDataWriter;
     }
 
+    @Before
+    public void setUp()
+    {
+        resourceManager.setResourceBasePath("/com/izforge/izpack/test/panel/");
+    }
+
+
     @After
     public void after()
     {
@@ -52,7 +65,6 @@ public class TestPanelDisplay
     @Test
     public void htmlInfoPanelShouldDisplayText() throws Exception
     {
-        resourceManager.setResourceBasePath("/com/izforge/izpack/test/panel/");
         addPanelAndShow("com.izforge.izpack.panels.htmlinfo.HTMLInfoPanel");
         String textArea = frameFixture.textBox(GuiId.HTML_INFO_PANEL_TEXT.id).text();
         assertThat(textArea, StringContains.containsString("This is a test"));
@@ -61,7 +73,6 @@ public class TestPanelDisplay
     @Test
     public void licencePanelShouldDisplayText() throws Exception
     {
-        resourceManager.setResourceBasePath("/com/izforge/izpack/test/panel/");
         addPanelAndShow("com.izforge.izpack.panels.licence.LicencePanel");
         String textArea = frameFixture.textBox(GuiId.LICENCE_TEXT_AREA.id).text();
         assertThat(textArea, StringContains.containsString("This is a licenSe panel"));
@@ -101,13 +112,38 @@ public class TestPanelDisplay
     private void addPanelAndShow(String... classNames)
             throws ClassNotFoundException
     {
+        ArrayList<Panel> panelList = new ArrayList<Panel>();
         for (String className : classNames)
         {
             Panel panel = new Panel();
             panel.setClassName(className);
+            panelList.add(panel);
+        }
+        addPanelAndShow(panelList);
+    }
+
+    private void addPanelAndShow(List<Panel> panelList)
+            throws ClassNotFoundException
+    {
+        for (Panel panel : panelList)
+        {
             guiInstallData.getPanelsOrder().add(panel);
         }
         installerFrame.loadPanels();
         installerFrame.enableFrame();
+    }
+
+    @Test
+    public void helpShouldDisplay() throws Exception
+    {
+        Panel panel = new Panel();
+        panel.setClassName("com.izforge.izpack.panels.hello.HelloPanel");
+        panel.addHelp("eng", "un.html");
+        addPanelAndShow(Collections.singletonList(panel));
+        frameFixture.button(GuiId.BUTTON_HELP.id).requireVisible();
+        frameFixture.button(GuiId.BUTTON_HELP.id).click();
+        DialogFixture dialogFixture = frameFixture.dialog(GuiId.HELP_WINDOWS.id);
+        dialogFixture.requireVisible();
+        assertThat(dialogFixture.textBox().text(), StringContains.containsString("toto"));
     }
 }

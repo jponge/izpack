@@ -20,6 +20,7 @@
 
 package com.izforge.izpack.installer.base;
 
+import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.Panel;
@@ -1199,6 +1200,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         }
 
         this.helpWindow = new HelpWindow(parent, getString("installer.help.close"));
+        helpWindow.setName(GuiId.HELP_WINDOWS.id);
         return this.helpWindow;
     }
 
