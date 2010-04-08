@@ -155,10 +155,8 @@ public class RulesEngineImpl implements RulesEngine
         Debug.trace("Initializing RulesEngine");
         RulesEngineImpl.installdata = installdata;
         conditionsmap = rules;
-        Iterator<String> keyiter = conditionsmap.keySet().iterator();
-        while (keyiter.hasNext())
+        for (String key : conditionsmap.keySet())
         {
-            String key = keyiter.next();
             Condition condition = conditionsmap.get(key);
             condition.setInstalldata(installdata);
         }
@@ -176,27 +174,6 @@ public class RulesEngineImpl implements RulesEngine
                 new String[this.conditionsmap.size()]);
         Arrays.sort(conditionids);
         return conditionids;
-    }
-
-    /**
-     * Checks if an attribute for an xmlelement is set.
-     *
-     * @param val       value of attribute to check
-     * @param attribute the attribute which is checked
-     * @param element   the element
-     * @return true value was set false no value was set
-     */
-    protected boolean checkAttribute(String val, String attribute, String element)
-    {
-        if ((val != null) && (val.length() > 0))
-        {
-            return true;
-        }
-        else
-        {
-            Debug.trace("Element " + element + " has to specify an attribute " + attribute);
-            return false;
-        }
     }
 
     public static Condition analyzeCondition(IXMLElement condition)
@@ -339,7 +316,7 @@ public class RulesEngineImpl implements RulesEngine
         }
     }
 
-    public static Condition getCondition(String id)
+    public Condition getCondition(String id)
     {
         Condition result = conditionsmap.get(id);
         if (result == null)
@@ -449,7 +426,7 @@ public class RulesEngineImpl implements RulesEngine
 
     public boolean isConditionTrue(String id)
     {
-        Condition cond = RulesEngineImpl.getCondition(id);
+        Condition cond = getCondition(id);
         if (cond != null)
         {
             if (cond.getInstalldata() == null)
