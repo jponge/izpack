@@ -16,6 +16,12 @@ public class Help
      */
     private String src;
 
+    public Help(String iso3, String src)
+    {
+        this.iso3 = iso3;
+        this.src = src;
+    }
+
     public String getIso3()
     {
         return iso3;

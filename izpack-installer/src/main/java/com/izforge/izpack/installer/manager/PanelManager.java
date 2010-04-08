@@ -90,7 +90,7 @@ public class PanelManager
                 {
                     izPanel.setValidationService(DataValidatorFactory.createDataValidator(dataValidator));
                 }
-                izPanel.setHelps(panel.getHelpsMap());
+                izPanel.setHelpUrl(panel.getHelpUrl(installdata.getLocaleISO3()));
 
                 preValidateAction(panel, izPanel);
                 postValidateAction(panel, izPanel);

@@ -1,13 +1,9 @@
 package com.izforge.izpack.compiler.container.provider;
 
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
-import com.izforge.izpack.api.data.binding.Listener;
-import com.izforge.izpack.api.data.binding.OsModel;
-import com.izforge.izpack.api.data.binding.Stage;
+import com.izforge.izpack.api.data.binding.*;
 import org.hamcrest.beans.HasPropertyWithValue;
 import org.hamcrest.collection.IsCollectionContaining;
-import org.hamcrest.collection.IsMapContaining;
 import org.hamcrest.core.AllOf;
 import org.hamcrest.core.Is;
 import org.junit.Before;
@@ -59,7 +55,7 @@ public class IzpackProjectProviderTest
     }
 
     @Test
-    public void bindingPanel() throws Exception
+    public void bindingSimplePanel() throws Exception
     {
         List<Panel> panelList = izpackProjectInstaller.getPanels();
 
@@ -70,6 +66,12 @@ public class IzpackProjectProviderTest
                         HasPropertyWithValue.<Panel>hasProperty("condition", Is.is("test.cond"))
                 )
         ));
+    }
+
+    @Test
+    public void bindingPanelWithOsConstraint() throws Exception
+    {
+        List<Panel> panelList = izpackProjectInstaller.getPanels();
         assertThat(panelList, IsCollectionContaining.hasItem(
                 AllOf.allOf(
                         HasPropertyWithValue.<Panel>hasProperty("className", Is.is("HTMLInfoPanel")),
@@ -78,10 +80,23 @@ public class IzpackProjectProviderTest
                                 IsCollectionContaining.hasItems(
                                         HasPropertyWithValue.<OsModel>hasProperty("family", Is.is("BSD")),
                                         HasPropertyWithValue.<OsModel>hasProperty("arch", Is.is("x666"))
-                                )),
-                        HasPropertyWithValue.<Panel>hasProperty("helps",
-                                IsMapContaining.hasEntry("deu", "HelloPanelHelp_deu.html")
-                        )
+                                ))
                 )));
     }
+
+    @Test
+    public void bindingPanelWithHelp() throws Exception
+    {
+        List<Panel> panelList = izpackProjectInstaller.getPanels();
+        assertThat(panelList, IsCollectionContaining.hasItem(
+                HasPropertyWithValue.<Panel>hasProperty("helps",
+                        IsCollectionContaining.hasItem(
+                                AllOf.allOf(
+                                        HasPropertyWithValue.<Help>hasProperty("src", Is.is("HelloPanelHelp_deu.html")),
+                                        HasPropertyWithValue.<Help>hasProperty("iso3", Is.is("deu"))
+                                )
+                        ))
+        ));
+    }
+
 }

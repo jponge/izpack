@@ -107,22 +107,17 @@
         <panel classname="CheckedHelloPanel" id="hellopanel" condition="test.cond" />
         <panel classname="HTMLInfoPanel" id="infopanel" encoding="ISO-8859-1">
             <os arch="x666" family="BSD" />
+        </panel>
+        <panel classname="HTMLLicencePanel" id="licensepanel">
             <help iso3="deu" src="HelloPanelHelp_deu.html" />
+        </panel>
+        <panel classname="TargetPanel" id="targetpanel">
             <validator classname="JdbcConnectionValidator" />
             <actions>
                 <action stage="preconstruct" classname="ConnectionPreConstructAction" />
                 <action stage="preactivate" classname="ConnectionPreActivateAction" />
-                <action stage="prevalidate" classname="ConnectionPreVAlidateAction" />
-                <action stage="postvalidate" classname="ConnectionPostValidateAction" />
             </actions>
         </panel>
-        <panel classname="HTMLLicencePanel" id="licensepanel" />
-        <panel classname="TargetPanel" id="targetpanel" />
-        <panel classname="PacksPanel" id="packspanel" />
-        <panel classname="SummaryPanel" id="summarypanel" />
-        <panel classname="InstallPanel" id="installpanel" />
-        <panel classname="ShortcutPanel" id="shortcutpanel" />
-        <panel classname="FinishPanel" id="finishpanel" />
     </panels>
 
     <!-- The listeners section for CustomActions -->

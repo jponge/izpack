@@ -5,6 +5,7 @@ import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.binding.Help;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.test.Container;
@@ -20,6 +21,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -138,7 +140,7 @@ public class TestPanelDisplay
     {
         Panel panel = new Panel();
         panel.setClassName("com.izforge.izpack.panels.hello.HelloPanel");
-        panel.addHelp("eng", "un.html");
+        panel.setHelps(Arrays.asList(new Help("eng", "un.html")));
         addPanelAndShow(Collections.singletonList(panel));
         frameFixture.button(GuiId.BUTTON_HELP.id).requireVisible();
         frameFixture.button(GuiId.BUTTON_HELP.id).click();

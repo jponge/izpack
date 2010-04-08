@@ -41,7 +41,6 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Defines the base class for the IzPack panels. Any panel should be a subclass of it and should
@@ -165,6 +164,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     protected ResourceManager resourceManager;
     protected VariableSubstitutor variableSubstitutor;
+    private String helpUrl = null;
 
     /**
      * The constructor.
@@ -1148,23 +1148,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         return string_to_parse;
     }
 
-    private HashMap<String, String> helps = null;
-
-    public void setHelps(HashMap helps)
-    {
-        this.helps = helps;
-    }
-
-    public String getHelpUrl(String isoCode)
-    {
-        String url = null;
-        if (this.helps != null)
-        {
-            url = helps.get(isoCode);
-        }
-        return url;
-    }
-
     /**
      * Indicates wether the panel can display help. The installer will hide Help button if current
      * panel does not support help functions. Default behaviour is to return <code>false</code>.
@@ -1173,7 +1156,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public boolean canShowHelp()
     {
-        return getHelpUrl(this.installData.getLocaleISO3()) != null;
+        return helpUrl != null;
     }
 
     /**
@@ -1181,12 +1164,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public void showHelp()
     {
-        String helpName = getHelpUrl(this.installData.getLocaleISO3());
         // System.out.println("Help function called, helpName: " + helpName);
-        if (helpName != null)
+        if (helpUrl != null)
         {
-            URL helpUrl = resourceManager.getURL(helpName);
-            getHelpWindow().showHelp(getString("installer.help"), helpUrl);
+            URL resourceUrl = resourceManager.getURL(helpUrl);
+            getHelpWindow().showHelp(getString("installer.help"), resourceUrl);
         }
     }
 
@@ -1264,4 +1246,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         }
     }
 
+    public void setHelpUrl(String helpUrl)
+    {
+        this.helpUrl = helpUrl;
+    }
 }

@@ -1292,7 +1292,7 @@ public class CompilerConfig extends Thread
                     panel.setValidator(validator);
                 }
             }
-            // adding helps
+//            // adding helps
             Vector<IXMLElement> helps = panelElement.getChildrenNamed(AutomatedInstallData.HELP_TAG);
             if (helps != null)
             {
@@ -1309,8 +1309,7 @@ public class CompilerConfig extends Thread
                     {
                         resourceId = panelid + "_" + panelCounter + "_help_" + iso3 + ".html";
                     }
-                    panel.addHelp(iso3, resourceId);
-
+//                    panel.addHelp(iso3, resourceId);
                     URL originalUrl = findProjectResource(help
                             .getAttribute(AutomatedInstallData.SRC_ATTRIBUTE), "Help", help);
                     packager.addResource(resourceId, originalUrl);

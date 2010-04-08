@@ -22,6 +22,8 @@
 package com.izforge.izpack.api.data;
 
 
+import com.izforge.izpack.api.data.binding.Action;
+import com.izforge.izpack.api.data.binding.Help;
 import com.izforge.izpack.api.data.binding.OsModel;
 
 import java.io.Serializable;
@@ -61,6 +63,8 @@ public class Panel implements Serializable
      */
     private String validator = null;
 
+    private List<Action> actions;
+
     /**
      * list of all pre panel construction actions
      */
@@ -83,11 +87,10 @@ public class Panel implements Serializable
 
     private Map<String, PanelActionConfiguration> actionConfiguration = null;
 
-
     /**
      * A HashMap for URLs to Helpfiles, key should be iso3-code
      */
-    private Map<String, String> helps = null;
+    private List<Help> helps = null;
 
     /**
      * Contains configuration values for a panel.
@@ -149,18 +152,14 @@ public class Panel implements Serializable
         this.validator = validator;
     }
 
-    public void addHelp(String isoCode, String url)
+    public List<Help> getHelps()
     {
-        if (this.helps == null)
-        {
-            this.helps = new HashMap<String, String>();
-        }
-        this.helps.put(isoCode, url);
+        return helps;
     }
 
-    public Map<String, String> getHelpsMap()
+    public void setHelps(List<Help> helps)
     {
-        return this.helps;
+        this.helps = helps;
     }
 
     public List<String> getPreConstructionActions()
@@ -262,17 +261,6 @@ public class Panel implements Serializable
         return result;
     }
 
-    @Override
-    public String toString()
-    {
-        return "Panel{" +
-                "className='" + className + '\'' +
-                ", osConstraints=" + getOsConstraints() +
-                ", panelid='" + panelid + '\'' +
-                ", condition='" + condition +
-                '}';
-    }
-
     public List<OsModel> getOsConstraints()
     {
         return osConstraints;
@@ -281,5 +269,41 @@ public class Panel implements Serializable
     public void setOsConstraints(List<OsModel> osConstraints)
     {
         this.osConstraints = osConstraints;
+    }
+
+    public String getHelpUrl(String localeISO3)
+    {
+        for (Help help : helps)
+        {
+            if (help.getIso3().equals(localeISO3))
+            {
+                return help.getSrc();
+            }
+        }
+        return null;
+    }
+
+    public List<Action> getActions()
+    {
+        return actions;
+    }
+
+    public void setActions(List<Action> actions)
+    {
+        this.actions = actions;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Panel{" +
+                "className='" + className + '\'' +
+                ", osConstraints=" + osConstraints +
+                ", panelid='" + panelid + '\'' +
+                ", condition='" + condition + '\'' +
+                ", actions=" + actions +
+                ", validator='" + validator + '\'' +
+                ", helps=" + helps +
+                '}';
     }
 }
