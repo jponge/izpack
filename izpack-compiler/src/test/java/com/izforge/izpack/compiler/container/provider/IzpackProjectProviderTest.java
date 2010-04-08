@@ -7,6 +7,7 @@ import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.data.binding.Stage;
 import org.hamcrest.beans.HasPropertyWithValue;
 import org.hamcrest.collection.IsCollectionContaining;
+import org.hamcrest.collection.IsMapContaining;
 import org.hamcrest.core.AllOf;
 import org.hamcrest.core.Is;
 import org.junit.Before;
@@ -77,6 +78,10 @@ public class IzpackProjectProviderTest
                                 IsCollectionContaining.hasItems(
                                         HasPropertyWithValue.<OsModel>hasProperty("family", Is.is("BSD")),
                                         HasPropertyWithValue.<OsModel>hasProperty("arch", Is.is("x666"))
-                                )))));
+                                )),
+                        HasPropertyWithValue.<Panel>hasProperty("helps",
+                                IsMapContaining.hasEntry("deu", "HelloPanelHelp_deu.html")
+                        )
+                )));
     }
 }

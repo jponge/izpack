@@ -1,6 +1,7 @@
 package com.izforge.izpack.compiler.container.provider;
 
 import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.data.binding.Help;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.data.binding.OsModel;
@@ -85,6 +86,7 @@ public class IzpackProjectProvider implements Provider
         }
         // Implicit collection for os list in panel
         xStream.addImplicitCollection(Panel.class, "osConstraints", "os", OsModel.class);
+        xStream.addImplicitCollection(Panel.class, "helps", "help", Help.class);
         for (String osAttribute : OS_ATTRIBUTE)
         {
             xStream.aliasAttribute(OsModel.class, osAttribute, osAttribute);
