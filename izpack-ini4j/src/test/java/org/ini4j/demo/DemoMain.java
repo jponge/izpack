@@ -39,7 +39,7 @@ public class DemoMain implements Runnable
         SwingUtilities.invokeLater(new DemoMain());
     }
 
-    public void run()
+    @Override public void run()
     {
         JFrame frame = new JFrame("TopLevelDemo");
 

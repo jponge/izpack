@@ -19,19 +19,16 @@ import org.ini4j.Registry;
 
 import org.ini4j.Registry.Type;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+
+import java.util.Arrays;
 
 public class RegEscapeTool extends EscapeTool
 {
-
     private static final RegEscapeTool INSTANCE = ServiceFinder.findService(RegEscapeTool.class);
-
-    private static final String HEX_CHARSET_NAME = "UTF-16LE";
-
+    private static final Charset HEX_CHARSET = Charset.forName("UTF-16LE");
     private static final int LOWER_DIGIT = 0x0f;
-
     private static final int UPPER_DIGIT = 0xf0;
-
     private static final int DIGIT_SIZE = 4;
 
     public static final RegEscapeTool getInstance()
@@ -41,27 +38,18 @@ public class RegEscapeTool extends EscapeTool
 
     public TypeValuesPair decode(String raw)
     {
-        TypeValuesPair returnPair = null;
-
         Type type = type(raw);
-        String value = (type == Type.REG_SZ) ? unquote(raw) : raw.substring(type.toString()
-                .length() + 1);
+        String value = (type == Type.REG_SZ) ? unquote(raw) : raw.substring(type.toString().length() + 1);
         String[] values;
 
         switch (type)
         {
+
             case REG_EXPAND_SZ:
             case REG_MULTI_SZ:
                 byte[] bytes = binary(value);
 
-                try
-                {
-                    value = new String(bytes, 0, bytes.length - 2, HEX_CHARSET_NAME);
-                }
-                catch (UnsupportedEncodingException e)
-                {
-                    value = null;
-                }
+                value = new String(bytes, 0, bytes.length - 2, HEX_CHARSET);
                 break;
 
             case REG_DWORD:
@@ -75,20 +63,16 @@ public class RegEscapeTool extends EscapeTool
                 break;
         }
 
-        if (value != null)
+        if (type == Type.REG_MULTI_SZ)
         {
-            if (type == Type.REG_MULTI_SZ)
-            {
-                values = splitMulti(value);
-            }
-            else
-            {
-                values = new String[] { value};
-            }
-            returnPair = new TypeValuesPair(type, values);
+            values = splitMulti(value);
+        }
+        else
+        {
+            values = new String[] { value };
         }
 
-        return returnPair;
+        return new TypeValuesPair(type, values);
     }
 
     public String encode(TypeValuesPair data)
@@ -139,7 +123,7 @@ public class RegEscapeTool extends EscapeTool
             }
         }
 
-        return copyOfRange(bytes, 0, idx + 1);
+        return Arrays.copyOfRange(bytes, 0, idx + 1);
     }
 
     String encode(Type type, String[] values)
@@ -150,6 +134,7 @@ public class RegEscapeTool extends EscapeTool
         buff.append(Type.SEPARATOR_CHAR);
         switch (type)
         {
+
             case REG_EXPAND_SZ:
                 buff.append(hexadecimal(values[0]));
                 break;
@@ -184,24 +169,16 @@ public class RegEscapeTool extends EscapeTool
 
         if ((value != null) && (value.length() != 0))
         {
-            byte[] bytes;
-            try
-            {
-                bytes = value.getBytes(HEX_CHARSET_NAME);
-                for (int i = 0; i < bytes.length; i++)
-                {
-                    buff.append(Character.forDigit((bytes[i] & UPPER_DIGIT) >> DIGIT_SIZE,
-                            HEX_RADIX));
-                    buff.append(Character.forDigit(bytes[i] & LOWER_DIGIT, HEX_RADIX));
-                    buff.append(',');
-                }
+            byte[] bytes = value.getBytes(HEX_CHARSET);
 
-                buff.append("00,00");
-            }
-            catch (UnsupportedEncodingException e)
+            for (int i = 0; i < bytes.length; i++)
             {
-                buff.setLength(0);
+                buff.append(Character.forDigit((bytes[i] & UPPER_DIGIT) >> DIGIT_SIZE, HEX_RADIX));
+                buff.append(Character.forDigit(bytes[i] & LOWER_DIGIT, HEX_RADIX));
+                buff.append(',');
             }
+
+            buff.append("00,00");
         }
 
         return buff.toString();
@@ -219,8 +196,7 @@ public class RegEscapeTool extends EscapeTool
         {
             int idx = raw.indexOf(Registry.TYPE_SEPARATOR);
 
-            type = (idx < 0) ? Registry.Type.REG_SZ : Registry.Type.fromString(raw
-                    .substring(0, idx));
+            type = (idx < 0) ? Registry.Type.REG_SZ : Registry.Type.fromString(raw.substring(0, idx));
         }
 
         return type;
@@ -256,45 +232,4 @@ public class RegEscapeTool extends EscapeTool
 
         return values;
     }
-
-    //
-    // Java 1.5 convenience methods
-    //
-
-    /**
-     * From Array class:<br>
-     * Copies the specified range of the specified array into a new array. The initial index of the
-     * range (<tt>from</tt>) must lie between zero and <tt>original.length</tt>, inclusive. The
-     * value at <tt>original[from]</tt> is placed into the initial element of the copy (unless
-     * <tt>from == original.length</tt> or <tt>from == to</tt>). Values from subsequent elements in
-     * the original array are placed into subsequent elements in the copy. The final index of the
-     * range (<tt>to</tt>), which must be greater than or equal to <tt>from</tt>, may be greater
-     * than <tt>original.length</tt>, in which case <tt>(byte)0</tt> is placed in all elements of
-     * the copy whose index is greater than or equal to <tt>original.length - from</tt>. The length
-     * of the returned array will be <tt>to - from</tt>.
-     *
-     * @param original the array from which a range is to be copied
-     * @param from the initial index of the range to be copied, inclusive
-     * @param to the final index of the range to be copied, exclusive. (This index may lie outside
-     * the array.)
-     * @return a new array containing the specified range from the original array, truncated or
-     * padded with zeros to obtain the required length
-     * @throws ArrayIndexOutOfBoundsException if <tt>from &lt; 0</tt> or
-     * <tt>from &gt; original.length()</tt>
-     * @throws IllegalArgumentException if <tt>from &gt; to</tt>
-     * @throws NullPointerException if <tt>original</tt> is null
-     * @since 1.6
-     */
-    private static byte[] copyOfRange(byte[] original, int from, int to)
-    {
-        int newLength = to - from;
-        if (newLength < 0)
-        {
-            throw new IllegalArgumentException(from + " > " + to);
-        }
-        byte[] copy = new byte[newLength];
-        System.arraycopy(original, from, copy, 0, Math.min(original.length - from, newLength));
-        return copy;
-    }
-
 }

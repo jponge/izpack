@@ -69,27 +69,27 @@ public class Ini extends BasicProfile implements Persistable, Configurable
         load();
     }
 
-    public Config getConfig()
+    @Override public Config getConfig()
     {
         return _config;
     }
 
-    public void setConfig(Config value)
+    @Override public void setConfig(Config value)
     {
         _config = value;
     }
 
-    public File getFile()
+    @Override public File getFile()
     {
         return _file;
     }
 
-    public void setFile(File value)
+    @Override public void setFile(File value)
     {
         _file = value;
     }
 
-    public void load() throws IOException, InvalidFileFormatException
+    @Override public void load() throws IOException, InvalidFileFormatException
     {
         if (_file == null)
         {
@@ -99,27 +99,27 @@ public class Ini extends BasicProfile implements Persistable, Configurable
         load(_file);
     }
 
-    public void load(InputStream input) throws IOException, InvalidFileFormatException
+    @Override public void load(InputStream input) throws IOException, InvalidFileFormatException
     {
         load(new InputStreamReader(input, getConfig().getFileEncoding()));
     }
 
-    public void load(Reader input) throws IOException, InvalidFileFormatException
+    @Override public void load(Reader input) throws IOException, InvalidFileFormatException
     {
         IniParser.newInstance(getConfig()).parse(input, newBuilder());
     }
 
-    public void load(File input) throws IOException, InvalidFileFormatException
+    @Override public void load(File input) throws IOException, InvalidFileFormatException
     {
         load(input.toURI().toURL());
     }
 
-    public void load(URL input) throws IOException, InvalidFileFormatException
+    @Override public void load(URL input) throws IOException, InvalidFileFormatException
     {
         IniParser.newInstance(getConfig()).parse(input, newBuilder());
     }
 
-    public void store() throws IOException
+    @Override public void store() throws IOException
     {
         if (_file == null)
         {
@@ -129,17 +129,17 @@ public class Ini extends BasicProfile implements Persistable, Configurable
         store(_file);
     }
 
-    public void store(OutputStream output) throws IOException
+    @Override public void store(OutputStream output) throws IOException
     {
         store(new OutputStreamWriter(output, getConfig().getFileEncoding()));
     }
 
-    public void store(Writer output) throws IOException
+    @Override public void store(Writer output) throws IOException
     {
         store(IniFormatter.newInstance(output, getConfig()));
     }
 
-    public void store(File output) throws IOException
+    @Override public void store(File output) throws IOException
     {
         OutputStream stream = new FileOutputStream(output);
 
@@ -152,7 +152,7 @@ public class Ini extends BasicProfile implements Persistable, Configurable
         return IniBuilder.newInstance(this);
     }
 
-    protected void store(IniHandler formatter, Profile.Section section)
+    @Override protected void store(IniHandler formatter, Profile.Section section)
     {
         if (getConfig().isEmptySection() || (section.size() != 0))
         {
@@ -160,7 +160,7 @@ public class Ini extends BasicProfile implements Persistable, Configurable
         }
     }
 
-    protected void store(IniHandler formatter, Profile.Section section, String option, int index)
+    @Override protected void store(IniHandler formatter, Profile.Section section, String option, int index)
     {
         if (getConfig().isMultiOption() || (index == (section.length(option) - 1)))
         {
@@ -168,17 +168,17 @@ public class Ini extends BasicProfile implements Persistable, Configurable
         }
     }
 
-    boolean isTreeMode()
+    @Override boolean isTreeMode()
     {
         return getConfig().isTree();
     }
 
-    char getPathSeparator()
+    @Override char getPathSeparator()
     {
         return getConfig().getPathSeparator();
     }
 
-    boolean isPropertyFirstUpper()
+    @Override boolean isPropertyFirstUpper()
     {
         return getConfig().isPropertyFirstUpper();
     }

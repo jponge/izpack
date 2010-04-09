@@ -34,7 +34,7 @@ public class DwarfsBean implements Dwarfs
     private Dwarf _sleepy;
     private Dwarf _sneezy;
 
-    public Dwarf getBashful()
+    @Override public Dwarf getBashful()
     {
         return _bashful;
     }
@@ -44,7 +44,7 @@ public class DwarfsBean implements Dwarfs
         _bashful = value;
     }
 
-    public Dwarf getDoc()
+    @Override public Dwarf getDoc()
     {
         return _doc;
     }
@@ -54,7 +54,7 @@ public class DwarfsBean implements Dwarfs
         _doc = value;
     }
 
-    public Dwarf getDopey()
+    @Override public Dwarf getDopey()
     {
         return _dopey;
     }
@@ -64,7 +64,7 @@ public class DwarfsBean implements Dwarfs
         _dopey = value;
     }
 
-    public Dwarf getGrumpy()
+    @Override public Dwarf getGrumpy()
     {
         return _grumpy;
     }
@@ -74,7 +74,7 @@ public class DwarfsBean implements Dwarfs
         _grumpy = value;
     }
 
-    public Dwarf getHappy()
+    @Override public Dwarf getHappy()
     {
         return _happy;
     }
@@ -84,7 +84,7 @@ public class DwarfsBean implements Dwarfs
         _happy = value;
     }
 
-    public Dwarf getSleepy()
+    @Override public Dwarf getSleepy()
     {
         return _sleepy;
     }
@@ -94,7 +94,7 @@ public class DwarfsBean implements Dwarfs
         _sleepy = value;
     }
 
-    public Dwarf getSneezy()
+    @Override public Dwarf getSneezy()
     {
         return _sneezy;
     }

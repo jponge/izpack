@@ -21,9 +21,9 @@ public interface IniHandler extends HandlerBase
 
     void endSection();
 
-    void handleComment(String comment);
+    @Override void handleComment(String comment);
 
-    void handleOption(String optionName, String optionValue);
+    @Override void handleOption(String optionName, String optionValue);
 
     void startIni();
 

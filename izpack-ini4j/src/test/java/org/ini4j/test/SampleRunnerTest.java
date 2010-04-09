@@ -62,8 +62,7 @@ import java.io.Reader;
 
 import java.lang.reflect.Method;
 
-import java.nio.CharBuffer;
-import java.nio.charset.*;
+import java.nio.charset.Charset;
 
 import java.util.Arrays;
 import java.util.Collection;

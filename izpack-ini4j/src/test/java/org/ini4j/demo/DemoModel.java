@@ -94,7 +94,7 @@ public class DemoModel implements Runnable
         _data = data;
     }
 
-    public void run()
+    @Override public void run()
     {
         _interpreter.setExitOnEOF(false);
         _interpreter.run();

@@ -25,7 +25,7 @@ abstract class AbstractProfileBuilder implements IniHandler
     private boolean _header;
     private String _lastComment;
 
-    public void endIni()
+    @Override public void endIni()
     {
 
         // comment only .ini files....
@@ -35,12 +35,12 @@ abstract class AbstractProfileBuilder implements IniHandler
         }
     }
 
-    public void endSection()
+    @Override public void endSection()
     {
         _currentSection = null;
     }
 
-    public void handleComment(String comment)
+    @Override public void handleComment(String comment)
     {
         if ((_lastComment != null) && _header)
         {
@@ -51,7 +51,7 @@ abstract class AbstractProfileBuilder implements IniHandler
         _lastComment = comment;
     }
 
-    public void handleOption(String name, String value)
+    @Override public void handleOption(String name, String value)
     {
         _header = false;
         if (getConfig().isMultiOption())
@@ -70,12 +70,12 @@ abstract class AbstractProfileBuilder implements IniHandler
         }
     }
 
-    public void startIni()
+    @Override public void startIni()
     {
         _header = true;
     }
 
-    public void startSection(String sectionName)
+    @Override public void startSection(String sectionName)
     {
         if (getConfig().isMultiSection())
         {

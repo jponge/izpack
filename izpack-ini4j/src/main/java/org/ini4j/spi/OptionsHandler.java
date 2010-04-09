@@ -19,9 +19,9 @@ public interface OptionsHandler extends HandlerBase
 {
     void endOptions();
 
-    void handleComment(String comment);
+    @Override void handleComment(String comment);
 
-    void handleOption(String optionName, String optionValue);
+    @Override void handleOption(String optionName, String optionValue);
 
     void startOptions();
 }

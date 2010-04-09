@@ -99,7 +99,7 @@ public class Reg extends BasicRegistry implements Registry, Persistable, Configu
         return WINDOWS;
     }
 
-    public Config getConfig()
+    @Override public Config getConfig()
     {
         return _config;
     }
@@ -109,17 +109,17 @@ public class Reg extends BasicRegistry implements Registry, Persistable, Configu
         _config = value;
     }
 
-    public File getFile()
+    @Override public File getFile()
     {
         return _file;
     }
 
-    public void setFile(File value)
+    @Override public void setFile(File value)
     {
         _file = value;
     }
 
-    public void load() throws IOException, InvalidFileFormatException
+    @Override public void load() throws IOException, InvalidFileFormatException
     {
         if (_file == null)
         {
@@ -129,17 +129,17 @@ public class Reg extends BasicRegistry implements Registry, Persistable, Configu
         load(_file);
     }
 
-    public void load(InputStream input) throws IOException, InvalidFileFormatException
+    @Override public void load(InputStream input) throws IOException, InvalidFileFormatException
     {
         load(new InputStreamReader(input, getConfig().getFileEncoding()));
     }
 
-    public void load(URL input) throws IOException, InvalidFileFormatException
+    @Override public void load(URL input) throws IOException, InvalidFileFormatException
     {
         load(new InputStreamReader(input.openStream(), getConfig().getFileEncoding()));
     }
 
-    public void load(Reader input) throws IOException, InvalidFileFormatException
+    @Override public void load(Reader input) throws IOException, InvalidFileFormatException
     {
         int newline = 2;
         StringBuilder buff = new StringBuilder();
@@ -173,7 +173,7 @@ public class Reg extends BasicRegistry implements Registry, Persistable, Configu
         IniParser.newInstance(getConfig()).parse(input, newBuilder());
     }
 
-    public void load(File input) throws IOException, InvalidFileFormatException
+    @Override public void load(File input) throws IOException, InvalidFileFormatException
     {
         load(input.toURI().toURL());
     }
@@ -193,7 +193,7 @@ public class Reg extends BasicRegistry implements Registry, Persistable, Configu
         }
     }
 
-    public void store() throws IOException
+    @Override public void store() throws IOException
     {
         if (_file == null)
         {
@@ -203,12 +203,12 @@ public class Reg extends BasicRegistry implements Registry, Persistable, Configu
         store(_file);
     }
 
-    public void store(OutputStream output) throws IOException
+    @Override public void store(OutputStream output) throws IOException
     {
         store(new OutputStreamWriter(output, getConfig().getFileEncoding()));
     }
 
-    public void store(Writer output) throws IOException
+    @Override public void store(Writer output) throws IOException
     {
         output.write(getVersion());
         output.write(getConfig().getLineSeparator());
@@ -216,7 +216,7 @@ public class Reg extends BasicRegistry implements Registry, Persistable, Configu
         store(IniFormatter.newInstance(output, getConfig()));
     }
 
-    public void store(File output) throws IOException
+    @Override public void store(File output) throws IOException
     {
         OutputStream stream = new FileOutputStream(output);
 

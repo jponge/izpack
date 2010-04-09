@@ -32,22 +32,22 @@ public class IniFormatter extends AbstractFormatter implements IniHandler
         return instance;
     }
 
-    public void endIni()
+    @Override public void endIni()
     {
         getOutput().flush();
     }
 
-    public void endSection()
+    @Override public void endSection()
     {
         getOutput().print(getConfig().getLineSeparator());
     }
 
-    public void startIni()
+    @Override public void startIni()
     {
         assert true;
     }
 
-    public void startSection(String sectionName)
+    @Override public void startSection(String sectionName)
     {
         setHeader(false);
         if (!getConfig().isGlobalSection() || !sectionName.equals(getConfig().getGlobalSectionName()))
