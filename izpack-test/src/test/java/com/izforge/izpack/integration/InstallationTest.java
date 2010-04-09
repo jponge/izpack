@@ -10,9 +10,11 @@ import com.izforge.izpack.installer.language.LanguageDialog;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
+import com.izforge.izpack.util.OsVersion;
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
+import org.fest.swing.timing.Timeout;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.After;
@@ -168,32 +170,45 @@ public class InstallationTest
         clickDefaultLang();
 
         installerFrameFixture = prepareFrameFixture();
+
         // Hello panel
         Thread.sleep(100);
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+
         // Chack Panel
         Thread.sleep(100);
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+
         // Licence Panel
         installerFrameFixture.radioButton(GuiId.LICENCE_YES_RADIO.id).click();
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+
         // Target Panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        installerFrameFixture.optionPane(Timeout.timeout(1000)).focus();
         installerFrameFixture.optionPane().requireWarningMessage();
         installerFrameFixture.optionPane().okButton().click();
+
         // Packs
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+
         // Summary
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+
         // Install
         waitAndCheckInstallation(installData, installPath);
 
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+
         // Shortcut
         // Deselect shortcut creation
-        Thread.sleep(400);
-        installerFrameFixture.checkBox(GuiId.SHORTCUT_CREATE_CHECK_BOX.id).click();
-        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        if (!OsVersion.IS_MAC)
+        {
+            Thread.sleep(400);
+            installerFrameFixture.checkBox(GuiId.SHORTCUT_CREATE_CHECK_BOX.id).click();
+            installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        }
+        
         // Finish
 //        installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
     }
