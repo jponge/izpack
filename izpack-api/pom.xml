@@ -32,10 +32,6 @@
             <artifactId>commons-io</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.ini4j</groupId>
-            <artifactId>izpack-ini4j</artifactId>
-        </dependency>
     </dependencies>
 
     <profiles>
