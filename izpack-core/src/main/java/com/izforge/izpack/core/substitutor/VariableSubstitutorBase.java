@@ -45,7 +45,7 @@ import com.izforge.izpack.util.IoHelper;
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  * @author René Krell <rkrell@gmx.net>
  */
-public abstract class VariableSubstitutorBaseImpl implements VariableSubstitutor
+public abstract class VariableSubstitutorBase implements VariableSubstitutor
 {
     /**
      * Whether braces are required for substitution.
@@ -110,7 +110,7 @@ public abstract class VariableSubstitutorBaseImpl implements VariableSubstitutor
         typeNameToConstantMap.put("ant", TYPE_ANT);
     }
 
-    protected abstract Value getValue(String name);
+    public abstract Value getValue(String name);
 
     /**
      * Get whether this substitutor requires braces.

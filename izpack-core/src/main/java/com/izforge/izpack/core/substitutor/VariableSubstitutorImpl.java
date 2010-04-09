@@ -27,7 +27,7 @@ import java.util.Properties;
 import com.izforge.izpack.api.data.Value;
 import com.izforge.izpack.core.variable.PlainValue;
 
-public class VariableSubstitutorImpl extends VariableSubstitutorBaseImpl implements Serializable
+public class VariableSubstitutorImpl extends VariableSubstitutorBase implements Serializable
 {
     private static final long serialVersionUID = 3907213762447685687L;
 
@@ -40,11 +40,11 @@ public class VariableSubstitutorImpl extends VariableSubstitutorBaseImpl impleme
      * Constructs a new substitutor using the specified variable value mappings. The environment
      * hashtable is copied by reference. Braces are not required by default
      *
-     * @param variables the map with variable value mappings
+     * @param vars the map with variable value mappings
      */
-    public VariableSubstitutorImpl(Properties variables)
+    public VariableSubstitutorImpl(Properties properties)
     {
-        this.variables = variables;
+        this.variables = properties;
     }
 
     @Override

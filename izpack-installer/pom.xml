@@ -20,7 +20,7 @@
             <artifactId>izpack-gui</artifactId>
         </dependency>
         <dependency>
-            <groupId>${groupId}</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>izpack-test-common</artifactId>
         </dependency>
         <dependency>

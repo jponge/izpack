@@ -30,7 +30,6 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.api.substitutor.VariableSubstitutorBase;
 import com.izforge.izpack.core.substitutor.DynamicVariableSubstitutor;
 
 /**
@@ -96,7 +95,7 @@ public abstract class InstallerBase implements InstallerRequirementDisplay
                     if (refresh)
                     {
                         // Add self replacing of previously replaced dynamic variables
-                        VariableSubstitutor[] newsubstitutors = new VariableSubstitutorBase[substitutors.length + 1];
+                        VariableSubstitutor[] newsubstitutors = new DynamicVariableSubstitutor[substitutors.length + 1];
                         for (int i=0; i<substitutors.length; i++)  {
                             newsubstitutors[i] = substitutors[i];
                         }

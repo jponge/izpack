@@ -43,7 +43,7 @@ import com.izforge.izpack.util.Debug;
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  * @author René Krell <rkrell@gmx.net>
  */
-public class DynamicVariableSubstitutor extends VariableSubstitutorBaseImpl implements Serializable
+public class DynamicVariableSubstitutor extends VariableSubstitutorBase implements Serializable
 {
     /**
      *

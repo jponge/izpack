@@ -28,7 +28,7 @@
             <artifactId>izpack-panel</artifactId>
         </dependency>
         <dependency>
-            <groupId>${groupId}</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>izpack-event</artifactId>
         </dependency>
 
@@ -38,7 +38,7 @@
         </dependency>
 
         <dependency>
-            <groupId>${groupId}</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>izpack-test-common</artifactId>
         </dependency>
 
