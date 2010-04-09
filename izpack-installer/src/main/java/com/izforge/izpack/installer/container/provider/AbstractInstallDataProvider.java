@@ -34,7 +34,7 @@ public abstract class AbstractInstallDataProvider implements Provider
     protected ResourceManager resourceManager;
     protected VariableSubstitutor variableSubstitutor;
     protected ClassPathCrawler classPathCrawler;
-    private RulesEngine rules;
+    protected RulesEngine rules;
 
     /**
      * Loads the installation data. Also sets environment variables to <code>installdata</code>.
