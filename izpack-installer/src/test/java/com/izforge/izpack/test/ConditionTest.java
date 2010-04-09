@@ -42,7 +42,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ConditionTest
 {
 
-    private static GUIInstallData idata;
+    private GUIInstallData idata;
 
     private RulesEngine rules;
     private static final Matcher<Boolean> IS_TRUE = Is.is(true);
@@ -102,11 +102,11 @@ public class ConditionTest
     @Test
     public void testNotCondition()
     {
-        assertThat(RulesEngineImpl.getCondition("test.not"), IS_NULL);
-        assertThat(RulesEngineImpl.getCondition("test.not.true"), IS_NOT_NULL);
+        assertThat(rules.getCondition("test.not"), IS_NULL);
+        assertThat(rules.getCondition("test.not.true"), IS_NOT_NULL);
         assertThat(rules.isConditionTrue("test.not.true", idata.getVariables()), IS_TRUE);
 
-        assertThat(RulesEngineImpl.getCondition("!test.not.true"), IS_NOT_NULL);
+        assertThat(rules.getCondition("!test.not.true"), IS_NOT_NULL);
 
         assertThat(rules.isConditionTrue("!test.not.true", idata.getVariables()), IS_FALSE);
     }
@@ -114,8 +114,8 @@ public class ConditionTest
     @Test
     public void testVariableCondition()
     {
-        assertThat(RulesEngineImpl.getCondition("test.true"), IS_NOT_NULL);
-        assertThat(RulesEngineImpl.getCondition("test.true2"), IS_NOT_NULL);
+        assertThat(rules.getCondition("test.true"), IS_NOT_NULL);
+        assertThat(rules.getCondition("test.true2"), IS_NOT_NULL);
 
         assertThat(rules.isConditionTrue("test.true", idata.getVariables()), IS_FALSE);
         assertThat(rules.isConditionTrue("test.true2", idata.getVariables()), IS_FALSE);

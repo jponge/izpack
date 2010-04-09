@@ -5,7 +5,7 @@ import com.izforge.izpack.api.data.InstallerRequirement;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.core.rules.RulesEngineImpl;
+import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 
@@ -20,12 +20,14 @@ public class ConditionCheck
 {
     private GUIInstallData installdata;
     private ResourceManager resourceManager;
+    private RulesEngine rules;
 
 
-    public ConditionCheck(GUIInstallData installdata, ResourceManager resourceManager)
+    public ConditionCheck(GUIInstallData installdata, ResourceManager resourceManager, RulesEngine rules)
     {
         this.installdata = installdata;
         this.resourceManager = resourceManager;
+        this.rules = rules;
     }
 
     public void check() throws Exception
@@ -172,7 +174,7 @@ public class ConditionCheck
         for (InstallerRequirement installerrequirement : installdata.getInstallerrequirements())
         {
             String conditionid = installerrequirement.getCondition();
-            Condition condition = RulesEngineImpl.getCondition(conditionid);
+            Condition condition = rules.getCondition(conditionid);
             if (condition == null)
             {
                 Debug.log(conditionid + " not a valid condition.");

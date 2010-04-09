@@ -23,7 +23,7 @@ package com.izforge.izpack.core.rules.process;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.core.rules.RulesEngineImpl;
+import com.izforge.izpack.api.rules.RulesEngine;
 
 /**
  * References an already defined condition
@@ -39,9 +39,11 @@ public class RefCondition extends Condition
     private static final long serialVersionUID = -2880915036530702269L;
     Condition referencedcondition;
     private String referencedConditionId;
+    private RulesEngine rules;
 
-    public RefCondition()
+    public RefCondition(RulesEngine rules)
     {
+        this.rules = rules;
         this.referencedcondition = null;
         this.referencedConditionId = null;
     }
@@ -54,7 +56,7 @@ public class RefCondition extends Condition
     public void readFromXML(IXMLElement xmlcondition)
     {
         this.referencedConditionId = xmlcondition.getAttribute("refid");
-        this.referencedcondition = RulesEngineImpl.getCondition(this.referencedConditionId);
+        this.referencedcondition = rules.getCondition(this.referencedConditionId);
         this.setId("ref." + this.referencedConditionId);
     }
 
@@ -68,7 +70,7 @@ public class RefCondition extends Condition
         {
             if (this.referencedcondition == null)
             {
-                this.referencedcondition = RulesEngineImpl.getCondition(this.referencedConditionId);
+                this.referencedcondition = rules.getCondition(this.referencedConditionId);
             }
             if (this.referencedcondition != null)
             {

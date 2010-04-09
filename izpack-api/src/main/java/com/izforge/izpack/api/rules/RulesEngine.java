@@ -28,4 +28,6 @@ public interface RulesEngine extends Serializable
     void addCondition(Condition condition);
 
     void writeRulesXML(OutputStream out);
+
+    Condition getCondition(String id);
 }

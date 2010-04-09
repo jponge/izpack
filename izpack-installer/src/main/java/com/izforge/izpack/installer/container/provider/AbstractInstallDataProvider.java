@@ -5,8 +5,8 @@ import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.installer.container.impl.CustomDataContainer;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
@@ -34,6 +34,7 @@ public abstract class AbstractInstallDataProvider implements Provider
     protected ResourceManager resourceManager;
     protected VariableSubstitutor variableSubstitutor;
     protected ClassPathCrawler classPathCrawler;
+    private RulesEngine rules;
 
     /**
      * Loads the installation data. Also sets environment variables to <code>installdata</code>.
@@ -44,8 +45,9 @@ public abstract class AbstractInstallDataProvider implements Provider
      * @param installdata Where to store the installation data.
      * @throws Exception Description of the Exception
      */
-    protected void loadInstallData(AutomatedInstallData installdata) throws IOException, ClassNotFoundException, InstallerException
+    protected void loadInstallData(AutomatedInstallData installdata, RulesEngine rules) throws IOException, ClassNotFoundException, InstallerException
     {
+        this.rules = rules;
         // Usefull variables
         InputStream in;
         ObjectInputStream objIn;
@@ -268,7 +270,7 @@ public abstract class AbstractInstallDataProvider implements Provider
             final String conditionId = info.getPrivilegedExecutionConditionID();
             if (conditionId != null)
             {
-                shouldElevate = RulesEngineImpl.getCondition(conditionId).isTrue();
+                shouldElevate = rules.getCondition(conditionId).isTrue();
             }
             PrivilegedRunner runner = new PrivilegedRunner(!shouldElevate);
             if (runner.isPlatformSupported() && runner.isElevationNeeded())
@@ -305,7 +307,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         final String conditionId = info.getRebootActionConditionID();
         if (conditionId != null)
         {
-            if (!RulesEngineImpl.getCondition(conditionId).isTrue())
+            if (!rules.getCondition(conditionId).isTrue())
             {
                 info.setRebootAction(Info.REBOOT_ACTION_IGNORE);
             }

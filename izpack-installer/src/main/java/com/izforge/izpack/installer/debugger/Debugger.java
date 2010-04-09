@@ -25,7 +25,6 @@ import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IconsDatabase;
 
@@ -88,7 +87,7 @@ public class Debugger
         String[] conditionids = this.rules.getKnownConditionIds();
         for (String conditionid : conditionids)
         {
-            Condition currentcondition = RulesEngineImpl.getCondition(conditionid);
+            Condition currentcondition = rules.getCondition(conditionid);
             boolean result = this.rules.isConditionTrue(currentcondition);
 
             ConditionHistory ch = null;
@@ -117,7 +116,7 @@ public class Debugger
         String[] conditionids = this.rules.getKnownConditionIds();
         for (String conditionid : conditionids)
         {
-            Condition currentcondition = RulesEngineImpl.getCondition(conditionid);
+            Condition currentcondition = rules.getCondition(conditionid);
             ConditionHistory ch = null;
             if (!conditionhistory.containsKey(conditionid))
             {

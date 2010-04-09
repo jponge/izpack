@@ -10,9 +10,9 @@ import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.handler.AbstractUIProcessHandler;
 import com.izforge.izpack.api.rules.Condition;
+import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraintHelper;
@@ -59,6 +59,7 @@ public class ProcessPanelWorker implements Runnable
 
     private Map<Boolean, List<ButtonConfig>> buttonConfigs = new Hashtable<Boolean, List<ButtonConfig>>();
     private VariableSubstitutor variableSubstitutor;
+    private RulesEngine rules;
 
     /**
      * The constructor.
@@ -67,13 +68,13 @@ public class ProcessPanelWorker implements Runnable
      * @param handler             The handler to notify of progress.
      * @param variableSubstitutor
      */
-    public ProcessPanelWorker(AutomatedInstallData idata, AbstractUIProcessHandler handler, VariableSubstitutor variableSubstitutor)
+    public ProcessPanelWorker(AutomatedInstallData idata, AbstractUIProcessHandler handler, VariableSubstitutor variableSubstitutor, RulesEngine rules)
             throws IOException
     {
         this.handler = handler;
         this.idata = idata;
         this.vs = variableSubstitutor;
-
+        this.rules = rules;
         // Removed this test in order to move out of the CTOR (ExecuteForPack
         // Patch)
         // if (!readSpec())
@@ -127,7 +128,7 @@ public class ProcessPanelWorker implements Runnable
             if ((conditionid != null) && (conditionid.length() > 0))
             {
                 Debug.trace("Condition for job.");
-                Condition cond = RulesEngineImpl.getCondition(conditionid);
+                Condition cond = rules.getCondition(conditionid);
                 if ((cond != null) && !cond.isTrue())
                 {
                     Debug.trace("condition is not fulfilled.");
@@ -321,7 +322,7 @@ public class ProcessPanelWorker implements Runnable
             if ((conditionid != null) && (conditionid.length() > 0))
             {
                 Debug.trace("Condition for job.");
-                Condition cond = RulesEngineImpl.getCondition(conditionid);
+                Condition cond = rules.getCondition(conditionid);
                 if ((cond != null) && !cond.isTrue())
                 {
                     Debug.trace("condition is not fulfilled.");
