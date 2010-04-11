@@ -1,6 +1,7 @@
 package com.izforge.izpack.api.container;
 
 import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.Parameter;
 
 /**
  * Interface for applcation container using Pico
@@ -13,7 +14,7 @@ public interface BindeableContainer
 
     <T> T getComponent(final Class<T> componentType);
 
-    void addComponent(Object componentType, Object implementation);
+    void addComponent(Object componentType, Object implementation, Parameter... parameters);
 
     Object getComponent(Object componentKeyOrType);
 

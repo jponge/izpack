@@ -5,6 +5,7 @@ import com.izforge.izpack.api.container.DependenciesFillerContainer;
 import com.izforge.izpack.api.exception.IzPackException;
 import org.picocontainer.Characteristics;
 import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.Parameter;
 import org.picocontainer.PicoBuilder;
 
 /**
@@ -29,9 +30,9 @@ public abstract class AbstractContainer implements BindeableContainer, Dependenc
         pico.as(Characteristics.USE_NAMES).addComponent(componentType);
     }
 
-    public void addComponent(Object componentType, Object implementation)
+    public void addComponent(Object componentType, Object implementation, Parameter... parameters)
     {
-        pico.addComponent(componentType, implementation);
+        pico.addComponent(componentType, implementation, parameters);
     }
 
     public <T> T getComponent(Class<T> componentType)
