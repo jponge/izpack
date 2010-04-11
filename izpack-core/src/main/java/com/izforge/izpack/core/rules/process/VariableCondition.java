@@ -26,8 +26,6 @@ import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.util.Debug;
 
-import java.util.HashMap;
-
 /**
  * @author Dennis Reil, <izpack@reil-online.de>
  */
@@ -42,13 +40,6 @@ public class VariableCondition extends Condition
     protected String variablename;
 
     protected String value;
-
-    public VariableCondition(String variablename, String value, HashMap packstoremove)
-    {
-        super();
-        this.variablename = variablename;
-        this.value = value;
-    }
 
     public VariableCondition(String variablename, String value)
     {
