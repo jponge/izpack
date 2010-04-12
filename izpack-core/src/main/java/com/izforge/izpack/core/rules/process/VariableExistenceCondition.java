@@ -43,7 +43,14 @@ public class VariableExistenceCondition extends Condition
         this.variable = "default.variable";
     }
 
+    public VariableExistenceCondition(String variable)
+    {
+        this.variable = variable;
+    }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isTrue()
     {
@@ -56,6 +63,9 @@ public class VariableExistenceCondition extends Condition
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void readFromXML(IXMLElement xmlcondition)
     {
@@ -73,19 +83,9 @@ public class VariableExistenceCondition extends Condition
         }
     }
 
-
-    public String getVariable()
-    {
-        return variable;
-    }
-
-
-    public void setVariable(String variable)
-    {
-        this.variable = variable;
-    }
-
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {

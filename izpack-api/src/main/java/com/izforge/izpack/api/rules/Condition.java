@@ -44,7 +44,6 @@ public abstract class Condition implements Serializable
     public Condition()
     {
         this.setId("UNKNOWN");
-        this.setInstalldata(null);
     }
 
     /**

@@ -40,8 +40,10 @@ import com.izforge.izpack.api.data.binding.Stage;
 import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.rules.Condition;
+import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
@@ -49,7 +51,6 @@ import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
 import com.izforge.izpack.compiler.listener.CompilerListener;
 import com.izforge.izpack.compiler.packager.IPackager;
-import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.data.PanelAction.ActionStage;
 import com.izforge.izpack.merge.MergeManager;
@@ -128,15 +129,17 @@ public class CompilerConfig extends Thread
     private AssertionHelper assertionHelper;
     private BindeableContainer compilerContainer;
     private ClassPathCrawler classPathCrawler;
+    private RulesEngine rules;
 
     /**
      * Constructor
      *
      * @param compilerData Object containing all informations found in command line
      */
-    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller, AssertionHelper assertionHelper, BindeableContainer compilerContainer, ClassPathCrawler classPathCrawler)
+    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller, AssertionHelper assertionHelper, CompilerContainer compilerContainer, ClassPathCrawler classPathCrawler, RulesEngine rules)
     {
         this.assertionHelper = assertionHelper;
+        this.rules = rules;
         this.compilerData = compilerData;
         this.variableSubstitutor = variableSubstitutor;
         this.compiler = compiler;
@@ -1834,7 +1837,7 @@ public class CompilerConfig extends Thread
         {
             for (IXMLElement conditionNode : root.getChildrenNamed("condition"))
             {
-                Condition condition = RulesEngineImpl.analyzeCondition(conditionNode);
+                Condition condition = rules.instanciateCondition(conditionNode);
                 if (condition != null)
                 {
                     String conditionid = condition.getId();
@@ -1844,7 +1847,6 @@ public class CompilerConfig extends Thread
                                 + "' will be overwritten");
                     }
                     conditions.put(conditionid, condition);
-
                 }
                 else
                 {

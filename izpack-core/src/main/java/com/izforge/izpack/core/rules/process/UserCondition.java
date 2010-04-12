@@ -38,6 +38,14 @@ public class UserCondition extends Condition
     private static final long serialVersionUID = -2076347348048202718L;
     private String requiredUsername;
 
+    public UserCondition(String requiredUsername)
+    {
+        this.requiredUsername = requiredUsername;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isTrue()
     {
@@ -61,6 +69,9 @@ public class UserCondition extends Condition
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void readFromXML(IXMLElement xmlcondition)
     {
@@ -76,6 +87,9 @@ public class UserCondition extends Condition
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {

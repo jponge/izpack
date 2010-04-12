@@ -1,5 +1,6 @@
 package com.izforge.izpack.compiler.container;
 
+import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.Compiler;
 import com.izforge.izpack.compiler.CompilerConfig;
@@ -12,13 +13,17 @@ import com.izforge.izpack.compiler.listener.CmdlinePackagerListener;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.compiler.packager.impl.Packager;
 import com.izforge.izpack.core.container.AbstractContainer;
+import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
+import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.MergeManagerImpl;
+import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.picocontainer.Characteristics;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.injectors.ProviderAdapter;
+import org.picocontainer.parameters.ComponentParameter;
 
 import java.util.Properties;
 
@@ -40,11 +45,14 @@ public class CompilerContainer extends AbstractContainer
                 .addComponent(CmdlinePackagerListener.class)
                 .addComponent(Compiler.class)
                 .addComponent(CompilerConfig.class)
+                .addComponent(ConditionContainer.class, ConditionContainer.class)
+                .addComponent(MutablePicoContainer.class, pico)
                 .as(Characteristics.USE_NAMES).addComponent(AssertionHelper.class)
                 .as(Characteristics.USE_NAMES).addComponent(PropertyManager.class)
                 .as(Characteristics.USE_NAMES).addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
                 .as(Characteristics.USE_NAMES).addComponent(IPackager.class, Packager.class)
                 .addComponent(CompilerHelper.class)
+                .addComponent(RulesEngine.class, RulesEngineImpl.class, new ComponentParameter(ClassPathCrawler.class), new ComponentParameter(ConditionContainer.class))
                 .addComponent(MergeManager.class, MergeManagerImpl.class)
                 ;
         new ResolverContainerFiller().fillContainer(pico);

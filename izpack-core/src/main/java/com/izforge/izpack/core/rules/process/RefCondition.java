@@ -32,10 +32,6 @@ import com.izforge.izpack.api.rules.RulesEngine;
  */
 public class RefCondition extends Condition
 {
-
-    /**
-     *
-     */
     private static final long serialVersionUID = -2880915036530702269L;
     Condition referencedcondition;
     private String referencedConditionId;
@@ -48,11 +44,10 @@ public class RefCondition extends Condition
         this.referencedConditionId = null;
     }
 
-    /*
-     * public boolean isTrue(Properties variables) { if (referencedcondition == null) { return
-     * false; } else { return referencedcondition.isTrue(variables); } }
+    /**
+     * {@inheritDoc}
      */
-
+    @Override
     public void readFromXML(IXMLElement xmlcondition)
     {
         this.referencedConditionId = xmlcondition.getAttribute("refid");
@@ -60,6 +55,10 @@ public class RefCondition extends Condition
         this.setId("ref." + this.referencedConditionId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean isTrue()
     {
         if (this.referencedConditionId == null)
@@ -80,10 +79,10 @@ public class RefCondition extends Condition
         }
     }
 
-    /* (non-Javadoc)
-     * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
+    /**
+     * {@inheritDoc}
      */
-
+    @Override
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();
@@ -94,6 +93,9 @@ public class RefCondition extends Condition
         return details.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {

@@ -22,16 +22,17 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.merge.resolve.ClassPathCrawler;
+import com.izforge.izpack.test.junit.PicoRunner;
 import org.hamcrest.Matcher;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
-
-import java.util.Properties;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -39,28 +40,39 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
+@RunWith(PicoRunner.class)
+@Container(TestConditionContainer.class)
 public class ConditionTest
 {
 
-    private GUIInstallData idata;
-
-    private RulesEngine rules;
     private static final Matcher<Boolean> IS_TRUE = Is.is(true);
     private static final Matcher<Boolean> IS_FALSE = Is.is(false);
     private static final Matcher<Object> IS_NULL = IsNull.nullValue();
     private static final Matcher<Object> IS_NOT_NULL = IsNull.notNullValue();
+    private RulesEngine rules;
+    private GUIInstallData idata;
+    private ClassPathCrawler classPathCrawler;
+    private ConditionContainer conditionContainer;
+
+    public ConditionTest(ClassPathCrawler classPathCrawler, GUIInstallData idata, ConditionContainer conditionContainer)
+    {
+        this.classPathCrawler = classPathCrawler;
+        this.idata = idata;
+        this.conditionContainer = conditionContainer;
+    }
 
     @Before
     public void setUp() throws Exception
     {
-        idata = new GUIInstallData(new Properties(), new VariableSubstitutorImpl(new Properties()));
         IXMLElement conditionspec = new XMLElementImpl("conditions");
         Document ownerDocument = conditionspec.getElement().getOwnerDocument();
         conditionspec.addChild(createVariableCondition("test.true", "TEST", "true", ownerDocument));
         conditionspec.addChild(createRefCondition("test.true2", "test.true", ownerDocument));
-        conditionspec.addChild(createNotCondition("test.not.true", createVariableCondition("test.true", "TEST", "true", ownerDocument), ownerDocument));
+//        conditionspec.addChild(createNotCondition("test.not.true", createVariableCondition("test.true", "TEST", "true", ownerDocument), ownerDocument));
         conditionspec.addChild(createNotCondition("test.not.true", createRefCondition("", "test.true", ownerDocument), ownerDocument));
-        rules = new RulesEngineImpl(conditionspec, idata);
+        rules = new RulesEngineImpl(idata, classPathCrawler, conditionContainer);
+        conditionContainer.addComponent(RulesEngine.class, rules);
+        rules.analyzeXml(conditionspec);
     }
 
     public IXMLElement createNotCondition(String id, IXMLElement condition, Document ownerDocument)

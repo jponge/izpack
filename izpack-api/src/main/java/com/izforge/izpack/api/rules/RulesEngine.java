@@ -1,7 +1,10 @@
 package com.izforge.izpack.api.rules;
 
+import com.izforge.izpack.api.adaptator.IXMLElement;
+
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -30,4 +33,12 @@ public interface RulesEngine extends Serializable
     void writeRulesXML(OutputStream out);
 
     Condition getCondition(String id);
+
+    void readConditionMap(Map<String, Condition> rules);
+
+    void analyzeXml(IXMLElement conditionsspec);
+
+    Condition instanciateCondition(IXMLElement condition);
+
+    IXMLElement createConditionElement(Condition condition, IXMLElement root);
 }

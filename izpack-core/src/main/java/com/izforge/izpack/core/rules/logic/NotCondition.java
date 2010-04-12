@@ -22,8 +22,9 @@
 package com.izforge.izpack.core.rules.logic;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.core.rules.RulesEngineImpl;
+import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
 
 /**
@@ -34,46 +35,17 @@ public class NotCondition extends Condition
 
     private static final long serialVersionUID = 3194843222487006309L;
     protected Condition operand;
+    private RulesEngine rulesEngineImpl;
 
-    /**
-     *
-     */
-    public NotCondition()
+    public NotCondition(RulesEngine rulesEngineImpl)
     {
-        super();
-        // TODO Auto-generated constructor stub
+        this.rulesEngineImpl = rulesEngineImpl;
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
-    public NotCondition(Condition operand)
-    {
-        this.operand = operand;
-        if (operand != null)
-        {
-            this.operand.setInstalldata(this.getInstalldata());
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see de.reddot.installer.util.Condition#isTrue()
-     */
-    /*
-    public boolean isTrue(Properties variables)
-    {
-        return !operand.isTrue(variables);
-    }
-    */
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.api.adaptator.IXMLElement)
-     */
-
+    @Override
     public void readFromXML(IXMLElement xmlcondition)
     {
         try
@@ -83,7 +55,7 @@ public class NotCondition extends Condition
                 Debug.log("not-condition needs one condition as operand");
                 return;
             }
-            this.operand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(0));
+            this.operand = rulesEngineImpl.instanciateCondition(xmlcondition.getChildAtIndex(0));
         }
         catch (Exception e)
         {
@@ -91,13 +63,11 @@ public class NotCondition extends Condition
         }
     }
 
-    /*
-    public boolean isTrue(Properties variables, List selectedpacks)
-    {
-        return !operand.isTrue(variables, selectedpacks);
-    }
-    */
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean isTrue()
     {
         if ((this.operand == null))
@@ -109,10 +79,11 @@ public class NotCondition extends Condition
         return !operand.isTrue();
     }
 
-    /* (non-Javadoc)
-     * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
-     */
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();
@@ -123,11 +94,27 @@ public class NotCondition extends Condition
         return details.toString();
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {
-        IXMLElement op = RulesEngineImpl.createConditionElement(this.operand, conditionRoot);
+        IXMLElement op = rulesEngineImpl.createConditionElement(this.operand, conditionRoot);
         this.operand.makeXMLData(op);
         conditionRoot.addChild(op);
+    }
+
+    public static Condition createFromCondition(Condition conditionByExpr, RulesEngine rulesEngine, AutomatedInstallData installData)
+    {
+        NotCondition notCondition = new NotCondition(rulesEngine);
+        notCondition.setInstalldata(installData);
+        notCondition.operand = conditionByExpr;
+        if (conditionByExpr != null)
+        {
+            notCondition.operand.setInstalldata(installData);
+        }
+        return notCondition;
     }
 }

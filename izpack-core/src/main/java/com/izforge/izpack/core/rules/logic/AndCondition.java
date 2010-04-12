@@ -38,20 +38,16 @@ public class AndCondition extends Condition
     protected Condition leftoperand;
 
     protected Condition rightoperand;
+    private RulesEngineImpl rulesEngineImpl;
 
-    /**
-     *
-     */
-    public AndCondition()
+    public AndCondition(RulesEngineImpl rulesEngineImpl)
     {
-        super();
+        this.rulesEngineImpl = rulesEngineImpl;
     }
 
-    /**
-     *
-     */
-    public AndCondition(Condition operand1, Condition operand2)
+    public AndCondition(Condition operand1, Condition operand2, RulesEngineImpl rulesEngineImpl)
     {
+        this.rulesEngineImpl = rulesEngineImpl;
         this.leftoperand = operand1;
         if (this.leftoperand != null)
         {
@@ -65,13 +61,10 @@ public class AndCondition extends Condition
         }
     }
 
-
-    /*
-    * (non-Javadoc)
-    *
-    * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.api.adaptator.IXMLElement)
-    */
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void readFromXML(IXMLElement xmlcondition)
     {
         try
@@ -81,8 +74,8 @@ public class AndCondition extends Condition
                 Debug.log("and-condition needs two conditions as operands");
                 return;
             }
-            this.leftoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(0));
-            this.rightoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(1));
+            this.leftoperand = rulesEngineImpl.instanciateCondition(xmlcondition.getChildAtIndex(0));
+            this.rightoperand = rulesEngineImpl.instanciateCondition(xmlcondition.getChildAtIndex(1));
         }
 
         catch (Exception e)
@@ -91,7 +84,10 @@ public class AndCondition extends Condition
         }
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean isTrue()
     {
         if ((this.leftoperand == null) || (this.rightoperand == null))
@@ -104,10 +100,10 @@ public class AndCondition extends Condition
         return leftoperand.isTrue() && rightoperand.isTrue();
     }
 
-    /* (non-Javadoc)
-     * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
+    /**
+     * {@inheritDoc}
      */
-
+    @Override
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();
@@ -120,13 +116,16 @@ public class AndCondition extends Condition
         return details.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void makeXMLData(IXMLElement root)
     {
-        IXMLElement left = RulesEngineImpl.createConditionElement(this.leftoperand, root);
+        IXMLElement left = rulesEngineImpl.createConditionElement(this.leftoperand, root);
         this.leftoperand.makeXMLData(left);
         root.addChild(left);
-        IXMLElement right = RulesEngineImpl.createConditionElement(this.rightoperand, root);
+        IXMLElement right = rulesEngineImpl.createConditionElement(this.rightoperand, root);
         this.rightoperand.makeXMLData(right);
         root.addChild(right);
     }

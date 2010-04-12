@@ -23,7 +23,6 @@ package com.izforge.izpack.core.rules.logic;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.util.Debug;
 
 /**
@@ -32,19 +31,8 @@ import com.izforge.izpack.util.Debug;
  */
 public class XorCondition extends OrCondition
 {
-
-    /**
-     *
-     */
     private static final long serialVersionUID = 3148555083095194992L;
 
-    /**
-     *
-     */
-    public XorCondition()
-    {
-        super();
-    }
 
     /**
      * @param operand1
@@ -55,12 +43,10 @@ public class XorCondition extends OrCondition
         super(operand1, operand2);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see de.reddot.installer.rules.Condition#readFromXML(net.n3.nanoxml.XMLElement)
+    /**
+     * {@inheritDoc}
      */
-
+    @Override
     public void readFromXML(IXMLElement xmlcondition)
     {
         try
@@ -70,8 +56,8 @@ public class XorCondition extends OrCondition
                 Debug.log("xor-condition needs two conditions as operands");
                 return;
             }
-            this.leftoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(0));
-            this.rightoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(1));
+            this.leftoperand = rulesEngineImpl.instanciateCondition(xmlcondition.getChildAtIndex(0));
+            this.rightoperand = rulesEngineImpl.instanciateCondition(xmlcondition.getChildAtIndex(1));
         }
         catch (Exception e)
         {
@@ -79,6 +65,10 @@ public class XorCondition extends OrCondition
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean isTrue()
     {
         if ((this.leftoperand == null) || (this.rightoperand == null))
@@ -100,12 +90,11 @@ public class XorCondition extends OrCondition
         return op1true || op2true;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.izforge.izpack.core.rules.logic.OrCondition#getDependenciesDetails()
-     */
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();

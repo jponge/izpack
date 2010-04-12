@@ -314,10 +314,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     {
         if (variable != null)
         {
-            VariableExistenceCondition variableCondition = new VariableExistenceCondition();
+            VariableExistenceCondition variableCondition = new VariableExistenceCondition(variable);
             variableCondition.setId("izpack.input." + variable);
             variableCondition.setInstalldata(this.installData);
-            variableCondition.setVariable(variable);
             parent.getRules().addCondition(variableCondition);
         }
     }

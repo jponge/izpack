@@ -55,6 +55,7 @@ public abstract class AbstractContainer implements BindeableContainer, Dependenc
         pico.dispose();
     }
 
+    @Override
     public MutablePicoContainer makeChildContainer()
     {
         return pico.makeChildContainer();

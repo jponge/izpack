@@ -7,13 +7,13 @@ import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
+import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.console.ConsoleInstaller;
 import com.izforge.izpack.installer.container.provider.GUIInstallDataProvider;
 import com.izforge.izpack.installer.container.provider.IconsProvider;
-import com.izforge.izpack.installer.container.provider.RulesProvider;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.language.ConditionCheck;
@@ -44,13 +44,15 @@ public class InstallerContainer extends AbstractContainer
 //              .addAdapter(new ProviderAdapter(new AutomatedInstallDataProvider()))
                 .addAdapter(new ProviderAdapter(new GUIInstallDataProvider()))
                 .addAdapter(new ProviderAdapter(new IconsProvider()))
-                .addAdapter(new ProviderAdapter(new RulesProvider()));
+//                .addAdapter(new ProviderAdapter(new RulesProvider()))
+                ;
         pico
                 .addComponent(PanelManager.class)
                 .addComponent(ConditionCheck.class)
                 .addComponent(MergeManagerImpl.class)
                 .addComponent(UninstallData.class)
-                .addComponent(CustomDataContainer.class, CustomDataContainer.class)
+                .addComponent(MutablePicoContainer.class, pico)
+                .addComponent(ConditionContainer.class)
                 .addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
                 .addComponent(Properties.class)
                 .addComponent(ResourceManager.class)

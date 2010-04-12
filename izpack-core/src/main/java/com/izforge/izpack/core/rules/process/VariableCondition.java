@@ -41,17 +41,12 @@ public class VariableCondition extends Condition
 
     protected String value;
 
-    public VariableCondition(String variablename, String value)
-    {
-        super();
-        this.variablename = variablename;
-        this.value = value;
-    }
-
-    public VariableCondition()
-    {
-        super();
-    }
+//    public VariableCondition(String variablename, String value, AutomatedInstallData installdata)
+//    {
+//        super(installdata);
+//        this.variablename = variablename;
+//        this.value = value;
+//    }
 
     public String getValue()
     {

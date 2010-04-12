@@ -1,5 +1,6 @@
 package com.izforge.izpack.installer.container.provider;
 
+import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
@@ -7,7 +8,6 @@ import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.installer.container.impl.CustomDataContainer;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.*;
@@ -62,7 +62,7 @@ public abstract class AbstractInstallDataProvider implements Provider
 
         checkForPrivilegedExecution(inf);
 
-        checkForRebootAction(inf);
+//        checkForRebootAction(inf);
 
         // We put the Info data as variables
         installdata.setVariable(ScriptParserConstant.APP_NAME, inf.getAppName());
@@ -203,11 +203,11 @@ public abstract class AbstractInstallDataProvider implements Provider
     /**
      * Loads custom data like listener and lib references if exist and fills the installdata.
      *
-     * @param installdata         installdata into which the custom action data should be stored
-     * @param customDataContainer
+     * @param installdata        installdata into which the custom action data should be stored
+     * @param bindeableContainer
      * @throws Exception
      */
-    protected void loadCustomData(AutomatedInstallData installdata, CustomDataContainer customDataContainer, PathResolver pathResolver) throws IOException, InstallerException, ClassNotFoundException
+    protected void loadCustomData(AutomatedInstallData installdata, BindeableContainer bindeableContainer, PathResolver pathResolver) throws IOException, InstallerException, ClassNotFoundException
     {
         IzpackProjectInstaller izpackModel = (IzpackProjectInstaller) readObject("izpackInstallModel");
         List<InstallerListener> customActions = new ArrayList<InstallerListener>();
@@ -221,8 +221,8 @@ public abstract class AbstractInstallDataProvider implements Provider
             {
                 case install:
                     Class aClass = classPathCrawler.searchClassInClassPath(listener.getClassname());
-                    customDataContainer.addComponent(aClass);
-                    customActions.add((InstallerListener) customDataContainer.getComponent(aClass));
+                    bindeableContainer.addComponent(aClass);
+                    customActions.add((InstallerListener) bindeableContainer.getComponent(aClass));
                     break;
                 case uninstall:
             }
@@ -301,6 +301,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         }
 
     }
+
 
     private void checkForRebootAction(Info info)
     {

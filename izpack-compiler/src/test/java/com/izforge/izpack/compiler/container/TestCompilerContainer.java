@@ -39,7 +39,6 @@ public class TestCompilerContainer extends AbstractContainer
             deleteLock();
             CompilerContainer compilerContainer = new CompilerContainer();
             compilerContainer.fillContainer(pico);
-
             InstallFile installFile = ((InstallFile) frameworkMethod.getAnnotation(InstallFile.class));
             if (installFile == null)
             {

@@ -26,8 +26,6 @@ import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.util.Debug;
 
-import java.util.HashMap;
-
 /**
  * @author Dennis Reil, <izpack@reil-online.de>
  */
@@ -35,57 +33,14 @@ public class CompareNumericsCondition extends Condition
 {
     private static final long serialVersionUID = 5631805710151645907L;
 
-    protected String variablename;
-    protected String value;
-    protected String operator;
+    private String variablename;
+    private String value;
+    private String operator;
 
-    public CompareNumericsCondition(String variablename, String value, HashMap packstoremove)
-    {
-        super();
-        this.variablename = variablename;
-        this.value = value;
-        this.operator = "eq";
-    }
-
-    public CompareNumericsCondition(String variablename, String value)
-    {
-        super();
-        this.variablename = variablename;
-        this.value = value;
-        this.operator = "eq";
-    }
-
-    public CompareNumericsCondition()
-    {
-        super();
-    }
-
-    public String getValue()
-    {
-        return value;
-    }
-
-    public void setValue(String value)
-    {
-        this.value = value;
-    }
-
-    public String getVariablename()
-    {
-        return variablename;
-    }
-
-    public void setVariablename(String variablename)
-    {
-        this.variablename = variablename;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.api.adaptator.IXMLElement)
+    /**
+     * {@inheritDoc}
      */
-
+    @Override
     public void readFromXML(IXMLElement xmlcondition)
     {
         try
@@ -98,9 +53,12 @@ public class CompareNumericsCondition extends Condition
         {
             Debug.log("missing element in <condition type=\"variable\"/>");
         }
-
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean isTrue()
     {
         boolean result = false;
@@ -147,10 +105,10 @@ public class CompareNumericsCondition extends Condition
         return result;
     }
 
-    /* (non-Javadoc)
-     * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
+    /**
+     * {@inheritDoc}
      */
-
+    @Override
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();
@@ -167,18 +125,9 @@ public class CompareNumericsCondition extends Condition
         return details.toString();
     }
 
-
-    public String getOperator()
-    {
-        return operator;
-    }
-
-
-    public void setOperator(String operator)
-    {
-        this.operator = operator;
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {

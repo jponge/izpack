@@ -37,19 +37,8 @@ public class OrCondition extends Condition
     protected Condition leftoperand;
 
     protected Condition rightoperand;
+    protected RulesEngineImpl rulesEngineImpl;
 
-    /**
-     *
-     */
-    public OrCondition()
-    {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-    /**
-     *
-     */
     public OrCondition(Condition operand1, Condition operand2)
     {
         this.leftoperand = operand1;
@@ -58,21 +47,10 @@ public class OrCondition extends Condition
         this.rightoperand.setInstalldata(this.getInstalldata());
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see de.reddot.installer.util.Condition#isTrue()
+    /**
+     * {@inheritDoc}
      */
-    /*
-     * public boolean isTrue(Properties variables) { return this.leftoperand.isTrue(variables) ||
-     * this.rightoperand.isTrue(variables); }
-     */
-    /*
-     * (non-Javadoc)
-     * 
-     * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.api.adaptator.IXMLElement)
-     */
-
+    @Override
     public void readFromXML(IXMLElement xmlcondition)
     {
         try
@@ -82,8 +60,8 @@ public class OrCondition extends Condition
                 Debug.log("or-condition needs two conditions as operands");
                 return;
             }
-            this.leftoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(0));
-            this.rightoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(1));
+            this.leftoperand = rulesEngineImpl.instanciateCondition(xmlcondition.getChildAtIndex(0));
+            this.rightoperand = rulesEngineImpl.instanciateCondition(xmlcondition.getChildAtIndex(1));
         }
         catch (Exception e)
         {
@@ -91,12 +69,11 @@ public class OrCondition extends Condition
         }
     }
 
-    /*
-     * public boolean isTrue(Properties variables, List selectedpacks) { return
-     * this.leftoperand.isTrue(variables, selectedpacks) || this.rightoperand.isTrue(variables,
-     * selectedpacks); }
-     */
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean isTrue()
     {
         if ((this.leftoperand == null) || (this.rightoperand == null))
@@ -109,10 +86,11 @@ public class OrCondition extends Condition
         return this.leftoperand.isTrue() || this.rightoperand.isTrue();
     }
 
-    /* (non-Javadoc)
-     * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
-     */
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();
@@ -125,13 +103,16 @@ public class OrCondition extends Condition
         return details.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {
-        IXMLElement left = RulesEngineImpl.createConditionElement(this.leftoperand, conditionRoot);
+        IXMLElement left = rulesEngineImpl.createConditionElement(this.leftoperand, conditionRoot);
         this.leftoperand.makeXMLData(left);
         conditionRoot.addChild(left);
-        IXMLElement right = RulesEngineImpl.createConditionElement(this.rightoperand, conditionRoot);
+        IXMLElement right = rulesEngineImpl.createConditionElement(this.rightoperand, conditionRoot);
         this.rightoperand.makeXMLData(right);
         conditionRoot.addChild(right);
     }

@@ -4,8 +4,10 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.installer.base.InstallerBase;
+import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.util.Debug;
 import org.picocontainer.injectors.Provider;
 
@@ -27,7 +29,7 @@ public class RulesProvider implements Provider
     /**
      * Reads the conditions specification file and initializes the rules engine.
      */
-    public RulesEngine provide(AutomatedInstallData installdata)
+    public RulesEngine provide(AutomatedInstallData installdata, ClassPathCrawler classPathCrawler, ConditionContainer conditionContainer)
     {
         // try to load already parsed conditions
         RulesEngine res = null;
@@ -38,7 +40,8 @@ public class RulesProvider implements Provider
             Map rules = (Map) objIn.readObject();
             if ((rules != null) && (rules.size() != 0))
             {
-                res = new RulesEngineImpl(rules, installdata);
+                res = new RulesEngineImpl(installdata, classPathCrawler, conditionContainer);
+                res.readConditionMap(rules);
             }
             objIn.close();
         }
@@ -57,20 +60,21 @@ public class RulesProvider implements Provider
             InputStream input = this.getClass().getResourceAsStream(CONDITIONS_SPECRESOURCENAME);
             if (input == null)
             {
-                res = new RulesEngineImpl((IXMLElement) null, installdata);
+                res = new RulesEngineImpl(installdata, classPathCrawler, conditionContainer);
                 return res;
             }
             XMLParser xmlParser = new XMLParser();
 
             // get the data
             IXMLElement conditionsxml = xmlParser.parse(input);
-            res = new RulesEngineImpl(conditionsxml, installdata);
+            res = new RulesEngineImpl(installdata, classPathCrawler, conditionContainer);
+            res.analyzeXml(conditionsxml);
         }
         catch (Exception e)
         {
             Debug.trace("Can not find optional resource " + CONDITIONS_SPECRESOURCENAME);
             // there seem to be no conditions
-            res = new RulesEngineImpl((IXMLElement) null, installdata);
+            res = new RulesEngineImpl(installdata, classPathCrawler, conditionContainer);
         }
         installdata.setRules(res);
         return res;
