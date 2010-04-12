@@ -28,7 +28,6 @@ import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.util.Debug;
 
 import java.util.List;
-import java.util.Properties;
 
 /**
  * @author Dennis Reil, <izpack@reil-online.de>
@@ -36,32 +35,8 @@ import java.util.Properties;
  */
 public class PackselectionCondition extends Condition
 {
-
-    /**
-     *
-     */
     private static final long serialVersionUID = 9193011814966195963L;
     protected String packid;
-
-    /**
-     *
-     */
-    public PackselectionCondition()
-    {
-        // TODO Auto-generated constructor stub
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see de.reddot.installer.rules.Condition#isTrue(java.util.Properties)
-     */
-
-    private boolean isTrue(Properties variables)
-    {
-        // no information about selected packs given, so return false
-        return false;
-    }
 
     /*
      * (non-Javadoc)
@@ -81,14 +56,13 @@ public class PackselectionCondition extends Condition
         }
     }
 
-    private boolean isTrue(Properties variables, List selectedpacks)
+    private boolean isTrue(List<Pack> selectedpacks)
     {
         if (selectedpacks != null)
         {
-            for (Object selectedpack : selectedpacks)
+            for (Pack selectedpack : selectedpacks)
             {
-                Pack p = (Pack) selectedpack;
-                if (packid.equals(p.id))
+                if (packid.equals(selectedpack.id))
                 {
                     // pack is selected
                     return true;
@@ -101,12 +75,9 @@ public class PackselectionCondition extends Condition
 
     public boolean isTrue()
     {
-        return this.isTrue(this.getInstalldata().getVariables(), this.getInstalldata().getSelectedPacks());
+        return this.isTrue(getInstalldata().getSelectedPacks());
     }
 
-    /* (non-Javadoc)
-     * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
-     */
 
     public String getDependenciesDetails()
     {
@@ -124,11 +95,6 @@ public class PackselectionCondition extends Condition
         XMLElementImpl packel = new XMLElementImpl("packid", conditionRoot);
         packel.setContent(this.packid);
         conditionRoot.addChild(packel);
-    }
-
-    public String getPackid()
-    {
-        return packid;
     }
 
     public void setPackid(String packid)
