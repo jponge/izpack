@@ -4,7 +4,6 @@ import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.GUIPrefs;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
@@ -32,14 +31,14 @@ import java.util.TreeMap;
 public class GUIInstallDataProvider extends AbstractInstallDataProvider
 {
 
-    public GUIInstallData provide(ResourceManager resourceManager, VariableSubstitutor variableSubstitutor, Properties variables, PathResolver pathResolver, ClassPathCrawler classPathCrawler, RulesEngine rules, BindeableContainer container) throws Exception
+    public GUIInstallData provide(ResourceManager resourceManager, VariableSubstitutor variableSubstitutor, Properties variables, PathResolver pathResolver, ClassPathCrawler classPathCrawler, BindeableContainer container) throws Exception
     {
         this.resourceManager = resourceManager;
         this.variableSubstitutor = variableSubstitutor;
         this.classPathCrawler = classPathCrawler;
         final GUIInstallData guiInstallData = new GUIInstallData(variables, variableSubstitutor);
         // Loads the installation data
-        loadInstallData(guiInstallData, rules);
+        loadInstallData(guiInstallData);
         // Load custom action data.
         loadCustomData(guiInstallData, container, pathResolver);
 

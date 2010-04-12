@@ -6,14 +6,15 @@ import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.OsConstraintHelper;
+import com.izforge.izpack.util.OsVersion;
 import org.picocontainer.injectors.Provider;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,7 +35,6 @@ public abstract class AbstractInstallDataProvider implements Provider
     protected ResourceManager resourceManager;
     protected VariableSubstitutor variableSubstitutor;
     protected ClassPathCrawler classPathCrawler;
-    protected RulesEngine rules;
 
     /**
      * Loads the installation data. Also sets environment variables to <code>installdata</code>.
@@ -45,9 +45,8 @@ public abstract class AbstractInstallDataProvider implements Provider
      * @param installdata Where to store the installation data.
      * @throws Exception Description of the Exception
      */
-    protected void loadInstallData(AutomatedInstallData installdata, RulesEngine rules) throws IOException, ClassNotFoundException, InstallerException
+    protected void loadInstallData(AutomatedInstallData installdata) throws IOException, ClassNotFoundException, InstallerException
     {
-        this.rules = rules;
         // Usefull variables
         InputStream in;
         ObjectInputStream objIn;
@@ -60,8 +59,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         // We load the Info data
         Info inf = (Info) readObject("info");
 
-        checkForPrivilegedExecution(inf);
-
+//        checkForPrivilegedExecution(inf);
 //        checkForRebootAction(inf);
 
         // We put the Info data as variables
@@ -256,63 +254,6 @@ public abstract class AbstractInstallDataProvider implements Provider
             }
         }
         return dir;
-    }
-
-    private void checkForPrivilegedExecution(Info info)
-    {
-        if (PrivilegedRunner.isPrivilegedMode())
-        {
-            // We have been launched through a privileged execution, so stop the checkings here!
-        }
-        else if (info.isPrivilegedExecutionRequired())
-        {
-            boolean shouldElevate = true;
-            final String conditionId = info.getPrivilegedExecutionConditionID();
-            if (conditionId != null)
-            {
-                shouldElevate = rules.getCondition(conditionId).isTrue();
-            }
-            PrivilegedRunner runner = new PrivilegedRunner(!shouldElevate);
-            if (runner.isPlatformSupported() && runner.isElevationNeeded())
-            {
-                try
-                {
-                    if (runner.relaunchWithElevatedRights() == 0)
-                    {
-                        System.exit(0);
-                    }
-                    else
-                    {
-                        throw new RuntimeException("Launching an installer with elevated permissions failed.");
-                    }
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "The installer could not launch itself with administrator permissions.\n" +
-                            "The installation will still continue but you may encounter problems due to insufficient permissions.");
-                }
-            }
-            else if (!runner.isPlatformSupported())
-            {
-                JOptionPane.showMessageDialog(null, "This installer should be run by an administrator.\n" +
-                        "The installation will still continue but you may encounter problems due to insufficient permissions.");
-            }
-        }
-
-    }
-
-
-    private void checkForRebootAction(Info info)
-    {
-        final String conditionId = info.getRebootActionConditionID();
-        if (conditionId != null)
-        {
-            if (!rules.getCondition(conditionId).isTrue())
-            {
-                info.setRebootAction(Info.REBOOT_ACTION_IGNORE);
-            }
-        }
     }
 
     /**

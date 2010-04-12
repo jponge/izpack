@@ -6,6 +6,7 @@ import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
+import com.izforge.izpack.installer.base.InstallDataConfiguratorWithRules;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.container.provider.IconsProvider;
 import com.izforge.izpack.installer.container.provider.RulesProvider;
@@ -41,6 +42,7 @@ public class TestPanelContainer extends AbstractContainer
                 .addComponent(UninstallData.class)
                 .addComponent(MutablePicoContainer.class, pico)
                 .addComponent(ConditionContainer.class)
+                .addComponent(InstallDataConfiguratorWithRules.class)
                 .addComponent(Mockito.mock(UninstallDataWriter.class))
                 .addComponent(AutomatedInstaller.class)
                 .addComponent(FrameFixture.class, FrameFixture.class, new ComponentParameter(InstallerFrame.class))

@@ -203,13 +203,12 @@ public class InstallerFrame extends JFrame
     /**
      * The constructor (normal mode).
      *
-     * @param variableSubstitutor
      * @param uninstallData
-     * @param title               The window title.
-     * @param installdata         The installation data.
+     * @param title         The window title.
+     * @param installdata   The installation data.
      * @throws Exception Description of the Exception
      */
-    public InstallerFrame(String title, GUIInstallData installdata, RulesEngine rules, IconsDatabase icons, PanelManager panelManager, UninstallDataWriter uninstallDataWriter, ResourceManager resourceManager, VariableSubstitutor variableSubstitutor, UninstallData uninstallData)
+    public InstallerFrame(String title, GUIInstallData installdata, RulesEngine rules, IconsDatabase icons, PanelManager panelManager, UninstallDataWriter uninstallDataWriter, ResourceManager resourceManager, UninstallData uninstallData, InstallDataConfiguratorWithRules installDataRulesEngineManager)
             throws Exception
     {
         super(title);
@@ -222,6 +221,7 @@ public class InstallerFrame extends JFrame
         this.uninstallDataWriter = uninstallDataWriter;
         this.uninstallData = uninstallData;
         this.panelManager = panelManager;
+        installDataRulesEngineManager.configureInstallData();
         // Sets the window events handler
         addWindowListener(new WindowHandler());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -261,7 +261,7 @@ public class InstallerFrame extends JFrame
     private void switchToFirstEnabledPanel()
     {
         int firstPanel = hasNavigateNext(-1, false);
-        if (firstPanel > -1) 
+        if (firstPanel > -1)
         {
             showFrame();
             installdata.setCurPanelNumber(firstPanel);
