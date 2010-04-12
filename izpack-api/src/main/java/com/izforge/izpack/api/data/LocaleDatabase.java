@@ -22,6 +22,7 @@ package com.izforge.izpack.api.data;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
+import com.izforge.izpack.api.exception.IzPackException;
 
 import java.io.InputStream;
 import java.text.MessageFormat;
@@ -81,7 +82,7 @@ public class LocaleDatabase extends TreeMap
      * @param in an InputStream to read the translation from.
      * @throws Exception
      */
-    public void add(InputStream in) throws Exception
+    public void add(InputStream in)
     {
         // Initialises the parser
         IXMLParser parser = new XMLParser();
@@ -91,7 +92,7 @@ public class LocaleDatabase extends TreeMap
         // We check the data
         if (!"langpack".equalsIgnoreCase(data.getName()))
         {
-            throw new Exception(
+            throw new IzPackException(
                     "this is not an IzPack XML langpack file");
         }
 
