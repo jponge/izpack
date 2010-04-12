@@ -9,7 +9,7 @@ import org.picocontainer.MutablePicoContainer;
 public class CustomDataContainer extends AbstractContainer
 {
 
-    public CustomDataContainer(InstallerContainer parent) throws ClassNotFoundException
+    public CustomDataContainer(MutablePicoContainer parent) throws ClassNotFoundException
     {
         pico = parent.makeChildContainer();
     }

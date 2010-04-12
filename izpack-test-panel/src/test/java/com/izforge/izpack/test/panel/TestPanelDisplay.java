@@ -1,7 +1,6 @@
 package com.izforge.izpack.test.panel;
 
 import com.izforge.izpack.api.GuiId;
-import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
@@ -41,7 +40,7 @@ public class TestPanelDisplay
     private InstallerFrame installerFrame;
     private UninstallDataWriter uninstallDataWriter;
 
-    public TestPanelDisplay(GUIInstallData guiInstallData, InstallerFrame installerFrame, ResourceManager resourceManager, FrameFixture frameFixture, BindeableContainer container, UninstallDataWriter uninstallDataWriter)
+    public TestPanelDisplay(GUIInstallData guiInstallData, InstallerFrame installerFrame, ResourceManager resourceManager, FrameFixture frameFixture, UninstallDataWriter uninstallDataWriter)
     {
         this.guiInstallData = guiInstallData;
         this.installerFrame = installerFrame;

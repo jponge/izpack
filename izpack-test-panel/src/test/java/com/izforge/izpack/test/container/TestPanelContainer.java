@@ -3,6 +3,7 @@ package com.izforge.izpack.test.container;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
+import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -32,12 +33,14 @@ public class TestPanelContainer extends AbstractContainer
      */
     public void fillContainer(MutablePicoContainer pico)
     {
+        this.pico = pico;
         pico.addComponent(System.getProperties());
-
         pico.addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
                 .addComponent(ResourceManager.class)
                 .addComponent(ConditionCheck.class)
                 .addComponent(UninstallData.class)
+                .addComponent(MutablePicoContainer.class, pico)
+                .addComponent(ConditionContainer.class)
                 .addComponent(Mockito.mock(UninstallDataWriter.class))
                 .addComponent(AutomatedInstaller.class)
                 .addComponent(FrameFixture.class, FrameFixture.class, new ComponentParameter(InstallerFrame.class))
