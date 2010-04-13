@@ -74,12 +74,6 @@ public class InstallerFrame extends JFrame
 
     private static final long serialVersionUID = 3257852069162727473L;
 
-    /**
-     * VM version to use version dependent methods calls
-     */
-    private static final float JAVA_SPECIFICATION_VERSION = Float.parseFloat(System
-            .getProperty("java.specification.version"));
-
     private static final String ICON_RESOURCE = "Installer.image";
 
     /**
@@ -690,22 +684,18 @@ public class InstallerFrame extends JFrame
                 // be ignored.
                 // Give a hint for the initial focus to the system.
                 final Component inFoc = newPanel.getInitialFocus();
-                if (JAVA_SPECIFICATION_VERSION < 1.35)
-                {
-                    inFoc.requestFocus();
-                }
-                else
-                { // On java VM version >= 1.5 it works only if
-                    // invoke later will be used.
-                    SwingUtilities.invokeLater(new Runnable()
-                    {
 
-                        public void run()
-                        {
-                            inFoc.requestFocusInWindow();
-                        }
-                    });
-                }
+                // On java VM version >= 1.5 it works only if
+                // invoke later will be used.
+                SwingUtilities.invokeLater(new Runnable()
+                {
+
+                    public void run()
+                    {
+                        inFoc.requestFocusInWindow();
+                    }
+                });
+
                 /*
                  * On editable text components position the caret to the end of the cust existent
                  * text.
@@ -1050,11 +1040,7 @@ public class InstallerFrame extends JFrame
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         getGlassPane().setVisible(true);
         getGlassPane().setEnabled(true);
-        // No traversal handling before VM version 1.4
-        if (JAVA_SPECIFICATION_VERSION < 1.35)
-        {
-            return;
-        }
+
         if (usualFTP == null)
         {
             usualFTP = getFocusTraversalPolicy();
@@ -1077,11 +1063,7 @@ public class InstallerFrame extends JFrame
         getGlassPane().setEnabled(false);
         getGlassPane().setVisible(false);
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-        // No traversal handling before VM version 1.4
-        if (JAVA_SPECIFICATION_VERSION < 1.35)
-        {
-            return;
-        }
+        
         setFocusTraversalPolicy((java.awt.FocusTraversalPolicy) usualFTP);
         callGUIListener(GUIListener.GUI_RELEASED);
     }

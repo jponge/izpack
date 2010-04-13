@@ -519,15 +519,7 @@ public class SelfModifier
         // file
         // Constructed w/ it will expect "%20" in path. URI and File(URI)
         // properly
-        // deal with escaping back and forth, but didn't exist until 1.4
-        if (JAVA_SPECIFICATION_VERSION < 1.4)
-        {
-            file = new File(fromURI(path));
-        }
-        else
-        {
-            file = new File(URI.create(path));
-        }
+        file = new File(URI.create(path));
 
         return file;
     }
@@ -838,8 +830,6 @@ public class SelfModifier
     // This was stolen (and specialized from much more modular code) from the
     // jakarta ant class org.apache.tools.ant.taskdefs.condition.Os
     // See the javaCommand() method.
-    private static final float JAVA_SPECIFICATION_VERSION = Float.parseFloat(System
-            .getProperty("java.specification.version"));
 
     private static final String JAVA_HOME = System.getProperty("java.home");
 
