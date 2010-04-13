@@ -8,7 +8,7 @@
     <packaging>pom</packaging>
     <name>IzPack parent</name>
 
-    <description>IzPack parent module</description>    
+    <description>IzPack parent module</description>
 
     <dependencies>
         <dependency>
@@ -245,7 +245,7 @@
 
         </dependencies>
     </dependencyManagement>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -304,7 +304,7 @@
             </plugin>
         </plugins>
     </build>
-    
+
     <profiles>
         <profile>
             <id>bamboo</id>
@@ -322,6 +322,7 @@
                                 <exclude>**/InstallationTest.java</exclude>
                                 <exclude>**/UninstallDataWriter.java</exclude>
                                 <exclude>**/UninstallWriteTest.java</exclude>
+                                <exclude>**/ConditionCheckTest.java</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
@@ -329,13 +330,13 @@
             </build>
         </profile>
     </profiles>
-    
+
     <scm>
         <connection>scm:git:git://git.codehaus.org/izpack.git</connection>
         <developerConnection>scm:git:ssh://git@git.codehaus.org/izpack.git</developerConnection>
         <url>http://git.codehaus.org/gitweb.cgi?p=izpack.git</url>
     </scm>
-    
+
     <distributionManagement>
         <site>
             <id>codehaus.org</id>
