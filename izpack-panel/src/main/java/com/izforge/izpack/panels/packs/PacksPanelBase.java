@@ -29,6 +29,7 @@ import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
@@ -136,6 +137,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     private static final String LANG_FILE_NAME = "packsLang.xml";
 
     private Debugger debugger;
+    private RulesEngine rules;
 
     /**
      * The constructor.
@@ -143,9 +145,10 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public PacksPanelBase(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    public PacksPanelBase(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, RulesEngine rules)
     {
         super(parent, idata, resourceManager);
+        this.rules = rules;
         // Load langpack.
         try
         {
@@ -610,7 +613,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     {
         try
         {
-            packsModel = new PacksModel(this, installData, this.parent.getRules())
+            packsModel = new PacksModel(this, installData, rules)
             {
                 @Override
                 public boolean isCellEditable(int rowIndex, int columnIndex)

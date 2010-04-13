@@ -1917,8 +1917,4 @@ public class InstallerFrame extends JFrame
         this.helpButton.setVisible(show);
     }
 
-    public RulesEngine getRules()
-    {
-        return rules;
-    }
 }

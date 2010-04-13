@@ -29,6 +29,7 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.panels.IShortcuPanel;
+import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.gui.ButtonFactory;
@@ -614,6 +615,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
     int col;
     private UninstallData uninstallData;
+    private RulesEngine rules;
 
     // ~ Constructors ***********************************************************************
 
@@ -634,9 +636,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /*
      * --------------------------------------------------------------------------
      */
-    public ShortcutPanel(InstallerFrame parent, GUIInstallData installDataGUI, ResourceManager resourceManager, UninstallData uninstallData)
+    public ShortcutPanel(InstallerFrame parent, GUIInstallData installDataGUI, ResourceManager resourceManager, UninstallData uninstallData, RulesEngine rules)
     {
         super(parent, installDataGUI, "link16x16", resourceManager);
+        this.rules = rules;
         this.uninstallData = uninstallData;
         layout = (GridBagLayout) super.getLayout();
         Object con = getLayoutHelper().getDefaultConstraints();
@@ -1327,7 +1330,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         String conditionid = shortcutSpec.getAttribute(SPEC_ATTRIBUTE_CONDITION);
         if (conditionid != null)
         {
-            result = this.parent.getRules().isConditionTrue(conditionid);
+            result = rules.isConditionTrue(conditionid);
         }
 //          Vector conditions = shortcutSpec.getChildrenNamed( Condition.CONDITION );
 //          

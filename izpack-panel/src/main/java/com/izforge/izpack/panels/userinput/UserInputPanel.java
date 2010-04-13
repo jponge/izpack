@@ -282,6 +282,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     private Vector<UIElement> elements = new Vector<UIElement>();
 
     private JPanel panel;
+    private RulesEngine rules;
 
     /*--------------------------------------------------------------------------*/
     // This method can be used to search for layout problems. If this class is
@@ -299,15 +300,17 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     /**
      * Constructs a <code>UserInputPanel</code>.
      *
+     * @param rules
      * @param parent         reference to the application frame
      * @param installDataGUI shared information about the installation
      */
     /*--------------------------------------------------------------------------*/
-    public UserInputPanel(InstallerFrame parent, GUIInstallData installDataGUI, ResourceManager resourceManager)
+    public UserInputPanel(InstallerFrame parent, GUIInstallData installDataGUI, ResourceManager resourceManager, RulesEngine rules)
     {
         super(parent, installDataGUI, resourceManager);
         instanceNumber = instanceCount++;
         this.parentFrame = parent;
+        this.rules = rules;
     }
 
     private void createBuiltInVariableConditions(String variable)
@@ -317,7 +320,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             VariableExistenceCondition variableCondition = new VariableExistenceCondition(variable);
             variableCondition.setId("izpack.input." + variable);
             variableCondition.setInstalldata(this.installData);
-            parent.getRules().addCondition(variableCondition);
+            rules.addCondition(variableCondition);
         }
     }
 
@@ -417,7 +420,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             if (conditionid != null)
             {
                 // check if condition is fulfilled
-                if (!this.parent.getRules().isConditionTrue(conditionid, this.installData.getVariables()))
+                if (!rules.isConditionTrue(conditionid, this.installData.getVariables()))
                 {
                     continue;
                 }
@@ -3937,7 +3940,6 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
          * Look if there are new variables defined
          */
         Vector<IXMLElement> variables = spec.getChildrenNamed(VARIABLE_NODE);
-        RulesEngine rules = parent.getRules();
 
         for (int i = 0; i < variables.size(); i++)
         {

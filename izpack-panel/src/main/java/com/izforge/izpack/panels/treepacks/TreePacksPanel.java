@@ -5,6 +5,7 @@ import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
@@ -114,14 +115,16 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     //private boolean created = false;   // UNUSED
 
     private CheckTreeController checkTreeController;
+    private RulesEngine rules;
 
     /**
      * The constructor.
      *
+     * @param rules
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public TreePacksPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    public TreePacksPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, RulesEngine rules)
     {
         super(parent, idata, resourceManager);
         // Load langpack.
@@ -159,6 +162,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         // init the map
         computePacks(idata.getAvailablePacks());
 
+        this.rules = rules;
     }
 
     /**
@@ -827,7 +831,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             // TODO the PacksModel could be patched such that isCellEditable
             // allows returns false. In that case the PacksModel must not be
             // adapted here.
-            packsModel = new PacksModel(this, installData, this.parent.getRules())
+            packsModel = new PacksModel(this, installData, rules)
             {
                 /**
                  * Required (serializable)
