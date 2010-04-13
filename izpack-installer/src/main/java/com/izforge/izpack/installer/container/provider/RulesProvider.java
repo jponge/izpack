@@ -57,7 +57,7 @@ public class RulesProvider implements Provider
         }
         try
         {
-            InputStream input = this.getClass().getResourceAsStream(CONDITIONS_SPECRESOURCENAME);
+            InputStream input = ClassLoader.getSystemResourceAsStream(CONDITIONS_SPECRESOURCENAME);
             if (input == null)
             {
                 res = new RulesEngineImpl(installdata, classPathCrawler, conditionContainer);
