@@ -1,5 +1,6 @@
 package com.izforge.izpack.installer.language;
 
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.compiler.container.TestIntegrationContainer;
 import com.izforge.izpack.test.Container;
@@ -23,10 +24,12 @@ public class ConditionCheckTest
 {
 
     private ConditionCheck conditionCheck;
+    private ResourceManager resourceManager;
 
-    public ConditionCheckTest(ConditionCheck conditionCheck)
+    public ConditionCheckTest(ConditionCheck conditionCheck, ResourceManager resourceManager)
     {
         this.conditionCheck = conditionCheck;
+        this.resourceManager = resourceManager;
     }
 
     @Test

@@ -178,7 +178,7 @@ public class ConditionCheck
             if (condition == null)
             {
                 Debug.log(conditionid + " not a valid condition.");
-                throw new Exception(conditionid + "could not be found as a defined condition");
+                throw new Exception(conditionid + " could not be found as a defined condition");
             }
             if (!condition.isTrue())
             {

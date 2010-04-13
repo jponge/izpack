@@ -3,10 +3,10 @@ package com.izforge.izpack.installer.container.provider;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
-import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.util.Debug;
 import org.picocontainer.injectors.Provider;
@@ -25,17 +25,18 @@ public class RulesProvider implements Provider
      * Resource name of the conditions specification
      */
     private static final String CONDITIONS_SPECRESOURCENAME = "conditions.xml";
+    private ResourceManager resourceManager;
 
     /**
      * Reads the conditions specification file and initializes the rules engine.
      */
-    public RulesEngine provide(AutomatedInstallData installdata, ClassPathCrawler classPathCrawler, ConditionContainer conditionContainer)
+    public RulesEngine provide(AutomatedInstallData installdata, ClassPathCrawler classPathCrawler, ConditionContainer conditionContainer, ResourceManager resourceManager)
     {
         // try to load already parsed conditions
         RulesEngine res = null;
         try
         {
-            InputStream in = InstallerBase.class.getResourceAsStream("/rules");
+            InputStream in = resourceManager.getInputStream("rules");
             ObjectInputStream objIn = new ObjectInputStream(in);
             Map rules = (Map) objIn.readObject();
             if ((rules != null) && (rules.size() != 0))
