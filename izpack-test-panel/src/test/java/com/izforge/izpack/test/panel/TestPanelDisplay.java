@@ -5,6 +5,7 @@ import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.binding.Help;
+import com.izforge.izpack.installer.base.InstallerController;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.test.Container;
@@ -39,14 +40,16 @@ public class TestPanelDisplay
     private ResourceManager resourceManager;
     private InstallerFrame installerFrame;
     private UninstallDataWriter uninstallDataWriter;
+    private InstallerController installerController;
 
-    public TestPanelDisplay(GUIInstallData guiInstallData, InstallerFrame installerFrame, ResourceManager resourceManager, FrameFixture frameFixture, UninstallDataWriter uninstallDataWriter)
+    public TestPanelDisplay(GUIInstallData guiInstallData, InstallerFrame installerFrame, ResourceManager resourceManager, FrameFixture frameFixture, UninstallDataWriter uninstallDataWriter, InstallerController installerController)
     {
         this.guiInstallData = guiInstallData;
         this.installerFrame = installerFrame;
         this.resourceManager = resourceManager;
         this.frameFixture = frameFixture;
         this.uninstallDataWriter = uninstallDataWriter;
+        this.installerController = installerController;
     }
 
     @Before
@@ -111,7 +114,7 @@ public class TestPanelDisplay
     }
 
     private void addPanelAndShow(String... classNames)
-            throws ClassNotFoundException
+            throws Exception
     {
         ArrayList<Panel> panelList = new ArrayList<Panel>();
         for (String className : classNames)
@@ -124,13 +127,13 @@ public class TestPanelDisplay
     }
 
     private void addPanelAndShow(List<Panel> panelList)
-            throws ClassNotFoundException
+            throws Exception
     {
         for (Panel panel : panelList)
         {
             guiInstallData.getPanelsOrder().add(panel);
         }
-        installerFrame.loadPanels();
+        installerController.buildInstallation();
         installerFrame.enableFrame();
     }
 

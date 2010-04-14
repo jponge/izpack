@@ -7,6 +7,7 @@ import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
 import com.izforge.izpack.installer.base.InstallDataConfiguratorWithRules;
+import com.izforge.izpack.installer.base.InstallerController;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.container.provider.IconsProvider;
 import com.izforge.izpack.installer.container.provider.RulesProvider;
@@ -39,6 +40,7 @@ public class TestPanelContainer extends AbstractContainer
         pico.addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
                 .addComponent(ResourceManager.class)
                 .addComponent(ConditionCheck.class)
+                .addComponent(InstallerController.class)
                 .addComponent(UninstallData.class)
                 .addComponent(MutablePicoContainer.class, pico)
                 .addComponent(ConditionContainer.class)
