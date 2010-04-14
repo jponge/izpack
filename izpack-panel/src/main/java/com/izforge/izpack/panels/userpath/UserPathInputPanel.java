@@ -45,11 +45,6 @@ import java.io.*;
 public class UserPathInputPanel extends IzPanel implements ActionListener
 {
 
-    /**
-     *
-     */
-    private InstallerFrame _parent;
-    private GUIInstallData _idata;
     private static final long serialVersionUID = 3257566217698292531L;
     /**
      * Flag whether the choosen path must exist or not
@@ -89,8 +84,6 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
     public UserPathInputPanel(InstallerFrame parent, GUIInstallData idata, String targetPanel, ResourceManager resourceManager)
     {
         super(parent, idata, new IzPanelLayout(), resourceManager);
-        _parent = parent;
-        _idata = idata;
         _targetPanel = targetPanel;
         _variableName = installData.getLangpack().getString(targetPanel + ".variableName");
         // Set default values
