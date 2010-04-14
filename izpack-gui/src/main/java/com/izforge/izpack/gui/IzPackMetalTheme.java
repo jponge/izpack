@@ -62,7 +62,7 @@ public class IzPackMetalTheme extends DefaultMetalTheme
     private Font createFont(String name, int style, int size)
     {
         Font font = new Font(name, style, size);
-        return ((font == null) ? new Font("Dialog", style, size) : font);
+        return font;
     }
 
     /**

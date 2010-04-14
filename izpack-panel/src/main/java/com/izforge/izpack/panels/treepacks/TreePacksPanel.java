@@ -368,10 +368,6 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     {
         JPanel panel = new JPanel();
         JLabel label = new JLabel();
-        if (label == null)
-        {
-            label = new JLabel("");
-        }
         panel.setAlignmentX(LEFT_ALIGNMENT);
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.add(LabelFactory.create(installData.getLangpack().getString(msgId)));

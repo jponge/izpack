@@ -570,9 +570,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     set = "";
                 }
             }
-            else
+            else // set != null
             {
-                if (set != null && !"".equals(set))
+                if (!"".equals(set))
                 {
                     set = variableSubstitutor.substitute(set);
 
@@ -807,9 +807,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     set = "";
                 }
             }
-            else
+            else // set != null
             {
-                if (set != null && !"".equals(set))
+                if (!"".equals(set))
                 {
                     set = variableSubstitutor.substitute(set);
                     this.installData.setVariable(variable, set);
@@ -1696,9 +1696,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     set = "";
                 }
             }
-            else
+            else // set != null
             {
-                if (set != null && !"".equals(set))
+                if (!"".equals(set))
                 {
                     set = variableSubstitutor.substitute(set);
                 }
@@ -2172,7 +2172,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 }
                 if (set != null)
                 {
-                    if (set != null && !"".equals(set))
+                    if (!"".equals(set))
                     {
                         set = variableSubstitutor.substitute(set);
                     }
@@ -2518,7 +2518,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
         if (set != null)
         {
-            if (set != null && !"".equals(set))
+            if (!"".equals(set))
             {
                 set = variableSubstitutor.substitute(set);
             }
@@ -2737,7 +2737,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 String set = (choices.elementAt(i)).getAttribute(SET);
                 if (set != null)
                 {
-                    if (set != null && !"".equals(set))
+                    if (!"".equals(set))
                     {
                         set = variableSubstitutor.substitute(set);
                     }

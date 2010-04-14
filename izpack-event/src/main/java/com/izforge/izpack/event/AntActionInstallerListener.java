@@ -409,11 +409,6 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         {
             // Get the resource
             BufferedInputStream bis = new BufferedInputStream(spec.getResource(attr));
-            if (null == bis)
-            {
-                // Resource not found
-                throw new InstallerException("Failed to find buildfile_resource: " + attr);
-            }
             BufferedOutputStream bos = null;
             try
             {

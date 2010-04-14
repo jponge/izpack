@@ -364,7 +364,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             }
         }
 
-        if (set != null && !"".equals(set))
+        if (!"".equals(set))
         {
             VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
             set = vs.substitute(set, null);

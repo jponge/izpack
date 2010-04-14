@@ -626,10 +626,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             {
                 return (null);
             }
-            if (alternateClass == null)
-            {
-                return (null);
-            }
             buf.delete(0, buf.length());
             buf.append(alternateClass).append(".").append(subkey);
             retval = installData.getLangpack().getString(buf.toString());
@@ -783,11 +779,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     {
         MultiLineLabel mll = null;
         mll = new MultiLineLabel(text, 0, 0);
-        if (mll != null)
-        {
-            mll.setFont(getControlTextFont());
-        }
-        return (mll);
+        mll.setFont(getControlTextFont());
+        return mll;
     }
 
     /**

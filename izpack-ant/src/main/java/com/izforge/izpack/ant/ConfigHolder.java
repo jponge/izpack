@@ -163,13 +163,9 @@ public class ConfigHolder
             if (fragment == null)
             {
                 String propertyName = j.nextElement();
-                Object replacement = null;
 
                 // try to get it from the project
-                if (replacement == null)
-                {
-                    replacement = project.getProperty(propertyName);
-                }
+                String replacement = project.getProperty(propertyName);
 
                 if (replacement == null)
                 {
@@ -178,7 +174,7 @@ public class ConfigHolder
                 }
                 if (replacement != null)
                 {
-                    fragment = replacement.toString();
+                    fragment = replacement;
                 }
                 else
                 {
