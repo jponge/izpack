@@ -540,7 +540,7 @@ public class Shortcut
      */
     public void setCreateForAll(Boolean aCreateForAll)
     {
-        this.createForAll = aCreateForAll.booleanValue();
+        this.createForAll = aCreateForAll;
     }
 
     /**

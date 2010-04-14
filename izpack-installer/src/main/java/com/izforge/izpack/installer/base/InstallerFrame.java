@@ -915,12 +915,12 @@ public class InstallerFrame extends JFrame
             String message = langpack.getString(mkey);
             String title = langpack.getString(tkey);
             // message equal to key -> no alternate message defined.
-            if (message.indexOf(mkey) > -1)
+            if (message.contains(mkey))
             {
                 message = langpack.getString("installer.quit.message");
             }
             // title equal to key -> no alternate title defined.
-            if (title.indexOf(tkey) > -1)
+            if (title.contains(tkey))
             {
                 title = langpack.getString("installer.quit.title");
             }

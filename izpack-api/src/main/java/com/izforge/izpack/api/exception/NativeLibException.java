@@ -327,7 +327,7 @@ public class NativeLibException extends Exception
      */
     private static String replaceString(String destination, String what, String with)
     {
-        if (destination.indexOf(what) >= 0)
+        if (destination.contains(what))
         { // what found, with (placeholder) not included in destination ->
             // perform changing.
             StringBuffer buf = new StringBuffer();

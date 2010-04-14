@@ -472,7 +472,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 int j = -1;
                 try
                 {
-                    j = Integer.valueOf(strIn).intValue();
+                    j = Integer.valueOf(strIn);
                 }
                 catch (Exception ex)
                 {
@@ -558,7 +558,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 int j = -1;
                 try
                 {
-                    j = Integer.valueOf(strIn).intValue();
+                    j = Integer.valueOf(strIn);
                 }
                 catch (Exception ex)
                 {
@@ -647,9 +647,9 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 while (setTokenizer.hasMoreTokens())
                 {
                     token = setTokenizer.nextToken();
-                    if (token.indexOf(":") > -1)
+                    if (token.contains(":"))
                     {
-                        listSet.set(new Integer(token.substring(0, token.indexOf(":"))).intValue(),
+                        listSet.set(new Integer(token.substring(0, token.indexOf(":"))),
                                 token.substring(token.indexOf(":") + 1));
                     }
                 }

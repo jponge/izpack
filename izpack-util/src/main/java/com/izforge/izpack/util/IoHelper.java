@@ -322,7 +322,7 @@ public class IoHelper
         if (OsVersion.IS_WINDOWS)
         {
             String command = "cmd.exe";
-            if (System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1)
+            if (System.getProperty("os.name").toLowerCase().contains("windows 9"))
             {
                 return (-1);
             }
@@ -377,7 +377,7 @@ public class IoHelper
             }
             if (OsVersion.IS_WINDOWS)
             { // getFreeSpace do not work on Windows 98.
-                if (System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1)
+                if (System.getProperty("os.name").toLowerCase().contains("windows 9"))
                 {
                     return (false);
                 }
@@ -471,7 +471,7 @@ public class IoHelper
 
         for (i = currentRange - 1; i >= 0; --i)
         {
-            if (useNotIdentifier != null && interestedEntries[i].indexOf(useNotIdentifier) > -1)
+            if (useNotIdentifier != null && interestedEntries[i].contains(useNotIdentifier))
             {
                 continue;
             }
@@ -548,7 +548,7 @@ public class IoHelper
      */
     public static String replaceString(String destination, String what, String with)
     {
-        if (destination.indexOf(what) >= 0)
+        if (destination.contains(what))
         { // what found, with (placeholder) not included in destination ->
             // perform changing.
             StringBuffer buf = new StringBuffer();
@@ -597,7 +597,7 @@ public class IoHelper
         // handles backslashes in the replacement string in a special way
         // and the method exist only beginning with JRE 1.4.
         // Therefore the little bit crude way following ...
-        if (destination.indexOf("\\/") >= 0 && destination.indexOf(MASKED_SLASH_PLACEHOLDER) < 0)
+        if (destination.contains("\\/") && !destination.contains(MASKED_SLASH_PLACEHOLDER))
         { // Masked slash found, placeholder not included in destination ->
             // perform masking.
             destination = replaceString(destination, "\\/", MASKED_SLASH_PLACEHOLDER);
@@ -651,7 +651,7 @@ public class IoHelper
         if (OsVersion.IS_WINDOWS)
         {
             String command = "cmd.exe";
-            if (System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1)
+            if (System.getProperty("os.name").toLowerCase().contains("windows 9"))
             {
                 command = "command.com";
             }

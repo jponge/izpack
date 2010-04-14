@@ -71,7 +71,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return;
         }
-        if (contents.indexOf("OLD_KEY_VALUE") > -1 && regWorker.valueExist(key, value))
+        if (contents.contains("OLD_KEY_VALUE") && regWorker.valueExist(key, value))
         {
             Object ob = regWorker.getValueAsObject(key, value);
             if (ob instanceof String)

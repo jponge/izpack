@@ -144,7 +144,7 @@ public class FileUtil
                 currentline = currentline.toLowerCase();
             }
 
-            if (currentline.indexOf(searchString) > -1)
+            if (currentline.contains(searchString))
             {
                 result = true;
 

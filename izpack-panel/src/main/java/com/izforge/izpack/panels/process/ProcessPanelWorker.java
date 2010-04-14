@@ -315,7 +315,7 @@ public class ProcessPanelWorker implements Runnable
         boolean unlockPrev = false;
 
         // get the ButtonConfigs matching the this.result
-        for (ButtonConfig bc : buttonConfigs.get(Boolean.valueOf(this.result)))
+        for (ButtonConfig bc : buttonConfigs.get(this.result))
         {
             String conditionid = bc.getConditionid();
             if ((conditionid != null) && (conditionid.length() > 0))
@@ -633,8 +633,7 @@ public class ProcessPanelWorker implements Runnable
 
                 if (m.getReturnType().getName().equals("boolean"))
                 {
-                    result = ((Boolean) m.invoke(o, new Object[]{myHandler, params}))
-                            .booleanValue();
+                    result = (Boolean) m.invoke(o, new Object[]{myHandler, params});
                 }
                 else
                 {

@@ -56,7 +56,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
             IXMLElement el = new XMLElementImpl("pack", panelRoot);
             el.setAttribute("index", Integer.toString(i));
             el.setAttribute("name", pack.name);
-            Boolean selected = Boolean.valueOf(idata.getSelectedPacks().contains(pack));
+            Boolean selected = idata.getSelectedPacks().contains(pack);
             el.setAttribute("selected", selected.toString());
 
             panelRoot.addChild(el);
@@ -85,7 +85,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
                 _selected = selected;
                 try
                 {
-                    _index = Integer.valueOf(index).intValue();
+                    _index = Integer.valueOf(index);
                 }
                 catch (NumberFormatException e)
                 {

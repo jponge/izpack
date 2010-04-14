@@ -62,7 +62,7 @@ public class ChmodInstallerListener extends SimpleInstallerListener
         int fileVal = -1;
         if (file != null && file instanceof Integer)
         {
-            fileVal = ((Integer) file).intValue();
+            fileVal = (Integer) file;
         }
         if (fileVal != -1)
         {
@@ -88,7 +88,7 @@ public class ChmodInstallerListener extends SimpleInstallerListener
         int dirVal = -1;
         if (dir != null && dir instanceof Integer)
         {
-            dirVal = ((Integer) dir).intValue();
+            dirVal = (Integer) dir;
         }
         if (dirVal != -1)
         {

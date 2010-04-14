@@ -309,7 +309,7 @@ public class JDKPathPanel extends PathInputPanel
         // We cannot look to the version of this vm because we should
         // test the given JDK VM.
         String[] params;
-        if (System.getProperty("os.name").indexOf("Windows") >= 0)
+        if (System.getProperty("os.name").contains("Windows"))
         {
             String[] paramsp = {
                     "cmd",
@@ -388,7 +388,7 @@ public class JDKPathPanel extends PathInputPanel
 
         for (i = 0; i < currentRange; ++i)
         {
-            if (useNotIdentifier != null && interestedEntries[i].indexOf(useNotIdentifier) > -1)
+            if (useNotIdentifier != null && interestedEntries[i].contains(useNotIdentifier))
             {
                 continue;
             }

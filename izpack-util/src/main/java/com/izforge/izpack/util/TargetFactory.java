@@ -262,15 +262,15 @@ public class TargetFactory
             architecture = X86;
             String osName = OsVersion.OS_NAME.toLowerCase();
 
-            if (osName.indexOf("nt") > -1)
+            if (osName.contains("nt"))
             {
                 osFlavor = NT;
             }
-            else if (osName.indexOf("2000") > -1)
+            else if (osName.contains("2000"))
             {
                 osFlavor = NT;
             }
-            else if (osName.indexOf("xp") > -1)
+            else if (osName.contains("xp"))
             {
                 osFlavor = NT;
             }
@@ -294,7 +294,7 @@ public class TargetFactory
             architecture = OTHER;
             String osName = OsVersion.OS_NAME.toLowerCase();
 
-            if (osName.indexOf("x86") > -1)
+            if (osName.contains("x86"))
             {
                 architecture = X86;
             }
@@ -713,21 +713,21 @@ public class TargetFactory
         // ----------------------------------------------------
         // test for Windows
         // ----------------------------------------------------
-        if (OSName.indexOf("windows") > -1)
+        if (OSName.contains("windows"))
         {
             OS = WINDOWS;
             OSFlavor = STANDARD;
             OSarchitecture = X86;
 
-            if (OSName.indexOf("nt") > -1)
+            if (OSName.contains("nt"))
             {
                 OSFlavor = NT;
             }
-            else if (OSName.indexOf("2000") > -1)
+            else if (OSName.contains("2000"))
             {
                 OSFlavor = NT;
             }
-            else if (OSName.indexOf("xp") > -1)
+            else if (OSName.contains("xp"))
             {
                 OSFlavor = NT;
             }
@@ -735,13 +735,13 @@ public class TargetFactory
         // ----------------------------------------------------
         // test for Mac OS
         // ----------------------------------------------------
-        else if (OSName.indexOf("mac") > -1)
+        else if (OSName.contains("mac"))
         {
             OS = GENERIC;
             OSFlavor = STANDARD;
             OSarchitecture = OTHER;
 
-            if (OSName.indexOf("macosx") > -1)
+            if (OSName.contains("macosx"))
             {
                 OSFlavor = X;
             }
@@ -755,7 +755,7 @@ public class TargetFactory
             OSFlavor = STANDARD;
             OSarchitecture = OTHER;
 
-            if (OSArch.indexOf("86") > -1)
+            if (OSArch.contains("86"))
             {
                 OSarchitecture = X86;
             }

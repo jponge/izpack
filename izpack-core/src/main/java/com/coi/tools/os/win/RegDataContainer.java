@@ -375,7 +375,7 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
 
     private boolean containsPlaceholder(String str)
     {
-        return str.indexOf("%") >= 0;
+        return str.contains("%");
     }
 
 }
