@@ -334,7 +334,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
             // files
             try
             {
-                in = parentFrame.getResource("TargetPanel.dir.".concat(os));
+                in = resourceManager.getInputStream("TargetPanel.dir.".concat(os));
             }
             catch (ResourceNotFoundException rnfe)
             {
@@ -345,7 +345,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
                 {
                     try
                     {
-                        in = parentFrame.getResource("TargetPanel.dir.windows");
+                        in = resourceManager.getInputStream("TargetPanel.dir.windows");
                     }
                     catch (ResourceNotFoundException rnfe)
                     {
@@ -355,7 +355,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
                 {
                     try
                     {
-                        in = parentFrame.getResource("TargetPanel.dir.macosx");
+                        in = resourceManager.getInputStream("TargetPanel.dir.macosx");
                     }
                     catch (ResourceNotFoundException rnfe)
                     {
@@ -365,7 +365,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
                 {
                     try
                     {
-                        in = parentFrame.getResource("TargetPanel.dir.unix");
+                        in = resourceManager.getInputStream("TargetPanel.dir.unix");
                     }
                     catch (ResourceNotFoundException eee)
                     {
@@ -379,7 +379,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
             {
                 try
                 {
-                    in = parentFrame.getResource("TargetPanel.dir");
+                    in = resourceManager.getInputStream("TargetPanel.dir");
                 }
                 catch (ResourceNotFoundException ignored)
                 {

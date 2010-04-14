@@ -54,7 +54,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -767,39 +766,6 @@ public class InstallerFrame extends JFrame implements InstallerView
             }
 
         }
-    }
-
-    /**
-     * REFACTOR : A remplacer par l'utilisation directe de
-     * resourceManager.getInputStream()
-     * Gets the stream to a resource.
-     *
-     * @param res The resource id.
-     * @return The resource value, null if not found
-     * @throws Exception
-     */
-    public InputStream getResource(String res) throws Exception
-    {
-        InputStream result;
-        String basePath = "";
-
-        try
-        {
-            basePath = resourceManager.getResourceBasePath();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        result = this.getClass().getResourceAsStream(basePath + res);
-
-        if (result == null)
-        {
-            throw new ResourceNotFoundException("Warning: Resource not found: "
-                    + res);
-        }
-        return result;
     }
 
     /**

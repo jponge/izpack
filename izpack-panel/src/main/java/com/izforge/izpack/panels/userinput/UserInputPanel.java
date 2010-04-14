@@ -1312,7 +1312,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
         try
         {
-            input = parentFrame.getResource(SPEC_FILE_NAME);
+            input = resourceManager.getInputStream(SPEC_FILE_NAME);
         }
         catch (Exception exception)
         {
