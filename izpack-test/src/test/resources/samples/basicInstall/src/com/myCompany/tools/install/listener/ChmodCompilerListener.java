@@ -60,10 +60,10 @@ public class ChmodCompilerListener extends SimpleCompilerListener
         {
             IXMLElement data = (IXMLElement) iter.next();
             String[] relevantKeys = {"permission.dir", "permission.file"};
-            for (int i = 0; i < relevantKeys.length; ++i)
+            for (String relevantKey : relevantKeys)
             {
                 String key = data.getAttribute("key");
-                if (key.equalsIgnoreCase(relevantKeys[i]))
+                if (key.equalsIgnoreCase(relevantKey))
                 {
                     String value = data.getAttribute("value");
                     if (value == null || value.length() == 0)
@@ -77,7 +77,7 @@ public class ChmodCompilerListener extends SimpleCompilerListener
                     }
                     catch (NumberFormatException x)
                     {
-                        throw new CompilerException("'" + relevantKeys[i] + "' must be an integer");
+                        throw new CompilerException("'" + relevantKey + "' must be an integer");
                     }
                 }
             }

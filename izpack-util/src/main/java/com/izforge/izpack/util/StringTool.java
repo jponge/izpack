@@ -177,10 +177,9 @@ public class StringTool
             replaceOrEscapeWith = "\\";
         }
 
-        for (int i = 0; i < replaceWhat.length; i++)
+        for (String aReplaceWhat : replaceWhat)
         {
-
-            aPathString = replace(aPathString, replaceWhat[i], escape == true ? replaceOrEscapeWith + replaceWhat[i] : replaceOrEscapeWith);
+            aPathString = replace(aPathString, aReplaceWhat, escape == true ? replaceOrEscapeWith + aReplaceWhat : replaceOrEscapeWith);
         }
 
         return aPathString;

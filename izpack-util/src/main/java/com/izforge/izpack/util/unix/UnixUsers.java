@@ -87,10 +87,8 @@ public class UnixUsers extends ArrayList
 
         ArrayList<UnixUser> usersWithValidShells = getUsersWithValidShells();
 
-        for (int idx = 0; idx < usersWithValidShells.size(); idx++)
+        for (UnixUser user : usersWithValidShells)
         {
-            UnixUser user = usersWithValidShells.get(idx);
-
             if ((user.getHome() != null) && new File(user.getHome().trim()).exists())
             {
                 result.add(user);
@@ -112,10 +110,8 @@ public class UnixUsers extends ArrayList
 
         ArrayList<UnixUser> usersWithValidShellsAndExistingHomes = getUsersWithValidShellsAndExistingHomes();
 
-        for (int idx = 0; idx < usersWithValidShellsAndExistingHomes.size(); idx++)
+        for (UnixUser user : usersWithValidShellsAndExistingHomes)
         {
-            UnixUser user = usersWithValidShellsAndExistingHomes.get(idx);
-
             if ((user.getHome() != null)
                     && new File(user.getXdgDesktopfolder()).exists())
             {
@@ -137,9 +133,9 @@ public class UnixUsers extends ArrayList
 
         ArrayList validUserDesktops = getUsersWithValidShellsExistingHomesAndDesktops();
 
-        for (int idx = 0; idx < validUserDesktops.size(); idx++)
+        for (Object validUserDesktop : validUserDesktops)
         {
-            UnixUser user = (UnixUser) validUserDesktops.get(idx);
+            UnixUser user = (UnixUser) validUserDesktop;
 
             if (user.getHome() != null)
             {
@@ -175,9 +171,9 @@ public class UnixUsers extends ArrayList
      */
     private void fromUsersArrayList(ArrayList<String> anUsersArrayList)
     {
-        for (int idx = 0; idx < anUsersArrayList.size(); idx++)
+        for (String anAnUsersArrayList : anUsersArrayList)
         {
-            add(new UnixUser().fromEtcPasswdLine(anUsersArrayList.get(idx)));
+            add(new UnixUser().fromEtcPasswdLine(anAnUsersArrayList));
         }
     }
 
@@ -191,9 +187,8 @@ public class UnixUsers extends ArrayList
         ArrayList<String> result = new ArrayList<String>();
         ArrayList<String> etcPasswdArray = UnixHelper.getEtcPasswdArray();
 
-        for (int idx = 0; idx < etcPasswdArray.size(); idx++)
+        for (String line : etcPasswdArray)
         {
-            String line = etcPasswdArray.get(idx);
             result.add(line);
         }
 
@@ -221,9 +216,8 @@ public class UnixUsers extends ArrayList
 
         String retValue = "";
 
-        for (int user = 0; user < usersArrayList.size(); user++)
+        for (String userline : usersArrayList)
         {
-            String userline = usersArrayList.get(user);
             retValue += (userline.substring(0, userline.indexOf(":")) + ":");
         }
 
@@ -247,9 +241,9 @@ public class UnixUsers extends ArrayList
         UnixUsers users = new UnixUsers();
 
         // users.fromUsersArrayList();
-        for (int idx = 0; idx < users.size(); idx++)
+        for (Object user : users)
         {
-            System.out.println(((UnixUser) users.get(idx)).getName());
+            System.out.println(((UnixUser) user).getName());
         }
 
         System.out.println(StringTool

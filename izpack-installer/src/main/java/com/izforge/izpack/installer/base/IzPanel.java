@@ -1226,9 +1226,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     {
         if (preActivateActions != null)
         {
-            for (int actionIndex = 0; actionIndex < preActivateActions.size(); actionIndex++)
+            for (PanelAction preActivateAction : preActivateActions)
             {
-                preActivateActions.get(actionIndex).executeAction(this.installData, this);
+                preActivateAction.executeAction(this.installData, this);
             }
         }
     }
@@ -1237,9 +1237,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     {
         if (preValidateActions != null)
         {
-            for (int actionIndex = 0; actionIndex < preValidateActions.size(); actionIndex++)
+            for (PanelAction preValidateAction : preValidateActions)
             {
-                preValidateActions.get(actionIndex).executeAction(this.installData, this);
+                preValidateAction.executeAction(this.installData, this);
             }
         }
     }
@@ -1248,9 +1248,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     {
         if (postValidateActions != null)
         {
-            for (int actionIndex = 0; actionIndex < postValidateActions.size(); actionIndex++)
+            for (PanelAction postValidateAction : postValidateActions)
             {
-                postValidateActions.get(actionIndex).executeAction(this.installData, this);
+                postValidateAction.executeAction(this.installData, this);
             }
         }
     }
