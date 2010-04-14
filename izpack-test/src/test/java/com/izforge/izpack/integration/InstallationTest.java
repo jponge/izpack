@@ -245,7 +245,7 @@ public class InstallationTest
     protected FrameFixture prepareFrameFixture() throws Exception
     {
         FrameFixture installerFrameFixture = new FrameFixture(installerFrame);
-        installerController.launchInstallation();
+        installerController.buildInstallation();
         installerFrameFixture.show();
         installerFrame.sizeFrame();
         // wait center

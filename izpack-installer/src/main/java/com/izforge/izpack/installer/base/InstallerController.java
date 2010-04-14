@@ -21,12 +21,17 @@ public class InstallerController
 
     }
 
-    public void launchInstallation() throws Exception
+    public InstallerController buildInstallation() throws Exception
     {
         panelManager.loadPanelsInContainer();
         panelManager.instantiatePanels();
         installerFrame.buildGUI();
         installerFrame.sizeFrame();
+        return this;
+    }
 
+    public void launchInstallation()
+    {
+        installerFrame.launchGUI();
     }
 }

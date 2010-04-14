@@ -169,7 +169,7 @@ public class Installer
                 BindeableContainer installerContainer = applicationComponent.getComponent(BindeableContainer.class);
 
                 installerContainer.getComponent(LanguageDialog.class).initLangPack();
-                installerContainer.getComponent(InstallerController.class).launchInstallation();
+                installerContainer.getComponent(InstallerController.class).buildInstallation().launchInstallation();
                 break;
 
             case INSTALLER_AUTO:
