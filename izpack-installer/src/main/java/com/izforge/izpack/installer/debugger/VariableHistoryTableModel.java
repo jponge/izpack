@@ -69,7 +69,7 @@ public class VariableHistoryTableModel extends AbstractTableModel
         switch (columnIndex)
         {
             case 0:
-                String[] keys = (String[]) this.variablevalues.keySet().toArray(new String[this.variablevalues.keySet().size()]);
+                String[] keys = this.variablevalues.keySet().toArray(new String[this.variablevalues.keySet().size()]);
                 Arrays.sort(keys);
                 return keys[rowIndex];
 

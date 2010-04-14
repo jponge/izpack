@@ -56,7 +56,7 @@ public class FileQueue
                 while (it.hasNext())
                 {
                     buf.append('\t');
-                    buf.append(((SystemErrorException) it.next()).toString());
+                    buf.append(it.next().toString());
                     buf.append('\n');
                 }
                 throw new IOException(buf.toString());

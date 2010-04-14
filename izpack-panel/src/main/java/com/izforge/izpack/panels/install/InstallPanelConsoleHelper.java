@@ -62,7 +62,7 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
 //                this);
         IUnpacker unpacker = null;
         Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
-        unpacker.setRules((RulesEngine) idata.getRules());
+        unpacker.setRules(idata.getRules());
         unpackerthread.start();
         boolean done = false;
         while (!done && unpackerthread.isAlive())

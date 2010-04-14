@@ -715,7 +715,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             {
                 for (int q = 0; q < this.installData.getAvailablePacks().size(); q++)
                 {
-                    Pack otherpack = (Pack) this.installData.getAvailablePacks().get(q);
+                    Pack otherpack = this.installData.getAvailablePacks().get(q);
                     String exgroup = otherpack.excludeGroup;
                     if (exgroup != null)
                     {

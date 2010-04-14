@@ -68,7 +68,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
 //        IUnpacker unpacker = UnpackerFactory.getUnpacker(idata.getInfo().getUnpackerClassName(), idata, this);
         IUnpacker unpacker = null;
         Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
-        unpacker.setRules((RulesEngine) idata.getRules());
+        unpacker.setRules(idata.getRules());
         unpackerthread.start();
         while (unpackerthread.isAlive())
         {

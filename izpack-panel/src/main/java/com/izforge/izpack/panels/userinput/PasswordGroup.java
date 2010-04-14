@@ -327,7 +327,7 @@ public class PasswordGroup implements ProcessingClient
         }
         else if (fields.size() > 0)
         {
-            returnValue = new String(((JPasswordField) fields.elementAt(0)).getPassword());
+            returnValue = new String(fields.elementAt(0).getPassword());
         }
         return returnValue;
     }

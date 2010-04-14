@@ -42,12 +42,12 @@ public class ProgressDialog extends JWindow
         main.add(Box.createVerticalGlue());
         this.add(main);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int height = (int) (screenSize.height / 2);
-        int width = (int) (screenSize.width / 2);
+        int height = screenSize.height / 2;
+        int width = screenSize.width / 2;
         this.pack();
         Dimension dialogSize = this.getSize();
-        int myheight = (int) (dialogSize.height / 2);
-        int mywidth = (int) (dialogSize.width / 2);
+        int myheight = dialogSize.height / 2;
+        int mywidth = dialogSize.width / 2;
 
         this.setLocation(width - mywidth, height - myheight);
     }

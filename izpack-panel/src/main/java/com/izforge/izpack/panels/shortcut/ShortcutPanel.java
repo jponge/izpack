@@ -1676,7 +1676,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         for (int i = 0; i < this.installData.getSelectedPacks().size(); i++)
         {
-            selected = ((Pack) this.installData.getSelectedPacks().get(i)).name;
+            selected = this.installData.getSelectedPacks().get(i).name;
 
             for (int k = 0; k < packs.size(); k++)
             {

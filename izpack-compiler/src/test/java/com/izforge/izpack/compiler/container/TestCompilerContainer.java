@@ -40,7 +40,7 @@ public class TestCompilerContainer extends AbstractContainer
             CompilerContainer compilerContainer = new CompilerContainer();
             compilerContainer.fillContainer(pico);
 
-            InstallFile installFile = ((InstallFile) frameworkMethod.getAnnotation(InstallFile.class));
+            InstallFile installFile = frameworkMethod.getAnnotation(InstallFile.class);
             if (installFile == null)
             {
                 installFile = (InstallFile) klass.getAnnotation(InstallFile.class);

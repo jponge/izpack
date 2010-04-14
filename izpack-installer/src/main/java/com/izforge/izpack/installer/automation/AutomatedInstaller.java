@@ -163,7 +163,7 @@ public class AutomatedInstaller extends InstallerBase
             // walk the panels in order
             for (Panel p : this.idata.getPanelsOrder())
             {
-                RulesEngine rules = (RulesEngine) this.idata.getRules();
+                RulesEngine rules = this.idata.getRules();
                 if (p.hasCondition()
                         && !rules.isConditionTrue(p.getCondition(), this.idata.getVariables()))
                 {

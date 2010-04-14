@@ -354,7 +354,7 @@ public class InstallationGroupPanel extends IzPanel
         HashMap installGroups = new HashMap();
         for (int n = 0; n < idata.getAvailablePacks().size(); n++)
         {
-            Pack p = (Pack) idata.getAvailablePacks().get(n);
+            Pack p = idata.getAvailablePacks().get(n);
             packsByName.put(p.name, p);
             Set<String> groups = p.installGroups;
             Iterator<String> iter = groups.iterator();

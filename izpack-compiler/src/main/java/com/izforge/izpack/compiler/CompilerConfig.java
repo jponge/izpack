@@ -1938,7 +1938,7 @@ public class CompilerConfig extends Thread
 
         for (int i = 0; i < element.getChildren().size(); i++)
         {
-            IXMLElement child = (IXMLElement) element.getChildren().elementAt(i);
+            IXMLElement child = element.getChildren().elementAt(i);
             substituteAllProperties(child);
         }
     }

@@ -78,7 +78,7 @@ public class Debugger
 
     private void init()
     {
-        String[] variablekeys = (String[]) lasttimevariables.keySet().toArray(new String[lasttimevariables.size()]);
+        String[] variablekeys = lasttimevariables.keySet().toArray(new String[lasttimevariables.size()]);
         for (String variablename : variablekeys)
         {
             VariableHistory vh = new VariableHistory(variablename);

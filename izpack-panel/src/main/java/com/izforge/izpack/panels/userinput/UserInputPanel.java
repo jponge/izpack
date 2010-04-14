@@ -2061,7 +2061,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
         try
         {
-            variable = (String) field.getAssociatedVariable();
+            variable = field.getAssociatedVariable();
             comboBox = (JComboBox) field.getComponent();
             value = ((UserInputPanel.TextValuePair) comboBox.getSelectedItem()).getValue();
         }
@@ -2421,7 +2421,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
         try
         {
-            group = (PasswordGroup) pwdField.getPasswordGroup();
+            group = pwdField.getPasswordGroup();
             variable = field.getAssociatedVariable();
             // Removed to support grabbing the message from multiple validators
             // message = (String) field[POS_MESSAGE];
@@ -3365,7 +3365,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // ----------------------------------------------------
         for (int i = 0; i < this.installData.getSelectedPacks().size(); i++)
         {
-            selected = ((Pack) this.installData.getSelectedPacks().get(i)).name;
+            selected = this.installData.getSelectedPacks().get(i).name;
 
             for (int k = 0; k < packs.size(); k++)
             {
@@ -3420,7 +3420,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // ----------------------------------------------------
         for (int i = 0; i < this.installData.getSelectedPacks().size(); i++)
         {
-            selected = ((Pack) this.installData.getSelectedPacks().get(i)).name;
+            selected = this.installData.getSelectedPacks().get(i).name;
 
             for (int k = 0; k < packs.size(); k++)
             {

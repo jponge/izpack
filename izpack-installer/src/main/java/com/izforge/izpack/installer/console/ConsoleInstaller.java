@@ -167,7 +167,7 @@ public class ConsoleInstaller extends InstallerBase
                         String strCondition = p.getCondition();
                         if (strCondition != null)
                         {
-                            RulesEngine rules = (RulesEngine) installdata.getRules();
+                            RulesEngine rules = installdata.getRules();
                             bIsConditionFulfilled = rules.isConditionTrue(
                                     strCondition);
                         }

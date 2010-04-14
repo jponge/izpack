@@ -99,7 +99,7 @@ public class InstallationGroupPanelAutomationHelper
                         int index = Integer.parseInt(indexStr);
                         if (index >= 0)
                         {
-                            Pack pack = (Pack) idata.getAvailablePacks().get(index);
+                            Pack pack = idata.getAvailablePacks().get(index);
                             idata.getSelectedPacks().add(pack);
                             Debug.trace("Added pack: " + pack.name);
                         }

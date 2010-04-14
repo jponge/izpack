@@ -144,7 +144,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         Iterator<Input> inputIterator = listInputs.iterator();
         while (inputIterator.hasNext())
         {
-            String strVariableName = ((Input) inputIterator.next()).strVariableName;
+            String strVariableName = inputIterator.next().strVariableName;
             if (strVariableName != null)
             {
                 String strVariableValue = p.getProperty(strVariableName);
@@ -165,7 +165,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         Iterator<Input> inputIterator = listInputs.iterator();
         while (inputIterator.hasNext())
         {
-            Input input = (Input) inputIterator.next();
+            Input input = inputIterator.next();
             if (input.strVariableName != null)
             {
                 printWriter.println(input.strVariableName + "=");
@@ -242,7 +242,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         Vector<IXMLElement> specElements;
         String attribute;
         String dataID;
-        String panelid = ((Panel) idata.getPanelsOrder().get(idata.getCurPanelNumber())).getPanelid();
+        String panelid = idata.getPanelsOrder().get(idata.getCurPanelNumber()).getPanelid();
         String instance = Integer.toString(instanceNumber);
 
         SpecHelper specHelper = new SpecHelper();
@@ -935,7 +935,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         // ----------------------------------------------------
         for (int i = 0; i < idata.getSelectedPacks().size(); i++)
         {
-            selected = ((Pack) idata.getSelectedPacks().get(i)).name;
+            selected = idata.getSelectedPacks().get(i).name;
 
             for (int k = 0; k < packs.size(); k++)
             {

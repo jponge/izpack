@@ -238,7 +238,7 @@ public class ImgPacksPanel extends PacksPanelBase
         }
         if (i >= 0)
         {
-            Pack pack = (Pack) this.installData.getAvailablePacks().get(i);
+            Pack pack = this.installData.getAvailablePacks().get(i);
             imgLabel.setIcon(images.get(pack.packImgId));
         }
     }

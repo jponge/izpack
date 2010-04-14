@@ -423,7 +423,7 @@ public class SelfModifier
         sandbox = sandbox.getCanonicalFile();
         logFile = logFile.getCanonicalFile();
 
-        jarFile = findJarFile((Class<?>) method.getDeclaringClass()).getCanonicalFile();
+        jarFile = findJarFile(method.getDeclaringClass()).getCanonicalFile();
         if (jarFile == null)
         {
             throw new IllegalStateException("SelfModifier must be in a jar file");

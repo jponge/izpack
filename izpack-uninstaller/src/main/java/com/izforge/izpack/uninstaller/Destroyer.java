@@ -118,7 +118,7 @@ public class Destroyer extends Thread
                 Iterator<String> rsi = rootScripts.iterator();
                 while (rsi.hasNext())
                 {
-                    execRootScript((String) rsi.next());
+                    execRootScript(rsi.next());
                 }
 
             }

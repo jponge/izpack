@@ -174,7 +174,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
                         if (packInfo.isSelected())
                         {
                             // Check if the conditions allow to select the pack
-                            RulesEngine rules = (RulesEngine) idata.getRules();
+                            RulesEngine rules = idata.getRules();
                             if ((idata.getSelectedPacks().indexOf(pack) < 0)
                                     && (pack.id != null)
                                     && (rules.canInstallPack(pack.id,

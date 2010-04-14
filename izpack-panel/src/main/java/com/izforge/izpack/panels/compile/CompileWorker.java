@@ -240,7 +240,7 @@ public class CompileWorker implements Runnable
 
         try
         {
-            this.spec = (IXMLElement) parser.parse(input);
+            this.spec = parser.parse(input);
         }
         catch (Exception e)
         {
@@ -438,7 +438,7 @@ public class CompileWorker implements Runnable
 
         for (int i = 0; i < toplevel_tags.size(); i++)
         {
-            IXMLElement child = (IXMLElement) toplevel_tags.elementAt(i);
+            IXMLElement child = toplevel_tags.elementAt(i);
 
             if ("classpath".equals(child.getName()))
             {
@@ -905,7 +905,7 @@ public class CompileWorker implements Runnable
                 return runEclipseCompiler(output, cmdline);
             }
 
-            return executor.executeCommand((String[]) cmdline.toArray(new String[cmdline.size()]), output);
+            return executor.executeCommand(cmdline.toArray(new String[cmdline.size()]), output);
         }
 
         private int runEclipseCompiler(String[] output, List<String> cmdline)
