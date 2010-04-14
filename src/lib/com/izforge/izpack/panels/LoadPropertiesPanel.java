@@ -96,10 +96,6 @@ public class LoadPropertiesPanel extends IzPanel
                 }
             }
         }
-        catch (Exception e)
-        {
-            throw e;
-        }
         finally
         {
             in.close();

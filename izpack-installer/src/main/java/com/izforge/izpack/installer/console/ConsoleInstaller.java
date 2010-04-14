@@ -238,10 +238,6 @@ public class ConsoleInstaller extends InstallerBase
         {
             iterateAndPerformAction("doInstall");
         }
-        catch (Exception e)
-        {
-            throw e;
-        }
         finally
         {
             checkedReboot();
@@ -256,11 +252,6 @@ public class ConsoleInstaller extends InstallerBase
             iterateAndPerformAction("doGeneratePropertiesFile");
             this.printWriter.flush();
         }
-        catch (Exception e)
-        {
-            throw e;
-        }
-
         finally
         {
             this.printWriter.close();
@@ -278,10 +269,6 @@ public class ConsoleInstaller extends InstallerBase
             properties.load(in);
             iterateAndPerformAction("doInstallFromPropertiesFile");
         }
-        catch (Exception e)
-        {
-            throw e;
-        }
         finally
         {
             in.close();
@@ -295,10 +282,6 @@ public class ConsoleInstaller extends InstallerBase
         {
             properties = System.getProperties();
             iterateAndPerformAction("doInstallFromPropertiesFile");
-        }
-        catch (Exception e)
-        {
-            throw e;
         }
         finally
         {
@@ -315,10 +298,6 @@ public class ConsoleInstaller extends InstallerBase
             properties.load(in);
             mergeAndOverwriteFromSysProperties();
             iterateAndPerformAction("doInstallFromPropertiesFile");
-        }
-        catch (Exception e)
-        {
-            throw e;
         }
         finally
         {

@@ -143,7 +143,7 @@ public class RulesEngineImpl implements RulesEngine
     {
         this();
         this.conditionsspec = conditionsspecxml;
-        this.installdata = installdata;
+        RulesEngineImpl.installdata = installdata;
         this.readConditions();
         init();
     }
@@ -172,7 +172,7 @@ public class RulesEngineImpl implements RulesEngine
     public String[] getKnownConditionIds()
     {
         String[] conditionids = conditionsmap.keySet().toArray(
-                new String[this.conditionsmap.size()]);
+                new String[conditionsmap.size()]);
         Arrays.sort(conditionids);
         return conditionids;
     }
