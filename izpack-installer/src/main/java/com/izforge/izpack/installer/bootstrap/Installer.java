@@ -23,7 +23,7 @@ package com.izforge.izpack.installer.bootstrap;
 
 import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
-import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.base.InstallerController;
 import com.izforge.izpack.installer.console.ConsoleInstaller;
 import com.izforge.izpack.installer.container.impl.InstallerContainer;
 import com.izforge.izpack.installer.language.LanguageDialog;
@@ -169,7 +169,7 @@ public class Installer
                 BindeableContainer installerContainer = applicationComponent.getComponent(BindeableContainer.class);
 
                 installerContainer.getComponent(LanguageDialog.class).initLangPack();
-                installerContainer.getComponent(InstallerFrame.class).loadPanels().launchGUI();
+                installerContainer.getComponent(InstallerController.class).launchInstallation();
                 break;
 
             case INSTALLER_AUTO:

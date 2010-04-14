@@ -11,6 +11,7 @@ import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
 import com.izforge.izpack.installer.base.InstallDataConfiguratorWithRules;
+import com.izforge.izpack.installer.base.InstallerController;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.console.ConsoleInstaller;
 import com.izforge.izpack.installer.container.provider.GUIInstallDataProvider;
@@ -52,6 +53,7 @@ public class InstallerContainer extends AbstractContainer
                 .addComponent(PanelManager.class)
                 .addComponent(InstallDataConfiguratorWithRules.class)
                 .addComponent(ConditionCheck.class)
+                .addComponent(InstallerController.class)
                 .addComponent(MergeManagerImpl.class)
                 .addComponent(UninstallData.class)
                 .addComponent(MutablePicoContainer.class, pico)

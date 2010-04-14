@@ -4,6 +4,7 @@ import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.compiler.container.TestIntegrationContainer;
+import com.izforge.izpack.installer.base.InstallerController;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.language.LanguageDialog;
@@ -40,9 +41,11 @@ public class InstallationTest
     private LanguageDialog languageDialog;
     private InstallerFrame installerFrame;
     private GUIInstallData installData;
+    private InstallerController installerController;
 
-    public InstallationTest(ResourceManager resourceManager, LanguageDialog languageDialog, InstallerFrame installerFrame, GUIInstallData installData)
+    public InstallationTest(ResourceManager resourceManager, LanguageDialog languageDialog, InstallerFrame installerFrame, GUIInstallData installData, InstallerController installerController)
     {
+        this.installerController = installerController;
         this.resourceManager = resourceManager;
         this.languageDialog = languageDialog;
         this.installData = installData;
@@ -168,11 +171,12 @@ public class InstallationTest
         clickDefaultLang();
 
         installerFrameFixture = prepareFrameFixture();
+        java.util.List panelList = installData.getPanels();
         // Hello panel
-        Thread.sleep(100);
-        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        Thread.sleep(600000);
+//        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Chack Panel
-        Thread.sleep(100);
+        Thread.sleep(600);
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Licence Panel
         installerFrameFixture.radioButton(GuiId.LICENCE_YES_RADIO.id).click();
@@ -241,7 +245,7 @@ public class InstallationTest
     protected FrameFixture prepareFrameFixture() throws Exception
     {
         FrameFixture installerFrameFixture = new FrameFixture(installerFrame);
-        installerFrame.loadPanels();
+        installerController.launchInstallation();
         installerFrameFixture.show();
         installerFrame.sizeFrame();
         // wait center

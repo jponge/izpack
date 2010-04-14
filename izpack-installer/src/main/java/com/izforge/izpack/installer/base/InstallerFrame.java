@@ -57,7 +57,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import static com.izforge.izpack.api.GuiId.*;
@@ -69,7 +68,7 @@ import static com.izforge.izpack.api.GuiId.*;
  * @author Fabrice Mirabile added fix for alert window on cross button, July 06 2005
  * @author Dennis Reil, added RulesEngine November 10 2006, several changes in January 2007
  */
-public class InstallerFrame extends JFrame
+public class InstallerFrame extends JFrame implements InstallerView
 {
 
     private static final long serialVersionUID = 3257852069162727473L;
@@ -221,13 +220,12 @@ public class InstallerFrame extends JFrame
         this.uninstallDataWriter = uninstallDataWriter;
         this.uninstallData = uninstallData;
         this.panelManager = panelManager;
-        installDataRulesEngineManager.configureInstallData();
         // Sets the window events handler
-        addWindowListener(new WindowHandler());
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowHandler(this));
         this.variableSubstitutor = new VariableSubstitutorImpl(this.installdata.getVariables());
     }
 
+    @Override
     public void sizeFrame()
     {
         pack();
@@ -235,21 +233,6 @@ public class InstallerFrame extends JFrame
         setPreferredSize(new Dimension(installdata.guiPrefs.width, installdata.guiPrefs.height));
         setResizable(installdata.guiPrefs.resizable);
         centerFrame(this);
-    }
-
-    /**
-     * Search and construct all necessary panels, prepare and size the frame.
-     *
-     * @return The frame for fluent interface
-     * @throws ClassNotFoundException
-     */
-    public InstallerFrame loadPanels() throws ClassNotFoundException
-    {
-        panelManager.loadPanelsInContainer();
-        panelManager.instantiatePanels();
-        buildGUI();
-        sizeFrame();
-        return this;
     }
 
     public void enableFrame()
@@ -277,7 +260,7 @@ public class InstallerFrame extends JFrame
     /**
      * Builds the GUI.
      */
-    private void buildGUI()
+    public void buildGUI()
     {
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         try
@@ -296,16 +279,16 @@ public class InstallerFrame extends JFrame
         // Prepares the glass pane to block the gui interaction when needed
         JPanel glassPane = (JPanel) getGlassPane();
         glassPane.addMouseListener(new MouseAdapter()
-        {/* Nothing todo */
+        {
         });
         glassPane.addMouseMotionListener(new MouseMotionAdapter()
-        {/* Nothing todo */
+        {
         });
         glassPane.addKeyListener(new KeyAdapter()
-        {/* Nothing todo */
+        {
         });
         glassPane.addFocusListener(new FocusAdapter()
-        {/* Nothing todo */
+        {
         });
 
         // We set the layout & prepare the constraint object
@@ -420,12 +403,11 @@ public class InstallerFrame extends JFrame
         callGUIListener(what, null);
     }
 
-    private void callGUIListener(int what, Object param)
+    private void callGUIListener(int what, JPanel param)
     {
-        Iterator<GUIListener> iter = guiListener.iterator();
-        while (iter.hasNext())
+        for (GUIListener aGuiListener : guiListener)
         {
-            (iter.next()).guiActionPerformed(what, param);
+            (aGuiListener).guiActionPerformed(what, param);
         }
     }
 
@@ -1089,6 +1071,7 @@ public class InstallerFrame extends JFrame
     /**
      * Locks the 'previous' button.
      */
+    @Override
     public void lockPrevButton()
     {
         prevButton.setEnabled(false);
@@ -1097,6 +1080,7 @@ public class InstallerFrame extends JFrame
     /**
      * Locks the 'next' button.
      */
+    @Override
     public void lockNextButton()
     {
         nextButton.setEnabled(false);
@@ -1105,6 +1089,7 @@ public class InstallerFrame extends JFrame
     /**
      * Unlocks the 'previous' button.
      */
+    @Override
     public void unlockPrevButton()
     {
         prevButton.setEnabled(true);
@@ -1113,6 +1098,7 @@ public class InstallerFrame extends JFrame
     /**
      * Unlocks the 'next' button.
      */
+    @Override
     public void unlockNextButton()
     {
         unlockNextButton(true);
@@ -1123,6 +1109,7 @@ public class InstallerFrame extends JFrame
      *
      * @param requestFocus if <code>true</code> focus goes to <code>nextButton</code>
      */
+    @Override
     public void unlockNextButton(boolean requestFocus)
     {
         nextButton.setEnabled(true);
@@ -1200,6 +1187,7 @@ public class InstallerFrame extends JFrame
     /**
      * This function moves to the next panel
      */
+    @Override
     public void navigateNext()
     {
         // If the button is inactive this indicates that we cannot move
@@ -1317,6 +1305,7 @@ public class InstallerFrame extends JFrame
     /**
      * This function moves to the previous panel
      */
+    @Override
     public void navigatePrevious()
     {
         // If the button is inactive this indicates that we cannot move
@@ -1347,6 +1336,7 @@ public class InstallerFrame extends JFrame
     /**
      * Show help Window
      */
+    @Override
     public void showHelp()
     {
         IzPanel izPanel = (IzPanel) installdata.getPanels().get(installdata.getCurPanelNumber());
@@ -1444,39 +1434,6 @@ public class InstallerFrame extends JFrame
         {
             showHelp();
         }
-    }
-
-    /**
-     * The window events handler.
-     *
-     * @author julien created October 27, 2002
-     */
-    class WindowHandler extends WindowAdapter
-    {
-
-        /**
-         * Window close is pressed,
-         *
-         * @param e The event.
-         */
-        public void windowClosing(WindowEvent e)
-        {
-            // We ask for confirmation
-            exit();
-        }
-
-        /**
-         * OLD VERSION We can't avoid the exit here, so don't call exit anywhere else.
-         *
-         * @param e The event.
-         *
-         * public void windowClosing(WindowEvent e) { if (Unpacker.isDiscardInterrupt() &&
-         * interruptCount < MAX_INTERRUPT) { // But we should not interrupt. interruptCount++;
-         * return; } // We show an alert anyway if (!installdata.canClose)
-         * JOptionPane.showMessageDialog(null, langpack.getString("installer.quit.message"),
-         * langpack.getString("installer.warning"), JOptionPane.ERROR_MESSAGE); wipeAborted();
-         * Housekeeper.getInstance().shutDown(0); }
-         */
     }
 
     /**
