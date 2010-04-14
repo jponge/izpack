@@ -115,10 +115,9 @@ public class Destroyer extends Thread
             if (OsVersion.IS_UNIX)
             {
                 ArrayList<String> rootScripts = getRootScripts();
-                Iterator<String> rsi = rootScripts.iterator();
-                while (rsi.hasNext())
+                for (String rootScript : rootScripts)
                 {
-                    execRootScript(rsi.next());
+                    execRootScript(rootScript);
                 }
 
             }
@@ -313,10 +312,9 @@ public class Destroyer extends Thread
             objIn = new ObjectInputStream(in);
             List listeners = (List) objIn.readObject();
             objIn.close();
-            Iterator iter = listeners.iterator();
-            while (iter != null && iter.hasNext())
+            for (Object listener : listeners)
             {
-                Class<UninstallerListener> clazz = (Class<UninstallerListener>) Class.forName(((String) iter.next()));
+                Class<UninstallerListener> clazz = (Class<UninstallerListener>) Class.forName(((String) listener));
                 UninstallerListener ul = clazz.newInstance();
                 if (ul.isFileListener())
                 {
@@ -341,13 +339,12 @@ public class Destroyer extends Thread
                                  AbstractUIProgressHandler handler)
     {
         // Iterate the action list.
-        Iterator iter = listeners.iterator();
         UninstallerListener il = null;
-        while (iter.hasNext())
+        for (Object listener : listeners)
         {
             try
             {
-                il = (UninstallerListener) iter.next();
+                il = (UninstallerListener) listener;
                 switch (action)
                 {
                     case UninstallerListener.BEFORE_DELETION:

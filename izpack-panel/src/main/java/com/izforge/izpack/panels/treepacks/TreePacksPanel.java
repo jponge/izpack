@@ -628,10 +628,8 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         treeData = new HashMap<String, ArrayList<String>>();
         idToPack = new HashMap<String, Pack>();
 
-        Iterator iter = this.installData.getAvailablePacks().iterator();
-        while (iter.hasNext())
+        for (Pack p : this.installData.getAvailablePacks())
         {
-            Pack p = (Pack) iter.next();
             idToPack.put(p.id, p);
             if (p.parent != null)
             {
@@ -765,11 +763,9 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     {
         if (parent == null) // the root node
         {
-            Iterator iter = this.installData.getAvailablePacks().iterator();
             ArrayList rootNodes = new ArrayList();
-            while (iter.hasNext())
+            for (Pack p : this.installData.getAvailablePacks())
             {
-                Pack p = (Pack) iter.next();
                 if (p.parent == null)
                 {
                     rootNodes.add(populateTreePacks(p.id));
@@ -838,10 +834,8 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
 
             //initialize helper map to increa performance
             packToRowNumber = new HashMap<Pack, Integer>();
-            Iterator rowpack = this.installData.getAvailablePacks().iterator();
-            while (rowpack.hasNext())
+            for (Pack p : this.installData.getAvailablePacks())
             {
-                Pack p = (Pack) rowpack.next();
                 packToRowNumber.put(p, this.installData.getAvailablePacks().indexOf(p));
             }
 
@@ -869,11 +863,9 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
 
             // set the JCheckBoxes to the currently selected panels. The
             // selection might have changed in another panel
-            Iterator iter = this.installData.getAvailablePacks().iterator();
             bytes = 0;
-            while (iter.hasNext())
+            for (Pack p : this.installData.getAvailablePacks())
             {
-                Pack p = (Pack) iter.next();
                 if (p.required)
                 {
                     bytes += p.nbytes;
@@ -902,16 +894,14 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     public String getSummaryBody()
     {
         StringBuffer retval = new StringBuffer(256);
-        Iterator iter = this.installData.getSelectedPacks().iterator();
         boolean first = true;
-        while (iter.hasNext())
+        for (Pack pack : this.installData.getSelectedPacks())
         {
             if (!first)
             {
                 retval.append("<br>");
             }
             first = false;
-            Pack pack = (Pack) iter.next();
             retval.append(getI18NPackName(pack));
         }
         return retval.toString();
@@ -1055,10 +1045,8 @@ class CheckTreeController extends MouseAdapter
         {
             return;
         }
-        Iterator<String> e = deps.iterator();
-        while (e.hasNext())
+        for (String depId : deps)
         {
-            String depId = e.next();
             CheckBoxNode depCbn = treePacksPanel.getCbnById(depId);
             selectAllDependencies(depCbn);
             if (depCbn.getChildCount() > 0)

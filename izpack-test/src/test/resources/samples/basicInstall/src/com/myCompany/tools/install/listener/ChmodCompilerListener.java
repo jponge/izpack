@@ -26,7 +26,6 @@ import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.compiler.listener.SimpleCompilerListener;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
@@ -49,16 +48,13 @@ public class ChmodCompilerListener extends SimpleCompilerListener
     {
         Map retval = existentDataMap != null ?
                 existentDataMap : new HashMap();
-        Vector dataList = element.getChildrenNamed("additionaldata");
-        Iterator iter = null;
+        Vector<IXMLElement> dataList = element.getChildrenNamed("additionaldata");
         if (dataList == null || dataList.size() == 0)
         {
             return (existentDataMap);
         }
-        iter = dataList.iterator();
-        while (iter.hasNext())
+        for (IXMLElement data : dataList)
         {
-            IXMLElement data = (IXMLElement) iter.next();
             String[] relevantKeys = {"permission.dir", "permission.file"};
             for (String relevantKey : relevantKeys)
             {

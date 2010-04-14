@@ -24,8 +24,6 @@ package com.izforge.izpack.util.helper;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.installer.ISummarisable;
 
-import java.util.Iterator;
-
 /**
  * A helper class which creates a summary from all panels. This class calls all declared panels for
  * a summary To differ between caption and message, HTML is used to draw caption in bold and indent
@@ -71,12 +69,11 @@ public class SummaryProcessor
      */
     public static String getSummary(AutomatedInstallData idata)
     {
-        Iterator<ISummarisable> iter = idata.getPanels().iterator();
         StringBuffer sb = new StringBuffer(2048);
         sb.append(HTML_HEADER);
-        while (iter.hasNext())
+        for (Object o : idata.getPanels())
         {
-            ISummarisable panel = iter.next();
+            ISummarisable panel = (ISummarisable) o;
             String caption = panel.getSummaryCaption();
             String msg = panel.getSummaryBody();
             // If no caption or/and message, ignore it.

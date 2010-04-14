@@ -747,11 +747,9 @@ public class IoHelper
             testName = testName.replace('\\', '.');
             if (files != null)
             {
-                Iterator<String> iterator = files.iterator();
                 boolean founded = false;
-                while (iterator.hasNext())
+                for (String doInclude : files)
                 {   // Make "includes" self to support regex.
-                    String doInclude = iterator.next();
                     if (testName.matches(doInclude))
                     {
                         founded = true;

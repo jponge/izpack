@@ -141,10 +141,9 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     {
 
         collectInputs(installData);
-        Iterator<Input> inputIterator = listInputs.iterator();
-        while (inputIterator.hasNext())
+        for (Input listInput : listInputs)
         {
-            String strVariableName = inputIterator.next().strVariableName;
+            String strVariableName = listInput.strVariableName;
             if (strVariableName != null)
             {
                 String strVariableValue = p.getProperty(strVariableName);
@@ -162,10 +161,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     {
 
         collectInputs(installData);
-        Iterator<Input> inputIterator = listInputs.iterator();
-        while (inputIterator.hasNext())
+        for (Input input : listInputs)
         {
-            Input input = inputIterator.next();
             if (input.strVariableName != null)
             {
                 printWriter.println(input.strVariableName + "=");
@@ -183,11 +180,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             return true;
         }
         boolean status = true;
-        Iterator<Input> inputsIterator = listInputs.iterator();
-        while (inputsIterator.hasNext())
+        for (Input input : listInputs)
         {
-            Input input = inputsIterator.next();
-
             if (TEXT_FIELD.equals(input.strFieldType)
                     || FILE.equals(input.strFieldType)
                     || RULE_FIELD.equals(input.strFieldType))

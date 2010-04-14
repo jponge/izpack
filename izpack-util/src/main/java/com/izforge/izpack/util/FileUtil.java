@@ -24,7 +24,6 @@ package com.izforge.izpack.util;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 
 /**
@@ -133,11 +132,9 @@ public class FileUtil
             e.printStackTrace();
         }
 
-        Iterator linesIter = fileContent.iterator();
-
-        while (linesIter.hasNext())
+        for (Object aFileContent : fileContent)
         {
-            String currentline = (String) linesIter.next();
+            String currentline = (String) aFileContent;
 
             if (caseInSensitiveSearch)
             {

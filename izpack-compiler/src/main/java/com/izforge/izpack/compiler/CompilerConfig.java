@@ -590,10 +590,8 @@ public class CompilerConfig extends Thread
                     parsable.setCondition(condition);
                     pack.addParsable(parsable);
                 }
-                Iterator<IXMLElement> iterSet = parsableNode.getChildrenNamed("fileset").iterator();
-                while (iterSet.hasNext())
+                for (IXMLElement f : parsableNode.getChildrenNamed("fileset"))
                 {
-                    IXMLElement f = iterSet.next();
                     String targetdir = xmlCompilerHelper.requireAttribute(f, "targetdir");
                     String dir_attr = xmlCompilerHelper.requireAttribute(f, "dir");
                     File dir = new File(dir_attr);

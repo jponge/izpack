@@ -30,7 +30,6 @@ import com.izforge.izpack.panels.installationgroup.InstallationGroupPanel.GroupD
 import com.izforge.izpack.util.Debug;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -54,10 +53,8 @@ public class InstallationGroupPanelAutomationHelper
         {
             IXMLElement xgroup = new XMLElementImpl("group", panelRoot);
             xgroup.setAttribute("name", gd.name);
-            Iterator<String> names = gd.packNames.iterator();
-            while (names.hasNext())
+            for (String name : gd.packNames)
             {
-                String name = names.next();
                 Pack pack = (Pack) packsByName.get(name);
                 int index = idata.getAvailablePacks().indexOf(pack);
                 IXMLElement xpack = new XMLElementImpl("pack", xgroup);

@@ -176,10 +176,8 @@ public class ImgPacksPanel extends PacksPanelBase
     {
         int size = this.installData.getAvailablePacks().size();
         images = new HashMap<String, ImageIcon>(size);
-        Iterator pack_it = this.installData.getAvailablePacks().iterator();
-        while (pack_it.hasNext())
+        for (Pack pack : this.installData.getAvailablePacks())
         {
-            Pack pack = (Pack) pack_it.next();
             if (pack.packImgId != null)
             {
                 try

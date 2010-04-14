@@ -146,17 +146,16 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
 
             if (getSpecHelper().getSpec() != null)
             {
-                Iterator iter = idata.getSelectedPacks().iterator();
                 // Get the special pack "UninstallStuff" which contains values
                 // for the uninstaller entry.
                 uninstallerPack = getSpecHelper().getPackForName("UninstallStuff");
                 performPack(uninstallerPack, variableSubstitutor);
 
                 // Now perform the selected packs.
-                while (iter != null && iter.hasNext())
+                for (Pack selectedPack : idata.getSelectedPacks())
                 {
                     // Resolve data for current pack.
-                    IXMLElement pack = getSpecHelper().getPackForName(((Pack) iter.next()).name);
+                    IXMLElement pack = getSpecHelper().getPackForName(selectedPack.name);
                     performPack(pack, variableSubstitutor);
 
                 }
@@ -257,10 +256,9 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
         {
             return;
         }
-        Iterator entriesIter = regEntries.iterator();
-        while (entriesIter != null && entriesIter.hasNext())
+        for (Object regEntryObj : regEntries)
         {
-            IXMLElement regEntry = (IXMLElement) entriesIter.next();
+            IXMLElement regEntry = (IXMLElement) regEntryObj;
             String condition = regEntry.getAttribute("condition");
             if (condition != null)
             {

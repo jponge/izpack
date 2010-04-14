@@ -36,7 +36,6 @@ import com.izforge.izpack.util.helper.SpecHelper;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -110,12 +109,8 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         }
 
         // Selected packs.
-        Iterator iter = idata.getSelectedPacks().iterator();
-        Pack p = null;
-        while (iter != null && iter.hasNext())
+        for (Pack p : idata.getSelectedPacks())
         {
-            p = (Pack) iter.next();
-
             // Resolve data for current pack.
             IXMLElement pack = getSpecHelper().getPackForName(p.name);
             if (pack == null)
@@ -134,10 +129,9 @@ public class AntActionInstallerListener extends SimpleInstallerListener
             Vector<IXMLElement> antCallEntries = pack.getChildrenNamed(AntAction.ANTCALL);
             if (antCallEntries != null && antCallEntries.size() >= 1)
             {
-                Iterator<IXMLElement> entriesIter = antCallEntries.iterator();
-                while (entriesIter != null && entriesIter.hasNext())
+                for (IXMLElement antCallEntry : antCallEntries)
                 {
-                    AntAction act = readAntCall(entriesIter.next(), idata);
+                    AntAction act = readAntCall(antCallEntry, idata);
                     if (act != null)
                     {
                         (packActions.get(act.getOrder())).add(act);
@@ -152,10 +146,9 @@ public class AntActionInstallerListener extends SimpleInstallerListener
 
             actions.put(p.name, packActions);
         }
-        iter = idata.getAvailablePacks().iterator();
-        while (iter.hasNext())
+        for (Pack pack : idata.getAvailablePacks())
         {
-            String currentPack = ((Pack) iter.next()).name;
+            String currentPack = pack.name;
             performAllActions(currentPack, ActionBase.BEFOREPACKS, null);
         }
     }
@@ -200,10 +193,9 @@ public class AntActionInstallerListener extends SimpleInstallerListener
             handler.nextStep(getMsg("AntAction.pack"), getProgressBarCallerId(), getActionCount(
                     idata, ActionBase.AFTERPACKS));
         }
-        Iterator iter = idata.getSelectedPacks().iterator();
-        while (iter.hasNext())
+        for (Pack pack : idata.getSelectedPacks())
         {
-            String currentPack = ((Pack) iter.next()).name;
+            String currentPack = pack.name;
             performAllActions(currentPack, ActionBase.AFTERPACKS, handler);
         }
         if (uninstActions.size() > 0)
@@ -215,10 +207,9 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     private int getActionCount(AutomatedInstallData idata, String order)
     {
         int retval = 0;
-        Iterator iter = idata.getSelectedPacks().iterator();
-        while (iter.hasNext())
+        for (Pack pack : idata.getSelectedPacks())
         {
-            String currentPack = ((Pack) iter.next()).name;
+            String currentPack = pack.name;
             ArrayList<AntAction> actList = getActions(currentPack, order);
             if (actList != null)
             {
@@ -357,35 +348,27 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         }
 
         // read propertyfiles
-        Iterator<IXMLElement> iter = el.getChildrenNamed(ActionBase.PROPERTYFILE).iterator();
-        while (iter.hasNext())
+        for (IXMLElement propEl : el.getChildrenNamed(ActionBase.PROPERTYFILE))
         {
-            IXMLElement propEl = iter.next();
             act.addPropertyFile(spec.getRequiredAttribute(propEl, ActionBase.PATH));
         }
 
         // read properties
-        iter = el.getChildrenNamed(ActionBase.PROPERTY).iterator();
-        while (iter.hasNext())
+        for (IXMLElement propEl : el.getChildrenNamed(ActionBase.PROPERTY))
         {
-            IXMLElement propEl = iter.next();
             act.setProperty(spec.getRequiredAttribute(propEl, ActionBase.NAME), spec
                     .getRequiredAttribute(propEl, ActionBase.VALUE));
         }
 
         // read targets
-        iter = el.getChildrenNamed(ActionBase.TARGET).iterator();
-        while (iter.hasNext())
+        for (IXMLElement targEl : el.getChildrenNamed(ActionBase.TARGET))
         {
-            IXMLElement targEl = iter.next();
             act.addTarget(spec.getRequiredAttribute(targEl, ActionBase.NAME));
         }
 
         // read uninstall rules
-        iter = el.getChildrenNamed(ActionBase.UNINSTALL_TARGET).iterator();
-        while (iter.hasNext())
+        for (IXMLElement utargEl : el.getChildrenNamed(ActionBase.UNINSTALL_TARGET))
         {
-            IXMLElement utargEl = iter.next();
             act.addUninstallTarget(spec.getRequiredAttribute(utargEl, ActionBase.NAME));
         }
 

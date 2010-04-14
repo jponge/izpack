@@ -299,11 +299,8 @@ public class WebRepositoryAccessor
             parseError(root, "<packs> requires a <pack>");
         }
 
-        Iterator<IXMLElement> packIter = packElements.iterator();
-        while (packIter.hasNext())
+        for (IXMLElement el : packElements)
         {
-            IXMLElement el = packIter.next();
-
             // Trivial initialisations
             String name = requireAttribute(el, "name");
             String id = el.getAttribute("id");
@@ -355,10 +352,8 @@ public class WebRepositoryAccessor
             }
 
             // We get the parsables list
-            Iterator<IXMLElement> iter = el.getChildrenNamed("parsable").iterator();
-            while (iter.hasNext())
+            for (IXMLElement p : el.getChildrenNamed("parsable"))
             {
-                IXMLElement p = iter.next();
                 String target = p.getAttribute("targetfile", null);
                 SubstitutionType type = SubstitutionType.lookup(p.getAttribute("type", "plain"));
                 String encoding = p.getAttribute("encoding", null);
@@ -370,10 +365,8 @@ public class WebRepositoryAccessor
             }
 
             // We get the executables list
-            iter = el.getChildrenNamed("executable").iterator();
-            while (iter.hasNext())
+            for (IXMLElement e : el.getChildrenNamed("executable"))
             {
-                IXMLElement e = iter.next();
                 ExecutableFile executable = new ExecutableFile();
                 String val; // temp value
 
@@ -418,10 +411,8 @@ public class WebRepositoryAccessor
                 IXMLElement args = e.getFirstChildNamed("args");
                 if (null != args)
                 {
-                    Iterator<IXMLElement> argIterator = args.getChildrenNamed("arg").iterator();
-                    while (argIterator.hasNext())
+                    for (IXMLElement arg : args.getChildrenNamed("arg"))
                     {
-                        IXMLElement arg = argIterator.next();
                         executable.argList.add(requireAttribute(arg, "value"));
                     }
                 }
@@ -433,11 +424,8 @@ public class WebRepositoryAccessor
             }
 
             // get the updatechecks list
-            iter = el.getChildrenNamed("updatecheck").iterator();
-            while (iter.hasNext())
+            for (IXMLElement f : el.getChildrenNamed("updatecheck"))
             {
-                IXMLElement f = iter.next();
-
                 String casesensitive = f.getAttribute("casesensitive");
 
                 // get includes and excludes
@@ -445,27 +433,21 @@ public class WebRepositoryAccessor
                 ArrayList<String> excludesList = new ArrayList<String>();
 
                 // get includes and excludes
-                Iterator<IXMLElement> include_it = f.getChildrenNamed("include").iterator();
-                while (include_it.hasNext())
+                for (IXMLElement inc_el : f.getChildrenNamed("include"))
                 {
-                    IXMLElement inc_el = include_it.next();
                     includesList.add(requireAttribute(inc_el, "name"));
                 }
 
-                Iterator<IXMLElement> exclude_it = f.getChildrenNamed("exclude").iterator();
-                while (exclude_it.hasNext())
+                for (IXMLElement excl_el : f.getChildrenNamed("exclude"))
                 {
-                    IXMLElement excl_el = exclude_it.next();
                     excludesList.add(requireAttribute(excl_el, "name"));
                 }
 
                 pack.addUpdateCheck(new UpdateCheck(includesList, excludesList, casesensitive));
             }
             // We get the dependencies
-            iter = el.getChildrenNamed("depends").iterator();
-            while (iter.hasNext())
+            for (IXMLElement dep : el.getChildrenNamed("depends"))
             {
-                IXMLElement dep = iter.next();
                 String depName = requireAttribute(dep, "packname");
                 pack.addDependency(depName);
 

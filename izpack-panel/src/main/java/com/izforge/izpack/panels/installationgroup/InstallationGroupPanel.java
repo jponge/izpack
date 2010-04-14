@@ -322,11 +322,9 @@ public class InstallationGroupPanel extends IzPanel
             return;
         }
 
-        Iterator<String> iter = p.dependencies.iterator();
         Debug.trace(p.name + " dependencies: " + p.dependencies);
-        while (iter.hasNext())
+        for (String dependent : p.dependencies)
         {
-            String dependent = iter.next();
             if (!data.packNames.contains(dependent))
             {
                 Debug.trace("Need dependent: " + dependent);
@@ -357,11 +355,9 @@ public class InstallationGroupPanel extends IzPanel
             Pack p = idata.getAvailablePacks().get(n);
             packsByName.put(p.name, p);
             Set<String> groups = p.installGroups;
-            Iterator<String> iter = groups.iterator();
             Debug.trace("Pack: " + p.name + ", installGroups: " + groups);
-            while (iter.hasNext())
+            for (String group : groups)
             {
-                String group = iter.next();
                 GroupData data = (GroupData) installGroups.get(group);
                 if (data == null)
                 {
@@ -377,15 +373,12 @@ public class InstallationGroupPanel extends IzPanel
         /* Build up a set of the packs to include in the installation by finding
         all packs in the selected group, and then include their dependencies.
         */
-        Iterator gditer = installGroups.values().iterator();
-        while (gditer.hasNext())
+        for (Object o : installGroups.values())
         {
-            GroupData data = (GroupData) gditer.next();
+            GroupData data = (GroupData) o;
             Debug.trace("Adding dependents for: " + data.name);
-            Iterator iter = idata.getAvailablePacks().iterator();
-            while (iter.hasNext())
+            for (Pack p : idata.getAvailablePacks())
             {
-                Pack p = (Pack) iter.next();
                 Set<String> groups = p.installGroups;
                 if (groups.size() == 0 || groups.contains(data.name))
                 {
@@ -565,13 +558,12 @@ public class InstallationGroupPanel extends IzPanel
             }
         });
 
-        Iterator iter = values.iterator();
         ButtonGroup buttonGroup = new ButtonGroup();
         boolean madeSelection = false;
         int count = 0;
-        while (iter.hasNext())
+        for (Object value : values)
         {
-            GroupData gd = (GroupData) iter.next();
+            GroupData gd = (GroupData) value;
             rows[count] = gd;
             Debug.trace("Creating button#" + count + ", group=" + gd.name);
             JRadioButton btn = new JRadioButton(getLocalizedGroupName(gd.name));

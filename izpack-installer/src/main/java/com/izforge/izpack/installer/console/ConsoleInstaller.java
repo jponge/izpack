@@ -40,7 +40,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Properties;
 
 /**
@@ -108,11 +107,9 @@ public class ConsoleInstaller extends InstallerBase
         try
         {
             this.result = true;
-            Iterator<Panel> panelsIterator = this.installdata.getPanelsOrder().iterator();
             this.installdata.setCurPanelNumber(-1);
-            while (panelsIterator.hasNext())
+            for (Panel p : this.installdata.getPanelsOrder())
             {
-                Panel p = panelsIterator.next();
                 this.installdata.setCurPanelNumber(this.installdata.getCurPanelNumber() + 1);
                 String praefix = "com.izforge.izpack.panels.";
                 if (p.className.compareTo(".") > -1)

@@ -108,10 +108,8 @@ public class PacksModel extends AbstractTableModel
 
                 Properties variables = (Properties) oin.readObject();
 
-                Iterator iter = variables.keySet().iterator();
-                while (iter.hasNext())
+                for (Object key : variables.keySet())
                 {
-                    Object key = iter.next();
                     idata.setVariable((String) key, (String) variables.get(key));
                 }
                 fin.close();

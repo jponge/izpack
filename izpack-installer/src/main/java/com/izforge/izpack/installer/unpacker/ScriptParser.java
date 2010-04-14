@@ -27,7 +27,6 @@ import com.izforge.izpack.util.OsConstraintHelper;
 
 import java.io.*;
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * The script parser classe.
@@ -72,17 +71,16 @@ public class ScriptParser
     public void parseFiles() throws Exception
     {
         // Parses the files
-        Iterator<ParsableFile> iter = files.iterator();
-        while (iter.hasNext())
+        for (ParsableFile pfile : files)
         {
+            // Create a temporary file for the parsed data
+            // (Use the same directory so that renaming works later)
+
             // If interrupt is desired, return immediately.
             if (Unpacker.isInterruptDesired())
             {
                 return;
             }
-            // Create a temporary file for the parsed data
-            // (Use the same directory so that renaming works later)
-            ParsableFile pfile = iter.next();
 
             // check whether the OS matches
             if (!OsConstraintHelper.oneMatchesCurrentSystem(pfile.osConstraints))

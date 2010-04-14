@@ -50,7 +50,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -640,11 +639,9 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
             // set the JCheckBoxes to the currently selected panels. The
             // selection might have changed in another panel
-            java.util.Iterator iter = this.installData.getAvailablePacks().iterator();
             bytes = 0;
-            while (iter.hasNext())
+            for (Pack p : this.installData.getAvailablePacks())
             {
-                Pack p = (Pack) iter.next();
                 if (p.required)
                 {
                     bytes += p.nbytes;
@@ -675,29 +672,26 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     public String getSummaryBody()
     {
         StringBuffer retval = new StringBuffer(256);
-        Iterator iter = this.installData.getSelectedPacks().iterator();
         boolean first = true;
-        while (iter.hasNext())
+        for (Pack pack : this.installData.getSelectedPacks())
         {
             if (!first)
             {
                 retval.append("<br>");
             }
             first = false;
-            Pack pack = (Pack) iter.next();
             retval.append(getI18NPackName(pack));
         }
         if (packsModel.isModifyinstallation())
         {
             Map installedpacks = packsModel.getInstalledpacks();
-            iter = installedpacks.keySet().iterator();
             retval.append("<br><b>");
             retval.append(langpack.getString("PacksPanel.installedpacks.summarycaption"));
             retval.append("</b>");
             retval.append("<br>");
-            while (iter.hasNext())
+            for (Object o : installedpacks.keySet())
             {
-                Pack pack = (Pack) installedpacks.get(iter.next());
+                Pack pack = (Pack) installedpacks.get(o);
                 retval.append(getI18NPackName(pack));
                 retval.append("<br>");
             }

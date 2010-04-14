@@ -154,10 +154,8 @@ public class RulesEngineImpl implements RulesEngine
         Debug.trace("Initializing RulesEngine");
         RulesEngineImpl.installdata = installdata;
         conditionsmap = rules;
-        Iterator<String> keyiter = conditionsmap.keySet().iterator();
-        while (keyiter.hasNext())
+        for (String key : conditionsmap.keySet())
         {
-            String key = keyiter.next();
             Condition condition = conditionsmap.get(key);
             condition.setInstalldata(installdata);
         }

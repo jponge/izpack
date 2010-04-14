@@ -29,7 +29,6 @@ import org.apache.tools.ant.util.JavaEnvUtils;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -431,11 +430,9 @@ public class AntAction extends ActionBase
         }
         if (props.size() > 0)
         {
-            Iterator iter = props.keySet().iterator();
-            String key = null;
-            while (iter.hasNext())
+            for (Object o : props.keySet())
             {
-                key = (String) iter.next();
+                String key = (String) o;
                 proj.setProperty(key, props.getProperty(key));
             }
         }

@@ -32,7 +32,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -177,16 +176,12 @@ public class SpecHelper
     public IXMLElement getPackForName(String packDestName)
     {
         Vector<IXMLElement> packs = getSpec().getChildrenNamed(PACK_KEY);
-        Iterator<IXMLElement> iter = null;
         if (packs == null)
         {
             return (null);
         }
-        iter = packs.iterator();
-        while (iter.hasNext())
+        for (IXMLElement pack : packs)
         {
-
-            IXMLElement pack = iter.next();
             String packName = pack.getAttribute(PACK_NAME);
             if (packName.equals(packDestName))
             {
@@ -273,10 +268,9 @@ public class SpecHelper
         }
         if (depth < childdef.length - 1)
         {
-            Iterator<IXMLElement> iter = children.iterator();
-            while (iter.hasNext())
+            for (IXMLElement child : children)
             {
-                retval2 = getSubChildren(iter.next(), childdef, depth + 1);
+                retval2 = getSubChildren(child, childdef, depth + 1);
                 if (retval2 != null)
                 {
                     if (retval == null)

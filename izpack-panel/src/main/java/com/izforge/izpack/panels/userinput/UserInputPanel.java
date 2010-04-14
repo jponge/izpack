@@ -514,12 +514,10 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 Vector<IXMLElement> validateParams = element.getChildrenNamed(RULE_PARAM);
                 if (validateParams != null && validateParams.size() > 0)
                 {
-                    Iterator<IXMLElement> iter = validateParams.iterator();
-                    while (iter.hasNext())
+                    for (IXMLElement validateParam : validateParams)
                     {
-                        element = iter.next();
-                        String paramName = element.getAttribute(RULE_PARAM_NAME);
-                        String paramValue = element.getAttribute(RULE_PARAM_VALUE);
+                        String paramName = validateParam.getAttribute(RULE_PARAM_NAME);
+                        String paramValue = validateParam.getAttribute(RULE_PARAM_VALUE);
 
                         validateParamMap.put(paramName, paramValue);
                     }

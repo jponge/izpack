@@ -301,12 +301,11 @@ public class NativeLibException extends Exception
 
     private String getMsg(String s)
     {
-        Iterator<ResourceBundle> it = messageResourceBundles.values().iterator();
-        while (it.hasNext())
+        for (ResourceBundle resourceBundle : messageResourceBundles.values())
         {
             try
             {
-                return ((it.next()).getString(s));
+                return resourceBundle.getString(s);
             }
             catch (MissingResourceException missingresourceexception)
             { // do not throw, else look in next bundle.

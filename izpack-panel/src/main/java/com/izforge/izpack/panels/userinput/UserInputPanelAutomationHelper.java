@@ -30,7 +30,6 @@ import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.util.Debug;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
@@ -104,10 +103,8 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
         // ----------------------------------------------------
         // add all entries
         // ----------------------------------------------------
-        Iterator<String> keys = this.entries.keySet().iterator();
-        while (keys.hasNext())
+        for (String key : this.entries.keySet())
         {
-            String key = keys.next();
             String value = this.entries.get(key);
             dataElement = new XMLElementImpl(AUTO_KEY_ENTRY, userInput);
             dataElement.setAttribute(AUTO_ATTRIBUTE_KEY, key);

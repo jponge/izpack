@@ -2,7 +2,6 @@ package com.izforge.izpack.util.os;
 
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -52,11 +51,10 @@ public class FileQueue
                 StringBuffer buf = new StringBuffer();
                 buf.append(
                         "The following system errors occured during committing the file queue:\n");
-                Iterator<SystemErrorException> it = exceptions.iterator();
-                while (it.hasNext())
+                for (SystemErrorException exception : exceptions)
                 {
                     buf.append('\t');
-                    buf.append(it.next().toString());
+                    buf.append(exception.toString());
                     buf.append('\n');
                 }
                 throw new IOException(buf.toString());

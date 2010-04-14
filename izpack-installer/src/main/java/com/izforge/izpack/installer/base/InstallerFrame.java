@@ -57,7 +57,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import static com.izforge.izpack.api.GuiId.*;
@@ -416,10 +415,9 @@ public class InstallerFrame extends JFrame
 
     private void callGUIListener(int what, Object param)
     {
-        Iterator<GUIListener> iter = guiListener.iterator();
-        while (iter.hasNext())
+        for (GUIListener aGuiListener : guiListener)
         {
-            (iter.next()).guiActionPerformed(what, param);
+            aGuiListener.guiActionPerformed(what, param);
         }
     }
 
