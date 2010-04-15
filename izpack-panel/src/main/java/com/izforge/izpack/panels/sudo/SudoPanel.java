@@ -82,7 +82,7 @@ public class SudoPanel extends IzPanel implements ActionListener
         add(LabelFactory
                 .create(
                 /* installData.getLangpack().getString("SudoPanel.tip") */"Please note that passwords are case-sensitive",
-                parent.icons.getImageIcon("tip"), JLabel.TRAILING));
+                parent.icons.get("tip"), JLabel.TRAILING));
 
         add(Box.createRigidArea(new Dimension(0, 5)));
 

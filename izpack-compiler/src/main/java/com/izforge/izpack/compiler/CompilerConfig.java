@@ -2268,7 +2268,7 @@ public class CompilerConfig extends Thread
         {
             for (CompilerListener compilerListener : compilerListeners)
             {
-                retval = (compilerListener).reviseAdditionalDataMap(retval, f);
+                retval = compilerListener.reviseAdditionalDataMap(retval, f);
             }
         }
         catch (CompilerException ce)

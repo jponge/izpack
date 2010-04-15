@@ -31,7 +31,7 @@ import java.util.ArrayList;
  *
  * @author marc.eppelmann&#064;reddot.de
  */
-public class UnixUsers extends ArrayList
+public class UnixUsers extends ArrayList<UnixUser>
 {
 
     // ~ Static fields/initializers *********************************************************
@@ -65,7 +65,7 @@ public class UnixUsers extends ArrayList
 
         for (int idx = 0; idx < size(); idx++)
         {
-            UnixUser user = (UnixUser) get(idx);
+            UnixUser user = get(idx);
 
             if ((user.getShell() != null) && user.getShell().trim().endsWith("sh"))
             {
@@ -104,9 +104,9 @@ public class UnixUsers extends ArrayList
      *
      * @return an UnixUsers Arraylist of these users
      */
-    public ArrayList _getUsersWithValidShellsExistingHomesAndDesktops()
+    public ArrayList<UnixUser> _getUsersWithValidShellsExistingHomesAndDesktops()
     {
-        ArrayList result = new ArrayList();
+        ArrayList<UnixUser> result = new ArrayList<UnixUser>();
 
         ArrayList<UnixUser> usersWithValidShellsAndExistingHomes = getUsersWithValidShellsAndExistingHomes();
 
@@ -131,12 +131,10 @@ public class UnixUsers extends ArrayList
     {
         ArrayList<String> result = new ArrayList<String>();
 
-        ArrayList validUserDesktops = getUsersWithValidShellsExistingHomesAndDesktops();
+        ArrayList<UnixUser> validUserDesktops = getUsersWithValidShellsExistingHomesAndDesktops();
 
-        for (Object validUserDesktop : validUserDesktops)
+        for (UnixUser user : validUserDesktops)
         {
-            UnixUser user = (UnixUser) validUserDesktop;
-
             if (user.getHome() != null)
             {
                 File DesktopFolder = new File(user.getXdgDesktopfolder());
@@ -157,7 +155,7 @@ public class UnixUsers extends ArrayList
      *
      * @return an UnixUsers Arraylist of these users
      */
-    public static ArrayList getUsersWithValidShellsExistingHomesAndDesktops()
+    public static ArrayList<UnixUser> getUsersWithValidShellsExistingHomesAndDesktops()
     {
         UnixUsers users = new UnixUsers();
 
@@ -247,7 +245,7 @@ public class UnixUsers extends ArrayList
         }
 
         System.out.println(StringTool
-                .stringArrayListToString(getUsersWithValidShellsExistingHomesAndDesktops()));
+                .listToString(getUsersWithValidShellsExistingHomesAndDesktops()));
 
         // getUsersWithValidShellsAndExistingHomes();
     }

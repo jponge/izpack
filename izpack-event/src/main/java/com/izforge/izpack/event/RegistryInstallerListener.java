@@ -251,14 +251,13 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
         }
 
         // Get all entries for registry settings.
-        Vector regEntries = pack.getChildren();
+        Vector<IXMLElement> regEntries = pack.getChildren();
         if (regEntries == null)
         {
             return;
         }
-        for (Object regEntryObj : regEntries)
+        for (IXMLElement regEntry : regEntries)
         {
-            IXMLElement regEntry = (IXMLElement) regEntryObj;
             String condition = regEntry.getAttribute("condition");
             if (condition != null)
             {

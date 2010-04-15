@@ -235,7 +235,7 @@ public class UnixHelper
     {
         System.out.println("Hallo from " + UnixHelper.class.getName() + VERSION);
 
-        // System.out.println( StringTool.stringArrayListToString(UnixUsers.getUsersAsArrayList())
+        // System.out.println( StringTool.listToString(UnixUsers.getUsersAsArrayList())
         // );
 
         // System.out.println("Kde is" + (kdeIsInstalled() ? " " : " not ") + "installed");

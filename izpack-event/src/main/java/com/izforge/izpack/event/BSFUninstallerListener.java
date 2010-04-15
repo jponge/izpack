@@ -34,12 +34,7 @@ import java.util.List;
 public class BSFUninstallerListener extends SimpleUninstallerListener
 {
 
-    private List bsfActions = null;
-
-    public BSFUninstallerListener()
-    {
-        super();
-    }
+    private List<BSFAction> bsfActions = null;
 
     private void loadActions() throws Exception
     {
@@ -58,9 +53,8 @@ public class BSFUninstallerListener extends SimpleUninstallerListener
     {
         loadActions();
 
-        for (Object bsfAction : bsfActions)
+        for (BSFAction action : bsfActions)
         {
-            BSFAction action = (BSFAction) bsfAction;
             action.init();
             action.executeUninstall(BSFAction.BEFOREDELETION, new Object[]{files, handler});
             action.destroy();
@@ -70,9 +64,8 @@ public class BSFUninstallerListener extends SimpleUninstallerListener
 
     public void afterDeletion(List files, AbstractUIProgressHandler handler) throws Exception
     {
-        for (Object bsfAction : bsfActions)
+        for (BSFAction action : bsfActions)
         {
-            BSFAction action = (BSFAction) bsfAction;
             action.init();
             action.executeUninstall(BSFAction.AFTERDELETION, new Object[]{files, handler});
             action.destroy();
@@ -81,9 +74,8 @@ public class BSFUninstallerListener extends SimpleUninstallerListener
 
     public void beforeDelete(File file, AbstractUIProgressHandler handler) throws Exception
     {
-        for (Object bsfAction : bsfActions)
+        for (BSFAction action : bsfActions)
         {
-            BSFAction action = (BSFAction) bsfAction;
             action.init();
             action.executeUninstall(BSFAction.BEFOREDELETE, new Object[]{file, handler});
             action.destroy();
@@ -92,9 +84,8 @@ public class BSFUninstallerListener extends SimpleUninstallerListener
 
     public void afterDelete(File file, AbstractUIProgressHandler handler) throws Exception
     {
-        for (Object bsfAction : bsfActions)
+        for (BSFAction action : bsfActions)
         {
-            BSFAction action = (BSFAction) bsfAction;
             action.init();
             action.executeUninstall(BSFAction.AFTERDELETE, new Object[]{file, handler});
             action.destroy();

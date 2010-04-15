@@ -41,6 +41,7 @@ import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Defines the base class for the IzPack panels. Any panel should be a subclass of it and should
@@ -333,7 +334,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public ImageIcon getImageIcon(String iconName)
     {
-        return parent.icons.getImageIcon(iconName);
+        return parent.icons.get(iconName);
     }
 
     /**
@@ -662,7 +663,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public JLabel createLabel(String subkey, String alternateClass, String iconId, int pos)
     {
-        ImageIcon ii = (iconId != null) ? parent.icons.getImageIcon(iconId) : null;
+        ImageIcon ii = (iconId != null) ? parent.icons.get(iconId) : null;
         String msg = getI18nStringForClass(subkey, alternateClass);
         JLabel label = LabelFactory.create(msg, ii, pos);
         if (label != null)
@@ -690,7 +691,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     public JLabel createLabel(String subkey, String alternateClass, String iconId, int pos,
                               boolean isFullLine)
     {
-        ImageIcon ii = (iconId != null) ? parent.icons.getImageIcon(iconId) : null;
+        ImageIcon ii = (iconId != null) ? parent.icons.get(iconId) : null;
         String msg = getI18nStringForClass(subkey, alternateClass);
         JLabel label = LabelFactory.create(msg, ii, pos, isFullLine);
         if (label != null)
@@ -731,7 +732,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public JLabel createLabel(String textId, String iconId, int pos, boolean isFullLine)
     {
-        ImageIcon ii = (iconId != null) ? parent.icons.getImageIcon(iconId) : null;
+        ImageIcon ii = (iconId != null) ? parent.icons.get(iconId) : null;
         JLabel label = LabelFactory.create(installData.getLangpack().getString(textId), ii, pos, isFullLine);
         if (label != null)
         {
@@ -1140,9 +1141,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         return string_to_parse;
     }
 
-    private HashMap<String, String> helps = null;
+    private Map<String, String> helps = null;
 
-    public void setHelps(HashMap helps)
+    public void setHelps(Map<String, String> helps)
     {
         this.helps = helps;
     }

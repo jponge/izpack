@@ -22,7 +22,7 @@
 package com.izforge.izpack.util;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A extended Java Implementation of Pythons string.replace()
@@ -122,7 +122,7 @@ public class StringTool
     /**
      * Escapes all white Space Characters
      *
-     * @param apathString
+     * @param aPathString
      * @return
      */
     public static String escapeSpaces(String aPathString)
@@ -134,7 +134,7 @@ public class StringTool
     /**
      * Escapes all white Space Characters
      *
-     * @param apathString
+     * @param aPathString
      * @return
      */
     public static String replaceSpacesWithMinus(String aPathString)
@@ -145,7 +145,7 @@ public class StringTool
     /**
      * Escapes all white Space Characters
      *
-     * @param apathString
+     * @param aPathString
      * @return
      */
     public static String replaceSpaces(String aPathString, String replaceWith)
@@ -268,9 +268,9 @@ public class StringTool
      * @param aStringList
      * @return a printable list
      */
-    public static String stringArrayListToString(ArrayList aStringList)
+    public static String listToString(List<?> aStringList)
     {
-        return stringArrayListToString(aStringList, null);
+        return listToString(aStringList, null);
     }
 
     /**
@@ -279,7 +279,7 @@ public class StringTool
      * @param aStringList
      * @return a printable list
      */
-    public static String stringArrayListToString(ArrayList aStringList, String aLineSeparator)
+    public static String listToString(List<?> aStringList, String aLineSeparator)
     {
         String LineSeparator = aLineSeparator;
         if (LineSeparator == null)

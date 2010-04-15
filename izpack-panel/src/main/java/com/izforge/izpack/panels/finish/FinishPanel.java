@@ -93,7 +93,7 @@ public class FinishPanel extends IzPanel implements ActionListener
         {
             // We set the information
             JLabel jLabel = LabelFactory.create(installData.getLangpack().getString("FinishPanel.success"),
-                    parent.icons.getImageIcon("preferences"), LEADING);
+                    parent.icons.get("preferences"), LEADING);
             jLabel.setName(GuiId.FINISH_PANEL_LABEL.id);
             add(jLabel, constraints);
             constraints.gridy++;
@@ -104,15 +104,15 @@ public class FinishPanel extends IzPanel implements ActionListener
 
                 add(LabelFactory.create(installData.getLangpack()
                         .getString("FinishPanel.uninst.info"), parent.icons
-                        .getImageIcon("preferences"), LEADING), constraints);
+                        .get("preferences"), LEADING), constraints);
                 constraints.gridy++;
-                add(LabelFactory.create(path, parent.icons.getImageIcon("empty"),
+                add(LabelFactory.create(path, parent.icons.get("empty"),
                         LEADING), constraints);
                 constraints.gridy++;
             }
             // We add the autoButton
             autoButton = ButtonFactory.createButton(installData.getLangpack().getString("FinishPanel.auto"),
-                    parent.icons.getImageIcon("edit"), this.installData.buttonsHColor);
+                    parent.icons.get("edit"), this.installData.buttonsHColor);
             autoButton.setName(GuiId.FINISH_PANEL_AUTO_BUTTON.id);
             autoButton.setToolTipText(installData.getLangpack().getString("FinishPanel.auto.tip"));
             autoButton.addActionListener(this);
@@ -122,7 +122,7 @@ public class FinishPanel extends IzPanel implements ActionListener
         else
         {
             add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.fail"),
-                    parent.icons.getImageIcon("stop"), LEADING), constraints);
+                    parent.icons.get("stop"), LEADING), constraints);
         }
         getLayoutHelper().completeLayout(); // Call, or call not?
         Log.getInstance().informUser();

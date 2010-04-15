@@ -364,7 +364,7 @@ public class CompileWorker implements Runnable
         }
 
         // list of classpath entries
-        ArrayList classpath = new ArrayList();
+        List<String> classpath = new ArrayList<String>();
 
         this.jobs = new ArrayList<CompilationJob>();
 
@@ -425,11 +425,11 @@ public class CompileWorker implements Runnable
         return new CompileResult();
     }
 
-    private CompilationJob collectJobsRecursive(IXMLElement node, ArrayList classpath)
+    private CompilationJob collectJobsRecursive(IXMLElement node, List<String> classpath)
             throws Exception
     {
         Vector<IXMLElement> toplevel_tags = node.getChildren();
-        ArrayList ourclasspath = (ArrayList) classpath.clone();
+        List<String> ourclasspath = new ArrayList<String>(classpath);
         ArrayList<File> files = new ArrayList<File>();
 
         for (int i = 0; i < toplevel_tags.size(); i++)
@@ -518,7 +518,7 @@ public class CompileWorker implements Runnable
     /**
      * helper: process a <code>&lt;classpath&gt;</code> tag.
      */
-    private void changeClassPath(ArrayList classpath, IXMLElement child) throws Exception
+    private void changeClassPath(List<String> classpath, IXMLElement child) throws Exception
     {
         String add = child.getAttribute("add");
         if (add != null)
@@ -607,7 +607,7 @@ public class CompileWorker implements Runnable
 
         private ArrayList<File> files;
 
-        private ArrayList classpath;
+        private List<String> classpath;
 
         private LocaleDatabase langpack;
 
@@ -626,7 +626,7 @@ public class CompileWorker implements Runnable
          * @param classpath The class path to use.
          */
         public CompilationJob(CompileHandler listener, AutomatedInstallData idata, String name,
-                              ArrayList<File> files, ArrayList classpath)
+                              ArrayList<File> files, List<String> classpath)
         {
             this.listener = listener;
             this.idata = idata;
@@ -693,9 +693,8 @@ public class CompileWorker implements Runnable
             // construct classpath argument for compiler
             // - collect all classpaths
             StringBuffer classpath_sb = new StringBuffer();
-            for (Object aClasspath : this.classpath)
+            for (String cp : this.classpath)
             {
-                String cp = (String) aClasspath;
                 if (classpath_sb.length() > 0)
                 {
                     classpath_sb.append(File.pathSeparatorChar);
@@ -1078,9 +1077,8 @@ public class CompileWorker implements Runnable
             // construct classpath argument for compiler
             // - collect all classpaths
             StringBuffer classpath_sb = new StringBuffer();
-            for (Object aClasspath : this.classpath)
+            for (String cp : this.classpath)
             {
-                String cp = (String) aClasspath;
                 if (classpath_sb.length() > 0)
                 {
                     classpath_sb.append(File.pathSeparatorChar);

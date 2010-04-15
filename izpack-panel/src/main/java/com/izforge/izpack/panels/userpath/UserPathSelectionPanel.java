@@ -119,7 +119,7 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
         {
             buttonText = parent.getInstallerFrame().langpack.getString(defaultPanelName + ".browse");
         }
-        browseButton = ButtonFactory.createButton(buttonText, parent.getInstallerFrame().icons.getImageIcon("open"), idata.buttonsHColor);
+        browseButton = ButtonFactory.createButton(buttonText, parent.getInstallerFrame().icons.get("open"), idata.buttonsHColor);
         browseButton.addActionListener(this);
         add(browseButton);
     }

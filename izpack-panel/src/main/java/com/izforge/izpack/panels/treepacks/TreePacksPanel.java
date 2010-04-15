@@ -343,7 +343,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
                                  GridBagConstraints constraints)
     {
         JLabel label = LabelFactory.create(installData.getLangpack().getString(msgId), parent.icons
-                .getImageIcon(iconId), TRAILING);
+                .get(iconId), TRAILING);
         if (layout != null && constraints != null)
         {
             layout.addLayoutComponent(label, constraints);

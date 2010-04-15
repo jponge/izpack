@@ -108,12 +108,12 @@ public class ImgPacksPanel extends PacksPanelBase
 
         // Create the image label with a scroller.
         // Use the image of the first pack having an image as initial image
-        Iterator pack_it = this.installData.getAvailablePacks().iterator();
+        Iterator<Pack> pack_it = this.installData.getAvailablePacks().iterator();
         Pack firstImgPack = null;
         boolean imgFound = false;
         while (!imgFound && pack_it.hasNext())
         {
-            firstImgPack = (Pack) pack_it.next();
+            firstImgPack = pack_it.next();
             imgFound = firstImgPack.packImgId != null;
         }
         if (imgFound)

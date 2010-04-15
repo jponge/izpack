@@ -22,11 +22,10 @@
 package com.izforge.izpack.api.data;
 
 
+import com.izforge.izpack.api.data.binding.OsModel;
+
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Jan Blok
@@ -45,7 +44,7 @@ public class Panel implements Serializable
     /**
      * The target operation system of this panel
      */
-    public List osConstraints = Collections.emptyList();
+    public List<OsModel> osConstraints = Collections.emptyList();
 
     /**
      * the unique id of this panel
@@ -159,7 +158,7 @@ public class Panel implements Serializable
         this.helps.put(isoCode, url);
     }
 
-    public HashMap<String, String> getHelpsMap()
+    public Map<String, String> getHelpsMap()
     {
         return this.helps;
     }

@@ -73,7 +73,7 @@ public class
         // We put our components
 
         add(LabelFactory.create(installData.getLangpack().getString("LicencePanel.info"),
-                parent.icons.getImageIcon("history"), LEADING), NEXT_LINE);
+                parent.icons.get("history"), LEADING), NEXT_LINE);
         JTextArea textArea = new JTextArea(licence);
         textArea.setName(GuiId.LICENCE_TEXT_AREA.id);
         textArea.setCaretPosition(0);

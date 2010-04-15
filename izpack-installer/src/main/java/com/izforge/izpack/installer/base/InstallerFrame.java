@@ -278,7 +278,7 @@ public class InstallerFrame extends JFrame
             ImageIcon jframeIcon = ResourceManager.getInstance().getImageIconResource("JFrameIcon");
             if (jframeIcon == null)
             {
-                jframeIcon = icons.getImageIcon("JFrameIcon");
+                jframeIcon = icons.get("JFrameIcon");
             }
             setIconImage(jframeIcon.getImage());
         }
@@ -330,7 +330,7 @@ public class InstallerFrame extends JFrame
 
         // Add help Button to the navigation panel
         this.helpButton = ButtonFactory.createButton(langpack.getString("installer.help"), icons
-                .getImageIcon("help"), installdata.buttonsHColor);
+                .get("help"), installdata.buttonsHColor);
         navPanel.add(this.helpButton);
         this.helpButton.setName(BUTTON_HELP.id);
         this.helpButton.addActionListener(new HelpHandler());
@@ -338,7 +338,7 @@ public class InstallerFrame extends JFrame
         navPanel.add(Box.createHorizontalGlue());
 
         prevButton = ButtonFactory.createButton(langpack.getString("installer.prev"), icons
-                .getImageIcon("stepback"), installdata.buttonsHColor);
+                .get("stepback"), installdata.buttonsHColor);
         navPanel.add(prevButton);
         prevButton.addActionListener(navHandler);
         prevButton.setName(BUTTON_PREV.id);
@@ -346,7 +346,7 @@ public class InstallerFrame extends JFrame
         navPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 
         nextButton = ButtonFactory.createButton(langpack.getString("installer.next"), icons
-                .getImageIcon("stepforward"), installdata.buttonsHColor);
+                .get("stepforward"), installdata.buttonsHColor);
         navPanel.add(nextButton);
         nextButton.setName(BUTTON_NEXT.id);
         nextButton.addActionListener(navHandler);
@@ -354,7 +354,7 @@ public class InstallerFrame extends JFrame
         navPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 
         quitButton = ButtonFactory.createButton(langpack.getString("installer.quit"), icons
-                .getImageIcon("stop"), installdata.buttonsHColor);
+                .get("stop"), installdata.buttonsHColor);
         navPanel.add(quitButton);
         quitButton.setName(BUTTON_QUIT.id);
         quitButton.addActionListener(navHandler);
@@ -1018,7 +1018,7 @@ public class InstallerFrame extends JFrame
 
         if (useButtonIcons == null || "yes".equalsIgnoreCase(useButtonIcons))
         {
-            quitButton.setIcon(icons.getImageIcon(iconName));
+            quitButton.setIcon(icons.get(iconName));
         }
     }
 

@@ -80,7 +80,7 @@ public class InstallationGroupPanel extends IzPanel
     public void panelActivate()
     {
         // Set/restore availablePacks from allPacks; consider OS constraints
-        this.installData.setAvailablePacks(new ArrayList());
+        this.installData.setAvailablePacks(new ArrayList<Pack>());
         for (Pack p : this.installData.getAllPacks())
         {
             if (OsConstraintHelper.oneMatchesCurrentSystem(p.osConstraints))
@@ -91,7 +91,7 @@ public class InstallationGroupPanel extends IzPanel
 
         Debug.trace("InstallationGroupPanel.panelActivate, selectedGroup=" + selectedGroup);
         // If there are no groups, skip this panel
-        HashMap installGroups = getInstallGroups(this.installData);
+        Map<String, GroupData> installGroups = getInstallGroups(this.installData);
         if (installGroups.size() == 0)
         {
             super.askQuestion("Skip InstallGroup selection",
@@ -343,13 +343,13 @@ public class InstallationGroupPanel extends IzPanel
      * @param idata - the panel install installDataGUI
      * @return HashMap<String, GroupData> of unique install group names
      */
-    protected HashMap getInstallGroups(GUIInstallData idata)
+    protected HashMap<String, GroupData> getInstallGroups(GUIInstallData idata)
     {
         /* First create a packsByName<String, Pack> of all packs and identify
         the unique install group names.
         */
         packsByName = new HashMap<String, Pack>();
-        HashMap installGroups = new HashMap();
+        HashMap<String, GroupData> installGroups = new HashMap<String, GroupData>();
         for (int n = 0; n < idata.getAvailablePacks().size(); n++)
         {
             Pack p = idata.getAvailablePacks().get(n);
@@ -358,7 +358,7 @@ public class InstallationGroupPanel extends IzPanel
             Debug.trace("Pack: " + p.name + ", installGroups: " + groups);
             for (String group : groups)
             {
-                GroupData data = (GroupData) installGroups.get(group);
+                GroupData data = installGroups.get(group);
                 if (data == null)
                 {
                     String description = getGroupDescription(group);
@@ -524,7 +524,7 @@ public class InstallationGroupPanel extends IzPanel
         return gname;
     }
 
-    protected TableModel getModel(HashMap groupData)
+    protected TableModel getModel(Map<String, GroupData> groupData)
     {
         String c1 = installData.getLangpack().getString("InstallationGroupPanel.colNameSelected");
         //String c2 = installData.getLangpack().getString("InstallationGroupPanel.colNameInstallType");
@@ -541,14 +541,11 @@ public class InstallationGroupPanel extends IzPanel
         // The name of the group to select if there is no current selection
         String defaultGroup = this.installData.getVariable("InstallationGroupPanel.defaultGroup");
         Debug.trace("InstallationGroupPanel.defaultGroup=" + defaultGroup + ", selectedGroup=" + selectedGroup);
-        List values = new ArrayList(groupData.values());
-        Collections.sort(values, new Comparator()
+        List<GroupData> values = new ArrayList<GroupData>(groupData.values());
+        Collections.sort(values, new Comparator<GroupData>()
         {
-            public int compare(Object o1, Object o2)
+            public int compare(GroupData g1, GroupData g2)
             {
-                GroupData g1 = (GroupData) o1;
-                GroupData g2 = (GroupData) o2;
-
                 if (g1.sortKey == null || g2.sortKey == null)
                 {
                     return 0;
@@ -561,9 +558,8 @@ public class InstallationGroupPanel extends IzPanel
         ButtonGroup buttonGroup = new ButtonGroup();
         boolean madeSelection = false;
         int count = 0;
-        for (Object value : values)
+        for (GroupData gd : values)
         {
-            GroupData gd = (GroupData) value;
             rows[count] = gd;
             Debug.trace("Creating button#" + count + ", group=" + gd.name);
             JRadioButton btn = new JRadioButton(getLocalizedGroupName(gd.name));

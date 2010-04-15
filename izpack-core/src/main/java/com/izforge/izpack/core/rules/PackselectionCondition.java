@@ -81,13 +81,12 @@ public class PackselectionCondition extends Condition
         }
     }
 
-    private boolean isTrue(Properties variables, List selectedpacks)
+    private boolean isTrue(Properties variables, List<Pack> selectedpacks)
     {
         if (selectedpacks != null)
         {
-            for (Object selectedpack : selectedpacks)
+            for (Pack p : selectedpacks)
             {
-                Pack p = (Pack) selectedpack;
                 if (packid.equals(p.id))
                 {
                     // pack is selected

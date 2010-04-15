@@ -94,7 +94,7 @@ public class WrappedNativeLibException extends Exception
                 {
                     if (nle.getLibMessage() != null)
                     {
-                        String val = (String) langpack.get("NativeLibException."
+                        String val = langpack.get("NativeLibException."
                                 + nle.getLibMessage());
                         if (val == null)
                         {
@@ -105,7 +105,7 @@ public class WrappedNativeLibException extends Exception
                     }
                     else if (nle.getLibErr() != 0)
                     {
-                        String val = (String) langpack.get("NativeLibException.libErrNumber."
+                        String val = langpack.get("NativeLibException.libErrNumber."
                                 + Integer.toString(nle.getLibErr()));
                         if (val == null)
                         {

@@ -3,6 +3,7 @@ package com.izforge.izpack.installer.container.provider;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.installer.base.InstallerBase;
@@ -35,7 +36,7 @@ public class RulesProvider implements Provider
         {
             InputStream in = InstallerBase.class.getResourceAsStream("/rules");
             ObjectInputStream objIn = new ObjectInputStream(in);
-            Map rules = (Map) objIn.readObject();
+            Map<String, Condition> rules = (Map) objIn.readObject();
             if ((rules != null) && (rules.size() != 0))
             {
                 res = new RulesEngineImpl(rules, installdata);

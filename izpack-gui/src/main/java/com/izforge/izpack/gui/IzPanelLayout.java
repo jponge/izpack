@@ -339,9 +339,9 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
     private int rows()
     {
         int maxRows = 0;
-        for (Object component : components)
+        for (ArrayList<IzPanelConstraints> component : components)
         {
-            int curRows = ((ArrayList) component).size();
+            int curRows = component.size();
             if (curRows > maxRows)
             {
                 maxRows = curRows;
@@ -657,27 +657,22 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
         {
             return (null);
         }
-        Object obj = components.get(col);
-        if (obj != null && obj instanceof ArrayList)
+        ArrayList<IzPanelConstraints> constraints = components.get(col);
+        if (constraints != null)
         {
             try
             {
-                obj = (components.get(col)).get(row);
+                return constraints.get(row);
             }
             catch (Throwable t)
             {
-                obj = null;
-            }
-            if (obj != null)
-            {
-                return ((IzPanelConstraints) obj);
+                // no constraints
             }
             // no constraints is possible if no valid component
             // was added under this component.
             // Put dummy components into the array.
 
-            ArrayList<IzPanelConstraints> colA = components.get(col);
-            for (int curRow = colA.size(); row >= curRow; ++curRow)
+            for (int curRow = constraints.size(); row >= curRow; ++curRow)
             {
 
                 IzPanelConstraints currentConst = IzPanelLayout
@@ -687,7 +682,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                 currentConst.component = new FillerComponent();
                 try
                 {
-                    (components.get(col)).add(row, currentConst);
+                    constraints.add(row, currentConst);
                 }
                 catch (Throwable t)
                 {

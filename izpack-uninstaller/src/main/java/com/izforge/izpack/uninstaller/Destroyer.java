@@ -79,7 +79,7 @@ public class Destroyer extends Thread
         try
         {
             // We get the list of uninstaller listeners
-            List[] listeners = getListenerLists();
+            List<UninstallerListener>[] listeners = getListenerLists();
             // We get the list of the files to delete
             ArrayList<ExecutableFile> executables = getExecutablesList();
 
@@ -300,9 +300,9 @@ public class Destroyer extends Thread
      * @return a list with the defined uninstall listeners
      * @throws Exception
      */
-    private List[] getListenerLists() throws Exception
+    private List<UninstallerListener>[] getListenerLists() throws Exception
     {
-        ArrayList[] uninstaller = new ArrayList[]{new ArrayList(), new ArrayList()};
+        ArrayList<UninstallerListener>[] uninstaller = new ArrayList[]{new ArrayList<UninstallerListener>(), new ArrayList<UninstallerListener>()};
         // Load listeners if exist
         InputStream in;
         ObjectInputStream objIn;
@@ -310,11 +310,11 @@ public class Destroyer extends Thread
         if (in != null)
         {
             objIn = new ObjectInputStream(in);
-            List listeners = (List) objIn.readObject();
+            List<String> listeners = (List) objIn.readObject();
             objIn.close();
-            for (Object listener : listeners)
+            for (String listener : listeners)
             {
-                Class<UninstallerListener> clazz = (Class<UninstallerListener>) Class.forName(((String) listener));
+                Class<UninstallerListener> clazz = (Class<UninstallerListener>) Class.forName(listener);
                 UninstallerListener ul = clazz.newInstance();
                 if (ul.isFileListener())
                 {
@@ -335,16 +335,14 @@ public class Destroyer extends Thread
      * @param handler   the current progress handler
      */
 
-    private void informListeners(List listeners, int action, Object param,
+    private void informListeners(List<UninstallerListener> listeners, int action, Object param,
                                  AbstractUIProgressHandler handler)
     {
         // Iterate the action list.
-        UninstallerListener il = null;
-        for (Object listener : listeners)
+        for (UninstallerListener il : listeners)
         {
             try
             {
-                il = (UninstallerListener) listener;
                 switch (action)
                 {
                     case UninstallerListener.BEFORE_DELETION:

@@ -457,7 +457,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                                  GridBagConstraints constraints)
     {
         JLabel label = LabelFactory.create(installData.getLangpack().getString(msgId), parent.icons
-                .getImageIcon(iconId), TRAILING);
+                .get(iconId), TRAILING);
         if (layout != null && constraints != null)
         {
             layout.addLayoutComponent(label, constraints);
@@ -586,13 +586,12 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      *
      * @param packs The list of packs.
      */
-    private void computePacks(List packs)
+    private void computePacks(List<Pack> packs)
     {
         names = new HashMap<String, Pack>();
         dependenciesExist = false;
-        for (Object pack1 : packs)
+        for (Pack pack : packs)
         {
-            Pack pack = (Pack) pack1;
             names.put(pack.name, pack);
             if (pack.dependencies != null || pack.excludeGroup != null)
             {
@@ -684,14 +683,14 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         }
         if (packsModel.isModifyinstallation())
         {
-            Map installedpacks = packsModel.getInstalledpacks();
+            Map<String, Pack> installedpacks = packsModel.getInstalledpacks();
             retval.append("<br><b>");
             retval.append(langpack.getString("PacksPanel.installedpacks.summarycaption"));
             retval.append("</b>");
             retval.append("<br>");
-            for (Object o : installedpacks.keySet())
+            for (String key : installedpacks.keySet())
             {
-                Pack pack = (Pack) installedpacks.get(o);
+                Pack pack = installedpacks.get(key);
                 retval.append(getI18NPackName(pack));
                 retval.append("<br>");
             }

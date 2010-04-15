@@ -145,7 +145,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         this.startButton = ButtonFactory.createButton(installData.getLangpack()
                 .getString("CompilePanel.start"), idata.buttonsHColor);
         this.tipLabel = LabelFactory.create(installData.getLangpack().getString("CompilePanel.tip"),
-                parent.icons.getImageIcon("tip"), SwingConstants.TRAILING);
+                parent.icons.get("tip"), SwingConstants.TRAILING);
         this.opLabel = new JLabel();
         packProgressBar = new JProgressBar();
         this.overallLabel = new JLabel();

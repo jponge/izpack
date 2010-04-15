@@ -114,7 +114,7 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
         // defaults are OK.
         browseButton = ButtonFactory.createButton(parent.getInstallerFrame().langpack
                 .getString("TargetPanel.browse"), parent.getInstallerFrame().icons
-                .getImageIcon("open"), idata.buttonsHColor);
+                .get("open"), idata.buttonsHColor);
         browseButton.addActionListener(this);
         add(browseButton);
     }

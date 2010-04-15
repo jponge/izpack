@@ -100,10 +100,10 @@ public class NextMediaDialog extends JDialog implements ActionListener
     {
         if (this.icons != null)
         {
-            this.msg = LabelFactory.create(this.langpack.getString(NEXTMEDIA_MSG_ID), this.icons.getImageIcon("warning"), JLabel.LEFT);
-            this.browsebtn = ButtonFactory.createButton(this.langpack.getString(BROWSEBTN_ID), this.icons.getImageIcon("open"), new Color(230, 230, 230));
-            this.okbtn = ButtonFactory.createButton(this.langpack.getString(OKBTN_ID), this.icons.getImageIcon("ok"), new Color(230, 230, 230));
-            this.cancelbtn = ButtonFactory.createButton(this.langpack.getString(CANCELBTN_ID), this.icons.getImageIcon("cancel"), new Color(230, 230, 230));
+            this.msg = LabelFactory.create(this.langpack.getString(NEXTMEDIA_MSG_ID), this.icons.get("warning"), JLabel.LEFT);
+            this.browsebtn = ButtonFactory.createButton(this.langpack.getString(BROWSEBTN_ID), this.icons.get("open"), new Color(230, 230, 230));
+            this.okbtn = ButtonFactory.createButton(this.langpack.getString(OKBTN_ID), this.icons.get("ok"), new Color(230, 230, 230));
+            this.cancelbtn = ButtonFactory.createButton(this.langpack.getString(CANCELBTN_ID), this.icons.get("cancel"), new Color(230, 230, 230));
         }
         else
         {

@@ -36,7 +36,7 @@ import java.util.Vector;
  * @author Julien Ponge
  * @author J. Chris Folsom <jchrisfolsom@gmail.com>
  */
-public class LocaleDatabase extends TreeMap
+public class LocaleDatabase extends TreeMap<String, String>
 {
 
     /*
@@ -96,19 +96,16 @@ public class LocaleDatabase extends TreeMap
         }
 
         // We fill the Hashtable
-        Vector children = data.getChildren();
-        int size = children.size();
-        for (int i = 0; i < size; i++)
+        for (IXMLElement child : data.getChildren())
         {
-            IXMLElement e = (IXMLElement) children.get(i);
-            String text = e.getContent();
+            String text = child.getContent();
             if (text != null && !"".equals(text))
             {
-                put(e.getAttribute("id"), text.trim());
+                put(child.getAttribute("id"), text.trim());
             }
             else
             {
-                put(e.getAttribute("id"), e.getAttribute("txt"));
+                put(child.getAttribute("id"), child.getAttribute("txt"));
             }
         }
 
@@ -122,7 +119,7 @@ public class LocaleDatabase extends TreeMap
      */
     public String getString(String key)
     {
-        String val = (String) get(key);
+        String val = get(key);
         // At a change of the return value at val == null the method
         // com.izforge.izpack.installer.IzPanel.getI18nStringForClass
         // should be also addapted.
