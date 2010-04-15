@@ -33,6 +33,7 @@ public class InstallerController
     public void launchInstallation()
     {
         installerFrame.launchGUI();
+        installerFrame.switchToFirstEnabledPanel();
     }
 
     public void switchPanel()

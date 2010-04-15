@@ -237,10 +237,9 @@ public class InstallerFrame extends JFrame implements InstallerView
     public void enableFrame()
     {
         showFrame();
-        switchToFirstEnabledPanel();
     }
 
-    private void switchToFirstEnabledPanel()
+    public void switchToFirstEnabledPanel()
     {
         int firstPanel = hasNavigateNext(-1, false);
         if (firstPanel > -1)
