@@ -36,7 +36,18 @@ public class InstallerController
 
     public void launchInstallation()
     {
-        installerFrame.switchToFirstEnabledPanel();
+        activateFirstPanel();
+    }
+
+    private void activateFirstPanel()
+    {
+        int firstPanel = installerFrame.hasNavigateNext(-1, false);
+        if (firstPanel > -1)
+        {
+            installerFrame.setVisible(true);
+            automatedInstallData.setCurPanelNumber(firstPanel);
+            installerFrame.switchPanel(firstPanel);
+        }
     }
 
     public void switchPanel()

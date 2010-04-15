@@ -234,17 +234,6 @@ public class InstallerFrame extends JFrame implements InstallerView
         centerFrame(this);
     }
 
-    public void switchToFirstEnabledPanel()
-    {
-        int firstPanel = hasNavigateNext(-1, false);
-        if (firstPanel > -1)
-        {
-            setVisible(true);
-            installdata.setCurPanelNumber(firstPanel);
-            switchPanel(firstPanel);
-        }
-    }
-
     public Debugger getDebugger()
     {
         return this.debugger;
