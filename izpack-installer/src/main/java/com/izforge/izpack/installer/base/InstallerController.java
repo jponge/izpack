@@ -1,5 +1,6 @@
 package com.izforge.izpack.installer.base;
 
+import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.installer.manager.PanelManager;
 
 /**
@@ -12,11 +13,14 @@ public class InstallerController
 
     private InstallerFrame installerFrame;
     private PanelManager panelManager;
+    private AutomatedInstallData automatedInstallData;
 
-    public InstallerController(PanelManager panelManager, InstallDataConfiguratorWithRules installDataRulesEngineManager, InstallerFrame installerFrame)
+    public InstallerController(PanelManager panelManager, InstallDataConfiguratorWithRules installDataRulesEngineManager, InstallerFrame installerFrame, AutomatedInstallData automatedInstallData)
     {
+
         this.panelManager = panelManager;
         this.installerFrame = installerFrame;
+        this.automatedInstallData = automatedInstallData;
         installDataRulesEngineManager.configureInstallData();
 
     }
@@ -32,7 +36,6 @@ public class InstallerController
 
     public void launchInstallation()
     {
-        installerFrame.launchGUI();
         installerFrame.switchToFirstEnabledPanel();
     }
 

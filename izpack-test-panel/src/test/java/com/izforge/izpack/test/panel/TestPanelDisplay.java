@@ -134,7 +134,7 @@ public class TestPanelDisplay
             guiInstallData.getPanelsOrder().add(panel);
         }
         installerController.buildInstallation();
-        installerFrame.enableFrame();
+        installerFrame.setVisible(true);
     }
 
     @Test

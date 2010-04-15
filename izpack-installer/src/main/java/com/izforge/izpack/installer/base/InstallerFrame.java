@@ -234,17 +234,12 @@ public class InstallerFrame extends JFrame implements InstallerView
         centerFrame(this);
     }
 
-    public void enableFrame()
-    {
-        showFrame();
-    }
-
     public void switchToFirstEnabledPanel()
     {
         int firstPanel = hasNavigateNext(-1, false);
         if (firstPanel > -1)
         {
-            showFrame();
+            setVisible(true);
             installdata.setCurPanelNumber(firstPanel);
             switchPanel(firstPanel);
         }
@@ -578,14 +573,6 @@ public class InstallerFrame extends JFrame implements InstallerView
     }
 
     /**
-     * Shows the frame.
-     */
-    private void showFrame()
-    {
-        setVisible(true);
-    }
-
-    /**
      * Here is persisted the direction of panel traversing.
      */
     private boolean isBack = false;
@@ -595,7 +582,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      *
      * @param oldIndex Description of the Parameter
      */
-    protected void switchPanel(int oldIndex)
+    public void switchPanel(int oldIndex)
     {
         // refresh dynamic variables every time, a panel switch is done
         installdata.refreshDynamicVariables();
@@ -1306,26 +1293,6 @@ public class InstallerFrame extends JFrame implements InstallerView
     {
         IzPanel izPanel = (IzPanel) installdata.getPanels().get(installdata.getCurPanelNumber());
         izPanel.showHelp();
-    }
-
-    public void launchGUI()
-    {
-        final InstallerFrame installerFrame = this;
-        SwingUtilities.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                try
-                {
-                    installerFrame.enableFrame();
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
-
     }
 
     /**
