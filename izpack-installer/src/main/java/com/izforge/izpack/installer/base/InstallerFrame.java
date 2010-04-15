@@ -357,7 +357,7 @@ public class InstallerFrame extends JFrame implements InstallerView
 
         try
         {
-            ImageIcon icon = loadIcon(ICON_RESOURCE, 0, true);
+            ImageIcon icon = loadIcon(ICON_RESOURCE, 0 + "", true);
             if (icon != null)
             {
                 JPanel imgPanel = new JPanel();
@@ -391,39 +391,6 @@ public class InstallerFrame extends JFrame implements InstallerView
         {
             (aGuiListener).guiActionPerformed(what, param);
         }
-    }
-
-    /**
-     * Loads icon for given panel.
-     *
-     * @param resPrefix   resources prefix.
-     * @param PanelNo     panel id.
-     * @param tryBaseIcon should try to fallback to base icon?
-     * @return icon image
-     * @throws ResourceNotFoundException
-     * @throws IOException
-     */
-    private ImageIcon loadIcon(String resPrefix, int PanelNo, boolean tryBaseIcon)
-            throws ResourceNotFoundException, IOException
-    {
-        ImageIcon icon;
-        String iconext = this.getIconResourceNameExtension();
-        if (tryBaseIcon)
-        {
-            try
-            {
-                icon = resourceManager.getImageIconResource(resPrefix);
-            }
-            catch (Exception e) // This is not that clean ...
-            {
-                icon = resourceManager.getImageIconResource(resPrefix + "." + PanelNo + iconext);
-            }
-        }
-        else
-        {
-            icon = resourceManager.getImageIconResource(resPrefix + "." + PanelNo + iconext);
-        }
-        return (icon);
     }
 
     /**
@@ -513,7 +480,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         {
             try
             {
-                icon = loadIcon(resPrefix, panelno, false);
+                icon = loadIcon(resPrefix, panelno + "", false);
             }
             catch (Exception ex)
             {
@@ -540,13 +507,13 @@ public class InstallerFrame extends JFrame implements InstallerView
         ImageIcon icon = null;
         try
         {
-            icon = loadIcon(resPrefix, panelNo, false);
+            icon = loadIcon(resPrefix, panelNo + "", false);
         }
         catch (Exception e)
         {
             try
             {
-                icon = loadIcon(resPrefix, panelNo, true);
+                icon = loadIcon(resPrefix, panelNo + "", true);
             }
             catch (Exception e1)
             {
@@ -1548,7 +1515,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         ImageIcon icon = null;
         try
         {
-            icon = loadIcon(HEADING_ICON_RESOURCE, 0, true);
+            icon = loadIcon(HEADING_ICON_RESOURCE, 0 + "", true);
         }
         catch (Exception e)
         {
@@ -1756,7 +1723,7 @@ public class InstallerFrame extends JFrame implements InstallerView
 
     }
 
-    private void performHeadingCounter()
+    public void performHeadingCounter()
     {
         if (headingCounterComponent != null)
         {

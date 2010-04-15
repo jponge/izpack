@@ -50,8 +50,4 @@ public class InstallerController
         }
     }
 
-    public void switchPanel()
-    {
-
-    }
 }
