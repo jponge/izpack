@@ -1807,23 +1807,33 @@ public class InstallerFrame extends JFrame implements InstallerView
         {
             int curPanelNo = panelManager.getPanelVisibilityNumber((installdata.getCurPanelNumber()));
             int visPanelsCount = panelManager.getCountVisiblePanel();
-
-            StringBuffer buf = new StringBuffer();
-            buf.append(langpack.getString("installer.step")).append(" ").append(curPanelNo + 1)
-                    .append(" ").append(langpack.getString("installer.of")).append(" ").append(
-                    visPanelsCount + 1);
+            String message = String.format(
+                    "%s %d %s %d",
+                    langpack.getString("installer.step"), curPanelNo + 1,
+                    langpack.getString("installer.of"), visPanelsCount + 1
+            );
             if (headingCounterComponent instanceof JProgressBar)
             {
-                JProgressBar headingProgressBar = (JProgressBar) headingCounterComponent;
-                headingProgressBar.setMaximum(visPanelsCount + 1);
-                headingProgressBar.setValue(curPanelNo + 1);
-                headingProgressBar.setString(buf.toString());
+                updateProgressBar(visPanelsCount + 1, curPanelNo + 1, message);
             }
             else
             {
-                ((JLabel) headingCounterComponent).setText(buf.toString());
+                updateProgressCounter(message);
             }
         }
+    }
+
+    public void updateProgressCounter(String message)
+    {
+        ((JLabel) headingCounterComponent).setText(message);
+    }
+
+    public void updateProgressBar(int maximum, int value, String message)
+    {
+        JProgressBar counterComponent = (JProgressBar) headingCounterComponent;
+        counterComponent.setMaximum(maximum);
+        counterComponent.setValue(value);
+        counterComponent.setString(message);
     }
 
     /**

@@ -34,4 +34,9 @@ public class InstallerController
     {
         installerFrame.launchGUI();
     }
+
+    public void switchPanel()
+    {
+
+    }
 }
