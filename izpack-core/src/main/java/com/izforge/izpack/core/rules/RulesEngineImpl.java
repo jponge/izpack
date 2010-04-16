@@ -80,10 +80,10 @@ public class RulesEngineImpl implements RulesEngine
 
     private RulesEngineImpl()
     {
-        conditionsmap = new Hashtable<String, Condition>();
-        this.panelconditions = new Hashtable<String, String>();
-        this.packconditions = new Hashtable<String, String>();
-        this.optionalpackconditions = new Hashtable<String, String>();
+        conditionsmap = new HashMap<String, Condition>();
+        this.panelconditions = new HashMap<String, String>();
+        this.packconditions = new HashMap<String, String>();
+        this.optionalpackconditions = new HashMap<String, String>();
     }
 
     /**

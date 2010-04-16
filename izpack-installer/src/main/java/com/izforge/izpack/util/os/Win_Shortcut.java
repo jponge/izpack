@@ -26,7 +26,8 @@ import com.izforge.izpack.util.StringTool;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /*---------------------------------------------------------------------------*/
 
@@ -138,7 +139,7 @@ public class Win_Shortcut extends Shortcut
      * @see #APPLICATIONS
      * @see #START_MENU
      */
-    public Vector<String> getProgramGroups(int userType)
+    public List<String> getProgramGroups(int userType)
     {
         int logentry = 0;
         Debug.log(CLASS + myClass + ".getProgramGroups()-" + logentry++ + " '" + Integer.toString(userType) + "'");
@@ -169,7 +170,7 @@ public class Win_Shortcut extends Shortcut
         // groups)
         if (linkPath == null)
         {
-            return (new Vector<String>());
+            return (new ArrayList<String>());
         }
 
         File path = new File(linkPath);
@@ -179,7 +180,7 @@ public class Win_Shortcut extends Shortcut
         // build a vector that contains only the names of
         // the directories.
         // ----------------------------------------------------
-        Vector<String> groups = new Vector<String>();
+        List<String> groups = new ArrayList<String>();
 
         if (file != null)
         {

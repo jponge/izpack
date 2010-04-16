@@ -22,6 +22,8 @@
 package com.izforge.izpack.util;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 /*---------------------------------------------------------------------------*/
@@ -48,7 +50,7 @@ public class Housekeeper
     // ------------------------------------------------------------------------
     private static Housekeeper me = null;
 
-    private Vector<CleanupClient> cleanupClients = new Vector<CleanupClient>();
+    private List<CleanupClient> cleanupClients = new ArrayList<CleanupClient>();
 
     /*--------------------------------------------------------------------------*/
 
@@ -132,7 +134,7 @@ public class Housekeeper
         {
             try
             {
-                (cleanupClients.elementAt(i)).cleanUp();
+                (cleanupClients.get(i)).cleanUp();
             }
             catch (Throwable exception)
             {

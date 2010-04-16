@@ -248,28 +248,28 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     /**
      * Holds the references to all radio button groups
      */
-    private Vector<ButtonGroup> buttonGroups = new Vector<ButtonGroup>();
+    private java.util.List<ButtonGroup> buttonGroups = new ArrayList<ButtonGroup>();
 
     /**
      * Holds the references to all password field groups
      */
-    private Vector<PasswordGroup> passwordGroups = new Vector<PasswordGroup>();
+    private java.util.List<PasswordGroup> passwordGroups = new ArrayList<PasswordGroup>();
 
     /**
      * used for temporary storage of references to password groups that have already been read in a
      * given read cycle.
      */
-    private Vector passwordGroupsRead = new Vector();
+    private java.util.List passwordGroupsRead = new ArrayList();
 
     /**
      * Used to track search fields. Contains SearchField references.
      */
-    private Vector<UserInputPanel.SearchField> searchFields = new Vector<UserInputPanel.SearchField>();
+    private java.util.List<UserInputPanel.SearchField> searchFields = new ArrayList<UserInputPanel.SearchField>();
 
     /**
      * Holds all user inputs for use in automated installation
      */
-    private Vector<UserInputPanel.TextValuePair> entries = new Vector<UserInputPanel.TextValuePair>();
+    private java.util.List<UserInputPanel.TextValuePair> entries = new ArrayList<UserInputPanel.TextValuePair>();
 
     private LocaleDatabase langpack = null;
 
@@ -279,7 +279,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
     private boolean eventsActivated = false;
 
-    private Vector<UIElement> elements = new Vector<UIElement>();
+    private java.util.List<UIElement> elements = new ArrayList<UIElement>();
 
     private JPanel panel;
 
@@ -1069,7 +1069,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
         for (int i = 0; i < entries.size(); i++)
         {
-            UserInputPanel.TextValuePair pair = entries.elementAt(i);
+            UserInputPanel.TextValuePair pair = entries.get(i);
             // IZPACK-283: read the value from installData instead of panel installDataGUI
             final String key = pair.toString();
             entryMap.put(key, this.installData.getVariable(key));
@@ -2872,7 +2872,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             comboBox = (JComboBox) field.getComponent();
             for (int i = 0; i < this.searchFields.size(); ++i)
             {
-                UserInputPanel.SearchField sf = this.searchFields.elementAt(i);
+                UserInputPanel.SearchField sf = this.searchFields.get(i);
                 if (sf.belongsTo(comboBox))
                 {
                     value = sf.getResult();
@@ -3726,7 +3726,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
          */
         public boolean autodetect()
         {
-            Vector<String> items = new Vector<String>();
+            java.util.List<String> items = new ArrayList<String>();
 
             /*
              * Check if the user has entered installDataGUI into the ComboBox and add it to the Itemlist
@@ -3787,7 +3787,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 }
             }
             // Make the enties in the vector unique
-            items = new Vector<String>(new HashSet<String>(items));
+            items = new ArrayList<String>(new HashSet<String>(items));
 
             // Now clear the combobox and add the items out of the newly
             // generated vector

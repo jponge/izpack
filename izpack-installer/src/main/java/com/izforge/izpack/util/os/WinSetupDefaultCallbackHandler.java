@@ -1,8 +1,8 @@
 package com.izforge.izpack.util.os;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class WinSetupDefaultCallbackHandler implements WinSetupQueueCallbackInterface
 {
@@ -54,7 +54,7 @@ public class WinSetupDefaultCallbackHandler implements WinSetupQueueCallbackInte
     {
         if (exceptions == null)
         {
-            exceptions = new Vector<SystemErrorException>();
+            exceptions = new ArrayList<SystemErrorException>();
         }
         exceptions.add(new SystemErrorException(errCode, errMsg));
     }

@@ -29,6 +29,7 @@ import com.izforge.izpack.panels.userinput.validator.ValidatorContainer;
 import com.izforge.izpack.util.Debug;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -51,7 +52,7 @@ public class PasswordGroup implements ProcessingClient
     // ------------------------------------------------------------------------
     // Variable Declarations
     // ------------------------------------------------------------------------
-    private Vector<JPasswordField> fields = new Vector<JPasswordField>();
+    private List<JPasswordField> fields = new ArrayList<JPasswordField>();
 
     private List<ValidatorContainer> validatorContainers = null;
 //  private Validator validator = null;
@@ -138,7 +139,7 @@ public class PasswordGroup implements ProcessingClient
             throw (new IndexOutOfBoundsException());
         }
 
-        String contents = new String((fields.elementAt(index)).getPassword());
+        String contents = new String((fields.get(index)).getPassword());
         return (contents);
     }
 
@@ -327,7 +328,7 @@ public class PasswordGroup implements ProcessingClient
         }
         else if (fields.size() > 0)
         {
-            returnValue = new String(fields.elementAt(0).getPassword());
+            returnValue = new String(fields.get(0).getPassword());
         }
         return returnValue;
     }

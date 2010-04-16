@@ -54,9 +54,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.*;
 
 //
 // import com.izforge.izpack.panels.shortcut.ShortcutData;
@@ -426,7 +424,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /**
      * a VectorList of Files wich should be make executable
      */
-    private Vector<ExecutableFile> execFiles = new Vector<ExecutableFile>();
+    private java.util.List<ExecutableFile> execFiles = new ArrayList<ExecutableFile>();
 
     // ------------------------------------------------------------------------
     // Variable Declarations
@@ -556,14 +554,14 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * A list of ShortcutData> objects. Each object is the complete specification for one shortcut
      * that must be created.
      */
-    private Vector shortcuts = new Vector();
+    private java.util.List<ShortcutData> shortcuts = new ArrayList<ShortcutData>();
 
     /**
      * Holds a list of all the shortcut files that have been created. Note: this variable contains
      * valid installDataGUI only after createShortcuts() has been called. This list is created so that the
      * files can be added to the uninstaller.
      */
-    private Vector<String> files = new Vector<String>();
+    private java.util.List<String> files = new ArrayList<String>();
 
     /**
      * If true it indicates that there are shortcuts to create. The value is set by
@@ -602,7 +600,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /**
      * shortCuts
      */
-    private Vector<String> shortCuts;
+    private java.util.List<String> shortCuts;
 
     /**
      * internal line counter
@@ -690,7 +688,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         {
             if (groupList != null)
             {
-                groupList.setListData(shortcut.getProgramGroups(Shortcut.CURRENT_USER));
+                groupList.setListData(shortcut.getProgramGroups(Shortcut.CURRENT_USER).toArray());
             }
             programGroup.setText(suggestedProgramGroup);
             shortcut.setUserType(itsUserType = Shortcut.CURRENT_USER);
@@ -706,7 +704,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         {
             if (groupList != null)
             {
-                groupList.setListData(shortcut.getProgramGroups(Shortcut.ALL_USERS));
+                groupList.setListData(shortcut.getProgramGroups(Shortcut.ALL_USERS).toArray());
             }
             programGroup.setText(suggestedProgramGroup);
             shortcut.setUserType(itsUserType = Shortcut.ALL_USERS);
@@ -1127,7 +1125,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         IXMLElement shortcutSpec;
         ShortcutData data;
 
-        shortCuts = new Vector<String>();
+        shortCuts = new ArrayList<String>();
 
         for (int i = 0; i < shortcutSpecs.size(); i++)
         {
@@ -1490,7 +1488,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         ArrayList startMenuShortcuts = new ArrayList();
         for (int i = 0; i < shortcuts.size(); i++)
         {
-            data = (ShortcutData) shortcuts.elementAt(i);
+            data = (ShortcutData) shortcuts.get(i);
 
             progressbar.setString("create " + data.name + " [" + data.description + "]");
 
@@ -1566,7 +1564,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
                         File file = new File(fileName);
                         File base = new File(shortcut.getBasePath());
-                        Vector<File> intermediates = new Vector<File>();
+                        java.util.List<File> intermediates = new ArrayList<File>();
 
                         // String directoryName = shortcut.getDirectoryCreated ();
                         execFiles.add(new ExecutableFile(fileName, ExecutableFile.UNINSTALL,
@@ -1586,11 +1584,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
                         if (file != null)
                         {
-                            Enumeration<File> filesEnum = intermediates.elements();
-
-                            while (filesEnum.hasMoreElements())
+                            for (File intermediateFile : intermediates)
                             {
-                                files.add(0, filesEnum.nextElement().toString());
+                                files.add(0, intermediateFile.toString());
                             }
                         }
                     }
@@ -1822,7 +1818,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // list box to list all of already existing folders as program groups
         // at the intended destination
         // ----------------------------------------------------
-        Vector<String> dirEntries = new Vector<String>();
+        java.util.List<String> dirEntries = new ArrayList<String>();
 
         File[] entries = groups.listFiles();
 
@@ -1958,16 +1954,16 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * @param aFill       the FILL to use in the gridbag layout.
      * @return the filled JList
      */
-    private JList addList(Vector<String> Entries, int ListModel, JList aJList, int aGridx, int aGridy,
+    private JList addList(java.util.List<String> Entries, int ListModel, JList aJList, int aGridx, int aGridy,
                           int aGridwidth, int aGridheight, int aFill)
     {
         if (aJList == null)
         {
-            aJList = new JList(Entries);
+            aJList = new JList(Entries.toArray());
         }
         else
         {
-            aJList.setListData(Entries);
+            aJList.setListData(Entries.toArray());
         }
 
         aJList.setSelectionMode(ListModel);
@@ -2043,14 +2039,14 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         // list box to list all of the intended shortcut targets
         // ----------------------------------------------------
-        Vector<String> targets = new Vector<String>();
+        java.util.List<String> targets = new ArrayList<String>();
 
         for (int i = 0; i < shortcuts.size(); i++)
         {
-            targets.add(((ShortcutData) shortcuts.elementAt(i)).target);
+            targets.add(((ShortcutData) shortcuts.get(i)).target);
         }
 
-        targetList = new JList(targets);
+        targetList = new JList(targets.toArray());
 
         JScrollPane scrollPane = new JScrollPane(targetList);
 
@@ -2196,7 +2192,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         for (int i = 0; i < shortcuts.size(); i++)
         {
-            ShortcutData data = (ShortcutData) shortcuts.elementAt(i);
+            ShortcutData data = shortcuts.get(i);
 
             buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.name"));
             buffer.append(data.name);
@@ -2303,7 +2299,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         for (int i = 0; i < files.size(); i++)
         {
-            uninstallData.addFile(files.elementAt(i), true);
+            uninstallData.addFile(files.get(i), true);
         }
     }
 
@@ -2361,7 +2357,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         for (int i = 0; i < shortcuts.size(); i++)
         {
             Debug.log("entering makeXMLData");
-            data = (ShortcutData) shortcuts.elementAt(i);
+            data = shortcuts.get(i);
             dataElement = new XMLElementImpl(AUTO_KEY_SHORTCUT, panelRoot);
 
             dataElement.setAttribute(AUTO_ATTRIBUTE_NAME, data.name);

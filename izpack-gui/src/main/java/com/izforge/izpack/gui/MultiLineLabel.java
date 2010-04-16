@@ -87,7 +87,7 @@ public class MultiLineLabel extends JComponent
 
     private static final char NEW_LINE = '\n';
 
-    protected Vector<String> line = new Vector<String>();// text lines to display
+    protected java.util.List<String> line = new java.util.ArrayList<String>();// text lines to display
 
     protected String labelText; // text lines to display
 
@@ -373,7 +373,7 @@ public class MultiLineLabel extends JComponent
             {
                 lastPos = currentPos;
                 String s = labelText.substring(startPos);
-                line.addElement(s);
+                line.add(s);
             }
             // ----------------------------------------------------------------
             // in all other cases copy the substring that we have found to fit
@@ -392,7 +392,7 @@ public class MultiLineLabel extends JComponent
                     lastPos = startPos + breakWord(labelText.substring(startPos, currentPos), fm);
                 }
                 String s = labelText.substring(startPos, lastPos);
-                line.addElement(s);
+                line.add(s);
             }
 
             // ----------------------------------------------------------------
@@ -443,7 +443,7 @@ public class MultiLineLabel extends JComponent
 
         for (int i = 0; i < numLines; i++)
         {
-            this.lineWidth[i] = fm.stringWidth(this.line.elementAt(i));
+            this.lineWidth[i] = fm.stringWidth(this.line.get(i));
             if (this.lineWidth[i] > this.maxWidth)
             {
                 this.maxWidth = this.lineWidth[i];
@@ -486,7 +486,7 @@ public class MultiLineLabel extends JComponent
                 default:
                     x = (d.width - lineWidth[i]) / 2;
             }
-            graphics.drawString(line.elementAt(i), x, y);
+            graphics.drawString(line.get(i), x, y);
         }
     }
 

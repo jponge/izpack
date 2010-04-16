@@ -1122,7 +1122,7 @@ public class CompilerConfig extends Thread
 
         FileInputStream fin = new FileInputStream(archive);
         ZipInputStream zin = new ZipInputStream(fin);
-        List<String> allDirList = new Vector<String>();
+        List<String> allDirList = new ArrayList<String>();
         String s = null;
         while (true)
         {

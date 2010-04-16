@@ -57,7 +57,7 @@ public class ProcessPanelWorker implements Runnable
 
     protected AutomatedInstallData idata;
 
-    private Map<Boolean, List<ButtonConfig>> buttonConfigs = new Hashtable<Boolean, List<ButtonConfig>>();
+    private Map<Boolean, List<ButtonConfig>> buttonConfigs = new HashMap<Boolean, List<ButtonConfig>>();
     private VariableSubstitutor variableSubstitutor;
 
     /**

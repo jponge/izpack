@@ -96,7 +96,7 @@ public class ShortcutData implements Cloneable
      * @throws OutOfMemoryError
      */
     /*--------------------------------------------------------------------------*/
-    public Object clone() throws OutOfMemoryError
+    public ShortcutData clone() throws OutOfMemoryError
     {
         ShortcutData result = new ShortcutData();
 

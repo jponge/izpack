@@ -27,8 +27,7 @@ package com.izforge.izpack.ant;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * A nested element holder for the installation configuration document content.
@@ -66,7 +65,7 @@ public class ConfigHolder
      * @throws BuildException if the string contains an opening @{ without a
      *                        closing }
      */
-    static void parseCompileProperties(String value, Vector<String> fragments, Vector<String> propertyRefs)
+    static void parseCompileProperties(String value, List<String> fragments, List<String> propertyRefs)
             throws BuildException
     {
         int prev = 0;
@@ -81,13 +80,13 @@ public class ConfigHolder
             // into the list
             if (pos > 0)
             {
-                fragments.addElement(value.substring(prev, pos));
+                fragments.add(value.substring(prev, pos));
             }
             // if we are at the end of the string, we tack on a $
             // then move past it
             if (pos == (value.length() - 1))
             {
-                fragments.addElement("@");
+                fragments.add("@");
                 prev = pos + 1;
             }
             else if (value.charAt(pos + 1) != '{')
@@ -100,13 +99,13 @@ public class ConfigHolder
                 if (value.charAt(pos + 1) == '@')
                 {
                     // backwards compatibility two $ map to one mode
-                    fragments.addElement("@");
+                    fragments.add("@");
                     prev = pos + 2;
                 }
                 else
                 {
                     // new behaviour: $X maps to $X for all values of X!='$'
-                    fragments.addElement(value.substring(pos, pos + 2));
+                    fragments.add(value.substring(pos, pos + 2));
                     prev = pos + 2;
                 }
 
@@ -120,8 +119,8 @@ public class ConfigHolder
                     throw new BuildException("Syntax error in property: " + value);
                 }
                 String propertyName = value.substring(pos + 2, endName);
-                fragments.addElement(null);
-                propertyRefs.addElement(propertyName);
+                fragments.add(null);
+                propertyRefs.add(propertyName);
                 prev = endName + 1;
             }
         }
@@ -129,7 +128,7 @@ public class ConfigHolder
         // if there is any tail to the file, append it
         if (prev < value.length())
         {
-            fragments.addElement(value.substring(prev));
+            fragments.add(value.substring(prev));
         }
     }
 
@@ -148,14 +147,14 @@ public class ConfigHolder
     public void addText(String rawText)
     {
         // Locate the @{x} references
-        Vector<String> fragments = new Vector<String>();
-        Vector<String> propertyRefs = new Vector<String>();
+        List<String> fragments = new ArrayList<String>();
+        List<String> propertyRefs = new ArrayList<String>();
         parseCompileProperties(rawText, fragments, propertyRefs);
 
         // Replace the references with the project property value
         StringBuffer sb = new StringBuffer();
-        Enumeration<String> i = fragments.elements();
-        Enumeration<String> j = propertyRefs.elements();
+        Enumeration<String> i = Collections.enumeration(fragments);
+        Enumeration<String> j = Collections.enumeration(propertyRefs);
 
         while (i.hasMoreElements())
         {
