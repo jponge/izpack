@@ -820,6 +820,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @return the default GridBagConstraints of this panel
      * @deprecated use <code>getLayoutHelper().getDefaulConstraints</code> instead
      */
+    @Deprecated
     public GridBagConstraints getDefaultGridBagConstraints()
     {
         return (GridBagConstraints) (layoutHelper.getDefaultConstraints());
@@ -831,6 +832,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @param constraints which should be set as default for this object
      * @deprecated use <code>getLayoutHelper().setDefaultConstraints</code> instead
      */
+    @Deprecated
     public void setDefaultGridBagConstraints(GridBagConstraints constraints)
     {
         layoutHelper.setDefaultConstraints(constraints);
@@ -842,6 +844,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *
      * @deprecated use <code>getLayoutHelper().resetGridCounter</code> instead
      */
+    @Deprecated
     public void resetGridCounter()
     {
         layoutHelper.resetGridCounter();
@@ -857,6 +860,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *         defaultGridBagConstraints for the other parameters
      * @deprecated use <code>getLayoutHelper().getNewConstraints</code> instead
      */
+    @Deprecated
     public GridBagConstraints getNewGridBagConstraints(int gridx, int gridy)
     {
         return (GridBagConstraints) (layoutHelper.getNewConstraints(gridx, gridy));
@@ -874,6 +878,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *         defaultGridBagConstraints for the other parameters
      * @deprecated use <code>getLayoutHelper().getNewConstraints</code> instead
      */
+    @Deprecated
     public GridBagConstraints getNewGridBagConstraints(int gridx, int gridy, int gridwidth,
                                                        int gridheight)
     {
@@ -887,6 +892,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @return a newly created GridBagConstraints for the next column of the current layout row
      * @deprecated use <code>getLayoutHelper().getNextXConstraints</code> instead
      */
+    @Deprecated
     public GridBagConstraints getNextXGridBagConstraints()
     {
         return (GridBagConstraints) (layoutHelper.getNextXConstraints());
@@ -898,6 +904,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @return a newly created GridBagConstraints with column 0 for the next row
      * @deprecated use <code>getLayoutHelper().getNextYConstraints</code> instead
      */
+    @Deprecated
     public GridBagConstraints getNextYGridBagConstraints()
     {
         return (GridBagConstraints) (layoutHelper.getNextYConstraints());
@@ -913,6 +920,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *         parameters
      * @deprecated use <code>getLayoutHelper().getNextYConstraints</code> instead
      */
+    @Deprecated
     public GridBagConstraints getNextYGridBagConstraints(int gridwidth, int gridheight)
     {
         return (GridBagConstraints) (layoutHelper.getNextYConstraints(gridwidth, gridheight));
@@ -926,6 +934,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *
      * @deprecated use <code>getLayoutHelper().startLayout</code> instead
      */
+    @Deprecated
     public void startGridBagLayout()
     {
         layoutHelper.startLayout(new GridBagLayout());
@@ -939,6 +948,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *
      * @deprecated use <code>getLayoutHelper().completeLayout</code> instead
      */
+    @Deprecated
     public void completeGridBagLayout()
     {
         layoutHelper.completeLayout();

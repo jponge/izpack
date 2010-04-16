@@ -55,6 +55,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.util.*;
+import java.util.List;
 
 //
 // import com.izforge.izpack.panels.shortcut.ShortcutData;
@@ -1355,7 +1356,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         addToUninstaller();
     }
 
-    private String createXDGMenu(ArrayList shortcuts, String menuName)
+    private String createXDGMenu(List<String> shortcuts, String menuName)
     {
         String menuConfigText = "<Menu>\n" +
                 "<Name>Applications</Name>\n" +
@@ -1365,9 +1366,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 "<Name>" + menuName + "</Name>\n" +
                 "<Include>\n";
 
-        for (Object shortcut1 : shortcuts)
+        for (String shortcutFile : shortcuts)
         {
-            String shortcutFile = (String) shortcut1;
             menuConfigText += "<Filename>" + shortcutFile + "</Filename>\n";
         }
         menuConfigText += "</Include>\n</Menu>\n</Menu>";
@@ -1392,7 +1392,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         return menuDirectoryDescriptor;
     }
 
-    private void writeXDGMenuFile(ArrayList desktopFileNames, String groupName, String icon, String comment)
+    private void writeXDGMenuFile(List<String> desktopFileNames, String groupName, String icon, String comment)
     {
         if ("".equals(suggestedProgramGroup) || suggestedProgramGroup == null)
         {
@@ -1485,10 +1485,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         progressbar.setStringPainted(true);
         invalidate();
 
-        ArrayList startMenuShortcuts = new ArrayList();
+        List<String> startMenuShortcuts = new ArrayList<String>();
         for (int i = 0; i < shortcuts.size(); i++)
         {
-            data = (ShortcutData) shortcuts.get(i);
+            data = shortcuts.get(i);
 
             progressbar.setString("create " + data.name + " [" + data.description + "]");
 
@@ -1551,7 +1551,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                             {
                                 com.izforge.izpack.util.os.Unix_Shortcut unixcut =
                                         (com.izforge.izpack.util.os.Unix_Shortcut) shortcut;
-                                Object f = unixcut.getWrittenFileName();
+                                String f = unixcut.getWrittenFileName();
                                 if (f != null)
                                 {
                                     startMenuShortcuts.add(f);
@@ -2043,7 +2043,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         for (int i = 0; i < shortcuts.size(); i++)
         {
-            targets.add(((ShortcutData) shortcuts.get(i)).target);
+            targets.add(shortcuts.get(i).target);
         }
 
         targetList = new JList(targets.toArray());
