@@ -432,10 +432,8 @@ public class CompileWorker implements Runnable
         List<String> ourclasspath = new ArrayList<String>(classpath);
         ArrayList<File> files = new ArrayList<File>();
 
-        for (int i = 0; i < toplevel_tags.size(); i++)
+        for (IXMLElement child : toplevel_tags)
         {
-            IXMLElement child = toplevel_tags.get(i);
-
             if ("classpath".equals(child.getName()))
             {
                 changeClassPath(ourclasspath, child);

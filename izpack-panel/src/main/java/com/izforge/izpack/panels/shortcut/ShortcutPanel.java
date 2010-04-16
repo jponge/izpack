@@ -1123,16 +1123,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         // String temp;
         java.util.List<IXMLElement> shortcutSpecs = spec.getChildrenNamed(SPEC_KEY_SHORTCUT);
-        IXMLElement shortcutSpec;
         ShortcutData data;
 
         shortCuts = new ArrayList<String>();
 
-        for (int i = 0; i < shortcutSpecs.size(); i++)
+        for (IXMLElement shortcutSpec : shortcutSpecs)
         {
-            // System.out.println( "Processing shortcut: " + i );
-            shortcutSpec = shortcutSpecs.get(i);
-
             if (!OsConstraintHelper.oneMatchesCurrentSystem(shortcutSpec))
             {
                 continue;
@@ -1243,7 +1239,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
             // the shortcut is not actually required for any of the selected packs // the shortcut
             // is not actually required for any of the selected packs
-            java.util.List<IXMLElement> forPacks = shortcutSpec.getChildrenNamed(SPEC_KEY_PACKS);
+            List<IXMLElement> forPacks = shortcutSpec.getChildrenNamed(SPEC_KEY_PACKS);
 
             if (!shortcutRequiredFor(forPacks))
             {
@@ -1674,9 +1670,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         {
             selected = this.installData.getSelectedPacks().get(i).name;
 
-            for (int k = 0; k < packs.size(); k++)
+            for (IXMLElement pack : packs)
             {
-                required = (packs.get(k)).getAttribute(
+                required = pack.getAttribute(
                         SPEC_ATTRIBUTE_NAME, "");
 
                 if (selected.equals(required))
@@ -2041,9 +2037,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         java.util.List<String> targets = new ArrayList<String>();
 
-        for (int i = 0; i < shortcuts.size(); i++)
+        for (ShortcutData shortcut : shortcuts)
         {
-            targets.add(shortcuts.get(i).target);
+            targets.add(shortcut.target);
         }
 
         targetList = new JList(targets.toArray());
@@ -2190,10 +2186,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         buffer.append(newline);
         buffer.append(newline);
 
-        for (int i = 0; i < shortcuts.size(); i++)
+        for (ShortcutData data : shortcuts)
         {
-            ShortcutData data = shortcuts.get(i);
-
             buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.name"));
             buffer.append(data.name);
             buffer.append(newline);
@@ -2297,9 +2291,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     {
         UninstallData uninstallData = this.uninstallData;
 
-        for (int i = 0; i < files.size(); i++)
+        for (String file : files)
         {
-            uninstallData.addFile(files.get(i), true);
+            uninstallData.addFile(file, true);
         }
     }
 
@@ -2341,7 +2335,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             return;
         }
 
-        ShortcutData data;
         IXMLElement dataElement;
 
         // ----------------------------------------------------
@@ -2354,10 +2347,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         // add the details for each of the shortcuts
         // ----------------------------------------------------
-        for (int i = 0; i < shortcuts.size(); i++)
+        for (ShortcutData data : shortcuts)
         {
             Debug.log("entering makeXMLData");
-            data = shortcuts.get(i);
             dataElement = new XMLElementImpl(AUTO_KEY_SHORTCUT, panelRoot);
 
             dataElement.setAttribute(AUTO_ATTRIBUTE_NAME, data.name);

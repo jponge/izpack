@@ -231,7 +231,6 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     {
 
         listInputs.clear();
-        IXMLElement data;
         IXMLElement spec = null;
         List<IXMLElement> specElements;
         String attribute;
@@ -252,9 +251,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         }
 
         specElements = specHelper.getSpec().getChildrenNamed(NODE_ID);
-        for (int i = 0; i < specElements.size(); i++)
+        for (IXMLElement data : specElements)
         {
-            data = specElements.get(i);
             attribute = data.getAttribute(INSTANCE_IDENTIFIER);
             dataID = data.getAttribute(PANEL_IDENTIFIER);
             if (((attribute != null) && instance.equals(attribute))
@@ -277,10 +275,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             return false;
         }
         List<IXMLElement> fields = spec.getChildrenNamed(FIELD_NODE_ID);
-        for (int i = 0; i < fields.size(); i++)
+        for (IXMLElement field : fields)
         {
-            IXMLElement field = fields.get(i);
-
             List<IXMLElement> forPacks = field.getChildrenNamed(SELECTEDPACKS);
             List<IXMLElement> forOs = field.getChildrenNamed(OS);
 
@@ -931,9 +927,9 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         {
             selected = idata.getSelectedPacks().get(i).name;
 
-            for (int k = 0; k < packs.size(); k++)
+            for (IXMLElement pack : packs)
             {
-                required = (packs.get(k)).getAttribute(NAME, "");
+                required = pack.getAttribute(NAME, "");
                 if (selected.equals(required))
                 {
                     return (true);
@@ -963,9 +959,9 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             return true;
         }
 
-        for (int i = 0; i < os.size(); i++)
+        for (IXMLElement osElement : os)
         {
-            String family = (os.get(i)).getAttribute(FAMILY);
+            String family = osElement.getAttribute(FAMILY);
             boolean match = false;
 
             if ("windows".equals(family))

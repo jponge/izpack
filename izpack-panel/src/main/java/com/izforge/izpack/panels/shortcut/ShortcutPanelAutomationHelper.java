@@ -128,7 +128,6 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
         }
 
         List<IXMLElement> shortcutElements;
-        ShortcutData data;
         IXMLElement dataElement;
 
         // ----------------------------------------------------
@@ -152,67 +151,66 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
         // ----------------------------------------------------
         shortcutElements = panelRoot.getChildrenNamed(ShortcutPanel.AUTO_KEY_SHORTCUT);
 
-        for (int i = 0; i < shortcutElements.size(); i++)
+        for (IXMLElement shortcutElement : shortcutElements)
         {
-            Debug.log(this.getClass().getName() + "runAutomated:shortcutElements " + i);
-            data = new ShortcutData();
-            dataElement = shortcutElements.get(i);
+            Debug.log(this.getClass().getName() + "runAutomated:shortcutElements " + shortcutElement);
+            ShortcutData data = new ShortcutData();
 
-            data.name = dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_NAME);
+            data.name = shortcutElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_NAME);
             data.addToGroup = Boolean.valueOf(
-                    dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_GROUP));
+                    shortcutElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_GROUP));
 
             if (OsVersion.IS_WINDOWS)
             {
                 data.type = Integer.valueOf(
-                        dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_TYPE));
+                        shortcutElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_TYPE));
             }
             else
             {
                 Debug.log("WARN: On Linux installDataGUI.type is NOT an int. Ignored.");
             }
 
-            data.commandLine = dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_COMMAND);
-            data.description = dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_DESCRIPTION);
-            data.iconFile = dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_ICON);
+            data.commandLine = shortcutElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_COMMAND);
+            data.description = shortcutElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_DESCRIPTION);
+            data.iconFile = shortcutElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_ICON);
             data.iconIndex = Integer.valueOf(
-                    dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_ICON_INDEX));
+                    shortcutElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_ICON_INDEX));
             data.initialState = Integer.valueOf(
-                    dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_INITIAL_STATE));
-            data.target = dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_TARGET);
-            data.workingDirectory = dataElement
+                    shortcutElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_INITIAL_STATE));
+            data.target = shortcutElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_TARGET);
+            data.workingDirectory = shortcutElement
                     .getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_WORKING_DIR);
 
             // Linux
-            data.deskTopEntryLinux_Encoding = dataElement.getAttribute(
+            data.deskTopEntryLinux_Encoding = shortcutElement.getAttribute(
                     ShortcutPanel.SPEC_ATTRIBUTE_ENCODING, "");
-            data.deskTopEntryLinux_MimeType = dataElement.getAttribute(
+            data.deskTopEntryLinux_MimeType = shortcutElement.getAttribute(
                     ShortcutPanel.SPEC_ATTRIBUTE_MIMETYPE, "");
-            data.deskTopEntryLinux_Terminal = dataElement.getAttribute(
+            data.deskTopEntryLinux_Terminal = shortcutElement.getAttribute(
                     ShortcutPanel.SPEC_ATTRIBUTE_TERMINAL, "");
-            data.deskTopEntryLinux_TerminalOptions = dataElement.getAttribute(
+            data.deskTopEntryLinux_TerminalOptions = shortcutElement.getAttribute(
                     ShortcutPanel.SPEC_ATTRIBUTE_TERMINAL_OPTIONS, "");
-            data.deskTopEntryLinux_Type = dataElement.getAttribute(
+            data.deskTopEntryLinux_Type = shortcutElement.getAttribute(
                     ShortcutPanel.SPEC_ATTRIBUTE_TYPE, "");
 
-            data.deskTopEntryLinux_URL = dataElement.getAttribute(ShortcutPanel.SPEC_ATTRIBUTE_URL,
+            data.deskTopEntryLinux_URL = shortcutElement.getAttribute(ShortcutPanel.SPEC_ATTRIBUTE_URL,
                     "");
 
-            data.deskTopEntryLinux_X_KDE_SubstituteUID = dataElement.getAttribute(
+            data.deskTopEntryLinux_X_KDE_SubstituteUID = shortcutElement.getAttribute(
                     ShortcutPanel.SPEC_ATTRIBUTE_KDE_SUBST_UID, "false");
 
-            data.deskTopEntryLinux_X_KDE_UserName = dataElement.getAttribute(
+            data.deskTopEntryLinux_X_KDE_UserName = shortcutElement.getAttribute(
                     ShortcutPanel.SPEC_ATTRIBUTE_KDE_USERNAME, "root");
 
-            data.Categories = dataElement.getAttribute(ShortcutPanel.SPEC_CATEGORIES,
+            data.Categories = shortcutElement.getAttribute(ShortcutPanel.SPEC_CATEGORIES,
                     "Application;Development");
 
-            data.TryExec = dataElement.getAttribute(ShortcutPanel.SPEC_TRYEXEC, "");
+            data.TryExec = shortcutElement.getAttribute(ShortcutPanel.SPEC_TRYEXEC, "");
 
-            data.createForAll = Boolean.valueOf(dataElement.getAttribute(ShortcutPanel.CREATE_FOR_ALL,
+            data.createForAll = Boolean.valueOf(shortcutElement.getAttribute(ShortcutPanel.CREATE_FOR_ALL,
                     "false"));
             data.userType = Integer.valueOf(
-                    dataElement.getAttribute(ShortcutPanel.USER_TYPE, Integer
+                    shortcutElement.getAttribute(ShortcutPanel.USER_TYPE, Integer
                             .toString(Shortcut.CURRENT_USER)));
             // END LINUX
             shortcuts.add(data);
@@ -221,47 +219,45 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
         System.out.print("[ Creating shortcuts ");
 
         // ShortcutData installDataGUI;
-        for (int i = 0; i < shortcuts.size(); i++)
+        for (ShortcutData shortcutData : shortcuts)
         {
-            data = shortcuts.get(i);
-
             try
             {
-                if (data.subgroup != null)
+                if (shortcutData.subgroup != null)
                 {
-                    groupName = groupName + data.subgroup;
+                    groupName = groupName + shortcutData.subgroup;
                 }
-                shortcut.setUserType(data.userType);
-                shortcut.setLinkName(data.name);
+                shortcut.setUserType(shortcutData.userType);
+                shortcut.setLinkName(shortcutData.name);
 
                 if (OsVersion.IS_WINDOWS)
                 {
-                    shortcut.setLinkType(data.type);
+                    shortcut.setLinkType(shortcutData.type);
                 }
 
-                shortcut.setArguments(data.commandLine);
-                shortcut.setDescription(data.description);
-                shortcut.setIconLocation(data.iconFile, data.iconIndex);
+                shortcut.setArguments(shortcutData.commandLine);
+                shortcut.setDescription(shortcutData.description);
+                shortcut.setIconLocation(shortcutData.iconFile, shortcutData.iconIndex);
 
-                shortcut.setShowCommand(data.initialState);
-                shortcut.setTargetPath(data.target);
-                shortcut.setWorkingDirectory(data.workingDirectory);
-                shortcut.setEncoding(data.deskTopEntryLinux_Encoding);
-                shortcut.setMimetype(data.deskTopEntryLinux_MimeType);
+                shortcut.setShowCommand(shortcutData.initialState);
+                shortcut.setTargetPath(shortcutData.target);
+                shortcut.setWorkingDirectory(shortcutData.workingDirectory);
+                shortcut.setEncoding(shortcutData.deskTopEntryLinux_Encoding);
+                shortcut.setMimetype(shortcutData.deskTopEntryLinux_MimeType);
 
-                shortcut.setTerminal(data.deskTopEntryLinux_Terminal);
-                shortcut.setTerminalOptions(data.deskTopEntryLinux_TerminalOptions);
+                shortcut.setTerminal(shortcutData.deskTopEntryLinux_Terminal);
+                shortcut.setTerminalOptions(shortcutData.deskTopEntryLinux_TerminalOptions);
 
                 if (!OsVersion.IS_WINDOWS)
                 {
-                    shortcut.setType(data.deskTopEntryLinux_Type);
+                    shortcut.setType(shortcutData.deskTopEntryLinux_Type);
                 }
 
-                shortcut.setKdeSubstUID(data.deskTopEntryLinux_X_KDE_SubstituteUID);
-                shortcut.setURL(data.deskTopEntryLinux_URL);
-                shortcut.setCreateForAll(data.createForAll);
+                shortcut.setKdeSubstUID(shortcutData.deskTopEntryLinux_X_KDE_SubstituteUID);
+                shortcut.setURL(shortcutData.deskTopEntryLinux_URL);
+                shortcut.setCreateForAll(shortcutData.createForAll);
 
-                if (data.addToGroup)
+                if (shortcutData.addToGroup)
                 {
                     shortcut.setProgramGroup(groupName);
                 }
@@ -349,9 +345,9 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
         System.out.println(" done. ]");
         System.out.print("[ Add shortcuts to uninstaller ");
 
-        for (int i = 0; i < files.size(); i++)
+        for (String file : files)
         {
-            uninstallData.addFile(files.get(i), true);
+            uninstallData.addFile(file, true);
             System.out.print(".");
             System.out.flush();
         }

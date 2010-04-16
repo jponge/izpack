@@ -403,9 +403,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // ----------------------------------------------------
         List<IXMLElement> fields = spec.getChildrenNamed(FIELD_NODE_ID);
 
-        for (int i = 0; i < fields.size(); i++)
+        for (IXMLElement field : fields)
         {
-            IXMLElement field = fields.get(i);
             String attribute = field.getAttribute(TYPE);
             String associatedVariable = field.getAttribute(VARIABLE);
             if (associatedVariable != null)
@@ -1067,9 +1066,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     {
         Map<String, String> entryMap = new HashMap<String, String>();
 
-        for (int i = 0; i < entries.size(); i++)
+        for (TextValuePair pair : entries)
         {
-            UserInputPanel.TextValuePair pair = entries.get(i);
             // IZPACK-283: read the value from installData instead of panel installDataGUI
             final String key = pair.toString();
             entryMap.put(key, this.installData.getVariable(key));
@@ -1331,18 +1329,17 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         if (data.hasChildren())
         {
             specElements = data.getChildrenNamed(NODE_ID);
-            for (int i = 0; i < specElements.size(); i++)
+            for (IXMLElement specElement : specElements)
             {
-                data = specElements.get(i);
-                attribute = data.getAttribute(INSTANCE_IDENTIFIER);
-                panelattribute = data.getAttribute(PANEL_IDENTIFIER);
+                attribute = specElement.getAttribute(INSTANCE_IDENTIFIER);
+                panelattribute = specElement.getAttribute(PANEL_IDENTIFIER);
 
                 if (((attribute != null) && instance.equals(attribute))
                         || ((panelattribute != null) && (panelid != null) && (panelid
                         .equals(panelattribute))))
                 {
                     // use the current element as spec
-                    spec = data;
+                    spec = specElement;
                     // close the stream
                     input.close();
                     haveSpec = true;
@@ -2145,20 +2142,20 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             // --------------------------------------------------
             // process each choice element
             // --------------------------------------------------
-            for (int i = 0; i < choices.size(); i++)
+            for (IXMLElement choiceElement : choices)
             {
                 JRadioButton choice = new JRadioButton();
-                choice.setText(getText(choices.get(i)));
-                String causesValidataion = (choices.get(i)).getAttribute(REVALIDATE);
+                choice.setText(getText(choiceElement));
+                String causesValidataion = choiceElement.getAttribute(REVALIDATE);
                 if (causesValidataion != null && causesValidataion.equals("yes"))
                 {
                     choice.addActionListener(this);
                 }
-                value = ((choices.get(i)).getAttribute(RADIO_VALUE));
+                value = (choiceElement.getAttribute(RADIO_VALUE));
 
                 group.add(choice);
 
-                String set = (choices.get(i)).getAttribute(SET);
+                String set = choiceElement.getAttribute(SET);
                 // in order to properly initialize dependent controls
                 // we must set this variable now
                 if (this.installData.getVariable(variable) == null)
@@ -2333,10 +2330,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             // --------------------------------------------------
             // process each input field
             // --------------------------------------------------
-            IXMLElement fieldSpec;
-            for (int i = 0; i < inputs.size(); i++)
+            for (IXMLElement fieldSpec : inputs)
             {
-                fieldSpec = inputs.get(i);
                 String set = fieldSpec.getAttribute(SET);
                 if (set != null && !"".equals(set))
                 {
@@ -2870,9 +2865,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         {
             variable = field.getAssociatedVariable();
             comboBox = (JComboBox) field.getComponent();
-            for (int i = 0; i < this.searchFields.size(); ++i)
+            for (SearchField sf : this.searchFields)
             {
-                UserInputPanel.SearchField sf = this.searchFields.get(i);
                 if (sf.belongsTo(comboBox))
                 {
                     value = sf.getResult();
@@ -3288,9 +3282,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             return true;
         }
 
-        for (int i = 0; i < os.size(); i++)
+        for (IXMLElement osElement : os)
         {
-            String family = (os.get(i)).getAttribute(FAMILY);
+            String family = osElement.getAttribute(FAMILY);
             boolean match = false;
 
             if ("windows".equals(family))
@@ -3420,9 +3414,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         {
             selected = this.installData.getSelectedPacks().get(i).name;
 
-            for (int k = 0; k < packs.size(); k++)
+            for (IXMLElement pack : packs)
             {
-                required = (packs.get(k)).getAttribute(NAME, "");
+                required = pack.getAttribute(NAME, "");
                 if (selected.equals(required))
                 {
                     return (false);
@@ -3938,9 +3932,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         List<IXMLElement> variables = spec.getChildrenNamed(VARIABLE_NODE);
         RulesEngine rules = parent.getRules();
 
-        for (int i = 0; i < variables.size(); i++)
+        for (IXMLElement variable : variables)
         {
-            IXMLElement variable = variables.get(i);
             String vname = variable.getAttribute(ATTRIBUTE_VARIABLE_NAME);
             String vvalue = variable.getAttribute(ATTRIBUTE_VARIABLE_VALUE);
 
@@ -3984,7 +3977,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     this.installData.setVariable(vname, vvalue);
 
                     // for save this variable to be used later by Automation Helper
-                    entries.add(new UserInputPanel.TextValuePair(vname, vvalue));
+                    entries.add(new TextValuePair(vname, vvalue));
                 }
             }
         }
