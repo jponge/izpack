@@ -26,6 +26,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.InputStream;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -107,7 +108,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     private static final String LANG_FILE_NAME = "packsLang.xml";
 
     private HashMap<String, Pack> idToPack;
-    private HashMap<String, ArrayList<String>> treeData;
+    private HashMap<String, List<String>> treeData;
     private HashMap<Pack, Integer> packToRowNumber;
 
     private HashMap<String, CheckBoxNode> idToCheckBoxNode = new HashMap<String, CheckBoxNode>();
@@ -460,7 +461,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     protected JTree createPacksTree(int width, JScrollPane scroller, GridBagLayout layout,
                                     GridBagConstraints constraints)
     {
-        JTree tree = new JTree((CheckBoxNode) populateTreePacks(null));
+        JTree tree = new JTree(populateTreePacks(null));
         packsTree = tree;
         tree.setCellRenderer(new CheckBoxNodeRenderer(this));
         tree.setEditable(false);
@@ -625,7 +626,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
      */
     private void createTreeData()
     {
-        treeData = new HashMap<String, ArrayList<String>>();
+        treeData = new HashMap<String, List<String>>();
         idToPack = new HashMap<String, Pack>();
 
         for (Pack p : this.installData.getAvailablePacks())
@@ -633,7 +634,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             idToPack.put(p.id, p);
             if (p.parent != null)
             {
-                ArrayList<String> kids = null;
+                List<String> kids = null;
                 if (treeData.containsKey(p.parent))
                 {
                     kids = treeData.get(p.parent);
@@ -759,11 +760,11 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
      * @param parent
      * @return
      */
-    private Object populateTreePacks(String parent)
+    private TreeNode populateTreePacks(String parent)
     {
         if (parent == null) // the root node
         {
-            ArrayList rootNodes = new ArrayList();
+            List<TreeNode> rootNodes = new ArrayList<TreeNode>();
             for (Pack p : this.installData.getAvailablePacks())
             {
                 if (p.parent == null)
@@ -776,17 +777,15 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         }
         else
         {
-            ArrayList links = new ArrayList();
-            Object kidsObject = treeData.get(parent);
+            List<TreeNode> links = new ArrayList<TreeNode>();
+            List<String> kids = treeData.get(parent);
             Pack p = idToPack.get(parent);
             String translated = getI18NPackName(parent);
 
-            if (kidsObject != null)
+            if (kids != null)
             {
-                ArrayList kids = (ArrayList) kidsObject;
-                for (Object kid : kids)
+                for (String kidId : kids)
                 {
-                    String kidId = (String) kid;
                     links.add(populateTreePacks(kidId));
                 }
 

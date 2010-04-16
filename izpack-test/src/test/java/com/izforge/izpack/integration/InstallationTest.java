@@ -204,7 +204,7 @@ public class InstallationTest
         // Deselect shortcut creation
         if (!OsVersion.IS_MAC)
         {
-            Thread.sleep(400);
+            Thread.sleep(1000);
             installerFrameFixture.checkBox(GuiId.SHORTCUT_CREATE_CHECK_BOX.id).click();
             installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         }
