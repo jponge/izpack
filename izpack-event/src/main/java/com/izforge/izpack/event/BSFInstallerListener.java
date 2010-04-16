@@ -39,7 +39,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Vector;
+import java.util.List;
 
 
 public class BSFInstallerListener extends SimpleInstallerListener
@@ -87,7 +87,7 @@ public class BSFInstallerListener extends SimpleInstallerListener
 
             ArrayList<BSFAction> packActions = new ArrayList<BSFAction>();
 
-            Vector<IXMLElement> scriptEntries = pack.getChildrenNamed("script");
+            List<IXMLElement> scriptEntries = pack.getChildrenNamed("script");
             if (scriptEntries != null && scriptEntries.size() >= 1)
             {
                 for (IXMLElement scriptEntry : scriptEntries)

@@ -1070,7 +1070,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
 
         IXMLElement group = null;
-        Vector<IXMLElement> groupSpecs = spec.getChildrenNamed(SPEC_KEY_PROGRAM_GROUP);
+        java.util.List<IXMLElement> groupSpecs = spec.getChildrenNamed(SPEC_KEY_PROGRAM_GROUP);
         String selectedInstallGroup = this.installData.getVariable("INSTALL_GROUP");
         if (selectedInstallGroup != null)
         {
@@ -1123,7 +1123,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // created, containing all details about each shortcut
         // ----------------------------------------------------
         // String temp;
-        Vector<IXMLElement> shortcutSpecs = spec.getChildrenNamed(SPEC_KEY_SHORTCUT);
+        java.util.List<IXMLElement> shortcutSpecs = spec.getChildrenNamed(SPEC_KEY_SHORTCUT);
         IXMLElement shortcutSpec;
         ShortcutData data;
 
@@ -1132,7 +1132,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         for (int i = 0; i < shortcutSpecs.size(); i++)
         {
             // System.out.println( "Processing shortcut: " + i );
-            shortcutSpec = shortcutSpecs.elementAt(i);
+            shortcutSpec = shortcutSpecs.get(i);
 
             if (!OsConstraintHelper.oneMatchesCurrentSystem(shortcutSpec))
             {
@@ -1244,7 +1244,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
             // the shortcut is not actually required for any of the selected packs // the shortcut
             // is not actually required for any of the selected packs
-            Vector<IXMLElement> forPacks = shortcutSpec.getChildrenNamed(SPEC_KEY_PACKS);
+            java.util.List<IXMLElement> forPacks = shortcutSpec.getChildrenNamed(SPEC_KEY_PACKS);
 
             if (!shortcutRequiredFor(forPacks))
             {
@@ -1664,7 +1664,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * that this panel is presented to the user AFTER the PacksPanel.
      * --------------------------------------------------------------------------
      */
-    private boolean shortcutRequiredFor(Vector<IXMLElement> packs)
+    private boolean shortcutRequiredFor(java.util.List<IXMLElement> packs)
     {
         String selected;
         String required;
@@ -1680,7 +1680,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
             for (int k = 0; k < packs.size(); k++)
             {
-                required = (packs.elementAt(k)).getAttribute(
+                required = (packs.get(k)).getAttribute(
                         SPEC_ATTRIBUTE_NAME, "");
 
                 if (selected.equals(required))

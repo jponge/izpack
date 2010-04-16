@@ -29,7 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * Test on the XMLElement
@@ -115,7 +115,7 @@ public class XMLElementTest
     public void testGetChildrenNamed()
     {
         IXMLElement element = root.getChildAtIndex(1);
-        Vector<IXMLElement> list = element.getChildrenNamed("modifier");
+        List<IXMLElement> list = element.getChildrenNamed("modifier");
         Assert.assertEquals(list.size(), 7);
     }
 }

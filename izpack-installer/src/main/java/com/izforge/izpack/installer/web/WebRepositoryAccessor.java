@@ -293,7 +293,7 @@ public class WebRepositoryAccessor
         IXMLElement root = requireChildNamed(data, "packs");
 
         // at least one pack is required
-        Vector<IXMLElement> packElements = root.getChildrenNamed("pack");
+        List<IXMLElement> packElements = root.getChildrenNamed("pack");
         if (packElements.isEmpty())
         {
             parseError(root, "<packs> requires a <pack>");

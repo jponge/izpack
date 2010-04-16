@@ -49,7 +49,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.Vector;
 
 /**
  * Runs the install process in text only (no GUI) mode.
@@ -281,7 +280,7 @@ public class AutomatedInstaller extends InstallerBase
         String panelClassName = p.className;
 
         // We get the panels root xml markup
-        Vector<IXMLElement> panelRoots = this.idata.getXmlData().getChildrenNamed(panelClassName);
+        List<IXMLElement> panelRoots = this.idata.getXmlData().getChildrenNamed(panelClassName);
         int panelRootNo = 0;
 
         if (this.panelInstanceCount.containsKey(panelClassName))
@@ -290,7 +289,7 @@ public class AutomatedInstaller extends InstallerBase
             panelRootNo = this.panelInstanceCount.get(panelClassName);
         }
 
-        IXMLElement panelRoot = panelRoots.elementAt(panelRootNo);
+        IXMLElement panelRoot = panelRoots.get(panelRootNo);
 
         this.panelInstanceCount.put(panelClassName, panelRootNo + 1);
 

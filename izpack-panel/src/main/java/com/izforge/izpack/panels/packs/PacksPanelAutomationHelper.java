@@ -31,7 +31,6 @@ import com.izforge.izpack.util.Debug;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Functions to support automated usage of the PacksPanel
@@ -128,7 +127,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
         List<PInfo> autoinstallPackInfoList = new ArrayList<PInfo>();
 
         // We get the packs markups
-        Vector<IXMLElement> packList = panelRoot.getChildrenNamed("pack");
+        List<IXMLElement> packList = panelRoot.getChildrenNamed("pack");
 
         // Read all packs from the xml and remember them to merge it with the selected packs from
         // install installDataGUI

@@ -304,7 +304,7 @@ public class CompileWorker implements Runnable
 
     private void readChoices(IXMLElement element, ArrayList<String> choiceList)
     {
-        Vector<IXMLElement> choices = element.getChildrenNamed("choice");
+        List<IXMLElement> choices = element.getChildrenNamed("choice");
 
         if (choices == null)
         {
@@ -428,13 +428,13 @@ public class CompileWorker implements Runnable
     private CompilationJob collectJobsRecursive(IXMLElement node, List<String> classpath)
             throws Exception
     {
-        Vector<IXMLElement> toplevel_tags = node.getChildren();
+        List<IXMLElement> toplevel_tags = node.getChildren();
         List<String> ourclasspath = new ArrayList<String>(classpath);
         ArrayList<File> files = new ArrayList<File>();
 
         for (int i = 0; i < toplevel_tags.size(); i++)
         {
-            IXMLElement child = toplevel_tags.elementAt(i);
+            IXMLElement child = toplevel_tags.get(i);
 
             if ("classpath".equals(child.getName()))
             {

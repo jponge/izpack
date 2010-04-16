@@ -238,7 +238,7 @@ public class CompilerConfig extends Thread
 
         if (root != null)
         {
-            Vector<IXMLElement> installerrequirementsels = root
+            List<IXMLElement> installerrequirementsels = root
                     .getChildrenNamed("installerrequirement");
             for (IXMLElement installerrequirement : installerrequirementsels)
             {
@@ -499,9 +499,9 @@ public class CompilerConfig extends Thread
         IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "packs");
 
         // at least one pack is required
-        Vector<IXMLElement> packElements = root.getChildrenNamed("pack");
-        Vector<IXMLElement> refPackElements = root.getChildrenNamed("refpack");
-        Vector<IXMLElement> refPackSets = root.getChildrenNamed("refpackset");
+        List<IXMLElement> packElements = root.getChildrenNamed("pack");
+        List<IXMLElement> refPackElements = root.getChildrenNamed("refpack");
+        List<IXMLElement> refPackSets = root.getChildrenNamed("refpackset");
         if (packElements.isEmpty() && refPackElements.isEmpty() && refPackSets.isEmpty())
         {
             assertionHelper.parseError(root, "<packs> requires a <pack>, <refpack> or <refpackset>");
@@ -925,7 +925,7 @@ public class CompilerConfig extends Thread
         boolean defexcludes = xmlCompilerHelper.validateYesNoAttribute(f, "defaultexcludes", YES);
 
         // get includes and excludes
-        Vector<IXMLElement> xcludesList = null;
+        List<IXMLElement> xcludesList = null;
         String[] includes = null;
         xcludesList = f.getChildrenNamed("include");
         if (!xcludesList.isEmpty())
@@ -1222,7 +1222,7 @@ public class CompilerConfig extends Thread
         IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "panels");
 
         // at least one panel is required
-        Vector<IXMLElement> panels = root.getChildrenNamed("panel");
+        List<IXMLElement> panels = root.getChildrenNamed("panel");
         if (panels.isEmpty())
         {
             assertionHelper.parseError(root, "<panels> requires a <panel>");
@@ -1266,7 +1266,7 @@ public class CompilerConfig extends Thread
             if (configurationElement != null)
             {
                 Debug.trace("found a configuration for this panel.");
-                Vector<IXMLElement> params = configurationElement.getChildrenNamed("param");
+                List<IXMLElement> params = configurationElement.getChildrenNamed("param");
                 if (params != null)
                 {
                     for (IXMLElement param : params)
@@ -1294,12 +1294,11 @@ public class CompilerConfig extends Thread
                 }
             }
             // adding helps
-            Vector<IXMLElement> helps = panelElement.getChildrenNamed(AutomatedInstallData.HELP_TAG);
-            if (helps != null)
+            List<IXMLElement> helps = panelElement.getChildrenNamed(AutomatedInstallData.HELP_TAG);
+            if (helps != null) // TODO : remove this condition, getChildrenNamed always return a list
             {
-                for (Object help1 : helps)
+                for (IXMLElement help : helps)
                 {
-                    IXMLElement help = (IXMLElement) help1;
                     String iso3 = help.getAttribute(AutomatedInstallData.ISO3_ATTRIBUTE);
                     String resourceId;
                     if (panelid == null)
@@ -1514,7 +1513,7 @@ public class CompilerConfig extends Thread
         IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "locale");
 
         // at least one langpack is required
-        Vector<IXMLElement> locals = root.getChildrenNamed("langpack");
+        List<IXMLElement> locals = root.getChildrenNamed("langpack");
         if (locals.isEmpty())
         {
             assertionHelper.parseError(root, "<locale> requires a <langpack>");
@@ -1936,7 +1935,7 @@ public class CompilerConfig extends Thread
 
         for (int i = 0; i < element.getChildren().size(); i++)
         {
-            IXMLElement child = element.getChildren().elementAt(i);
+            IXMLElement child = element.getChildren().get(i);
             substituteAllProperties(child);
         }
     }
@@ -2341,7 +2340,7 @@ public class CompilerConfig extends Thread
                         else
                         {
                             // append data of all xml-docs into the first document
-                            Vector<IXMLElement> langStrings = xml.getChildrenNamed("str");
+                            List<IXMLElement> langStrings = xml.getChildrenNamed("str");
                             for (IXMLElement langString : langStrings)
                             {
                                 mergedPacksLang.addChild(langString);
@@ -2400,7 +2399,7 @@ public class CompilerConfig extends Thread
         IXMLElement xmlActions = xmlPanel.getFirstChildNamed(PanelAction.PANEL_ACTIONS_TAG);
         if (xmlActions != null)
         {
-            Vector<IXMLElement> actionList = xmlActions
+            List<IXMLElement> actionList = xmlActions
                     .getChildrenNamed(PanelAction.PANEL_ACTION_TAG);
             if (actionList != null)
             {
@@ -2410,7 +2409,7 @@ public class CompilerConfig extends Thread
                     String actionName = action.getAttribute(PanelAction.PANEL_ACTION_CLASSNAME_TAG);
                     if (actionName != null)
                     {
-                        Vector<IXMLElement> params = action.getChildrenNamed("param");
+                        List<IXMLElement> params = action.getChildrenNamed("param");
                         PanelActionConfiguration config = new PanelActionConfiguration();
 
                         for (IXMLElement param : params)

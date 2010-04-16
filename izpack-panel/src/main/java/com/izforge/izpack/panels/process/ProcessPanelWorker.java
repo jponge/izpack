@@ -138,7 +138,7 @@ public class ProcessPanelWorker implements Runnable
             Debug.trace("Condition is fulfilled or not existent.");
             // ExecuteForPack Patch
             // Check if processing required for pack
-            Vector<IXMLElement> forPacks = job_el.getChildrenNamed("executeForPack");
+            List<IXMLElement> forPacks = job_el.getChildrenNamed("executeForPack");
             if (!jobRequiredFor(forPacks))
             {
                 continue;
@@ -711,7 +711,7 @@ public class ProcessPanelWorker implements Runnable
      * /*--------------------------------------------------------------------------
      */
 
-    private boolean jobRequiredFor(Vector<IXMLElement> packs)
+    private boolean jobRequiredFor(List<IXMLElement> packs)
     {
         String selected;
         String required;
@@ -730,9 +730,9 @@ public class ProcessPanelWorker implements Runnable
 
             // System.out.println ("Selected pack is " + selected);
 
-            for (int k = 0; k < packs.size(); k++)
+            for (IXMLElement pack : packs)
             {
-                required = (packs.elementAt(k)).getAttribute("name", "");
+                required = pack.getAttribute("name", "");
                 // System.out.println ("Attribute name is " + required);
                 if (selected.equals(required))
                 {

@@ -12,7 +12,7 @@ import org.picocontainer.injectors.Provider;
 import javax.swing.*;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * Provide icons database
@@ -55,7 +55,7 @@ public class IconsProvider implements Provider
         IXMLElement data = parser.parse(inXML);
 
         // We load the icons
-        Vector<IXMLElement> children = data.getChildrenNamed("icon");
+        List<IXMLElement> children = data.getChildrenNamed("icon");
         int size = children.size();
         for (int i = 0; i < size; i++)
         {
@@ -108,7 +108,7 @@ public class IconsProvider implements Provider
         IXMLElement data = parser.parse(inXML);
 
         // We load the icons
-        Vector<IXMLElement> children = data.getChildrenNamed("icon");
+        List<IXMLElement> children = data.getChildrenNamed("icon");
         int size = children.size();
         for (int i = 0; i < size; i++)
         {

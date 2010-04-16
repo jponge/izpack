@@ -233,7 +233,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         listInputs.clear();
         IXMLElement data;
         IXMLElement spec = null;
-        Vector<IXMLElement> specElements;
+        List<IXMLElement> specElements;
         String attribute;
         String dataID;
         String panelid = idata.getPanelsOrder().get(idata.getCurPanelNumber()).getPanelid();
@@ -254,15 +254,15 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         specElements = specHelper.getSpec().getChildrenNamed(NODE_ID);
         for (int i = 0; i < specElements.size(); i++)
         {
-            data = specElements.elementAt(i);
+            data = specElements.get(i);
             attribute = data.getAttribute(INSTANCE_IDENTIFIER);
             dataID = data.getAttribute(PANEL_IDENTIFIER);
             if (((attribute != null) && instance.equals(attribute))
                     || ((dataID != null) && (panelid != null) && (panelid.equals(dataID))))
             {
 
-                Vector<IXMLElement> forPacks = data.getChildrenNamed(SELECTEDPACKS);
-                Vector<IXMLElement> forOs = data.getChildrenNamed(OS);
+                List<IXMLElement> forPacks = data.getChildrenNamed(SELECTEDPACKS);
+                List<IXMLElement> forOs = data.getChildrenNamed(OS);
 
                 if (itemRequiredFor(forPacks, idata) && itemRequiredForOs(forOs))
                 {
@@ -276,13 +276,13 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         {
             return false;
         }
-        Vector<IXMLElement> fields = spec.getChildrenNamed(FIELD_NODE_ID);
+        List<IXMLElement> fields = spec.getChildrenNamed(FIELD_NODE_ID);
         for (int i = 0; i < fields.size(); i++)
         {
-            IXMLElement field = fields.elementAt(i);
+            IXMLElement field = fields.get(i);
 
-            Vector<IXMLElement> forPacks = field.getChildrenNamed(SELECTEDPACKS);
-            Vector<IXMLElement> forOs = field.getChildrenNamed(OS);
+            List<IXMLElement> forPacks = field.getChildrenNamed(SELECTEDPACKS);
+            List<IXMLElement> forOs = field.getChildrenNamed(OS);
 
             if (itemRequiredFor(forPacks, idata) && itemRequiredForOs(forOs))
             {
@@ -692,7 +692,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             int selection = -1;
             IXMLElement spec = field.getFirstChildNamed(SPEC);
             IXMLElement description = field.getFirstChildNamed(DESCRIPTION);
-            Vector<IXMLElement> choices = null;
+            List<IXMLElement> choices = null;
             if (spec != null)
             {
                 choices = spec.getChildrenNamed(CHOICE);
@@ -704,7 +704,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             for (int i = 0; i < choices.size(); i++)
             {
 
-                IXMLElement choice = choices.elementAt(i);
+                IXMLElement choice = choices.get(i);
                 String processorClass = choice.getAttribute("processor");
 
                 if (processorClass != null && !"".equals(processorClass))
@@ -847,7 +847,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             if (spec != null)
             {
 
-                Vector<IXMLElement> pwds = spec.getChildrenNamed(PWD);
+                List<IXMLElement> pwds = spec.getChildrenNamed(PWD);
                 if (pwds == null || pwds.size() == 0)
                 {
                     System.out.println("No pwd specified in the spec for type password");
@@ -858,7 +858,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 for (int i = 0; i < pwds.size(); i++)
                 {
 
-                    IXMLElement pwde = pwds.elementAt(i);
+                    IXMLElement pwde = pwds.get(i);
                     strText = pwde.getAttribute(TEXT);
                     strSet = pwde.getAttribute(SET);
                     choicesList.add(new Choice(strText, null, strSet));
@@ -902,7 +902,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
      * that this panel is presented to the user AFTER the PacksPanel.
      * --------------------------------------------------------------------------
      */
-    private boolean itemRequiredFor(Vector<IXMLElement> packs, AutomatedInstallData idata)
+    private boolean itemRequiredFor(List<IXMLElement> packs, AutomatedInstallData idata)
     {
 
         String selected;
@@ -933,7 +933,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
             for (int k = 0; k < packs.size(); k++)
             {
-                required = (packs.elementAt(k)).getAttribute(NAME, "");
+                required = (packs.get(k)).getAttribute(NAME, "");
                 if (selected.equals(required))
                 {
                     return (true);
@@ -956,7 +956,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
      * @return <code>true</code> if the item is required for the os, otherwise returns
      *         <code>false</code>.
      */
-    public boolean itemRequiredForOs(Vector<IXMLElement> os)
+    public boolean itemRequiredForOs(List<IXMLElement> os)
     {
         if (os.size() == 0)
         {
@@ -965,7 +965,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
         for (int i = 0; i < os.size(); i++)
         {
-            String family = (os.elementAt(i)).getAttribute(FAMILY);
+            String family = (os.get(i)).getAttribute(FAMILY);
             boolean match = false;
 
             if ("windows".equals(family))

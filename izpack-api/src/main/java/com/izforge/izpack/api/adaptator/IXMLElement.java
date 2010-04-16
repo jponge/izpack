@@ -26,8 +26,8 @@ import org.w3c.dom.Node;
 
 import java.io.Serializable;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 
 /**
  * Interface of the adaptator between the methods of nanoXml and javax
@@ -80,11 +80,11 @@ public interface IXMLElement extends Serializable
     int getChildrenCount();
 
     /**
-     * Returns a vector containing all the child elements.
+     * Returns a list containing all the child elements.
      *
-     * @return the vector.
+     * @return the list.
      */
-    Vector<IXMLElement> getChildren();
+    List<IXMLElement> getChildren();
 
     /**
      * Returns the child at a specific index.
@@ -105,12 +105,12 @@ public interface IXMLElement extends Serializable
     IXMLElement getFirstChildNamed(String name);
 
     /**
-     * Returns a vector of all child elements named <I>name</I>.
+     * Returns a list of all child elements named <I>name</I>.
      *
      * @param name the name of the children to search for.
-     * @return the non-null vector of child elements.
+     * @return the non-null list of child elements.
      */
-    Vector<IXMLElement> getChildrenNamed(String name);
+    List<IXMLElement> getChildrenNamed(String name);
 
     /**
      * Returns the value of an attribute.

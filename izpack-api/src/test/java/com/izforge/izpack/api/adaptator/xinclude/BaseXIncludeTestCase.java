@@ -6,7 +6,7 @@ import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import org.junit.Test;
 
 import java.net.URL;
-import java.util.Vector;
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
@@ -67,12 +67,12 @@ public abstract class BaseXIncludeTestCase
         assertEquals("equal number of children " + a.getName(),
                 a.getChildrenCount(), b.getChildrenCount());
 
-        Vector<IXMLElement> aChildren = a.getChildren();
-        Vector<IXMLElement> bChildren = b.getChildren();
+        List<IXMLElement> aChildren = a.getChildren();
+        List<IXMLElement> bChildren = b.getChildren();
         for (int i = 0; i < bChildren.size(); i++)
         {
-            IXMLElement aChild = aChildren.elementAt(i);
-            IXMLElement bChild = bChildren.elementAt(i);
+            IXMLElement aChild = aChildren.get(i);
+            IXMLElement bChild = bChildren.get(i);
             deepEqual(aChild, bChild);
         }
 

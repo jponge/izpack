@@ -30,7 +30,7 @@ import com.izforge.izpack.panels.installationgroup.InstallationGroupPanel.GroupD
 import com.izforge.izpack.util.Debug;
 
 import java.util.HashMap;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * An automation helper for the InstallationGroupPanel
@@ -77,7 +77,7 @@ public class InstallationGroupPanelAutomationHelper
         Debug.trace("InstallationGroupPanelAutomationHelper: runAutomated, INSTALL_GROUP: " + installGroup);
         if (installGroup != null)
         {
-            Vector<IXMLElement> groups = panelRoot.getChildrenNamed("group");
+            List<IXMLElement> groups = panelRoot.getChildrenNamed("group");
             for (IXMLElement group : groups)
             {
                 String name = group.getAttribute("name");
@@ -86,7 +86,7 @@ public class InstallationGroupPanelAutomationHelper
                 {
                     Debug.trace("Found INSTALL_GROUP match for: " + installGroup);
                     idata.getSelectedPacks().clear();
-                    Vector<IXMLElement> packs = group.getChildrenNamed("pack");
+                    List<IXMLElement> packs = group.getChildrenNamed("pack");
                     Debug.trace(name + " pack count: " + packs.size());
                     Debug.trace("Available pack count: " + idata.getAvailablePacks().size());
                     for (IXMLElement xpack : packs)

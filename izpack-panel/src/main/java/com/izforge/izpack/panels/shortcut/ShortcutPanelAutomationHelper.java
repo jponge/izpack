@@ -34,6 +34,7 @@ import com.izforge.izpack.util.os.Shortcut;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -130,7 +131,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
 
         shortcuts = new Vector<ShortcutData>();
 
-        Vector<IXMLElement> shortcutElements;
+        List<IXMLElement> shortcutElements;
         ShortcutData data;
         IXMLElement dataElement;
 
@@ -159,7 +160,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
         {
             Debug.log(this.getClass().getName() + "runAutomated:shortcutElements " + i);
             data = new ShortcutData();
-            dataElement = shortcutElements.elementAt(i);
+            dataElement = shortcutElements.get(i);
 
             data.name = dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_NAME);
             data.addToGroup = Boolean.valueOf(

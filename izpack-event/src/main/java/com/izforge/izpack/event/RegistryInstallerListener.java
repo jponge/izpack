@@ -41,7 +41,6 @@ import com.izforge.izpack.util.helper.SpecHelper;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 /**
  * Installer custom action for handling registry entries on Windows. On Unix nothing will be done.
@@ -251,7 +250,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
         }
 
         // Get all entries for registry settings.
-        Vector<IXMLElement> regEntries = pack.getChildren();
+        List<IXMLElement> regEntries = pack.getChildren();
         if (regEntries == null)
         {
             return;
@@ -345,7 +344,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             rh.setValue(keypath, name, value);
             return;
         }
-        Vector<IXMLElement> values = regEntry.getChildrenNamed(REG_MULTI);
+        List<IXMLElement> values = regEntry.getChildrenNamed(REG_MULTI);
         if (values != null && !values.isEmpty())
         { // Value type is REG_MULTI_SZ; placeholder possible.
             Iterator<IXMLElement> multiIter = values.iterator();

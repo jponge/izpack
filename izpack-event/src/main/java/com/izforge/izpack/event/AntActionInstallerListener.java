@@ -36,7 +36,7 @@ import com.izforge.izpack.util.helper.SpecHelper;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * Installer listener for performing ANT actions. The definition what should be done will be made in
@@ -126,7 +126,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
             packActions.put(ActionBase.AFTERPACKS, new ArrayList<AntAction>());
 
             // Get all entries for antcalls.
-            Vector<IXMLElement> antCallEntries = pack.getChildrenNamed(AntAction.ANTCALL);
+            List<IXMLElement> antCallEntries = pack.getChildrenNamed(AntAction.ANTCALL);
             if (antCallEntries != null && antCallEntries.size() >= 1)
             {
                 for (IXMLElement antCallEntry : antCallEntries)
