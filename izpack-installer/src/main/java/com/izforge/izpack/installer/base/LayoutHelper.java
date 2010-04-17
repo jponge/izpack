@@ -808,4 +808,25 @@ public class LayoutHelper implements LayoutConstants
         this.izPanelLayout = izPanelLayout;
     }
 
+    /**
+     * Sets the parameters of a GridBagConstraints object.
+     *
+     * @param gbc The constraints object.
+     * @param gx  The x coordinates.
+     * @param gy  The y coordinates.
+     * @param gw  The width.
+     * @param wx  The x wheight.
+     * @param wy  The y wheight.
+     * @param gh  Description of the Parameter
+     */
+    public static void buildConstraints(GridBagConstraints gbc, int gx, int gy, int gw, int gh, double wx,
+                                        double wy)
+    {
+        gbc.gridx = gx;
+        gbc.gridy = gy;
+        gbc.gridwidth = gw;
+        gbc.gridheight = gh;
+        gbc.weightx = wx;
+        gbc.weighty = wy;
+    }
 }

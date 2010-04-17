@@ -28,6 +28,7 @@ import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.base.LayoutHelper;
 import com.izforge.izpack.panels.packs.PacksPanelBase;
 import com.izforge.izpack.util.IoHelper;
 
@@ -92,19 +93,19 @@ public class ImgPacksPanel extends PacksPanelBase
         setLayout(layout);
 
         // Create constraint for first component as standard constraint.
-        parent.buildConstraints(gbConstraints, 0, 0, 1, 1, 0.25, 0.0);
+        LayoutHelper.buildConstraints(gbConstraints, 0, 0, 1, 1, 0.25, 0.0);
         gbConstraints.insets = new Insets(5, 5, 5, 5);
         gbConstraints.anchor = GridBagConstraints.WEST;
         // Create the info label.
         createLabel("PacksPanel.info", "preferences", layout, gbConstraints);
 
         // Create the snap label.
-        parent.buildConstraints(gbConstraints, 1, 0, 1, 1, 0.50, 0.0);
+        LayoutHelper.buildConstraints(gbConstraints, 1, 0, 1, 1, 0.50, 0.0);
         createLabel("ImgPacksPanel.snap", "tip", layout, gbConstraints);
 
         // Create packs table with a scroller.
         tableScroller = new JScrollPane();
-        parent.buildConstraints(gbConstraints, 0, 1, 1, 2, 0.50, 0.0);
+        LayoutHelper.buildConstraints(gbConstraints, 0, 1, 1, 2, 0.50, 0.0);
         gbConstraints.fill = GridBagConstraints.BOTH;
         packsTable = createPacksTable(250, tableScroller, layout, gbConstraints);
 
@@ -128,14 +129,14 @@ public class ImgPacksPanel extends PacksPanelBase
         }
         JScrollPane imgScroller = new JScrollPane(imgLabel);
         imgScroller.setPreferredSize(getPreferredSizeFromImages());
-        parent.buildConstraints(gbConstraints, 1, 1, 1, 1, 0.5, 1.0);
+        LayoutHelper.buildConstraints(gbConstraints, 1, 1, 1, 1, 0.5, 1.0);
         layout.addLayoutComponent(imgScroller, gbConstraints);
         add(imgScroller);
 
         // Create a vertical strut.
 
         Component strut = Box.createVerticalStrut(20);
-        parent.buildConstraints(gbConstraints, 1, 2, 1, 3, 0.0, 0.0);
+        LayoutHelper.buildConstraints(gbConstraints, 1, 2, 1, 3, 0.0, 0.0);
         layout.addLayoutComponent(strut, gbConstraints);
         add(strut);
 
@@ -144,7 +145,7 @@ public class ImgPacksPanel extends PacksPanelBase
         {
             JScrollPane depScroller = new JScrollPane();
             depScroller.setPreferredSize(new Dimension(250, 40));
-            parent.buildConstraints(gbConstraints, 0, 3, 1, 1, 0.50, 0.50);
+            LayoutHelper.buildConstraints(gbConstraints, 0, 3, 1, 1, 0.50, 0.50);
             dependencyArea = createTextArea("ImgPacksPanel.dependencyList", depScroller, layout,
                     gbConstraints);
         }
@@ -154,18 +155,18 @@ public class ImgPacksPanel extends PacksPanelBase
         descriptionScroller.setPreferredSize(new Dimension(200, 60));
         descriptionScroller.setBorder(BorderFactory.createEmptyBorder());
 
-        parent.buildConstraints(gbConstraints, 1, 3, 1, 1, 0.50, 0.50);
+        LayoutHelper.buildConstraints(gbConstraints, 1, 3, 1, 1, 0.50, 0.50);
         descriptionArea = createTextArea("PacksPanel.description", descriptionScroller, layout,
                 gbConstraints);
         // Create the tip label.
-        parent.buildConstraints(gbConstraints, 0, 4, 2, 1, 0.0, 0.0);
+        LayoutHelper.buildConstraints(gbConstraints, 0, 4, 2, 1, 0.0, 0.0);
         createLabel("PacksPanel.tip", "tip", layout, gbConstraints);
         // Create the space label.
-        parent.buildConstraints(gbConstraints, 0, 5, 2, 1, 0.0, 0.0);
+        LayoutHelper.buildConstraints(gbConstraints, 0, 5, 2, 1, 0.0, 0.0);
         spaceLabel = createPanelWithLabel("PacksPanel.space", layout, gbConstraints);
         if (IoHelper.supported("getFreeSpace"))
         { // Create the free space label only if free space is supported.
-            parent.buildConstraints(gbConstraints, 0, 6, 2, 1, 0.0, 0.0);
+            LayoutHelper.buildConstraints(gbConstraints, 0, 6, 2, 1, 0.0, 0.0);
             freeSpaceLabel = createPanelWithLabel("PacksPanel.freespace", layout, gbConstraints);
         }
 
