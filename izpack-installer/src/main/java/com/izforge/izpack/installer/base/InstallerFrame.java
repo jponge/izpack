@@ -45,7 +45,6 @@ import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.installer.unpacker.Unpacker;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -201,12 +200,13 @@ public class InstallerFrame extends JFrame implements InstallerView
     /**
      * The constructor (normal mode).
      *
+     * @param variableSubstitutor
      * @param uninstallData
-     * @param title         The window title.
-     * @param installdata   The installation data.
+     * @param title               The window title.
+     * @param installdata         The installation data.
      * @throws Exception Description of the Exception
      */
-    public InstallerFrame(String title, GUIInstallData installdata, RulesEngine rules, IconsDatabase icons, PanelManager panelManager, UninstallDataWriter uninstallDataWriter, ResourceManager resourceManager, UninstallData uninstallData, InstallDataConfiguratorWithRules installDataRulesEngineManager)
+    public InstallerFrame(String title, GUIInstallData installdata, RulesEngine rules, IconsDatabase icons, PanelManager panelManager, UninstallDataWriter uninstallDataWriter, ResourceManager resourceManager, UninstallData uninstallData, VariableSubstitutor variableSubstitutor)
             throws Exception
     {
         super(title);
@@ -221,7 +221,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         this.panelManager = panelManager;
         // Sets the window events handler
         addWindowListener(new WindowHandler(this));
-        this.variableSubstitutor = new VariableSubstitutorImpl(this.installdata.getVariables());
+        this.variableSubstitutor = variableSubstitutor;
     }
 
     @Override
@@ -406,7 +406,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     private ImageIcon loadIcon(String resPrefix, String panelid, boolean tryBaseIcon)
             throws ResourceNotFoundException, IOException
     {
-        ImageIcon icon = null;
+        ImageIcon icon;
         String iconext = this.getIconResourceNameExtension();
         if (tryBaseIcon)
         {
