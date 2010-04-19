@@ -245,18 +245,15 @@ public class UninstallDataWriter
         Map<String, Object> additionalData = udata.getAdditionalData();
         if (additionalData != null && !additionalData.isEmpty())
         {
-            Iterator<String> keys = additionalData.keySet().iterator();
             Set<String> exist = new HashSet<String>();
-            while (keys != null && keys.hasNext())
+            for (String key : additionalData.keySet())
             {
-                String key = keys.next();
                 Object contents = additionalData.get(key);
                 if ("__uninstallLibs__".equals(key))
                 {
-                    Iterator nativeLibIter = ((List) contents).iterator();
-                    while (nativeLibIter != null && nativeLibIter.hasNext())
+                    for (Object o : ((List) contents))
                     {
-                        String nativeLibName = (String) ((List) nativeLibIter.next()).get(0);
+                        String nativeLibName = (String) ((List) o).get(0);
                         byte[] buffer = new byte[5120];
                         long bytesCopied = 0;
                         int bytesInBuffer;

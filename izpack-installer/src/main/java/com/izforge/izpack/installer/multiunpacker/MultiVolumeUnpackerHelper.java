@@ -39,21 +39,21 @@ public class MultiVolumeUnpackerHelper implements IMultiVolumeUnpackerHelper
         Debug.trace("Enter next media: " + volumename);
 
         File nextvolume = new File(volumename);
-        NextMediaDialog nmd = null;
+        NextMediaDialog nextMediaDialog = null;
 
         while (!nextvolume.exists() || lastcorrupt)
         {
             if ((this.handler != null) && (this.handler instanceof IzPanel))
             {
                 InstallerFrame installframe = ((IzPanel) this.handler).getInstallerFrame();
-                nmd = new NextMediaDialog(installframe, idata, volumename);
+                nextMediaDialog = new NextMediaDialog(installframe, idata, volumename);
             }
             else
             {
-                nmd = new NextMediaDialog(null, idata, volumename);
+                nextMediaDialog = new NextMediaDialog(null, idata, volumename);
             }
-            nmd.setVisible(true);
-            String nextmediainput = nmd.getNextMedia();
+            nextMediaDialog.setVisible(true);
+            String nextmediainput = nextMediaDialog.getNextMedia();
             if (nextmediainput != null)
             {
                 nextvolume = new File(nextmediainput);

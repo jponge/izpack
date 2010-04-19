@@ -47,40 +47,35 @@ public abstract class AbstractInstallDataProvider implements Provider
      */
     protected void loadInstallData(AutomatedInstallData installdata) throws IOException, ClassNotFoundException, InstallerException
     {
-        // Usefull variables
-        InputStream in;
-        ObjectInputStream objIn;
-        int size;
-        int i;
-
         // We load the variables
         Properties variables = (Properties) readObject("vars");
 
         // We load the Info data
-        Info inf = (Info) readObject("info");
+        Info info = (Info) readObject("info");
 
-//        checkForPrivilegedExecution(inf);
-//        checkForRebootAction(inf);
+        checkForPrivilegedExecution(info);
+
+        checkForRebootAction(info);
 
         // We put the Info data as variables
-        installdata.setVariable(ScriptParserConstant.APP_NAME, inf.getAppName());
-        if (inf.getAppURL() != null)
+        installdata.setVariable(ScriptParserConstant.APP_NAME, info.getAppName());
+        if (info.getAppURL() != null)
         {
-            installdata.setVariable(ScriptParserConstant.APP_URL, inf.getAppURL());
+            installdata.setVariable(ScriptParserConstant.APP_URL, info.getAppURL());
         }
-        installdata.setVariable(ScriptParserConstant.APP_VER, inf.getAppVersion());
-        if (inf.getUninstallerCondition() != null)
+        installdata.setVariable(ScriptParserConstant.APP_VER, info.getAppVersion());
+        if (info.getUninstallerCondition() != null)
         {
-            installdata.setVariable("UNINSTALLER_CONDITION", inf.getUninstallerCondition());
+            installdata.setVariable("UNINSTALLER_CONDITION", info.getUninstallerCondition());
         }
 
-        installdata.setInfo(inf);
+        installdata.setInfo(info);
         // Set the installation path in a default manner
         String dir = getDir();
-        String installPath = dir + inf.getAppName();
-        if (inf.getInstallationSubPath() != null)
+        String installPath = dir + info.getAppName();
+        if (info.getInstallationSubPath() != null)
         { // A subpath was defined, use it.
-            installPath = IoHelper.translatePath(dir + inf.getInstallationSubPath(),
+            installPath = IoHelper.translatePath(dir + info.getInstallationSubPath(),
                     variableSubstitutor);
         }
         installdata.setInstallPath(installPath);
@@ -90,19 +85,19 @@ public abstract class AbstractInstallDataProvider implements Provider
         List<Panel> panelsOrder = (List<Panel>) readObject("panelsOrder");
 
         // We read the packs data
-        in = resourceManager.getInputStream("packs.info");
-        objIn = new ObjectInputStream(in);
-        size = objIn.readInt();
-        ArrayList<Pack> availablePacks = new ArrayList<Pack>();
-        ArrayList<Pack> allPacks = new ArrayList<Pack>();
+        InputStream in = resourceManager.getInputStream("packs.info");
+        ObjectInputStream objIn = new ObjectInputStream(in);
+        int size = objIn.readInt();
+        List<Pack> availablePacks = new ArrayList<Pack>();
+        List<Pack> allPacks = new ArrayList<Pack>();
 
-        for (i = 0; i < size; i++)
+        for (int i = 0; i < size; i++)
         {
-            Pack pk = (Pack) objIn.readObject();
-            allPacks.add(pk);
-            if (OsConstraintHelper.oneMatchesCurrentSystem(pk.osConstraints))
+            Pack pack = (Pack) objIn.readObject();
+            allPacks.add(pack);
+            if (OsConstraintHelper.oneMatchesCurrentSystem(pack.osConstraints))
             {
-                availablePacks.add(pk);
+                availablePacks.add(pack);
             }
         }
         objIn.close();
@@ -137,10 +132,10 @@ public abstract class AbstractInstallDataProvider implements Provider
         installdata.setVariable(ScriptParserConstant.HOST_NAME, hostname);
         installdata.setVariable(ScriptParserConstant.FILE_SEPARATOR, File.separator);
 
-        Enumeration e = System.getProperties().keys();
-        while (e.hasMoreElements())
+        Enumeration systemProperties = System.getProperties().keys();
+        while (systemProperties.hasMoreElements())
         {
-            String varName = (String) e.nextElement();
+            String varName = (String) systemProperties.nextElement();
             String varValue = System.getProperty(varName);
             if (varValue != null)
             {

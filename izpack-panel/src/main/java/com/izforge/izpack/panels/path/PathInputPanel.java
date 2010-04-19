@@ -274,11 +274,11 @@ public class PathInputPanel extends IzPanel implements ActionListener
     /**
      * Sets the must exist state. If it is true, the path must exist.
      *
-     * @param b must exist state
+     * @param mustExist must exist state
      */
-    public void setMustExist(boolean b)
+    public void setMustExist(boolean mustExist)
     {
-        mustExist = b;
+        this.mustExist = mustExist;
     }
 
     /**
@@ -474,11 +474,11 @@ public class PathInputPanel extends IzPanel implements ActionListener
     /**
      * Sets the default for the installation directory to the given string.
      *
-     * @param string path for default for the installation directory
+     * @param defaultInstallDir path for default for the installation directory
      */
-    public static void setDefaultInstallDir(String string)
+    public static void setDefaultInstallDir(String defaultInstallDir)
     {
-        defaultInstallDir = string;
+        PathInputPanel.defaultInstallDir = defaultInstallDir;
     }
 
 }

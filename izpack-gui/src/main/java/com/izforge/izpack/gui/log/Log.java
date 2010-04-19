@@ -202,12 +202,12 @@ public class Log implements LogError, LogWarning, LogMessage
      * this purpose, since this is the only class that explicitly specifies that the
      * <code>equals()</code> method is used for determining if a particular object is contained.
      */
-    private Vector<String> channels = null;
+    private List<String> channels = null;
 
     /**
      * This map keeps track of all channels that are recorded. It is used for information purposes.
      */
-    private Hashtable<String, String> recordedChannels = null;
+    private Map<String, String> recordedChannels = null;
 
     /**
      * This flag signals if debug messages should be recorded
@@ -251,8 +251,8 @@ public class Log implements LogError, LogWarning, LogMessage
             // ----------------------------------------------------
             // get the list of debug channels requested
             // ----------------------------------------------------
-            recordedChannels = new Hashtable<String, String>();
-            channels = new Vector<String>();
+            recordedChannels = new HashMap<String, String>();
+            channels = new ArrayList<String>();
             temp = System.getProperty(CHANNEL_LIST);
             if ((temp != null) && (temp.toUpperCase().equals("ON")))
             {
@@ -935,11 +935,9 @@ public class Log implements LogError, LogWarning, LogMessage
             System.out.println("The following debug channels did record messages:");
             System.out.println();
 
-            Enumeration<String> list = recordedChannels.keys();
-
-            while (list.hasMoreElements())
+            for (String channel : recordedChannels.keySet())
             {
-                System.out.println(" - " + list.nextElement().toString());
+                System.out.println(" - " + channel);
             }
 
             System.out.println();

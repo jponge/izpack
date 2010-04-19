@@ -16,7 +16,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.*;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -34,8 +35,8 @@ public final class Console
 
     public static void main(String[] args)
     {
-        Runtime rt = Runtime.getRuntime();
-        Process p = null;
+        Runtime runtime = Runtime.getRuntime();
+        Process process = null;
         try
         {
 
@@ -43,9 +44,9 @@ public final class Console
              * Start a new process in which to execute the commands in cmd, using the environment in
              * env and use pwd as the current working directory.
              */
-            p = rt.exec(args);// , env, pwd);
-            new Console(p);
-            System.exit(p.exitValue());
+            process = runtime.exec(args);// , env, pwd);
+            new Console(process);
+            System.exit(process.exitValue());
         }
         catch (IOException e)
         {
@@ -201,7 +202,7 @@ class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
 
     private PipedInputStream in;
 
-    private Vector<String> history;
+    private List<String> history;
 
     private int historyIndex = -1;
 
@@ -216,7 +217,7 @@ class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
     public ConsoleTextArea()
     {
         super();
-        history = new java.util.Vector<String>();
+        history = new ArrayList<String>();
         console1 = new ConsoleWriter(this);
         ConsoleWriter console2 = new ConsoleWriter(this);
         out = new PrintStream(console1);
@@ -256,7 +257,7 @@ class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
         }
         if (segment.count > 0)
         {
-            history.addElement(segment.toString());
+            history.add(segment.toString());
         }
         historyIndex = history.size();
         inPipe.write(segment.array, segment.offset, segment.count);
@@ -327,7 +328,7 @@ class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
                 }
                 if (historyIndex >= 0)
                 {
-                    String str = history.elementAt(historyIndex);
+                    String str = history.get(historyIndex);
                     int len = getDocument().getLength();
                     replaceRange(str, outputMark, len);
                     int caretPos = outputMark + str.length();
@@ -357,7 +358,7 @@ class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
                 int len = getDocument().getLength();
                 if (historyIndex < history.size())
                 {
-                    String str = history.elementAt(historyIndex);
+                    String str = history.get(historyIndex);
                     replaceRange(str, outputMark, len);
                     caretPos = outputMark + str.length();
                 }

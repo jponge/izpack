@@ -24,7 +24,6 @@ package com.coi.tools.os.win;
 import com.izforge.izpack.api.exception.NativeLibException;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -518,12 +517,11 @@ public class RegistryImpl implements MSWinConstants
     {
         synchronized (logging)
         {
-            Iterator iter = logging.iterator();
             suspendLogging();
 
-            while (iter.hasNext())
+            for (Object aLogging : logging)
             {
-                RegistryLogItem rli = (RegistryLogItem) iter.next();
+                RegistryLogItem rli = (RegistryLogItem) aLogging;
                 String rliValueName = (DEFAULT_PLACEHOLDER.equals(rli.getValueName())) ? "" : rli
                         .getValueName();
                 switch (rli.getType())
@@ -696,12 +694,11 @@ public class RegistryImpl implements MSWinConstants
     public List<Object> getLoggingInfo()
     {
         ArrayList<Object> retval = new ArrayList<Object>(logging.size());
-        Iterator iter = logging.iterator();
-        while (iter.hasNext())
+        for (Object aLogging : logging)
         {
             try
             {
-                retval.add(((RegistryLogItem) iter.next()).clone());
+                retval.add(((RegistryLogItem) aLogging).clone());
             }
             catch (CloneNotSupportedException e)
             { // Should never be...
@@ -730,12 +727,11 @@ public class RegistryImpl implements MSWinConstants
      */
     public void addLoggingInfo(List info)
     {
-        Iterator iter = info.iterator();
-        while (iter.hasNext())
+        for (Object anInfo : info)
         {
             try
             {
-                logging.add(((RegistryLogItem) iter.next()).clone());
+                logging.add(((RegistryLogItem) anInfo).clone());
             }
             catch (CloneNotSupportedException e)
             { // Should never be

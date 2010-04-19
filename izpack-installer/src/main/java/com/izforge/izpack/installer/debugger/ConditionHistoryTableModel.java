@@ -69,14 +69,14 @@ public class ConditionHistoryTableModel extends AbstractTableModel
         switch (columnIndex)
         {
             case 0:
-                String[] keys = (String[]) this.conditionvalues.keySet().toArray(new String[this.conditionvalues.keySet().size()]);
+                String[] keys = this.conditionvalues.keySet().toArray(new String[this.conditionvalues.keySet().size()]);
                 Arrays.sort(keys);
                 return keys[rowIndex];
 
             case 1:
                 String conditionid = (String) getValueAt(rowIndex, 0);
-                ConditionHistory ch = conditionvalues.get(conditionid);
-                return ch;
+                ConditionHistory conditionHistory = conditionvalues.get(conditionid);
+                return conditionHistory;
         }
         return null;
     }

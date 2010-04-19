@@ -240,7 +240,7 @@ public class CompileWorker implements Runnable
 
         try
         {
-            this.spec = (IXMLElement) parser.parse(input);
+            this.spec = parser.parse(input);
         }
         catch (Exception e)
         {
@@ -304,7 +304,7 @@ public class CompileWorker implements Runnable
 
     private void readChoices(IXMLElement element, ArrayList<String> choiceList)
     {
-        Vector<IXMLElement> choices = element.getChildrenNamed("choice");
+        List<IXMLElement> choices = element.getChildrenNamed("choice");
 
         if (choices == null)
         {
@@ -313,12 +313,8 @@ public class CompileWorker implements Runnable
 
         choiceList.clear();
 
-        Iterator<IXMLElement> choice_it = choices.iterator();
-
-        while (choice_it.hasNext())
+        for (IXMLElement choice : choices)
         {
-            IXMLElement choice = choice_it.next();
-
             String value = choice.getAttribute("value");
 
             if (value != null)
@@ -368,7 +364,7 @@ public class CompileWorker implements Runnable
         }
 
         // list of classpath entries
-        ArrayList classpath = new ArrayList();
+        List<String> classpath = new ArrayList<String>();
 
         this.jobs = new ArrayList<CompilationJob>();
 
@@ -429,17 +425,15 @@ public class CompileWorker implements Runnable
         return new CompileResult();
     }
 
-    private CompilationJob collectJobsRecursive(IXMLElement node, ArrayList classpath)
+    private CompilationJob collectJobsRecursive(IXMLElement node, List<String> classpath)
             throws Exception
     {
-        Vector<IXMLElement> toplevel_tags = node.getChildren();
-        ArrayList ourclasspath = (ArrayList) classpath.clone();
+        List<IXMLElement> toplevel_tags = node.getChildren();
+        List<String> ourclasspath = new ArrayList<String>(classpath);
         ArrayList<File> files = new ArrayList<File>();
 
-        for (int i = 0; i < toplevel_tags.size(); i++)
+        for (IXMLElement child : toplevel_tags)
         {
-            IXMLElement child = (IXMLElement) toplevel_tags.elementAt(i);
-
             if ("classpath".equals(child.getName()))
             {
                 changeClassPath(ourclasspath, child);
@@ -490,13 +484,10 @@ public class CompileWorker implements Runnable
                 }
 
                 // check whether the wanted pack was selected for installation
-                Iterator pack_it = this.idata.getSelectedPacks().iterator();
                 boolean found = false;
 
-                while (pack_it.hasNext())
+                for (Pack pack : this.idata.getSelectedPacks())
                 {
-                    Pack pack = (Pack) pack_it.next();
-
                     if (pack.name.equals(name))
                     {
                         found = true;
@@ -525,7 +516,7 @@ public class CompileWorker implements Runnable
     /**
      * helper: process a <code>&lt;classpath&gt;</code> tag.
      */
-    private void changeClassPath(ArrayList classpath, IXMLElement child) throws Exception
+    private void changeClassPath(List<String> classpath, IXMLElement child) throws Exception
     {
         String add = child.getAttribute("add");
         if (add != null)
@@ -581,20 +572,20 @@ public class CompileWorker implements Runnable
 
         File[] entries = path.listFiles();
 
-        for (File f : entries)
+        for (File file : entries)
         {
-            if (f == null)
+            if (file == null)
             {
                 continue;
             }
 
-            if (f.isDirectory())
+            if (file.isDirectory())
             {
-                scan_result.addAll(scanDirectory(f));
+                scan_result.addAll(scanDirectory(file));
             }
-            else if ((f.isFile()) && (f.getName().toLowerCase().endsWith(".java")))
+            else if ((file.isFile()) && (file.getName().toLowerCase().endsWith(".java")))
             {
-                scan_result.add(f);
+                scan_result.add(file);
             }
 
         }
@@ -614,7 +605,7 @@ public class CompileWorker implements Runnable
 
         private ArrayList<File> files;
 
-        private ArrayList classpath;
+        private List<String> classpath;
 
         private LocaleDatabase langpack;
 
@@ -633,7 +624,7 @@ public class CompileWorker implements Runnable
          * @param classpath The class path to use.
          */
         public CompilationJob(CompileHandler listener, AutomatedInstallData idata, String name,
-                              ArrayList<File> files, ArrayList classpath)
+                              ArrayList<File> files, List<String> classpath)
         {
             this.listener = listener;
             this.idata = idata;
@@ -685,10 +676,9 @@ public class CompileWorker implements Runnable
             LinkedList<String> args = new LinkedList<String>(arguments);
 
             {
-                Iterator<String> arg_it = args.iterator();
-                while (arg_it.hasNext())
+                for (String arg : args)
                 {
-                    cmdline_len += (arg_it.next()).length() + 1;
+                    cmdline_len += (arg).length() + 1;
                 }
             }
 
@@ -701,10 +691,8 @@ public class CompileWorker implements Runnable
             // construct classpath argument for compiler
             // - collect all classpaths
             StringBuffer classpath_sb = new StringBuffer();
-            Iterator cp_it = this.classpath.iterator();
-            while (cp_it.hasNext())
+            for (String cp : this.classpath)
             {
-                String cp = (String) cp_it.next();
                 if (classpath_sb.length() > 0)
                 {
                     classpath_sb.append(File.pathSeparatorChar);
@@ -739,13 +727,10 @@ public class CompileWorker implements Runnable
             int last_fileno = 0;
 
             // now iterate over all files of this job
-            Iterator<File> file_it = this.files.iterator();
 
-            while (file_it.hasNext())
+            for (File file : this.files)
             {
-                File f = file_it.next();
-
-                String fpath = f.getAbsolutePath();
+                String fpath = file.getAbsolutePath();
 
                 Debug.trace("processing " + fpath);
 
@@ -753,7 +738,7 @@ public class CompileWorker implements Runnable
                 // chance to get something done if the command line is almost
                 // MAX_CMDLINE_SIZE or even above
                 fileno++;
-                jobfiles += f.getName() + " ";
+                jobfiles += file.getName() + " ";
                 args.add(fpath);
                 cmdline_len += fpath.length();
 
@@ -905,7 +890,7 @@ public class CompileWorker implements Runnable
                 return runEclipseCompiler(output, cmdline);
             }
 
-            return executor.executeCommand((String[]) cmdline.toArray(new String[cmdline.size()]), output);
+            return executor.executeCommand(cmdline.toArray(new String[cmdline.size()]), output);
         }
 
         private int runEclipseCompiler(String[] output, List<String> cmdline)
@@ -1090,10 +1075,8 @@ public class CompileWorker implements Runnable
             // construct classpath argument for compiler
             // - collect all classpaths
             StringBuffer classpath_sb = new StringBuffer();
-            Iterator cp_it = this.classpath.iterator();
-            while (cp_it.hasNext())
+            for (String cp : this.classpath)
             {
-                String cp = (String) cp_it.next();
                 if (classpath_sb.length() > 0)
                 {
                     classpath_sb.append(File.pathSeparatorChar);

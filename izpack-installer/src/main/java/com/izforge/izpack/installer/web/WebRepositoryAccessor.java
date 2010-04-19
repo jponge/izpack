@@ -137,8 +137,8 @@ public class WebRepositoryAccessor
         InputStream in = null;
         try
         {
-            WebAccessor w = new WebAccessor(null);
-            in = w.openInputStream(new URL(url));
+            WebAccessor webAccessor = new WebAccessor(null);
+            in = webAccessor.openInputStream(new URL(url));
             if (in == null)
             {
                 throw new RuntimeException("Unable to open network stream");
@@ -223,12 +223,12 @@ public class WebRepositoryAccessor
 
             IXMLElement xml = parser.parse(packsInfo);
             IXMLElement root = xml; //requireChildNamed(xml, "packs");
-            for (int q = 0; q < root.getChildrenCount(); q++)
+            for (int i = 0; i < root.getChildrenCount(); i++)
             {
-                IXMLElement ch = root.getChildAtIndex(q);
-                PackInfo pi = packs.get(q);
-                Pack p = pi.getPack();
-                p.nbytes = Long.parseLong(ch.getAttribute("nbytes"));
+                IXMLElement packElement = root.getChildAtIndex(i);
+                PackInfo packInfo = packs.get(i);
+                Pack pack = packInfo.getPack();
+                pack.nbytes = Long.parseLong(packElement.getAttribute("nbytes"));
             }
         }
         catch (Exception e)
@@ -252,8 +252,8 @@ public class WebRepositoryAccessor
         byte[] raw = new byte[max];
         try
         {
-            WebAccessor w = new WebAccessor(null);
-            InputStream in = w.openInputStream(new URL(url));
+            WebAccessor webAccessor = new WebAccessor(null);
+            InputStream in = webAccessor.openInputStream(new URL(url));
             int r = in.read(raw);
             File tempDir = new File(tempFolder);
 
@@ -293,49 +293,46 @@ public class WebRepositoryAccessor
         IXMLElement root = requireChildNamed(data, "packs");
 
         // at least one pack is required
-        Vector<IXMLElement> packElements = root.getChildrenNamed("pack");
+        List<IXMLElement> packElements = root.getChildrenNamed("pack");
         if (packElements.isEmpty())
         {
             parseError(root, "<packs> requires a <pack>");
         }
 
-        Iterator<IXMLElement> packIter = packElements.iterator();
-        while (packIter.hasNext())
+        for (IXMLElement packElement : packElements)
         {
-            IXMLElement el = packIter.next();
-
             // Trivial initialisations
-            String name = requireAttribute(el, "name");
-            String id = el.getAttribute("id");
+            String name = requireAttribute(packElement, "name");
+            String id = packElement.getAttribute("id");
 
-            boolean loose = "true".equalsIgnoreCase(el.getAttribute("loose", "false"));
-            String description = requireChildNamed(el, "description").getContent();
-            boolean required = requireYesNoAttribute(el, "required");
-            String group = el.getAttribute("group");
-            String installGroups = el.getAttribute("installGroups");
-            String excludeGroup = el.getAttribute("excludeGroup");
-            boolean uninstall = "yes".equalsIgnoreCase(el.getAttribute("uninstall", "yes"));
-            String parent = el.getAttribute("parent");
+            boolean loose = "true".equalsIgnoreCase(packElement.getAttribute("loose", "false"));
+            String description = requireChildNamed(packElement, "description").getContent();
+            boolean required = requireYesNoAttribute(packElement, "required");
+            String group = packElement.getAttribute("group");
+            String installGroups = packElement.getAttribute("installGroups");
+            String excludeGroup = packElement.getAttribute("excludeGroup");
+            boolean uninstall = "yes".equalsIgnoreCase(packElement.getAttribute("uninstall", "yes"));
+            String parent = packElement.getAttribute("parent");
 
             if (required && excludeGroup != null)
             {
-                parseError(el, "Pack, which has excludeGroup can not be required.", new Exception(
+                parseError(packElement, "Pack, which has excludeGroup can not be required.", new Exception(
                         "Pack, which has excludeGroup can not be required."));
             }
 
             PackInfo pack = new PackInfo(name, id, description, required, loose, excludeGroup, uninstall);
-            pack.setOsConstraints(OsConstraintHelper.getOsList(el)); // TODO:
+            pack.setOsConstraints(OsConstraintHelper.getOsList(packElement)); // TODO:
             pack.setParent(parent);
 
             // unverified
             // if the pack belongs to an excludeGroup it's not preselected by default
             if (excludeGroup == null)
             {
-                pack.setPreselected(validateYesNoAttribute(el, "preselected", YES));
+                pack.setPreselected(validateYesNoAttribute(packElement, "preselected", YES));
             }
             else
             {
-                pack.setPreselected(validateYesNoAttribute(el, "preselected", NO));
+                pack.setPreselected(validateYesNoAttribute(packElement, "preselected", NO));
             }
 
             // Set the pack group if specified
@@ -346,23 +343,21 @@ public class WebRepositoryAccessor
             // Set the pack install groups if specified
             if (installGroups != null)
             {
-                StringTokenizer st = new StringTokenizer(installGroups, ",");
-                while (st.hasMoreTokens())
+                StringTokenizer tokenizer = new StringTokenizer(installGroups, ",");
+                while (tokenizer.hasMoreTokens())
                 {
-                    String igroup = st.nextToken();
+                    String igroup = tokenizer.nextToken();
                     pack.addInstallGroup(igroup);
                 }
             }
 
             // We get the parsables list
-            Iterator<IXMLElement> iter = el.getChildrenNamed("parsable").iterator();
-            while (iter.hasNext())
+            for (IXMLElement parsableElement : packElement.getChildrenNamed("parsable"))
             {
-                IXMLElement p = iter.next();
-                String target = p.getAttribute("targetfile", null);
-                SubstitutionType type = SubstitutionType.lookup(p.getAttribute("type", "plain"));
-                String encoding = p.getAttribute("encoding", null);
-                List<OsModel> osList = OsConstraintHelper.getOsList(p); // TODO: unverified
+                String target = parsableElement.getAttribute("targetfile", null);
+                SubstitutionType type = SubstitutionType.lookup(parsableElement.getAttribute("type", "plain"));
+                String encoding = parsableElement.getAttribute("encoding", null);
+                List<OsModel> osList = OsConstraintHelper.getOsList(parsableElement); // TODO: unverified
                 if (target != null)
                 {
                     pack.addParsable(new ParsableFile(target, type, encoding, osList));
@@ -370,17 +365,15 @@ public class WebRepositoryAccessor
             }
 
             // We get the executables list
-            iter = el.getChildrenNamed("executable").iterator();
-            while (iter.hasNext())
+            for (IXMLElement executableElement : packElement.getChildrenNamed("executable"))
             {
-                IXMLElement e = iter.next();
                 ExecutableFile executable = new ExecutableFile();
                 String val; // temp value
 
-                executable.path = requireAttribute(e, "targetfile");
+                executable.path = requireAttribute(executableElement, "targetfile");
 
                 // when to execute this executable
-                val = e.getAttribute("stage", "never");
+                val = executableElement.getAttribute("stage", "never");
                 if ("postinstall".equalsIgnoreCase(val))
                 {
                     executable.executionStage = ExecutableFile.POSTINSTALL;
@@ -391,16 +384,16 @@ public class WebRepositoryAccessor
                 }
 
                 // type of this executable
-                val = e.getAttribute("type", "bin");
+                val = executableElement.getAttribute("type", "bin");
                 if ("jar".equalsIgnoreCase(val))
                 {
                     executable.type = ExecutableFile.JAR;
-                    executable.mainClass = e.getAttribute("class"); // executable
+                    executable.mainClass = executableElement.getAttribute("class"); // executable
                     // class
                 }
 
                 // what to do if execution fails
-                val = e.getAttribute("failure", "ask");
+                val = executableElement.getAttribute("failure", "ask");
                 if ("abort".equalsIgnoreCase(val))
                 {
                     executable.onFailure = ExecutableFile.ABORT;
@@ -411,61 +404,50 @@ public class WebRepositoryAccessor
                 }
 
                 // whether to keep the executable after executing it
-                val = e.getAttribute("keep");
+                val = executableElement.getAttribute("keep");
                 executable.keepFile = "true".equalsIgnoreCase(val);
 
                 // get arguments for this executable
-                IXMLElement args = e.getFirstChildNamed("args");
+                IXMLElement args = executableElement.getFirstChildNamed("args");
                 if (null != args)
                 {
-                    Iterator<IXMLElement> argIterator = args.getChildrenNamed("arg").iterator();
-                    while (argIterator.hasNext())
+                    for (IXMLElement arg : args.getChildrenNamed("arg"))
                     {
-                        IXMLElement arg = argIterator.next();
                         executable.argList.add(requireAttribute(arg, "value"));
                     }
                 }
 
-                executable.osList = OsConstraintHelper.getOsList(e); // TODO:
+                executable.osList = OsConstraintHelper.getOsList(executableElement); // TODO:
                 // unverified
 
                 pack.addExecutable(executable);
             }
 
             // get the updatechecks list
-            iter = el.getChildrenNamed("updatecheck").iterator();
-            while (iter.hasNext())
+            for (IXMLElement fileElement : packElement.getChildrenNamed("updatecheck"))
             {
-                IXMLElement f = iter.next();
-
-                String casesensitive = f.getAttribute("casesensitive");
+                String casesensitive = fileElement.getAttribute("casesensitive");
 
                 // get includes and excludes
                 ArrayList<String> includesList = new ArrayList<String>();
                 ArrayList<String> excludesList = new ArrayList<String>();
 
                 // get includes and excludes
-                Iterator<IXMLElement> include_it = f.getChildrenNamed("include").iterator();
-                while (include_it.hasNext())
+                for (IXMLElement inc_el : fileElement.getChildrenNamed("include"))
                 {
-                    IXMLElement inc_el = include_it.next();
                     includesList.add(requireAttribute(inc_el, "name"));
                 }
 
-                Iterator<IXMLElement> exclude_it = f.getChildrenNamed("exclude").iterator();
-                while (exclude_it.hasNext())
+                for (IXMLElement excl_el : fileElement.getChildrenNamed("exclude"))
                 {
-                    IXMLElement excl_el = exclude_it.next();
                     excludesList.add(requireAttribute(excl_el, "name"));
                 }
 
                 pack.addUpdateCheck(new UpdateCheck(includesList, excludesList, casesensitive));
             }
             // We get the dependencies
-            iter = el.getChildrenNamed("depends").iterator();
-            while (iter.hasNext())
+            for (IXMLElement dep : packElement.getChildrenNamed("depends"))
             {
-                IXMLElement dep = iter.next();
                 String depName = requireAttribute(dep, "packname");
                 pack.addDependency(depName);
 

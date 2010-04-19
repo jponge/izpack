@@ -36,23 +36,23 @@ public class EtchedLineBorder extends EtchedBorder
     /**
      * Paints the etched line.
      *
-     * @param c      The component to draw the border on.
-     * @param g      The graphics object.
+     * @param component      The component to draw the border on.
+     * @param graphics      The graphics object.
      * @param x      The top-left x.
      * @param y      The top-left y.
      * @param width  The border width.
      * @param height The border height.
      */
-    public void paintBorder(Component c, Graphics g, int x, int y, int width, int height)
+    public void paintBorder(Component component, Graphics graphics, int x, int y, int width, int height)
     {
-        g.translate(x, y);
+        graphics.translate(x, y);
 
-        g.setColor(etchType == LOWERED ? getShadowColor(c) : getHighlightColor(c));
-        g.drawLine(10, 0, width - 2, 0);
+        graphics.setColor(etchType == LOWERED ? getShadowColor(component) : getHighlightColor(component));
+        graphics.drawLine(10, 0, width - 2, 0);
 
-        g.setColor(etchType == LOWERED ? getHighlightColor(c) : getShadowColor(c));
-        g.drawLine(10, 1, width - 2, 1);
+        graphics.setColor(etchType == LOWERED ? getHighlightColor(component) : getShadowColor(component));
+        graphics.drawLine(10, 1, width - 2, 1);
 
-        g.translate(0 - x, 0 - y);
+        graphics.translate(0 - x, 0 - y);
     }
 }

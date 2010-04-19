@@ -79,10 +79,9 @@ public class HelloPanel extends IzPanel
         // This have to be the first line during layout if IzPanelLayout will be used.
         super(parent, idata, layout, resourceManager);
         // We create and put the labels
-        String str;
-        str = installData.getLangpack().getString("HelloPanel.welcome1") + idata.getInfo().getAppName() + " "
+        String welcomeText = installData.getLangpack().getString("HelloPanel.welcome1") + idata.getInfo().getAppName() + " "
                 + idata.getInfo().getAppVersion() + installData.getLangpack().getString("HelloPanel.welcome2");
-        JLabel welcomeLabel = LabelFactory.create(str, parent.icons.getImageIcon("host"), LEADING);
+        JLabel welcomeLabel = LabelFactory.create(welcomeText, parent.icons.get("host"), LEADING);
         welcomeLabel.setName(GuiId.HELLO_PANEL_LABEL.id);
         // IzPanelLayout is a constraint orientated layout manager. But if no constraint is
         // given, a default will be used. It starts in the first line.
@@ -97,12 +96,12 @@ public class HelloPanel extends IzPanel
         add(IzPanelLayout.createParagraphGap());
 
         ArrayList<Info.Author> authors = idata.getInfo().getAuthors();
-        int size = authors.size();
-        if (size > 0)
+
+        if (!authors.isEmpty())
         {
-            str = installData.getLangpack().getString("HelloPanel.authors");
-            JLabel appAuthorsLabel = LabelFactory.create(str, parent.icons
-                    .getImageIcon("information"), LEADING);
+            String authorText = installData.getLangpack().getString("HelloPanel.authors");
+            JLabel appAuthorsLabel = LabelFactory.create(authorText, parent.icons
+                    .get("information"), LEADING);
             // If nothing will be sad to the IzPanelLayout the position of an add will be
             // determined in the default constraint. For labels it is CURRENT_ROW, NEXT_COLUMN.
             // But at this point we would place the label in the next row. It is possible
@@ -115,13 +114,12 @@ public class HelloPanel extends IzPanel
             add(appAuthorsLabel, LayoutConstants.NEXT_LINE);
 
             JLabel label;
-            for (int i = 0; i < size; i++)
+            for (Info.Author author : authors)
             {
-                Info.Author a = authors.get(i);
-                String email = (a.getEmail() != null && a.getEmail().length() > 0) ? (" <"
-                        + a.getEmail() + ">") : "";
-                label = LabelFactory.create(" - " + a.getName() + email, parent.icons
-                        .getImageIcon("empty"), LEADING);
+                String email = (author.getEmail() != null && author.getEmail().length() > 0) ? (" <"
+                        + author.getEmail() + ">") : "";
+                label = LabelFactory.create(" - " + author.getName() + email, parent.icons
+                        .get("empty"), LEADING);
                 add(label, NEXT_LINE);
             }
             add(IzPanelLayout.createParagraphGap());
@@ -129,8 +127,8 @@ public class HelloPanel extends IzPanel
 
         if (idata.getInfo().getAppURL() != null)
         {
-            str = installData.getLangpack().getString("HelloPanel.url") + idata.getInfo().getAppURL();
-            JLabel appURLLabel = LabelFactory.create(str, parent.icons.getImageIcon("bookmark"),
+            String urlText = installData.getLangpack().getString("HelloPanel.url") + idata.getInfo().getAppURL();
+            JLabel appURLLabel = LabelFactory.create(urlText, parent.icons.get("bookmark"),
                     LEADING);
             add(appURLLabel, LayoutConstants.NEXT_LINE);
         }

@@ -130,8 +130,8 @@ public class PasswordKeystoreValidator implements Validator
             if (keystoreFile != null)
             {
                 System.out.println("Attempting to open keystore: " + keystoreFile);
-                KeyStore ks = getKeyStore(keystoreFile, keystoreType, keystorePassword.toCharArray());
-                if (ks != null)
+                KeyStore keyStore = getKeyStore(keystoreFile, keystoreType, keystorePassword.toCharArray());
+                if (keyStore != null)
                 {
                     returnValue = true;
                     System.out.println("keystore password validated");
@@ -139,13 +139,13 @@ public class PasswordKeystoreValidator implements Validator
                     alias = params.get("keystoreAlias");
                     if (alias != null)
                     {
-                        returnValue = ks.containsAlias(alias);
+                        returnValue = keyStore.containsAlias(alias);
                         if (returnValue)
                         {
                             System.out.println("keystore alias '" + alias + "' found, trying to retrieve");
                             try
                             {
-                                ks.getKey(alias, aliasPassword.toCharArray());
+                                keyStore.getKey(alias, aliasPassword.toCharArray());
                                 System.out.println("keystore alias '" + alias + "' validated");
                             }
                             catch (Exception e)
@@ -214,18 +214,18 @@ public class PasswordKeystoreValidator implements Validator
 
     public static KeyStore getKeyStore(String fileName, String type, char[] password)
     {
-        KeyStore ks = null;
+        KeyStore keyStore = null;
         try
         {
-            ks = KeyStore.getInstance(type);
-            ks.load(new FileInputStream(fileName), password);
+            keyStore = KeyStore.getInstance(type);
+            keyStore.load(new FileInputStream(fileName), password);
         }
         catch (Exception e)
         {
             System.out.println("getKeyStore() Failed: " + e);
-            ks = null;
+            keyStore = null;
         }
-        return ks;
+        return keyStore;
     }
 
 }

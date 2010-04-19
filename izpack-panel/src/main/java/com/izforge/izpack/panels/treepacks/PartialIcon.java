@@ -17,48 +17,48 @@ class PartialIcon implements Icon
         return 13;
     }
 
-    public void paintIcon(Component c, Graphics g, int x, int y)
+    public void paintIcon(Component component, Graphics graphics, int x, int y)
     {
         int controlSize = getControlSize();
-        g.setColor(MetalLookAndFeel.getControlShadow());
-        g.fillRect(x, y, controlSize - 1, controlSize - 1);
-        drawBorder(g, x, y, controlSize, controlSize);
+        graphics.setColor(MetalLookAndFeel.getControlShadow());
+        graphics.fillRect(x, y, controlSize - 1, controlSize - 1);
+        drawBorder(graphics, x, y, controlSize, controlSize);
 
-        g.setColor(Color.green);
-        drawCheck(c, g, x, y);
+        graphics.setColor(Color.green);
+        drawCheck(component, graphics, x, y);
     }
 
-    private void drawBorder(Graphics g, int x, int y, int w, int h)
+    private void drawBorder(Graphics graphics, int x, int y, int width, int height)
     {
-        g.translate(x, y);
+        graphics.translate(x, y);
 
         // outer frame rectangle
-        g.setColor(MetalLookAndFeel.getControlDarkShadow());
-        g.setColor(new Color(0.4f, 0.4f, 0.4f));
-        g.drawRect(0, 0, w - 2, h - 2);
+        graphics.setColor(MetalLookAndFeel.getControlDarkShadow());
+        graphics.setColor(new Color(0.4f, 0.4f, 0.4f));
+        graphics.drawRect(0, 0, width - 2, height - 2);
 
         // middle frame
-        g.setColor(MetalLookAndFeel.getControlHighlight());
-        g.setColor(new Color(0.6f, 0.6f, 0.6f));
-        g.drawRect(1, 1, w - 2, h - 2);
+        graphics.setColor(MetalLookAndFeel.getControlHighlight());
+        graphics.setColor(new Color(0.6f, 0.6f, 0.6f));
+        graphics.drawRect(1, 1, width - 2, height - 2);
 
         // background
-        g.setColor(new Color(0.99f, 0.99f, 0.99f));
-        g.fillRect(2, 2, w - 3, h - 3);
+        graphics.setColor(new Color(0.99f, 0.99f, 0.99f));
+        graphics.fillRect(2, 2, width - 3, height - 3);
 
         //some extra lines for FX
-        g.setColor(MetalLookAndFeel.getControl());
-        g.drawLine(0, h - 1, 1, h - 2);
-        g.drawLine(w - 1, 0, w - 2, 1);
-        g.translate(-x, -y);
+        graphics.setColor(MetalLookAndFeel.getControl());
+        graphics.drawLine(0, height - 1, 1, height - 2);
+        graphics.drawLine(width - 1, 0, width - 2, 1);
+        graphics.translate(-x, -y);
     }
 
-    protected void drawCheck(Component c, Graphics g, int x, int y)
+    protected void drawCheck(Component component, Graphics graphics, int x, int y)
     {
         int controlSize = getControlSize();
-        g.setColor(new Color(0.0f, 0.7f, 0.0f));
+        graphics.setColor(new Color(0.0f, 0.7f, 0.0f));
 
-        g.fillOval(x + controlSize / 2 - 2, y + controlSize / 2 - 2, 6, 6);
+        graphics.fillOval(x + controlSize / 2 - 2, y + controlSize / 2 - 2, 6, 6);
     }
 
     public int getIconWidth()

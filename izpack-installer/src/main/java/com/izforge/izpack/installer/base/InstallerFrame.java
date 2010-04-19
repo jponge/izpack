@@ -71,12 +71,6 @@ public class InstallerFrame extends JFrame implements InstallerView
 
     private static final long serialVersionUID = 3257852069162727473L;
 
-    /**
-     * VM version to use version dependent methods calls
-     */
-    private static final float JAVA_SPECIFICATION_VERSION = Float.parseFloat(System
-            .getProperty("java.specification.version"));
-
     private static final String ICON_RESOURCE = "Installer.image";
 
     /**
@@ -250,7 +244,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             ImageIcon jframeIcon = ResourceManager.getInstance().getImageIconResource("JFrameIcon");
             if (jframeIcon == null)
             {
-                jframeIcon = icons.getImageIcon("JFrameIcon");
+                jframeIcon = icons.get("JFrameIcon");
             }
             setIconImage(jframeIcon.getImage());
         }
@@ -302,7 +296,7 @@ public class InstallerFrame extends JFrame implements InstallerView
 
         // Add help Button to the navigation panel
         this.helpButton = ButtonFactory.createButton(langpack.getString("installer.help"), icons
-                .getImageIcon("help"), installdata.buttonsHColor);
+                .get("help"), installdata.buttonsHColor);
         navPanel.add(this.helpButton);
         this.helpButton.setName(BUTTON_HELP.id);
         this.helpButton.addActionListener(new HelpHandler());
@@ -310,7 +304,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         navPanel.add(Box.createHorizontalGlue());
 
         prevButton = ButtonFactory.createButton(langpack.getString("installer.prev"), icons
-                .getImageIcon("stepback"), installdata.buttonsHColor);
+                .get("stepback"), installdata.buttonsHColor);
         navPanel.add(prevButton);
         prevButton.addActionListener(navHandler);
         prevButton.setName(BUTTON_PREV.id);
@@ -318,7 +312,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         navPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 
         nextButton = ButtonFactory.createButton(langpack.getString("installer.next"), icons
-                .getImageIcon("stepforward"), installdata.buttonsHColor);
+                .get("stepforward"), installdata.buttonsHColor);
         navPanel.add(nextButton);
         nextButton.setName(BUTTON_NEXT.id);
         nextButton.addActionListener(navHandler);
@@ -326,7 +320,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         navPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 
         quitButton = ButtonFactory.createButton(langpack.getString("installer.quit"), icons
-                .getImageIcon("stop"), installdata.buttonsHColor);
+                .get("stop"), installdata.buttonsHColor);
         navPanel.add(quitButton);
         quitButton.setName(BUTTON_QUIT.id);
         quitButton.addActionListener(navHandler);
@@ -388,6 +382,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     private void callGUIListener(int what, JPanel param)
     {
         for (GUIListener aGuiListener : guiListener)
+            aGuiListener.guiActionPerformed(what, param);
         {
             (aGuiListener).guiActionPerformed(what, param);
         }
@@ -613,22 +608,18 @@ public class InstallerFrame extends JFrame implements InstallerView
                 // be ignored.
                 // Give a hint for the initial focus to the system.
                 final Component inFoc = newPanel.getInitialFocus();
-                if (JAVA_SPECIFICATION_VERSION < 1.35)
-                {
-                    inFoc.requestFocus();
-                }
-                else
-                { // On java VM version >= 1.5 it works only if
-                    // invoke later will be used.
-                    SwingUtilities.invokeLater(new Runnable()
-                    {
 
-                        public void run()
-                        {
-                            inFoc.requestFocusInWindow();
-                        }
-                    });
-                }
+                // On java VM version >= 1.5 it works only if
+                // invoke later will be used.
+                SwingUtilities.invokeLater(new Runnable()
+                {
+
+                    public void run()
+                    {
+                        inFoc.requestFocusInWindow();
+                    }
+                });
+
                 /*
                  * On editable text components position the caret to the end of the cust existent
                  * text.
@@ -793,19 +784,19 @@ public class InstallerFrame extends JFrame implements InstallerView
             String message = langpack.getString(mkey);
             String title = langpack.getString(tkey);
             // message equal to key -> no alternate message defined.
-            if (message.indexOf(mkey) > -1)
+            if (message.contains(mkey))
             {
                 message = langpack.getString("installer.quit.message");
             }
             // title equal to key -> no alternate title defined.
-            if (title.indexOf(tkey) > -1)
+            if (title.contains(tkey))
             {
                 title = langpack.getString("installer.quit.title");
             }
             // Now replace variables in message or title.
-            VariableSubstitutor vs = variableSubstitutor;
-            message = vs.substitute(message);
-            title = vs.substitute(title);
+            VariableSubstitutor substitutor = variableSubstitutor;
+            message = substitutor.substitute(message);
+            title = substitutor.substitute(title);
             int res = JOptionPane
                     .showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION);
             if (res == JOptionPane.YES_OPTION)
@@ -829,10 +820,10 @@ public class InstallerFrame extends JFrame implements InstallerView
         }
 
         // Wipe the files that had been installed
-        for (String p : uninstallData.getInstalledFilesList())
+        for (String installedFile : uninstallData.getInstalledFilesList())
         {
-            File f = new File(p);
-            f.delete();
+            File file = new File(installedFile);
+            file.delete();
         }
     }
 
@@ -898,7 +889,7 @@ public class InstallerFrame extends JFrame implements InstallerView
 
         if (useButtonIcons == null || "yes".equalsIgnoreCase(useButtonIcons))
         {
-            quitButton.setIcon(icons.getImageIcon(iconName));
+            quitButton.setIcon(icons.get(iconName));
         }
     }
 
@@ -918,11 +909,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         getGlassPane().setVisible(true);
         getGlassPane().setEnabled(true);
-        // No traversal handling before VM version 1.4
-        if (JAVA_SPECIFICATION_VERSION < 1.35)
-        {
-            return;
-        }
+
         if (usualFTP == null)
         {
             usualFTP = getFocusTraversalPolicy();
@@ -945,11 +932,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         getGlassPane().setEnabled(false);
         getGlassPane().setVisible(false);
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-        // No traversal handling before VM version 1.4
-        if (JAVA_SPECIFICATION_VERSION < 1.35)
-        {
-            return;
-        }
+        
         setFocusTraversalPolicy((java.awt.FocusTraversalPolicy) usualFTP);
         callGUIListener(GUIListener.GUI_RELEASED);
     }

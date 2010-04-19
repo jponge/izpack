@@ -54,18 +54,18 @@ public class Property extends org.apache.tools.ant.taskdefs.Property
     /**
      * Overridden to store properties locally, not in the Ant Project.
      *
-     * @param n name of property
-     * @param v value to set
+     * @param name name of property
+     * @param value value to set
      */
-    protected void addProperty(String n, String v)
+    protected void addProperty(String name, String value)
     {
-        if (props.get(n) == null)
+        if (props.get(name) == null)
         {
-            props.put(n, v);
+            props.put(name, value);
         }
         else
         {
-            log("Override ignored for " + n, Project.MSG_VERBOSE);
+            log("Override ignored for " + name, Project.MSG_VERBOSE);
         }
     }
 }

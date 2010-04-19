@@ -27,6 +27,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.InputStream;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -108,7 +109,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     private static final String LANG_FILE_NAME = "packsLang.xml";
 
     private HashMap<String, Pack> idToPack;
-    private HashMap<String, ArrayList<String>> treeData;
+    private HashMap<String, List<String>> treeData;
     private HashMap<Pack, Integer> packToRowNumber;
 
     private HashMap<String, CheckBoxNode> idToCheckBoxNode = new HashMap<String, CheckBoxNode>();
@@ -347,7 +348,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
                                  GridBagConstraints constraints)
     {
         JLabel label = LabelFactory.create(installData.getLangpack().getString(msgId), parent.icons
-                .getImageIcon(iconId), TRAILING);
+                .get(iconId), TRAILING);
         if (layout != null && constraints != null)
         {
             layout.addLayoutComponent(label, constraints);
@@ -372,10 +373,6 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     {
         JPanel panel = new JPanel();
         JLabel label = new JLabel();
-        if (label == null)
-        {
-            label = new JLabel("");
-        }
         panel.setAlignmentX(LEFT_ALIGNMENT);
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.add(LabelFactory.create(installData.getLangpack().getString(msgId)));
@@ -392,14 +389,14 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     private void refreshPacksToInstall()
     {
         this.installData.getSelectedPacks().clear();
-        CheckBoxNode cbn = (CheckBoxNode) getTree().getModel().getRoot();
-        Enumeration e = cbn.depthFirstEnumeration();
-        while (e.hasMoreElements())
+        CheckBoxNode rootCheckBoxNode = (CheckBoxNode) getTree().getModel().getRoot();
+        Enumeration checkBoxNodeEnumeration = rootCheckBoxNode.depthFirstEnumeration();
+        while (checkBoxNodeEnumeration.hasMoreElements())
         {
-            CheckBoxNode c = (CheckBoxNode) e.nextElement();
-            if (c.isSelected() || c.isPartial())
+            CheckBoxNode checkBox = (CheckBoxNode) checkBoxNodeEnumeration.nextElement();
+            if (checkBox.isSelected() || checkBox.isPartial())
             {
-                this.installData.getSelectedPacks().add(c.getPack());
+                this.installData.getSelectedPacks().add(checkBox.getPack());
             }
         }
     }
@@ -468,7 +465,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     protected JTree createPacksTree(int width, JScrollPane scroller, GridBagLayout layout,
                                     GridBagConstraints constraints)
     {
-        JTree tree = new JTree((CheckBoxNode) populateTreePacks(null));
+        JTree tree = new JTree(populateTreePacks(null));
         packsTree = tree;
         tree.setCellRenderer(new CheckBoxNodeRenderer(this));
         tree.setEditable(false);
@@ -528,13 +525,12 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
 
     private int getRowIndex(Pack pack)
     {
-        Object o = packToRowNumber.get(pack);
-        if (o == null)
+        Integer rowNumber = packToRowNumber.get(pack);
+        if (rowNumber == null)
         {
             return -1;
         }
-        Integer ret = (Integer) o;
-        return ret;
+        return rowNumber;
     }
 
     /**
@@ -554,15 +550,15 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
                 Enumeration toBeDeselected = rnode.depthFirstEnumeration();
                 while (toBeDeselected.hasMoreElements())
                 {
-                    CheckBoxNode cbn = (CheckBoxNode) toBeDeselected.nextElement();
-                    boolean chDirty = cbn.isSelected() || cbn.isPartial() || cbn.isEnabled();
+                    CheckBoxNode checkBoxNode = (CheckBoxNode) toBeDeselected.nextElement();
+                    boolean chDirty = checkBoxNode.isSelected() || checkBoxNode.isPartial() || checkBoxNode.isEnabled();
                     dirty = dirty || chDirty;
                     if (chDirty)
                     {
-                        cbn.setPartial(false);
-                        cbn.setSelected(false);
-                        cbn.setEnabled(false);
-                        setModelValue(cbn);
+                        checkBoxNode.setPartial(false);
+                        checkBoxNode.setSelected(false);
+                        checkBoxNode.setEnabled(false);
+                        setModelValue(checkBoxNode);
                     }
                 }
                 if (dirty)
@@ -633,27 +629,25 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
      */
     private void createTreeData()
     {
-        treeData = new HashMap<String, ArrayList<String>>();
+        treeData = new HashMap<String, List<String>>();
         idToPack = new HashMap<String, Pack>();
 
-        Iterator iter = this.installData.getAvailablePacks().iterator();
-        while (iter.hasNext())
+        for (Pack pack : this.installData.getAvailablePacks())
         {
-            Pack p = (Pack) iter.next();
-            idToPack.put(p.id, p);
-            if (p.parent != null)
+            idToPack.put(pack.id, pack);
+            if (pack.parent != null)
             {
-                ArrayList<String> kids = null;
-                if (treeData.containsKey(p.parent))
+                List<String> kids = null;
+                if (treeData.containsKey(pack.parent))
                 {
-                    kids = treeData.get(p.parent);
+                    kids = treeData.get(pack.parent);
                 }
                 else
                 {
                     kids = new ArrayList<String>();
                 }
-                kids.add(p.id);
-                treeData.put(p.parent, kids);
+                kids.add(pack.id);
+                treeData.put(pack.parent, kids);
             }
         }
     }
@@ -719,7 +713,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             {
                 for (int q = 0; q < this.installData.getAvailablePacks().size(); q++)
                 {
-                    Pack otherpack = (Pack) this.installData.getAvailablePacks().get(q);
+                    Pack otherpack = this.installData.getAvailablePacks().get(q);
                     String exgroup = otherpack.excludeGroup;
                     if (exgroup != null)
                     {
@@ -769,52 +763,48 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
      * @param parent
      * @return
      */
-    private Object populateTreePacks(String parent)
+    private TreeNode populateTreePacks(String parent)
     {
         if (parent == null) // the root node
         {
-            Iterator iter = this.installData.getAvailablePacks().iterator();
-            ArrayList rootNodes = new ArrayList();
-            while (iter.hasNext())
+            List<TreeNode> rootNodes = new ArrayList<TreeNode>();
+            for (Pack pack : this.installData.getAvailablePacks())
             {
-                Pack p = (Pack) iter.next();
-                if (p.parent == null)
+                if (pack.parent == null)
                 {
-                    rootNodes.add(populateTreePacks(p.id));
+                    rootNodes.add(populateTreePacks(pack.id));
                 }
             }
-            TreeNode nv = new CheckBoxNode("Root", "Root", rootNodes.toArray(), true);
-            return nv;
+            TreeNode treeNode = new CheckBoxNode("Root", "Root", rootNodes.toArray(), true);
+            return treeNode;
         }
         else
         {
-            ArrayList links = new ArrayList();
-            Object kidsObject = treeData.get(parent);
-            Pack p = idToPack.get(parent);
+            List<TreeNode> links = new ArrayList<TreeNode>();
+            List<String> kids = treeData.get(parent);
+            Pack pack = idToPack.get(parent);
             String translated = getI18NPackName(parent);
 
-            if (kidsObject != null)
+            if (kids != null)
             {
-                ArrayList kids = (ArrayList) kidsObject;
-                for (Object kid : kids)
+                for (String kidId : kids)
                 {
-                    String kidId = (String) kid;
                     links.add(populateTreePacks(kidId));
                 }
 
-                CheckBoxNode cbn = new CheckBoxNode(parent, translated, links.toArray(), true);
-                idToCheckBoxNode.put(cbn.getId(), cbn);
-                cbn.setPack(p);
-                cbn.setTotalSize(p.nbytes);
-                return cbn;
+                CheckBoxNode checkBoxNode = new CheckBoxNode(parent, translated, links.toArray(), true);
+                idToCheckBoxNode.put(checkBoxNode.getId(), checkBoxNode);
+                checkBoxNode.setPack(pack);
+                checkBoxNode.setTotalSize(pack.nbytes);
+                return checkBoxNode;
             }
             else
             {
-                CheckBoxNode cbn = new CheckBoxNode(parent, translated, true);
-                idToCheckBoxNode.put(cbn.getId(), cbn);
-                cbn.setPack(p);
-                cbn.setTotalSize(p.nbytes);
-                return cbn;
+                CheckBoxNode checkBoxNode = new CheckBoxNode(parent, translated, true);
+                idToCheckBoxNode.put(checkBoxNode.getId(), checkBoxNode);
+                checkBoxNode.setPack(pack);
+                checkBoxNode.setTotalSize(pack.nbytes);
+                return checkBoxNode;
             }
         }
     }
@@ -846,11 +836,9 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
 
             //initialize helper map to increa performance
             packToRowNumber = new HashMap<Pack, Integer>();
-            Iterator rowpack = this.installData.getAvailablePacks().iterator();
-            while (rowpack.hasNext())
+            for (Pack pack : this.installData.getAvailablePacks())
             {
-                Pack p = (Pack) rowpack.next();
-                packToRowNumber.put(p, this.installData.getAvailablePacks().indexOf(p));
+                packToRowNumber.put(pack, this.installData.getAvailablePacks().indexOf(pack));
             }
 
             // Init tree structures
@@ -877,19 +865,17 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
 
             // set the JCheckBoxes to the currently selected panels. The
             // selection might have changed in another panel
-            Iterator iter = this.installData.getAvailablePacks().iterator();
             bytes = 0;
-            while (iter.hasNext())
+            for (Pack pack : this.installData.getAvailablePacks())
             {
-                Pack p = (Pack) iter.next();
-                if (p.required)
+                if (pack.required)
                 {
-                    bytes += p.nbytes;
+                    bytes += pack.nbytes;
                     continue;
                 }
-                if (this.installData.getSelectedPacks().contains(p))
+                if (this.installData.getSelectedPacks().contains(pack))
                 {
-                    bytes += p.nbytes;
+                    bytes += pack.nbytes;
                 }
             }
         }
@@ -910,16 +896,14 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     public String getSummaryBody()
     {
         StringBuffer retval = new StringBuffer(256);
-        Iterator iter = this.installData.getSelectedPacks().iterator();
         boolean first = true;
-        while (iter.hasNext())
+        for (Pack pack : this.installData.getSelectedPacks())
         {
             if (!first)
             {
                 retval.append("<br>");
             }
             first = false;
-            Pack pack = (Pack) iter.next();
             retval.append(getI18NPackName(pack));
         }
         return retval.toString();
@@ -975,8 +959,8 @@ class CheckTreeController extends MouseAdapter
         Enumeration e = node.depthFirstEnumeration();
         while (e.hasMoreElements())
         {
-            CheckBoxNode cbn = (CheckBoxNode) e.nextElement();
-            if (cbn.getPack().excludeGroup != null)
+            CheckBoxNode checkBoxNode = (CheckBoxNode) e.nextElement();
+            if (checkBoxNode.getPack().excludeGroup != null)
             {
                 return true;
             }
@@ -1063,10 +1047,8 @@ class CheckTreeController extends MouseAdapter
         {
             return;
         }
-        Iterator<String> e = deps.iterator();
-        while (e.hasNext())
+        for (String depId : deps)
         {
-            String depId = e.next();
             CheckBoxNode depCbn = treePacksPanel.getCbnById(depId);
             selectAllDependencies(depCbn);
             if (depCbn.getChildCount() > 0)
@@ -1190,9 +1172,9 @@ class CheckTreeController extends MouseAdapter
         }
         while (e.hasMoreElements())
         {
-            CheckBoxNode c = (CheckBoxNode) e.nextElement();
-            long size = initTotalSize(c, markChanged);
-            if (c.isSelected() || c.isPartial())
+            CheckBoxNode checkBoxNode = (CheckBoxNode) e.nextElement();
+            long size = initTotalSize(checkBoxNode, markChanged);
+            if (checkBoxNode.isSelected() || checkBoxNode.isPartial())
             {
                 bytes += size;
             }

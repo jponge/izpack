@@ -239,11 +239,11 @@ public class ActionBase implements Serializable
     /**
      * Sets the message ID to the given string.
      *
-     * @param string string to be used as message ID
+     * @param messageID string to be used as message ID
      */
-    public void setMessageID(String string)
+    public void setMessageID(String messageID)
     {
-        messageID = string;
+        this.messageID = messageID;
     }
 
 }

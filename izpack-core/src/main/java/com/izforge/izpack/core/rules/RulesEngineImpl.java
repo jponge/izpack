@@ -72,10 +72,10 @@ public class RulesEngineImpl implements RulesEngine
         this.installdata = installdata;
         this.classPathCrawler = classPathCrawler;
         this.container = container;
-        conditionsmap = new Hashtable<String, Condition>();
-        this.panelconditions = new Hashtable<String, String>();
-        this.packconditions = new Hashtable<String, String>();
-        this.optionalpackconditions = new Hashtable<String, String>();
+        conditionsmap = new HashMap<String, Condition>();
+        this.panelconditions = new HashMap<String, String>();
+        this.packconditions = new HashMap<String, String>();
+        this.optionalpackconditions = new HashMap<String, String>();
         initStandardConditions();
     }
 
@@ -160,7 +160,7 @@ public class RulesEngineImpl implements RulesEngine
     public String[] getKnownConditionIds()
     {
         String[] conditionids = conditionsmap.keySet().toArray(
-                new String[this.conditionsmap.size()]);
+                new String[conditionsmap.size()]);
         Arrays.sort(conditionids);
         return conditionids;
     }
@@ -219,7 +219,7 @@ public class RulesEngineImpl implements RulesEngine
         if (conditionsspec.hasChildren())
         {
             // read in the condition specs
-            Vector<IXMLElement> childs = conditionsspec.getChildrenNamed("condition");
+                List<IXMLElement> childs = this.conditionsspec.getChildrenNamed("condition");
 
             for (IXMLElement condition : childs)
             {
@@ -236,7 +236,7 @@ public class RulesEngineImpl implements RulesEngine
                 }
             }
 
-            Vector<IXMLElement> panelconditionels = conditionsspec
+                List<IXMLElement> panelconditionels = this.conditionsspec
                     .getChildrenNamed("panelcondition");
             for (IXMLElement panelel : panelconditionels)
             {
@@ -245,7 +245,7 @@ public class RulesEngineImpl implements RulesEngine
                 this.panelconditions.put(panelid, conditionid);
             }
 
-            Vector<IXMLElement> packconditionels = conditionsspec
+                List<IXMLElement> packconditionels = this.conditionsspec
                     .getChildrenNamed("packcondition");
             for (IXMLElement panelel : packconditionels)
             {

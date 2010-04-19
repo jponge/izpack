@@ -229,7 +229,7 @@ public final class OsVersion implements OsVersionConstants, StringConstants
         {
             try
             {
-                result = SUSE + SP + LINUX + NL + StringTool.stringArrayListToString(FileUtil.getFileContent(getReleaseFileName()));
+                result = SUSE + SP + LINUX + NL + StringTool.listToString(FileUtil.getFileContent(getReleaseFileName()));
             }
             catch (IOException e)
             {
@@ -240,7 +240,7 @@ public final class OsVersion implements OsVersionConstants, StringConstants
         {
             try
             {
-                result = REDHAT + SP + LINUX + NL + StringTool.stringArrayListToString(FileUtil.getFileContent(getReleaseFileName()));
+                result = REDHAT + SP + LINUX + NL + StringTool.listToString(FileUtil.getFileContent(getReleaseFileName()));
             }
             catch (IOException e)
             {
@@ -252,7 +252,7 @@ public final class OsVersion implements OsVersionConstants, StringConstants
             try
             {
                 result = FEDORA + SP + LINUX + NL
-                        + StringTool.stringArrayListToString(FileUtil.getFileContent(getReleaseFileName()));
+                        + StringTool.listToString(FileUtil.getFileContent(getReleaseFileName()));
             }
             catch (IOException e)
             {
@@ -264,7 +264,7 @@ public final class OsVersion implements OsVersionConstants, StringConstants
             try
             {
                 result = MANDRAKE + SP + LINUX + NL
-                        + StringTool.stringArrayListToString(FileUtil.getFileContent(getReleaseFileName()));
+                        + StringTool.listToString(FileUtil.getFileContent(getReleaseFileName()));
             }
             catch (IOException e)
             {
@@ -276,7 +276,7 @@ public final class OsVersion implements OsVersionConstants, StringConstants
             try
             {
                 result = MANDRIVA + SP + LINUX + NL
-                        + StringTool.stringArrayListToString(FileUtil.getFileContent(getReleaseFileName()));
+                        + StringTool.listToString(FileUtil.getFileContent(getReleaseFileName()));
             }
             catch (IOException e)
             {
@@ -288,7 +288,7 @@ public final class OsVersion implements OsVersionConstants, StringConstants
             try
             {
                 result = DEBIAN + SP + LINUX + NL
-                        + StringTool.stringArrayListToString(FileUtil.getFileContent("/etc/debian_version"));
+                        + StringTool.listToString(FileUtil.getFileContent("/etc/debian_version"));
             }
             catch (IOException e)
             {
@@ -300,7 +300,7 @@ public final class OsVersion implements OsVersionConstants, StringConstants
             try
             {
                 result = "Unknown Linux Distribution\n"
-                        + StringTool.stringArrayListToString(FileUtil.getFileContent(getReleaseFileName()));
+                        + StringTool.listToString(FileUtil.getFileContent(getReleaseFileName()));
             }
             catch (IOException e)
             {

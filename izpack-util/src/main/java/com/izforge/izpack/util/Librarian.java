@@ -28,7 +28,8 @@ import java.security.CodeSource;
 import java.security.ProtectionDomain;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /*---------------------------------------------------------------------------*/
 
@@ -98,27 +99,27 @@ public class Librarian implements CleanupClient
      * A list that is used to track all libraries that have been loaded. This list is used to ensure
      * that each library is loaded only once.
      */
-    private Vector<String> trackList = new Vector<String>();
+    private List<String> trackList = new ArrayList<String>();
 
     /**
      * A list of references to clients that use libraries that were extracted from a *.jar file.
      * This is needed because the clients need to be called for freeing their libraries.
      */
-    private Vector<NativeLibraryClient> clients = new Vector<NativeLibraryClient>();
+    private List<NativeLibraryClient> clients = new ArrayList<NativeLibraryClient>();
 
     /**
      * A list of library names as they appear in the temporary directory. This is needed to free
      * each library through the client. The index of each name corresponds to the index of the
      * respective client in the <code>clients</code> list.
      */
-    private Vector<String> libraryNames = new Vector<String>();
+    private List<String> libraryNames = new ArrayList<String>();
 
     /**
      * A list of fully qualified library names. This is needed to delete the temporary library files
      * after use. The index of each name corresponds to the index of the respective client in the
      * <code>clients</code> list.
      */
-    private Vector<String> temporaryFileNames = new Vector<String>();
+    private List<String> temporaryFileNames = new ArrayList<String>();
 
     /**
      * The extension to use for native libraries.
@@ -528,7 +529,7 @@ public class Librarian implements CleanupClient
     {
         // This was "stolen" from com.izforge.izpack.util.SelfModifier
 
-        StringBuffer sb = new StringBuffer();
+        StringBuffer buffer = new StringBuffer();
         CharacterIterator iter = new StringCharacterIterator(in);
         for (char c = iter.first(); c != CharacterIterator.DONE; c = iter.next())
         {
@@ -542,16 +543,16 @@ public class Librarian implements CleanupClient
                     if (c2 != CharacterIterator.DONE)
                     {
                         int i2 = Character.digit(c2, 16);
-                        sb.append((char) ((i1 << 4) + i2));
+                        buffer.append((char) ((i1 << 4) + i2));
                     }
                 }
             }
             else
             {
-                sb.append(c);
+                buffer.append(c);
             }
         }
-        String path = sb.toString();
+        String path = buffer.toString();
         return path;
     }
 

@@ -74,7 +74,7 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
         // We put our components
 
         add(LabelFactory.create(installData.getLangpack().getString("LicencePanel.info"),
-                parent.icons.getImageIcon("history"), LEADING), NEXT_LINE);
+                parent.icons.get("history"), LEADING), NEXT_LINE);
         try
         {
             textArea = new JEditorPane();

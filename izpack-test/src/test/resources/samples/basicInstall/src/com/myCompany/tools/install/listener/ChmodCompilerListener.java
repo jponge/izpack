@@ -26,7 +26,7 @@ import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.compiler.listener.SimpleCompilerListener;
 
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -49,21 +49,18 @@ public class ChmodCompilerListener extends SimpleCompilerListener
     {
         Map retval = existentDataMap != null ?
                 existentDataMap : new HashMap();
-        Vector dataList = element.getChildrenNamed("additionaldata");
-        Iterator iter = null;
+        List<IXMLElement> dataList = element.getChildrenNamed("additionaldata");
         if (dataList == null || dataList.size() == 0)
         {
             return (existentDataMap);
         }
-        iter = dataList.iterator();
-        while (iter.hasNext())
+        for (IXMLElement data : dataList)
         {
-            IXMLElement data = (IXMLElement) iter.next();
             String[] relevantKeys = {"permission.dir", "permission.file"};
-            for (int i = 0; i < relevantKeys.length; ++i)
+            for (String relevantKey : relevantKeys)
             {
                 String key = data.getAttribute("key");
-                if (key.equalsIgnoreCase(relevantKeys[i]))
+                if (key.equalsIgnoreCase(relevantKey))
                 {
                     String value = data.getAttribute("value");
                     if (value == null || value.length() == 0)
@@ -77,7 +74,7 @@ public class ChmodCompilerListener extends SimpleCompilerListener
                     }
                     catch (NumberFormatException x)
                     {
-                        throw new CompilerException("'" + relevantKeys[i] + "' must be an integer");
+                        throw new CompilerException("'" + relevantKey + "' must be an integer");
                     }
                 }
             }

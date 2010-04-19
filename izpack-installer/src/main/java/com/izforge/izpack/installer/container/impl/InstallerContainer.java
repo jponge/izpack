@@ -113,7 +113,7 @@ public class InstallerContainer extends AbstractContainer
         final String key = "installer.reversetitle";
         String message = automatedInstallData.getLangpack().getString(key);
         // message equal to key -> no message defined.
-        if (message.indexOf(key) > -1)
+        if (message.contains(key))
         {
             return automatedInstallData.getLangpack().getString("installer.title")
                     + automatedInstallData.getInfo().getAppName();

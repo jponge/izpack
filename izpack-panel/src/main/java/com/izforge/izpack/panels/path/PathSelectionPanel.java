@@ -114,7 +114,7 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
         // defaults are OK.
         browseButton = ButtonFactory.createButton(parent.getInstallerFrame().langpack
                 .getString("TargetPanel.browse"), parent.getInstallerFrame().icons
-                .getImageIcon("open"), idata.buttonsHColor);
+                .get("open"), idata.buttonsHColor);
         browseButton.addActionListener(this);
         add(browseButton);
     }
@@ -124,9 +124,9 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
 
     public Dimension getMinimumSize()
     {
-        Dimension ss = super.getPreferredSize();
+        Dimension preferredSize = super.getPreferredSize();
         Dimension retval = parent.getSize();
-        retval.height = ss.height;
+        retval.height = preferredSize.height;
         return (retval);
     }
 
@@ -144,16 +144,16 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
             // The user wants to browse its filesystem
 
             // Prepares the file chooser
-            JFileChooser fc = new JFileChooser();
-            fc.setCurrentDirectory(new File(textField.getText()));
-            fc.setMultiSelectionEnabled(false);
-            fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            fc.addChoosableFileFilter(fc.getAcceptAllFileFilter());
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(new File(textField.getText()));
+            fileChooser.setMultiSelectionEnabled(false);
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            fileChooser.addChoosableFileFilter(fileChooser.getAcceptAllFileFilter());
 
             // Shows it
-            if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
             {
-                String path = fc.getSelectedFile().getAbsolutePath();
+                String path = fileChooser.getSelectedFile().getAbsolutePath();
                 textField.setText(path);
             }
 

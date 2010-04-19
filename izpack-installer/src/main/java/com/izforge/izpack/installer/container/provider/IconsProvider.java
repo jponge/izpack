@@ -12,7 +12,7 @@ import org.picocontainer.injectors.Provider;
 import javax.swing.*;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * Provide icons database
@@ -42,39 +42,10 @@ public class IconsProvider implements Provider
     private void loadIcons(IconsDatabase iconsDatabase) throws Exception
     {
         // Initialisations
-        URL url;
-        ImageIcon img;
-        IXMLElement icon;
         InputStream inXML = getClass().
                 getResourceAsStream("icons.xml");
 
-        // Initialises the parser
-        IXMLParser parser = new XMLParser();
-
-        // We get the data
-        IXMLElement data = parser.parse(inXML);
-
-        // We load the icons
-        Vector<IXMLElement> children = data.getChildrenNamed("icon");
-        int size = children.size();
-        for (int i = 0; i < size; i++)
-        {
-            icon = children.get(i);
-            url = InstallerFrame.class.getResource(icon.getAttribute("res"));
-            img = new ImageIcon(url);
-            iconsDatabase.put(icon.getAttribute("id"), img);
-        }
-
-        // We load the Swing-specific icons
-        children = data.getChildrenNamed("sysicon");
-        size = children.size();
-        for (int i = 0; i < size; i++)
-        {
-            icon = children.get(i);
-            url = InstallerFrame.class.getResource(icon.getAttribute("res"));
-            img = new ImageIcon(url);
-            UIManager.put(icon.getAttribute("id"), img);
-        }
+        parseXML(inXML, iconsDatabase);
     }
 
     /**
@@ -97,22 +68,27 @@ public class IconsProvider implements Provider
             return;
         }
         Debug.trace("Custom icons available.");
-        URL url;
-        ImageIcon img;
-        IXMLElement icon;
 
-        // Initialises the parser
+        parseXML(inXML, icons);
+    }
+
+    /**
+     * parse the xml and fill in the db
+     * @param inXML
+     * @param icons
+     */
+    private void parseXML(InputStream inXML, IconsDatabase icons)
+    {
+        URL url;
+        ImageIcon img;// Initialises the parser
         IXMLParser parser = new XMLParser();
 
         // We get the data
         IXMLElement data = parser.parse(inXML);
 
         // We load the icons
-        Vector<IXMLElement> children = data.getChildrenNamed("icon");
-        int size = children.size();
-        for (int i = 0; i < size; i++)
+        for (IXMLElement icon : data.getChildrenNamed("icon"))
         {
-            icon = children.get(i);
             url = InstallerFrame.class.getResource(icon.getAttribute("res"));
             img = new ImageIcon(url);
             Debug.trace("Icon with id found: " + icon.getAttribute("id"));
@@ -120,14 +96,12 @@ public class IconsProvider implements Provider
         }
 
         // We load the Swing-specific icons
-        children = data.getChildrenNamed("sysicon");
-        size = children.size();
-        for (int i = 0; i < size; i++)
+        for (IXMLElement icon : data.getChildrenNamed("sysicon"))
         {
-            icon = children.get(i);
             url = InstallerFrame.class.getResource(icon.getAttribute("res"));
             img = new ImageIcon(url);
             UIManager.put(icon.getAttribute("id"), img);
         }
     }
+
 }

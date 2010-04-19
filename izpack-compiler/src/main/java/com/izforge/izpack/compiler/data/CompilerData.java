@@ -200,28 +200,28 @@ public class CompilerData
         self = self.replace('.', '/');
         self = "/" + self + ".class";
         URL url = Compiler.class.getResource(self);
-        String np = url.getFile();
-        int start = np.indexOf(self);
-        np = np.substring(0, start);
-        if (np.endsWith("!"))
+        String name = url.getFile();
+        int start = name.indexOf(self);
+        name = name.substring(0, start);
+        if (name.endsWith("!"))
         { // Where shut IZPACK_HOME at the standalone-compiler be??
             // No idea.
-            if (np.endsWith("standalone-compiler.jar!")
-                    || np.endsWith("standalone-compiler-4.0.0.jar!")
-                    || np.matches("standalone-compiler-[\\d\\.]+.jar!"))
+            if (name.endsWith("standalone-compiler.jar!")
+                    || name.endsWith("standalone-compiler-4.0.0.jar!")
+                    || name.matches("standalone-compiler-[\\d\\.]+.jar!"))
             {
                 return (".");
             }
-            np = np.substring(0, np.length() - 1);
+            name = name.substring(0, name.length() - 1);
         }
         File root;
-        if (URI.create(np).isAbsolute())
+        if (URI.create(name).isAbsolute())
         {
-            root = new File(URI.create(np));
+            root = new File(URI.create(name));
         }
         else
         {
-            root = new File(np);
+            root = new File(name);
         }
         while (true)
         {

@@ -37,7 +37,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 
 /**
  * The compile panel class.
@@ -146,7 +145,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         this.startButton = ButtonFactory.createButton(installData.getLangpack()
                 .getString("CompilePanel.start"), idata.buttonsHColor);
         this.tipLabel = LabelFactory.create(installData.getLangpack().getString("CompilePanel.tip"),
-                parent.icons.getImageIcon("tip"), SwingConstants.TRAILING);
+                parent.icons.get("tip"), SwingConstants.TRAILING);
         this.opLabel = new JLabel();
         packProgressBar = new JProgressBar();
         this.overallLabel = new JLabel();
@@ -195,11 +194,9 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         // gridBagConstraints.weighty = 0.1;
 
-        Iterator<String> it = this.worker.getAvailableCompilers().iterator();
-
-        while (it.hasNext())
+        for (String availableCompiler : this.worker.getAvailableCompilers())
         {
-            compilerComboBox.addItem(it.next());
+            compilerComboBox.addItem(availableCompiler);
         }
 
         subpanel.add(compilerComboBox, gridBagConstraints);
@@ -229,11 +226,9 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         gridBagConstraints.weightx = 0.5;
         // gridBagConstraints.weighty = 0.1;
 
-        it = this.worker.getAvailableArguments().iterator();
-
-        while (it.hasNext())
+        for (String availableArgument : this.worker.getAvailableArguments())
         {
-            argumentsComboBox.addItem(it.next());
+            argumentsComboBox.addItem(availableArgument);
         }
 
         subpanel.add(argumentsComboBox, gridBagConstraints);
@@ -499,15 +494,13 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
      */
     public void panelActivate()
     {
-        // get compilers again (because they might contain variables from former
-        // panels)
-        Iterator<String> it = this.worker.getAvailableCompilers().iterator();
-
         compilerComboBox.removeAllItems();
 
-        while (it.hasNext())
+        // get compilers again (because they might contain variables from former
+        // panels)
+        for (String availableCompiler : this.worker.getAvailableCompilers())
         {
-            compilerComboBox.addItem(it.next());
+            compilerComboBox.addItem(availableCompiler);
         }
 
         // We clip the panel

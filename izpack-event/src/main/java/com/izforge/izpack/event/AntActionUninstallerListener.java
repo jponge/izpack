@@ -29,7 +29,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -103,7 +102,6 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
         in.close();
         ArrayList<AntAction> befDel = new ArrayList<AntAction>();
         antActions = new ArrayList<AntAction>();
-        Iterator iter = allActions.iterator();
         // There are two possible orders; before and after deletion.
         // Now we assign the actions to two different lists, the
         // local "before" list which we perform after the scan and
@@ -112,9 +110,9 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
         // files like the properties file for this order because if they're
         // part of the pack the'll be lost after the deletion has been
         // performed.
-        while (iter.hasNext())
+        for (Object allAction : allActions)
         {
-            AntAction action = (AntAction) iter.next();
+            AntAction action = (AntAction) allAction;
             // See if we need to set the action with the build_resource that
             //  we extracted
             if (null != buildResource)
@@ -141,11 +139,9 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
                 List<String> props = action.getPropertyFiles();
                 if (props != null)
                 {
-                    Iterator<String> iter2 = props.iterator();
                     ArrayList<String> newProps = new ArrayList<String>();
-                    while (iter2.hasNext())
+                    for (String propName : props)
                     {
-                        String propName = iter2.next();
                         File propFile = IoHelper.copyToTempFile(propName, ".properties");
                         newProps.add(propFile.getCanonicalPath());
                     }

@@ -20,6 +20,8 @@
 package com.izforge.izpack.panels.userinput;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
+
+import java.util.List;
 import java.util.Vector;
 import javax.swing.*;
 import java.util.Vector;
@@ -42,9 +44,9 @@ public class UIElement
 
     Object constraints;
 
-    Vector<IXMLElement> forPacks;
+    List<IXMLElement> forPacks;
 
-    Vector<IXMLElement> forOs;
+    List<IXMLElement> forOs;
 
     String trueValue;
 
@@ -112,22 +114,22 @@ public class UIElement
         this.constraints = constraints;
     }
 
-    public Vector<IXMLElement> getForPacks()
+    public List<IXMLElement> getForPacks()
     {
         return forPacks;
     }
 
-    public void setForPacks(Vector<IXMLElement> forPacks)
+    public void setForPacks(List<IXMLElement> forPacks)
     {
         this.forPacks = forPacks;
     }
 
-    public Vector<IXMLElement> getForOs()
+    public List<IXMLElement> getForOs()
     {
         return forOs;
     }
 
-    public void setForOs(Vector<IXMLElement> forOs)
+    public void setForOs(List<IXMLElement> forOs)
     {
         this.forOs = forOs;
     }

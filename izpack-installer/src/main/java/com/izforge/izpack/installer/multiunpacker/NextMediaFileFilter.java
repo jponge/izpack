@@ -41,13 +41,13 @@ public class NextMediaFileFilter extends FileFilter
     * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
     */
 
-    public boolean accept(File f)
+    public boolean accept(File file)
     {
-        if (f.isDirectory())
+        if (file.isDirectory())
         {
             return true;
         }
-        String filepath = f.getAbsolutePath();
+        String filepath = file.getAbsolutePath();
         return filepath.endsWith(this.volumename);
     }
 

@@ -68,21 +68,21 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
 
         // controls # of lines to display at a time, to allow simulated scrolling down
         int lines = 25;
-        int l = 0;
+        int lineNumber = 0;
 
-        StringTokenizer st = new StringTokenizer(license, "\n");
-        while (st.hasMoreTokens())
+        StringTokenizer tokenizer = new StringTokenizer(license, "\n");
+        while (tokenizer.hasMoreTokens())
         {
-            String token = st.nextToken();
+            String token = tokenizer.nextToken();
             System.out.println(token);
-            l++;
-            if (l >= lines)
+            lineNumber++;
+            if (lineNumber >= lines)
             {
                 if (!doContinue())
                 {
                     return false;
                 }
-                l = 0;
+                lineNumber = 0;
             }
 
         }
@@ -109,11 +109,11 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
         try
         {
             System.out.println("\r");
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             while (true)
             {
                 System.out.println("press Enter to continue, X to exit");
-                String strIn = br.readLine();
+                String strIn = reader.readLine();
                 if (strIn.equalsIgnoreCase("x"))
                 {
                     return false;
@@ -134,11 +134,11 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
     {
         try
         {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             while (true)
             {
                 System.out.println("press 1 to accept, 2 to reject, 3 to redisplay");
-                String strIn = br.readLine();
+                String strIn = reader.readLine();
                 if (strIn.equals("1"))
                 {
                     return 1;

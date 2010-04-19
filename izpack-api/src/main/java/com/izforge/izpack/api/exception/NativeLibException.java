@@ -83,20 +83,20 @@ public class NativeLibException extends Exception
      */
     public static void addResourceBundle(String bundlePath)
     {
-        ResourceBundle bd = null;
+        ResourceBundle resourceBundle = null;
         if (messageResourceBundles.containsKey(bundlePath))
         {
             return;
         }
         try
         {
-            bd = ResourceBundle.getBundle(bundlePath);
+            resourceBundle = ResourceBundle.getBundle(bundlePath);
         }
         catch (MissingResourceException mre)
         {
             mre.printStackTrace();
         }
-        messageResourceBundles.put(bundlePath, bd);
+        messageResourceBundles.put(bundlePath, resourceBundle);
 
     }
 
@@ -301,12 +301,11 @@ public class NativeLibException extends Exception
 
     private String getMsg(String s)
     {
-        Iterator<ResourceBundle> it = messageResourceBundles.values().iterator();
-        while (it.hasNext())
+        for (ResourceBundle resourceBundle : messageResourceBundles.values())
         {
             try
             {
-                return ((it.next()).getString(s));
+                return resourceBundle.getString(s);
             }
             catch (MissingResourceException missingresourceexception)
             { // do not throw, else look in next bundle.
@@ -327,7 +326,7 @@ public class NativeLibException extends Exception
      */
     private static String replaceString(String destination, String what, String with)
     {
-        if (destination.indexOf(what) >= 0)
+        if (destination.contains(what))
         { // what found, with (placeholder) not included in destination ->
             // perform changing.
             StringBuffer buf = new StringBuffer();

@@ -53,11 +53,11 @@ public class LabelFactory implements SwingConstants
     /**
      * Sets the use icon state.
      *
-     * @param b flag for the icon state
+     * @param useLabelIcons flag for the icon state
      */
-    public static void setUseLabelIcons(boolean b)
+    public static void setUseLabelIcons(boolean useLabelIcons)
     {
-        useLabelIcons = b;
+        LabelFactory.useLabelIcons = useLabelIcons;
     }
 
     /**

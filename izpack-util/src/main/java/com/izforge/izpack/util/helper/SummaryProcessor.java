@@ -24,8 +24,6 @@ package com.izforge.izpack.util.helper;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.installer.ISummarisable;
 
-import java.util.Iterator;
-
 /**
  * A helper class which creates a summary from all panels. This class calls all declared panels for
  * a summary To differ between caption and message, HTML is used to draw caption in bold and indent
@@ -51,14 +49,14 @@ public class SummaryProcessor
     static
     {
         // Initialize HTML header and footer.
-        StringBuffer sb = new StringBuffer(256);
-        sb.append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n").append(
+        StringBuffer buffer = new StringBuffer(256);
+        buffer.append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n").append(
                 "<html>\n" + "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">" +
                         "<head>\n<STYLE TYPE=\"text/css\" media=screen,print>\n").append(
                 "h1{\n  font-size: 100%;\n  margin: 1em 0 0 0;\n  padding: 0;\n}\n").append(
                 "div.body {\n  font-size: 100%;\n  margin: 0mm 2mm 0  8mm;\n  padding: 0;\n}\n")
                 .append("</STYLE>\n</head>\n<body>\n");
-        HTML_HEADER = sb.toString();
+        HTML_HEADER = buffer.toString();
     }
 
     /**
@@ -71,12 +69,11 @@ public class SummaryProcessor
      */
     public static String getSummary(AutomatedInstallData idata)
     {
-        Iterator<ISummarisable> iter = idata.getPanels().iterator();
-        StringBuffer sb = new StringBuffer(2048);
-        sb.append(HTML_HEADER);
-        while (iter.hasNext())
+        StringBuffer buffer = new StringBuffer(2048);
+        buffer.append(HTML_HEADER);
+        for (Object o : idata.getPanels())
         {
-            ISummarisable panel = iter.next();
+            ISummarisable panel = (ISummarisable) o;
             String caption = panel.getSummaryCaption();
             String msg = panel.getSummaryBody();
             // If no caption or/and message, ignore it.
@@ -84,11 +81,11 @@ public class SummaryProcessor
             {
                 continue;
             }
-            sb.append(HEAD_START).append(caption).append(HEAD_END);
-            sb.append(BODY_START).append(msg).append(BODY_END);
+            buffer.append(HEAD_START).append(caption).append(HEAD_END);
+            buffer.append(BODY_START).append(msg).append(BODY_END);
         }
-        sb.append(HTML_FOOTER);
-        return (sb.toString());
+        buffer.append(HTML_FOOTER);
+        return (buffer.toString());
     }
 
 }

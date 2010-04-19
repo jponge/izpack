@@ -29,7 +29,6 @@ import org.apache.tools.ant.util.JavaEnvUtils;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -431,11 +430,9 @@ public class AntAction extends ActionBase
         }
         if (props.size() > 0)
         {
-            Iterator iter = props.keySet().iterator();
-            String key = null;
-            while (iter.hasNext())
+            for (Object o : props.keySet())
             {
-                key = (String) iter.next();
+                String key = (String) o;
                 proj.setProperty(key, props.getProperty(key));
             }
         }
@@ -448,22 +445,21 @@ public class AntAction extends ActionBase
             return;
         }
         Properties props = new Properties();
-        File pf = null;
         FileInputStream fis = null;
         try
         {
             for (String propertyFile : propertyFiles)
             {
-                pf = new File(propertyFile);
-                if (pf.exists())
+                File file = new File(propertyFile);
+                if (file.exists())
                 {
-                    fis = new FileInputStream(pf);
+                    fis = new FileInputStream(file);
                     props.load(fis);
                     fis.close();
                 }
                 else
                 {
-                    throw new Exception("Required propertyfile " + pf
+                    throw new Exception("Required propertyfile " + file
                             + " for antcall doesn't exist.");
                 }
             }

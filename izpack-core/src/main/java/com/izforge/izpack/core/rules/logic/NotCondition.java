@@ -101,9 +101,9 @@ public class NotCondition extends Condition
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {
-        IXMLElement op = rulesEngineImpl.createConditionElement(this.operand, conditionRoot);
-        this.operand.makeXMLData(op);
-        conditionRoot.addChild(op);
+        IXMLElement conditionElement = rulesEngineImpl.createConditionElement(this.operand, conditionRoot);
+        this.operand.makeXMLData(conditionElement);
+        conditionRoot.addChild(conditionElement);
     }
 
     public static Condition createFromCondition(Condition conditionByExpr, RulesEngine rulesEngine, AutomatedInstallData installData)

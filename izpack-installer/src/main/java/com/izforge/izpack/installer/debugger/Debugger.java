@@ -77,12 +77,12 @@ public class Debugger
 
     private void init()
     {
-        String[] variablekeys = (String[]) lasttimevariables.keySet().toArray(new String[lasttimevariables.size()]);
+        String[] variablekeys = lasttimevariables.keySet().toArray(new String[lasttimevariables.size()]);
         for (String variablename : variablekeys)
         {
-            VariableHistory vh = new VariableHistory(variablename);
-            vh.addValue(lasttimevariables.getProperty(variablename), "initial value");
-            variableshistory.put(variablename, vh);
+            VariableHistory variableHistory = new VariableHistory(variablename);
+            variableHistory.addValue(lasttimevariables.getProperty(variablename), "initial value");
+            variableshistory.put(variablename, variableHistory);
         }
         String[] conditionids = this.rules.getKnownConditionIds();
         for (String conditionid : conditionids)
@@ -117,18 +117,18 @@ public class Debugger
         for (String conditionid : conditionids)
         {
             Condition currentcondition = rules.getCondition(conditionid);
-            ConditionHistory ch = null;
+            ConditionHistory aConditionHistory = null;
             if (!conditionhistory.containsKey(conditionid))
             {
                 // new condition
-                ch = new ConditionHistory(currentcondition);
-                conditionhistory.put(conditionid, ch);
+                aConditionHistory = new ConditionHistory(currentcondition);
+                conditionhistory.put(conditionid, aConditionHistory);
             }
             else
             {
-                ch = conditionhistory.get(conditionid);
+                aConditionHistory = conditionhistory.get(conditionid);
             }
-            ch.addValue(this.rules.isConditionTrue(currentcondition), comment);
+            aConditionHistory.addValue(this.rules.isConditionTrue(currentcondition), comment);
         }
         conditionhistorymodel.fireTableDataChanged();
     }
@@ -150,9 +150,9 @@ public class Debugger
 
             if ((oldvalue == null))
             {
-                VariableHistory vh = new VariableHistory(key);
-                vh.addValue(currentvalue, "new after panel " + lastpanelmetadata.getPanelid());
-                variableshistory.put(key, vh);
+                VariableHistory variableHistory = new VariableHistory(key);
+                variableHistory.addValue(currentvalue, "new after panel " + lastpanelmetadata.getPanelid());
+                variableshistory.put(key, variableHistory);
                 changes = true;
                 changedvariables.put(key, currentvalue);
             }
@@ -160,8 +160,8 @@ public class Debugger
             {
                 if (!currentvalue.equals(oldvalue))
                 {
-                    VariableHistory vh = variableshistory.get(key);
-                    vh.addValue(currentvalue, "changed value after panel " + lastpanelmetadata.getPanelid());
+                    VariableHistory variableHistory = variableshistory.get(key);
+                    variableHistory.addValue(currentvalue, "changed value after panel " + lastpanelmetadata.getPanelid());
                     changes = true;
                     changedvariables.put(key, currentvalue);
                 }
@@ -177,10 +177,10 @@ public class Debugger
     private void modifyVariableManually(String varnametxt, String varvaluetxt)
     {
         lasttimevariables = (Properties) idata.getVariables().clone();
-        VariableHistory vh = variableshistory.get(varnametxt);
-        if (vh != null)
+        VariableHistory variableHistory = variableshistory.get(varnametxt);
+        if (variableHistory != null)
         {
-            vh.addValue(varvaluetxt, "modified manually");
+            variableHistory.addValue(varvaluetxt, "modified manually");
         }
         variablesmodel.fireTableDataChanged();
         updateChangedConditions("after manual modification of variable " + varnametxt);
@@ -212,7 +212,7 @@ public class Debugger
         varchangepanel.add(label);
         final JTextField varvalue = new JTextField();
         varchangepanel.add(varvalue);
-        JButton changevarbtn = ButtonFactory.createButton(idata.getLangpack().getString("debug.changevariable"), icons.getImageIcon("debug.changevariable"), idata.buttonsHColor);
+        JButton changevarbtn = ButtonFactory.createButton(idata.getLangpack().getString("debug.changevariable"), icons.get("debug.changevariable"), idata.buttonsHColor);
         changevarbtn.addActionListener(new ActionListener()
         {
 
@@ -244,19 +244,19 @@ public class Debugger
                 }
                 else
                 {
-                    VariableHistory vh = variableshistory.get(selectedvariable);
+                    VariableHistory variableHistory = variableshistory.get(selectedvariable);
 
                     JFrame variabledetails = new JFrame("Details");
 
                     JTextPane detailspane = new JTextPane();
                     detailspane.setContentType("text/html");
-                    detailspane.setText(vh.getValueHistoryDetails());
+                    detailspane.setText(variableHistory.getValueHistoryDetails());
                     detailspane.setEditable(false);
                     JScrollPane scroller = new JScrollPane(detailspane);
 
-                    Container con = variabledetails.getContentPane();
-                    con.setLayout(new BorderLayout());
-                    con.add(scroller, BorderLayout.CENTER);
+                    Container container = variabledetails.getContentPane();
+                    container.setLayout(new BorderLayout());
+                    container.add(scroller, BorderLayout.CENTER);
 
                     variabledetails.pack();
                     variabledetails.setVisible(true);
@@ -312,19 +312,19 @@ public class Debugger
                 if (e.getClickCount() == 2)
                 {
 
-                    ConditionHistory ch = conditionhistory.get(selectedcondition);
+                    ConditionHistory aConditionHistory = conditionhistory.get(selectedcondition);
 
                     JFrame variabledetails = new JFrame("Details");
 
                     JTextPane detailspane = new JTextPane();
                     detailspane.setContentType("text/html");
-                    detailspane.setText(ch.getConditionHistoryDetails());
+                    detailspane.setText(aConditionHistory.getConditionHistoryDetails());
                     detailspane.setEditable(false);
                     JScrollPane scroller = new JScrollPane(detailspane);
 
-                    Container con = variabledetails.getContentPane();
-                    con.setLayout(new BorderLayout());
-                    con.add(scroller, BorderLayout.CENTER);
+                    Container container = variabledetails.getContentPane();
+                    container.setLayout(new BorderLayout());
+                    container.add(scroller, BorderLayout.CENTER);
 
                     variabledetails.pack();
                     variabledetails.setVisible(true);

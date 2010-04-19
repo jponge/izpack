@@ -28,9 +28,10 @@ import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 import java.util.regex.Pattern;
 
 /**
@@ -49,15 +50,15 @@ public class XMLElementImpl implements IXMLElement
 
     /**
      * A flag to notice any changement made to the element.
-     * It is used to generate the childrenVector.
+     * It is used to generate the childrenList.
      */
     private boolean hasChanged = true;
 
     /**
-     * Vector of the children elements.
+     * List of the children elements.
      * It is generated as it is called.
      */
-    private Vector<IXMLElement> childrenVector;
+    private List<IXMLElement> childrenList;
 
     /**
      * Create a new root element in a new document.
@@ -149,17 +150,17 @@ public class XMLElementImpl implements IXMLElement
         return false;
     }
 
-    private void initChildrenVector()
+    private void initChildrenList()
     {
         if (hasChanged)
         {
             hasChanged = false;
-            childrenVector = new Vector<IXMLElement>();
+            childrenList = new ArrayList<IXMLElement>();
             for (Node child = element.getFirstChild(); child != null; child = child.getNextSibling())
             {
                 if (child.getNodeType() == Node.ELEMENT_NODE)
                 {
-                    childrenVector.add(new XMLElementImpl(child));
+                    childrenList.add(new XMLElementImpl(child));
                 }
             }
         }
@@ -167,20 +168,20 @@ public class XMLElementImpl implements IXMLElement
 
     public int getChildrenCount()
     {
-        initChildrenVector();
-        return childrenVector.size();
+        initChildrenList();
+        return childrenList.size();
     }
 
-    public Vector<IXMLElement> getChildren()
+    public List<IXMLElement> getChildren()
     {
-        initChildrenVector();
-        return childrenVector;
+        initChildrenList();
+        return childrenList;
     }
 
     public IXMLElement getChildAtIndex(int index)
     {
-        initChildrenVector();
-        return childrenVector.get(index);
+        initChildrenList();
+        return childrenList.get(index);
     }
 
     public IXMLElement getFirstChildNamed(String name)
@@ -194,13 +195,11 @@ public class XMLElementImpl implements IXMLElement
         return res;
     }
 
-    public Vector<IXMLElement> getChildrenNamed(String name)
+    public List<IXMLElement> getChildrenNamed(String name)
     {
-        Vector<IXMLElement> res = new Vector<IXMLElement>();
-        Vector<IXMLElement> children = getChildren();
-        for (int i = 0; i < children.size(); i++)
+        List<IXMLElement> res = new ArrayList<IXMLElement>();
+        for (IXMLElement child : getChildren())
         {
-            IXMLElement child = children.elementAt(i);
             if (child.getName() != null && child.getName().equals(name))
             {
                 res.add(new XMLElementImpl(child.getElement()));
@@ -284,7 +283,7 @@ public class XMLElementImpl implements IXMLElement
 
     public String getContent()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
         String content;
         Node child = this.element.getFirstChild();
 
@@ -292,7 +291,7 @@ public class XMLElementImpl implements IXMLElement
         boolean err = (child == null);
 
         // pattern : only whitespace characters
-        Pattern p = Pattern.compile("^\\s+$");
+        Pattern pattern = Pattern.compile("^\\s+$");
 
         while (!err && child != null)
         {
@@ -300,14 +299,14 @@ public class XMLElementImpl implements IXMLElement
             if (child.getNodeType() == Node.TEXT_NODE)
             {
                 // text node : nanoXML ignores it if it's only whitespace characters.
-                if (content != null && !p.matcher(content).matches())
+                if (content != null && !pattern.matcher(content).matches())
                 {
-                    sb.append(content);
+                    builder.append(content);
                 }
             }
             else if (child.getNodeType() == Node.CDATA_SECTION_NODE)
             {
-                sb.append(content);
+                builder.append(content);
             }
             // neither CDATA nor text : real nested element !
             else
@@ -316,7 +315,7 @@ public class XMLElementImpl implements IXMLElement
             }
             child = child.getNextSibling();
         }
-        return (err) ? null : sb.toString().trim();
+        return (err) ? null : builder.toString().trim();
     }
 
     public void setContent(String content)

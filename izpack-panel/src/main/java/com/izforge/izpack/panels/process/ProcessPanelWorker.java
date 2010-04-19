@@ -57,7 +57,7 @@ public class ProcessPanelWorker implements Runnable
 
     protected AutomatedInstallData idata;
 
-    private Map<Boolean, List<ButtonConfig>> buttonConfigs = new Hashtable<Boolean, List<ButtonConfig>>();
+    private Map<Boolean, List<ButtonConfig>> buttonConfigs = new HashMap<Boolean, List<ButtonConfig>>();
     private VariableSubstitutor variableSubstitutor;
     private RulesEngine rules;
 
@@ -115,10 +115,10 @@ public class ProcessPanelWorker implements Runnable
         }
 
         // Handle logfile
-        IXMLElement lfd = spec.getFirstChildNamed("logfiledir");
-        if (lfd != null)
+        IXMLElement logFileDirElement = spec.getFirstChildNamed("logfiledir");
+        if (logFileDirElement != null)
         {
-            logfiledir = lfd.getContent();
+            logfiledir = logFileDirElement.getContent();
         }
 
         for (IXMLElement job_el : spec.getChildrenNamed("job"))
@@ -139,7 +139,7 @@ public class ProcessPanelWorker implements Runnable
             Debug.trace("Condition is fulfilled or not existent.");
             // ExecuteForPack Patch
             // Check if processing required for pack
-            Vector<IXMLElement> forPacks = job_el.getChildrenNamed("executeForPack");
+            List<IXMLElement> forPacks = job_el.getChildrenNamed("executeForPack");
             if (!jobRequiredFor(forPacks))
             {
                 continue;
@@ -154,9 +154,9 @@ public class ProcessPanelWorker implements Runnable
 
                 String job_name = job_el.getAttribute("name", "");
 
-                for (IXMLElement ef : job_el.getChildrenNamed("executefile"))
+                for (IXMLElement executeFileElement : job_el.getChildrenNamed("executefile"))
                 {
-                    String ef_name = ef.getAttribute("name");
+                    String ef_name = executeFileElement.getAttribute("name");
 
                     if ((ef_name == null) || (ef_name.length() == 0))
                     {
@@ -166,7 +166,7 @@ public class ProcessPanelWorker implements Runnable
 
                     List<String> args = new ArrayList<String>();
 
-                    for (IXMLElement arg_el : ef.getChildrenNamed("arg"))
+                    for (IXMLElement arg_el : executeFileElement.getChildrenNamed("arg"))
                     {
                         String arg_val = arg_el.getContent();
 
@@ -175,7 +175,7 @@ public class ProcessPanelWorker implements Runnable
 
                     List<String> envvars = new ArrayList<String>();
 
-                    for (IXMLElement env_el : ef.getChildrenNamed("env"))
+                    for (IXMLElement env_el : executeFileElement.getChildrenNamed("env"))
                     {
                         String env_val = env_el.getContent();
 
@@ -186,9 +186,9 @@ public class ProcessPanelWorker implements Runnable
                     ef_list.add(new ProcessPanelWorker.ExecutableFile(ef_name, args, envvars));
                 }
 
-                for (IXMLElement ef : job_el.getChildrenNamed("executeclass"))
+                for (IXMLElement executeClassElement : job_el.getChildrenNamed("executeclass"))
                 {
-                    String ef_name = ef.getAttribute("name");
+                    String ef_name = executeClassElement.getAttribute("name");
                     if ((ef_name == null) || (ef_name.length() == 0))
                     {
                         System.err.println("missing \"name\" attribute for <executeclass>");
@@ -196,7 +196,7 @@ public class ProcessPanelWorker implements Runnable
                     }
 
                     List<String> args = new ArrayList<String>();
-                    for (IXMLElement arg_el : ef.getChildrenNamed("arg"))
+                    for (IXMLElement arg_el : executeClassElement.getChildrenNamed("arg"))
                     {
                         String arg_val = arg_el.getContent();
                         args.add(arg_val);
@@ -219,17 +219,17 @@ public class ProcessPanelWorker implements Runnable
         buttonConfigs.put(Boolean.FALSE, new ArrayList<ButtonConfig>());
         buttonConfigs.put(Boolean.TRUE, new ArrayList<ButtonConfig>());
 
-        for (IXMLElement ef : spec.getChildrenNamed("onFail"))
+        for (IXMLElement onFailElement : spec.getChildrenNamed("onFail"))
         {
-            String conditionid = ef.hasAttribute("condition") ? ef.getAttribute("condition") : ef.hasAttribute("conditionid") ? ef.getAttribute("conditionid") : null;
-            boolean unlockPrev = ef.hasAttribute("previous") ? Boolean.parseBoolean(ef.getAttribute("previous")) : false;
-            boolean unlockNext = ef.hasAttribute("next") ? Boolean.parseBoolean(ef.getAttribute("next")) : false;
+            String conditionid = onFailElement.hasAttribute("condition") ? onFailElement.getAttribute("condition") : onFailElement.hasAttribute("conditionid") ? onFailElement.getAttribute("conditionid") : null;
+            boolean unlockPrev = onFailElement.hasAttribute("previous") ? Boolean.parseBoolean(onFailElement.getAttribute("previous")) : false;
+            boolean unlockNext = onFailElement.hasAttribute("next") ? Boolean.parseBoolean(onFailElement.getAttribute("next")) : false;
             buttonConfigs.get(Boolean.FALSE).add(new ButtonConfig(conditionid, unlockPrev, unlockNext));
         }
-        for (IXMLElement ef : spec.getChildrenNamed("onSuccess"))
+        for (IXMLElement onSuccessElement : spec.getChildrenNamed("onSuccess"))
         {
-            String conditionid = ef.hasAttribute("condition") ? ef.getAttribute("condition") : ef.hasAttribute("conditionid") ? ef.getAttribute("conditionid") : null;
-            boolean unlockPrev = ef.hasAttribute("previous") ? Boolean.parseBoolean(ef.getAttribute("previous")) : false;
+            String conditionid = onSuccessElement.hasAttribute("condition") ? onSuccessElement.getAttribute("condition") : onSuccessElement.hasAttribute("conditionid") ? onSuccessElement.getAttribute("conditionid") : null;
+            boolean unlockPrev = onSuccessElement.hasAttribute("previous") ? Boolean.parseBoolean(onSuccessElement.getAttribute("previous")) : false;
             buttonConfigs.get(Boolean.TRUE).add(new ButtonConfig(conditionid, unlockPrev, true));
         }
 
@@ -266,8 +266,6 @@ public class ProcessPanelWorker implements Runnable
         {
             logfiledir = IoHelper.translatePath(logfiledir, variableSubstitutor);
 
-            File lf;
-
             String appVersion = idata.getVariable("APP_VER");
 
             if (appVersion != null)
@@ -285,9 +283,9 @@ public class ProcessPanelWorker implements Runnable
 
             try
             {
-                lf = File.createTempFile("Install_" + identifier + "_", ".log",
+                File tempLogFile = File.createTempFile("Install_" + identifier + "_", ".log",
                         new File(logfiledir));
-                logfile = new PrintWriter(new FileOutputStream(lf), true);
+                logfile = new PrintWriter(new FileOutputStream(tempLogFile), true);
             }
             catch (IOException e)
             {
@@ -298,11 +296,11 @@ public class ProcessPanelWorker implements Runnable
 
         this.handler.startProcessing(this.jobs.size());
 
-        for (ProcessPanelWorker.ProcessingJob pj : this.jobs)
+        for (ProcessPanelWorker.ProcessingJob processingJob : this.jobs)
         {
-            this.handler.startProcess(pj.name);
+            this.handler.startProcess(processingJob.name);
 
-            this.result = pj.run(this.handler, this.vs);
+            this.result = processingJob.run(this.handler, this.vs);
 
             this.handler.finishProcess();
 
@@ -316,9 +314,9 @@ public class ProcessPanelWorker implements Runnable
         boolean unlockPrev = false;
 
         // get the ButtonConfigs matching the this.result
-        for (ButtonConfig bc : buttonConfigs.get(Boolean.valueOf(this.result)))
+        for (ButtonConfig buttonConfig : buttonConfigs.get(this.result))
         {
-            String conditionid = bc.getConditionid();
+            String conditionid = buttonConfig.getConditionid();
             if ((conditionid != null) && (conditionid.length() > 0))
             {
                 Debug.trace("Condition for job.");
@@ -331,8 +329,8 @@ public class ProcessPanelWorker implements Runnable
                 }
             }
 
-            unlockNext = bc.isUnlockNext();
-            unlockPrev = bc.isUnlockPrev();
+            unlockNext = buttonConfig.isUnlockNext();
+            unlockPrev = buttonConfig.isUnlockPrev();
             break;
         }
 
@@ -388,9 +386,9 @@ public class ProcessPanelWorker implements Runnable
 
         public boolean run(AbstractUIProcessHandler handler, VariableSubstitutor vs)
         {
-            for (ProcessPanelWorker.Processable pr : this.processables)
+            for (ProcessPanelWorker.Processable processable : this.processables)
             {
-                if (!pr.run(handler, vs))
+                if (!processable.run(handler, vs))
                 {
                     return false;
                 }
@@ -432,8 +430,8 @@ public class ProcessPanelWorker implements Runnable
                 params.add(vs.substitute(argument, SubstitutionType.TYPE_PLAIN));
             }
 
-            ProcessBuilder pb = new ProcessBuilder(params);
-            Map<String, String> environment = pb.environment();
+            ProcessBuilder processBuilder = new ProcessBuilder(params);
+            Map<String, String> environment = processBuilder.environment();
             for (String envvar : envvariables)
             {
                 String ev = vs.substitute(envvar, SubstitutionType.TYPE_PLAIN);
@@ -447,10 +445,10 @@ public class ProcessPanelWorker implements Runnable
             try
             {
 
-                Process p = pb.start();
+                Process process = processBuilder.start();
 
-                ProcessPanelWorker.ExecutableFile.OutputMonitor stdoutMon = new ProcessPanelWorker.ExecutableFile.OutputMonitor(this.handler, p.getInputStream(), false);
-                ProcessPanelWorker.ExecutableFile.OutputMonitor stderrMon = new ProcessPanelWorker.ExecutableFile.OutputMonitor(this.handler, p.getErrorStream(), true);
+                ProcessPanelWorker.ExecutableFile.OutputMonitor stdoutMon = new ProcessPanelWorker.ExecutableFile.OutputMonitor(this.handler, process.getInputStream(), false);
+                ProcessPanelWorker.ExecutableFile.OutputMonitor stderrMon = new ProcessPanelWorker.ExecutableFile.OutputMonitor(this.handler, process.getErrorStream(), true);
                 Thread stdoutThread = new Thread(stdoutMon);
                 Thread stderrThread = new Thread(stderrMon);
                 stdoutThread.setDaemon(true);
@@ -460,7 +458,7 @@ public class ProcessPanelWorker implements Runnable
 
                 try
                 {
-                    int exitStatus = p.waitFor();
+                    int exitStatus = process.waitFor();
 
                     stopMonitor(stdoutMon, stdoutThread);
                     stopMonitor(stderrMon, stderrThread);
@@ -477,7 +475,7 @@ public class ProcessPanelWorker implements Runnable
                 }
                 catch (InterruptedException ie)
                 {
-                    p.destroy();
+                    process.destroy();
                     this.handler.emitError("process interrupted", ie.toString());
                     return false;
                 }
@@ -491,29 +489,29 @@ public class ProcessPanelWorker implements Runnable
             return true;
         }
 
-        private void stopMonitor(ProcessPanelWorker.ExecutableFile.OutputMonitor m, Thread t)
+        private void stopMonitor(ProcessPanelWorker.ExecutableFile.OutputMonitor monitor, Thread thread)
         {
             // taken from com.izforge.izpack.util.FileExecutor
-            m.doStop();
+            monitor.doStop();
             long softTimeout = 500;
             try
             {
-                t.join(softTimeout);
+                thread.join(softTimeout);
             }
             catch (InterruptedException e)
             {
             }
 
-            if (!t.isAlive())
+            if (!thread.isAlive())
             {
                 return;
             }
 
-            t.interrupt();
+            thread.interrupt();
             long hardTimeout = 500;
             try
             {
-                t.join(hardTimeout);
+                thread.join(hardTimeout);
             }
             catch (InterruptedException e)
             {
@@ -628,18 +626,17 @@ public class ProcessPanelWorker implements Runnable
                 ClassLoader loader = this.getClass().getClassLoader();
                 Class procClass = loader.loadClass(myClassName);
 
-                Object o = procClass.newInstance();
-                Method m = procClass.getMethod("run", new Class[]{AbstractUIProcessHandler.class,
+                Object instance = procClass.newInstance();
+                Method method = procClass.getMethod("run", new Class[]{AbstractUIProcessHandler.class,
                         String[].class});
 
-                if (m.getReturnType().getName().equals("boolean"))
+                if (method.getReturnType().getName().equals("boolean"))
                 {
-                    result = ((Boolean) m.invoke(o, new Object[]{myHandler, params}))
-                            .booleanValue();
+                    result = (Boolean) method.invoke(instance, new Object[]{myHandler, params});
                 }
                 else
                 {
-                    m.invoke(o, new Object[]{myHandler, params});
+                    method.invoke(instance, new Object[]{myHandler, params});
                     result = true;
                 }
             }
@@ -713,7 +710,7 @@ public class ProcessPanelWorker implements Runnable
      * /*--------------------------------------------------------------------------
      */
 
-    private boolean jobRequiredFor(Vector<IXMLElement> packs)
+    private boolean jobRequiredFor(List<IXMLElement> packs)
     {
         String selected;
         String required;
@@ -728,13 +725,13 @@ public class ProcessPanelWorker implements Runnable
 
         for (int i = 0; i < idata.getSelectedPacks().size(); i++)
         {
-            selected = ((Pack) idata.getSelectedPacks().get(i)).name;
+            selected = idata.getSelectedPacks().get(i).name;
 
             // System.out.println ("Selected pack is " + selected);
 
-            for (int k = 0; k < packs.size(); k++)
+            for (IXMLElement pack : packs)
             {
-                required = (packs.elementAt(k)).getAttribute("name", "");
+                required = pack.getAttribute("name", "");
                 // System.out.println ("Attribute name is " + required);
                 if (selected.equals(required))
                 {

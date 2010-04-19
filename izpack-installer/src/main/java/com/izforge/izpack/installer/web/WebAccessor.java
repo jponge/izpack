@@ -95,12 +95,12 @@ public class WebAccessor
     public WebAccessor(Component parent)
     {
         this.parent = parent;
-        Locale l = null;
+        Locale locale = null;
         if (parent != null)
         {
             parent.getLocale();
         }
-        soloCancelOption = UIManager.get("OptionPane.cancelButtonText", l);// TODO:
+        soloCancelOption = UIManager.get("OptionPane.cancelButtonText", locale);// TODO:
         // i18n?
         Authenticator.setDefault(new MyDialogAuthenticator());
     }
@@ -212,7 +212,7 @@ public class WebAccessor
 
     private void startOpening(final URL url)
     {
-        final WebAccessor wa = this;
+        final WebAccessor webAccessor = this;
         openerThread = new Thread()
         {
             public void run()
@@ -231,8 +231,8 @@ public class WebAccessor
                     }
 
                     //InputStream iii = echoSocket.getInputStream();
-                    InputStream i = connection.getInputStream();
-                    iStream = new LoggedInputStream(i, wa); // just to make
+                    InputStream inputStream = connection.getInputStream();
+                    iStream = new LoggedInputStream(inputStream, webAccessor); // just to make
 
                 }
                 catch (ConnectException x)
@@ -278,10 +278,10 @@ public class WebAccessor
             errorLabel = new JLabel();
 
             JPanel fields = new JPanel(new GridLayout(2, 2));
-            String h = (String) System.getProperties().get("proxyHost");
-            String p = (String) System.getProperties().get("proxyPort");
-            hostField = new JTextField(h != null ? h : "");
-            portField = new JTextField(p != null ? p : "");
+            String hostDefaultValue = (String) System.getProperties().get("proxyHost");
+            String portDefaultValue = (String) System.getProperties().get("proxyPort");
+            hostField = new JTextField(hostDefaultValue != null ? hostDefaultValue : "");
+            portField = new JTextField(portDefaultValue != null ? portDefaultValue : "");
             JLabel host = new JLabel("Host: "); // TODO: i18n
             JLabel port = new JLabel("Port: "); // TODO: i18n
             fields.add(host);
@@ -335,7 +335,7 @@ public class WebAccessor
         public PasswordAuthentication getPasswordAuthentication()
         {
             // TODO: i18n
-            JPanel p = getPasswordPanel();
+            JPanel panel = getPasswordPanel();
             String prompt = getRequestingPrompt();
             InetAddress addr = getRequestingSite();
             if (addr != null)
@@ -343,7 +343,7 @@ public class WebAccessor
                 prompt += " (" + addr.getHostName() + ")";
             }
             promptLabel.setText(prompt);
-            int result = JOptionPane.showConfirmDialog(parent, p, "Enter Password", JOptionPane.OK_CANCEL_OPTION,
+            int result = JOptionPane.showConfirmDialog(parent, panel, "Enter Password", JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
             if (result != JOptionPane.OK_OPTION)
             {

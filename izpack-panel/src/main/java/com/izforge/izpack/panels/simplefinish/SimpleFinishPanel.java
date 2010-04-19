@@ -82,10 +82,10 @@ public class SimpleFinishPanel extends IzPanel
         {
 
             // We set the information
-            add(LabelFactory.create(parent.icons.getImageIcon("check")));
+            add(LabelFactory.create(parent.icons.get("check")));
             add(IzPanelLayout.createVerticalStrut(5));
             JLabel jLabel = LabelFactory.create(installData.getLangpack().getString("FinishPanel.success"),
-                    parent.icons.getImageIcon("preferences"), LEADING);
+                    parent.icons.get("preferences"), LEADING);
             jLabel.setName(GuiId.SIMPLE_FINISH_LABEL.id);
             add(jLabel, NEXT_LINE);
             add(IzPanelLayout.createVerticalStrut(5));
@@ -96,17 +96,17 @@ public class SimpleFinishPanel extends IzPanel
 
                 JLabel uninstallJLabel = LabelFactory.create(installData.getLangpack()
                         .getString("FinishPanel.uninst.info"), parent.icons
-                        .getImageIcon("preferences"), LEADING);
+                        .get("preferences"), LEADING);
                 uninstallJLabel.setName(GuiId.SIMPLE_FINISH_UNINSTALL_LABEL.id);
                 add(uninstallJLabel, NEXT_LINE);
-                add(LabelFactory.create(path, parent.icons.getImageIcon("empty"),
+                add(LabelFactory.create(path, parent.icons.get("empty"),
                         LEADING), NEXT_LINE);
             }
         }
         else
         {
             add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.fail"),
-                    parent.icons.getImageIcon("stop"), LEADING));
+                    parent.icons.get("stop"), LEADING));
         }
         getLayoutHelper().completeLayout(); // Call, or call not?
         Log.getInstance().informUser();

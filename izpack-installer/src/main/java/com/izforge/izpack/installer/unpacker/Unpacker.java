@@ -500,9 +500,9 @@ public class Unpacker extends UnpackerBase
 
                 for (int k = 0; k < numUpdateChecks; k++)
                 {
-                    UpdateCheck uc = (UpdateCheck) objIn.readObject();
+                    UpdateCheck updateCheck = (UpdateCheck) objIn.readObject();
 
-                    updatechecks.add(uc);
+                    updatechecks.add(updateCheck);
                 }
 
                 objIn.close();
@@ -632,11 +632,11 @@ public class Unpacker extends UnpackerBase
             // See compiler.Packager#getJarOutputStream for the counterpart
             String baseName = idata.getInfo().getInstallerBase();
             String packURL = webDirURL + "/" + baseName + ".pack" + packid + ".jar";
-            String tf = IoHelper.translatePath(idata.getInfo().getUninstallerPath() + Unpacker.tempSubPath, variableSubstitutor);
+            String tempFolder = IoHelper.translatePath(idata.getInfo().getUninstallerPath() + Unpacker.tempSubPath, variableSubstitutor);
             String tempfile;
             try
             {
-                tempfile = WebRepositoryAccessor.getCachedUrl(packURL, tf);
+                tempfile = WebRepositoryAccessor.getCachedUrl(packURL, tempFolder);
                 udata.addFile(tempfile, uninstall);
             }
             catch (Exception e)

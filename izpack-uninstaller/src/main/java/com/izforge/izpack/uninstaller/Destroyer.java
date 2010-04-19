@@ -79,7 +79,7 @@ public class Destroyer extends Thread
         try
         {
             // We get the list of uninstaller listeners
-            List[] listeners = getListenerLists();
+            List<UninstallerListener>[] listeners = getListenerLists();
             // We get the list of the files to delete
             ArrayList<ExecutableFile> executables = getExecutablesList();
 
@@ -304,9 +304,9 @@ public class Destroyer extends Thread
      * @return a list with the defined uninstall listeners
      * @throws Exception
      */
-    private List[] getListenerLists() throws Exception
+    private List<UninstallerListener>[] getListenerLists() throws Exception
     {
-        ArrayList[] uninstaller = new ArrayList[]{new ArrayList(), new ArrayList()};
+        ArrayList<UninstallerListener>[] uninstaller = new ArrayList[]{new ArrayList<UninstallerListener>(), new ArrayList<UninstallerListener>()};
         // Load listeners if exist
         InputStream in;
         ObjectInputStream objIn;
@@ -314,18 +314,17 @@ public class Destroyer extends Thread
         if (in != null)
         {
             objIn = new ObjectInputStream(in);
-            List listeners = (List) objIn.readObject();
+            List<String> listeners = (List) objIn.readObject();
             objIn.close();
-            Iterator iter = listeners.iterator();
-            while (iter != null && iter.hasNext())
+            for (String listener : listeners)
             {
-                Class<UninstallerListener> clazz = (Class<UninstallerListener>) Class.forName(((String) iter.next()));
-                UninstallerListener ul = clazz.newInstance();
-                if (ul.isFileListener())
+                Class<UninstallerListener> clazz = (Class<UninstallerListener>) Class.forName(listener);
+                UninstallerListener uninstallerListener = clazz.newInstance();
+                if (uninstallerListener.isFileListener())
                 {
-                    uninstaller[1].add(ul);
+                    uninstaller[1].add(uninstallerListener);
                 }
-                uninstaller[0].add(ul);
+                uninstaller[0].add(uninstallerListener);
             }
         }
         return uninstaller;
@@ -340,37 +339,34 @@ public class Destroyer extends Thread
      * @param handler   the current progress handler
      */
 
-    private void informListeners(List listeners, int action, Object param,
+    private void informListeners(List<UninstallerListener> listeners, int action, Object param,
                                  AbstractUIProgressHandler handler)
     {
         // Iterate the action list.
-        Iterator iter = listeners.iterator();
-        UninstallerListener il = null;
-        while (iter.hasNext())
+        for (UninstallerListener listener : listeners)
         {
             try
             {
-                il = (UninstallerListener) iter.next();
                 switch (action)
                 {
                     case UninstallerListener.BEFORE_DELETION:
-                        il.beforeDeletion((List) param, handler);
+                        listener.beforeDeletion((List) param, handler);
                         break;
                     case UninstallerListener.AFTER_DELETION:
-                        il.afterDeletion((List) param, handler);
+                        listener.afterDeletion((List) param, handler);
                         break;
                     case UninstallerListener.BEFORE_DELETE:
-                        il.beforeDelete((File) param, handler);
+                        listener.beforeDelete((File) param, handler);
                         break;
                     case UninstallerListener.AFTER_DELETE:
-                        il.afterDelete((File) param, handler);
+                        listener.afterDelete((File) param, handler);
                         break;
                 }
             }
             catch (Throwable e)
             { // Catch it to prevent for a block of uninstallation.
                 handler.emitError("Skipping custom action because exception caught during "
-                        + il.getClass().getName(), e.toString());
+                        + listener.getClass().getName(), e.toString());
             }
         }
     }

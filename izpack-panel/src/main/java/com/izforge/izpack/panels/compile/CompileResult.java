@@ -202,16 +202,16 @@ public class CompileResult
      */
     public String getCmdline()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuffer stringBuffer = new StringBuffer();
         for (String aCmdline : this.cmdline)
         {
-            if (sb.length() > 0)
+            if (stringBuffer.length() > 0)
             {
-                sb.append(' ');
+                stringBuffer.append(' ');
             }
-            sb.append(aCmdline);
+            stringBuffer.append(aCmdline);
         }
-        return sb.toString();
+        return stringBuffer.toString();
     }
 
     public String getStdout()

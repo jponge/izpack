@@ -54,20 +54,20 @@ public class ConditionHistoryTableCellRenderer extends DefaultTableCellRenderer
     {
         JComponent comp = null;
 
-        ConditionHistory ch = (ConditionHistory) value;
+        ConditionHistory conditionHistory = (ConditionHistory) value;
 
         JLabel label = new JLabel();
         label.setAutoscrolls(true);
         comp = label;
 
-        label.setText(ch.toString());
+        label.setText(conditionHistory.toString());
 
         comp.setOpaque(true);
-        if (ch.isNewcondition())
+        if (conditionHistory.isNewcondition())
         {
             comp.setBackground(Color.green);
         }
-        else if (ch.isChangedcondition())
+        else if (conditionHistory.isChangedcondition())
         {
             comp.setBackground(Color.yellow);
         }
@@ -78,8 +78,8 @@ public class ConditionHistoryTableCellRenderer extends DefaultTableCellRenderer
     {
         for (String s : conditionhistory.keySet())
         {
-            ConditionHistory ch = conditionhistory.get(s);
-            ch.clearState();
+            ConditionHistory conditionHistory = conditionhistory.get(s);
+            conditionHistory.clearState();
         }
     }
 }

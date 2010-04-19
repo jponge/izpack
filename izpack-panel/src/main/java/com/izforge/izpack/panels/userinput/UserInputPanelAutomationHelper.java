@@ -30,9 +30,8 @@ import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.util.Debug;
 
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 /**
  * Functions to support automated usage of the UserInputPanel
@@ -104,10 +103,8 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
         // ----------------------------------------------------
         // add all entries
         // ----------------------------------------------------
-        Iterator<String> keys = this.entries.keySet().iterator();
-        while (keys.hasNext())
+        for (String key : this.entries.keySet())
         {
-            String key = keys.next();
             String value = this.entries.get(key);
             dataElement = new XMLElementImpl(AUTO_KEY_ENTRY, userInput);
             dataElement.setAttribute(AUTO_ATTRIBUTE_KEY, key);
@@ -127,7 +124,6 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
     public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException
     {
         IXMLElement userInput;
-        IXMLElement dataElement;
         String variable;
         String value;
 
@@ -141,7 +137,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
             throw new InstallerException("Missing userInput element on line " + panelRoot.getLineNr());
         }
 
-        Vector<IXMLElement> userEntries = userInput.getChildrenNamed(AUTO_KEY_ENTRY);
+        List<IXMLElement> userEntries = userInput.getChildrenNamed(AUTO_KEY_ENTRY);
 
         if (userEntries == null)
         {
@@ -152,9 +148,8 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
         // retieve each entry and substitute the associated
         // variable
         // ----------------------------------------------------
-        for (int i = 0; i < userEntries.size(); i++)
+        for (IXMLElement dataElement : userEntries)
         {
-            dataElement = userEntries.elementAt(i);
             variable = dataElement.getAttribute(AUTO_ATTRIBUTE_KEY);
 
             // Substitute variable used in the 'value' field

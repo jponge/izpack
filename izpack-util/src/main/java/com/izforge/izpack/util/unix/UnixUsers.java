@@ -31,7 +31,7 @@ import java.util.ArrayList;
  *
  * @author marc.eppelmann&#064;reddot.de
  */
-public class UnixUsers extends ArrayList
+public class UnixUsers extends ArrayList<UnixUser>
 {
 
     // ~ Static fields/initializers *********************************************************
@@ -65,7 +65,7 @@ public class UnixUsers extends ArrayList
 
         for (int idx = 0; idx < size(); idx++)
         {
-            UnixUser user = (UnixUser) get(idx);
+            UnixUser user = get(idx);
 
             if ((user.getShell() != null) && user.getShell().trim().endsWith("sh"))
             {
@@ -87,10 +87,8 @@ public class UnixUsers extends ArrayList
 
         ArrayList<UnixUser> usersWithValidShells = getUsersWithValidShells();
 
-        for (int idx = 0; idx < usersWithValidShells.size(); idx++)
+        for (UnixUser user : usersWithValidShells)
         {
-            UnixUser user = usersWithValidShells.get(idx);
-
             if ((user.getHome() != null) && new File(user.getHome().trim()).exists())
             {
                 result.add(user);
@@ -106,16 +104,14 @@ public class UnixUsers extends ArrayList
      *
      * @return an UnixUsers Arraylist of these users
      */
-    public ArrayList _getUsersWithValidShellsExistingHomesAndDesktops()
+    public ArrayList<UnixUser> _getUsersWithValidShellsExistingHomesAndDesktops()
     {
-        ArrayList result = new ArrayList();
+        ArrayList<UnixUser> result = new ArrayList<UnixUser>();
 
         ArrayList<UnixUser> usersWithValidShellsAndExistingHomes = getUsersWithValidShellsAndExistingHomes();
 
-        for (int idx = 0; idx < usersWithValidShellsAndExistingHomes.size(); idx++)
+        for (UnixUser user : usersWithValidShellsAndExistingHomes)
         {
-            UnixUser user = usersWithValidShellsAndExistingHomes.get(idx);
-
             if ((user.getHome() != null)
                     && new File(user.getXdgDesktopfolder()).exists())
             {
@@ -135,12 +131,10 @@ public class UnixUsers extends ArrayList
     {
         ArrayList<String> result = new ArrayList<String>();
 
-        ArrayList validUserDesktops = getUsersWithValidShellsExistingHomesAndDesktops();
+        ArrayList<UnixUser> validUserDesktops = getUsersWithValidShellsExistingHomesAndDesktops();
 
-        for (int idx = 0; idx < validUserDesktops.size(); idx++)
+        for (UnixUser user : validUserDesktops)
         {
-            UnixUser user = (UnixUser) validUserDesktops.get(idx);
-
             if (user.getHome() != null)
             {
                 File DesktopFolder = new File(user.getXdgDesktopfolder());
@@ -161,7 +155,7 @@ public class UnixUsers extends ArrayList
      *
      * @return an UnixUsers Arraylist of these users
      */
-    public static ArrayList getUsersWithValidShellsExistingHomesAndDesktops()
+    public static ArrayList<UnixUser> getUsersWithValidShellsExistingHomesAndDesktops()
     {
         UnixUsers users = new UnixUsers();
 
@@ -175,9 +169,9 @@ public class UnixUsers extends ArrayList
      */
     private void fromUsersArrayList(ArrayList<String> anUsersArrayList)
     {
-        for (int idx = 0; idx < anUsersArrayList.size(); idx++)
+        for (String anAnUsersArrayList : anUsersArrayList)
         {
-            add(new UnixUser().fromEtcPasswdLine(anUsersArrayList.get(idx)));
+            add(new UnixUser().fromEtcPasswdLine(anAnUsersArrayList));
         }
     }
 
@@ -191,9 +185,8 @@ public class UnixUsers extends ArrayList
         ArrayList<String> result = new ArrayList<String>();
         ArrayList<String> etcPasswdArray = UnixHelper.getEtcPasswdArray();
 
-        for (int idx = 0; idx < etcPasswdArray.size(); idx++)
+        for (String line : etcPasswdArray)
         {
-            String line = etcPasswdArray.get(idx);
             result.add(line);
         }
 
@@ -221,9 +214,8 @@ public class UnixUsers extends ArrayList
 
         String retValue = "";
 
-        for (int user = 0; user < usersArrayList.size(); user++)
+        for (String userline : usersArrayList)
         {
-            String userline = usersArrayList.get(user);
             retValue += (userline.substring(0, userline.indexOf(":")) + ":");
         }
 
@@ -247,13 +239,13 @@ public class UnixUsers extends ArrayList
         UnixUsers users = new UnixUsers();
 
         // users.fromUsersArrayList();
-        for (int idx = 0; idx < users.size(); idx++)
+        for (Object user : users)
         {
-            System.out.println(((UnixUser) users.get(idx)).getName());
+            System.out.println(((UnixUser) user).getName());
         }
 
         System.out.println(StringTool
-                .stringArrayListToString(getUsersWithValidShellsExistingHomesAndDesktops()));
+                .listToString(getUsersWithValidShellsExistingHomesAndDesktops()));
 
         // getUsersWithValidShellsAndExistingHomes();
     }

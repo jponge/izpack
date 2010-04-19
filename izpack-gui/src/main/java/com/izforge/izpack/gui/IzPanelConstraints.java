@@ -195,8 +195,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
     {
         try
         {
-            IzPanelConstraints c = (IzPanelConstraints) super.clone();
-            return c;
+            IzPanelConstraints constraints = (IzPanelConstraints) super.clone();
+            return constraints;
         }
         catch (CloneNotSupportedException e)
         {

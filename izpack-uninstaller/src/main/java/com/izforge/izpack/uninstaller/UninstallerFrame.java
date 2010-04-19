@@ -109,7 +109,7 @@ public class UninstallerFrame extends JFrame
         UIManager.put("OptionPane.cancelButtonText", langpack.getString("installer.cancel"));
 
         // Sets the frame icon
-        setIconImage(icons.getImageIcon("JFrameIcon").getImage());
+        setIconImage(icons.get("JFrameIcon").getImage());
 
         // We build the GUI & show it
         buildGUI(displayForceOption, forceOptionState);
@@ -158,7 +158,7 @@ public class UninstallerFrame extends JFrame
         // We put our components
 
         JLabel warningLabel = new JLabel(langpack.getString("uninstaller.warning"), icons
-                .getImageIcon("warning"), JLabel.TRAILING);
+                .get("warning"), JLabel.TRAILING);
         buildConstraints(gbConstraints, 0, 0, 2, 1, 1.0, 0.0);
         gbConstraints.anchor = GridBagConstraints.WEST;
         gbConstraints.fill = GridBagConstraints.NONE;
@@ -183,7 +183,7 @@ public class UninstallerFrame extends JFrame
         contentPane.add(progressBar);
 
         destroyButton = ButtonFactory.createButton(langpack.getString("uninstaller.uninstall"),
-                icons.getImageIcon("delete"), buttonsHColor);
+                icons.get("delete"), buttonsHColor);
         destroyButton.addActionListener(handler);
         buildConstraints(gbConstraints, 0, 3, 1, 1, 0.5, 0.0);
         gbConstraints.fill = GridBagConstraints.NONE;
@@ -192,7 +192,7 @@ public class UninstallerFrame extends JFrame
         contentPane.add(destroyButton);
 
         quitButton = ButtonFactory.createButton(langpack.getString("installer.quit"), icons
-                .getImageIcon("stop"), buttonsHColor);
+                .get("stop"), buttonsHColor);
         quitButton.addActionListener(handler);
         buildConstraints(gbConstraints, 1, 3, 1, 1, 0.5, 0.0);
         gbConstraints.anchor = GridBagConstraints.EAST;

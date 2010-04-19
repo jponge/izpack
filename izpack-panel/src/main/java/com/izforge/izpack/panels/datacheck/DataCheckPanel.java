@@ -107,11 +107,10 @@ public class DataCheckPanel extends IzPanel
      */
     private String getPackNames(List<Pack> packList)
     {
-        int i;
         String pStatus;
         String sOutput = "";
         Pack iPack;
-        for (i = 0; i < packList.size(); i++)
+        for (int i = 0; i < packList.size(); i++)
         {
             iPack = packList.get(i);
             if (installDataGUI.getSelectedPacks().indexOf(iPack) != -1)

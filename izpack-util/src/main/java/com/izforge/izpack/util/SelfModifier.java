@@ -361,14 +361,14 @@ public class SelfModifier
     {
         try
         {
-            Process p = Runtime.getRuntime().exec(javaCommand());
+            Process process = Runtime.getRuntime().exec(javaCommand());
 
-            new StreamProxy(p.getErrorStream(), "err").start();
-            new StreamProxy(p.getInputStream(), "out").start();
-            p.getOutputStream().close();
+            new StreamProxy(process.getErrorStream(), "err").start();
+            new StreamProxy(process.getInputStream(), "out").start();
+            process.getOutputStream().close();
 
             // even if it returns an error code, it was at least found
-            p.waitFor();
+            process.waitFor();
         }
         catch (InterruptedException ie)
         {
@@ -404,8 +404,8 @@ public class SelfModifier
         while (true)
         {
             logFile = File.createTempFile(prefix, ".log");
-            String f = logFile.toString();
-            sandbox = new File(f.substring(0, f.length() - 4) + ".d");
+            String fileName = logFile.toString();
+            sandbox = new File(fileName.substring(0, fileName.length() - 4) + ".d");
 
             // check if the similarly named directory is free
             if (!sandbox.exists())
@@ -423,7 +423,7 @@ public class SelfModifier
         sandbox = sandbox.getCanonicalFile();
         logFile = logFile.getCanonicalFile();
 
-        jarFile = findJarFile((Class<?>) method.getDeclaringClass()).getCanonicalFile();
+        jarFile = findJarFile(method.getDeclaringClass()).getCanonicalFile();
         if (jarFile == null)
         {
             throw new IllegalStateException("SelfModifier must be in a jar file");
@@ -480,13 +480,13 @@ public class SelfModifier
             command.add(arg);
         }
 
-        StringBuffer sb = new StringBuffer("Spawning phase ");
-        sb.append(nextPhase).append(": ");
+        StringBuffer buffer = new StringBuffer("Spawning phase ");
+        buffer.append(nextPhase).append(": ");
         for (String anEntireCmd : command)
         {
-            sb.append("\n\t").append(anEntireCmd);
+            buffer.append("\n\t").append(anEntireCmd);
         }
-        log(sb.toString());
+        log(buffer.toString());
 
 //        ProcessBuilder process = new ProcessBuilder(command);       
 //        return process.start();
@@ -519,15 +519,7 @@ public class SelfModifier
         // file
         // Constructed w/ it will expect "%20" in path. URI and File(URI)
         // properly
-        // deal with escaping back and forth, but didn't exist until 1.4
-        if (JAVA_SPECIFICATION_VERSION < 1.4)
-        {
-            file = new File(fromURI(path));
-        }
-        else
-        {
-            file = new File(URI.create(path));
-        }
+        file = new File(URI.create(path));
 
         return file;
     }
@@ -653,15 +645,15 @@ public class SelfModifier
 
 
             // spawn phase 3, capture its stdio and wait for it to exit
-            Process p = spawn(args, 3);
+            Process process = spawn(args, 3);
 
-            new StreamProxy(p.getErrorStream(), "err", log).start();
-            new StreamProxy(p.getInputStream(), "out", log).start();
-            p.getOutputStream().close();
+            new StreamProxy(process.getErrorStream(), "err", log).start();
+            new StreamProxy(process.getInputStream(), "out", log).start();
+            process.getOutputStream().close();
 
             try
             {
-                retVal = p.waitFor();
+                retVal = process.waitFor();
             }
             catch (InterruptedException e)
             {
@@ -802,25 +794,25 @@ public class SelfModifier
         {
             try
             {
-                PrintWriter pw = null;
+                PrintWriter printWriter = null;
                 if (out != null)
                 {
-                    pw = new PrintWriter(out);
+                    printWriter = new PrintWriter(out);
                 }
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
                 String line;
                 while ((line = br.readLine()) != null)
                 {
-                    if (pw != null)
+                    if (printWriter != null)
                     {
-                        pw.println(line);
+                        printWriter.println(line);
                     }
                     // System.out.println(name + ">" + line);
                 }
-                if (pw != null)
+                if (printWriter != null)
                 {
-                    pw.flush();
+                    printWriter.flush();
                 }
             }
             catch (IOException ioe)
@@ -838,8 +830,6 @@ public class SelfModifier
     // This was stolen (and specialized from much more modular code) from the
     // jakarta ant class org.apache.tools.ant.taskdefs.condition.Os
     // See the javaCommand() method.
-    private static final float JAVA_SPECIFICATION_VERSION = Float.parseFloat(System
-            .getProperty("java.specification.version"));
 
     private static final String JAVA_HOME = System.getProperty("java.home");
 
@@ -880,7 +870,7 @@ public class SelfModifier
             uri = uri.substring(1);
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuffer buffer = new StringBuffer();
         CharacterIterator iter = new StringCharacterIterator(uri);
         for (char c = iter.first(); c != CharacterIterator.DONE; c = iter.next())
         {
@@ -894,17 +884,17 @@ public class SelfModifier
                     if (c2 != CharacterIterator.DONE)
                     {
                         int i2 = Character.digit(c2, 16);
-                        sb.append((char) ((i1 << 4) + i2));
+                        buffer.append((char) ((i1 << 4) + i2));
                     }
                 }
             }
             else
             {
-                sb.append(c);
+                buffer.append(c);
             }
         }
 
-        String path = sb.toString();
+        String path = buffer.toString();
         return path;
     }
 

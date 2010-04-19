@@ -32,7 +32,7 @@ public class WinSetupFileQueue extends WinSetupAPIBase
     public WinSetupFileQueue(WinSetupQueueCallbackInterface handler) throws Exception
     {
         super();
-        this.handle = SetupOpenFileQueue((Object) handler);
+        this.handle = SetupOpenFileQueue(handler);
     }
 
     /**

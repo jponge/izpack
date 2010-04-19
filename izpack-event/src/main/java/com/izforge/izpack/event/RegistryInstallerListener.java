@@ -41,7 +41,6 @@ import com.izforge.izpack.util.helper.SpecHelper;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 /**
  * Installer custom action for handling registry entries on Windows. On Unix nothing will be done.
@@ -146,17 +145,16 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
 
             if (getSpecHelper().getSpec() != null)
             {
-                Iterator iter = idata.getSelectedPacks().iterator();
                 // Get the special pack "UninstallStuff" which contains values
                 // for the uninstaller entry.
                 uninstallerPack = getSpecHelper().getPackForName("UninstallStuff");
                 performPack(uninstallerPack, variableSubstitutor);
 
                 // Now perform the selected packs.
-                while (iter != null && iter.hasNext())
+                for (Pack selectedPack : idata.getSelectedPacks())
                 {
                     // Resolve data for current pack.
-                    IXMLElement pack = getSpecHelper().getPackForName(((Pack) iter.next()).name);
+                    IXMLElement pack = getSpecHelper().getPackForName(selectedPack.name);
                     performPack(pack, variableSubstitutor);
 
                 }
@@ -216,10 +214,6 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             {
                 return;
             }
-            if (registryHandler == null)
-            {
-                return;
-            }
             registryHandler.activateLogging();
             registryHandler.setLoggingInfo(registryModificationLog);
             registryHandler.rewind();
@@ -256,15 +250,13 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
         }
 
         // Get all entries for registry settings.
-        Vector regEntries = pack.getChildren();
+        List<IXMLElement> regEntries = pack.getChildren();
         if (regEntries == null)
         {
             return;
         }
-        Iterator entriesIter = regEntries.iterator();
-        while (entriesIter != null && entriesIter.hasNext())
+        for (IXMLElement regEntry : regEntries)
         {
-            IXMLElement regEntry = (IXMLElement) entriesIter.next();
             String condition = regEntry.getAttribute("condition");
             if (condition != null)
             {
@@ -352,7 +344,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             rh.setValue(keypath, name, value);
             return;
         }
-        Vector<IXMLElement> values = regEntry.getChildrenNamed(REG_MULTI);
+        List<IXMLElement> values = regEntry.getChildrenNamed(REG_MULTI);
         if (values != null && !values.isEmpty())
         { // Value type is REG_MULTI_SZ; placeholder possible.
             Iterator<IXMLElement> multiIter = values.iterator();

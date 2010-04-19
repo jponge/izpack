@@ -43,6 +43,6 @@ public class NativeUninstallerListener extends SimpleUninstallerListener
     public NativeUninstallerListener(LocaleDatabase langpack)
     {
         super();
-        this.langpack = langpack;
+        NativeUninstallerListener.langpack = langpack;
     }
 }

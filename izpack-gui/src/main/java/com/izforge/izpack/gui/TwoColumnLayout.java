@@ -19,6 +19,7 @@
 package com.izforge.izpack.gui;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -100,8 +101,8 @@ public class TwoColumnLayout implements LayoutManager2
      * holds all the components and layout constraints.
      */
     @SuppressWarnings("unchecked")
-    private Vector<TwoColumnConstraints>[] components = new Vector[]{new Vector<TwoColumnConstraints>(),
-            new Vector<TwoColumnConstraints>()};
+    private java.util.List<TwoColumnConstraints>[] components = new ArrayList[]{new ArrayList<TwoColumnConstraints>(),
+            new ArrayList<TwoColumnConstraints>()};
 
     /**
      * holds the component to be placed in the title region, including layout constraints.
@@ -500,7 +501,7 @@ public class TwoColumnLayout implements LayoutManager2
 
         try
         {
-            constraints = components[column].elementAt(row);
+            constraints = components[column].get(row);
         }
         catch (Throwable exception)
         {
@@ -611,14 +612,11 @@ public class TwoColumnLayout implements LayoutManager2
     private int minimumColumnWidth(int column, Container parent)
     {
         Component component = null;
-        TwoColumnConstraints constraints = null;
         int width = 0;
         int temp = 0;
 
-        for (int i = 0; i < components[column].size(); i++)
+        for (TwoColumnConstraints constraints : components[column])
         {
-            constraints = components[column].elementAt(i);
-
             if ((constraints != null) && (constraints.position != TwoColumnConstraints.BOTH))
             {
                 component = constraints.component;
@@ -649,7 +647,7 @@ public class TwoColumnLayout implements LayoutManager2
     private int minimumBothColumnsWidth(Container parent)
     {
         Component component = null;
-        TwoColumnConstraints constraints = null;
+        //TwoColumnConstraints constraints = null;
         int width = 0;
         int temp = 0;
 
@@ -659,10 +657,8 @@ public class TwoColumnLayout implements LayoutManager2
             width = (int) component.getMinimumSize().getWidth();
         }
 
-        for (int i = 0; i < components[LEFT].size(); i++)
+        for (TwoColumnConstraints constraints : components[LEFT])
         {
-            constraints = components[LEFT].elementAt(i);
-
             if ((constraints != null) && (constraints.position == TwoColumnConstraints.BOTH))
             {
                 component = constraints.component;
@@ -760,7 +756,7 @@ public class TwoColumnLayout implements LayoutManager2
 
         try
         {
-            constraints = components[column].elementAt(row);
+            constraints = components[column].get(row);
             if (constraints != null)
             {
                 component = constraints.component;
@@ -943,8 +939,8 @@ public class TwoColumnLayout implements LayoutManager2
      */
     public void removeLayoutComponent(Component comp)
     {
-        Vector<TwoColumnConstraints> left = components[LEFT];
-        Vector<TwoColumnConstraints> right = components[RIGHT];
+        java.util.List<TwoColumnConstraints> left = components[LEFT];
+        java.util.List<TwoColumnConstraints> right = components[RIGHT];
 
         for (int i = 0; i < left.size(); i++)
         {

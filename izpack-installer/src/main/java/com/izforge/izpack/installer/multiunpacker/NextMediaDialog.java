@@ -100,10 +100,10 @@ public class NextMediaDialog extends JDialog implements ActionListener
     {
         if (this.icons != null)
         {
-            this.msg = LabelFactory.create(this.langpack.getString(NEXTMEDIA_MSG_ID), this.icons.getImageIcon("warning"), JLabel.LEFT);
-            this.browsebtn = ButtonFactory.createButton(this.langpack.getString(BROWSEBTN_ID), this.icons.getImageIcon("open"), new Color(230, 230, 230));
-            this.okbtn = ButtonFactory.createButton(this.langpack.getString(OKBTN_ID), this.icons.getImageIcon("ok"), new Color(230, 230, 230));
-            this.cancelbtn = ButtonFactory.createButton(this.langpack.getString(CANCELBTN_ID), this.icons.getImageIcon("cancel"), new Color(230, 230, 230));
+            this.msg = LabelFactory.create(this.langpack.getString(NEXTMEDIA_MSG_ID), this.icons.get("warning"), JLabel.LEFT);
+            this.browsebtn = ButtonFactory.createButton(this.langpack.getString(BROWSEBTN_ID), this.icons.get("open"), new Color(230, 230, 230));
+            this.okbtn = ButtonFactory.createButton(this.langpack.getString(OKBTN_ID), this.icons.get("ok"), new Color(230, 230, 230));
+            this.cancelbtn = ButtonFactory.createButton(this.langpack.getString(CANCELBTN_ID), this.icons.get("cancel"), new Color(230, 230, 230));
         }
         else
         {
@@ -166,22 +166,22 @@ public class NextMediaDialog extends JDialog implements ActionListener
     {
         if (e.getSource() == this.browsebtn)
         {
-            JFileChooser jfc;
+            JFileChooser fileChooser;
             if (this.path.getText() != null)
             {
-                jfc = new JFileChooser(this.path.getText());
+                fileChooser = new JFileChooser(this.path.getText());
             }
             else
             {
-                jfc = new JFileChooser();
+                fileChooser = new JFileChooser();
             }
-            jfc.setFileFilter(new NextMediaFileFilter(this.nextmedianame, this.langpack));
-            jfc.setDialogTitle(this.langpack.getString("nextmedia.choosertitle"));
-            jfc.setDialogType(JFileChooser.OPEN_DIALOG);
-            jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            if (jfc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+            fileChooser.setFileFilter(new NextMediaFileFilter(this.nextmedianame, this.langpack));
+            fileChooser.setDialogTitle(this.langpack.getString("nextmedia.choosertitle"));
+            fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
             {
-                this.nextmediainput = jfc.getSelectedFile().getAbsolutePath();
+                this.nextmediainput = fileChooser.getSelectedFile().getAbsolutePath();
                 this.path.setText(this.nextmediainput);
             }
         }

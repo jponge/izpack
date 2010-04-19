@@ -57,7 +57,7 @@ public class InfoPanel extends IzPanel
         loadInfo();
         // The info label.
         add(LabelFactory.create(installData.getLangpack().getString("InfoPanel.info"), parent.icons
-                .getImageIcon("edit"), LEADING), NEXT_LINE);
+                .get("edit"), LEADING), NEXT_LINE);
         // The text area which shows the info.
         JTextArea textArea = new JTextArea(info);
         textArea.setName(GuiId.INFO_PANEL_TEXT_AREA.id);

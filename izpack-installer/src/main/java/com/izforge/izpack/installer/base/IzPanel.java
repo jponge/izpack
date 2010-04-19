@@ -41,6 +41,7 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Defines the base class for the IzPack panels. Any panel should be a subclass of it and should
@@ -135,14 +136,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     public final static int Y_ORIGIN = 0;
 
     /**
-     * D = "." ( dot )
+     * DELIMITER = "." ( dot )
      */
-    public final static String D = ".";
-
-    /**
-     * d = D
-     */
-    public final static String d = D;
+    public final static String DELIMITER = ".";
 
     /**
      * COLS_1 = 1
@@ -248,20 +244,20 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         // TODO:
         // TODO: first Test if a Resource for your protected Instance exists.
         String headline;
-        String headlineSearchBaseKey = myClassname + d + "headline"; // Results for example in
+        String headlineSearchBaseKey = myClassname + DELIMITER + "headline"; // Results for example in
         // "ShortcutPanel.headline"
         // :
 
         if (instanceNumber > -1) // Search for Results for example in "ShortcutPanel.headline.1,
         // 2, 3 etc." :
         {
-            String instanceSearchKey = headlineSearchBaseKey + d + Integer.toString(instanceNumber);
+            String instanceSearchKey = headlineSearchBaseKey + DELIMITER + Integer.toString(instanceNumber);
 
             String instanceHeadline = getString(instanceSearchKey);
 
             if (Debug.isLOG())
             {
-                System.out.println("found headline: " + instanceHeadline + d + " for instance # "
+                System.out.println("found headline: " + instanceHeadline + DELIMITER + " for instance # "
                         + instanceNumber);
             }
             if (!instanceSearchKey.equals(instanceHeadline))
@@ -334,7 +330,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public ImageIcon getImageIcon(String iconName)
     {
-        return parent.icons.getImageIcon(iconName);
+        return parent.icons.get(iconName);
     }
 
     /**
@@ -602,9 +598,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
         int nameStart = curClassName.lastIndexOf('.') + 1;
         curClassName = curClassName.substring(nameStart, curClassName.length());
-        StringBuffer buf = new StringBuffer();
-        buf.append(curClassName).append(".").append(subkey);
-        String fullkey = buf.toString();
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(curClassName).append(".").append(subkey);
+        String fullkey = buffer.toString();
         String panelid = null;
         if (getMetadata() != null)
         {
@@ -613,9 +609,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         String retval = null;
         if (panelid != null)
         {
-            buf.append(".");
-            buf.append(panelid);
-            retval = installData.getLangpack().getString(buf.toString());
+            buffer.append(".");
+            buffer.append(panelid);
+            retval = installData.getLangpack().getString(buffer.toString());
         }
         if (retval == null || retval.startsWith(fullkey))
         {
@@ -627,13 +623,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             {
                 return (null);
             }
-            if (alternateClass == null)
-            {
-                return (null);
-            }
-            buf.delete(0, buf.length());
-            buf.append(alternateClass).append(".").append(subkey);
-            retval = installData.getLangpack().getString(buf.toString());
+            buffer.delete(0, buffer.length());
+            buffer.append(alternateClass).append(".").append(subkey);
+            retval = installData.getLangpack().getString(buffer.toString());
         }
         if (retval != null && retval.indexOf('$') > -1)
         {
@@ -667,9 +659,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public JLabel createLabel(String subkey, String alternateClass, String iconId, int pos)
     {
-        ImageIcon ii = (iconId != null) ? parent.icons.getImageIcon(iconId) : null;
+        ImageIcon imageIcon = (iconId != null) ? parent.icons.get(iconId) : null;
         String msg = getI18nStringForClass(subkey, alternateClass);
-        JLabel label = LabelFactory.create(msg, ii, pos);
+        JLabel label = LabelFactory.create(msg, imageIcon, pos);
         if (label != null)
         {
             label.setFont(getControlTextFont());
@@ -695,9 +687,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     public JLabel createLabel(String subkey, String alternateClass, String iconId, int pos,
                               boolean isFullLine)
     {
-        ImageIcon ii = (iconId != null) ? parent.icons.getImageIcon(iconId) : null;
+        ImageIcon imageIcon = (iconId != null) ? parent.icons.get(iconId) : null;
         String msg = getI18nStringForClass(subkey, alternateClass);
-        JLabel label = LabelFactory.create(msg, ii, pos, isFullLine);
+        JLabel label = LabelFactory.create(msg, imageIcon, pos, isFullLine);
         if (label != null)
         {
             label.setFont(getControlTextFont());
@@ -736,8 +728,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public JLabel createLabel(String textId, String iconId, int pos, boolean isFullLine)
     {
-        ImageIcon ii = (iconId != null) ? parent.icons.getImageIcon(iconId) : null;
-        JLabel label = LabelFactory.create(installData.getLangpack().getString(textId), ii, pos, isFullLine);
+        ImageIcon imageIcon = (iconId != null) ? parent.icons.get(iconId) : null;
+        JLabel label = LabelFactory.create(installData.getLangpack().getString(textId), imageIcon, pos, isFullLine);
         if (label != null)
         {
             label.setFont(getControlTextFont());
@@ -782,13 +774,10 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public MultiLineLabel createMultiLineLabel(String text, String iconId, int pos)
     {
-        MultiLineLabel mll = null;
-        mll = new MultiLineLabel(text, 0, 0);
-        if (mll != null)
-        {
-            mll.setFont(getControlTextFont());
-        }
-        return (mll);
+        MultiLineLabel multiLineLabel = null;
+        multiLineLabel = new MultiLineLabel(text, 0, 0);
+        multiLineLabel.setFont(getControlTextFont());
+        return multiLineLabel;
     }
 
     /**
@@ -810,10 +799,10 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     protected static MetalLookAndFeel getLAF()
     {
-        LookAndFeel laf = UIManager.getLookAndFeel();
-        if (laf instanceof MetalLookAndFeel)
+        LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
+        if (lookAndFeel instanceof MetalLookAndFeel)
         {
-            return ((MetalLookAndFeel) laf);
+            return ((MetalLookAndFeel) lookAndFeel);
         }
         return (null);
     }
@@ -827,6 +816,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @return the default GridBagConstraints of this panel
      * @deprecated use <code>getLayoutHelper().getDefaulConstraints</code> instead
      */
+    @Deprecated
     public GridBagConstraints getDefaultGridBagConstraints()
     {
         return (GridBagConstraints) (layoutHelper.getDefaultConstraints());
@@ -838,6 +828,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @param constraints which should be set as default for this object
      * @deprecated use <code>getLayoutHelper().setDefaultConstraints</code> instead
      */
+    @Deprecated
     public void setDefaultGridBagConstraints(GridBagConstraints constraints)
     {
         layoutHelper.setDefaultConstraints(constraints);
@@ -849,6 +840,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *
      * @deprecated use <code>getLayoutHelper().resetGridCounter</code> instead
      */
+    @Deprecated
     public void resetGridCounter()
     {
         layoutHelper.resetGridCounter();
@@ -864,6 +856,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *         defaultGridBagConstraints for the other parameters
      * @deprecated use <code>getLayoutHelper().getNewConstraints</code> instead
      */
+    @Deprecated
     public GridBagConstraints getNewGridBagConstraints(int gridx, int gridy)
     {
         return (GridBagConstraints) (layoutHelper.getNewConstraints(gridx, gridy));
@@ -881,6 +874,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *         defaultGridBagConstraints for the other parameters
      * @deprecated use <code>getLayoutHelper().getNewConstraints</code> instead
      */
+    @Deprecated
     public GridBagConstraints getNewGridBagConstraints(int gridx, int gridy, int gridwidth,
                                                        int gridheight)
     {
@@ -894,6 +888,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @return a newly created GridBagConstraints for the next column of the current layout row
      * @deprecated use <code>getLayoutHelper().getNextXConstraints</code> instead
      */
+    @Deprecated
     public GridBagConstraints getNextXGridBagConstraints()
     {
         return (GridBagConstraints) (layoutHelper.getNextXConstraints());
@@ -905,6 +900,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @return a newly created GridBagConstraints with column 0 for the next row
      * @deprecated use <code>getLayoutHelper().getNextYConstraints</code> instead
      */
+    @Deprecated
     public GridBagConstraints getNextYGridBagConstraints()
     {
         return (GridBagConstraints) (layoutHelper.getNextYConstraints());
@@ -920,6 +916,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *         parameters
      * @deprecated use <code>getLayoutHelper().getNextYConstraints</code> instead
      */
+    @Deprecated
     public GridBagConstraints getNextYGridBagConstraints(int gridwidth, int gridheight)
     {
         return (GridBagConstraints) (layoutHelper.getNextYConstraints(gridwidth, gridheight));
@@ -933,6 +930,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *
      * @deprecated use <code>getLayoutHelper().startLayout</code> instead
      */
+    @Deprecated
     public void startGridBagLayout()
     {
         layoutHelper.startLayout(new GridBagLayout());
@@ -946,6 +944,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *
      * @deprecated use <code>getLayoutHelper().completeLayout</code> instead
      */
+    @Deprecated
     public void completeGridBagLayout()
     {
         layoutHelper.completeLayout();
@@ -1148,6 +1147,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         return string_to_parse;
     }
 
+    private Map<String, String> helps = null;
+    public void setHelps(Map<String, String> helps)
     /**
      * Indicates wether the panel can display help. The installer will hide Help button if current
      * panel does not support help functions. Default behaviour is to return <code>false</code>.
@@ -1217,9 +1218,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     {
         if (preActivateActions != null)
         {
-            for (int actionIndex = 0; actionIndex < preActivateActions.size(); actionIndex++)
+            for (PanelAction preActivateAction : preActivateActions)
             {
-                preActivateActions.get(actionIndex).executeAction(this.installData, this);
+                preActivateAction.executeAction(this.installData, this);
             }
         }
     }
@@ -1228,9 +1229,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     {
         if (preValidateActions != null)
         {
-            for (int actionIndex = 0; actionIndex < preValidateActions.size(); actionIndex++)
+            for (PanelAction preValidateAction : preValidateActions)
             {
-                preValidateActions.get(actionIndex).executeAction(this.installData, this);
+                preValidateAction.executeAction(this.installData, this);
             }
         }
     }
@@ -1239,9 +1240,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     {
         if (postValidateActions != null)
         {
-            for (int actionIndex = 0; actionIndex < postValidateActions.size(); actionIndex++)
+            for (PanelAction postValidateAction : postValidateActions)
             {
-                postValidateActions.get(actionIndex).executeAction(this.installData, this);
+                postValidateAction.executeAction(this.installData, this);
             }
         }
     }

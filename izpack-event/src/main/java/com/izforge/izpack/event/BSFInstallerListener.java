@@ -39,8 +39,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 
 public class BSFInstallerListener extends SimpleInstallerListener
@@ -78,27 +77,22 @@ public class BSFInstallerListener extends SimpleInstallerListener
             return;
         }
 
-        Iterator iter = idata.getSelectedPacks().iterator();
-        Pack p;
-        while (iter != null && iter.hasNext())
+        for (Pack pack : idata.getSelectedPacks())
         {
-            p = (Pack) iter.next();
-
-            IXMLElement pack = getSpecHelper().getPackForName(p.name);
-            if (pack == null)
+            IXMLElement packElement = getSpecHelper().getPackForName(pack.name);
+            if (packElement == null)
             {
                 continue;
             }
 
             ArrayList<BSFAction> packActions = new ArrayList<BSFAction>();
 
-            Vector<IXMLElement> scriptEntries = pack.getChildrenNamed("script");
+            List<IXMLElement> scriptEntries = packElement.getChildrenNamed("script");
             if (scriptEntries != null && scriptEntries.size() >= 1)
             {
-                Iterator<IXMLElement> entriesIter = scriptEntries.iterator();
-                while (entriesIter != null && entriesIter.hasNext())
+                for (IXMLElement scriptEntry : scriptEntries)
                 {
-                    BSFAction action = readAction(entriesIter.next(), idata);
+                    BSFAction action = readAction(scriptEntry, idata);
                     if (action != null)
                     {
                         packActions.add(action);
@@ -119,14 +113,13 @@ public class BSFInstallerListener extends SimpleInstallerListener
                 }
             }
 
-            actions.put(p.name, packActions);
+            actions.put(pack.name, packActions);
 
         }
 
-        iter = idata.getAvailablePacks().iterator();
-        while (iter.hasNext())
+        for (Pack pack : idata.getAvailablePacks())
         {
-            String currentPack = ((Pack) iter.next()).name;
+            String currentPack = pack.name;
             performAllActions(currentPack, ActionBase.BEFOREPACKS, null, new Object[]{idata, npacks, handler});
         }
     }

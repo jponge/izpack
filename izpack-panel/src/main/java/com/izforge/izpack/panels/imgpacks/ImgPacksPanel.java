@@ -110,12 +110,12 @@ public class ImgPacksPanel extends PacksPanelBase
 
         // Create the image label with a scroller.
         // Use the image of the first pack having an image as initial image
-        Iterator pack_it = this.installData.getAvailablePacks().iterator();
+        Iterator<Pack> pack_it = this.installData.getAvailablePacks().iterator();
         Pack firstImgPack = null;
         boolean imgFound = false;
         while (!imgFound && pack_it.hasNext())
         {
-            firstImgPack = (Pack) pack_it.next();
+            firstImgPack = pack_it.next();
             imgFound = firstImgPack.packImgId != null;
         }
         if (imgFound)
@@ -178,10 +178,8 @@ public class ImgPacksPanel extends PacksPanelBase
     {
         int size = this.installData.getAvailablePacks().size();
         images = new HashMap<String, ImageIcon>(size);
-        Iterator pack_it = this.installData.getAvailablePacks().iterator();
-        while (pack_it.hasNext())
+        for (Pack pack : this.installData.getAvailablePacks())
         {
-            Pack pack = (Pack) pack_it.next();
             if (pack.packImgId != null)
             {
                 try
@@ -239,7 +237,7 @@ public class ImgPacksPanel extends PacksPanelBase
         }
         if (i >= 0)
         {
-            Pack pack = (Pack) this.installData.getAvailablePacks().get(i);
+            Pack pack = this.installData.getAvailablePacks().get(i);
             imgLabel.setIcon(images.get(pack.packImgId));
         }
     }

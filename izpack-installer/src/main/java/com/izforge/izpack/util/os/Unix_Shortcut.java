@@ -350,9 +350,9 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      *
      * @see com.izforge.izpack.util.os.Shortcut#getProgramGroups(int)
      */
-    public Vector<String> getProgramGroups(int userType)
+    public List<String> getProgramGroups(int userType)
     {
-        Vector<String> groups = new Vector<String>();
+        List<String> groups = new ArrayList<String>();
 
         File kdeShareApplnk = getKdeShareApplnkFolder(userType);
 
@@ -448,11 +448,11 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
         if (userType == Shortcut.ALL_USERS)
         {
-            FileExecutor fe = new FileExecutor();
+            FileExecutor fileExecutor = new FileExecutor();
 
             String[] execOut = new String[2];
 
-            int execResult = fe.executeCommand(new String[]{"/usr/bin/env", "kde-config",
+            int execResult = fileExecutor.executeCommand(new String[]{"/usr/bin/env", "kde-config",
                     "--prefix"}, execOut);
 
             result = new File(execOut[0].trim());
@@ -645,11 +645,11 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                 // System.out.println("Creating "+localApps);
                 try
                 {
-                    java.io.File f = new java.io.File(localApps);
-                    f.mkdirs();
+                    java.io.File file = new java.io.File(localApps);
+                    file.mkdirs();
 
-                    f = new java.io.File(localPixmaps);
-                    f.mkdirs();
+                    file = new java.io.File(localPixmaps);
+                    file.mkdirs();
                 }
                 catch (Exception ignore)
                 {
@@ -701,12 +701,12 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         ShellScript myXdgDesktopIconScript = new ShellScript(null);
         String lines = "";
 
-        ResourceManager m = ResourceManager.getInstance();
-        m.setDefaultOrResourceBasePath("");
+        ResourceManager resourceManager = ResourceManager.getInstance();
+        resourceManager.setDefaultOrResourceBasePath("");
 
-        lines = m.getTextResource("/com/izforge/izpack/util/unix/xdgdesktopiconscript.sh");
+        lines = resourceManager.getTextResource("/com/izforge/izpack/util/unix/xdgdesktopiconscript.sh");
 
-        m.setDefaultOrResourceBasePath(null);
+        resourceManager.setDefaultOrResourceBasePath(null);
 
         myXdgDesktopIconScript.append(lines);
 

@@ -570,7 +570,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
                 {
                     String val = token.substring((token.indexOf(':') + 1), token.length());
                     String className = "";
-                    if (val.indexOf(":") > -1)
+                    if (val.contains(":"))
                     {
                         className = val.substring(val.indexOf(":") + 1);
                         val = val.substring(0, val.indexOf(":"));
@@ -608,7 +608,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
                         String val = token.substring((token.indexOf(':') + 1), token.length());
                         String className = "";
                         String presult = "";
-                        if (val.indexOf(":") > -1)
+                        if (val.contains(":"))
                         {
                             className = val.substring(val.indexOf(":") + 1);
                             val = val.substring(0, val.indexOf(":"));
@@ -616,8 +616,8 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
 
                         if (!"".equals(className))
                         {
-                            Processor p = (Processor) Class.forName(className).newInstance();
-                            presult = p.process(this);
+                            Processor processor = (Processor) Class.forName(className).newInstance();
+                            presult = processor.process(this);
                         }
                         String[] td = new RE("\\*").split(presult);
                         ((JTextField) inputFields.elementAt(index)).setText(td[index]);

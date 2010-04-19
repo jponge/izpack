@@ -131,7 +131,7 @@ public class Uninstaller
     {
         try
         {
-            UninstallerConsole uco = new UninstallerConsole();
+            UninstallerConsole uninstallerConsole = new UninstallerConsole();
             boolean force = false;
             for (String arg : args)
             {
@@ -141,7 +141,7 @@ public class Uninstaller
                 }
             }
             System.out.println("Force deletion: " + force);
-            uco.runUninstall(force);
+            uninstallerConsole.runUninstall(force);
         }
         catch (Exception err)
         {

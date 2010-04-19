@@ -82,7 +82,7 @@ public class SudoPanel extends IzPanel implements ActionListener
         add(LabelFactory
                 .create(
                 /* installData.getLangpack().getString("SudoPanel.tip") */"Please note that passwords are case-sensitive",
-                parent.icons.getImageIcon("tip"), JLabel.TRAILING));
+                parent.icons.get("tip"), JLabel.TRAILING));
 
         add(Box.createRigidArea(new Dimension(0, 5)));
 
@@ -152,17 +152,17 @@ public class SudoPanel extends IzPanel implements ActionListener
             oses.add(new OsModel("unix", null, null, null, null));
 
             ArrayList<ParsableFile> plist = new ArrayList<ParsableFile>();
-            ParsableFile pf = new ParsableFile(file.getAbsolutePath(), null, null, oses);
-            plist.add(pf);
-            ScriptParser sp = new ScriptParser(plist, variableSubstitutor);
-            sp.parseFiles();
+            ParsableFile parsableFile = new ParsableFile(file.getAbsolutePath(), null, null, oses);
+            plist.add(parsableFile);
+            ScriptParser scriptParser = new ScriptParser(plist, variableSubstitutor);
+            scriptParser.parseFiles();
 
-            ArrayList<ExecutableFile> elist = new ArrayList<ExecutableFile>();
-            ExecutableFile ef = new ExecutableFile(file.getAbsolutePath(),
+            ArrayList<ExecutableFile> executableFiles = new ArrayList<ExecutableFile>();
+            ExecutableFile executableFile = new ExecutableFile(file.getAbsolutePath(),
                     ExecutableFile.POSTINSTALL, ExecutableFile.ABORT, oses, false);
-            elist.add(ef);
-            FileExecutor fe = new FileExecutor(elist);
-            int retval = fe.executeFiles(ExecutableFile.POSTINSTALL, this);
+            executableFiles.add(executableFile);
+            FileExecutor fileExecutor = new FileExecutor(executableFiles);
+            int retval = fileExecutor.executeFiles(ExecutableFile.POSTINSTALL, this);
             if (retval == 0)
             {
                 this.installData.setVariable("password", pass);

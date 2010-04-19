@@ -468,11 +468,11 @@ public class Info implements Serializable
     /**
      * Sets the installation subpath.
      *
-     * @param string subpath to be set
+     * @param installationSubPath subpath to be set
      */
-    public void setInstallationSubPath(String string)
+    public void setInstallationSubPath(String installationSubPath)
     {
-        installationSubPath = string;
+        this.installationSubPath = installationSubPath;
     }
 
     /**

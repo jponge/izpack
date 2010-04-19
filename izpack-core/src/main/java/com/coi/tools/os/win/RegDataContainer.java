@@ -197,11 +197,11 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
     /**
      * Sets the dword data to the given value.
      *
-     * @param i data to be set
+     * @param dwordData data to be set
      */
-    public void setDwordData(long i)
+    public void setDwordData(long dwordData)
     {
-        dwordData = i;
+        this.dwordData = dwordData;
     }
 
     /**
@@ -217,34 +217,34 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
     /**
      * Sets the string data to the given value.
      *
-     * @param string data to be set
+     * @param stringData data to be set
      */
-    public void setStringData(String string)
+    public void setStringData(String stringData)
     {
-        stringData = string;
+        this.stringData = stringData;
     }
 
     /**
      * Sets the type.
      *
-     * @param i type to be set
+     * @param type type to be set
      */
-    public void setType(int i)
+    public void setType(int type)
     {
-        type = i;
+        this.type = type;
     }
 
     /**
      * Verifies whether the given int represents a valid type or not.
      *
-     * @param type0 value to be verified
+     * @param type value to be verified
      * @return whether the given int represents a valid type or not
      */
-    public boolean isValidType(int type0)
+    public boolean isValidType(int type)
     {
-        for (int aVALID_TYPES : VALID_TYPES)
+        for (int validType : VALID_TYPES)
         {
-            if (type0 == aVALID_TYPES)
+            if (type == validType)
             {
                 return (true);
             }
@@ -375,7 +375,7 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
 
     private boolean containsPlaceholder(String str)
     {
-        return str.indexOf("%") >= 0;
+        return str.contains("%");
     }
 
 }

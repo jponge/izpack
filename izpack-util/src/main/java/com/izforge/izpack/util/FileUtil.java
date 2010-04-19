@@ -24,7 +24,7 @@ package com.izforge.izpack.util;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -53,10 +53,10 @@ public class FileUtil
      *         null.
      * @throws IOException
      */
-    public static ArrayList getFileContent(String fileName)
+    public static List<String> getFileContent(String fileName)
             throws IOException
     {
-        ArrayList result = new ArrayList();
+        List<String> result = new ArrayList<String>();
 
         File aFile = new File(fileName);
 
@@ -72,10 +72,10 @@ public class FileUtil
         {
             reader = new BufferedReader(new FileReader(aFile));
         }
-        catch (FileNotFoundException e1)
+        catch (FileNotFoundException e)
         {
             // TODO handle Exception
-            e1.printStackTrace();
+            e.printStackTrace();
 
             return result;
         }
@@ -121,7 +121,7 @@ public class FileUtil
         String searchString = caseInSensitiveSearch
                 ? aSearchString.toLowerCase() : aSearchString;
 
-        ArrayList fileContent = new ArrayList();
+        List<String> fileContent = new ArrayList<String>();
 
         try
         {
@@ -133,18 +133,14 @@ public class FileUtil
             e.printStackTrace();
         }
 
-        Iterator linesIter = fileContent.iterator();
-
-        while (linesIter.hasNext())
+        for (String currentline : fileContent)
         {
-            String currentline = (String) linesIter.next();
-
             if (caseInSensitiveSearch)
             {
                 currentline = currentline.toLowerCase();
             }
 
-            if (currentline.indexOf(searchString) > -1)
+            if (currentline.contains(searchString))
             {
                 result = true;
 

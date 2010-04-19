@@ -28,8 +28,6 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.util.Debug;
 
-import java.util.Iterator;
-
 /**
  * The target directory selection panel.
  *
@@ -77,10 +75,8 @@ public class UserPathPanel extends UserPathInputPanel
         if (dependsName != null && !(dependsName.equalsIgnoreCase("")))
         {
             Debug.trace("Checking for pack dependency of " + dependsName);
-            Iterator iter = installData.getSelectedPacks().iterator();
-            while (iter.hasNext())
+            for (Pack pack : installData.getSelectedPacks())
             {
-                Pack pack = (Pack) iter.next();
                 Debug.trace("- Checking if " + pack.name + " equals " + dependsName);
                 if (pack.name.equalsIgnoreCase(dependsName))
                 {

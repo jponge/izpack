@@ -322,7 +322,7 @@ public class IoHelper
         if (OsVersion.IS_WINDOWS)
         {
             String command = "cmd.exe";
-            if (System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1)
+            if (System.getProperty("os.name").toLowerCase().contains("windows 9"))
             {
                 return (-1);
             }
@@ -377,7 +377,7 @@ public class IoHelper
             }
             if (OsVersion.IS_WINDOWS)
             { // getFreeSpace do not work on Windows 98.
-                if (System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1)
+                if (System.getProperty("os.name").toLowerCase().contains("windows 9"))
                 {
                     return (false);
                 }
@@ -471,7 +471,7 @@ public class IoHelper
 
         for (i = currentRange - 1; i >= 0; --i)
         {
-            if (useNotIdentifier != null && interestedEntries[i].indexOf(useNotIdentifier) > -1)
+            if (useNotIdentifier != null && interestedEntries[i].contains(useNotIdentifier))
             {
                 continue;
             }
@@ -502,20 +502,20 @@ public class IoHelper
             { // Standard id of SOLARIS do not support -gn.
                 String[] params = {"id"};
                 String[] output = new String[2];
-                FileExecutor fe = new FileExecutor();
-                fe.executeCommand(params, output);
+                FileExecutor fileExecutor = new FileExecutor();
+                fileExecutor.executeCommand(params, output);
                 // No we have "uid=%u(%s) gid=%u(%s)"
                 if (output[0] != null)
                 {
-                    StringTokenizer st = new StringTokenizer(output[0], "()");
-                    int length = st.countTokens();
+                    StringTokenizer tokenizer = new StringTokenizer(output[0], "()");
+                    int length = tokenizer.countTokens();
                     if (length >= 4)
                     {
                         for (int i = 0; i < 3; ++i)
                         {
-                            st.nextToken();
+                            tokenizer.nextToken();
                         }
-                        return (st.nextToken());
+                        return (tokenizer.nextToken());
                     }
                 }
                 return (null);
@@ -548,7 +548,7 @@ public class IoHelper
      */
     public static String replaceString(String destination, String what, String with)
     {
-        if (destination.indexOf(what) >= 0)
+        if (destination.contains(what))
         { // what found, with (placeholder) not included in destination ->
             // perform changing.
             StringBuffer buf = new StringBuffer();
@@ -597,7 +597,7 @@ public class IoHelper
         // handles backslashes in the replacement string in a special way
         // and the method exist only beginning with JRE 1.4.
         // Therefore the little bit crude way following ...
-        if (destination.indexOf("\\/") >= 0 && destination.indexOf(MASKED_SLASH_PLACEHOLDER) < 0)
+        if (destination.contains("\\/") && !destination.contains(MASKED_SLASH_PLACEHOLDER))
         { // Masked slash found, placeholder not included in destination ->
             // perform masking.
             destination = replaceString(destination, "\\/", MASKED_SLASH_PLACEHOLDER);
@@ -651,7 +651,7 @@ public class IoHelper
         if (OsVersion.IS_WINDOWS)
         {
             String command = "cmd.exe";
-            if (System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1)
+            if (System.getProperty("os.name").toLowerCase().contains("windows 9"))
             {
                 command = "command.com";
             }
@@ -670,12 +670,12 @@ public class IoHelper
             return;
         }
         String lineSep = System.getProperty("line.separator");
-        StringTokenizer st = new StringTokenizer(output[0], lineSep);
+        StringTokenizer tokenizer = new StringTokenizer(output[0], lineSep);
         envVars = new Properties();
         String var = null;
-        while (st.hasMoreTokens())
+        while (tokenizer.hasMoreTokens())
         {
-            String line = st.nextToken();
+            String line = tokenizer.nextToken();
             if (line.indexOf('=') == -1)
             { // May be a env var with a new line in it.
                 if (var == null)
@@ -747,11 +747,9 @@ public class IoHelper
             testName = testName.replace('\\', '.');
             if (files != null)
             {
-                Iterator<String> iterator = files.iterator();
                 boolean founded = false;
-                while (iterator.hasNext())
+                for (String doInclude : files)
                 {   // Make "includes" self to support regex.
-                    String doInclude = iterator.next();
                     if (testName.matches(doInclude))
                     {
                         founded = true;

@@ -32,8 +32,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class contains some helper methods to simplify handling of xml specification files.
@@ -176,17 +176,13 @@ public class SpecHelper
      */
     public IXMLElement getPackForName(String packDestName)
     {
-        Vector<IXMLElement> packs = getSpec().getChildrenNamed(PACK_KEY);
-        Iterator<IXMLElement> iter = null;
+        List<IXMLElement> packs = getSpec().getChildrenNamed(PACK_KEY);
         if (packs == null)
         {
             return (null);
         }
-        iter = packs.iterator();
-        while (iter.hasNext())
+        for (IXMLElement pack : packs)
         {
-
-            IXMLElement pack = iter.next();
             String packName = pack.getAttribute(PACK_NAME);
             if (packName.equals(packDestName))
             {
@@ -247,7 +243,7 @@ public class SpecHelper
      *                 name
      * @return a Vector of XMLElements of all leafs founded under root
      */
-    public Vector<IXMLElement> getAllSubChildren(IXMLElement root, String[] childdef)
+    public List<IXMLElement> getAllSubChildren(IXMLElement root, String[] childdef)
     {
         return (getSubChildren(root, childdef, 0));
     }
@@ -262,26 +258,25 @@ public class SpecHelper
      * @param depth    depth to start in childdef
      * @return a Vector of XMLElements of all leafs founded under root
      */
-    private Vector<IXMLElement> getSubChildren(IXMLElement root, String[] childdef, int depth)
+    private List<IXMLElement> getSubChildren(IXMLElement root, String[] childdef, int depth)
     {
-        Vector<IXMLElement> retval = null;
-        Vector<IXMLElement> retval2 = null;
-        Vector<IXMLElement> children = root != null ? root.getChildrenNamed(childdef[depth]) : null;
+        List<IXMLElement> retval = null;
+        List<IXMLElement> retval2 = null;
+        List<IXMLElement> children = root != null ? root.getChildrenNamed(childdef[depth]) : null;
         if (children == null)
         {
             return (null);
         }
         if (depth < childdef.length - 1)
         {
-            Iterator<IXMLElement> iter = children.iterator();
-            while (iter.hasNext())
+            for (IXMLElement child : children)
             {
-                retval2 = getSubChildren(iter.next(), childdef, depth + 1);
+                retval2 = getSubChildren(child, childdef, depth + 1);
                 if (retval2 != null)
                 {
                     if (retval == null)
                     {
-                        retval = new Vector<IXMLElement>();
+                        retval = new ArrayList<IXMLElement>();
                     }
                     retval.addAll(retval2);
                 }

@@ -31,7 +31,6 @@ import com.izforge.izpack.util.Debug;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Functions to support automated usage of the PacksPanel
@@ -53,13 +52,13 @@ public class PacksPanelAutomationHelper implements PanelAutomation
         for (int i = 0; i < idata.getAvailablePacks().size(); i++)
         {
             Pack pack = idata.getAvailablePacks().get(i);
-            IXMLElement el = new XMLElementImpl("pack", panelRoot);
-            el.setAttribute("index", Integer.toString(i));
-            el.setAttribute("name", pack.name);
-            Boolean selected = Boolean.valueOf(idata.getSelectedPacks().contains(pack));
-            el.setAttribute("selected", selected.toString());
+            IXMLElement packElement = new XMLElementImpl("pack", panelRoot);
+            packElement.setAttribute("index", Integer.toString(i));
+            packElement.setAttribute("name", pack.name);
+            Boolean selected = idata.getSelectedPacks().contains(pack);
+            packElement.setAttribute("selected", selected.toString());
 
-            panelRoot.addChild(el);
+            panelRoot.addChild(packElement);
         }
     }
 
@@ -85,7 +84,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
                 _selected = selected;
                 try
                 {
-                    _index = Integer.valueOf(index).intValue();
+                    _index = Integer.valueOf(index);
                 }
                 catch (NumberFormatException e)
                 {
@@ -128,7 +127,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
         List<PInfo> autoinstallPackInfoList = new ArrayList<PInfo>();
 
         // We get the packs markups
-        Vector<IXMLElement> packList = panelRoot.getChildrenNamed("pack");
+        List<IXMLElement> packList = panelRoot.getChildrenNamed("pack");
 
         // Read all packs from the xml and remember them to merge it with the selected packs from
         // install installDataGUI
@@ -174,7 +173,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
                         if (packInfo.isSelected())
                         {
                             // Check if the conditions allow to select the pack
-                            RulesEngine rules = (RulesEngine) idata.getRules();
+                            RulesEngine rules = idata.getRules();
                             if ((idata.getSelectedPacks().indexOf(pack) < 0)
                                     && (pack.id != null)
                                     && (rules.canInstallPack(pack.id,

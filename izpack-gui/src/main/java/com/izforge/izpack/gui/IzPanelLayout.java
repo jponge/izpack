@@ -339,9 +339,9 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
     private int rows()
     {
         int maxRows = 0;
-        for (Object component : components)
+        for (ArrayList<IzPanelConstraints> component : components)
         {
-            int curRows = ((ArrayList) component).size();
+            int curRows = component.size();
             if (curRows > maxRows)
             {
                 maxRows = curRows;
@@ -657,27 +657,22 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
         {
             return (null);
         }
-        Object obj = components.get(col);
-        if (obj != null && obj instanceof ArrayList)
+        ArrayList<IzPanelConstraints> constraints = components.get(col);
+        if (constraints != null)
         {
             try
             {
-                obj = (components.get(col)).get(row);
+                return constraints.get(row);
             }
             catch (Throwable t)
             {
-                obj = null;
-            }
-            if (obj != null)
-            {
-                return ((IzPanelConstraints) obj);
+                // no constraints
             }
             // no constraints is possible if no valid component
             // was added under this component.
             // Put dummy components into the array.
 
-            ArrayList<IzPanelConstraints> colA = components.get(col);
-            for (int curRow = colA.size(); row >= curRow; ++curRow)
+            for (int curRow = constraints.size(); row >= curRow; ++curRow)
             {
 
                 IzPanelConstraints currentConst = IzPanelLayout
@@ -687,7 +682,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                 currentConst.component = new FillerComponent();
                 try
                 {
-                    (components.get(col)).add(row, currentConst);
+                    constraints.add(row, currentConst);
                 }
                 catch (Throwable t)
                 {
@@ -1244,7 +1239,6 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
             cc = (IzPanelConstraints) ((IzPanelConstraints) constraints).clone();
         }
         cc.component = comp;
-        int i;
         // Modify positions if constraint value is one of the symbolic ints.
         int yPos = cc.getYPos();
         if (yPos == LayoutConstants.NEXT_ROW)
@@ -1271,7 +1265,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
         int perfCol = cc.getXWeight() < Byte.MAX_VALUE ? cc.getXWeight() : 1;
         if (components.size() < cc.getXPos() + perfCol)
         {
-            for (i = components.size() - 1; i < cc.getXPos() + perfCol - 1; ++i)
+            for (int i = components.size() - 1; i < cc.getXPos() + perfCol - 1; ++i)
             {
                 components.add(new ArrayList<IzPanelConstraints>());
             }
@@ -1282,7 +1276,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
             ArrayList<IzPanelConstraints> xComp = components.get(xPos);
             if (xComp.size() < yPos)
             {
-                for (i = xComp.size() - 1; i < yPos - 1; ++i)
+                for (int i = xComp.size() - 1; i < yPos - 1; ++i)
                 {
                     IzPanelConstraints dc = getDefaultConstraint(XDUMMY_CONSTRAINT);
                     dc.component = new FillerComponent();
@@ -1520,9 +1514,9 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
 
         public Rectangle getBounds(Rectangle rect)
         {
-            Rectangle rv = (rect != null) ? rect : new Rectangle();
-            rv.setBounds(0, 0, size.width, size.height);
-            return (rv);
+            Rectangle rectangle = (rect != null) ? rect : new Rectangle();
+            rectangle.setBounds(0, 0, size.width, size.height);
+            return (rectangle);
         }
 
         /**

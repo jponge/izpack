@@ -45,11 +45,11 @@ public class PasswordEncryptionValidator implements Validator
         String encryptedPassword = null;
         String key = null;
         String algorithm = null;
-        Map params = getParams(client);
+        Map<String, String> params = getParams(client);
         try
         {
-            key = (String) params.get("encryptionKey");
-            algorithm = (String) params.get("algorithm");
+            key = params.get("encryptionKey");
+            algorithm = params.get("algorithm");
             if (key != null && algorithm != null)
             {
                 initialize(key, algorithm);
@@ -73,10 +73,10 @@ public class PasswordEncryptionValidator implements Validator
         return (returnValue);
     }
 
-    private Map getParams(ProcessingClient client)
+    private Map<String, String> getParams(ProcessingClient client)
     {
         PasswordGroup group = null;
-        Map params = null;
+        Map<String, String> params = null;
         try
         {
             group = (PasswordGroup) client;
@@ -89,7 +89,7 @@ public class PasswordEncryptionValidator implements Validator
         {
             Debug.trace("getParams() Failed: " + e);
         }
-        return (params);
+        return params;
     }
 
     private void initialize(String key, String algorithm) throws Exception

@@ -30,8 +30,7 @@ import com.izforge.izpack.panels.installationgroup.InstallationGroupPanel.GroupD
 import com.izforge.izpack.util.Debug;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * An automation helper for the InstallationGroupPanel
@@ -48,17 +47,15 @@ public class InstallationGroupPanelAutomationHelper
     public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot)
     {
         GroupData[] rows = (GroupData[]) idata.getAttribute("GroupData");
-        HashMap packsByName = (HashMap) idata.getAttribute("packsByName");
+        HashMap<String, Pack> packsByName = (HashMap) idata.getAttribute("packsByName");
         // Write out the group to pack mappings
-        for (GroupData gd : rows)
+        for (GroupData groupData : rows)
         {
             IXMLElement xgroup = new XMLElementImpl("group", panelRoot);
-            xgroup.setAttribute("name", gd.name);
-            Iterator<String> names = gd.packNames.iterator();
-            while (names.hasNext())
+            xgroup.setAttribute("name", groupData.name);
+            for (String name : groupData.packNames)
             {
-                String name = names.next();
-                Pack pack = (Pack) packsByName.get(name);
+                Pack pack = packsByName.get(name);
                 int index = idata.getAvailablePacks().indexOf(pack);
                 IXMLElement xpack = new XMLElementImpl("pack", xgroup);
                 xpack.setAttribute("name", name);
@@ -80,7 +77,7 @@ public class InstallationGroupPanelAutomationHelper
         Debug.trace("InstallationGroupPanelAutomationHelper: runAutomated, INSTALL_GROUP: " + installGroup);
         if (installGroup != null)
         {
-            Vector<IXMLElement> groups = panelRoot.getChildrenNamed("group");
+            List<IXMLElement> groups = panelRoot.getChildrenNamed("group");
             for (IXMLElement group : groups)
             {
                 String name = group.getAttribute("name");
@@ -89,7 +86,7 @@ public class InstallationGroupPanelAutomationHelper
                 {
                     Debug.trace("Found INSTALL_GROUP match for: " + installGroup);
                     idata.getSelectedPacks().clear();
-                    Vector<IXMLElement> packs = group.getChildrenNamed("pack");
+                    List<IXMLElement> packs = group.getChildrenNamed("pack");
                     Debug.trace(name + " pack count: " + packs.size());
                     Debug.trace("Available pack count: " + idata.getAvailablePacks().size());
                     for (IXMLElement xpack : packs)
@@ -99,7 +96,7 @@ public class InstallationGroupPanelAutomationHelper
                         int index = Integer.parseInt(indexStr);
                         if (index >= 0)
                         {
-                            Pack pack = (Pack) idata.getAvailablePacks().get(index);
+                            Pack pack = idata.getAvailablePacks().get(index);
                             idata.getSelectedPacks().add(pack);
                             Debug.trace("Added pack: " + pack.name);
                         }

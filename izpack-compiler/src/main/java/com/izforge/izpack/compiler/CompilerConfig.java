@@ -238,7 +238,7 @@ public class CompilerConfig extends Thread
 
         if (root != null)
         {
-            Vector<IXMLElement> installerrequirementsels = root
+            List<IXMLElement> installerrequirementsels = root
                     .getChildrenNamed("installerrequirement");
             for (IXMLElement installerrequirement : installerrequirementsels)
             {
@@ -304,16 +304,16 @@ public class CompilerConfig extends Thread
     {
         notifyCompilerListener("addGUIPrefs", CompilerListener.BEGIN, data);
         // We get the IXMLElement & the attributes
-        IXMLElement gp = data.getFirstChildNamed("guiprefs");
+        IXMLElement guiPrefsElement = data.getFirstChildNamed("guiprefs");
         GUIPrefs prefs = new GUIPrefs();
-        if (gp != null)
+        if (guiPrefsElement != null)
         {
-            prefs.resizable = xmlCompilerHelper.requireYesNoAttribute(gp, "resizable");
-            prefs.width = xmlCompilerHelper.requireIntAttribute(gp, "width");
-            prefs.height = xmlCompilerHelper.requireIntAttribute(gp, "height");
+            prefs.resizable = xmlCompilerHelper.requireYesNoAttribute(guiPrefsElement, "resizable");
+            prefs.width = xmlCompilerHelper.requireIntAttribute(guiPrefsElement, "width");
+            prefs.height = xmlCompilerHelper.requireIntAttribute(guiPrefsElement, "height");
 
             // Look and feel mappings
-            for (IXMLElement lafNode : gp.getChildrenNamed("laf"))
+            for (IXMLElement lafNode : guiPrefsElement.getChildrenNamed("laf"))
             {
                 String lafName = xmlCompilerHelper.requireAttribute(lafNode, "name");
                 xmlCompilerHelper.requireChildNamed(lafNode, "os");
@@ -334,7 +334,7 @@ public class CompilerConfig extends Thread
                 prefs.lookAndFeelParams.put(lafName, params);
             }
             // Load modifier
-            for (IXMLElement ixmlElement : gp.getChildrenNamed("modifier"))
+            for (IXMLElement ixmlElement : guiPrefsElement.getChildrenNamed("modifier"))
             {
                 String key = xmlCompilerHelper.requireAttribute(ixmlElement, "key");
                 String value = xmlCompilerHelper.requireAttribute(ixmlElement, "value");
@@ -362,11 +362,11 @@ public class CompilerConfig extends Thread
                 String lafJarName = lafMap.get(lafName);
                 if (lafJarName == null)
                 {
-                    assertionHelper.parseError(gp, "Unrecognized Look and Feel: " + lafName);
+                    assertionHelper.parseError(guiPrefsElement, "Unrecognized Look and Feel: " + lafName);
                 }
 
                 URL lafJarURL = findIzPackResource("lib/" + lafJarName, "Look and Feel Jar file",
-                        gp);
+                        guiPrefsElement);
                 packager.addJarContent(lafJarURL);
             }
         }
@@ -400,9 +400,9 @@ public class CompilerConfig extends Thread
                     && ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage)))
             {
                 URL url = findProjectResource(src, "Jar file", ixmlElement);
-                CustomData ca = new CustomData(null, compilerHelper.getContainedFilePaths(url), null,
+                CustomData customData = new CustomData(null, compilerHelper.getContainedFilePaths(url), null,
                         CustomData.UNINSTALLER_JAR);
-                packager.addCustomJar(ca, url);
+                packager.addCustomJar(customData, url);
             }
         }
         notifyCompilerListener("addJars", CompilerListener.END, data);
@@ -441,10 +441,10 @@ public class CompilerConfig extends Thread
             if (stage != null
                     && ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage)))
             {
-                ArrayList<String> al = new ArrayList<String>();
-                al.add(name);
-                CustomData cad = new CustomData(null, al, constraints, CustomData.UNINSTALLER_LIB);
-                packager.addNativeUninstallerLibrary(cad);
+                List<String> contents = new ArrayList<String>();
+                contents.add(name);
+                CustomData customData = new CustomData(null, contents, constraints, CustomData.UNINSTALLER_LIB);
+                packager.addNativeUninstallerLibrary(customData);
                 needAddOns = true;
             }
 
@@ -499,9 +499,9 @@ public class CompilerConfig extends Thread
         IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "packs");
 
         // at least one pack is required
-        Vector<IXMLElement> packElements = root.getChildrenNamed("pack");
-        Vector<IXMLElement> refPackElements = root.getChildrenNamed("refpack");
-        Vector<IXMLElement> refPackSets = root.getChildrenNamed("refpackset");
+        List<IXMLElement> packElements = root.getChildrenNamed("pack");
+        List<IXMLElement> refPackElements = root.getChildrenNamed("refpack");
+        List<IXMLElement> refPackSets = root.getChildrenNamed("refpackset");
         if (packElements.isEmpty() && refPackElements.isEmpty() && refPackSets.isEmpty())
         {
             assertionHelper.parseError(root, "<packs> requires a <pack>, <refpack> or <refpackset>");
@@ -590,12 +590,10 @@ public class CompilerConfig extends Thread
                     parsable.setCondition(condition);
                     pack.addParsable(parsable);
                 }
-                Iterator<IXMLElement> iterSet = parsableNode.getChildrenNamed("fileset").iterator();
-                while (iterSet.hasNext())
+                for (IXMLElement fileSetElement : parsableNode.getChildrenNamed("fileset"))
                 {
-                    IXMLElement f = iterSet.next();
-                    String targetdir = xmlCompilerHelper.requireAttribute(f, "targetdir");
-                    String dir_attr = xmlCompilerHelper.requireAttribute(f, "dir");
+                    String targetdir = xmlCompilerHelper.requireAttribute(fileSetElement, "targetdir");
+                    String dir_attr = xmlCompilerHelper.requireAttribute(fileSetElement, "dir");
                     File dir = new File(dir_attr);
                     if (!dir.isAbsolute())
                     {
@@ -603,9 +601,9 @@ public class CompilerConfig extends Thread
                     }
                     if (!dir.isDirectory()) // also tests '.exists()'
                     {
-                        assertionHelper.parseError(f, "Invalid directory 'dir': " + dir_attr);
+                        assertionHelper.parseError(fileSetElement, "Invalid directory 'dir': " + dir_attr);
                     }
-                    String[] includedFiles = getFilesetIncludedFiles(f);
+                    String[] includedFiles = getFilesetIncludedFiles(fileSetElement);
                     if (includedFiles != null)
                     {
                         for (String filePath : includedFiles)
@@ -908,10 +906,10 @@ public class CompilerConfig extends Thread
         notifyCompilerListener("addPacksSingle", CompilerListener.END, data);
     }
 
-    private String[] getFilesetIncludedFiles(IXMLElement f) throws CompilerException
+    private String[] getFilesetIncludedFiles(IXMLElement fileSetElement) throws CompilerException
     {
         List<String> includedFiles = new ArrayList<String>();
-        String dir_attr = xmlCompilerHelper.requireAttribute(f, "dir");
+        String dir_attr = xmlCompilerHelper.requireAttribute(fileSetElement, "dir");
 
         File dir = new File(dir_attr);
         if (!dir.isAbsolute())
@@ -920,16 +918,16 @@ public class CompilerConfig extends Thread
         }
         if (!dir.isDirectory()) // also tests '.exists()'
         {
-            assertionHelper.parseError(f, "Invalid directory 'dir': " + dir_attr);
+            assertionHelper.parseError(fileSetElement, "Invalid directory 'dir': " + dir_attr);
         }
 
-        boolean casesensitive = xmlCompilerHelper.validateYesNoAttribute(f, "casesensitive", YES);
-        boolean defexcludes = xmlCompilerHelper.validateYesNoAttribute(f, "defaultexcludes", YES);
+        boolean casesensitive = xmlCompilerHelper.validateYesNoAttribute(fileSetElement, "casesensitive", YES);
+        boolean defexcludes = xmlCompilerHelper.validateYesNoAttribute(fileSetElement, "defaultexcludes", YES);
 
         // get includes and excludes
-        Vector<IXMLElement> xcludesList = null;
+        List<IXMLElement> xcludesList = null;
         String[] includes = null;
-        xcludesList = f.getChildrenNamed("include");
+        xcludesList = fileSetElement.getChildrenNamed("include");
         if (!xcludesList.isEmpty())
         {
             includes = new String[xcludesList.size()];
@@ -940,7 +938,7 @@ public class CompilerConfig extends Thread
             }
         }
         String[] excludes = null;
-        xcludesList = f.getChildrenNamed("exclude");
+        xcludesList = fileSetElement.getChildrenNamed("exclude");
         if (!xcludesList.isEmpty())
         {
             excludes = new String[xcludesList.size()];
@@ -958,12 +956,11 @@ public class CompilerConfig extends Thread
         String[][] containers = new String[][]{includes, excludes};
         for (int j = 0; j < toDo.length; ++j)
         {
-            String inex = f.getAttribute(toDo[j]);
+            String inex = fileSetElement.getAttribute(toDo[j]);
             if (inex != null && inex.length() > 0)
             { // This is the same "splitting" as ant PatternSet do ...
-                StringTokenizer tok = new StringTokenizer(inex, ", ", false);
-                int newSize = tok.countTokens();
-                int k = 0;
+                StringTokenizer tokenizer = new StringTokenizer(inex, ", ", false);
+                int newSize = tokenizer.countTokens();
                 String[] nCont = null;
                 if (containers[j] != null && containers[j].length > 0)
                 { // old container exist; create a new which can hold
@@ -971,7 +968,7 @@ public class CompilerConfig extends Thread
                     // and copy the old stuff to the front
                     newSize += containers[j].length;
                     nCont = new String[newSize];
-                    for (; k < containers[j].length; ++k)
+                    for (int k = 0; k < containers[j].length; ++k)
                     {
                         nCont[k] = containers[j][k];
                     }
@@ -982,10 +979,10 @@ public class CompilerConfig extends Thread
                 {
                     nCont = new String[newSize];
                 }
-                for (; k < newSize; ++k)
+                for (int k = 0; k < newSize; ++k)
                 // Fill the new one or expand the existent container
                 {
-                    nCont[k] = tok.nextToken();
+                    nCont[k] = tokenizer.nextToken();
                 }
                 containers[j] = nCont;
             }
@@ -996,19 +993,19 @@ public class CompilerConfig extends Thread
         // local var
 
         // scan and add fileset
-        DirectoryScanner ds = new DirectoryScanner();
-        ds.setIncludes(includes);
-        ds.setExcludes(excludes);
+        DirectoryScanner directoryScanner = new DirectoryScanner();
+        directoryScanner.setIncludes(includes);
+        directoryScanner.setExcludes(excludes);
         if (defexcludes)
         {
-            ds.addDefaultExcludes();
+            directoryScanner.addDefaultExcludes();
         }
-        ds.setBasedir(dir);
-        ds.setCaseSensitive(casesensitive);
-        ds.scan();
+        directoryScanner.setBasedir(dir);
+        directoryScanner.setCaseSensitive(casesensitive);
+        directoryScanner.scan();
 
-        String[] files = ds.getIncludedFiles();
-        String[] dirs = ds.getIncludedDirectories();
+        String[] files = directoryScanner.getIncludedFiles();
+        String[] dirs = directoryScanner.getIncludedDirectories();
 
         // Directory scanner has done recursion, add files and
         // directories
@@ -1124,8 +1121,7 @@ public class CompilerConfig extends Thread
 
         FileInputStream fin = new FileInputStream(archive);
         ZipInputStream zin = new ZipInputStream(fin);
-        List<String> allDirList = new Vector<String>();
-        String s = null;
+        List<String> allDirList = new ArrayList<String>();
         while (true)
         {
             ZipEntry zentry = zin.getNextEntry();
@@ -1224,7 +1220,7 @@ public class CompilerConfig extends Thread
         IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "panels");
 
         // at least one panel is required
-        Vector<IXMLElement> panels = root.getChildrenNamed("panel");
+        List<IXMLElement> panels = root.getChildrenNamed("panel");
         if (panels.isEmpty())
         {
             assertionHelper.parseError(root, "<panels> requires a <panel>");
@@ -1268,7 +1264,7 @@ public class CompilerConfig extends Thread
             if (configurationElement != null)
             {
                 Debug.trace("found a configuration for this panel.");
-                Vector<IXMLElement> params = configurationElement.getChildrenNamed("param");
+                List<IXMLElement> params = configurationElement.getChildrenNamed("param");
                 if (params != null)
                 {
                     for (IXMLElement param : params)
@@ -1296,12 +1292,11 @@ public class CompilerConfig extends Thread
                 }
             }
 //            // adding helps
-            Vector<IXMLElement> helps = panelElement.getChildrenNamed(AutomatedInstallData.HELP_TAG);
-            if (helps != null)
+            List<IXMLElement> helps = panelElement.getChildrenNamed(AutomatedInstallData.HELP_TAG);
+            if (helps != null) // TODO : remove this condition, getChildrenNamed always return a list
             {
-                for (Object help1 : helps)
+                for (IXMLElement help : helps)
                 {
-                    IXMLElement help = (IXMLElement) help1;
                     String iso3 = help.getAttribute(AutomatedInstallData.ISO3_ATTRIBUTE);
                     String resourceId;
                     if (panelid == null)
@@ -1515,7 +1510,7 @@ public class CompilerConfig extends Thread
         IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "locale");
 
         // at least one langpack is required
-        Vector<IXMLElement> locals = root.getChildrenNamed("langpack");
+        List<IXMLElement> locals = root.getChildrenNamed("langpack");
         if (locals.isEmpty())
         {
             assertionHelper.parseError(root, "<locale> requires a <langpack>");
@@ -1937,7 +1932,7 @@ public class CompilerConfig extends Thread
 
         for (int i = 0; i < element.getChildren().size(); i++)
         {
-            IXMLElement child = (IXMLElement) element.getChildren().elementAt(i);
+            IXMLElement child = element.getChildren().get(i);
             substituteAllProperties(child);
         }
     }
@@ -1985,9 +1980,9 @@ public class CompilerConfig extends Thread
         return data;
     }
 
-    protected OverrideType getOverrideValue(IXMLElement f) throws CompilerException
+    protected OverrideType getOverrideValue(IXMLElement fileElement) throws CompilerException
     {
-        String override_val = f.getAttribute("override");
+        String override_val = fileElement.getAttribute("override");
         if (override_val == null)
         {
             return OverrideType.OVERRIDE_UPDATE;
@@ -1996,7 +1991,7 @@ public class CompilerConfig extends Thread
         OverrideType override = OverrideType.getOverrideTypeFromAttribute(override_val);
         if (override == null)
         {
-            assertionHelper.parseError(f, "invalid value for attribute \"override\"");
+            assertionHelper.parseError(fileElement, "invalid value for attribute \"override\"");
         }
 
         return override;
@@ -2007,14 +2002,14 @@ public class CompilerConfig extends Thread
      * family=windows if not already se in the given constraint list.
      * Throws a parsing warning if the constraint list was implicitely modified.
      *
-     * @param f      the blockable XML element to parse
+     * @param blockableElement      the blockable XML element to parse
      * @param osList constraint list to maintain and return
      * @return blockable level
      * @throws CompilerException
      */
-    protected Blockable getBlockableValue(IXMLElement f, List<OsModel> osList) throws CompilerException
+    protected Blockable getBlockableValue(IXMLElement blockableElement, List<OsModel> osList) throws CompilerException
     {
-        String blockable_val = f.getAttribute("blockable");
+        String blockable_val = blockableElement.getAttribute("blockable");
         if (blockable_val == null)
         {
             return Blockable.BLOCKABLE_NONE;
@@ -2022,7 +2017,7 @@ public class CompilerConfig extends Thread
         Blockable blockable = Blockable.getBlockableFromAttribute(blockable_val);
         if (blockable == null)
         {
-            assertionHelper.parseError(f, "invalid value for attribute \"blockable\"");
+            assertionHelper.parseError(blockableElement, "invalid value for attribute \"blockable\"");
         }
 
         if (blockable != Blockable.BLOCKABLE_NONE)
@@ -2042,7 +2037,7 @@ public class CompilerConfig extends Thread
                 // the copied files might be multi-platform.
                 // Print out a warning to inform the user about this fact.
                 //osList.add(new OsModel("windows", null, null, null));
-                assertionHelper.parseWarn(f, "'blockable' will implicitely apply only on Windows target systems");
+                assertionHelper.parseWarn(blockableElement, "'blockable' will implicitely apply only on Windows target systems");
             }
         }
         return blockable;
@@ -2259,22 +2254,22 @@ public class CompilerConfig extends Thread
     /**
      * Calls the reviseAdditionalDataMap method of all registered CompilerListener's.
      *
-     * @param f file releated XML node
+     * @param fileElement file releated XML node
      * @return a map with the additional attributes
      */
-    private Map getAdditionals(IXMLElement f) throws CompilerException
+    private Map getAdditionals(IXMLElement fileElement) throws CompilerException
     {
         Map retval = null;
         try
         {
             for (CompilerListener compilerListener : compilerListeners)
             {
-                retval = (compilerListener).reviseAdditionalDataMap(retval, f);
+                retval = compilerListener.reviseAdditionalDataMap(retval, fileElement);
             }
         }
         catch (CompilerException ce)
         {
-            assertionHelper.parseError(f, ce.getMessage());
+            assertionHelper.parseError(fileElement, ce.getMessage());
         }
         return (retval);
     }
@@ -2342,7 +2337,7 @@ public class CompilerConfig extends Thread
                         else
                         {
                             // append data of all xml-docs into the first document
-                            Vector<IXMLElement> langStrings = xml.getChildrenNamed("str");
+                            List<IXMLElement> langStrings = xml.getChildrenNamed("str");
                             for (IXMLElement langString : langStrings)
                             {
                                 mergedPacksLang.addChild(langString);
@@ -2401,7 +2396,7 @@ public class CompilerConfig extends Thread
         IXMLElement xmlActions = xmlPanel.getFirstChildNamed(PanelAction.PANEL_ACTIONS_TAG);
         if (xmlActions != null)
         {
-            Vector<IXMLElement> actionList = xmlActions
+            List<IXMLElement> actionList = xmlActions
                     .getChildrenNamed(PanelAction.PANEL_ACTION_TAG);
             if (actionList != null)
             {
@@ -2411,7 +2406,7 @@ public class CompilerConfig extends Thread
                     String actionName = action.getAttribute(PanelAction.PANEL_ACTION_CLASSNAME_TAG);
                     if (actionName != null)
                     {
-                        Vector<IXMLElement> params = action.getChildrenNamed("param");
+                        List<IXMLElement> params = action.getChildrenNamed("param");
                         PanelActionConfiguration config = new PanelActionConfiguration();
 
                         for (IXMLElement param : params)

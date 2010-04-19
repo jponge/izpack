@@ -129,7 +129,7 @@ public class UnixHelper
                     }
 
                 }
-                catch (Exception i)
+                catch (Exception exception)
                 {
                     // ignore
                 }
@@ -147,11 +147,11 @@ public class UnixHelper
      */
     public static boolean kdeIsInstalled()
     {
-        FileExecutor fe = new FileExecutor();
+        FileExecutor fileExecutor = new FileExecutor();
 
         String[] execOut = new String[2];
 
-        int execResult = fe.executeCommand(new String[]{"/usr/bin/env", "kwin", "--version"},
+        int execResult = fileExecutor.executeCommand(new String[]{"/usr/bin/env", "kwin", "--version"},
                 execOut);
 
         return execResult == 0;
@@ -235,7 +235,7 @@ public class UnixHelper
     {
         System.out.println("Hallo from " + UnixHelper.class.getName() + VERSION);
 
-        // System.out.println( StringTool.stringArrayListToString(UnixUsers.getUsersAsArrayList())
+        // System.out.println( StringTool.listToString(UnixUsers.getUsersAsArrayList())
         // );
 
         // System.out.println("Kde is" + (kdeIsInstalled() ? " " : " not ") + "installed");
@@ -277,10 +277,10 @@ public class UnixHelper
         {
             try
             {
-                BufferedWriter w = new BufferedWriter(new FileWriter(tempFile));
-                w.write("Hallo");
-                w.flush();
-                w.close();
+                BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+                writer.write("Hallo");
+                writer.flush();
+                writer.close();
                 if (tempFile.exists())
                 {
                     System.out.println("Wrote: " + tempFile + ">>Hallo");
@@ -300,9 +300,9 @@ public class UnixHelper
 
             System.out.println("Copy: " + tempFile.toString() + " to " + destfilename);
 
-            ShellScript s = new ShellScript("bash");
+            ShellScript script = new ShellScript("bash");
 
-            s.append(getSuCommand() + " " + "marc.eppelmann" + " " + "-c" + " " + "\""
+            script.append(getSuCommand() + " " + "marc.eppelmann" + " " + "-c" + " " + "\""
                     + getCpCommand() + " " + tempFile.toString() + " " + destfilename + "\"");
 
             String shLocation = "/tmp/x.21.21";
@@ -315,8 +315,8 @@ public class UnixHelper
             {
                 x.printStackTrace();
             }
-            s.write(shLocation);
-            s.exec();
+            script.write(shLocation);
+            script.exec();
 
             // File deleteMe = new File( shLocation ); deleteMe.delete();
 
