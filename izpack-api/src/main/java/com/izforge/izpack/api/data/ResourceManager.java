@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -284,6 +285,16 @@ public class ResourceManager
                 this.getLanguageResourceString(resource));
     }
 
+
+    private URL getURL(String resource)
+    {
+        if (resource.charAt(0) == '/')
+        {
+            return getClass().getResource(resource);
+        }
+        return getClass().getResource(getResourceBasePath() + resource);
+    }
+
     /**
      * Returns a text resource from the jar file. The resource is loaded by
      * ResourceManager#getResource and then converted into text.
@@ -343,7 +354,20 @@ public class ResourceManager
      */
     public ImageIcon getImageIconResource(String resource, String... fallback)
     {
-        return new ImageIcon(this.getLocalizedURL(resource));
+        URL location = this.getURL(resource);
+        if (location != null)
+        {
+            return new ImageIcon(location);
+        }
+        for (String fallbackResource : fallback)
+        {
+            location = this.getURL(resource);
+            if (location != null)
+            {
+                return new ImageIcon(location);
+            }
+        }
+        throw new ResourceNotFoundException("Image icon not found in " + resource + " and " + Arrays.toString(fallback));
     }
 
     /**
