@@ -175,7 +175,7 @@ public class InstallationTest
         installerFrameFixture = prepareFrameFixture();
         java.util.List panelList = installData.getPanels();
         // Hello panel
-        Thread.sleep(600000);
+        Thread.sleep(600);
 //        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
 
         // Chack Panel
