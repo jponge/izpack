@@ -85,9 +85,9 @@ public class PackselectionCondition extends Condition
     {
         if (selectedpacks != null)
         {
-            for (Pack p : selectedpacks)
+            for (Pack pack : selectedpacks)
             {
-                if (packid.equals(p.id))
+                if (packid.equals(pack.id))
                 {
                     // pack is selected
                     return true;

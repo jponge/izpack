@@ -68,24 +68,24 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
 
         // controls # of lines to display at a time, to allow simulated scrolling down
         int lines = 25;
-        int l = 0;
+        int lineNumber = 0;
 
 
         String strippedHTML = this.removeHTML(license);
 
-        StringTokenizer st = new StringTokenizer(strippedHTML, "\n");
-        while (st.hasMoreTokens())
+        StringTokenizer tokenizer = new StringTokenizer(strippedHTML, "\n");
+        while (tokenizer.hasMoreTokens())
         {
-            String token = st.nextToken();
+            String token = tokenizer.nextToken();
             System.out.println(token);
-            l++;
-            if (l >= lines)
+            lineNumber++;
+            if (lineNumber >= lines)
             {
                 if (!doContinue())
                 {
                     return false;
                 }
-                l = 0;
+                lineNumber = 0;
             }
 
         }

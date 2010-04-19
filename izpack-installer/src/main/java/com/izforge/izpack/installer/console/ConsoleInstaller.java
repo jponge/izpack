@@ -108,19 +108,19 @@ public class ConsoleInstaller extends InstallerBase
         {
             this.result = true;
             this.installdata.setCurPanelNumber(-1);
-            for (Panel p : this.installdata.getPanelsOrder())
+            for (Panel panel : this.installdata.getPanelsOrder())
             {
                 this.installdata.setCurPanelNumber(this.installdata.getCurPanelNumber() + 1);
                 String praefix = "com.izforge.izpack.panels.";
-                if (p.className.compareTo(".") > -1)
+                if (panel.className.compareTo(".") > -1)
                 {
                     praefix = "";
                 }
-                if (!OsConstraintHelper.oneMatchesCurrentSystem(p.osConstraints))
+                if (!OsConstraintHelper.oneMatchesCurrentSystem(panel.osConstraints))
                 {
                     continue;
                 }
-                String panelClassName = p.className;
+                String panelClassName = panel.className;
                 String consoleHelperClassName = praefix + panelClassName + "ConsoleHelper";
                 Class<PanelConsole> consoleHelperClass = null;
 
@@ -153,7 +153,7 @@ public class ConsoleInstaller extends InstallerBase
                 }
 
                 //Check to see if we can show the panel based on its conditions.
-                if ((consoleHelperInstance != null) && (canShow(p)))
+                if ((consoleHelperInstance != null) && (canShow(panel)))
                 {
                     try
                     {
@@ -161,7 +161,7 @@ public class ConsoleInstaller extends InstallerBase
                                 + consoleHelperClassName + " entered.");
                         boolean bActionResult = true;
                         boolean bIsConditionFulfilled = true;
-                        String strCondition = p.getCondition();
+                        String strCondition = panel.getCondition();
                         if (strCondition != null)
                         {
                             RulesEngine rules = installdata.getRules();
@@ -175,7 +175,7 @@ public class ConsoleInstaller extends InstallerBase
                             {
                                 bActionResult = consoleHelperInstance.runConsole(this.installdata);
                             }
-                            while (!validatePanel(p));
+                            while (!validatePanel(panel));
                         }
                         else if (strAction.equals("doGeneratePropertiesFile"))
                         {
@@ -372,12 +372,12 @@ public class ConsoleInstaller extends InstallerBase
 
     private void mergeAndOverwriteFromSysProperties()
     {
-        Properties p = System.getProperties();
-        Enumeration<?> e = p.propertyNames();
+        Properties systemProperties = System.getProperties();
+        Enumeration<?> e = systemProperties.propertyNames();
         while (e.hasMoreElements())
         {
             String key = (String) e.nextElement();
-            String newval = p.getProperty(key);
+            String newval = systemProperties.getProperty(key);
             String oldval = (String) properties.setProperty(key, newval);
             if (oldval != null)
             {

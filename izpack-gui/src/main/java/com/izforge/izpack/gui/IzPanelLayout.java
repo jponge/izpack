@@ -1239,7 +1239,6 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
             cc = (IzPanelConstraints) ((IzPanelConstraints) constraints).clone();
         }
         cc.component = comp;
-        int i;
         // Modify positions if constraint value is one of the symbolic ints.
         int yPos = cc.getYPos();
         if (yPos == LayoutConstants.NEXT_ROW)
@@ -1266,7 +1265,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
         int perfCol = cc.getXWeight() < Byte.MAX_VALUE ? cc.getXWeight() : 1;
         if (components.size() < cc.getXPos() + perfCol)
         {
-            for (i = components.size() - 1; i < cc.getXPos() + perfCol - 1; ++i)
+            for (int i = components.size() - 1; i < cc.getXPos() + perfCol - 1; ++i)
             {
                 components.add(new ArrayList<IzPanelConstraints>());
             }
@@ -1277,7 +1276,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
             ArrayList<IzPanelConstraints> xComp = components.get(xPos);
             if (xComp.size() < yPos)
             {
-                for (i = xComp.size() - 1; i < yPos - 1; ++i)
+                for (int i = xComp.size() - 1; i < yPos - 1; ++i)
                 {
                     IzPanelConstraints dc = getDefaultConstraint(XDUMMY_CONSTRAINT);
                     dc.component = new FillerComponent();
@@ -1515,9 +1514,9 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
 
         public Rectangle getBounds(Rectangle rect)
         {
-            Rectangle rv = (rect != null) ? rect : new Rectangle();
-            rv.setBounds(0, 0, size.width, size.height);
-            return (rv);
+            Rectangle rectangle = (rect != null) ? rect : new Rectangle();
+            rectangle.setBounds(0, 0, size.width, size.height);
+            return (rectangle);
         }
 
         /**

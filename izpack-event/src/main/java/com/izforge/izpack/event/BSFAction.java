@@ -264,13 +264,13 @@ public class BSFAction extends ActionBase
                     }
                 }
 
-                Method m = null;
+                Method method = null;
                 Class clazz = idata.getClass();
-                while (m == null && clazz != Object.class)
+                while (method == null && clazz != Object.class)
                 {
                     try
                     {
-                        m = clazz.getDeclaredMethod("getVariables");
+                        method = clazz.getDeclaredMethod("getVariables");
                     }
                     catch (NoSuchMethodException e)
                     {
@@ -278,9 +278,9 @@ public class BSFAction extends ActionBase
                     }
                 }
 
-                if (m != null)
+                if (method != null)
                 {
-                    Properties properties = (Properties) m.invoke(idata);
+                    Properties properties = (Properties) method.invoke(idata);
                     variables.putAll(properties);
                 }
 

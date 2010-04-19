@@ -12,12 +12,12 @@ public class WinSetupDefaultCallbackHandler implements WinSetupQueueCallbackInte
     public int handleNeedMedia(String tagfile, String description, String sourcePath,
                                String sourceFile)
     {
-        File f = new File(sourcePath, sourceFile);
-        if (f.exists() && f.canRead())
+        File file = new File(sourcePath, sourceFile);
+        if (file.exists() && file.canRead())
         {
             return FILEOP_RETRY;
         }
-        addException("Source file " + f.getPath() + " not found, aborting.");
+        addException("Source file " + file.getPath() + " not found, aborting.");
         return FILEOP_ABORT;
     }
 

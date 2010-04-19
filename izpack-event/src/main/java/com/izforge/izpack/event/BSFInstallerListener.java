@@ -77,17 +77,17 @@ public class BSFInstallerListener extends SimpleInstallerListener
             return;
         }
 
-        for (Pack p : idata.getSelectedPacks())
+        for (Pack pack : idata.getSelectedPacks())
         {
-            IXMLElement pack = getSpecHelper().getPackForName(p.name);
-            if (pack == null)
+            IXMLElement packElement = getSpecHelper().getPackForName(pack.name);
+            if (packElement == null)
             {
                 continue;
             }
 
             ArrayList<BSFAction> packActions = new ArrayList<BSFAction>();
 
-            List<IXMLElement> scriptEntries = pack.getChildrenNamed("script");
+            List<IXMLElement> scriptEntries = packElement.getChildrenNamed("script");
             if (scriptEntries != null && scriptEntries.size() >= 1)
             {
                 for (IXMLElement scriptEntry : scriptEntries)
@@ -113,7 +113,7 @@ public class BSFInstallerListener extends SimpleInstallerListener
                 }
             }
 
-            actions.put(p.name, packActions);
+            actions.put(pack.name, packActions);
 
         }
 

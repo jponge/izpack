@@ -393,15 +393,15 @@ public class Packager extends PackagerBase
     private Pack200.Packer createAgressivePack200Packer()
     {
         Pack200.Packer packer = Pack200.newPacker();
-        Map<String, String> m = packer.properties();
-        m.put(Pack200.Packer.EFFORT, "9");
-        m.put(Pack200.Packer.SEGMENT_LIMIT, "-1");
-        m.put(Pack200.Packer.KEEP_FILE_ORDER, Pack200.Packer.FALSE);
-        m.put(Pack200.Packer.DEFLATE_HINT, Pack200.Packer.FALSE);
-        m.put(Pack200.Packer.MODIFICATION_TIME, Pack200.Packer.LATEST);
-        m.put(Pack200.Packer.CODE_ATTRIBUTE_PFX + "LineNumberTable", Pack200.Packer.STRIP);
-        m.put(Pack200.Packer.CODE_ATTRIBUTE_PFX + "LocalVariableTable", Pack200.Packer.STRIP);
-        m.put(Pack200.Packer.CODE_ATTRIBUTE_PFX + "SourceFile", Pack200.Packer.STRIP);
+        Map<String, String> packerProperties = packer.properties();
+        packerProperties.put(Pack200.Packer.EFFORT, "9");
+        packerProperties.put(Pack200.Packer.SEGMENT_LIMIT, "-1");
+        packerProperties.put(Pack200.Packer.KEEP_FILE_ORDER, Pack200.Packer.FALSE);
+        packerProperties.put(Pack200.Packer.DEFLATE_HINT, Pack200.Packer.FALSE);
+        packerProperties.put(Pack200.Packer.MODIFICATION_TIME, Pack200.Packer.LATEST);
+        packerProperties.put(Pack200.Packer.CODE_ATTRIBUTE_PFX + "LineNumberTable", Pack200.Packer.STRIP);
+        packerProperties.put(Pack200.Packer.CODE_ATTRIBUTE_PFX + "LocalVariableTable", Pack200.Packer.STRIP);
+        packerProperties.put(Pack200.Packer.CODE_ATTRIBUTE_PFX + "SourceFile", Pack200.Packer.STRIP);
         return packer;
     }
 

@@ -265,12 +265,12 @@ public class IzPackMojo extends AbstractMojo
             compilerData.setKind(kind);
             compilerContainer.addComponent(CompilerData.class, compilerData);
             // REFACTOR Check if it still works
-            CompilerConfig c = compilerContainer.getComponent(CompilerConfig.class);
+            CompilerConfig compilerConfig = compilerContainer.getComponent(CompilerConfig.class);
             CompilerData.setIzpackHome(basedir);
 
-            c.executeCompiler();
+            compilerConfig.executeCompiler();
 
-            if (!c.wasSuccessful())
+            if (!compilerConfig.wasSuccessful())
             {
                 throw new MojoExecutionException("IzPack compilation ERROR");
             }
@@ -323,8 +323,8 @@ public class IzPackMojo extends AbstractMojo
             for (Object classpathElement : classpathElements)
             {
                 String element = (String) classpathElement;
-                File f = new File(element);
-                URL newURL = f.toURI().toURL();
+                File file = new File(element);
+                URL newURL = file.toURI().toURL();
                 classpathURLs.add(newURL);
                 getLog().debug("Added to classpath " + element);
             }

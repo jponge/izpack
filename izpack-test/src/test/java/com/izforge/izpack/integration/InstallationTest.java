@@ -240,10 +240,10 @@ public class InstallationTest
         }
         assertThat(installPath.exists(), Is.is(true));
         UninstallData uninstallData = new UninstallData();
-        for (String p : uninstallData.getInstalledFilesList())
+        for (String installedFile : uninstallData.getInstalledFilesList())
         {
-            File f = new File(p);
-            assertThat(f.exists(), Is.is(true));
+            File file = new File(installedFile);
+            assertThat(file.exists(), Is.is(true));
         }
     }
 

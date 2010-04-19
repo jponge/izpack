@@ -35,9 +35,6 @@ import com.izforge.izpack.util.OsVersion;
 import java.io.*;
 import java.util.*;
 
-import java.io.*;
-import java.util.*;
-
 /**
  * The Target panel console helper class.
  *
@@ -252,23 +249,23 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
     private boolean compareVersions(String in, String template, boolean isMin,
                                     int assumedPlace, int halfRange, String useNotIdentifier)
     {
-        StringTokenizer st = new StringTokenizer(in, " \t\n\r\f\"");
+        StringTokenizer tokenizer = new StringTokenizer(in, " \t\n\r\f\"");
         int i;
         int currentRange = 0;
         String[] interestedEntries = new String[halfRange + halfRange];
         for (i = 0; i < assumedPlace - halfRange; ++i)
         {
-            if (st.hasMoreTokens())
+            if (tokenizer.hasMoreTokens())
             {
-                st.nextToken(); // Forget this entries.
+                tokenizer.nextToken(); // Forget this entries.
             }
         }
 
         for (i = 0; i < halfRange + halfRange; ++i)
         { // Put the interesting Strings into an intermediaer array.
-            if (st.hasMoreTokens())
+            if (tokenizer.hasMoreTokens())
             {
-                interestedEntries[i] = st.nextToken();
+                interestedEntries[i] = tokenizer.nextToken();
                 currentRange++;
             }
         }
@@ -291,9 +288,9 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
             return (false);
         }
         detectedVersion = interestedEntries[i];
-        StringTokenizer current = new StringTokenizer(interestedEntries[i], "._-");
-        StringTokenizer needed = new StringTokenizer(template, "._-");
-        while (needed.hasMoreTokens())
+        StringTokenizer currentTokenizer = new StringTokenizer(interestedEntries[i], "._-");
+        StringTokenizer neededTokenizer = new StringTokenizer(template, "._-");
+        while (neededTokenizer.hasMoreTokens())
         {
             // Current can have no more tokens if needed has more
             // and if a privious token was not accepted as good version.
@@ -301,18 +298,18 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
             // will be right here. Only if e.g. needed is 1.4.2_00 the
             // return value will be false, but zero should not b e used
             // at the last version part.
-            if (!current.hasMoreTokens())
+            if (!currentTokenizer.hasMoreTokens())
             {
                 return (false);
             }
-            String cur = current.nextToken();
-            String nee = needed.nextToken();
-            int curVal = 0;
-            int neededVal = 0;
+            String current = currentTokenizer.nextToken();
+            String needed = neededTokenizer.nextToken();
+            int currentValue = 0;
+            int neededValue = 0;
             try
             {
-                curVal = Integer.parseInt(cur);
-                neededVal = Integer.parseInt(nee);
+                currentValue = Integer.parseInt(current);
+                neededValue = Integer.parseInt(needed);
             }
             catch (NumberFormatException nfe)
             { // A number format exception will be raised if
@@ -324,7 +321,7 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
                 // the minimal needed version will be 1.5.0.2.
                 return (false);
             }
-            if (curVal < neededVal)
+            if (currentValue < neededValue)
             {
                 if (isMin)
                 {
@@ -332,7 +329,7 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
                 }
                 return (true);
             }
-            if (curVal > neededVal)
+            if (currentValue > neededValue)
             {
                 if (isMin)
                 {
@@ -356,22 +353,22 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
     {
         String retval = "";
         int oldVal = 0;
-        RegistryHandler rh = null;
+        RegistryHandler registryHandler = null;
         Set<String> badRegEntries = new HashSet<String>();
         try
         {
             // Get the default registry handler.
-            rh = RegistryDefaultHandler.getInstance();
-            if (rh == null)
+            registryHandler = RegistryDefaultHandler.getInstance();
+            if (registryHandler == null)
             // We are on a os which has no registry or the
             // needed dll was not bound to this installation. In
             // both cases we forget the try to get the JDK path from registry.
             {
                 return (retval);
             }
-            oldVal = rh.getRoot(); // Only for security...
-            rh.setRoot(MSWinConstants.HKEY_LOCAL_MACHINE);
-            String[] keys = rh.getSubkeys(JDKPathPanel.JDK_ROOT_KEY);
+            oldVal = registryHandler.getRoot(); // Only for security...
+            registryHandler.setRoot(MSWinConstants.HKEY_LOCAL_MACHINE);
+            String[] keys = registryHandler.getSubkeys(JDKPathPanel.JDK_ROOT_KEY);
             if (keys == null || keys.length == 0)
             {
                 return (retval);
@@ -387,7 +384,7 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
                     if (min == null || compareVersions(keys[i], min, true, 4, 4, "__NO_NOT_IDENTIFIER_"))
                     {
                         String cv = JDKPathPanel.JDK_ROOT_KEY + "\\" + keys[i];
-                        String path = rh.getValue(cv, JDKPathPanel.JDK_VALUE_NAME).getStringData();
+                        String path = registryHandler.getValue(cv, JDKPathPanel.JDK_VALUE_NAME).getStringData();
                         // Use it only if the path is valid.
                         // Set the path for method pathIsValid ...
                         if (!pathIsValid(path))
@@ -410,11 +407,11 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
         }
         finally
         {
-            if (rh != null && oldVal != 0)
+            if (registryHandler != null && oldVal != 0)
             {
                 try
                 {
-                    rh.setRoot(MSWinConstants.HKEY_LOCAL_MACHINE);
+                    registryHandler.setRoot(MSWinConstants.HKEY_LOCAL_MACHINE);
                 }
                 catch (NativeLibException e)
                 {

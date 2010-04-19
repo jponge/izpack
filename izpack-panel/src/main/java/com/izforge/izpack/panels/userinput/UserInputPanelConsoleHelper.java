@@ -304,8 +304,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
     boolean processSimpleField(Input input, AutomatedInstallData idata)
     {
-        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
-        System.out.println(vs.substitute(input.strText, null));
+        VariableSubstitutor variableSubstitutor = new VariableSubstitutorImpl(idata.getVariables());
+        System.out.println(variableSubstitutor.substitute(input.strText, null));
         return true;
     }
 
@@ -432,8 +432,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 {
                     if (set != null && !"".equals(set))
                     {
-                        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
-                        set = vs.substitute(set, null);
+                        VariableSubstitutor variableSubstitutor = new VariableSubstitutorImpl(idata.getVariables());
+                        set = variableSubstitutor.substitute(set, null);
                     }
                     if (set.equals(TRUE))
                     {
@@ -447,13 +447,13 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
         try
         {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             boolean bKeepAsking = true;
 
             while (bKeepAsking)
             {
                 System.out.println("input selection:");
-                String strIn = br.readLine();
+                String strIn = reader.readLine();
                 // take default value if default value exists and no user input
                 if (strIn.trim().equals("") && input.iSelectedChoice != -1)
                 {
@@ -533,13 +533,13 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 + (choice.strText != null ? choice.strText : ""));
         try
         {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             boolean bKeepAsking = true;
 
             while (bKeepAsking)
             {
                 System.out.println("input 1 to select, 0 to deseclect:");
-                String strIn = br.readLine();
+                String strIn = reader.readLine();
                 // take default value if default value exists and no user input
                 if (strIn.trim().equals(""))
                 {
@@ -645,7 +645,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 }
 
                 int iCounter = 0;
-                StringBuffer sb = new StringBuffer();
+                StringBuffer buffer = new StringBuffer();
                 String strRusultFormat = spec.getAttribute(RESULT_FORMAT);
                 String strSpecialSeparator = spec.getAttribute(SPECIAL_SEPARATOR);
                 while (layoutTokenizer.hasMoreTokens())
@@ -653,14 +653,14 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     token = layoutTokenizer.nextToken();
                     if (token.matches(".*:.*:.*"))
                     {
-                        sb.append(listSet.get(iCounter) != null ? listSet.get(iCounter) : "");
+                        buffer.append(listSet.get(iCounter) != null ? listSet.get(iCounter) : "");
                         iCounter++;
                     }
                     else
                     {
                         if (SPECIAL_SEPARATOR.equals(strRusultFormat))
                         {
-                            sb.append(strSpecialSeparator);
+                            buffer.append(strSpecialSeparator);
                         }
                         else if (PLAIN_STRING.equals(strRusultFormat))
                         {
@@ -669,12 +669,12 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                         else
                         // if (DISPLAY_FORMAT.equals(strRusultFormat))
                         {
-                            sb.append(token);
+                            buffer.append(token);
                         }
 
                     }
                 }
-                strSet = sb.toString();
+                strSet = buffer.toString();
             }
             choicesList.add(new Choice(strText, null, strSet));
             return new Input(strVariableName, strSet, choicesList, TEXT_FIELD, strFieldText, 0);
@@ -722,8 +722,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     }
                     if (set != null && !"".equals(set))
                     {
-                        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
-                        set = vs.substitute(set, null);
+                        VariableSubstitutor variableSubstitutor = new VariableSubstitutorImpl(idata.getVariables());
+                        set = variableSubstitutor.substitute(set, null);
                     }
 
                     StringTokenizer tokenizer = new StringTokenizer(choiceValues, ":");
@@ -755,9 +755,9 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     {
                         if (set != null && !"".equals(set))
                         {
-                            VariableSubstitutor vs = new VariableSubstitutorImpl(idata
+                            VariableSubstitutor variableSubstitutor = new VariableSubstitutorImpl(idata
                                     .getVariables());
-                            set = vs.substitute(set, null);
+                            set = variableSubstitutor.substitute(set, null);
                         }
                         if (set.equalsIgnoreCase(TRUE))
                         {

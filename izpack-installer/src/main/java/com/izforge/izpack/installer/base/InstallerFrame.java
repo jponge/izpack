@@ -923,9 +923,9 @@ public class InstallerFrame extends JFrame
                 title = langpack.getString("installer.quit.title");
             }
             // Now replace variables in message or title.
-            VariableSubstitutor vs = variableSubstitutor;
-            message = vs.substitute(message);
-            title = vs.substitute(title);
+            VariableSubstitutor substitutor = variableSubstitutor;
+            message = substitutor.substitute(message);
+            title = substitutor.substitute(title);
             int res = JOptionPane
                     .showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION);
             if (res == JOptionPane.YES_OPTION)
@@ -949,10 +949,10 @@ public class InstallerFrame extends JFrame
         }
 
         // Wipe the files that had been installed
-        for (String p : uninstallData.getInstalledFilesList())
+        for (String installedFile : uninstallData.getInstalledFilesList())
         {
-            File f = new File(p);
-            f.delete();
+            File file = new File(installedFile);
+            file.delete();
         }
     }
 
@@ -1865,8 +1865,8 @@ public class InstallerFrame extends JFrame
             int curPanelNo = panelManager.getPanelVisibilityNumber((installdata.getCurPanelNumber()));
             int visPanelsCount = panelManager.getCountVisiblePanel();
 
-            StringBuffer buf = new StringBuffer();
-            buf.append(langpack.getString("installer.step")).append(" ").append(curPanelNo + 1)
+            StringBuffer buffer = new StringBuffer();
+            buffer.append(langpack.getString("installer.step")).append(" ").append(curPanelNo + 1)
                     .append(" ").append(langpack.getString("installer.of")).append(" ").append(
                     visPanelsCount + 1);
             if (headingCounterComponent instanceof JProgressBar)
@@ -1874,11 +1874,11 @@ public class InstallerFrame extends JFrame
                 JProgressBar headingProgressBar = (JProgressBar) headingCounterComponent;
                 headingProgressBar.setMaximum(visPanelsCount + 1);
                 headingProgressBar.setValue(curPanelNo + 1);
-                headingProgressBar.setString(buf.toString());
+                headingProgressBar.setString(buffer.toString());
             }
             else
             {
-                ((JLabel) headingCounterComponent).setText(buf.toString());
+                ((JLabel) headingCounterComponent).setText(buffer.toString());
             }
         }
     }

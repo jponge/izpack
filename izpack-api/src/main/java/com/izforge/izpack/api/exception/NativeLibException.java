@@ -83,20 +83,20 @@ public class NativeLibException extends Exception
      */
     public static void addResourceBundle(String bundlePath)
     {
-        ResourceBundle bd = null;
+        ResourceBundle resourceBundle = null;
         if (messageResourceBundles.containsKey(bundlePath))
         {
             return;
         }
         try
         {
-            bd = ResourceBundle.getBundle(bundlePath);
+            resourceBundle = ResourceBundle.getBundle(bundlePath);
         }
         catch (MissingResourceException mre)
         {
             mre.printStackTrace();
         }
-        messageResourceBundles.put(bundlePath, bd);
+        messageResourceBundles.put(bundlePath, resourceBundle);
 
     }
 

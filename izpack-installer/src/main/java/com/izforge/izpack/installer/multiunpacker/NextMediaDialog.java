@@ -166,22 +166,22 @@ public class NextMediaDialog extends JDialog implements ActionListener
     {
         if (e.getSource() == this.browsebtn)
         {
-            JFileChooser jfc;
+            JFileChooser fileChooser;
             if (this.path.getText() != null)
             {
-                jfc = new JFileChooser(this.path.getText());
+                fileChooser = new JFileChooser(this.path.getText());
             }
             else
             {
-                jfc = new JFileChooser();
+                fileChooser = new JFileChooser();
             }
-            jfc.setFileFilter(new NextMediaFileFilter(this.nextmedianame, this.langpack));
-            jfc.setDialogTitle(this.langpack.getString("nextmedia.choosertitle"));
-            jfc.setDialogType(JFileChooser.OPEN_DIALOG);
-            jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            if (jfc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+            fileChooser.setFileFilter(new NextMediaFileFilter(this.nextmedianame, this.langpack));
+            fileChooser.setDialogTitle(this.langpack.getString("nextmedia.choosertitle"));
+            fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
             {
-                this.nextmediainput = jfc.getSelectedFile().getAbsolutePath();
+                this.nextmediainput = fileChooser.getSelectedFile().getAbsolutePath();
                 this.path.setText(this.nextmediainput);
             }
         }

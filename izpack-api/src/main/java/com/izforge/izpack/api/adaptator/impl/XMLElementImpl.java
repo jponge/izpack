@@ -283,7 +283,7 @@ public class XMLElementImpl implements IXMLElement
 
     public String getContent()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
         String content;
         Node child = this.element.getFirstChild();
 
@@ -291,7 +291,7 @@ public class XMLElementImpl implements IXMLElement
         boolean err = (child == null);
 
         // pattern : only whitespace characters
-        Pattern p = Pattern.compile("^\\s+$");
+        Pattern pattern = Pattern.compile("^\\s+$");
 
         while (!err && child != null)
         {
@@ -299,14 +299,14 @@ public class XMLElementImpl implements IXMLElement
             if (child.getNodeType() == Node.TEXT_NODE)
             {
                 // text node : nanoXML ignores it if it's only whitespace characters.
-                if (content != null && !p.matcher(content).matches())
+                if (content != null && !pattern.matcher(content).matches())
                 {
-                    sb.append(content);
+                    builder.append(content);
                 }
             }
             else if (child.getNodeType() == Node.CDATA_SECTION_NODE)
             {
-                sb.append(content);
+                builder.append(content);
             }
             // neither CDATA nor text : real nested element !
             else
@@ -315,7 +315,7 @@ public class XMLElementImpl implements IXMLElement
             }
             child = child.getNextSibling();
         }
-        return (err) ? null : sb.toString().trim();
+        return (err) ? null : builder.toString().trim();
     }
 
     public void setContent(String content)

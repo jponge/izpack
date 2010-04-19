@@ -330,7 +330,7 @@ public class MultiLineLabel extends JComponent
         int endPos;
 
         line.clear();
-        FontMetrics fm = this.getFontMetrics(this.getFont());
+        FontMetrics fontMetrics = this.getFontMetrics(this.getFont());
 
         startPos = 0;
         currentPos = startPos;
@@ -350,7 +350,7 @@ public class MultiLineLabel extends JComponent
             {
                 lastPos = currentPos;
                 currentPos = getPosition(labelText, currentPos, WHITE_SPACE, FOUND);
-                width = fm.stringWidth(labelText.substring(startPos, currentPos));
+                width = fontMetrics.stringWidth(labelText.substring(startPos, currentPos));
             }
             // ----------------------------------------------------------------
             // if we have a line break we want to copy everything up to
@@ -389,7 +389,7 @@ public class MultiLineLabel extends JComponent
                 // ------------------------------------------------------------
                 if (lastPos == startPos)
                 {
-                    lastPos = startPos + breakWord(labelText.substring(startPos, currentPos), fm);
+                    lastPos = startPos + breakWord(labelText.substring(startPos, currentPos), fontMetrics);
                 }
                 String s = labelText.substring(startPos, lastPos);
                 line.add(s);
@@ -427,23 +427,23 @@ public class MultiLineLabel extends JComponent
             return;
         }
 
-        FontMetrics fm = this.getFontMetrics(this.getFont());
+        FontMetrics fontMetrics = this.getFontMetrics(this.getFont());
 
         // return if no font metrics available
-        if (fm == null)
+        if (fontMetrics == null)
         {
             return;
         }
 
         divideLabel();
 
-        this.lineHeight = fm.getHeight();
-        this.lineDescent = fm.getDescent();
+        this.lineHeight = fontMetrics.getHeight();
+        this.lineDescent = fontMetrics.getDescent();
         this.maxWidth = 0;
 
         for (int i = 0; i < numLines; i++)
         {
-            this.lineWidth[i] = fm.stringWidth(this.line.get(i));
+            this.lineWidth[i] = fontMetrics.stringWidth(this.line.get(i));
             if (this.lineWidth[i] > this.maxWidth)
             {
                 this.maxWidth = this.lineWidth[i];
@@ -465,9 +465,9 @@ public class MultiLineLabel extends JComponent
         int y;
 
         measure();
-        Dimension d = this.getSize();
+        Dimension size = this.getSize();
 
-        y = lineAscent + (d.height - (numLines * lineHeight)) / 2;
+        y = lineAscent + (size.height - (numLines * lineHeight)) / 2;
 
         for (int i = 0; i < numLines; i++)
         {
@@ -478,13 +478,13 @@ public class MultiLineLabel extends JComponent
                     x = marginWidth;
                     break;
                 case CENTER:
-                    x = (d.width - lineWidth[i]) / 2;
+                    x = (size.width - lineWidth[i]) / 2;
                     break;
                 case RIGHT:
-                    x = d.width - marginWidth - lineWidth[i];
+                    x = size.width - marginWidth - lineWidth[i];
                     break;
                 default:
-                    x = (d.width - lineWidth[i]) / 2;
+                    x = (size.width - lineWidth[i]) / 2;
             }
             graphics.drawString(line.get(i), x, y);
         }

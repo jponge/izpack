@@ -39,8 +39,8 @@ class CheckBoxNode extends DefaultMutableTreeNode
         this.translatedText = translated;
         for (int i = 0, n = elements.length; i < n; i++)
         {
-            CheckBoxNode tn = (CheckBoxNode) elements[i];
-            add(tn);
+            CheckBoxNode checkBoxNode = (CheckBoxNode) elements[i];
+            add(checkBoxNode);
         }
     }
 

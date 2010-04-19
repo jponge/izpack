@@ -54,20 +54,20 @@ public class VariableHistoryTableCellRenderer extends DefaultTableCellRenderer
     {
         JComponent comp = null;
 
-        VariableHistory vh = (VariableHistory) value;
+        VariableHistory variableHistory = (VariableHistory) value;
 
         JLabel label = new JLabel();
         label.setAutoscrolls(true);
         comp = label;
 
-        label.setText(vh.getLastValue());
+        label.setText(variableHistory.getLastValue());
 
         comp.setOpaque(true);
-        if (vh.isNewvariable())
+        if (variableHistory.isNewvariable())
         {
             comp.setBackground(Color.green);
         }
-        else if (vh.isChanged())
+        else if (variableHistory.isChanged())
         {
             comp.setBackground(Color.yellow);
         }
@@ -78,8 +78,8 @@ public class VariableHistoryTableCellRenderer extends DefaultTableCellRenderer
     {
         for (String s : variablehistory.keySet())
         {
-            VariableHistory vh = variablehistory.get(s);
-            vh.clearState();
+            VariableHistory variableHistory = variablehistory.get(s);
+            variableHistory.clearState();
         }
     }
 }

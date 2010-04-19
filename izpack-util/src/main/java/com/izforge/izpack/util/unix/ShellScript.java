@@ -409,11 +409,11 @@ public class ShellScript
     public static String execute(String aShell, StringBuffer lines, String aLocation,
                                  String itsParams)
     {
-        ShellScript s = new ShellScript((aShell == null) ? "sh" : aShell);
-        s.append(lines);
-        s.write(aLocation);
+        ShellScript script = new ShellScript((aShell == null) ? "sh" : aShell);
+        script.append(lines);
+        script.write(aLocation);
 
-        return (itsParams == null) ? s.exec() : s.exec(itsParams);
+        return (itsParams == null) ? script.exec() : script.exec(itsParams);
     }
 
     /**

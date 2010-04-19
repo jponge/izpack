@@ -47,15 +47,15 @@ public class InstallationGroupPanelAutomationHelper
     public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot)
     {
         GroupData[] rows = (GroupData[]) idata.getAttribute("GroupData");
-        HashMap packsByName = (HashMap) idata.getAttribute("packsByName");
+        HashMap<String, Pack> packsByName = (HashMap) idata.getAttribute("packsByName");
         // Write out the group to pack mappings
-        for (GroupData gd : rows)
+        for (GroupData groupData : rows)
         {
             IXMLElement xgroup = new XMLElementImpl("group", panelRoot);
-            xgroup.setAttribute("name", gd.name);
-            for (String name : gd.packNames)
+            xgroup.setAttribute("name", groupData.name);
+            for (String name : groupData.packNames)
             {
-                Pack pack = (Pack) packsByName.get(name);
+                Pack pack = packsByName.get(name);
                 int index = idata.getAvailablePacks().indexOf(pack);
                 IXMLElement xpack = new XMLElementImpl("pack", xgroup);
                 xpack.setAttribute("name", name);

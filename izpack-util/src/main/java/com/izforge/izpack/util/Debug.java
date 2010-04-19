@@ -134,18 +134,18 @@ public class Debug
      */
     static
     {
-        boolean st = false;
+        boolean useStackTrace = false;
 
         try
         {
-            st = Boolean.getBoolean(DSTACKTRACE);
+            useStackTrace = Boolean.getBoolean(DSTACKTRACE);
         }
         catch (Exception ex)
         {
             // ignore
         }
 
-        STACKTRACE = st;
+        STACKTRACE = useStackTrace;
 
         boolean log = false;
 
@@ -160,17 +160,17 @@ public class Debug
 
         LOG = log;
 
-        boolean t = false;
+        boolean useTrace = false;
 
         try
         {
             if (STACKTRACE)
             {
-                t = true;
+                useTrace = true;
             }
             else
             {
-                t = Boolean.getBoolean(DTRACE);
+                useTrace = Boolean.getBoolean(DTRACE);
             }
         }
         catch (Exception ex)
@@ -178,7 +178,7 @@ public class Debug
             // ignore
         }
 
-        TRACE = t;
+        TRACE = useTrace;
 
         if (LOG)
         {
@@ -370,9 +370,9 @@ public class Debug
         {
             tempDirFile.mkdirs();
         }
-        catch (RuntimeException e1)
+        catch (RuntimeException e)
         {
-            e1.printStackTrace();
+            e.printStackTrace();
         }
 
         String logfilename = LOGFILENAME;

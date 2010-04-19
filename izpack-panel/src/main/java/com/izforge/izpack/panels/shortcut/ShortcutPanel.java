@@ -1076,12 +1076,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             //The user selected an InstallGroup before.
             //We may have some restrictions on the Installationgroup
             //search all defined ProgramGroups for the given InstallGroup
-            for (IXMLElement g : groupSpecs)
+            for (IXMLElement groupSpec : groupSpecs)
             {
-                String instGrp = g.getAttribute(SPEC_ATTRIBUTE_INSTALLGROUP);
+                String instGrp = groupSpec.getAttribute(SPEC_ATTRIBUTE_INSTALLGROUP);
                 if (instGrp != null && selectedInstallGroup.equalsIgnoreCase(instGrp))
                 {
-                    group = g;
+                    group = groupSpec;
                     break;
                 }
             }
@@ -1547,10 +1547,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                             {
                                 com.izforge.izpack.util.os.Unix_Shortcut unixcut =
                                         (com.izforge.izpack.util.os.Unix_Shortcut) shortcut;
-                                String f = unixcut.getWrittenFileName();
-                                if (f != null)
+                                String fileName = unixcut.getWrittenFileName();
+                                if (fileName != null)
                                 {
-                                    startMenuShortcuts.add(f);
+                                    startMenuShortcuts.add(fileName);
                                 }
                             }
                         }

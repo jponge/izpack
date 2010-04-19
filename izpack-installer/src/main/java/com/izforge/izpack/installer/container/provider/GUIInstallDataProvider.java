@@ -60,7 +60,6 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
      */
     protected void loadLookAndFeel(GUIInstallData installdata) throws Exception
     {
-        String lnf;
         // Do we have any preference for this OS ?
         String syskey = "unix";
         if (OsVersion.IS_WINDOWS)
@@ -71,10 +70,10 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         {
             syskey = "mac";
         }
-        String laf = null;
+        String lookAndFeelName = null;
         if (installdata.guiPrefs.lookAndFeelMapping.containsKey(syskey))
         {
-            laf = installdata.guiPrefs.lookAndFeelMapping.get(syskey);
+            lookAndFeelName = installdata.guiPrefs.lookAndFeelMapping.get(syskey);
         }
 
         // Let's use the system LAF
@@ -110,7 +109,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
             }
         }
 
-        if (laf == null)
+        if (lookAndFeelName == null)
         {
             if (!"mac".equals(syskey))
             {
@@ -130,12 +129,11 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
                     ButtonFactory.useButtonIcons(useButtonIcons);
                 }
             }
-            lnf = "swing";
             return;
         }
 
         // Kunststoff (http://www.incors.org/)
-        if ("kunststoff".equals(laf))
+        if ("kunststoff".equals(lookAndFeelName))
         {
             ButtonFactory.useHighlightButtons();
             // Reset the use button icons state because useHighlightButtons
@@ -154,18 +152,15 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
             Object[] kparams = {ktheme};
             UIManager.setLookAndFeel(kunststoff);
             setCurrentThemeMethod.invoke(kunststoff, kparams);
-
-            lnf = "kunststoff";
             return;
         }
 
         // Liquid (http://liquidlnf.sourceforge.net/)
-        if ("liquid".equals(laf))
+        if ("liquid".equals(lookAndFeelName))
         {
             UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
-            lnf = "liquid";
 
-            Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(laf);
+            Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(lookAndFeelName);
             if (params.containsKey("decorate.frames"))
             {
                 String value = params.get("decorate.frames");
@@ -187,22 +182,21 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         }
 
         // Metouia (http://mlf.sourceforge.net/)
-        if ("metouia".equals(laf))
+        if ("metouia".equals(lookAndFeelName))
         {
             UIManager.setLookAndFeel("net.sourceforge.mlf.metouia.MetouiaLookAndFeel");
-            lnf = "metouia";
             return;
         }
 
         // Nimbus (http://nimbus.dev.java.net/)
-        if ("nimbus".equals(laf))
+        if ("nimbus".equals(lookAndFeelName))
         {
             UIManager.setLookAndFeel("org.jdesktop.swingx.plaf.nimbus.NimbusLookAndFeel");
             return;
         }
 
         // JGoodies Looks (http://looks.dev.java.net/)
-        if ("looks".equals(laf))
+        if ("looks".equals(lookAndFeelName))
         {
             Map<String, String> variants = new TreeMap<String, String>();
             variants.put("windows", "com.jgoodies.looks.windows.WindowsLookAndFeel");
@@ -211,7 +205,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
             variants.put("plasticXP", "com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
             String variant = variants.get("plasticXP");
 
-            Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(laf);
+            Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(lookAndFeelName);
             if (params.containsKey("variant"))
             {
                 String param = params.get("variant");
@@ -226,7 +220,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         }
 
         // Substance (http://substance.dev.java.net/)
-        if ("substance".equals(laf))
+        if ("substance".equals(lookAndFeelName))
         {
             Map<String, String> variants = new TreeMap<String, String>();
             variants.put("default", "org.jvnet.substance.SubstanceLookAndFeel"); // Ugly!!!
@@ -239,7 +233,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
             variants.put("officesilver", "org.jvnet.substance.skin.SubstanceOfficeSilver2007LookAndFeel");
             String variant = variants.get("default");
 
-            Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(laf);
+            Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(lookAndFeelName);
             if (params.containsKey("variant"))
             {
                 String param = params.get("variant");

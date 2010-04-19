@@ -42,9 +42,9 @@ public class FileExecutor
 {
     private static final String JAR_FILE_SUFFIX = ".jar";
 
-    private boolean stopThread(Thread t, MonitorInputStream m)
+    private boolean stopThread(Thread t, MonitorInputStream monitorInputStream)
     {
-        m.doStop();
+        monitorInputStream.doStop();
         long softTimeout = 1000;
         try
         {
@@ -113,11 +113,11 @@ public class FileExecutor
      */
     public static String getExecOutput(String[] aCommandLine, boolean forceToGetStdOut)
     {
-        FileExecutor fe = new FileExecutor();
+        FileExecutor fileExecutor = new FileExecutor();
 
         String[] execOut = new String[2];
 
-        int execResult = fe.executeCommand(aCommandLine, execOut);
+        int execResult = fileExecutor.executeCommand(aCommandLine, execOut);
 
         if (execResult == 0)
 
@@ -157,8 +157,8 @@ public class FileExecutor
         Process process = null;
         MonitorInputStream outMonitor = null;
         MonitorInputStream errMonitor = null;
-        Thread t1 = null;
-        Thread t2 = null;
+        Thread outMonitorThread = null;
+        Thread errMonitorThread = null;
         int exitStatus = -1;
 
         Debug.trace(retval);
@@ -168,15 +168,15 @@ public class FileExecutor
             // execute command
             process = Runtime.getRuntime().exec(params);
 
-            boolean console = false;// TODO: impl from xml <execute
+            boolean isConsole = false;// TODO: impl from xml <execute
             // in_console=true ...>, but works already
             // if this flag is true
-            if (console)
+            if (isConsole)
             {
-                Console c = new Console(process);
+                Console console = new Console(process);
                 // save command output
-                output[0] = c.getOutputData();
-                output[1] = c.getErrorData();
+                output[0] = console.getOutputData();
+                output[1] = console.getErrorData();
                 exitStatus = process.exitValue();
             }
             else
@@ -184,21 +184,21 @@ public class FileExecutor
                 StringWriter outWriter = new StringWriter();
                 StringWriter errWriter = new StringWriter();
 
-                InputStreamReader or = new InputStreamReader(process.getInputStream());
-                InputStreamReader er = new InputStreamReader(process.getErrorStream());
-                outMonitor = new MonitorInputStream(or, outWriter);
-                errMonitor = new MonitorInputStream(er, errWriter);
-                t1 = new Thread(outMonitor);
-                t2 = new Thread(errMonitor);
-                t1.setDaemon(true);
-                t2.setDaemon(true);
-                t1.start();
-                t2.start();
+                InputStreamReader outStreamReader = new InputStreamReader(process.getInputStream());
+                InputStreamReader errStreamReader = new InputStreamReader(process.getErrorStream());
+                outMonitor = new MonitorInputStream(outStreamReader, outWriter);
+                errMonitor = new MonitorInputStream(errStreamReader, errWriter);
+                outMonitorThread = new Thread(outMonitor);
+                errMonitorThread = new Thread(errMonitor);
+                outMonitorThread.setDaemon(true);
+                errMonitorThread.setDaemon(true);
+                outMonitorThread.start();
+                errMonitorThread.start();
 
                 // wait for command to complete
                 exitStatus = process.waitFor();
-                t1.join();
-                t2.join();
+                outMonitorThread.join();
+                errMonitorThread.join();
 
                 // save command output
                 output[0] = outWriter.toString();
@@ -216,8 +216,8 @@ public class FileExecutor
             {
                 e.printStackTrace(System.err);
             }
-            stopThread(t1, outMonitor);
-            stopThread(t2, errMonitor);
+            stopThread(outMonitorThread, outMonitor);
+            stopThread(errMonitorThread, errMonitor);
             output[0] = "";
             output[1] = e.getMessage() + "\n";
         }

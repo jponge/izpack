@@ -35,8 +35,8 @@ public final class Console
 
     public static void main(String[] args)
     {
-        Runtime rt = Runtime.getRuntime();
-        Process p = null;
+        Runtime runtime = Runtime.getRuntime();
+        Process process = null;
         try
         {
 
@@ -44,9 +44,9 @@ public final class Console
              * Start a new process in which to execute the commands in cmd, using the environment in
              * env and use pwd as the current working directory.
              */
-            p = rt.exec(args);// , env, pwd);
-            new Console(p);
-            System.exit(p.exitValue());
+            process = runtime.exec(args);// , env, pwd);
+            new Console(process);
+            System.exit(process.exitValue());
         }
         catch (IOException e)
         {

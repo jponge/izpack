@@ -168,44 +168,44 @@ public class UnixUser
 
         StringTokenizer usersToken = new StringTokenizer(anEtcPasswdLine, ":");
 
-        UnixUser u = new UnixUser();
+        UnixUser user = new UnixUser();
 
         if (usersToken.hasMoreTokens())
         {
-            u.itsName = usersToken.nextToken();
+            user.itsName = usersToken.nextToken();
         }
 
         if (usersToken.hasMoreTokens())
         {
-            u.itsPasswdDigest = usersToken.nextToken();
+            user.itsPasswdDigest = usersToken.nextToken();
         }
 
         if (usersToken.hasMoreTokens())
         {
-            u.itsId = usersToken.nextToken();
+            user.itsId = usersToken.nextToken();
         }
 
         if (usersToken.hasMoreTokens())
         {
-            u.itsGid = usersToken.nextToken();
+            user.itsGid = usersToken.nextToken();
         }
 
         if (usersToken.hasMoreTokens())
         {
-            u.itsDescription = usersToken.nextToken();
+            user.itsDescription = usersToken.nextToken();
         }
 
         if (usersToken.hasMoreTokens())
         {
-            u.itsHome = usersToken.nextToken();
+            user.itsHome = usersToken.nextToken();
         }
 
         if (usersToken.hasMoreTokens())
         {
-            u.itsShell = usersToken.nextToken();
+            user.itsShell = usersToken.nextToken();
         }
 
-        return u;
+        return user;
     }
 
     /**

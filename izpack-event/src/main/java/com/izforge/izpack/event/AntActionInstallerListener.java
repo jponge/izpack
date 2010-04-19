@@ -109,11 +109,11 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         }
 
         // Selected packs.
-        for (Pack p : idata.getSelectedPacks())
+        for (Pack pack : idata.getSelectedPacks())
         {
             // Resolve data for current pack.
-            IXMLElement pack = getSpecHelper().getPackForName(p.name);
-            if (pack == null)
+            IXMLElement packElement = getSpecHelper().getPackForName(pack.name);
+            if (packElement == null)
             {
                 continue;
             }
@@ -126,7 +126,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
             packActions.put(ActionBase.AFTERPACKS, new ArrayList<AntAction>());
 
             // Get all entries for antcalls.
-            List<IXMLElement> antCallEntries = pack.getChildrenNamed(AntAction.ANTCALL);
+            List<IXMLElement> antCallEntries = packElement.getChildrenNamed(AntAction.ANTCALL);
             if (antCallEntries != null && antCallEntries.size() >= 1)
             {
                 for (IXMLElement antCallEntry : antCallEntries)
@@ -144,7 +144,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
                 }
             }
 
-            actions.put(p.name, packActions);
+            actions.put(pack.name, packActions);
         }
         for (Pack pack : idata.getAvailablePacks())
         {
@@ -399,10 +399,10 @@ public class AntActionInstallerListener extends SimpleInstallerListener
                 File tempFile = File.createTempFile("buildfile_resource", "xml");
                 tempFile.deleteOnExit();
                 bos = new BufferedOutputStream(new FileOutputStream(tempFile));
-                int c;
-                while (-1 != (c = bis.read()))
+                int aByte;
+                while (-1 != (aByte = bis.read()))
                 {
-                    bos.write(c);
+                    bos.write(aByte);
                 }
                 bis.close();
                 bos.close();
@@ -439,10 +439,10 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         try
         {
             bis = new BufferedInputStream(new FileInputStream(buildFile));
-            int c;
-            while (-1 != (c = bis.read()))
+            int aByte;
+            while (-1 != (aByte = bis.read()))
             {
-                bos.write(c);
+                bos.write(aByte);
             }
             content = bos.toByteArray();
             uninstallData.addAdditionalData("build_resource", content);

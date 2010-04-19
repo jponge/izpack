@@ -52,13 +52,13 @@ public class PacksPanelAutomationHelper implements PanelAutomation
         for (int i = 0; i < idata.getAvailablePacks().size(); i++)
         {
             Pack pack = idata.getAvailablePacks().get(i);
-            IXMLElement el = new XMLElementImpl("pack", panelRoot);
-            el.setAttribute("index", Integer.toString(i));
-            el.setAttribute("name", pack.name);
+            IXMLElement packElement = new XMLElementImpl("pack", panelRoot);
+            packElement.setAttribute("index", Integer.toString(i));
+            packElement.setAttribute("name", pack.name);
             Boolean selected = idata.getSelectedPacks().contains(pack);
-            el.setAttribute("selected", selected.toString());
+            packElement.setAttribute("selected", selected.toString());
 
-            panelRoot.addChild(el);
+            panelRoot.addChild(packElement);
         }
     }
 

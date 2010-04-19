@@ -502,20 +502,20 @@ public class IoHelper
             { // Standard id of SOLARIS do not support -gn.
                 String[] params = {"id"};
                 String[] output = new String[2];
-                FileExecutor fe = new FileExecutor();
-                fe.executeCommand(params, output);
+                FileExecutor fileExecutor = new FileExecutor();
+                fileExecutor.executeCommand(params, output);
                 // No we have "uid=%u(%s) gid=%u(%s)"
                 if (output[0] != null)
                 {
-                    StringTokenizer st = new StringTokenizer(output[0], "()");
-                    int length = st.countTokens();
+                    StringTokenizer tokenizer = new StringTokenizer(output[0], "()");
+                    int length = tokenizer.countTokens();
                     if (length >= 4)
                     {
                         for (int i = 0; i < 3; ++i)
                         {
-                            st.nextToken();
+                            tokenizer.nextToken();
                         }
-                        return (st.nextToken());
+                        return (tokenizer.nextToken());
                     }
                 }
                 return (null);
@@ -670,12 +670,12 @@ public class IoHelper
             return;
         }
         String lineSep = System.getProperty("line.separator");
-        StringTokenizer st = new StringTokenizer(output[0], lineSep);
+        StringTokenizer tokenizer = new StringTokenizer(output[0], lineSep);
         envVars = new Properties();
         String var = null;
-        while (st.hasMoreTokens())
+        while (tokenizer.hasMoreTokens())
         {
-            String line = st.nextToken();
+            String line = tokenizer.nextToken();
             if (line.indexOf('=') == -1)
             { // May be a env var with a new line in it.
                 if (var == null)

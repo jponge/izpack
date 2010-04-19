@@ -195,9 +195,9 @@ public class JDKPathPanel extends PathInputPanel
         }
         // Set the default to the path selection panel.
         pathSelectionPanel.setPath(chosenPath);
-        String var = this.installData.getVariable("JDKPathPanel.skipIfValid");
+        String skipIfValid = this.installData.getVariable("JDKPathPanel.skipIfValid");
         // Should we skip this panel?
-        if (chosenPath.length() > 0 && var != null && "yes".equalsIgnoreCase(var))
+        if (chosenPath.length() > 0 && skipIfValid != null && "yes".equalsIgnoreCase(skipIfValid))
         {
             this.installData.setVariable(getVariableName(), chosenPath);
             parent.skipPanel();
@@ -216,23 +216,23 @@ public class JDKPathPanel extends PathInputPanel
     {
         String retval = "";
         int oldVal = 0;
-        RegistryHandler rh = null;
+        RegistryHandler registryHandler = null;
         badRegEntries = new HashSet<String>();
         try
         {
             // Get the default registry handler.
-            rh = RegistryDefaultHandler.getInstance();
-            if (rh == null)
+            registryHandler = RegistryDefaultHandler.getInstance();
+            if (registryHandler == null)
             // We are on a os which has no registry or the
             // needed dll was not bound to this installation. In
             // both cases we forget the try to get the JDK path from registry.
             {
                 return (retval);
             }
-            rh.verify(this.installData);
-            oldVal = rh.getRoot(); // Only for security...
-            rh.setRoot(MSWinConstants.HKEY_LOCAL_MACHINE);
-            String[] keys = rh.getSubkeys(JDK_ROOT_KEY);
+            registryHandler.verify(this.installData);
+            oldVal = registryHandler.getRoot(); // Only for security...
+            registryHandler.setRoot(MSWinConstants.HKEY_LOCAL_MACHINE);
+            String[] keys = registryHandler.getSubkeys(JDK_ROOT_KEY);
             if (keys == null || keys.length == 0)
             {
                 return (retval);
@@ -250,7 +250,7 @@ public class JDKPathPanel extends PathInputPanel
                     if (compareVersions(keys[i], min, true, 4, 4, "__NO_NOT_IDENTIFIER_"))
                     {
                         String cv = JDK_ROOT_KEY + "\\" + keys[i];
-                        String path = rh.getValue(cv, JDK_VALUE_NAME).getStringData();
+                        String path = registryHandler.getValue(cv, JDK_VALUE_NAME).getStringData();
                         // Use it only if the path is valid.
                         // Set the path for method pathIsValid ...
                         pathSelectionPanel.setPath(path);
@@ -275,11 +275,11 @@ public class JDKPathPanel extends PathInputPanel
         }
         finally
         {
-            if (rh != null && oldVal != 0)
+            if (registryHandler != null && oldVal != 0)
             {
                 try
                 {
-                    rh.setRoot(MSWinConstants.HKEY_LOCAL_MACHINE);
+                    registryHandler.setRoot(MSWinConstants.HKEY_LOCAL_MACHINE);
                 }
                 catch (NativeLibException e)
                 {
@@ -328,8 +328,8 @@ public class JDKPathPanel extends PathInputPanel
             params = paramsp;
         }
         String[] output = new String[2];
-        FileExecutor fe = new FileExecutor();
-        fe.executeCommand(params, output);
+        FileExecutor fileExecutor = new FileExecutor();
+        fileExecutor.executeCommand(params, output);
         // "My" VM writes the version on stderr :-(
         String vs = (output[0].length() > 0) ? output[0] : output[1];
         if (min != null)
@@ -365,23 +365,23 @@ public class JDKPathPanel extends PathInputPanel
     private boolean compareVersions(String in, String template, boolean isMin,
                                     int assumedPlace, int halfRange, String useNotIdentifier)
     {
-        StringTokenizer st = new StringTokenizer(in, " \t\n\r\f\"");
+        StringTokenizer tokenizer = new StringTokenizer(in, " \t\n\r\f\"");
         int i;
         int currentRange = 0;
         String[] interestedEntries = new String[halfRange + halfRange];
         for (i = 0; i < assumedPlace - halfRange; ++i)
         {
-            if (st.hasMoreTokens())
+            if (tokenizer.hasMoreTokens())
             {
-                st.nextToken(); // Forget this entries.
+                tokenizer.nextToken(); // Forget this entries.
             }
         }
 
         for (i = 0; i < halfRange + halfRange; ++i)
         { // Put the interesting Strings into an intermediaer array.
-            if (st.hasMoreTokens())
+            if (tokenizer.hasMoreTokens())
             {
-                interestedEntries[i] = st.nextToken();
+                interestedEntries[i] = tokenizer.nextToken();
                 currentRange++;
             }
         }
@@ -490,44 +490,44 @@ public class JDKPathPanel extends PathInputPanel
     /**
      * Sets the given value as current detected version.
      *
-     * @param string version string to be used as detected version
+     * @param detectedVersion version string to be used as detected version
      */
-    protected void setDetectedVersion(String string)
+    protected void setDetectedVersion(String detectedVersion)
     {
-        detectedVersion = string;
+        this.detectedVersion = detectedVersion;
     }
 
     /**
      * Sets the given value as maximum for version control.
      *
-     * @param string version string to be used as maximum
+     * @param maxVersion version string to be used as maximum
      */
-    protected void setMaxVersion(String string)
+    protected void setMaxVersion(String maxVersion)
     {
-        if (string != null && string.length() > 0)
+        if (maxVersion != null && maxVersion.length() > 0)
         {
-            maxVersion = string;
+            this.maxVersion = maxVersion;
         }
         else
         {
-            maxVersion = "99.0.0";
+            this.maxVersion = "99.0.0";
         }
     }
 
     /**
      * Sets the given value as minimum for version control.
      *
-     * @param string version string to be used as minimum
+     * @param minVersion version string to be used as minimum
      */
-    protected void setMinVersion(String string)
+    protected void setMinVersion(String minVersion)
     {
-        if (string != null && string.length() > 0)
+        if (minVersion != null && minVersion.length() > 0)
         {
-            minVersion = string;
+            this.minVersion = minVersion;
         }
         else
         {
-            minVersion = "1.0.0";
+            this.minVersion = "1.0.0";
         }
     }
 
@@ -544,11 +544,11 @@ public class JDKPathPanel extends PathInputPanel
     /**
      * Sets the name for the variable which should be set with the path.
      *
-     * @param string variable name to be used
+     * @param variableName variable name to be used
      */
-    public void setVariableName(String string)
+    public void setVariableName(String variableName)
     {
-        variableName = string;
+        this.variableName = variableName;
     }
 
     /*

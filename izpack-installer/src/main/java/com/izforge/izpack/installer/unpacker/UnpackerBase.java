@@ -310,15 +310,15 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
     }
 
     /**
-     * @param list       A list of file name patterns (in ant fileset syntax)
+     * @param fileNamePatterns       A list of file name patterns (in ant fileset syntax)
      * @param recompiler The regular expression compiler (used to speed up RE compiling).
      * @return List of org.apache.regexp.RE
      */
-    private List<RE> preparePatterns(ArrayList<String> list, RECompiler recompiler)
+    private List<RE> preparePatterns(ArrayList<String> fileNamePatterns, RECompiler recompiler)
     {
         ArrayList<RE> result = new ArrayList<RE>();
 
-        for (String element : list)
+        for (String element : fileNamePatterns)
         {
             if ((element != null) && (element.length() > 0))
             {
@@ -326,12 +326,12 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
                 element = variableSubstitutor.substitute(element, SubstitutionType.TYPE_PLAIN);
 
                 // check whether the pattern is absolute or relative
-                File f = new File(element);
+                File file = new File(element);
 
                 // if it is relative, make it absolute and prepend the
                 // installation path
                 // (this is a bit dangerous...)
-                if (!f.isAbsolute())
+                if (!file.isAbsolute())
                 {
                     element = new File(this.absolute_installpath, element).toString();
                 }
@@ -422,7 +422,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
                 catch (RESyntaxException e)
                 {
                     this.handler.emitNotification("internal error: pattern \"" + element
-                            + "\" produced invalid RE \"" + f.getPath() + "\"");
+                            + "\" produced invalid RE \"" + file.getPath() + "\"");
                 }
 
             }
@@ -605,16 +605,16 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
         this.absolute_installpath = new File(idata.getInstallPath()).getAbsoluteFile();
 
         // at first, collect all patterns
-        for (UpdateCheck uc : updatechecks)
+        for (UpdateCheck updateCheck : updatechecks)
         {
-            if (uc.includesList != null)
+            if (updateCheck.includesList != null)
             {
-                include_patterns.addAll(preparePatterns(uc.includesList, recompiler));
+                include_patterns.addAll(preparePatterns(updateCheck.includesList, recompiler));
             }
 
-            if (uc.excludesList != null)
+            if (updateCheck.excludesList != null)
             {
-                exclude_patterns.addAll(preparePatterns(uc.excludesList, recompiler));
+                exclude_patterns.addAll(preparePatterns(updateCheck.excludesList, recompiler));
             }
         }
 
@@ -630,16 +630,16 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
         // use a treeset for fast access
         TreeSet<String> installed_files = new TreeSet<String>();
 
-        for (String fname : this.udata.getInstalledFilesList())
+        for (String installedFileName : this.udata.getInstalledFilesList())
         {
-            File f = new File(fname);
+            File file = new File(installedFileName);
 
-            if (!f.isAbsolute())
+            if (!file.isAbsolute())
             {
-                f = new File(this.absolute_installpath, fname);
+                file = new File(this.absolute_installpath, installedFileName);
             }
 
-            installed_files.add(f.getAbsolutePath());
+            installed_files.add(file.getAbsolutePath());
         }
 
         // now scan installation directory (breadth first), contains Files of
@@ -657,34 +657,34 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
 
             while (!scanstack.empty())
             {
-                File f = scanstack.pop();
+                File dirToScan = scanstack.pop();
 
-                File[] files = f.listFiles();
+                File[] files = dirToScan.listFiles();
 
                 if (files == null)
                 {
-                    throw new IOException(f.getPath() + "is not a directory!");
+                    throw new IOException(dirToScan.getPath() + "is not a directory!");
                 }
 
-                for (File newf : files)
+                for (File subFile : files)
                 {
-                    String newfname = newf.getPath();
+                    String subFileName = subFile.getPath();
 
                     // skip files we just installed
-                    if (installed_files.contains(newfname))
+                    if (installed_files.contains(subFileName))
                     {
                         continue;
                     }
 
-                    if (fileMatchesOnePattern(newfname, include_patterns)
-                            && (!fileMatchesOnePattern(newfname, exclude_patterns)))
+                    if (fileMatchesOnePattern(subFileName, include_patterns)
+                            && (!fileMatchesOnePattern(subFileName, exclude_patterns)))
                     {
-                        files_to_delete.add(newf);
+                        files_to_delete.add(subFile);
                     }
 
-                    if (newf.isDirectory() && !fileMatchesOnePattern(newfname, exclude_patterns))
+                    if (subFile.isDirectory() && !fileMatchesOnePattern(subFileName, exclude_patterns))
                     {
-                        scanstack.push(newf);
+                        scanstack.push(subFile);
                     }
 
                 }
@@ -695,13 +695,13 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
             this.handler.emitError("error while performing update checks", e.toString());
         }
 
-        for (File f : files_to_delete)
+        for (File file : files_to_delete)
         {
-            if (!f.isDirectory())
+            if (!file.isDirectory())
             // skip directories - they cannot be removed safely yet
             {
 //                this.handler.emitNotification("deleting " + f.getPath());
-                f.delete();
+                file.delete();
             }
 
         }

@@ -75,8 +75,8 @@ public class VariableHistoryTableModel extends AbstractTableModel
 
             case 1:
                 String variablename = (String) getValueAt(rowIndex, 0);
-                VariableHistory vh = variablevalues.get(variablename);
-                return vh;
+                VariableHistory variableHistory = variablevalues.get(variablename);
+                return variableHistory;
         }
         return null;
     }

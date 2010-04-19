@@ -170,11 +170,11 @@ public class RegistryLogItem implements Cloneable, Serializable
     /**
      * Sets the key name to the given string
      *
-     * @param string to be used as key name
+     * @param key to be used as key name
      */
-    public void setKey(String string)
+    public void setKey(String key)
     {
-        key = string;
+        this.key = key;
     }
 
     /**
@@ -220,11 +220,11 @@ public class RegistryLogItem implements Cloneable, Serializable
     /**
      * Sets the value name to the given string
      *
-     * @param string to be used as value name
+     * @param valueName to be used as value name
      */
-    public void setValueName(String string)
+    public void setValueName(String valueName)
     {
-        valueName = string;
+        this.valueName = valueName;
     }
 
     public Object clone() throws CloneNotSupportedException

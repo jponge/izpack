@@ -77,11 +77,11 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants
         // First we need a handler. There is no overhead at a
         // secound call of getInstance, therefore we do not buffer
         // the handler in this class.
-        RegistryHandler rh = RegistryDefaultHandler.getInstance();
-        int oldVal = rh.getRoot(); // Only for security...
+        RegistryHandler registryHandler = RegistryDefaultHandler.getInstance();
+        int oldVal = registryHandler.getRoot(); // Only for security...
         // We know, that the product is already installed, else we
         // would not in this method. Now we search for the path...
-        String uninstallName = rh.getUninstallName();
+        String uninstallName = registryHandler.getUninstallName();
         String oldInstallPath = "<not found>";
         while (true) // My goto alternative :-)
         {
@@ -92,8 +92,8 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants
             }
             // First we "create" the reg key.
             String keyName = RegistryHandler.UNINSTALL_ROOT + uninstallName;
-            rh.setRoot(HKEY_LOCAL_MACHINE);
-            if (!rh.valueExist(keyName, "UninstallString"))
+            registryHandler.setRoot(HKEY_LOCAL_MACHINE);
+            if (!registryHandler.valueExist(keyName, "UninstallString"))
             // We assume that the application was installed with
             // IzPack. Therefore there should be the value "UninstallString"
             // which contains the uninstaller call. If not we can do nothing.
@@ -106,11 +106,11 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants
             // ways; at this point more are used to demonstrate the different ways.
 
             // 1. If we are secure about the type, we can extract the value immediately.
-            String valString = rh.getValue(keyName, "UninstallString").getStringData();
+            String valString = registryHandler.getValue(keyName, "UninstallString").getStringData();
 
             // 2. If we are not so much interessted at the type, we can get the value
             // as Object. A DWORD is then a Long Object not a long primitive type.
-            Object valObj = rh.getValue(keyName, "UninstallString").getDataAsObject();
+            Object valObj = registryHandler.getValue(keyName, "UninstallString").getDataAsObject();
             if (valObj instanceof String) // Only to inhibit warnings about local variable never read.
             {
                 valString = (String) valObj;
@@ -118,7 +118,7 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants
 
             // 3. If we are not secure about the type we should differ between possible
             // types.
-            RegDataContainer val = rh.getValue(keyName, "UninstallString");
+            RegDataContainer val = registryHandler.getValue(keyName, "UninstallString");
             int typeOfVal = val.getType();
             switch (typeOfVal)
             {
@@ -160,7 +160,7 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants
             // break produces an endless loop.
         }
 
-        rh.setRoot(oldVal); // Only for security...
+        registryHandler.setRoot(oldVal); // Only for security...
 
         // The text will be to long for one line. Therefore we should use
         // the multi line label. Unfortunately it has no icon. Nothing is
@@ -184,11 +184,11 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants
         try
         {
             // Get the default registry handler.
-            RegistryHandler rh = RegistryDefaultHandler.getInstance();
-            if (rh != null)
+            RegistryHandler registryHandler = RegistryDefaultHandler.getInstance();
+            if (registryHandler != null)
             {
-                rh.verify(installData);
-                retval = rh.isProductRegistered();
+                registryHandler.verify(installData);
+                retval = registryHandler.isProductRegistered();
 
             }
             // else we are on a os which has no registry or the
@@ -241,10 +241,10 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants
             }
 
         }
-        RegistryHandler rh = RegistryDefaultHandler.getInstance();
-        if (rh != null)
+        RegistryHandler registryHandler = RegistryDefaultHandler.getInstance();
+        if (registryHandler != null)
         {
-            installData.setVariable("UNINSTALL_NAME", rh.getUninstallName());
+            installData.setVariable("UNINSTALL_NAME", registryHandler.getUninstallName());
         }
     }
 
@@ -258,8 +258,8 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants
         // First we need a handler. There is no overhead at a
         // secound call of getInstance, therefore we do not buffer
         // the handler in this class.
-        RegistryHandler rh = RegistryDefaultHandler.getInstance();
-        int oldVal = rh.getRoot(); // Only for security...
+        RegistryHandler registryHandler = RegistryDefaultHandler.getInstance();
+        int oldVal = registryHandler.getRoot(); // Only for security...
         // We know, that the product is already installed, else we
         // would not in this method. First we get the
         // "default" uninstall key.
@@ -267,7 +267,7 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants
         {
             return;
         }
-        String uninstallName = rh.getUninstallName();
+        String uninstallName = registryHandler.getUninstallName();
         int uninstallModifier = 1;
         while (true)
         {
@@ -280,11 +280,11 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants
                     + ")";
             // Then we "create" the reg key with it.
             String keyName = RegistryHandler.UNINSTALL_ROOT + newUninstallName;
-            rh.setRoot(HKEY_LOCAL_MACHINE);
-            if (!rh.keyExist(keyName))
+            registryHandler.setRoot(HKEY_LOCAL_MACHINE);
+            if (!registryHandler.keyExist(keyName))
             { // That's the name for which we searched.
                 // Change the uninstall name in the reg helper.
-                rh.setUninstallName(newUninstallName);
+                registryHandler.setUninstallName(newUninstallName);
                 // Now let us inform the user.
                 emitNotification(installData.getLangpack()
                         .getString("CheckedHelloPanel.infoOverUninstallKey")

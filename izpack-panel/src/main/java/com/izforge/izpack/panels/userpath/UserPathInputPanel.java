@@ -266,11 +266,11 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
     /**
      * Sets the must exist state. If it is true, the path must exist.
      *
-     * @param b must exist state
+     * @param mustExist must exist state
      */
-    public void setMustExist(boolean b)
+    public void setMustExist(boolean mustExist)
     {
-        _mustExist = b;
+        _mustExist = mustExist;
     }
 
     /**
@@ -316,7 +316,7 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
         // Load only once ...
         if (!(_loadedDefaultDir))
         {
-            BufferedReader br = null;
+            BufferedReader reader = null;
             try
             {
                 InputStream in = null;
@@ -380,9 +380,9 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
                 {
                     // now read the file, once we've identified which one to read
                     InputStreamReader isr = new InputStreamReader(in);
-                    br = new BufferedReader(isr);
+                    reader = new BufferedReader(isr);
                     String line;
-                    while ((line = br.readLine()) != null)
+                    while ((line = reader.readLine()) != null)
                     {
                         line = line.trim();
                         // use the first non-blank line
@@ -406,9 +406,9 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
             {
                 try
                 {
-                    if (br != null)
+                    if (reader != null)
                     {
-                        br.close();
+                        reader.close();
                     }
                 }
                 catch (IOException ignored)
@@ -469,11 +469,11 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
     /**
      * Sets the default for the directory to the given string.
      *
-     * @param string path for default directory
+     * @param defaultDir path for default directory
      */
-    public void setDefaultDir(String string)
+    public void setDefaultDir(String defaultDir)
     {
-        _defaultDir = string;
+        _defaultDir = defaultDir;
     }
 
     /**
@@ -491,10 +491,10 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
      * Sets the panel name extending this class.
      * Used for looking up localized text and resources.
      *
-     * @param string path for default directory
+     * @param targetPanel path for default directory
      */
-    public void setTargetPanel(String string)
+    public void setTargetPanel(String targetPanel)
     {
-        _targetPanel = string;
+        _targetPanel = targetPanel;
     }
 }

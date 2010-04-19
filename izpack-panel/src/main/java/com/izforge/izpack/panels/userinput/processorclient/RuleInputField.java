@@ -616,8 +616,8 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
 
                         if (!"".equals(className))
                         {
-                            Processor p = (Processor) Class.forName(className).newInstance();
-                            presult = p.process(this);
+                            Processor processor = (Processor) Class.forName(className).newInstance();
+                            presult = processor.process(this);
                         }
                         String[] td = new RE("\\*").split(presult);
                         ((JTextField) inputFields.elementAt(index)).setText(td[index]);

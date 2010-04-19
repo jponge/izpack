@@ -32,7 +32,6 @@ public class MultiVolumeUnpackerAutomationHelper implements IMultiVolumeUnpacker
         Debug.trace("Enter next media: " + volumename);
 
         File nextvolume = new File(volumename);
-        NextMediaDialog nmd = null;
 
         while (!nextvolume.exists() || lastcorrupt)
         {

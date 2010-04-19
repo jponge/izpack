@@ -72,10 +72,10 @@ public class FileUtil
         {
             reader = new BufferedReader(new FileReader(aFile));
         }
-        catch (FileNotFoundException e1)
+        catch (FileNotFoundException e)
         {
             // TODO handle Exception
-            e1.printStackTrace();
+            e.printStackTrace();
 
             return result;
         }

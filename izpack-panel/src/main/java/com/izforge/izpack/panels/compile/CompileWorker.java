@@ -572,20 +572,20 @@ public class CompileWorker implements Runnable
 
         File[] entries = path.listFiles();
 
-        for (File f : entries)
+        for (File file : entries)
         {
-            if (f == null)
+            if (file == null)
             {
                 continue;
             }
 
-            if (f.isDirectory())
+            if (file.isDirectory())
             {
-                scan_result.addAll(scanDirectory(f));
+                scan_result.addAll(scanDirectory(file));
             }
-            else if ((f.isFile()) && (f.getName().toLowerCase().endsWith(".java")))
+            else if ((file.isFile()) && (file.getName().toLowerCase().endsWith(".java")))
             {
-                scan_result.add(f);
+                scan_result.add(file);
             }
 
         }
@@ -728,9 +728,9 @@ public class CompileWorker implements Runnable
 
             // now iterate over all files of this job
 
-            for (File f : this.files)
+            for (File file : this.files)
             {
-                String fpath = f.getAbsolutePath();
+                String fpath = file.getAbsolutePath();
 
                 Debug.trace("processing " + fpath);
 
@@ -738,7 +738,7 @@ public class CompileWorker implements Runnable
                 // chance to get something done if the command line is almost
                 // MAX_CMDLINE_SIZE or even above
                 fileno++;
-                jobfiles += f.getName() + " ";
+                jobfiles += file.getName() + " ";
                 args.add(fpath);
                 cmdline_len += fpath.length();
 

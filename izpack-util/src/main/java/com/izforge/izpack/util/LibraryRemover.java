@@ -142,14 +142,14 @@ public class LibraryRemover
     {
         try
         {
-            Process p = Runtime.getRuntime().exec(javaCommand());
+            Process process = Runtime.getRuntime().exec(javaCommand());
 
-            new StreamProxy(p.getErrorStream(), "err").start();
-            new StreamProxy(p.getInputStream(), "out").start();
-            p.getOutputStream().close();
+            new StreamProxy(process.getErrorStream(), "err").start();
+            new StreamProxy(process.getInputStream(), "out").start();
+            process.getOutputStream().close();
 
             // even if it returns an error code, it was at least found
-            p.waitFor();
+            process.waitFor();
         }
         catch (InterruptedException ie)
         {
@@ -169,9 +169,9 @@ public class LibraryRemover
         while (true)
         {
             logFile = File.createTempFile(PREFIX, ".log");
-            String f = logFile.getCanonicalPath();
-            specFile = new File(f.substring(0, f.length() - 4) + ".spec");
-            sandbox = new File(f.substring(0, f.length() - 4) + ".d");
+            String canonicalPath = logFile.getCanonicalPath();
+            specFile = new File(canonicalPath.substring(0, canonicalPath.length() - 4) + ".spec");
+            sandbox = new File(canonicalPath.substring(0, canonicalPath.length() - 4) + ".d");
 
             // check if the similarly named directory is free
             if (!sandbox.exists())
@@ -490,25 +490,25 @@ public class LibraryRemover
         {
             try
             {
-                PrintWriter pw = null;
+                PrintWriter printWriter = null;
                 if (out != null)
                 {
-                    pw = new PrintWriter(out);
+                    printWriter = new PrintWriter(out);
                 }
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
                 String line;
                 while ((line = br.readLine()) != null)
                 {
-                    if (pw != null)
+                    if (printWriter != null)
                     {
-                        pw.println(line);
+                        printWriter.println(line);
                     }
                     // System.out.println(name + ">" + line);
                 }
-                if (pw != null)
+                if (printWriter != null)
                 {
-                    pw.flush();
+                    printWriter.flush();
                 }
             }
             catch (IOException ioe)

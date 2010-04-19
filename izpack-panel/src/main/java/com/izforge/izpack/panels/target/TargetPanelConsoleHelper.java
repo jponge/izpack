@@ -77,10 +77,10 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
         // default path point to the
         // current location
         System.out.println("Select target path [" + strDefaultPath + "] ");
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try
         {
-            String strIn = br.readLine();
+            String strIn = reader.readLine();
             if (!strIn.trim().equals(""))
             {
                 strTargetPath = strIn;

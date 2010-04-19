@@ -755,108 +755,108 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             return 13;
         }
 
-        public void paintIcon(Component c, Graphics g, int x, int y)
+        public void paintIcon(Component component, Graphics graphics, int x, int y)
         {
-            ButtonModel model = ((JCheckBox) c).getModel();
+            ButtonModel model = ((JCheckBox) component).getModel();
             buttonModel = model;
             int controlSize = getControlSize();
             if (model.isPressed() && model.isArmed())
             {
-                g.setColor(MetalLookAndFeel.getControlShadow());
+                graphics.setColor(MetalLookAndFeel.getControlShadow());
                 if (model.isEnabled())
                 {
-                    g.setColor(Color.green);
+                    graphics.setColor(Color.green);
                 }
                 else
                 {
-                    g.setColor(Color.gray);
+                    graphics.setColor(Color.gray);
                 }
-                g.fillRect(x, y, controlSize - 1, controlSize - 1);
-                drawPressedBorder(g, x, y, controlSize, controlSize, model);
+                graphics.fillRect(x, y, controlSize - 1, controlSize - 1);
+                drawPressedBorder(graphics, x, y, controlSize, controlSize, model);
             }
             else
             {
-                drawBorder(g, x, y, controlSize, controlSize, model);
+                drawBorder(graphics, x, y, controlSize, controlSize, model);
             }
-            g.setColor(Color.green);
+            graphics.setColor(Color.green);
             if (model.isSelected())
             {
-                drawCheck(g, x, y);
+                drawCheck(graphics, x, y);
             }
         }
 
-        private void drawBorder(Graphics g, int x, int y, int w, int h, ButtonModel model)
+        private void drawBorder(Graphics graphics, int x, int y, int width, int height, ButtonModel model)
         {
-            g.translate(x, y);
+            graphics.translate(x, y);
 
             // outer frame rectangle
-            g.setColor(MetalLookAndFeel.getControlDarkShadow());
+            graphics.setColor(MetalLookAndFeel.getControlDarkShadow());
             if (!model.isEnabled())
             {
-                g.setColor(new Color(0.4f, 0.4f, 0.4f));
+                graphics.setColor(new Color(0.4f, 0.4f, 0.4f));
             }
-            g.drawRect(0, 0, w - 2, h - 2);
+            graphics.drawRect(0, 0, width - 2, height - 2);
 
             // middle frame
-            g.setColor(MetalLookAndFeel.getControlHighlight());
+            graphics.setColor(MetalLookAndFeel.getControlHighlight());
             if (!model.isEnabled())
             {
-                g.setColor(new Color(0.6f, 0.6f, 0.6f));
+                graphics.setColor(new Color(0.6f, 0.6f, 0.6f));
             }
-            g.drawRect(1, 1, w - 2, h - 2);
+            graphics.drawRect(1, 1, width - 2, height - 2);
 
             // background
             if (model.isEnabled())
             {
-                g.setColor(Color.white);
+                graphics.setColor(Color.white);
             }
             else
             {
-                g.setColor(new Color(0.8f, 0.8f, 0.8f));
+                graphics.setColor(new Color(0.8f, 0.8f, 0.8f));
             }
-            g.fillRect(2, 2, w - 3, h - 3);
+            graphics.fillRect(2, 2, width - 3, height - 3);
 
             //some extra lines for FX
-            g.setColor(MetalLookAndFeel.getControl());
-            g.drawLine(0, h - 1, 1, h - 2);
-            g.drawLine(w - 1, 0, w - 2, 1);
-            g.translate(-x, -y);
+            graphics.setColor(MetalLookAndFeel.getControl());
+            graphics.drawLine(0, height - 1, 1, height - 2);
+            graphics.drawLine(width - 1, 0, width - 2, 1);
+            graphics.translate(-x, -y);
         }
 
-        private void drawPressedBorder(Graphics g, int x, int y, int w, int h, ButtonModel model)
+        private void drawPressedBorder(Graphics graphics, int x, int y, int width, int height, ButtonModel model)
         {
-            g.translate(x, y);
-            drawBorder(g, 0, 0, w, h, model);
-            g.setColor(MetalLookAndFeel.getControlShadow());
-            g.drawLine(1, 1, 1, h - 2);
-            g.drawLine(1, 1, w - 2, 1);
-            g.drawLine(2, 2, 2, h - 3);
-            g.drawLine(2, 2, w - 3, 2);
-            g.translate(-x, -y);
+            graphics.translate(x, y);
+            drawBorder(graphics, 0, 0, width, height, model);
+            graphics.setColor(MetalLookAndFeel.getControlShadow());
+            graphics.drawLine(1, 1, 1, height - 2);
+            graphics.drawLine(1, 1, width - 2, 1);
+            graphics.drawLine(2, 2, 2, height - 3);
+            graphics.drawLine(2, 2, width - 3, 2);
+            graphics.translate(-x, -y);
         }
 
-        protected void drawCheck(Graphics g, int x, int y)
+        protected void drawCheck(Graphics graphics, int x, int y)
         {
             int controlSize = getControlSize();
             if (buttonModel != null)
             {
                 if (buttonModel.isEnabled())
                 {
-                    g.setColor(new Color(0.0f, 0.6f, 0.0f));
+                    graphics.setColor(new Color(0.0f, 0.6f, 0.0f));
                 }
                 else
                 {
-                    g.setColor(new Color(0.1f, 0.1f, 0.1f));
+                    graphics.setColor(new Color(0.1f, 0.1f, 0.1f));
                 }
             }
 
-            g.drawLine(x + (controlSize - 4), y + 2, x + (controlSize - 4) - 4, y + 2 + 4);
-            g.drawLine(x + (controlSize - 4), y + 3, x + (controlSize - 4) - 4, y + 3 + 4);
-            g.drawLine(x + (controlSize - 4), y + 4, x + (controlSize - 4) - 4, y + 4 + 4);
+            graphics.drawLine(x + (controlSize - 4), y + 2, x + (controlSize - 4) - 4, y + 2 + 4);
+            graphics.drawLine(x + (controlSize - 4), y + 3, x + (controlSize - 4) - 4, y + 3 + 4);
+            graphics.drawLine(x + (controlSize - 4), y + 4, x + (controlSize - 4) - 4, y + 4 + 4);
 
-            g.drawLine(x + (controlSize - 4) - 4, y + 2 + 4, x + (controlSize - 4) - 4 - 2, y + 2 + 4 - 2);
-            g.drawLine(x + (controlSize - 4) - 4, y + 3 + 4, x + (controlSize - 4) - 4 - 2, y + 3 + 4 - 2);
-            g.drawLine(x + (controlSize - 4) - 4, y + 4 + 4, x + (controlSize - 4) - 4 - 2, y + 4 + 4 - 2);
+            graphics.drawLine(x + (controlSize - 4) - 4, y + 2 + 4, x + (controlSize - 4) - 4 - 2, y + 2 + 4 - 2);
+            graphics.drawLine(x + (controlSize - 4) - 4, y + 3 + 4, x + (controlSize - 4) - 4 - 2, y + 3 + 4 - 2);
+            graphics.drawLine(x + (controlSize - 4) - 4, y + 4 + 4, x + (controlSize - 4) - 4 - 2, y + 4 + 4 - 2);
         }
 
         public int getIconWidth()

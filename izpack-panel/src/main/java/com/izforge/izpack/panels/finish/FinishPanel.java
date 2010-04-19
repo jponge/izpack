@@ -136,20 +136,20 @@ public class FinishPanel extends IzPanel implements ActionListener
     public void actionPerformed(ActionEvent e)
     {
         // Prepares the file chooser
-        JFileChooser fc = new JFileChooser();
-        fc.setName(GuiId.FINISH_PANEL_FILE_CHOOSER.id);
-        fc.setCurrentDirectory(new File(this.installData.getInstallPath()));
-        fc.setMultiSelectionEnabled(false);
-        fc.addChoosableFileFilter(new AutomatedInstallScriptFilter());
-        // fc.setCurrentDirectory(new File("."));
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setName(GuiId.FINISH_PANEL_FILE_CHOOSER.id);
+        fileChooser.setCurrentDirectory(new File(this.installData.getInstallPath()));
+        fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.addChoosableFileFilter(new AutomatedInstallScriptFilter());
+        // fileChooser.setCurrentDirectory(new File("."));
 
         // Shows it
         try
         {
-            if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
             {
                 // We handle the xml installDataGUI writing
-                File file = fc.getSelectedFile();
+                File file = fileChooser.getSelectedFile();
                 FileOutputStream out = new FileOutputStream(file);
                 BufferedOutputStream outBuff = new BufferedOutputStream(out, 5120);
                 parent.writeXMLTree(this.installData.getXmlData(), outBuff);

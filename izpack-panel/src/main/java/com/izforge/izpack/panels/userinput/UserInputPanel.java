@@ -3851,12 +3851,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
                 if (result == JFileChooser.APPROVE_OPTION)
                 {
-                    File f = chooser.getSelectedFile();
+                    File selectedFile = chooser.getSelectedFile();
 
-                    this.pathComboBox.setSelectedItem(f.getAbsolutePath());
+                    this.pathComboBox.setSelectedItem(selectedFile.getAbsolutePath());
 
                     // use any given directory directly
-                    if (this.resultType != TYPE_FILE && !this.pathMatches(f.getAbsolutePath()))
+                    if (this.resultType != TYPE_FILE && !this.pathMatches(selectedFile.getAbsolutePath()))
                     {
                         showMessageDialog(parent, "UserInputPanel.search.wrongselection.message",
                                 "UserInputPanel.search.wrongselection.caption",
@@ -3890,11 +3890,11 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             }
             String path = item;
 
-            File f = new File(item);
+            File file = new File(item);
 
-            if (!f.isDirectory())
+            if (!file.isDirectory())
             {
-                path = f.getParent();
+                path = file.getParent();
             }
 
             // path now contains the final content of the combo box

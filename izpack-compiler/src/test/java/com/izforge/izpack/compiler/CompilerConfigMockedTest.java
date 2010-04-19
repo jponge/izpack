@@ -69,11 +69,11 @@ public class CompilerConfigMockedTest
 
     private void verifyCallToMap(Map<String, List<DynamicVariable>> mapStringListDyn, String name, String value)
     {
-        DynamicVariable dyn = new DynamicVariable();
-        dyn.setName(name);
-        dyn.setValue(value);
+        DynamicVariable dynamicVariable = new DynamicVariable();
+        dynamicVariable.setName(name);
+        dynamicVariable.setValue(value);
         ArrayList<DynamicVariable> list = new ArrayList<DynamicVariable>();
-        list.add(dyn);
+        list.add(dynamicVariable);
         Mockito.verify(mapStringListDyn).put(name, list);
     }
 
@@ -99,11 +99,11 @@ public class CompilerConfigMockedTest
         compilerConfig.addDynamicVariables(xmlData);
 
         new ArrayList();
-        DynamicVariable dyn = new DynamicVariable();
-        dyn.setName("myPath");
-        dyn.setValue("$INSTALLPATH/test");
+        DynamicVariable dynamicVariable = new DynamicVariable();
+        dynamicVariable.setName("myPath");
+        dynamicVariable.setValue("$INSTALLPATH/test");
         ArrayList<DynamicVariable> list = new ArrayList<DynamicVariable>();
-        list.add(dyn);
+        list.add(dynamicVariable);
         Mockito.verify(variable).put("myPath", list);
     }
 

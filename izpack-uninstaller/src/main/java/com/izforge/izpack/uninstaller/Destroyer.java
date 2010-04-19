@@ -315,12 +315,12 @@ public class Destroyer extends Thread
             for (String listener : listeners)
             {
                 Class<UninstallerListener> clazz = (Class<UninstallerListener>) Class.forName(listener);
-                UninstallerListener ul = clazz.newInstance();
-                if (ul.isFileListener())
+                UninstallerListener uninstallerListener = clazz.newInstance();
+                if (uninstallerListener.isFileListener())
                 {
-                    uninstaller[1].add(ul);
+                    uninstaller[1].add(uninstallerListener);
                 }
-                uninstaller[0].add(ul);
+                uninstaller[0].add(uninstallerListener);
             }
         }
         return uninstaller;
@@ -339,30 +339,30 @@ public class Destroyer extends Thread
                                  AbstractUIProgressHandler handler)
     {
         // Iterate the action list.
-        for (UninstallerListener il : listeners)
+        for (UninstallerListener listener : listeners)
         {
             try
             {
                 switch (action)
                 {
                     case UninstallerListener.BEFORE_DELETION:
-                        il.beforeDeletion((List) param, handler);
+                        listener.beforeDeletion((List) param, handler);
                         break;
                     case UninstallerListener.AFTER_DELETION:
-                        il.afterDeletion((List) param, handler);
+                        listener.afterDeletion((List) param, handler);
                         break;
                     case UninstallerListener.BEFORE_DELETE:
-                        il.beforeDelete((File) param, handler);
+                        listener.beforeDelete((File) param, handler);
                         break;
                     case UninstallerListener.AFTER_DELETE:
-                        il.afterDelete((File) param, handler);
+                        listener.afterDelete((File) param, handler);
                         break;
                 }
             }
             catch (Throwable e)
             { // Catch it to prevent for a block of uninstallation.
                 handler.emitError("Skipping custom action because exception caught during "
-                        + il.getClass().getName(), e.toString());
+                        + listener.getClass().getName(), e.toString());
             }
         }
     }

@@ -143,10 +143,10 @@ public class PropertyManager
         File file = null;
         String name = xmlProp.getAttribute("name");
         String value = xmlProp.getAttribute("value");
-        String env = xmlProp.getAttribute("environment");
-        if (env != null && !env.endsWith("."))
+        String environnement = xmlProp.getAttribute("environment");
+        if (environnement != null && !environnement.endsWith("."))
         {
-            env += ".";
+            environnement += ".";
         }
 
         String prefix = xmlProp.getAttribute("prefix");
@@ -170,7 +170,7 @@ public class PropertyManager
         }
         else
         {
-            if (file == null && env == null)
+            if (file == null && environnement == null)
             {
                 assertionHelper.parseError(xmlProp,
                         "You must specify file, or environment when not using the name attribute");
@@ -190,9 +190,9 @@ public class PropertyManager
         {
             loadFile(file, xmlProp, prefix);
         }
-        else if (env != null)
+        else if (environnement != null)
         {
-            loadEnvironment(env, xmlProp, file);
+            loadEnvironment(environnement, xmlProp, file);
         }
     }
 

@@ -271,12 +271,12 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     public void panelActivate()
     {
         // We clip the panel
-        Dimension dim = parent.getPanelsContainerSize();
-        dim.width -= (dim.width / 4);
-        dim.height = 150;
-        setMinimumSize(dim);
-        setMaximumSize(dim);
-        setPreferredSize(dim);
+        Dimension dimension = parent.getPanelsContainerSize();
+        dimension.width -= (dimension.width / 4);
+        dimension.height = 150;
+        setMinimumSize(dimension);
+        setMaximumSize(dimension);
+        setPreferredSize(dimension);
         parent.lockNextButton();
 
         parent.install(this);

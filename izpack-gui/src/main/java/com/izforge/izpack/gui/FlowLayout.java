@@ -358,34 +358,34 @@ public class FlowLayout implements LayoutManager
     {
         synchronized (target.getTreeLock())
         {
-            Dimension dim = new Dimension(0, 0);
+            Dimension dimension = new Dimension(0, 0);
             int nmembers = target.getComponentCount();
             boolean firstVisibleComponent = true;
 
             for (int i = 0; i < nmembers; i++)
             {
-                Component m = target.getComponent(i);
-                if (m.isVisible())
+                Component component = target.getComponent(i);
+                if (component.isVisible())
                 {
-                    Dimension d = m.getPreferredSize();
-                    dim.height = Math.max(dim.height, d.height);
+                    Dimension preferredSize = component.getPreferredSize();
+                    dimension.height = Math.max(dimension.height, preferredSize.height);
                     if (firstVisibleComponent)
                     {
                         firstVisibleComponent = false;
                     }
                     else
                     {
-                        dim.width += hgap;
+                        dimension.width += hgap;
                     }
-                    dim.width += d.width;
+                    dimension.width += preferredSize.width;
                 }
             }
 
             Insets insets = target.getInsets();
-            dim.width += insets.left + insets.right + hgap * 2;
-            dim.height += insets.top + insets.bottom + vgap * 2;
+            dimension.width += insets.left + insets.right + hgap * 2;
+            dimension.height += insets.top + insets.bottom + vgap * 2;
 
-            return (dim);
+            return (dimension);
         }
     }
 
@@ -404,29 +404,29 @@ public class FlowLayout implements LayoutManager
     {
         synchronized (target.getTreeLock())
         {
-            Dimension dim = new Dimension(0, 0);
+            Dimension dimension = new Dimension(0, 0);
             int nmembers = target.getComponentCount();
 
             for (int i = 0; i < nmembers; i++)
             {
-                Component m = target.getComponent(i);
-                if (m.isVisible())
+                Component component = target.getComponent(i);
+                if (component.isVisible())
                 {
-                    Dimension d = m.getMinimumSize();
-                    dim.height = Math.max(dim.height, d.height);
+                    Dimension minimumSize = component.getMinimumSize();
+                    dimension.height = Math.max(dimension.height, minimumSize.height);
                     if (i > 0)
                     {
-                        dim.width += hgap;
+                        dimension.width += hgap;
                     }
-                    dim.width += d.width;
+                    dimension.width += minimumSize.width;
                 }
             }
 
             Insets insets = target.getInsets();
-            dim.width += insets.left + insets.right + hgap * 2;
-            dim.height += insets.top + insets.bottom + vgap * 2;
+            dimension.width += insets.left + insets.right + hgap * 2;
+            dimension.height += insets.top + insets.bottom + vgap * 2;
 
-            return (dim);
+            return (dimension);
         }
     }
 
@@ -469,21 +469,21 @@ public class FlowLayout implements LayoutManager
 
             for (int i = rowStart; i < rowEnd; i++)
             {
-                Component m = target.getComponent(i);
+                Component component = target.getComponent(i);
 
-                if (m.isVisible())
+                if (component.isVisible())
                 {
                     if (ltr)
                     {
-                        m.setLocation(x, y + (height - m.getSize().height) / 2);
+                        component.setLocation(x, y + (height - component.getSize().height) / 2);
                     }
                     else
                     {
-                        m.setLocation(target.getSize().width - x - m.getSize().width, y
-                                + (height - m.getSize().height) / 2);
+                        component.setLocation(target.getSize().width - x - component.getSize().width, y
+                                + (height - component.getSize().height) / 2);
                     }
 
-                    x += m.getSize().width + hgap;
+                    x += component.getSize().width + hgap;
                 }
             }
         }
@@ -515,28 +515,28 @@ public class FlowLayout implements LayoutManager
 
             for (int i = 0; i < nMembers; i++)
             {
-                Component m = target.getComponent(i);
+                Component component = target.getComponent(i);
 
-                if (m.isVisible())
+                if (component.isVisible())
                 {
-                    Dimension d = m.getPreferredSize();
-                    m.setSize(d.width, d.height);
+                    Dimension preferredSize = component.getPreferredSize();
+                    component.setSize(preferredSize.width, preferredSize.height);
 
-                    if ((x == 0) || ((x + d.width) <= maxWidth))
+                    if ((x == 0) || ((x + preferredSize.width) <= maxWidth))
                     {
                         if (x > 0)
                         {
                             x += hgap;
                         }
-                        x += d.width;
-                        rowh = Math.max(rowh, d.height);
+                        x += preferredSize.width;
+                        rowh = Math.max(rowh, preferredSize.height);
                     }
                     else
                     {
                         moveComponents(target, insets.left, y, maxWidth - x, rowh, start, i, ltr);
-                        x = d.width;
+                        x = preferredSize.width;
                         y += vgap + rowh;
-                        rowh = d.height;
+                        rowh = preferredSize.height;
                         start = i;
                     }
                 }

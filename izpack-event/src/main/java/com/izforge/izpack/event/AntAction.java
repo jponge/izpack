@@ -445,22 +445,21 @@ public class AntAction extends ActionBase
             return;
         }
         Properties props = new Properties();
-        File pf = null;
         FileInputStream fis = null;
         try
         {
             for (String propertyFile : propertyFiles)
             {
-                pf = new File(propertyFile);
-                if (pf.exists())
+                File file = new File(propertyFile);
+                if (file.exists())
                 {
-                    fis = new FileInputStream(pf);
+                    fis = new FileInputStream(file);
                     props.load(fis);
                     fis.close();
                 }
                 else
                 {
-                    throw new Exception("Required propertyfile " + pf
+                    throw new Exception("Required propertyfile " + file
                             + " for antcall doesn't exist.");
                 }
             }

@@ -529,7 +529,7 @@ public class Librarian implements CleanupClient
     {
         // This was "stolen" from com.izforge.izpack.util.SelfModifier
 
-        StringBuffer sb = new StringBuffer();
+        StringBuffer buffer = new StringBuffer();
         CharacterIterator iter = new StringCharacterIterator(in);
         for (char c = iter.first(); c != CharacterIterator.DONE; c = iter.next())
         {
@@ -543,16 +543,16 @@ public class Librarian implements CleanupClient
                     if (c2 != CharacterIterator.DONE)
                     {
                         int i2 = Character.digit(c2, 16);
-                        sb.append((char) ((i1 << 4) + i2));
+                        buffer.append((char) ((i1 << 4) + i2));
                     }
                 }
             }
             else
             {
-                sb.append(c);
+                buffer.append(c);
             }
         }
-        String path = sb.toString();
+        String path = buffer.toString();
         return path;
     }
 

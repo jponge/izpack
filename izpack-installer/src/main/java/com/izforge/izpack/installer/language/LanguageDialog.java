@@ -230,10 +230,10 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
         if (iso2Str == null && !isoMapExpanded)
         { // Expand iso3toiso2 only if needed because it needs some time.
             isoMapExpanded = true;
-            Locale[] loc = Locale.getAvailableLocales();
-            for (i = 0; i < loc.length; ++i)
+            Locale[] locales = Locale.getAvailableLocales();
+            for (i = 0; i < locales.length; ++i)
             {
-                iso3Toiso2.put(loc[i].getISO3Language(), loc[i].getLanguage());
+                iso3Toiso2.put(locales[i].getISO3Language(), locales[i].getLanguage());
             }
             iso2Str = iso3Toiso2.get(item);
         }

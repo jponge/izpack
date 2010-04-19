@@ -153,15 +153,15 @@ public class ConfigHolder
 
         // Replace the references with the project property value
         StringBuffer sb = new StringBuffer();
-        Enumeration<String> i = Collections.enumeration(fragments);
-        Enumeration<String> j = Collections.enumeration(propertyRefs);
+        Enumeration<String> fragmentsEnumeration = Collections.enumeration(fragments);
+        Enumeration<String> propertyRefsEnumeration = Collections.enumeration(propertyRefs);
 
-        while (i.hasMoreElements())
+        while (fragmentsEnumeration.hasMoreElements())
         {
-            String fragment = i.nextElement();
+            String fragment = fragmentsEnumeration.nextElement();
             if (fragment == null)
             {
-                String propertyName = j.nextElement();
+                String propertyName = propertyRefsEnumeration.nextElement();
 
                 // try to get it from the project
                 String replacement = project.getProperty(propertyName);

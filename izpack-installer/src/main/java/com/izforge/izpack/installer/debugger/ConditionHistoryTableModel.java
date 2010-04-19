@@ -75,8 +75,8 @@ public class ConditionHistoryTableModel extends AbstractTableModel
 
             case 1:
                 String conditionid = (String) getValueAt(rowIndex, 0);
-                ConditionHistory ch = conditionvalues.get(conditionid);
-                return ch;
+                ConditionHistory conditionHistory = conditionvalues.get(conditionid);
+                return conditionHistory;
         }
         return null;
     }
