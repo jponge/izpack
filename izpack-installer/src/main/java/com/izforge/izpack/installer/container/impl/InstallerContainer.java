@@ -4,7 +4,6 @@ import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.IzPackException;
-import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.ConditionContainer;
@@ -98,14 +97,7 @@ public class InstallerContainer extends AbstractContainer
         // Dummy Frame
         JFrame frame = new JFrame();
         ImageIcon imageIcon;
-        try
-        {
-            imageIcon = resourceManager.getImageIconResource("JFrameIcon");
-        }
-        catch (ResourceNotFoundException e)
-        {
-            imageIcon = new ImageIcon(this.getClass().getResource("/img/JFrameIcon.png"));
-        }
+        imageIcon = resourceManager.getImageIconResource("JFrameIcon", "/img/JFrameIcon.png");
         frame.setIconImage(imageIcon.getImage());
 
         Dimension frameSize = frame.getSize();

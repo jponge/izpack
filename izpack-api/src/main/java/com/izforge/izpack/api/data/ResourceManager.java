@@ -361,7 +361,7 @@ public class ResourceManager
         }
         for (String fallbackResource : fallback)
         {
-            location = this.getURL(resource);
+            location = this.getURL(fallbackResource);
             if (location != null)
             {
                 return new ImageIcon(location);
