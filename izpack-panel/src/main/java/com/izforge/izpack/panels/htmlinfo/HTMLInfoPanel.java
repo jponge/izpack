@@ -165,7 +165,7 @@ public class HTMLInfoPanel extends IzPanel
 
         try
         {
-            return resourceManager.getURL(panelResourceNameStr);
+            return resourceManager.getLocalizedURL(panelResourceNameStr);
         }
         catch (Exception ex)
         {

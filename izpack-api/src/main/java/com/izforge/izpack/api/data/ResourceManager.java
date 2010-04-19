@@ -278,7 +278,7 @@ public class ResourceManager
      * @return A languagedependen URL spezifies the requested resource
      * @throws ResourceNotFoundException thrown if there is no resource found
      */
-    public URL getURL(String resource)
+    public URL getLocalizedURL(String resource)
     {
         return ClassLoader.getSystemResource(
                 this.getLanguageResourceString(resource));
@@ -343,7 +343,7 @@ public class ResourceManager
      */
     public ImageIcon getImageIconResource(String resource, String... fallback)
     {
-        return new ImageIcon(this.getURL(resource));
+        return new ImageIcon(this.getLocalizedURL(resource));
     }
 
     /**

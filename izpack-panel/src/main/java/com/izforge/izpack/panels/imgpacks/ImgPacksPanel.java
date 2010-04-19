@@ -35,7 +35,6 @@ import com.izforge.izpack.util.IoHelper;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -187,8 +186,7 @@ public class ImgPacksPanel extends PacksPanelBase
             {
                 try
                 {
-                    URL url = resourceManager.getURL(pack.packImgId);
-                    ImageIcon img = new ImageIcon(url);
+                    ImageIcon img = resourceManager.getImageIconResource(pack.packImgId);
                     images.put(pack.packImgId, img);
                 }
                 catch (Exception err)
