@@ -29,7 +29,10 @@ import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.unix.ShellScript;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.TreeSet;
 
 
 /**

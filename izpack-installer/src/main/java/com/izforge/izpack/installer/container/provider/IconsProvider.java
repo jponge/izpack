@@ -12,7 +12,6 @@ import org.picocontainer.injectors.Provider;
 import javax.swing.*;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.List;
 
 /**
  * Provide icons database
@@ -74,6 +73,7 @@ public class IconsProvider implements Provider
 
     /**
      * parse the xml and fill in the db
+     *
      * @param inXML
      * @param icons
      */

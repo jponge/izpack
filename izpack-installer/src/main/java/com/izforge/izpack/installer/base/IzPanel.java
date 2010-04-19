@@ -1148,7 +1148,12 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     }
 
     private Map<String, String> helps = null;
+
     public void setHelps(Map<String, String> helps)
+    {
+        this.helps = helps;
+    }
+
     /**
      * Indicates wether the panel can display help. The installer will hide Help button if current
      * panel does not support help functions. Default behaviour is to return <code>false</code>.

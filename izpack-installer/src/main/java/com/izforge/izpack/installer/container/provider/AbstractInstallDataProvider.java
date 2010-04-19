@@ -53,10 +53,6 @@ public abstract class AbstractInstallDataProvider implements Provider
         // We load the Info data
         Info info = (Info) readObject("info");
 
-        checkForPrivilegedExecution(info);
-
-        checkForRebootAction(info);
-
         // We put the Info data as variables
         installdata.setVariable(ScriptParserConstant.APP_NAME, info.getAppName());
         if (info.getAppURL() != null)

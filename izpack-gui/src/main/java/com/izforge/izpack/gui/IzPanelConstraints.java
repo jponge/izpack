@@ -22,8 +22,7 @@
 
 package com.izforge.izpack.gui;
 
-import java.awt.Component;
-import java.awt.Rectangle;
+import java.awt.*;
 
 /**
  * Constraints class for the layout manager <code>IzPanelLayout</code>.

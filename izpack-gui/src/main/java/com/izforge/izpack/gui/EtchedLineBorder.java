@@ -20,8 +20,7 @@
 package com.izforge.izpack.gui;
 
 import javax.swing.border.EtchedBorder;
-import java.awt.Component;
-import java.awt.Graphics;
+import java.awt.*;
 
 /**
  * Draws an etched line border.
@@ -36,12 +35,12 @@ public class EtchedLineBorder extends EtchedBorder
     /**
      * Paints the etched line.
      *
-     * @param component      The component to draw the border on.
-     * @param graphics      The graphics object.
-     * @param x      The top-left x.
-     * @param y      The top-left y.
-     * @param width  The border width.
-     * @param height The border height.
+     * @param component The component to draw the border on.
+     * @param graphics  The graphics object.
+     * @param x         The top-left x.
+     * @param y         The top-left y.
+     * @param width     The border width.
+     * @param height    The border height.
      */
     public void paintBorder(Component component, Graphics graphics, int x, int y, int width, int height)
     {

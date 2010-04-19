@@ -382,9 +382,8 @@ public class InstallerFrame extends JFrame implements InstallerView
     private void callGUIListener(int what, JPanel param)
     {
         for (GUIListener aGuiListener : guiListener)
-            aGuiListener.guiActionPerformed(what, param);
         {
-            (aGuiListener).guiActionPerformed(what, param);
+            aGuiListener.guiActionPerformed(what, param);
         }
     }
 
@@ -932,7 +931,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         getGlassPane().setEnabled(false);
         getGlassPane().setVisible(false);
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-        
+
         setFocusTraversalPolicy((java.awt.FocusTraversalPolicy) usualFTP);
         callGUIListener(GUIListener.GUI_RELEASED);
     }

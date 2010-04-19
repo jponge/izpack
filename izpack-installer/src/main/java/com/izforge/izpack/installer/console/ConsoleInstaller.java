@@ -116,7 +116,7 @@ public class ConsoleInstaller extends InstallerBase
                 {
                     praefix = "";
                 }
-                if (!OsConstraintHelper.oneMatchesCurrentSystem(panel.osConstraints))
+                if (!OsConstraintHelper.oneMatchesCurrentSystem(panel.getOsConstraints()))
                 {
                     continue;
                 }

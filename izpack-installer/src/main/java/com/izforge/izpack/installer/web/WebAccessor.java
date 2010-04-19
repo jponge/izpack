@@ -22,10 +22,7 @@
 package com.izforge.izpack.installer.web;
 
 import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.io.InputStream;
 import java.net.*;
 import java.util.Locale;

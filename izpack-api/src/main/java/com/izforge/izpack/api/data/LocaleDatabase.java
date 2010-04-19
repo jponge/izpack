@@ -29,7 +29,6 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 
 /**
  * Represents a database of a locale.

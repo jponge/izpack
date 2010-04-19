@@ -219,7 +219,7 @@ public class RulesEngineImpl implements RulesEngine
         if (conditionsspec.hasChildren())
         {
             // read in the condition specs
-                List<IXMLElement> childs = this.conditionsspec.getChildrenNamed("condition");
+            List<IXMLElement> childs = conditionsspec.getChildrenNamed("condition");
 
             for (IXMLElement condition : childs)
             {
@@ -236,7 +236,7 @@ public class RulesEngineImpl implements RulesEngine
                 }
             }
 
-                List<IXMLElement> panelconditionels = this.conditionsspec
+            List<IXMLElement> panelconditionels = conditionsspec
                     .getChildrenNamed("panelcondition");
             for (IXMLElement panelel : panelconditionels)
             {
@@ -245,7 +245,7 @@ public class RulesEngineImpl implements RulesEngine
                 this.panelconditions.put(panelid, conditionid);
             }
 
-                List<IXMLElement> packconditionels = this.conditionsspec
+            List<IXMLElement> packconditionels = conditionsspec
                     .getChildrenNamed("packcondition");
             for (IXMLElement panelel : packconditionels)
             {

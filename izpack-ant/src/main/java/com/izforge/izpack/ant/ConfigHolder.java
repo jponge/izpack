@@ -27,7 +27,10 @@ package com.izforge.izpack.ant;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
 
 /**
  * A nested element holder for the installation configuration document content.

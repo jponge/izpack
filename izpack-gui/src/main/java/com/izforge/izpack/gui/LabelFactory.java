@@ -21,9 +21,7 @@
 
 package com.izforge.izpack.gui;
 
-import javax.swing.Icon;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import java.awt.*;
 
 /**

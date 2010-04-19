@@ -2002,8 +2002,8 @@ public class CompilerConfig extends Thread
      * family=windows if not already se in the given constraint list.
      * Throws a parsing warning if the constraint list was implicitely modified.
      *
-     * @param blockableElement      the blockable XML element to parse
-     * @param osList constraint list to maintain and return
+     * @param blockableElement the blockable XML element to parse
+     * @param osList           constraint list to maintain and return
      * @return blockable level
      * @throws CompilerException
      */

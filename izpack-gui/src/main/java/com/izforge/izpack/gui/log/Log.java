@@ -24,8 +24,7 @@ package com.izforge.izpack.gui.log;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.text.DateFormatSymbols;

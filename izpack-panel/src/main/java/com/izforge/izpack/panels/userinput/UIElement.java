@@ -21,10 +21,8 @@ package com.izforge.izpack.panels.userinput;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 
-import java.util.List;
-import java.util.Vector;
 import javax.swing.*;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * Metadata for elements shown in the dialog.

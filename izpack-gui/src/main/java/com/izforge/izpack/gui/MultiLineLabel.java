@@ -21,9 +21,8 @@
 
 package com.izforge.izpack.gui;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 import java.awt.*;
-import java.util.Vector;
 
 /*---------------------------------------------------------------------------*/
 

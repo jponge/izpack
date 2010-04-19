@@ -310,8 +310,8 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
     }
 
     /**
-     * @param fileNamePatterns       A list of file name patterns (in ant fileset syntax)
-     * @param recompiler The regular expression compiler (used to speed up RE compiling).
+     * @param fileNamePatterns A list of file name patterns (in ant fileset syntax)
+     * @param recompiler       The regular expression compiler (used to speed up RE compiling).
      * @return List of org.apache.regexp.RE
      */
     private List<RE> preparePatterns(ArrayList<String> fileNamePatterns, RECompiler recompiler)

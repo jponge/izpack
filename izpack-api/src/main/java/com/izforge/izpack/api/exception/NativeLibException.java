@@ -21,7 +21,10 @@
 
 package com.izforge.izpack.api.exception;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * A exception class which will be used from the native part of system dependent classes to signal

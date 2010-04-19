@@ -20,7 +20,6 @@ package com.izforge.izpack.gui;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * This class implements a layout manager that generally lays out components in two columns. <BR>

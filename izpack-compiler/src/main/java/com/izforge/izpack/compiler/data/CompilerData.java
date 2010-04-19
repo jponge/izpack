@@ -66,7 +66,7 @@ public class CompilerData
      * The IzPack version.
      */
     public final static String IZPACK_VERSION = ResourceBundle.getBundle("version").getString("izpack.version");
-    
+
     private final static String IZ_TEST_FILE = "ShellLink.dll";
 
     private final static String IZ_TEST_SUBDIR = "bin" + File.separator + "native" + File.separator + "izpack";

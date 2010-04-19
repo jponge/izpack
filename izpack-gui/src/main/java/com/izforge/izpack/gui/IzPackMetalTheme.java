@@ -22,7 +22,7 @@ package com.izforge.izpack.gui;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.metal.DefaultMetalTheme;
-import java.awt.Font;
+import java.awt.*;
 
 /**
  * The IzPack metal theme.
