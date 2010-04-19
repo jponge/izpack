@@ -276,7 +276,6 @@ public class ResourceManager
      *
      * @param resource the resource to load
      * @return A languagedependen URL spezifies the requested resource
-     * @throws ResourceNotFoundException Description of the Exception
      * @throws ResourceNotFoundException thrown if there is no resource found
      */
     public URL getURL(String resource)
@@ -338,10 +337,11 @@ public class ResourceManager
      * Returns a laguage dependent ImageIcon for the given Resource
      *
      * @param resource resrouce of the Icon
+     * @param fallback fallback resources
      * @return a ImageIcon loaded from the given Resource
      * @throws ResourceNotFoundException thrown when the resource can not be found
      */
-    public ImageIcon getImageIconResource(String resource)
+    public ImageIcon getImageIconResource(String resource, String... fallback)
     {
         return new ImageIcon(this.getURL(resource));
     }
