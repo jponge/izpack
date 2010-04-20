@@ -1,18 +1,18 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2004 Klaus Bartz
  * Copyright 2004 Thomas Guenter
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,9 +28,11 @@ import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
+import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.helper.SpecHelper;
 
 import java.io.*;
@@ -51,7 +53,6 @@ import java.util.Vector;
  */
 public class AntActionInstallerListener extends SimpleInstallerListener
 {
-
     // ------------------------------------------------------------------------
     // Constant Definitions
     // ------------------------------------------------------------------------
@@ -90,13 +91,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         return (actions);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.izforge.izpack.installer.InstallerListener#beforePacks(com.izforge.izpack.installer.AutomatedInstallData,
-     * java.lang.Integer, com.izforge.izpack.api.handler.AbstractUIProgressHandler)
-     */
-
+    @Override
     public void beforePacks(AutomatedInstallData idata, Integer npacks,
                             AbstractUIProgressHandler handler) throws Exception
     {
@@ -110,11 +105,11 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         }
 
         // Selected packs.
-        Iterator iter = idata.getSelectedPacks().iterator();
+        Iterator<Pack> iter = idata.getSelectedPacks().iterator();
         Pack p = null;
         while (iter != null && iter.hasNext())
         {
-            p = (Pack) iter.next();
+            p = iter.next();
 
             // Resolve data for current pack.
             IXMLElement pack = getSpecHelper().getPackForName(p.name);
@@ -155,43 +150,25 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         iter = idata.getAvailablePacks().iterator();
         while (iter.hasNext())
         {
-            String currentPack = ((Pack) iter.next()).name;
+            String currentPack = iter.next().name;
             performAllActions(currentPack, ActionBase.BEFOREPACKS, null);
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.izforge.izpack.installer.InstallerListener#beforePack(com.izforge.izpack.Pack,
-     * java.lang.Integer, com.izforge.izpack.api.handler.AbstractUIProgressHandler)
-     */
-
+    @Override
     public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler)
             throws Exception
     {
         performAllActions(pack.name, ActionBase.BEFOREPACK, handler);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.izforge.izpack.installer.InstallerListener#afterPack(com.izforge.izpack.Pack,
-     * java.lang.Integer, com.izforge.izpack.api.handler.AbstractUIProgressHandler)
-     */
-
+    @Override
     public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
     {
         performAllActions(pack.name, ActionBase.AFTERPACK, handler);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
-     * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
-     */
-
+    @Override
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
             throws Exception
     {
@@ -200,10 +177,10 @@ public class AntActionInstallerListener extends SimpleInstallerListener
             handler.nextStep(getMsg("AntAction.pack"), getProgressBarCallerId(), getActionCount(
                     idata, ActionBase.AFTERPACKS));
         }
-        Iterator iter = idata.getSelectedPacks().iterator();
+        Iterator<Pack> iter = idata.getSelectedPacks().iterator();
         while (iter.hasNext())
         {
-            String currentPack = ((Pack) iter.next()).name;
+            String currentPack = iter.next().name;
             performAllActions(currentPack, ActionBase.AFTERPACKS, handler);
         }
         if (uninstActions.size() > 0)
@@ -215,10 +192,10 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     private int getActionCount(AutomatedInstallData idata, String order)
     {
         int retval = 0;
-        Iterator iter = idata.getSelectedPacks().iterator();
+        Iterator<Pack> iter = idata.getSelectedPacks().iterator();
         while (iter.hasNext())
         {
-            String currentPack = ((Pack) iter.next()).name;
+            String currentPack = iter.next().name;
             ArrayList<AntAction> actList = getActions(currentPack, order);
             if (actList != null)
             {
@@ -282,7 +259,12 @@ public class AntActionInstallerListener extends SimpleInstallerListener
             }
             try
             {
-                act.performInstallAction();
+                String conditionId = act.getConditionId();
+                if (conditionId == null
+                    || (conditionId != null && getInstalldata().getRules().isConditionTrue(act.getConditionId())))
+                {
+                    act.performInstallAction();
+                }
             }
             catch (Exception e)
             {
@@ -313,6 +295,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
             return null;
         }
         SpecHelper spec = getSpecHelper();
+        VariableSubstitutor subst = new VariableSubstitutorImpl(idata.getVariables());
         AntAction act = new AntAction();
         try
         {
@@ -328,6 +311,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         act.setQuiet(spec.isAttributeYes(el, ActionBase.QUIET, false));
         act.setVerbose(spec.isAttributeYes(el, ActionBase.VERBOSE, false));
         buildFile = el.getAttribute(ActionBase.BUILDFILE);
+        act.setConditionId(el.getAttribute(ActionBase.CONDITIONID));
         buildResource = processBuildfileResource(spec, idata, el);
         if (null == buildFile && null == buildResource)
         {
@@ -339,16 +323,30 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         }
         if (null != buildFile)
         {
-            act.setBuildFile(buildFile);
+            try
+            {
+                act.setBuildFile(FileUtil.getAbsoluteFile(subst.substitute(buildFile), idata.getInstallPath()));
+            }
+            catch (Exception e)
+            {
+                act.setBuildFile(FileUtil.getAbsoluteFile(buildFile, idata.getInstallPath()));
+            }
         }
         else
         {
-            act.setBuildFile(buildResource);
+            act.setBuildFile(new File(buildResource));
         }
         String str = el.getAttribute(ActionBase.LOGFILE);
         if (str != null)
         {
-            act.setLogFile(str);
+            try
+            {
+                act.setLogFile(FileUtil.getAbsoluteFile(subst.substitute(str), idata.getInstallPath()));
+            }
+            catch (Exception e)
+            {
+                act.setLogFile(FileUtil.getAbsoluteFile(str, idata.getInstallPath()));
+            }
         }
         String msgId = el.getAttribute(ActionBase.MESSAGEID);
         if (msgId != null && msgId.length() > 0)

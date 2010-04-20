@@ -24,7 +24,7 @@ package com.izforge.izpack.event;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.izforge.izpack.util.config.ConfigurableTask;
+import com.izforge.izpack.util.Debug;
 
 /**
  * This class contains data and 'perform' logic for configuration action listeners.
@@ -40,7 +40,7 @@ public class ConfigurationAction extends ActionBase
     public static final String CONFIGURABLE = "configurable";
     public static final String CONFIGURABLESET = "configurableset";
 
-    private List<ConfigurableTask> configtasks = null;
+    private List<ConfigurationActionTask> actionTasks = null;
 
     /**
      * Default constructor
@@ -56,21 +56,27 @@ public class ConfigurationAction extends ActionBase
      */
     public void performInstallAction() throws Exception
     {
-        for (ConfigurableTask task : configtasks)
+        Debug.trace("Found "+actionTasks.size()+" configuration tasks");
+        for (ConfigurationActionTask task : actionTasks)
         {
             task.execute();
         }
     }
 
-    public void setConfigurables(List<ConfigurableTask> configtasks)
+    public List<ConfigurationActionTask> getActionTasks()
     {
-        this.configtasks = configtasks;
+        return actionTasks;
     }
 
-    public void addConfigurables(List<ConfigurableTask> configtasks)
+    public void setActionTasks(List<ConfigurationActionTask> configtasks)
+    {
+        this.actionTasks = configtasks;
+    }
+
+    public void addActionTasks(List<ConfigurationActionTask> configtasks)
     {
         if (configtasks == null)
-            configtasks = new ArrayList<ConfigurableTask>();
-        this.configtasks.addAll(configtasks);
+            configtasks = new ArrayList<ConfigurationActionTask>();
+        this.actionTasks.addAll(configtasks);
     }
 }

@@ -50,6 +50,7 @@ import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.data.binding.Stage;
 import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.api.installer.DataValidator;
+import com.izforge.izpack.api.installer.DataValidator.Status;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -61,7 +62,7 @@ import com.izforge.izpack.compiler.helper.TargetFileSet;
 import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
 import com.izforge.izpack.compiler.listener.CompilerListener;
 import com.izforge.izpack.compiler.packager.IPackager;
-import com.izforge.izpack.core.data.DynamicConditionValidatorImpl;
+import com.izforge.izpack.core.data.DynamicInstallerRequirementValidatorImpl;
 import com.izforge.izpack.core.data.DynamicVariableImpl;
 import com.izforge.izpack.core.regex.RegularExpressionFilterImpl;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
@@ -223,7 +224,7 @@ public class CompilerConfig extends Thread
         // We add all the information
         addVariables(data);
         addDynamicVariables(data);
-        addDynamicConditions(data);
+        addDynamicInstallerRequirement(data);
         addConditions(data);
         addInfo(data);
         addGUIPrefs(data);
@@ -250,9 +251,9 @@ public class CompilerConfig extends Thread
 
         if (root != null)
         {
-            Vector<IXMLElement> installerrequirementsels = root
+            Vector<IXMLElement> installerRequirementList = root
                     .getChildrenNamed("installerrequirement");
-            for (IXMLElement installerrequirement : installerrequirementsels)
+            for (IXMLElement installerrequirement : installerRequirementList)
             {
                 InstallerRequirement basicInstallerCondition = new InstallerRequirement();
                 String condition = installerrequirement.getAttribute("condition");
@@ -2052,25 +2053,33 @@ public class CompilerConfig extends Thread
         notifyCompilerListener("addDynamicVariables", CompilerListener.END, data);
     }
 
-    protected void addDynamicConditions(IXMLElement data) throws CompilerException
+    protected void addDynamicInstallerRequirement(IXMLElement data) throws CompilerException
     {
-        notifyCompilerListener("addDynamicConditions", CompilerListener.BEGIN, data);
+        notifyCompilerListener("addDynamicInstallerRequirements", CompilerListener.BEGIN, data);
         // We get the dynamic variable list
-        IXMLElement root = data.getFirstChildNamed("dynamicconditions");
-        if (root == null) { return; }
+        IXMLElement root = data.getFirstChildNamed("dynamicinstallerrequirements");
+        List<DynamicInstallerRequirementValidator> dynamicReq = packager.getDynamicInstallerRequirements();
 
-        List<DynamicConditionValidator> dynamicConds = packager.getDynamicConditions();
-
-        Iterator<IXMLElement> iter = root.getChildrenNamed("variable").iterator();
-        while (iter.hasNext())
+        if (root != null)
         {
-            IXMLElement condElement = iter.next();
-            dynamicConds.add(new DynamicConditionValidatorImpl(
-                    xmlCompilerHelper.requireAttribute(condElement, "id"),
-                    xmlCompilerHelper.requireAttribute(condElement, "errormessage")));
+            Vector<IXMLElement> installerRequirementList = root
+                    .getChildrenNamed("installerrequirement");
+            for (IXMLElement installerrequirement : installerRequirementList)
+            {
+                Status severity = Status.valueOf(xmlCompilerHelper.requireAttribute(installerrequirement, "severity"));
+                if (severity == null || severity == Status.OK)
+                {
+                    assertionHelper.parseError(installerrequirement, "invalid value for attribute \"severity\"");
+                }
+
+                dynamicReq.add(new DynamicInstallerRequirementValidatorImpl(
+                        xmlCompilerHelper.requireAttribute(installerrequirement, "condition"),
+                        severity,
+                        xmlCompilerHelper.requireAttribute(installerrequirement, "messageid")));
+            }
         }
 
-        notifyCompilerListener("addDynamicConditions", CompilerListener.END, data);
+        notifyCompilerListener("addDynamicInstallerRequirements", CompilerListener.END, data);
     }
 
     /**

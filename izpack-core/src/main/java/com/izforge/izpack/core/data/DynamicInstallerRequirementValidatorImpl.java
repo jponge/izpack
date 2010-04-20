@@ -26,14 +26,14 @@ package com.izforge.izpack.core.data;
 import java.io.Serializable;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.DynamicConditionValidator;
+import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.rules.RulesEngine;
 
 
 /**
  * Implicit data validator for checking a set of conditions on each panel change
  */
-public class DynamicConditionValidatorImpl implements DynamicConditionValidator, Serializable
+public class DynamicInstallerRequirementValidatorImpl implements DynamicInstallerRequirementValidator, Serializable
 {
     /**
      *
@@ -41,13 +41,15 @@ public class DynamicConditionValidatorImpl implements DynamicConditionValidator,
     private static final long serialVersionUID = -3752323264590369711L;
 
     private String conditionId;
-    private String errorMessage;
+    private Status severity;
+    private String messageId;
 
 
-    public DynamicConditionValidatorImpl(String conditionId, String errorMessage)
+    public DynamicInstallerRequirementValidatorImpl(String conditionId, Status severity, String messageId)
     {
         this.conditionId = conditionId;
-        this.errorMessage = errorMessage;
+        this.severity = severity;
+        this.messageId = messageId;
     }
 
     public Status validateData(AutomatedInstallData idata)
@@ -55,7 +57,7 @@ public class DynamicConditionValidatorImpl implements DynamicConditionValidator,
         RulesEngine rules = idata.getRules();
         if (!rules.isConditionTrue(conditionId))
         {
-            return Status.ERROR;
+            return severity;
         }
 
         return Status.OK;
@@ -63,20 +65,23 @@ public class DynamicConditionValidatorImpl implements DynamicConditionValidator,
 
     public String getErrorMessageId()
     {
-        if (errorMessage != null)
-            return errorMessage;
+        if (this.messageId != null)
+            return this.messageId;
 
         return null;
     }
 
     public String getWarningMessageId()
     {
+        if (this.messageId != null)
+            return this.messageId;
+
         return null;
     }
 
     public boolean getDefaultAnswer()
     {
-        return false;
+        return (this.severity != Status.ERROR);
     }
 
 }

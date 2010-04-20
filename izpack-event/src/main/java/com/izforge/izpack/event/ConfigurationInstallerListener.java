@@ -102,6 +102,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         while (iter != null && iter.hasNext())
         {
             p = iter.next();
+            Debug.trace("Entering beforepacks configuration action for pack "+p.name);
 
             // Resolve data for current pack.
             IXMLElement pack = getSpecHelper().getPackForName(p.name);
@@ -110,6 +111,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                 continue;
             }
 
+            Debug.trace("Found configuration action descriptor for pack "+p.name);
             // Prepare the action cache
             HashMap<Object, ArrayList<ConfigurationAction>> packActions = new HashMap<Object, ArrayList<ConfigurationAction>>();
             packActions.put(ActionBase.BEFOREPACK, new ArrayList<ConfigurationAction>());
@@ -119,15 +121,26 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
 
             // Get all entries for antcalls.
             Vector<IXMLElement> configActionEntries = pack.getChildrenNamed(ConfigurationAction.CONFIGACTION);
-            if (configActionEntries != null && configActionEntries.size() >= 1)
+            if (configActionEntries != null)
             {
-                Iterator<IXMLElement> entriesIter = configActionEntries.iterator();
-                while (entriesIter != null && entriesIter.hasNext())
+                Debug.trace("Found "+configActionEntries.size()+ " configuration actions");
+                if (configActionEntries.size() >= 1)
                 {
-                    ConfigurationAction act = readConfigAction(entriesIter.next(), idata);
-                    if (act != null)
+                    Iterator<IXMLElement> entriesIter = configActionEntries.iterator();
+                    while (entriesIter != null && entriesIter.hasNext())
                     {
-                        (packActions.get(act.getOrder())).add(act);
+                        ConfigurationAction act = readConfigAction(entriesIter.next(), idata);
+                        if (act != null)
+                        {
+                            Debug.trace("Adding "+act.getOrder()+ "configuration action with "
+                                    +act.getActionTasks().size()+" tasks");
+                            (packActions.get(act.getOrder())).add(act);
+                        }
+                    }
+                    // Set for progress bar interaction.
+                    if ((packActions.get(ActionBase.AFTERPACKS)).size() > 0)
+                    {
+                        this.setProgressBarCaller();
                     }
                 }
                 // Set for progress bar interaction.
@@ -244,13 +257,16 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                 ((ExtendedUIProgressHandler) handler)
                         .progress((act.getMessageID() != null) ? getMsg(act.getMessageID()) : "");
             }
-            try
+            else
             {
-                act.performInstallAction();
-            }
-            catch (Exception e)
-            {
-                throw new InstallerException(e);
+                try
+                {
+                    act.performInstallAction();
+                }
+                catch (Exception e)
+                {
+                    throw new InstallerException(e);
+                }
             }
         }
     }
@@ -283,14 +299,15 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         // Read specific attributes and nested elements
         substglobal = new VariableSubstitutorImpl( idata.getVariables() );
         substlocal = new VariableSubstitutorImpl( readVariables(idata, el) );
-        act.setConfigurables( readConfigurables(idata, el) );
-        act.addConfigurables( readConfigurableSets(idata, el) );
+        act.setActionTasks( readConfigurables(idata, el) );
+        act.addActionTasks( readConfigurableSets(idata, el) );
 
         return act;
     }
 
     private String substituteVariables(String name) {
-        if (substglobal != null) try
+        if (substglobal != null)
+        try
         {
             name = substglobal.substitute(name);
         }
@@ -309,9 +326,9 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         return name;
     }
 
-    protected List<ConfigurableTask> readConfigurableSets(AutomatedInstallData idata,
+    protected List<ConfigurationActionTask> readConfigurableSets(AutomatedInstallData idata,
             IXMLElement parent) throws InstallerException {
-        List<ConfigurableTask> configtasks = new ArrayList<ConfigurableTask>();
+        List<ConfigurationActionTask> configtasks = new ArrayList<ConfigurationActionTask>();
         Iterator<IXMLElement> iter = parent.getChildrenNamed("configurableset").iterator();
         while (iter.hasNext())
         {
@@ -355,7 +372,8 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                 throw new InstallerException("Type '"+type.getValue()+"' not allowed for ConfigurableSet");
             }
 
-            configtasks.add(task);
+            configtasks.add(new ConfigurationActionTask(task, getAttribute(el, "condition"),
+                    getInstalldata().getRules()));
         }
         return configtasks;
     }
@@ -442,9 +460,9 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
             task.setCleanup(Boolean.parseBoolean(boolattr));
     }
 
-    protected List<ConfigurableTask> readConfigurables(AutomatedInstallData idata,
+    protected List<ConfigurationActionTask> readConfigurables(AutomatedInstallData idata,
             IXMLElement parent) throws InstallerException {
-        List<ConfigurableTask> configtasks = new ArrayList<ConfigurableTask>();
+        List<ConfigurationActionTask> configtasks = new ArrayList<ConfigurationActionTask>();
         Iterator<IXMLElement> iter = parent.getChildrenNamed("configurable").iterator();
         while (iter.hasNext())
         {
@@ -519,7 +537,8 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                 throw new InstallerException("Type '"+type.getValue()+"' not allowed for Configurable");
             }
 
-            configtasks.add(task);
+            configtasks.add(new ConfigurationActionTask(task, getAttribute(el, "condition"),
+                    getInstalldata().getRules()));
         }
         return configtasks;
     }

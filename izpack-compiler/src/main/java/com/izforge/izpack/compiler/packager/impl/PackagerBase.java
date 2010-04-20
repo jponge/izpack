@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import com.izforge.izpack.api.data.DynamicConditionValidator;
+import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.DynamicVariable;
 import com.izforge.izpack.api.data.GUIPrefs;
 import com.izforge.izpack.api.data.Info;
@@ -45,7 +45,7 @@ import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.listener.PackagerListener;
 import com.izforge.izpack.compiler.packager.IPackager;
-import com.izforge.izpack.core.data.DynamicConditionValidatorImpl;
+import com.izforge.izpack.core.data.DynamicInstallerRequirementValidatorImpl;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.merge.MergeManager;
@@ -135,7 +135,7 @@ public abstract class PackagerBase implements IPackager
     /**
      * dynamic conditions
      */
-    protected List<DynamicConditionValidator> dynamicConditions = new ArrayList<DynamicConditionValidator>();
+    protected List<DynamicInstallerRequirementValidator> dynamicInstallerRequirements = new ArrayList<DynamicInstallerRequirementValidator>();
 
     /**
      * Jar file URLs who's contents will be copied into the installer.
@@ -370,7 +370,7 @@ public abstract class PackagerBase implements IPackager
         writeInstallerObject("langpacks.info", langpackNameList);
         writeInstallerObject("rules", rules);
         writeInstallerObject("dynvariables", dynamicvariables);
-        writeInstallerObject("dynconditions", dynamicConditions);
+        writeInstallerObject("dynconditions", dynamicInstallerRequirements);
         writeInstallerObject("installerrequirements", installerrequirements);
 
         writeInstallerResources();
@@ -402,9 +402,9 @@ public abstract class PackagerBase implements IPackager
     /**
      * @return the dynamic conditions
      */
-    public List<DynamicConditionValidator> getDynamicConditions()
+    public List<DynamicInstallerRequirementValidator> getDynamicInstallerRequirements()
     {
-        return this.dynamicConditions;
+        return this.dynamicInstallerRequirements;
     }
 
     public void addInstallerRequirements(List<InstallerRequirement> conditions)

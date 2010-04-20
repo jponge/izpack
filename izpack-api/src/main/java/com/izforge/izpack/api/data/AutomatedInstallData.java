@@ -138,7 +138,7 @@ public class AutomatedInstallData implements Serializable
     /**
      * Dynamic conditions
      */
-    private List<DynamicConditionValidator> dynamicconditions;
+    private List<DynamicInstallerRequirementValidator> dynamicinstallerrequirements;
 
     /**
      * List of install requirements
@@ -493,14 +493,14 @@ public class AutomatedInstallData implements Serializable
         this.dynamicvariables = dynamicvariables;
     }
 
-    public List<DynamicConditionValidator> getDynamicconditions()
+    public List<DynamicInstallerRequirementValidator> getDynamicinstallerrequirements()
     {
-        return this.dynamicconditions;
+        return this.dynamicinstallerrequirements;
     }
 
-    public void setDynamicconditions(List<DynamicConditionValidator> dynamicconditions)
+    public void setDynamicinstallerrequirements(List<DynamicInstallerRequirementValidator> dynamicinstallerrequirements)
     {
-        this.dynamicconditions = dynamicconditions;
+        this.dynamicinstallerrequirements = dynamicinstallerrequirements;
     }
 
     public void setInstallerrequirements(List<InstallerRequirement> installerrequirements)

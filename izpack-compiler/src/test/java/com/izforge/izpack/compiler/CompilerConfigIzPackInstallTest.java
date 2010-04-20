@@ -40,7 +40,6 @@ public class CompilerConfigIzPackInstallTest
     public void installerShouldContainInstallerClassResourcesAndImages() throws Exception
     {
         compilerConfig.executeCompiler();
-        assertThat(out, ZipMatcher.isZipContainingFile("com/izforge/izpack/panels/hello/HelloPanel.class"));
         assertThat(out, ZipMatcher.isZipContainingFile("com/izforge/izpack/panels/checkedhello/CheckedHelloPanel.class"));
         assertThat(out, ZipMatcher.isZipContainingFile("resources/vars"));
         assertThat(out, ZipMatcher.isZipContainingFile("img/JFrameIcon.png"));

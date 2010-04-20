@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2004 Klaus Bartz
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -61,7 +61,7 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.izforge.izpack.uninstaller.UninstallerListener#beforeDeletion(java.util.List,
      * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
@@ -120,9 +120,9 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
             if (null != buildResource)
             {
                 // We do
-                action.setBuildFile(buildResource);
+                action.setBuildFile(new File(buildResource));
             }
-            // 
+            //
             if (action.getUninstallOrder().equals(ActionBase.BEFOREDELETION))
             {
                 befDel.add(action);
@@ -136,7 +136,7 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
                     //  so now copy the local build file to a temporary file
                     //  and set it as the build file for the action
                     File tmpFile = IoHelper.copyToTempFile(action.getBuildFile(), ".xml");
-                    action.setBuildFile(tmpFile.getCanonicalPath());
+                    action.setBuildFile(tmpFile);
                 }
                 List<String> props = action.getPropertyFiles();
                 if (props != null)
@@ -167,7 +167,7 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.izforge.izpack.uninstaller.UninstallerListener#afterDeletion(java.util.List,
      * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */

@@ -23,8 +23,8 @@ public class IzpackProjectProvider implements Provider
 {
 
     public static List<String> TAG_TO_IGNORE = Arrays.asList("info", "guiprefs", "variables",
-            "packs", "packaging", "conditions", "installerrequirements", "locale", "resources", "panels", "help", "validator"
-            , "actions", "native", "dynamicvariables");
+            "packs", "packaging", "conditions", "installerrequirements", "locale", "resources",
+            "panels", "help", "validator", "actions", "native", "dynamicvariables", "jar");
 
     public static List<String> LISTENER_ATTRIBUTE = Arrays.asList("classname", "stage", "jar");
     public static List<String> OS_ATTRIBUTE = Arrays.asList("arch", "jre", "family", "name", "version");

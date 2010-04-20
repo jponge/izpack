@@ -1,18 +1,18 @@
 /*
  * $Id$
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2002 Paul Wilkinson
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,21 +22,22 @@
 
 package com.izforge.izpack.ant;
 
-import com.izforge.izpack.compiler.CompilerConfig;
-import com.izforge.izpack.compiler.container.CompilerContainer;
-import com.izforge.izpack.compiler.data.CompilerData;
-import com.izforge.izpack.compiler.data.PropertyManager;
-import com.izforge.izpack.compiler.listener.PackagerListener;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Properties;
+import java.util.ResourceBundle;
+
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.EnumeratedAttribute;
 import org.apache.tools.ant.types.PropertySet;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Properties;
-import java.util.ResourceBundle;
+import com.izforge.izpack.compiler.CompilerConfig;
+import com.izforge.izpack.compiler.container.CompilerContainer;
+import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.compiler.data.PropertyManager;
+import com.izforge.izpack.compiler.listener.PackagerListener;
 
 /**
  * A IzPack Ant task.
@@ -193,12 +194,19 @@ public class IzPackTask extends Task implements PackagerListener
      */
     public void execute() throws org.apache.tools.ant.BuildException
     {
+
         // Either the input attribute or config element must be specified
         if (input == null && config == null)
         {
             throw new BuildException(ResourceBundle.getBundle(
                     "com/izforge/izpack/ant/langpacks/messages").getString(
                     "input_must_be_specified"));
+        }
+
+        if (input != null)
+        {
+            // AssertionHelper dependency injection
+            compilerContainer.addConfig("installFile", input);
         }
 
         if (output == null)

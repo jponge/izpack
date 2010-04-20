@@ -40,7 +40,7 @@ public class CompilerContainer extends AbstractContainer
     public void fillContainer(MutablePicoContainer pico)
     {
         pico
-                .addComponent("properties", new Properties(System.getProperties()))
+                .addComponent(Properties.class)
                 .addComponent(CompilerContainer.class, this)
                 .addComponent(CliAnalyzer.class)
                 .addComponent(CmdlinePackagerListener.class)

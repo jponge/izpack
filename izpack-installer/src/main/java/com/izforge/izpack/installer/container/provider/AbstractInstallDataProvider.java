@@ -6,7 +6,7 @@ import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.data.DynamicConditionValidatorImpl;
+import com.izforge.izpack.core.data.DynamicInstallerRequirementValidatorImpl;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.installer.container.impl.CustomDataContainer;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
@@ -434,7 +434,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         {
             InputStream in = resourceManager.getInputStream("dynconditions");
             ObjectInputStream objIn = new ObjectInputStream(in);
-            automatedInstallData.setDynamicconditions((List<DynamicConditionValidator>) objIn.readObject());
+            automatedInstallData.setDynamicinstallerrequirements((List<DynamicInstallerRequirementValidator>) objIn.readObject());
             objIn.close();
         }
         catch (Exception e)

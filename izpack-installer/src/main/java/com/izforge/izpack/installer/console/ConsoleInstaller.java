@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Properties;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.DynamicConditionValidator;
+import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Panel;
@@ -394,10 +394,10 @@ public class ConsoleInstaller extends InstallerBase
         }
 
         // Evaluate all global dynamic conditions
-        List<DynamicConditionValidator> dynConds = installdata.getDynamicconditions();
+        List<DynamicInstallerRequirementValidator> dynConds = installdata.getDynamicinstallerrequirements();
         if (dynConds != null)
         {
-            for (DynamicConditionValidator validator : dynConds)
+            for (DynamicInstallerRequirementValidator validator : dynConds)
             {
                 Status validationResult = validator.validateData(installdata);
                 if (validationResult != DataValidator.Status.OK)

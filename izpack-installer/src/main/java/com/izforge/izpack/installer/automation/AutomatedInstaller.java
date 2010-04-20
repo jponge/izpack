@@ -380,10 +380,10 @@ public class AutomatedInstaller extends InstallerBase
         }
 
         // Evaluate all global dynamic conditions
-        List<DynamicConditionValidator> dynConds = idata.getDynamicconditions();
+        List<DynamicInstallerRequirementValidator> dynConds = idata.getDynamicinstallerrequirements();
         if (dynConds != null)
         {
-            for (DynamicConditionValidator validator : dynConds)
+            for (DynamicInstallerRequirementValidator validator : dynConds)
             {
                 Status validationResult = validator.validateData(idata);
                 if (validationResult != DataValidator.Status.OK)

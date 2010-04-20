@@ -36,7 +36,7 @@ import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.DynamicConditionValidator;
+import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
@@ -545,8 +545,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public void emitErrorAndBlockNext(String title, String message)
     {
-        emitError(title, message);
         parent.lockNextButton();
+        emitError(title, message);
     }
 
     /**
@@ -1092,7 +1092,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         boolean returnValue = false;
 
         // Evaluate all global dynamic conditions
-        List<DynamicConditionValidator> dynConds = installData.getDynamicconditions();
+        List<DynamicInstallerRequirementValidator> dynConds = installData.getDynamicinstallerrequirements();
         if (dynConds != null)
         {
             Component guiComponent = getTopLevelAncestor();
@@ -1101,7 +1101,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             try
             {
                 guiComponent.setCursor(newCursor);
-                for (DynamicConditionValidator validator : dynConds)
+                for (DynamicInstallerRequirementValidator validator : dynConds)
                 {
                     returnValue = processValidationState(validator.validateData(installData));
                 }

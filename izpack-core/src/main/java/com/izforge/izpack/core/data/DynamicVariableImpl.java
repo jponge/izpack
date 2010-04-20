@@ -28,57 +28,57 @@ import com.izforge.izpack.api.data.Value;
 import com.izforge.izpack.api.regex.RegularExpressionFilter;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
-
 public class DynamicVariableImpl implements DynamicVariable
 {
+
     private static final long serialVersionUID = -7985397187206803090L;
 
     private String name;
+
     private Value value;
+
     private String conditionid;
+
     private RegularExpressionFilter regexp;
+
     private boolean checkonce = false;
+
     private boolean ignorefailure = true;
 
     private transient String currentValue;
 
     public void validate() throws Exception
     {
-        if (name == null)
-            throw new Exception("No dynamic variable name defined");
+        if (name == null) throw new Exception("No dynamic variable name defined");
 
         if (value == null)
-            throw new Exception("No dynamic variable value defined for variable "+name);
+            throw new Exception("No dynamic variable value defined for variable " + name);
 
         value.validate();
 
-        if (regexp != null)
-            regexp.validate();
+        if (regexp != null) regexp.validate();
     }
 
     public String evaluate(VariableSubstitutor... substitutors) throws Exception
     {
         String newValue = this.currentValue;
 
-        if (this.value == null)
-            return null;
+        if (this.value == null) return null;
 
-        if (this.checkonce && this.currentValue != null)
-            return this.currentValue;
+        if (this.checkonce && this.currentValue != null) return this.currentValue;
 
-        try {
+        try
+        {
             newValue = value.resolve(regexp, substitutors);
-            if (this.checkonce)
-                this.currentValue = newValue;
+            if (this.checkonce) this.currentValue = newValue;
         }
-        catch (Exception e) {
-            if (!this.ignorefailure)
-                throw e;
+        catch (Exception e)
+        {
+            if (!this.ignorefailure) throw e;
             if (regexp != null)
             {
                 newValue = regexp.getDefaultValue();
-                if (this.checkonce)
-                    this.currentValue = newValue;
+                if (this.checkonce) this.currentValue = newValue;
             }
         }
 
@@ -184,12 +184,10 @@ public class DynamicVariableImpl implements DynamicVariable
     @Override
     public boolean equals(Object obj)
     {
-        if ((obj == null) || !(obj instanceof DynamicVariable))
-        {
-            return false;
-        }
+        if ((obj == null) || !(obj instanceof DynamicVariable)) { return false; }
         DynamicVariable compareObj = (DynamicVariable) obj;
-        return (name.equals(compareObj.getName()) && conditionid.equals(compareObj.getConditionid()));
+        return (name.equals(compareObj.getName())
+                && (conditionid == null || conditionid.equals(compareObj.getConditionid())));
     }
 
     @Override
@@ -200,4 +198,3 @@ public class DynamicVariableImpl implements DynamicVariable
     }
 
 }
-

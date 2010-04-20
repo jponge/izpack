@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.DynamicConditionValidator;
+import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.DynamicVariable;
 import com.izforge.izpack.api.data.GUIPrefs;
 import com.izforge.izpack.api.data.Info;
@@ -164,7 +164,7 @@ public interface IPackager
      *
      * @return the list
      */
-    public abstract List<DynamicConditionValidator> getDynamicConditions();
+    public abstract List<DynamicInstallerRequirementValidator> getDynamicInstallerRequirements();
 
     /**
      * Add a panel, where order is important. Only one copy of the class files needd are inserted in

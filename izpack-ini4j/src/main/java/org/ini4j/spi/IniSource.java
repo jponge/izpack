@@ -31,6 +31,7 @@ class IniSource
     public static final char INCLUDE_END = '>';
     public static final char INCLUDE_OPTIONAL = '?';
     private static final char ESCAPE_CHAR = '\\';
+    private static final String NEWLINE = "\n";
     private Config _config;
     private URL _base;
     private IniSource _chain;
@@ -177,19 +178,12 @@ class IniSource
             line = line.trim();
             if (line.length() == 0)
             {
-                if (_config.isNoHeader())
-                {
-                    comment.append(_config.getLineSeparator());
-                }
-                else
-                {
-                    handleComment(comment);
-                }
+                handleComment(comment);
             }
             else if ((_commentChars.indexOf(line.charAt(0)) >= 0) && (buff.length() == 0))
             {
                 comment.append(line.substring(1));
-                comment.append(_config.getLineSeparator());
+                comment.append(NEWLINE);
             }
             else
             {

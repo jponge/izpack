@@ -40,7 +40,7 @@ public class VariableSubstitutorImpl extends VariableSubstitutorBase implements 
      * Constructs a new substitutor using the specified variable value mappings. The environment
      * hashtable is copied by reference. Braces are not required by default
      *
-     * @param vars the map with variable value mappings
+     * @param properties the map with variable value mappings
      */
     public VariableSubstitutorImpl(Properties properties)
     {

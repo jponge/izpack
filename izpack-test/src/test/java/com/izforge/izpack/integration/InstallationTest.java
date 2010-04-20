@@ -208,7 +208,7 @@ public class InstallationTest
             installerFrameFixture.checkBox(GuiId.SHORTCUT_CREATE_CHECK_BOX.id).click();
             installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         }
-        
+
         // Finish
 //        installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
     }

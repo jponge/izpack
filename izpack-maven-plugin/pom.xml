@@ -94,7 +94,7 @@
             <artifactId>izpack-uninstaller</artifactId>
         </dependency>
         <dependency>
-            <groupId>${groupId}</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>izpack-event</artifactId>
         </dependency>
 

@@ -29,14 +29,18 @@ import com.izforge.izpack.api.installer.DataValidator;
 /**
  * Implicit data validator for checking a set of conditions on each panel change
  */
-public interface DynamicConditionValidator extends DataValidator
+public interface DynamicInstallerRequirementValidator extends DataValidator
 {
+    @Override
     public Status validateData(AutomatedInstallData idata);
 
+    @Override
     public String getErrorMessageId();
 
+    @Override
     public String getWarningMessageId();
 
+    @Override
     public boolean getDefaultAnswer();
 
 }

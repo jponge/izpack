@@ -196,6 +196,39 @@
                 <groupId>org.ini4j</groupId>
                 <version>0.5.2-SNAPSHOT</version>
             </dependency>
+            <dependency>
+                <groupId>org.jdom</groupId>
+                <artifactId>jdom</artifactId>
+                <version>1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>jaxen</groupId>
+                <artifactId>jaxen</artifactId>
+                <version>1.1.1</version>
+                <!--
+                 exclude conflicting dependencies, already resolved in a different way
+                 XML parsers are part of newer JDKs
+                 -->
+                <exclusions>
+                  <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xercesImpl</artifactId>
+                  </exclusion>
+                  <exclusion>
+                    <groupId>xml-apis</groupId>
+                    <artifactId>xml-apis</artifactId>
+                  </exclusion>
+                  <exclusion>
+                    <groupId>xom</groupId>
+                    <artifactId>xom</artifactId>
+                  </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.wutka</groupId>
+                <artifactId>dtdparser</artifactId>
+                <version>1.21</version>
+            </dependency>
 
             <!-- inner dependencies to test jar -->
 
@@ -248,27 +281,9 @@
                 <scope>test</scope>
             </dependency>
 
-            <dependency>
-                <groupId>org.jdom</groupId>
-                <artifactId>jdom</artifactId>
-                <version>1.1</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>jaxen</groupId>
-                <artifactId>jaxen</artifactId>
-                <version>1.1.1</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.wutka</groupId>
-                <artifactId>dtdparser</artifactId>
-                <version>1.21</version>
-                <scope>compile</scope>
-            </dependency>
         </dependencies>
     </dependencyManagement>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
