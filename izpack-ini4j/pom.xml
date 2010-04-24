@@ -134,6 +134,7 @@
             </activation>
             <build>
                 <plugins>
+                    <!-- This causes issues on Mac OS X 10.6 (jponge)
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -153,7 +154,7 @@
                             </execution>
                         </executions>
                     </plugin>
-
+                    -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-pmd-plugin</artifactId>
