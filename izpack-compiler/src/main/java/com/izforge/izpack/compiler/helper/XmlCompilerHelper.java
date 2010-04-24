@@ -13,13 +13,10 @@ import java.net.URL;
  */
 public class XmlCompilerHelper
 {
-
-    private final String installFile;
     private AssertionHelper assertionHelper;
 
-    public XmlCompilerHelper(String installFile, AssertionHelper assertionHelper)
+    public XmlCompilerHelper(AssertionHelper assertionHelper)
     {
-        this.installFile = installFile;
         this.assertionHelper = assertionHelper;
     }
 
@@ -50,7 +47,7 @@ public class XmlCompilerHelper
         URL url = null;
         try
         {
-            url = new URL(requireContent(element));
+            url = new URL(requireContent(element).replace(" ", "%20"));
         }
         catch (MalformedURLException x)
         {

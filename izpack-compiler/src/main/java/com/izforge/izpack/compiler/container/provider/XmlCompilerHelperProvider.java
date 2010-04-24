@@ -14,6 +14,6 @@ public class XmlCompilerHelperProvider implements Provider
 
     public XmlCompilerHelper provide(String installFile, AssertionHelper assertionHelper)
     {
-        return new XmlCompilerHelper(installFile, assertionHelper);
+        return new XmlCompilerHelper(assertionHelper);
     }
 }
