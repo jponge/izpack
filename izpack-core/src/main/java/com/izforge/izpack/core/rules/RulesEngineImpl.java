@@ -247,7 +247,7 @@ public class RulesEngineImpl implements RulesEngine
 
     private static Class<Condition> getConditionClass(String conditionClassName)
     {
-        ClassLoader loader = Thread.currentThread().getContextClassLoader(); // 
+        ClassLoader loader = Thread.currentThread().getContextClassLoader(); //
         Class<Condition> conditionclass = null;
         try
         {
@@ -451,10 +451,6 @@ public class RulesEngineImpl implements RulesEngine
         Condition cond = RulesEngineImpl.getCondition(id);
         if (cond != null)
         {
-            if (cond.getInstalldata() == null)
-            {
-                cond.setInstalldata(RulesEngineImpl.installdata);
-            }
             return this.isConditionTrue(cond);
         }
         else
