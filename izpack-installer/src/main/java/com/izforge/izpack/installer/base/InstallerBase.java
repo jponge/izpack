@@ -74,23 +74,17 @@ public abstract class InstallerBase implements InstallerRequirementDisplay
                 //Debug.log("Dynamic variable: " + dynvarname);
                 for (DynamicVariable dynvar : dynamicvariables.get(dynvarname))
                 {
-                    boolean refresh = false;
+                    boolean refresh = true;
                     String conditionid = dynvar.getConditionid();
                     //Debug.log("condition: " + conditionid);
                     if ((conditionid != null) && (conditionid.length() > 0))
                     {
-                        if ((rules != null) && rules.isConditionTrue(conditionid))
+                        if ((rules != null) && !rules.isConditionTrue(conditionid))
                         {
-                            //Debug.log("refresh condition");
+                            //Debug.log("skipped refreshing dynamic variable due to unmet condition " + conditionid);
                             // condition for this rule is true
-                            refresh = true;
+                            refresh = false;
                         }
-                    }
-                    else
-                    {
-                        //Debug.log("refresh condition");
-                        // empty condition
-                        refresh = true;
                     }
                     if (refresh)
                     {

@@ -1252,6 +1252,8 @@ public class InstallerFrame extends JFrame
         Debug.trace("Current Panel: " + panelid);
         boolean canShow = false;
 
+        refreshDynamicVariables();
+
         if (panelmetadata.hasCondition())
         {
             canShow = rules.isConditionTrue(panelmetadata.getCondition());
@@ -1302,15 +1304,6 @@ public class InstallerFrame extends JFrame
             // panelconditions try to resolve the rules based on unassigned vars.
             final IzPanel panel = (IzPanel) installdata.getPanels().get(startPanel);
             panel.executePreValidationActions();
-            // Refresh dynamic variables to use in ConditionValidator
-            try
-            {
-                InstallerBase.refreshDynamicVariables(installdata, new VariableSubstitutorImpl(installdata.getVariables()));
-            }
-            catch (Exception e)
-            {
-                return;
-            }
             boolean isValid = doValidation ? panel.panelValidated() : true;
             panel.executePostValidationActions();
 
@@ -2006,5 +1999,37 @@ public class InstallerFrame extends JFrame
     public RulesEngine getRules()
     {
         return rules;
+    }
+
+    private void refreshDynamicVariables()
+    {
+        try {
+            InstallerBase.refreshDynamicVariables(installdata, new VariableSubstitutorImpl(installdata.getVariables()));
+        }
+        catch(Exception e) {
+            Debug.trace("Refreshing dynamic variables failed, asking user whether to proceed.");
+            StringBuffer msg = new StringBuffer();
+            msg.append("<html>");
+            msg.append("The following error occured during refreshing panel contents:<br>");
+            msg.append("<i>"+e.getMessage()+"</i><br>");
+            msg.append("Are you sure you want to continue with this installation?");
+            msg.append("</html>");
+            JLabel label = new JLabel(msg.toString());
+            label.setFont(new Font("Sans Serif", Font.PLAIN, 12));
+            Object[] optionValues = {"Continue", "Exit"};
+            int selectedOption = JOptionPane.showOptionDialog(null, label, "Warning",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, optionValues,
+                    optionValues[1]);
+            Debug.trace("Selected option: " + selectedOption);
+            if (selectedOption == 0)
+            {
+                Debug.trace("Continuing installation");
+            }
+            else
+            {
+                Debug.trace("Exiting");
+                System.exit(1);
+            }
+        }
     }
 }
