@@ -1250,18 +1250,19 @@ public class InstallerFrame extends JFrame
         com.izforge.izpack.api.data.Panel panelmetadata = panel.getMetadata();
         String panelid = panelmetadata.getPanelid();
         Debug.trace("Current Panel: " + panelid);
+        boolean canShow = false;
 
         if (panelmetadata.hasCondition())
         {
-            Debug.log("Checking panelcondition");
-            return rules.isConditionTrue(panelmetadata.getCondition());
+            canShow = rules.isConditionTrue(panelmetadata.getCondition());
+            Debug.log("Skipping panel " + panelid + " due to unmet condition " + panelmetadata.getCondition());
         }
         else
         {
             if (!rules.canShowPanel(panelid, this.installdata.getVariables()))
             {
                 // skip panel, if conditions for panel aren't met
-                Debug.log("Skip panel with panelid=" + panelid);
+                Debug.log("Can't show panel " + panelid);
                 // panel should be skipped, so we have to decrement panelnumber for skipping
                 return false;
             }
@@ -1270,6 +1271,7 @@ public class InstallerFrame extends JFrame
                 return true;
             }
         }
+        return canShow;
     }
 
     /**
