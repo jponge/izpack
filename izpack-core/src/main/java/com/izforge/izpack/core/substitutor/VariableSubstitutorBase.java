@@ -29,6 +29,8 @@ import com.izforge.izpack.util.IoHelper;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Substitutes variables occurring in an input stream or a string. This implementation supports a
@@ -47,6 +49,8 @@ import java.util.Map;
  */
 public abstract class VariableSubstitutorBase implements VariableSubstitutor
 {
+    private static final Logger LOGGER = Logger.getLogger(VariableSubstitutorBase.class.getName());
+
     /**
      * Whether braces are required for substitution.
      */
@@ -169,7 +173,8 @@ public abstract class VariableSubstitutorBase implements VariableSubstitutor
         }
         catch (Exception e)
         {
-            throw new Error(e.getMessage());
+            LOGGER.log(Level.SEVERE, "Error when substituting variables", e);
+            throw new Error(e);
         }
 
         // Return the resulting string
