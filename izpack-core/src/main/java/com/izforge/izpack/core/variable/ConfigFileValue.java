@@ -21,7 +21,6 @@
 
 package com.izforge.izpack.core.variable;
 
-import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import org.ini4j.Ini;
 import org.ini4j.Options;
@@ -128,7 +127,7 @@ public abstract class ConfigFileValue extends ValueImpl implements Serializable
         String _key_ = key;
         for (VariableSubstitutor substitutor : substitutors)
         {
-            _key_ = substitutor.substitute(_key_, (SubstitutionType) null);
+            _key_ = substitutor.substitute(_key_);
         }
 
         switch (type)
@@ -142,7 +141,7 @@ public abstract class ConfigFileValue extends ValueImpl implements Serializable
                 String _section_ = section;
                 for (VariableSubstitutor substitutor : substitutors)
                 {
-                    _key_ = substitutor.substitute(_key_, (SubstitutionType) null);
+                    _key_ = substitutor.substitute(_key_);
                 }
                 ini = new Ini(in);
                 return ini.get(_section_, _key_);

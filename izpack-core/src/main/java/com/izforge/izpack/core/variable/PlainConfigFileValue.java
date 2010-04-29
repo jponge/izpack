@@ -21,7 +21,6 @@
 
 package com.izforge.izpack.core.variable;
 
-import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
 import java.io.FileInputStream;
@@ -75,7 +74,7 @@ public class PlainConfigFileValue extends ConfigFileValue implements Serializabl
         String _location_ = location;
         for (VariableSubstitutor substitutor : substitutors)
         {
-            _location_ = substitutor.substitute(_location_, (SubstitutionType) null);
+            _location_ = substitutor.substitute(_location_);
         }
         return resolve(new FileInputStream(_location_), substitutors);
     }

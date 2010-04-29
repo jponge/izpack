@@ -21,7 +21,6 @@
 
 package com.izforge.izpack.core.variable;
 
-import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
@@ -107,7 +106,7 @@ public class ExecValue extends ValueImpl implements Serializable
             String _cmdarg_ = cmd[i];
             for (VariableSubstitutor substitutor : substitutors)
             {
-                _cmdarg_ = substitutor.substitute(_cmdarg_, (SubstitutionType) null);
+                _cmdarg_ = substitutor.substitute(_cmdarg_);
             }
             _cmd_[i] = _cmdarg_;
         }

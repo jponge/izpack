@@ -21,7 +21,6 @@
 
 package com.izforge.izpack.core.variable;
 
-import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
 import java.io.Serializable;
@@ -73,7 +72,7 @@ public class PlainValue extends ValueImpl implements Serializable
         String _value_ = value;
         for (VariableSubstitutor substitutor : substitutors)
         {
-            _value_ = substitutor.substitute(_value_, (SubstitutionType) null);
+            _value_ = substitutor.substitute(_value_);
         }
 
         return _value_;

@@ -21,7 +21,6 @@
 
 package com.izforge.izpack.core.variable;
 
-import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.OsVersion;
 import org.ini4j.Reg;
@@ -134,7 +133,7 @@ public class RegistryValue extends ValueImpl implements Serializable
             String _root_ = root;
             for (VariableSubstitutor substitutor : substitutors)
             {
-                _root_ = substitutor.substitute(_root_, (SubstitutionType) null);
+                _root_ = substitutor.substitute(_root_);
             }
             reg = new Reg(_root_);
         }
@@ -147,7 +146,7 @@ public class RegistryValue extends ValueImpl implements Serializable
             String _key_ = key;
             for (VariableSubstitutor substitutor : substitutors)
             {
-                _key_ = substitutor.substitute(_key_, (SubstitutionType) null);
+                _key_ = substitutor.substitute(_key_);
             }
             regkey = reg.get(_key_);
         }
@@ -156,7 +155,7 @@ public class RegistryValue extends ValueImpl implements Serializable
             String _value_ = value;
             for (VariableSubstitutor substitutor : substitutors)
             {
-                _value_ = substitutor.substitute(_value_, (SubstitutionType) null);
+                _value_ = substitutor.substitute(_value_);
             }
             return regkey.get(_value_);
         }

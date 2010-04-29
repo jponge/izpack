@@ -21,7 +21,6 @@
 
 package com.izforge.izpack.core.variable;
 
-import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.IoHelper;
 
@@ -73,7 +72,7 @@ public class EnvironmentValue extends ValueImpl implements Serializable
         String _variable_ = variable;
         for (VariableSubstitutor substitutor : substitutors)
         {
-            _variable_ = substitutor.substitute(_variable_, (SubstitutionType) null);
+            _variable_ = substitutor.substitute(_variable_);
         }
 
         return IoHelper.getenv(_variable_);

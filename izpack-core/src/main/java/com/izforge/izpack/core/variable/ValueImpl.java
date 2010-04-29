@@ -24,7 +24,6 @@ package com.izforge.izpack.core.variable;
 import com.izforge.izpack.api.data.Value;
 import com.izforge.izpack.api.regex.RegularExpressionFilter;
 import com.izforge.izpack.api.regex.RegularExpressionProcessor;
-import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.regex.RegularExpressionProcessorImpl;
 
@@ -46,15 +45,15 @@ public abstract class ValueImpl implements Value
             String replace = null, select = null, regex = null;
             for (VariableSubstitutor substitutor : substitutors)
             {
-                replace = substitutor.substitute(regexp.getReplace(), (SubstitutionType) null);
+                replace = substitutor.substitute(regexp.getReplace());
             }
             for (VariableSubstitutor substitutor : substitutors)
             {
-                select = substitutor.substitute(regexp.getSelect(), (SubstitutionType) null);
+                select = substitutor.substitute(regexp.getSelect());
             }
             for (VariableSubstitutor substitutor : substitutors)
             {
-                regex = substitutor.substitute(regexp.getRegexp(), (SubstitutionType) null);
+                regex = substitutor.substitute(regexp.getRegexp());
             }
             RegularExpressionProcessor processor = new RegularExpressionProcessorImpl();
             processor.setInput(newValue);

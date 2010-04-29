@@ -1,6 +1,5 @@
 package com.izforge.izpack.core.variable;
 
-import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
 import java.io.InputStream;
@@ -30,11 +29,11 @@ public class JarEntryConfigValue extends ZipEntryConfigFileValue
         String _filename_ = getFilename(), _entryname_ = getEntryname();
         for (VariableSubstitutor substitutor : substitutors)
         {
-            _filename_ = substitutor.substitute(_filename_, (SubstitutionType) null);
+            _filename_ = substitutor.substitute(_filename_);
         }
         for (VariableSubstitutor substitutor : substitutors)
         {
-            _entryname_ = substitutor.substitute(_entryname_, (SubstitutionType) null);
+            _entryname_ = substitutor.substitute(_entryname_);
         }
         return super.resolve(getJarEntryInputStream(_filename_, _entryname_), substitutors);
     }
