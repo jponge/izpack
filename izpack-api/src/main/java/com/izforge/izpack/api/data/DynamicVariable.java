@@ -81,11 +81,5 @@ public interface DynamicVariable extends Serializable
      * @param expression the non-mandatory regular expression
      */
     public void setRegularExpression(RegularExpressionFilter expression);
-
-    @Override
-    public boolean equals(Object obj);
-
-    @Override
-    public int hashCode();
 }
 
