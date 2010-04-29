@@ -6,7 +6,6 @@ import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.binding.Help;
 import com.izforge.izpack.installer.base.InstallerController;
-import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.container.TestPanelContainer;
@@ -38,14 +37,12 @@ public class TestPanelDisplay
     private GUIInstallData guiInstallData;
     private FrameFixture frameFixture;
     private ResourceManager resourceManager;
-    private InstallerFrame installerFrame;
     private UninstallDataWriter uninstallDataWriter;
     private InstallerController installerController;
 
-    public TestPanelDisplay(GUIInstallData guiInstallData, InstallerFrame installerFrame, ResourceManager resourceManager, FrameFixture frameFixture, UninstallDataWriter uninstallDataWriter, InstallerController installerController)
+    public TestPanelDisplay(GUIInstallData guiInstallData, ResourceManager resourceManager, FrameFixture frameFixture, UninstallDataWriter uninstallDataWriter, InstallerController installerController)
     {
         this.guiInstallData = guiInstallData;
-        this.installerFrame = installerFrame;
         this.resourceManager = resourceManager;
         this.frameFixture = frameFixture;
         this.uninstallDataWriter = uninstallDataWriter;
