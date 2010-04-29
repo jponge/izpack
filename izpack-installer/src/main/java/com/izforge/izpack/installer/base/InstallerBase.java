@@ -29,8 +29,10 @@ import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.DynamicVariableSubstitutor;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Common utility functions for the GUI and text installers. (Do not import swing/awt classes to
@@ -41,6 +43,8 @@ import java.util.Map;
  */
 public abstract class InstallerBase implements InstallerRequirementDisplay
 {
+
+    private static final Logger LOGGER = Logger.getLogger(InstallerBase.class.getName());
 
     protected ResourceManager resourceManager;
 
@@ -65,7 +69,7 @@ public abstract class InstallerBase implements InstallerRequirementDisplay
         Map<String, List<DynamicVariable>> dynamicvariables = installdata.getDynamicvariables();
         RulesEngine rules = installdata.getRules();
 
-        //Debug.log("refreshing dynamic variables");
+        LOGGER.info("refreshing dynamic variables");
         if (dynamicvariables == null)
         {
             return;
@@ -75,35 +79,22 @@ public abstract class InstallerBase implements InstallerRequirementDisplay
         {
             for (DynamicVariable dynamicVariable : dynamicVariableList)
             {
-                boolean refresh = true;
                 String conditionid = dynamicVariable.getConditionid();
-                //Debug.log("condition: " + conditionid);
-                if ((conditionid != null) && (conditionid.length() > 0))
+                if ((conditionid != null) && (conditionid.length() > 0) && !rules.isConditionTrue(conditionid))
                 {
-                    if ((rules != null) && !rules.isConditionTrue(conditionid))
-                    {
-                        //Debug.log("skipped refreshing dynamic variable due to unmet condition " + conditionid);
-                        // condition for this rule is true
-                        refresh = false;
-                    }
+                    continue;
                 }
-                if (refresh)
-                {
-                    // Add self replacing of previously replaced dynamic variables
-                    VariableSubstitutor[] newsubstitutors = new DynamicVariableSubstitutor[substitutors.length + 1];
-                    System.arraycopy(substitutors, 0, newsubstitutors, 0, substitutors.length);
-                    newsubstitutors[substitutors.length] = new DynamicVariableSubstitutor(dynamicvariables, rules);
 
-                    String newValue = dynamicVariable.evaluate(newsubstitutors);
-                    if (newValue != null)
-                    {
-                        //Debug.log("dynamic variable " + dynamicVariable.getName() + ": " + newValue);
-                        installdata.getVariables().setProperty(dynamicVariable.getName(), newValue);
-                    }
-                    else
-                    {
-                        //Debug.log("dynamic variable " + dynamicVariable.getName() + " unchanged: " + dynamicVariable.getValue());
-                    }
+                // Add self replacing of previously replaced dynamic variables
+
+                VariableSubstitutor[] newsubstitutors = Arrays.copyOf(substitutors, substitutors.length + 1);
+                newsubstitutors[substitutors.length] = new DynamicVariableSubstitutor(dynamicvariables, rules);
+
+                String newValue = dynamicVariable.evaluate(newsubstitutors);
+                if (newValue != null)
+                {
+                    //Debug.log("dynamic variable " + dynamicVariable.getName() + ": " + newValue);
+                    installdata.getVariables().setProperty(dynamicVariable.getName(), newValue);
                 }
             }
         }
