@@ -37,49 +37,50 @@ public interface DynamicVariable extends Serializable
     /**
      * @return the name
      */
-    public String getName();
+    String getName();
 
     /**
      * @param name the name to set
      */
-    public void setName(String name);
+    void setName(String name);
 
     /**
      * @return the value
      */
-    public Value getValue();
+    Value getValue();
 
     /**
      * @param value the value to set
      */
-    public void setValue(Value value);
+    void setValue(Value value);
 
     /**
      * @return the conditionid
      */
-    public String getConditionid();
+    String getConditionid();
 
     /**
      * @param conditionid the conditionid to set
      */
-    public void setConditionid(String conditionid);
+    void setConditionid(String conditionid);
 
-    public void validate() throws Exception;
+    void validate() throws Exception;
 
-    public String evaluate(VariableSubstitutor... substitutors) throws Exception;
+    String evaluate(VariableSubstitutor... substitutors) throws Exception;
 
-    public void setCheckonce(boolean checkonce);
+    void setCheckonce(boolean checkonce);
 
-    public void setIgnoreFailure(boolean ignore);
+    void setIgnoreFailure(boolean ignore);
 
     /**
      * @return the non-mandatory regular expression
      */
-    public RegularExpressionFilter getRegularExpression();
+    RegularExpressionFilter getRegularExpression();
 
     /**
      * @param expression the non-mandatory regular expression
      */
-    public void setRegularExpression(RegularExpressionFilter expression);
+    void setRegularExpression(RegularExpressionFilter expression);
+
 }
 
