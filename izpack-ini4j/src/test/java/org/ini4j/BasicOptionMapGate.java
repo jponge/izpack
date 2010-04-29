@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j;
 
 import org.ini4j.spi.BeanAccess;
@@ -21,12 +22,14 @@ public class BasicOptionMapGate extends BasicOptionMap
 {
     private static final long serialVersionUID = -479440334238558045L;
 
-    @Override public BeanAccess newBeanAccess()
+    @Override
+    public BeanAccess newBeanAccess()
     {
         return super.newBeanAccess();
     }
 
-    @Override public BeanAccess newBeanAccess(String prefix)
+    @Override
+    public BeanAccess newBeanAccess(String prefix)
     {
         return super.newBeanAccess(prefix);
     }

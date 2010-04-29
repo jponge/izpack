@@ -13,31 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j.spi;
 
 import org.ini4j.sample.Dwarf;
-
-import static org.junit.Assert.*;
-
+import org.ini4j.test.Helper;
 import org.junit.Test;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
 import java.beans.VetoableChangeListener;
-
 import java.lang.reflect.Proxy;
-
 import java.util.HashMap;
 import java.util.Map;
-import org.ini4j.test.Helper;
+
+import static org.junit.Assert.*;
 
 public class AbstractBeanInvocationHandlerTest
 {
     private static final String PROP_AGE = Dwarf.PROP_AGE;
     private static final String PROP_HEIGHT = Dwarf.PROP_HEIGHT;
 
-    @Test public void testGetProperty() throws Exception
+    @Test
+    public void testGetProperty() throws Exception
     {
         Map<String, String> map = new HashMap<String, String>();
         MapBeanHandler handler = new MapBeanHandler(map);
@@ -52,7 +51,8 @@ public class AbstractBeanInvocationHandlerTest
         assertEquals("?.", (String) handler.getProperty(PROP_AGE, String.class));
         handler = new MapBeanHandler(map)
         {
-            @Override protected boolean hasPropertySpi(String property)
+            @Override
+            protected boolean hasPropertySpi(String property)
             {
                 throw new UnsupportedOperationException();
             }
@@ -60,7 +60,8 @@ public class AbstractBeanInvocationHandlerTest
         assertFalse(handler.hasProperty(PROP_AGE));
     }
 
-    @Test public void testGetSetHas() throws Exception
+    @Test
+    public void testGetSetHas() throws Exception
     {
         Dwarf dwarf = MapBeanHandler.newBean(Dwarf.class);
 
@@ -71,11 +72,12 @@ public class AbstractBeanInvocationHandlerTest
         dwarf.setHomeDir("dummy");
     }
 
-    @Test public void testMisc() throws Exception
+    @Test
+    public void testMisc() throws Exception
     {
         Map<String, String> map = new HashMap<String, String>();
         MapBeanHandler handler = new MapBeanHandler(map);
-        Dummy dummy = (Dummy) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] { Dummy.class }, handler);
+        Dummy dummy = (Dummy) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{Dummy.class}, handler);
 
         assertNull(handler.getProxy());
 
@@ -96,7 +98,8 @@ public class AbstractBeanInvocationHandlerTest
     }
 
 
-    @Test public void testPropertyChangeListener() throws Exception
+    @Test
+    public void testPropertyChangeListener() throws Exception
     {
         class Listener implements PropertyChangeListener
         {
@@ -109,7 +112,8 @@ public class AbstractBeanInvocationHandlerTest
                 _property = property;
             }
 
-            @Override public void propertyChange(PropertyChangeEvent event)
+            @Override
+            public void propertyChange(PropertyChangeEvent event)
             {
                 if (_property.equals(event.getPropertyName()))
                 {
@@ -151,7 +155,8 @@ public class AbstractBeanInvocationHandlerTest
         d.removePropertyChangeListener(PROP_AGE, l);
     }
 
-    @Test public void testSetProperty() throws Exception
+    @Test
+    public void testSetProperty() throws Exception
     {
         Map<String, String> map = new HashMap<String, String>();
         MapBeanHandler handler = new MapBeanHandler(map);
@@ -161,11 +166,13 @@ public class AbstractBeanInvocationHandlerTest
         assertEquals("23", handler.getProperty(PROP_AGE, String.class));
     }
 
-    @Test public void testVetoableChangeListener() throws Exception
+    @Test
+    public void testVetoableChangeListener() throws Exception
     {
         class HeightCheck implements VetoableChangeListener
         {
-            @Override public void vetoableChange(PropertyChangeEvent event) throws PropertyVetoException
+            @Override
+            public void vetoableChange(PropertyChangeEvent event) throws PropertyVetoException
             {
                 if (PROP_HEIGHT.equals(event.getPropertyName()))
                 {
@@ -244,20 +251,23 @@ public class AbstractBeanInvocationHandlerTest
 
         protected static <T> T newBean(Class<T> clazz, Map<String, String> map)
         {
-            return clazz.cast(Proxy.newProxyInstance(clazz.getClassLoader(), new Class[] { clazz }, new MapBeanHandler(map)));
+            return clazz.cast(Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new MapBeanHandler(map)));
         }
 
-        @Override protected Object getPropertySpi(String property, Class clazz)
+        @Override
+        protected Object getPropertySpi(String property, Class clazz)
         {
             return _map.get(property);
         }
 
-        @Override protected void setPropertySpi(String property, Object value, Class clazz)
+        @Override
+        protected void setPropertySpi(String property, Object value, Class clazz)
         {
             _map.put(property, value.toString());
         }
 
-        @Override protected boolean hasPropertySpi(String property)
+        @Override
+        protected boolean hasPropertySpi(String property)
         {
             return _map.containsKey(property);
         }

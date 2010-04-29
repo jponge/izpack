@@ -17,32 +17,37 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import java.io.File;
-
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.file.types.*;
+import com.izforge.izpack.util.file.types.EnumeratedAttribute;
+import com.izforge.izpack.util.file.types.Parameter;
+
+import java.io.File;
 
 /**
  * Selector that selects a certain kind of file: directory or regular.
  */
-public class TypeSelector extends BaseExtendSelector {
+public class TypeSelector extends BaseExtendSelector
+{
 
     private String type = null;
 
-    /** Key to used for parameterized custom selector */
+    /**
+     * Key to used for parameterized custom selector
+     */
     public static final String TYPE_KEY = "type";
 
     /**
      * Creates a new <code>TypeSelector</code> instance.
-     *
      */
-    public TypeSelector() {
+    public TypeSelector()
+    {
     }
 
     /**
      * @return a string describing this object
      */
-    public String toString() {
+    public String toString()
+    {
         StringBuffer buf = new StringBuffer("{typeselector type: ");
         buf.append(type);
         buf.append("}");
@@ -51,9 +56,11 @@ public class TypeSelector extends BaseExtendSelector {
 
     /**
      * Set the type of file to require.
+     *
      * @param fileTypes the type of file - file or dir
      */
-    public void setType(FileType fileTypes) {
+    public void setType(FileType fileTypes)
+    {
         this.type = fileTypes.getValue();
     }
 
@@ -63,12 +70,16 @@ public class TypeSelector extends BaseExtendSelector {
      *
      * @param parameters the complete set of parameters for this selector
      */
-    public void setParameters(Parameter[] parameters) {
+    public void setParameters(Parameter[] parameters)
+    {
         super.setParameters(parameters);
-        if (parameters != null) {
-            for (int i = 0; i < parameters.length; i++) {
+        if (parameters != null)
+        {
+            for (int i = 0; i < parameters.length; i++)
+            {
                 String paramname = parameters[i].getName();
-                if (TYPE_KEY.equalsIgnoreCase(paramname)) {
+                if (TYPE_KEY.equalsIgnoreCase(paramname))
+                {
                     FileType type = new FileType();
                     try
                     {
@@ -76,10 +87,12 @@ public class TypeSelector extends BaseExtendSelector {
                     }
                     catch (Exception e)
                     {
-                        setError("Invalid "+TYPE_KEY+" setting " + parameters[i].getValue());
+                        setError("Invalid " + TYPE_KEY + " setting " + parameters[i].getValue());
                     }
                     setType(type);
-                } else {
+                }
+                else
+                {
                     setError("Invalid parameter " + paramname);
                 }
             }
@@ -89,10 +102,11 @@ public class TypeSelector extends BaseExtendSelector {
     /**
      * Checks to make sure all settings are kosher. In this case, it
      * means that the pattern attribute has been set.
-     *
      */
-    public void verifySettings() {
-        if (type == null) {
+    public void verifySettings()
+    {
+        if (type == null)
+        {
             setError("The type attribute is required");
         }
     }
@@ -101,20 +115,23 @@ public class TypeSelector extends BaseExtendSelector {
      * The heart of the matter. This is where the selector gets to decide
      * on the inclusion of a file in a particular fileset.
      *
-     * @param basedir the base directory the scan is being done from
+     * @param basedir  the base directory the scan is being done from
      * @param filename is the name of the file to check
-     * @param file is a java.io.File object the selector can use
+     * @param file     is a java.io.File object the selector can use
      * @return whether the file should be selected or not
      */
     public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file)
-    throws Exception
+            throws Exception
     {
         // throw Exception on error
         validate();
 
-        if (file.isDirectory()) {
+        if (file.isDirectory())
+        {
             return type.equals(FileType.DIR);
-        } else {
+        }
+        else
+        {
             return type.equals(FileType.FILE);
         }
     }
@@ -122,16 +139,22 @@ public class TypeSelector extends BaseExtendSelector {
     /**
      * Enumerated attribute with the values for types of file
      */
-    public static class FileType extends EnumeratedAttribute {
-        /** the string value for file */
+    public static class FileType extends EnumeratedAttribute
+    {
+        /**
+         * the string value for file
+         */
         public static final String FILE = "file";
-        /** the string value for dir */
+        /**
+         * the string value for dir
+         */
         public static final String DIR = "dir";
 
         /**
          * @return the values as an array of strings
          */
-        public String[] getValues() {
+        public String[] getValues()
+        {
             return new String[]{FILE, DIR};
         }
     }

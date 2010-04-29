@@ -21,17 +21,22 @@
 
 package com.izforge.izpack.panels.userinput;
 
-import java.io.*;
-import java.util.*;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
-import com.izforge.izpack.installer.console.*;
+import com.izforge.izpack.installer.console.PanelConsole;
+import com.izforge.izpack.installer.console.PanelConsoleHelper;
 import com.izforge.izpack.panels.userinput.processor.Processor;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.helper.SpecHelper;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.*;
 
 /**
  * The user input panel console helper class.
@@ -300,7 +305,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         VariableSubstitutor variableSubstitutor = new VariableSubstitutorImpl(idata.getVariables());
         try
         {
-            System.out.println(vs.substitute(input.strText, null));
+            System.out.println(variableSubstitutor.substitute(input.strText, null));
         }
         catch (Exception e)
         {

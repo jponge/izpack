@@ -22,9 +22,8 @@
 
 package com.izforge.izpack.util.xmlmerge.matcher;
 
-import org.jdom.Element;
-
 import com.izforge.izpack.util.xmlmerge.Matcher;
+import org.jdom.Element;
 
 /**
  * Elements match if their name and 'id' attribute are the same.
@@ -44,7 +43,7 @@ public class IdMatcher implements Matcher
                 && originalElement.getAttribute("id") != null
                 && patchElement.getAttribute("id") != null
                 && originalElement.getAttributeValue("id").equals(
-                        patchElement.getAttributeValue("id"));
+                patchElement.getAttributeValue("id"));
     }
 
 }

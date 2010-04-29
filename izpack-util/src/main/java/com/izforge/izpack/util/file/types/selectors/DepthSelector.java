@@ -17,36 +17,42 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import java.io.File;
-import java.util.StringTokenizer;
-
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.util.file.types.Parameter;
+
+import java.io.File;
+import java.util.StringTokenizer;
 
 /**
  * Selector that filters files based on the how deep in the directory
  * tree they are.
  */
-public class DepthSelector extends BaseExtendSelector {
+public class DepthSelector extends BaseExtendSelector
+{
 
     public int min = -1;
     public int max = -1;
-    /** Used for parameterized custom selector */
+    /**
+     * Used for parameterized custom selector
+     */
     public static final String MIN_KEY = "min";
-    /** Used for parameterized custom selector */
+    /**
+     * Used for parameterized custom selector
+     */
     public static final String MAX_KEY = "max";
 
     /**
      * Creates a new <code>DepthSelector</code> instance.
-     *
      */
-    public DepthSelector() {
+    public DepthSelector()
+    {
     }
 
     /**
      * @return a string describing this object
      */
-    public String toString() {
+    public String toString()
+    {
         StringBuffer buf = new StringBuffer("{depthselector min: ");
         buf.append(min);
         buf.append(" max: ");
@@ -60,7 +66,8 @@ public class DepthSelector extends BaseExtendSelector {
      *
      * @param min minimum directory levels below basedir to go
      */
-    public void setMin(int min) {
+    public void setMin(int min)
+    {
         this.min = min;
     }
 
@@ -69,7 +76,8 @@ public class DepthSelector extends BaseExtendSelector {
      *
      * @param max maximum directory levels below basedir to go
      */
-    public void setMax(int max) {
+    public void setMax(int max)
+    {
         this.max = max;
     }
 
@@ -79,26 +87,40 @@ public class DepthSelector extends BaseExtendSelector {
      *
      * @param parameters the complete set of parameters for this selector
      */
-    public void setParameters(Parameter[] parameters) {
+    public void setParameters(Parameter[] parameters)
+    {
         super.setParameters(parameters);
-        if (parameters != null) {
-            for (int i = 0; i < parameters.length; i++) {
+        if (parameters != null)
+        {
+            for (int i = 0; i < parameters.length; i++)
+            {
                 String paramname = parameters[i].getName();
-                if (MIN_KEY.equalsIgnoreCase(paramname)) {
-                    try {
+                if (MIN_KEY.equalsIgnoreCase(paramname))
+                {
+                    try
+                    {
                         setMin(Integer.parseInt(parameters[i].getValue()));
-                    } catch (NumberFormatException nfe1) {
+                    }
+                    catch (NumberFormatException nfe1)
+                    {
                         setError("Invalid minimum value "
                                 + parameters[i].getValue());
                     }
-                } else if (MAX_KEY.equalsIgnoreCase(paramname)) {
-                    try {
+                }
+                else if (MAX_KEY.equalsIgnoreCase(paramname))
+                {
+                    try
+                    {
                         setMax(Integer.parseInt(parameters[i].getValue()));
-                    } catch (NumberFormatException nfe1) {
+                    }
+                    catch (NumberFormatException nfe1)
+                    {
                         setError("Invalid maximum value "
                                 + parameters[i].getValue());
                     }
-                } else {
+                }
+                else
+                {
                     setError("Invalid parameter " + paramname);
                 }
             }
@@ -109,12 +131,15 @@ public class DepthSelector extends BaseExtendSelector {
      * Checks to make sure all settings are kosher. In this case, it
      * means that the max depth is not lower than the min depth.
      */
-    public void verifySettings() {
-        if (min < 0 && max < 0) {
+    public void verifySettings()
+    {
+        if (min < 0 && max < 0)
+        {
             setError("You must set at least one of the min or the "
                     + "max levels.");
         }
-        if (max < min && max > -1) {
+        if (max < min && max > -1)
+        {
             setError("The maximum depth is lower than the minimum.");
         }
     }
@@ -126,13 +151,13 @@ public class DepthSelector extends BaseExtendSelector {
      * that provides the same services for both FilenameSelector and
      * DirectoryScanner.
      *
-     * @param basedir the base directory the scan is being done from
+     * @param basedir  the base directory the scan is being done from
      * @param filename is the name of the file to check
-     * @param file is a java.io.File object the selector can use
+     * @param file     is a java.io.File object the selector can use
      * @return whether the file should be selected or not
      */
     public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file)
-    throws Exception
+            throws Exception
     {
         // throw BuildException on error
         validate();
@@ -145,28 +170,36 @@ public class DepthSelector extends BaseExtendSelector {
                 File.separator);
         StringTokenizer tokFile = new StringTokenizer(absFile,
                 File.separator);
-        while (tokFile.hasMoreTokens()) {
+        while (tokFile.hasMoreTokens())
+        {
             String filetoken = tokFile.nextToken();
-            if (tokBase.hasMoreTokens()) {
+            if (tokBase.hasMoreTokens())
+            {
                 String basetoken = tokBase.nextToken();
                 // Sanity check. Ditch it if you want faster performance
-                if (!basetoken.equals(filetoken)) {
+                if (!basetoken.equals(filetoken))
+                {
                     throw new Exception("File " + filename
                             + " does not appear within " + absBase
                             + "directory");
                 }
-            } else {
+            }
+            else
+            {
                 depth += 1;
-                if (max > -1 && depth > max) {
+                if (max > -1 && depth > max)
+                {
                     return false;
                 }
             }
         }
-        if (tokBase.hasMoreTokens()) {
+        if (tokBase.hasMoreTokens())
+        {
             throw new Exception("File " + filename
-                + " is outside of " + absBase + "directory tree");
+                    + " is outside of " + absBase + "directory tree");
         }
-        if (min > -1 && depth < min) {
+        if (min > -1 && depth < min)
+        {
             return false;
         }
         return true;

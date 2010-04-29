@@ -13,24 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j.demo;
 
 import bsh.ConsoleInterface;
 import bsh.EvalError;
 import bsh.Interpreter;
 import bsh.NameSpace;
+import org.ini4j.*;
 
-import org.ini4j.Config;
-import org.ini4j.Ini;
-import org.ini4j.Options;
-import org.ini4j.Persistable;
-import org.ini4j.Reg;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.*;
 
 public class DemoModel implements Runnable
 {
@@ -94,7 +86,8 @@ public class DemoModel implements Runnable
         _data = data;
     }
 
-    @Override public void run()
+    @Override
+    public void run()
     {
         _interpreter.setExitOnEOF(false);
         _interpreter.run();

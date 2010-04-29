@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j.demo;
 
-import javax.swing.JApplet;
-import javax.swing.UIManager;
+import javax.swing.*;
 
 public class DemoApplet extends JApplet
 {
@@ -34,7 +34,8 @@ public class DemoApplet extends JApplet
         }
     }
 
-    @Override public void init()
+    @Override
+    public void init()
     {
         Demo demo = new Demo(getContentPane());
 

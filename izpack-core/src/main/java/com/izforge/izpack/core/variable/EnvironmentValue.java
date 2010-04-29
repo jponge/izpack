@@ -21,11 +21,11 @@
 
 package com.izforge.izpack.core.variable;
 
-import java.io.Serializable;
-
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.IoHelper;
+
+import java.io.Serializable;
 
 public class EnvironmentValue extends ValueImpl implements Serializable
 {
@@ -35,11 +35,13 @@ public class EnvironmentValue extends ValueImpl implements Serializable
     private static final long serialVersionUID = -658114236595736672L;
 
     public String variable; // mandatory
+
     public EnvironmentValue(String variable)
     {
         super();
         this.variable = variable;
     }
+
     public String getVariable()
     {
         return this.variable;
@@ -54,7 +56,9 @@ public class EnvironmentValue extends ValueImpl implements Serializable
     public void validate() throws Exception
     {
         if (this.variable == null || this.variable.length() <= 0)
+        {
             throw new Exception("No or empty environment variable name");
+        }
     }
 
     @Override
@@ -67,10 +71,12 @@ public class EnvironmentValue extends ValueImpl implements Serializable
     public String resolve(VariableSubstitutor... substitutors) throws Exception
     {
         String _variable_ = variable;
-        for ( VariableSubstitutor substitutor : substitutors )
-            _variable_ = substitutor.substitute(_variable_, (SubstitutionType)null);
+        for (VariableSubstitutor substitutor : substitutors)
+        {
+            _variable_ = substitutor.substitute(_variable_, (SubstitutionType) null);
+        }
 
-        return IoHelper.getenv( _variable_ );
+        return IoHelper.getenv(_variable_);
     }
 
 }

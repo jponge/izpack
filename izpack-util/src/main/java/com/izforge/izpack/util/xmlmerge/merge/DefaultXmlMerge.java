@@ -22,17 +22,22 @@
 
 package com.izforge.izpack.util.xmlmerge.merge;
 
-import java.io.*;
-
-import org.jdom.*;
-import org.jdom.input.*;
-import org.jdom.output.*;
-
 import com.izforge.izpack.util.xmlmerge.*;
 import com.izforge.izpack.util.xmlmerge.action.OrderedMergeAction;
 import com.izforge.izpack.util.xmlmerge.factory.StaticOperationFactory;
 import com.izforge.izpack.util.xmlmerge.mapper.IdentityMapper;
 import com.izforge.izpack.util.xmlmerge.matcher.TagMatcher;
+import org.jdom.DocType;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.DOMBuilder;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.DOMOutputter;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
+
+import java.io.*;
 
 /**
  * Default implementation of XmlMerge. Create all JDOM documents, then perform the merge into a new
@@ -128,7 +133,7 @@ public class DefaultXmlMerge implements XmlMerge
         for (int i = 0; i < sources.length; i++)
         {
             // ask JDOM to parse the given inputStream
-            System.err.println("sources[i]: "+sources[i]);
+            System.err.println("sources[i]: " + sources[i]);
             docs[i] = domb.build(sources[i]);
         }
 
@@ -256,8 +261,11 @@ public class DefaultXmlMerge implements XmlMerge
         for (int i = 1; i < docs.length; i++)
         {
 
-            if (!m_rootMatcher.matches(temporary.getRootElement(), docs[i].getRootElement())) { throw new IllegalArgumentException(
-                    "Root elements do not match."); }
+            if (!m_rootMatcher.matches(temporary.getRootElement(), docs[i].getRootElement()))
+            {
+                throw new IllegalArgumentException(
+                        "Root elements do not match.");
+            }
 
             Document output = new Document();
             if (docs[0].getDocType() != null)

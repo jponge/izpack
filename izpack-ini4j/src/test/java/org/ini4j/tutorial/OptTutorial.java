@@ -13,22 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j.tutorial;
 
 import org.ini4j.Options;
-
 import org.ini4j.sample.Dwarf;
-
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
-
-import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
 import java.util.Set;
+
+import static org.junit.Assert.assertFalse;
 
 //<editor-fold defaultstate="collapsed" desc="apt documentation">
 //|
@@ -64,6 +62,7 @@ import java.util.Set;
 //|
 //|magicNumber = ${player.foruneNumber[1]}
 //|+--------------------+
+
 //|
 //|  The magicNumber property will have value: <<<44>>>
 //|
@@ -120,7 +119,8 @@ public class OptTutorial extends AbstractTutorial
 //|* Instantiating
 //|
 //| There is nothing special with instantiating Options object, but there is a
-//| few constructor, to simplify loading data. These constructors simply call
+
+    //| few constructor, to simplify loading data. These constructors simply call
 //| the <<<load()>>> method on newly created instance. Ofcource these
 //| constructors are throws IOException.
 //{
@@ -138,7 +138,8 @@ public class OptTutorial extends AbstractTutorial
     }
 
 //|
-//|* Map of String
+
+    //|* Map of String
 //{
     void sample02(Options opt)
     {

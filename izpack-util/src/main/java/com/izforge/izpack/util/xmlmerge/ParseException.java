@@ -45,7 +45,7 @@ public class ParseException extends AbstractXmlMergeException
      * Constructor with message and cause.
      *
      * @param message Exception message
-     * @param cause Exception cause
+     * @param cause   Exception cause
      */
     public ParseException(String message, Throwable cause)
     {

@@ -21,21 +21,7 @@
 
 package com.izforge.izpack.installer.console;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
-import com.izforge.izpack.api.data.Info;
-import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.data.ScriptParserConstant;
+import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.installer.DataValidator.Status;
@@ -49,6 +35,13 @@ import com.izforge.izpack.installer.manager.DataValidatorFactory;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraintHelper;
+
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Runs the console installer
@@ -383,7 +376,7 @@ public class ConsoleInstaller extends InstallerBase
                     try
                     {
                         errorMessage = installdata.getLangpack().getString("data.validation.error.title")
-                        +": "+variableSubstitutor.substitute(installdata.getLangpack().getString(validator
+                                + ": " + variableSubstitutor.substitute(installdata.getLangpack().getString(validator
                                 .getErrorMessageId()));
                     }
                     catch (Exception e)
@@ -393,7 +386,7 @@ public class ConsoleInstaller extends InstallerBase
                     // if defaultAnswer is true, result is ok
                     if (validationResult == Status.WARNING && validator.getDefaultAnswer())
                     {
-                        System.out.println(errorMessage +" - ignoring");
+                        System.out.println(errorMessage + " - ignoring");
                     }
                     // make installation fail instantly
                     return false;

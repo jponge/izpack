@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j.spi;
 
 import org.ini4j.Config;
@@ -38,7 +39,8 @@ public class OptionsBuilder implements OptionsHandler
         _options = value;
     }
 
-    @Override public void endOptions()
+    @Override
+    public void endOptions()
     {
 
         // comment only .opt file ...
@@ -48,7 +50,8 @@ public class OptionsBuilder implements OptionsHandler
         }
     }
 
-    @Override public void handleComment(String comment)
+    @Override
+    public void handleComment(String comment)
     {
         if ((_lastComment != null) && _header && !getConfig().isNoHeader())
         {
@@ -59,7 +62,8 @@ public class OptionsBuilder implements OptionsHandler
         _lastComment = comment;
     }
 
-    @Override public void handleOption(String name, String value)
+    @Override
+    public void handleOption(String name, String value)
     {
         if (getConfig().isMultiOption())
         {
@@ -87,7 +91,8 @@ public class OptionsBuilder implements OptionsHandler
         _header = false;
     }
 
-    @Override public void startOptions()
+    @Override
+    public void startOptions()
     {
         _header = true;
     }

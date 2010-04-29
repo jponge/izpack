@@ -22,12 +22,12 @@
 
 package com.izforge.izpack.util.xmlmerge.config;
 
-import java.io.*;
-
-import org.w3c.dom.Document;
-
 import com.izforge.izpack.util.xmlmerge.*;
 import com.izforge.izpack.util.xmlmerge.merge.DefaultXmlMerge;
+import org.w3c.dom.Document;
+
+import java.io.File;
+import java.io.InputStream;
 
 /**
  * XmlMerge wrapper applying a configurer on the wrapped instance.
@@ -58,7 +58,7 @@ public class ConfigurableXmlMerge implements XmlMerge
      * Applies a configurer on a wrapped XmlMerge instance.
      *
      * @param wrappedXmlMerge The wrapped XmlMerge instance to configure
-     * @param configurer The configurer to apply
+     * @param configurer      The configurer to apply
      * @throws ConfigurationException If an error occurred during configuration
      */
     public ConfigurableXmlMerge(XmlMerge wrappedXmlMerge, Configurer configurer)

@@ -14,6 +14,7 @@
  *  limitations under the License.
  *
  */
+
 package com.izforge.izpack.util.file.types.selectors;
 
 /**
@@ -22,7 +23,8 @@ package com.izforge.izpack.util.file.types.selectors;
  *
  * @since 1.5
  */
-public interface SelectorScanner {
+public interface SelectorScanner
+{
     /**
      * Sets the selectors the scanner should use.
      *

@@ -21,11 +21,11 @@
 
 package com.izforge.izpack.util.config;
 
-import java.io.*;
-
+import com.izforge.izpack.util.Debug;
 import org.ini4j.Options;
 
-import com.izforge.izpack.util.Debug;
+import java.io.File;
+import java.io.IOException;
 
 public class SingleOptionFileTask extends ConfigFileTask
 {
@@ -55,8 +55,11 @@ public class SingleOptionFileTask extends ConfigFileTask
         {
             try
             {
-                if (!newFile.exists()) { throw new Exception("Reference file "
-                        + newFile.getAbsolutePath() + " for patch cannot be found"); }
+                if (!newFile.exists())
+                {
+                    throw new Exception("Reference file "
+                            + newFile.getAbsolutePath() + " for patch cannot be found");
+                }
                 Debug.log("Loading options file: " + newFile.getAbsolutePath());
                 configurable = new Options(newFile);
             }

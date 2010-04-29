@@ -17,10 +17,11 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import java.io.*;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.util.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * This selector selects files against a mapped set of target files, selecting
@@ -32,20 +33,20 @@ import org.apache.tools.ant.util.FileUtils;
  * Contents are compared if the lengths are the same
  * and the timestamps are ignored or the same,
  * except if you decide to ignore contents to gain speed.
- * <p>
+ * <p/>
  * This is a useful selector to work with programs and tasks that don't handle
  * dependency checking properly; Even if a predecessor task always creates its
  * output files, followup tasks can be driven off copies made with a different
  * selector, so their dependencies are driven on the absolute state of the
  * files, not a timestamp.
- * <p>
+ * <p/>
  * Clearly, however, bulk file comparisons is inefficient; anything that can
  * use timestamps is to be preferred. If this selector must be used, use it
  * over as few files as possible, perhaps following it with an &lt;uptodate;&gt
  * to keep the descendent routines conditional.
- *
  */
-public class DifferentSelector extends MappingSelector {
+public class DifferentSelector extends MappingSelector
+{
 
     private FileUtils fileUtils = FileUtils.newFileUtils();
 
@@ -55,57 +56,75 @@ public class DifferentSelector extends MappingSelector {
 
     /**
      * This flag tells the selector to ignore file times in the comparison
+     *
      * @param ignoreFileTimes if true ignore file times
      */
-    public void setIgnoreFileTimes(boolean ignoreFileTimes) {
+    public void setIgnoreFileTimes(boolean ignoreFileTimes)
+    {
         this.ignoreFileTimes = ignoreFileTimes;
     }
+
     /**
      * This flag tells the selector to ignore contents
+     *
      * @param ignoreContents if true ignore contents
      * @since ant 1.6.3
      */
-    public void setIgnoreContents(boolean ignoreContents) {
+    public void setIgnoreContents(boolean ignoreContents)
+    {
         this.ignoreContents = ignoreContents;
     }
+
     /**
      * this test is our selection test that compared the file with the destfile
-     * @param srcfile the source file
+     *
+     * @param srcfile  the source file
      * @param destfile the destination file
      * @return true if the files are different
      */
-    protected boolean selectionTest(File srcfile, File destfile) {
+    protected boolean selectionTest(File srcfile, File destfile)
+    {
 
         //if either of them is missing, they are different
-        if (srcfile.exists() != destfile.exists()) {
+        if (srcfile.exists() != destfile.exists())
+        {
             return true;
         }
 
-        if (srcfile.length() != destfile.length()) {
+        if (srcfile.length() != destfile.length())
+        {
             // different size =>different files
             return true;
         }
 
-        if (!ignoreFileTimes) {
+        if (!ignoreFileTimes)
+        {
             //same date if dest timestamp is within granularity of the srcfile
             boolean sameDate;
             sameDate = destfile.lastModified() >= srcfile.lastModified() - granularity
                     && destfile.lastModified() <= srcfile.lastModified() + granularity;
 
             // different dates => different files
-            if (!sameDate) {
+            if (!sameDate)
+            {
                 return true;
             }
         }
-        if (!ignoreContents) {
+        if (!ignoreContents)
+        {
             //here do a bulk comparison
-            try {
+            try
+            {
                 return !fileUtils.contentEquals(srcfile, destfile);
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 throw new BuildException("while comparing " + srcfile + " and "
                         + destfile, e);
             }
-        } else {
+        }
+        else
+        {
             return false;
         }
     }

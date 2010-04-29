@@ -17,16 +17,17 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import java.util.Enumeration;
-
 import com.izforge.izpack.util.file.types.selectors.modifiedselector.ModifiedSelector;
+
+import java.util.Enumeration;
 
 /**
  * This is the interface for selectors that can contain other selectors.
  *
  * @since 1.5
  */
-public interface SelectorContainer {
+public interface SelectorContainer
+{
 
     /**
      * Indicates whether there are any selectors here.
@@ -44,6 +45,7 @@ public interface SelectorContainer {
 
     /**
      * Returns the set of selectors as an array.
+     *
      * @param p the current project
      * @return an array of selectors in this container
      */
@@ -67,96 +69,112 @@ public interface SelectorContainer {
 
     /**
      * add a "Select" selector entry on the selector list
+     *
      * @param selector the selector to add
      */
     void addSelector(SelectSelector selector);
 
     /**
      * add an "And" selector entry on the selector list
+     *
      * @param selector the selector to add
      */
     void addAnd(AndSelector selector);
 
     /**
      * add an "Or" selector entry on the selector list
+     *
      * @param selector the selector to add
      */
     void addOr(OrSelector selector);
 
     /**
      * add a "Not" selector entry on the selector list
+     *
      * @param selector the selector to add
      */
     void addNot(NotSelector selector);
 
     /**
      * add a "None" selector entry on the selector list
+     *
      * @param selector the selector to add
      */
     void addNone(NoneSelector selector);
 
     /**
      * add a majority selector entry on the selector list
+     *
      * @param selector the selector to add
      */
     void addMajority(MajoritySelector selector);
 
     /**
      * add a selector date entry on the selector list
+     *
      * @param selector the selector to add
      */
     void addDate(DateSelector selector);
 
     /**
      * add a selector size entry on the selector list
+     *
      * @param selector the selector to add
      */
     void addSize(SizeSelector selector);
 
     /**
      * add a selector filename entry on the selector list
+     *
      * @param selector the selector to add
      */
     void addFilename(FilenameSelector selector);
 
     /**
      * add an extended selector entry on the selector list
+     *
      * @param selector the selector to add
      */
     void addCustom(ExtendSelector selector);
 
     /**
      * add a contains selector entry on the selector list
+     *
      * @param selector the selector to add
      */
     void addContains(ContainsSelector selector);
 
     /**
      * add a present selector entry on the selector list
+     *
      * @param selector the selector to add
      */
     void addPresent(PresentSelector selector);
 
     /**
      * add a depth selector entry on the selector list
+     *
      * @param selector the selector to add
      */
     void addDepth(DepthSelector selector);
 
     /**
      * add a depends selector entry on the selector list
+     *
      * @param selector the selector to add
      */
     void addDepend(DependSelector selector);
 
     /**
      * add a regular expression selector entry on the selector list
+     *
      * @param selector the selector to add
      */
     void addContainsRegexp(ContainsRegexpSelector selector);
 
     /**
      * add the type selector
+     *
      * @param selector the selector to add
      * @since ant 1.6
      */
@@ -164,6 +182,7 @@ public interface SelectorContainer {
 
     /**
      * add the different selector
+     *
      * @param selector the selector to add
      * @since ant 1.6
      */
@@ -171,6 +190,7 @@ public interface SelectorContainer {
 
     /**
      * add the modified selector
+     *
      * @param selector the selector to add
      * @since ant 1.6
      */
@@ -178,6 +198,7 @@ public interface SelectorContainer {
 
     /**
      * add an arbitary selector
+     *
      * @param selector the selector to add
      * @since Ant 1.6
      */

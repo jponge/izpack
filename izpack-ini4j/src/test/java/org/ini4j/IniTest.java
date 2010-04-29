@@ -13,25 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j;
 
 import org.ini4j.sample.Dwarfs;
-
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
-
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
+
+import static org.junit.Assert.assertEquals;
 
 public class IniTest
 {
@@ -41,21 +33,24 @@ public class IniTest
     private static final String COMMENTED_OPTION = COMMENT_ONLY + "\n\n[section]\n;comment\nkey=value\n";
     private static final String MULTI = "[section]\noption=value\noption=value2\n[section]\noption=value3\noption=value4\noption=value5\n";
 
-    @Test public void testCommentedOption() throws Exception
+    @Test
+    public void testCommentedOption() throws Exception
     {
         Ini ini = new Ini(new StringReader(COMMENTED_OPTION));
 
         assertEquals("comment", ini.get("section").getComment("key"));
     }
 
-    @Test public void testCommentOnly() throws Exception
+    @Test
+    public void testCommentOnly() throws Exception
     {
         Ini ini = new Ini(new StringReader(COMMENT_ONLY));
 
         assertEquals(COMMENT_ONLY_VALUE, ini.getComment());
     }
 
-    @Test public void testLoad() throws Exception
+    @Test
+    public void testLoad() throws Exception
     {
         Ini ini;
 
@@ -81,7 +76,8 @@ public class IniTest
         ini.load();
     }
 
-    @Test public void testMulti() throws Exception
+    @Test
+    public void testMulti() throws Exception
     {
         Ini ini = new Ini(new StringReader(MULTI));
         Ini.Section sec;
@@ -118,14 +114,16 @@ public class IniTest
         assertEquals(1, ini.get("section", 1).length("option"));
     }
 
-    @Test public void testOneHeaderOnly() throws Exception
+    @Test
+    public void testOneHeaderOnly() throws Exception
     {
         Ini ini = new Ini(new StringReader(INI_ONE_HEADER));
 
         assertEquals(COMMENT_ONLY_VALUE, ini.getComment());
     }
 
-    @Test public void testStore() throws Exception
+    @Test
+    public void testStore() throws Exception
     {
         Ini ini = Helper.newDwarfsIni();
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();

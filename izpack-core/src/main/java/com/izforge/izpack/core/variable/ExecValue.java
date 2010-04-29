@@ -21,12 +21,12 @@
 
 package com.izforge.izpack.core.variable;
 
-import java.io.Serializable;
-
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
+
+import java.io.Serializable;
 
 
 public class ExecValue extends ValueImpl implements Serializable
@@ -37,34 +37,42 @@ public class ExecValue extends ValueImpl implements Serializable
     private static final long serialVersionUID = -6438593229737421526L;
 
     private String cmd[];
+
     public ExecValue(String[] command, boolean isShellCommand)
     {
         super();
-        if (isShellCommand) {
+        if (isShellCommand)
+        {
             if (OsVersion.IS_WINDOWS)
             {
-                this.cmd = new String[command.length+2];
+                this.cmd = new String[command.length + 2];
                 this.cmd[0] = "cmd";
                 this.cmd[1] = "/C";
                 for (int i = 2; i < this.cmd.length; i++)
                 {
-                    this.cmd[i] = command[i-2];
+                    this.cmd[i] = command[i - 2];
                 }
-            } else if (OsVersion.IS_UNIX)
+            }
+            else if (OsVersion.IS_UNIX)
             {
-                this.cmd = new String[command.length+1];
+                this.cmd = new String[command.length + 1];
                 this.cmd[0] = "sh";
                 for (int i = 1; i < this.cmd.length; i++)
                 {
-                    this.cmd[i] = command[i-1];
+                    this.cmd[i] = command[i - 1];
                 }
-            } else
+            }
+            else
             {
                 this.cmd = command;
             }
-        } else
+        }
+        else
+        {
             this.cmd = command;
+        }
     }
+
     public String[] getCmd()
     {
         return cmd;
@@ -79,7 +87,9 @@ public class ExecValue extends ValueImpl implements Serializable
     public void validate() throws Exception
     {
         if (this.cmd == null || this.cmd.length <= 0)
+        {
             throw new IllegalArgumentException("Bad command line");
+        }
     }
 
     @Override
@@ -95,8 +105,10 @@ public class ExecValue extends ValueImpl implements Serializable
         for (int i = 0; i < cmd.length; i++)
         {
             String _cmdarg_ = cmd[i];
-            for ( VariableSubstitutor substitutor : substitutors )
-                _cmdarg_ = substitutor.substitute(_cmdarg_, (SubstitutionType)null);
+            for (VariableSubstitutor substitutor : substitutors)
+            {
+                _cmdarg_ = substitutor.substitute(_cmdarg_, (SubstitutionType) null);
+            }
             _cmd_[i] = _cmdarg_;
         }
         return FileExecutor.getExecOutput(_cmd_);

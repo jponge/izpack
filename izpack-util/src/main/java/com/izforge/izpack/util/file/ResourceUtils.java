@@ -14,122 +14,142 @@
  *  limitations under the License.
  *
  */
+
 package com.izforge.izpack.util.file;
+
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.file.types.Resource;
+import com.izforge.izpack.util.file.types.ResourceFactory;
+import com.izforge.izpack.util.file.types.selectors.SelectorUtils;
 
 import java.io.File;
 import java.util.Vector;
-
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.file.types.*;
-import com.izforge.izpack.util.file.types.selectors.SelectorUtils;
 
 /**
  * this class provides utility methods to process resources
  *
  * @since Ant 1.5.2
  */
-public class ResourceUtils {
+public class ResourceUtils
+{
 
     /**
      * tells which source files should be reprocessed based on the
      * last modification date of target files
-     * @param logTo where to send (more or less) interesting output
-     * @param source array of resources bearing relative path and last
-     * modification date
-     * @param mapper filename mapper indicating how to find the target
-     * files
+     *
+     * @param logTo   where to send (more or less) interesting output
+     * @param source  array of resources bearing relative path and last
+     *                modification date
+     * @param mapper  filename mapper indicating how to find the target
+     *                files
      * @param targets object able to map as a resource a relative path
-     * at <b>destination</b>
+     *                at <b>destination</b>
      * @return array containing the source files which need to be
-     * copied or processed, because the targets are out of date or do
-     * not exist
+     *         copied or processed, because the targets are out of date or do
+     *         not exist
      */
     public static Resource[] selectOutOfDateSources(Resource[] source,
                                                     FileNameMapper mapper,
                                                     ResourceFactory targets)
-    throws Exception {
+            throws Exception
+    {
         return selectOutOfDateSources(source, mapper, targets,
-                                      FileUtils.newFileUtils()
-                                      .getFileTimestampGranularity());
+                FileUtils.newFileUtils()
+                        .getFileTimestampGranularity());
     }
 
     /**
      * tells which source files should be reprocessed based on the
      * last modification date of target files
-     * @param logTo where to send (more or less) interesting output
-     * @param source array of resources bearing relative path and last
-     * modification date
-     * @param mapper filename mapper indicating how to find the target
-     * files
-     * @param targets object able to map as a resource a relative path
-     * at <b>destination</b>
+     *
+     * @param logTo       where to send (more or less) interesting output
+     * @param source      array of resources bearing relative path and last
+     *                    modification date
+     * @param mapper      filename mapper indicating how to find the target
+     *                    files
+     * @param targets     object able to map as a resource a relative path
+     *                    at <b>destination</b>
      * @param granularity The number of milliseconds leeway to give
-     * before deciding a target is out of date.
+     *                    before deciding a target is out of date.
      * @return array containing the source files which need to be
-     * copied or processed, because the targets are out of date or do
-     * not exist
+     *         copied or processed, because the targets are out of date or do
+     *         not exist
      * @since Ant 1.6.2
      */
     public static Resource[] selectOutOfDateSources(Resource[] source,
                                                     FileNameMapper mapper,
                                                     ResourceFactory targets,
                                                     long granularity)
-    throws Exception {
+            throws Exception
+    {
         long now = (new java.util.Date()).getTime() + granularity;
 
         Vector vresult = new Vector();
-        for (int counter = 0; counter < source.length; counter++) {
-            if (source[counter].getLastModified() > now) {
+        for (int counter = 0; counter < source.length; counter++)
+        {
+            if (source[counter].getLastModified() > now)
+            {
                 Debug.log("Warning: " + source[counter].getName()
-                         + " modified in the future.");
+                        + " modified in the future.");
             }
 
             String[] targetnames =
-                mapper.mapFileName(source[counter].getName()
-                                   .replace('/', File.separatorChar));
-            if (targetnames != null) {
+                    mapper.mapFileName(source[counter].getName()
+                            .replace('/', File.separatorChar));
+            if (targetnames != null)
+            {
                 boolean added = false;
                 StringBuffer targetList = new StringBuffer();
                 for (int ctarget = 0; !added && ctarget < targetnames.length;
-                     ctarget++) {
+                     ctarget++)
+                {
                     Resource atarget =
-                        targets.getResource(targetnames[ctarget]
-                                            .replace(File.separatorChar, '/'));
+                            targets.getResource(targetnames[ctarget]
+                                    .replace(File.separatorChar, '/'));
                     // if the target does not exist, or exists and
                     // is older than the source, then we want to
                     // add the resource to what needs to be copied
-                    if (!atarget.isExists()) {
+                    if (!atarget.isExists())
+                    {
                         Debug.log(source[counter].getName() + " added as "
-                                  + atarget.getName()
-                                  + " doesn\'t exist.");
+                                + atarget.getName()
+                                + " doesn\'t exist.");
                         vresult.addElement(source[counter]);
                         added = true;
-                    } else if (!atarget.isDirectory()
-                               && SelectorUtils.isOutOfDate(source[counter],
-                                                         atarget,
-                                                         (int) granularity)) {
+                    }
+                    else if (!atarget.isDirectory()
+                            && SelectorUtils.isOutOfDate(source[counter],
+                            atarget,
+                            (int) granularity))
+                    {
                         Debug.log(source[counter].getName() + " added as "
-                                  + atarget.getName()
-                                  + " is outdated.");
+                                + atarget.getName()
+                                + " is outdated.");
                         vresult.addElement(source[counter]);
                         added = true;
-                    } else {
-                        if (targetList.length() > 0) {
+                    }
+                    else
+                    {
+                        if (targetList.length() > 0)
+                        {
                             targetList.append(", ");
                         }
                         targetList.append(atarget.getName());
                     }
                 }
 
-                if (!added) {
+                if (!added)
+                {
                     Debug.log(source[counter].getName()
-                              + " omitted as " + targetList.toString()
-                              + (targetnames.length == 1 ? " is" : " are ")
-                              + " up to date.");
+                            + " omitted as " + targetList.toString()
+                            + (targetnames.length == 1 ? " is" : " are ")
+                            + " up to date.");
                 }
-            } else {
+            }
+            else
+            {
                 Debug.log(source[counter].getName()
-                          + " skipped - don\'t know how to handle it");
+                        + " skipped - don\'t know how to handle it");
             }
         }
         Resource[] result = new Resource[vresult.size()];

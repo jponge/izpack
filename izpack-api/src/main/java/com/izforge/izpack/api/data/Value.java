@@ -27,7 +27,10 @@ import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 public interface Value
 {
     public abstract void validate() throws Exception;
+
     public abstract String resolve() throws Exception;
+
     public abstract String resolve(VariableSubstitutor... substitutors) throws Exception;
+
     public String resolve(RegularExpressionFilter regexp, VariableSubstitutor... substitutors) throws Exception;
 }

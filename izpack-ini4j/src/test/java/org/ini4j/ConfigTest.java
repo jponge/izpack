@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j;
 
 import org.ini4j.test.Helper;
-
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,12 +25,14 @@ import java.nio.charset.Charset;
 
 public class ConfigTest
 {
-    @AfterClass public static void tearDownClass() throws Exception
+    @AfterClass
+    public static void tearDownClass() throws Exception
     {
         Helper.resetConfig();
     }
 
-    @Test public void testDefaults()
+    @Test
+    public void testDefaults()
     {
         Config def = newDefaultConfig();
 
@@ -39,7 +41,8 @@ public class ConfigTest
         assertEquals(def, Config.getGlobal().clone());
     }
 
-    @Test public void testSystemProperties()
+    @Test
+    public void testSystemProperties()
     {
         Config exp = newInverseConfig();
 

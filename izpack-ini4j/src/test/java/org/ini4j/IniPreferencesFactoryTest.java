@@ -13,28 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j;
 
 import org.ini4j.test.Helper;
-
 import org.junit.AfterClass;
-
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 import java.util.prefs.Preferences;
+
+import static org.junit.Assert.*;
 
 public class IniPreferencesFactoryTest
 {
     private static final String DUMMY = "dummy";
 
-    @AfterClass public static void tearDownClass() throws Exception
+    @AfterClass
+    public static void tearDownClass() throws Exception
     {
         Helper.resetConfig();
     }
 
-    @Test public void testGetIniLocation() throws Exception
+    @Test
+    public void testGetIniLocation() throws Exception
     {
         IniPreferencesFactory factory = new IniPreferencesFactory();
 
@@ -45,7 +46,8 @@ public class IniPreferencesFactoryTest
     }
 
     @SuppressWarnings("empty-statement")
-    @Test public void testGetResourceAsStream() throws Exception
+    @Test
+    public void testGetResourceAsStream() throws Exception
     {
         IniPreferencesFactory factory = new IniPreferencesFactory();
 
@@ -83,7 +85,8 @@ public class IniPreferencesFactoryTest
         }
     }
 
-    @Test public void testSystemRoot() throws Exception
+    @Test
+    public void testSystemRoot() throws Exception
     {
         Preferences prefs = Preferences.systemRoot();
 
@@ -92,7 +95,8 @@ public class IniPreferencesFactoryTest
         assertSame(prefs, Preferences.systemRoot());
     }
 
-    @Test public void testUserRoot() throws Exception
+    @Test
+    public void testUserRoot() throws Exception
     {
         Preferences prefs = Preferences.userRoot();
 

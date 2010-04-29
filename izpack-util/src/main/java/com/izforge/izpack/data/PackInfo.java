@@ -21,11 +21,13 @@
 
 package com.izforge.izpack.data;
 
-import java.io.*;
-import java.util.*;
-
 import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.data.binding.OsModel;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Temporary holding place for Pack information as the Packager is built. The packager is used by
@@ -229,7 +231,7 @@ public class PackInfo implements Serializable
      * until the {@link Packager#createInstaller} is invoked, thus a FileNotFoundEception will occur
      * then, if the file is deleted in between.
      */
-    public void addFile(File baseDir, File file, String targetfile, List<OsModel> osList, OverrideType override, String overrideRenameTo,  Blockable blockable, Map additionals, String condition)
+    public void addFile(File baseDir, File file, String targetfile, List<OsModel> osList, OverrideType override, String overrideRenameTo, Blockable blockable, Map additionals, String condition)
             throws FileNotFoundException
     {
         if (!file.exists())

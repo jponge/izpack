@@ -20,17 +20,17 @@ package com.izforge.izpack.util.file;
 /**
  * Implementation of FileNameMapper that does simple wildcard pattern
  * replacements.
- *
+ * <p/>
  * <p>This does simple translations like *.foo -> *.bar where the
  * prefix to .foo will be left unchanged. It only handles a single *
  * character, use regular expressions for more complicated
  * situations.</p>
- *
+ * <p/>
  * <p>This is one of the more useful Mappers, it is used by javac for
  * example.</p>
- *
  */
-public class GlobPatternMapper implements FileNameMapper {
+public class GlobPatternMapper implements FileNameMapper
+{
 
     /**
      * Part of &quot;from&quot; pattern before the *.
@@ -68,10 +68,12 @@ public class GlobPatternMapper implements FileNameMapper {
     /**
      * Attribute specifing whether to ignore the difference
      * between / and \ (the two common directory characters).
+     *
      * @param handleDirSep a boolean, default is false.
      * @since Ant 1.6.3
      */
-    public void setHandleDirSep(boolean handleDirSep) {
+    public void setHandleDirSep(boolean handleDirSep)
+    {
         this.handleDirSep = handleDirSep;
     }
 
@@ -82,20 +84,26 @@ public class GlobPatternMapper implements FileNameMapper {
      * @param caseSensitive a boolean, default is false.
      * @since Ant 1.6.3
      */
-    public void setCaseSensitive(boolean caseSensitive) {
+    public void setCaseSensitive(boolean caseSensitive)
+    {
         this.caseSensitive = caseSensitive;
     }
 
     /**
      * Sets the &quot;from&quot; pattern. Required.
+     *
      * @param from a string
      */
-    public void setFrom(String from) {
+    public void setFrom(String from)
+    {
         int index = from.lastIndexOf("*");
-        if (index == -1) {
+        if (index == -1)
+        {
             fromPrefix = from;
             fromPostfix = "";
-        } else {
+        }
+        else
+        {
             fromPrefix = from.substring(0, index);
             fromPostfix = from.substring(index + 1);
         }
@@ -105,14 +113,19 @@ public class GlobPatternMapper implements FileNameMapper {
 
     /**
      * Sets the &quot;to&quot; pattern. Required.
+     *
      * @param to a string
      */
-    public void setTo(String to) {
+    public void setTo(String to)
+    {
         int index = to.lastIndexOf("*");
-        if (index == -1) {
+        if (index == -1)
+        {
             toPrefix = to;
             toPostfix = "";
-        } else {
+        }
+        else
+        {
             toPrefix = to.substring(0, index);
             toPostfix = to.substring(index + 1);
         }
@@ -122,42 +135,52 @@ public class GlobPatternMapper implements FileNameMapper {
      * Returns null if the source file name doesn't match the
      * &quot;from&quot; pattern, an one-element array containing the
      * translated file otherwise.
+     *
      * @param sourceFileName the filename to map
      * @return a list of converted filenames
      */
-    public String[] mapFileName(String sourceFileName) {
+    public String[] mapFileName(String sourceFileName)
+    {
         if (fromPrefix == null
-            || !modifyName(sourceFileName).startsWith(modifyName(fromPrefix))
-            || !modifyName(sourceFileName).endsWith(modifyName(fromPostfix))) {
+                || !modifyName(sourceFileName).startsWith(modifyName(fromPrefix))
+                || !modifyName(sourceFileName).endsWith(modifyName(fromPostfix)))
+        {
             return null;
         }
-        return new String[] {toPrefix
-                                 + extractVariablePart(sourceFileName)
-                                 + toPostfix};
+        return new String[]{toPrefix
+                + extractVariablePart(sourceFileName)
+                + toPostfix};
     }
 
     /**
      * Returns the part of the given string that matches the * in the
      * &quot;from&quot; pattern.
+     *
      * @param name the source file name
      * @return the variable part of the name
      */
-    protected String extractVariablePart(String name) {
+    protected String extractVariablePart(String name)
+    {
         return name.substring(prefixLength,
-                              name.length() - postfixLength);
+                name.length() - postfixLength);
     }
 
     /**
      * modify string based on dir char mapping and case sensitivity
+     *
      * @param name the name to convert
      * @return the converted name
      */
-    private String modifyName(String name) {
-        if (!caseSensitive) {
+    private String modifyName(String name)
+    {
+        if (!caseSensitive)
+        {
             name = name.toLowerCase();
         }
-        if (handleDirSep) {
-            if (name.indexOf('\\') != -1) {
+        if (handleDirSep)
+        {
+            if (name.indexOf('\\') != -1)
+            {
                 name = name.replace('\\', '/');
             }
         }

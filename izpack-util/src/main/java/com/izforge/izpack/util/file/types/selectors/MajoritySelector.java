@@ -17,10 +17,10 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
+import com.izforge.izpack.api.data.AutomatedInstallData;
+
 import java.io.File;
 import java.util.Enumeration;
-
-import com.izforge.izpack.api.data.AutomatedInstallData;
 
 /**
  * This selector is here just to shake up your thinking a bit. Don't get
@@ -33,22 +33,26 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
  *
  * @since 1.5
  */
-public class MajoritySelector extends BaseSelectorContainer {
+public class MajoritySelector extends BaseSelectorContainer
+{
 
     private boolean allowtie = true;
 
     /**
      * Default constructor.
      */
-    public MajoritySelector() {
+    public MajoritySelector()
+    {
     }
 
     /**
      * @return a string describing this object
      */
-    public String toString() {
+    public String toString()
+    {
         StringBuffer buf = new StringBuffer();
-        if (hasSelectors()) {
+        if (hasSelectors())
+        {
             buf.append("{majorityselect: ");
             buf.append(super.toString());
             buf.append("}");
@@ -63,7 +67,8 @@ public class MajoritySelector extends BaseSelectorContainer {
      *
      * @param tiebreaker the value to give if there is a tie
      */
-    public void setAllowtie(boolean tiebreaker) {
+    public void setAllowtie(boolean tiebreaker)
+    {
         allowtie = tiebreaker;
     }
 
@@ -72,32 +77,40 @@ public class MajoritySelector extends BaseSelectorContainer {
      * agree. In case of a tie, go by the allowtie setting. That defaults
      * to true, meaning in case of a tie, the file is selected.
      *
-     * @param basedir the base directory the scan is being done from
+     * @param basedir  the base directory the scan is being done from
      * @param filename is the name of the file to check
-     * @param file is a java.io.File object for the filename that the selector
-     * can use
+     * @param file     is a java.io.File object for the filename that the selector
+     *                 can use
      * @return whether the file should be selected or not
      */
     public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file)
-    throws Exception {
+            throws Exception
+    {
         validate();
         int yesvotes = 0;
         int novotes = 0;
         Enumeration<FileSelector> e = selectorElements();
         boolean result;
 
-        while (e.hasMoreElements()) {
+        while (e.hasMoreElements())
+        {
             result = e.nextElement().isSelected(idata, basedir,
                     filename, file);
-            if (result) {
+            if (result)
+            {
                 yesvotes = yesvotes + 1;
-            } else {
+            }
+            else
+            {
                 novotes = novotes + 1;
             }
         }
-        if (yesvotes > novotes) {
+        if (yesvotes > novotes)
+        {
             return true;
-        } else if (novotes > yesvotes) {
+        }
+        else if (novotes > yesvotes)
+        {
             return false;
         }
         // At this point, we know we have a tie.

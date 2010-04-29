@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j;
 
 import java.io.InputStream;
-
 import java.net.URI;
 import java.net.URL;
-
 import java.util.Properties;
 import java.util.prefs.Preferences;
 import java.util.prefs.PreferencesFactory;
@@ -32,7 +31,8 @@ public class IniPreferencesFactory implements PreferencesFactory
     private Preferences _system;
     private Preferences _user;
 
-    @Override public synchronized Preferences systemRoot()
+    @Override
+    public synchronized Preferences systemRoot()
     {
         if (_system == null)
         {
@@ -42,7 +42,8 @@ public class IniPreferencesFactory implements PreferencesFactory
         return _system;
     }
 
-    @Override public synchronized Preferences userRoot()
+    @Override
+    public synchronized Preferences userRoot()
     {
         if (_user == null)
         {

@@ -21,11 +21,11 @@
 
 package com.izforge.izpack.api.installer;
 
+import com.izforge.izpack.api.data.AutomatedInstallData;
+
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.izforge.izpack.api.data.AutomatedInstallData;
 
 public interface DataValidator
 {

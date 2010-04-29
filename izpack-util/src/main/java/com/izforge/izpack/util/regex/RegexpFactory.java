@@ -23,17 +23,17 @@ package com.izforge.izpack.util.regex;
 
 import org.apache.tools.ant.BuildException;
 
-/***
+/**
  * Regular expression factory, which will create Regexp objects.  The
  * actual implementation class depends on the System or Ant Property:
  * <code>izpack.regexp.regexpimpl</code>.
  *
- * @see <a href='http://ant.apache.org'>Apache Ant</a>
  * @author René Krell - changes against the original implementation in Apache Ant 1.6.5
+ * @see <a href='http://ant.apache.org'>Apache Ant</a>
  */
 public class RegexpFactory extends RegexpMatcherFactory
 {
-    /***
+    /**
      * Create a new regular expression matcher instance.
      *
      * @return the matcher instance
@@ -42,16 +42,20 @@ public class RegexpFactory extends RegexpMatcherFactory
     public Regexp newRegexp() throws RuntimeException
     {
         String systemDefault = System.getProperty("izpack.regexp.regexpimpl");
-        if (systemDefault != null) {
+        if (systemDefault != null)
+        {
             return createRegexpInstance(systemDefault);
             // XXX     should we silently catch possible exceptions and try to
             //         load a different implementation?
         }
 
-        try {
+        try
+        {
             testAvailability("java.util.regex.Matcher");
             return createRegexpInstance("com.izforge.izpack.util.regex.JavaRegexp");
-        } catch (Exception be) {
+        }
+        catch (Exception be)
+        {
             // ignore
         }
 
@@ -80,17 +84,19 @@ public class RegexpFactory extends RegexpMatcherFactory
      * Wrapper over RegexpMatcherFactory.createInstance that ensures that
      * we are dealing with a Regexp implementation.
      *
-     * @since 1.3
-     *
      * @see RegexpMatcherFactory#createInstance(String)
+     * @since 1.3
      */
     protected Regexp createRegexpInstance(String classname)
-    throws RuntimeException
+            throws RuntimeException
     {
         RegexpMatcher m = createInstance(classname);
-        if (m instanceof Regexp) {
+        if (m instanceof Regexp)
+        {
             return (Regexp) m;
-        } else {
+        }
+        else
+        {
             throw new RuntimeException(classname + " doesn't implement the Regexp interface");
         }
     }

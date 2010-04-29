@@ -17,8 +17,8 @@
 
 -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
     <properties>
         <title>Download</title>
     </properties>
@@ -32,9 +32,9 @@
                 <a href="http://sourceforge.net/project/showfiles.php?group_id=129580">Download from SourceForge</a>
             </p>
             <p>
- [ini4j] also deployed into Maven Central repository, so if you are using
- Apache Maven build environment, nothing to do: maven will download
- automatically.
+                [ini4j] also deployed into Maven Central repository, so if you are using
+                Apache Maven build environment, nothing to do: maven will download
+                automatically.
             </p>
             <p>
                 <a href="http://repo2.maven.org/maven2/org/ini4j/ini4j/">Download from Maven Central repository</a>
@@ -53,17 +53,27 @@
 
             <subsection name="Other options">
                 <p>
- For Linux users also easy to get [ini4j]. Most Linux distribution already
- contains [ini4j] as installable library, called: libini4j-java. You can use
- standard package manager (rpm/apt-get) to install it.
+                    For Linux users also easy to get [ini4j]. Most Linux distribution already
+                    contains [ini4j] as installable library, called: libini4j-java. You can use
+                    standard package manager (rpm/apt-get) to install it.
                 </p>
-            <menu>
-                <li><a href="http://packages.ubuntu.com/intrepid/libini4j-java"><img src="img/ubuntu.png"/></a></li>
-                <li><a href="https://admin.fedoraproject.org/pkgdb/packages/name/ini4j"><img src="img/fedora.png"/></a></li>
-            </menu>
-            <p>
-                If you have <a href="http://www.netbeans.org/about/legal/code_dependency_matrix.html">NetBeans IDE</a> installed on your computer, probably you already have [ini4j] :)
-            </p>
+                <menu>
+                    <li>
+                        <a href="http://packages.ubuntu.com/intrepid/libini4j-java">
+                            <img src="img/ubuntu.png" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://admin.fedoraproject.org/pkgdb/packages/name/ini4j">
+                            <img src="img/fedora.png" />
+                        </a>
+                    </li>
+                </menu>
+                <p>
+                    If you have
+                    <a href="http://www.netbeans.org/about/legal/code_dependency_matrix.html">NetBeans IDE</a>
+                    installed on your computer, probably you already have [ini4j] :)
+                </p>
             </subsection>
         </section>
     </body>

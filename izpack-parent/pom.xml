@@ -210,18 +210,18 @@
                  XML parsers are part of newer JDKs
                  -->
                 <exclusions>
-                  <exclusion>
-                    <groupId>xerces</groupId>
-                    <artifactId>xercesImpl</artifactId>
-                  </exclusion>
-                  <exclusion>
-                    <groupId>xml-apis</groupId>
-                    <artifactId>xml-apis</artifactId>
-                  </exclusion>
-                  <exclusion>
-                    <groupId>xom</groupId>
-                    <artifactId>xom</artifactId>
-                  </exclusion>
+                    <exclusion>
+                        <groupId>xerces</groupId>
+                        <artifactId>xercesImpl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>xml-apis</groupId>
+                        <artifactId>xml-apis</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>xom</groupId>
+                        <artifactId>xom</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>

@@ -17,49 +17,64 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import java.io.File;
-
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.file.types.*;
+import com.izforge.izpack.util.file.types.EnumeratedAttribute;
+import com.izforge.izpack.util.file.types.Parameter;
+
+import java.io.File;
 
 /**
  * Selector that filters files based on their size.
  */
-public class SizeSelector extends BaseExtendSelector {
+public class SizeSelector extends BaseExtendSelector
+{
 
     private long size = -1;
     private long multiplier = 1;
     private long sizelimit = -1;
     private int cmp = 2;
-    /** Used for parameterized custom selector */
+    /**
+     * Used for parameterized custom selector
+     */
     public static final String SIZE_KEY = "value";
-    /** Used for parameterized custom selector */
+    /**
+     * Used for parameterized custom selector
+     */
     public static final String UNITS_KEY = "units";
-    /** Used for parameterized custom selector */
+    /**
+     * Used for parameterized custom selector
+     */
     public static final String WHEN_KEY = "when";
 
     /**
      * Creates a new <code>SizeSelector</code> instance.
-     *
      */
-    public SizeSelector() {
+    public SizeSelector()
+    {
     }
 
     /**
      * Returns a <code>String</code> object representing the specified
      * SizeSelector. This is "{sizeselector value: " + <"compare",
      * "less", "more", "equal"> + "}".
+     *
      * @return a string describing this object
      */
-    public String toString() {
+    public String toString()
+    {
         StringBuffer buf = new StringBuffer("{sizeselector value: ");
         buf.append(sizelimit);
         buf.append("compare: ");
-        if (cmp == 0) {
+        if (cmp == 0)
+        {
             buf.append("less");
-        } else if (cmp == 1) {
+        }
+        else if (cmp == 1)
+        {
             buf.append("more");
-        } else {
+        }
+        else
+        {
             buf.append("equal");
         }
         buf.append("}");
@@ -73,9 +88,11 @@ public class SizeSelector extends BaseExtendSelector {
      *
      * @param size the size to select against expressed in units.
      */
-    public void setValue(long size) {
+    public void setValue(long size)
+    {
         this.size = size;
-        if ((multiplier != 0) && (size > -1)) {
+        if ((multiplier != 0) && (size > -1))
+        {
             sizelimit = size * multiplier;
         }
     }
@@ -88,45 +105,62 @@ public class SizeSelector extends BaseExtendSelector {
      * "k". Others have tried to introduce "K" as a multiple of 1024,
      * but that falls down when you reach "M", since "m" is already
      * defined as 0.001.
-     * <p>
+     * <p/>
      * To get around this complexity, a number of standards bodies
      * have proposed the 2^10 standard, and at least one has adopted
      * it. But we are still left with a populace that isn't clear on
      * how capitalization should work.
-     * <p>
+     * <p/>
      * We therefore ignore capitalization as much as possible.
      * Completely mixed case is not possible, but all upper and lower
      * forms are accepted for all long and short forms. Since we have
      * no need to work with the 0.001 case, this practice works here.
-     * <p>
+     * <p/>
      * This function translates all the long and short forms that a
      * unit prefix can occur in and translates them into a single
      * multiplier.
      *
      * @param units The units to compare the size to, using an
-     *        EnumeratedAttribute.
+     *              EnumeratedAttribute.
      */
-    public void setUnits(ByteUnits units) {
+    public void setUnits(ByteUnits units)
+    {
         int i = units.getIndex();
         multiplier = 0;
-        if ((i > -1) && (i < 4)) {
+        if ((i > -1) && (i < 4))
+        {
             multiplier = 1000;
-        } else if ((i > 3) && (i < 9)) {
+        }
+        else if ((i > 3) && (i < 9))
+        {
             multiplier = 1024;
-        } else if ((i > 8) && (i < 13)) {
+        }
+        else if ((i > 8) && (i < 13))
+        {
             multiplier = 1000000;
-        } else if ((i > 12) && (i < 18)) {
+        }
+        else if ((i > 12) && (i < 18))
+        {
             multiplier = 1048576;
-        } else if ((i > 17) && (i < 22)) {
+        }
+        else if ((i > 17) && (i < 22))
+        {
             multiplier = 1000000000L;
-        } else if ((i > 21) && (i < 27)) {
+        }
+        else if ((i > 21) && (i < 27))
+        {
             multiplier = 1073741824L;
-        } else if ((i > 26) && (i < 31)) {
+        }
+        else if ((i > 26) && (i < 31))
+        {
             multiplier = 1000000000000L;
-        } else if ((i > 30) && (i < 36)) {
+        }
+        else if ((i > 30) && (i < 36))
+        {
             multiplier = 1099511627776L;
         }
-        if ((multiplier > 0) && (size > -1)) {
+        if ((multiplier > 0) && (size > -1))
+        {
             sizelimit = size * multiplier;
         }
     }
@@ -138,7 +172,8 @@ public class SizeSelector extends BaseExtendSelector {
      *
      * @param scmp The comparison to perform, an EnumeratedAttribute.
      */
-    public void setWhen(SizeComparisons scmp) {
+    public void setWhen(SizeComparisons scmp)
+    {
         this.cmp = scmp.getIndex();
     }
 
@@ -148,19 +183,28 @@ public class SizeSelector extends BaseExtendSelector {
      *
      * @param parameters the complete set of parameters for this selector.
      */
-    public void setParameters(Parameter[] parameters) {
+    public void setParameters(Parameter[] parameters)
+    {
         super.setParameters(parameters);
-        if (parameters != null) {
-            for (int i = 0; i < parameters.length; i++) {
+        if (parameters != null)
+        {
+            for (int i = 0; i < parameters.length; i++)
+            {
                 String paramname = parameters[i].getName();
-                if (SIZE_KEY.equalsIgnoreCase(paramname)) {
-                    try {
+                if (SIZE_KEY.equalsIgnoreCase(paramname))
+                {
+                    try
+                    {
                         setValue(new Long(parameters[i].getValue()
                         ).longValue());
-                    } catch (NumberFormatException nfe) {
+                    }
+                    catch (NumberFormatException nfe)
+                    {
                         setError("Invalid size setting " + parameters[i].getValue());
                     }
-                } else if (UNITS_KEY.equalsIgnoreCase(paramname)) {
+                }
+                else if (UNITS_KEY.equalsIgnoreCase(paramname))
+                {
                     ByteUnits units = new ByteUnits();
                     try
                     {
@@ -168,10 +212,12 @@ public class SizeSelector extends BaseExtendSelector {
                     }
                     catch (Exception e)
                     {
-                        setError("Invalid "+UNITS_KEY+" setting " + parameters[i].getValue());
+                        setError("Invalid " + UNITS_KEY + " setting " + parameters[i].getValue());
                     }
                     setUnits(units);
-                } else if (WHEN_KEY.equalsIgnoreCase(paramname)) {
+                }
+                else if (WHEN_KEY.equalsIgnoreCase(paramname))
+                {
                     SizeComparisons scmp = new SizeComparisons();
                     try
                     {
@@ -179,10 +225,12 @@ public class SizeSelector extends BaseExtendSelector {
                     }
                     catch (Exception e)
                     {
-                        setError("Invalid "+WHEN_KEY+" setting " + parameters[i].getValue());
+                        setError("Invalid " + WHEN_KEY + " setting " + parameters[i].getValue());
                     }
                     setWhen(scmp);
-                } else {
+                }
+                else
+                {
                     setError("Invalid parameter " + paramname);
                 }
             }
@@ -199,12 +247,18 @@ public class SizeSelector extends BaseExtendSelector {
      * <p>If a problem is detected, the setError() method is called.
      * </p>
      */
-    public void verifySettings() {
-        if (size < 0) {
+    public void verifySettings()
+    {
+        if (size < 0)
+        {
             setError("The value attribute is required, and must be positive");
-        } else if (multiplier < 1) {
+        }
+        else if (multiplier < 1)
+        {
             setError("Invalid Units supplied, must be K,Ki,M,Mi,G,Gi,T,or Ti");
-        } else if (sizelimit < 0) {
+        }
+        else if (sizelimit < 0)
+        {
             setError("Internal error: Code is not setting sizelimit correctly");
         }
     }
@@ -213,26 +267,32 @@ public class SizeSelector extends BaseExtendSelector {
      * The heart of the matter. This is where the selector gets to decide
      * on the inclusion of a file in a particular fileset.
      *
-     * @param basedir A java.io.File object for the base directory.
+     * @param basedir  A java.io.File object for the base directory.
      * @param filename The name of the file to check.
-     * @param file A File object for this filename.
+     * @param file     A File object for this filename.
      * @return whether the file should be selected or not.
      */
     public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file)
-    throws Exception
+            throws Exception
     {
         // throw Exception on error
         validate();
 
         // Directory size never selected for
-        if (file.isDirectory()) {
+        if (file.isDirectory())
+        {
             return true;
         }
-        if (cmp == 0) {
+        if (cmp == 0)
+        {
             return (file.length() < sizelimit);
-        } else if (cmp == 1) {
+        }
+        else if (cmp == 1)
+        {
             return (file.length() > sizelimit);
-        } else {
+        }
+        else
+        {
             return (file.length() == sizelimit);
         }
     }
@@ -240,7 +300,7 @@ public class SizeSelector extends BaseExtendSelector {
 
     /**
      * Enumerated attribute with the values for units.
-     * <p>
+     * <p/>
      * This treats the standard SI units as representing powers of ten,
      * as they should. If you want the powers of 2 that approximate
      * the SI units, use the first two characters followed by a
@@ -251,24 +311,26 @@ public class SizeSelector extends BaseExtendSelector {
      * by an <code>i</code>. <code>Ki</code>, <code>Mi</code>,
      * <code>Gi</code>, and so on. Capitalization variations on these
      * are also accepted.
-     * <p>
+     * <p/>
      * This binary prefix system is approved by the IEC and appears on
      * its way for approval by other agencies, but it is not an SI
      * standard. It disambiguates things for us, though.
      */
-    public static class ByteUnits extends EnumeratedAttribute {
+    public static class ByteUnits extends EnumeratedAttribute
+    {
         /**
          * @return the values as an array of strings
          */
-        public String[] getValues() {
+        public String[] getValues()
+        {
             return new String[]{"K", "k", "kilo", "KILO",
-                                "Ki", "KI", "ki", "kibi", "KIBI",
-                                "M", "m", "mega", "MEGA",
-                                "Mi", "MI", "mi", "mebi", "MEBI",
-                                "G", "g", "giga", "GIGA",
-                                "Gi", "GI", "gi", "gibi", "GIBI",
-                                "T", "t", "tera", "TERA",
-           /* You wish! */      "Ti", "TI", "ti", "tebi", "TEBI"
+                    "Ki", "KI", "ki", "kibi", "KIBI",
+                    "M", "m", "mega", "MEGA",
+                    "Mi", "MI", "mi", "mebi", "MEBI",
+                    "G", "g", "giga", "GIGA",
+                    "Gi", "GI", "gi", "gibi", "GIBI",
+                    "T", "t", "tera", "TERA",
+                    /* You wish! */      "Ti", "TI", "ti", "tebi", "TEBI"
             };
         }
     }
@@ -276,11 +338,13 @@ public class SizeSelector extends BaseExtendSelector {
     /**
      * Enumerated attribute with the values for size comparison.
      */
-    public static class SizeComparisons extends EnumeratedAttribute {
+    public static class SizeComparisons extends EnumeratedAttribute
+    {
         /**
          * @return the values as an array of strings
          */
-        public String[] getValues() {
+        public String[] getValues()
+        {
             return new String[]{"less", "more", "equal"};
         }
     }

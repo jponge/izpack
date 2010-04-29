@@ -1,14 +1,5 @@
 package com.izforge.izpack.compiler;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.DynamicVariable;
@@ -20,6 +11,14 @@ import com.izforge.izpack.core.data.DynamicVariableImpl;
 import com.izforge.izpack.core.variable.PlainValue;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.junit.PicoRunner;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Test of compiler config with mock
@@ -73,7 +72,7 @@ public class CompilerConfigMockedTest
 
     private void verifyCallToMap(Map<String, List<DynamicVariable>> mapStringListDyn, String name, Value value)
     {
-        DynamicVariable dynamicVariable = new DynamicVariable();
+        DynamicVariable dynamicVariable = new DynamicVariableImpl();
         dynamicVariable.setName(name);
         dynamicVariable.setValue(value);
         ArrayList<DynamicVariable> list = new ArrayList<DynamicVariable>();
@@ -103,7 +102,7 @@ public class CompilerConfigMockedTest
         compilerConfig.addDynamicVariables(xmlData);
 
         new ArrayList();
-        DynamicVariable dynamicVariable = new DynamicVariable();
+        DynamicVariable dynamicVariable = new DynamicVariableImpl();
         dynamicVariable.setName("myPath");
         dynamicVariable.setValue(new PlainValue("$INSTALLPATH/test"));
         ArrayList<DynamicVariable> list = new ArrayList<DynamicVariable>();

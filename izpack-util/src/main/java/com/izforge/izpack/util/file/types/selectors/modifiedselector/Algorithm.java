@@ -28,20 +28,23 @@ import java.io.File;
  * The implementing class should implement a useful toString() method.
  *
  * @version 2003-09-13
- * @since  Ant 1.6
+ * @since Ant 1.6
  */
-public interface Algorithm {
+public interface Algorithm
+{
 
     /**
      * Checks its prerequisites.
+     *
      * @return <i>true</i> if all is ok, otherwise <i>false</i>.
      */
     boolean isValid();
 
     /**
      * Get the value for a file.
-     * @param file    File object for which the value should be evaluated.
-     * @return        The value for that file
+     *
+     * @param file File object for which the value should be evaluated.
+     * @return The value for that file
      */
     String getValue(File file);
 }

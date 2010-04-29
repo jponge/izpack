@@ -1,20 +1,5 @@
 package com.izforge.izpack.installer.container;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.util.Arrays;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-
-import org.codehaus.izpack.test.provider.GUIInstallDataMockProvider;
-import org.fest.swing.fixture.DialogFixture;
-import org.mockito.Mockito;
-import org.picocontainer.Characteristics;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.injectors.ProviderAdapter;
-import org.picocontainer.parameters.ComponentParameter;
-
 import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -28,6 +13,17 @@ import com.izforge.izpack.installer.language.ConditionCheck;
 import com.izforge.izpack.installer.language.LanguageDialog;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.merge.resolve.PathResolver;
+import org.codehaus.izpack.test.provider.GUIInstallDataMockProvider;
+import org.fest.swing.fixture.DialogFixture;
+import org.mockito.Mockito;
+import org.picocontainer.Characteristics;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.injectors.ProviderAdapter;
+import org.picocontainer.parameters.ComponentParameter;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Arrays;
 
 /**
  * Container for test language

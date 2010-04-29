@@ -13,26 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j;
 
 import org.ini4j.spi.WinEscapeToolTest;
+import org.junit.Test;
+
+import java.io.*;
+import java.net.URL;
 
 import static org.junit.Assert.*;
 
-import org.junit.Test;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-
-import java.net.URL;
-
 public class WiniTest
 {
-    @Test public void testConstructors() throws Exception
+    @Test
+    public void testConstructors() throws Exception
     {
         File f = File.createTempFile("wini", "test");
 
@@ -43,7 +38,8 @@ public class WiniTest
         assertTrue(new WiniHelper(f.toURI().toURL()).isOK());
     }
 
-    @Test public void testDefaults()
+    @Test
+    public void testDefaults()
     {
         Wini wini = new Wini();
         Config cfg = wini.getConfig();
@@ -54,7 +50,8 @@ public class WiniTest
         assertFalse(cfg.isEscape());
     }
 
-    @Test public void testEscape()
+    @Test
+    public void testEscape()
     {
         Wini instance = new Wini();
 
@@ -65,7 +62,8 @@ public class WiniTest
         assertEquals(WinEscapeToolTest.ESCAPE5, instance.escape(WinEscapeToolTest.VALUE5));
     }
 
-    @Test public void testUnescape() throws Exception
+    @Test
+    public void testUnescape() throws Exception
     {
         Wini instance = new Wini();
 
@@ -107,22 +105,26 @@ public class WiniTest
             return _ok;
         }
 
-        @Override public void load(InputStream input) throws IOException, InvalidFileFormatException
+        @Override
+        public void load(InputStream input) throws IOException, InvalidFileFormatException
         {
             _ok = true;
         }
 
-        @Override public void load(Reader input) throws IOException, InvalidFileFormatException
+        @Override
+        public void load(Reader input) throws IOException, InvalidFileFormatException
         {
             _ok = true;
         }
 
-        @Override public void load(File input) throws IOException, InvalidFileFormatException
+        @Override
+        public void load(File input) throws IOException, InvalidFileFormatException
         {
             _ok = true;
         }
 
-        @Override public void load(URL input) throws IOException, InvalidFileFormatException
+        @Override
+        public void load(URL input) throws IOException, InvalidFileFormatException
         {
             _ok = true;
         }

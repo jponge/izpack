@@ -17,20 +17,21 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import java.io.File;
-import java.util.Vector;
-
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.util.file.types.Parameter;
+import com.izforge.izpack.util.file.types.Path;
 import org.apache.tools.ant.BuildException;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.file.types.*;
+import java.io.File;
+import java.util.Vector;
 
 /**
  * Selector that selects files by forwarding the request on to other classes.
  *
  * @since 1.5
  */
-public class ExtendSelector extends BaseSelector {
+public class ExtendSelector extends BaseSelector
+{
 
     private String classname = null;
     private FileSelector dynselector = null;
@@ -40,7 +41,8 @@ public class ExtendSelector extends BaseSelector {
     /**
      * Default constructor.
      */
-    public ExtendSelector() {
+    public ExtendSelector()
+    {
     }
 
     /**
@@ -48,16 +50,20 @@ public class ExtendSelector extends BaseSelector {
      *
      * @param classname is the class which implements this selector
      */
-    public void setClassname(String classname) {
+    public void setClassname(String classname)
+    {
         this.classname = classname;
     }
 
     /**
      * Instantiates the identified custom selector class.
      */
-    public void selectorCreate() {
-        if (classname != null && classname.length() > 0) {
-            try {
+    public void selectorCreate()
+    {
+        if (classname != null && classname.length() > 0)
+        {
+            try
+            {
                 Class c = Class.forName(classname);
 //                if (classpath == null) {
 //                    c = Class.forName(classname);
@@ -71,17 +77,25 @@ public class ExtendSelector extends BaseSelector {
 //                if (project != null) {
 //                    project.setProjectReference(dynselector);
 //                }
-            } catch (ClassNotFoundException cnfexcept) {
-                setError("Selector " + classname
-                    + " not initialized, no such class");
-            } catch (InstantiationException iexcept) {
-                setError("Selector " + classname
-                    + " not initialized, could not create class");
-            } catch (IllegalAccessException iaexcept) {
-                setError("Selector " + classname
-                    + " not initialized, class not accessible");
             }
-        } else {
+            catch (ClassNotFoundException cnfexcept)
+            {
+                setError("Selector " + classname
+                        + " not initialized, no such class");
+            }
+            catch (InstantiationException iexcept)
+            {
+                setError("Selector " + classname
+                        + " not initialized, could not create class");
+            }
+            catch (IllegalAccessException iaexcept)
+            {
+                setError("Selector " + classname
+                        + " not initialized, class not accessible");
+            }
+        }
+        else
+        {
             setError("There is no classname specified");
         }
     }
@@ -91,32 +105,41 @@ public class ExtendSelector extends BaseSelector {
      *
      * @param p The new Parameter object
      */
-    public void addParam(Parameter p) {
+    public void addParam(Parameter p)
+    {
         paramVec.addElement(p);
     }
 
 
     /**
      * Set the classpath to load the classname specified using an attribute.
+     *
      * @param classpath the classpath to use
      */
-    public final void setClasspath(Path classpath) throws Exception {
+    public final void setClasspath(Path classpath) throws Exception
+    {
 //        if (isReference()) {
 //            throw tooManyAttributes();
 //        }
-        if (this.classpath == null) {
+        if (this.classpath == null)
+        {
             this.classpath = classpath;
-        } else {
+        }
+        else
+        {
             this.classpath.append(classpath);
         }
     }
 
     /**
      * Specify the classpath to use to load the Selector (nested element).
+     *
      * @return a classpath to be configured
      */
-    public final Path createClasspath() throws Exception {
-        if (this.classpath == null) {
+    public final Path createClasspath() throws Exception
+    {
+        if (this.classpath == null)
+        {
             this.classpath = new Path();
         }
         return this.classpath.createPath();
@@ -124,9 +147,11 @@ public class ExtendSelector extends BaseSelector {
 
     /**
      * Get the classpath
+     *
      * @return the classpath
      */
-    public final Path getClasspath() {
+    public final Path getClasspath()
+    {
         return classpath;
     }
 
@@ -135,19 +160,26 @@ public class ExtendSelector extends BaseSelector {
      * errors in the custom selector, it should throw a BuildException
      * when isSelected() is called.
      */
-    public void verifySettings() {
+    public void verifySettings()
+    {
         // Creation is done here rather than in isSelected() because some
         // containers may do a validation pass before running isSelected(),
         // but we need to check for the existence of the created class.
-        if (dynselector == null) {
+        if (dynselector == null)
+        {
             selectorCreate();
         }
-        if (classname == null || classname.length() < 1) {
+        if (classname == null || classname.length() < 1)
+        {
             setError("The classname attribute is required");
-        } else if (dynselector == null) {
+        }
+        else if (dynselector == null)
+        {
             setError("Internal Error: The custom selector was not created");
-        } else if (!(dynselector instanceof ExtendFileSelector)
-                    && (paramVec.size() > 0)) {
+        }
+        else if (!(dynselector instanceof ExtendFileSelector)
+                && (paramVec.size() > 0))
+        {
             setError("Cannot set parameters on custom selector that does not "
                     + "implement ExtendFileSelector");
         }
@@ -161,12 +193,14 @@ public class ExtendSelector extends BaseSelector {
      * both classpath and classname, creating the class is deferred to here
      * as well.
      *
-     * @exception BuildException if an error occurs
+     * @throws BuildException if an error occurs
      */
     public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file)
-            throws Exception {
+            throws Exception
+    {
         validate();
-        if (paramVec.size() > 0 && dynselector instanceof ExtendFileSelector) {
+        if (paramVec.size() > 0 && dynselector instanceof ExtendFileSelector)
+        {
             Parameter[] paramArray = new Parameter[paramVec.size()];
             paramVec.copyInto(paramArray);
             // We know that dynselector must be non-null if no error message

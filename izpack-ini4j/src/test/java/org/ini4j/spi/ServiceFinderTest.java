@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j.spi;
 
 import org.ini4j.test.Helper;
-
 import org.junit.AfterClass;
+import org.junit.Test;
 
 import static org.junit.Assert.*;
-
-import org.junit.Test;
 
 public class ServiceFinderTest
 {
@@ -31,12 +30,14 @@ public class ServiceFinderTest
     static final String EMPTY_CONFIG_SERVICE = "org.ini4j.EmptyConfig";
     static final String DUMMY_IMPL = "DummyImpl";
 
-    @AfterClass public static void tearDownClass() throws Exception
+    @AfterClass
+    public static void tearDownClass() throws Exception
     {
         Helper.resetConfig();
     }
 
-    @Test public void testFindService() throws Exception
+    @Test
+    public void testFindService() throws Exception
     {
         boolean flag = false;
 
@@ -55,7 +56,8 @@ public class ServiceFinderTest
         assertTrue(flag);
     }
 
-    @Test public void testFindServiceClass() throws Exception
+    @Test
+    public void testFindServiceClass() throws Exception
     {
         boolean flag = false;
 
@@ -74,7 +76,8 @@ public class ServiceFinderTest
         assertTrue(flag);
     }
 
-    @Test public void testFindServiceClassName() throws Exception
+    @Test
+    public void testFindServiceClassName() throws Exception
     {
         System.setProperty(IniParser.class.getName(), DUMMY);
         assertEquals(DUMMY, ServiceFinder.findServiceClassName(IniParser.class.getName()));

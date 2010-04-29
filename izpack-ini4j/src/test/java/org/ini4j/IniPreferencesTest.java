@@ -13,29 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j;
 
 import org.ini4j.sample.Dwarf;
 import org.ini4j.sample.Dwarfs;
-
 import org.ini4j.spi.BeanAccess;
 import org.ini4j.spi.BeanTool;
-
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
 import org.ini4j.test.TaleData;
-
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 import java.util.prefs.Preferences;
+
+import static org.junit.Assert.*;
 
 public class IniPreferencesTest
 {
     private static final String DUMMY = "dummy";
 
-    @Test public void testConstructor() throws Exception
+    @Test
+    public void testConstructor() throws Exception
     {
         Ini ini = Helper.newDwarfsIni();
         IniPreferences prefs = new IniPreferences(ini);
@@ -50,7 +49,8 @@ public class IniPreferencesTest
         Helper.assertEquals(DwarfsData.sleepy, newDwarf(prefs.node(Dwarfs.PROP_SLEEPY)));
     }
 
-    @Test public void testMisc() throws Exception
+    @Test
+    public void testMisc() throws Exception
     {
         Ini ini = new Ini();
         IniPreferences prefs = new IniPreferences(ini);
@@ -103,7 +103,8 @@ public class IniPreferencesTest
         assertNull(ini.get(Dwarfs.PROP_DOC));
     }
 
-    @Test public void testTaleTree() throws Exception
+    @Test
+    public void testTaleTree() throws Exception
     {
         Ini ini = Helper.newTaleIni();
         IniPreferences prefs = new IniPreferences(ini);
@@ -114,7 +115,8 @@ public class IniPreferencesTest
         assertEquals(1, prefs.childrenNames().length);
     }
 
-    @Test public void testTree() throws Exception
+    @Test
+    public void testTree() throws Exception
     {
         Ini ini = new Ini();
         IniPreferences prefs = new IniPreferences(ini);
@@ -128,7 +130,8 @@ public class IniPreferencesTest
     }
 
     @SuppressWarnings("empty-statement")
-    @Test public void testUnsupported() throws Exception
+    @Test
+    public void testUnsupported() throws Exception
     {
         Ini ini = new Ini();
         IniPreferences prefs = new IniPreferences(ini);

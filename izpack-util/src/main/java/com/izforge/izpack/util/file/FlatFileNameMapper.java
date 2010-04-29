@@ -20,30 +20,33 @@ package com.izforge.izpack.util.file;
 /**
  * Implementation of FileNameMapper that always returns the source
  * file name without any leading directory information.
- *
+ * <p/>
  * <p>This is the default FileNameMapper for the copy and move
  * tasks if the flatten attribute has been set.</p>
- *
  */
-public class FlatFileNameMapper implements FileNameMapper {
+public class FlatFileNameMapper implements FileNameMapper
+{
 
     /**
      * Ignored.
      */
-    public void setFrom(String from) {
+    public void setFrom(String from)
+    {
     }
 
     /**
      * Ignored.
      */
-    public void setTo(String to) {
+    public void setTo(String to)
+    {
     }
 
     /**
      * Returns an one-element array containing the source file name
      * without any leading directory information.
      */
-    public String[] mapFileName(String sourceFileName) {
-        return new String[] {new java.io.File(sourceFileName).getName()};
+    public String[] mapFileName(String sourceFileName)
+    {
+        return new String[]{new java.io.File(sourceFileName).getName()};
     }
 }

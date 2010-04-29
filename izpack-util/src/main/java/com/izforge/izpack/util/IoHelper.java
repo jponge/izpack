@@ -21,13 +21,15 @@
 
 package com.izforge.izpack.util;
 
-import java.io.*;
-import java.util.*;
-import java.util.zip.*;
-
+import com.izforge.izpack.api.substitutor.SubstitutionType;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import org.apache.tools.zip.ZipOutputStream;
 
-import com.izforge.izpack.api.substitutor.*;
+import java.io.*;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipInputStream;
 
 /**
  * <p>
@@ -194,7 +196,7 @@ public class IoHelper
             }
             catch (Exception e)
             {
-                throw new IOException("Substitution failed during copying a stream("+e.getMessage()+")");
+                throw new IOException("Substitution failed during copying a stream(" + e.getMessage() + ")");
             }
             bin.close();
             bout.close();

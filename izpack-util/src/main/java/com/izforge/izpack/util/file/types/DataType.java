@@ -21,15 +21,15 @@ package com.izforge.izpack.util.file.types;
 /**
  * Base class for those classes that can appear inside the build file
  * as stand alone data types.
- *
+ * <p/>
  * <p>This class handles the common description attribute and provides
  * a default implementation for reference handling and checking for
  * circular references that is appropriate for types that can not be
  * nested inside elements of the same type (i.e. &lt;patternset&gt;
  * but not &lt;path&gt;).</p>
- *
  */
-public abstract class DataType /*extends ProjectComponent*/ {
+public abstract class DataType /*extends ProjectComponent*/
+{
     /**
      * The description the user has set.
      */
@@ -42,7 +42,7 @@ public abstract class DataType /*extends ProjectComponent*/ {
 
     /**
      * Are we sure we don't hold circular references?
-     *
+     * <p/>
      * <p>Subclasses are responsible for setting this value to false
      * if we'd need to investigate this condition (usually because a
      * child element has been added that is a subclass of
@@ -54,14 +54,16 @@ public abstract class DataType /*extends ProjectComponent*/ {
      * Sets a description of the current data type. It will be useful
      * in commenting what we are doing.
      */
-    public void setDescription(final String desc) {
+    public void setDescription(final String desc)
+    {
         description = desc;
     }
 
     /**
      * Return the description for the current data type.
      */
-    public String getDescription() {
+    public String getDescription()
+    {
         return description;
     }
 
@@ -147,18 +149,20 @@ public abstract class DataType /*extends ProjectComponent*/ {
      * Creates an exception that indicates that refid has to be the
      * only attribute if it is set.
      */
-    protected Exception tooManyAttributes() {
+    protected Exception tooManyAttributes()
+    {
         return new Exception("You must not specify more than one "
-            + "attribute when using refid");
+                + "attribute when using refid");
     }
 
     /**
      * Creates an exception that indicates that this XML element must
      * not have child elements if the refid attribute is set.
      */
-    protected Exception noChildrenAllowed() {
+    protected Exception noChildrenAllowed()
+    {
         return new Exception("You must not specify nested elements "
-            + "when using refid");
+                + "when using refid");
     }
 
 //    /**
@@ -170,11 +174,13 @@ public abstract class DataType /*extends ProjectComponent*/ {
 //            + "reference.");
 //    }
 
-    protected boolean isChecked() {
+    protected boolean isChecked()
+    {
         return checked;
     }
 
-    protected void setChecked(final boolean checked) {
+    protected void setChecked(final boolean checked)
+    {
         this.checked = checked;
     }
 

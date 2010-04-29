@@ -13,33 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j.spi;
 
 import org.easymock.EasyMock;
-
 import org.ini4j.Config;
 import org.ini4j.Ini;
-
 import org.ini4j.sample.Dwarf;
 import org.ini4j.sample.Dwarfs;
-
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
-
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+
 public class IniFormatterTest
 {
     private static final String NL = System.getProperty("line.separator");
     private static final String DUMMY = "dummy";
 
-    @Test public void testFormat() throws Exception
+    @Test
+    public void testFormat() throws Exception
     {
         Ini ini = Helper.newDwarfsIni();
         IniHandler handler = EasyMock.createMock(IniHandler.class);
@@ -123,7 +122,8 @@ public class IniFormatterTest
         verify(ini, handler);
     }
 
-    @Test public void testNewInstance() throws Exception
+    @Test
+    public void testNewInstance() throws Exception
     {
         StringWriter stringWriter;
         PrintWriter printWriter;
@@ -153,7 +153,8 @@ public class IniFormatterTest
         assertSame(printWriter, instance.getOutput());
     }
 
-    @Test public void testWithEmptyOption() throws Exception
+    @Test
+    public void testWithEmptyOption() throws Exception
     {
         Config cfg = new Config();
 
@@ -174,7 +175,8 @@ public class IniFormatterTest
         verify(ini, handler);
     }
 
-    @Test public void testWithoutConfig() throws Exception
+    @Test
+    public void testWithoutConfig() throws Exception
     {
         Ini ini = new Ini();
         Ini.Section sec = ini.add(Dwarfs.PROP_BASHFUL);
@@ -190,7 +192,8 @@ public class IniFormatterTest
         verify(ini, handler);
     }
 
-    @Test public void testWithStrictOperator() throws Exception
+    @Test
+    public void testWithStrictOperator() throws Exception
     {
         Config cfg = new Config();
 

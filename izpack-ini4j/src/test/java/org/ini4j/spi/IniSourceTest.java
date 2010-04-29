@@ -13,20 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j.spi;
 
 import org.easymock.EasyMock;
-
 import org.ini4j.Config;
-
 import org.ini4j.test.Helper;
-
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class IniSourceTest
 {
@@ -39,7 +38,8 @@ public class IniSourceTest
     private static final String PART2 = ":part2.txt";
     private static final String OUTER = ":outer";
 
-    @Test public void testWithInclude() throws Exception
+    @Test
+    public void testWithInclude() throws Exception
     {
         HandlerBase handler = EasyMock.createMock(HandlerBase.class);
         Config config = new Config();
@@ -111,7 +111,8 @@ public class IniSourceTest
         EasyMock.verify(handler);
     }
 
-    @Test public void testWithoutInclude() throws Exception
+    @Test
+    public void testWithoutInclude() throws Exception
     {
         HandlerBase handler = EasyMock.createMock(HandlerBase.class);
         Config config = new Config();

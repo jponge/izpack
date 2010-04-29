@@ -22,9 +22,8 @@
 
 package com.izforge.izpack.util.xmlmerge.mapper;
 
-import org.jdom.Element;
-
 import com.izforge.izpack.util.xmlmerge.Mapper;
+import org.jdom.Element;
 
 /**
  * Does not transform the element.
@@ -40,7 +39,10 @@ public class IdentityMapper implements Mapper
      */
     public Element map(Element patchElement)
     {
-        if (patchElement == null) { return null; }
+        if (patchElement == null)
+        {
+            return null;
+        }
 
         return (Element) patchElement.clone();
     }

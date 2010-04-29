@@ -17,16 +17,18 @@
 
 package com.izforge.izpack.util.file.types;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 /**
  * Named collection of include/exclude tags.
- *
+ * <p/>
  * <p>Moved out of MatchingTask to make it a standalone object that
  * could be referenced (by scripts for example).
- *
  */
-public class PatternSet extends DataType implements Cloneable {
+public class PatternSet extends DataType implements Cloneable
+{
     private Vector includeList = new Vector();
     private Vector excludeList = new Vector();
 
@@ -35,7 +37,8 @@ public class PatternSet extends DataType implements Cloneable {
      * may be used to invalidate the entry based on the existence of a
      * property (typically set thru the use of the Available task).
      */
-    public class NameEntry {
+    public class NameEntry
+    {
         private String name;
         private String ifCond;
         private String unlessCond;
@@ -45,7 +48,8 @@ public class PatternSet extends DataType implements Cloneable {
          *
          * @param name The pattern string.
          */
-        public void setName(String name) {
+        public void setName(String name)
+        {
             this.name = name;
         }
 
@@ -57,7 +61,8 @@ public class PatternSet extends DataType implements Cloneable {
          * @param cond A property name. If this property is not
          *             present, the name is invalid.
          */
-        public void setIf(String cond) {
+        public void setIf(String cond)
+        {
             ifCond = cond;
         }
 
@@ -69,36 +74,43 @@ public class PatternSet extends DataType implements Cloneable {
          * @param cond A property name. If this property is
          *             present, the name is invalid.
          */
-        public void setUnless(String cond) {
+        public void setUnless(String cond)
+        {
             unlessCond = cond;
         }
 
         /**
          * @return the name attribute.
          */
-        public String getName() {
+        public String getName()
+        {
             return name;
         }
 
         /**
          * @return a printable form of this object.
          */
-        public String toString() {
-            if (name == null) {
+        public String toString()
+        {
+            if (name == null)
+            {
                 throw new RuntimeException(
-                    "Missing attribute \"name\" for a pattern");
+                        "Missing attribute \"name\" for a pattern");
             }
             StringBuffer buf = new StringBuffer(name);
-            if ((ifCond != null) || (unlessCond != null)) {
+            if ((ifCond != null) || (unlessCond != null))
+            {
                 buf.append(":");
                 String connector = "";
 
-                if (ifCond != null) {
+                if (ifCond != null)
+                {
                     buf.append("if->");
                     buf.append(ifCond);
                     connector = ";";
                 }
-                if (unlessCond != null) {
+                if (unlessCond != null)
+                {
                     buf.append(connector);
                     buf.append("unless->");
                     buf.append(unlessCond);
@@ -112,7 +124,8 @@ public class PatternSet extends DataType implements Cloneable {
     /**
      * Creates a new <code>PatternSet</code> instance.
      */
-    public PatternSet() {
+    public PatternSet()
+    {
         super();
     }
 
@@ -121,18 +134,23 @@ public class PatternSet extends DataType implements Cloneable {
      *
      * @param p a configured patternset nested element.
      */
-    public void addConfiguredPatternset(PatternSet p) {
+    public void addConfiguredPatternset(PatternSet p)
+    {
         String[] nestedIncludes = p.getIncludePatterns();
         String[] nestedExcludes = p.getExcludePatterns();
 
-        if (nestedIncludes != null) {
-            for (int i = 0; i < nestedIncludes.length; i++) {
+        if (nestedIncludes != null)
+        {
+            for (int i = 0; i < nestedIncludes.length; i++)
+            {
                 createInclude().setName(nestedIncludes[i]);
             }
         }
 
-        if (nestedExcludes != null) {
-            for (int i = 0; i < nestedExcludes.length; i++) {
+        if (nestedExcludes != null)
+        {
+            for (int i = 0; i < nestedExcludes.length; i++)
+            {
                 createExclude().setName(nestedExcludes[i]);
             }
         }
@@ -140,17 +158,21 @@ public class PatternSet extends DataType implements Cloneable {
 
     /**
      * add a name entry on the include list
+     *
      * @return a nested include element to be configured.
      */
-    public NameEntry createInclude() {
+    public NameEntry createInclude()
+    {
         return addPatternToList(includeList);
     }
 
     /**
      * add a name entry on the exclude list
+     *
      * @return a nested exclude element to be configured.
      */
-    public NameEntry createExclude() {
+    public NameEntry createExclude()
+    {
         return addPatternToList(excludeList);
     }
 
@@ -160,10 +182,13 @@ public class PatternSet extends DataType implements Cloneable {
      *
      * @param includes the string containing the include patterns
      */
-    public void setIncludes(String includes) {
-        if (includes != null && includes.length() > 0) {
+    public void setIncludes(String includes)
+    {
+        if (includes != null && includes.length() > 0)
+        {
             StringTokenizer tok = new StringTokenizer(includes, ", ", false);
-            while (tok.hasMoreTokens()) {
+            while (tok.hasMoreTokens())
+            {
                 createInclude().setName(tok.nextToken());
             }
         }
@@ -175,10 +200,13 @@ public class PatternSet extends DataType implements Cloneable {
      *
      * @param excludes the string containing the exclude patterns
      */
-    public void setExcludes(String excludes) {
-        if (excludes != null && excludes.length() > 0) {
+    public void setExcludes(String excludes)
+    {
+        if (excludes != null && excludes.length() > 0)
+        {
             StringTokenizer tok = new StringTokenizer(excludes, ", ", false);
-            while (tok.hasMoreTokens()) {
+            while (tok.hasMoreTokens())
+            {
                 createExclude().setName(tok.nextToken());
             }
         }
@@ -187,7 +215,8 @@ public class PatternSet extends DataType implements Cloneable {
     /**
      * add a name entry to the given list
      */
-    private NameEntry addPatternToList(Vector list) {
+    private NameEntry addPatternToList(Vector list)
+    {
         NameEntry result = new NameEntry();
         list.addElement(result);
         return result;
@@ -195,20 +224,26 @@ public class PatternSet extends DataType implements Cloneable {
 
     /**
      * Adds the patterns of the other instance to this set.
+     *
      * @param other the other PatternSet instance.
-     * @param p the current project.
+     * @param p     the current project.
      */
-    public void append(PatternSet other/*, Project p*/) {
+    public void append(PatternSet other/*, Project p*/)
+    {
         String[] incl = other.getIncludePatterns(/*p*/);
-        if (incl != null) {
-            for (int i = 0; i < incl.length; i++) {
+        if (incl != null)
+        {
+            for (int i = 0; i < incl.length; i++)
+            {
                 createInclude().setName(incl[i]);
             }
         }
 
         String[] excl = other.getExcludePatterns(/*p*/);
-        if (excl != null) {
-            for (int i = 0; i < excl.length; i++) {
+        if (excl != null)
+        {
+            for (int i = 0; i < excl.length; i++)
+            {
                 createExclude().setName(excl[i]);
             }
         }
@@ -216,42 +251,51 @@ public class PatternSet extends DataType implements Cloneable {
 
     /**
      * Returns the filtered include patterns.
+     *
      * @param p the current project.
      * @return the filtered included patterns.
      */
-    public String[] getIncludePatterns() {
+    public String[] getIncludePatterns()
+    {
         return makeArray(includeList);
     }
 
     /**
      * Returns the filtered include patterns.
+     *
      * @param p the current project.
      * @return the filtered excluded patterns.
      */
-    public String[] getExcludePatterns() {
+    public String[] getExcludePatterns()
+    {
         return makeArray(excludeList);
     }
 
     /**
      * helper for FileSet.
      */
-    boolean hasPatterns() {
+    boolean hasPatterns()
+    {
         return includeList.size() > 0 || excludeList.size() > 0;
     }
 
     /**
      * Convert a vector of NameEntry elements into an array of Strings.
      */
-    private String[] makeArray(Vector list) {
-        if (list.size() == 0) {
-          return null;
+    private String[] makeArray(Vector list)
+    {
+        if (list.size() == 0)
+        {
+            return null;
         }
 
         Vector tmpNames = new Vector();
-        for (Enumeration e = list.elements(); e.hasMoreElements();) {
+        for (Enumeration e = list.elements(); e.hasMoreElements();)
+        {
             NameEntry ne = (NameEntry) e.nextElement();
             String pattern = ne.getName();
-            if (pattern != null && pattern.length() > 0) {
+            if (pattern != null && pattern.length() > 0)
+            {
                 tmpNames.addElement(pattern);
             }
         }
@@ -264,7 +308,8 @@ public class PatternSet extends DataType implements Cloneable {
     /**
      * @return a printable form of this object.
      */
-    public String toString() {
+    public String toString()
+    {
         return "patternSet{ includes: " + includeList
                 + " excludes: " + excludeList + " }";
     }

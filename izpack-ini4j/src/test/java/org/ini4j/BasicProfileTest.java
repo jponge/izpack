@@ -13,21 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j;
 
 import org.ini4j.sample.Dwarf;
 import org.ini4j.sample.DwarfBean;
 import org.ini4j.sample.Dwarfs;
-
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.DwarfsData.DwarfData;
 import org.ini4j.test.Helper;
-
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 import java.net.URI;
+
+import static org.junit.Assert.*;
 
 public class BasicProfileTest
 {
@@ -39,7 +38,8 @@ public class BasicProfileTest
     private static final String LOCATION_1 = "http://www.ini4j.org";
     private static final String LOCATION_2 = "http://ini4j.org";
 
-    @Test public void testAddPut()
+    @Test
+    public void testAddPut()
     {
         Profile prof = new BasicProfile();
 
@@ -60,7 +60,8 @@ public class BasicProfileTest
         assertNull(prof.remove(SECTION, Dwarf.PROP_FORTUNE_NUMBER));
     }
 
-    @Test public void testFirstUpper()
+    @Test
+    public void testFirstUpper()
     {
         BasicProfile prof = new BasicProfile(true, true);
         DwarfsRW dwarfs = prof.as(DwarfsRW.class);
@@ -70,7 +71,8 @@ public class BasicProfileTest
         assertNotNull(dwarfs.getBashful());
     }
 
-    @Test public void testFromToAs() throws Exception
+    @Test
+    public void testFromToAs() throws Exception
     {
         BasicProfile prof = new BasicProfile();
 
@@ -103,7 +105,8 @@ public class BasicProfileTest
         Helper.assertEquals(DwarfsData.dopey, dwarfs.getBashful());
     }
 
-    @Test public void testIniGetFetch()
+    @Test
+    public void testIniGetFetch()
     {
         Profile prof = new BasicProfile();
         Profile.Section sec = Helper.addDwarf(prof, DwarfsData.dopey);
@@ -130,7 +133,8 @@ public class BasicProfileTest
         assertNull(prof.fetch(SECTION, Dwarf.PROP_HOME_PAGE, URI.class));
     }
 
-    @Test public void testOptionArray() throws Exception
+    @Test
+    public void testOptionArray() throws Exception
     {
         BasicProfile prof = new BasicProfile();
         Profile.Section sec = prof.add(SECTION);
@@ -148,13 +152,14 @@ public class BasicProfileTest
         assertEquals(2, s.getLocation().length);
         assertEquals(new URI(LOCATION_1), s.getLocation()[0]);
         assertNull(s.getMissing());
-        int[] numbers = new int[] { 1, 2, 3, 4, 5 };
+        int[] numbers = new int[]{1, 2, 3, 4, 5};
 
         s.setNumber(numbers);
         assertEquals(5, sec.length(NUMBER));
     }
 
-    @Test public void testResolve() throws Exception
+    @Test
+    public void testResolve() throws Exception
     {
         BasicProfile prof = new BasicProfile();
 
@@ -252,7 +257,8 @@ public class BasicProfileTest
         assertEquals(input, buffer.toString());
     }
 
-    @Test public void testResolveArray() throws Exception
+    @Test
+    public void testResolveArray() throws Exception
     {
         StringBuilder buffer;
         BasicProfile prof = new BasicProfile();
@@ -287,7 +293,8 @@ public class BasicProfileTest
         assertEquals("1-2-2", buffer.toString());
     }
 
-    @Test public void testSectionArray() throws Exception
+    @Test
+    public void testSectionArray() throws Exception
     {
         BasicProfile prof = new BasicProfile();
 
@@ -303,13 +310,14 @@ public class BasicProfileTest
         assertTrue(g.hasSection());
     }
 
-    @Test public void testSetter()
+    @Test
+    public void testSetter()
     {
         BasicProfile prof = new BasicProfile();
         Global g = prof.as(Global.class);
         Section s1 = new SectionBean();
         Section s2 = new SectionBean();
-        Section[] all = new Section[] { s1, s2 };
+        Section[] all = new Section[]{s1, s2};
 
         g.setSection(all);
         assertEquals(2, prof.length("section"));
@@ -384,32 +392,38 @@ public class BasicProfileTest
         private String[] _missing;
         private int[] _number;
 
-        @Override public URI[] getLocation()
+        @Override
+        public URI[] getLocation()
         {
             return _location;
         }
 
-        @Override public void setLocation(URI[] value)
+        @Override
+        public void setLocation(URI[] value)
         {
             _location = value;
         }
 
-        @Override public String[] getMissing()
+        @Override
+        public String[] getMissing()
         {
             return _missing;
         }
 
-        @Override public void setMissing(String[] value)
+        @Override
+        public void setMissing(String[] value)
         {
             _missing = value;
         }
 
-        @Override public int[] getNumber()
+        @Override
+        public int[] getNumber()
         {
             return _number;
         }
 
-        @Override public void setNumber(int[] value)
+        @Override
+        public void setNumber(int[] value)
         {
             _number = value;
         }

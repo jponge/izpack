@@ -342,12 +342,13 @@ public class CompileWorker implements Runnable
                     }
                     else
                     {
-                        try {
-                          choiceList.add(this.vs.substitute(value, SubstitutionType.TYPE_PLAIN));
+                        try
+                        {
+                            choiceList.add(this.vs.substitute(value, SubstitutionType.TYPE_PLAIN));
                         }
                         catch (Exception e)
                         {
-                          // ignore, just don't add it as a choice
+                            // ignore, just don't add it as a choice
                         }
                     }
                 }

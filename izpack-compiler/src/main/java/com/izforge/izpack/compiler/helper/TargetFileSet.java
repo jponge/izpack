@@ -1,10 +1,12 @@
 package com.izforge.izpack.compiler.helper;
 
-import java.util.*;
-
-import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.data.Blockable;
+import com.izforge.izpack.api.data.OverrideType;
 import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.util.file.types.FileSet;
+
+import java.util.List;
+import java.util.Map;
 
 
 public class TargetFileSet extends FileSet
@@ -21,6 +23,7 @@ public class TargetFileSet extends FileSet
     {
         return targetDir;
     }
+
     public void setTargetDir(String targetDir)
     {
         this.targetDir = targetDir;
@@ -55,6 +58,7 @@ public class TargetFileSet extends FileSet
     {
         this.overrideRenameTo = overrideRenameTo;
     }
+
     public Blockable getBlockable()
     {
         return blockable;

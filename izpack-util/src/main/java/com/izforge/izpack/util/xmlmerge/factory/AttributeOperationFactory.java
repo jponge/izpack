@@ -22,9 +22,11 @@
 
 package com.izforge.izpack.util.xmlmerge.factory;
 
-import org.jdom.*;
-
-import com.izforge.izpack.util.xmlmerge.*;
+import com.izforge.izpack.util.xmlmerge.AbstractXmlMergeException;
+import com.izforge.izpack.util.xmlmerge.Operation;
+import com.izforge.izpack.util.xmlmerge.OperationFactory;
+import org.jdom.Element;
+import org.jdom.Namespace;
 
 /**
  * Creates operations by inspecting keywords passed as attributes in patch elements.
@@ -59,12 +61,12 @@ public class AttributeOperationFactory implements OperationFactory
      * Creates a new AttributeOperationFactory.
      *
      * @param defaultOperation The factory's default operation
-     * @param resolver The factory's operation resolver
-     * @param keyword The name of the attribute representing the factory's operation
-     * @param namespace The namespace describing the operations to apply
+     * @param resolver         The factory's operation resolver
+     * @param keyword          The name of the attribute representing the factory's operation
+     * @param namespace        The namespace describing the operations to apply
      */
     public AttributeOperationFactory(Operation defaultOperation, OperationResolver resolver,
-            String keyword, String namespace)
+                                     String keyword, String namespace)
     {
         this.m_defaultOperation = defaultOperation;
         this.m_keyword = keyword;
@@ -79,7 +81,10 @@ public class AttributeOperationFactory implements OperationFactory
             throws AbstractXmlMergeException
     {
 
-        if (modifiedElement == null) { return m_defaultOperation; }
+        if (modifiedElement == null)
+        {
+            return m_defaultOperation;
+        }
 
         String operationString = modifiedElement.getAttributeValue(m_keyword, m_namespace);
 

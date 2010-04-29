@@ -18,10 +18,13 @@
 
 package com.izforge.izpack.util.unix;
 
-import java.io.*;
-import java.util.Date;
-
 import com.izforge.izpack.util.FileExecutor;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Date;
 
 /**
  * A Generator, Wrapper and Executor for Unix ShellScripts

@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j.spi;
 
 import org.ini4j.Registry;
-
 import org.ini4j.Registry.Type;
 
 import java.nio.charset.Charset;
-
 import java.util.Arrays;
 
 public class RegEscapeTool extends EscapeTool
@@ -69,7 +68,7 @@ public class RegEscapeTool extends EscapeTool
         }
         else
         {
-            values = new String[] { value };
+            values = new String[]{value};
         }
 
         return new TypeValuesPair(type, values);

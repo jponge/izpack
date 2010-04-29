@@ -14,12 +14,13 @@
  *  limitations under the License.
  *
  */
-package com.izforge.izpack.util.file.types.selectors;
 
-import java.io.File;
+package com.izforge.izpack.util.file.types.selectors;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.util.file.types.Parameter;
+
+import java.io.File;
 
 /**
  * Convenience base class for all selectors accessed through ExtendSelector.
@@ -31,15 +32,19 @@ import com.izforge.izpack.util.file.types.Parameter;
  */
 public abstract class BaseExtendSelector
         extends BaseSelector
-        implements ExtendFileSelector {
+        implements ExtendFileSelector
+{
 
-    /** The passed in parameter array. */
+    /**
+     * The passed in parameter array.
+     */
     protected Parameter[] parameters = null;
 
     /**
      * Default constructor.
      */
-    public BaseExtendSelector() {
+    public BaseExtendSelector()
+    {
     }
 
     /**
@@ -48,7 +53,8 @@ public abstract class BaseExtendSelector
      *
      * @param parameters the complete set of parameters for this selector
      */
-    public void setParameters(Parameter[] parameters) {
+    public void setParameters(Parameter[] parameters)
+    {
         this.parameters = parameters;
     }
 
@@ -58,7 +64,8 @@ public abstract class BaseExtendSelector
      *
      * @return the set of parameters defined for this selector
      */
-    protected Parameter[] getParameters() {
+    protected Parameter[] getParameters()
+    {
         return parameters;
     }
 
@@ -68,15 +75,15 @@ public abstract class BaseExtendSelector
      * of a selector, it can throw a BuildException to indicate
      * the problem.
      *
-     * @param basedir A java.io.File object for the base directory
+     * @param basedir  A java.io.File object for the base directory
      * @param filename The name of the file to check
-     * @param file A File object for this filename
+     * @param file     A File object for this filename
      * @return whether the file should be selected or not
-     * @exception Exception if an error occurs
+     * @throws Exception if an error occurs
      * @throws Exception
      */
     public abstract boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file)
-    throws Exception;
+            throws Exception;
 
 }
 

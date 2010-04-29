@@ -32,7 +32,7 @@ public interface VariableSubstitutor extends Serializable
      * @return the string with substituted variables
      * @throws IllegalArgumentException if unknown escaping type specified
      */
-    String substitute(String str) throws Exception;
+    String substitute(String str);
 
     /**
      * Substitutes the variables found in the specified string. Escapes special characters using
@@ -43,7 +43,7 @@ public interface VariableSubstitutor extends Serializable
      * @return the string with substituted variables
      * @throws IllegalArgumentException if unknown escaping type specified
      */
-    String substitute(String str, SubstitutionType type) throws Exception;
+    String substitute(String str, SubstitutionType type);
 
     /**
      * Substitutes the variables found in the specified input stream. Escapes special characters

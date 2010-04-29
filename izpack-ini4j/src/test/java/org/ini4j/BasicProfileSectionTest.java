@@ -13,22 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j;
 
 import org.ini4j.sample.Dwarf;
 import org.ini4j.sample.Dwarfs;
-
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
 import org.ini4j.test.TaleData;
+import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-import org.junit.Test;
-
 public class BasicProfileSectionTest
 {
-    @Test public void testAddChild() throws Exception
+    @Test
+    public void testAddChild() throws Exception
     {
         Profile prof = Helper.newTaleIni();
         Profile.Section dwarfs = prof.get(TaleData.PROP_DWARFS);
@@ -45,7 +45,8 @@ public class BasicProfileSectionTest
         assertNull(dwarfs.lookup(Dwarfs.PROP_DOC + '/' + Dwarfs.PROP_DOPEY));
     }
 
-    @Test public void testGetChild() throws Exception
+    @Test
+    public void testGetChild() throws Exception
     {
         Profile prof = Helper.newTaleIni();
         Profile.Section dwarfs = prof.get(TaleData.PROP_DWARFS);
@@ -60,7 +61,8 @@ public class BasicProfileSectionTest
         assertSame(prof.get(TaleData.sneezy.name), dwarfs.getChild(Dwarfs.PROP_SNEEZY));
     }
 
-    @Test public void testGetParent() throws Exception
+    @Test
+    public void testGetParent() throws Exception
     {
         Profile prof = Helper.newTaleIni();
         Profile.Section dwarfs = prof.get(TaleData.PROP_DWARFS);
@@ -75,7 +77,8 @@ public class BasicProfileSectionTest
         assertSame(dwarfs, prof.get(TaleData.sneezy.name).getParent());
     }
 
-    @Test public void testLoad() throws Exception
+    @Test
+    public void testLoad() throws Exception
     {
         Profile prof = Helper.loadTaleIni();
         Profile.Section dwarfs = prof.get(TaleData.PROP_DWARFS);

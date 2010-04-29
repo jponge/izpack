@@ -22,10 +22,10 @@
 package com.izforge.izpack.data;
 
 
+import com.izforge.izpack.api.data.binding.OsModel;
+
 import java.io.Serializable;
 import java.util.List;
-
-import com.izforge.izpack.api.data.binding.OsModel;
 
 /**
  * Container for serialized custom data.

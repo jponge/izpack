@@ -17,10 +17,10 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
+import com.izforge.izpack.api.data.AutomatedInstallData;
+
 import java.io.File;
 import java.util.Enumeration;
-
-import com.izforge.izpack.api.data.AutomatedInstallData;
 
 /**
  * This selector has a collection of other selectors. All of those selectors
@@ -29,20 +29,24 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
  *
  * @since 1.5
  */
-public class NoneSelector extends BaseSelectorContainer {
+public class NoneSelector extends BaseSelectorContainer
+{
 
     /**
      * Default constructor.
      */
-    public NoneSelector() {
+    public NoneSelector()
+    {
     }
 
     /**
      * @return a string representation of the selector
      */
-    public String toString() {
+    public String toString()
+    {
         StringBuffer buf = new StringBuffer();
-        if (hasSelectors()) {
+        if (hasSelectors())
+        {
             buf.append("{noneselect: ");
             buf.append(super.toString());
             buf.append("}");
@@ -54,23 +58,25 @@ public class NoneSelector extends BaseSelectorContainer {
      * Returns true (the file is selected) only if all other selectors
      * agree that the file should not be selected.
      *
-     * @param basedir the base directory the scan is being done from
+     * @param basedir  the base directory the scan is being done from
      * @param filename is the name of the file to check
-     * @param file is a java.io.File object for the filename that the selector
-     * can use
+     * @param file     is a java.io.File object for the filename that the selector
+     *                 can use
      * @return whether the file should be selected or not
      */
     public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file)
-    throws Exception
+            throws Exception
     {
         validate();
         Enumeration<FileSelector> e = selectorElements();
         boolean result;
 
-        while (e.hasMoreElements()) {
+        while (e.hasMoreElements())
+        {
             result = e.nextElement().isSelected(idata,
                     basedir, filename, file);
-            if (result) {
+            if (result)
+            {
                 return false;
             }
         }

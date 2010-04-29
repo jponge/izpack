@@ -13,57 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j.test;
 
-import org.ini4j.sample.BeanEventSample;
-import org.ini4j.sample.BeanSample;
-import org.ini4j.sample.DumpSample;
-import org.ini4j.sample.Dwarf;
-import org.ini4j.sample.DwarfBean;
-import org.ini4j.sample.Dwarfs;
-import org.ini4j.sample.DwarfsBean;
-import org.ini4j.sample.FromSample;
-import org.ini4j.sample.IniSample;
-import org.ini4j.sample.ListenerSample;
-import org.ini4j.sample.NoImportSample;
-import org.ini4j.sample.PyReadSample;
-import org.ini4j.sample.ReadPrimitiveSample;
-import org.ini4j.sample.ReadStringSample;
-import org.ini4j.sample.StreamSample;
-import org.ini4j.sample.ToSample;
-
-import org.ini4j.tutorial.BeanTutorial;
-import org.ini4j.tutorial.IniTutorial;
-import org.ini4j.tutorial.OneMinuteTutorial;
-import org.ini4j.tutorial.OptTutorial;
-import org.ini4j.tutorial.PrefsTutorial;
-import org.ini4j.tutorial.RegTutorial;
-import org.ini4j.tutorial.WindowsRegistryTutorial;
-
+import org.ini4j.sample.*;
+import org.ini4j.tutorial.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import org.junit.runner.RunWith;
-
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.Reader;
-
+import java.io.*;
 import java.lang.reflect.Method;
-
 import java.nio.charset.Charset;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.regex.Matcher;
@@ -89,7 +52,8 @@ public class SampleRunnerTest
         _sourceFile = sourceFile(_clazz);
     }
 
-    @BeforeClass public static void setUpClass() throws Exception
+    @BeforeClass
+    public static void setUpClass() throws Exception
     {
         System.setProperty("java.util.prefs.PreferencesFactory", "org.ini4j.IniPreferencesFactory");
         _documentDir = new File(Helper.getBuildDirectory(), DOC_PATH);
@@ -102,38 +66,40 @@ public class SampleRunnerTest
         document(sourceFile(IniSample.class.getPackage()), "//");
     }
 
-    @Parameters public static Collection data()
+    @Parameters
+    public static Collection data()
     {
         return Arrays.asList(
                 new Object[][]
-                {
+                        {
 
-                    // samples
-                    { ReadStringSample.class },
-                    { ReadPrimitiveSample.class },
-                    { IniSample.class },
-                    { StreamSample.class },
-                    { DumpSample.class },
-                    { NoImportSample.class },
-                    { ListenerSample.class },
-                    { BeanSample.class },
-                    { BeanEventSample.class },
-                    { FromSample.class },
-                    { ToSample.class },
-                    { PyReadSample.class },
+                                // samples
+                                {ReadStringSample.class},
+                                {ReadPrimitiveSample.class},
+                                {IniSample.class},
+                                {StreamSample.class},
+                                {DumpSample.class},
+                                {NoImportSample.class},
+                                {ListenerSample.class},
+                                {BeanSample.class},
+                                {BeanEventSample.class},
+                                {FromSample.class},
+                                {ToSample.class},
+                                {PyReadSample.class},
 
-                    // tutorials
-                    { OneMinuteTutorial.class },
-                    { IniTutorial.class },
-                    { RegTutorial.class },
-                    { WindowsRegistryTutorial.class },
-                    { OptTutorial.class },
-                    { BeanTutorial.class },
-                    { PrefsTutorial.class },
-                });
+                                // tutorials
+                                {OneMinuteTutorial.class},
+                                {IniTutorial.class},
+                                {RegTutorial.class},
+                                {WindowsRegistryTutorial.class},
+                                {OptTutorial.class},
+                                {BeanTutorial.class},
+                                {PrefsTutorial.class},
+                        });
     }
 
-    @Test public void test() throws Exception
+    @Test
+    public void test() throws Exception
     {
         System.out.println("Executing " + _clazz.getName());
         PrintStream saved = System.out;
@@ -331,11 +297,11 @@ public class SampleRunnerTest
             File argument = new File(_sourceFile.getParentFile(), (String) _clazz.getField("FILENAME").get(null));
 
             document(argument, "[#;!]");
-            args = new String[] { argument.getCanonicalPath() };
+            args = new String[]{argument.getCanonicalPath()};
         }
         catch (NoSuchFieldException x)
         {
-            args = new String[] {};
+            args = new String[]{};
         }
 
         main.invoke(null, (Object) args);

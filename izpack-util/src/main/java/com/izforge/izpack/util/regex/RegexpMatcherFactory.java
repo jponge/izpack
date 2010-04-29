@@ -28,16 +28,16 @@ import org.apache.tools.ant.BuildException;
  * RegexpMatcher based on the system property
  * <code>izpack.regexp.matcherimpl</code> and the classes
  * available.
- *
+ * <p/>
  * <p>In a more general framework this class would be abstract and
  * have a static newInstance method.</p>
  *
- * @see <a href='http://ant.apache.org'>Apache Ant</a>
  * @author René Krell - changes against the original implementation in Apache Ant 1.6.5
+ * @see <a href='http://ant.apache.org'>Apache Ant</a>
  */
 public class RegexpMatcherFactory
 {
-    /***
+    /**
      * Create a new regular expression instance.
      *
      * @return the matcher
@@ -46,14 +46,18 @@ public class RegexpMatcherFactory
     public RegexpMatcher newRegexpMatcher() throws Exception
     {
         String systemDefault = System.getProperty("izpack.regexp.matcherimpl");
-        if (systemDefault != null) {
+        if (systemDefault != null)
+        {
             return createInstance(systemDefault);
         }
 
-        try {
+        try
+        {
             testAvailability("java.util.regex.Matcher");
             return createInstance("com.izforge.izpack.util.regex.JavaRegexpMatcher");
-        } catch (Exception be) {
+        }
+        catch (Exception be)
+        {
             // ignore
         }
 
@@ -72,21 +76,25 @@ public class RegexpMatcherFactory
         }
 */
         throw new Exception("No supported regular expression matcher found");
-   }
+    }
 
     /**
      * Create an instance of a matcher from a classname.
      *
      * @param className a <code>String</code> value
      * @return a <code>RegexpMatcher</code> value
-     * @exception BuildException if an error occurs
+     * @throws BuildException if an error occurs
      */
     protected RegexpMatcher createInstance(String className)
-        throws RuntimeException {
-        try {
+            throws RuntimeException
+    {
+        try
+        {
             Class<?> implClass = Class.forName(className);
             return (RegexpMatcher) implClass.newInstance();
-        } catch (Throwable t) {
+        }
+        catch (Throwable t)
+        {
             throw new RuntimeException(t);
         }
     }
@@ -95,12 +103,16 @@ public class RegexpMatcherFactory
      * Test if a particular class is available to be used.
      *
      * @param className a <code>String</code> value
-     * @exception BuildException if an error occurs
+     * @throws BuildException if an error occurs
      */
-    protected void testAvailability(String className) throws Exception {
-        try {
+    protected void testAvailability(String className) throws Exception
+    {
+        try
+        {
             Class.forName(className);
-        } catch (Throwable t) {
+        }
+        catch (Throwable t)
+        {
             throw new Exception(t);
         }
     }

@@ -24,26 +24,30 @@ import org.apache.tools.ant.Project;
 
 /**
  * Class to hold a reference to another object in the project.
- *
  */
-public class Reference {
+public class Reference
+{
 
     private String refid;
 //    private Project project;
 
     /**
      * Create a reference.
+     *
      * @deprecated Please use {@link Reference#Reference(Project,String)} instead.
      */
-    public Reference() {
+    public Reference()
+    {
     }
 
     /**
      * Create a reference to a named ID.
+     *
      * @param id the name of this reference
      * @deprecated Please use {@link Reference#Reference(Project,String)} instead.
      */
-    public Reference(String id) {
+    public Reference(String id)
+    {
         setRefId(id);
     }
 
@@ -61,17 +65,21 @@ public class Reference {
     /**
      * Set the reference id. Should not normally be necessary;
      * use {@link Reference#Reference(Project, String)}.
+     *
      * @param id the reference id to use
      */
-    public void setRefId(String id) {
+    public void setRefId(String id)
+    {
         refid = id;
     }
 
     /**
      * Get the reference id of this reference.
+     *
      * @return the reference id
      */
-    public String getRefId() {
+    public String getRefId()
+    {
         return refid;
     }
 

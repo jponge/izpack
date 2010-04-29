@@ -18,6 +18,6 @@ Release notes
 * $release.version ($release.dateRelease) - $release.description
 
 #foreach( $action in $release.actions )
-    * $action.action
+* $action.action
 #end
 

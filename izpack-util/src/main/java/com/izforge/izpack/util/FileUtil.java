@@ -23,7 +23,7 @@ package com.izforge.izpack.util;
 
 import java.io.*;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -214,18 +214,25 @@ public class FileUtil
     /**
      * Gets an absolute file from a filename. In difference to File.isAbsolute()
      * this method bases relative file names on a given base directory.
+     *
      * @param filename The filename to build an absolute file from
-     * @param basedir The base directory for a relative filename
+     * @param basedir  The base directory for a relative filename
      * @return The absolute file according to the described algorithm
      */
-    public static File getAbsoluteFile(String filename, String basedir) {
+    public static File getAbsoluteFile(String filename, String basedir)
+    {
         if (filename == null)
+        {
             return null;
+        }
         File file = new File(filename);
-        if (file.isAbsolute()) {
+        if (file.isAbsolute())
+        {
             return file;
-        } else {
-          return new File(basedir, file.getPath());
+        }
+        else
+        {
+            return new File(basedir, file.getPath());
         }
     }
 

@@ -21,10 +21,10 @@
 
 package com.izforge.izpack.core.variable;
 
-import java.io.Serializable;
-
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+
+import java.io.Serializable;
 
 
 public class PlainValue extends ValueImpl implements Serializable
@@ -56,7 +56,9 @@ public class PlainValue extends ValueImpl implements Serializable
     public void validate() throws Exception
     {
         if (this.value == null || this.value.length() <= 0)
+        {
             throw new Exception("None or empty plain value");
+        }
     }
 
     @Override
@@ -69,8 +71,10 @@ public class PlainValue extends ValueImpl implements Serializable
     public String resolve(VariableSubstitutor... substitutors) throws Exception
     {
         String _value_ = value;
-        for ( VariableSubstitutor substitutor : substitutors )
-            _value_ = substitutor.substitute(_value_, (SubstitutionType)null);
+        for (VariableSubstitutor substitutor : substitutors)
+        {
+            _value_ = substitutor.substitute(_value_, (SubstitutionType) null);
+        }
 
         return _value_;
     }

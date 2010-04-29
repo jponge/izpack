@@ -252,7 +252,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
             {
                 String conditionId = act.getConditionId();
                 if (conditionId == null
-                    || (conditionId != null && getInstalldata().getRules().isConditionTrue(act.getConditionId())))
+                        || (conditionId != null && getInstalldata().getRules().isConditionTrue(act.getConditionId())))
                 {
                     act.performInstallAction();
                 }

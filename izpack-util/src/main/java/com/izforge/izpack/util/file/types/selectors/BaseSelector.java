@@ -17,10 +17,10 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import java.io.File;
-
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.util.file.types.DataType;
+
+import java.io.File;
 
 /**
  * A convenience base class that you can subclass Selectors from. It
@@ -30,7 +30,8 @@ import com.izforge.izpack.util.file.types.DataType;
  *
  * @since 1.5
  */
-public abstract class BaseSelector extends DataType implements FileSelector {
+public abstract class BaseSelector extends DataType implements FileSelector
+{
 
     private String errmsg = null;
 
@@ -38,7 +39,8 @@ public abstract class BaseSelector extends DataType implements FileSelector {
     /**
      * Do nothing constructor.
      */
-    public BaseSelector() {
+    public BaseSelector()
+    {
     }
 
     /**
@@ -47,8 +49,10 @@ public abstract class BaseSelector extends DataType implements FileSelector {
      *
      * @param msg The error message any BuildException should throw.
      */
-    public void setError(String msg) {
-        if (errmsg == null) {
+    public void setError(String msg)
+    {
+        if (errmsg == null)
+        {
             errmsg = msg;
         }
     }
@@ -58,7 +62,8 @@ public abstract class BaseSelector extends DataType implements FileSelector {
      *
      * @return the error condition
      */
-    public String getError() {
+    public String getError()
+    {
         return errmsg;
     }
 
@@ -69,9 +74,11 @@ public abstract class BaseSelector extends DataType implements FileSelector {
      * be called automatically (unless they override validate()).</p>
      * <p>Implementations should check for incorrect settings and call
      * setError() as necessary.</p>
+     *
      * @throws Exception
      */
-    public void verifySettings() throws Exception {
+    public void verifySettings() throws Exception
+    {
     }
 
 
@@ -79,11 +86,14 @@ public abstract class BaseSelector extends DataType implements FileSelector {
      * Subclasses can use this to throw the requisite exception
      * in isSelected() in the case of an error condition.
      */
-    public void validate() throws Exception {
-        if (getError() == null) {
+    public void validate() throws Exception
+    {
+        if (getError() == null)
+        {
             verifySettings();
         }
-        if (getError() != null) {
+        if (getError() != null)
+        {
             throw new Exception(errmsg);
         }
     }
@@ -94,14 +104,14 @@ public abstract class BaseSelector extends DataType implements FileSelector {
      * of a selector, it can throw a BuildException to indicate
      * the problem.
      *
-     * @param basedir A java.io.File object for the base directory
+     * @param basedir  A java.io.File object for the base directory
      * @param filename The name of the file to check
-     * @param file A File object for this filename
+     * @param file     A File object for this filename
      * @return whether the file should be selected or not
      * @throws Exception
      */
     public abstract boolean isSelected(AutomatedInstallData idata,
-            File basedir, String filename, File file) throws Exception;
+                                       File basedir, String filename, File file) throws Exception;
 
 }
 

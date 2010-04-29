@@ -13,41 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j.spi;
 
 import org.easymock.EasyMock;
-
 import org.ini4j.Config;
 import org.ini4j.InvalidFileFormatException;
-
 import org.ini4j.sample.Dwarf;
 import org.ini4j.sample.Dwarfs;
-
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
-
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringReader;
 
+import static org.junit.Assert.*;
+
 public class IniParserTest
 {
-    private static final String[] BAD = { "[section\noption=value\n", "[]\noption=value", "section\noption=value", "[section]\noption\n", "[section]\n=value\n", "[section]\n\\u000d\\u000d=value\n" };
+    private static final String[] BAD = {"[section\noption=value\n", "[]\noption=value", "section\noption=value", "[section]\noption\n", "[section]\n=value\n", "[section]\n\\u000d\\u000d=value\n"};
     private static final String CFG_LOWER = "[SectioN]\n\nOptioN=ValuE\n";
     private static final String CFG_UNNAMED = "[]\noption=value\n";
     private static final String CFG_EMPTY_OPTION = "[section]\noption\n";
     private static final String CFG_GLOBAL = "option=value\n";
-    private static final String[] CFG_EXTRA = { CFG_EMPTY_OPTION, CFG_UNNAMED, CFG_GLOBAL };
+    private static final String[] CFG_EXTRA = {CFG_EMPTY_OPTION, CFG_UNNAMED, CFG_GLOBAL};
     private static final String ANONYMOUS = "?";
     private static final String EMPTY = "";
     private static final String SECTION = "section";
     private static final String OPTION = "option";
     private static final String VALUE = "value";
 
-    @Test public void testEmpty() throws Exception
+    @Test
+    public void testEmpty() throws Exception
     {
         IniParser parser = new IniParser();
         IniHandler handler = EasyMock.createMock(IniHandler.class);
@@ -59,7 +57,8 @@ public class IniParserTest
         EasyMock.verify(handler);
     }
 
-    @Test public void testEmptyOption() throws Exception
+    @Test
+    public void testEmptyOption() throws Exception
     {
         IniParser parser = new IniParser();
         IniHandler handler = EasyMock.createMock(IniHandler.class);
@@ -78,7 +77,8 @@ public class IniParserTest
         EasyMock.verify(handler);
     }
 
-    @Test public void testGlobalSection() throws Exception
+    @Test
+    public void testGlobalSection() throws Exception
     {
         IniParser parser = new IniParser();
         IniHandler handler = EasyMock.createMock(IniHandler.class);
@@ -97,7 +97,8 @@ public class IniParserTest
         EasyMock.verify(handler);
     }
 
-    @Test public void testLower() throws Exception
+    @Test
+    public void testLower() throws Exception
     {
         IniParser parser = new IniParser();
         IniHandler handler = EasyMock.createMock(IniHandler.class);
@@ -117,7 +118,8 @@ public class IniParserTest
         EasyMock.verify(handler);
     }
 
-    @Test public void testNewInstance() throws Exception
+    @Test
+    public void testNewInstance() throws Exception
     {
         Config cfg = new Config();
         cfg.setNoHeader(false);
@@ -129,7 +131,8 @@ public class IniParserTest
         assertSame(cfg, parser.getConfig());
     }
 
-    @Test public void testParse() throws Exception
+    @Test
+    public void testParse() throws Exception
     {
         IniParser parser = new IniParser();
         IniHandler handler = EasyMock.createMock(IniHandler.class);
@@ -223,13 +226,15 @@ public class IniParserTest
         EasyMock.verify(handler);
     }
 
-    @Test public void testParseExceptions() throws Exception
+    @Test
+    public void testParseExceptions() throws Exception
     {
         assertBad(BAD);
         assertBad(CFG_EXTRA);
     }
 
-    @Test public void testUnnamedSection() throws Exception
+    @Test
+    public void testUnnamedSection() throws Exception
     {
         IniParser parser = new IniParser();
         IniHandler handler = EasyMock.createMock(IniHandler.class);

@@ -21,36 +21,40 @@
 
 package com.izforge.izpack.util.regex;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Vector;
 
-/****************************************************************************
+/**
+ * *************************************************************************
  * Regular Expression utilities
  *
  * @author <a href='mailto:mattinger@yahoo.com'>Matthew Inger</a> (original Ant Contrib implementation part)
+ * @author René Krell - changes against the original implementation in Apache Ant 1.6.5 and ant-contrib 1.0b3
+ *         **************************************************************************
  * @see <a href='http://ant.apache.org'>Apache Ant</a>
  * @see <a href='http://ant-contrib.sourceforge.net'>Ant Contrib project</a>
- * @author René Krell - changes against the original implementation in Apache Ant 1.6.5 and ant-contrib 1.0b3
- ****************************************************************************/
+ */
 
 public class RegexUtil
 {
-    /***
+    /**
      * An abritrary node in a select expression
      */
     private static interface SelectNode
     {
-        /***
+        /**
          * Select the value based on the groups
+         *
          * @param groups The groups found in the match
          */
         public String select(Vector<String> groups);
     }
 
-    /***
+    /**
      * A group node in a select expression
      */
     private static class GroupSelectNode
-        implements SelectNode
+            implements SelectNode
     {
         private int groupNumber;
 
@@ -61,10 +65,14 @@ public class RegexUtil
 
         public String select(Vector<String> groups)
         {
-            if ( groupNumber < groups.size())
-                return (String)groups.elementAt(groupNumber);
+            if (groupNumber < groups.size())
+            {
+                return (String) groups.elementAt(groupNumber);
+            }
             else
+            {
                 return "\\" + groupNumber;
+            }
         }
 
         public String toString()
@@ -73,11 +81,11 @@ public class RegexUtil
         }
     }
 
-    /***
+    /**
      * An abritrary node in a select expression
      */
     private static class StringSelectNode
-        implements SelectNode
+            implements SelectNode
     {
         private String text;
 
@@ -97,10 +105,11 @@ public class RegexUtil
         }
     }
 
-    /***
+    /**
      * Parses a select string into a List of SelectNode objects.
      * These objects can then be merged with a group list to produce
      * an output string (using the "select" method)
+     *
      * @param input The select string
      * @return a List of SelectNode objects
      */
@@ -109,7 +118,7 @@ public class RegexUtil
         Vector<SelectNode> nodes = new Vector<SelectNode>();
         StringBuffer buf = new StringBuffer();
         char c[] = input.toCharArray();
-        for (int i=0;i<c.length;i++)
+        for (int i = 0; i < c.length; i++)
         {
             if (c[i] == '\\')
             {
@@ -119,9 +128,9 @@ public class RegexUtil
                     buf.setLength(0);
                 }
 
-                while (i+1 < c.length && Character.isDigit(c[i+1]))
+                while (i + 1 < c.length && Character.isDigit(c[i + 1]))
                 {
-                    buf.append(c[i+1]);
+                    buf.append(c[i + 1]);
                     i++;
                 }
 
@@ -145,11 +154,12 @@ public class RegexUtil
         return nodes;
     }
 
-    /***
+    /**
      * Parse a select string, and merge it with a match groups
      * vector to produce an output string.  Each group placeholder
      * in the select string is replaced with the group at the
      * corresponding index in the match groups vector
+     *
      * @param select The select string
      * @param groups The match groups
      * @return The output string with the merged selection
@@ -163,7 +173,7 @@ public class RegexUtil
         SelectNode node = null;
         while (e.hasMoreElements())
         {
-            node = (SelectNode)e.nextElement();
+            node = (SelectNode) e.nextElement();
             buf.append(node.select(groups));
         }
         return buf.toString();
@@ -173,10 +183,11 @@ public class RegexUtil
      * Check the options has a particular flag set.
      *
      * @param options an <code>int</code> value
-     * @param flag an <code>int</code> value
+     * @param flag    an <code>int</code> value
      * @return true if the flag is set
      */
-    public static boolean hasFlag(int options, int flag) {
+    public static boolean hasFlag(int options, int flag)
+    {
         return ((options & flag) > 0);
     }
 
@@ -184,10 +195,11 @@ public class RegexUtil
      * Remove a particular flag from an int value contains the option flags.
      *
      * @param options an <code>int</code> value
-     * @param flag an <code>int</code> value
+     * @param flag    an <code>int</code> value
      * @return the options with the flag unset
      */
-    public static int removeFlag(int options, int flag) {
+    public static int removeFlag(int options, int flag)
+    {
         return (options & (0xFFFFFFFF - flag));
     }
 }

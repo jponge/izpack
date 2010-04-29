@@ -14,6 +14,7 @@
  *  limitations under the License.
  *
  */
+
 package com.izforge.izpack.util.file;
 
 import java.io.File;
@@ -21,9 +22,9 @@ import java.io.File;
 /**
  * An interface used to describe the actions required of any type of
  * directory scanner.
- *
  */
-public interface FileScanner {
+public interface FileScanner
+{
     /**
      * Adds default exclusions to the current exclusions set.
      */
@@ -43,7 +44,7 @@ public interface FileScanner {
      * The names are relative to the base directory.
      *
      * @return the names of the directories which matched at least one of the
-     * include patterns and at least one of the exclude patterns.
+     *         include patterns and at least one of the exclude patterns.
      * @throws Exception
      */
     String[] getExcludedDirectories() throws Exception;
@@ -56,7 +57,6 @@ public interface FileScanner {
      * @return the names of the files which matched at least one of the
      *         include patterns and at least one of the exclude patterns.
      * @throws Exception
-     *
      */
     String[] getExcludedFiles() throws Exception;
 
@@ -66,7 +66,7 @@ public interface FileScanner {
      * The names are relative to the base directory.
      *
      * @return the names of the directories which matched at least one of the
-     * include patterns and none of the exclude patterns.
+     *         include patterns and none of the exclude patterns.
      * @throws Exception
      */
     String[] getIncludedDirectories() throws Exception;
@@ -87,7 +87,7 @@ public interface FileScanner {
      * patterns. The names are relative to the base directory.
      *
      * @return the names of the directories which matched none of the include
-     * patterns.
+     *         patterns.
      * @throws Exception
      */
     String[] getNotIncludedDirectories() throws Exception;
@@ -106,9 +106,9 @@ public interface FileScanner {
      * Scans the base directory for files which match at least one include
      * pattern and don't match any exclude patterns.
      *
-     * @exception Exception if the base directory was set
-     *            incorrectly (i.e. if it is <code>null</code>, doesn't exist,
-     *            or isn't a directory).
+     * @throws Exception if the base directory was set
+     *                   incorrectly (i.e. if it is <code>null</code>, doesn't exist,
+     *                   or isn't a directory).
      */
     void scan() throws Exception;
 
@@ -149,7 +149,7 @@ public interface FileScanner {
      *                 May be <code>null</code>, indicating that all files
      *                 should be included. If a non-<code>null</code>
      *                 list is given, all elements must be
-     * non-<code>null</code>.
+     *                 non-<code>null</code>.
      */
     void setIncludes(String[] includes);
 

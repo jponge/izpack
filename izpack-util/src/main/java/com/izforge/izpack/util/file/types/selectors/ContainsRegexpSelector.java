@@ -17,35 +17,41 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import java.io.*;
-
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.util.file.types.Parameter;
-import com.izforge.izpack.util.regex.*;
+import com.izforge.izpack.util.regex.Regexp;
+import com.izforge.izpack.util.regex.RegularExpression;
+
+import java.io.*;
 
 /**
  * Selector that filters files based on a regular expression.
  *
  * @since Ant 1.6
  */
-public class ContainsRegexpSelector extends BaseExtendSelector {
+public class ContainsRegexpSelector extends BaseExtendSelector
+{
 
     private String userProvidedExpression = null;
     private RegularExpression myRegExp = null;
     private Regexp myExpression = null;
-    /** Key to used for parameterized custom selector */
+    /**
+     * Key to used for parameterized custom selector
+     */
     public static final String EXPRESSION_KEY = "expression";
 
     /**
      * Creates a new <code>ContainsRegexpSelector</code> instance.
      */
-    public ContainsRegexpSelector() {
+    public ContainsRegexpSelector()
+    {
     }
 
     /**
      * @return a string describing this object
      */
-    public String toString() {
+    public String toString()
+    {
         StringBuffer buf = new StringBuffer(
                 "{containsregexpselector expression: ");
         buf.append(userProvidedExpression);
@@ -58,7 +64,8 @@ public class ContainsRegexpSelector extends BaseExtendSelector {
      *
      * @param theexpression this must match a line in the file to be selected.
      */
-    public void setExpression(String theexpression) {
+    public void setExpression(String theexpression)
+    {
         this.userProvidedExpression = theexpression;
     }
 
@@ -68,14 +75,20 @@ public class ContainsRegexpSelector extends BaseExtendSelector {
      *
      * @param parameters the complete set of parameters for this selector
      */
-    public void setParameters(Parameter[] parameters) {
+    public void setParameters(Parameter[] parameters)
+    {
         super.setParameters(parameters);
-        if (parameters != null) {
-            for (int i = 0; i < parameters.length; i++) {
+        if (parameters != null)
+        {
+            for (int i = 0; i < parameters.length; i++)
+            {
                 String paramname = parameters[i].getName();
-                if (EXPRESSION_KEY.equalsIgnoreCase(paramname)) {
+                if (EXPRESSION_KEY.equalsIgnoreCase(paramname))
+                {
                     setExpression(parameters[i].getValue());
-                } else {
+                }
+                else
+                {
                     setError("Invalid parameter " + paramname);
                 }
             }
@@ -84,10 +97,11 @@ public class ContainsRegexpSelector extends BaseExtendSelector {
 
     /**
      * Checks that an expression was specified.
-     *
      */
-    public void verifySettings() {
-        if (userProvidedExpression == null) {
+    public void verifySettings()
+    {
+        if (userProvidedExpression == null)
+        {
             setError("The expression attribute is required");
         }
     }
@@ -95,13 +109,14 @@ public class ContainsRegexpSelector extends BaseExtendSelector {
     /**
      * Tests a regular expression against each line of text in the file.
      *
-     * @param basedir the base directory the scan is being done from
+     * @param basedir  the base directory the scan is being done from
      * @param filename is the name of the file to check
-     * @param file is a java.io.File object the selector can use
+     * @param file     is a java.io.File object the selector can use
      * @return whether the file should be selected or not
      */
     public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file)
-    throws Exception {
+            throws Exception
+    {
         String teststr = null;
         BufferedReader in = null;
 
@@ -109,40 +124,53 @@ public class ContainsRegexpSelector extends BaseExtendSelector {
 
         validate();
 
-        if (file.isDirectory()) {
+        if (file.isDirectory())
+        {
             return true;
         }
 
-        if (myRegExp == null) {
+        if (myRegExp == null)
+        {
             myRegExp = new RegularExpression();
             myRegExp.setPattern(userProvidedExpression);
             myExpression = myRegExp.getRegexp();
         }
 
-        try {
+        try
+        {
             in = new BufferedReader(new InputStreamReader(
                     new FileInputStream(file)));
 
             teststr = in.readLine();
 
-            while (teststr != null) {
+            while (teststr != null)
+            {
 
-                if (myExpression.matches(teststr)) {
+                if (myExpression.matches(teststr))
+                {
                     return true;
                 }
                 teststr = in.readLine();
             }
 
             return false;
-        } catch (IOException ioe) {
+        }
+        catch (IOException ioe)
+        {
             throw new Exception("Could not read file " + filename);
-        } finally {
-            if (in != null) {
-                try {
+        }
+        finally
+        {
+            if (in != null)
+            {
+                try
+                {
                     in.close();
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     throw new Exception("Could not close file "
-                                             + filename);
+                            + filename);
                 }
             }
         }

@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.util.regex;
 
-/***
+/**
  * A regular expression datatype.  Keeps an instance of the
  * compiled expression for speed purposes.  This compiled
  * expression is lazily evaluated (it is compiled the first
@@ -29,35 +29,34 @@ package com.izforge.izpack.util.regex;
  * regular expression type you are using.  The system property
  * "izpack.regexp.regexpimpl" will be the classname of the implementation
  * that will be used.
- *
+ * <p/>
  * <pre>
  * For jdk  &lt;= 1.3, there are two available implementations:
  *   org.apache.tools.ant.util.regexp.JakartaOroRegexp (the default)
  *        Based on the jakarta-oro package
- *
+ * <p/>
  *   org.apache.tools.ant.util.regexp.JakartaRegexpRegexp
  *        Based on the jakarta-regexp package
- *
+ * <p/>
  * For jdk &gt;= 1.4 an additional implementation is available:
  *   org.apache.tools.ant.util.regexp.Jdk14RegexpRegexp
  *        Based on the jdk 1.4 built in regular expression package.
  * </pre>
- *
+ * <p/>
  * <pre>
  *   &lt;regexp [ [id="id"] pattern="expression" | refid="id" ]
  *   /&gt;
  * </pre>
  *
+ * @author René Krell - changes against the original implementation in Apache Ant 1.6.5
  * @see org.apache.oro.text.regex.Perl5Compiler
  * @see org.apache.regexp.RE
  * @see java.util.regex.Pattern
- *
  * @see org.apache.tools.ant.util.regexp.Regexp
- *
  * @see <a href='http://ant.apache.org'>Apache Ant</a>
- * @author René Krell - changes against the original implementation in Apache Ant 1.6.5
  */
-public class RegularExpression {
+public class RegularExpression
+{
     private boolean alreadyInit = false;
 
     // The regular expression factory
@@ -68,37 +67,50 @@ public class RegularExpression {
     private String myPattern;
     private boolean setPatternPending = false;
 
-    private void init() {
-        if (!alreadyInit) {
+    private void init()
+    {
+        if (!alreadyInit)
+        {
             this.regexp = FACTORY.newRegexp();
             alreadyInit = true;
         }
     }
-    private void setPattern() {
-        if (setPatternPending) {
+
+    private void setPattern()
+    {
+        if (setPatternPending)
+        {
             regexp.setPattern(myPattern);
             setPatternPending = false;
         }
     }
+
     /**
      * sets the regular expression pattern
+     *
      * @param pattern regular expression pattern
      */
-    public void setPattern(String pattern) {
-        if (regexp == null) {
+    public void setPattern(String pattern)
+    {
+        if (regexp == null)
+        {
             myPattern = pattern;
             setPatternPending = true;
-        } else {
+        }
+        else
+        {
             regexp.setPattern(pattern);
         }
     }
 
-    /***
+    /**
      * Gets the pattern string for this RegularExpression in the
      * given project.
+     *
      * @return pattern
      */
-    public String getPattern() {
+    public String getPattern()
+    {
         init();
         setPattern();
         return regexp.getPattern();
@@ -106,9 +118,11 @@ public class RegularExpression {
 
     /**
      * provides a reference to the Regexp contained in this
-     * @return   Regexp instance associated with this RegularExpression instance
+     *
+     * @return Regexp instance associated with this RegularExpression instance
      */
-    public Regexp getRegexp() {
+    public Regexp getRegexp()
+    {
         init();
         setPattern();
         return this.regexp;

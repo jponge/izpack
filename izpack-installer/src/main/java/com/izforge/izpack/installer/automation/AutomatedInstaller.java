@@ -391,7 +391,7 @@ public class AutomatedInstaller extends InstallerBase
                     try
                     {
                         errorMessage = idata.getLangpack().getString("data.validation.error.title")
-                        +": "+variableSubstitutor.substitute(idata.getLangpack().getString(validator
+                                + ": " + variableSubstitutor.substitute(idata.getLangpack().getString(validator
                                 .getErrorMessageId()));
                     }
                     catch (Exception e)
@@ -401,7 +401,7 @@ public class AutomatedInstaller extends InstallerBase
                     // if defaultAnswer is true, result is ok
                     if (validationResult == Status.WARNING && validator.getDefaultAnswer())
                     {
-                        System.out.println(errorMessage +" - ignoring");
+                        System.out.println(errorMessage + " - ignoring");
                         return;
                     }
                     // make installation fail instantly
@@ -423,7 +423,7 @@ public class AutomatedInstaller extends InstallerBase
                 try
                 {
                     errorMessage = idata.getLangpack().getString("data.validation.error.title")
-                    +": "+variableSubstitutor.substitute(idata.getLangpack().getString(validator
+                            + ": " + variableSubstitutor.substitute(idata.getLangpack().getString(validator
                             .getErrorMessageId()));
                 }
                 catch (Exception e)
@@ -434,7 +434,7 @@ public class AutomatedInstaller extends InstallerBase
                 // if defaultAnswer is true, result is ok
                 if (validationResult == Status.WARNING && validator.getDefaultAnswer())
                 {
-                    System.out.println(errorMessage +" - ignoring");
+                    System.out.println(errorMessage + " - ignoring");
                     return;
                 }
                 // make installation fail instantly

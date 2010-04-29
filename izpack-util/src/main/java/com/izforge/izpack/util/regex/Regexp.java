@@ -23,34 +23,36 @@ package com.izforge.izpack.util.regex;
 
 import org.apache.tools.ant.BuildException;
 
-/***
+/**
  * Interface which represents a regular expression, and the operations
  * that can be performed on it.
  *
- * @see <a href='http://ant.apache.org'>Apache Ant</a>
  * @author René Krell - changes against the original implementation in Apache Ant 1.6.5
+ * @see <a href='http://ant.apache.org'>Apache Ant</a>
  */
-public interface Regexp extends RegexpMatcher {
+public interface Regexp extends RegexpMatcher
+{
 
     /**
      * Replace only the first occurance of the regular expression
      */
-    int REPLACE_FIRST          = 0x00000001;
+    int REPLACE_FIRST = 0x00000001;
 
     /**
      * Replace all occurances of the regular expression
      */
-    int REPLACE_ALL            = 0x00000010;
+    int REPLACE_ALL = 0x00000010;
 
     /**
      * Perform a substitution on the regular expression.
-     * @param input The string to substitute on
+     *
+     * @param input    The string to substitute on
      * @param argument The string which defines the substitution
-     * @param options The list of options for the match and replace. See the
-     *                MATCH_ and REPLACE_ constants above.
+     * @param options  The list of options for the match and replace. See the
+     *                 MATCH_ and REPLACE_ constants above.
      * @return the result of the operation
      * @throws BuildException on error
      */
     String substitute(String input, String argument, int options)
-        throws RuntimeException;
+            throws RuntimeException;
 }

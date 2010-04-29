@@ -17,42 +17,55 @@
 
 package com.izforge.izpack.util.file;
 
-import java.util.*;
-
 import com.izforge.izpack.util.file.types.Mapper;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * A <code>FileNameMapper</code> that contains
  * other <CODE>FileNameMapper</CODE>s.
+ *
  * @see FileNameMapper
  */
-public abstract class ContainerMapper implements FileNameMapper {
+public abstract class ContainerMapper implements FileNameMapper
+{
 
     private List mappers = new ArrayList();
 
     /**
      * Add a <code>Mapper</code>.
+     *
      * @param mapper the <code>Mapper</code> to add.
      */
-    public void addConfiguredMapper(Mapper mapper) throws Exception {
+    public void addConfiguredMapper(Mapper mapper) throws Exception
+    {
         add(mapper.getImplementation());
     }
 
     /**
      * Add a <code>FileNameMapper</code>.
+     *
      * @param fileNameMapper a <CODE>FileNameMapper</CODE>.
-     * @throws <CODE>IllegalArgumentException</CODE> if attempting to add this
-     *         <CODE>ContainerMapper</CODE> to itself, or if the specified
-     *         <CODE>FileNameMapper</CODE> is itself a <CODE>ContainerMapper</CODE>
-     *         that contains this <CODE>ContainerMapper</CODE>.
+     * @throws <CODE>IllegalArgumentException</CODE>
+     *          if attempting to add this
+     *          <CODE>ContainerMapper</CODE> to itself, or if the specified
+     *          <CODE>FileNameMapper</CODE> is itself a <CODE>ContainerMapper</CODE>
+     *          that contains this <CODE>ContainerMapper</CODE>.
      */
-    public synchronized void add(FileNameMapper fileNameMapper) {
+    public synchronized void add(FileNameMapper fileNameMapper)
+    {
         if (this == fileNameMapper
-            || (fileNameMapper instanceof ContainerMapper
-            && ((ContainerMapper)fileNameMapper).contains(this))) {
+                || (fileNameMapper instanceof ContainerMapper
+                && ((ContainerMapper) fileNameMapper).contains(this)))
+        {
             throw new IllegalArgumentException(
-                "Circular mapper containment condition detected");
-        } else {
+                    "Circular mapper containment condition detected");
+        }
+        else
+        {
             mappers.add(fileNameMapper);
         }
     }
@@ -60,38 +73,45 @@ public abstract class ContainerMapper implements FileNameMapper {
     /**
      * Return <CODE>true</CODE> if this <CODE>ContainerMapper</CODE> or any of
      * its sub-elements contains the specified <CODE>FileNameMapper</CODE>.
-     * @param fileNameMapper   the <CODE>FileNameMapper</CODE> to search for.
+     *
+     * @param fileNameMapper the <CODE>FileNameMapper</CODE> to search for.
      * @return <CODE>boolean</CODE>.
      */
-    protected synchronized boolean contains(FileNameMapper fileNameMapper) {
+    protected synchronized boolean contains(FileNameMapper fileNameMapper)
+    {
         boolean foundit = false;
-        for (Iterator iter = mappers.iterator(); iter.hasNext() && !foundit;) {
-            FileNameMapper next = (FileNameMapper)(iter.next());
-            foundit|= (next == fileNameMapper
-                || (next instanceof ContainerMapper
-                && ((ContainerMapper)next).contains(fileNameMapper)));
+        for (Iterator iter = mappers.iterator(); iter.hasNext() && !foundit;)
+        {
+            FileNameMapper next = (FileNameMapper) (iter.next());
+            foundit |= (next == fileNameMapper
+                    || (next instanceof ContainerMapper
+                    && ((ContainerMapper) next).contains(fileNameMapper)));
         }
         return foundit;
     }
 
     /**
      * Get the <CODE>List</CODE> of <CODE>FileNameMapper</CODE>s.
+     *
      * @return <CODE>List</CODE>.
      */
-    public synchronized List getMappers() {
+    public synchronized List getMappers()
+    {
         return Collections.unmodifiableList(mappers);
     }
 
     /**
      * Empty implementation.
      */
-    public void setFrom(String ignore) {
+    public void setFrom(String ignore)
+    {
     }
 
     /**
      * Empty implementation.
      */
-    public void setTo(String ignore) {
+    public void setTo(String ignore)
+    {
     }
 
 }

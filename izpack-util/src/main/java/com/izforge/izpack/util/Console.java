@@ -1,13 +1,18 @@
 package com.izforge.izpack.util;
 
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
+import javax.swing.text.Segment;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.*;
 import java.util.ArrayList;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.

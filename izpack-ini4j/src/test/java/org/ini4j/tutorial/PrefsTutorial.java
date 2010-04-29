@@ -13,19 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j.tutorial;
 
 import org.ini4j.Ini;
 import org.ini4j.IniPreferences;
-
 import org.ini4j.test.DwarfsData;
-
-import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.util.prefs.Preferences;
+
+import static org.junit.Assert.assertEquals;
 
 //<editor-fold defaultstate="collapsed" desc="apt documentation">
 //|
@@ -38,6 +37,7 @@ import java.util.prefs.Preferences;
 //| the [ini4j] library's Preferences interface. Each chapter contains all the
 //| necessary code portions and explanation for a given function.
 //|
+
 //| Code sniplets in this tutorial tested with the following .ini file:
 //| {{{../sample/dwarfs.ini.html}dwarfs.ini}}
 //|
@@ -67,7 +67,8 @@ public class PrefsTutorial extends AbstractTutorial
 //|
 //|* Reading and writing values
 //|
-//| Values can read and write like any other Preferences node, there is no
+
+    //| Values can read and write like any other Preferences node, there is no
 //| differences.
 //{
     void sample01(Ini ini) throws IOException

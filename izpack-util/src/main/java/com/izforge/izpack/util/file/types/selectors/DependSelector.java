@@ -27,32 +27,40 @@ import java.io.File;
  *
  * @since 1.5
  */
-public class DependSelector extends MappingSelector {
+public class DependSelector extends MappingSelector
+{
 
     /**
      * Creates a new <code>DependSelector</code> instance.
-     *
      */
-    public DependSelector() {
+    public DependSelector()
+    {
 
     }
 
     /**
      * @return a string describing this object
      */
-    public String toString() {
+    public String toString()
+    {
         StringBuffer buf = new StringBuffer("{dependselector targetdir: ");
-        if (targetdir == null) {
+        if (targetdir == null)
+        {
             buf.append("NOT YET SET");
-        } else {
+        }
+        else
+        {
             buf.append(targetdir.getName());
         }
         buf.append(" granularity: ");
         buf.append(granularity);
-        if (map != null) {
+        if (map != null)
+        {
             buf.append(" mapper: ");
             buf.append(map.toString());
-        } else if (mapperElement != null) {
+        }
+        else if (mapperElement != null)
+        {
             buf.append(" mapper: ");
             buf.append(mapperElement.toString());
         }
@@ -63,11 +71,13 @@ public class DependSelector extends MappingSelector {
 
     /**
      * this test is our selection test that compared the file with the destfile
-     * @param srcfile the source file
+     *
+     * @param srcfile  the source file
      * @param destfile the destination file
      * @return true if destination is out of date
      */
-    public boolean selectionTest(File srcfile, File destfile) {
+    public boolean selectionTest(File srcfile, File destfile)
+    {
         boolean selected = SelectorUtils.isOutOfDate(srcfile, destfile,
                 granularity);
         return selected;

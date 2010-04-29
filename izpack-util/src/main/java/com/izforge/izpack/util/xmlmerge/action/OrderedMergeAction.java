@@ -22,12 +22,13 @@
 
 package com.izforge.izpack.util.xmlmerge.action;
 
-import java.util.*;
-
-import org.jdom.*;
-
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.xmlmerge.*;
+import org.jdom.*;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Merge implementation traversing parallelly both element contents. Works when contents are in the
@@ -87,8 +88,8 @@ public class OrderedMergeAction extends AbstractMergeAction
 
         addAttributes(parentOut, parentIn2);
 
-        Content[] list1 = (Content[]) parentIn1.getContent().toArray(new Content[] {});
-        Content[] list2 = (Content[]) parentIn2.getContent().toArray(new Content[] {});
+        Content[] list1 = (Content[]) parentIn1.getContent().toArray(new Content[]{});
+        Content[] list2 = (Content[]) parentIn2.getContent().toArray(new Content[]{});
 
         int offsetTreated1 = 0;
         int offsetTreated2 = 0;
@@ -212,9 +213,9 @@ public class OrderedMergeAction extends AbstractMergeAction
     /**
      * Applies the action which performs the merge between two source elements.
      *
-     * @param workingParent Output parent element
+     * @param workingParent   Output parent element
      * @param originalElement Original element
-     * @param patchElement Patch element
+     * @param patchElement    Patch element
      * @throws AbstractXmlMergeException if an error occurred during the merge
      */
     private void applyAction(Element workingParent, Element originalElement, Element patchElement)
@@ -240,7 +241,7 @@ public class OrderedMergeAction extends AbstractMergeAction
      * Adds attributes from in element to out element.
      *
      * @param out out element
-     * @param in in element
+     * @param in  in element
      */
     private void addAttributes(Element out, Element in)
     {

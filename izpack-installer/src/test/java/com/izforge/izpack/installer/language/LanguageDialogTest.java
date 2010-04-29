@@ -6,7 +6,6 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.container.TestLanguageContainer;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.junit.PicoRunner;
-
 import org.fest.swing.fixture.DialogFixture;
 import org.hamcrest.core.Is;
 import org.junit.After;

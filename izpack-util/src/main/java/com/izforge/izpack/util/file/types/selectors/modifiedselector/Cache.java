@@ -30,27 +30,36 @@ import java.util.Iterator;
  * The implementing class should implement a useful toString() method.
  *
  * @version 2003-09-13
- * @since  Ant 1.6
+ * @since Ant 1.6
  */
-public interface Cache {
+public interface Cache
+{
 
     /**
      * Checks its prerequisites.
+     *
      * @return <i>true</i> if all is ok, otherwise <i>false</i>.
      */
     boolean isValid();
 
-    /** Deletes the cache. If file based the file has to be deleted also. */
+    /**
+     * Deletes the cache. If file based the file has to be deleted also.
+     */
     void delete();
 
-    /** Loads the cache, must handle not existing cache. */
+    /**
+     * Loads the cache, must handle not existing cache.
+     */
     void load();
 
-    /** Saves modification of the cache. */
+    /**
+     * Saves modification of the cache.
+     */
     void save();
 
     /**
      * Returns a value for a given key from the cache.
+     *
      * @param key the key
      * @return the stored value
      */
@@ -58,13 +67,15 @@ public interface Cache {
 
     /**
      * Saves a key-value-pair in the cache.
-     * @param key the key
+     *
+     * @param key   the key
      * @param value the value
      */
     void put(Object key, Object value);
 
     /**
      * Returns an iterator over the keys in the cache.
+     *
      * @return An iterator over the keys.
      */
     Iterator iterator();

@@ -21,11 +21,14 @@
 
 package com.izforge.izpack.util;
 
-import java.io.*;
-import java.util.*;
-
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.data.ExecutableFile;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Executes a bunch of files. This class is intended to do a system dependent installation
@@ -341,11 +344,11 @@ public class FileExecutor
 
                     if (efile.onFailure == ExecutableFile.ABORT)
                     {
-                        handler.emitErrorAndBlockNext("File execution returned "+exitStatus, message);
+                        handler.emitErrorAndBlockNext("File execution returned " + exitStatus, message);
                     }
                     else if (efile.onFailure == ExecutableFile.WARN)
                     {
-                        handler.emitWarning("File execution returned "+exitStatus, message);
+                        handler.emitWarning("File execution returned " + exitStatus, message);
                         exitStatus = 0;
                     }
                     else if (efile.onFailure == ExecutableFile.IGNORE)

@@ -22,11 +22,13 @@
 
 package com.izforge.izpack.util.xmlmerge.action;
 
-import java.util.*;
-
-import org.jdom.*;
-
 import com.izforge.izpack.util.xmlmerge.Action;
+import org.jdom.Content;
+import org.jdom.Element;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Copies the patch element into the output by inserting it after already existing elements of the

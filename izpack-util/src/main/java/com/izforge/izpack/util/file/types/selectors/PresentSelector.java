@@ -17,13 +17,14 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import java.io.File;
-
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.util.file.FileNameMapper;
+import com.izforge.izpack.util.file.IdentityMapper;
+import com.izforge.izpack.util.file.types.EnumeratedAttribute;
+import com.izforge.izpack.util.file.types.Mapper;
 import org.apache.tools.ant.BuildException;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.file.*;
-import com.izforge.izpack.util.file.types.*;
+import java.io.File;
 
 /**
  * Selector that filters files based on whether they appear in another
@@ -33,7 +34,8 @@ import com.izforge.izpack.util.file.types.*;
  *
  * @since 1.5
  */
-public class PresentSelector extends BaseSelector {
+public class PresentSelector extends BaseSelector
+{
 
     private File targetdir = null;
     private Mapper mapperElement = null;
@@ -42,30 +44,40 @@ public class PresentSelector extends BaseSelector {
 
     /**
      * Creates a new <code>PresentSelector</code> instance.
-     *
      */
-    public PresentSelector() {
+    public PresentSelector()
+    {
     }
 
     /**
      * @return a string describing this object
      */
-    public String toString() {
+    public String toString()
+    {
         StringBuffer buf = new StringBuffer("{presentselector targetdir: ");
-        if (targetdir == null) {
+        if (targetdir == null)
+        {
             buf.append("NOT YET SET");
-        } else {
+        }
+        else
+        {
             buf.append(targetdir.getName());
         }
         buf.append(" present: ");
-        if (destmustexist) {
+        if (destmustexist)
+        {
             buf.append("both");
-        } else {
+        }
+        else
+        {
             buf.append("srconly");
         }
-        if (map != null) {
+        if (map != null)
+        {
             buf.append(map.toString());
-        } else if (mapperElement != null) {
+        }
+        else if (mapperElement != null)
+        {
             buf.append(mapperElement.toString());
         }
         buf.append("}");
@@ -78,17 +90,21 @@ public class PresentSelector extends BaseSelector {
      *
      * @param targetdir the directory to scan looking for matching files.
      */
-    public void setTargetdir(File targetdir) {
+    public void setTargetdir(File targetdir)
+    {
         this.targetdir = targetdir;
     }
 
     /**
      * Defines the FileNameMapper to use (nested mapper element).
+     *
      * @return a mapper to be configured
      * @throws BuildException if more that one mapper defined
      */
-    public Mapper createMapper() throws Exception {
-        if (mapperElement != null) {
+    public Mapper createMapper() throws Exception
+    {
+        if (mapperElement != null)
+        {
             throw new Exception("Cannot define more than one mapper");
         }
         mapperElement = new Mapper();
@@ -108,8 +124,10 @@ public class PresentSelector extends BaseSelector {
      * @param fp An attribute set to either <code>srconly</code or
      *           <code>both</code>.
      */
-    public void setPresent(FilePresence fp) {
-        if (fp.getIndex() == 0) {
+    public void setPresent(FilePresence fp)
+    {
+        if (fp.getIndex() == 0)
+        {
             destmustexist = false;
         }
     }
@@ -118,16 +136,22 @@ public class PresentSelector extends BaseSelector {
      * Checks to make sure all settings are kosher. In this case, it
      * means that the targetdir attribute has been set and we have a mapper.
      */
-    public void verifySettings() throws Exception {
-        if (targetdir == null) {
+    public void verifySettings() throws Exception
+    {
+        if (targetdir == null)
+        {
             setError("The targetdir attribute is required.");
         }
-        if (mapperElement == null) {
+        if (mapperElement == null)
+        {
             map = new IdentityMapper();
-        } else {
+        }
+        else
+        {
             map = mapperElement.getImplementation();
         }
-        if (map == null) {
+        if (map == null)
+        {
             setError("Could not set <mapper> element.");
         }
     }
@@ -136,12 +160,13 @@ public class PresentSelector extends BaseSelector {
      * The heart of the matter. This is where the selector gets to decide
      * on the inclusion of a file in a particular fileset.
      *
-     * @param basedir the base directory the scan is being done from
+     * @param basedir  the base directory the scan is being done from
      * @param filename is the name of the file to check
-     * @param file is a java.io.File object the selector can use
+     * @param file     is a java.io.File object the selector can use
      * @return whether the file should be selected or not
      */
-    public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file) throws Exception {
+    public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file) throws Exception
+    {
 
         // throw BuildException on error
         validate();
@@ -150,11 +175,13 @@ public class PresentSelector extends BaseSelector {
         String[] destfiles = map.mapFileName(filename);
         // If filename does not match the To attribute of the mapper
         // then filter it out of the files we are considering
-        if (destfiles == null) {
+        if (destfiles == null)
+        {
             return false;
         }
         // Sanity check
-        if (destfiles.length != 1 || destfiles[0] == null) {
+        if (destfiles.length != 1 || destfiles[0] == null)
+        {
             throw new Exception("Invalid destination file results for "
                     + targetdir + " with filename " + filename);
         }
@@ -167,11 +194,13 @@ public class PresentSelector extends BaseSelector {
      * Enumerated attribute with the values for indicating where a file's
      * presence is allowed and required.
      */
-    public static class FilePresence extends EnumeratedAttribute {
+    public static class FilePresence extends EnumeratedAttribute
+    {
         /**
          * @return the values as an array of strings
          */
-        public String[] getValues() {
+        public String[] getValues()
+        {
             return new String[]{"srconly", "both"};
         }
     }

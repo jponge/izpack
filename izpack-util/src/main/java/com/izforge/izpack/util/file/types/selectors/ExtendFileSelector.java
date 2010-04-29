@@ -30,7 +30,8 @@ import com.izforge.izpack.util.file.types.Parameterizable;
  *
  * @since 1.5
  */
-public interface ExtendFileSelector extends FileSelector, Parameterizable {
+public interface ExtendFileSelector extends FileSelector, Parameterizable
+{
 
     // No further methods necessary. This is just an amalgamation of two other
     // interfaces.

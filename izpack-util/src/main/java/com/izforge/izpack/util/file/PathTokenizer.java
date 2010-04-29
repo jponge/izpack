@@ -14,22 +14,24 @@
  *  limitations under the License.
  *
  */
+
 package com.izforge.izpack.util.file;
 
-import java.io.File;
-import java.util.*;
-
 import org.apache.tools.ant.taskdefs.condition.Os;
+
+import java.io.File;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 /**
  * A Path tokenizer takes a path and returns the components that make up
  * that path.
- *
+ * <p/>
  * The path can use path separators of either ':' or ';' and file separators
  * of either '/' or '\'.
- *
  */
-public class PathTokenizer {
+public class PathTokenizer
+{
     /**
      * A tokenizer to break the string up based on the ':' or ';' separators.
      */
@@ -59,12 +61,16 @@ public class PathTokenizer {
      *
      * @param path The path to tokenize. Must not be <code>null</code>.
      */
-    public PathTokenizer(String path) {
-        if (onNetWare) {
+    public PathTokenizer(String path)
+    {
+        if (onNetWare)
+        {
             // For NetWare, use the boolean=true mode, so we can use delimiter
             // information to make a better decision later.
             tokenizer = new StringTokenizer(path, ":;", true);
-        } else {
+        }
+        else
+        {
             // on Windows and Unix, we can ignore delimiters and still have
             // enough information to tokenize correctly.
             tokenizer = new StringTokenizer(path, ":;", false);
@@ -78,10 +84,12 @@ public class PathTokenizer {
      * to nextToken will successfully return a token.
      *
      * @return <code>true</code> if and only if there is at least one token
-     * in the string after the current position; <code>false</code> otherwise.
+     *         in the string after the current position; <code>false</code> otherwise.
      */
-    public boolean hasMoreTokens() {
-        if (lookahead != null) {
+    public boolean hasMoreTokens()
+    {
+        if (lookahead != null)
+        {
             return true;
         }
 
@@ -92,66 +100,86 @@ public class PathTokenizer {
      * Returns the next path element from this tokenizer.
      *
      * @return the next path element from this tokenizer.
-     *
-     * @exception NoSuchElementException if there are no more elements in this
-     *            tokenizer's path.
+     * @throws NoSuchElementException if there are no more elements in this
+     *                                tokenizer's path.
      */
-    public String nextToken() throws NoSuchElementException {
+    public String nextToken() throws NoSuchElementException
+    {
         String token = null;
-        if (lookahead != null) {
+        if (lookahead != null)
+        {
             token = lookahead;
             lookahead = null;
-        } else {
+        }
+        else
+        {
             token = tokenizer.nextToken().trim();
         }
 
-        if (!onNetWare) {
+        if (!onNetWare)
+        {
             if (token.length() == 1 && Character.isLetter(token.charAt(0))
-                                    && dosStyleFilesystem
-                                    && tokenizer.hasMoreTokens()) {
+                    && dosStyleFilesystem
+                    && tokenizer.hasMoreTokens())
+            {
                 // we are on a dos style system so this path could be a drive
                 // spec. We look at the next token
                 String nextToken = tokenizer.nextToken().trim();
-                if (nextToken.startsWith("\\") || nextToken.startsWith("/")) {
+                if (nextToken.startsWith("\\") || nextToken.startsWith("/"))
+                {
                     // we know we are on a DOS style platform and the next path
                     // starts with a slash or backslash, so we know this is a
                     // drive spec
                     token += ":" + nextToken;
-                } else {
+                }
+                else
+                {
                     // store the token just read for next time
                     lookahead = nextToken;
                 }
             }
-        } else {
+        }
+        else
+        {
             // we are on NetWare, tokenizing is handled a little differently,
             // due to the fact that NetWare has multiple-character volume names.
-            if (token.equals(File.pathSeparator) || token.equals(":")) {
+            if (token.equals(File.pathSeparator) || token.equals(":"))
+            {
                 // ignore ";" and get the next token
                 token = tokenizer.nextToken().trim();
             }
 
-            if (tokenizer.hasMoreTokens()) {
+            if (tokenizer.hasMoreTokens())
+            {
                 // this path could be a drive spec, so look at the next token
                 String nextToken = tokenizer.nextToken().trim();
 
                 // make sure we aren't going to get the path separator next
-                if (!nextToken.equals(File.pathSeparator)) {
-                    if (nextToken.equals(":")) {
+                if (!nextToken.equals(File.pathSeparator))
+                {
+                    if (nextToken.equals(":"))
+                    {
                         if (!token.startsWith("/") && !token.startsWith("\\")
-                            && !token.startsWith(".")
-                            && !token.startsWith("..")) {
+                                && !token.startsWith(".")
+                                && !token.startsWith(".."))
+                        {
                             // it indeed is a drive spec, get the next bit
                             String oneMore = tokenizer.nextToken().trim();
-                            if (!oneMore.equals(File.pathSeparator)) {
+                            if (!oneMore.equals(File.pathSeparator))
+                            {
                                 token += ":" + oneMore;
-                            } else {
+                            }
+                            else
+                            {
                                 token += ":";
                                 lookahead = oneMore;
                             }
                         }
                         // implicit else: ignore the ':' since we have either a
                         // UNIX or a relative path
-                    } else {
+                    }
+                    else
+                    {
                         // store the token just read for next time
                         lookahead = nextToken;
                     }

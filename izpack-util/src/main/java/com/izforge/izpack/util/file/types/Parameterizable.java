@@ -14,13 +14,14 @@
  *  limitations under the License.
  *
  */
+
 package com.izforge.izpack.util.file.types;
 
 /**
  * Parameterizable objects take genric key value pairs.
- *
  */
-public interface Parameterizable {
+public interface Parameterizable
+{
     /**
      * Set the parameters
      *

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j.spi;
 
 import org.ini4j.Config;
@@ -29,7 +30,8 @@ abstract class AbstractFormatter implements HandlerBase
     private boolean _header = true;
     private PrintWriter _output;
 
-    @Override public void handleComment(String comment)
+    @Override
+    public void handleComment(String comment)
     {
         for (String line : comment.split(NEWLINE))
         {
@@ -45,7 +47,8 @@ abstract class AbstractFormatter implements HandlerBase
         }
     }
 
-    @Override public void handleOption(String optionName, String optionValue)
+    @Override
+    public void handleOption(String optionName, String optionValue)
     {
         if (getConfig().isStrictOperator())
         {

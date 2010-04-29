@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j.demo;
 
-import java.awt.Dimension;
-
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.*;
+import java.awt.*;
 
 public class DemoMain implements Runnable
 {
@@ -39,7 +37,8 @@ public class DemoMain implements Runnable
         SwingUtilities.invokeLater(new DemoMain());
     }
 
-    @Override public void run()
+    @Override
+    public void run()
     {
         JFrame frame = new JFrame("TopLevelDemo");
 

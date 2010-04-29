@@ -31,33 +31,44 @@ import com.izforge.izpack.core.regex.RegularExpressionProcessorImpl;
 public abstract class ValueImpl implements Value
 {
     public abstract void validate() throws Exception;
+
     public abstract String resolve() throws Exception;
+
     public abstract String resolve(VariableSubstitutor... substitutors) throws Exception;
 
     public String resolve(RegularExpressionFilter regexp, VariableSubstitutor... substitutors)
-    throws Exception
+            throws Exception
     {
         String newValue = resolve(substitutors);
 
-        if (regexp != null) {
+        if (regexp != null)
+        {
             String replace = null, select = null, regex = null;
-            for ( VariableSubstitutor substitutor : substitutors )
-                replace = substitutor.substitute(regexp.getReplace(), (SubstitutionType)null);
-            for ( VariableSubstitutor substitutor : substitutors )
-                select = substitutor.substitute(regexp.getSelect(), (SubstitutionType)null);
-            for ( VariableSubstitutor substitutor : substitutors )
-                regex = substitutor.substitute(regexp.getRegexp(), (SubstitutionType)null);
+            for (VariableSubstitutor substitutor : substitutors)
+            {
+                replace = substitutor.substitute(regexp.getReplace(), (SubstitutionType) null);
+            }
+            for (VariableSubstitutor substitutor : substitutors)
+            {
+                select = substitutor.substitute(regexp.getSelect(), (SubstitutionType) null);
+            }
+            for (VariableSubstitutor substitutor : substitutors)
+            {
+                regex = substitutor.substitute(regexp.getRegexp(), (SubstitutionType) null);
+            }
             RegularExpressionProcessor processor = new RegularExpressionProcessorImpl();
             processor.setInput(newValue);
             processor.setRegexp(regex);
             processor.setCaseSensitive(regexp.getCasesensitive());
-            if (select != null) {
+            if (select != null)
+            {
                 processor.setSelect(select);
-            } else
-                if (replace != null) {
-                    processor.setReplace(replace);
-                    processor.setGlobal(regexp.getGlobal());
-                }
+            }
+            else if (replace != null)
+            {
+                processor.setReplace(replace);
+                processor.setGlobal(regexp.getGlobal());
+            }
             newValue = processor.execute();
         }
 

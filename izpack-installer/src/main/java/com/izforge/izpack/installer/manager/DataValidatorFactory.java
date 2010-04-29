@@ -43,7 +43,7 @@ public final class DataValidatorFactory
                 catch (ClassNotFoundException e)
                 {
                     validator = (DataValidator) Class.forName(
-                            "com.izforge.izpack.installer.validator."+className).newInstance();
+                            "com.izforge.izpack.installer.validator." + className).newInstance();
                 }
             }
             catch (InstantiationException e)

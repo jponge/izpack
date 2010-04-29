@@ -13,36 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j;
 
 import org.ini4j.sample.Dwarfs;
-
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
-
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
+import java.io.*;
+
+import static org.junit.Assert.*;
 
 public class RegTest
 {
     private static final String DWARFS_PATH = Helper.DWARFS_REG_PATH + "\\dwarfs\\";
 
-    @Test public void proba() throws Exception
+    @Test
+    public void proba() throws Exception
     {
     }
 
-    @Test public void testDwarfs() throws Exception
+    @Test
+    public void testDwarfs() throws Exception
     {
         Reg reg = Helper.loadDwarfsReg();
         Dwarfs dwarfs = reg.as(Dwarfs.class, DWARFS_PATH);
@@ -57,12 +50,14 @@ public class RegTest
         new Reg(Helper.getResourceReader(Helper.DWARFS_INI));
     }
 
-    @Test public void testIsWindwos()
+    @Test
+    public void testIsWindwos()
     {
         assertEquals(isWindows(), Reg.isWindows());
     }
 
-    @Test public void testLoad() throws Exception
+    @Test
+    public void testLoad() throws Exception
     {
         Reg r1 = new Reg(new InputStreamReader(Helper.getResourceStream(Helper.DWARFS_REG), "UnicodeLittle"));
         Reg r2 = new Reg(Helper.getResourceStream(Helper.DWARFS_REG));
@@ -89,7 +84,8 @@ public class RegTest
         reg.load();
     }
 
-    @Test public void testLoadSave() throws Exception
+    @Test
+    public void testLoadSave() throws Exception
     {
         Reg reg = new Reg(Helper.getResourceURL(Helper.TEST_REG));
 
@@ -102,7 +98,8 @@ public class RegTest
         new Reg(new StringReader("\r\n\r\n[section]\r\n\"option\"=\"value\""));
     }
 
-    @Test public void testNonWindwosExec() throws Exception
+    @Test
+    public void testNonWindwosExec() throws Exception
     {
         if (isSkip(isWindows(), "testNonWindwosExec"))
         {
@@ -111,10 +108,10 @@ public class RegTest
 
         Reg reg = new Reg();
 
-        reg.exec(new String[] { "/bin/true" });
+        reg.exec(new String[]{"/bin/true"});
         try
         {
-            reg.exec(new String[] { "/bin/ls", "no such file" });
+            reg.exec(new String[]{"/bin/ls", "no such file"});
             fail("IOException expected");
         }
         catch (IOException x)
@@ -123,7 +120,8 @@ public class RegTest
         }
     }
 
-    @Test public void testReadException() throws Exception
+    @Test
+    public void testReadException() throws Exception
     {
         if (!isWindows())
         {
@@ -151,7 +149,8 @@ public class RegTest
         }
     }
 
-    @Test public void testReadWrite() throws Exception
+    @Test
+    public void testReadWrite() throws Exception
     {
         if (isSkip(!isWindows(), "testReadWrite"))
         {
@@ -170,7 +169,8 @@ public class RegTest
         Helper.assertEquals(DwarfsData.dwarfs, dwarfs);
     }
 
-    @Test public void testStore() throws Exception
+    @Test
+    public void testStore() throws Exception
     {
         Reg reg = Helper.loadDwarfsReg();
         File tmp = File.createTempFile(Reg.TMP_PREFIX, Reg.DEFAULT_SUFFIX);
@@ -189,7 +189,8 @@ public class RegTest
         new Reg().store();
     }
 
-    @Test public void testUnsupportedOperatingSystem() throws Exception
+    @Test
+    public void testUnsupportedOperatingSystem() throws Exception
     {
         if (isSkip(isWindows(), "testUnsupportedOperatingSystem"))
         {

@@ -13,29 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ini4j.spi;
 
-import static org.junit.Assert.*;
+package org.ini4j.spi;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class RegEscapeToolTest
 {
     protected RegEscapeTool instance;
 
-    @Before public void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         instance = RegEscapeTool.getInstance();
     }
 
-    @Test public void testHexadecimal()
+    @Test
+    public void testHexadecimal()
     {
         assertEquals(0, instance.hexadecimal(null).length());
         assertEquals(0, instance.hexadecimal("").length());
     }
 
-    @Test public void testSingleton() throws Exception
+    @Test
+    public void testSingleton() throws Exception
     {
         assertEquals(RegEscapeTool.class, RegEscapeTool.getInstance().getClass());
     }

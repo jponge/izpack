@@ -21,10 +21,11 @@
 
 package com.izforge.izpack.util.unix;
 
-import java.io.*;
-import java.util.StringTokenizer;
-
 import com.izforge.izpack.util.FileExecutor;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.StringTokenizer;
 
 
 /**

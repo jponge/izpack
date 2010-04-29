@@ -22,11 +22,19 @@
 package com.izforge.izpack.util;
 
 import java.io.*;
-import java.lang.reflect.*;
-import java.net.*;
-import java.text.*;
-import java.util.*;
-import java.util.jar.*;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.net.URI;
+import java.net.URL;
+import java.text.CharacterIterator;
+import java.text.SimpleDateFormat;
+import java.text.StringCharacterIterator;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
 /**

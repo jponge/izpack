@@ -49,36 +49,59 @@ public class DynamicVariableImpl implements DynamicVariable
 
     public void validate() throws Exception
     {
-        if (name == null) throw new Exception("No dynamic variable name defined");
+        if (name == null)
+        {
+            throw new Exception("No dynamic variable name defined");
+        }
 
         if (value == null)
+        {
             throw new Exception("No dynamic variable value defined for variable " + name);
+        }
 
         value.validate();
 
-        if (regexp != null) regexp.validate();
+        if (regexp != null)
+        {
+            regexp.validate();
+        }
     }
 
     public String evaluate(VariableSubstitutor... substitutors) throws Exception
     {
         String newValue = this.currentValue;
 
-        if (this.value == null) return null;
+        if (this.value == null)
+        {
+            return null;
+        }
 
-        if (this.checkonce && this.currentValue != null) return this.currentValue;
+        if (this.checkonce && this.currentValue != null)
+        {
+            return this.currentValue;
+        }
 
         try
         {
             newValue = value.resolve(regexp, substitutors);
-            if (this.checkonce) this.currentValue = newValue;
+            if (this.checkonce)
+            {
+                this.currentValue = newValue;
+            }
         }
         catch (Exception e)
         {
-            if (!this.ignorefailure) throw e;
+            if (!this.ignorefailure)
+            {
+                throw e;
+            }
             if (regexp != null)
             {
                 newValue = regexp.getDefaultValue();
-                if (this.checkonce) this.currentValue = newValue;
+                if (this.checkonce)
+                {
+                    this.currentValue = newValue;
+                }
             }
         }
 
@@ -184,7 +207,10 @@ public class DynamicVariableImpl implements DynamicVariable
     @Override
     public boolean equals(Object obj)
     {
-        if ((obj == null) || !(obj instanceof DynamicVariable)) { return false; }
+        if ((obj == null) || !(obj instanceof DynamicVariable))
+        {
+            return false;
+        }
         DynamicVariable compareObj = (DynamicVariable) obj;
         return (name.equals(compareObj.getName())
                 && (conditionid == null || conditionid.equals(compareObj.getConditionid())));

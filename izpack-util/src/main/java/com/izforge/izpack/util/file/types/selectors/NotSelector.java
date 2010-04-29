@@ -26,20 +26,24 @@ package com.izforge.izpack.util.file.types.selectors;
  *
  * @since 1.5
  */
-public class NotSelector extends NoneSelector {
+public class NotSelector extends NoneSelector
+{
 
     /**
      * Default constructor.
      */
-    public NotSelector() {
+    public NotSelector()
+    {
     }
 
     /**
      * @return a string representation of the selector
      */
-    public String toString() {
+    public String toString()
+    {
         StringBuffer buf = new StringBuffer();
-        if (hasSelectors()) {
+        if (hasSelectors())
+        {
             buf.append("{notselect: ");
             buf.append(super.toString());
             buf.append("}");
@@ -51,10 +55,12 @@ public class NotSelector extends NoneSelector {
      * Makes sure that there is only one entry, sets an error message if
      * not.
      */
-    public void verifySettings() {
-        if (selectorCount() != 1) {
+    public void verifySettings()
+    {
+        if (selectorCount() != 1)
+        {
             setError("One and only one selector is allowed within the "
-                + "<not> tag");
+                    + "<not> tag");
         }
     }
 

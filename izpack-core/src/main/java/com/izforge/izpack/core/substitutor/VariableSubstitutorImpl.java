@@ -21,11 +21,11 @@
 
 package com.izforge.izpack.core.substitutor;
 
-import java.io.Serializable;
-import java.util.Properties;
-
 import com.izforge.izpack.api.data.Value;
 import com.izforge.izpack.core.variable.PlainValue;
+
+import java.io.Serializable;
+import java.util.Properties;
 
 public class VariableSubstitutorImpl extends VariableSubstitutorBase implements Serializable
 {
@@ -48,7 +48,8 @@ public class VariableSubstitutorImpl extends VariableSubstitutorBase implements 
     }
 
     @Override
-    public Value getValue(String name) {
+    public Value getValue(String name)
+    {
         return new PlainValue(variables.getProperty(name));
     }
 }

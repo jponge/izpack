@@ -36,7 +36,10 @@ import com.izforge.izpack.util.file.types.FileSet;
 
 import java.io.*;
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.TreeSet;
 
 /**
  * Abstract base class for all unpacker implementations.
@@ -450,9 +453,6 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
 
     public abstract void run();
 
-    /**
-     * @param updatechecks
-     */
     protected void performUpdateChecks(ArrayList<UpdateCheck> updatechecks)
     {
         FileSet fileset = new FileSet();
@@ -463,21 +463,21 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
         {
             fileset.setDir(new File(idata.getInstallPath()).getAbsoluteFile());
 
-        for (UpdateCheck updateCheck : updatechecks)
+            for (UpdateCheck uc : updatechecks)
             {
-            if (updateCheck.includesList != null)
+                if (uc.includesList != null)
                 {
-                include_patterns.addAll(preparePatterns(updateCheck.includesList, recompiler));
+                    for (String incl : uc.includesList)
                     {
-                        fileset.createInclude().setName( variableSubstitutor.substitute(incl) );
+                        fileset.createInclude().setName(variableSubstitutor.substitute(incl));
                     }
                 }
 
-            if (updateCheck.excludesList != null)
+                if (uc.excludesList != null)
                 {
                     for (String excl : uc.excludesList)
                     {
-                        fileset.createExclude().setName( variableSubstitutor.substitute(excl) );
+                        fileset.createExclude().setName(variableSubstitutor.substitute(excl));
                     }
                 }
             }
@@ -488,16 +488,16 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
 
             TreeSet<File> installed_files = new TreeSet<File>();
 
-        for (String installedFileName : this.udata.getInstalledFilesList())
+            for (String fname : this.udata.getInstalledFilesList())
             {
-            File file = new File(installedFileName);
+                File f = new File(fname);
 
-            if (!file.isAbsolute())
+                if (!f.isAbsolute())
                 {
-                file = new File(this.absolute_installpath, installedFileName);
+                    f = new File(this.absolute_installpath, fname);
                 }
 
-            installed_files.add(file.getAbsolutePath());
+                installed_files.add(f);
             }
             for (int i = 0; i < srcFiles.length; i++)
             {
@@ -533,9 +533,9 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
             this.handler.emitError("Error while performing update checks", e.getMessage());
         }
 
-        for (File file : files_to_delete)
+        for (File f : files_to_delete)
         {
-                file.delete();
+            f.delete();
         }
         for (File d : dirs_to_delete)
         {

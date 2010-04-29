@@ -21,19 +21,19 @@
 
 package com.izforge.izpack.core.regex;
 
-import java.util.Vector;
-
 import com.izforge.izpack.api.regex.RegularExpressionProcessor;
 import com.izforge.izpack.util.regex.RegexUtil;
 import com.izforge.izpack.util.regex.Regexp;
 import com.izforge.izpack.util.regex.RegularExpression;
 
+import java.util.Vector;
+
 /**
  * Regular expression utility adapted from and inspired by the PropertyRegEx Ant task
  * (project Ant Contrib)
  *
- * @see <a href='http://ant-contrib.sourceforge.net'>Ant Contrib project</a>
  * @author René Krell - changes against the original implementation ant-contrib 1.0b3
+ * @see <a href='http://ant-contrib.sourceforge.net'>Ant Contrib project</a>
  */
 public class RegularExpressionProcessorImpl implements RegularExpressionProcessor
 {
@@ -67,14 +67,18 @@ public class RegularExpressionProcessorImpl implements RegularExpressionProcesso
     public void setReplace(String replace)
     {
         if (select != null)
+        {
             throw new IllegalArgumentException("You cannot specify both a select and replace expression");
+        }
         this.replace = replace;
     }
 
     public void setSelect(String select)
     {
         if (replace != null)
+        {
             throw new IllegalArgumentException("You cannot specify both a select and replace expression");
+        }
         this.select = select;
     }
 
@@ -88,29 +92,38 @@ public class RegularExpressionProcessorImpl implements RegularExpressionProcesso
         this.global = global;
     }
 
-    protected String doReplace () throws RuntimeException
+    protected String doReplace() throws RuntimeException
     {
         if (replace == null)
+        {
             throw new IllegalArgumentException("No replace expression specified.");
+        }
 
         int options = 0;
-        if (! caseSensitive)
+        if (!caseSensitive)
+        {
             options |= Regexp.MATCH_CASE_INSENSITIVE;
+        }
         if (global)
+        {
             options |= Regexp.REPLACE_ALL;
+        }
 
         Regexp sregex = regexp.getRegexp();
 
         String output = null;
 
-        if (sregex.matches(input, options)) {
+        if (sregex.matches(input, options))
+        {
             output = sregex.substitute(input,
-                                       replace,
-                                       options);
+                    replace,
+                    options);
         }
 
         if (output == null)
+        {
             output = defaultValue;
+        }
 
         return output;
     }
@@ -118,11 +131,15 @@ public class RegularExpressionProcessorImpl implements RegularExpressionProcesso
     protected String doSelect() throws RuntimeException
     {
         if (select == null)
+        {
             throw new IllegalArgumentException("No select expression specified.");
+        }
 
         int options = 0;
-        if (! caseSensitive)
+        if (!caseSensitive)
+        {
             options |= Regexp.MATCH_CASE_INSENSITIVE;
+        }
 
         Regexp sregex = regexp.getRegexp();
 
@@ -139,7 +156,9 @@ public class RegularExpressionProcessorImpl implements RegularExpressionProcesso
         }
 
         if (output == null)
+        {
             output = defaultValue;
+        }
 
         return output;
     }
@@ -148,9 +167,13 @@ public class RegularExpressionProcessorImpl implements RegularExpressionProcesso
     protected void validate()
     {
         if (regexp == null)
+        {
             throw new IllegalArgumentException("No match expression specified.");
+        }
         if (replace == null && select == null)
+        {
             throw new IllegalArgumentException("You must specify either a replace or select expression");
+        }
     }
 
     public String execute()
@@ -158,9 +181,13 @@ public class RegularExpressionProcessorImpl implements RegularExpressionProcesso
         validate();
 
         if (replace != null)
+        {
             return doReplace();
+        }
         else
+        {
             return doSelect();
+        }
     }
 
 }

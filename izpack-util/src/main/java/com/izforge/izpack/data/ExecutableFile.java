@@ -22,10 +22,11 @@
 package com.izforge.izpack.data;
 
 
-import java.io.Serializable;
-import java.util.*;
-
 import com.izforge.izpack.api.data.binding.OsModel;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Encloses information about a executable file. This class abstracts the way to do a system

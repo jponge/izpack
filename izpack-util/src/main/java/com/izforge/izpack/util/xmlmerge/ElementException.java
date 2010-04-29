@@ -65,7 +65,7 @@ public class ElementException extends AbstractXmlMergeException
      * Constructor with cause.
      *
      * @param element Element which caused the exception
-     * @param cause Exception cause
+     * @param cause   Exception cause
      */
     public ElementException(Element element, Throwable cause)
     {

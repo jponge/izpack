@@ -17,25 +17,29 @@
 
 package com.izforge.izpack.util.file;
 
-import java.io.*;
-import java.util.*;
-
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.file.types.FileSet;
+import com.izforge.izpack.util.file.types.Mapper;
 import org.apache.tools.ant.BuildException;
 
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.file.types.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * Copies a file or directory to a new file
  * or directory.  Files are only copied if the source file is newer
  * than the destination file, or when the destination file does not
  * exist.  It is possible to explicitly overwrite existing files.</p>
- *
+ * <p/>
  * <p>This implementation is based on Arnout Kuiper's initial design
  * document, the following mailing list discussions, and the
  * copyfile/copydir tasks.</p>
  */
-public class FileCopyTask{
+public class FileCopyTask
+{
     protected File file = null;     // the source file
     protected File destFile = null; // the destination file
     protected File destDir = null;  // the destination directory
@@ -59,7 +63,8 @@ public class FileCopyTask{
     /**
      * Copy task constructor.
      */
-    public FileCopyTask() {
+    public FileCopyTask()
+    {
         fileUtils = FileUtils.newFileUtils();
         granularity = fileUtils.getFileTimestampGranularity();
     }
@@ -67,58 +72,71 @@ public class FileCopyTask{
     /**
      * @return the fileutils object
      */
-    protected FileUtils getFileUtils() {
+    protected FileUtils getFileUtils()
+    {
         return fileUtils;
     }
 
     /**
      * Sets a single source file to copy.
+     *
      * @param file the file to copy
      */
-    public void setFile(File file) {
+    public void setFile(File file)
+    {
         this.file = file;
     }
 
     /**
      * Sets the destination file.
+     *
      * @param destFile the file to copy to
      */
-    public void setToFile(File destFile) {
+    public void setToFile(File destFile)
+    {
         this.destFile = destFile;
     }
 
     /**
      * Sets the destination directory.
+     *
      * @param destDir the destination directory
      */
-    public void setToDir(File destDir) {
+    public void setToDir(File destDir)
+    {
         this.destDir = destDir;
     }
 
     /**
      * Give the copied files the same last modified time as the original files.
+     *
      * @param preserve if true perverse the modified time, default is false
      */
-    public void setPreserveLastModified(boolean preserve) {
+    public void setPreserveLastModified(boolean preserve)
+    {
         preserveLastModified = preserve;
     }
 
     /**
      * Whether to give the copied files the same last modified time as
      * the original files.
+     *
      * @return the preserveLastModified attribute
      */
-    public boolean getPreserveLastModified() {
+    public boolean getPreserveLastModified()
+    {
         return preserveLastModified;
     }
 
     /**
      * Overwrite any existing destination file(s).
+     *
      * @param overwrite if true force overwriting of destination file(s)
      *                  even if the destination file(s) are younger than
      *                  the corresponding source file. Default is false.
      */
-    public void setOverwrite(boolean overwrite) {
+    public void setOverwrite(boolean overwrite)
+    {
         this.forceOverwrite = overwrite;
     }
 
@@ -128,65 +146,79 @@ public class FileCopyTask{
      * the same name in the source directory tree, only the first
      * file will be copied into the "flattened" directory, unless
      * the forceoverwrite attribute is true.
+     *
      * @param flatten if true flatten the destination directory. Default
      *                is false.
      */
-    public void setFlatten(boolean flatten) {
+    public void setFlatten(boolean flatten)
+    {
         this.flatten = flatten;
     }
 
     /**
      * Used to copy empty directories.
+     *
      * @param includeEmpty if true copy empty directories. Default is true.
      */
-    public void setIncludeEmptyDirs(boolean includeEmpty) {
+    public void setIncludeEmptyDirs(boolean includeEmpty)
+    {
         this.includeEmpty = includeEmpty;
     }
 
     /**
      * Attribute to handle mappers that return multiple
      * mappings for a given source path.
+     *
      * @param enableMultipleMappings If true the task will
-     *        copy to all the mappings for a given source path, if
-     *        false, only the first file or directory is
-     *        processed.
-     *        By default, this setting is false to provide backward
-     *        compatibility with earlier releases.
+     *                               copy to all the mappings for a given source path, if
+     *                               false, only the first file or directory is
+     *                               processed.
+     *                               By default, this setting is false to provide backward
+     *                               compatibility with earlier releases.
      */
-    public void setEnableMultipleMappings(boolean enableMultipleMappings) {
+    public void setEnableMultipleMappings(boolean enableMultipleMappings)
+    {
         this.enableMultipleMappings = enableMultipleMappings;
     }
 
     /**
      * @return the value of the enableMultipleMapping attribute
      */
-    public boolean isEnableMultipleMapping() {
+    public boolean isEnableMultipleMapping()
+    {
         return enableMultipleMappings;
     }
 
     /**
      * If false, note errors to the output but keep going.
+     *
      * @param failonerror true or false
      */
-    public void setFailOnError(boolean failonerror) {
+    public void setFailOnError(boolean failonerror)
+    {
         this.failonerror = failonerror;
     }
 
     /**
      * Adds a set of files to copy.
+     *
      * @param set a set of files to copy
      */
-    public void addFileSet(FileSet set) {
+    public void addFileSet(FileSet set)
+    {
         filesets.addElement(set);
     }
 
     /**
      * Defines the mapper to map source to destination files.
+     *
      * @return a mapper to be configured
-     * @exception BuildException if more than one mapper is defined
+     * @throws BuildException if more than one mapper is defined
      */
-    public Mapper createMapper() throws Exception {
-        if (mapperElement != null) {
+    public Mapper createMapper() throws Exception
+    {
+        if (mapperElement != null)
+        {
             throw new Exception("Cannot define more than one mapper");
         }
         mapperElement = new Mapper();
@@ -195,9 +227,11 @@ public class FileCopyTask{
 
     /**
      * A nested filenamemapper
+     *
      * @param fileNameMapper the mapper to add
      */
-    public void add(FileNameMapper fileNameMapper) throws Exception {
+    public void add(FileNameMapper fileNameMapper) throws Exception
+    {
         createMapper().add(fileNameMapper);
     }
 
@@ -206,20 +240,24 @@ public class FileCopyTask{
      * target is out of date.
      * <p>Default is 0 milliseconds, or 2 seconds on DOS systems.</p>
      */
-    public void setGranularity(long granularity) {
+    public void setGranularity(long granularity)
+    {
         this.granularity = granularity;
     }
 
     /**
      * Performs the copy operation.
-     * @exception BuildException if an error occurs
+     *
+     * @throws BuildException if an error occurs
      */
-    public void execute() throws Exception {
+    public void execute() throws Exception
+    {
         File savedFile = file; // may be altered in validateAttributes
         File savedDestFile = destFile;
         File savedDestDir = destDir;
         FileSet savedFileSet = null;
-        if (file == null && destFile != null && filesets.size() == 1) {
+        if (file == null && destFile != null && filesets.size() == 1)
+        {
             // will be removed in validateAttributes
             savedFileSet = (FileSet) filesets.elementAt(0);
         }
@@ -227,45 +265,64 @@ public class FileCopyTask{
         // make sure we don't have an illegal set of options
         validateAttributes();
 
-        try {
+        try
+        {
 
             // deal with the single file
-            if (file != null) {
-                if (file.exists()) {
-                    if (destFile == null) {
+            if (file != null)
+            {
+                if (file.exists())
+                {
+                    if (destFile == null)
+                    {
                         destFile = new File(destDir, file.getName());
                     }
 
                     if (forceOverwrite || !destFile.exists()
-                        || (file.lastModified() - granularity
-                                > destFile.lastModified())) {
+                            || (file.lastModified() - granularity
+                            > destFile.lastModified()))
+                    {
                         fileCopyMap.put(file.getAbsolutePath(),
-                                        new String[] {destFile.getAbsolutePath()});
-                    } else {
+                                new String[]{destFile.getAbsolutePath()});
+                    }
+                    else
+                    {
                         Debug.log(file + " omitted as " + destFile + " is up to date.");
                     }
-                } else {
+                }
+                else
+                {
                     String message = "Warning: Could not find file "
-                        + file.getAbsolutePath() + " to copy.";
-                    if (!failonerror) {
+                            + file.getAbsolutePath() + " to copy.";
+                    if (!failonerror)
+                    {
                         Debug.log(message);
-                    } else {
+                    }
+                    else
+                    {
                         throw new Exception(message);
                     }
                 }
             }
 
             // deal with the filesets
-            for (int i = 0; i < filesets.size(); i++) {
+            for (int i = 0; i < filesets.size(); i++)
+            {
                 FileSet fs = (FileSet) filesets.elementAt(i);
                 DirectoryScanner ds = null;
-                try {
+                try
+                {
                     ds = fs.getDirectoryScanner();
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     if (failonerror
-                        || !e.getMessage().endsWith(" not found.")) {
+                            || !e.getMessage().endsWith(" not found."))
+                    {
                         throw e;
-                    } else {
+                    }
+                    else
+                    {
                         Debug.log("Warning: " + e.getMessage());
                         continue;
                     }
@@ -276,31 +333,41 @@ public class FileCopyTask{
                 String[] srcFiles = ds.getIncludedFiles();
                 String[] srcDirs = ds.getIncludedDirectories();
                 boolean isEverythingIncluded = ds.isEverythingIncluded()
-                    && (!fs.hasSelectors() && !fs.hasPatterns());
+                        && (!fs.hasSelectors() && !fs.hasPatterns());
                 if (isEverythingIncluded
-                    && !flatten && mapperElement == null) {
+                        && !flatten && mapperElement == null)
+                {
                     completeDirMap.put(fromDir, destDir);
                 }
                 scan(fromDir, destDir, srcFiles, srcDirs);
             }
 
             // do all the copy operations now...
-            try {
+            try
+            {
                 doFileOperations();
-            } catch (Exception e) {
-                if (!failonerror) {
+            }
+            catch (Exception e)
+            {
+                if (!failonerror)
+                {
                     System.err.println("Warning: " + e.getMessage());
-                } else {
+                }
+                else
+                {
                     throw e;
                 }
             }
-        } finally {
+        }
+        finally
+        {
             // clean up again, so this instance can be used a second
             // time
             file = savedFile;
             destFile = savedDestFile;
             destDir = savedDestDir;
-            if (savedFileSet != null) {
+            if (savedFileSet != null)
+            {
                 filesets.insertElementAt(savedFileSet, 0);
             }
 
@@ -318,55 +385,74 @@ public class FileCopyTask{
      * Ensure we have a consistent and legal set of attributes, and set
      * any internal flags necessary based on different combinations
      * of attributes.
-     * @exception BuildException if an error occurs
+     *
+     * @throws BuildException if an error occurs
      */
-    protected void validateAttributes() throws Exception {
-        if (file == null && filesets.size() == 0) {
+    protected void validateAttributes() throws Exception
+    {
+        if (file == null && filesets.size() == 0)
+        {
             throw new Exception("Specify at least one source "
-                                     + "- a file or a fileset.");
+                    + "- a file or a fileset.");
         }
 
-        if (destFile != null && destDir != null) {
+        if (destFile != null && destDir != null)
+        {
             throw new Exception("Only one of tofile and todir "
-                                     + "may be set.");
+                    + "may be set.");
         }
 
-        if (destFile == null && destDir == null) {
+        if (destFile == null && destDir == null)
+        {
             throw new Exception("One of tofile or todir must be set.");
         }
 
-        if (file != null && file.exists() && file.isDirectory()) {
+        if (file != null && file.exists() && file.isDirectory())
+        {
             throw new Exception("Use a fileset to copy directories.");
         }
 
-        if (destFile != null && filesets.size() > 0) {
-            if (filesets.size() > 1) {
+        if (destFile != null && filesets.size() > 0)
+        {
+            if (filesets.size() > 1)
+            {
                 throw new Exception(
-                                         "Cannot concatenate multiple files into a single file.");
-            } else {
+                        "Cannot concatenate multiple files into a single file.");
+            }
+            else
+            {
                 FileSet fs = (FileSet) filesets.elementAt(0);
                 DirectoryScanner ds = fs.getDirectoryScanner(/*getProject()*/);
                 String[] srcFiles = ds.getIncludedFiles();
 
-                if (srcFiles.length == 0) {
+                if (srcFiles.length == 0)
+                {
                     throw new Exception(
-                                             "Cannot perform operation from directory to file.");
-                } else if (srcFiles.length == 1) {
-                    if (file == null) {
+                            "Cannot perform operation from directory to file.");
+                }
+                else if (srcFiles.length == 1)
+                {
+                    if (file == null)
+                    {
                         file = new File(ds.getBasedir(), srcFiles[0]);
                         filesets.removeElementAt(0);
-                    } else {
-                        throw new Exception("Cannot concatenate multiple "
-                                                 + "files into a single file.");
                     }
-                } else {
+                    else
+                    {
+                        throw new Exception("Cannot concatenate multiple "
+                                + "files into a single file.");
+                    }
+                }
+                else
+                {
                     throw new Exception("Cannot concatenate multiple "
-                                             + "files into a single file.");
+                            + "files into a single file.");
                 }
             }
         }
 
-        if (destFile != null) {
+        if (destFile != null)
+        {
             destDir = fileUtils.getParentFile(destFile);
         }
 
@@ -376,25 +462,32 @@ public class FileCopyTask{
      * Compares source files to destination files to see if they should be
      * copied.
      *
-     * @param fromDir  The source directory
-     * @param toDir    The destination directory
-     * @param files    A list of files to copy
-     * @param dirs     A list of directories to copy
+     * @param fromDir The source directory
+     * @param toDir   The destination directory
+     * @param files   A list of files to copy
+     * @param dirs    A list of directories to copy
      */
     protected void scan(File fromDir, File toDir, String[] files,
-                        String[] dirs) throws Exception {
+                        String[] dirs) throws Exception
+    {
         FileNameMapper mapper = null;
-        if (mapperElement != null) {
+        if (mapperElement != null)
+        {
             mapper = mapperElement.getImplementation();
-        } else if (flatten) {
+        }
+        else if (flatten)
+        {
             mapper = new FlatFileNameMapper();
-        } else {
+        }
+        else
+        {
             mapper = new IdentityMapper();
         }
 
         buildMap(fromDir, toDir, files, mapper, fileCopyMap);
 
-        if (includeEmpty) {
+        if (includeEmpty)
+        {
             buildMap(fromDir, toDir, dirs, mapper, dirCopyMap);
         }
     }
@@ -410,33 +503,44 @@ public class FileCopyTask{
      */
     protected void buildMap(File fromDir, File toDir, String[] names,
                             FileNameMapper mapper, Hashtable<String, String[]> map)
-    throws Exception {
+            throws Exception
+    {
         String[] toCopy = null;
-        if (forceOverwrite) {
+        if (forceOverwrite)
+        {
             Vector<String> v = new Vector<String>();
-            for (int i = 0; i < names.length; i++) {
-                if (mapper.mapFileName(names[i]) != null) {
+            for (int i = 0; i < names.length; i++)
+            {
+                if (mapper.mapFileName(names[i]) != null)
+                {
                     v.addElement(names[i]);
                 }
             }
             toCopy = new String[v.size()];
             v.copyInto(toCopy);
-        } else {
+        }
+        else
+        {
             SourceFileScanner ds = new SourceFileScanner();
             toCopy = ds.restrict(names, fromDir, toDir, mapper, granularity);
         }
 
-        for (int i = 0; i < toCopy.length; i++) {
+        for (int i = 0; i < toCopy.length; i++)
+        {
             File src = new File(fromDir, toCopy[i]);
 
             String[] mappedFiles = mapper.mapFileName(toCopy[i]);
 
-            if (!enableMultipleMappings) {
+            if (!enableMultipleMappings)
+            {
                 map.put(src.getAbsolutePath(),
-                        new String[] {new File(toDir, mappedFiles[0]).getAbsolutePath()});
-            } else {
+                        new String[]{new File(toDir, mappedFiles[0]).getAbsolutePath()});
+            }
+            else
+            {
                 // reuse the array created by the mapper
-                for (int k = 0; k < mappedFiles.length; k++) {
+                for (int k = 0; k < mappedFiles.length; k++)
+                {
                     mappedFiles[k] = new File(toDir, mappedFiles[k]).getAbsolutePath();
                 }
 
@@ -449,34 +553,43 @@ public class FileCopyTask{
      * Actually does the file (and possibly empty directory) copies.
      * This is a good method for subclasses to override.
      */
-    protected void doFileOperations() throws Exception {
-        if (fileCopyMap.size() > 0) {
+    protected void doFileOperations() throws Exception
+    {
+        if (fileCopyMap.size() > 0)
+        {
             Debug.log("Copying " + fileCopyMap.size()
-                + " file" + (fileCopyMap.size() == 1 ? "" : "s")
-                + " to " + destDir.getAbsolutePath());
+                    + " file" + (fileCopyMap.size() == 1 ? "" : "s")
+                    + " to " + destDir.getAbsolutePath());
 
             Enumeration<String> e = fileCopyMap.keys();
-            while (e.hasMoreElements()) {
+            while (e.hasMoreElements())
+            {
                 String fromFile = e.nextElement();
                 String[] toFiles = (String[]) fileCopyMap.get(fromFile);
 
-                for (int i = 0; i < toFiles.length; i++) {
+                for (int i = 0; i < toFiles.length; i++)
+                {
                     String toFile = toFiles[i];
 
-                    if (fromFile.equals(toFile)) {
+                    if (fromFile.equals(toFile))
+                    {
                         Debug.log("Skipping self-copy of " + fromFile);
                         continue;
                     }
 
-                    try {
+                    try
+                    {
                         Debug.log("Copying " + fromFile + " to " + toFile);
                         fileUtils.copyFile(fromFile, toFile, forceOverwrite,
-                                           preserveLastModified);
-                    } catch (IOException ioe) {
+                                preserveLastModified);
+                    }
+                    catch (IOException ioe)
+                    {
                         String msg = "Failed to copy " + fromFile + " to " + toFile
-                            + " due to " + ioe.getMessage();
+                                + " due to " + ioe.getMessage();
                         File targetFile = new File(toFile);
-                        if (targetFile.exists() && !targetFile.delete()) {
+                        if (targetFile.exists() && !targetFile.delete())
+                        {
                             msg += " and I couldn't delete the corrupt " + toFile;
                         }
                         throw new Exception(msg, ioe);
@@ -485,31 +598,39 @@ public class FileCopyTask{
             }
         }
 
-        if (includeEmpty) {
+        if (includeEmpty)
+        {
             Enumeration<String[]> e = dirCopyMap.elements();
             int createCount = 0;
-            while (e.hasMoreElements()) {
+            while (e.hasMoreElements())
+            {
                 String[] dirs = e.nextElement();
-                for (int i = 0; i < dirs.length; i++) {
+                for (int i = 0; i < dirs.length; i++)
+                {
                     File d = new File(dirs[i]);
-                    if (!d.exists()) {
-                        if (!d.mkdirs()) {
+                    if (!d.exists())
+                    {
+                        if (!d.mkdirs())
+                        {
                             System.err.println("Unable to create directory "
-                                + d.getAbsolutePath());
-                        } else {
+                                    + d.getAbsolutePath());
+                        }
+                        else
+                        {
                             createCount++;
                         }
                     }
                 }
             }
-            if (createCount > 0) {
+            if (createCount > 0)
+            {
                 Debug.log("Copied " + dirCopyMap.size()
-                    + " empty director"
-                    + (dirCopyMap.size() == 1 ? "y" : "ies")
-                    + " to " + createCount
-                    + " empty director"
-                    + (createCount == 1 ? "y" : "ies") + " under "
-                    + destDir.getAbsolutePath());
+                        + " empty director"
+                        + (dirCopyMap.size() == 1 ? "y" : "ies")
+                        + " to " + createCount
+                        + " empty director"
+                        + (createCount == 1 ? "y" : "ies") + " under "
+                        + destDir.getAbsolutePath());
             }
         }
     }

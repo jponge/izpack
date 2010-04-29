@@ -22,9 +22,9 @@
 
 package com.izforge.izpack.util.xmlmerge.factory;
 
+import com.izforge.izpack.util.xmlmerge.Operation;
+import com.izforge.izpack.util.xmlmerge.OperationFactory;
 import org.jdom.Element;
-
-import com.izforge.izpack.util.xmlmerge.*;
 
 /**
  * An operation factory returning always the same operation whatever the specified elements.

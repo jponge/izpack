@@ -17,27 +17,31 @@
 
 package com.izforge.izpack.util.file;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.Reader;
 
 /**
  * input stream tokenizers implement this interface
  *
  * @version Ant 1.6
  */
-public interface Tokenizer {
+public interface Tokenizer
+{
     /**
      * get the next token from the input stream
+     *
      * @param in the input stream
      * @return the next token, or null for the end
      *         of the stream
      * @throws IOException if an error occurs
      */
     String getToken(Reader in)
-        throws IOException;
+            throws IOException;
 
     /**
      * return the string between tokens, after the
      * previous token.
+     *
      * @return the intra-token string
      */
     String getPostToken();

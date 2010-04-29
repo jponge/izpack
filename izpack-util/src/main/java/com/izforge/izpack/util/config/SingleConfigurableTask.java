@@ -21,13 +21,15 @@
 
 package com.izforge.izpack.util.config;
 
-import java.text.*;
-import java.util.*;
-
-import org.ini4j.*;
-
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.file.types.EnumeratedAttribute;
+import org.ini4j.*;
+
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public abstract class SingleConfigurableTask implements ConfigurableTask
 {
@@ -73,7 +75,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
      * configuration.
      *
      * @param preserveValues - true to preserve the values of equal entries from an old
-     * configuration
+     *                       configuration
      */
     public void setPatchPreserveValues(boolean preserveValues)
     {
@@ -163,7 +165,10 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                                 .get(fromSectionKey);
                         fromKeySet = fromSection.keySet();
                         toKeySet = null;
-                        if (toSection != null) toKeySet = toSection.keySet();
+                        if (toSection != null)
+                        {
+                            toKeySet = toSection.keySet();
+                        }
                         for (Iterator<String> iterator2 = fromKeySet.iterator(); iterator2
                                 .hasNext();)
                         {
@@ -204,7 +209,10 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                         Reg.Key toRegKey = ((Reg) configurable).get(fromRootKey);
                         fromKeySet = fromRegKey.keySet();
                         toKeySet = null;
-                        if (toRegKey != null) toKeySet = toRegKey.keySet();
+                        if (toRegKey != null)
+                        {
+                            toKeySet = toRegKey.keySet();
+                        }
                         for (Iterator<String> iterator2 = fromKeySet.iterator(); iterator2
                                 .hasNext();)
                         {
@@ -452,7 +460,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
          * Handle operations for type <code>date</code>.
          *
          * @param oldValue the current value read from the configuration file or <code>null</code>
-         * if the <code>key</code> was not contained in the configuration file.
+         *                 if the <code>key</code> was not contained in the configuration file.
          */
         private void executeDate(String oldValue) throws Exception
         {
@@ -511,7 +519,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
          * Handle operations for type <code>int</code>.
          *
          * @param oldValue the current value read from the configuration file or <code>null</code>
-         * if the <code>key</code> was not contained in the configuration file.
+         *                 if the <code>key</code> was not contained in the configuration file.
          */
         private void executeInteger(String oldValue) throws Exception
         {
@@ -581,7 +589,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
          * Handle operations for type <code>string</code>.
          *
          * @param oldValue the current value read from the configuration file or <code>null</code>
-         * if the <code>key</code> was not contained in the configuration file.
+         *                 if the <code>key</code> was not contained in the configuration file.
          */
         private void executeString(String oldValue) throws Exception
         {
@@ -612,14 +620,26 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
          */
         private void checkParameters() throws Exception
         {
-            if (type == Type.STRING_TYPE && operation == Operation.DECREMENT_OPER) { throw new Exception(
-                    "- is not supported for string " + "properties (key: " + key + ")"); }
-            if (value == null && defaultValue == null) { throw new Exception(
-                    "\"value\" and/or \"default\" " + "attribute must be specified (key: " + key
-                            + ")"); }
-            if (key == null) { throw new Exception("key is mandatory"); }
-            if (type == Type.STRING_TYPE && pattern != null) { throw new Exception(
-                    "pattern is not supported for string " + "properties (key: " + key + ")"); }
+            if (type == Type.STRING_TYPE && operation == Operation.DECREMENT_OPER)
+            {
+                throw new Exception(
+                        "- is not supported for string " + "properties (key: " + key + ")");
+            }
+            if (value == null && defaultValue == null)
+            {
+                throw new Exception(
+                        "\"value\" and/or \"default\" " + "attribute must be specified (key: " + key
+                                + ")");
+            }
+            if (key == null)
+            {
+                throw new Exception("key is mandatory");
+            }
+            if (type == Type.STRING_TYPE && pattern != null)
+            {
+                throw new Exception(
+                        "pattern is not supported for string " + "properties (key: " + key + ")");
+            }
         }
 
         private String getCurrentValue(String oldValue)
@@ -687,7 +707,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
 
             public String[] getValues()
             {
-                return new String[] { "+", "-", "="};
+                return new String[]{"+", "-", "="};
             }
 
             public static int toOperation(String oper)
@@ -696,7 +716,10 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                 {
                     return INCREMENT_OPER;
                 }
-                else if ("-".equals(oper)) { return DECREMENT_OPER; }
+                else if ("-".equals(oper))
+                {
+                    return DECREMENT_OPER;
+                }
                 return EQUALS_OPER;
             }
         }
@@ -716,7 +739,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
 
             public String[] getValues()
             {
-                return new String[] { "int", "date", "string"};
+                return new String[]{"int", "date", "string"};
             }
 
             public static int toType(String type)
@@ -725,7 +748,10 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                 {
                     return INTEGER_TYPE;
                 }
-                else if ("date".equals(type)) { return DATE_TYPE; }
+                else if ("date".equals(type))
+                {
+                    return DATE_TYPE;
+                }
                 return STRING_TYPE;
             }
         }
@@ -751,7 +777,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
 
         private static final String YEAR = "year";
 
-        private static final String[] UNITS = { MILLISECOND, SECOND, MINUTE, HOUR, DAY, WEEK,
+        private static final String[] UNITS = {MILLISECOND, SECOND, MINUTE, HOUR, DAY, WEEK,
                 MONTH, YEAR};
 
         private Hashtable<String, Integer> calendarFields = new Hashtable<String, Integer>();

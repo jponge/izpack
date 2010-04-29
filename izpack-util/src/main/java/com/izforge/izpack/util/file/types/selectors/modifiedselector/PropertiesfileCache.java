@@ -19,7 +19,10 @@ package com.izforge.izpack.util.file.types.selectors.modifiedselector;
 
 
 import java.io.*;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.Vector;
 
 
 /**
@@ -27,61 +30,75 @@ import java.util.*;
  * The use of this Cache-implementation requires the use of the parameter
  * <param name="cache.cachefile" .../> for defining, where to store the
  * properties file.
- *
+ * <p/>
  * The ModifiedSelector sets the <i>cachefile</i> to the default value
  * <i>cache.properties</i>.
- *
+ * <p/>
  * Supported <param>s are:
  * <table>
  * <tr>
- *   <th>name</th><th>values</th><th>description</th><th>required</th>
+ * <th>name</th><th>values</th><th>description</th><th>required</th>
  * </tr>
  * <tr>
- *   <td> cache.cachefile </td>
- *   <td> <i>path to file</i> </td>
- *   <td> the name of the properties file </td>
- *   <td> yes </td>
+ * <td> cache.cachefile </td>
+ * <td> <i>path to file</i> </td>
+ * <td> the name of the properties file </td>
+ * <td> yes </td>
  * </tr>
  * </table>
  *
  * @version 2003-09-13
- * @since  Ant 1.6
+ * @since Ant 1.6
  */
-public class PropertiesfileCache implements Cache {
+public class PropertiesfileCache implements Cache
+{
 
 
     // -----  member variables - configuration  -----
 
 
-    /** Where to store the properties? */
+    /**
+     * Where to store the properties?
+     */
     private File cachefile = null;
 
-    /** Object for storing the key-value-pairs. */
+    /**
+     * Object for storing the key-value-pairs.
+     */
     private Properties cache = new Properties();
 
 
     // -----  member variables - internal use  -----
 
 
-    /** Is the cache already loaded? Prevents from multiple load operations. */
+    /**
+     * Is the cache already loaded? Prevents from multiple load operations.
+     */
     private boolean cacheLoaded = false;
 
-    /** Must the cache be saved? Prevents from multiple save operations. */
-    private boolean cacheDirty  = true;
+    /**
+     * Must the cache be saved? Prevents from multiple save operations.
+     */
+    private boolean cacheDirty = true;
 
 
     // -----  Constructors  -----
 
 
-    /** Bean-Constructor. */
-    public PropertiesfileCache() {
+    /**
+     * Bean-Constructor.
+     */
+    public PropertiesfileCache()
+    {
     }
 
     /**
      * Constructor.
+     *
      * @param cachefile set the cachefile
      */
-    public PropertiesfileCache(File cachefile) {
+    public PropertiesfileCache(File cachefile)
+    {
         this.cachefile = cachefile;
     }
 
@@ -89,13 +106,18 @@ public class PropertiesfileCache implements Cache {
     // -----  Cache-Configuration  -----
 
 
-    public void setCachefile(File file) {
+    public void setCachefile(File file)
+    {
         cachefile = file;
     }
 
-    public File getCachefile() { return cachefile; }
+    public File getCachefile()
+    {
+        return cachefile;
+    }
 
-    public boolean isValid() {
+    public boolean isValid()
+    {
         return (cachefile != null);
     }
 
@@ -103,20 +125,25 @@ public class PropertiesfileCache implements Cache {
     // -----  Data Access
 
 
-    public void load() {
-        if ((cachefile != null) && cachefile.isFile() && cachefile.canRead()) {
-            try {
+    public void load()
+    {
+        if ((cachefile != null) && cachefile.isFile() && cachefile.canRead())
+        {
+            try
+            {
                 BufferedInputStream bis = new BufferedInputStream(
-                    new FileInputStream(cachefile));
+                        new FileInputStream(cachefile));
                 cache.load(bis);
                 bis.close();
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 e.printStackTrace();
             }
         }
         // after loading the cache is up to date with the file
         cacheLoaded = true;
-        cacheDirty  = false;
+        cacheDirty = false;
     }
 
     /**
@@ -126,26 +153,35 @@ public class PropertiesfileCache implements Cache {
      * implementation checks the existence of entries before creating the file
      * for performance optimisation.
      */
-    public void save() {
-        if (!cacheDirty) {
+    public void save()
+    {
+        if (!cacheDirty)
+        {
             return;
         }
-        if ((cachefile != null) && cache.propertyNames().hasMoreElements()) {
-            try {
+        if ((cachefile != null) && cache.propertyNames().hasMoreElements())
+        {
+            try
+            {
                 BufferedOutputStream bos = new BufferedOutputStream(
-                      new FileOutputStream(cachefile));
+                        new FileOutputStream(cachefile));
                 cache.store(bos, null);
                 bos.flush();
                 bos.close();
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 e.printStackTrace();
             }
         }
         cacheDirty = false;
     }
 
-    /** Deletes the cache and its underlying file. */
-    public void delete() {
+    /**
+     * Deletes the cache and its underlying file.
+     */
+    public void delete()
+    {
         cache = new Properties();
         cachefile.delete();
         cacheLoaded = true;
@@ -154,38 +190,49 @@ public class PropertiesfileCache implements Cache {
 
     /**
      * Returns a value for a given key from the cache.
+     *
      * @param key the key
      * @return the stored value
      */
-    public Object get(Object key) {
-        if (!cacheLoaded) {
+    public Object get(Object key)
+    {
+        if (!cacheLoaded)
+        {
             load();
         }
-        try {
+        try
+        {
             return cache.getProperty(String.valueOf(key));
-        } catch (ClassCastException e) {
+        }
+        catch (ClassCastException e)
+        {
             return null;
         }
     }
 
     /**
      * Saves a key-value-pair in the cache.
-     * @param key the key
+     *
+     * @param key   the key
      * @param value the value
      */
-    public void put(Object key, Object value) {
+    public void put(Object key, Object value)
+    {
         cache.put(String.valueOf(key), String.valueOf(value));
         cacheDirty = true;
     }
 
     /**
      * Returns an iterator over the keys in the cache.
+     *
      * @return An iterator over the keys.
      */
-    public Iterator iterator() {
+    public Iterator iterator()
+    {
         Vector v = new java.util.Vector();
         Enumeration en = cache.propertyNames();
-        while (en.hasMoreElements()) {
+        while (en.hasMoreElements())
+        {
             v.add(en.nextElement());
         }
         return v.iterator();
@@ -197,9 +244,11 @@ public class PropertiesfileCache implements Cache {
 
     /**
      * Override Object.toString().
+     *
      * @return information about this cache
      */
-    public String toString() {
+    public String toString()
+    {
         StringBuffer buf = new StringBuffer();
         buf.append("<PropertiesfileCache:");
         buf.append("cachefile=").append(cachefile);

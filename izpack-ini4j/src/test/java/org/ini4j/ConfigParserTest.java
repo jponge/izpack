@@ -13,33 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j;
 
 import org.ini4j.sample.Dwarf;
 import org.ini4j.sample.Dwarfs;
-
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
-
 import org.junit.After;
-
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringReader;
-
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.junit.Assert.*;
 
 public class ConfigParserTest
 {
@@ -54,16 +44,19 @@ public class ConfigParserTest
     private static final String DUMMY = "dummy";
     protected ConfigParser instance;
 
-    @Before public void setUp()
+    @Before
+    public void setUp()
     {
         instance = new ConfigParser();
     }
 
-    @After public void tearDown()
+    @After
+    public void tearDown()
     {
     }
 
-    @Test public void testAddHasRemove() throws Exception
+    @Test
+    public void testAddHasRemove() throws Exception
     {
         assertFalse(instance.hasSection(SECTION));
         assertFalse(instance.hasOption(SECTION, OPTION));
@@ -92,7 +85,8 @@ public class ConfigParserTest
         instance.addSection(ConfigParser.PyIni.DEFAULT_SECTION_NAME);
     }
 
-    @Test public void testDefaults() throws Exception
+    @Test
+    public void testDefaults() throws Exception
     {
         Map<String, String> defs = new HashMap<String, String>();
 
@@ -101,7 +95,8 @@ public class ConfigParserTest
         assertSame(defs, instance.defaults());
     }
 
-    @Test public void testDwarfs() throws Exception
+    @Test
+    public void testDwarfs() throws Exception
     {
         readDwarfs();
         checkEquals(DwarfsData.bashful, Dwarfs.PROP_BASHFUL);
@@ -113,7 +108,8 @@ public class ConfigParserTest
         checkEquals(DwarfsData.sneezy, Dwarfs.PROP_SNEEZY);
     }
 
-    @Test public void testGet() throws Exception
+    @Test
+    public void testGet() throws Exception
     {
         Ini.Section section = instance.getIni().add(SECTION);
 
@@ -179,7 +175,8 @@ public class ConfigParserTest
         instance.get(SECTION, OPTION);
     }
 
-    @Test @SuppressWarnings("empty-statement")
+    @Test
+    @SuppressWarnings("empty-statement")
     public void testGetVars() throws Exception
     {
         Map<String, String> vars = new HashMap<String, String>();
@@ -206,7 +203,8 @@ public class ConfigParserTest
         assertEquals(DUMMY, instance.get(SECTION, OPTION, false, vars));
     }
 
-    @Test public void testItems() throws Exception
+    @Test
+    public void testItems() throws Exception
     {
         Ini ini = new Ini();
 
@@ -238,7 +236,8 @@ public class ConfigParserTest
         assertEquals("%(_height)", dopey.get(Dwarf.PROP_HEIGHT));
     }
 
-    @Test public void testOptions() throws Exception
+    @Test
+    public void testOptions() throws Exception
     {
         instance.addSection(SECTION);
         assertEquals(0, instance.options(SECTION).size());
@@ -250,7 +249,8 @@ public class ConfigParserTest
         assertEquals(10, instance.options(SECTION).size());
     }
 
-    @Test public void testRead() throws Exception
+    @Test
+    public void testRead() throws Exception
     {
         File file = newTestFile(DWARFS_PATH);
 
@@ -286,7 +286,8 @@ public class ConfigParserTest
         instance.read(badFile().toURI().toURL());
     }
 
-    @Test public void testSections() throws Exception
+    @Test
+    public void testSections() throws Exception
     {
         instance.addSection(SECTION);
         assertEquals(1, instance.sections().size());
@@ -298,7 +299,8 @@ public class ConfigParserTest
         assertEquals(11, instance.sections().size());
     }
 
-    @Test public void testSet() throws Exception
+    @Test
+    public void testSet() throws Exception
     {
         instance.addSection(SECTION);
         instance.set(SECTION, OPTION, "dummy");
@@ -314,7 +316,8 @@ public class ConfigParserTest
         instance.set(SECTION, OPTION, "dummy");
     }
 
-    @Test public void testWrite() throws Exception
+    @Test
+    public void testWrite() throws Exception
     {
         File input = newTestFile(DWARFS_PATH);
         File output = new File(TEST_WORK_PATH, input.getName());

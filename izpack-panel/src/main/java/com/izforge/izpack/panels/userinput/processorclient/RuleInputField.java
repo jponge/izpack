@@ -21,16 +21,6 @@
 
 package com.izforge.izpack.panels.userinput.processorclient;
 
-import java.awt.Toolkit;
-import java.awt.event.*;
-import java.io.Serializable;
-import java.util.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
-
-import org.apache.regexp.RE;
-
 import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
@@ -38,6 +28,20 @@ import com.izforge.izpack.panels.userinput.RuleTextField;
 import com.izforge.izpack.panels.userinput.processor.Processor;
 import com.izforge.izpack.panels.userinput.validator.Validator;
 import com.izforge.izpack.util.Debug;
+import org.apache.regexp.RE;
+
+import javax.swing.*;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.Serializable;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 /*---------------------------------------------------------------------------*/
 

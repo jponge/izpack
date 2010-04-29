@@ -17,10 +17,11 @@
 
 package com.izforge.izpack.util.file.types;
 
-import java.io.File;
-import java.util.*;
-
 import org.apache.tools.ant.BuildException;
+
+import java.io.File;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 /**
  * FileList represents an explicitly named list of files.  FileLists
@@ -29,16 +30,17 @@ import org.apache.tools.ant.BuildException;
  * filter, only returning the name of a matched file if it currently
  * exists in the file system.
  */
-public class FileList extends DataType {
+public class FileList extends DataType
+{
 
     private Vector filenames = new Vector();
     private File dir;
 
     /**
      * The default constructor.
-     *
      */
-    public FileList() {
+    public FileList()
+    {
         super();
     }
 
@@ -47,8 +49,9 @@ public class FileList extends DataType {
      *
      * @param filelist a <code>FileList</code> value
      */
-    protected FileList(FileList filelist) {
-        this.dir       = filelist.dir;
+    protected FileList(FileList filelist)
+    {
+        this.dir = filelist.dir;
         this.filenames = filelist.filenames;
 //        setProject(filelist.getProject());
     }
@@ -73,9 +76,10 @@ public class FileList extends DataType {
      * Set the dir attribute.
      *
      * @param dir the directory this filelist is relative to.
-     * @exception BuildException if an error occurs
+     * @throws BuildException if an error occurs
      */
-    public void setDir(File dir) throws Exception {
+    public void setDir(File dir) throws Exception
+    {
 //        if (isReference()) {
 //            throw tooManyAttributes();
 //        }
@@ -85,7 +89,8 @@ public class FileList extends DataType {
     /**
      * @return the directory attribute
      */
-    public File getDir(/*Project p*/) {
+    public File getDir(/*Project p*/)
+    {
 //        if (isReference()) {
 //            return getRef(p).getDir(p);
 //        }
@@ -96,36 +101,43 @@ public class FileList extends DataType {
      * Set the filenames attribute.
      *
      * @param filenames a string contains filenames, separated by , or
-     *        by whitespace.
+     *                  by whitespace.
      */
-    public void setFiles(String filenames) {
+    public void setFiles(String filenames)
+    {
 //        if (isReference()) {
 //            throw tooManyAttributes();
 //        }
-        if (filenames != null && filenames.length() > 0) {
+        if (filenames != null && filenames.length() > 0)
+        {
             StringTokenizer tok = new StringTokenizer(
-                filenames, ", \t\n\r\f", false);
-            while (tok.hasMoreTokens()) {
-               this.filenames.addElement(tok.nextToken());
+                    filenames, ", \t\n\r\f", false);
+            while (tok.hasMoreTokens())
+            {
+                this.filenames.addElement(tok.nextToken());
             }
         }
     }
 
     /**
      * Returns the list of files represented by this FileList.
+     *
      * @param p the current project
      * @return the list of files represented by this FileList.
      */
-    public String[] getFiles(/*Project p*/) throws Exception {
+    public String[] getFiles(/*Project p*/) throws Exception
+    {
 //        if (isReference()) {
 //            return getRef(p).getFiles(p);
 //        }
 
-        if (dir == null) {
+        if (dir == null)
+        {
             throw new Exception("No directory specified for filelist.");
         }
 
-        if (filenames.size() == 0) {
+        if (filenames.size() == 0)
+        {
             throw new Exception("No files specified for filelist.");
         }
 
@@ -159,7 +171,8 @@ public class FileList extends DataType {
     /**
      * Inner class corresponding to the &lt;file&gt; nested element.
      */
-    public static class FileName {
+    public static class FileName
+    {
         private String name;
 
         /**
@@ -167,14 +180,16 @@ public class FileList extends DataType {
          *
          * @param name the name of a file to add to the file list.
          */
-        public void setName(String name) {
+        public void setName(String name)
+        {
             this.name = name;
         }
 
         /**
          * @return the name of the file for this element.
          */
-        public String getName() {
+        public String getName()
+        {
             return name;
         }
     }
@@ -184,10 +199,12 @@ public class FileList extends DataType {
      *
      * @param name a configured file element with a name.
      */
-    public void addConfiguredFile(FileName name) throws Exception {
-        if (name.getName() == null) {
+    public void addConfiguredFile(FileName name) throws Exception
+    {
+        if (name.getName() == null)
+        {
             throw new Exception(
-                "No name specified in nested file element");
+                    "No name specified in nested file element");
         }
         filenames.addElement(name.getName());
     }

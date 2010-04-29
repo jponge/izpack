@@ -22,9 +22,8 @@
 
 package com.izforge.izpack.util.xmlmerge.matcher;
 
-import org.jdom.Element;
-
 import com.izforge.izpack.util.xmlmerge.Matcher;
+import org.jdom.Element;
 
 /**
  * Compares the qualified name of elements.

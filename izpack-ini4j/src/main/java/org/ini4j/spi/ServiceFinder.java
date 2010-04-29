@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j.spi;
 
 import java.io.BufferedReader;
@@ -35,7 +36,7 @@ final class ServiceFinder
 
     /**
      * Service objektum keres�s �s p�ld�nyos�t�s
-     *
+     * <p/>
      * a JDK JAR specifik�ci�ban defini�lt <B>Services API</B>-nak
      * megfelel�en service oszt�ly keres�s, majd pedig p�ld�ny k�pz�s a context
      * ClassLoader seg�ts�g�vel.</p><p>
@@ -47,10 +48,11 @@ final class ServiceFinder
      * <CODE>defaultService</CODE> lesz az oszt�ly neve.</p><p>
      * A fenti keres�st k�vet�en t�rt�nik a p�ld�ny k�pz�s. A visszat�r�si
      * �rt�k mindig egy val�di objektum, l�v�n minden hiba exception-t gener�l.
-     * @param <T> type
+     *
+     * @param <T>   type
      * @param clazz keresett oszt�ly/service neve
-     * @throws IllegalArgumentException keres�si vagy p�ld�nyos�t�si hiba eset�n
      * @return a keresett oszt�ly implement�l� objektum
+     * @throws IllegalArgumentException keres�si vagy p�ld�nyos�t�si hiba eset�n
      */
     static <T> T findService(Class<T> clazz)
     {
@@ -63,7 +65,7 @@ final class ServiceFinder
         catch (Exception x)
         {
             throw (IllegalArgumentException) new IllegalArgumentException("Provider " + clazz.getName() + " could not be instantiated: " + x)
-              .initCause(x);
+                    .initCause(x);
         }
     }
 

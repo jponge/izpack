@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j.tutorial;
 
 import org.ini4j.Reg;
-
-import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +26,7 @@ import java.io.IOException;
 //|                -------------------------
 //|                Windows Registry Tutorial
 //|
+
 //|Windows Registry Tutorial - Read/Write windows registry
 //|
 //| Yes, it is possible now to read/write registry from java programs
@@ -45,7 +45,8 @@ public class WindowsRegistryTutorial extends AbstractTutorial
         }
     }
 
-    @Override protected void run(File arg) throws Exception
+    @Override
+    protected void run(File arg) throws Exception
     {
         sample01();
         sample02();
@@ -54,7 +55,8 @@ public class WindowsRegistryTutorial extends AbstractTutorial
 
 //|
 //|* Write
-//|
+
+    //|
 //| Lets write something to registry
 //{
     void sample01() throws IOException
@@ -71,7 +73,8 @@ public class WindowsRegistryTutorial extends AbstractTutorial
 
 //|
 //|* Read
-//|
+
+    //|
 //| Lets read something from Control Panel settings...
 //{
     void sample02() throws IOException
@@ -87,7 +90,8 @@ public class WindowsRegistryTutorial extends AbstractTutorial
 
 //|
 //|* Create environment variable
-//|
+
+    //|
 //| Lets create a new environment variable under current users environment....
 //{
     void sample03() throws IOException

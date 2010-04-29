@@ -23,10 +23,14 @@
 package com.izforge.izpack.util.xmlmerge.config;
 
 import com.izforge.izpack.util.xmlmerge.*;
-import com.izforge.izpack.util.xmlmerge.action.*;
-import com.izforge.izpack.util.xmlmerge.factory.*;
+import com.izforge.izpack.util.xmlmerge.action.OrderedMergeAction;
+import com.izforge.izpack.util.xmlmerge.action.StandardActions;
+import com.izforge.izpack.util.xmlmerge.factory.AttributeOperationFactory;
+import com.izforge.izpack.util.xmlmerge.factory.OperationResolver;
+import com.izforge.izpack.util.xmlmerge.factory.StaticOperationFactory;
 import com.izforge.izpack.util.xmlmerge.mapper.NamespaceFilterMapper;
-import com.izforge.izpack.util.xmlmerge.matcher.*;
+import com.izforge.izpack.util.xmlmerge.matcher.StandardMatchers;
+import com.izforge.izpack.util.xmlmerge.matcher.TagMatcher;
 
 /**
  * Configure to apply actions declared as attributes in the patch DOM.

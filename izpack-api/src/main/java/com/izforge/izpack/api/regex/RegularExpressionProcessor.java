@@ -25,8 +25,8 @@ package com.izforge.izpack.api.regex;
  * Regular expression utility adapted from and inspired by the PropertyRegEx Ant task
  * (project Ant Contrib)
  *
- * @see <a href='http://ant-contrib.sourceforge.net'>Ant Contrib project</a>
  * @author René Krell - changes against the original implementation ant-contrib 1.0b3
+ * @see <a href='http://ant-contrib.sourceforge.net'>Ant Contrib project</a>
  */
 public interface RegularExpressionProcessor
 {

@@ -21,9 +21,6 @@
 
 package com.izforge.izpack.installer.base;
 
-import java.util.List;
-import java.util.Map;
-
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.DynamicVariable;
 import com.izforge.izpack.api.data.ResourceManager;
@@ -31,6 +28,9 @@ import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.DynamicVariableSubstitutor;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Common utility functions for the GUI and text installers. (Do not import swing/awt classes to
@@ -60,8 +60,8 @@ public abstract class InstallerBase implements InstallerRequirementDisplay
      * Refreshes Dynamic Variables.
      */
     public static void refreshDynamicVariables(AutomatedInstallData installdata,
-            VariableSubstitutor... substitutors)
-    throws Exception
+                                               VariableSubstitutor... substitutors)
+            throws Exception
     {
         Map<String, List<DynamicVariable>> dynamicvariables = installdata.getDynamicvariables();
         RulesEngine rules = installdata.getRules();
@@ -90,16 +90,20 @@ public abstract class InstallerBase implements InstallerRequirementDisplay
                     {
                         // Add self replacing of previously replaced dynamic variables
                         VariableSubstitutor[] newsubstitutors = new DynamicVariableSubstitutor[substitutors.length + 1];
-                        for (int i=0; i<substitutors.length; i++)  {
+                        for (int i = 0; i < substitutors.length; i++)
+                        {
                             newsubstitutors[i] = substitutors[i];
                         }
                         newsubstitutors[substitutors.length] = new DynamicVariableSubstitutor(dynamicvariables, rules);
 
                         String newValue = dynvar.evaluate(newsubstitutors);
-                        if (newValue != null) {
+                        if (newValue != null)
+                        {
                             //Debug.log("dynamic variable " + dynvar.getName() + ": " + newValue);
                             installdata.getVariables().setProperty(dynvar.getName(), newValue);
-                        } else {
+                        }
+                        else
+                        {
                             //Debug.log("dynamic variable " + dynvar.getName() + " unchanged: " + dynvar.getValue());
                         }
                     }

@@ -17,18 +17,22 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import java.io.File;
-import java.text.*;
-import java.util.Locale;
-
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.file.types.*;
+import com.izforge.izpack.util.file.types.EnumeratedAttribute;
+import com.izforge.izpack.util.file.types.Parameter;
+
+import java.io.File;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * Selector that chooses files based on their last modified date.
  */
-public class DateSelector extends BaseExtendSelector {
+public class DateSelector extends BaseExtendSelector
+{
 
     private long millis = -1;
     private String dateTime = null;
@@ -36,25 +40,38 @@ public class DateSelector extends BaseExtendSelector {
     private int granularity = 0;
     private int cmp = 2;
     private String pattern;
-    /** Key to used for parameterized custom selector */
+    /**
+     * Key to used for parameterized custom selector
+     */
     public static final String MILLIS_KEY = "millis";
-    /** Key to used for parameterized custom selector */
+    /**
+     * Key to used for parameterized custom selector
+     */
     public static final String DATETIME_KEY = "datetime";
-    /** Key to used for parameterized custom selector */
+    /**
+     * Key to used for parameterized custom selector
+     */
     public static final String CHECKDIRS_KEY = "checkdirs";
-    /** Key to used for parameterized custom selector */
+    /**
+     * Key to used for parameterized custom selector
+     */
     public static final String GRANULARITY_KEY = "granularity";
-    /** Key to used for parameterized custom selector */
+    /**
+     * Key to used for parameterized custom selector
+     */
     public static final String WHEN_KEY = "when";
-    /** Key to used for parameterized custom selector */
+    /**
+     * Key to used for parameterized custom selector
+     */
     public static final String PATTERN_KEY = "pattern";
 
     /**
      * Creates a new <code>DateSelector</code> instance.
-     *
      */
-    public DateSelector() {
-        if (OsVersion.IS_WINDOWS) {
+    public DateSelector()
+    {
+        if (OsVersion.IS_WINDOWS)
+        {
             granularity = 2000;
         }
     }
@@ -62,20 +79,27 @@ public class DateSelector extends BaseExtendSelector {
     /**
      * @return a string describing this object
      */
-    public String toString() {
+    public String toString()
+    {
         StringBuffer buf = new StringBuffer("{dateselector date: ");
         buf.append(dateTime);
         buf.append(" compare: ");
-        if (cmp == 0) {
+        if (cmp == 0)
+        {
             buf.append("before");
-        } else if (cmp == 1) {
+        }
+        else if (cmp == 1)
+        {
             buf.append("after");
-        } else {
+        }
+        else
+        {
             buf.append("equal");
         }
         buf.append(" granularity: ");
         buf.append(granularity);
-        if (pattern != null) {
+        if (pattern != null)
+        {
             buf.append(" pattern: ").append(pattern);
         }
         buf.append("}");
@@ -86,18 +110,22 @@ public class DateSelector extends BaseExtendSelector {
      * For users that prefer to express time in milliseconds since 1970
      *
      * @param millis the time to compare file's last modified date to,
-     *        expressed in milliseconds
+     *               expressed in milliseconds
      */
-    public void setMillis(long millis) {
+    public void setMillis(long millis)
+    {
         this.millis = millis;
     }
 
     /**
      * Returns the millisecond value the selector is set for.
+     *
      * @return the millisecond value
      */
-    public long getMillis() throws Exception {
-        if (dateTime != null) {
+    public long getMillis() throws Exception
+    {
+        if (dateTime != null)
+        {
             validate();
         }
         return millis;
@@ -109,7 +137,8 @@ public class DateSelector extends BaseExtendSelector {
      *
      * @param dateTime a string in MM/DD/YYYY HH:MM AM_PM format
      */
-    public void setDatetime(String dateTime) {
+    public void setDatetime(String dateTime)
+    {
         this.dateTime = dateTime;
     }
 
@@ -118,16 +147,19 @@ public class DateSelector extends BaseExtendSelector {
      *
      * @param includeDirs whether to check the timestamp on directories
      */
-    public void setCheckdirs(boolean includeDirs) {
+    public void setCheckdirs(boolean includeDirs)
+    {
         this.includeDirs = includeDirs;
     }
 
     /**
      * Sets the number of milliseconds leeway we will give before we consider
      * a file not to have matched a date.
+     *
      * @param granularity the number of milliconds leeway
      */
-    public void setGranularity(int granularity) {
+    public void setGranularity(int granularity)
+    {
         this.granularity = granularity;
     }
 
@@ -137,7 +169,8 @@ public class DateSelector extends BaseExtendSelector {
      *
      * @param cmp The comparison to perform, an EnumeratedAttribute
      */
-    public void setWhen(TimeComparisons cmp) {
+    public void setWhen(TimeComparisons cmp)
+    {
         this.cmp = cmp.getIndex();
     }
 
@@ -146,7 +179,8 @@ public class DateSelector extends BaseExtendSelector {
      *
      * @param pattern the pattern that defines the date format
      */
-    public void setPattern(String pattern) {
+    public void setPattern(String pattern)
+    {
         this.pattern = pattern;
     }
 
@@ -156,42 +190,67 @@ public class DateSelector extends BaseExtendSelector {
      *
      * @param parameters the complete set of parameters for this selector
      */
-    public void setParameters(Parameter[] parameters) {
+    public void setParameters(Parameter[] parameters)
+    {
         super.setParameters(parameters);
-        if (parameters != null) {
-            for (int i = 0; i < parameters.length; i++) {
+        if (parameters != null)
+        {
+            for (int i = 0; i < parameters.length; i++)
+            {
                 String paramname = parameters[i].getName();
-                if (MILLIS_KEY.equalsIgnoreCase(paramname)) {
-                    try {
+                if (MILLIS_KEY.equalsIgnoreCase(paramname))
+                {
+                    try
+                    {
                         setMillis(new Long(parameters[i].getValue()
                         ).longValue());
-                    } catch (NumberFormatException nfe) {
+                    }
+                    catch (NumberFormatException nfe)
+                    {
                         setError("Invalid millisecond setting "
                                 + parameters[i].getValue());
                     }
-                } else if (DATETIME_KEY.equalsIgnoreCase(paramname)) {
+                }
+                else if (DATETIME_KEY.equalsIgnoreCase(paramname))
+                {
                     setDatetime(parameters[i].getValue());
-                } else if (CHECKDIRS_KEY.equalsIgnoreCase(paramname)) {
+                }
+                else if (CHECKDIRS_KEY.equalsIgnoreCase(paramname))
+                {
                     setCheckdirs(Boolean.parseBoolean(parameters[i].getValue()));
-                } else if (GRANULARITY_KEY.equalsIgnoreCase(paramname)) {
-                    try {
+                }
+                else if (GRANULARITY_KEY.equalsIgnoreCase(paramname))
+                {
+                    try
+                    {
                         setGranularity(new Integer(parameters[i].getValue()
                         ).intValue());
-                    } catch (NumberFormatException nfe) {
-                        setError("Invalid granularity setting "
-                            + parameters[i].getValue());
                     }
-                } else if (WHEN_KEY.equalsIgnoreCase(paramname)) {
+                    catch (NumberFormatException nfe)
+                    {
+                        setError("Invalid granularity setting "
+                                + parameters[i].getValue());
+                    }
+                }
+                else if (WHEN_KEY.equalsIgnoreCase(paramname))
+                {
                     TimeComparisons cmp = new TimeComparisons();
-                    try {
+                    try
+                    {
                         cmp.setValue(parameters[i].getValue());
-                    } catch (Exception e) {
-                        setError(e.getMessage() +": "+ parameters[i].getValue());
+                    }
+                    catch (Exception e)
+                    {
+                        setError(e.getMessage() + ": " + parameters[i].getValue());
                     }
                     setWhen(cmp);
-                } else if (PATTERN_KEY.equalsIgnoreCase(paramname)) {
+                }
+                else if (PATTERN_KEY.equalsIgnoreCase(paramname))
+                {
                     setPattern(parameters[i].getValue());
-                } else {
+                }
+                else
+                {
                     setError("Invalid parameter " + paramname);
                 }
             }
@@ -202,25 +261,33 @@ public class DateSelector extends BaseExtendSelector {
      * This is a consistency check to ensure the selector's required
      * values have been set.
      */
-    public void verifySettings() {
-        if (dateTime == null && millis < 0) {
+    public void verifySettings()
+    {
+        if (dateTime == null && millis < 0)
+        {
             setError("You must provide a datetime or the number of "
                     + "milliseconds.");
-        } else if (millis < 0 && dateTime != null) {
+        }
+        else if (millis < 0 && dateTime != null)
+        {
             // check millis and only set it once.
             DateFormat df = ((pattern == null)
-                ? DateFormat.getDateTimeInstance(
+                    ? DateFormat.getDateTimeInstance(
                     DateFormat.SHORT, DateFormat.SHORT, Locale.US)
-                : new SimpleDateFormat(pattern));
+                    : new SimpleDateFormat(pattern));
 
-            try {
+            try
+            {
                 setMillis(df.parse(dateTime).getTime());
-                if (millis < 0) {
+                if (millis < 0)
+                {
                     setError("Date of " + dateTime
-                        + " results in negative milliseconds value"
-                        + " relative to epoch (January 1, 1970, 00:00:00 GMT).");
+                            + " results in negative milliseconds value"
+                            + " relative to epoch (January 1, 1970, 00:00:00 GMT).");
                 }
-            } catch (ParseException pe) {
+            }
+            catch (ParseException pe)
+            {
                 setError("Date of " + dateTime
                         + " Cannot be parsed correctly. It should be in"
                         + ((pattern == null)
@@ -233,37 +300,46 @@ public class DateSelector extends BaseExtendSelector {
      * The heart of the matter. This is where the selector gets to decide
      * on the inclusion of a file in a particular fileset.
      *
-     * @param basedir the base directory the scan is being done from
+     * @param basedir  the base directory the scan is being done from
      * @param filename is the name of the file to check
-     * @param file is a java.io.File object the selector can use
+     * @param file     is a java.io.File object the selector can use
      * @return whether the file should be selected or not
      */
     public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file)
-    throws Exception {
+            throws Exception
+    {
 
         validate();
 
-        if (file.isDirectory() && (!includeDirs)) {
+        if (file.isDirectory() && (!includeDirs))
+        {
             return true;
         }
-        if (cmp == 0) {
+        if (cmp == 0)
+        {
             return ((file.lastModified() - granularity) < millis);
-        } else if (cmp == 1) {
+        }
+        else if (cmp == 1)
+        {
             return ((file.lastModified() + granularity) > millis);
-        } else {
+        }
+        else
+        {
             return (Math.abs(file.lastModified() - millis) <= granularity);
         }
     }
 
     /**
      * Enumerated attribute with the values for time comparison.
-     * <p>
+     * <p/>
      */
-    public static class TimeComparisons extends EnumeratedAttribute {
+    public static class TimeComparisons extends EnumeratedAttribute
+    {
         /**
          * @return the values as an array of strings
          */
-        public String[] getValues() {
+        public String[] getValues()
+        {
             return new String[]{"before", "after", "equal"};
         }
     }

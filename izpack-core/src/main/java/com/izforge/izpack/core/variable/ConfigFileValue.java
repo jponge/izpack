@@ -21,27 +21,21 @@
 
 package com.izforge.izpack.core.variable;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
+import com.izforge.izpack.api.substitutor.SubstitutionType;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import org.ini4j.Ini;
 import org.ini4j.Options;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
 
 public abstract class ConfigFileValue extends ValueImpl implements Serializable
 {
@@ -100,59 +94,67 @@ public abstract class ConfigFileValue extends ValueImpl implements Serializable
     public void validate() throws Exception
     {
         if (this.type == CONFIGFILE_TYPE_INI && (this.section == null || this.section.length() <= 0))
+        {
             throw new Exception("No INI file section defined");
+        }
         if (this.type != CONFIGFILE_TYPE_INI && this.section != null)
+        {
             throw new Exception("No INI file section expected for non-INI file types");
+        }
     }
 
     protected String resolve(InputStream in) throws Exception
     {
         switch (type)
         {
-        case CONFIGFILE_TYPE_OPTIONS:
-            Options opts;
-            opts = new Options(in);
-            return opts.get(key);
-        case CONFIGFILE_TYPE_INI:
-            Ini ini;
-            ini = new Ini(in);
-            return ini.get(section, key);
-        case CONFIGFILE_TYPE_XML:
-            return parseXPath(in, key, System.getProperty("line.separator"));
-        default:
-            throw new Exception("Invalid configuration file type "+type);
+            case CONFIGFILE_TYPE_OPTIONS:
+                Options opts;
+                opts = new Options(in);
+                return opts.get(key);
+            case CONFIGFILE_TYPE_INI:
+                Ini ini;
+                ini = new Ini(in);
+                return ini.get(section, key);
+            case CONFIGFILE_TYPE_XML:
+                return parseXPath(in, key, System.getProperty("line.separator"));
+            default:
+                throw new Exception("Invalid configuration file type " + type);
         }
     }
 
     protected String resolve(InputStream in, VariableSubstitutor... substitutors)
-    throws Exception
+            throws Exception
     {
         String _key_ = key;
-        for ( VariableSubstitutor substitutor : substitutors )
-            _key_ = substitutor.substitute(_key_, (SubstitutionType)null);
+        for (VariableSubstitutor substitutor : substitutors)
+        {
+            _key_ = substitutor.substitute(_key_, (SubstitutionType) null);
+        }
 
         switch (type)
         {
-        case CONFIGFILE_TYPE_OPTIONS:
-            Options opts;
-            opts = new Options(in);
-            return opts.get(_key_);
-        case CONFIGFILE_TYPE_INI:
-            Ini ini;
-            String _section_ = section;
-            for ( VariableSubstitutor substitutor : substitutors )
-                _key_ = substitutor.substitute(_key_, (SubstitutionType)null);
-            ini = new Ini(in);
-            return ini.get(_section_, _key_);
-        case CONFIGFILE_TYPE_XML:
-            return parseXPath(in, _key_, System.getProperty("line.separator"));
-        default:
-            throw new Exception("Invalid configuration file type '"+type+"'");
+            case CONFIGFILE_TYPE_OPTIONS:
+                Options opts;
+                opts = new Options(in);
+                return opts.get(_key_);
+            case CONFIGFILE_TYPE_INI:
+                Ini ini;
+                String _section_ = section;
+                for (VariableSubstitutor substitutor : substitutors)
+                {
+                    _key_ = substitutor.substitute(_key_, (SubstitutionType) null);
+                }
+                ini = new Ini(in);
+                return ini.get(_section_, _key_);
+            case CONFIGFILE_TYPE_XML:
+                return parseXPath(in, _key_, System.getProperty("line.separator"));
+            default:
+                throw new Exception("Invalid configuration file type '" + type + "'");
         }
     }
 
-    private static String parseXPath( InputStream in, String expression, String separator )
-    throws ParserConfigurationException, SAXException, IOException, XPathExpressionException
+    private static String parseXPath(InputStream in, String expression, String separator)
+            throws ParserConfigurationException, SAXException, IOException, XPathExpressionException
     {
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setNamespaceAware(true);
@@ -168,9 +170,12 @@ public abstract class ConfigFileValue extends ValueImpl implements Serializable
         for (int i = 0; i < nodes.getLength(); i++)
         {
             String value = nodes.item(i).getNodeValue();
-            if (value != null) {
-                if (sb.length()>0)
+            if (value != null)
+            {
+                if (sb.length() > 0)
+                {
                     sb.append(separator);
+                }
                 sb.append(value);
             }
         }

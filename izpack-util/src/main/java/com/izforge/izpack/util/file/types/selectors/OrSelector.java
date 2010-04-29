@@ -17,10 +17,10 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
+import com.izforge.izpack.api.data.AutomatedInstallData;
+
 import java.io.File;
 import java.util.Enumeration;
-
-import com.izforge.izpack.api.data.AutomatedInstallData;
 
 /**
  * This selector has a collection of other selectors, any of which have to
@@ -28,20 +28,24 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
  *
  * @since 1.5
  */
-public class OrSelector extends BaseSelectorContainer {
+public class OrSelector extends BaseSelectorContainer
+{
 
     /**
      * Default constructor.
      */
-    public OrSelector() {
+    public OrSelector()
+    {
     }
 
     /**
      * @return a string representation of the selector
      */
-    public String toString() {
+    public String toString()
+    {
         StringBuffer buf = new StringBuffer();
-        if (hasSelectors()) {
+        if (hasSelectors())
+        {
             buf.append("{orselect: ");
             buf.append(super.toString());
             buf.append("}");
@@ -53,24 +57,26 @@ public class OrSelector extends BaseSelectorContainer {
      * Returns true (the file is selected) if any of the other selectors
      * agree that the file should be selected.
      *
-     * @param basedir the base directory the scan is being done from
+     * @param basedir  the base directory the scan is being done from
      * @param filename the name of the file to check
-     * @param file a java.io.File object for the filename that the selector
-     * can use
+     * @param file     a java.io.File object for the filename that the selector
+     *                 can use
      * @return whether the file should be selected or not
      */
     public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file)
-    throws Exception
+            throws Exception
     {
         validate();
         Enumeration e = selectorElements();
         boolean result;
 
         // First, check that all elements are correctly configured
-        while (e.hasMoreElements()) {
+        while (e.hasMoreElements())
+        {
             result = ((FileSelector) e.nextElement()).isSelected(idata,
                     basedir, filename, file);
-            if (result) {
+            if (result)
+            {
                 return true;
             }
         }

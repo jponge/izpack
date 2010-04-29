@@ -21,14 +21,14 @@
 
 package com.izforge.izpack.core.substitutor;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-
 import com.izforge.izpack.api.data.DynamicVariable;
 import com.izforge.izpack.api.data.Value;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Substitutes variables occurring in an input stream or a string. This implementation supports a
@@ -64,7 +64,7 @@ public class DynamicVariableSubstitutor extends VariableSubstitutorBase implemen
      * @param variables the map with variable value mappings
      */
     public DynamicVariableSubstitutor(Map<String, List<DynamicVariable>> dynamicvariables,
-            RulesEngine rules)
+                                      RulesEngine rules)
     {
         this.dynamicvariables = dynamicvariables;
         this.rules = rules;
@@ -72,7 +72,8 @@ public class DynamicVariableSubstitutor extends VariableSubstitutorBase implemen
 
 
     @Override
-    public Value getValue(String name) {
+    public Value getValue(String name)
+    {
         if (dynamicvariables != null)
         {
             for (String dynvarname : dynamicvariables.keySet())

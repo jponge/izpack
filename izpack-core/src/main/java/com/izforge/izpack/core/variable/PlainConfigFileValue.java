@@ -21,11 +21,11 @@
 
 package com.izforge.izpack.core.variable;
 
-import java.io.FileInputStream;
-import java.io.Serializable;
-
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+
+import java.io.FileInputStream;
+import java.io.Serializable;
 
 public class PlainConfigFileValue extends ConfigFileValue implements Serializable
 {
@@ -57,7 +57,9 @@ public class PlainConfigFileValue extends ConfigFileValue implements Serializabl
     {
         super.validate();
         if (this.location == null || this.location.length() <= 0)
+        {
             throw new Exception("No or empty plain configuration file path");
+        }
     }
 
     @Override
@@ -68,11 +70,13 @@ public class PlainConfigFileValue extends ConfigFileValue implements Serializabl
 
     @Override
     public String resolve(VariableSubstitutor... substitutors)
-    throws Exception
+            throws Exception
     {
         String _location_ = location;
-        for ( VariableSubstitutor substitutor : substitutors )
-            _location_ = substitutor.substitute(_location_, (SubstitutionType)null);
+        for (VariableSubstitutor substitutor : substitutors)
+        {
+            _location_ = substitutor.substitute(_location_, (SubstitutionType) null);
+        }
         return resolve(new FileInputStream(_location_), substitutors);
     }
 }

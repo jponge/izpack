@@ -4,9 +4,9 @@ import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.ConditionContainer;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.parameters.ComponentParameter;
 

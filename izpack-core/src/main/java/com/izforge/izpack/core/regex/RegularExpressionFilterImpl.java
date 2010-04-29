@@ -21,9 +21,9 @@
 
 package com.izforge.izpack.core.regex;
 
-import java.io.Serializable;
-
 import com.izforge.izpack.api.regex.RegularExpressionFilter;
+
+import java.io.Serializable;
 
 public class RegularExpressionFilterImpl implements RegularExpressionFilter, Serializable
 {
@@ -39,7 +39,7 @@ public class RegularExpressionFilterImpl implements RegularExpressionFilter, Ser
     public Boolean global;
 
     public RegularExpressionFilterImpl(String regexp, String select, String replace, String defaultValue,
-            Boolean casesensitive, Boolean global)
+                                       Boolean casesensitive, Boolean global)
     {
         super();
         this.regexp = regexp;
@@ -49,24 +49,33 @@ public class RegularExpressionFilterImpl implements RegularExpressionFilter, Ser
         this.casesensitive = casesensitive;
         this.global = global;
     }
+
     public RegularExpressionFilterImpl(String regexp, String select, String defaultValue,
-            Boolean casesensitive)
+                                       Boolean casesensitive)
     {
         this(regexp, select, null, defaultValue, casesensitive, null);
     }
+
     public RegularExpressionFilterImpl(String regexp, String replace, String defaultValue,
-            Boolean casesensitive, Boolean global)
+                                       Boolean casesensitive, Boolean global)
     {
         this(regexp, null, replace, defaultValue, casesensitive, global);
     }
+
     public void validate() throws Exception
     {
         if (this.regexp == null || this.regexp.length() <= 0)
+        {
             throw new Exception("No or empty regular expression defined");
+        }
         if (this.select == null && this.replace == null)
+        {
             throw new Exception("Exactly one of both select or replace expression required");
+        }
         if (this.select != null && this.replace != null)
+        {
             throw new Exception("Expected only one of both select or replace expression");
+        }
     }
 
     public String getRegexp()

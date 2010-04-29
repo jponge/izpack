@@ -22,7 +22,8 @@
 
 package com.izforge.izpack.util.xmlmerge.action;
 
-import com.izforge.izpack.util.xmlmerge.*;
+import com.izforge.izpack.util.xmlmerge.MergeAction;
+import com.izforge.izpack.util.xmlmerge.OperationFactory;
 import com.izforge.izpack.util.xmlmerge.factory.StaticOperationFactory;
 import com.izforge.izpack.util.xmlmerge.mapper.IdentityMapper;
 import com.izforge.izpack.util.xmlmerge.matcher.TagMatcher;

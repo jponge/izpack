@@ -28,7 +28,7 @@ public class OptionFileCopyTask extends ConfigurableFileCopyTask
 
     @Override
     protected void doFileOperation(File oldFile, File newFile, File toFile,
-            boolean patchPreserveEntries, boolean patchPreserveValues, boolean patchResolveVariables)
+                                   boolean patchPreserveEntries, boolean patchPreserveValues, boolean patchResolveVariables)
             throws Exception
     {
         SingleOptionFileTask task = new SingleOptionFileTask();

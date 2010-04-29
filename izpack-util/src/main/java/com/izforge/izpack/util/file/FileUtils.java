@@ -17,22 +17,27 @@
 
 package com.izforge.izpack.util.file;
 
-import java.io.*;
-import java.net.*;
-import java.text.*;
-import java.util.*;
-
 import com.izforge.izpack.util.OsVersion;
+
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.CharacterIterator;
+import java.text.DecimalFormat;
+import java.text.StringCharacterIterator;
+import java.util.Random;
+import java.util.Stack;
+import java.util.StringTokenizer;
 
 /**
  * This class also encapsulates methods which allow Files to be
  * referred to using abstract path names which are translated to native
  * system file paths at runtime as well as copying files or setting
  * their last modification time.
- *
  */
 
-public class FileUtils {
+public class FileUtils
+{
 
     private static final FileUtils PRIMARY_INSTANCE = new FileUtils();
 
@@ -59,8 +64,11 @@ public class FileUtils {
 
 
     // stolen from FilePathToURI of the Xerces-J team
-    static {
-        for (int i = 0; i <= 0x20; i++) {
+
+    static
+    {
+        for (int i = 0; i <= 0x20; i++)
+        {
             isSpecial[i] = true;
             escapedChar1[i] = Character.forDigit(i >> 4, 16);
             escapedChar2[i] = Character.forDigit(i & 0xf, 16);
@@ -69,10 +77,11 @@ public class FileUtils {
         escapedChar1[0x7f] = '7';
         escapedChar2[0x7f] = 'F';
         char[] escChs = {'<', '>', '#', '%', '"', '{', '}',
-                         '|', '\\', '^', '~', '[', ']', '`'};
+                '|', '\\', '^', '~', '[', ']', '`'};
         int len = escChs.length;
         char ch;
-        for (int i = 0; i < len; i++) {
+        for (int i = 0; i < len; i++)
+        {
             ch = escChs[i];
             isSpecial[ch] = true;
             escapedChar1[ch] = Character.forDigit(ch >> 4, 16);
@@ -85,24 +94,28 @@ public class FileUtils {
      *
      * @return a new instance of FileUtils.
      */
-    public static FileUtils newFileUtils() {
+    public static FileUtils newFileUtils()
+    {
         return new FileUtils();
     }
 
     /**
      * Method to retrieve The FileUtils, which is shared by all users of this
      * method.
+     *
      * @return an instance of FileUtils.
      * @since Ant 1.6.3
      */
-    public static FileUtils getFileUtils() {
+    public static FileUtils getFileUtils()
+    {
         return PRIMARY_INSTANCE;
     }
 
     /**
      * Empty constructor.
      */
-    protected FileUtils() {
+    protected FileUtils()
+    {
     }
 
     /**
@@ -111,9 +124,10 @@ public class FileUtils {
      * @param file the file whose URL representation is required.
      * @return The FileURL value.
      * @throws MalformedURLException if the URL representation cannot be
-     *      formed.
+     *                               formed.
      */
-    public URL getFileURL(File file) throws MalformedURLException {
+    public URL getFileURL(File file) throws MalformedURLException
+    {
         return new URL(toURI(file.getAbsolutePath()));
     }
 
@@ -123,14 +137,14 @@ public class FileUtils {
      *
      * @param sourceFile Name of file to copy from.
      *                   Must not be <code>null</code>.
-     * @param destFile Name of file to copy to.
-     *                 Must not be <code>null</code>.
-     *
+     * @param destFile   Name of file to copy to.
+     *                   Must not be <code>null</code>.
      * @throws IOException if the copying fails.
      */
     public void copyFile(String sourceFile, String destFile,
-            boolean overwrite, boolean preserveLastModified)
-        throws IOException {
+                         boolean overwrite, boolean preserveLastModified)
+            throws IOException
+    {
         copyFile(new File(sourceFile), new File(destFile), overwrite, preserveLastModified);
     }
 
@@ -140,12 +154,12 @@ public class FileUtils {
      *
      * @param sourceFile the file to copy from.
      *                   Must not be <code>null</code>.
-     * @param destFile the file to copy to.
-     *                 Must not be <code>null</code>.
-     *
+     * @param destFile   the file to copy to.
+     *                   Must not be <code>null</code>.
      * @throws IOException if the copying fails.
      */
-    public void copyFile(File sourceFile, File destFile) throws IOException {
+    public void copyFile(File sourceFile, File destFile) throws IOException
+    {
         copyFile(sourceFile, destFile, false, false);
     }
 
@@ -157,24 +171,21 @@ public class FileUtils {
      * <code>destFile</code> file should be made equal
      * to the last modified time of <code>sourceFile</code>.
      *
-     * @param sourceFile the file to copy from.
-     *                   Must not be <code>null</code>.
-     * @param destFile the file to copy to.
-     *                 Must not be <code>null</code>.
-     * @param filters the collection of filters to apply to this copy.
-     * @param filterChains filterChains to apply during the copy.
-     * @param overwrite Whether or not the destination file should be
-     *                  overwritten if it already exists.
+     * @param sourceFile           the file to copy from.
+     *                             Must not be <code>null</code>.
+     * @param destFile             the file to copy to.
+     *                             Must not be <code>null</code>.
+     * @param filters              the collection of filters to apply to this copy.
+     * @param filterChains         filterChains to apply during the copy.
+     * @param overwrite            Whether or not the destination file should be
+     *                             overwritten if it already exists.
      * @param preserveLastModified Whether or not the last modified time of
      *                             the resulting file should be set to that
      *                             of the source file.
-     * @param inputEncoding the encoding used to read the files.
-     * @param outputEncoding the encoding used to write the files.
-     * @param project the project instance.
-     *
-     *
+     * @param inputEncoding        the encoding used to read the files.
+     * @param outputEncoding       the encoding used to write the files.
+     * @param project              the project instance.
      * @throws IOException if the copying fails.
-     *
      * @since Ant 1.6
      */
     public void copyFile(File sourceFile, File destFile,
@@ -182,18 +193,22 @@ public class FileUtils {
                          boolean overwrite, boolean preserveLastModified
                          /*String inputEncoding, String outputEncoding,
                          Project project*/)
-        throws IOException {
+            throws IOException
+    {
 
         if (overwrite || !destFile.exists()
-            || destFile.lastModified() < sourceFile.lastModified()) {
+                || destFile.lastModified() < sourceFile.lastModified())
+        {
 
-            if (destFile.exists() && destFile.isFile()) {
+            if (destFile.exists() && destFile.isFile())
+            {
                 destFile.delete();
             }
             // ensure that parent dir of dest file exists!
             // not using getParentFile method to stay 1.1 compat
             File parent = destFile.getParentFile();
-            if (parent != null && !parent.exists()) {
+            if (parent != null && !parent.exists())
+            {
                 parent.mkdirs();
             }
 //            final boolean filterSetsAvailable = (filters != null
@@ -295,24 +310,30 @@ public class FileUtils {
 //                     close(in);
 //                 }
 //            } else {
-                FileInputStream in = null;
-                FileOutputStream out = null;
-                try {
-                    in = new FileInputStream(sourceFile);
-                    out = new FileOutputStream(destFile);
+            FileInputStream in = null;
+            FileOutputStream out = null;
+            try
+            {
+                in = new FileInputStream(sourceFile);
+                out = new FileOutputStream(destFile);
 
-                    byte[] buffer = new byte[BUF_SIZE];
-                    int count = 0;
-                    do {
-                        out.write(buffer, 0, count);
-                        count = in.read(buffer, 0, buffer.length);
-                    } while (count != -1);
-                } finally {
-                    close(out);
-                    close(in);
+                byte[] buffer = new byte[BUF_SIZE];
+                int count = 0;
+                do
+                {
+                    out.write(buffer, 0, count);
+                    count = in.read(buffer, 0, buffer.length);
                 }
+                while (count != -1);
+            }
+            finally
+            {
+                close(out);
+                close(in);
+            }
 //            }
-            if (preserveLastModified) {
+            if (preserveLastModified)
+            {
                 setFileLastModified(destFile, sourceFile.lastModified());
             }
         }
@@ -326,7 +347,8 @@ public class FileUtils {
      * @param time the time to which the last modified time is to be set.
      *             if this is -1, the current time is used.
      */
-    public void setFileLastModified(File file, long time) {
+    public void setFileLastModified(File file, long time)
+    {
         file.setLastModified((time < 0) ? System.currentTimeMillis() : time);
     }
 
@@ -334,44 +356,52 @@ public class FileUtils {
      * Interpret the filename as a file relative to the given file
      * unless the filename already represents an absolute filename.
      *
-     * @param file the "reference" file for relative paths. This
-     * instance must be an absolute file and must not contain
-     * &quot;./&quot; or &quot;../&quot; sequences (same for \ instead
-     * of /).  If it is null, this call is equivalent to
-     * <code>new java.io.File(filename)</code>.
-     *
+     * @param file     the "reference" file for relative paths. This
+     *                 instance must be an absolute file and must not contain
+     *                 &quot;./&quot; or &quot;../&quot; sequences (same for \ instead
+     *                 of /).  If it is null, this call is equivalent to
+     *                 <code>new java.io.File(filename)</code>.
      * @param filename a file name.
-     *
      * @return an absolute file that doesn't contain &quot;./&quot; or
-     * &quot;../&quot; sequences and uses the correct separator for
-     * the current platform.
+     *         &quot;../&quot; sequences and uses the correct separator for
+     *         the current platform.
      */
-    public File resolveFile(File file, String filename) throws Exception {
+    public File resolveFile(File file, String filename) throws Exception
+    {
         filename = filename.replace('/', File.separatorChar)
-            .replace('\\', File.separatorChar);
+                .replace('\\', File.separatorChar);
 
         // deal with absolute files
-        if (isAbsolutePath(filename)) {
+        if (isAbsolutePath(filename))
+        {
             return normalize(filename);
         }
-        if (file == null) {
+        if (file == null)
+        {
             return new File(filename);
         }
         File helpFile = new File(file.getAbsolutePath());
         StringTokenizer tok = new StringTokenizer(filename, File.separator);
-        while (tok.hasMoreTokens()) {
+        while (tok.hasMoreTokens())
+        {
             String part = tok.nextToken();
-            if (part.equals("..")) {
+            if (part.equals(".."))
+            {
                 helpFile = helpFile.getParentFile();
-                if (helpFile == null) {
+                if (helpFile == null)
+                {
                     String msg = "The file or path you specified ("
-                        + filename + ") is invalid relative to "
-                        + file.getPath();
+                            + filename + ") is invalid relative to "
+                            + file.getPath();
                     throw new Exception(msg);
                 }
-            } else if (part.equals(".")) {
+            }
+            else if (part.equals("."))
+            {
                 // Do nothing here
-            } else {
+            }
+            else
+            {
                 helpFile = new File(helpFile, part);
             }
         }
@@ -380,17 +410,21 @@ public class FileUtils {
 
     /**
      * Verifies that the specified filename represents an absolute path.
+     *
      * @param filename the filename to be checked.
      * @return true if the filename represents an absolute path.
      */
-    public static boolean isAbsolutePath(String filename) {
-        if (filename.startsWith(File.separator)) {
+    public static boolean isAbsolutePath(String filename)
+    {
+        if (filename.startsWith(File.separator))
+        {
             // common for all os
             return true;
         }
         if (OsVersion.IS_WINDOWS && filename.length() >= 2
-            && Character.isLetter(filename.charAt(0))
-            && filename.charAt(1) == ':') {
+                && Character.isLetter(filename.charAt(0))
+                && filename.charAt(1) == ':')
+        {
             // Actually on windows the : must be followed by a \ for
             // the path to be absolute, else the path is relative
             // to the current working directory on that drive.
@@ -402,34 +436,35 @@ public class FileUtils {
 
     /**
      * &quot;Normalize&quot; the given absolute path.
-     *
+     * <p/>
      * <p>This includes:
      * <ul>
-     *   <li>Uppercase the drive letter if there is one.</li>
-     *   <li>Remove redundant slashes after the drive spec.</li>
-     *   <li>Resolve all ./, .\, ../ and ..\ sequences.</li>
-     *   <li>DOS style paths that start with a drive letter will have
-     *     \ as the separator.</li>
+     * <li>Uppercase the drive letter if there is one.</li>
+     * <li>Remove redundant slashes after the drive spec.</li>
+     * <li>Resolve all ./, .\, ../ and ..\ sequences.</li>
+     * <li>DOS style paths that start with a drive letter will have
+     * \ as the separator.</li>
      * </ul>
      * Unlike <code>File#getCanonicalPath()</code> this method
      * specifically does not resolve symbolic links.
      *
      * @param path the path to be normalized.
      * @return the normalized version of the path.
-     *
      * @throws java.lang.NullPointerException if the file path is
-     * equal to null.
+     *                                        equal to null.
      */
-    public File normalize(String path) throws Exception {
+    public File normalize(String path) throws Exception
+    {
         String orig = path;
 
         path = path.replace('/', File.separatorChar)
-            .replace('\\', File.separatorChar);
+                .replace('\\', File.separatorChar);
 
         // make sure we are dealing with an absolute path
         int colon = path.indexOf(":");
 
-        if (!isAbsolutePath(path)) {
+        if (!isAbsolutePath(path))
+        {
             String msg = path + " is not an absolute path";
             throw new Exception(msg);
         }
@@ -438,39 +473,51 @@ public class FileUtils {
         // Eliminate consecutive slashes after the drive spec
         if ((OsVersion.IS_WINDOWS && path.length() >= 2
                 && Character.isLetter(path.charAt(0))
-                && path.charAt(1) == ':')) {
+                && path.charAt(1) == ':'))
+        {
 
             dosWithDrive = true;
 
             char[] ca = path.replace('/', '\\').toCharArray();
             StringBuffer sbRoot = new StringBuffer();
-            for (int i = 0; i < colon; i++) {
+            for (int i = 0; i < colon; i++)
+            {
                 sbRoot.append(Character.toUpperCase(ca[i]));
             }
             sbRoot.append(':');
-            if (colon + 1 < path.length()) {
+            if (colon + 1 < path.length())
+            {
                 sbRoot.append(File.separatorChar);
             }
             root = sbRoot.toString();
 
             // Eliminate consecutive slashes after the drive spec
             StringBuffer sbPath = new StringBuffer();
-            for (int i = colon + 1; i < ca.length; i++) {
+            for (int i = colon + 1; i < ca.length; i++)
+            {
                 if ((ca[i] != '\\')
-                    || (ca[i] == '\\' && ca[i - 1] != '\\')) {
+                        || (ca[i] == '\\' && ca[i - 1] != '\\'))
+                {
                     sbPath.append(ca[i]);
                 }
             }
             path = sbPath.toString().replace('\\', File.separatorChar);
-        } else {
-            if (path.length() == 1) {
+        }
+        else
+        {
+            if (path.length() == 1)
+            {
                 root = File.separator;
                 path = "";
-            } else if (path.charAt(1) == File.separatorChar) {
+            }
+            else if (path.charAt(1) == File.separatorChar)
+            {
                 // UNC drive
                 root = File.separator + File.separator;
                 path = path.substring(2);
-            } else {
+            }
+            else
+            {
                 root = File.separator;
                 path = path.substring(1);
             }
@@ -478,23 +525,34 @@ public class FileUtils {
         Stack s = new Stack();
         s.push(root);
         StringTokenizer tok = new StringTokenizer(path, File.separator);
-        while (tok.hasMoreTokens()) {
+        while (tok.hasMoreTokens())
+        {
             String thisToken = tok.nextToken();
-            if (".".equals(thisToken)) {
+            if (".".equals(thisToken))
+            {
                 continue;
-            } else if ("..".equals(thisToken)) {
-                if (s.size() < 2) {
+            }
+            else if ("..".equals(thisToken))
+            {
+                if (s.size() < 2)
+                {
                     throw new Exception("Cannot resolve path " + orig);
-                } else {
+                }
+                else
+                {
                     s.pop();
                 }
-            } else { // plain component
+            }
+            else
+            { // plain component
                 s.push(thisToken);
             }
         }
         StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < s.size(); i++) {
-            if (i > 1) {
+        for (int i = 0; i < s.size(); i++)
+        {
+            if (i > 1)
+            {
                 // not before the filesystem root and not after it, since root
                 // already contains one
                 sb.append(File.separatorChar);
@@ -502,7 +560,8 @@ public class FileUtils {
             sb.append(s.elementAt(i));
         }
         path = sb.toString();
-        if (dosWithDrive) {
+        if (dosWithDrive)
+        {
             path = path.replace('/', '\\');
         }
         return new File(path);
@@ -517,7 +576,8 @@ public class FileUtils {
      * @param f The <code>File</code> to get the VMS path for.
      * @return The absolute VMS path to <code>f</code>.
      */
-    public String toVMSPath(File f) throws Exception {
+    public String toVMSPath(File f) throws Exception
+    {
         // format: "DEVICE:[DIR.SUBDIR]FILE"
         String osPath;
         String path = normalize(f.getAbsolutePath()).getPath();
@@ -525,7 +585,7 @@ public class FileUtils {
         boolean isAbsolute = path.charAt(0) == File.separatorChar;
         // treat directories specified using .DIR syntax as files
         boolean isDirectory = f.isDirectory()
-            && !name.regionMatches(true, name.length() - 4, ".DIR", 0, 4);
+                && !name.regionMatches(true, name.length() - 4, ".DIR", 0, 4);
 
         String device = null;
         StringBuffer directory = null;
@@ -533,43 +593,55 @@ public class FileUtils {
 
         int index = 0;
 
-        if (isAbsolute) {
+        if (isAbsolute)
+        {
             index = path.indexOf(File.separatorChar, 1);
-            if (index == -1) {
+            if (index == -1)
+            {
                 return path.substring(1) + ":[000000]";
-            } else {
+            }
+            else
+            {
                 device = path.substring(1, index++);
             }
         }
-        if (isDirectory) {
+        if (isDirectory)
+        {
             directory = new StringBuffer(path.substring(index).
-                                         replace(File.separatorChar, '.'));
-        } else {
+                    replace(File.separatorChar, '.'));
+        }
+        else
+        {
             int dirEnd =
-                path.lastIndexOf(File.separatorChar, path.length());
-            if (dirEnd == -1 || dirEnd < index) {
+                    path.lastIndexOf(File.separatorChar, path.length());
+            if (dirEnd == -1 || dirEnd < index)
+            {
                 file = path.substring(index);
-            } else {
+            }
+            else
+            {
                 directory = new StringBuffer(path.substring(index, dirEnd).
-                                             replace(File.separatorChar, '.'));
+                        replace(File.separatorChar, '.'));
                 index = dirEnd + 1;
-                if (path.length() > index) {
+                if (path.length() > index)
+                {
                     file = path.substring(index);
                 }
             }
         }
-        if (!isAbsolute && directory != null) {
+        if (!isAbsolute && directory != null)
+        {
             directory.insert(0, '.');
         }
         osPath = ((device != null) ? device + ":" : "")
-            + ((directory != null) ? "[" + directory + "]" : "")
-            + ((file != null) ? file : "");
+                + ((directory != null) ? "[" + directory + "]" : "")
+                + ((file != null) ? file : "");
         return osPath;
     }
 
     /**
      * Create a temporary file in a given directory.
-     *
+     * <p/>
      * <p>The file denoted by the returned abstract pathname did not
      * exist before this method was invoked, any subsequent invocation
      * of this method will yield a different file name.</p>
@@ -580,27 +652,30 @@ public class FileUtils {
      * as it doesn't create the file itself.  It uses the location pointed
      * to by java.io.tmpdir when the parentDir attribute is null.</p>
      *
-     * @param prefix prefix before the random number.
-     * @param suffix file extension; include the '.'.
+     * @param prefix    prefix before the random number.
+     * @param suffix    file extension; include the '.'.
      * @param parentDir Directory to create the temporary file in;
-     * java.io.tmpdir used if not specified.
-     *
+     *                  java.io.tmpdir used if not specified.
      * @return a File reference to the new temporary file.
      * @since Ant 1.5
      */
-    public File createTempFile(String prefix, String suffix, File parentDir) {
+    public File createTempFile(String prefix, String suffix, File parentDir)
+    {
         File result = null;
         String parent = (parentDir == null)
-            ? System.getProperty("java.io.tmpdir")
-            : parentDir.getPath();
+                ? System.getProperty("java.io.tmpdir")
+                : parentDir.getPath();
 
         DecimalFormat fmt = new DecimalFormat("#####");
-        synchronized (rand) {
-            do {
+        synchronized (rand)
+        {
+            do
+            {
                 result = new File(parent,
-                                  prefix + fmt.format(Math.abs(rand.nextInt()))
-                                  + suffix);
-            } while (result.exists());
+                        prefix + fmt.format(Math.abs(rand.nextInt()))
+                                + suffix);
+            }
+            while (result.exists());
         }
         return result;
     }
@@ -610,43 +685,45 @@ public class FileUtils {
      *
      * @param f1 the file whose content is to be compared.
      * @param f2 the other file whose content is to be compared.
-     *
      * @return true if the content of the files is the same.
-     *
      * @throws IOException if the files cannot be read.
      */
-    public boolean contentEquals(File f1, File f2) throws Exception {
+    public boolean contentEquals(File f1, File f2) throws Exception
+    {
         return contentEquals(f1, f2, false);
     }
 
     /**
      * Compares the contents of two files.
      *
-     * @param f1 the file whose content is to be compared.
-     * @param f2 the other file whose content is to be compared.
+     * @param f1       the file whose content is to be compared.
+     * @param f2       the other file whose content is to be compared.
      * @param textfile true if the file is to be treated as a text file and
-     *        differences in kind of line break are to be ignored.
-     *
+     *                 differences in kind of line break are to be ignored.
      * @return true if the content of the files is the same.
-     *
      * @throws IOException if the files cannot be read.
      * @since Ant 1.6.3
      */
-    public boolean contentEquals(File f1, File f2, boolean textfile) throws Exception {
-        if (f1.exists() != f2.exists()) {
+    public boolean contentEquals(File f1, File f2, boolean textfile) throws Exception
+    {
+        if (f1.exists() != f2.exists())
+        {
             return false;
         }
-        if (!f1.exists()) {
+        if (!f1.exists())
+        {
             // two not existing files are equal
             return true;
         }
         // should the following two be switched?  If f1 and f2 refer to the same file,
         // isn't their content equal regardless of whether that file is a directory?
-        if (f1.isDirectory() || f2.isDirectory()) {
+        if (f1.isDirectory() || f2.isDirectory())
+        {
             // don't want to compare directory contents for now
             return false;
         }
-        if (fileNameEquals(f1, f2)) {
+        if (fileNameEquals(f1, f2))
+        {
             // same filename => true
             return true;
         }
@@ -666,30 +743,38 @@ public class FileUtils {
      * @return true if the content of the files is the same.
      * @throws IOException if the files cannot be read.
      */
-    private boolean binaryEquals(File f1, File f2) throws IOException {
-        if (f1.length() != f2.length()) {
+    private boolean binaryEquals(File f1, File f2) throws IOException
+    {
+        if (f1.length() != f2.length())
+        {
             // different size =>false
             return false;
         }
 
         InputStream in1 = null;
         InputStream in2 = null;
-        try {
+        try
+        {
             in1 = new BufferedInputStream(new FileInputStream(f1));
             in2 = new BufferedInputStream(new FileInputStream(f2));
 
             int expectedByte = in1.read();
-            while (expectedByte != -1) {
-                if (expectedByte != in2.read()) {
+            while (expectedByte != -1)
+            {
+                if (expectedByte != in2.read())
+                {
                     return false;
                 }
                 expectedByte = in1.read();
             }
-            if (in2.read() != -1) {
+            if (in2.read() != -1)
+            {
                 return false;
             }
             return true;
-        } finally {
+        }
+        finally
+        {
             close(in1);
             close(in2);
         }
@@ -697,7 +782,7 @@ public class FileUtils {
 
     /**
      * Text compares the contents of two files.
-     *
+     * <p/>
      * Ignores different kinds of line endings.
      *
      * @param f1 the file whose content is to be compared.
@@ -705,25 +790,32 @@ public class FileUtils {
      * @return true if the content of the files is the same.
      * @throws IOException if the files cannot be read.
      */
-    private boolean textEquals(File f1, File f2) throws IOException {
+    private boolean textEquals(File f1, File f2) throws IOException
+    {
         BufferedReader in1 = null;
         BufferedReader in2 = null;
-        try {
+        try
+        {
             in1 = new BufferedReader(new FileReader(f1));
             in2 = new BufferedReader(new FileReader(f2));
 
             String expected = in1.readLine();
-            while (expected != null) {
-                if (!expected.equals(in2.readLine())) {
+            while (expected != null)
+            {
+                if (!expected.equals(in2.readLine()))
+                {
                     return false;
                 }
                 expected = in1.readLine();
             }
-            if (in2.readLine() != null) {
+            if (in2.readLine() != null)
+            {
                 return false;
             }
             return true;
-        } finally {
+        }
+        finally
+        {
             close(in1);
             close(in2);
         }
@@ -732,50 +824,55 @@ public class FileUtils {
     /**
      * This was originally an emulation of {@link File#getParentFile} for JDK 1.1,
      * but it is now implemented using that method (Ant 1.6.3 onwards).
+     *
      * @param f the file whose parent is required.
      * @return the given file's parent, or null if the file does not have a
      *         parent.
      * @since 1.10
      */
-    public File getParentFile(File f) {
+    public File getParentFile(File f)
+    {
         return (f == null) ? null : f.getParentFile();
     }
 
     /**
      * Read from reader till EOF.
+     *
      * @param rdr the reader from which to read.
      * @return the contents read out of the given reader.
-     *
      * @throws IOException if the contents could not be read out from the
-     *         reader.
+     *                     reader.
      */
-    public static final String readFully(Reader rdr) throws IOException {
+    public static final String readFully(Reader rdr) throws IOException
+    {
         return readFully(rdr, BUF_SIZE);
     }
 
     /**
      * Read from reader till EOF.
      *
-     * @param rdr the reader from which to read.
+     * @param rdr        the reader from which to read.
      * @param bufferSize the buffer size to use when reading.
-     *
      * @return the contents read out of the given reader.
-     *
      * @throws IOException if the contents could not be read out from the
-     *         reader.
+     *                     reader.
      */
     public static final String readFully(Reader rdr, int bufferSize)
-        throws IOException {
-        if (bufferSize <= 0) {
+            throws IOException
+    {
+        if (bufferSize <= 0)
+        {
             throw new IllegalArgumentException("Buffer size must be greater "
-                                               + "than 0");
+                    + "than 0");
         }
         final char[] buffer = new char[bufferSize];
         int bufferLength = 0;
         StringBuffer textBuffer = null;
-        while (bufferLength != -1) {
+        while (bufferLength != -1)
+        {
             bufferLength = rdr.read(buffer);
-            if (bufferLength > 0) {
+            if (bufferLength > 0)
+            {
                 textBuffer = (textBuffer == null) ? new StringBuffer() : textBuffer;
                 textBuffer.append(new String(buffer, 0, bufferLength));
             }
@@ -786,7 +883,7 @@ public class FileUtils {
     /**
      * This was originally an emulation of File.createNewFile for JDK 1.1,
      * but it is now implemented using that method (Ant 1.6.3 onwards).
-     *
+     * <p/>
      * <p>This method has historically <strong>not</strong> guaranteed that the
      * operation was atomic. In its current implementation it is.
      *
@@ -795,22 +892,25 @@ public class FileUtils {
      * @throws IOException on error.
      * @since Ant 1.5
      */
-    public boolean createNewFile(File f) throws IOException {
+    public boolean createNewFile(File f) throws IOException
+    {
         return f.createNewFile();
     }
 
     /**
      * Create a new file, optionally creating parent directories.
      *
-     * @param f the file to be created.
+     * @param f      the file to be created.
      * @param mkdirs <code>boolean</code> whether to create parent directories.
      * @return true if the file did not exist already.
      * @throws IOException on error.
      * @since Ant 1.6.3
      */
-    public boolean createNewFile(File f, boolean mkdirs) throws IOException {
+    public boolean createNewFile(File f, boolean mkdirs) throws IOException
+    {
         File parent = f.getParentFile();
-        if (mkdirs && !(parent.exists())) {
+        if (mkdirs && !(parent.exists()))
+        {
             parent.mkdirs();
         }
         return f.createNewFile();
@@ -818,21 +918,22 @@ public class FileUtils {
 
     /**
      * Checks whether a given file is a symbolic link.
-     *
+     * <p/>
      * <p>It doesn't really test for symbolic links but whether the
      * canonical and absolute paths of the file are identical--this
      * may lead to false positives on some platforms.</p>
      *
      * @param parent the parent directory of the file to test
-     * @param name the name of the file to test.
-     *
+     * @param name   the name of the file to test.
      * @return true if the file is a symbolic link.
      * @throws IOException on error.
      * @since Ant 1.5
      */
     public boolean isSymbolicLink(File parent, String name)
-        throws IOException {
-        if (parent == null) {
+            throws IOException
+    {
+        if (parent == null)
+        {
             File f = new File(name);
             parent = f.getParentFile();
             name = f.getName();
@@ -845,23 +946,24 @@ public class FileUtils {
      * Removes a leading path from a second path.
      *
      * @param leading The leading path, must not be null, must be absolute.
-     * @param path The path to remove from, must not be null, must be absolute.
-     *
+     * @param path    The path to remove from, must not be null, must be absolute.
      * @return path's normalized absolute if it doesn't start with
-     * leading; path's path with leading's path removed otherwise.
-     *
+     *         leading; path's path with leading's path removed otherwise.
      * @since Ant 1.5
      */
-    public String removeLeadingPath(File leading, File path) throws Exception {
+    public String removeLeadingPath(File leading, File path) throws Exception
+    {
         String l = normalize(leading.getAbsolutePath()).getAbsolutePath();
         String p = normalize(path.getAbsolutePath()).getAbsolutePath();
-        if (l.equals(p)) {
+        if (l.equals(p))
+        {
             return "";
         }
 
         // ensure that l ends with a /
         // so we never think /foo was a parent directory of /foobar
-        if (!l.endsWith(File.separator)) {
+        if (!l.endsWith(File.separator))
+        {
             l += File.separator;
         }
         return (p.startsWith(l)) ? p.substring(l.length()) : p;
@@ -870,29 +972,34 @@ public class FileUtils {
     /**
      * Constructs a <code>file:</code> URI that represents the
      * external form of the given pathname.
-     *
+     * <p/>
      * <p>Will be an absolute URI if the given path is absolute.</p>
-     *
+     * <p/>
      * <p>This code doesn't handle non-ASCII characters properly.</p>
      *
      * @param path the path in the local file system.
      * @return the URI version of the local path.
      * @since Ant 1.6
      */
-    public String toURI(String path) {
+    public String toURI(String path)
+    {
         boolean isDir = (new File(path)).isDirectory();
 
         StringBuffer sb = new StringBuffer("file:");
 
         // catch exception if normalize thinks this is not an absolute path
-        try {
+        try
+        {
             path = normalize(path).getAbsolutePath();
             sb.append("//");
             // add an extra slash for filesystems with drive-specifiers
-            if (!path.startsWith(File.separator)) {
+            if (!path.startsWith(File.separator))
+            {
                 sb.append("/");
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             // relative path
         }
 
@@ -900,16 +1007,21 @@ public class FileUtils {
 
         CharacterIterator iter = new StringCharacterIterator(path);
         for (char c = iter.first(); c != CharacterIterator.DONE;
-             c = iter.next()) {
-            if (c < 256 && isSpecial[c]) {
+             c = iter.next())
+        {
+            if (c < 256 && isSpecial[c])
+            {
                 sb.append('%');
                 sb.append(escapedChar1[c]);
                 sb.append(escapedChar2[c]);
-            } else {
+            }
+            else
+            {
                 sb.append(c);
             }
         }
-        if (isDir && !path.endsWith("/")) {
+        if (isDir && !path.endsWith("/"))
+        {
             sb.append('/');
         }
         return sb.toString();
@@ -917,55 +1029,57 @@ public class FileUtils {
 
     /**
      * Compares two filenames.
-     *
+     * <p/>
      * <p>Unlike java.io.File#equals this method will try to compare
      * the absolute paths and &quot;normalize&quot; the filenames
      * before comparing them.</p>
      *
      * @param f1 the file whose name is to be compared.
      * @param f2 the other file whose name is to be compared.
-     *
      * @return true if the file are for the same file.
-     *
      * @since Ant 1.5.3
      */
-    public boolean fileNameEquals(File f1, File f2) throws Exception {
+    public boolean fileNameEquals(File f1, File f2) throws Exception
+    {
         return normalize(f1.getAbsolutePath())
-            .equals(normalize(f2.getAbsolutePath()));
+                .equals(normalize(f2.getAbsolutePath()));
     }
 
     /**
      * Renames a file, even if that involves crossing file system boundaries.
-     *
+     * <p/>
      * <p>This will remove <code>to</code> (if it exists), ensure that
      * <code>to</code>'s parent directory exists and move
      * <code>from</code>, which involves deleting <code>from</code> as
      * well.</p>
      *
      * @param from the file to move.
-     * @param to the new file name.
-     *
+     * @param to   the new file name.
      * @throws IOException if anything bad happens during this
-     * process.  Note that <code>to</code> may have been deleted
-     * already when this happens.
-     *
+     *                     process.  Note that <code>to</code> may have been deleted
+     *                     already when this happens.
      * @since Ant 1.6
      */
-    public void rename(File from, File to) throws IOException {
-        if (to.exists() && !to.delete()) {
+    public void rename(File from, File to) throws IOException
+    {
+        if (to.exists() && !to.delete())
+        {
             throw new IOException("Failed to delete " + to
-                                  + " while trying to rename " + from);
+                    + " while trying to rename " + from);
         }
         File parent = to.getParentFile();
-        if (parent != null && !parent.exists() && !parent.mkdirs()) {
+        if (parent != null && !parent.exists() && !parent.mkdirs())
+        {
             throw new IOException("Failed to create directory " + parent
-                                  + " while trying to rename " + from);
+                    + " while trying to rename " + from);
         }
-        if (!from.renameTo(to)) {
+        if (!from.renameTo(to))
+        {
             copyFile(from, to);
-            if (!from.delete()) {
+            if (!from.delete())
+            {
                 throw new IOException("Failed to delete " + from
-                                      + " while trying to rename it.");
+                        + " while trying to rename it.");
             }
         }
     }
@@ -975,28 +1089,33 @@ public class FileUtils {
      * The choice is made based on OS, which is incorrect--it should really be
      * by filesystem. We do not have an easy way to probe for file systems,
      * however.
+     *
      * @return the difference, in milliseconds, which two file timestamps must have
-     * in order for the two files to be given a creation order.
+     *         in order for the two files to be given a creation order.
      */
-    public long getFileTimestampGranularity() {
+    public long getFileTimestampGranularity()
+    {
         return OsVersion.IS_WINDOWS
-            ? FAT_FILE_TIMESTAMP_GRANULARITY : UNIX_FILE_TIMESTAMP_GRANULARITY;
+                ? FAT_FILE_TIMESTAMP_GRANULARITY : UNIX_FILE_TIMESTAMP_GRANULARITY;
     }
 
     /**
      * Returns true if the source is older than the dest.
      * If the dest file does not exist, then the test returns false; it is
      * implicitly not up do date.
-     * @param source source file (should be the older).
-     * @param dest dest file (should be the newer).
+     *
+     * @param source      source file (should be the older).
+     * @param dest        dest file (should be the newer).
      * @param granularity an offset added to the source time.
      * @return true if the source is older than the dest after accounting
-     *              for granularity.
+     *         for granularity.
      * @since Ant 1.6.3
      */
-    public boolean isUpToDate(File source, File dest, long granularity) {
+    public boolean isUpToDate(File source, File dest, long granularity)
+    {
         //do a check for the destination file existing
-        if (!dest.exists()) {
+        if (!dest.exists())
+        {
             //if it does not, then the file is not up to date.
             return false;
         }
@@ -1008,12 +1127,14 @@ public class FileUtils {
 
     /**
      * Returns true if the source is older than the dest.
+     *
      * @param source source file (should be the older).
-     * @param dest dest file (should be the newer).
+     * @param dest   dest file (should be the newer).
      * @return true if the source is older than the dest, taking the granularity into account.
      * @since Ant 1.6.3
      */
-    public boolean isUpToDate(File source, File dest) {
+    public boolean isUpToDate(File source, File dest)
+    {
         return isUpToDate(source, dest, getFileTimestampGranularity());
     }
 
@@ -1021,13 +1142,15 @@ public class FileUtils {
      * Compare two timestamps for being up to date using
      * the specified granularity.
      *
-     * @param sourceTime timestamp of source file.
-     * @param destTime timestamp of dest file.
+     * @param sourceTime  timestamp of source file.
+     * @param destTime    timestamp of dest file.
      * @param granularity os/filesys granularity.
      * @return true if the dest file is considered up to date.
      */
-    public boolean isUpToDate(long sourceTime, long destTime, long granularity) {
-        if (destTime == -1) {
+    public boolean isUpToDate(long sourceTime, long destTime, long granularity)
+    {
+        if (destTime == -1)
+        {
             return false;
         }
         return destTime >= sourceTime + granularity;
@@ -1037,24 +1160,31 @@ public class FileUtils {
      * Compare two timestamps for being up to date using the
      * current granularity.
      *
-     * @param sourceTime  timestamp of source file.
-     * @param destTime    timestamp of dest file.
+     * @param sourceTime timestamp of source file.
+     * @param destTime   timestamp of dest file.
      * @return true if the dest file is considered up to date.
      */
-    public boolean isUpToDate(long sourceTime, long destTime) {
+    public boolean isUpToDate(long sourceTime, long destTime)
+    {
         return isUpToDate(sourceTime, destTime, getFileTimestampGranularity());
     }
 
     /**
      * Close a Writer without throwing any exception if something went wrong.
      * Do not attempt to close it if the argument is null.
+     *
      * @param device output writer, can be null.
      */
-    public static void close(Writer device) {
-        if (device != null) {
-            try {
+    public static void close(Writer device)
+    {
+        if (device != null)
+        {
+            try
+            {
                 device.close();
-            } catch (IOException ioex) {
+            }
+            catch (IOException ioex)
+            {
                 //ignore
             }
         }
@@ -1066,11 +1196,16 @@ public class FileUtils {
      *
      * @param device Reader, can be null.
      */
-    public static void close(Reader device) {
-        if (device != null) {
-            try {
+    public static void close(Reader device)
+    {
+        if (device != null)
+        {
+            try
+            {
                 device.close();
-            } catch (IOException ioex) {
+            }
+            catch (IOException ioex)
+            {
                 //ignore
             }
         }
@@ -1082,11 +1217,16 @@ public class FileUtils {
      *
      * @param device stream, can be null.
      */
-    public static void close(OutputStream device) {
-        if (device != null) {
-            try {
+    public static void close(OutputStream device)
+    {
+        if (device != null)
+        {
+            try
+            {
                 device.close();
-            } catch (IOException ioex) {
+            }
+            catch (IOException ioex)
+            {
                 //ignore
             }
         }
@@ -1098,11 +1238,16 @@ public class FileUtils {
      *
      * @param device stream, can be null.
      */
-    public static void close(InputStream device) {
-        if (device != null) {
-            try {
+    public static void close(InputStream device)
+    {
+        if (device != null)
+        {
+            try
+            {
                 device.close();
-            } catch (IOException ioex) {
+            }
+            catch (IOException ioex)
+            {
                 //ignore
             }
         }
@@ -1111,10 +1256,13 @@ public class FileUtils {
     /**
      * Delete the file with {@link File#delete()} if the argument is not null.
      * Do nothing on a null argument.
+     *
      * @param file file to delete.
      */
-    public static void delete(File file) {
-        if (file != null) {
+    public static void delete(File file)
+    {
+        if (file != null)
+        {
             file.delete();
         }
     }

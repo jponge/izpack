@@ -22,9 +22,10 @@
 
 package com.izforge.izpack.util.xmlmerge.factory;
 
+import com.izforge.izpack.util.xmlmerge.AbstractXmlMergeException;
+import com.izforge.izpack.util.xmlmerge.Operation;
+import com.izforge.izpack.util.xmlmerge.OperationFactory;
 import org.jdom.Element;
-
-import com.izforge.izpack.util.xmlmerge.*;
 
 /**
  * An operation factory delegating to other operation factories according to the existence of the
@@ -56,7 +57,7 @@ public class DiffOperationFactory implements OperationFactory
      * exist.
      *
      * @param inBothOperationFactory the operation factory this factory delegates to if the original
-     * and patch elements exist.
+     *                               and patch elements exist.
      */
     public void setInBothOperationFactory(OperationFactory inBothOperationFactory)
     {
@@ -67,7 +68,7 @@ public class DiffOperationFactory implements OperationFactory
      * Sets the operation factory this factory delegates to if only the original element exists.
      *
      * @param onlyInOriginalOperationFactory factory this factory delegates to if only the original
-     * element exists
+     *                                       element exists
      */
     public void setOnlyInOriginalOperationFactory(OperationFactory onlyInOriginalOperationFactory)
     {
@@ -78,7 +79,7 @@ public class DiffOperationFactory implements OperationFactory
      * Sets the operation factory this factory delegates to if only the patch element exists.
      *
      * @param onlyInPatchOperationFactory factory this factory delegates to if only the patch
-     * element exists
+     *                                    element exists
      */
     public void setOnlyInPatchOperationFactory(OperationFactory onlyInPatchOperationFactory)
     {
@@ -92,14 +93,23 @@ public class DiffOperationFactory implements OperationFactory
             throws AbstractXmlMergeException
     {
 
-        if (originalElement != null && patchElement == null) { return m_onlyInOriginalOperationFactory
-                .getOperation(originalElement, null); }
+        if (originalElement != null && patchElement == null)
+        {
+            return m_onlyInOriginalOperationFactory
+                    .getOperation(originalElement, null);
+        }
 
-        if (originalElement == null && patchElement != null) { return m_onlyInPatchOperationFactory
-                .getOperation(null, patchElement); }
+        if (originalElement == null && patchElement != null)
+        {
+            return m_onlyInPatchOperationFactory
+                    .getOperation(null, patchElement);
+        }
 
-        if (originalElement != null && patchElement != null) { return m_inBothOperationFactory
-                .getOperation(originalElement, patchElement); }
+        if (originalElement != null && patchElement != null)
+        {
+            return m_inBothOperationFactory
+                    .getOperation(originalElement, patchElement);
+        }
 
         throw new IllegalArgumentException();
     }

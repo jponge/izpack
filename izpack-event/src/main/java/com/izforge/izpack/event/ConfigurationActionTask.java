@@ -64,12 +64,12 @@ public class ConfigurationActionTask
     {
         if (condition == null || condition.trim().length() == 0 || rules.isConditionTrue(condition))
         {
-            Debug.trace("Executing configuration task class "+task.getClass().getName());
+            Debug.trace("Executing configuration task class " + task.getClass().getName());
             this.task.execute();
         }
         else
         {
-            Debug.trace("Condition "+condition+" not met - skipping configuration task class "+task.getClass().getName());
+            Debug.trace("Condition " + condition + " not met - skipping configuration task class " + task.getClass().getName());
         }
     }
 }

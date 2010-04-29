@@ -22,13 +22,17 @@
 
 package com.izforge.izpack.util.xmlmerge.factory;
 
-import java.util.*;
-
+import com.izforge.izpack.util.xmlmerge.AbstractXmlMergeException;
+import com.izforge.izpack.util.xmlmerge.MatchException;
+import com.izforge.izpack.util.xmlmerge.Operation;
+import com.izforge.izpack.util.xmlmerge.OperationFactory;
 import org.jaxen.JaxenException;
 import org.jaxen.jdom.JDOMXPath;
 import org.jdom.Element;
 
-import com.izforge.izpack.util.xmlmerge.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * An operation factory that resolves operations given a map { xpath (as String), Operation }. The
@@ -80,8 +84,11 @@ public class XPathOperationFactory implements OperationFactory
         while (it.hasNext())
         {
             String xPath = (String) it.next();
-            if (matches(originalElement, xPath) || matches(patchElement, xPath)) { return (Operation) m_map
-                    .get(xPath); }
+            if (matches(originalElement, xPath) || matches(patchElement, xPath))
+            {
+                return (Operation) m_map
+                        .get(xPath);
+            }
         }
         return m_defaultOperation;
     }
@@ -89,7 +96,7 @@ public class XPathOperationFactory implements OperationFactory
     /**
      * Detects whether the given element matches the given XPath string.
      *
-     * @param element The element which will be checked
+     * @param element     The element which will be checked
      * @param xPathString The XPath expression the element will be checked against
      * @return True if the given element matches the given XPath string
      * @throws AbstractXmlMergeException If an error occurred during the matching process
@@ -97,7 +104,10 @@ public class XPathOperationFactory implements OperationFactory
     private boolean matches(Element element, String xPathString) throws AbstractXmlMergeException
     {
 
-        if (element == null) { return false; }
+        if (element == null)
+        {
+            return false;
+        }
 
         try
         {

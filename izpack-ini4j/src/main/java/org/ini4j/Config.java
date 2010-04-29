@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j;
 
 import java.io.Serializable;
-
 import java.nio.charset.Charset;
 
 public class Config implements Cloneable, Serializable
@@ -312,7 +312,8 @@ public class Config implements Cloneable, Serializable
     }
 
 
-    @Override public Config clone()
+    @Override
+    public Config clone()
     {
         try
         {

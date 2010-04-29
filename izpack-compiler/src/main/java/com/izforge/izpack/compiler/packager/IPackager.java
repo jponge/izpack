@@ -19,21 +19,16 @@
 
 package com.izforge.izpack.compiler.packager;
 
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.rules.Condition;
+import com.izforge.izpack.data.CustomData;
+import com.izforge.izpack.data.PackInfo;
+
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
-import com.izforge.izpack.api.data.DynamicVariable;
-import com.izforge.izpack.api.data.GUIPrefs;
-import com.izforge.izpack.api.data.Info;
-import com.izforge.izpack.api.data.InstallerRequirement;
-import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.data.CustomData;
-import com.izforge.izpack.data.PackInfo;
 
 /**
  * Interface for all packager implementations

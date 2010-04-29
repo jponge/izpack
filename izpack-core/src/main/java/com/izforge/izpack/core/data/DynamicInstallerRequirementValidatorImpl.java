@@ -23,11 +23,11 @@
 
 package com.izforge.izpack.core.data;
 
-import java.io.Serializable;
-
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.rules.RulesEngine;
+
+import java.io.Serializable;
 
 
 /**
@@ -66,7 +66,9 @@ public class DynamicInstallerRequirementValidatorImpl implements DynamicInstalle
     public String getErrorMessageId()
     {
         if (this.messageId != null)
+        {
             return this.messageId;
+        }
 
         return null;
     }
@@ -74,7 +76,9 @@ public class DynamicInstallerRequirementValidatorImpl implements DynamicInstalle
     public String getWarningMessageId()
     {
         if (this.messageId != null)
+        {
             return this.messageId;
+        }
 
         return null;
     }

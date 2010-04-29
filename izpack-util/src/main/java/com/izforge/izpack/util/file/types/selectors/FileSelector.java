@@ -17,16 +17,17 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import java.io.File;
-
 import com.izforge.izpack.api.data.AutomatedInstallData;
+
+import java.io.File;
 
 /**
  * This is the interface to be used by all selectors.
  *
  * @since 1.5
  */
-public interface FileSelector {
+public interface FileSelector
+{
 
     /**
      * Method that each selector will implement to create their
@@ -34,11 +35,11 @@ public interface FileSelector {
      * of a selector, it can throw a BuildException to indicate
      * the problem.
      *
-     * @param basedir A java.io.File object for the base directory
+     * @param basedir  A java.io.File object for the base directory
      * @param filename The name of the file to check
-     * @param file A File object for this filename
+     * @param file     A File object for this filename
      * @return whether the file should be selected or not
-     * @exception Exception if the selector was not configured correctly
+     * @throws Exception if the selector was not configured correctly
      * @throws Exception
      */
     boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file)

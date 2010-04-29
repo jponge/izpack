@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j;
 
 import org.ini4j.spi.AbstractBeanInvocationHandler;
@@ -21,7 +22,6 @@ import org.ini4j.spi.IniHandler;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Proxy;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,17 +50,20 @@ public class BasicProfile extends CommonMultiMap<String, Profile.Section> implem
         _propertyFirstUpper = propertyFirstUpper;
     }
 
-    @Override public String getComment()
+    @Override
+    public String getComment()
     {
         return _comment;
     }
 
-    @Override public void setComment(String value)
+    @Override
+    public void setComment(String value)
     {
         _comment = value;
     }
 
-    @Override public Section add(String name)
+    @Override
+    public Section add(String name)
     {
         if (isTreeMode())
         {
@@ -84,61 +87,71 @@ public class BasicProfile extends CommonMultiMap<String, Profile.Section> implem
         return section;
     }
 
-    @Override public void add(String section, String option, Object value)
+    @Override
+    public void add(String section, String option, Object value)
     {
         getOrAdd(section).add(option, value);
     }
 
-    @Override public <T> T as(Class<T> clazz)
+    @Override
+    public <T> T as(Class<T> clazz)
     {
         return as(clazz, null);
     }
 
-    @Override public <T> T as(Class<T> clazz, String prefix)
+    @Override
+    public <T> T as(Class<T> clazz, String prefix)
     {
-        return clazz.cast(Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[] { clazz },
-                    new BeanInvocationHandler(prefix)));
+        return clazz.cast(Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{clazz},
+                new BeanInvocationHandler(prefix)));
     }
 
-    @Override public String fetch(Object sectionName, Object optionName)
+    @Override
+    public String fetch(Object sectionName, Object optionName)
     {
         Section sec = get(sectionName);
 
         return (sec == null) ? null : sec.fetch(optionName);
     }
 
-    @Override public <T> T fetch(Object sectionName, Object optionName, Class<T> clazz)
+    @Override
+    public <T> T fetch(Object sectionName, Object optionName, Class<T> clazz)
     {
         Section sec = get(sectionName);
 
         return (sec == null) ? BeanTool.getInstance().zero(clazz) : sec.fetch(optionName, clazz);
     }
 
-    @Override public String get(Object sectionName, Object optionName)
+    @Override
+    public String get(Object sectionName, Object optionName)
     {
         Section sec = get(sectionName);
 
         return (sec == null) ? null : sec.get(optionName);
     }
 
-    @Override public <T> T get(Object sectionName, Object optionName, Class<T> clazz)
+    @Override
+    public <T> T get(Object sectionName, Object optionName, Class<T> clazz)
     {
         Section sec = get(sectionName);
 
         return (sec == null) ? BeanTool.getInstance().zero(clazz) : sec.get(optionName, clazz);
     }
 
-    @Override public String put(String sectionName, String optionName, Object value)
+    @Override
+    public String put(String sectionName, String optionName, Object value)
     {
         return getOrAdd(sectionName).put(optionName, value);
     }
 
-    @Override public Section remove(Section section)
+    @Override
+    public Section remove(Section section)
     {
         return remove((Object) section.getName());
     }
 
-    @Override public String remove(Object sectionName, Object optionName)
+    @Override
+    public String remove(Object sectionName, Object optionName)
     {
         Section sec = get(sectionName);
 
@@ -280,7 +293,8 @@ public class BasicProfile extends CommonMultiMap<String, Profile.Section> implem
             _prefix = prefix;
         }
 
-        @Override protected Object getPropertySpi(String property, Class<?> clazz)
+        @Override
+        protected Object getPropertySpi(String property, Class<?> clazz)
         {
             String key = transform(property);
             Object o = null;
@@ -304,7 +318,8 @@ public class BasicProfile extends CommonMultiMap<String, Profile.Section> implem
             return o;
         }
 
-        @Override protected void setPropertySpi(String property, Object value, Class<?> clazz)
+        @Override
+        protected void setPropertySpi(String property, Object value, Class<?> clazz)
         {
             String key = transform(property);
 
@@ -329,7 +344,8 @@ public class BasicProfile extends CommonMultiMap<String, Profile.Section> implem
             }
         }
 
-        @Override protected boolean hasPropertySpi(String property)
+        @Override
+        protected boolean hasPropertySpi(String property)
         {
             return containsKey(transform(property));
         }

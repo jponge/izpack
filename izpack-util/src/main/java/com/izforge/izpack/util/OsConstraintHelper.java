@@ -1,9 +1,10 @@
 package com.izforge.izpack.util;
 
-import java.util.*;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.binding.OsModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Encapsulates OS constraints specified on creation time and allows to check them against the

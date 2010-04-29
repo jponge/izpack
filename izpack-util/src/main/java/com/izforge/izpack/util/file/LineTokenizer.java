@@ -17,19 +17,22 @@
 
 package com.izforge.izpack.util.file;
 
-import java.io.*;
-
 import org.apache.tools.ant.ProjectComponent;
+
+import java.io.IOException;
+import java.io.Reader;
 
 /**
  * class to tokenize the input as lines seperated
  * by \r (mac style), \r\n (dos/windows style) or \n (unix style)
+ *
  * @since Ant 1.6
  */
 public class LineTokenizer extends ProjectComponent
-    implements Tokenizer {
-    private String  lineEnd = "";
-    private int     pushed = -2;
+        implements Tokenizer
+{
+    private String lineEnd = "";
+    private int pushed = -2;
     private boolean includeDelims = false;
 
     /**
@@ -37,10 +40,12 @@ public class LineTokenizer extends ProjectComponent
      * the line ending with the line, or to return
      * it in the posttoken
      * default false
+     *
      * @param includeDelims if true include /r and /n in the line
      */
 
-    public void setIncludeDelims(boolean includeDelims) {
+    public void setIncludeDelims(boolean includeDelims)
+    {
         this.includeDelims = includeDelims;
     }
 
@@ -49,17 +54,22 @@ public class LineTokenizer extends ProjectComponent
      *
      * @param in the input reader
      * @return the line excluding /r or /n, unless includedelims is set
-     * @exception IOException if an error occurs reading
+     * @throws IOException if an error occurs reading
      */
-    public String getToken(Reader in) throws IOException {
+    public String getToken(Reader in) throws IOException
+    {
         int ch = -1;
-        if (pushed != -2) {
+        if (pushed != -2)
+        {
             ch = pushed;
             pushed = -2;
-        } else {
+        }
+        else
+        {
             ch = in.read();
         }
-        if (ch == -1) {
+        if (ch == -1)
+        {
             return null;
         }
 
@@ -67,21 +77,33 @@ public class LineTokenizer extends ProjectComponent
         StringBuffer line = new StringBuffer();
 
         int state = 0;
-        while (ch != -1) {
-            if (state == 0) {
-                if (ch == '\r') {
+        while (ch != -1)
+        {
+            if (state == 0)
+            {
+                if (ch == '\r')
+                {
                     state = 1;
-                } else if (ch == '\n') {
+                }
+                else if (ch == '\n')
+                {
                     lineEnd = "\n";
                     break;
-                } else {
+                }
+                else
+                {
                     line.append((char) ch);
                 }
-            } else {
+            }
+            else
+            {
                 state = 0;
-                if (ch == '\n') {
+                if (ch == '\n')
+                {
                     lineEnd = "\r\n";
-                } else {
+                }
+                else
+                {
                     pushed = ch;
                     lineEnd = "\r";
                 }
@@ -89,11 +111,13 @@ public class LineTokenizer extends ProjectComponent
             }
             ch = in.read();
         }
-        if (ch == -1 && state == 1) {
+        if (ch == -1 && state == 1)
+        {
             lineEnd = "\r";
         }
 
-        if (includeDelims) {
+        if (includeDelims)
+        {
             line.append(lineEnd);
         }
         return line.toString();
@@ -102,8 +126,10 @@ public class LineTokenizer extends ProjectComponent
     /**
      * @return the line ending character(s) for the current line
      */
-    public String getPostToken() {
-        if (includeDelims) {
+    public String getPostToken()
+    {
+        if (includeDelims)
+        {
             return "";
         }
         return lineEnd;

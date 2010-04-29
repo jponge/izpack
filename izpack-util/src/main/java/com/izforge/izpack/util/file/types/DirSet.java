@@ -21,9 +21,11 @@ package com.izforge.izpack.util.file.types;
  * Subclass as hint for supporting tasks that the included directories
  * instead of files should be used.
  */
-public class DirSet extends FileSet {
+public class DirSet extends FileSet
+{
 
-    public DirSet() {
+    public DirSet()
+    {
         super();
     }
 

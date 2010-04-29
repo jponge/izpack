@@ -23,7 +23,8 @@ package com.izforge.izpack.util;
 
 import java.io.*;
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is responsible for allowing the installer to re-launch itself with administrator permissions.

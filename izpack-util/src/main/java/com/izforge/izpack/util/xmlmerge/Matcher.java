@@ -37,7 +37,7 @@ public interface Matcher extends Operation
      * Compares two elements to know if they correspond for merging.
      *
      * @param originalElement Original element
-     * @param patchElement Patch element
+     * @param patchElement    Patch element
      * @return True if the two elements correspond for merging
      */
     boolean matches(Element originalElement, Element patchElement);

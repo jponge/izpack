@@ -21,14 +21,14 @@
 
 package com.izforge.izpack.core.substitutor;
 
-import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.izforge.izpack.api.data.Value;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.IoHelper;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Substitutes variables occurring in an input stream or a string. This implementation supports a
@@ -39,7 +39,7 @@ import com.izforge.izpack.util.IoHelper;
  * ${NAME} (the latter syntax being useful in situations like ${NAME}NOTPARTOFNAME). If a referenced
  * variable is undefined then it is not substituted but the corresponding part of the stream is
  * copied as is.
- *
+ * <p/>
  * This is a abstract base type for all kinds of variables
  *
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
@@ -98,6 +98,7 @@ public abstract class VariableSubstitutorBase implements VariableSubstitutor
     protected final static Map<String, Integer> typeNameToConstantMap;
 
     // Initialize the file type map
+
     static
     {
         typeNameToConstantMap = new HashMap<String, Integer>();
@@ -132,11 +133,11 @@ public abstract class VariableSubstitutorBase implements VariableSubstitutor
      * Substitutes the variables found in the specified string. Escapes special characters using
      * file type specific escaping if necessary. The plain type is assumed
      *
-     * @param str  the string to check for variables
+     * @param str the string to check for variables
      * @return the string with substituted variables
      * @throws IllegalArgumentException An error occured
      */
-    public String substitute(String str) throws Exception
+    public String substitute(String str)
     {
         return substitute(str, SubstitutionType.TYPE_PLAIN);
     }
@@ -150,7 +151,7 @@ public abstract class VariableSubstitutorBase implements VariableSubstitutor
      * @return the string with substituted variables
      * @throws IllegalArgumentException An error occured
      */
-    public String substitute(String str, SubstitutionType type) throws Exception
+    public String substitute(String str, SubstitutionType type)
     {
         if (str == null)
         {
@@ -187,7 +188,7 @@ public abstract class VariableSubstitutorBase implements VariableSubstitutor
      * @throws IOException
      */
     public int substitute(InputStream in, OutputStream out, SubstitutionType type, String encoding)
-    throws Exception
+            throws Exception
     {
         // Check if file type specific default encoding known
         if (encoding == null)
@@ -227,7 +228,7 @@ public abstract class VariableSubstitutorBase implements VariableSubstitutor
      * @throws IOException
      */
     public String substitute(InputStream in, SubstitutionType type)
-    throws Exception
+            throws Exception
     {
         // Check if file type specific default encoding known
         String encoding = PLAIN;
@@ -357,13 +358,17 @@ public abstract class VariableSubstitutorBase implements VariableSubstitutor
                 {
                     varvalue = IoHelper.getenv(name.substring(4, name.length() - 1));
                     if (varvalue == null)
+                    {
                         varvalue = "";
+                    }
                 }
                 else
                 {
                     Value val = getValue(name);
                     if (val != null)
+                    {
                         varvalue = val.resolve();
+                    }
                 }
 
                 subs++;
@@ -417,7 +422,7 @@ public abstract class VariableSubstitutorBase implements VariableSubstitutor
     /**
      * Escapes the special characters in the specified string using file type specific rules.
      *
-     * @param str the string to check for special characters
+     * @param str  the string to check for special characters
      * @param type the target file type (one of TYPE_xxx)
      * @return the string with the special characters properly escaped
      */
@@ -428,116 +433,116 @@ public abstract class VariableSubstitutorBase implements VariableSubstitutor
         int i;
         switch (type)
         {
-        case TYPE_PLAIN:
-        case TYPE_AT:
-        case TYPE_ANT:
-            return str;
-        case TYPE_SHELL:
-            // apple mac has major problem with \r, make sure they are gone
-            return str.replace("\r", "");
-        case TYPE_JAVA_PROPERTIES:
-        case TYPE_JAVA:
-            buffer = new StringBuffer(str);
-            len = str.length();
-            boolean leading = true;
-            for (i = 0; i < len; i++)
-            {
-                // Check for control characters
-                char c = buffer.charAt(i);
-                if (type.equals(SubstitutionType.TYPE_JAVA_PROPERTIES))
+            case TYPE_PLAIN:
+            case TYPE_AT:
+            case TYPE_ANT:
+                return str;
+            case TYPE_SHELL:
+                // apple mac has major problem with \r, make sure they are gone
+                return str.replace("\r", "");
+            case TYPE_JAVA_PROPERTIES:
+            case TYPE_JAVA:
+                buffer = new StringBuffer(str);
+                len = str.length();
+                boolean leading = true;
+                for (i = 0; i < len; i++)
                 {
-                    if (c == '\t' || c == '\n' || c == '\r')
+                    // Check for control characters
+                    char c = buffer.charAt(i);
+                    if (type.equals(SubstitutionType.TYPE_JAVA_PROPERTIES))
                     {
-                        char tag;
-                        if (c == '\t')
+                        if (c == '\t' || c == '\n' || c == '\r')
                         {
-                            tag = 't';
+                            char tag;
+                            if (c == '\t')
+                            {
+                                tag = 't';
+                            }
+                            else if (c == '\n')
+                            {
+                                tag = 'n';
+                            }
+                            else
+                            {
+                                tag = 'r';
+                            }
+                            buffer.replace(i, i + 1, "\\" + tag);
+                            len++;
+                            i++;
                         }
-                        else if (c == '\n')
-                        {
-                            tag = 'n';
-                        }
-                        else
-                        {
-                            tag = 'r';
-                        }
-                        buffer.replace(i, i + 1, "\\" + tag);
-                        len++;
-                        i++;
-                    }
 
-                    // Check for special characters
-                    // According to the spec:
-                    // 'For the element, leading space characters, but not embedded or trailing
-                    // space characters,
-                    // are written with a preceding \ character'
-                    else if (c == ' ')
-                    {
-                        if (leading)
+                        // Check for special characters
+                        // According to the spec:
+                        // 'For the element, leading space characters, but not embedded or trailing
+                        // space characters,
+                        // are written with a preceding \ character'
+                        else if (c == ' ')
                         {
+                            if (leading)
+                            {
+                                buffer.insert(i, '\\');
+                                len++;
+                                i++;
+                            }
+                        }
+                        else if (c == '\\' || c == '"' || c == '\'')
+                        {
+                            leading = false;
                             buffer.insert(i, '\\');
                             len++;
                             i++;
                         }
-                    }
-                    else if (c == '\\' || c == '"' || c == '\'')
-                    {
-                        leading = false;
-                        buffer.insert(i, '\\');
-                        len++;
-                        i++;
+                        else
+                        {
+                            leading = false;
+                        }
                     }
                     else
                     {
-                        leading = false;
+                        if (c == '\\')
+                        {
+                            buffer.replace(i, i + 1, "\\\\");
+                            len++;
+                            i++;
+                        }
                     }
                 }
-                else
+                return buffer.toString();
+            case TYPE_XML:
+                buffer = new StringBuffer(str);
+                len = str.length();
+                for (i = 0; i < len; i++)
                 {
-                    if (c == '\\')
+                    String r = null;
+                    char c = buffer.charAt(i);
+                    switch (c)
                     {
-                        buffer.replace(i, i + 1, "\\\\");
-                        len++;
-                        i++;
+                        case '<':
+                            r = "&lt;";
+                            break;
+                        case '>':
+                            r = "&gt;";
+                            break;
+                        case '&':
+                            r = "&amp;";
+                            break;
+                        case '\'':
+                            r = "&apos;";
+                            break;
+                        case '"':
+                            r = "&quot;";
+                            break;
+                    }
+                    if (r != null)
+                    {
+                        buffer.replace(i, i + 1, r);
+                        len = buffer.length();
+                        i += r.length() - 1;
                     }
                 }
-            }
-            return buffer.toString();
-        case TYPE_XML:
-            buffer = new StringBuffer(str);
-            len = str.length();
-            for (i = 0; i < len; i++)
-            {
-                String r = null;
-                char c = buffer.charAt(i);
-                switch (c)
-                {
-                case '<':
-                    r = "&lt;";
-                    break;
-                case '>':
-                    r = "&gt;";
-                    break;
-                case '&':
-                    r = "&amp;";
-                    break;
-                case '\'':
-                    r = "&apos;";
-                    break;
-                case '"':
-                    r = "&quot;";
-                    break;
-                }
-                if (r != null)
-                {
-                    buffer.replace(i, i + 1, r);
-                    len = buffer.length();
-                    i += r.length() - 1;
-                }
-            }
-            return buffer.toString();
-        default:
-            throw new Error("Unknown file type constant " + type);
+                return buffer.toString();
+            default:
+                throw new Error("Unknown file type constant " + type);
         }
     }
 }

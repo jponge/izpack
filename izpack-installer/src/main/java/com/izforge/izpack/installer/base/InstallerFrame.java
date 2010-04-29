@@ -22,25 +22,6 @@
 
 package com.izforge.izpack.installer.base;
 
-import static com.izforge.izpack.api.GuiId.BUTTON_HELP;
-import static com.izforge.izpack.api.GuiId.BUTTON_NEXT;
-import static com.izforge.izpack.api.GuiId.BUTTON_PREV;
-import static com.izforge.izpack.api.GuiId.BUTTON_QUIT;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import javax.swing.text.JTextComponent;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLWriter;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
@@ -65,6 +46,19 @@ import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.installer.unpacker.Unpacker;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
+
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.text.JTextComponent;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.izforge.izpack.api.GuiId.*;
 
 /**
  * The IzPack installer frame.
@@ -542,15 +536,17 @@ public class InstallerFrame extends JFrame implements InstallerView
     public void switchPanel(int oldIndex)
     {
         // refresh dynamic variables every time, a panel switch is done
-        try {
+        try
+        {
             InstallerBase.refreshDynamicVariables(installdata, new VariableSubstitutorImpl(installdata.getVariables()));
         }
-        catch(Exception e) {
+        catch (Exception e)
+        {
             Debug.trace("Refreshing dynamic variables failed, asking user whether to proceed.");
             StringBuffer msg = new StringBuffer();
             msg.append("<html>");
             msg.append("The following error occured during refreshing panel contents:<br>");
-            msg.append("<i>"+e.getMessage()+"</i><br>");
+            msg.append("<i>" + e.getMessage() + "</i><br>");
             msg.append("Are you sure you want to continue with this installation?");
             msg.append("</html>");
             JLabel label = new JLabel(msg.toString());
@@ -860,18 +856,8 @@ public class InstallerFrame extends JFrame implements InstallerView
             VariableSubstitutor substitutor = variableSubstitutor;
             message = substitutor.substitute(message);
             title = substitutor.substitute(title);
-            }
-            catch (Exception e)
-            {
-                // ignore
-            }
-            try
-            {
-            }
-            catch (Exception e)
-            {
-                // ignore
-            }
+
+
             int res = JOptionPane
                     .showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION);
             if (res == JOptionPane.YES_OPTION)
@@ -1812,19 +1798,19 @@ public class InstallerFrame extends JFrame implements InstallerView
         this.helpButton.setVisible(show);
     }
 
-    }
-
     private void refreshDynamicVariables()
     {
-        try {
+        try
+        {
             InstallerBase.refreshDynamicVariables(installdata, new VariableSubstitutorImpl(installdata.getVariables()));
         }
-        catch(Exception e) {
+        catch (Exception e)
+        {
             Debug.trace("Refreshing dynamic variables failed, asking user whether to proceed.");
             StringBuffer msg = new StringBuffer();
             msg.append("<html>");
             msg.append("The following error occured during refreshing panel contents:<br>");
-            msg.append("<i>"+e.getMessage()+"</i><br>");
+            msg.append("<i>" + e.getMessage() + "</i><br>");
             msg.append("Are you sure you want to continue with this installation?");
             msg.append("</html>");
             JLabel label = new JLabel(msg.toString());
@@ -1844,4 +1830,6 @@ public class InstallerFrame extends JFrame implements InstallerView
                 System.exit(1);
             }
         }
+    }
+
 }

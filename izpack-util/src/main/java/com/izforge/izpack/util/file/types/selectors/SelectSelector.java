@@ -17,10 +17,10 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
+import com.izforge.izpack.api.data.AutomatedInstallData;
+
 import java.io.File;
 import java.util.Enumeration;
-
-import com.izforge.izpack.api.data.AutomatedInstallData;
 
 /**
  * This selector just holds one other selector and forwards all
@@ -32,7 +32,8 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
  *
  * @since 1.5
  */
-public class SelectSelector extends BaseSelectorContainer {
+public class SelectSelector extends BaseSelectorContainer
+{
 
     private String ifProperty;
     private String unlessProperty;
@@ -40,21 +41,26 @@ public class SelectSelector extends BaseSelectorContainer {
     /**
      * Default constructor.
      */
-    public SelectSelector() {
+    public SelectSelector()
+    {
     }
 
     /**
      * @return a string describing this object
      */
-    public String toString() {
+    public String toString()
+    {
         StringBuffer buf = new StringBuffer();
-        if (hasSelectors()) {
+        if (hasSelectors())
+        {
             buf.append("{select");
-            if (ifProperty != null) {
+            if (ifProperty != null)
+            {
                 buf.append(" if: ");
                 buf.append(ifProperty);
             }
-            if (unlessProperty != null) {
+            if (unlessProperty != null)
+            {
                 buf.append(" unless: ");
                 buf.append(unlessProperty);
             }
@@ -76,9 +82,11 @@ public class SelectSelector extends BaseSelectorContainer {
 
     /**
      * Indicates whether there are any selectors here.
+     *
      * @return whether any selectors are in this container
      */
-    public boolean hasSelectors() {
+    public boolean hasSelectors()
+    {
 //        if (isReference()) {
 //            return getRef().hasSelectors();
 //        }
@@ -87,9 +95,11 @@ public class SelectSelector extends BaseSelectorContainer {
 
     /**
      * Gives the count of the number of selectors in this container
+     *
      * @return the number of selectors in this container
      */
-    public int selectorCount() {
+    public int selectorCount()
+    {
 //        if (isReference()) {
 //            return getRef().selectorCount();
 //        }
@@ -98,10 +108,12 @@ public class SelectSelector extends BaseSelectorContainer {
 
     /**
      * Returns the set of selectors as an array.
+     *
      * @param p the current project
      * @return an array of selectors in this container
      */
-    public FileSelector[] getSelectors() {
+    public FileSelector[] getSelectors()
+    {
 //        if (isReference()) {
 //            return getRef().getSelectors(p);
 //        }
@@ -110,9 +122,11 @@ public class SelectSelector extends BaseSelectorContainer {
 
     /**
      * Returns an enumerator for accessing the set of selectors.
+     *
      * @return an enumerator that goes through each of the selectors
      */
-    public Enumeration selectorElements() {
+    public Enumeration selectorElements()
+    {
 //        if (isReference()) {
 //            return getRef().selectorElements();
 //        }
@@ -124,7 +138,8 @@ public class SelectSelector extends BaseSelectorContainer {
      *
      * @param selector the new selector to add
      */
-    public void appendSelector(FileSelector selector) {
+    public void appendSelector(FileSelector selector)
+    {
 //        if (isReference()) {
 //            throw noChildrenAllowed();
 //        }
@@ -136,25 +151,32 @@ public class SelectSelector extends BaseSelectorContainer {
      * Makes sure that there is only one entry, sets an error message if
      * not.
      */
-    public void verifySettings() {
+    public void verifySettings()
+    {
         int cnt = selectorCount();
-        if (cnt < 0 || cnt > 1) {
+        if (cnt < 0 || cnt > 1)
+        {
             setError("Only one selector is allowed within the "
-                + "<selector> tag");
+                    + "<selector> tag");
         }
     }
 
     /**
      * Ensures that the selector passes the conditions placed
      * on it with <code>if</code> and <code>unless</code>.
+     *
      * @return true if conditions are passed
      */
-    public boolean passesConditions(AutomatedInstallData idata) {
+    public boolean passesConditions(AutomatedInstallData idata)
+    {
         if (ifProperty != null
-            && idata.getVariable(ifProperty) == null) {
+                && idata.getVariable(ifProperty) == null)
+        {
             return false;
-        } else if (unlessProperty != null
-            && idata.getVariable(unlessProperty) != null) {
+        }
+        else if (unlessProperty != null
+                && idata.getVariable(unlessProperty) != null)
+        {
             return false;
         }
         return true;
@@ -163,18 +185,22 @@ public class SelectSelector extends BaseSelectorContainer {
     /**
      * Sets the if attribute to a property which must exist for the
      * selector to select any files.
+     *
      * @param ifProperty the property to check
      */
-    public void setIf(String ifProperty) {
+    public void setIf(String ifProperty)
+    {
         this.ifProperty = ifProperty;
     }
 
     /**
      * Sets the unless attribute to a property which cannot exist for the
      * selector to select any files.
+     *
      * @param unlessProperty the property to check
      */
-    public void setUnless(String unlessProperty) {
+    public void setUnless(String unlessProperty)
+    {
         this.unlessProperty = unlessProperty;
     }
 
@@ -185,24 +211,27 @@ public class SelectSelector extends BaseSelectorContainer {
      * selector, return true (because we assume that the point was to test
      * the if and unless conditions).
      *
-     * @param basedir the base directory the scan is being done from
+     * @param basedir  the base directory the scan is being done from
      * @param filename the name of the file to check
-     * @param file a java.io.File object for the filename that the selector
-     * can use
+     * @param file     a java.io.File object for the filename that the selector
+     *                 can use
      * @return whether the file should be selected or not
      */
     @Override
     public boolean isSelected(AutomatedInstallData idata,
-            File basedir, String filename, File file) throws Exception {
+                              File basedir, String filename, File file) throws Exception
+    {
         validate();
 
         // Deal with if and unless properties first
-        if (!(passesConditions(idata))) {
+        if (!(passesConditions(idata)))
+        {
             return false;
         }
 
         Enumeration e = selectorElements();
-        if (!(e.hasMoreElements())) {
+        if (!(e.hasMoreElements()))
+        {
             return true;
         }
         FileSelector f = (FileSelector) e.nextElement();

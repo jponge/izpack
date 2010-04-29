@@ -22,16 +22,20 @@
 
 package com.izforge.izpack.util.xmlmerge.action;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.xmlmerge.AbstractXmlMergeException;
+import com.izforge.izpack.util.xmlmerge.Action;
+import com.izforge.izpack.util.xmlmerge.DocumentException;
+import com.izforge.izpack.util.xmlmerge.ElementException;
+import com.wutka.dtd.*;
 import org.jdom.Element;
 
-import com.wutka.dtd.*;
-
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.xmlmerge.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
 
 /**
  * Copy the patch element in the output parent with the correct position according to the DTD

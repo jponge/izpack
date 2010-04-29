@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j.spi;
 
 import org.ini4j.Config;
@@ -25,7 +26,8 @@ abstract class AbstractProfileBuilder implements IniHandler
     private boolean _header;
     private String _lastComment;
 
-    @Override public void endIni()
+    @Override
+    public void endIni()
     {
 
         // comment only .ini files....
@@ -35,12 +37,14 @@ abstract class AbstractProfileBuilder implements IniHandler
         }
     }
 
-    @Override public void endSection()
+    @Override
+    public void endSection()
     {
         _currentSection = null;
     }
 
-    @Override public void handleComment(String comment)
+    @Override
+    public void handleComment(String comment)
     {
         if ((_lastComment != null) && _header)
         {
@@ -51,7 +55,8 @@ abstract class AbstractProfileBuilder implements IniHandler
         _lastComment = comment;
     }
 
-    @Override public void handleOption(String name, String value)
+    @Override
+    public void handleOption(String name, String value)
     {
         _header = false;
         if (getConfig().isMultiOption())
@@ -70,12 +75,14 @@ abstract class AbstractProfileBuilder implements IniHandler
         }
     }
 
-    @Override public void startIni()
+    @Override
+    public void startIni()
     {
         _header = true;
     }
 
-    @Override public void startSection(String sectionName)
+    @Override
+    public void startSection(String sectionName)
     {
         if (getConfig().isMultiSection())
         {

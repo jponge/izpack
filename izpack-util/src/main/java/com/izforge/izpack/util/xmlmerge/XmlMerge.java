@@ -22,9 +22,10 @@
 
 package com.izforge.izpack.util.xmlmerge;
 
-import java.io.*;
-
 import org.w3c.dom.Document;
+
+import java.io.File;
+import java.io.InputStream;
 
 /**
  * Entry point for merging XML documents.

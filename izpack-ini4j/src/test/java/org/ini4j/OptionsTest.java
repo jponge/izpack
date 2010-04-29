@@ -13,41 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j;
 
 import org.ini4j.sample.Dwarf;
-
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
+import org.junit.Test;
+
+import java.io.*;
 
 import static org.junit.Assert.*;
 
-import org.junit.Test;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
-
 public class OptionsTest
 {
-    private static final String[] _badOptions = { "=value\n", "\\u000d\\u000d=value\n" };
+    private static final String[] _badOptions = {"=value\n", "\\u000d\\u000d=value\n"};
     private static final String COMMENT_ONLY = "# first line\n# second line\n";
     private static final String COMMENT_ONLY_VALUE = " first line\n second line";
     private static final String OPTIONS_ONE_HEADER = COMMENT_ONLY + "\n\nkey=value\n";
     private static final String MULTI = "option=value\noption=value2\noption=value3\noption=value4\noption=value5\n";
 
-    @Test public void testCommentOnly() throws Exception
+    @Test
+    public void testCommentOnly() throws Exception
     {
         Options opt = new Options(new StringReader(COMMENT_ONLY));
 
         assertEquals(COMMENT_ONLY_VALUE, opt.getComment());
     }
 
-    @Test public void testConfig()
+    @Test
+    public void testConfig()
     {
         Options opts = new Options();
         Config conf = opts.getConfig();
@@ -61,7 +56,8 @@ public class OptionsTest
         assertSame(conf, opts.getConfig());
     }
 
-    @Test public void testDwarfs() throws Exception
+    @Test
+    public void testDwarfs() throws Exception
     {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         Options happy = new Options();
@@ -88,7 +84,8 @@ public class OptionsTest
         file.delete();
     }
 
-    @Test public void testLoad() throws Exception
+    @Test
+    public void testLoad() throws Exception
     {
         Options o1 = new Options(Helper.getResourceURL(Helper.DWARFS_OPT));
         Options o2 = new Options(Helper.getResourceURL(Helper.DWARFS_OPT).openStream());
@@ -115,7 +112,8 @@ public class OptionsTest
         opt.load();
     }
 
-    @Test public void testLowerCase() throws Exception
+    @Test
+    public void testLowerCase() throws Exception
     {
         Config cfg = new Config();
         Options opts = new Options();
@@ -126,7 +124,8 @@ public class OptionsTest
         assertTrue(opts.containsKey("option"));
     }
 
-    @Test public void testMultiOption() throws Exception
+    @Test
+    public void testMultiOption() throws Exception
     {
         Options opts = new Options(new StringReader(MULTI));
 
@@ -154,7 +153,8 @@ public class OptionsTest
         opts.load(new StringReader("foo\n"));
     }
 
-    @Test public void testOneHeaderOnly() throws Exception
+    @Test
+    public void testOneHeaderOnly() throws Exception
     {
         Options opt = new Options(new StringReader(OPTIONS_ONE_HEADER));
 

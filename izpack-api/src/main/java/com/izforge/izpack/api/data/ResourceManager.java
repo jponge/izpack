@@ -136,8 +136,9 @@ public class ResourceManager
      *
      * @param resource Resource to load language dependen
      * @return the language dependent path of the given resource
-     * @throws com.izforge.izpack.api.exception.ResourceNotFoundException If the resource is not
-     * found
+     * @throws com.izforge.izpack.api.exception.ResourceNotFoundException
+     *          If the resource is not
+     *          found
      */
     private String getLanguageResourceString(String resource)
     {
@@ -223,8 +224,11 @@ public class ResourceManager
             }
             else
             {
-                if (resource.charAt(0) == '/') { return getAbsoluteLanguageResourceString(resource
-                        .substring(1)); }
+                if (resource.charAt(0) == '/')
+                {
+                    return getAbsoluteLanguageResourceString(resource
+                            .substring(1));
+                }
                 throw new ResourceNotFoundException("Cannot find named Resource: '" + resource
                         + "' AND '" + resourcePath + "'");
             }
@@ -255,14 +259,17 @@ public class ResourceManager
     /**
      * Get Input stream with a default value
      *
-     * @param resource Path of resource
+     * @param resource     Path of resource
      * @param defaultValue Default value if stream is not found
      * @return Stream found or default value
      */
     public InputStream getInputStream(String resource, InputStream defaultValue)
     {
         String resourcepath = this.getLanguageResourceString(resource);
-        if (resourcepath == null) { return defaultValue; }
+        if (resourcepath == null)
+        {
+            return defaultValue;
+        }
         return ClassLoader.getSystemResourceAsStream(resourcepath);
     }
 
@@ -295,8 +302,9 @@ public class ResourceManager
      * @param resource - a text resource to load
      * @param encoding - the encoding, which should be used to read the resource
      * @return a String contains the text of the resource
-     * @throws com.izforge.izpack.api.exception.ResourceNotFoundException if the resource can not be
-     * found
+     * @throws com.izforge.izpack.api.exception.ResourceNotFoundException
+     *                     if the resource can not be
+     *                     found
      * @throws IOException if the resource can not be loaded
      */
     // Maybe we can add a text parser for this method
@@ -329,7 +337,7 @@ public class ResourceManager
      * @param resource - a text resource to load
      * @return a String contains the text of the resource
      * @throws ResourceNotFoundException if the resource can not be found
-     * @throws IOException if the resource can not be loaded
+     * @throws IOException               if the resource can not be loaded
      */
     // Maybe we can add a text parser for this method
     public String getTextResource(String resource) throws IOException

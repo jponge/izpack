@@ -21,101 +21,124 @@
 
 package com.izforge.izpack.util.config;
 
-import java.io.IOException;
-
+import com.izforge.izpack.util.Debug;
 import org.ini4j.Reg;
 
-import com.izforge.izpack.util.Debug;
+import java.io.IOException;
 
-public class RegistryTask extends SingleConfigurableTask {
+public class RegistryTask extends SingleConfigurableTask
+{
 
-  /*
-   * Instance variables.
-   */
+    /*
+    * Instance variables.
+    */
 
-  protected String key;
-  protected String fromKey;
+    protected String key;
+    protected String fromKey;
 
 
-  /**
-  * Location of the configuration file to be edited; required.
-  */
-  public void setKey(String key) {
-    this.key = key;
-  }
-
-  /**
-  * Location of the configuration file to be patched from; optional.
-  */
-  public void setFromKey(String key) {
-    this.fromKey = key;
-  }
-
-  public static class Entry extends SingleConfigurableTask.Entry {
-
-    public void setKey(String key) {
-      // Name of the root key in registry
-      this.section = key;
-    }
-
-    public void setValue(String value) {
-      // Name of the registry value ("value" is a key in registry meaning)
-      this.key = value;
+    /**
+     * Location of the configuration file to be edited; required.
+     */
+    public void setKey(String key)
+    {
+        this.key = key;
     }
 
     /**
-     * Registry data
+     * Location of the configuration file to be patched from; optional.
      */
-    public void setData(String data) {
-      this.value = data;
+    public void setFromKey(String key)
+    {
+        this.fromKey = key;
     }
 
-  }
+    public static class Entry extends SingleConfigurableTask.Entry
+    {
 
-  protected void readSourceConfigurable() throws Exception {
-    // deal with a registry key to patch from
-    if (this.fromKey != null) {
-      try {
-          Debug.log("Loading from registry: " + this.fromKey);
-          fromConfigurable = new Reg(this.fromKey);
-      } catch (IOException ioe) {
-        throw new Exception(ioe.toString());
-      }
-    }
-  }
+        public void setKey(String key)
+        {
+            // Name of the root key in registry
+            this.section = key;
+        }
 
-  protected void readConfigurable() throws Exception {
-    if (this.key != null) {
-      try {
-          Debug.log("Loading from registry: " + this.key);
-          configurable = new Reg(this.key);
-      } catch (IOException ioe) {
-        throw new Exception(ioe.toString());
-      }
-    }
-  }
+        public void setValue(String value)
+        {
+            // Name of the registry value ("value" is a key in registry meaning)
+            this.key = value;
+        }
 
-  protected void writeConfigurable() throws Exception {
+        /**
+         * Registry data
+         */
+        public void setData(String data)
+        {
+            this.value = data;
+        }
 
-    if (configurable == null) {
-        Debug.log("Registry key " +
-          this.key +
-          " did not exist and is not allowed to be created");
-      return;
     }
 
-    try {
-      Reg r = (Reg) configurable;
-      r.store();
-    } catch (IOException ioe) {
-      throw new Exception(ioe);
+    protected void readSourceConfigurable() throws Exception
+    {
+        // deal with a registry key to patch from
+        if (this.fromKey != null)
+        {
+            try
+            {
+                Debug.log("Loading from registry: " + this.fromKey);
+                fromConfigurable = new Reg(this.fromKey);
+            }
+            catch (IOException ioe)
+            {
+                throw new Exception(ioe.toString());
+            }
+        }
     }
-  }
 
-  protected void checkAttributes() throws Exception {
-    if (this.key == null) {
-      throw new Exception("Key attribute must be set");
+    protected void readConfigurable() throws Exception
+    {
+        if (this.key != null)
+        {
+            try
+            {
+                Debug.log("Loading from registry: " + this.key);
+                configurable = new Reg(this.key);
+            }
+            catch (IOException ioe)
+            {
+                throw new Exception(ioe.toString());
+            }
+        }
     }
-  }
+
+    protected void writeConfigurable() throws Exception
+    {
+
+        if (configurable == null)
+        {
+            Debug.log("Registry key " +
+                    this.key +
+                    " did not exist and is not allowed to be created");
+            return;
+        }
+
+        try
+        {
+            Reg r = (Reg) configurable;
+            r.store();
+        }
+        catch (IOException ioe)
+        {
+            throw new Exception(ioe);
+        }
+    }
+
+    protected void checkAttributes() throws Exception
+    {
+        if (this.key == null)
+        {
+            throw new Exception("Key attribute must be set");
+        }
+    }
 
 }

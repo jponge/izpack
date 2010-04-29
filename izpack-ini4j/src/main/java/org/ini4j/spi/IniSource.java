@@ -13,17 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ini4j.spi;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
-import java.io.Reader;
-
-import java.net.URL;
-
 import org.ini4j.Config;
+
+import java.io.*;
+import java.net.URL;
 
 class IniSource
 {

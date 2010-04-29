@@ -14,32 +14,41 @@
  *  limitations under the License.
  *
  */
+
 package com.izforge.izpack.util.file;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * A <CODE>ContainerMapper</CODE> that unites the results of its constituent
  * <CODE>FileNameMapper</CODE>s into a single set of result filenames.
  */
-public class CompositeMapper extends ContainerMapper {
+public class CompositeMapper extends ContainerMapper
+{
 
     //inherit doc
-    public String[] mapFileName(String sourceFileName) {
+
+    public String[] mapFileName(String sourceFileName)
+    {
         HashSet results = new HashSet();
 
         FileNameMapper mapper = null;
-        for (Iterator mIter = getMappers().iterator(); mIter.hasNext();) {
-            mapper = (FileNameMapper)(mIter.next());
-            if (mapper != null) {
+        for (Iterator mIter = getMappers().iterator(); mIter.hasNext();)
+        {
+            mapper = (FileNameMapper) (mIter.next());
+            if (mapper != null)
+            {
                 String[] mapped = mapper.mapFileName(sourceFileName);
-                if (mapped != null) {
+                if (mapped != null)
+                {
                     results.addAll(Arrays.asList(mapped));
                 }
             }
         }
         return (results.size() == 0) ? null
-            : (String[]) results.toArray(new String[results.size()]);
+                : (String[]) results.toArray(new String[results.size()]);
     }
 
 }

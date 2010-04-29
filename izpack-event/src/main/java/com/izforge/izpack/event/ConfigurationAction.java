@@ -21,13 +21,14 @@
 
 package com.izforge.izpack.event;
 
+import com.izforge.izpack.util.Debug;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.izforge.izpack.util.Debug;
-
 /**
  * This class contains data and 'perform' logic for configuration action listeners.
+ *
  * @author Rene Krell
  */
 public class ConfigurationAction extends ActionBase
@@ -52,11 +53,12 @@ public class ConfigurationAction extends ActionBase
 
     /**
      * Performs all defined install actions.
+     *
      * @throws Exception
      */
     public void performInstallAction() throws Exception
     {
-        Debug.trace("Found "+actionTasks.size()+" configuration tasks");
+        Debug.trace("Found " + actionTasks.size() + " configuration tasks");
         for (ConfigurationActionTask task : actionTasks)
         {
             task.execute();
@@ -76,7 +78,9 @@ public class ConfigurationAction extends ActionBase
     public void addActionTasks(List<ConfigurationActionTask> configtasks)
     {
         if (configtasks == null)
+        {
             configtasks = new ArrayList<ConfigurationActionTask>();
+        }
         this.actionTasks.addAll(configtasks);
     }
 }

@@ -22,22 +22,21 @@
 
 package com.izforge.izpack.ant;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Properties;
-import java.util.ResourceBundle;
-
+import com.izforge.izpack.compiler.CompilerConfig;
+import com.izforge.izpack.compiler.container.CompilerContainer;
+import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.compiler.data.PropertyManager;
+import com.izforge.izpack.compiler.listener.PackagerListener;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.EnumeratedAttribute;
 import org.apache.tools.ant.types.PropertySet;
 
-import com.izforge.izpack.compiler.CompilerConfig;
-import com.izforge.izpack.compiler.container.CompilerContainer;
-import com.izforge.izpack.compiler.data.CompilerData;
-import com.izforge.izpack.compiler.data.PropertyManager;
-import com.izforge.izpack.compiler.listener.PackagerListener;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Properties;
+import java.util.ResourceBundle;
 
 /**
  * A IzPack Ant task.

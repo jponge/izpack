@@ -1,8 +1,7 @@
 package com.izforge.izpack.util;
 
+import javax.swing.*;
 import java.io.InputStreamReader;
-
-import javax.swing.SwingUtilities;
 
 /**
  * Created by IntelliJ IDEA.

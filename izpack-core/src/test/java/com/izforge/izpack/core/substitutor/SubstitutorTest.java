@@ -22,10 +22,9 @@
 package com.izforge.izpack.core.substitutor;
 
 
-import junit.framework.TestCase;
-
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import junit.framework.TestCase;
 
 
 /**

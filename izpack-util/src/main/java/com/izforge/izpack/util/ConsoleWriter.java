@@ -1,6 +1,6 @@
 package com.izforge.izpack.util;
 
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 /**
  * Created by IntelliJ IDEA.

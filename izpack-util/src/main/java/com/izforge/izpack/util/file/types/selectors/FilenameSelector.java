@@ -17,52 +17,66 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import java.io.File;
-
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.util.file.types.Parameter;
+
+import java.io.File;
 
 /**
  * Selector that filters files based on the filename.
  *
  * @since 1.5
  */
-public class FilenameSelector extends BaseExtendSelector {
+public class FilenameSelector extends BaseExtendSelector
+{
 
     private String pattern = null;
     private boolean casesensitive = true;
 
     private boolean negated = false;
-    /** Used for parameterized custom selector */
+    /**
+     * Used for parameterized custom selector
+     */
     public static final String NAME_KEY = "name";
-    /** Used for parameterized custom selector */
+    /**
+     * Used for parameterized custom selector
+     */
     public static final String CASE_KEY = "casesensitive";
-    /** Used for parameterized custom selector */
+    /**
+     * Used for parameterized custom selector
+     */
     public static final String NEGATE_KEY = "negate";
 
     /**
      * Creates a new <code>FilenameSelector</code> instance.
-     *
      */
-    public FilenameSelector() {
+    public FilenameSelector()
+    {
     }
 
     /**
      * @return a string describing this object
      */
-    public String toString() {
+    public String toString()
+    {
         StringBuffer buf = new StringBuffer("{filenameselector name: ");
         buf.append(pattern);
         buf.append(" negate: ");
-        if (negated) {
+        if (negated)
+        {
             buf.append("true");
-        } else {
+        }
+        else
+        {
             buf.append("false");
         }
         buf.append(" casesensitive: ");
-        if (casesensitive) {
+        if (casesensitive)
+        {
             buf.append("true");
-        } else {
+        }
+        else
+        {
             buf.append("false");
         }
         buf.append("}");
@@ -76,10 +90,12 @@ public class FilenameSelector extends BaseExtendSelector {
      * @param pattern the file pattern that any filename must match
      *                against in order to be selected.
      */
-    public void setName(String pattern) {
+    public void setName(String pattern)
+    {
         pattern = pattern.replace('/', File.separatorChar).replace('\\',
                 File.separatorChar);
-        if (pattern.endsWith(File.separator)) {
+        if (pattern.endsWith(File.separator))
+        {
             pattern += "**";
         }
         this.pattern = pattern;
@@ -90,7 +106,8 @@ public class FilenameSelector extends BaseExtendSelector {
      *
      * @param casesensitive whether to pay attention to case sensitivity
      */
-    public void setCasesensitive(boolean casesensitive) {
+    public void setCasesensitive(boolean casesensitive)
+    {
         this.casesensitive = casesensitive;
     }
 
@@ -102,7 +119,8 @@ public class FilenameSelector extends BaseExtendSelector {
      *
      * @param negated whether to negate this selection
      */
-    public void setNegate(boolean negated) {
+    public void setNegate(boolean negated)
+    {
         this.negated = negated;
     }
 
@@ -112,19 +130,29 @@ public class FilenameSelector extends BaseExtendSelector {
      *
      * @param parameters the complete set of parameters for this selector
      */
-    public void setParameters(Parameter[] parameters) {
+    public void setParameters(Parameter[] parameters)
+    {
         super.setParameters(parameters);
-        if (parameters != null) {
-            for (int i = 0; i < parameters.length; i++) {
+        if (parameters != null)
+        {
+            for (int i = 0; i < parameters.length; i++)
+            {
                 String paramname = parameters[i].getName();
-                if (NAME_KEY.equalsIgnoreCase(paramname)) {
+                if (NAME_KEY.equalsIgnoreCase(paramname))
+                {
                     setName(parameters[i].getValue());
-                } else if (CASE_KEY.equalsIgnoreCase(paramname)) {
+                }
+                else if (CASE_KEY.equalsIgnoreCase(paramname))
+                {
                     setCasesensitive(Boolean.parseBoolean(
                             parameters[i].getValue()));
-                } else if (NEGATE_KEY.equalsIgnoreCase(paramname)) {
+                }
+                else if (NEGATE_KEY.equalsIgnoreCase(paramname))
+                {
                     setNegate(Boolean.parseBoolean(parameters[i].getValue()));
-                } else {
+                }
+                else
+                {
                     setError("Invalid parameter " + paramname);
                 }
             }
@@ -134,10 +162,11 @@ public class FilenameSelector extends BaseExtendSelector {
     /**
      * Checks to make sure all settings are kosher. In this case, it
      * means that the name attribute has been set.
-     *
      */
-    public void verifySettings() {
-        if (pattern == null) {
+    public void verifySettings()
+    {
+        if (pattern == null)
+        {
             setError("The name attribute is required");
         }
     }
@@ -149,12 +178,13 @@ public class FilenameSelector extends BaseExtendSelector {
      * that provides the same services for both FilenameSelector and
      * DirectoryScanner.
      *
-     * @param basedir the base directory the scan is being done from
+     * @param basedir  the base directory the scan is being done from
      * @param filename is the name of the file to check
-     * @param file is a java.io.File object the selector can use
+     * @param file     is a java.io.File object the selector can use
      * @return whether the file should be selected or not
      */
-    public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file) throws Exception {
+    public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file) throws Exception
+    {
         validate();
 
         return (SelectorUtils.matchPath(pattern, filename,
