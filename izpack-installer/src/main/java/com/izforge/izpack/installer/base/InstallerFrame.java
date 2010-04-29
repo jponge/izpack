@@ -57,6 +57,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.izforge.izpack.api.GuiId.*;
 
@@ -83,7 +85,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      * Heading icon resource name.
      */
     private static final String HEADING_ICON_RESOURCE = "Heading.image";
-
+    private final static Logger LOGGER = Logger.getLogger(InstallerFrame.class.getName());
     /**
      * The language pack.
      */
@@ -542,6 +544,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         }
         catch (Exception e)
         {
+
             Debug.trace("Refreshing dynamic variables failed, asking user whether to proceed.");
             StringBuffer msg = new StringBuffer();
             msg.append("<html>");
@@ -1806,6 +1809,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         }
         catch (Exception e)
         {
+            LOGGER.log(Level.SEVERE, "Error when refreshing variable", e);
             Debug.trace("Refreshing dynamic variables failed, asking user whether to proceed.");
             StringBuffer msg = new StringBuffer();
             msg.append("<html>");
