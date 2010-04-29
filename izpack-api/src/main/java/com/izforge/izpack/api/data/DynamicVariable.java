@@ -26,11 +26,13 @@ package com.izforge.izpack.api.data;
 import com.izforge.izpack.api.regex.RegularExpressionFilter;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
+import java.io.Serializable;
+
 /**
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  * @version $Id: $
  */
-public interface DynamicVariable
+public interface DynamicVariable extends Serializable
 {
     /**
      * @return the name
