@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2002 Marcus Stursberg
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,10 +41,9 @@ import java.util.Properties;
  * language dependent resource just append '_' and the locale to the end of the Resourcename<br>
  * <br>
  * Example:
- * <li> InfoPanel.info - for default value</li>
- * <li> InfoPanel.info_deu - for german value</li>
- * <li> InfoPanel.info_eng - for english value</li>
- * <br>
+ * <li>InfoPanel.info - for default value</li>
+ * <li>InfoPanel.info_deu - for german value</li>
+ * <li>InfoPanel.info_eng - for english value</li> <br>
  * <p/>
  * This class is almost a singleton. It is created once using <code>create</code> by the installer
  * and later, the instance is retrieved using <code>getInstance</code>.
@@ -103,7 +102,8 @@ public class ResourceManager
     public ResourceManager(Properties properties)
     {
         this.locale = "eng";
-        final String systemPropertyBundleName = properties.getProperty("resource.bundle.system.property");
+        final String systemPropertyBundleName = properties
+                .getProperty("resource.bundle.system.property");
         if (systemPropertyBundleName != null)
         {
             setBundleName(System.getProperty(systemPropertyBundleName));
@@ -111,9 +111,8 @@ public class ResourceManager
     }
 
     /**
-     * If null was given the Default BasePath "/res/" is set
-     * If otherwise the Basepath is set to the given String.
-     * This is useful if someone needs direct access to Reosurces in the jar.
+     * If null was given the Default BasePath "/res/" is set If otherwise the Basepath is set to the
+     * given String. This is useful if someone needs direct access to Reosurces in the jar.
      *
      * @param aDefaultBasePath If null was given the DefaultBasepath is re/set "/res/"
      */
@@ -130,7 +129,6 @@ public class ResourceManager
         }
     }
 
-
     /**
      * This method is used to get the language dependent path of the given resource. If there is a
      * resource for the current language the path of the language dependen resource is returnd. If
@@ -138,8 +136,8 @@ public class ResourceManager
      *
      * @param resource Resource to load language dependen
      * @return the language dependent path of the given resource
-     * @throws com.izforge.izpack.api.exception.ResourceNotFoundException
-     *          If the resource is not found
+     * @throws com.izforge.izpack.api.exception.ResourceNotFoundException If the resource is not
+     * found
      */
     private String getLanguageResourceString(String resource)
     {
@@ -152,37 +150,37 @@ public class ResourceManager
             return getAbsoluteLanguageResourceString(this.getResourceBasePath() + resource);
         }
 
-//        String localeSuffix = "_" + this.locale;
-//        String resourcePath = getBundlePath() + resource + localeSuffix;
-//        if (resourceExists(resourcePath))
-//        {
-//            return resourcePath;
-//        }
-//
-//        // if there's no language dependent resource found
-//        resourcePath = getBundlePath() + resource;
-//        if (resourceExists(resourcePath))
-//        {
-//            return resourcePath;
-//        }
-//
-//        resourcePath = this.resourceBasePath + resource + localeSuffix;
-//        if (resourceExists(resourcePath))
-//        {
-//            return resourcePath;
-//        }
-//
-//        // if there's no language dependent resource found
-//        resourcePath = this.resourceBasePath + resource;
-//        if (resourceExists(resourcePath))
-//        {
-//            return resourcePath;
-//        }
-//
-//        throw new ResourceNotFoundException("Cannot find named Resource: '" + getBundlePath()
-//                + resource + "', '" + getBundlePath() + resource + localeSuffix + "'" + ", '"
-//                + this.resourceBasePath + resource + "' AND '" + this.resourceBasePath + resource
-//                + localeSuffix + "'");
+        // String localeSuffix = "_" + this.locale;
+        // String resourcePath = getBundlePath() + resource + localeSuffix;
+        // if (resourceExists(resourcePath))
+        // {
+        // return resourcePath;
+        // }
+        //
+        // // if there's no language dependent resource found
+        // resourcePath = getBundlePath() + resource;
+        // if (resourceExists(resourcePath))
+        // {
+        // return resourcePath;
+        // }
+        //
+        // resourcePath = this.resourceBasePath + resource + localeSuffix;
+        // if (resourceExists(resourcePath))
+        // {
+        // return resourcePath;
+        // }
+        //
+        // // if there's no language dependent resource found
+        // resourcePath = this.resourceBasePath + resource;
+        // if (resourceExists(resourcePath))
+        // {
+        // return resourcePath;
+        // }
+        //
+        // throw new ResourceNotFoundException("Cannot find named Resource: '" + getBundlePath()
+        // + resource + "', '" + getBundlePath() + resource + localeSuffix + "'" + ", '"
+        // + this.resourceBasePath + resource + "' AND '" + this.resourceBasePath + resource
+        // + localeSuffix + "'");
 
     }
 
@@ -198,8 +196,8 @@ public class ResourceManager
     }
 
     /**
-     * Get stream on the given resource. First search if a localized resource exist then try to
-     * get the given resource.
+     * Get stream on the given resource. First search if a localized resource exist then try to get
+     * the given resource.
      *
      * @param resource
      * @return
@@ -225,11 +223,10 @@ public class ResourceManager
             }
             else
             {
-                if (resource.charAt(0) == '/')
-                {
-                    return getAbsoluteLanguageResourceString(resource.substring(1));
-                }
-                throw new ResourceNotFoundException("Cannot find named Resource: '" + resource + "' AND '" + resourcePath + "'");
+                if (resource.charAt(0) == '/') { return getAbsoluteLanguageResourceString(resource
+                        .substring(1)); }
+                throw new ResourceNotFoundException("Cannot find named Resource: '" + resource
+                        + "' AND '" + resourcePath + "'");
             }
         }
     }
@@ -258,17 +255,14 @@ public class ResourceManager
     /**
      * Get Input stream with a default value
      *
-     * @param resource     Path of resource
+     * @param resource Path of resource
      * @param defaultValue Default value if stream is not found
      * @return Stream found or default value
      */
     public InputStream getInputStream(String resource, InputStream defaultValue)
     {
         String resourcepath = this.getLanguageResourceString(resource);
-        if (resourcepath == null)
-        {
-            return defaultValue;
-        }
+        if (resourcepath == null) { return defaultValue; }
         return ClassLoader.getSystemResourceAsStream(resourcepath);
     }
 
@@ -281,8 +275,7 @@ public class ResourceManager
      */
     public URL getLocalizedURL(String resource)
     {
-        return ClassLoader.getSystemResource(
-                this.getLanguageResourceString(resource));
+        return ClassLoader.getSystemResource(this.getLanguageResourceString(resource));
     }
 
 
@@ -302,8 +295,8 @@ public class ResourceManager
      * @param resource - a text resource to load
      * @param encoding - the encoding, which should be used to read the resource
      * @return a String contains the text of the resource
-     * @throws com.izforge.izpack.api.exception.ResourceNotFoundException
-     *                     if the resource can not be found
+     * @throws com.izforge.izpack.api.exception.ResourceNotFoundException if the resource can not be
+     * found
      * @throws IOException if the resource can not be loaded
      */
     // Maybe we can add a text parser for this method
@@ -336,7 +329,7 @@ public class ResourceManager
      * @param resource - a text resource to load
      * @return a String contains the text of the resource
      * @throws ResourceNotFoundException if the resource can not be found
-     * @throws IOException               if the resource can not be loaded
+     * @throws IOException if the resource can not be loaded
      */
     // Maybe we can add a text parser for this method
     public String getTextResource(String resource) throws IOException
@@ -412,10 +405,9 @@ public class ResourceManager
      */
     public InputStream getLangPack(String localeISO3)
     {
-        return ClassLoader.getSystemResourceAsStream(getResourceBasePath() +
-                "/langpacks/" + localeISO3 + ".xml");
+        return ClassLoader.getSystemResourceAsStream(getResourceBasePath() + "/langpacks/"
+                + localeISO3 + ".xml");
     }
-
 
     /**
      * Get langpack of the locale present in installData

@@ -21,6 +21,8 @@
 
 package com.izforge.izpack.util.helper;
 
+import java.util.Iterator;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.installer.ISummarisable;
 

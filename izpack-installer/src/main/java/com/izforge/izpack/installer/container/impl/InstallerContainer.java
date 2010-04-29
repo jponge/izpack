@@ -1,5 +1,16 @@
 package com.izforge.izpack.installer.container.impl;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.util.Properties;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+
+import org.picocontainer.Characteristics;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.injectors.ProviderAdapter;
+
 import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
@@ -8,6 +19,7 @@ import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
 import com.izforge.izpack.installer.base.InstallDataConfiguratorWithRules;
 import com.izforge.izpack.installer.base.InstallerController;
@@ -23,14 +35,6 @@ import com.izforge.izpack.installer.language.LanguageDialog;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.merge.MergeManagerImpl;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
-import org.picocontainer.Characteristics;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.injectors.ProviderAdapter;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.Properties;
 
 /**
  * Application Component. <br />
@@ -121,8 +125,16 @@ public class InstallerContainer extends AbstractContainer
         else
         { // Attention! The alternate message has to contain the whole message including
             // $APP_NAME and may be $APP_VER.
-            return vs.substitute(message);
+            try
+            {
+                return vs.substitute(message);
+            }
+            catch (Exception e)
+            {
+                // ignore
+            }
         }
+        return message;
     }
 
 }

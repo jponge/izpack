@@ -1,27 +1,19 @@
 package com.izforge.izpack.panels.process;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.adaptator.IXMLParser;
-import com.izforge.izpack.api.adaptator.impl.XMLParser;
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.data.binding.OsModel;
-import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.api.handler.AbstractUIProcessHandler;
-import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.OsConstraintHelper;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
-
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import com.izforge.izpack.api.adaptator.*;
+import com.izforge.izpack.api.adaptator.impl.XMLParser;
+import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.data.binding.OsModel;
+import com.izforge.izpack.api.handler.*;
+import com.izforge.izpack.api.rules.Condition;
+import com.izforge.izpack.api.substitutor.*;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.util.*;
 
 /**
  * This class does alle the work for the process panel.
@@ -422,18 +414,40 @@ public class ProcessPanelWorker implements Runnable
 
             List<String> params = new ArrayList<String>(this.arguments.size() + 1);
 
-            params.add(vs.substitute(this.filename, SubstitutionType.TYPE_PLAIN));
+            try
+            {
+                params.add(vs.substitute(this.filename, SubstitutionType.TYPE_PLAIN));
+            }
+            catch (Exception e)
+            {
+                params.add(this.filename);
+            }
 
             for (String argument : this.arguments)
             {
-                params.add(vs.substitute(argument, SubstitutionType.TYPE_PLAIN));
+                try
+                {
+                    params.add(vs.substitute(argument, SubstitutionType.TYPE_PLAIN));
+                }
+                catch (Exception e)
+                {
+                    params.add(argument);
+                }
             }
 
             ProcessBuilder processBuilder = new ProcessBuilder(params);
             Map<String, String> environment = processBuilder.environment();
             for (String envvar : envvariables)
             {
-                String ev = vs.substitute(envvar, SubstitutionType.TYPE_PLAIN);
+                String ev;
+                try
+                {
+                    ev = vs.substitute(envvar, SubstitutionType.TYPE_PLAIN);
+                }
+                catch (Exception e)
+                {
+                    ev = envvar;
+                }
                 int i = ev.indexOf("=");
                 if (i > 0)
                 {
@@ -617,7 +631,15 @@ public class ProcessPanelWorker implements Runnable
             int i = 0;
             for (String myArgument : myArguments)
             {
-                params[i++] = varSubstitutor.substitute(myArgument, SubstitutionType.TYPE_PLAIN);
+                try
+                {
+                    params[i] = varSubstitutor.substitute(myArgument, SubstitutionType.TYPE_PLAIN);
+                }
+                catch (Exception e)
+                {
+                    params[i] = myArgument;
+                }
+                i++;
             }
 
             try

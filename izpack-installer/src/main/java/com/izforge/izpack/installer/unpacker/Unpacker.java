@@ -319,7 +319,7 @@ public class Unpacker extends UnpackerBase
                             {
                                 pis = new FileInputStream(resolvedFile);
                                 //may have a different length & last modified than we had at compiletime, therefore we have to build a new PackFile for the copy process...
-                                pf = new PackFile(resolvedFile.getParentFile(), resolvedFile, pf.getTargetPath(), pf.osConstraints(), pf.override(), pf.blockable(), pf.getAdditionals());
+                                pf = new PackFile(resolvedFile.getParentFile(), resolvedFile, pf.getTargetPath(), pf.osConstraints(), pf.override(), pf.overrideRenameTo(), pf.blockable(), pf.getAdditionals());
                             }
                             else
                             {

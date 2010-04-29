@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2003 Tino Schwarze
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -333,7 +333,7 @@ public class CompileWorker implements Runnable
                         }
                         catch (ExceptionInInitializerError eiie)
                         {
-                            // ignore, just don't add it as a choice                            
+                            // ignore, just don't add it as a choice
                         }
                         catch (ClassNotFoundException cnfe)
                         {
@@ -342,7 +342,13 @@ public class CompileWorker implements Runnable
                     }
                     else
                     {
-                        choiceList.add(this.vs.substitute(value, SubstitutionType.TYPE_PLAIN));
+                        try {
+                          choiceList.add(this.vs.substitute(value, SubstitutionType.TYPE_PLAIN));
+                        }
+                        catch (Exception e)
+                        {
+                          // ignore, just don't add it as a choice
+                        }
                     }
                 }
             }
@@ -1370,7 +1376,7 @@ public class CompileWorker implements Runnable
             }
             catch (NumberFormatException _nfe)
             {
-                // should not happen - ignore                    
+                // should not happen - ignore
             }
 
             return true;

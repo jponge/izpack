@@ -16,6 +16,7 @@
         <module>izpack-compiler</module>
         <module>izpack-dist</module>
         <module>izpack-gui</module>
+        <module>izpack-ini4j</module>
         <module>izpack-uninstaller</module>
         <module>izpack-panel</module>
         <module>izpack-native</module>

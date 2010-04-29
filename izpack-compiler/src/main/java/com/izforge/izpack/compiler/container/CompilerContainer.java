@@ -1,11 +1,21 @@
 package com.izforge.izpack.compiler.container;
 
 import com.izforge.izpack.api.rules.RulesEngine;
+
+import org.picocontainer.Characteristics;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.injectors.ProviderAdapter;
+
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.Compiler;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.cli.CliAnalyzer;
-import com.izforge.izpack.compiler.container.provider.*;
+import com.izforge.izpack.compiler.container.provider.CompilerDataProvider;
+import com.izforge.izpack.compiler.container.provider.CompressedOutputStreamProvider;
+import com.izforge.izpack.compiler.container.provider.IzpackProjectProvider;
+import com.izforge.izpack.compiler.container.provider.JarOutputStreamProvider;
+import com.izforge.izpack.compiler.container.provider.PackCompressorProvider;
+import com.izforge.izpack.compiler.container.provider.XmlCompilerHelperProvider;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
@@ -19,13 +29,7 @@ import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.MergeManagerImpl;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
-import org.picocontainer.Characteristics;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.injectors.ProviderAdapter;
 import org.picocontainer.parameters.ComponentParameter;
-
-import java.util.Properties;
 
 /**
  * Container for compiler
@@ -39,7 +43,7 @@ public class CompilerContainer extends AbstractContainer
     public void fillContainer(MutablePicoContainer pico)
     {
         pico
-                .addComponent("properties", new Properties(System.getProperties()))
+                .addComponent(Properties.class)
                 .addComponent(CompilerContainer.class, this)
                 .addComponent(CliAnalyzer.class)
                 .addComponent(CmdlinePackagerListener.class)

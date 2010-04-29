@@ -5,6 +5,8 @@ import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.util.Debug;
 
 import javax.swing.*;
@@ -508,6 +510,11 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
         {
             this.runPicker();
         }
+
+        // Get dynamic variables immediately for being able to use them as
+        // variable condition in installerrequirements
+        InstallerBase.refreshDynamicVariables(installdata,
+                new VariableSubstitutorImpl(installdata.getVariables()));
 
         // check installer conditions
         if (!conditionCheck.checkInstallerRequirements(this))

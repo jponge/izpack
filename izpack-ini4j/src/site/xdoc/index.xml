@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2005,2009 Ivan SZKIBA
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+    <properties>
+        <title>Java API for handling Windows ini file format</title>
+    </properties>
+    <body>
+        <section name="Java API for handling Windows ini file format">
+            <p>
+ The [ini4j] is a simple Java API for handling configuration files in Windows .ini format.
+ Additionally, the library includes
+ <a href="http://java.sun.com/javase/6/docs/api/java/util/prefs/Preferences.html">Java Preferences API</a>
+ implementation based on the .ini file.
+            </p>
+            <menu>
+                <li><a href="tutorial/index.html"><img src="img/tutorial.png"/> Tutorials</a></li>
+<!--                <li><a href="documents.html"><img src="img/docs.png"/> Documents</a></li> -->
+                <li><a href="download.html"><img src="img/download.png"/> Download</a></li>
+                <li><a href="community.html"><img src="img/community.png"/> Community</a></li>
+            </menu>
+            <subsection name="Simple document model">
+                <p>
+                    [ini4j] has very simple, but intuitive document model for windows .ini files.
+                    Basicly it is two level of Maps. You can use full power of Collections API.
+                    The Ini (Wini) class is map of Sections. Section is map of name/value pairs (options).
+                    <a href="tutorial/IniTutorial.java.html">--&gt; Ini Tutorial</a>
+                </p>
+            </subsection>
+            <subsection name="Multiply option/section values">
+                <p>
+                    In addition of model above, [ini4j] is able to deal with multiply option/section
+                    entries. It can be handled with MultiMap interface, which simply extends Map
+                    interface, and allow multiply values per key.
+                </p>
+            </subsection>
+            <subsection name="Expression handling">
+                <p>
+                    Many .ini files contains same values more than one times. With [ini4j] you are
+                    able to refer other options value via simple macro substitution. The basic
+                    syntax is the commonly used ${REF} format: ${section/option}
+                    (or with multi option: ${section/option[index]})
+                </p>
+            </subsection>
+            <subsection name="java.util.Properties replacement">
+                <p>
+                    [ini4j] contains class <code>Options</code> which is a better
+                    Properties replacement. <code>Options</code> use .properties
+                    file format, but allow macro/variable substitution, mult value
+                    properties. Unlike original java.util.Properties, <code>Options</code> implements
+                    Map&lt;String,String&gt;, so it more confortable to use
+                    standard Collections api.
+                    <a href="tutorial/OptTutorial.java.html">--&gt; Options Tutorial</a>
+                </p>
+            </subsection>
+            <subsection name="Read/write Windows registry">
+                <p>
+                    Yes, it is possible now to read/write registry from java programs
+                    without native (JNI) code ! [ini4j] is able to read and write
+                    registry keys. And almost all .ini features (expression handling, multi value,
+                    bean interface, etc) works with windows registry.
+                    <a href="tutorial/WindowsRegistryTutorial.java.html">--&gt; Windows Registry Tutorial</a>
+                </p>
+            </subsection>
+            <subsection name="Handle .REG file format">
+                <p>
+                    On windows systems .REG file is common for registry import/export.
+                    It has similar but bit different syntax than old .ini format.
+                    [ini4j] fully support .REG file format.
+                    <a href="tutorial/RegTutorial.java.html">--&gt; Reg Tutorial</a>
+                </p>
+            </subsection>
+        </section>
+    </body>
+</document>

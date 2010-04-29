@@ -18,10 +18,10 @@
 
 package com.izforge.izpack.util.unix;
 
-import com.izforge.izpack.util.FileExecutor;
-
 import java.io.*;
 import java.util.ArrayList;
+
+import com.izforge.izpack.util.FileExecutor;
 
 /**
  * Helper Methods for unix-systems and derived.

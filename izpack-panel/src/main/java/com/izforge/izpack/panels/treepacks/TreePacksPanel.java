@@ -672,7 +672,14 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             {
                 desc = pack.description;
             }
-            desc = variableSubstitutor.substitute(desc);
+            try
+            {
+                desc = variableSubstitutor.substitute(desc);
+            }
+            catch (Exception e)
+            {
+                // ignore
+            }
             descriptionArea.setText(desc);
         }
     }

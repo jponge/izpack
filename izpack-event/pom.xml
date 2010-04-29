@@ -15,15 +15,15 @@
 
     <dependencies>
         <dependency>
-            <groupId>${groupId}</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>izpack-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>${groupId}</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>izpack-util</artifactId>
         </dependency>
         <dependency>
-            <groupId>${groupId}</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>izpack-installer</artifactId>
         </dependency>
         <dependency>

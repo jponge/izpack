@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2002 Elmar Grom
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,27 +21,23 @@
 
 package com.izforge.izpack.panels.userinput.processorclient;
 
+import java.awt.Toolkit;
+import java.awt.event.*;
+import java.io.Serializable;
+import java.util.*;
+
+import javax.swing.*;
+import javax.swing.event.*;
+
+import org.apache.regexp.RE;
+
 import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.panels.userinput.RuleTextField;
 import com.izforge.izpack.panels.userinput.processor.Processor;
 import com.izforge.izpack.panels.userinput.validator.Validator;
 import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
-import org.apache.regexp.RE;
-
-import javax.swing.*;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
-import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.Serializable;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.Vector;
 
 /*---------------------------------------------------------------------------*/
 
@@ -433,7 +429,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     /*--------------------------------------------------------------------------*/
     /*
      * $ @design
-     * 
+     *
      * I used a simple StringTokenizer to break the format string into individual tokens. The
      * approach in building up the field is to consider each token a potential definition for an
      * input field. Therefore I attempt to create an instance of FieldSpec from each token.
@@ -728,7 +724,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     /*--------------------------------------------------------------------------*/
     /*
      * $ @design <- keep this tag in place and don't write on this line!
-     * 
+     *
      * Enter design related documentation here.
      * --------------------------------------------------------------------------
      */

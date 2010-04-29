@@ -379,10 +379,7 @@ public class RulesEngineImpl implements RulesEngine
         Condition cond = getCondition(id);
         if (cond != null)
         {
-            if (cond.getInstalldata() == null)
-            {
                 cond.setInstalldata(installdata);
-            }
             return this.isConditionTrue(cond);
         }
         else

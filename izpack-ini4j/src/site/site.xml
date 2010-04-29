@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2005,2009 Ivan SZKIBA
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<project name="[ini4j]" xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-default-skin</artifactId>
+        <version>1.0</version>
+    </skin>
+    <bannerLeft>
+        <name>[ini4j]</name>
+        <src>img/ini4j-banner.png</src>
+        <href>http://ini4j.sourceforge.net/index.html</href>
+    </bannerLeft>
+    <bannerRight>
+        <name>SourceForge</name>
+        <src>http://sourceforge.net/sflogo.php?group_id=129580&amp;type=16</src>
+        <href>http://sourceforge.net</href>
+    </bannerRight>
+    <poweredBy>
+        <logo name="java.net" href="http://www.java.net"
+          img="http://java.net/images/javanet_button_90.gif"/>
+    </poweredBy>
+    <publishDate position="bottom" format="yyyy-MM-dd"/>
+    <version position="bottom"/>
+    <body>
+        <head>
+            <link rel="shortcut icon" href="/favicon.ico"/>
+            <meta name="keywords" content="windows ini,java library,ini,configuration,properties,java.util.Properties,properties replacement,properties macro substitution"></meta>
+            <meta name="author" content="szkiba"></meta>
+            <meta name="description" content="Java API for handling configuration files in Windows .ini format. The library includes its own Map based API, Java Preferences API and Java Beans API for handling .ini files. Additionally, the library includes a feature rich (variable/macro substitution, multiply property values, etc) java.util.Properties replacement."></meta>
+            <script src="http://www.google-analytics.com/ga.js" type="text/javascript"></script>
+            <script type="text/javascript">
+                    try { var pageTracker = _gat._getTracker("UA-7815137-3"); pageTracker._trackPageview(); } catch(err) {}
+            </script>
+        </head>
+
+        <links>
+            <item name="SourceForge project page" href="http://sourceforge.net/projects/ini4j"/>
+        </links>
+
+        <breadcrumbs>
+            <item name="Home" href="/index.html"/>
+            <item name="Tutorials" href="/tutorial/index.html"/>
+            <item name="Samples" href="/sample/index.html"/>
+            <item name="Demo" href="/demo.html"/>
+<!--            <item name="Documents" href="/documents.html"/> -->
+            <item name="Download" href="/download.html"/>
+            <item name="Community" href="/community.html"/>
+            <item name="Search" href="/search.html"/>
+        </breadcrumbs>
+
+        <menu name="Documents">
+            <item name="Home" href="index.html"/>
+            <item name="Overview" href="overview.html" />
+<!--            <item name="Features" href="features.html" /> -->
+            <item name="JavaDocs" href="apidocs/index.html"/>
+            <item name="Goals" href="design.html"/>
+            <item name="TODO" href="taglist.html"/>
+            <item name="Changes" href="changes-report.html"/>
+            <item name="Demo" href="demo.html"/>
+            <item name="Search" href="search.html"/>
+        </menu>
+        <menu name="Tutorials">
+            <item name="One minute" href="tutorial/OneMinuteTutorial.java.html"/>
+            <item name="Ini" href="tutorial/IniTutorial.java.html"/>
+            <item name="Reg" href="tutorial/RegTutorial.java.html"/>
+            <item name="Windows Registry" href="tutorial/WindowsRegistryTutorial.java.html"/>
+            <item name="Options" href="tutorial/OptTutorial.java.html"/>
+            <item name="Bean" href="tutorial/BeanTutorial.java.html"/>
+            <item name="Preferences" href="tutorial/PrefsTutorial.java.html"/>
+        </menu>
+        <menu name="Community">
+            <item name="Bug report" href="http://sourceforge.net/tracker2/?func=add&amp;group_id=129580&amp;atid=715133"/>
+            <item name="Feature request" href="http://sourceforge.net/tracker2/?func=add&amp;group_id=129580&amp;atid=715136"/>
+            <item name="Forums" href="http://sourceforge.net/forum/?group_id=129580"/>
+            <item name="Project page" href="http://sourceforge.net/projects/ini4j"/>
+            <item name="Donate" href="http://sourceforge.net/donate/index.php?group_id=129580"/>
+        </menu>
+        <menu ref="reports"/>
+    </body>
+</project>

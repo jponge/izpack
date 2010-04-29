@@ -7,6 +7,7 @@ import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.data.DynamicInstallerRequirementValidatorImpl;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
@@ -339,15 +340,15 @@ public abstract class AbstractInstallDataProvider implements Provider
     /**
      * Loads Dynamic Variables.
      *
-     * @param installDataGUI
+     * @param automatedInstallData
      */
-    protected void loadDynamicVariables(AutomatedInstallData installDataGUI)
+    protected void loadDynamicVariables(AutomatedInstallData automatedInstallData)
     {
         try
         {
             InputStream in = resourceManager.getInputStream("dynvariables");
             ObjectInputStream objIn = new ObjectInputStream(in);
-            installDataGUI.setDynamicvariables((Map<String, List<DynamicVariable>>) objIn.readObject());
+            automatedInstallData.setDynamicvariables((Map<String, List<DynamicVariable>>) objIn.readObject());
             objIn.close();
         }
         catch (Exception e)
@@ -358,16 +359,37 @@ public abstract class AbstractInstallDataProvider implements Provider
     }
 
     /**
+     * Loads dynamic conditions.
+     *
+     * @param automatedInstallData
+     */
+    protected void loadDynamicConditions(AutomatedInstallData automatedInstallData)
+    {
+        try
+        {
+            InputStream in = resourceManager.getInputStream("dynconditions");
+            ObjectInputStream objIn = new ObjectInputStream(in);
+            automatedInstallData.setDynamicinstallerrequirements((List<DynamicInstallerRequirementValidator>) objIn.readObject());
+            objIn.close();
+        }
+        catch (Exception e)
+        {
+            Debug.trace("Cannot find optional dynamic conditions");
+            System.out.println(e);
+        }
+    }
+
+    /**
      * Load installer conditions
      *
-     * @param installDataGUI
+     * @param automatedInstallData
      * @throws Exception
      */
-    public void loadInstallerRequirements(AutomatedInstallData installDataGUI) throws Exception
+    public void loadInstallerRequirements(AutomatedInstallData automatedInstallData) throws Exception
     {
         InputStream in = resourceManager.getInputStream("installerrequirements");
         ObjectInputStream objIn = new ObjectInputStream(in);
-        installDataGUI.setInstallerrequirements((List<InstallerRequirement>) objIn.readObject());
+        automatedInstallData.setInstallerrequirements((List<InstallerRequirement>) objIn.readObject());
         objIn.close();
     }
 

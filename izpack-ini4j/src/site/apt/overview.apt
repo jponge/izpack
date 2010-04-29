@@ -1,0 +1,46 @@
+                ----
+                Java API for handling Windows ini file format
+
+Java API for handling Windows ini file format
+
+ The [ini4j] is a simple Java API for handling configuration files in Windows .ini format.
+ Additionally, the library includes
+ {{{http://java.sun.com/javase/6/docs/api/java/util/prefs/Preferences.html}Java Preferences API}}
+ implementation based on the .ini file.
+
+ Configuration management is an integral part of every application. The standard Java API
+ {{{http://java.sun.com/j2se/1.5.0/docs/api/java/util/Properties.html}Properties}}
+ warrants simple configuration management.
+ A bit more complicated configuration can be managed with the standard Java 
+ {{{http://java.sun.com/j2se/1.5.0/docs/api/java/util/prefs/Preferences.html}Preferences API}}
+ since Java version 1.4. There is also another (much more complicated) method of configuration management:
+ managing configuration files in XML format. 
+ In this case the standard Java XML API (JAXP) or another XML-based configuration management system, e.g.
+ {{{http://jakarta.apache.org/commons/digester/}Jakarta Commons Digester}}, is used.
+
+ The {{{http://java.sun.com/j2se/1.5.0/docs/api/java/util/Properties.html}Properties}}
+ file can't group settings, which is why its services are often not sufficient. 
+ The Preferences API can sort settings in a nice tree structure, but the standard implementation
+ uses hidden filesystem directory structures inside the user's home directory.
+ This means that it can't be used for managing configuration files attached to the application.
+ Managing XML configuration files through the JAXP is a tiresome work, and to learn and master
+ a complex XML-based configuration management system is a time-consuming and difficult task.
+
+ There is another way not mentioned so far: using good old Windows .ini files. 
+ This format allows you to group settings, so it's better than the Properties API, whereas it's considerably
+ easier to manage than XML configuration files. Contrary to the standard Preferences implementation, .ini
+ files can be attached to applications as configuration files without worry. At the time of writing this
+ document a "de facto" .ini file handling Java library doesn't exist. The [ini4j] tries to be one.
+
+ It was an important design aspect to use the standard API. Due to this, I chose the standard
+ {{{http://java.sun.com/j2se/1.5.0/docs/api/java/util/prefs/Preferences.html}Preferences API}}.
+ This means that the [ini4j] package contains a Preferences implementation that realizes a Preferences API on the .ini files.
+ The Preferences tree has only one level that contains the sections of the .ini file. The only [ini4j] specific
+ thing that remains is to create a Preferences tree that means creating an instance of the IniPreferences object.
+ This object corresponds to the .ini file as a Preferences object.
+
+ The {{{http://java.sun.com/j2se/1.5.0/docs/api/java/util/Properties.html}Properties}}
+ file is a simple String,String map, while the Ini object is a two-level map. On its first level
+ the String type keys define the Ini.Section type sections.
+ The Ini.Section object itself is a map, a String,String type map of the name/value pairs.
+

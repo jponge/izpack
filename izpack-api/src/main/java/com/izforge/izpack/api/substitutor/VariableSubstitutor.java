@@ -32,7 +32,7 @@ public interface VariableSubstitutor extends Serializable
      * @return the string with substituted variables
      * @throws IllegalArgumentException if unknown escaping type specified
      */
-    String substitute(String str) throws IllegalArgumentException;
+    String substitute(String str) throws Exception;
 
     /**
      * Substitutes the variables found in the specified string. Escapes special characters using
@@ -43,7 +43,7 @@ public interface VariableSubstitutor extends Serializable
      * @return the string with substituted variables
      * @throws IllegalArgumentException if unknown escaping type specified
      */
-    String substitute(String str, SubstitutionType type) throws IllegalArgumentException;
+    String substitute(String str, SubstitutionType type) throws Exception;
 
     /**
      * Substitutes the variables found in the specified input stream. Escapes special characters
@@ -57,9 +57,10 @@ public interface VariableSubstitutor extends Serializable
      * @throws IllegalArgumentException     if unknown file type specified
      * @throws UnsupportedEncodingException if encoding not supported
      * @throws IOException                  if an I/O error occurs
+     * @throws
      */
     int substitute(InputStream in, OutputStream out, SubstitutionType type, String encoding)
-            throws IllegalArgumentException, IOException;
+            throws Exception;
 
     /**
      * Substitute method Variant that gets An Input Stream and returns A String
@@ -71,7 +72,7 @@ public interface VariableSubstitutor extends Serializable
      * @throws UnsupportedEncodingException If the file comes with a wrong Encoding
      * @throws IOException                  If an I/O Error occurs.
      */
-    String substitute(InputStream in, SubstitutionType type) throws IllegalArgumentException, IOException;
+    String substitute(InputStream in, SubstitutionType type) throws Exception;
 
     /**
      * Substitutes the variables found in the data read from the specified reader. Escapes special
@@ -84,5 +85,5 @@ public interface VariableSubstitutor extends Serializable
      * @throws IllegalArgumentException if unknown file type specified
      * @throws IOException              if an I/O error occurs
      */
-    int substitute(Reader reader, Writer writer, SubstitutionType type) throws IllegalArgumentException, IOException;
+    int substitute(Reader reader, Writer writer, SubstitutionType type) throws Exception;
 }

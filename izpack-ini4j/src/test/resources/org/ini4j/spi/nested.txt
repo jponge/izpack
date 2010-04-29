@@ -1,0 +1,7 @@
+#-1:nested.txt
+1:nested.txt
+#-2:nested.txt
+<include.txt>
+#-3:nested.txt
+2:nested.txt
+#-4:nested.txt

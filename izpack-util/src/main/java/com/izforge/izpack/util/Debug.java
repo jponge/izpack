@@ -22,9 +22,7 @@
 package com.izforge.izpack.util;
 
 import java.io.*;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * This class is for debug purposes. It is highly recommended to use it on critical or experimental

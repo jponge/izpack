@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2005,2009 Ivan SZKIBA
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+    <properties>
+        <title>Download</title>
+    </properties>
+
+    <body>
+        <section name="Download">
+            <p>
+                The main download location for [ini4j] is the SourceForge download site.
+            </p>
+            <p>
+                <a href="http://sourceforge.net/project/showfiles.php?group_id=129580">Download from SourceForge</a>
+            </p>
+            <p>
+ [ini4j] also deployed into Maven Central repository, so if you are using
+ Apache Maven build environment, nothing to do: maven will download
+ automatically.
+            </p>
+            <p>
+                <a href="http://repo2.maven.org/maven2/org/ini4j/ini4j/">Download from Maven Central repository</a>
+            </p>
+
+            <subsection name="Using from maven">
+                <p>
+                    If you are using Apache Maven build system, you need only specify [ini4j] as dependency:
+                </p>
+                <source><![CDATA[<dependency>
+    <groupId>org.ini4j<groupId>
+    <artifactId>ini4j</artifactID>
+    <version>X.Y.Z</version>
+</dependency>]]></source>
+            </subsection>
+
+            <subsection name="Other options">
+                <p>
+ For Linux users also easy to get [ini4j]. Most Linux distribution already
+ contains [ini4j] as installable library, called: libini4j-java. You can use
+ standard package manager (rpm/apt-get) to install it.
+                </p>
+            <menu>
+                <li><a href="http://packages.ubuntu.com/intrepid/libini4j-java"><img src="img/ubuntu.png"/></a></li>
+                <li><a href="https://admin.fedoraproject.org/pkgdb/packages/name/ini4j"><img src="img/fedora.png"/></a></li>
+            </menu>
+            <p>
+                If you have <a href="http://www.netbeans.org/about/legal/code_dependency_matrix.html">NetBeans IDE</a> installed on your computer, probably you already have [ini4j] :)
+            </p>
+            </subsection>
+        </section>
+    </body>
+</document>

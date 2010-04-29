@@ -1,18 +1,18 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2004 Klaus Bartz
  * Copyright 2004 Thomas Guenter
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -62,9 +62,11 @@ public class AntAction extends ActionBase
 
     private List<String> uninstallTargets = null;
 
-    private String logFile = null;
+    private File logFile = null;
 
-    private String buildFile = null;
+    private File buildFile = null;
+
+    private String conditionId = null;
 
     private List<String> propertyFiles = null;
 
@@ -146,7 +148,7 @@ public class AntAction extends ActionBase
                 for (String choosenTarget : choosenTargets)
                 {
                     antcall = (Ant) antProj.createTask("ant");
-                    antcall.setAntfile(getBuildFile());
+                    antcall.setAntfile(getBuildFile().getAbsolutePath());
                     antcall.setTarget(choosenTarget);
                     antcalls.add(antcall);
                 }
@@ -174,12 +176,24 @@ public class AntAction extends ActionBase
         }
     }
 
+
+    public String getConditionId()
+    {
+        return conditionId;
+    }
+
+
+    public void setConditionId(String conditionId)
+    {
+        this.conditionId = conditionId;
+    }
+
     /**
      * Returns the build file.
      *
      * @return the build file
      */
-    public String getBuildFile()
+    public File getBuildFile()
     {
         return buildFile;
     }
@@ -189,7 +203,7 @@ public class AntAction extends ActionBase
      *
      * @param buildFile build file path to be used
      */
-    public void setBuildFile(String buildFile)
+    public void setBuildFile(File buildFile)
     {
         this.buildFile = buildFile;
     }
@@ -199,7 +213,7 @@ public class AntAction extends ActionBase
      *
      * @return current logfile path
      */
-    public String getLogFile()
+    public File getLogFile()
     {
         return logFile;
     }
@@ -209,7 +223,7 @@ public class AntAction extends ActionBase
      *
      * @param logFile to be set
      */
-    public void setLogFile(String logFile)
+    public void setLogFile(File logFile)
     {
         this.logFile = logFile;
     }
@@ -404,6 +418,7 @@ public class AntAction extends ActionBase
             PrintStream printStream;
             try
             {
+                logFile.getParentFile().mkdirs();
                 printStream = new PrintStream(new FileOutputStream(logFile));
                 logger.setOutputPrintStream(printStream);
                 logger.setErrorPrintStream(printStream);

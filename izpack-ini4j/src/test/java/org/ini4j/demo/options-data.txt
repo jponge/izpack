@@ -1,0 +1,33 @@
+! dopey properties without prefix
+weight = ${bashful.weight}
+height = ${doc.height}
+age = 23
+homePage = http://dopey.snowwhite.tale/
+homeDir = c:\\Documents and Settings\\dopey
+fortuneNumber = 11
+fortuneNumber = 33
+fortuneNumber = 55
+
+! bashful
+bashful.weight = 45.7
+bashful.height = 98.8
+bashful.age = 67
+bashful.homePage = http://snowwhite.tale/~bashful
+bashful.homeDir = /home/bashful
+
+! doc
+doc.weight = 49.5
+doc.height = 87.7
+doc.age = 63
+doc.homePage = http://doc.dwarfs
+doc.homeDir = c:\Documents and Settings\doc
+
+! dopey
+dopey.weight = ${bashful.weight}
+dopey.height = ${doc.height}
+dopey.age = 23
+dopey.homePage = http://dopey.snowwhite.tale/
+dopey.homeDir = c:\\Documents and Settings\\dopey
+dopey.fortuneNumber = 11
+dopey.fortuneNumber = 33
+dopey.fortuneNumber = 55

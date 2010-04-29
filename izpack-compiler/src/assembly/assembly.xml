@@ -18,14 +18,20 @@
         </dependencySet>
 
         <dependencySet>
+            <!--
             <unpack>false</unpack>
+             -->
+            <unpack>true</unpack>
             <scope>runtime</scope>
             <excludes>
                 <exclude>org.codehaus.izpack:izpack-util</exclude>
                 <exclude>org.codehaus.izpack:izpack-compiler</exclude>
                 <exclude>org.codehaus.izpack:izpack-native</exclude>
             </excludes>
+            <!--
             <outputDirectory>lib</outputDirectory>
+             -->
+            <outputDirectory>/</outputDirectory>
         </dependencySet>
     </dependencySets>
     <fileSets>

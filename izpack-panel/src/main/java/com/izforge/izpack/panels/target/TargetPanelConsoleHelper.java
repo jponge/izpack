@@ -62,7 +62,14 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
         }
         else
         {
-            strTargetPath = variableSubstitutor.substitute(strTargetPath);
+            try
+            {
+                strTargetPath = variableSubstitutor.substitute(strTargetPath);
+            }
+            catch (Exception e)
+            {
+                // ignore
+            }
             installData.setInstallPath(strTargetPath);
             return true;
         }
@@ -96,7 +103,14 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
             e.printStackTrace();
         }
 
-        strTargetPath = variableSubstitutor.substitute(strTargetPath);
+        try
+        {
+            strTargetPath = variableSubstitutor.substitute(strTargetPath);
+        }
+        catch (Exception e)
+        {
+            // ignore
+        }
 
         idata.setInstallPath(strTargetPath);
         int i = askEndOfConsolePanel();

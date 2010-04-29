@@ -1,0 +1,15 @@
+
+Redirect permanent /license.txt http://ini4j.sourceforge.net/license.html
+Redirect permanent /changelog.html http://ini4j.sourceforge.net/changes-report.html
+Redirect permanent /releasenotes.html http://ini4j.sourceforge.net/changes-report.html
+Redirect permanent /todo.html http://ini4j.sourceforge.net/taglist.html
+
+Redirect permanent /tutorial.html http://ini4j.sourceforge.net/tutorial/index.html
+Redirect permanent /tutorials.html http://ini4j.sourceforge.net/tutorial/index.html
+Redirect permanent /samples.html http://ini4j.sourceforge.net/sample/index.html
+
+RedirectMatch permanent /(testapidocs)/.* http://ini4j.sourceforge.net/
+
+RedirectMatch permanent /(pmd|links|using|cpd|checkstyle|integration|jdepend-report|surefire-report).html http://ini4j.sourceforge.net/
+
+ErrorDocument 404 /404.html

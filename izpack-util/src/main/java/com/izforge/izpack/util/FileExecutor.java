@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2002 Olexij Tkatchenko
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,14 +21,11 @@
 
 package com.izforge.izpack.util;
 
+import java.io.*;
+import java.util.*;
+
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.data.ExecutableFile;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Executes a bunch of files. This class is intended to do a system dependent installation
@@ -344,18 +341,16 @@ public class FileExecutor
 
                     if (efile.onFailure == ExecutableFile.ABORT)
                     {
-                        // CHECKME: let the user decide or abort anyway?
-                        handler.emitError("file execution error", message);
+                        handler.emitErrorAndBlockNext("File execution returned "+exitStatus, message);
                     }
                     else if (efile.onFailure == ExecutableFile.WARN)
                     {
-                        // CHECKME: let the user decide or abort anyway?
-                        handler.emitWarning("file execution error", message);
+                        handler.emitWarning("File execution returned "+exitStatus, message);
                         exitStatus = 0;
                     }
                     else if (efile.onFailure == ExecutableFile.IGNORE)
                     {
-                        // do nothing  
+                        // do nothing
                         exitStatus = 0;
                     }
                     else

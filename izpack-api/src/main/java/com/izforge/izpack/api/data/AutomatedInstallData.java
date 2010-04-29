@@ -19,14 +19,19 @@
 
 package com.izforge.izpack.api.data;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * Encloses information about the install process. This implementation is not thread safe.
@@ -126,9 +131,14 @@ public class AutomatedInstallData implements Serializable
     private Properties variables;
 
     /**
-     * Dynamics variables
+     * Dynamic variables
      */
-    private Map<String, java.util.List<DynamicVariable>> dynamicvariables;
+    private Map<String, List<DynamicVariable>> dynamicvariables;
+
+    /**
+     * Dynamic conditions
+     */
+    private List<DynamicInstallerRequirementValidator> dynamicinstallerrequirements;
 
     /**
      * List of install requirements
@@ -282,49 +292,6 @@ public class AutomatedInstallData implements Serializable
         else
         {
             getAttributes().put(attr, val);
-        }
-    }
-
-
-    /**
-     * Refreshes Dynamic Variables.
-     */
-    public void refreshDynamicVariables()
-    {
-//        Debug.log("refreshing dyamic variables.");
-        if (dynamicvariables != null)
-        {
-            for (String dynvarname : dynamicvariables.keySet())
-            {
-//                Debug.log("Variable: " + dynvarname);
-                for (DynamicVariable dynvar : dynamicvariables.get(dynvarname))
-                {
-                    boolean refresh = false;
-                    String conditionid = dynvar.getConditionid();
-//                    Debug.log("condition: " + conditionid);
-                    if ((conditionid != null) && (conditionid.length() > 0))
-                    {
-                        if ((rules != null) && rules.isConditionTrue(conditionid))
-                        {
-//                            Debug.log("refresh condition");
-                            // condition for this rule is true
-                            refresh = true;
-                        }
-                    }
-                    else
-                    {
-//                        Debug.log("refresh condition");
-                        // empty condition
-                        refresh = true;
-                    }
-                    if (refresh)
-                    {
-                        String newvalue = variableSubstitutor.substitute(dynvar.getValue());
-//                        Debug.log("newvalue: " + newvalue);
-                        getVariables().setProperty(dynvar.getName(), newvalue);
-                    }
-                }
-            }
         }
     }
 
@@ -516,9 +483,24 @@ public class AutomatedInstallData implements Serializable
         this.attributes = attributes;
     }
 
+    public Map<String, List<DynamicVariable>> getDynamicvariables()
+    {
+        return this.dynamicvariables;
+    }
+
     public void setDynamicvariables(Map<String, List<DynamicVariable>> dynamicvariables)
     {
         this.dynamicvariables = dynamicvariables;
+    }
+
+    public List<DynamicInstallerRequirementValidator> getDynamicinstallerrequirements()
+    {
+        return this.dynamicinstallerrequirements;
+    }
+
+    public void setDynamicinstallerrequirements(List<DynamicInstallerRequirementValidator> dynamicinstallerrequirements)
+    {
+        this.dynamicinstallerrequirements = dynamicinstallerrequirements;
     }
 
     public void setInstallerrequirements(List<InstallerRequirement> installerrequirements)

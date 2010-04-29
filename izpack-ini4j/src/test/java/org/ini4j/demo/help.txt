@@ -1,0 +1,11 @@
+You can try Ini, Reg and Options class features usgin this demo. In "data" tab
+you may type data file or load sample test data by pressing "L O A D" button.
+
+After typing or loading data, you can parse it by pressing "P A R S E" button.
+This will parse the data for the format you select. When parse successfully
+completed, a variable with name "data" will be defined in "Interpreter". You
+can copy/paste sample expressions from "tip" panel.
+
+In "Interpreter" panel you can find a BeanShell interpreter. BeanShell language
+is very close to Java, you can use it as Java interpreter. So in this panel
+you can test your parsed data object interactive mode.

@@ -1,0 +1,53 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER]
+
+[HKEY_CURRENT_USER\Software]
+
+[HKEY_CURRENT_USER\Software\ini4j-test]
+
+[HKEY_CURRENT_USER\Software\ini4j-test\dwarfs]
+
+; bashful
+;   weight=45.7
+;   age=67
+[HKEY_CURRENT_USER\Software\ini4j-test\dwarfs\bashful]
+@="bashful"
+"weight"=hex(2):34,00,35,00,2e,00,37,00,00,00
+"height"="98.8"
+"age"=dword:00000043
+"homePage"="http://snowwhite.tale/~bashful"
+"homeDir"="/home/bashful"
+
+; doc
+;   weight=49.5
+;   age=63
+[HKEY_CURRENT_USER\Software\ini4j-test\dwarfs\doc]
+@="doc"
+"weight"=hex(2):34,00,39,00,2e,00,35,00,00,00
+"height"="87.7"
+"age"=dword:0000003f
+"homePage"="http://doc.dwarfs"
+"homeDir"="c:Documents and Settingsdoc"
+
+; dopey
+;   weight=${HKEY_CURRENT_USER\Software\ini4j-test\dwarfs\bashful/weight}
+;   age=23
+;   fortuneNumber=11
+;   fortuneNumber=33
+;   fortuneNumber=55
+[HKEY_CURRENT_USER\Software\ini4j-test\dwarfs\dopey]
+@="dopey"
+"weight"=hex(2):24,00,7b,00,48,00,4b,00,45,00,59,00,5f,00,43,00,55,00,52,00,52,\
+                00,45,00,4e,00,54,00,5f,00,55,00,53,00,45,00,52,00,5c,00,53,00,\
+                6f,00,66,00,74,00,77,00,61,00,72,00,65,00,5c,00,69,00,6e,00,69,\
+                00,34,00,6a,00,2d,00,74,00,65,00,73,00,74,00,5c,00,64,00,77,00,\
+                61,00,72,00,66,00,73,00,5c,00,62,00,61,00,73,00,68,00,66,00,75,\
+                00,6c,00,2f,00,77,00,65,00,69,00,67,00,68,00,74,00,7d,00,00,00
+"height"="${HKEY_CURRENT_USER\\Software\\ini4j-test\\dwarfs\\doc/height}"
+"age"=dword:00000017
+"homePage"="http://dopey.snowwhite.tale/"
+"homeDir"="c:\\Documents and Settings\\dopey"
+"fortuneNumber"=hex(7):31,00,31,00,00,00,32,00,32,00,00,00,35,00,35,00,00,00,\
+                       00,00
+

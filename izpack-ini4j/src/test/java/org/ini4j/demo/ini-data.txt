@@ -1,0 +1,26 @@
+; bashful
+[bashful]
+weight = 45.7
+height = 98.8
+age = 67
+homePage = http://snowwhite.tale/~bashful
+homeDir = /home/bashful
+
+; doc
+[doc]
+weight = 49.5
+height = 87.7
+age = 63
+homePage = http://doc.dwarfs
+homeDir = c:\Documents and Settings\doc
+
+; dopey
+[dopey]
+weight = ${bashful/weight}
+height = ${doc/height}
+age = 23
+homePage = http://dopey.snowwhite.tale/
+homeDir = c:\\Documents and Settings\\dopey
+fortuneNumber = 11
+fortuneNumber = 33
+fortuneNumber = 55

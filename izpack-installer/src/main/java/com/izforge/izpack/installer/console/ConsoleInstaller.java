@@ -21,12 +21,27 @@
 
 package com.izforge.izpack.installer.console;
 
-import com.izforge.izpack.api.data.*;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
+import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.ScriptParserConstant;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.installer.DataValidator.Status;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.bootstrap.Installer;
 import com.izforge.izpack.installer.language.ConditionCheck;
@@ -34,13 +49,6 @@ import com.izforge.izpack.installer.manager.DataValidatorFactory;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraintHelper;
-import com.izforge.izpack.util.substitutor.VariableSubstitutorImpl;
-
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.util.Enumeration;
-import java.util.Properties;
 
 /**
  * Runs the console installer
@@ -97,6 +105,12 @@ public class ConsoleInstaller extends InstallerBase
 
     protected void iterateAndPerformAction(String strAction) throws Exception
     {
+        VariableSubstitutor subst = new VariableSubstitutorImpl(this.installdata.getVariables());
+
+        // Get dynamic variables immediately for being able to use them as
+        // variable condition in installerrequirements
+        InstallerBase.refreshDynamicVariables(this.installdata, subst);
+
         if (!checkCondition.checkInstallerRequirements(this))
         {
             System.out.println("[ Console installation FAILED! ]");
@@ -141,7 +155,6 @@ public class ConsoleInstaller extends InstallerBase
                     try
                     {
                         Debug.log("Instantiate :" + consoleHelperClassName);
-                        installdata.refreshDynamicVariables();
                         consoleHelperInstance = consoleHelperClass.newInstance();
                     }
                     catch (Exception e)
@@ -208,6 +221,7 @@ public class ConsoleInstaller extends InstallerBase
 
                 }
 
+                refreshDynamicVariables(this.installdata, subst);
             }
 
             if (this.result)
@@ -346,6 +360,48 @@ public class ConsoleInstaller extends InstallerBase
      */
     private boolean validatePanel(final Panel p) throws InstallerException
     {
+        try
+        {
+            InstallerBase.refreshDynamicVariables(installdata,
+                    new VariableSubstitutorImpl(this.installdata.getVariables()));
+        }
+        catch (Exception e)
+        {
+            throw new InstallerException(e);
+        }
+
+        // Evaluate all global dynamic conditions
+        List<DynamicInstallerRequirementValidator> dynConds = installdata.getDynamicinstallerrequirements();
+        if (dynConds != null)
+        {
+            for (DynamicInstallerRequirementValidator validator : dynConds)
+            {
+                Status validationResult = validator.validateData(installdata);
+                if (validationResult != DataValidator.Status.OK)
+                {
+                    String errorMessage;
+                    try
+                    {
+                        errorMessage = installdata.getLangpack().getString("data.validation.error.title")
+                        +": "+variableSubstitutor.substitute(installdata.getLangpack().getString(validator
+                                .getErrorMessageId()));
+                    }
+                    catch (Exception e)
+                    {
+                        throw new InstallerException(e);
+                    }
+                    // if defaultAnswer is true, result is ok
+                    if (validationResult == Status.WARNING && validator.getDefaultAnswer())
+                    {
+                        System.out.println(errorMessage +" - ignoring");
+                    }
+                    // make installation fail instantly
+                    return false;
+                }
+            }
+        }
+
+        // Evaluate panel condition
         String dataValidator = p.getValidator();
         if (dataValidator != null)
         {

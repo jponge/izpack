@@ -22,6 +22,25 @@
 
 package com.izforge.izpack.installer.base;
 
+import static com.izforge.izpack.api.GuiId.BUTTON_HELP;
+import static com.izforge.izpack.api.GuiId.BUTTON_NEXT;
+import static com.izforge.izpack.api.GuiId.BUTTON_PREV;
+import static com.izforge.izpack.api.GuiId.BUTTON_QUIT;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.text.JTextComponent;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLWriter;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
@@ -33,6 +52,7 @@ import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;
@@ -45,19 +65,6 @@ import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.installer.unpacker.Unpacker;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
-
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import javax.swing.text.JTextComponent;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.izforge.izpack.api.GuiId.*;
 
 /**
  * The IzPack installer frame.
@@ -535,7 +542,34 @@ public class InstallerFrame extends JFrame implements InstallerView
     public void switchPanel(int oldIndex)
     {
         // refresh dynamic variables every time, a panel switch is done
-        installdata.refreshDynamicVariables();
+        try {
+            InstallerBase.refreshDynamicVariables(installdata, new VariableSubstitutorImpl(installdata.getVariables()));
+        }
+        catch(Exception e) {
+            Debug.trace("Refreshing dynamic variables failed, asking user whether to proceed.");
+            StringBuffer msg = new StringBuffer();
+            msg.append("<html>");
+            msg.append("The following error occured during refreshing panel contents:<br>");
+            msg.append("<i>"+e.getMessage()+"</i><br>");
+            msg.append("Are you sure you want to continue with this installation?");
+            msg.append("</html>");
+            JLabel label = new JLabel(msg.toString());
+            label.setFont(new Font("Sans Serif", Font.PLAIN, 12));
+            Object[] optionValues = {"Continue", "Exit"};
+            int selectedOption = JOptionPane.showOptionDialog(null, label, "Warning",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, optionValues,
+                    optionValues[1]);
+            Debug.trace("Selected option: " + selectedOption);
+            if (selectedOption == 0)
+            {
+                Debug.trace("Continuing installation");
+            }
+            else
+            {
+                Debug.trace("Exiting");
+                System.exit(1);
+            }
+        }
         try
         {
             if (installdata.getCurPanelNumber() < oldIndex)
@@ -746,8 +780,23 @@ public class InstallerFrame extends JFrame implements InstallerView
                         reboot = true;
                         break;
                     case Info.REBOOT_ACTION_ASK:
-                        message = variableSubstitutor.substitute(langpack.getString("installer.reboot.ask.message"));
-                        title = variableSubstitutor.substitute(langpack.getString("installer.reboot.ask.title"));
+                        try
+                        {
+                            message = variableSubstitutor.substitute(langpack.getString("installer.reboot.ask.message"));
+                        }
+                        catch (Exception e)
+                        {
+                            message = langpack.getString("installer.reboot.ask.message");
+                        }
+                        try
+                        {
+                            title = variableSubstitutor.substitute(langpack
+                                    .getString("installer.reboot.ask.title"));
+                        }
+                        catch (Exception e)
+                        {
+                            title = langpack.getString("installer.reboot.ask.title");
+                        }
                         int res = JOptionPane
                                 .showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION);
                         if (res == JOptionPane.YES_OPTION)
@@ -756,8 +805,23 @@ public class InstallerFrame extends JFrame implements InstallerView
                         }
                         break;
                     case Info.REBOOT_ACTION_NOTICE:
-                        message = variableSubstitutor.substitute(langpack.getString("installer.reboot.notice.message"));
-                        title = variableSubstitutor.substitute(langpack.getString("installer.reboot.notice.title"));
+                        try
+                        {
+                            message = variableSubstitutor.substitute(langpack.getString("installer.reboot.notice.message"));
+                        }
+                        catch (Exception e)
+                        {
+                            message = langpack.getString("installer.reboot.notice.message");
+                        }
+                        try
+                        {
+                            title = variableSubstitutor.substitute(langpack
+                                    .getString("installer.reboot.notice.title"));
+                        }
+                        catch (Exception e)
+                        {
+                            title = langpack.getString("installer.reboot.notice.title");
+                        }
                         JOptionPane.showConfirmDialog(this, message, title, JOptionPane.OK_OPTION);
                         break;
                 }
@@ -796,6 +860,18 @@ public class InstallerFrame extends JFrame implements InstallerView
             VariableSubstitutor substitutor = variableSubstitutor;
             message = substitutor.substitute(message);
             title = substitutor.substitute(title);
+            }
+            catch (Exception e)
+            {
+                // ignore
+            }
+            try
+            {
+            }
+            catch (Exception e)
+            {
+                // ignore
+            }
             int res = JOptionPane
                     .showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION);
             if (res == JOptionPane.YES_OPTION)
@@ -1030,18 +1106,21 @@ public class InstallerFrame extends JFrame implements InstallerView
         com.izforge.izpack.api.data.Panel panelmetadata = panel.getMetadata();
         String panelid = panelmetadata.getPanelid();
         Debug.trace("Current Panel: " + panelid);
+        boolean canShow = false;
+
+        refreshDynamicVariables();
 
         if (panelmetadata.hasCondition())
         {
-            Debug.log("Checking panelcondition");
-            return rules.isConditionTrue(panelmetadata.getCondition());
+            canShow = rules.isConditionTrue(panelmetadata.getCondition());
+            Debug.log("Skipping panel " + panelid + " due to unmet condition " + panelmetadata.getCondition());
         }
         else
         {
             if (!rules.canShowPanel(panelid, this.installdata.getVariables()))
             {
                 // skip panel, if conditions for panel aren't met
-                Debug.log("Skip panel with panelid=" + panelid);
+                Debug.log("Can't show panel " + panelid);
                 // panel should be skipped, so we have to decrement panelnumber for skipping
                 return false;
             }
@@ -1050,6 +1129,7 @@ public class InstallerFrame extends JFrame implements InstallerView
                 return true;
             }
         }
+        return canShow;
     }
 
     /**
@@ -1732,4 +1812,36 @@ public class InstallerFrame extends JFrame implements InstallerView
         this.helpButton.setVisible(show);
     }
 
+    }
+
+    private void refreshDynamicVariables()
+    {
+        try {
+            InstallerBase.refreshDynamicVariables(installdata, new VariableSubstitutorImpl(installdata.getVariables()));
+        }
+        catch(Exception e) {
+            Debug.trace("Refreshing dynamic variables failed, asking user whether to proceed.");
+            StringBuffer msg = new StringBuffer();
+            msg.append("<html>");
+            msg.append("The following error occured during refreshing panel contents:<br>");
+            msg.append("<i>"+e.getMessage()+"</i><br>");
+            msg.append("Are you sure you want to continue with this installation?");
+            msg.append("</html>");
+            JLabel label = new JLabel(msg.toString());
+            label.setFont(new Font("Sans Serif", Font.PLAIN, 12));
+            Object[] optionValues = {"Continue", "Exit"};
+            int selectedOption = JOptionPane.showOptionDialog(null, label, "Warning",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, optionValues,
+                    optionValues[1]);
+            Debug.trace("Selected option: " + selectedOption);
+            if (selectedOption == 0)
+            {
+                Debug.trace("Continuing installation");
+            }
+            else
+            {
+                Debug.trace("Exiting");
+                System.exit(1);
+            }
+        }
 }

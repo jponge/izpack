@@ -25,16 +25,14 @@ import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.api.unpacker.IDiscardInterruptable;
 import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;
-import org.apache.regexp.RE;
-import org.apache.regexp.RECompiler;
-import org.apache.regexp.RESyntaxException;
+import com.izforge.izpack.util.file.DirectoryScanner;
+import com.izforge.izpack.util.file.types.FileSet;
 
 import java.io.*;
 import java.net.URI;
@@ -290,146 +288,6 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
         return this.result;
     }
 
-    /**
-     * @param filename
-     * @param patterns
-     * @return true if the file matched one pattern, false if it did not
-     */
-    private boolean fileMatchesOnePattern(String filename, ArrayList<RE> patterns)
-    {
-        // first check whether any include matches
-        for (RE pattern : patterns)
-        {
-            if (pattern.match(filename))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param fileNamePatterns A list of file name patterns (in ant fileset syntax)
-     * @param recompiler       The regular expression compiler (used to speed up RE compiling).
-     * @return List of org.apache.regexp.RE
-     */
-    private List<RE> preparePatterns(ArrayList<String> fileNamePatterns, RECompiler recompiler)
-    {
-        ArrayList<RE> result = new ArrayList<RE>();
-
-        for (String element : fileNamePatterns)
-        {
-            if ((element != null) && (element.length() > 0))
-            {
-                // substitute variables in the pattern
-                element = variableSubstitutor.substitute(element, SubstitutionType.TYPE_PLAIN);
-
-                // check whether the pattern is absolute or relative
-                File file = new File(element);
-
-                // if it is relative, make it absolute and prepend the
-                // installation path
-                // (this is a bit dangerous...)
-                if (!file.isAbsolute())
-                {
-                    element = new File(this.absolute_installpath, element).toString();
-                }
-
-                // now parse the element and construct a regular expression from
-                // it
-                // (we have to parse it one character after the next because
-                // every
-                // character should only be processed once - it's not possible
-                // to get this
-                // correct using regular expression replacing)
-                StringBuffer element_re = new StringBuffer();
-
-                int lookahead = -1;
-
-                int pos = 0;
-
-                while (pos < element.length())
-                {
-                    char c;
-
-                    if (lookahead != -1)
-                    {
-                        c = (char) lookahead;
-                        lookahead = -1;
-                    }
-                    else
-                    {
-                        c = element.charAt(pos++);
-                    }
-
-                    switch (c)
-                    {
-                        case '/':
-                        {
-                            element_re.append(File.separator);
-                            break;
-                        }
-                        // escape backslash and dot
-                        case '\\':
-                        case '.':
-                        {
-                            element_re.append("\\");
-                            element_re.append(c);
-                            break;
-                        }
-                        case '*':
-                        {
-                            if (pos == element.length())
-                            {
-                                element_re.append("[^").append(File.separator).append("]*");
-                                break;
-                            }
-
-                            lookahead = element.charAt(pos++);
-
-                            // check for "**"
-                            if (lookahead == '*')
-                            {
-                                element_re.append(".*");
-                                // consume second star
-                                lookahead = -1;
-                            }
-                            else
-                            {
-                                element_re.append("[^").append(File.separator).append("]*");
-                                // lookahead stays there
-                            }
-                            break;
-                        }
-                        default:
-                        {
-                            element_re.append(c);
-                            break;
-                        }
-                    } // switch
-
-                }
-
-                // make sure that the whole expression is matched
-                element_re.append('$');
-
-                // replace \ by \\ and create a RE from the result
-                try
-                {
-                    result.add(new RE(recompiler.compile(element_re.toString())));
-                }
-                catch (RESyntaxException e)
-                {
-                    this.handler.emitNotification("internal error: pattern \"" + element
-                            + "\" produced invalid RE \"" + file.getPath() + "\"");
-                }
-
-            }
-        }
-
-        return result;
-    }
 
     // CUSTOM ACTION STUFF -------------- start -----------------
 
@@ -597,113 +455,92 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
      */
     protected void performUpdateChecks(ArrayList<UpdateCheck> updatechecks)
     {
-        ArrayList<RE> include_patterns = new ArrayList<RE>();
-        ArrayList<RE> exclude_patterns = new ArrayList<RE>();
-
-        RECompiler recompiler = new RECompiler();
-
-        this.absolute_installpath = new File(idata.getInstallPath()).getAbsoluteFile();
-
-        // at first, collect all patterns
-        for (UpdateCheck updateCheck : updatechecks)
-        {
-            if (updateCheck.includesList != null)
-            {
-                include_patterns.addAll(preparePatterns(updateCheck.includesList, recompiler));
-            }
-
-            if (updateCheck.excludesList != null)
-            {
-                exclude_patterns.addAll(preparePatterns(updateCheck.excludesList, recompiler));
-            }
-        }
-
-        // do nothing if no update checks were specified
-        if (include_patterns.size() == 0)
-        {
-            return;
-        }
-
-        // now collect all files in the installation directory and figure
-        // out files to check for deletion
-
-        // use a treeset for fast access
-        TreeSet<String> installed_files = new TreeSet<String>();
-
-        for (String installedFileName : this.udata.getInstalledFilesList())
-        {
-            File file = new File(installedFileName);
-
-            if (!file.isAbsolute())
-            {
-                file = new File(this.absolute_installpath, installedFileName);
-            }
-
-            installed_files.add(file.getAbsolutePath());
-        }
-
-        // now scan installation directory (breadth first), contains Files of
-        // directories to scan
-        // (note: we'll recurse infinitely if there are circular links or
-        // similar nasty things)
-        Stack<File> scanstack = new Stack<File>();
-
-        // contains File objects determined for deletion
+        FileSet fileset = new FileSet();
         ArrayList<File> files_to_delete = new ArrayList<File>();
+        ArrayList<File> dirs_to_delete = new ArrayList<File>();
 
         try
         {
-            scanstack.add(absolute_installpath);
+            fileset.setDir(new File(idata.getInstallPath()).getAbsoluteFile());
 
-            while (!scanstack.empty())
+        for (UpdateCheck updateCheck : updatechecks)
             {
-                File dirToScan = scanstack.pop();
-
-                File[] files = dirToScan.listFiles();
-
-                if (files == null)
+            if (updateCheck.includesList != null)
                 {
-                    throw new IOException(dirToScan.getPath() + "is not a directory!");
+                include_patterns.addAll(preparePatterns(updateCheck.includesList, recompiler));
+                    {
+                        fileset.createInclude().setName( variableSubstitutor.substitute(incl) );
+                    }
                 }
 
-                for (File subFile : files)
+            if (updateCheck.excludesList != null)
                 {
-                    String subFileName = subFile.getPath();
-
-                    // skip files we just installed
-                    if (installed_files.contains(subFileName))
+                    for (String excl : uc.excludesList)
                     {
-                        continue;
+                        fileset.createExclude().setName( variableSubstitutor.substitute(excl) );
                     }
+                }
+            }
+            DirectoryScanner ds = fileset.getDirectoryScanner();
+            ds.scan();
+            String[] srcFiles = ds.getIncludedFiles();
+            String[] srcDirs = ds.getIncludedDirectories();
 
-                    if (fileMatchesOnePattern(subFileName, include_patterns)
-                            && (!fileMatchesOnePattern(subFileName, exclude_patterns)))
-                    {
-                        files_to_delete.add(subFile);
-                    }
+            TreeSet<File> installed_files = new TreeSet<File>();
 
-                    if (subFile.isDirectory() && !fileMatchesOnePattern(subFileName, exclude_patterns))
-                    {
-                        scanstack.push(subFile);
-                    }
+        for (String installedFileName : this.udata.getInstalledFilesList())
+            {
+            File file = new File(installedFileName);
 
+            if (!file.isAbsolute())
+                {
+                file = new File(this.absolute_installpath, installedFileName);
+                }
+
+            installed_files.add(file.getAbsolutePath());
+            }
+            for (int i = 0; i < srcFiles.length; i++)
+            {
+                File newFile = new File(ds.getBasedir(), srcFiles[i]);
+
+                // skip files we just installed
+                if (installed_files.contains(newFile))
+                {
+                    continue;
+                }
+                else
+                {
+                    files_to_delete.add(newFile);
+                }
+            }
+            for (int i = 0; i < srcDirs.length; i++)
+            {
+                File newDir = new File(ds.getBasedir(), srcDirs[i]);
+
+                // skip directories we just installed
+                if (installed_files.contains(newDir))
+                {
+                    continue;
+                }
+                else
+                {
+                    dirs_to_delete.add(newDir);
                 }
             }
         }
-        catch (IOException e)
+        catch (Exception e)
         {
-            this.handler.emitError("error while performing update checks", e.toString());
+            this.handler.emitError("Error while performing update checks", e.getMessage());
         }
 
         for (File file : files_to_delete)
         {
-            if (!file.isDirectory())
-            // skip directories - they cannot be removed safely yet
-            {
-//                this.handler.emitNotification("deleting " + f.getPath());
                 file.delete();
-            }
-
+        }
+        for (File d : dirs_to_delete)
+        {
+            // Only empty directories will be deleted
+            d.delete();
         }
     }
 
@@ -739,10 +576,10 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
             FileInputStream fin = new FileInputStream(installationinfo);
             ObjectInputStream oin = new ObjectInputStream(fin);
 
-            List packs = (List) oin.readObject();
-            for (Object pack1 : packs)
+            List<Pack> packs = (List<Pack>) oin.readObject();
+            for (Pack pack1 : packs)
             {
-                Pack pack = (Pack) pack1;
+                Pack pack = pack1;
                 installedpacks.add(pack);
             }
             oin.close();

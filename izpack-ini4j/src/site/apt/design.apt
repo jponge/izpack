@@ -1,0 +1,68 @@
+                ------
+                Design goals
+
+Design goals
+
+ This document summarizes the design aspects of the [ini4j] project. 
+ First let me quote something every library designer should keep in mind:
+
+
+       "Perfection (in design) is achieved not when there is nothing more to add, but rather when
+       there is nothing more to take away." - Antoine de Saint-Exupéry
+
+
+* Only .ini handling library
+
+ One of the most important aspects was that the [ini4j] is not a complex configuration management system,
+ but principally a library that allows you to manage files in .ini format.
+
+ We could say that we regard the java.util.Properties object as a pattern in designing.
+ The Properties object works as a file containing pairs of name and value. It can be read
+ from a stream or be written to a stream (lately even in XML format). This way it is understandable
+ why the Ini object doesn't need to belong to a file: you can read it from InputStream (and Reader)
+ or write it to OutputStream (and Writer).
+
+    
+* Simple API
+
+ The programming interface had to be designed as simple as possible, firstly for the sake
+ of easier understanding and usage, secondly in order to avoid needless complexity.
+ The handling of the .ini files in any application is just a tool, not the goal.
+
+ As a result of this approach the Ini object is in fact a Map composed of sections.
+ The section object is a Map composed of String values assigned to String keys.
+
+* Standard API
+
+ Another very important design aspect was that if a standard API exists, that must be used
+ to handle the .ini file. Fortunately, ever since the introduction of version 1.4, there is
+ a Preferences API, which is actually a simple tree structure of name/value pairs. This is ideal
+ for the .ini format's top level API, because the programmer using the library doesn't have to
+ learn a new API, but can handle the .ini files using the Preferences API included in the standard JDK!
+
+ So the .ini file is in fact a one-level Preferences tree. On the only level the nodes of the
+ tree are the sections of the .ini file, and the leaf nodes are the section's name/value pairs.    
+ Due to the Preferences API the conversion of values to primitive types or vice versa is solved
+ (getInt(), setInt(), etc).
+
+* Comfortable API
+
+ The designer of a library always seeks the favour of the potential users, the programmers in this case,
+ so comfort is at least as important an aspect as simplicity. An API should be as comfortable as possible.
+ The Java Beans-style programming interface was born on these terms, that is, to allow the programmer to
+ define completely freely how (as what type) he'd wish to access the values of the section as a java interface.
+
+* Sequential parser
+
+ When handling large .ini files, it is not practical to read the whole file into the memory. So there
+ might be a need for a sequential parser that calls the processing routine as a callback while parsing
+ sections or name/value pairs inside sections. The JAXP SAX parser can be regarded as a model.
+
+ Along these lines, the corresponding document object of the .ini file must be built based on this
+ sequential parser. Thus the model of the Ini object is the JAXP DOM document.
+
+ A bit of history: an early ancestor of the [ini4j] library was an exercise assigned as homework at
+ a Java programmer course. Its purpose was to prepare the exposition of JAXP SAX/DOM API. The assignment
+ was to write a sequential parser for the .ini file, and then to use it to build an object in the memory.
+
+ 
