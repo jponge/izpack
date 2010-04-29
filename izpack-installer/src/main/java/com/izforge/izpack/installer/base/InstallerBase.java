@@ -60,52 +60,49 @@ public abstract class InstallerBase implements InstallerRequirementDisplay
      * Refreshes Dynamic Variables.
      */
     public static void refreshDynamicVariables(AutomatedInstallData installdata,
-                                               VariableSubstitutor... substitutors)
-            throws Exception
+                                               VariableSubstitutor... substitutors) throws Exception
     {
         Map<String, List<DynamicVariable>> dynamicvariables = installdata.getDynamicvariables();
         RulesEngine rules = installdata.getRules();
 
         //Debug.log("refreshing dynamic variables");
-        if (dynamicvariables != null)
+        if (dynamicvariables == null)
         {
-            for (String dynvarname : dynamicvariables.keySet())
-            {
-                //Debug.log("Dynamic variable: " + dynvarname);
-                for (DynamicVariable dynvar : dynamicvariables.get(dynvarname))
-                {
-                    boolean refresh = true;
-                    String conditionid = dynvar.getConditionid();
-                    //Debug.log("condition: " + conditionid);
-                    if ((conditionid != null) && (conditionid.length() > 0))
-                    {
-                        if ((rules != null) && !rules.isConditionTrue(conditionid))
-                        {
-                            //Debug.log("skipped refreshing dynamic variable due to unmet condition " + conditionid);
-                            // condition for this rule is true
-                            refresh = false;
-                        }
-                    }
-                    if (refresh)
-                    {
-                        // Add self replacing of previously replaced dynamic variables
-                        VariableSubstitutor[] newsubstitutors = new DynamicVariableSubstitutor[substitutors.length + 1];
-                        for (int i = 0; i < substitutors.length; i++)
-                        {
-                            newsubstitutors[i] = substitutors[i];
-                        }
-                        newsubstitutors[substitutors.length] = new DynamicVariableSubstitutor(dynamicvariables, rules);
+            return;
+        }
 
-                        String newValue = dynvar.evaluate(newsubstitutors);
-                        if (newValue != null)
-                        {
-                            //Debug.log("dynamic variable " + dynvar.getName() + ": " + newValue);
-                            installdata.getVariables().setProperty(dynvar.getName(), newValue);
-                        }
-                        else
-                        {
-                            //Debug.log("dynamic variable " + dynvar.getName() + " unchanged: " + dynvar.getValue());
-                        }
+        for (List<DynamicVariable> dynamicVariableList : dynamicvariables.values())
+        {
+            for (DynamicVariable dynamicVariable : dynamicVariableList)
+            {
+                boolean refresh = true;
+                String conditionid = dynamicVariable.getConditionid();
+                //Debug.log("condition: " + conditionid);
+                if ((conditionid != null) && (conditionid.length() > 0))
+                {
+                    if ((rules != null) && !rules.isConditionTrue(conditionid))
+                    {
+                        //Debug.log("skipped refreshing dynamic variable due to unmet condition " + conditionid);
+                        // condition for this rule is true
+                        refresh = false;
+                    }
+                }
+                if (refresh)
+                {
+                    // Add self replacing of previously replaced dynamic variables
+                    VariableSubstitutor[] newsubstitutors = new DynamicVariableSubstitutor[substitutors.length + 1];
+                    System.arraycopy(substitutors, 0, newsubstitutors, 0, substitutors.length);
+                    newsubstitutors[substitutors.length] = new DynamicVariableSubstitutor(dynamicvariables, rules);
+
+                    String newValue = dynamicVariable.evaluate(newsubstitutors);
+                    if (newValue != null)
+                    {
+                        //Debug.log("dynamic variable " + dynamicVariable.getName() + ": " + newValue);
+                        installdata.getVariables().setProperty(dynamicVariable.getName(), newValue);
+                    }
+                    else
+                    {
+                        //Debug.log("dynamic variable " + dynamicVariable.getName() + " unchanged: " + dynamicVariable.getValue());
                     }
                 }
             }
