@@ -405,21 +405,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     {
         ImageIcon icon;
         String iconext = this.getIconResourceNameExtension();
-        if (tryBaseIcon)
-        {
-            try
-            {
-                icon = resourceManager.getImageIconResource(resPrefix);
-            }
-            catch (Exception e) // This is not that clean ...
-            {
-                icon = resourceManager.getImageIconResource(resPrefix + "." + panelid + iconext);
-            }
-        }
-        else
-        {
-            icon = resourceManager.getImageIconResource(resPrefix + "." + panelid + iconext);
-        }
+        icon = resourceManager.getImageIconResource(resPrefix, resPrefix + "." + panelid + iconext);
         return (icon);
     }
 
