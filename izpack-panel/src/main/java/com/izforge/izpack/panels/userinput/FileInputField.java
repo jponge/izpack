@@ -173,8 +173,8 @@ public class FileInputField extends JPanel implements ActionListener
 
     protected void showMessage(String messageType)
     {
-        JOptionPane.showMessageDialog(parentFrame, parentFrame.langpack.getString("UserInputPanel." + messageType
-                + ".message"), parentFrame.langpack.getString("UserInputPanel." + messageType + ".caption"),
+        JOptionPane.showMessageDialog(parentFrame, parentFrame.getLangpack().getString("UserInputPanel." + messageType
+                + ".message"), parentFrame.getLangpack().getString("UserInputPanel." + messageType + ".caption"),
                 JOptionPane.WARNING_MESSAGE);
     }
 
@@ -215,7 +215,7 @@ public class FileInputField extends JPanel implements ActionListener
                 {
                     JOptionPane
                             .showMessageDialog(parentFrame, processingClient.getValidationMessage(),
-                                    parentFrame.langpack.getString("UserInputPanel.error.caption"),
+                                    parentFrame.getLangpack().getString("UserInputPanel.error.caption"),
                                     JOptionPane.WARNING_MESSAGE);
                 }
                 result = success;

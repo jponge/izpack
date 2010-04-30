@@ -81,7 +81,7 @@ public class HelloPanel extends IzPanel
         // We create and put the labels
         String welcomeText = installData.getLangpack().getString("HelloPanel.welcome1") + idata.getInfo().getAppName() + " "
                 + idata.getInfo().getAppVersion() + installData.getLangpack().getString("HelloPanel.welcome2");
-        JLabel welcomeLabel = LabelFactory.create(welcomeText, parent.icons.get("host"), LEADING);
+        JLabel welcomeLabel = LabelFactory.create(welcomeText, parent.getIcons().get("host"), LEADING);
         welcomeLabel.setName(GuiId.HELLO_PANEL_LABEL.id);
         // IzPanelLayout is a constraint orientated layout manager. But if no constraint is
         // given, a default will be used. It starts in the first line.
@@ -100,7 +100,7 @@ public class HelloPanel extends IzPanel
         if (!authors.isEmpty())
         {
             String authorText = installData.getLangpack().getString("HelloPanel.authors");
-            JLabel appAuthorsLabel = LabelFactory.create(authorText, parent.icons
+            JLabel appAuthorsLabel = LabelFactory.create(authorText, parent.getIcons()
                     .get("information"), LEADING);
             // If nothing will be sad to the IzPanelLayout the position of an add will be
             // determined in the default constraint. For labels it is CURRENT_ROW, NEXT_COLUMN.
@@ -118,7 +118,7 @@ public class HelloPanel extends IzPanel
             {
                 String email = (author.getEmail() != null && author.getEmail().length() > 0) ? (" <"
                         + author.getEmail() + ">") : "";
-                label = LabelFactory.create(" - " + author.getName() + email, parent.icons
+                label = LabelFactory.create(" - " + author.getName() + email, parent.getIcons()
                         .get("empty"), LEADING);
                 add(label, NEXT_LINE);
             }
@@ -128,7 +128,7 @@ public class HelloPanel extends IzPanel
         if (idata.getInfo().getAppURL() != null)
         {
             String urlText = installData.getLangpack().getString("HelloPanel.url") + idata.getInfo().getAppURL();
-            JLabel appURLLabel = LabelFactory.create(urlText, parent.icons.get("bookmark"),
+            JLabel appURLLabel = LabelFactory.create(urlText, parent.getIcons().get("bookmark"),
                     LEADING);
             add(appURLLabel, LayoutConstants.NEXT_LINE);
         }

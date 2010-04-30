@@ -54,7 +54,7 @@ public class InstallationTypePanel extends IzPanel implements ActionListener
         // We put our components
 
         add(LabelFactory.create(installData.getLangpack().getString("InstallationTypePanel.info"),
-                parent.icons.get("history"), LEADING), NEXT_LINE);
+                parent.getIcons().get("history"), LEADING), NEXT_LINE);
 
 
         ButtonGroup group = new ButtonGroup();

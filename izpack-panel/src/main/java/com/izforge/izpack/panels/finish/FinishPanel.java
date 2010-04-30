@@ -93,7 +93,7 @@ public class FinishPanel extends IzPanel implements ActionListener
         {
             // We set the information
             JLabel jLabel = LabelFactory.create(installData.getLangpack().getString("FinishPanel.success"),
-                    parent.icons.get("preferences"), LEADING);
+                    parent.getIcons().get("preferences"), LEADING);
             jLabel.setName(GuiId.FINISH_PANEL_LABEL.id);
             add(jLabel, constraints);
             constraints.gridy++;
@@ -103,16 +103,16 @@ public class FinishPanel extends IzPanel implements ActionListener
                 String path = translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
 
                 add(LabelFactory.create(installData.getLangpack()
-                        .getString("FinishPanel.uninst.info"), parent.icons
+                        .getString("FinishPanel.uninst.info"), parent.getIcons()
                         .get("preferences"), LEADING), constraints);
                 constraints.gridy++;
-                add(LabelFactory.create(path, parent.icons.get("empty"),
+                add(LabelFactory.create(path, parent.getIcons().get("empty"),
                         LEADING), constraints);
                 constraints.gridy++;
             }
             // We add the autoButton
             autoButton = ButtonFactory.createButton(installData.getLangpack().getString("FinishPanel.auto"),
-                    parent.icons.get("edit"), this.installData.buttonsHColor);
+                    parent.getIcons().get("edit"), this.installData.buttonsHColor);
             autoButton.setName(GuiId.FINISH_PANEL_AUTO_BUTTON.id);
             autoButton.setToolTipText(installData.getLangpack().getString("FinishPanel.auto.tip"));
             autoButton.addActionListener(this);
@@ -122,7 +122,7 @@ public class FinishPanel extends IzPanel implements ActionListener
         else
         {
             add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.fail"),
-                    parent.icons.get("stop"), LEADING), constraints);
+                    parent.getIcons().get("stop"), LEADING), constraints);
         }
         getLayoutHelper().completeLayout(); // Call, or call not?
         Log.getInstance().informUser();

@@ -1417,7 +1417,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             ImageIcon imgicon = null;
             try
             {
-                imgicon = parent.icons.get(icon);
+                imgicon = parent.getIcons().get(icon);
                 label = LabelFactory.create(title, imgicon, JLabel.TRAILING, true);
             }
             catch (Exception e)
@@ -2514,7 +2514,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 if (!success)
                 {
                     JOptionPane.showMessageDialog(parentFrame, group.getValidatorMessage(i),
-                            parentFrame.langpack.getString("UserInputPanel.error.caption"),
+                            parentFrame.getLangpack().getString("UserInputPanel.error.caption"),
                             JOptionPane.WARNING_MESSAGE);
                     break;
                 }
@@ -2864,7 +2864,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
         if ((filename != null) && (filename.length() > 0))
         {
-            tooltiptext.append(MessageFormat.format(parentFrame.langpack
+            tooltiptext.append(MessageFormat.format(parentFrame.getLangpack()
                     .getString("UserInputPanel.search.location"),
                     new Object[]{new String[]{filename}}));
         }
@@ -2872,7 +2872,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         boolean showAutodetect = (check_filename != null) && (check_filename.length() > 0);
         if (showAutodetect)
         {
-            tooltiptext.append(MessageFormat.format(parentFrame.langpack
+            tooltiptext.append(MessageFormat.format(parentFrame.getLangpack()
                     .getString("UserInputPanel.search.location.checkedfile"),
                     new Object[]{new String[]{check_filename}}));
         }
@@ -2898,16 +2898,16 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         buttonPanel.setLayout(new com.izforge.izpack.gui.FlowLayout(
                 com.izforge.izpack.gui.FlowLayout.LEADING));
 
-        JButton autodetectButton = ButtonFactory.createButton(parentFrame.langpack
+        JButton autodetectButton = ButtonFactory.createButton(parentFrame.getLangpack()
                 .getString("UserInputPanel.search.autodetect"), this.installData.buttonsHColor);
         autodetectButton.setVisible(showAutodetect);
 
-        autodetectButton.setToolTipText(parentFrame.langpack
+        autodetectButton.setToolTipText(parentFrame.getLangpack()
                 .getString("UserInputPanel.search.autodetect.tooltip"));
 
         buttonPanel.add(autodetectButton);
 
-        JButton browseButton = ButtonFactory.createButton(parentFrame.langpack
+        JButton browseButton = ButtonFactory.createButton(parentFrame.getLangpack()
                 .getString("UserInputPanel.search.browse"), this.installData.buttonsHColor);
 
         buttonPanel.add(browseButton);
@@ -4132,12 +4132,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     private void showMessageDialog(InstallerFrame parentFrame, String message, String caption,
                                    int messageType)
     {
-        String localizedMessage = parentFrame.langpack.getString(message);
+        String localizedMessage = parentFrame.getLangpack().getString(message);
         if ((localizedMessage == null) || (localizedMessage.trim().length() == 0))
         {
             localizedMessage = message;
         }
-        String localizedCaption = parentFrame.langpack.getString(caption);
+        String localizedCaption = parentFrame.getLangpack().getString(caption);
         if ((localizedCaption == null) || (localizedCaption.trim().length() == 0))
         {
             localizedCaption = caption;
