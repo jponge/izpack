@@ -76,10 +76,10 @@ public class NextMediaDialog extends JDialog implements ActionListener
      */
     public NextMediaDialog(Frame owner, InstallerFrame main, String nextmedia) throws HeadlessException
     {
-        this(owner, main.langpack, main.icons, nextmedia);
+        this(owner, main.getLangpack(), main.getIcons(), nextmedia);
     }
 
-    public NextMediaDialog(Frame owner, LocaleDatabase languagepack, IconsDatabase icons, String nextmedia) throws HeadlessException
+    public NextMediaDialog(Frame owner, LocaleDatabase languagepack, IconsDatabase icons, String nextmedia)
     {
         super(owner, languagepack.getString(NEXTMEDIA_TITLE_ID), true);
         this.owner = owner;
@@ -91,12 +91,12 @@ public class NextMediaDialog extends JDialog implements ActionListener
         this.initUI();
     }
 
-    public NextMediaDialog(Frame owner, AutomatedInstallData idata, String nextmedia) throws HeadlessException
+    public NextMediaDialog(Frame owner, AutomatedInstallData idata, String nextmedia)
     {
         this(owner, idata.getLangpack(), null, nextmedia);
     }
 
-    protected void initUI()
+    private void initUI()
     {
         if (this.icons != null)
         {

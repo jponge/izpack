@@ -204,8 +204,8 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
 
     private void showMessage(String messageType)
     {
-        JOptionPane.showMessageDialog(parentFrame, parentFrame.langpack.getString("UserInputPanel." + messageType + ".message"),
-                parentFrame.langpack.getString("UserInputPanel." + messageType + ".caption"),
+        JOptionPane.showMessageDialog(parentFrame, parentFrame.getLangpack().getString("UserInputPanel." + messageType + ".message"),
+                parentFrame.getLangpack().getString("UserInputPanel." + messageType + ".caption"),
                 JOptionPane.WARNING_MESSAGE);
     }
 
@@ -237,7 +237,7 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
                 if (!success)
                 {
                     JOptionPane.showMessageDialog(parentFrame, processingClient.getValidationMessage(),
-                            parentFrame.langpack.getString("UserInputPanel.error.caption"),
+                            parentFrame.getLangpack().getString("UserInputPanel.error.caption"),
                             JOptionPane.WARNING_MESSAGE);
                 }
                 result = success;

@@ -82,10 +82,10 @@ public class SimpleFinishPanel extends IzPanel
         {
 
             // We set the information
-            add(LabelFactory.create(parent.icons.get("check")));
+            add(LabelFactory.create(parent.getIcons().get("check")));
             add(IzPanelLayout.createVerticalStrut(5));
             JLabel jLabel = LabelFactory.create(installData.getLangpack().getString("FinishPanel.success"),
-                    parent.icons.get("preferences"), LEADING);
+                    parent.getIcons().get("preferences"), LEADING);
             jLabel.setName(GuiId.SIMPLE_FINISH_LABEL.id);
             add(jLabel, NEXT_LINE);
             add(IzPanelLayout.createVerticalStrut(5));
@@ -95,18 +95,18 @@ public class SimpleFinishPanel extends IzPanel
                 String path = translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
 
                 JLabel uninstallJLabel = LabelFactory.create(installData.getLangpack()
-                        .getString("FinishPanel.uninst.info"), parent.icons
+                        .getString("FinishPanel.uninst.info"), parent.getIcons()
                         .get("preferences"), LEADING);
                 uninstallJLabel.setName(GuiId.SIMPLE_FINISH_UNINSTALL_LABEL.id);
                 add(uninstallJLabel, NEXT_LINE);
-                add(LabelFactory.create(path, parent.icons.get("empty"),
+                add(LabelFactory.create(path, parent.getIcons().get("empty"),
                         LEADING), NEXT_LINE);
             }
         }
         else
         {
             add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.fail"),
-                    parent.icons.get("stop"), LEADING));
+                    parent.getIcons().get("stop"), LEADING));
         }
         getLayoutHelper().completeLayout(); // Call, or call not?
         Log.getInstance().informUser();

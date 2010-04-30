@@ -333,7 +333,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public ImageIcon getImageIcon(String iconName)
     {
-        return parent.icons.get(iconName);
+        return parent.getIcons().get(iconName);
     }
 
     /**
@@ -669,7 +669,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public JLabel createLabel(String subkey, String alternateClass, String iconId, int pos)
     {
-        ImageIcon imageIcon = (iconId != null) ? parent.icons.get(iconId) : null;
+        ImageIcon imageIcon = (iconId != null) ? parent.getIcons().get(iconId) : null;
         String msg = getI18nStringForClass(subkey, alternateClass);
         JLabel label = LabelFactory.create(msg, imageIcon, pos);
         if (label != null)
@@ -697,7 +697,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     public JLabel createLabel(String subkey, String alternateClass, String iconId, int pos,
                               boolean isFullLine)
     {
-        ImageIcon imageIcon = (iconId != null) ? parent.icons.get(iconId) : null;
+        ImageIcon imageIcon = (iconId != null) ? parent.getIcons().get(iconId) : null;
         String msg = getI18nStringForClass(subkey, alternateClass);
         JLabel label = LabelFactory.create(msg, imageIcon, pos, isFullLine);
         if (label != null)
@@ -738,7 +738,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public JLabel createLabel(String textId, String iconId, int pos, boolean isFullLine)
     {
-        ImageIcon imageIcon = (iconId != null) ? parent.icons.get(iconId) : null;
+        ImageIcon imageIcon = (iconId != null) ? parent.getIcons().get(iconId) : null;
         JLabel label = LabelFactory.create(installData.getLangpack().getString(textId), imageIcon, pos, isFullLine);
         if (label != null)
         {

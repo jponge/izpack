@@ -466,7 +466,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     protected JLabel createLabel(String msgId, String iconId, GridBagLayout layout,
                                  GridBagConstraints constraints)
     {
-        JLabel label = LabelFactory.create(installData.getLangpack().getString(msgId), parent.icons
+        JLabel label = LabelFactory.create(installData.getLangpack().getString(msgId), parent.getIcons()
                 .get(iconId), TRAILING);
         if (layout != null && constraints != null)
         {

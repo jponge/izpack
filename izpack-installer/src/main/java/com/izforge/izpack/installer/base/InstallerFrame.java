@@ -89,17 +89,17 @@ public class InstallerFrame extends JFrame implements InstallerView
     /**
      * The language pack.
      */
-    public LocaleDatabase langpack;
+    private LocaleDatabase langpack;
 
     /**
      * The installation data.
      */
-    protected GUIInstallData installdata;
+    private GUIInstallData installdata;
 
     /**
      * The icons database.
      */
-    public IconsDatabase icons;
+    private IconsDatabase icons;
 
     /**
      * The panels container.
@@ -208,10 +208,10 @@ public class InstallerFrame extends JFrame implements InstallerView
     {
         super(title);
         guiListener = new ArrayList<GUIListener>();
-        this.installdata = installdata;
-        this.langpack = installdata.getLangpack();
+        this.setInstalldata(installdata);
+        this.setLangpack(installdata.getLangpack());
         this.rules = rules;
-        this.icons = icons;
+        this.setIcons(icons);
         this.resourceManager = resourceManager;
         this.uninstallDataWriter = uninstallDataWriter;
         this.uninstallData = uninstallData;
@@ -225,9 +225,9 @@ public class InstallerFrame extends JFrame implements InstallerView
     public void sizeFrame()
     {
         pack();
-        setSize(installdata.guiPrefs.width, installdata.guiPrefs.height);
-        setPreferredSize(new Dimension(installdata.guiPrefs.width, installdata.guiPrefs.height));
-        setResizable(installdata.guiPrefs.resizable);
+        setSize(getInstalldata().guiPrefs.width, getInstalldata().guiPrefs.height);
+        setPreferredSize(new Dimension(getInstalldata().guiPrefs.width, getInstalldata().guiPrefs.height));
+        setResizable(getInstalldata().guiPrefs.resizable);
         centerFrame(this);
     }
 
@@ -247,7 +247,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             ImageIcon jframeIcon = ResourceManager.getInstance().getImageIconResource("JFrameIcon");
             if (jframeIcon == null)
             {
-                jframeIcon = icons.get("JFrameIcon");
+                jframeIcon = getIcons().get("JFrameIcon");
             }
             setIconImage(jframeIcon.getImage());
         }
@@ -281,8 +281,8 @@ public class InstallerFrame extends JFrame implements InstallerView
         contentPane.add(panelsContainer, BorderLayout.CENTER);
 
         // We put the first panel
-        installdata.setCurPanelNumber(0);
-        IzPanel panel_0 = (IzPanel) installdata.getPanels().get(0);
+        getInstalldata().setCurPanelNumber(0);
+        IzPanel panel_0 = (IzPanel) getInstalldata().getPanels().get(0);
         panelsContainer.add(panel_0);
 
         // We add the navigation buttons & labels
@@ -292,53 +292,53 @@ public class InstallerFrame extends JFrame implements InstallerView
         JPanel navPanel = new JPanel();
         navPanel.setLayout(new BoxLayout(navPanel, BoxLayout.X_AXIS));
         navPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(8, 8,
-                8, 8), BorderFactory.createTitledBorder(new EtchedLineBorder(), langpack
+                8, 8), BorderFactory.createTitledBorder(new EtchedLineBorder(), getLangpack()
                 .getString("installer.madewith")
                 + " ", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font(
                 "Dialog", Font.PLAIN, 10))));
 
         // Add help Button to the navigation panel
-        this.helpButton = ButtonFactory.createButton(langpack.getString("installer.help"), icons
-                .get("help"), installdata.buttonsHColor);
+        this.helpButton = ButtonFactory.createButton(getLangpack().getString("installer.help"), getIcons()
+                .get("help"), getInstalldata().buttonsHColor);
         navPanel.add(this.helpButton);
         this.helpButton.setName(BUTTON_HELP.id);
         this.helpButton.addActionListener(new HelpHandler());
 
         navPanel.add(Box.createHorizontalGlue());
 
-        prevButton = ButtonFactory.createButton(langpack.getString("installer.prev"), icons
-                .get("stepback"), installdata.buttonsHColor);
+        prevButton = ButtonFactory.createButton(getLangpack().getString("installer.prev"), getIcons()
+                .get("stepback"), getInstalldata().buttonsHColor);
         navPanel.add(prevButton);
         prevButton.addActionListener(navHandler);
         prevButton.setName(BUTTON_PREV.id);
 
         navPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 
-        nextButton = ButtonFactory.createButton(langpack.getString("installer.next"), icons
-                .get("stepforward"), installdata.buttonsHColor);
+        nextButton = ButtonFactory.createButton(getLangpack().getString("installer.next"), getIcons()
+                .get("stepforward"), getInstalldata().buttonsHColor);
         navPanel.add(nextButton);
         nextButton.setName(BUTTON_NEXT.id);
         nextButton.addActionListener(navHandler);
 
         navPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 
-        quitButton = ButtonFactory.createButton(langpack.getString("installer.quit"), icons
-                .get("stop"), installdata.buttonsHColor);
+        quitButton = ButtonFactory.createButton(getLangpack().getString("installer.quit"), getIcons()
+                .get("stop"), getInstalldata().buttonsHColor);
         navPanel.add(quitButton);
         quitButton.setName(BUTTON_QUIT.id);
         quitButton.addActionListener(navHandler);
         contentPane.add(navPanel, BorderLayout.SOUTH);
 
         // always initialize debugger
-        debugger = new Debugger(installdata, icons, rules);
+        debugger = new Debugger(getInstalldata(), getIcons(), rules);
         // this needed to fully initialize the debugger.
         JPanel debugpanel = debugger.getDebugPanel();
 
         // create a debug panel if TRACE is enabled
         if (Debug.isTRACE())
         {
-            if (installdata.guiPrefs.modifier.containsKey("showDebugWindow")
-                    && Boolean.valueOf(installdata.guiPrefs.modifier.get("showDebugWindow")))
+            if (getInstalldata().guiPrefs.modifier.containsKey("showDebugWindow")
+                    && Boolean.valueOf(getInstalldata().guiPrefs.modifier.get("showDebugWindow")))
             {
                 JFrame debugframe = new JFrame("Debug information");
                 debugframe.setContentPane(debugpanel);
@@ -433,7 +433,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     {
         try
         {
-            String iconext = this.installdata.getVariable(ICON_RESOURCE_EXT_VARIABLE_NAME);
+            String iconext = this.getInstalldata().getVariable(ICON_RESOURCE_EXT_VARIABLE_NAME);
             if (iconext == null)
             {
                 iconext = "";
@@ -540,7 +540,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         // refresh dynamic variables every time, a panel switch is done
         try
         {
-            InstallerBase.refreshDynamicVariables(installdata, new VariableSubstitutorImpl(installdata.getVariables()));
+            InstallerBase.refreshDynamicVariables(getInstalldata(), new VariableSubstitutorImpl(getInstalldata().getVariables()));
         }
         catch (Exception e)
         {
@@ -571,13 +571,13 @@ public class InstallerFrame extends JFrame implements InstallerView
         }
         try
         {
-            if (installdata.getCurPanelNumber() < oldIndex)
+            if (getInstalldata().getCurPanelNumber() < oldIndex)
             {
                 isBack = true;
             }
             panelsContainer.setVisible(false);
-            IzPanel newPanel = (IzPanel) installdata.getPanels().get(installdata.getCurPanelNumber());
-            IzPanel oldPanel = (IzPanel) installdata.getPanels().get(oldIndex);
+            IzPanel newPanel = (IzPanel) getInstalldata().getPanels().get(getInstalldata().getCurPanelNumber());
+            IzPanel oldPanel = (IzPanel) getInstalldata().getPanels().get(oldIndex);
             showHelpButton(newPanel.canShowHelp());
             if (Debug.isTRACE())
             {
@@ -586,7 +586,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             Log.getInstance().addDebugMessage(
                     "InstallerFrame.switchPanel: try switching newPanel from {0} to {1} ({2} to {3})",
                     new String[]{oldPanel.getClass().getName(), newPanel.getClass().getName(),
-                            Integer.toString(oldIndex), Integer.toString(installdata.getCurPanelNumber())},
+                            Integer.toString(oldIndex), Integer.toString(getInstalldata().getCurPanelNumber())},
                     Log.PANEL_TRACE, null);
 
             // instead of writing data here which leads to duplicated entries in
@@ -673,12 +673,12 @@ public class InstallerFrame extends JFrame implements InstallerView
             com.izforge.izpack.api.data.Panel metadata = newPanel.getMetadata();
             if ((metadata != null) && (!"UNKNOWN".equals(metadata.getPanelid())))
             {
-                loadAndShowImage(panelManager.getPanelVisibilityNumber(installdata.getCurPanelNumber()), metadata
+                loadAndShowImage(panelManager.getPanelVisibilityNumber(getInstalldata().getCurPanelNumber()), metadata
                         .getPanelid());
             }
             else
             {
-                loadAndShowImage(panelManager.getPanelVisibilityNumber(installdata.getCurPanelNumber()));
+                loadAndShowImage(panelManager.getPanelVisibilityNumber(getInstalldata().getCurPanelNumber()));
             }
             isBack = false;
             callGUIListener(GUIListener.PANEL_SWITCHED);
@@ -693,14 +693,14 @@ public class InstallerFrame extends JFrame implements InstallerView
 
     private void configureButtonVisibility()
     {
-        if (panelManager.isVisible(installdata.getCurPanelNumber()))
+        if (panelManager.isVisible(getInstalldata().getCurPanelNumber()))
         {
             prevButton.setVisible(false);
             lockPrevButton();
             unlockNextButton(); // if we push the button back at the license panel
         }
         // Only the exit button in the last panel.
-        else if (panelManager.isLast(installdata.getCurPanelNumber()))
+        else if (panelManager.isLast(getInstalldata().getCurPanelNumber()))
         {
             prevButton.setVisible(false);
             nextButton.setVisible(false);
@@ -708,7 +708,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         }
         else
         {
-            if (hasNavigatePrevious(installdata.getCurPanelNumber(), true) != -1)
+            if (hasNavigatePrevious(getInstalldata().getCurPanelNumber(), true) != -1)
             {
                 prevButton.setVisible(true);
                 unlockPrevButton();
@@ -719,7 +719,7 @@ public class InstallerFrame extends JFrame implements InstallerView
                 prevButton.setVisible(false);
             }
 
-            if (hasNavigateNext(installdata.getCurPanelNumber(), true) != -1)
+            if (hasNavigateNext(getInstalldata().getCurPanelNumber(), true) != -1)
             {
                 nextButton.setVisible(true);
                 unlockNextButton();
@@ -761,7 +761,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     public void exit()
     {
         // FIXME !!! Reboot handling
-        if (installdata.isCanClose()
+        if (getInstalldata().isCanClose()
                 || ((!nextButton.isVisible() || !nextButton.isEnabled()) && (!prevButton
                 .isVisible() || !prevButton.isEnabled())))
         {
@@ -769,11 +769,11 @@ public class InstallerFrame extends JFrame implements InstallerView
             uninstallDataWriter.write();
 
             boolean reboot = false;
-            if (installdata.isRebootNecessary())
+            if (getInstalldata().isRebootNecessary())
             {
                 String message, title;
                 System.out.println("[ There are file operations pending after reboot ]");
-                switch (installdata.getInfo().getRebootAction())
+                switch (getInstalldata().getInfo().getRebootAction())
                 {
                     case Info.REBOOT_ACTION_ALWAYS:
                         reboot = true;
@@ -781,20 +781,20 @@ public class InstallerFrame extends JFrame implements InstallerView
                     case Info.REBOOT_ACTION_ASK:
                         try
                         {
-                            message = variableSubstitutor.substitute(langpack.getString("installer.reboot.ask.message"));
+                            message = variableSubstitutor.substitute(getLangpack().getString("installer.reboot.ask.message"));
                         }
                         catch (Exception e)
                         {
-                            message = langpack.getString("installer.reboot.ask.message");
+                            message = getLangpack().getString("installer.reboot.ask.message");
                         }
                         try
                         {
-                            title = variableSubstitutor.substitute(langpack
+                            title = variableSubstitutor.substitute(getLangpack()
                                     .getString("installer.reboot.ask.title"));
                         }
                         catch (Exception e)
                         {
-                            title = langpack.getString("installer.reboot.ask.title");
+                            title = getLangpack().getString("installer.reboot.ask.title");
                         }
                         int res = JOptionPane
                                 .showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION);
@@ -806,20 +806,20 @@ public class InstallerFrame extends JFrame implements InstallerView
                     case Info.REBOOT_ACTION_NOTICE:
                         try
                         {
-                            message = variableSubstitutor.substitute(langpack.getString("installer.reboot.notice.message"));
+                            message = variableSubstitutor.substitute(getLangpack().getString("installer.reboot.notice.message"));
                         }
                         catch (Exception e)
                         {
-                            message = langpack.getString("installer.reboot.notice.message");
+                            message = getLangpack().getString("installer.reboot.notice.message");
                         }
                         try
                         {
-                            title = variableSubstitutor.substitute(langpack
+                            title = variableSubstitutor.substitute(getLangpack()
                                     .getString("installer.reboot.notice.title"));
                         }
                         catch (Exception e)
                         {
-                            title = langpack.getString("installer.reboot.notice.title");
+                            title = getLangpack().getString("installer.reboot.notice.title");
                         }
                         JOptionPane.showConfirmDialog(this, message, title, JOptionPane.OK_OPTION);
                         break;
@@ -843,17 +843,17 @@ public class InstallerFrame extends JFrame implements InstallerView
             // Use a alternate message and title if defined.
             final String mkey = "installer.quit.reversemessage";
             final String tkey = "installer.quit.reversetitle";
-            String message = langpack.getString(mkey);
-            String title = langpack.getString(tkey);
+            String message = getLangpack().getString(mkey);
+            String title = getLangpack().getString(tkey);
             // message equal to key -> no alternate message defined.
             if (message.contains(mkey))
             {
-                message = langpack.getString("installer.quit.message");
+                message = getLangpack().getString("installer.quit.message");
             }
             // title equal to key -> no alternate title defined.
             if (title.contains(tkey))
             {
-                title = langpack.getString("installer.quit.title");
+                title = getLangpack().getString("installer.quit.title");
             }
             // Now replace variables in message or title.
             VariableSubstitutor substitutor = variableSubstitutor;
@@ -918,10 +918,10 @@ public class InstallerFrame extends JFrame implements InstallerView
         IXMLWriter writer = new XMLWriter(out);
         // fix bug# 4551
         // write.write(root);
-        for (int i = 0; i < installdata.getPanels().size(); i++)
+        for (int i = 0; i < getInstalldata().getPanels().size(); i++)
         {
-            IzPanel panel = (IzPanel) installdata.getPanels().get(i);
-            panel.makeXMLData(installdata.getXmlData().getChildAtIndex(i));
+            IzPanel panel = (IzPanel) getInstalldata().getPanels().get(i);
+            panel.makeXMLData(getInstalldata().getXmlData().getChildAtIndex(i));
         }
         writer.write(root);
 
@@ -937,7 +937,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         String text1 = text;
         if (text1 == null)
         {
-            text1 = langpack.getString("installer.quit");
+            text1 = getLangpack().getString("installer.quit");
         }
         quitButton.setText(text1);
     }
@@ -949,11 +949,11 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     public void setQuitButtonIcon(String iconName)
     {
-        String useButtonIcons = installdata.guiPrefs.modifier.get("useButtonIcons");
+        String useButtonIcons = getInstalldata().guiPrefs.modifier.get("useButtonIcons");
 
         if (useButtonIcons == null || "yes".equalsIgnoreCase(useButtonIcons))
         {
-            quitButton.setIcon(icons.get(iconName));
+            quitButton.setIcon(getIcons().get(iconName));
         }
     }
 
@@ -1070,15 +1070,15 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     public void skipPanel()
     {
-        if (installdata.getCurPanelNumber() < installdata.getPanels().size() - 1)
+        if (getInstalldata().getCurPanelNumber() < getInstalldata().getPanels().size() - 1)
         {
             if (isBack)
             {
-                navigatePrevious(installdata.getCurPanelNumber());
+                navigatePrevious(getInstalldata().getCurPanelNumber());
             }
             else
             {
-                navigateNext(installdata.getCurPanelNumber(), false);
+                navigateNext(getInstalldata().getCurPanelNumber(), false);
             }
         }
     }
@@ -1091,7 +1091,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     public boolean canShow(int panelnumber)
     {
-        IzPanel panel = (IzPanel) installdata.getPanels().get(panelnumber);
+        IzPanel panel = (IzPanel) getInstalldata().getPanels().get(panelnumber);
         com.izforge.izpack.api.data.Panel panelmetadata = panel.getMetadata();
         String panelid = panelmetadata.getPanelid();
         Debug.trace("Current Panel: " + panelid);
@@ -1106,7 +1106,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         }
         else
         {
-            if (!rules.canShowPanel(panelid, this.installdata.getVariables()))
+            if (!rules.canShowPanel(panelid, this.getInstalldata().getVariables()))
             {
                 // skip panel, if conditions for panel aren't met
                 Debug.log("Can't show panel " + panelid);
@@ -1133,7 +1133,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         {
             return;
         }
-        this.navigateNext(installdata.getCurPanelNumber(), true);
+        this.navigateNext(getInstalldata().getCurPanelNumber(), true);
     }
 
     /**
@@ -1144,11 +1144,11 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     public void navigateNext(int startPanel, boolean doValidation)
     {
-        if ((installdata.getCurPanelNumber() < installdata.getPanels().size() - 1))
+        if ((getInstalldata().getCurPanelNumber() < getInstalldata().getPanels().size() - 1))
         {
             // We must trasfer all fields into the variables before
             // panelconditions try to resolve the rules based on unassigned vars.
-            final IzPanel panel = (IzPanel) installdata.getPanels().get(startPanel);
+            final IzPanel panel = (IzPanel) getInstalldata().getPanels().get(startPanel);
             panel.executePreValidationActions();
             boolean isValid = doValidation ? panel.panelValidated() : true;
             panel.executePostValidationActions();
@@ -1171,7 +1171,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             int nextPanel = hasNavigateNext(startPanel, false);
             if (-1 != nextPanel)
             {
-                installdata.setCurPanelNumber(nextPanel);
+                getInstalldata().setCurPanelNumber(nextPanel);
                 switchPanel(startPanel);
             }
         }
@@ -1194,7 +1194,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         int res = -1;
         // Start from the panel given and check each one until we find one
         // that we can navigate to or until there are no more panels
-        for (int panel = startPanel + 1; res == -1 && panel < installdata.getPanels().size(); panel++)
+        for (int panel = startPanel + 1; res == -1 && panel < getInstalldata().getPanels().size(); panel++)
         {
             // See if we can show this panel
             if (!visibleOnly || panelManager.isVisible(panel))
@@ -1251,7 +1251,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         {
             return;
         }
-        this.navigatePrevious(installdata.getCurPanelNumber());
+        this.navigatePrevious(getInstalldata().getCurPanelNumber());
     }
 
     /**
@@ -1265,7 +1265,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         int prevPanel = hasNavigatePrevious(endingPanel, false);
         if (-1 != prevPanel)
         {
-            installdata.setCurPanelNumber(prevPanel);
+            getInstalldata().setCurPanelNumber(prevPanel);
             switchPanel(endingPanel);
         }
     }
@@ -1276,8 +1276,38 @@ public class InstallerFrame extends JFrame implements InstallerView
     @Override
     public void showHelp()
     {
-        IzPanel izPanel = (IzPanel) installdata.getPanels().get(installdata.getCurPanelNumber());
+        IzPanel izPanel = (IzPanel) getInstalldata().getPanels().get(getInstalldata().getCurPanelNumber());
         izPanel.showHelp();
+    }
+
+    public LocaleDatabase getLangpack()
+    {
+        return langpack;
+    }
+
+    public void setLangpack(LocaleDatabase langpack)
+    {
+        this.langpack = langpack;
+    }
+
+    public GUIInstallData getInstalldata()
+    {
+        return installdata;
+    }
+
+    public void setInstalldata(GUIInstallData installdata)
+    {
+        this.installdata = installdata;
+    }
+
+    public IconsDatabase getIcons()
+    {
+        return icons;
+    }
+
+    public void setIcons(IconsDatabase icons)
+    {
+        this.icons = icons;
     }
 
     /**
@@ -1411,16 +1441,16 @@ public class InstallerFrame extends JFrame implements InstallerView
         // Updated by Daniel Azarov, Exadel Inc.
         // start
         Color foreground = null;
-        if (installdata.guiPrefs.modifier.containsKey("headingForegroundColor"))
+        if (getInstalldata().guiPrefs.modifier.containsKey("headingForegroundColor"))
         {
-            foreground = Color.decode(installdata.guiPrefs.modifier.get("headingForegroundColor"));
+            foreground = Color.decode(getInstalldata().guiPrefs.modifier.get("headingForegroundColor"));
             headingLabels[0].setForeground(foreground);
         }
         // end
 
-        if (installdata.guiPrefs.modifier.containsKey("headingFontSize"))
+        if (getInstalldata().guiPrefs.modifier.containsKey("headingFontSize"))
         {
-            float fontSize = Float.parseFloat(installdata.guiPrefs.modifier.get("headingFontSize"));
+            float fontSize = Float.parseFloat(getInstalldata().guiPrefs.modifier.get("headingFontSize"));
             if (fontSize > 0.0 && fontSize <= 5.0)
             {
                 float currentSize = headingLabels[0].getFont().getSize2D();
@@ -1458,19 +1488,19 @@ public class InstallerFrame extends JFrame implements InstallerView
     {
         int i;
         String counterPos = "inHeading";
-        if (installdata.guiPrefs.modifier.containsKey("headingPanelCounterPos"))
+        if (getInstalldata().guiPrefs.modifier.containsKey("headingPanelCounterPos"))
         {
-            counterPos = installdata.guiPrefs.modifier.get("headingPanelCounterPos");
+            counterPos = getInstalldata().guiPrefs.modifier.get("headingPanelCounterPos");
         }
         // Do not create counter if it should be in the heading, but no heading should be used.
         if (leftHeadingPanel == null && "inHeading".equalsIgnoreCase(counterPos))
         {
             return;
         }
-        if (installdata.guiPrefs.modifier.containsKey("headingPanelCounter"))
+        if (getInstalldata().guiPrefs.modifier.containsKey("headingPanelCounter"))
         {
             headingCounterComponent = null;
-            if ("progressbar".equalsIgnoreCase(installdata.guiPrefs.modifier
+            if ("progressbar".equalsIgnoreCase(getInstalldata().guiPrefs.modifier
                     .get("headingPanelCounter")))
             {
                 JProgressBar headingProgressBar = new JProgressBar();
@@ -1483,7 +1513,7 @@ public class InstallerFrame extends JFrame implements InstallerView
                     headingCounterComponent.setAlignmentX(Component.RIGHT_ALIGNMENT);
                 }
             }
-            else if ("text".equalsIgnoreCase(installdata.guiPrefs.modifier
+            else if ("text".equalsIgnoreCase(getInstalldata().guiPrefs.modifier
                     .get("headingPanelCounter")))
             {
                 JLabel headingCountPanels = new JLabel(" ");
@@ -1500,9 +1530,9 @@ public class InstallerFrame extends JFrame implements InstallerView
                 // Updated by Daniel Azarov, Exadel Inc.
                 // start
                 Color foreground = null;
-                if (installdata.guiPrefs.modifier.containsKey("headingForegroundColor"))
+                if (getInstalldata().guiPrefs.modifier.containsKey("headingForegroundColor"))
                 {
-                    foreground = Color.decode(installdata.guiPrefs.modifier
+                    foreground = Color.decode(getInstalldata().guiPrefs.modifier
                             .get("headingForegroundColor"));
                     headingCountPanels.setForeground(foreground);
                 }
@@ -1556,9 +1586,9 @@ public class InstallerFrame extends JFrame implements InstallerView
         // Updated by Daniel Azarov, Exadel Inc.
         // start
         int borderSize = 8;
-        if (installdata.guiPrefs.modifier.containsKey("headingImageBorderSize"))
+        if (getInstalldata().guiPrefs.modifier.containsKey("headingImageBorderSize"))
         {
-            borderSize = Integer.parseInt(installdata.guiPrefs.modifier
+            borderSize = Integer.parseInt(getInstalldata().guiPrefs.modifier
                     .get("headingImageBorderSize"));
         }
         imgPanel.setBorder(BorderFactory.createEmptyBorder(borderSize, borderSize, borderSize,
@@ -1594,16 +1624,16 @@ public class InstallerFrame extends JFrame implements InstallerView
         int headingLines = 1;
         // The number of lines can be determined in the config xml file.
         // The first is the header, additonals are descriptions for the header.
-        if (installdata.guiPrefs.modifier.containsKey("headingLineCount"))
+        if (getInstalldata().guiPrefs.modifier.containsKey("headingLineCount"))
         {
-            headingLines = Integer.parseInt(installdata.guiPrefs.modifier.get("headingLineCount"));
+            headingLines = Integer.parseInt(getInstalldata().guiPrefs.modifier.get("headingLineCount"));
         }
         Color back = null;
         int i = 0;
         // It is possible to determine the used background color of the heading panel.
-        if (installdata.guiPrefs.modifier.containsKey("headingBackgroundColor"))
+        if (getInstalldata().guiPrefs.modifier.containsKey("headingBackgroundColor"))
         {
-            back = Color.decode(installdata.guiPrefs.modifier.get("headingBackgroundColor"));
+            back = Color.decode(getInstalldata().guiPrefs.modifier.get("headingBackgroundColor"));
         }
         // Try to create counter if no heading should be used.
         if (!isHeading(null))
@@ -1612,8 +1642,8 @@ public class InstallerFrame extends JFrame implements InstallerView
             return;
         }
         // See if we should switch the header image to the left side
-        if (installdata.guiPrefs.modifier.containsKey("headingImageOnLeft")
-                && (installdata.guiPrefs.modifier.get("headingImageOnLeft").equalsIgnoreCase("yes") || installdata.guiPrefs.modifier
+        if (getInstalldata().guiPrefs.modifier.containsKey("headingImageOnLeft")
+                && (getInstalldata().guiPrefs.modifier.get("headingImageOnLeft").equalsIgnoreCase("yes") || getInstalldata().guiPrefs.modifier
                 .get("headingImageOnLeft").equalsIgnoreCase("true")))
         {
             imageLeft = true;
@@ -1685,8 +1715,8 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     public boolean isHeading(IzPanel caller)
     {
-        if (!installdata.guiPrefs.modifier.containsKey("useHeadingPanel")
-                || !(installdata.guiPrefs.modifier.get("useHeadingPanel")).equalsIgnoreCase("yes"))
+        if (!getInstalldata().guiPrefs.modifier.containsKey("useHeadingPanel")
+                || !(getInstalldata().guiPrefs.modifier.get("useHeadingPanel")).equalsIgnoreCase("yes"))
         {
             return (false);
         }
@@ -1702,9 +1732,9 @@ public class InstallerFrame extends JFrame implements InstallerView
     {
         int i;
         int headingLines = 1;
-        if (installdata.guiPrefs.modifier.containsKey("headingLineCount"))
+        if (getInstalldata().guiPrefs.modifier.containsKey("headingLineCount"))
         {
-            headingLines = Integer.parseInt(installdata.guiPrefs.modifier.get("headingLineCount"));
+            headingLines = Integer.parseInt(getInstalldata().guiPrefs.modifier.get("headingLineCount"));
         }
 
         if (headingLabels == null)
@@ -1742,7 +1772,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         // Do not forgett the first headline.
         headingLabels[0].setText(headline);
         headingLabels[0].setVisible(true);
-        int curPanelNo = panelManager.getPanelVisibilityNumber(installdata.getCurPanelNumber());
+        int curPanelNo = panelManager.getPanelVisibilityNumber(getInstalldata().getCurPanelNumber());
         if (headingLabels[headingLines] != null)
         {
             loadAndShowImage(headingLabels[headingLines], HEADING_ICON_RESOURCE, curPanelNo);
@@ -1756,12 +1786,12 @@ public class InstallerFrame extends JFrame implements InstallerView
     {
         if (headingCounterComponent != null)
         {
-            int curPanelNo = panelManager.getPanelVisibilityNumber((installdata.getCurPanelNumber()));
+            int curPanelNo = panelManager.getPanelVisibilityNumber((getInstalldata().getCurPanelNumber()));
             int visPanelsCount = panelManager.getCountVisiblePanel();
             String message = String.format(
                     "%s %d %s %d",
-                    langpack.getString("installer.step"), curPanelNo + 1,
-                    langpack.getString("installer.of"), visPanelsCount + 1
+                    getLangpack().getString("installer.step"), curPanelNo + 1,
+                    getLangpack().getString("installer.of"), visPanelsCount + 1
             );
             if (headingCounterComponent instanceof JProgressBar)
             {
@@ -1805,7 +1835,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     {
         try
         {
-            InstallerBase.refreshDynamicVariables(installdata, new VariableSubstitutorImpl(installdata.getVariables()));
+            InstallerBase.refreshDynamicVariables(getInstalldata(), new VariableSubstitutorImpl(getInstalldata().getVariables()));
         }
         catch (Exception e)
         {

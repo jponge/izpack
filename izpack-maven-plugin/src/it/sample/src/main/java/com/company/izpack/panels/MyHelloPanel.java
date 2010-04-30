@@ -78,7 +78,7 @@ public class MyHelloPanel extends IzPanel
         String str;
         str = installData.getLangpack().getString("HelloPanel.welcome1") + idata.getInfo().getAppName() + " "
                 + idata.getInfo().getAppVersion() + installData.getLangpack().getString("HelloPanel.welcome2");
-        JLabel welcomeLabel = LabelFactory.create(str, parent.icons.get("host"), LEADING);
+        JLabel welcomeLabel = LabelFactory.create(str, parent.getIcons().get("host"), LEADING);
         // IzPanelLayout is a constraint orientated layout manager. But if no constraint is
         // given, a default will be used. It starts in the first line.
         // NEXT_LINE have to insert also in the first line!!
@@ -96,7 +96,7 @@ public class MyHelloPanel extends IzPanel
         if (size > 0)
         {
             str = installData.getLangpack().getString("HelloPanel.authors");
-            JLabel appAuthorsLabel = LabelFactory.create(str, parent.icons
+            JLabel appAuthorsLabel = LabelFactory.create(str, parent.getIcons()
                     .get("information"), LEADING);
             // If nothing will be sad to the IzPanelLayout the position of an add will be
             // determined in the default constraint. For labels it is CURRENT_ROW, NEXT_COLUMN.
@@ -115,7 +115,7 @@ public class MyHelloPanel extends IzPanel
                 Info.Author a = authors.get(i);
                 String email = (a.getEmail() != null && a.getEmail().length() > 0) ? (" <"
                         + a.getEmail() + ">") : "";
-                label = LabelFactory.create(" - " + a.getName() + email, parent.icons
+                label = LabelFactory.create(" - " + a.getName() + email, parent.getIcons()
                         .get("empty"), LEADING);
                 add(label, NEXT_LINE);
             }
@@ -125,7 +125,7 @@ public class MyHelloPanel extends IzPanel
         if (idata.getInfo().getAppURL() != null)
         {
             str = installData.getLangpack().getString("HelloPanel.url") + idata.getInfo().getAppURL();
-            JLabel appURLLabel = LabelFactory.create(str, parent.icons.get("bookmark"),
+            JLabel appURLLabel = LabelFactory.create(str, parent.getIcons().get("bookmark"),
                     LEADING);
             add(appURLLabel, LayoutConstants.NEXT_LINE);
         }
