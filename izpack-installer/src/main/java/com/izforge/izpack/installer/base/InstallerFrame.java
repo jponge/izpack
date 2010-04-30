@@ -354,7 +354,7 @@ public class InstallerFrame extends JFrame implements InstallerView
 
         try
         {
-            ImageIcon icon = loadIcon(ICON_RESOURCE, 0 + "", true);
+            ImageIcon icon = loadIcon(ICON_RESOURCE, 0 + "");
             if (icon != null)
             {
                 JPanel imgPanel = new JPanel();
@@ -393,15 +393,13 @@ public class InstallerFrame extends JFrame implements InstallerView
     /**
      * Loads icon for given panel id.
      *
-     * @param resPrefix   resource prefix.
-     * @param panelid     panel id.
-     * @param tryBaseIcon should try to load base icon?
+     * @param resPrefix resource prefix.
+     * @param panelid   panel id.
      * @return image icon
      * @throws ResourceNotFoundException
      * @throws IOException
      */
-    private ImageIcon loadIcon(String resPrefix, String panelid, boolean tryBaseIcon)
-            throws ResourceNotFoundException, IOException
+    private ImageIcon loadIcon(String resPrefix, String panelid)
     {
         ImageIcon icon;
         String iconext = this.getIconResourceNameExtension();
@@ -457,32 +455,15 @@ public class InstallerFrame extends JFrame implements InstallerView
         ImageIcon icon = null;
         try
         {
-            icon = loadIcon(resPrefix, panelid, false);
+            icon = loadIcon(resPrefix, panelid);
         }
         catch (Exception e)
         {
-            try
-            {
-                icon = loadIcon(resPrefix, panelno + "", false);
-            }
-            catch (Exception ex)
-            {
-                try
-                {
-                    icon = loadIcon(resPrefix, panelid, true);
-                }
-                catch (Exception e1)
-                {
-                    // ignore
-                }
-            }
+            icon = loadIcon(resPrefix, panelno + "");
         }
-        if (icon != null)
-        {
-            iLabel.setVisible(false);
-            iLabel.setIcon(icon);
-            iLabel.setVisible(true);
-        }
+        iLabel.setVisible(false);
+        iLabel.setIcon(icon);
+        iLabel.setVisible(true);
     }
 
     private void loadAndShowImage(JLabel iLabel, String resPrefix, int panelNo)
@@ -490,13 +471,13 @@ public class InstallerFrame extends JFrame implements InstallerView
         ImageIcon icon = null;
         try
         {
-            icon = loadIcon(resPrefix, panelNo + "", false);
+            icon = loadIcon(resPrefix, panelNo + "");
         }
         catch (Exception e)
         {
             try
             {
-                icon = loadIcon(resPrefix, panelNo + "", true);
+                icon = loadIcon(resPrefix, panelNo + "");
             }
             catch (Exception e1)
             {
@@ -1560,7 +1541,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         ImageIcon icon = null;
         try
         {
-            icon = loadIcon(HEADING_ICON_RESOURCE, 0 + "", true);
+            icon = loadIcon(HEADING_ICON_RESOURCE, 0 + "");
         }
         catch (Exception e)
         {
