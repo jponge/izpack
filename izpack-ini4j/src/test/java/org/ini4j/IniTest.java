@@ -60,10 +60,10 @@ public class IniTest
         Helper.assertEquals(DwarfsData.dwarfs, ini.as(Dwarfs.class));
         ini = new Ini(Helper.getResourceReader(Helper.DWARFS_INI));
         Helper.assertEquals(DwarfsData.dwarfs, ini.as(Dwarfs.class));
-        ini = new Ini(Helper.getSourceFile(Helper.DWARFS_INI));
+        ini = new Ini(Helper.getResourceURL(Helper.DWARFS_INI));
         Helper.assertEquals(DwarfsData.dwarfs, ini.as(Dwarfs.class));
         ini = new Ini();
-        ini.setFile(Helper.getSourceFile(Helper.DWARFS_INI));
+        ini.setFile(new File(Helper.getResourceURL(Helper.DWARFS_INI).toURI()));
         ini.load();
         Helper.assertEquals(DwarfsData.dwarfs, ini.as(Dwarfs.class));
     }

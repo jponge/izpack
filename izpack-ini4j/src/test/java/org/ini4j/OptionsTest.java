@@ -91,10 +91,10 @@ public class OptionsTest
         Options o2 = new Options(Helper.getResourceURL(Helper.DWARFS_OPT).openStream());
         Options o3 = new Options(new InputStreamReader(Helper.getResourceURL(Helper.DWARFS_OPT).openStream()));
         Options o4 = new Options(Helper.getResourceURL(Helper.DWARFS_OPT));
-        Options o5 = new Options(Helper.getSourceFile(Helper.DWARFS_OPT));
+        Options o5 = new Options(Helper.getResourceURL(Helper.DWARFS_OPT));
         Options o6 = new Options();
 
-        o6.setFile(Helper.getSourceFile(Helper.DWARFS_OPT));
+        o6.setFile(new File(Helper.getResourceURL(Helper.DWARFS_OPT).toURI()));
         o6.load();
         Helper.assertEquals(DwarfsData.dopey, o1.as(Dwarf.class));
         Helper.assertEquals(DwarfsData.dopey, o2.as(Dwarf.class));
