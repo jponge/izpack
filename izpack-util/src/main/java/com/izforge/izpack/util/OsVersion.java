@@ -183,7 +183,11 @@ public final class OsVersion implements OsVersionConstants, StringConstants
     public static final boolean IS_DEBIAN_LINUX = (IS_LINUX
             && FileUtil.fileContains(PROC_VERSION, DEBIAN)) || (IS_LINUX && new File("/etc/debian_version").exists());
 
-    // TODO detect the newcomer (K)Ubuntu */
+    /** 
+     * True if Ubuntu Linux or derived was detected
+     */ 
+    public static final boolean IS_UBUNTU_LINUX = (IS_LINUX && FileUtil.fileContains(PROC_VERSION, UBUNTU));
+
     //~ Methods
     // **************************************************************************************************************************************************
 
