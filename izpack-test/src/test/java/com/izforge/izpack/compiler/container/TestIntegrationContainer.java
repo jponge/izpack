@@ -31,9 +31,9 @@ public class TestIntegrationContainer extends AbstractContainer
     {
         try
         {
-            TestCompilerContainer testCompilerContainer = new TestCompilerContainer(klass, frameworkMethod);
-            testCompilerContainer.initBindings();
-            testCompilerContainer.launchCompilation();
+            TestInstallationContainer testInstallationContainer = new TestInstallationContainer(klass, frameworkMethod);
+            testInstallationContainer.initBindings();
+            testInstallationContainer.launchCompilation();
             InstallerContainer installerContainer = new InstallerContainer();
             installerContainer.fillContainer(pico);
         }
