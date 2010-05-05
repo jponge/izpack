@@ -244,7 +244,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         try
         {
-            ImageIcon jframeIcon = ResourceManager.getInstance().getImageIconResource("JFrameIcon");
+            ImageIcon jframeIcon = resourceManager.getImageIconResource("JFrameIcon");
             if (jframeIcon == null)
             {
                 jframeIcon = getIcons().get("JFrameIcon");
