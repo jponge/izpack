@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -368,7 +367,7 @@ public class ResourceManager
                 return new ImageIcon(location);
             }
         }
-        throw new ResourceNotFoundException("Image icon not found in " + resource + " and " + Arrays.toString(fallback));
+        return null;
     }
 
     /**

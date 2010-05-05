@@ -253,7 +253,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         }
         catch (Exception ignored)
         {
-            // ignore
+            LOGGER.log(Level.WARNING, "Image icon not found", ignored);
         }
         // Prepares the glass pane to block the gui interaction when needed
         JPanel glassPane = (JPanel) getGlassPane();
