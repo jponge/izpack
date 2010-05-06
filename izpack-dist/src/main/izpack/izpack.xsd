@@ -4,9 +4,8 @@
     <xs:element name="installation" type="installationType" />
 
     <xs:complexType name="installationType">
-        <xs:sequence>
-
-            <xs:element type="infoType" name="info">
+        <xs:all>
+            <xs:element type="infoType" name="info" minOccurs="1">
                 <xs:annotation>
                     <xs:documentation>The info section</xs:documentation>
                 </xs:annotation>
@@ -22,13 +21,13 @@
 
             <xs:element type="resourcesType" name="resources" />
 
-            <xs:element type="localeType" name="locale">
+            <xs:element type="localeType" name="locale" minOccurs="1">
                 <xs:annotation>
                     <xs:documentation>Locales of the installation</xs:documentation>
                 </xs:annotation>
             </xs:element>
 
-            <xs:element type="panelsType" name="panels">
+            <xs:element type="panelsType" name="panels" minOccurs="1">
                 <xs:annotation>
                     <xs:documentation>The panels in order</xs:documentation>
                 </xs:annotation>
@@ -40,7 +39,7 @@
                 </xs:annotation>
             </xs:element>
 
-            <xs:element type="nativeType" name="native" maxOccurs="unbounded" minOccurs="0" />
+            <xs:element type="nativesType" name="natives" />
 
             <xs:element type="packsType" name="packs">
                 <xs:annotation>
@@ -48,7 +47,7 @@
                 </xs:annotation>
             </xs:element>
 
-        </xs:sequence>
+        </xs:all>
         <xs:attribute type="xs:string" name="version" />
     </xs:complexType>
 
@@ -69,7 +68,7 @@
             <xs:element type="xs:string" name="url" />
             <xs:element type="xs:string" name="javaversion" />
             <xs:element type="xs:string" name="requiresjdk" />
-            <xs:element type="xs:string" name="pack200" />
+            <xs:element type="xs:string" name="pack200" minOccurs="0" />
             <xs:element type="run-privilegedType" name="run-privileged" />
             <xs:element type="xs:string" name="summarylogfilepath" />
         </xs:sequence>
@@ -223,7 +222,7 @@
 
     <xs:complexType name="packsType">
         <xs:sequence>
-            <xs:element type="packType" name="pack">
+            <xs:element type="packType" name="pack" minOccurs="1" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation>The core files</xs:documentation>
                 </xs:annotation>
@@ -240,14 +239,18 @@
         </xs:simpleContent>
     </xs:complexType>
 
+    <xs:complexType name="nativesType">
+        <xs:sequence>
+            <xs:element type="nativeType" name="native" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
     <xs:complexType name="nativeType">
-        <xs:simpleContent>
-            <xs:extension base="xs:string">
-                <xs:attribute type="xs:string" name="type" use="optional" />
-                <xs:attribute type="xs:string" name="name" use="optional" />
-                <xs:attribute type="xs:string" name="stage" use="optional" />
-            </xs:extension>
-        </xs:simpleContent>
+        <xs:sequence>
+            <xs:element type="osType" name="os" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="type" />
+        <xs:attribute type="xs:string" name="name" />
+        <xs:attribute type="xs:string" name="stage" />
     </xs:complexType>
 
 
