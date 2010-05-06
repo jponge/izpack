@@ -316,7 +316,7 @@ public class AutomatedInstaller extends InstallerBase
         PanelAutomation automationHelperInstance = null;
 
         String praefix = "com.izforge.izpack.panels.";
-        if (p.className.compareTo(".") > -1)
+        if (p.className.contains("."))
         // Full qualified class name
         {
             praefix = "";
