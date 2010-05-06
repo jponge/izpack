@@ -40,6 +40,8 @@
                 </xs:annotation>
             </xs:element>
 
+            <xs:element type="nativeType" name="native" maxOccurs="unbounded" minOccurs="0" />
+
             <xs:element type="packsType" name="packs">
                 <xs:annotation>
                     <xs:documentation>The packs section</xs:documentation>
@@ -95,6 +97,23 @@
         </xs:simpleContent>
     </xs:complexType>
 
+    <!-- Filesets types -->
+    <xs:complexType name="filesetType">
+        <xs:sequence>
+            <xs:element type="includeType" name="include" maxOccurs="unbounded" minOccurs="0" />
+            <xs:element type="includeType" name="exclude" maxOccurs="unbounded" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="dir" use="required" />
+        <xs:attribute type="xs:string" name="targetdir" use="required" />
+    </xs:complexType>
+    <xs:complexType name="includeType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="name" use="required" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
     <!-- Resources types -->
     <xs:complexType name="resourcesType">
         <xs:sequence>
@@ -114,6 +133,8 @@
     <xs:complexType name="packType">
         <xs:sequence>
             <xs:element type="xs:string" name="description" />
+            <xs:element type="filesetType" name="fileset" />
+            <xs:element type="executableType" name="executable" maxOccurs="unbounded" minOccurs="0" />
         </xs:sequence>
         <xs:attribute type="xs:string" name="name" />
         <xs:attribute type="xs:string" name="required" />
@@ -209,4 +230,25 @@
             </xs:element>
         </xs:sequence>
     </xs:complexType>
+
+    <xs:complexType name="executableType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="targetfile" use="optional" />
+                <xs:attribute type="xs:string" name="stage" use="optional" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="nativeType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="type" use="optional" />
+                <xs:attribute type="xs:string" name="name" use="optional" />
+                <xs:attribute type="xs:string" name="stage" use="optional" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+
 </xs:schema>
