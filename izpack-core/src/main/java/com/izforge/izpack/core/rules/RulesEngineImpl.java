@@ -268,13 +268,125 @@ public class RulesEngineImpl implements RulesEngine
     }
 
 
+    /**
+     * Gets the condition for the requested id.
+     * The id may be one of the following:
+     * A condition ID as defined in the install.xml
+     * A simple expression with !,+,|,\
+     * A complex expression with !,&&,||,\\ - must begin with char @ 
+     * 
+     * @param id
+     * @return
+     */
     public Condition getCondition(String id)
     {
         Condition result = conditionsmap.get(id);
         if (result == null)
         {
-            result = getConditionByExpr(new StringBuffer(id));
+            if (id.startsWith("@"))
+            {
+                result = parseComplexCondition(id.substring(1));
+            }
+            else
+            {
+                result = getConditionByExpr(new StringBuffer(id));
+            }
         }
+        return result;
+    }
+
+    /**
+     * Parses the given complex expression into a condition.
+     * Understands the boolean operations && (AND), || (OR)
+     * and ! (NOT).
+     * 
+     * Precedence is: 
+     * NOT is evaluated first.
+     * AND is evaluated after NOT, but before OR.
+     * OR is evaluated last.
+     * 
+     * Parentheses may be added at a later time.
+     * 
+     * @param expression
+     * @return
+     */
+    protected Condition parseComplexCondition(String expression)
+    {
+        Condition result = null;
+
+        if (expression.contains("||"))
+        {
+            result = parseComplexOrCondition(expression);
+        }
+        else if (expression.contains("&&"))
+        {
+            result = parseComplexAndCondition(expression);
+        }
+        else if (expression.contains("!"))
+        {
+            result = parseComplexNotCondition(expression);
+        }
+        else
+        {
+            result = conditionsmap.get(expression);
+        }
+
+        result.setInstalldata(installdata);
+
+        return result;
+    }
+
+    /**
+     * Creates an OR condition from the given complex expression.
+     * Uses the substring up to the first || delimiter as first operand and
+     * the rest as second operand.
+     * 
+     * @param expression
+     * @return OrCondition
+     */
+    private Condition parseComplexOrCondition(String expression)
+    {
+        Condition result = null;
+
+        String[] parts = expression.split("\\|\\|", 2);
+        result = new OrCondition(parseComplexCondition(parts[0].trim()), parseComplexCondition(parts[1].trim()));
+
+        return result;
+    }
+
+    /**
+     * Creates an AND condition from the given complex expression.
+     * Uses the expression up to the first && delimiter as first operand and
+     * the rest as second operand.
+     * 
+     * @param expression
+     * @return AndCondition
+     */
+    private Condition parseComplexAndCondition(String expression)
+    {
+        Condition result = null;
+
+        String[] parts = expression.split("\\&\\&", 2);
+        result = new AndCondition(parseComplexCondition(parts[0].trim()), parseComplexCondition(parts[1].trim()),
+                this);
+
+        return result;
+    }
+
+    /**
+     * Creates a NOT condition from the given complex expression.
+     * Negates the result of the whole expression!
+     * 
+     * @param expression
+     * @return NotCondtion
+     */
+    private Condition parseComplexNotCondition(String expression)
+    {
+        Condition result = null;
+
+        result = NotCondition.createFromCondition(parseComplexCondition(expression.substring(1).trim()),
+                this, installdata);
+
         return result;
     }
 
