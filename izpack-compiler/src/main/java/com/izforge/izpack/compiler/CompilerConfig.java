@@ -424,7 +424,12 @@ public class CompilerConfig extends Thread
     {
         boolean needAddOns = false;
         notifyCompilerListener("addNativeLibraries", CompilerListener.BEGIN, data);
-        for (IXMLElement ixmlElement : data.getChildrenNamed("native"))
+        IXMLElement nativesElement = data.getFirstChildNamed("natives");
+        if (nativesElement == null)
+        {
+            return;
+        }
+        for (IXMLElement ixmlElement : nativesElement.getChildrenNamed("native"))
         {
             String type = xmlCompilerHelper.requireAttribute(ixmlElement, "type");
             String name = xmlCompilerHelper.requireAttribute(ixmlElement, "name");
