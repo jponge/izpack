@@ -63,7 +63,9 @@
         <res src="resource/RegistrySpec.xml" id="RegistrySpec.xml" />
     </resources>
 
-    <native type="izpack" name="ShellLink.dll" />
+    <natives>
+        <native type="izpack" name="ShellLink.dll" />
+    </natives>
 
     <panels>
         <panel classname="HTMLInfoPanel" />
@@ -164,9 +166,11 @@
 
     </packs>
 
-    <native type="izpack" name="ShellLink.dll" />
-    <native type="3rdparty" name="COIOSHelper.dll" stage="both">
-        <os family="windows" />
-    </native>
+    <natives>
+        <native type="izpack" name="ShellLink.dll" />
+        <native type="3rdparty" name="COIOSHelper.dll" stage="both">
+            <os family="windows" />
+        </native>
+    </natives>
 
 </installation>

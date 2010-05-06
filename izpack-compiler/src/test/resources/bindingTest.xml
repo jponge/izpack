@@ -199,13 +199,14 @@
     </packs>
 
     <!-- The native libraries to add -->
-    <native type="izpack" name="ShellLink.dll" />
-    <native type="izpack" name="ShellLink_x64.dll" />
-    <native type="izpack" name="WinSetupAPI.dll" />
-    <native type="izpack" name="WinSetupAPI_x64.dll" />
-    <native type="3rdparty" name="COIOSHelper.dll" stage="both">
-        <os family="windows" />
-    </native>
-
+    <natives>
+        <native type="izpack" name="ShellLink.dll" />
+        <native type="izpack" name="ShellLink_x64.dll" />
+        <native type="izpack" name="WinSetupAPI.dll" />
+        <native type="izpack" name="WinSetupAPI_x64.dll" />
+        <native type="3rdparty" name="COIOSHelper.dll" stage="both">
+            <os family="windows" />
+        </native>
+    </natives>
 
 </installation>

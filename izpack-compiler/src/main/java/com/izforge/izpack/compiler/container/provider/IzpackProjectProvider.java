@@ -25,7 +25,7 @@ public class IzpackProjectProvider implements Provider
 
     public static List<String> TAG_TO_IGNORE = Arrays.asList("info", "guiprefs", "variables",
             "packs", "packaging", "conditions", "installerrequirements", "locale", "resources",
-            "panels", "help", "validator", "actions", "native", "dynamicvariables", "jar");
+            "panels", "help", "validator", "actions", "natives", "dynamicvariables", "jar");
 
     public static Map<String, String> PANEL_ATTRIBUTE = new HashMap<String, String>();
 
