@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="installation" type="installationType" />
+    <xs:complexType name="run-privilegedType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="condition" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="variableType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="name" use="optional" />
+                <xs:attribute type="xs:string" name="value" use="optional" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="authorType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="email" use="optional" />
+                <xs:attribute type="xs:string" name="name" use="optional" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="infoType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="appname" />
+            <xs:element type="xs:string" name="appversion" />
+            <xs:element type="authorsType" name="authors" />
+            <xs:element type="xs:string" name="url" />
+            <xs:element type="xs:string" name="javaversion" />
+            <xs:element type="xs:string" name="requiresjdk" />
+            <xs:element type="run-privilegedType" name="run-privileged">
+                <xs:annotation>
+                    <xs:documentation>>&lt;pack200/></xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="summarylogfilepath" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="packType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="description" />
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="name" />
+        <xs:attribute type="xs:string" name="required" />
+    </xs:complexType>
+    <xs:complexType name="osType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="family" use="optional" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="variablesType">
+        <xs:sequence>
+            <xs:element type="variableType" name="variable" maxOccurs="unbounded" minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="langpackType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="iso3" use="optional" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="panelsType">
+        <xs:sequence>
+            <xs:element type="panelType" name="panel" maxOccurs="unbounded" minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="listenerType" mixed="true">
+        <xs:sequence>
+            <xs:element type="osType" name="os" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="classname" use="optional" />
+        <xs:attribute type="xs:string" name="stage" use="optional" />
+    </xs:complexType>
+    <xs:complexType name="installationType">
+        <xs:sequence>
+            <xs:element type="infoType" name="info">
+                <xs:annotation>
+                    <xs:documentation>The info section</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="guiprefsType" name="guiprefs">
+                <xs:annotation>
+                    <xs:documentation>Flexible and in the screen proportions</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="variablesType" name="variables" />
+            <xs:element type="localeType" name="locale">
+                <xs:annotation>
+                    <xs:documentation>We include every langpack</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="panelsType" name="panels">
+                <xs:annotation>
+                    <xs:documentation>The panels in a classic order</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="listenersType" name="listeners">
+                <xs:annotation>
+                    <xs:documentation>The listeners section for CustomActions</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="packsType" name="packs">
+                <xs:annotation>
+                    <xs:documentation>The packs section</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="version" />
+    </xs:complexType>
+    <xs:complexType name="panelType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="classname" use="optional" />
+                <xs:attribute type="xs:string" name="id" use="optional" />
+                <xs:attribute type="xs:string" name="encoding" use="optional" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="guiprefsType">
+        <xs:sequence>
+            <xs:element type="modifierType" name="modifier" maxOccurs="unbounded" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>GUI addaption for more informations see "Modifying the GUI" in the documentation
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="height" />
+        <xs:attribute type="xs:string" name="resizable" />
+        <xs:attribute type="xs:string" name="width" />
+    </xs:complexType>
+    <xs:complexType name="authorsType">
+        <xs:sequence>
+            <xs:element type="authorType" name="author" maxOccurs="unbounded" minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="modifierType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="key" use="optional" />
+                <xs:attribute type="xs:string" name="value" use="optional" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="listenersType">
+        <xs:sequence>
+            <xs:element type="listenerType" name="listener" maxOccurs="unbounded" minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="localeType">
+        <xs:sequence>
+            <xs:element type="langpackType" name="langpack" maxOccurs="unbounded" minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="packsType">
+        <xs:sequence>
+            <xs:element type="packType" name="pack">
+                <xs:annotation>
+                    <xs:documentation>The core files</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
