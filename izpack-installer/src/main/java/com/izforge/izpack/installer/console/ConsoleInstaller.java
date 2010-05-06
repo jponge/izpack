@@ -119,7 +119,7 @@ public class ConsoleInstaller extends InstallerBase
             {
                 this.installdata.setCurPanelNumber(this.installdata.getCurPanelNumber() + 1);
                 String praefix = "com.izforge.izpack.panels.";
-                if (panel.className.compareTo(".") > -1)
+                if (panel.className.contains("."))
                 {
                     praefix = "";
                 }
