@@ -54,7 +54,7 @@ public class RulesEngineImpl implements RulesEngine
 {
 
     private static final long serialVersionUID = 3966346766966632860L;
-
+    
     protected Map<String, String> panelconditions;
 
     protected Map<String, String> packconditions;
@@ -316,11 +316,14 @@ public class RulesEngineImpl implements RulesEngine
 
         if (expression.contains("||"))
         {
+            result = parseComplexOrLevelCondition(expression);
             result = parseComplexOrCondition(expression);
         }
         else if (expression.contains("&&"))
         {
             result = parseComplexAndCondition(expression);
+        } else if (expression.contains("^")) {
+            result = parseComplexXorCondition(expression);
         }
         else if (expression.contains("!"))
         {
@@ -333,6 +336,24 @@ public class RulesEngineImpl implements RulesEngine
 
         result.setInstalldata(installdata);
 
+        return result;
+    }
+    
+    private Condition parseComplexOrLevelCondition(String expression) {
+        Condition result = null;
+        int orPosition = expression.indexOf("||");
+        int xorPosition = expression.indexOf("^");
+        
+        if (xorPosition == -1) {
+            result = parseComplexOrCondition(expression);
+        } else if (orPosition == -1) {
+            result = parseComplexXorCondition(expression);
+        } else if (orPosition < xorPosition) {
+            result = parseComplexOrCondition(expression);
+        } else {
+            result = parseComplexXorCondition(expression);
+        }
+        
         return result;
     }
 
@@ -354,6 +375,21 @@ public class RulesEngineImpl implements RulesEngine
         return result;
     }
 
+    /**
+     * Creates a XOR condition from the given complex expression 
+     * @param expression
+     * @return
+     */
+    private Condition parseComplexXorCondition(String expression) {
+        Condition result = null;
+
+        String[] parts = expression.split("\\^", 2);
+        result = new XorCondition(parseComplexCondition(parts[0].trim()), parseComplexCondition(parts[1].trim()));
+
+        return result;
+        
+    }
+    
     /**
      * Creates an AND condition from the given complex expression.
      * Uses the expression up to the first && delimiter as first operand and
