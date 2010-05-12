@@ -49,11 +49,21 @@ public interface OsVersionConstants
      * X86 = "x86"
      */
     public static final String X86 = "x86";
+    
+    /**
+     * X64 = "x64"
+     */
+    public static final String X64 = "x64";
 
     /**
      * I386 = "i386"
      */
     public static final String I386 = "i386";
+    
+    /**
+     * AMD64 = "amd64"
+     */
+    public static final String AMD64 = "amd64"; 
 
     /**
      * PPC = "ppc"

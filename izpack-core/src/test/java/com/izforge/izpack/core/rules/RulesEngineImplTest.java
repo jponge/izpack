@@ -110,6 +110,25 @@ public class RulesEngineImplTest extends TestCase
     }
     
     @Test
+    public void testSimpleXor() throws Exception {
+        Condition condition = null;
+        
+        condition = engine.getCondition("@false ^ false");
+        assertEquals(false ^ false, condition.isTrue());
+        
+        condition = engine.getCondition("@false ^ true");
+        assertEquals(false ^ true, condition.isTrue());
+
+        condition = engine.getCondition("@true ^ false");
+        assertEquals(true ^ false, condition.isTrue());
+        
+        condition = engine.getCondition("@true ^ true");
+        assertEquals(true ^ true, condition.isTrue());
+    }
+
+    
+    @Test
+
     public void testComplexNot() throws Exception {
         Condition condition = null;
         
@@ -250,8 +269,236 @@ public class RulesEngineImplTest extends TestCase
 
         condition = engine.getCondition("@true && true || true && true");
         assertEquals(true && true || true && true, condition.isTrue());
-        
     }
+
+    @Test
+    public void testComplexXor() throws Exception {
+        Condition condition = null;
+
+        condition = engine.getCondition("@false && false ^ false && false");
+        assertEquals(false && false ^ false && false, condition.isTrue());
+
+        condition = engine.getCondition("@false && false ^ false && true");
+        assertEquals(false && false ^ false && true, condition.isTrue());
+
+        condition = engine.getCondition("@false && false ^ true && false");
+        assertEquals(false && false ^ true && false, condition.isTrue());
+
+        condition = engine.getCondition("@false && false ^ true && true");
+        assertEquals(false && false ^ true && true, condition.isTrue());
+
+        condition = engine.getCondition("@false && true ^ false && false");
+        assertEquals(false && true ^ false && false, condition.isTrue());
+
+        condition = engine.getCondition("@false && true ^ false && false");
+        assertEquals(false && true ^ false && false, condition.isTrue());
+
+        condition = engine.getCondition("@false && true ^ false && true");
+        assertEquals(false && true ^ false && true, condition.isTrue());
+
+        condition = engine.getCondition("@false && true ^ true && false");
+        assertEquals(false && true ^ true && false, condition.isTrue());
+
+        condition = engine.getCondition("@false && true ^ true && true");
+        assertEquals(false && true ^ true && true, condition.isTrue());
+
+        condition = engine.getCondition("@true && false ^ false && false");
+        assertEquals(true && false ^ false && false, condition.isTrue());
+
+        condition = engine.getCondition("@true && false ^ false && true");
+        assertEquals(true && false ^ false && true, condition.isTrue());
+
+        condition = engine.getCondition("@true && false ^ true && false");
+        assertEquals(true && false ^ true && false, condition.isTrue());
+
+        condition = engine.getCondition("@true && false ^ true && true");
+        assertEquals(true && false ^ true && true, condition.isTrue());
+
+        condition = engine.getCondition("@true && true ^ false && false");
+        assertEquals(true && true ^ false && false, condition.isTrue());
+
+        condition = engine.getCondition("@true && true ^ false && false");
+        assertEquals(true && true ^ false && false, condition.isTrue());
+
+        condition = engine.getCondition("@true && true ^ false && true");
+        assertEquals(true && true ^ false && true, condition.isTrue());
+
+        condition = engine.getCondition("@true && true ^ true && false");
+        assertEquals(true && true ^ true && false, condition.isTrue());
+
+        condition = engine.getCondition("@true && true ^ true && true");
+        assertEquals(true && true ^ true && true, condition.isTrue());
+
+        condition = engine.getCondition("@false ^ false && false ^ false");
+        assertEquals(false ^ false && false ^ false, condition.isTrue());
+        
+        condition = engine.getCondition("@false ^ false && false ^ true");
+        assertEquals(false ^ false && false ^ true, condition.isTrue());
+
+        condition = engine.getCondition("@false ^ false && true ^ false");
+        assertEquals(false ^ false && true ^ false, condition.isTrue());
+        
+        condition = engine.getCondition("@false ^ false && true ^ true");
+        assertEquals(false ^ false && true ^ true, condition.isTrue());
+
+        condition = engine.getCondition("@false ^ true && false ^ false");
+        assertEquals(false ^ true && false ^ false, condition.isTrue());
+        
+        condition = engine.getCondition("@false ^ true && false ^ false");
+        assertEquals(false ^ true && false ^ false, condition.isTrue());
+
+        condition = engine.getCondition("@false ^ true && false ^ true");
+        assertEquals(false ^ true && false ^ true, condition.isTrue());
+        
+        condition = engine.getCondition("@false ^ true && true ^ false");
+        assertEquals(false ^ true && true ^ false, condition.isTrue());
+
+        condition = engine.getCondition("@false ^ true && true ^ true");
+        assertEquals(false ^ true && true ^ true, condition.isTrue());
+        
+        condition = engine.getCondition("@true ^ false && false ^ false");
+        assertEquals(true ^ false && false ^ false, condition.isTrue());
+        
+        condition = engine.getCondition("@true ^ false && false ^ true");
+        assertEquals(true ^ false && false ^ true, condition.isTrue());
+
+        condition = engine.getCondition("@true ^ false && true ^ false");
+        assertEquals(true ^ false && true ^ false, condition.isTrue());
+        
+        condition = engine.getCondition("@true ^ false && true ^ true");
+        assertEquals(true ^ false && true ^ true, condition.isTrue());
+
+        condition = engine.getCondition("@true ^ true && false ^ false");
+        assertEquals(true ^ true && false ^ false, condition.isTrue());
+        
+        condition = engine.getCondition("@true ^ true && false ^ false");
+        assertEquals(true ^ true && false ^ false, condition.isTrue());
+
+        condition = engine.getCondition("@true ^ true && false ^ true");
+        assertEquals(true ^ true && false ^ true, condition.isTrue());
+        
+        condition = engine.getCondition("@true ^ true && true ^ false");
+        assertEquals(true ^ true && true ^ false, condition.isTrue());
+
+        condition = engine.getCondition("@true ^ true && true ^ true");
+        assertEquals(true ^ true && true ^ true, condition.isTrue());
+
+    }
+
+    }
+
+    @Test
+    public void testComplexXor() throws Exception {
+        Condition condition = null;
+
+        condition = engine.getCondition("@false && false ^ false && false");
+        assertEquals(false && false ^ false && false, condition.isTrue());
+
+        condition = engine.getCondition("@false && false ^ false && true");
+        assertEquals(false && false ^ false && true, condition.isTrue());
+
+        condition = engine.getCondition("@false && false ^ true && false");
+        assertEquals(false && false ^ true && false, condition.isTrue());
+
+        condition = engine.getCondition("@false && false ^ true && true");
+        assertEquals(false && false ^ true && true, condition.isTrue());
+
+        condition = engine.getCondition("@false && true ^ false && false");
+        assertEquals(false && true ^ false && false, condition.isTrue());
+
+        condition = engine.getCondition("@false && true ^ false && false");
+        assertEquals(false && true ^ false && false, condition.isTrue());
+
+        condition = engine.getCondition("@false && true ^ false && true");
+        assertEquals(false && true ^ false && true, condition.isTrue());
+
+        condition = engine.getCondition("@false && true ^ true && false");
+        assertEquals(false && true ^ true && false, condition.isTrue());
+
+        condition = engine.getCondition("@false && true ^ true && true");
+        assertEquals(false && true ^ true && true, condition.isTrue());
+
+        condition = engine.getCondition("@true && false ^ false && false");
+        assertEquals(true && false ^ false && false, condition.isTrue());
+
+        condition = engine.getCondition("@true && false ^ false && true");
+        assertEquals(true && false ^ false && true, condition.isTrue());
+
+        condition = engine.getCondition("@true && false ^ true && false");
+        assertEquals(true && false ^ true && false, condition.isTrue());
+
+        condition = engine.getCondition("@true && false ^ true && true");
+        assertEquals(true && false ^ true && true, condition.isTrue());
+
+        condition = engine.getCondition("@true && true ^ false && false");
+        assertEquals(true && true ^ false && false, condition.isTrue());
+
+        condition = engine.getCondition("@true && true ^ false && false");
+        assertEquals(true && true ^ false && false, condition.isTrue());
+
+        condition = engine.getCondition("@true && true ^ false && true");
+        assertEquals(true && true ^ false && true, condition.isTrue());
+
+        condition = engine.getCondition("@true && true ^ true && false");
+        assertEquals(true && true ^ true && false, condition.isTrue());
+
+        condition = engine.getCondition("@true && true ^ true && true");
+        assertEquals(true && true ^ true && true, condition.isTrue());
+
+        condition = engine.getCondition("@false ^ false && false ^ false");
+        assertEquals(false ^ false && false ^ false, condition.isTrue());
+        
+        condition = engine.getCondition("@false ^ false && false ^ true");
+        assertEquals(false ^ false && false ^ true, condition.isTrue());
+
+        condition = engine.getCondition("@false ^ false && true ^ false");
+        assertEquals(false ^ false && true ^ false, condition.isTrue());
+        
+        condition = engine.getCondition("@false ^ false && true ^ true");
+        assertEquals(false ^ false && true ^ true, condition.isTrue());
+
+        condition = engine.getCondition("@false ^ true && false ^ false");
+        assertEquals(false ^ true && false ^ false, condition.isTrue());
+        
+        condition = engine.getCondition("@false ^ true && false ^ false");
+        assertEquals(false ^ true && false ^ false, condition.isTrue());
+
+        condition = engine.getCondition("@false ^ true && false ^ true");
+        assertEquals(false ^ true && false ^ true, condition.isTrue());
+        
+        condition = engine.getCondition("@false ^ true && true ^ false");
+        assertEquals(false ^ true && true ^ false, condition.isTrue());
+
+        condition = engine.getCondition("@false ^ true && true ^ true");
+        assertEquals(false ^ true && true ^ true, condition.isTrue());
+        
+        condition = engine.getCondition("@true ^ false && false ^ false");
+        assertEquals(true ^ false && false ^ false, condition.isTrue());
+        
+        condition = engine.getCondition("@true ^ false && false ^ true");
+        assertEquals(true ^ false && false ^ true, condition.isTrue());
+
+        condition = engine.getCondition("@true ^ false && true ^ false");
+        assertEquals(true ^ false && true ^ false, condition.isTrue());
+        
+        condition = engine.getCondition("@true ^ false && true ^ true");
+        assertEquals(true ^ false && true ^ true, condition.isTrue());
+
+        condition = engine.getCondition("@true ^ true && false ^ false");
+        assertEquals(true ^ true && false ^ false, condition.isTrue());
+        
+        condition = engine.getCondition("@true ^ true && false ^ false");
+        assertEquals(true ^ true && false ^ false, condition.isTrue());
+
+        condition = engine.getCondition("@true ^ true && false ^ true");
+        assertEquals(true ^ true && false ^ true, condition.isTrue());
+        
+        condition = engine.getCondition("@true ^ true && true ^ false");
+        assertEquals(true ^ true && true ^ false, condition.isTrue());
+
+        condition = engine.getCondition("@true ^ true && true ^ true");
+        assertEquals(true ^ true && true ^ true, condition.isTrue());
+
 }
 
 

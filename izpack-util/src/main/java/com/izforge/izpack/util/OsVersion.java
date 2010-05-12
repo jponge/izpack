@@ -50,11 +50,17 @@ public final class OsVersion implements OsVersionConstants, StringConstants
     public static final String OS_VERSION = System.getProperty(OSVERSION);
 
     /**
-     * True if the processor is in the Intel x86 family.
+     * True if the processor is in the Intel x86 family. Also true if you're running
+     * a x86 JVM on an amd64 CPU. 
      */
     public static final boolean IS_X86 = StringTool.startsWithIgnoreCase(OS_ARCH, X86) ||
             StringTool.startsWithIgnoreCase(OS_ARCH, I386);
 
+    /**
+     * True if the processor is in the AMD64 family AND you're running an x64 JVM.
+     */
+    public static final boolean IS_X64 = StringTool.startsWithIgnoreCase(OS_ARCH, X64) ||
+            StringTool.startsWithIgnoreCase(OS_ARCH, AMD64);
     /**
      * True if the processor is in the PowerPC family.
      */
