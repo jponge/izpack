@@ -831,22 +831,28 @@ public class CompilerConfig extends Thread
             {
                 try
                 {
-                    String[] includedFiles = fs.getDirectoryScanner().getIncludedFiles();
-                    if (includedFiles != null)
+                    String[][] includedFilesAndDirs = new String[][] {
+                            fs.getDirectoryScanner().getIncludedDirectories(),
+                            fs.getDirectoryScanner().getIncludedFiles()
+                    };
+                    for (String[] filesOrDirs : includedFilesAndDirs)
                     {
-                        for (String filePath : includedFiles)
+                        if (filesOrDirs != null)
                         {
-                            try
+                            for (String filePath : filesOrDirs)
                             {
-                                File file = new File(fs.getDir(), filePath);
-                                String target = new File(fs.getTargetDir(), filePath).getPath();
-                                pack.addFile(baseDir, file, target, fs.getOsList(), fs
-                                        .getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(), fs.getAdditionals(), fs
-                                        .getCondition());
-                            }
-                            catch (FileNotFoundException x)
-                            {
-                                assertionHelper.parseError(packElement, x.getMessage(), x);
+                                try
+                                {
+                                    File file = new File(fs.getDir(), filePath);
+                                    String target = new File(fs.getTargetDir(), filePath).getPath();
+                                    pack.addFile(baseDir, file, target, fs.getOsList(), fs
+                                            .getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(), fs.getAdditionals(), fs
+                                            .getCondition());
+                                }
+                                catch (FileNotFoundException x)
+                                {
+                                    assertionHelper.parseError(packElement, x.getMessage(), x);
+                                }
                             }
                         }
                     }

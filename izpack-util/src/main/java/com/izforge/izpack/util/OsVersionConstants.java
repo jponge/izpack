@@ -169,6 +169,11 @@ public interface OsVersionConstants
      * DEBIAN = "Debian"
      */
     public final static String DEBIAN = "Debian";
+    
+    /**
+     * UBUNTU = "Ubuntu"
+     */
+    public final static String UBUNTU = "Ubuntu";
 
     /**
      * PROC_VERSION = "/proc/version"

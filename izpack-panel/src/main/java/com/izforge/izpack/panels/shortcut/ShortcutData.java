@@ -26,7 +26,7 @@ package com.izforge.izpack.panels.shortcut;
 /**
  * This class serves as a installDataGUI structure in
  * <code>{@link com.izforge.izpack.panels.shortcut.ShortcutPanel}</code>
- *
+ * 
  * @author Elmar Grom
  * @version 0.0.1 / 4/1/02
  */
@@ -86,16 +86,16 @@ public class ShortcutData implements Cloneable
 
     public Boolean createForAll;
 
-
     /*--------------------------------------------------------------------------*/
 
     /**
      * Returns a clone (copy) of this object.
-     *
+     * 
      * @return a copy of this object
      * @throws OutOfMemoryError
      */
     /*--------------------------------------------------------------------------*/
+    @Override
     public ShortcutData clone() throws OutOfMemoryError
     {
         ShortcutData result = new ShortcutData();
@@ -125,17 +125,17 @@ public class ShortcutData implements Cloneable
         result.Categories = cloneString(Categories);
         result.TryExec = cloneString(TryExec);
 
-        result.createForAll = createForAll;
+        result.createForAll = Boolean.valueOf(createForAll.booleanValue());
         return (result);
     }
 
     /*--------------------------------------------------------------------------*/
 
     /**
-     * Clones a <code>String</code>, that is it makes a copy of the content, not of the
-     * reference. In addition, if the original is <code>null</code> then an empty
-     * <code>String</code> is returned rather than <code>null</code>.
-     *
+     * Clones a <code>String</code>, that is it makes a copy of the content, not of the reference.
+     * In addition, if the original is <code>null</code> then an empty <code>String</code> is
+     * returned rather than <code>null</code>.
+     * 
      * @param original the <code>String</code> to clone
      * @return a clone of the original
      */
