@@ -15,8 +15,7 @@ import java.util.zip.ZipFile;
  *
  * @author Anthonin Bonnefoy
  */
-public class ResolveUtils
-{
+public class ResolveUtils {
     public static final String CLASSNAME_PREFIX = "com.izforge.izpack.panels";
     public static final String BASE_CLASSNAME_PATH = CLASSNAME_PREFIX.replaceAll("\\.", "/") + "/";
 
@@ -26,71 +25,57 @@ public class ResolveUtils
      * @param url url to test. If it is a jar content, the jar file is extracted and treated as a jar
      * @return true if the file is a jar
      */
-    public static boolean isJar(URL url)
-    {
+    public static boolean isJar(URL url) {
         String file = url.getFile();
         file = file.substring(file.indexOf(":") + 1);
-        if (file.contains("!"))
-        {
+        if (file.contains("!")) {
             file = file.substring(0, file.lastIndexOf('!'));
         }
         File classFile = new File(file);
         return isJar(classFile);
     }
 
-    public static boolean isJar(File classFile)
-    {
+    public static boolean isJar(File classFile) {
         ZipFile zipFile = null;
-        try
-        {
+        try {
             zipFile = new ZipFile(classFile);
             zipFile.getName();
         }
-        catch (IOException e)
-        {
+        catch (IOException e) {
             return false;
         }
-        finally
-        {
-            if (zipFile != null)
-            {
-                try
-                {
+        finally {
+            if (zipFile != null) {
+                try {
                     zipFile.close();
                 }
-                catch (IOException ignored)
-                {
+                catch (IOException ignored) {
                 }
             }
         }
         return true;
     }
 
-    public static String getCurrentClasspath()
-    {
+    public static String getCurrentClasspath() {
         StringBuilder stringBuilder = new StringBuilder();
-        for (URL url : getClassPathUrl())
-        {
+        for (URL url : getClassPathUrl()) {
             stringBuilder.append(url.getPath());
             stringBuilder.append('\n');
         }
         return stringBuilder.toString();
     }
 
-    static Collection<URL> getClassPathUrl()
-    {
+    static Collection<URL> getClassPathUrl() {
         Collection<URL> result = new HashSet<URL>();
         java.net.URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
         result.addAll(Arrays.asList(loader.getURLs()));
-        try
-        {
+        try {
             Enumeration<URL> urlEnumeration = loader.getResources("");
             result.addAll(Collections.list(urlEnumeration));
             urlEnumeration = loader.getResources("META-INF/");
             result.addAll(Collections.list(urlEnumeration));
         }
-        catch (IOException ignored)
-        {
+        catch (IOException ignored) {
         }
         return result;
     }
@@ -102,36 +87,29 @@ public class ResolveUtils
      * @param path The path of File to load.
      * @return The file or null if nothing found.
      */
-    public static URL getFileFromPath(String path)
-    {
-        try
-        {
+    public static URL getFileFromPath(String path) {
+        try {
             File file = new File(path);
-            if (file.exists())
-            {
+            if (file.exists()) {
                 return file.toURI().toURL();
             }
         }
-        catch (MalformedURLException e)
-        {
+        catch (MalformedURLException e) {
             throw new IzPackException(e);
         }
         return null;
     }
 
-    public static String processUrlToJarPath(URL resource)
-    {
+    public static String processUrlToJarPath(URL resource) {
         String res = resource.getPath();
         res = res.replaceAll("file:", "");
-        if (res.contains("!"))
-        {
+        if (res.contains("!")) {
             return res.substring(0, res.lastIndexOf("!"));
         }
         return res;
     }
 
-    public static String processUrlToJarPackage(URL resource)
-    {
+    public static String processUrlToJarPackage(URL resource) {
         String res = resource.getPath();
         res = res.replaceAll("file:", "");
         res = res.substring(res.lastIndexOf("!") + 1);
@@ -147,17 +125,18 @@ public class ResolveUtils
      * @param className className to process.
      * @return Extracted package from classname or the default package
      */
-    public static String getPanelsPackagePathFromClassName(String className)
-    {
-        if (className.contains("."))
-        {
+    public static String getPanelsPackagePathFromClassName(String className) {
+        if (className.contains(".")) {
             return className.substring(0, className.lastIndexOf(".")).replaceAll("\\.", "/") + "/";
         }
         return BASE_CLASSNAME_PATH;
     }
 
-    public static boolean isFile(URL url)
-    {
+    public static boolean isFile(URL url) {
         return !new File(url.getFile()).isDirectory();
+    }
+
+    public static String getAbsolutePosixPath(File fileToCopy) {
+        return fileToCopy.getAbsolutePath().replaceAll("\\\\", "/");
     }
 }

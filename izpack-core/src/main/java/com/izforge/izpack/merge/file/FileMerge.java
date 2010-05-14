@@ -2,6 +2,7 @@ package com.izforge.izpack.merge.file;
 
 import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.merge.AbstractMerge;
+import com.izforge.izpack.merge.resolve.ResolveUtils;
 import com.izforge.izpack.util.IoHelper;
 import org.apache.tools.zip.ZipOutputStream;
 
@@ -138,20 +139,16 @@ public class FileMerge extends AbstractMerge {
         if (isFile(destination)) {
             return destination;
         }
-        String path = this.getAbsolutePosixPath(fileToCopy);
+        String path = ResolveUtils.getAbsolutePosixPath(fileToCopy);
         if (destination.equals("")) {
-            path = getAbsolutePosixPath(this.fileToCopy.getParentFile());
+            path = ResolveUtils.getAbsolutePosixPath(this.fileToCopy.getParentFile());
         }
         path = path + '/';
         StringBuilder builder = new StringBuilder();
         builder.append(destination);
-        String absolutePath = getAbsolutePosixPath(fileToCopy);
+        String absolutePath = ResolveUtils.getAbsolutePosixPath(fileToCopy);
         builder.append(absolutePath.replaceAll(path, ""));
         return builder.toString().replaceAll("//", "/");
-    }
-
-    private String getAbsolutePosixPath(File fileToCopy) {
-        return fileToCopy.getAbsolutePath().replaceAll("\\\\", "/");
     }
 
     private boolean isFile(String destination) {
