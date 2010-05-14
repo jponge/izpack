@@ -139,14 +139,14 @@ public class FileMerge extends AbstractMerge {
         if (isFile(destination)) {
             return destination;
         }
-        String path = ResolveUtils.getAbsolutePosixPath(fileToCopy);
+        String path = ResolveUtils.convertPathToPosixPath(fileToCopy.getAbsolutePath());
         if (destination.equals("")) {
-            path = ResolveUtils.getAbsolutePosixPath(this.fileToCopy.getParentFile());
+            path = ResolveUtils.convertPathToPosixPath(fileToCopy.getParentFile().getAbsolutePath());
         }
         path = path + '/';
         StringBuilder builder = new StringBuilder();
         builder.append(destination);
-        String absolutePath = ResolveUtils.getAbsolutePosixPath(fileToCopy);
+        String absolutePath = ResolveUtils.convertPathToPosixPath(fileToCopy.getAbsolutePath());
         builder.append(absolutePath.replaceAll(path, ""));
         return builder.toString().replaceAll("//", "/");
     }

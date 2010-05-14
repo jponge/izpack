@@ -136,7 +136,8 @@ public class ResolveUtils {
         return !new File(url.getFile()).isDirectory();
     }
 
-    public static String getAbsolutePosixPath(File fileToCopy) {
-        return fileToCopy.getAbsolutePath().replaceAll("\\\\", "/");
+    public static String convertPathToPosixPath(String path) {
+        return path.replaceAll("\\\\", "/");
     }
+
 }
