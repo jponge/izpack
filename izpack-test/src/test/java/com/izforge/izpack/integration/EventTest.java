@@ -21,6 +21,5 @@ public class EventTest
     @InstallFile("samples/event/event.xml")
     public void eventInitialization() throws Exception
     {
-
     }
 }

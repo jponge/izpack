@@ -7,6 +7,7 @@ import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.ConditionContainer;
+import com.izforge.izpack.core.container.filler.EventFiller;
 import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
@@ -63,6 +64,7 @@ public class InstallerContainer extends AbstractContainer
                 .addComponent(ConsoleInstaller.class)
                 .addComponent(UninstallDataWriter.class)
                 .addComponent(AutomatedInstaller.class)
+                .addComponent(EventFiller.class)
                 .addComponent(BindeableContainer.class, this);
 
         new ResolverContainerFiller().fillContainer(pico);
@@ -86,8 +88,11 @@ public class InstallerContainer extends AbstractContainer
                 .addConfig("frame", initFrame());
         pico
                 .addComponent(IUnpacker.class, unpackerclass)
-                .as(Characteristics.USE_NAMES).addComponent(InstallerFrame.class)
+                .addComponent(InstallerFrame.class)
                 .as(Characteristics.USE_NAMES).addComponent(LanguageDialog.class);
+
+        // Load custom data in last position
+        pico.getComponent(EventFiller.class).loadCustomData();
     }
 
 

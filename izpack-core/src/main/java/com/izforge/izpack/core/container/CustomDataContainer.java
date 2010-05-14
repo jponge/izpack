@@ -1,6 +1,5 @@
-package com.izforge.izpack.installer.container.impl;
+package com.izforge.izpack.core.container;
 
-import com.izforge.izpack.core.container.AbstractContainer;
 import org.picocontainer.MutablePicoContainer;
 
 /**

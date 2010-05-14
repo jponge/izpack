@@ -3,7 +3,7 @@ package com.izforge.izpack.installer.container.provider;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.installer.container.impl.CustomDataContainer;
+import com.izforge.izpack.core.container.CustomDataContainer;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
 
@@ -26,7 +26,7 @@ public class AutomatedInstallDataProvider extends AbstractInstallDataProvider
             // Loads the installation data
             loadInstallData(automatedInstallData);
             // Load custom action data.
-            loadCustomData(automatedInstallData, customDataContainer, pathResolver);
+//            loadCustomData(automatedInstallData, customDataContainer, pathResolver);
 
             // Load custom langpack if exist.
             addCustomLangpack(automatedInstallData);

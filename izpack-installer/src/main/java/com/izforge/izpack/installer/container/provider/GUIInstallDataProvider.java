@@ -40,7 +40,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         // Loads the installation data
         loadInstallData(guiInstallData);
         // Load custom action data.
-        loadCustomData(guiInstallData, container, pathResolver);
+//        loadCustomData(guiInstallData, container, pathResolver);
 
         loadGUIInstallData(guiInstallData);
         loadInstallerRequirements(guiInstallData);
