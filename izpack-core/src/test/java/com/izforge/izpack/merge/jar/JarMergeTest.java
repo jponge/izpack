@@ -5,6 +5,7 @@ import com.izforge.izpack.core.container.TestMergeContainer;
 import com.izforge.izpack.matcher.MergeMatcher;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
+import com.izforge.izpack.merge.resolve.ResolveUtils;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.junit.PicoRunner;
 import org.hamcrest.core.Is;
@@ -27,20 +28,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 @RunWith(PicoRunner.class)
 @Container(TestMergeContainer.class)
-public class JarMergeTest
-{
+public class JarMergeTest {
     private PathResolver pathResolver;
     private MergeableResolver mergeableResolver;
 
-    public JarMergeTest(PathResolver pathResolver, MergeableResolver mergeableResolver)
-    {
+    public JarMergeTest(PathResolver pathResolver, MergeableResolver mergeableResolver) {
         this.pathResolver = pathResolver;
         this.mergeableResolver = mergeableResolver;
     }
 
     @Test
-    public void testAddJarContent() throws Exception
-    {
+    public void testAddJarContent() throws Exception {
         URL resource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
         Mergeable jarMerge = mergeableResolver.getMergeableFromURL(resource);
         assertThat(jarMerge, MergeMatcher.isMergeableContainingFiles("jar/izforge/izpack/panels/hello/HelloPanel.class")
@@ -48,8 +46,7 @@ public class JarMergeTest
     }
 
     @Test
-    public void testMergeClassFromJarFile() throws Exception
-    {
+    public void testMergeClassFromJarFile() throws Exception {
         List<Mergeable> jarMergeList = pathResolver.getMergeableFromPath("org/fest/assertions/Assert.class");
 
         assertThat(jarMergeList.size(), Is.is(1));
@@ -61,8 +58,7 @@ public class JarMergeTest
 
 
     @Test
-    public void testMergeJarFoundDynamicallyLoaded() throws Exception
-    {
+    public void testMergeJarFoundDynamicallyLoaded() throws Exception {
         URL urlJar = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
         URLClassLoader loader = URLClassLoader.newInstance(new URL[]{urlJar}, ClassLoader.getSystemClassLoader());
 
@@ -73,33 +69,27 @@ public class JarMergeTest
 
 
     @Test
-    public void testFindPanelInJar() throws Exception
-    {
+    public void testFindPanelInJar() throws Exception {
         URL resource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/izpack-panel-5.0.0-SNAPSHOT.jar");
         Mergeable jarMerge = mergeableResolver.getMergeableFromURL(resource);
-        File file = jarMerge.find(new FileFilter()
-        {
-            public boolean accept(File pathname)
-            {
+        File file = jarMerge.find(new FileFilter() {
+            public boolean accept(File pathname) {
                 return pathname.isDirectory() ||
                         pathname.getName().replaceAll(".class", "").equalsIgnoreCase("CheckedHelloPanel");
             }
         });
-        assertThat(file.getAbsolutePath(), StringContains.containsString("com/izforge/izpack/panels/checkedhello/CheckedHelloPanel.class"));
+        assertThat(ResolveUtils.convertPathToPosixPath(file.getAbsolutePath()), StringContains.containsString("com/izforge/izpack/panels/checkedhello/CheckedHelloPanel.class"));
     }
 
 
     @Test
-    public void testFindFileInJarFoundWithURL() throws Exception
-    {
+    public void testFindFileInJarFoundWithURL() throws Exception {
         URL urlJar = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
         URLClassLoader loader = URLClassLoader.newInstance(new URL[]{urlJar}, ClassLoader.getSystemClassLoader());
 
         Mergeable jarMerge = mergeableResolver.getMergeableFromURL(loader.getResource("jar/izforge"));
-        File file = jarMerge.find(new FileFilter()
-        {
-            public boolean accept(File pathname)
-            {
+        File file = jarMerge.find(new FileFilter() {
+            public boolean accept(File pathname) {
                 return pathname.getName().matches(".*HelloPanel\\.class") || pathname.isDirectory();
             }
         });
