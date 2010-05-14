@@ -1,6 +1,7 @@
 package com.izforge.izpack.merge;
 
 import com.izforge.izpack.api.exception.MergeException;
+import com.izforge.izpack.merge.resolve.ResolveUtils;
 
 import java.io.File;
 import java.net.URL;
@@ -12,8 +13,7 @@ import java.util.List;
  *
  * @author Anthonin Bonnefoy
  */
-public class ClassResolver
-{
+public class ClassResolver {
     public static final List<String> packageBegin = Arrays.asList("com/", "org/", "net/");
 
     /**
@@ -22,13 +22,10 @@ public class ClassResolver
      * @param file File to process
      * @return Full className
      */
-    public static String processFileToClassName(File file)
-    {
-        String absolutePath = file.getAbsolutePath();
-        for (String packageString : packageBegin)
-        {
-            if (!absolutePath.contains(packageString))
-            {
+    public static String processFileToClassName(File file) {
+        String absolutePath = ResolveUtils.convertPathToPosixPath(file.getAbsolutePath());
+        for (String packageString : packageBegin) {
+            if (!absolutePath.contains(packageString)) {
                 continue;
             }
             return absolutePath.substring(absolutePath.lastIndexOf(packageString)).replaceAll("\\.class", "").replaceAll("/", ".");
@@ -36,13 +33,11 @@ public class ClassResolver
         throw new MergeException("No standard package begin found in " + file.getPath());
     }
 
-    public static String processURLToClassName(URL url)
-    {
+    public static String processURLToClassName(URL url) {
         return processFileToClassName(new File(url.getFile()));
     }
 
-    public static boolean isFullClassName(String className)
-    {
+    public static boolean isFullClassName(String className) {
         return className.contains(".");
     }
 }
