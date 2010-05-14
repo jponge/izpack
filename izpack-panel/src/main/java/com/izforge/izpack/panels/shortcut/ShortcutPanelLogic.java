@@ -398,7 +398,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
      */
     public String getSuggestedProgramGroup()
     {
-        return suggestedProgramGroup;
+        return variableSubstitutor.substitute(suggestedProgramGroup, null);
     }
 
     /**
