@@ -305,7 +305,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         VariableSubstitutor variableSubstitutor = new VariableSubstitutorImpl(idata.getVariables());
         try
         {
-            System.out.println(variableSubstitutor.substitute(input.strText, null));
+            System.out.println(variableSubstitutor.substitute(input.strText));
         }
         catch (Exception e)
         {
@@ -364,7 +364,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
             try
             {
-                set = vs.substitute(set, null);
+                set = vs.substitute(set);
             }
             catch (Exception e)
             {
@@ -445,7 +445,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     if (set != null && !"".equals(set))
                     {
                         VariableSubstitutor variableSubstitutor = new VariableSubstitutorImpl(idata.getVariables());
-                        set = variableSubstitutor.substitute(set, null);
+                        set = variableSubstitutor.substitute(set);
                     }
                     if (set.equals(TRUE))
                     {
@@ -534,7 +534,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                         VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
                         try
                         {
-                            set = vs.substitute(set, null);
+                            set = vs.substitute(set);
                         }
                         catch (Exception e)
                         {
@@ -742,7 +742,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     if (set != null && !"".equals(set))
                     {
                         VariableSubstitutor variableSubstitutor = new VariableSubstitutorImpl(idata.getVariables());
-                        set = variableSubstitutor.substitute(set, null);
+                        set = variableSubstitutor.substitute(set);
                     }
 
                     StringTokenizer tokenizer = new StringTokenizer(choiceValues, ":");
@@ -776,7 +776,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                         {
                             VariableSubstitutor variableSubstitutor = new VariableSubstitutorImpl(idata
                                     .getVariables());
-                            set = variableSubstitutor.substitute(set, null);
+                            set = variableSubstitutor.substitute(set);
                         }
                         if (set.equalsIgnoreCase(TRUE))
                         {
