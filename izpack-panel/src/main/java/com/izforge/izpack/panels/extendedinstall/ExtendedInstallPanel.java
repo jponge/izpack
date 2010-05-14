@@ -24,6 +24,7 @@ package com.izforge.izpack.panels.extendedinstall;
 import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.panels.install.InstallPanel;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 
@@ -42,12 +43,13 @@ public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProg
     /**
      * The constructor.
      *
-     * @param parent The parent window.
-     * @param idata  The installation installDataGUI.
+     * @param unpacker
+     * @param parent   The parent window.
+     * @param idata    The installation installDataGUI.
      */
-    public ExtendedInstallPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    public ExtendedInstallPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, IUnpacker unpacker)
     {
-        super(parent, idata, resourceManager);
+        super(parent, idata, resourceManager, unpacker);
     }
 
     /*

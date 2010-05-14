@@ -72,7 +72,7 @@ public class EventFiller
         }
         catch (ClassNotFoundException e)
         {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new IzPackException("Error when reading custom data (events)", e);
         }
 
     }

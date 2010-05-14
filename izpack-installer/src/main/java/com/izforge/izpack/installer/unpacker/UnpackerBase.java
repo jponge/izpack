@@ -113,15 +113,13 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
      * The constructor.
      *
      * @param idata               The installation data.
-     * @param handler             The installation progress handler.
      * @param rules
      * @param variableSubstitutor
      * @param udata
      */
-    public UnpackerBase(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata)
+    public UnpackerBase(AutomatedInstallData idata, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata)
     {
         this.idata = idata;
-        this.handler = handler;
         this.resourceManager = resourceManager;
         this.rules = rules;
         // Initialize the variable substitutor
@@ -627,6 +625,12 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
         return
                 (pf.blockable() != Blockable.BLOCKABLE_NONE)
                         && (OsVersion.IS_WINDOWS);
+    }
+
+    @Override
+    public void setHandler(AbstractUIProgressHandler handler)
+    {
+        this.handler = handler;
     }
 }
 

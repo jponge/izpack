@@ -26,7 +26,6 @@ import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.data.ExecutableFile;
@@ -64,12 +63,11 @@ public class Unpacker extends UnpackerBase
      *
      * @param variableSubstitutor
      * @param udata
-     * @param idata                     The installation data.
-     * @param abstractUIProgressHandler The installation progress abstractUIProgressHandler.
+     * @param idata               The installation data.
      */
-    public Unpacker(AutomatedInstallData idata, ResourceManager resourceManager, AbstractUIProgressHandler abstractUIProgressHandler, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata)
+    public Unpacker(AutomatedInstallData idata, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata)
     {
-        super(idata, abstractUIProgressHandler, resourceManager, rules, variableSubstitutor, udata);
+        super(idata, resourceManager, rules, variableSubstitutor, udata);
     }
 
     /* (non-Javadoc)

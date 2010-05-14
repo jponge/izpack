@@ -30,6 +30,7 @@ import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.unpacker.IUnpacker;
 
 import javax.swing.*;
 import java.awt.*;
@@ -116,6 +117,8 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
      */
     private int noOfJobs;
 
+    private IUnpacker unpacker;
+
     /**
      * The constructor.
      *
@@ -124,10 +127,10 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
      * @param idata               The installation installDataGUI.
      * @throws IOException
      */
-    public CompilePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, VariableSubstitutor variableSubstitutor) throws IOException
+    public CompilePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, VariableSubstitutor variableSubstitutor, IUnpacker unpacker) throws IOException
     {
         super(parent, idata, resourceManager);
-
+        unpacker.setHandler(this);
         this.worker = new CompileWorker(idata, this, variableSubstitutor);
 
         GridBagConstraints gridBagConstraints;

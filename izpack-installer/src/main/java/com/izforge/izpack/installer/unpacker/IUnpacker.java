@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.installer.unpacker;
 
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.rules.RulesEngine;
 
 public interface IUnpacker extends Runnable
@@ -40,4 +41,5 @@ public interface IUnpacker extends Runnable
      */
     public void setRules(RulesEngine rules);
 
+    void setHandler(AbstractUIProgressHandler handler);
 }
