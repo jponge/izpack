@@ -25,8 +25,7 @@ import java.util.*;
 /**
  * Abstract class sharing commons instanciation methods beetween installData
  */
-public abstract class AbstractInstallDataProvider implements Provider
-{
+public abstract class AbstractInstallDataProvider implements Provider {
     /**
      * The base name of the XML file that specifies the custom langpack. Searched is for the file
      * with the name expanded by _ISO3.
@@ -45,8 +44,7 @@ public abstract class AbstractInstallDataProvider implements Provider
      * @param installdata Where to store the installation data.
      * @throws Exception Description of the Exception
      */
-    protected void loadInstallData(AutomatedInstallData installdata) throws IOException, ClassNotFoundException, InstallerException
-    {
+    protected void loadInstallData(AutomatedInstallData installdata) throws IOException, ClassNotFoundException, InstallerException {
         // We load the variables
         Properties variables = (Properties) readObject("vars");
 
@@ -55,13 +53,11 @@ public abstract class AbstractInstallDataProvider implements Provider
 
         // We put the Info data as variables
         installdata.setVariable(ScriptParserConstant.APP_NAME, info.getAppName());
-        if (info.getAppURL() != null)
-        {
+        if (info.getAppURL() != null) {
             installdata.setVariable(ScriptParserConstant.APP_URL, info.getAppURL());
         }
         installdata.setVariable(ScriptParserConstant.APP_VER, info.getAppVersion());
-        if (info.getUninstallerCondition() != null)
-        {
+        if (info.getUninstallerCondition() != null) {
             installdata.setVariable("UNINSTALLER_CONDITION", info.getUninstallerCondition());
         }
 
@@ -69,8 +65,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         // Set the installation path in a default manner
         String dir = getDir();
         String installPath = dir + info.getAppName();
-        if (info.getInstallationSubPath() != null)
-        { // A subpath was defined, use it.
+        if (info.getInstallationSubPath() != null) { // A subpath was defined, use it.
             installPath = IoHelper.translatePath(dir + info.getInstallationSubPath(),
                     variableSubstitutor);
         }
@@ -87,12 +82,10 @@ public abstract class AbstractInstallDataProvider implements Provider
         List<Pack> availablePacks = new ArrayList<Pack>();
         List<Pack> allPacks = new ArrayList<Pack>();
 
-        for (int i = 0; i < size; i++)
-        {
+        for (int i = 0; i < size; i++) {
             Pack pack = (Pack) objIn.readObject();
             allPacks.add(pack);
-            if (OsConstraintHelper.oneMatchesCurrentSystem(pack.osConstraints))
-            {
+            if (OsConstraintHelper.oneMatchesCurrentSystem(pack.osConstraints)) {
                 availablePacks.add(pack);
             }
         }
@@ -102,8 +95,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         String hostname;
         String IPAddress;
 
-        try
-        {
+        try {
             InetAddress addr = InetAddress.getLocalHost();
 
             // Get IP Address
@@ -112,8 +104,7 @@ public abstract class AbstractInstallDataProvider implements Provider
             // Get hostname
             hostname = addr.getHostName();
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             hostname = "";
             IPAddress = "";
         }
@@ -129,24 +120,20 @@ public abstract class AbstractInstallDataProvider implements Provider
         installdata.setVariable(ScriptParserConstant.FILE_SEPARATOR, File.separator);
 
         Enumeration systemProperties = System.getProperties().keys();
-        while (systemProperties.hasMoreElements())
-        {
+        while (systemProperties.hasMoreElements()) {
             String varName = (String) systemProperties.nextElement();
             String varValue = System.getProperty(varName);
-            if (varValue != null)
-            {
+            if (varValue != null) {
                 varName = varName.replace('.', '_');
                 installdata.setVariable("SYSTEM_" + varName, varValue);
             }
         }
 
-        if (null != variables)
-        {
+        if (null != variables) {
             Enumeration enumeration = variables.keys();
             String varName;
             String varValue;
-            while (enumeration.hasMoreElements())
-            {
+            while (enumeration.hasMoreElements()) {
                 varName = (String) enumeration.nextElement();
                 varValue = variables.getProperty(varName);
                 installdata.setVariable(varName, varValue);
@@ -158,10 +145,8 @@ public abstract class AbstractInstallDataProvider implements Provider
         installdata.setAllPacks(allPacks);
 
         // get list of preselected packs
-        for (Pack availablePack : availablePacks)
-        {
-            if (availablePack.preselected)
-            {
+        for (Pack availablePack : availablePacks) {
+            if (availablePack.preselected) {
                 installdata.getSelectedPacks().add(availablePack);
             }
         }
@@ -174,15 +159,12 @@ public abstract class AbstractInstallDataProvider implements Provider
      *
      * @param idata install data to be used
      */
-    protected void addCustomLangpack(AutomatedInstallData idata)
-    {
+    protected void addCustomLangpack(AutomatedInstallData idata) {
         // We try to load and add a custom langpack.
-        try
-        {
+        try {
             idata.getLangpack().add(resourceManager.getInputStream(LANG_FILE_NAME));
         }
-        catch (Throwable exception)
-        {
+        catch (Throwable exception) {
             Debug.trace("No custom langpack available.");
             return;
         }
@@ -196,18 +178,14 @@ public abstract class AbstractInstallDataProvider implements Provider
      * @param bindeableContainer
      * @throws Exception
      */
-    protected void loadCustomData(AutomatedInstallData installdata, BindeableContainer bindeableContainer, PathResolver pathResolver) throws IOException, InstallerException, ClassNotFoundException
-    {
+    protected void loadCustomData(AutomatedInstallData installdata, BindeableContainer bindeableContainer, PathResolver pathResolver) throws IOException, InstallerException, ClassNotFoundException {
         IzpackProjectInstaller izpackModel = (IzpackProjectInstaller) readObject("izpackInstallModel");
         List<InstallerListener> customActions = new ArrayList<InstallerListener>();
-        for (Listener listener : izpackModel.getListeners())
-        {
-            if (!OsConstraintHelper.oneMatchesCurrentSystem(listener.getOs()))
-            {
+        for (Listener listener : izpackModel.getListeners()) {
+            if (!OsConstraintHelper.oneMatchesCurrentSystem(listener.getOs())) {
                 continue;
             }
-            switch (listener.getStage())
-            {
+            switch (listener.getStage()) {
                 case install:
                     Class aClass = classPathCrawler.searchClassInClassPath(listener.getClassname());
                     bindeableContainer.addComponent(aClass);
@@ -221,26 +199,17 @@ public abstract class AbstractInstallDataProvider implements Provider
 
     }
 
-    private String getDir()
-    {
+    private String getDir() {
         // We determine the operating system and the initial installation path
         String dir;
-        if (OsVersion.IS_WINDOWS)
-        {
+        if (OsVersion.IS_WINDOWS) {
             dir = buildWindowsDefaultPath();
-        }
-        else if (OsVersion.IS_OSX)
-        {
+        } else if (OsVersion.IS_OSX) {
             dir = "/Applications/";
-        }
-        else
-        {
-            if (new File("/usr/local/").canWrite())
-            {
-                dir = "/usr/local";
-            }
-            else
-            {
+        } else {
+            if (new File("/usr/local/").canWrite()) {
+                dir = "/usr/local/";
+            } else {
                 dir = System.getProperty("user.home") + File.separatorChar;
             }
         }
@@ -254,23 +223,17 @@ public abstract class AbstractInstallDataProvider implements Provider
      *
      * @return The Windows default installation path for applications.
      */
-    private String buildWindowsDefaultPath()
-    {
-        try
-        {
+    private String buildWindowsDefaultPath() {
+        try {
             //get value from environment...
             String prgFilesPath = IoHelper.getenv("ProgramFiles");
-            if (prgFilesPath != null && prgFilesPath.length() > 0)
-            {
-                return prgFilesPath;
-            }
-            else
-            {
+            if (prgFilesPath != null && prgFilesPath.length() > 0) {
+                return prgFilesPath + File.separatorChar;
+            } else {
                 return buildWindowsDefaultPathFromProps();
             }
         }
-        catch (Exception x)
-        {
+        catch (Exception x) {
             x.printStackTrace();
             return buildWindowsDefaultPathFromProps();
         }
@@ -282,11 +245,9 @@ public abstract class AbstractInstallDataProvider implements Provider
      *
      * @return the program files path
      */
-    private String buildWindowsDefaultPathFromProps()
-    {
+    private String buildWindowsDefaultPathFromProps() {
         StringBuffer dpath = new StringBuffer("");
-        try
-        {
+        try {
             // We load the properties
             Properties props = new Properties();
             props.load(
@@ -294,8 +255,7 @@ public abstract class AbstractInstallDataProvider implements Provider
 
             // We look for the drive mapping
             String drive = System.getProperty("user.home");
-            if (drive.length() > 3)
-            {
+            if (drive.length() > 3) {
                 drive = drive.substring(0, 3);
             }
 
@@ -305,8 +265,7 @@ public abstract class AbstractInstallDataProvider implements Provider
             // Ensure that we have a trailing backslash (in case drive was
             // something
             // like "C:")
-            if (drive.length() == 2)
-            {
+            if (drive.length() == 2) {
                 dpath.append("\\");
             }
 
@@ -315,21 +274,15 @@ public abstract class AbstractInstallDataProvider implements Provider
             String language_country = language + "_" + country;
 
             // Try the most specific combination first
-            if (null != props.getProperty(language_country))
-            {
+            if (null != props.getProperty(language_country)) {
                 dpath.append(props.getProperty(language_country));
-            }
-            else if (null != props.getProperty(language))
-            {
+            } else if (null != props.getProperty(language)) {
                 dpath.append(props.getProperty(language));
-            }
-            else
-            {
+            } else {
                 dpath.append(props.getProperty(Locale.ENGLISH.getLanguage()));
             }
         }
-        catch (Exception err)
-        {
+        catch (Exception err) {
             dpath = new StringBuffer("C:\\Program Files");
         }
 
@@ -341,17 +294,14 @@ public abstract class AbstractInstallDataProvider implements Provider
      *
      * @param automatedInstallData
      */
-    protected void loadDynamicVariables(AutomatedInstallData automatedInstallData)
-    {
-        try
-        {
+    protected void loadDynamicVariables(AutomatedInstallData automatedInstallData) {
+        try {
             InputStream in = resourceManager.getInputStream("dynvariables");
             ObjectInputStream objIn = new ObjectInputStream(in);
             automatedInstallData.setDynamicvariables((Map<String, List<DynamicVariable>>) objIn.readObject());
             objIn.close();
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             Debug.trace("Cannot find optional dynamic variables");
             System.out.println(e);
         }
@@ -362,17 +312,14 @@ public abstract class AbstractInstallDataProvider implements Provider
      *
      * @param automatedInstallData
      */
-    protected void loadDynamicConditions(AutomatedInstallData automatedInstallData)
-    {
-        try
-        {
+    protected void loadDynamicConditions(AutomatedInstallData automatedInstallData) {
+        try {
             InputStream in = resourceManager.getInputStream("dynconditions");
             ObjectInputStream objIn = new ObjectInputStream(in);
             automatedInstallData.setDynamicinstallerrequirements((List<DynamicInstallerRequirementValidator>) objIn.readObject());
             objIn.close();
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             Debug.trace("Cannot find optional dynamic conditions");
             System.out.println(e);
         }
@@ -384,8 +331,7 @@ public abstract class AbstractInstallDataProvider implements Provider
      * @param automatedInstallData
      * @throws Exception
      */
-    public void loadInstallerRequirements(AutomatedInstallData automatedInstallData) throws Exception
-    {
+    public void loadInstallerRequirements(AutomatedInstallData automatedInstallData) throws Exception {
         InputStream in = resourceManager.getInputStream("installerrequirements");
         ObjectInputStream objIn = new ObjectInputStream(in);
         automatedInstallData.setInstallerrequirements((List<InstallerRequirement>) objIn.readObject());
@@ -398,8 +344,7 @@ public abstract class AbstractInstallDataProvider implements Provider
      * @param automatedInstallData The installData to fill
      * @throws Exception
      */
-    protected void loadDefaultLocale(AutomatedInstallData automatedInstallData) throws Exception
-    {
+    protected void loadDefaultLocale(AutomatedInstallData automatedInstallData) throws Exception {
         // Loads the suitable langpack
         List<String> availableLangPacks = resourceManager.getAvailableLangPacks();
         String selectedPack = availableLangPacks.get(0);
@@ -408,8 +353,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         resourceManager.setLocale(selectedPack);
     }
 
-    public Object readObject(String resourceId) throws IOException, ClassNotFoundException
-    {
+    public Object readObject(String resourceId) throws IOException, ClassNotFoundException {
         InputStream inputStream = resourceManager.getInputStream(resourceId);
         ObjectInputStream objIn = new ObjectInputStream(inputStream);
         Object model = objIn.readObject();
