@@ -242,19 +242,12 @@ public class InstallerFrame extends JFrame implements InstallerView
     public void buildGUI()
     {
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        try
+        ImageIcon jframeIcon = resourceManager.getImageIconResource("JFrameIcon");
+        if (jframeIcon == null)
         {
-            ImageIcon jframeIcon = resourceManager.getImageIconResource("JFrameIcon");
-            if (jframeIcon == null)
-            {
-                jframeIcon = getIcons().get("JFrameIcon");
-            }
-            setIconImage(jframeIcon.getImage());
+            jframeIcon = getIcons().get("JFrameIcon");
         }
-        catch (Exception ignored)
-        {
-            LOGGER.log(Level.WARNING, "Image icon not found", ignored);
-        }
+        setIconImage(jframeIcon.getImage());
         // Prepares the glass pane to block the gui interaction when needed
         JPanel glassPane = (JPanel) getGlassPane();
         glassPane.addMouseListener(new MouseAdapter()
@@ -368,6 +361,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         }
         catch (Exception e)
         {
+            LOGGER.log(Level.WARNING, "Error when loading icon image", e);
             // ignore
         }
 

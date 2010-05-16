@@ -30,8 +30,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * With this ResourceManager you are able to get resources from the jar file.
@@ -44,13 +46,13 @@ import java.util.Properties;
  * <li>InfoPanel.info_deu - for german value</li>
  * <li>InfoPanel.info_eng - for english value</li> <br>
  * <p/>
- * This class is almost a singleton. It is created once using <code>create</code> by the installer
- * and later, the instance is retrieved using <code>getInstance</code>.
  *
  * @author Marcus Stursberg
  */
 public class ResourceManager
 {
+
+    private final static Logger LOGGER = Logger.getLogger(ResourceManager.class.getName());
 
     /**
      * Contains the current language of the installer The locale is taken from
@@ -367,6 +369,7 @@ public class ResourceManager
                 return new ImageIcon(location);
             }
         }
+        LOGGER.info("Image icon resource not found in " + resource + " and in fallbacks " + Arrays.toString(fallback));
         return null;
     }
 
