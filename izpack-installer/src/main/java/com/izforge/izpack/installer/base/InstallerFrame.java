@@ -364,8 +364,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             LOGGER.log(Level.WARNING, "Error when loading icon image", e);
             // ignore
         }
-
-        loadAndShowImage(0);
+        loadAndShowImageForPanelNum(0);
         getRootPane().setDefaultButton(nextButton);
         callGUIListener(GUIListener.GUI_BUILDED, navPanel);
         createHeading(navPanel);
@@ -434,12 +433,12 @@ public class InstallerFrame extends JFrame implements InstallerView
         }
     }
 
-    private void loadAndShowImage(int panelNo)
+    private void loadAndShowImageForPanelNum(int panelNo)
     {
         loadAndShowImage(iconLabel, ICON_RESOURCE, panelNo);
     }
 
-    private void loadAndShowImage(int panelNo, String panelid)
+    private void loadAndShowImageForPanelOrId(int panelNo, String panelid)
     {
         loadAndShowImage(iconLabel, ICON_RESOURCE, panelNo, panelid);
     }
@@ -501,11 +500,10 @@ public class InstallerFrame extends JFrame implements InstallerView
         // refresh dynamic variables every time, a panel switch is done
         try
         {
-            InstallerBase.refreshDynamicVariables(getInstalldata(), new VariableSubstitutorImpl(getInstalldata().getVariables()));
+            InstallerBase.refreshDynamicVariables(getInstalldata(), variableSubstitutor);
         }
         catch (Exception e)
         {
-
             Debug.trace("Refreshing dynamic variables failed, asking user whether to proceed.");
             StringBuffer msg = new StringBuffer();
             msg.append("<html>");
@@ -634,12 +632,12 @@ public class InstallerFrame extends JFrame implements InstallerView
             com.izforge.izpack.api.data.Panel metadata = newPanel.getMetadata();
             if ((metadata != null) && (!"UNKNOWN".equals(metadata.getPanelid())))
             {
-                loadAndShowImage(panelManager.getPanelVisibilityNumber(getInstalldata().getCurPanelNumber()), metadata
+                loadAndShowImageForPanelOrId(getCurrentPanelVisbilityNumber(), metadata
                         .getPanelid());
             }
             else
             {
-                loadAndShowImage(panelManager.getPanelVisibilityNumber(getInstalldata().getCurPanelNumber()));
+                loadAndShowImageForPanelNum(getCurrentPanelVisbilityNumber());
             }
             isBack = false;
             callGUIListener(GUIListener.PANEL_SWITCHED);
@@ -648,8 +646,13 @@ public class InstallerFrame extends JFrame implements InstallerView
         }
         catch (Exception err)
         {
-            err.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error when switching panel", err);
         }
+    }
+
+    private int getCurrentPanelVisbilityNumber()
+    {
+        return panelManager.getPanelVisibilityNumber(getInstalldata().getCurPanelNumber());
     }
 
     private void configureButtonVisibility()
@@ -1733,7 +1736,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         // Do not forgett the first headline.
         headingLabels[0].setText(headline);
         headingLabels[0].setVisible(true);
-        int curPanelNo = panelManager.getPanelVisibilityNumber(getInstalldata().getCurPanelNumber());
+        int curPanelNo = getCurrentPanelVisbilityNumber();
         if (headingLabels[headingLines] != null)
         {
             loadAndShowImage(headingLabels[headingLines], HEADING_ICON_RESOURCE, curPanelNo);
