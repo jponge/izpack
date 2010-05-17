@@ -9,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>izpack-test-panel</artifactId>
     <packaging>jar</packaging>
-    <name>izpack-test-panel</name>
+    <name>IzPack panel test support</name>
 
     <description>
         Module providing mock and provider for rapid panel rendering.
