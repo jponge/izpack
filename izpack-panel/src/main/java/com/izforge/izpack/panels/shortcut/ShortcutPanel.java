@@ -330,7 +330,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     public void panelActivate()
     {
         // Create the UI elements
-        if (shortcutLogicInitialized && shortcutPanelLogic.isCreateShortcuts() && !OsVersion.IS_OSX)
+        if (shortcutLogicInitialized && !OsVersion.IS_OSX)
         {
             if (shortcutPanelLogic.isSupported() && !shortcutPanelLogic.isSimulteNotSupported())
             {
