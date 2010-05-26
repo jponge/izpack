@@ -21,6 +21,9 @@
 
 package com.izforge.izpack.core.rules.logic;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
@@ -35,98 +38,72 @@ public class AndCondition extends Condition
 {
     private static final long serialVersionUID = -5854944262991488370L;
 
-    protected Condition leftoperand;
+    protected RulesEngineImpl rulesEngineImpl;
 
-    protected Condition rightoperand;
-    private RulesEngineImpl rulesEngineImpl;
+    protected Set<Condition> nestedConditions = new HashSet<Condition>();
 
     public AndCondition(RulesEngineImpl rulesEngineImpl)
     {
         this.rulesEngineImpl = rulesEngineImpl;
     }
 
-    public AndCondition(Condition operand1, Condition operand2, RulesEngineImpl rulesEngineImpl)
+    public AndCondition(RulesEngineImpl rulesEngineImpl, Condition ... operands)
     {
         this.rulesEngineImpl = rulesEngineImpl;
-        this.leftoperand = operand1;
-        if (this.leftoperand != null)
+        for (Condition condition : operands)
         {
-            this.leftoperand.setInstalldata(this.getInstalldata());
-        }
-
-        this.rightoperand = operand2;
-        if (this.rightoperand != null)
-        {
-            this.rightoperand.setInstalldata(this.getInstalldata());
+            nestedConditions.add(condition);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void readFromXML(IXMLElement xmlcondition)
     {
-        try
+        if (xmlcondition.getChildrenCount() <= 0)
         {
-            if (xmlcondition.getChildrenCount() != 2)
-            {
-                Debug.log("and-condition needs two conditions as operands");
-                return;
-            }
-            this.leftoperand = rulesEngineImpl.instanciateCondition(xmlcondition.getChildAtIndex(0));
-            this.rightoperand = rulesEngineImpl.instanciateCondition(xmlcondition.getChildAtIndex(1));
+            Debug.log("missing element in condition");
         }
-
-        catch (Exception e)
+        for (IXMLElement element : xmlcondition.getChildren())
         {
-            Debug.log("missing element in and-condition");
+            nestedConditions.add(rulesEngineImpl.instanciateCondition(element));
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isTrue()
     {
-        if ((this.leftoperand == null) || (this.rightoperand == null))
+        boolean result = true;
+        for (Condition condition : nestedConditions)
         {
-            Debug.trace("Operands of condition " + this.getId() + " not initialized correctly.");
-            return false;
+            condition.setInstalldata(this.getInstalldata());
+            result = result && condition.isTrue();
         }
-        this.leftoperand.setInstalldata(this.getInstalldata());
-        this.rightoperand.setInstalldata(this.getInstalldata());
-        return leftoperand.isTrue() && rightoperand.isTrue();
+        return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();
         details.append(this.getId());
         details.append(" depends on:<ul><li>");
-        details.append(leftoperand.getDependenciesDetails());
-        details.append("</li> AND <li>");
-        details.append(rightoperand.getDependenciesDetails());
+        for (Condition condition : nestedConditions)
+        {
+            details.append(condition.getDependenciesDetails());
+            details.append("</li> AND <li>");
+        }
         details.append("</li></ul>");
         return details.toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void makeXMLData(IXMLElement root)
+    public void makeXMLData(IXMLElement conditionRoot)
     {
-        IXMLElement left = rulesEngineImpl.createConditionElement(this.leftoperand, root);
-        this.leftoperand.makeXMLData(left);
-        root.addChild(left);
-        IXMLElement right = rulesEngineImpl.createConditionElement(this.rightoperand, root);
-        this.rightoperand.makeXMLData(right);
-        root.addChild(right);
+        for (Condition condition : nestedConditions)
+        {
+            IXMLElement left = rulesEngineImpl.createConditionElement(condition, conditionRoot);
+            condition.makeXMLData(left);
+            conditionRoot.addChild(left);
+        }
     }
 }
