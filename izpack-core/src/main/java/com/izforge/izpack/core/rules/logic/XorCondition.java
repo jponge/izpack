@@ -1,29 +1,28 @@
-/* 
- * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved. 
- * 
- * http://izpack.org/ 
- * http://izpack.codehaus.org/ 
- * 
- * Copyright 2007 Dennis Reil 
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+/*
+ * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
+ *
+ * http://izpack.org/
+ * http://izpack.codehaus.org/
+ *
+ * Copyright 2007 Dennis Reil
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.izforge.izpack.core.rules.logic;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.core.rules.RulesEngineImpl;
 
 /**
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
@@ -33,77 +32,56 @@ public class XorCondition extends OrCondition
 {
     private static final long serialVersionUID = 3148555083095194992L;
 
-
-    /**
-     * @param operand1
-     * @param operand2
-     */
-    public XorCondition(Condition operand1, Condition operand2)
+    public XorCondition(RulesEngineImpl rulesEngineImpl)
     {
-        super(operand1, operand2);
+        super(rulesEngineImpl);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void readFromXML(IXMLElement xmlcondition)
+    public XorCondition(RulesEngineImpl rulesEngineImpl, Condition ... operands)
     {
-        try
-        {
-            if (xmlcondition.getChildrenCount() != 2)
-            {
-                Debug.log("xor-condition needs two conditions as operands");
-                return;
-            }
-            this.leftoperand = rulesEngineImpl.instanciateCondition(xmlcondition.getChildAtIndex(0));
-            this.rightoperand = rulesEngineImpl.instanciateCondition(xmlcondition.getChildAtIndex(1));
-        }
-        catch (Exception e)
-        {
-            Debug.log("missing element in xor-condition");
-        }
+        super(rulesEngineImpl, operands);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isTrue()
     {
-        if ((this.leftoperand == null) || (this.rightoperand == null))
+        Boolean result = null;
+        for (Condition condition : nestedConditions)
         {
-            Debug.trace("Operands of condition " + this.getId() + " not initialized correctly.");
-            return false;
+            condition.setInstalldata(this.getInstalldata());
+            if (result == null)
+            {
+                result = new Boolean(condition.isTrue());
+            }
+            else
+            {
+                if (result.booleanValue() && condition.isTrue())
+                {
+                    // in case both are true
+                    result = new Boolean(false);
+                }
+                else
+                {
+                    result = new Boolean(result.booleanValue() || condition.isTrue());
+                }
+            }
         }
-        this.leftoperand.setInstalldata(this.getInstalldata());
-        this.rightoperand.setInstalldata(this.getInstalldata());
-
-        boolean op1true = leftoperand.isTrue();
-        boolean op2true = rightoperand.isTrue();
-
-        if (op1true && op2true)
-        {
-            // in case where both are true
-            return false;
-        }
-        return op1true || op2true;
+        return result.booleanValue();
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();
         details.append(this.getId());
         details.append(" depends on:<ul><li>");
-        details.append(leftoperand.getDependenciesDetails());
-        details.append("</li> XOR <li>");
-        details.append(rightoperand.getDependenciesDetails());
+        for (Condition condition : nestedConditions)
+        {
+            details.append(condition.getDependenciesDetails());
+            details.append("</li> XOR <li>");
+        }
         details.append("</li></ul>");
         return details.toString();
     }
+
 }

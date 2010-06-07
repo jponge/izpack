@@ -54,7 +54,7 @@ public class RulesEngineImpl implements RulesEngine
 {
 
     private static final long serialVersionUID = 3966346766966632860L;
-    
+
     protected Map<String, String> panelconditions;
 
     protected Map<String, String> packconditions;
@@ -273,8 +273,8 @@ public class RulesEngineImpl implements RulesEngine
      * The id may be one of the following:
      * A condition ID as defined in the install.xml
      * A simple expression with !,+,|,\
-     * A complex expression with !,&&,||,\\ - must begin with char @ 
-     * 
+     * A complex expression with !,&&,||,\\ - must begin with char @
+     *
      * @param id
      * @return
      */
@@ -299,14 +299,14 @@ public class RulesEngineImpl implements RulesEngine
      * Parses the given complex expression into a condition.
      * Understands the boolean operations && (AND), || (OR)
      * and ! (NOT).
-     * 
-     * Precedence is: 
+     *
+     * Precedence is:
      * NOT is evaluated first.
      * AND is evaluated after NOT, but before OR.
      * OR is evaluated last.
-     * 
+     *
      * Parentheses may be added at a later time.
-     * 
+     *
      * @param expression
      * @return
      */
@@ -338,12 +338,12 @@ public class RulesEngineImpl implements RulesEngine
 
         return result;
     }
-    
+
     private Condition parseComplexOrLevelCondition(String expression) {
         Condition result = null;
         int orPosition = expression.indexOf("||");
         int xorPosition = expression.indexOf("^");
-        
+
         if (xorPosition == -1) {
             result = parseComplexOrCondition(expression);
         } else if (orPosition == -1) {
@@ -353,7 +353,7 @@ public class RulesEngineImpl implements RulesEngine
         } else {
             result = parseComplexXorCondition(expression);
         }
-        
+
         return result;
     }
 
@@ -361,7 +361,7 @@ public class RulesEngineImpl implements RulesEngine
      * Creates an OR condition from the given complex expression.
      * Uses the substring up to the first || delimiter as first operand and
      * the rest as second operand.
-     * 
+     *
      * @param expression
      * @return OrCondition
      */
@@ -370,13 +370,13 @@ public class RulesEngineImpl implements RulesEngine
         Condition result = null;
 
         String[] parts = expression.split("\\|\\|", 2);
-        result = new OrCondition(parseComplexCondition(parts[0].trim()), parseComplexCondition(parts[1].trim()));
+        result = new OrCondition(this, parseComplexCondition(parts[0].trim()), parseComplexCondition(parts[1].trim()));
 
         return result;
     }
 
     /**
-     * Creates a XOR condition from the given complex expression 
+     * Creates a XOR condition from the given complex expression
      * @param expression
      * @return
      */
@@ -384,17 +384,17 @@ public class RulesEngineImpl implements RulesEngine
         Condition result = null;
 
         String[] parts = expression.split("\\^", 2);
-        result = new XorCondition(parseComplexCondition(parts[0].trim()), parseComplexCondition(parts[1].trim()));
+        result = new XorCondition(this, parseComplexCondition(parts[0].trim()), parseComplexCondition(parts[1].trim()));
 
         return result;
-        
+
     }
-    
+
     /**
      * Creates an AND condition from the given complex expression.
      * Uses the expression up to the first && delimiter as first operand and
      * the rest as second operand.
-     * 
+     *
      * @param expression
      * @return AndCondition
      */
@@ -403,8 +403,7 @@ public class RulesEngineImpl implements RulesEngine
         Condition result = null;
 
         String[] parts = expression.split("\\&\\&", 2);
-        result = new AndCondition(parseComplexCondition(parts[0].trim()), parseComplexCondition(parts[1].trim()),
-                this);
+        result = new AndCondition(this, parseComplexCondition(parts[0].trim()), parseComplexCondition(parts[1].trim()));
 
         return result;
     }
@@ -412,7 +411,7 @@ public class RulesEngineImpl implements RulesEngine
     /**
      * Creates a NOT condition from the given complex expression.
      * Negates the result of the whole expression!
-     * 
+     *
      * @param expression
      * @return NotCondtion
      */
@@ -439,20 +438,20 @@ public class RulesEngineImpl implements RulesEngine
                     // and-condition
                     Condition op1 = conditionsmap.get(conditionexpr.substring(0, index));
                     conditionexpr.delete(0, index + 1);
-                    result = new AndCondition(op1, getConditionByExpr(conditionexpr), this);
+                    result = new AndCondition(this, op1, getConditionByExpr(conditionexpr));
                     break;
                 case '|':
                     // or-condition
                     op1 = conditionsmap.get(conditionexpr.substring(0, index));
                     conditionexpr.delete(0, index + 1);
-                    result = new OrCondition(op1, getConditionByExpr(conditionexpr));
+                    result = new OrCondition(this, op1, getConditionByExpr(conditionexpr));
 
                     break;
                 case '\\':
                     // xor-condition
                     op1 = conditionsmap.get(conditionexpr.substring(0, index));
                     conditionexpr.delete(0, index + 1);
-                    result = new XorCondition(op1, getConditionByExpr(conditionexpr));
+                    result = new XorCondition(this, op1, getConditionByExpr(conditionexpr));
                     break;
                 case '!':
                     // not-condition
