@@ -1,9 +1,11 @@
 #!/bin/sh
-MAVEN_BIN=$MAVEN_HOME/bin
-XVFB_BIN=/usr/bin
+#MAVEN_BIN=$MAVEN_HOME/bin
+#XVFB_BIN=/usr/bin
 #/usr/local/bin/xvfb-run -s "-screen 0 1280x1024x24" /opt/maven/apache-maven-2.2.0/bin/mvn clean install
 #$XVFB_BIN/xvfb-run -s "-screen 0 1280x1024x24" $MAVEN_BIN/mvn clean install
-$XVFB_BIN/xvfb-run -s "-screen 0 1280x1024x24" $MAVEN_BIN/mvn clean install
+export DISPLAY=:66
+mvn clean install -Prun-xvfb
+#$XVFB_BIN/xvfb-run -s "-screen 0 1280x1024x24" $MAVEN_BIN/mvn clean install
 #XVFB_DISPLAY=:66
 #XAUTH_FILE=/tmp/xauth-izpack
 #killall Xvfb
