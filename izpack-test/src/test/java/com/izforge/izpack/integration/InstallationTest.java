@@ -6,16 +6,12 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.compiler.container.TestIntegrationContainer;
 import com.izforge.izpack.installer.base.InstallerController;
 import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.language.LanguageDialog;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
-import com.izforge.izpack.util.OsVersion;
-import org.apache.commons.io.FileUtils;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
-import org.fest.swing.timing.Timeout;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.After;
@@ -25,7 +21,6 @@ import org.junit.runner.RunWith;
 
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -83,7 +78,7 @@ public class InstallationTest
         assertThat(image, IsNull.<Object>notNullValue());
 
         languageDialog.initLangPack();
-        installerFrameFixture = prepareFrameFixture();
+        installerFrameFixture = HelperTestMethod.prepareFrameFixture(installerFrame, installerController);
 
         // Hello panel
         installerFrameFixture.requireSize(new Dimension(640, 480));
@@ -122,11 +117,11 @@ public class InstallationTest
     @InstallFile("samples/basicInstall/basicInstall.xml")
     public void testBasicInstall() throws Exception
     {
-        File installPath = prepareInstallation(installData);
+        File installPath = HelperTestMethod.prepareInstallation(installData);
         // Lang picker
-        clickDefaultLang();
+        HelperTestMethod.clickDefaultLang(dialogFrameFixture, languageDialog);
 
-        installerFrameFixture = prepareFrameFixture();
+        installerFrameFixture = HelperTestMethod.prepareFrameFixture(installerFrame, installerController);
         Thread.sleep(600);
         // Hello panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
@@ -151,7 +146,7 @@ public class InstallationTest
         Thread.sleep(300);
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Install Panel
-        waitAndCheckInstallation(installData, installPath);
+        HelperTestMethod.waitAndCheckInstallation(installData, installPath);
 
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Finish panel
@@ -165,114 +160,4 @@ public class InstallationTest
     }
 
 
-    @Test
-    @InstallFile("samples/izpack/install.xml")
-    public void testIzpackInstallation() throws Exception
-    {
-        File installPath = prepareInstallation(installData);
-        clickDefaultLang();
-
-        installerFrameFixture = prepareFrameFixture();
-        java.util.List panelList = installData.getPanels();
-        // Hello panel
-        Thread.sleep(600);
-//        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
-
-        // Chack Panel
-        Thread.sleep(600);
-        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
-
-        // Licence Panel
-        installerFrameFixture.radioButton(GuiId.LICENCE_YES_RADIO.id).click();
-        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
-
-        // Target Panel
-        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
-        installerFrameFixture.optionPane(Timeout.timeout(1000)).focus();
-        installerFrameFixture.optionPane().requireWarningMessage();
-        installerFrameFixture.optionPane().okButton().click();
-
-        // Packs
-        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
-
-        // Summary
-        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
-
-        // Install
-        waitAndCheckInstallation(installData, installPath);
-
-        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
-
-        // Shortcut
-        // Deselect shortcut creation
-        if (!OsVersion.IS_MAC)
-        {
-            Thread.sleep(1000);
-            installerFrameFixture.checkBox(GuiId.SHORTCUT_CREATE_CHECK_BOX.id).click();
-            installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
-        }
-
-        // Finish
-//        installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
-    }
-
-
-    private File prepareInstallation(GUIInstallData installData) throws IOException
-    {
-        File installPath = new File(installData.getInstallPath());
-        FileUtils.deleteDirectory(installPath);
-        assertThat(installPath.exists(), Is.is(false));
-        return installPath;
-    }
-
-
-    private void clickDefaultLang()
-    {
-        dialogFrameFixture = prepareDialogFixture();
-        dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
-        // Seems necessary to unlock window
-        dialogFrameFixture.cleanUp();
-        dialogFrameFixture = null;
-    }
-
-    private void waitAndCheckInstallation(GUIInstallData installData, File installPath) throws InterruptedException
-    {
-        while (!installData.isCanClose())
-        {
-            Thread.sleep(500);
-        }
-        assertThat(installPath.exists(), Is.is(true));
-        UninstallData uninstallData = new UninstallData();
-        for (String installedFile : uninstallData.getInstalledFilesList())
-        {
-            File file = new File(installedFile);
-            assertThat(file.exists(), Is.is(true));
-        }
-    }
-
-
-    /**
-     * Prepare fest fixture for installer frame
-     *
-     * @throws Exception
-     */
-    protected FrameFixture prepareFrameFixture() throws Exception
-    {
-        FrameFixture installerFrameFixture = new FrameFixture(installerFrame);
-        installerController.buildInstallation();
-        installerFrameFixture.show();
-        installerFrame.sizeFrame();
-        // wait center
-        return installerFrameFixture;
-    }
-
-    /**
-     * Prepare fest fixture for lang selection
-     */
-    protected DialogFixture prepareDialogFixture()
-    {
-        DialogFixture dialogFixture = new DialogFixture(languageDialog);
-        dialogFixture.show();
-        return dialogFixture;
-    }
 }
