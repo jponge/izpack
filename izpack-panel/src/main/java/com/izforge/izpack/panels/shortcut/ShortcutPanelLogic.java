@@ -19,15 +19,6 @@
 
 package com.izforge.izpack.panels.shortcut;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Vector;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
@@ -41,16 +32,18 @@ import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.CleanupClient;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.Housekeeper;
-import com.izforge.izpack.util.OsConstraintHelper;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.StringTool;
-import com.izforge.izpack.util.TargetFactory;
+import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.Shortcut;
 import com.izforge.izpack.util.xml.XMLHelper;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Vector;
 
 //
 // import com.izforge.izpack.panels.ShortcutData;
@@ -61,7 +54,7 @@ import com.izforge.izpack.util.xml.XMLHelper;
  * This class implements a the logic for the creation of shortcuts. The logic is used in the
  * ShortcutPanel, ShortcutPanelAutomationHelper.
  * <p/>
- * 
+ *
  * @version $Revision: 1.2 $
  */
 public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
@@ -289,7 +282,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
      * Private Constructor for this singleton. Use {@link #getInstance()} and
      * {@link #initInstance(AutomatedInstallData, ResourceManager, UninstallData, VariableSubstitutor)}
      * instead.
-     * 
+     *
      * @throws Exception
      */
     private ShortcutPanelLogic() throws Exception
@@ -311,7 +304,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
      * For initialization of the singleton call
      * {@link #initInstance(AutomatedInstallData, ResourceManager, UninstallData, VariableSubstitutor)}
      * after {@link #getInstance()}.
-     * 
+     *
      * @return the instance of the singleton {@link ShortcutPanelLogic}
      * @throws Exception
      */
@@ -368,7 +361,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
 
     /**
      * Returns the ProgramsFolder for the current User
-     * 
+     *
      * @param user type of the user {@link Shortcut#ALL_USERS} or {@link Shortcut#CURRENT_USER}
      * @return The basedir
      */
@@ -398,7 +391,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
      */
     public String getSuggestedProgramGroup()
     {
-        return variableSubstitutor.substitute(suggestedProgramGroup, null);
+        return variableSubstitutor.substitute(suggestedProgramGroup);
     }
 
     /**
@@ -467,7 +460,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
 
     /**
      * Reads the xml content for automated installations.
-     * 
+     *
      * @param panelRoot specifies the xml elemnt for this panel
      */
     public void setAutoinstallXMLData(IXMLElement panelRoot)
@@ -498,7 +491,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
 
     /**
      * @return <code>true</code> if current user is the default for the panel otherwise
-     * <code>false</code>
+     *         <code>false</code>
      */
     public final boolean isDefaultCurrentUserFlag()
     {
@@ -507,7 +500,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
 
     /**
      * @return <code>true</code> if we have desktop shortcuts in the spec otherwise
-     * <code>false</code>
+     *         <code>false</code>
      */
     public boolean hasDesktopShortcuts()
     {
@@ -517,16 +510,16 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
     /**
      * Initializes the singleton instance. This method should be called after {@link #getInstance()}
      * .
-     * 
-     * @param installData {@link AutomatedInstallData}
-     * @param resourceManager {@link ResourceManager}
-     * @param uninstallData {@link UninstallData}
+     *
+     * @param installData         {@link AutomatedInstallData}
+     * @param resourceManager     {@link ResourceManager}
+     * @param uninstallData       {@link UninstallData}
      * @param variableSubstitutor {@link VariableSubstitutor}
      * @throws Exception
      */
     public final void initInstance(AutomatedInstallData installData,
-            ResourceManager resourceManager, UninstallData uninstallData,
-            VariableSubstitutor variableSubstitutor) throws Exception
+                                   ResourceManager resourceManager, UninstallData uninstallData,
+                                   VariableSubstitutor variableSubstitutor) throws Exception
     {
         this.installData = installData;
         this.resourceManager = resourceManager;
@@ -570,7 +563,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
 
     /**
      * @return <code>true</code> if we do a shortcut creation simulation otherwise
-     * <code>false</code>
+     *         <code>false</code>
      */
     public boolean isSimulteNotSupported()
     {
@@ -579,7 +572,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
 
     /**
      * @return <code>true</code> if we skip shortcut panel and shortcut creation if this is not
-     * supported on the current OS otherwise <code>false</code>
+     *         supported on the current OS otherwise <code>false</code>
      */
     public boolean isSkipIfNotSupported()
     {
@@ -623,7 +616,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
 
     /**
      * This method saves all shortcut information to a text file.
-     * 
+     *
      * @param file to save the information to
      */
     public void saveToFile(File file)
@@ -687,35 +680,39 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
 
             switch (data.type)
             {
-            case Shortcut.DESKTOP: {
-                buffer
-                        .append(installData.getLangpack().getString(
-                                "ShortcutPanel.location.desktop"));
+                case Shortcut.DESKTOP:
+                {
+                    buffer
+                            .append(installData.getLangpack().getString(
+                                    "ShortcutPanel.location.desktop"));
 
-                break;
-            }
+                    break;
+                }
 
-            case Shortcut.APPLICATIONS: {
-                buffer.append(installData.getLangpack().getString(
-                        "ShortcutPanel.location.applications"));
+                case Shortcut.APPLICATIONS:
+                {
+                    buffer.append(installData.getLangpack().getString(
+                            "ShortcutPanel.location.applications"));
 
-                break;
-            }
+                    break;
+                }
 
-            case Shortcut.START_MENU: {
-                buffer.append(installData.getLangpack().getString(
-                        "ShortcutPanel.location.startMenu"));
+                case Shortcut.START_MENU:
+                {
+                    buffer.append(installData.getLangpack().getString(
+                            "ShortcutPanel.location.startMenu"));
 
-                break;
-            }
+                    break;
+                }
 
-            case Shortcut.START_UP: {
-                buffer
-                        .append(installData.getLangpack().getString(
-                                "ShortcutPanel.location.startup"));
+                case Shortcut.START_UP:
+                {
+                    buffer
+                            .append(installData.getLangpack().getString(
+                                    "ShortcutPanel.location.startup"));
 
-                break;
-            }
+                    break;
+                }
             }
 
             buffer.append(newline);
@@ -757,7 +754,8 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
             output.write(buffer.toString());
         }
         catch (Throwable exception)
-        {}
+        {
+        }
         finally
         {
             try
@@ -1090,7 +1088,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
 
     /**
      * This returns true if a Shortcut should or can be created. Returns false to suppress Creation
-     * 
+     *
      * @param shortcutSpec
      * @return true if condtion is resolved positive
      */
@@ -1233,10 +1231,12 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
                     }
                 }
                 catch (Exception exception)
-                {}
+                {
+                }
             }
             catch (Throwable exception)
-            {}
+            {
+            }
         }
         if (OsVersion.IS_UNIX)
         {
@@ -1309,7 +1309,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
 
     /**
      * Reads the XML specification for the shortcuts to create. The result is stored in spec.
-     * 
+     *
      * @throws Exception for any problems in reading the specification
      */
 
@@ -1361,18 +1361,21 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
      * for a pack in the list if that pack is actually selected for installation. Note: If the list
      * of selected packs is empty then true is always returnd. The same is true if the packs list is
      * empty.
-     * 
+     *
      * @param packs a Vector of Strings. Each of the strings denotes a pack for which the schortcut
-     * should be created if the pack is actually installed.
+     *              should be created if the pack is actually installed.
      * @return true if the shortcut is required for at least on pack in the list, otherwise returns
-     * false.
+     *         false.
      */
     private boolean shortcutRequiredFor(List<IXMLElement> packs)
     {
         String selected;
         String required;
 
-        if (packs.size() == 0) { return (true); }
+        if (packs.size() == 0)
+        {
+            return (true);
+        }
 
         for (int i = 0; i < this.installData.getSelectedPacks().size(); i++)
         {
@@ -1381,7 +1384,10 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
             for (IXMLElement pack : packs)
             {
                 required = pack.getAttribute(SPEC_ATTRIBUTE_NAME, "");
-                if (selected.equals(required)) { return (true); }
+                if (selected.equals(required))
+                {
+                    return (true);
+                }
             }
         }
 
@@ -1409,13 +1415,15 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
     }
 
     private void writeXDGMenuFile(List<String> desktopFileNames, String groupName, String icon,
-            String comment)
+                                  String comment)
     {
-        if ("".equals(suggestedProgramGroup) || suggestedProgramGroup == null) { return; // No group
-        // name
-        // means
-        // the
-        // shortcuts
+        if ("".equals(suggestedProgramGroup) || suggestedProgramGroup == null)
+        {
+            return; // No group
+            // name
+            // means
+            // the
+            // shortcuts
         }
         // will be placed by category
         if (OsVersion.IS_UNIX)

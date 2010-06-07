@@ -2,7 +2,6 @@ package com.izforge.izpack.integration;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.GUIInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.compiler.container.TestIntegrationContainer;
 import com.izforge.izpack.installer.base.InstallerController;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -35,7 +34,7 @@ public class IzpackInstallationTest
     private GUIInstallData installData;
     private InstallerController installerController;
 
-    public IzpackInstallationTest(ResourceManager resourceManager, LanguageDialog languageDialog, InstallerFrame installerFrame, GUIInstallData installData, InstallerController installerController)
+    public IzpackInstallationTest(LanguageDialog languageDialog, InstallerFrame installerFrame, GUIInstallData installData, InstallerController installerController)
     {
         this.installerController = installerController;
         this.languageDialog = languageDialog;
@@ -112,5 +111,7 @@ public class IzpackInstallationTest
         }
         // Finish
 //        installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
+
+
     }
 }
