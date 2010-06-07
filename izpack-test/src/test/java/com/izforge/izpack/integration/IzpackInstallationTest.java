@@ -13,11 +13,19 @@ import com.izforge.izpack.util.OsVersion;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.timing.Timeout;
+import org.hamcrest.collection.IsCollectionContaining;
+import org.hamcrest.core.Is;
 import org.junit.After;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Test for an installation
@@ -27,6 +35,8 @@ import java.io.File;
 @Container(TestIntegrationContainer.class)
 public class IzpackInstallationTest
 {
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
     private DialogFixture dialogFrameFixture;
     private FrameFixture installerFrameFixture;
     private LanguageDialog languageDialog;
@@ -67,7 +77,9 @@ public class IzpackInstallationTest
     @InstallFile("samples/izpack/install.xml")
     public void testIzpackInstallation() throws Exception
     {
-        File installPath = HelperTestMethod.prepareInstallation(installData);
+        File installPath = new File(temporaryFolder.getRoot(), "izpackTest");
+
+        installData.setInstallPath(installPath.getAbsolutePath());
         HelperTestMethod.clickDefaultLang(dialogFrameFixture, languageDialog);
 
         installerFrameFixture = HelperTestMethod.prepareFrameFixture(installerFrame, installerController);
@@ -109,9 +121,27 @@ public class IzpackInstallationTest
             installerFrameFixture.checkBox(GuiId.SHORTCUT_CREATE_CHECK_BOX.id).click();
             installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         }
+
+        checkIzpackInstallation(installPath);
+
         // Finish
 //        installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
 
 
+    }
+
+    private void checkIzpackInstallation(File installPath)
+    {
+        File[] files = installPath.listFiles();
+        List<String> paths = new ArrayList<String>();
+        for (File file : files)
+        {
+            paths.add(file.getName());
+        }
+        assertThat(paths, IsCollectionContaining.hasItems(
+                Is.is("src"),
+                Is.is("lib"),
+                Is.is("bin")
+        ));
     }
 }

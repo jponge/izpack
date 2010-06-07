@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.panels.path;
 
+import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IzPanelConstraints;
@@ -115,6 +116,7 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
         browseButton = ButtonFactory.createButton(parent.getInstallerFrame().getLangpack()
                 .getString("TargetPanel.browse"), parent.getInstallerFrame().getIcons()
                 .get("open"), idata.buttonsHColor);
+        browseButton.setName(GuiId.BUTTON_BROWSE.id);
         browseButton.addActionListener(this);
         add(browseButton);
     }
@@ -145,6 +147,7 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
 
             // Prepares the file chooser
             JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setName(GuiId.TARGET_PANEL_FILE_CHOOSER.id);
             fileChooser.setCurrentDirectory(new File(textField.getText()));
             fileChooser.setMultiSelectionEnabled(false);
             fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
