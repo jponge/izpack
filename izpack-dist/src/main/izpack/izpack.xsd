@@ -131,8 +131,9 @@
 
     <xs:complexType name="packType">
         <xs:sequence>
-            <xs:element type="xs:string" name="description" />
-            <xs:element type="filesetType" name="fileset" />
+            <xs:element type="xs:string" name="description" maxOccurs="1" />
+            <xs:element type="filesetType" name="fileset" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element type="fileType" name="file" minOccurs="0" maxOccurs="unbounded" />
             <xs:element type="executableType" name="executable" maxOccurs="unbounded" minOccurs="0" />
         </xs:sequence>
         <xs:attribute type="xs:string" name="name" />
@@ -253,5 +254,16 @@
         <xs:attribute type="xs:string" name="stage" />
     </xs:complexType>
 
+    <xs:complexType name="fileType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="condition" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element type="osType" name="os" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="src" use="required" />
+        <xs:attribute type="xs:string" name="targetdir" use="required" />
+        <xs:attribute type="xs:boolean" name="override" />
+        <xs:attribute type="xs:string" name="blockable" />
+        <xs:attribute type="xs:boolean" name="unpack" />
+    </xs:complexType>
 
 </xs:schema>
