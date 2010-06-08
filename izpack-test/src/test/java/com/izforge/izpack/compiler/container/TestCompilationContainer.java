@@ -18,7 +18,7 @@ import java.io.IOException;
  *
  * @author Anthonin Bonnefoy
  */
-public class TestInstallationContainer extends AbstractContainer
+public class TestCompilationContainer extends AbstractContainer
 {
 
     public static final String APPNAME = "Test Installation";
@@ -26,7 +26,7 @@ public class TestInstallationContainer extends AbstractContainer
     private Class klass;
     private FrameworkMethod frameworkMethod;
 
-    public TestInstallationContainer(Class klass, FrameworkMethod frameworkMethod)
+    public TestCompilationContainer(Class klass, FrameworkMethod frameworkMethod)
     {
         this.klass = klass;
         this.frameworkMethod = frameworkMethod;
