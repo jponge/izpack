@@ -55,6 +55,7 @@ public class TestInstallationContainer extends AbstractContainer
             pico.addConfig("installFile", installerFile.getAbsolutePath());
             pico.addComponent(CompilerData.class, data);
             pico.addComponent(File.class, out);
+            pico.addComponent(this);
         }
         catch (Exception e)
         {

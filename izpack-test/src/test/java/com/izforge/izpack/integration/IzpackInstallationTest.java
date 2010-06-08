@@ -43,13 +43,15 @@ public class IzpackInstallationTest
     private InstallerFrame installerFrame;
     private GUIInstallData installData;
     private InstallerController installerController;
+    private File generatedInstallJar;
 
-    public IzpackInstallationTest(LanguageDialog languageDialog, InstallerFrame installerFrame, GUIInstallData installData, InstallerController installerController)
+    public IzpackInstallationTest(LanguageDialog languageDialog, InstallerFrame installerFrame, GUIInstallData installData, InstallerController installerController, File generatedInstallJar)
     {
         this.installerController = installerController;
         this.languageDialog = languageDialog;
         this.installData = installData;
         this.installerFrame = installerFrame;
+        this.generatedInstallJar = generatedInstallJar;
     }
 
     @After
