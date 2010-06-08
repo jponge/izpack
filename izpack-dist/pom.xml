@@ -71,9 +71,16 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
+                    <!--<descriptorRefs>-->
+                    <!--<descriptorRef>-->
+                    <!--project-->
+                    <!--</descriptorRef>-->
+                    <!--</descriptorRefs>-->
                     <descriptors>
-                        <descriptor>src/assembly/izpack-sources.xml</descriptor>
+                        <descriptor>src/assembly/assembly.xml</descriptor>
                     </descriptors>
+                    <outputDirectory>${staging.dir}</outputDirectory>
+                    <finalName>izpack</finalName>
                 </configuration>
                 <executions>
                     <execution>
@@ -88,6 +95,6 @@
         </plugins>
     </build>
     <properties>
-        <staging.dir>${basedir}/target/staging</staging.dir>
+        <staging.dir>${basedir}/target/staging/</staging.dir>
     </properties>
 </project>
