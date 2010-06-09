@@ -22,15 +22,14 @@ public class TestMergeContainer extends AbstractContainer
 
     public void fillContainer(MutablePicoContainer picoContainer)
     {
-        Properties property = new Properties();
-        property.put("HelloPanelTestWithDependenciesClass", "com.izforge.izpack.panels.depend");
+        picoContainer.getComponent(Properties.class).put("HelloPanelTestWithDependenciesClass", "com.izforge.izpack.panels.depend");
         picoContainer
                 .addComponent(MergeManager.class, MergeManagerImpl.class)
                 .as(Characteristics.USE_NAMES).addComponent(ClassPathCrawler.class)
                 .as(Characteristics.USE_NAMES).addComponent(PathResolver.class)
                 .as(Characteristics.USE_NAMES).addComponent(MergeableResolver.class)
                 .addComponent("mergeContent", HashMap.class, ComponentParameter.ZERO)
-                .addComponent("panelDependencies", property);
+                ;
     }
 
 }

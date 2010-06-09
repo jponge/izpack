@@ -42,7 +42,7 @@ public class IzpackGenerationTest
     public void testGeneratedIzpackInstaller() throws Exception
     {
         assertThat(generatedInstallJar, ZipMatcher.isZipContainingFiles(
-                "com/izforge/izpack/panels/hello/HelloPanel"
+                "com/izforge/izpack/panels/hello/HelloPanel.class"
         ));
     }
 }

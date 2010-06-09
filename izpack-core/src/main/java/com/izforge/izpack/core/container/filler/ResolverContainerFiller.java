@@ -11,6 +11,7 @@ import org.picocontainer.parameters.ComponentParameter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -22,8 +23,12 @@ public class ResolverContainerFiller implements DependenciesFillerContainer
 {
     public void fillContainer(MutablePicoContainer picoContainer)
     {
+        Properties properties = picoContainer.getComponent(Properties.class);
+        for (Map.Entry<Object, Object> entry : getPanelDependencies().entrySet())
+        {
+            properties.put(entry.getKey(), entry.getValue());
+        }
         picoContainer
-                .addComponent("panelDependencies", getPanelDependencies())
                 .addComponent("mergeContent", HashMap.class, ComponentParameter.ZERO)
                 .as(Characteristics.USE_NAMES).addComponent(ClassPathCrawler.class)
                 .as(Characteristics.USE_NAMES).addComponent(PathResolver.class)
