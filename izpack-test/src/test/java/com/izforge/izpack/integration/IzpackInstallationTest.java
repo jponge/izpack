@@ -2,7 +2,7 @@ package com.izforge.izpack.integration;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.GUIInstallData;
-import com.izforge.izpack.compiler.container.TestIntegrationContainer;
+import com.izforge.izpack.compiler.container.TestInstallationContainer;
 import com.izforge.izpack.installer.base.InstallerController;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.language.LanguageDialog;
@@ -32,7 +32,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 
 @RunWith(PicoRunner.class)
-@Container(TestIntegrationContainer.class)
+@Container(TestInstallationContainer.class)
 public class IzpackInstallationTest
 {
     @Rule
@@ -43,15 +43,13 @@ public class IzpackInstallationTest
     private InstallerFrame installerFrame;
     private GUIInstallData installData;
     private InstallerController installerController;
-    private File generatedInstallJar;
 
-    public IzpackInstallationTest(LanguageDialog languageDialog, InstallerFrame installerFrame, GUIInstallData installData, InstallerController installerController, File generatedInstallJar)
+    public IzpackInstallationTest(LanguageDialog languageDialog, InstallerFrame installerFrame, GUIInstallData installData, InstallerController installerController)
     {
         this.installerController = installerController;
         this.languageDialog = languageDialog;
         this.installData = installData;
         this.installerFrame = installerFrame;
-        this.generatedInstallJar = generatedInstallJar;
     }
 
     @After

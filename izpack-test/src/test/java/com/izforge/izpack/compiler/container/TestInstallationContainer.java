@@ -13,7 +13,7 @@ import org.picocontainer.MutablePicoContainer;
  *
  * @author Anthonin Bonnefoy
  */
-public class TestIntegrationContainer extends AbstractContainer
+public class TestInstallationContainer extends AbstractContainer
 {
     private Class klass;
     private FrameworkMethod frameworkMethod;
@@ -21,7 +21,7 @@ public class TestIntegrationContainer extends AbstractContainer
     @Rule
     public UnloadJarRule unloadJarRule = new UnloadJarRule();
 
-    public TestIntegrationContainer(Class klass, FrameworkMethod frameworkMethod)
+    public TestInstallationContainer(Class klass, FrameworkMethod frameworkMethod)
     {
         this.klass = klass;
         this.frameworkMethod = frameworkMethod;

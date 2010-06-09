@@ -23,6 +23,7 @@ import org.mockito.Mockito;
 import org.picocontainer.MutablePicoContainer;
 
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Container for compiler test using mocks
@@ -60,6 +61,7 @@ public class TestCompilerContainerMock extends AbstractContainer
                 .addComponent(IzpackProjectInstaller.class)
                 .addComponent(XmlCompilerHelper.class)
                 .addComponent(XMLParser.class)
+                .addComponent(Properties.class)
                 ;
         new ResolverContainerFiller().fillContainer(pico);
 

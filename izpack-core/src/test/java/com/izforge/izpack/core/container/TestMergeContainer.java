@@ -22,6 +22,10 @@ public class TestMergeContainer extends AbstractContainer
 
     public void fillContainer(MutablePicoContainer picoContainer)
     {
+        if (picoContainer.getComponent(Properties.class) == null)
+        {
+            picoContainer.addComponent(Properties.class);
+        }
         picoContainer.getComponent(Properties.class).put("HelloPanelTestWithDependenciesClass", "com.izforge.izpack.panels.depend");
         picoContainer
                 .addComponent(MergeManager.class, MergeManagerImpl.class)

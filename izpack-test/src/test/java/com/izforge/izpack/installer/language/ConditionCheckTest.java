@@ -2,7 +2,7 @@ package com.izforge.izpack.installer.language;
 
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
-import com.izforge.izpack.compiler.container.TestIntegrationContainer;
+import com.izforge.izpack.compiler.container.TestInstallationContainer;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
@@ -19,7 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * @author Anthonin Bonnefoy
  */
 @RunWith(PicoRunner.class)
-@Container(TestIntegrationContainer.class)
+@Container(TestInstallationContainer.class)
 public class ConditionCheckTest
 {
 

@@ -3,7 +3,7 @@ package com.izforge.izpack.integration;
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.compiler.container.TestIntegrationContainer;
+import com.izforge.izpack.compiler.container.TestInstallationContainer;
 import com.izforge.izpack.installer.base.InstallerController;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.language.LanguageDialog;
@@ -29,7 +29,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 
 @RunWith(PicoRunner.class)
-@Container(TestIntegrationContainer.class)
+@Container(TestInstallationContainer.class)
 public class InstallationTest
 {
     private DialogFixture dialogFrameFixture;

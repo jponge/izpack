@@ -2,7 +2,7 @@ package com.izforge.izpack.integration;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.event.InstallerListener;
-import com.izforge.izpack.compiler.container.TestIntegrationContainer;
+import com.izforge.izpack.compiler.container.TestInstallationContainer;
 import com.izforge.izpack.event.RegistryInstallerListener;
 import com.izforge.izpack.event.SummaryLoggerInstallerListener;
 import com.izforge.izpack.test.Container;
@@ -23,7 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 
 @RunWith(PicoRunner.class)
-@Container(TestIntegrationContainer.class)
+@Container(TestInstallationContainer.class)
 public class EventTest
 {
     private AutomatedInstallData automatedInstallData;

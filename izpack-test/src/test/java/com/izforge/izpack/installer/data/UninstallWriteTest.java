@@ -2,7 +2,7 @@ package com.izforge.izpack.installer.data;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.compiler.container.TestIntegrationContainer;
+import com.izforge.izpack.compiler.container.TestInstallationContainer;
 import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
@@ -20,7 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Test of unpacker
  */
 @RunWith(PicoRunner.class)
-@Container(TestIntegrationContainer.class)
+@Container(TestInstallationContainer.class)
 public class UninstallWriteTest
 {
     private UninstallDataWriter uninstallDataWriter;
