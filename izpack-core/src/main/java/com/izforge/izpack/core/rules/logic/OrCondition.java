@@ -21,13 +21,14 @@
 
 package com.izforge.izpack.core.rules.logic;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.util.Debug;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * @author Dennis Reil, <izpack@reil-online.de>
@@ -38,20 +39,12 @@ public class OrCondition extends Condition
 
     protected RulesEngineImpl rulesEngineImpl;
 
-    protected Set<Condition> nestedConditions = new HashSet<Condition>();
+    protected Collection<Condition> nestedConditions = new ArrayList<Condition>();
 
-    public OrCondition(RulesEngineImpl rulesEngineImpl)
+    public OrCondition(RulesEngineImpl rulesEngineImpl, Condition... operands)
     {
         this.rulesEngineImpl = rulesEngineImpl;
-    }
-
-    public OrCondition(RulesEngineImpl rulesEngineImpl, Condition ... operands)
-    {
-        this.rulesEngineImpl = rulesEngineImpl;
-        for (Condition condition : operands)
-        {
-            nestedConditions.add(condition);
-        }
+        nestedConditions.addAll(Arrays.asList(operands));
     }
 
     @Override

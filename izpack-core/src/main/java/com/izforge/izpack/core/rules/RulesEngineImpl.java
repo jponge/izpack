@@ -299,12 +299,12 @@ public class RulesEngineImpl implements RulesEngine
      * Parses the given complex expression into a condition.
      * Understands the boolean operations && (AND), || (OR)
      * and ! (NOT).
-     *
+     * <p/>
      * Precedence is:
      * NOT is evaluated first.
      * AND is evaluated after NOT, but before OR.
      * OR is evaluated last.
-     *
+     * <p/>
      * Parentheses may be added at a later time.
      *
      * @param expression
@@ -316,13 +316,14 @@ public class RulesEngineImpl implements RulesEngine
 
         if (expression.contains("||"))
         {
-            result = parseComplexOrLevelCondition(expression);
             result = parseComplexOrCondition(expression);
         }
         else if (expression.contains("&&"))
         {
             result = parseComplexAndCondition(expression);
-        } else if (expression.contains("^")) {
+        }
+        else if (expression.contains("^"))
+        {
             result = parseComplexXorCondition(expression);
         }
         else if (expression.contains("!"))
@@ -335,24 +336,6 @@ public class RulesEngineImpl implements RulesEngine
         }
 
         result.setInstalldata(installdata);
-
-        return result;
-    }
-
-    private Condition parseComplexOrLevelCondition(String expression) {
-        Condition result = null;
-        int orPosition = expression.indexOf("||");
-        int xorPosition = expression.indexOf("^");
-
-        if (xorPosition == -1) {
-            result = parseComplexOrCondition(expression);
-        } else if (orPosition == -1) {
-            result = parseComplexXorCondition(expression);
-        } else if (orPosition < xorPosition) {
-            result = parseComplexOrCondition(expression);
-        } else {
-            result = parseComplexXorCondition(expression);
-        }
 
         return result;
     }
@@ -377,10 +360,12 @@ public class RulesEngineImpl implements RulesEngine
 
     /**
      * Creates a XOR condition from the given complex expression
+     *
      * @param expression
      * @return
      */
-    private Condition parseComplexXorCondition(String expression) {
+    private Condition parseComplexXorCondition(String expression)
+    {
         Condition result = null;
 
         String[] parts = expression.split("\\^", 2);

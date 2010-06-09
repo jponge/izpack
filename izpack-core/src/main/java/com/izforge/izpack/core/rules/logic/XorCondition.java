@@ -32,12 +32,7 @@ public class XorCondition extends OrCondition
 {
     private static final long serialVersionUID = 3148555083095194992L;
 
-    public XorCondition(RulesEngineImpl rulesEngineImpl)
-    {
-        super(rulesEngineImpl);
-    }
-
-    public XorCondition(RulesEngineImpl rulesEngineImpl, Condition ... operands)
+    public XorCondition(RulesEngineImpl rulesEngineImpl, Condition... operands)
     {
         super(rulesEngineImpl, operands);
     }
@@ -51,22 +46,14 @@ public class XorCondition extends OrCondition
             condition.setInstalldata(this.getInstalldata());
             if (result == null)
             {
-                result = new Boolean(condition.isTrue());
+                result = condition.isTrue();
             }
             else
             {
-                if (result.booleanValue() && condition.isTrue())
-                {
-                    // in case both are true
-                    result = new Boolean(false);
-                }
-                else
-                {
-                    result = new Boolean(result.booleanValue() || condition.isTrue());
-                }
+                result = !(result && condition.isTrue()) && (result || condition.isTrue());
             }
         }
-        return result.booleanValue();
+        return result;
     }
 
     @Override
