@@ -369,6 +369,7 @@
                                 <exclude>**/UninstallDataWriter.java</exclude>
                                 <exclude>**/UninstallWriteTest.java</exclude>
                                 <exclude>**/ConditionCheckTest.java</exclude>
+                                <exclude>**/EventTest.java</exclude>
                                 <exclude>**/IzpackInstallationTest.java</exclude>
                             </excludes>
                         </configuration>
