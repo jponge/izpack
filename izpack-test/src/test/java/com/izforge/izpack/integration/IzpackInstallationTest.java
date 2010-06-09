@@ -18,6 +18,7 @@ import org.hamcrest.core.Is;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.MethodRule;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 
@@ -37,6 +38,9 @@ public class IzpackInstallationTest
 {
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @Rule
+    public MethodRule globalTimeout= new org.junit.rules.Timeout(50000);
+
     private DialogFixture dialogFrameFixture;
     private FrameFixture installerFrameFixture;
     private LanguageDialog languageDialog;

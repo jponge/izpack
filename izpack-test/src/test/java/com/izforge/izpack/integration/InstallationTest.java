@@ -16,7 +16,9 @@ import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.After;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.MethodRule;
 import org.junit.runner.RunWith;
 
 import java.awt.*;
@@ -32,6 +34,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @Container(TestInstallationContainer.class)
 public class InstallationTest
 {
+    @Rule
+    public MethodRule globalTimeout= new org.junit.rules.Timeout(50000);
     private DialogFixture dialogFrameFixture;
     private FrameFixture installerFrameFixture;
     private ResourceManager resourceManager;
@@ -39,7 +43,6 @@ public class InstallationTest
     private InstallerFrame installerFrame;
     private GUIInstallData installData;
     private InstallerController installerController;
-
     public InstallationTest(ResourceManager resourceManager, LanguageDialog languageDialog, InstallerFrame installerFrame, GUIInstallData installData, InstallerController installerController)
     {
         this.installerController = installerController;
