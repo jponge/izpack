@@ -34,7 +34,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @Container(TestInstallationContainer.class)
 public class InstallationTest {
     @Rule
-    public MethodRule globalTimeout = new org.junit.rules.Timeout(600000);
+    public MethodRule globalTimeout = new org.junit.rules.Timeout(HelperTestMethod.TIMEOUT);
     private DialogFixture dialogFrameFixture;
     private FrameFixture installerFrameFixture;
     private ResourceManager resourceManager;

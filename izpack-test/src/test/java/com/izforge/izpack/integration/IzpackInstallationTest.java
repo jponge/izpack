@@ -38,7 +38,7 @@ public class IzpackInstallationTest {
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
     @Rule
-    public MethodRule globalTimeout = new org.junit.rules.Timeout(600000);
+    public MethodRule globalTimeout = new org.junit.rules.Timeout(HelperTestMethod.TIMEOUT);
 
     private DialogFixture dialogFrameFixture;
     private FrameFixture installerFrameFixture;
@@ -120,7 +120,7 @@ public class IzpackInstallationTest {
         checkIzpackInstallation(installPath);
 
         // Finish
-//        installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
+        installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
 
 
     }

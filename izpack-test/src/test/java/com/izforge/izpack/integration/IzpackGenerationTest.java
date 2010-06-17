@@ -23,7 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @Container(TestCompilationContainer.class)
 public class IzpackGenerationTest {
     @Rule
-    public MethodRule globalTimeout = new org.junit.rules.Timeout(600000);
+    public MethodRule globalTimeout = new org.junit.rules.Timeout(HelperTestMethod.TIMEOUT);
 
     private File generatedInstallJar;
 
