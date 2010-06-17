@@ -18,6 +18,11 @@
             <groupId>org.apache.maven.plugin-testing</groupId>
             <artifactId>maven-plugin-testing-harness</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.izpack</groupId>
+            <artifactId>izpack-utils</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -71,6 +76,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Launch izpack compilation -->
             <plugin>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>izpack-maven-plugin</artifactId>
@@ -85,6 +91,7 @@
                 </executions>
             </plugin>
 
+            <!-- Project sources generation -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
