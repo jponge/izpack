@@ -80,7 +80,7 @@ set LOCALCLASSPATH=%IZPACK_HOME%\Izpack.jar;%CLASSPATH%
 for %%i in ("%IZPACK_HOME%\lib\*.jar") do call "%IZPACK_HOME%\bin\lcp.bat" %%i
 
 :runIzpack
-set MAIN_CLASS=com.izforge.izpack.compiler.Compiler
+set MAIN_CLASS=com.izforge.izpack.compiler.bootstrap.CompilerLauncher
 
 "%_JAVACMD%" -Xmx512m %IZPACK_OPTS% -classpath "%LOCALCLASSPATH%" %MAIN_CLASS% %IZPACK_CMD_LINE_ARGS%
 goto end
