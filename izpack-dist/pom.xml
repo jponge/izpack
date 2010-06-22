@@ -20,8 +20,20 @@
         </dependency>
 
         <dependency>
-            <groupId>org.codehaus.izpack</groupId>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>izpack-compiler</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>izpack-installer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>izpack-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>izpack-event</artifactId>
         </dependency>
     </dependencies>
 
@@ -74,6 +86,19 @@
                             <outputDirectory>${staging.dir}</outputDirectory>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>Copy libs</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <excludeArtifactIds>izpack-utils</excludeArtifactIds>
+                            <outputDirectory>${staging.dir}/lib</outputDirectory>
+                            <includeScope>runtime</includeScope>
+                        </configuration>
+                    </execution>
+
                 </executions>
             </plugin>
             <!-- Launch izpack compilation -->
