@@ -16,25 +16,25 @@
 
 -->
 <assembly>
-    <id>bin</id>
-    <formats>
-        <format>zip</format>
-    </formats>
-    <fileSets>
-        <fileSet>
-            <includes>
-                <include>README*</include>
-                <include>LICENSE*</include>
-                <include>NOTICE*</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>${project.build.directory}</directory>
-            <outputDirectory></outputDirectory>
-            <includes>
-                <include>${project.artifactId}-${project.version}.jar</include>
-                <include>${project.artifactId}-${project.version}-jdk14.jar</include>
-            </includes>
-        </fileSet>
-    </fileSets>
+  <id>bin</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <fileSets>
+    <fileSet>
+      <includes>
+        <include>README*</include>
+        <include>LICENSE*</include>
+        <include>NOTICE*</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.directory}</directory>
+      <outputDirectory></outputDirectory>
+      <includes>
+        <include>${project.artifactId}-${project.version}.jar</include>
+        <include>${project.artifactId}-${project.version}-jdk14.jar</include>
+      </includes>
+    </fileSet>
+  </fileSets>
 </assembly>

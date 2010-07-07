@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
 import org.ini4j.Config;
@@ -25,30 +24,44 @@ abstract class AbstractFormatter implements HandlerBase
     private static final char OPERATOR = '=';
     private static final char COMMENT = '#';
     private static final char SPACE = ' ';
-    private static final String NEWLINE = "\n";
     private Config _config = Config.getGlobal();
     private boolean _header = true;
     private PrintWriter _output;
 
-    @Override
-    public void handleComment(String comment)
+    @Override public void handleEmptyLine()
     {
-        for (String line : comment.split(NEWLINE))
-        {
-            getOutput().print(COMMENT);
-            getOutput().print(line);
-            getOutput().print(getConfig().getLineSeparator());
-        }
-
-        if (_header && !getConfig().isNoHeader())
-        {
-            getOutput().print(getConfig().getLineSeparator());
-            setHeader(false);
-        }
+        getOutput().print(getConfig().getLineSeparator());
     }
 
-    @Override
-    public void handleOption(String optionName, String optionValue)
+    @Override public void handleComment(String comment)
+    {
+        if (getConfig().isComment() && (!_header || getConfig().isHeaderComment()) && (comment != null) && (comment.length() != 0))
+        {
+            String[] lines = comment.split(getConfig().getLineSeparator());
+            for (String line : lines)
+            {
+                if (getConfig().isEmptyLines() && line.startsWith(EMPTY_LINE_MARK))
+                {
+                    handleEmptyLine();
+                }
+                else
+                {
+                    getOutput().print(COMMENT);
+                    getOutput().print(line);
+                    getOutput().print(getConfig().getLineSeparator());
+                }
+            }
+
+            if (_header)
+            {
+                getOutput().print(getConfig().getLineSeparator());
+            }
+        }
+
+        _header = false;
+    }
+
+    @Override public void handleOption(String optionName, String optionValue)
     {
         if (getConfig().isStrictOperator())
         {

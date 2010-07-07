@@ -13,26 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j;
 
-import org.ini4j.test.Helper;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.nio.charset.Charset;
 
-public class ConfigTest
+public class ConfigTest extends Ini4jCase
 {
-    @AfterClass
-    public static void tearDownClass() throws Exception
-    {
-        Helper.resetConfig();
-    }
-
-    @Test
-    public void testDefaults()
+    @Test public void testDefaults()
     {
         Config def = newDefaultConfig();
 
@@ -41,8 +31,7 @@ public class ConfigTest
         assertEquals(def, Config.getGlobal().clone());
     }
 
-    @Test
-    public void testSystemProperties()
+    @Test public void testSystemProperties()
     {
         Config exp = newInverseConfig();
 
@@ -55,7 +44,6 @@ public class ConfigTest
         setBoolean(Config.PROP_LOWER_CASE_SECTION, exp.isLowerCaseSection());
         setBoolean(Config.PROP_MULTI_OPTION, exp.isMultiOption());
         setBoolean(Config.PROP_MULTI_SECTION, exp.isMultiSection());
-        setBoolean(Config.PROP_NO_HEADER, exp.isNoHeader());
         setBoolean(Config.PROP_STRICT_OPERATOR, exp.isStrictOperator());
         setBoolean(Config.PROP_UNNAMED_SECTION, exp.isUnnamedSection());
         setBoolean(Config.PROP_ESCAPE, exp.isEscape());
@@ -64,6 +52,8 @@ public class ConfigTest
         setBoolean(Config.PROP_PROPERTY_FIRST_UPPER, exp.isPropertyFirstUpper());
         setString(Config.PROP_LINE_SEPARATOR, exp.getLineSeparator());
         setCharset(Config.PROP_FILE_ENCODING, exp.getFileEncoding());
+        setBoolean(Config.PROP_COMMENT, exp.isComment());
+        setBoolean(Config.PROP_HEADER_COMMENT, exp.isHeaderComment());
         Config cfg = new Config();
 
         assertEquals(exp, cfg);
@@ -100,7 +90,6 @@ public class ConfigTest
         Assert.assertEquals(exp.isLowerCaseSection(), act.isLowerCaseSection());
         Assert.assertEquals(exp.isMultiOption(), act.isMultiOption());
         Assert.assertEquals(exp.isMultiSection(), act.isMultiSection());
-        Assert.assertEquals(exp.isNoHeader(), act.isNoHeader());
         Assert.assertEquals(exp.isStrictOperator(), act.isStrictOperator());
         Assert.assertEquals(exp.isUnnamedSection(), act.isUnnamedSection());
         Assert.assertEquals(exp.getGlobalSectionName(), act.getGlobalSectionName());
@@ -109,6 +98,8 @@ public class ConfigTest
         Assert.assertEquals(exp.isPropertyFirstUpper(), act.isPropertyFirstUpper());
         Assert.assertEquals(exp.getLineSeparator(), act.getLineSeparator());
         Assert.assertEquals(exp.getFileEncoding(), act.getFileEncoding());
+        Assert.assertEquals(exp.isComment(), act.isComment());
+        Assert.assertEquals(exp.isHeaderComment(), act.isHeaderComment());
     }
 
     private Config newDefaultConfig()
@@ -125,7 +116,6 @@ public class ConfigTest
         cfg.setLowerCaseSection(false);
         cfg.setMultiSection(false);
         cfg.setMultiOption(true);
-        cfg.setNoHeader(false);
         cfg.setStrictOperator(false);
         cfg.setUnnamedSection(false);
         cfg.setPathSeparator('/');
@@ -133,6 +123,8 @@ public class ConfigTest
         cfg.setPropertyFirstUpper(false);
         cfg.setLineSeparator(System.getProperty("line.separator"));
         cfg.setFileEncoding(Charset.forName("UTF-8"));
+        cfg.setComment(true);
+        cfg.setHeaderComment(true);
 
         return cfg;
     }
@@ -151,12 +143,14 @@ public class ConfigTest
         cfg.setLowerCaseSection(!cfg.isLowerCaseSection());
         cfg.setMultiSection(!cfg.isMultiSection());
         cfg.setMultiOption(!cfg.isMultiOption());
-        cfg.setNoHeader(!cfg.isNoHeader());
         cfg.setStrictOperator(!cfg.isStrictOperator());
         cfg.setUnnamedSection(!cfg.isUnnamedSection());
         cfg.setPathSeparator('?');
         cfg.setTree(!cfg.isTree());
         cfg.setPropertyFirstUpper(!cfg.isPropertyFirstUpper());
+        cfg.setComment(!cfg.isComment());
+        cfg.setHeaderComment(!cfg.isHeaderComment());
+
         //cfg.setLineSeparator("\t");
         //cfg.setFileEncoding(Charset.forName("ASCII"));
         return cfg;

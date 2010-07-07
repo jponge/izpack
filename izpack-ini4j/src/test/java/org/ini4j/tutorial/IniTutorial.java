@@ -13,23 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.tutorial;
 
 import org.ini4j.Ini;
+
 import org.ini4j.sample.Dwarf;
 import org.ini4j.sample.Dwarfs;
+
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+
 import java.util.Map;
 import java.util.Set;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 //<editor-fold defaultstate="collapsed" desc="apt documentation">
 //|
@@ -38,7 +40,6 @@ import static org.junit.Assert.assertNotNull;
 //|
 //|Ini Tutorial - How to use \[ini4j\] api
 //|
-
 //| This tutorial familiarize the reader with the usage of
 //| the [ini4j] library's natural interface.
 //|
@@ -53,8 +54,7 @@ public class IniTutorial extends AbstractTutorial
         new IniTutorial().run(filearg(args));
     }
 
-    @Override
-    protected void run(File arg) throws Exception
+    @Override protected void run(File arg) throws Exception
     {
         Ini ini = new Ini(arg.toURI().toURL());
 
@@ -67,8 +67,7 @@ public class IniTutorial extends AbstractTutorial
 //|* Data model
 //|
 //| Data model for .ini files is represented by org.ini4j.Ini class. This class
-
-    //| implements Map\<String,Section\>. It mean you can access sections using
+//| implements Map\<String,Section\>. It mean you can access sections using
 //| java.util.Map collection API interface. The Section is also a map, which is
 //| implements Map\<String,String\>.
 //{
@@ -104,8 +103,7 @@ public class IniTutorial extends AbstractTutorial
 //|
 //| There is several way to load data into Ini object. It can be done by using
 //| <<<load>>> methods or overloaded constructors. Data can be load from
-
-    //| InputStream, Reader, URL or File.
+//| InputStream, Reader, URL or File.
 //|
 //| You can store data using <<<store>>> methods. Data can store to OutputStream,
 //| Writer, or File.
@@ -133,8 +131,7 @@ public class IniTutorial extends AbstractTutorial
 //|* Macro/variable substitution
 //|
 //| To get a value, besides <<<get()>>> you can also
-
-    //| use <<<fetch()>>> which resolves any occurrent $\{section/option\} format
+//| use <<<fetch()>>> which resolves any occurrent $\{section/option\} format
 //| variable references in the needed value.
 //|
 //{
@@ -177,8 +174,7 @@ public class IniTutorial extends AbstractTutorial
 //|* Multi values
 //|
 //| \[ini4j\] library introduces MultiMap interface, which is extends normal
-
-    //| Map, but allows multiply values per keys. You can simply index values for
+//| Map, but allows multiply values per keys. You can simply index values for
 //| a given key, similar to indexed properties in JavaBeans api.
 //|
 //{
@@ -191,16 +187,26 @@ public class IniTutorial extends AbstractTutorial
         String n4 = sneezy.get("fortuneNumber", 3);  // = 44
 
         // ok, lets do in it easier...
-        //   int[] n = sneezy.get("fortuneNumber", int[].class);
+        int[] n = sneezy.getAll("fortuneNumber", int[].class);
 //}
+        // #2817399
+
+        assertEquals("11", n1);
+        assertEquals("22", n2);
+        assertEquals("33", n3);
+        assertEquals("44", n4);
+        assertEquals(4, n.length);
+        assertEquals(11, n[0]);
+        assertEquals(22, n[1]);
+        assertEquals(33, n[2]);
+        assertEquals(44, n[3]);
     }
 
 //|
 //|* Tree model
 //|
 //| Beyond two level map model, Ini class provides tree model. You can access
-
-    //| Sections as tree. It means that section names becomes path names, with a
+//| Sections as tree. It means that section names becomes path names, with a
 //| path separator character ('/' and '\' on Wini and Reg).
 //|
 //{

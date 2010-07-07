@@ -13,21 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
 import org.easymock.EasyMock;
+
 import org.ini4j.Config;
+import org.ini4j.Ini4jCase;
+
 import org.ini4j.test.Helper;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-public class IniSourceTest
+public class IniSourceTest extends Ini4jCase
 {
     private static final String COMMENTS = ";#";
     private static final String NESTED_TXT = "nested.txt";
@@ -38,13 +41,9 @@ public class IniSourceTest
     private static final String PART2 = ":part2.txt";
     private static final String OUTER = ":outer";
 
-    @Test
-    public void testWithInclude() throws Exception
+    @Test public void testWithInclude() throws Exception
     {
         HandlerBase handler = EasyMock.createMock(HandlerBase.class);
-        Config config = new Config();
-        config.setInclude(true);
-        config.setNoHeader(false);
 
         handler.handleComment("-1" + OUTER);
         handler.handleComment("-1" + NESTED);
@@ -75,7 +74,10 @@ public class IniSourceTest
         outer.append("2" + OUTER + '\n');
         outer.append(";-2" + OUTER + '\n');
         InputStream in = new ByteArrayInputStream(outer.toString().getBytes());
-        IniSource src = new IniSource(in, handler, config, COMMENTS);
+        Config cfg = new Config();
+
+        cfg.setInclude(true);
+        IniSource src = new IniSource(in, handler, COMMENTS, cfg);
 
         assertEquals("1" + OUTER, src.readLine());
         assertEquals(2, src.getLineNumber());
@@ -111,20 +113,19 @@ public class IniSourceTest
         EasyMock.verify(handler);
     }
 
-    @Test
-    public void testWithoutInclude() throws Exception
+    @Test public void testWithoutInclude() throws Exception
     {
         HandlerBase handler = EasyMock.createMock(HandlerBase.class);
-        Config config = new Config();
-        config.setInclude(false);
-        config.setNoHeader(false);
 
         handler.handleComment("-1" + NESTED);
         handler.handleComment("-2" + NESTED);
         handler.handleComment("-3" + NESTED);
         handler.handleComment("-4" + NESTED);
         EasyMock.replay(handler);
-        IniSource src = new IniSource(Helper.getResourceURL(NESTED_PATH), handler, config, COMMENTS);
+        Config cfg = new Config();
+
+        cfg.setInclude(false);
+        IniSource src = new IniSource(Helper.getResourceURL(NESTED_PATH), handler, COMMENTS, cfg);
 
         assertEquals("1" + NESTED, src.readLine());
         assertEquals("<include.txt>", src.readLine());

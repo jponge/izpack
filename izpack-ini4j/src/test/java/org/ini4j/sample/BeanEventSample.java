@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.sample;
 
 //<editor-fold defaultstate="collapsed" desc="apt documentation">
@@ -32,11 +31,11 @@ package org.ini4j.sample;
 //|
 //</editor-fold>
 //{
-
 import org.ini4j.Ini;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+
 import java.io.FileInputStream;
 
 public class BeanEventSample
@@ -50,13 +49,13 @@ public class BeanEventSample
         Dwarf sneezy = ini.get("sneezy").as(Dwarf.class);
 
         sneezy.addPropertyChangeListener("age", new PropertyChangeListener()
-        {
-            public void propertyChange(PropertyChangeEvent event)
             {
-                System.out.println("property " + event.getPropertyName() + " change");
-                System.out.println(event.getOldValue() + " -> " + event.getNewValue());
-            }
-        });
+                public void propertyChange(PropertyChangeEvent event)
+                {
+                    System.out.println("property " + event.getPropertyName() + " change");
+                    System.out.println(event.getOldValue() + " -> " + event.getNewValue());
+                }
+            });
         System.out.println("Sneezy's age: " + sneezy.getAge());
         sneezy.setAge(44);
         System.out.println("Sneezy's age: " + sneezy.getAge());

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.sample;
 
 //<editor-fold defaultstate="collapsed" desc="apt documentation">
@@ -30,7 +29,6 @@ package org.ini4j.sample;
 //|
 //</editor-fold>
 //{
-
 import org.ini4j.Ini;
 
 import java.io.FileReader;

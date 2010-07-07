@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
 import org.ini4j.Config;
@@ -38,14 +37,12 @@ public class IniBuilder extends AbstractProfileBuilder implements IniHandler
         _ini = value;
     }
 
-    @Override
-    Config getConfig()
+    @Override Config getConfig()
     {
         return _ini.getConfig();
     }
 
-    @Override
-    Profile getProfile()
+    @Override Profile getProfile()
     {
         return _ini;
     }

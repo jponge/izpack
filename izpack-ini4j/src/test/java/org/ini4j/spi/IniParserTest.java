@@ -13,39 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
 import org.easymock.EasyMock;
+
 import org.ini4j.Config;
+import org.ini4j.Ini4jCase;
 import org.ini4j.InvalidFileFormatException;
+
 import org.ini4j.sample.Dwarf;
 import org.ini4j.sample.Dwarfs;
+
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringReader;
 
-import static org.junit.Assert.*;
-
-public class IniParserTest
+public class IniParserTest extends Ini4jCase
 {
-    private static final String[] BAD = {"[section\noption=value\n", "[]\noption=value", "section\noption=value", "[section]\noption\n", "[section]\n=value\n", "[section]\n\\u000d\\u000d=value\n"};
+    private static final String[] BAD = { "[section\noption=value\n", "[]\noption=value", "section\noption=value", "[section]\noption\n", "[section]\n=value\n", "[section]\n\\u000d\\u000d=value\n" };
     private static final String CFG_LOWER = "[SectioN]\n\nOptioN=ValuE\n";
     private static final String CFG_UNNAMED = "[]\noption=value\n";
     private static final String CFG_EMPTY_OPTION = "[section]\noption\n";
     private static final String CFG_GLOBAL = "option=value\n";
-    private static final String[] CFG_EXTRA = {CFG_EMPTY_OPTION, CFG_UNNAMED, CFG_GLOBAL};
+    private static final String[] CFG_EXTRA = { CFG_EMPTY_OPTION, CFG_UNNAMED, CFG_GLOBAL };
     private static final String ANONYMOUS = "?";
     private static final String EMPTY = "";
     private static final String SECTION = "section";
     private static final String OPTION = "option";
     private static final String VALUE = "value";
 
-    @Test
-    public void testEmpty() throws Exception
+    @Test public void testEmpty() throws Exception
     {
         IniParser parser = new IniParser();
         IniHandler handler = EasyMock.createMock(IniHandler.class);
@@ -57,8 +62,7 @@ public class IniParserTest
         EasyMock.verify(handler);
     }
 
-    @Test
-    public void testEmptyOption() throws Exception
+    @Test public void testEmptyOption() throws Exception
     {
         IniParser parser = new IniParser();
         IniHandler handler = EasyMock.createMock(IniHandler.class);
@@ -70,15 +74,14 @@ public class IniParserTest
         handler.endIni();
         EasyMock.replay(handler);
         Config cfg = new Config();
+
         cfg.setEmptyOption(true);
-        cfg.setNoHeader(false);
         parser.setConfig(cfg);
         parser.parse(new StringReader(CFG_EMPTY_OPTION), handler);
         EasyMock.verify(handler);
     }
 
-    @Test
-    public void testGlobalSection() throws Exception
+    @Test public void testGlobalSection() throws Exception
     {
         IniParser parser = new IniParser();
         IniHandler handler = EasyMock.createMock(IniHandler.class);
@@ -90,15 +93,14 @@ public class IniParserTest
         handler.endIni();
         EasyMock.replay(handler);
         Config cfg = new Config();
+
         cfg.setGlobalSection(true);
-        cfg.setNoHeader(false);
         parser.setConfig(cfg);
         parser.parse(new StringReader(CFG_GLOBAL), handler);
         EasyMock.verify(handler);
     }
 
-    @Test
-    public void testLower() throws Exception
+    @Test public void testLower() throws Exception
     {
         IniParser parser = new IniParser();
         IniHandler handler = EasyMock.createMock(IniHandler.class);
@@ -110,19 +112,17 @@ public class IniParserTest
         handler.endIni();
         EasyMock.replay(handler);
         Config cfg = new Config();
+
         cfg.setLowerCaseOption(true);
         cfg.setLowerCaseSection(true);
-        cfg.setNoHeader(false);
         parser.setConfig(cfg);
         parser.parse(new StringReader(CFG_LOWER), handler);
         EasyMock.verify(handler);
     }
 
-    @Test
-    public void testNewInstance() throws Exception
+    @Test public void testNewInstance() throws Exception
     {
         Config cfg = new Config();
-        cfg.setNoHeader(false);
         IniParser parser = IniParser.newInstance();
 
         assertEquals(IniParser.class, parser.getClass());
@@ -131,8 +131,7 @@ public class IniParserTest
         assertSame(cfg, parser.getConfig());
     }
 
-    @Test
-    public void testParse() throws Exception
+    @Test public void testParse() throws Exception
     {
         IniParser parser = new IniParser();
         IniHandler handler = EasyMock.createMock(IniHandler.class);
@@ -226,15 +225,13 @@ public class IniParserTest
         EasyMock.verify(handler);
     }
 
-    @Test
-    public void testParseExceptions() throws Exception
+    @Test public void testParseExceptions() throws Exception
     {
         assertBad(BAD);
         assertBad(CFG_EXTRA);
     }
 
-    @Test
-    public void testUnnamedSection() throws Exception
+    @Test public void testUnnamedSection() throws Exception
     {
         IniParser parser = new IniParser();
         IniHandler handler = EasyMock.createMock(IniHandler.class);
@@ -246,8 +243,8 @@ public class IniParserTest
         handler.endIni();
         EasyMock.replay(handler);
         Config cfg = new Config();
+
         cfg.setUnnamedSection(true);
-        cfg.setNoHeader(false);
         parser.setConfig(cfg);
         parser.parse(new StringReader(CFG_UNNAMED), handler);
         EasyMock.verify(handler);

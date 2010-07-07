@@ -13,16 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
+import org.ini4j.Ini4jCase;
+
 import org.ini4j.test.Helper;
-import org.junit.AfterClass;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-public class ServiceFinderTest
+public class ServiceFinderTest extends Ini4jCase
 {
     static final String DUMMY = "dummy";
     static final String DUMMY_SERVICE = "org.ini4j.Dummy";
@@ -30,14 +33,7 @@ public class ServiceFinderTest
     static final String EMPTY_CONFIG_SERVICE = "org.ini4j.EmptyConfig";
     static final String DUMMY_IMPL = "DummyImpl";
 
-    @AfterClass
-    public static void tearDownClass() throws Exception
-    {
-        Helper.resetConfig();
-    }
-
-    @Test
-    public void testFindService() throws Exception
+    @Test public void testFindService() throws Exception
     {
         boolean flag = false;
 
@@ -56,8 +52,7 @@ public class ServiceFinderTest
         assertTrue(flag);
     }
 
-    @Test
-    public void testFindServiceClass() throws Exception
+    @Test public void testFindServiceClass() throws Exception
     {
         boolean flag = false;
 
@@ -76,8 +71,7 @@ public class ServiceFinderTest
         assertTrue(flag);
     }
 
-    @Test
-    public void testFindServiceClassName() throws Exception
+    @Test public void testFindServiceClassName() throws Exception
     {
         System.setProperty(IniParser.class.getName(), DUMMY);
         assertEquals(DUMMY, ServiceFinder.findServiceClassName(IniParser.class.getName()));

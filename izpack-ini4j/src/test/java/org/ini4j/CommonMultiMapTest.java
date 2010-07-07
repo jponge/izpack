@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
-
-public class CommonMultiMapTest
+public class CommonMultiMapTest extends Ini4jCase
 {
     private static final String KEY = "key";
     private static final String VALUE = "value";
     private static final String COMMENT = "comment";
 
-    @Test
-    public void testClearAndRemove() throws Exception
+    @Test public void testClearAndRemove() throws Exception
     {
         CommonMultiMap<String, String> map = new CommonMultiMap<String, String>();
 
@@ -84,8 +84,7 @@ public class CommonMultiMapTest
         assertNull(map.getComment(KEY));
     }
 
-    @Test
-    public void testPutAll() throws Exception
+    @Test public void testPutAll() throws Exception
     {
         CommonMultiMap<String, String> map = new CommonMultiMap<String, String>();
         CommonMultiMap<String, String> copy = new CommonMultiMap<String, String>();

@@ -17,40 +17,24 @@
 
 -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
     <properties>
         <title>Java API for handling Windows ini file format</title>
     </properties>
     <body>
         <section name="Java API for handling Windows ini file format">
             <p>
-                The [ini4j] is a simple Java API for handling configuration files in Windows .ini format.
-                Additionally, the library includes
-                <a href="http://java.sun.com/javase/6/docs/api/java/util/prefs/Preferences.html">Java Preferences API
-                </a>
-                implementation based on the .ini file.
+ The [ini4j] is a simple Java API for handling configuration files in Windows .ini format.
+ Additionally, the library includes
+ <a href="http://java.sun.com/javase/6/docs/api/java/util/prefs/Preferences.html">Java Preferences API</a>
+ implementation based on the .ini file.
             </p>
             <menu>
-                <li>
-                    <a href="tutorial/index.html">
-                        <img src="img/tutorial.png" />
-                        Tutorials
-                    </a>
-                </li>
-                <!--                <li><a href="documents.html"><img src="img/docs.png"/> Documents</a></li> -->
-                <li>
-                    <a href="download.html">
-                        <img src="img/download.png" />
-                        Download
-                    </a>
-                </li>
-                <li>
-                    <a href="community.html">
-                        <img src="img/community.png" />
-                        Community
-                    </a>
-                </li>
+                <li><a href="tutorial/index.html"><img src="img/tutorial.png"/> Tutorials</a></li>
+<!--                <li><a href="documents.html"><img src="img/docs.png"/> Documents</a></li> -->
+                <li><a href="download.html"><img src="img/download.png"/> Download</a></li>
+                <li><a href="community.html"><img src="img/community.png"/> Community</a></li>
             </menu>
             <subsection name="Simple document model">
                 <p>
@@ -77,16 +61,10 @@
             </subsection>
             <subsection name="java.util.Properties replacement">
                 <p>
-                    [ini4j] contains class
-                    <code>Options</code>
-                    which is a better
-                    Properties replacement.
-                    <code>Options</code>
-                    use .properties
+                    [ini4j] contains class <code>Options</code> which is a better
+                    Properties replacement. <code>Options</code> use .properties
                     file format, but allow macro/variable substitution, mult value
-                    properties. Unlike original java.util.Properties,
-                    <code>Options</code>
-                    implements
+                    properties. Unlike original java.util.Properties, <code>Options</code> implements
                     Map&lt;String,String&gt;, so it more confortable to use
                     standard Collections api.
                     <a href="tutorial/OptTutorial.java.html">--&gt; Options Tutorial</a>

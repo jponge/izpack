@@ -18,25 +18,25 @@
 -->
 <jalopy vendor="TRIEMAX">
     <profile name="ini4j">
-        <html>
-            <output>
-                <blankLines>
-                    <keepUpTo>2</keepUpTo>
-                </blankLines>
-                <indent>
-                    <size>2</size>
-                </indent>
-                <wrap>
-                    <attributes>never</attributes>
-                    <keepBreak>
-                        <tags>false</tags>
-                        <text>false</text>
-                    </keepBreak>
-                    <size>80</size>
-                    <text>necessary</text>
-                </wrap>
-            </output>
-        </html>
+  <html>
+   <output>
+    <blankLines>
+     <keepUpTo>2</keepUpTo>
+    </blankLines>
+    <indent>
+     <size>2</size>
+    </indent>
+    <wrap>
+     <attributes>never</attributes>
+     <keepBreak>
+      <tags>false</tags>
+      <text>false</text>
+     </keepBreak>
+     <size>80</size>
+     <text>necessary</text>
+    </wrap>
+   </output>
+  </html>
         <internal>
             <version>36</version>
         </internal>
@@ -277,7 +277,7 @@
                         <doWhile>true</doWhile>
                         <for>true</for>
                         <ifElse>true</ifElse>
-                        <singleIf>true</singleIf>
+      <singleIf>true</singleIf>
                         <singleLine>false</singleLine>
                         <switch>false</switch>
                         <while>true</while>
@@ -292,7 +292,7 @@
                         <doWhile>false</doWhile>
                         <for>false</for>
                         <ifElse>false</ifElse>
-                        <singleIf>false</singleIf>
+      <singleIf>false</singleIf>
                         <switch>false</switch>
                         <while>false</while>
                     </remove>
@@ -320,9 +320,9 @@
                         <singleLine>false</singleLine>
                     </format>
                     <javadoc>
-                        <blankLines>
-                            <xdoclet>-1</xdoclet>
-                        </blankLines>
+      <blankLines>
+       <xdoclet>-1</xdoclet>
+      </blankLines>
                         <blockTagsShort>false</blockTagsShort>
                         <check>
                             <description>
@@ -348,9 +348,9 @@
                             <throwsTags>false</throwsTags>
                         </check>
                         <classShort>false</classShort>
-                        <compact>
-                            <attribute>false</attribute>
-                        </compact>
+      <compact>
+       <attribute>false</attribute>
+      </compact>
                         <enumShort>false</enumShort>
                         <failOnError>false</failOnError>
                         <fieldsShort>true</fieldsShort>
@@ -388,13 +388,11 @@
                             <indent>true</indent>
                             <innerSpacing>2</innerSpacing>
                             <methodTypeParams>false</methodTypeParams>
-                            <order>
-                                @param^param|@return^return|@throws^throws|@author^common|@version^common|@see^common|@since^common|@serial^common|@serialData^common|@serialField^common|@deprecated^common|@custom^common|@beaninfo^none|@@attribute^none|@invalid^common|@todo^common|@xdoclet^none|@jalopy.group^none|@call-tree^none
-                            </order>
+                            <order>@param^param|@return^return|@throws^throws|@author^common|@version^common|@see^common|@since^common|@serial^common|@serialData^common|@serialField^common|@deprecated^common|@custom^common|@beaninfo^none|@@attribute^none|@invalid^common|@todo^common|@xdoclet^none|@jalopy.group^none|@call-tree^none</order>
                             <removeMisused>false</removeMisused>
                             <sort>false</sort>
                             <sortAttributes>false</sortAttributes>
-                            <sortXDoclet>false</sortXDoclet>
+       <sortXDoclet>false</sortXDoclet>
                             <spelling>false</spelling>
                         </tags>
                         <templates>
@@ -703,16 +701,12 @@ test\w+
                             <public>true</public>
                             <static>true</static>
                         </modifier>
-                        <order>
-                            static|enum|enumConstant|field|initializer|constructor|method|interface|class|annotation
-                        </order>
+                        <order>static|enum|enumConstant|field|initializer|constructor|method|interface|class|annotation</order>
                     </declaration>
                     <modifier>
                         <annotation>false</annotation>
                         <enable>false</enable>
-                        <order>
-                            annotation|public|protected|private|abstract|static|final|synchronized|transient|volatile|native|strictfp
-                        </order>
+                        <order>annotation|public|protected|private|abstract|static|final|synchronized|transient|volatile|native|strictfp</order>
                     </modifier>
                 </sorting>
                 <whitespace>
@@ -1084,9 +1078,9 @@ test\w+
                 <timePattern>hh:mm</timePattern>
             </locale>
             <misc>
-                <checkout>false</checkout>
-                <encoding>UTF-8</encoding>
-                <forceEncoding>false</forceEncoding>
+    <checkout>false</checkout>
+    <encoding>UTF-8</encoding>
+    <forceEncoding>false</forceEncoding>
                 <forceFormatting>false</forceFormatting>
                 <forceLineSeparator>false</forceLineSeparator>
                 <formatOnCheckin>false</formatOnCheckin>

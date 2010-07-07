@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
 interface HandlerBase
 {
+    String EMPTY_LINE_MARK = "\0";
+
+    void handleEmptyLine();
+
     void handleComment(String comment);
 
     void handleOption(String optionName, String optionValue);

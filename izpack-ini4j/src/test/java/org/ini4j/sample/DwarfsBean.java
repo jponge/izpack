@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.sample;
 
 //<editor-fold defaultstate="collapsed" desc="apt documentation">
 //|
 //|                ----------------
 //|                DwarfsBean class
-
 //|
 //|DwarfsBean class
 //|
@@ -36,8 +34,7 @@ public class DwarfsBean implements Dwarfs
     private Dwarf _sleepy;
     private Dwarf _sneezy;
 
-    @Override
-    public Dwarf getBashful()
+    @Override public Dwarf getBashful()
     {
         return _bashful;
     }
@@ -47,8 +44,7 @@ public class DwarfsBean implements Dwarfs
         _bashful = value;
     }
 
-    @Override
-    public Dwarf getDoc()
+    @Override public Dwarf getDoc()
     {
         return _doc;
     }
@@ -58,8 +54,7 @@ public class DwarfsBean implements Dwarfs
         _doc = value;
     }
 
-    @Override
-    public Dwarf getDopey()
+    @Override public Dwarf getDopey()
     {
         return _dopey;
     }
@@ -69,8 +64,7 @@ public class DwarfsBean implements Dwarfs
         _dopey = value;
     }
 
-    @Override
-    public Dwarf getGrumpy()
+    @Override public Dwarf getGrumpy()
     {
         return _grumpy;
     }
@@ -80,8 +74,7 @@ public class DwarfsBean implements Dwarfs
         _grumpy = value;
     }
 
-    @Override
-    public Dwarf getHappy()
+    @Override public Dwarf getHappy()
     {
         return _happy;
     }
@@ -91,8 +84,7 @@ public class DwarfsBean implements Dwarfs
         _happy = value;
     }
 
-    @Override
-    public Dwarf getSleepy()
+    @Override public Dwarf getSleepy()
     {
         return _sleepy;
     }
@@ -102,8 +94,7 @@ public class DwarfsBean implements Dwarfs
         _sleepy = value;
     }
 
-    @Override
-    public Dwarf getSneezy()
+    @Override public Dwarf getSneezy()
     {
         return _sneezy;
     }

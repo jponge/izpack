@@ -13,18 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+
 import java.io.File;
+
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+
 import java.net.URI;
 import java.net.URL;
+
 import java.util.TimeZone;
 
 public class BeanTool
@@ -68,7 +71,8 @@ public class BeanTool
             }
             catch (Exception x)
             {
-                throw new IllegalArgumentException("Failed to set property: " + pd.getDisplayName(), x);
+                throw (IllegalArgumentException) (new IllegalArgumentException("Failed to set property: " + pd.getDisplayName()).initCause(
+                        x));
             }
         }
     }
@@ -154,7 +158,8 @@ public class BeanTool
 
     public <T> T proxy(Class<T> clazz, BeanAccess props)
     {
-        return clazz.cast(Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{clazz}, new BeanInvocationHandler(props)));
+        return clazz.cast(Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[] { clazz },
+                    new BeanInvocationHandler(props)));
     }
 
     @SuppressWarnings("unchecked")
@@ -230,12 +235,12 @@ public class BeanTool
             }
             else
             {
+
                 // TODO handle constructor with String arg as converter from String
-
                 // look for "valueOf" converter method
-                Method parser = clazz.getMethod(PARSE_METHOD, new Class[]{String.class});
+                Method parser = clazz.getMethod(PARSE_METHOD, new Class[] { String.class });
 
-                o = parser.invoke(null, new Object[]{value});
+                o = parser.invoke(null, new Object[] { value });
             }
         }
         catch (Exception x)
@@ -314,8 +319,7 @@ public class BeanTool
             _backend = backend;
         }
 
-        @Override
-        protected Object getPropertySpi(String property, Class<?> clazz)
+        @Override protected Object getPropertySpi(String property, Class<?> clazz)
         {
             Object ret = null;
 
@@ -343,8 +347,7 @@ public class BeanTool
             return ret;
         }
 
-        @Override
-        protected void setPropertySpi(String property, Object value, Class<?> clazz)
+        @Override protected void setPropertySpi(String property, Object value, Class<?> clazz)
         {
             if (clazz.isArray())
             {
@@ -360,8 +363,7 @@ public class BeanTool
             }
         }
 
-        @Override
-        protected boolean hasPropertySpi(String property)
+        @Override protected boolean hasPropertySpi(String property)
         {
             return _backend.propLength(property) != 0;
         }

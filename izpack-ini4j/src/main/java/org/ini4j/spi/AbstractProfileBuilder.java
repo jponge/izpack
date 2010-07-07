@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
+import org.ini4j.CommentedMap;
 import org.ini4j.Config;
 import org.ini4j.Ini;
 import org.ini4j.Profile;
@@ -26,37 +26,45 @@ abstract class AbstractProfileBuilder implements IniHandler
     private boolean _header;
     private String _lastComment;
 
-    @Override
-    public void endIni()
+    @Override public void endIni()
     {
 
         // comment only .ini files....
         if ((_lastComment != null) && _header)
         {
-            getProfile().setComment(_lastComment);
+            setHeaderComment();
         }
     }
 
-    @Override
-    public void endSection()
+    @Override public void endSection()
     {
         _currentSection = null;
     }
 
-    @Override
-    public void handleComment(String comment)
+    @Override public void handleEmptyLine()
+    {
+        if (_lastComment == null)
+        {
+            _lastComment = EMPTY_LINE_MARK;
+        }
+        else
+        {
+            _lastComment = _lastComment + getConfig().getLineSeparator() + EMPTY_LINE_MARK;
+        }
+    }
+
+    @Override public void handleComment(String comment)
     {
         if ((_lastComment != null) && _header)
         {
-            getProfile().setComment(_lastComment);
             _header = false;
+            setHeaderComment();
         }
 
         _lastComment = comment;
     }
 
-    @Override
-    public void handleOption(String name, String value)
+    @Override public void handleOption(String name, String value)
     {
         _header = false;
         if (getConfig().isMultiOption())
@@ -70,19 +78,20 @@ abstract class AbstractProfileBuilder implements IniHandler
 
         if (_lastComment != null)
         {
-            _currentSection.putComment(name, _lastComment);
+            putComment(_currentSection, name);
             _lastComment = null;
         }
     }
 
-    @Override
-    public void startIni()
+    @Override public void startIni()
     {
-        _header = true;
+        if (getConfig().isHeaderComment())
+        {
+            _header = true;
+        }
     }
 
-    @Override
-    public void startSection(String sectionName)
+    @Override public void startSection(String sectionName)
     {
         if (getConfig().isMultiSection())
         {
@@ -99,11 +108,11 @@ abstract class AbstractProfileBuilder implements IniHandler
         {
             if (_header)
             {
-                getProfile().setComment(_lastComment);
+                setHeaderComment();
             }
             else
             {
-                getProfile().putComment(sectionName, _lastComment);
+                putComment(getProfile(), sectionName);
             }
 
             _lastComment = null;
@@ -119,5 +128,21 @@ abstract class AbstractProfileBuilder implements IniHandler
     Profile.Section getCurrentSection()
     {
         return _currentSection;
+    }
+
+    private void setHeaderComment()
+    {
+        if (getConfig().isComment())
+        {
+            getProfile().setComment(_lastComment);
+        }
+    }
+
+    private void putComment(CommentedMap<String, ?> map, String key)
+    {
+        if (getConfig().isComment())
+        {
+            map.putComment(key, _lastComment);
+        }
     }
 }

@@ -13,34 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j;
 
 import org.ini4j.sample.Dwarf;
 import org.ini4j.sample.DwarfBean;
+
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.DwarfsData.DwarfData;
 import org.ini4j.test.Helper;
-import org.junit.BeforeClass;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 import java.net.URI;
 
-import static org.junit.Assert.*;
-
-public class BasicOptionMapTest
+public class BasicOptionMapTest extends Ini4jCase
 {
     private static BasicOptionMap _map;
 
-    @BeforeClass
-    public static void setUpClass()
+    static
     {
         _map = new BasicOptionMap();
         _map.putAll(Helper.newDwarfsOpt());
     }
 
-    @Test
-    public void testAddPutNullAndString()
+    @Test public void testAddPutNullAndString()
     {
         OptionMap map = new BasicOptionMap();
         Object o;
@@ -49,11 +51,11 @@ public class BasicOptionMapTest
         o = null;
         map.add(Dwarf.PROP_AGE, o);
         assertNull(map.get(Dwarf.PROP_AGE));
-        map.put(Dwarf.PROP_AGE, DwarfsData.doc.age);
+        map.put(Dwarf.PROP_AGE, new Integer(DwarfsData.doc.age));
         assertNotNull(map.get(Dwarf.PROP_AGE));
         map.add(Dwarf.PROP_AGE, o, 0);
         assertNull(map.get(Dwarf.PROP_AGE, 0));
-        map.put(Dwarf.PROP_AGE, DwarfsData.doc.age, 0);
+        map.put(Dwarf.PROP_AGE, new Integer(DwarfsData.doc.age), 0);
         assertNotNull(map.get(Dwarf.PROP_AGE, 0));
         map.put(Dwarf.PROP_AGE, o, 0);
         assertNull(map.get(Dwarf.PROP_AGE, 0));
@@ -71,14 +73,13 @@ public class BasicOptionMapTest
         assertEquals(o, map.get(Dwarf.PROP_AGE));
         o = String.valueOf(DwarfsData.happy.age);
         map.add(Dwarf.PROP_AGE, o, 0);
-        assertEquals(DwarfsData.happy.age, (int) map.get(Dwarf.PROP_AGE, 0, int.class));
+        assertEquals(new Integer(DwarfsData.happy.age), (Integer) map.get(Dwarf.PROP_AGE, 0, int.class));
         o = String.valueOf(DwarfsData.doc.age);
         map.put(Dwarf.PROP_AGE, o, 0);
         assertEquals(DwarfsData.doc.age, (int) map.get(Dwarf.PROP_AGE, 0, int.class));
     }
 
-    @Test
-    public void testFetch()
+    @Test public void testFetch()
     {
         OptionMap map = new BasicOptionMap();
 
@@ -103,16 +104,22 @@ public class BasicOptionMapTest
         assertNull(map.fetch(Dwarf.PROP_AGE, 0));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testFetchAllException()
+    @Test public void testFetchAllException()
     {
         OptionMap map = new BasicOptionMap();
 
-        map.fetchAll(Dwarf.PROP_FORTUNE_NUMBER, String.class);
+        try
+        {
+            map.fetchAll(Dwarf.PROP_FORTUNE_NUMBER, String.class);
+            missing(IllegalArgumentException.class);
+        }
+        catch (IllegalArgumentException x)
+        {
+            //
+        }
     }
 
-    @Test
-    public void testFromToAs() throws Exception
+    @Test public void testFromToAs() throws Exception
     {
         DwarfBean bean = new DwarfBean();
 
@@ -132,8 +139,7 @@ public class BasicOptionMapTest
         Helper.assertEquals(DwarfsData.dopey, proxy);
     }
 
-    @Test
-    public void testFromToAsPrefixed() throws Exception
+    @Test public void testFromToAsPrefixed() throws Exception
     {
         fromToAs(DwarfsData.bashful);
         fromToAs(DwarfsData.doc);
@@ -144,8 +150,7 @@ public class BasicOptionMapTest
         fromToAs(DwarfsData.sneezy);
     }
 
-    @Test
-    public void testGet()
+    @Test public void testGet()
     {
         OptionMap map = new BasicOptionMap();
 
@@ -157,16 +162,22 @@ public class BasicOptionMapTest
         assertEquals(DwarfsData.bashful.homePage, map.fetch(Dwarf.PROP_HOME_PAGE, URI.class));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetAllException()
+    @Test public void testGetAllException()
     {
         OptionMap map = new BasicOptionMap();
 
-        map.getAll(Dwarf.PROP_FORTUNE_NUMBER, String.class);
+        try
+        {
+            map.getAll(Dwarf.PROP_FORTUNE_NUMBER, String.class);
+            missing(IllegalArgumentException.class);
+        }
+        catch (IllegalArgumentException x)
+        {
+            //
+        }
     }
 
-    @Test
-    public void testPropertyFirstUpper()
+    @Test public void testPropertyFirstUpper()
     {
         DwarfBean bean;
         OptionMap map = new BasicOptionMap(true);
@@ -183,35 +194,40 @@ public class BasicOptionMapTest
         Helper.assertEquals(DwarfsData.bashful, map.as(Dwarf.class));
     }
 
-    @Test
-    public void testPut()
+    @Test public void testPut()
     {
         OptionMap map = new BasicOptionMap();
 
-        map.add(Dwarf.PROP_AGE, DwarfsData.sneezy.age);
-        map.put(Dwarf.PROP_HEIGHT, DwarfsData.sneezy.height);
+        map.add(Dwarf.PROP_AGE, new Integer(DwarfsData.sneezy.age));
+        map.put(Dwarf.PROP_HEIGHT, new Double(DwarfsData.sneezy.height));
         map.add(Dwarf.PROP_HOME_DIR, DwarfsData.sneezy.homeDir);
-        map.add(Dwarf.PROP_WEIGHT, DwarfsData.sneezy.weight, 0);
+        map.add(Dwarf.PROP_WEIGHT, new Double(DwarfsData.sneezy.weight), 0);
         map.put(Dwarf.PROP_HOME_PAGE, null);
         map.put(Dwarf.PROP_HOME_PAGE, DwarfsData.sneezy.homePage);
-        map.add(Dwarf.PROP_FORTUNE_NUMBER, DwarfsData.sneezy.fortuneNumber[1]);
-        map.add(Dwarf.PROP_FORTUNE_NUMBER, DwarfsData.sneezy.fortuneNumber[2]);
-        map.add(Dwarf.PROP_FORTUNE_NUMBER, 0);
-        map.put(Dwarf.PROP_FORTUNE_NUMBER, DwarfsData.sneezy.fortuneNumber[3], 2);
-        map.add(Dwarf.PROP_FORTUNE_NUMBER, DwarfsData.sneezy.fortuneNumber[0], 0);
+        map.add(Dwarf.PROP_FORTUNE_NUMBER, new Integer(DwarfsData.sneezy.fortuneNumber[1]));
+        map.add(Dwarf.PROP_FORTUNE_NUMBER, new Integer(DwarfsData.sneezy.fortuneNumber[2]));
+        map.add(Dwarf.PROP_FORTUNE_NUMBER, new Integer(0));
+        map.put(Dwarf.PROP_FORTUNE_NUMBER, new Integer(DwarfsData.sneezy.fortuneNumber[3]), 2);
+        map.add(Dwarf.PROP_FORTUNE_NUMBER, new Integer(DwarfsData.sneezy.fortuneNumber[0]), 0);
         Helper.assertEquals(DwarfsData.sneezy, map.as(Dwarf.class));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testPutAllException()
+    @Test public void testPutAllException()
     {
         OptionMap map = new BasicOptionMap();
 
-        map.putAll(Dwarf.PROP_FORTUNE_NUMBER, 0);
+        try
+        {
+            map.putAll(Dwarf.PROP_FORTUNE_NUMBER, new Integer(0));
+            missing(IllegalArgumentException.class);
+        }
+        catch (IllegalArgumentException x)
+        {
+            //
+        }
     }
 
-    @Test
-    public void testPutGetFetchAll()
+    @Test public void testPutGetFetchAll()
     {
         OptionMap map = new BasicOptionMap();
 
@@ -225,8 +241,7 @@ public class BasicOptionMapTest
         assertEquals(0, map.fetchAll(Dwarf.PROP_FORTUNE_NUMBER, int[].class).length);
     }
 
-    @Test
-    public void testResolve() throws Exception
+    @Test public void testResolve() throws Exception
     {
         StringBuilder buffer;
         String input;

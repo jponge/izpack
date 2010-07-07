@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j;
 
 import org.ini4j.Registry.Type;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-public class BasicRegistryKeyTest
+public class BasicRegistryKeyTest extends Ini4jCase
 {
     private static final String KEY = "key";
     private static final String DUMMY = "dummy";
     private static final String OPTION = "option";
 
-    @Test
-    public void testWrapped() throws Exception
+    @Test public void testWrapped() throws Exception
     {
         BasicRegistry reg = new BasicRegistry();
         Registry.Key parent = reg.add(KEY);

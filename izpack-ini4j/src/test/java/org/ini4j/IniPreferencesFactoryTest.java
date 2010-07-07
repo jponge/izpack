@@ -13,41 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j;
 
 import org.ini4j.test.Helper;
-import org.junit.AfterClass;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 
 import java.util.prefs.Preferences;
 
-import static org.junit.Assert.*;
-
-public class IniPreferencesFactoryTest
+public class IniPreferencesFactoryTest extends Ini4jCase
 {
     private static final String DUMMY = "dummy";
 
-    @AfterClass
-    public static void tearDownClass() throws Exception
-    {
-        Helper.resetConfig();
-    }
-
-    @Test
-    public void testGetIniLocation() throws Exception
+    @Test public void testGetIniLocation() throws Exception
     {
         IniPreferencesFactory factory = new IniPreferencesFactory();
 
         System.setProperty(DUMMY, DUMMY);
         assertEquals(DUMMY, factory.getIniLocation(DUMMY));
-        System.clearProperty(DUMMY);
+        System.getProperties().remove(DUMMY);
         assertNull(factory.getIniLocation(DUMMY));
     }
 
     @SuppressWarnings("empty-statement")
-    @Test
-    public void testGetResourceAsStream() throws Exception
+    @Test public void testGetResourceAsStream() throws Exception
     {
         IniPreferencesFactory factory = new IniPreferencesFactory();
 
@@ -71,22 +66,25 @@ public class IniPreferencesFactoryTest
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testNewIniPreferences()
+    @Test public void testNewIniPreferences()
     {
         System.setProperty(DUMMY, DUMMY);
         try
         {
             new IniPreferencesFactory().newIniPreferences(DUMMY);
+            missing(IllegalArgumentException.class);
+        }
+        catch (IllegalArgumentException x)
+        {
+            //
         }
         finally
         {
-            System.clearProperty(DUMMY);
+            System.getProperties().remove(DUMMY);
         }
     }
 
-    @Test
-    public void testSystemRoot() throws Exception
+    @Test public void testSystemRoot() throws Exception
     {
         Preferences prefs = Preferences.systemRoot();
 
@@ -95,8 +93,7 @@ public class IniPreferencesFactoryTest
         assertSame(prefs, Preferences.systemRoot());
     }
 
-    @Test
-    public void testUserRoot() throws Exception
+    @Test public void testUserRoot() throws Exception
     {
         Preferences prefs = Preferences.userRoot();
 

@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.ini4j.Ini4jCase;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class EscapeToolTest
+import org.junit.Before;
+import org.junit.Test;
+
+public class EscapeToolTest extends Ini4jCase
 {
     private static final String VALUE1 = "simple";
     private static final String ESCAPE1 = "simple";
@@ -41,14 +42,13 @@ public class EscapeToolTest
     private static final String QUOTED3 = "";
     protected EscapeTool instance;
 
-    @Before
-    public void setUp() throws Exception
+    @Before @Override public void setUp() throws Exception
     {
+        super.setUp();
         instance = EscapeTool.getInstance();
     }
 
-    @Test
-    public void testEscape() throws Exception
+    @Test public void testEscape() throws Exception
     {
         assertEquals(ESCAPE1, instance.escape(VALUE1));
         assertEquals(ESCAPE2, instance.escape(VALUE2));
@@ -56,14 +56,20 @@ public class EscapeToolTest
         assertEquals(ESCAPE4, instance.escape(VALUE4));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testInvalidUnicode()
+    @Test public void testInvalidUnicode()
     {
-        instance.unescape(INVALID_UNICODE);
+        try
+        {
+            instance.unescape(INVALID_UNICODE);
+            missing(IllegalArgumentException.class);
+        }
+        catch (IllegalArgumentException x)
+        {
+            //
+        }
     }
 
-    @Test
-    public void testQuote() throws Exception
+    @Test public void testQuote() throws Exception
     {
         assertEquals(QUOTED1, instance.quote(UNQUOTED1));
         assertEquals(QUOTED2, instance.quote(UNQUOTED2));
@@ -71,15 +77,13 @@ public class EscapeToolTest
         assertNull(instance.quote(null));
     }
 
-    @Test
-    public void testSingleton() throws Exception
+    @Test public void testSingleton() throws Exception
     {
         assertEquals(EscapeTool.class, EscapeTool.getInstance().getClass());
     }
 
     @SuppressWarnings("empty-statement")
-    @Test
-    public void testUnescape() throws Exception
+    @Test public void testUnescape() throws Exception
     {
         assertEquals(VALUE1, instance.unescape(ESCAPE1));
         assertEquals(VALUE2, instance.unescape(ESCAPE2));

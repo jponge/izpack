@@ -13,62 +13,85 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
 import org.ini4j.BasicOptionMapGate;
+import org.ini4j.Ini4jCase;
+
 import org.ini4j.sample.Dwarf;
 import org.ini4j.sample.DwarfBean;
+
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.net.URI;
 import java.net.URL;
+
 import java.util.TimeZone;
 
-import static org.junit.Assert.*;
-
-public class BeanToolTest
+public class BeanToolTest extends Ini4jCase
 {
     protected BeanTool instance;
 
-    @Before
-    public void setUp() throws Exception
+    @Before @Override public void setUp() throws Exception
     {
+        super.setUp();
         instance = BeanTool.getInstance();
     }
 
-    @Test
-    public void testInject() throws Exception
+    @Test public void testInject() throws Exception
     {
         testInject(null);
         testInject("dummy");
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testInjectIllegalArgument1() throws Exception
+    @Test public void testInjectIllegalArgument1() throws Exception
     {
         TestMap map = new TestMap();
 
-        instance.inject(map.newBeanAccess(), new BadBean());
+        try
+        {
+            instance.inject(map.newBeanAccess(), new BadBean());
+            missing(IllegalArgumentException.class);
+        }
+        catch (IllegalArgumentException x)
+        {
+            //
+        }
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testInjectIllegalArgument2() throws Exception
+    @Test public void testInjectIllegalArgument2() throws Exception
     {
         TestMap map = new TestMap();
 
         map.put("name", "bad");
-        instance.inject(new BadBean(), map.newBeanAccess());
+        try
+        {
+            instance.inject(new BadBean(), map.newBeanAccess());
+            missing(IllegalArgumentException.class);
+        }
+        catch (IllegalArgumentException x)
+        {
+            //
+        }
     }
 
     @SuppressWarnings("empty-statement")
-    @Test
-    public void testParse() throws Exception
+    @Test public void testParse() throws Exception
     {
         String input = "6";
         int value = 6;
@@ -133,8 +156,7 @@ public class BeanToolTest
         }
     }
 
-    @Test
-    public void testSetGet() throws Exception
+    @Test public void testSetGet() throws Exception
     {
         TestMap map = new TestMap();
         Dwarf proxy = instance.proxy(Dwarf.class, map.newBeanAccess());
@@ -152,14 +174,12 @@ public class BeanToolTest
         assertArrayEquals(DwarfsData.sneezy.fortuneNumber, proxy.getFortuneNumber());
     }
 
-    @Test
-    public void testSingleton() throws Exception
+    @Test public void testSingleton() throws Exception
     {
         assertEquals(BeanTool.class, BeanTool.getInstance().getClass());
     }
 
-    @Test
-    public void testZero() throws Exception
+    @Test public void testZero() throws Exception
     {
         assertEquals(null, instance.zero(Object.class));
         assertEquals(0, instance.zero(byte.class).byteValue());
@@ -186,7 +206,7 @@ public class BeanToolTest
         String dir = "/home/happy";
 
         bean.setHomeDir(dir);
-        bean.setFortuneNumber(new int[]{1, 2, 3});
+        bean.setFortuneNumber(new int[] { 1, 2, 3 });
         TestMap map = new TestMap();
 
         instance.inject(map.newBeanAccess(prefix), bean);
@@ -207,7 +227,7 @@ public class BeanToolTest
         assertEquals(5.3, bean.getHeight(), Helper.DELTA);
         assertEquals(uri, bean.getHomePage());
         assertEquals(dir, bean.getHomeDir());
-        assertArrayEquals(new int[]{1, 2, 3}, bean.getFortuneNumber());
+        assertArrayEquals(new int[] { 1, 2, 3 }, bean.getFortuneNumber());
 
         //
         // bean interface
@@ -218,7 +238,7 @@ public class BeanToolTest
         assertEquals(5.3, proxy.getHeight(), Helper.DELTA);
         assertEquals(uri, proxy.getHomePage());
         assertEquals(dir, proxy.getHomeDir());
-        assertArrayEquals(new int[]{1, 2, 3}, proxy.getFortuneNumber());
+        assertArrayEquals(new int[] { 1, 2, 3 }, proxy.getFortuneNumber());
     }
 
     static class TestMap extends BasicOptionMapGate

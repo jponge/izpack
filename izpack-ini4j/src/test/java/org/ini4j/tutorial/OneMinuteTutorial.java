@@ -13,28 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.tutorial;
 
 import org.ini4j.Wini;
+
 import org.ini4j.sample.Dwarf;
 import org.ini4j.sample.Dwarfs;
+
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
+
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-
 //<editor-fold defaultstate="collapsed" desc="apt documentation">
 //|
 //|                -------------------
 //|                One minute Tutorial
 //|
-
 //|One minute Tutorial - First step
 //|
 //| First step with \[ini4j\] library. No data model, no interfaces, no design
@@ -64,8 +64,7 @@ public class OneMinuteTutorial extends AbstractTutorial
         os.close();
     }
 
-    @Override
-    protected void run(File arg) throws Exception
+    @Override protected void run(File arg) throws Exception
     {
         File file = File.createTempFile("tutorial", ".ini");
 
@@ -77,8 +76,7 @@ public class OneMinuteTutorial extends AbstractTutorial
 
 //|
 //| Lets read some value from .ini file...
-
-    //|
+//|
 //{
     void sample01(String filename) throws IOException
     {
@@ -106,8 +104,7 @@ public class OneMinuteTutorial extends AbstractTutorial
     }
 
 //| Now let see how to write values....
-
-    //|
+//|
 //{
     void sample02(String filename) throws IOException
     {

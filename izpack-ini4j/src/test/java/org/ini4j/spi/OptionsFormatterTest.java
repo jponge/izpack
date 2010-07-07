@@ -13,32 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
 import org.easymock.EasyMock;
+
 import org.ini4j.Config;
+import org.ini4j.Ini4jCase;
 import org.ini4j.Options;
+
 import org.ini4j.sample.Dwarf;
 import org.ini4j.sample.Dwarfs;
+
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+
 import org.junit.Test;
 
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-
-public class OptionsFormatterTest
+public class OptionsFormatterTest extends Ini4jCase
 {
     private static final String NL = System.getProperty("line.separator");
     private static final String DUMMY = "dummy";
 
-    @Test
-    public void testFormat() throws Exception
+    @Test public void testFormat() throws Exception
     {
         Options opts = Helper.newDwarfsOpt();
         OptionsHandler handler = EasyMock.createMock(OptionsHandler.class);
@@ -138,8 +141,7 @@ public class OptionsFormatterTest
         verify(opts, handler);
     }
 
-    @Test
-    public void testNewInstance() throws Exception
+    @Test public void testNewInstance() throws Exception
     {
         StringWriter stringWriter;
         PrintWriter printWriter;
@@ -171,8 +173,7 @@ public class OptionsFormatterTest
         assertSame(printWriter, instance.getOutput());
     }
 
-    @Test
-    public void testWithStrictOperatorEmptyOptions() throws Exception
+    @Test public void testWithStrictOperatorEmptyOptions() throws Exception
     {
         Config cfg = new Config();
 
@@ -198,8 +199,7 @@ public class OptionsFormatterTest
         assertEquals(exp.toString(), writer.toString());
     }
 
-    @Test
-    public void testWithStrictOperatorNoEmptyOptions() throws Exception
+    @Test public void testWithStrictOperatorNoEmptyOptions() throws Exception
     {
         Config cfg = new Config();
 

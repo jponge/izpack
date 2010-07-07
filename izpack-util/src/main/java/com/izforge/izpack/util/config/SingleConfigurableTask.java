@@ -105,7 +105,9 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
 
     public void execute() throws Exception
     {
-        Config.getGlobal().setNoHeader(true);
+        Config.getGlobal().setHeaderComment(false);
+        Config.getGlobal().setEmptyLines(true);
+        Config.getGlobal().setAutoNumbering(true);
         checkAttributes();
         readConfigurable();
         readSourceConfigurable();

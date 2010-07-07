@@ -17,8 +17,8 @@
 
 -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
     <properties>
         <title>Search</title>
     </properties>
@@ -34,12 +34,10 @@
                     <input type="submit" name="sa" value="Search" />
                 </div>
             </form>
-            <script type="text/javascript"
-                    src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=en"></script>
+            <script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=en"></script>
 
             <div id="cse-search-results"></div>
-            <script type="text/javascript">
-                <![CDATA[  var googleSearchIframeName = 'cse-search-results';  var googleSearchFormName = 'cse-search-box';  var googleSearchFrameWidth = 500;  var googleSearchDomain = 'www.google.com';  var googleSearchPath = '/cse';]]> </script>
+            <script type="text/javascript"><![CDATA[  var googleSearchIframeName = 'cse-search-results';  var googleSearchFormName = 'cse-search-box';  var googleSearchFrameWidth = 500;  var googleSearchDomain = 'www.google.com';  var googleSearchPath = '/cse';]]> </script>
             <script type="text/javascript" src="http://www.google.com/afsonline/show_afs_search.js"></script>
         </section>
     </body>

@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
 import org.ini4j.Registry;
+
 import org.ini4j.Registry.Type;
 
+import java.io.UnsupportedEncodingException;
+
 import java.nio.charset.Charset;
+
 import java.util.Arrays;
 
 public class RegEscapeTool extends EscapeTool
@@ -46,9 +49,7 @@ public class RegEscapeTool extends EscapeTool
 
             case REG_EXPAND_SZ:
             case REG_MULTI_SZ:
-                byte[] bytes = binary(value);
-
-                value = new String(bytes, 0, bytes.length - 2, HEX_CHARSET);
+                value = bytes2string(binary(value));
                 break;
 
             case REG_DWORD:
@@ -68,7 +69,7 @@ public class RegEscapeTool extends EscapeTool
         }
         else
         {
-            values = new String[]{value};
+            values = new String[] { value };
         }
 
         return new TypeValuesPair(type, values);
@@ -168,7 +169,7 @@ public class RegEscapeTool extends EscapeTool
 
         if ((value != null) && (value.length() != 0))
         {
-            byte[] bytes = value.getBytes(HEX_CHARSET);
+            byte[] bytes = string2bytes(value);
 
             for (int i = 0; i < bytes.length; i++)
             {
@@ -201,6 +202,30 @@ public class RegEscapeTool extends EscapeTool
         return type;
     }
 
+    // XXX Java 1.4 compatibility hack
+    private String bytes2string(byte[] bytes)
+    {
+        String str;
+
+        try
+        {
+            str = new String(bytes, 0, bytes.length - 2, HEX_CHARSET);
+        }
+        catch (NoSuchMethodError x)
+        {
+            try
+            {
+                str = new String(bytes, 0, bytes.length, HEX_CHARSET.name());
+            }
+            catch (UnsupportedEncodingException ex)
+            {
+                throw new IllegalStateException(ex);
+            }
+        }
+
+        return str;
+    }
+
     private String[] splitMulti(String value)
     {
         int len = value.length();
@@ -230,5 +255,29 @@ public class RegEscapeTool extends EscapeTool
         }
 
         return values;
+    }
+
+    // XXX Java 1.4 compatibility hack
+    private byte[] string2bytes(String value)
+    {
+        byte[] bytes;
+
+        try
+        {
+            bytes = value.getBytes(HEX_CHARSET);
+        }
+        catch (NoSuchMethodError x)
+        {
+            try
+            {
+                bytes = value.getBytes(HEX_CHARSET.name());
+            }
+            catch (UnsupportedEncodingException ex)
+            {
+                throw new IllegalStateException(ex);
+            }
+        }
+
+        return bytes;
     }
 }

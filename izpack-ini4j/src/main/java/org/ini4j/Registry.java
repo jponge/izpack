@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j;
 
 import java.nio.charset.Charset;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,8 +73,7 @@ public interface Registry extends Profile
             return MAPPING.get(str);
         }
 
-        @Override
-        public String toString()
+        @Override public String toString()
         {
             return _prefix;
         }
@@ -91,43 +90,33 @@ public interface Registry extends Profile
 
     void setVersion(String value);
 
-    @Override
-    Key get(Object key);
+    @Override Key get(Object key);
 
-    @Override
-    Key get(Object key, int index);
+    @Override Key get(Object key, int index);
 
-    @Override
-    Key put(String key, Section value);
+    @Override Key put(String key, Section value);
 
-    @Override
-    Key put(String key, Section value, int index);
+    @Override Key put(String key, Section value, int index);
 
-    @Override
-    Key remove(Object key);
+    @Override Key remove(Object key);
 
-    @Override
-    Key remove(Object key, int index);
+    @Override Key remove(Object key, int index);
 
     interface Key extends Section
     {
         String DEFAULT_NAME = "@";
 
-        @Override
-        Key getChild(String key);
+        @Override Key getChild(String key);
 
-        @Override
-        Key getParent();
+        @Override Key getParent();
 
         Type getType(Object key);
 
         Type getType(Object key, Type defaulType);
 
-        @Override
-        Key addChild(String key);
+        @Override Key addChild(String key);
 
-        @Override
-        Key lookup(String... path);
+        @Override Key lookup(String... path);
 
         Type putType(String key, Type type);
 

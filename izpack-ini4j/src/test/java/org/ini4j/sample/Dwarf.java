@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.sample;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
 import java.beans.VetoableChangeListener;
+
 import java.net.URI;
 
 //<editor-fold defaultstate="collapsed" desc="apt documentation">
@@ -29,7 +29,6 @@ import java.net.URI;
 //|Dwarf interface
 //|
 //| This is a very simple bean interface with a few getter and setter. Some of
-
 //| the properties are java primitive types. The <<<homePage>>> property has a
 //| complex type (java.net.URI). It is not a problem for \[ini4j\] to do the
 //| required type conversion automatically between java.lang.String and the tpye

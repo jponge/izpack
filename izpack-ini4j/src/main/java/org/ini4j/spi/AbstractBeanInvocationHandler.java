@@ -13,10 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
-import java.beans.*;
+import java.beans.Introspector;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.beans.PropertyVetoException;
+import java.beans.VetoableChangeListener;
+import java.beans.VetoableChangeSupport;
+
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -83,8 +88,7 @@ public abstract class AbstractBeanInvocationHandler implements InvocationHandler
     private Object _proxy;
     private VetoableChangeSupport _vcSupport;
 
-    @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws PropertyVetoException
+    @Override public Object invoke(Object proxy, Method method, Object[] args) throws PropertyVetoException
     {
         Object ret = null;
         Prefix prefix = Prefix.parse(method.getName());

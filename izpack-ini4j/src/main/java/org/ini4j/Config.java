@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j;
 
 import java.io.Serializable;
+
 import java.nio.charset.Charset;
 
+@SuppressWarnings("PMD.ExcessivePublicCount")
 public class Config implements Cloneable, Serializable
 {
     public static final String KEY_PREFIX = "org.ini4j.config.";
@@ -31,7 +32,6 @@ public class Config implements Cloneable, Serializable
     public static final String PROP_LOWER_CASE_SECTION = "lowerCaseSection";
     public static final String PROP_MULTI_OPTION = "multiOption";
     public static final String PROP_MULTI_SECTION = "multiSection";
-    public static final String PROP_NO_HEADER = "noHeader";
     public static final String PROP_STRICT_OPERATOR = "strictOperator";
     public static final String PROP_UNNAMED_SECTION = "unnamedSection";
     public static final String PROP_ESCAPE = "escape";
@@ -40,6 +40,10 @@ public class Config implements Cloneable, Serializable
     public static final String PROP_PROPERTY_FIRST_UPPER = "propertyFirstUpper";
     public static final String PROP_FILE_ENCODING = "fileEncoding";
     public static final String PROP_LINE_SEPARATOR = "lineSeparator";
+    public static final String PROP_COMMENT = "comment";
+    public static final String PROP_HEADER_COMMENT = "headerComment";
+    public static final String PROP_EMPTY_LINES = "emptyLines";
+    public static final String PROP_AUTO_NUMBERING = "autoNumbering";
     public static final boolean DEFAULT_EMPTY_OPTION = false;
     public static final boolean DEFAULT_EMPTY_SECTION = false;
     public static final boolean DEFAULT_GLOBAL_SECTION = false;
@@ -49,35 +53,41 @@ public class Config implements Cloneable, Serializable
     public static final boolean DEFAULT_LOWER_CASE_SECTION = false;
     public static final boolean DEFAULT_MULTI_OPTION = true;
     public static final boolean DEFAULT_MULTI_SECTION = false;
-    public static final boolean DEFAULT_NO_HEADER = false;
     public static final boolean DEFAULT_STRICT_OPERATOR = false;
     public static final boolean DEFAULT_UNNAMED_SECTION = false;
     public static final boolean DEFAULT_ESCAPE = true;
     public static final boolean DEFAULT_TREE = true;
     public static final boolean DEFAULT_PROPERTY_FIRST_UPPER = false;
+    public static final boolean DEFAULT_COMMENT = true;
+    public static final boolean DEFAULT_HEADER_COMMENT = true;
+    public static final boolean DEFAULT_EMPTY_LINES = false;
+    public static final boolean DEFAULT_AUTO_NUMBERING = false;
     public static final char DEFAULT_PATH_SEPARATOR = '/';
     public static final String DEFAULT_LINE_SEPARATOR = getSystemProperty("line.separator", "\n");
     public static final Charset DEFAULT_FILE_ENCODING = Charset.forName("UTF-8");
     private static final Config GLOBAL = new Config();
     private static final long serialVersionUID = 2865793267410367814L;
+    private boolean _comment;
     private boolean _emptyOption;
     private boolean _emptySection;
     private boolean _escape;
     private Charset _fileEncoding;
     private boolean _globalSection;
     private String _globalSectionName;
+    private boolean _headerComment;
     private boolean _include;
     private String _lineSeparator;
     private boolean _lowerCaseOption;
     private boolean _lowerCaseSection;
     private boolean _multiOption;
     private boolean _multiSection;
-    private boolean _noHeader;
     private char _pathSeparator;
     private boolean _propertyFirstUpper;
     private boolean _strictOperator;
     private boolean _tree;
     private boolean _unnamedSection;
+    private boolean _emptyLines;
+    private boolean _autoNumbering;
 
     public Config()
     {
@@ -129,6 +139,11 @@ public class Config implements Cloneable, Serializable
         }
 
         return (value == null) ? defaultValue : value;
+    }
+
+    public void setComment(boolean value)
+    {
+        _comment = value;
     }
 
     public boolean isEscape()
@@ -184,6 +199,21 @@ public class Config implements Cloneable, Serializable
     public void setGlobalSectionName(String value)
     {
         _globalSectionName = value;
+    }
+
+    public void setHeaderComment(boolean value)
+    {
+        _headerComment = value;
+    }
+
+    public void setEmptyLines(boolean value)
+    {
+        _emptyLines = value;
+    }
+
+    public void setAutoNumbering(boolean value)
+    {
+        _autoNumbering = value;
     }
 
     public void setInclude(boolean value)
@@ -261,11 +291,6 @@ public class Config implements Cloneable, Serializable
         return _unnamedSection;
     }
 
-    public boolean isNoHeader()
-    {
-        return _noHeader;
-    }
-
     public char getPathSeparator()
     {
         return _pathSeparator;
@@ -296,6 +321,26 @@ public class Config implements Cloneable, Serializable
         _strictOperator = value;
     }
 
+    public boolean isComment()
+    {
+        return _comment;
+    }
+
+    public boolean isHeaderComment()
+    {
+        return _headerComment;
+    }
+
+    public boolean isEmptyLines()
+    {
+        return _emptyLines;
+    }
+
+    public boolean isAutoNumbering()
+    {
+        return _autoNumbering;
+    }
+
     public void setTree(boolean value)
     {
         _tree = value;
@@ -306,14 +351,7 @@ public class Config implements Cloneable, Serializable
         _unnamedSection = value;
     }
 
-    public void setNoHeader(boolean value)
-    {
-        _noHeader = value;
-    }
-
-
-    @Override
-    public Config clone()
+    @Override public Config clone()
     {
         try
         {
@@ -336,7 +374,6 @@ public class Config implements Cloneable, Serializable
         _lowerCaseSection = getBoolean(PROP_LOWER_CASE_SECTION, DEFAULT_LOWER_CASE_SECTION);
         _multiOption = getBoolean(PROP_MULTI_OPTION, DEFAULT_MULTI_OPTION);
         _multiSection = getBoolean(PROP_MULTI_SECTION, DEFAULT_MULTI_SECTION);
-        _noHeader = getBoolean(PROP_NO_HEADER, DEFAULT_NO_HEADER);
         _strictOperator = getBoolean(PROP_STRICT_OPERATOR, DEFAULT_STRICT_OPERATOR);
         _unnamedSection = getBoolean(PROP_UNNAMED_SECTION, DEFAULT_UNNAMED_SECTION);
         _escape = getBoolean(PROP_ESCAPE, DEFAULT_ESCAPE);
@@ -345,6 +382,10 @@ public class Config implements Cloneable, Serializable
         _propertyFirstUpper = getBoolean(PROP_PROPERTY_FIRST_UPPER, DEFAULT_PROPERTY_FIRST_UPPER);
         _lineSeparator = getString(PROP_LINE_SEPARATOR, DEFAULT_LINE_SEPARATOR);
         _fileEncoding = getCharset(PROP_FILE_ENCODING, DEFAULT_FILE_ENCODING);
+        _comment = getBoolean(PROP_COMMENT, DEFAULT_COMMENT);
+        _headerComment = getBoolean(PROP_HEADER_COMMENT, DEFAULT_HEADER_COMMENT);
+        _emptyLines = getBoolean(PROP_EMPTY_LINES, DEFAULT_EMPTY_LINES);
+        _autoNumbering = getBoolean(PROP_AUTO_NUMBERING, DEFAULT_AUTO_NUMBERING);
     }
 
     private boolean getBoolean(String name, boolean defaultValue)

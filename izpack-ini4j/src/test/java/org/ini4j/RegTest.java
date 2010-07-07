@@ -13,29 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j;
 
 import org.ini4j.sample.Dwarfs;
+
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 
-import static org.junit.Assert.*;
-
-public class RegTest
+public class RegTest extends Ini4jCase
 {
     private static final String DWARFS_PATH = Helper.DWARFS_REG_PATH + "\\dwarfs\\";
 
-    @Test
-    public void proba() throws Exception
+    @Test public void proba() throws Exception
     {
     }
 
-    @Test
-    public void testDwarfs() throws Exception
+    @Test public void testDwarfs() throws Exception
     {
         Reg reg = Helper.loadDwarfsReg();
         Dwarfs dwarfs = reg.as(Dwarfs.class, DWARFS_PATH);
@@ -44,20 +54,25 @@ public class RegTest
         Helper.assertEquals(DwarfsData.dwarfs, dwarfs);
     }
 
-    @Test(expected = InvalidFileFormatException.class)
-    public void testInvalidFileFormatException() throws Exception
+    @Test public void testInvalidFileFormatException() throws Exception
     {
-        new Reg(Helper.getResourceReader(Helper.DWARFS_INI));
+        try
+        {
+            new Reg(Helper.getResourceReader(Helper.DWARFS_INI));
+            missing(InvalidFileFormatException.class);
+        }
+        catch (InvalidFileFormatException x)
+        {
+            //
+        }
     }
 
-    @Test
-    public void testIsWindwos()
+    @Test public void testIsWindwos()
     {
         assertEquals(isWindows(), Reg.isWindows());
     }
 
-    @Test
-    public void testLoad() throws Exception
+    @Test public void testLoad() throws Exception
     {
         Reg r1 = new Reg(new InputStreamReader(Helper.getResourceStream(Helper.DWARFS_REG), "UnicodeLittle"));
         Reg r2 = new Reg(Helper.getResourceStream(Helper.DWARFS_REG));
@@ -76,30 +91,42 @@ public class RegTest
         assertSame(f, r4.getFile());
     }
 
-    @Test(expected = FileNotFoundException.class)
-    public void testLoadFileNotFoundException() throws Exception
+    @Test public void testLoadFileNotFoundException() throws Exception
     {
         Reg reg = new Reg();
 
-        reg.load();
+        try
+        {
+            reg.load();
+            missing(FileNotFoundException.class);
+        }
+        catch (FileNotFoundException x)
+        {
+            //
+        }
     }
 
-    @Test
-    public void testLoadSave() throws Exception
+    @Test public void testLoadSave() throws Exception
     {
         Reg reg = new Reg(Helper.getResourceURL(Helper.TEST_REG));
 
         checkLoadSave(Helper.TEST_REG, reg);
     }
 
-    @Test(expected = InvalidFileFormatException.class)
-    public void testMissingVersion() throws Exception
+    @Test public void testMissingVersion() throws Exception
     {
-        new Reg(new StringReader("\r\n\r\n[section]\r\n\"option\"=\"value\""));
+        try
+        {
+            new Reg(new StringReader("\r\n\r\n[section]\r\n\"option\"=\"value\""));
+            missing(InvalidFileFormatException.class);
+        }
+        catch (InvalidFileFormatException x)
+        {
+            //
+        }
     }
 
-    @Test
-    public void testNonWindwosExec() throws Exception
+    @Test public void testNonWindwosExec() throws Exception
     {
         if (isSkip(isWindows(), "testNonWindwosExec"))
         {
@@ -108,10 +135,10 @@ public class RegTest
 
         Reg reg = new Reg();
 
-        reg.exec(new String[]{"/bin/true"});
+        reg.exec(new String[] { "/bin/true" });
         try
         {
-            reg.exec(new String[]{"/bin/ls", "no such file"});
+            reg.exec(new String[] { "/bin/ls", "no such file" });
             fail("IOException expected");
         }
         catch (IOException x)
@@ -120,8 +147,7 @@ public class RegTest
         }
     }
 
-    @Test
-    public void testReadException() throws Exception
+    @Test public void testReadException() throws Exception
     {
         if (!isWindows())
         {
@@ -149,8 +175,7 @@ public class RegTest
         }
     }
 
-    @Test
-    public void testReadWrite() throws Exception
+    @Test public void testReadWrite() throws Exception
     {
         if (isSkip(!isWindows(), "testReadWrite"))
         {
@@ -169,8 +194,7 @@ public class RegTest
         Helper.assertEquals(DwarfsData.dwarfs, dwarfs);
     }
 
-    @Test
-    public void testStore() throws Exception
+    @Test public void testStore() throws Exception
     {
         Reg reg = Helper.loadDwarfsReg();
         File tmp = File.createTempFile(Reg.TMP_PREFIX, Reg.DEFAULT_SUFFIX);
@@ -183,14 +207,20 @@ public class RegTest
         tmp.delete();
     }
 
-    @Test(expected = FileNotFoundException.class)
-    public void testStoreFileNotFoundException() throws Exception
+    @Test public void testStoreFileNotFoundException() throws Exception
     {
-        new Reg().store();
+        try
+        {
+            new Reg().store();
+            missing(FileNotFoundException.class);
+        }
+        catch (FileNotFoundException x)
+        {
+            //
+        }
     }
 
-    @Test
-    public void testUnsupportedOperatingSystem() throws Exception
+    @Test public void testUnsupportedOperatingSystem() throws Exception
     {
         if (isSkip(isWindows(), "testUnsupportedOperatingSystem"))
         {

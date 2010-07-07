@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j;
 
 import org.ini4j.spi.IniFormatter;
@@ -21,7 +20,18 @@ import org.ini4j.spi.IniHandler;
 import org.ini4j.spi.IniParser;
 import org.ini4j.spi.RegBuilder;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.InterruptedIOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+
 import java.net.URL;
 
 public class Reg extends BasicRegistry implements Registry, Persistable, Configurable
@@ -89,8 +99,7 @@ public class Reg extends BasicRegistry implements Registry, Persistable, Configu
         return WINDOWS;
     }
 
-    @Override
-    public Config getConfig()
+    @Override public Config getConfig()
     {
         return _config;
     }
@@ -100,20 +109,17 @@ public class Reg extends BasicRegistry implements Registry, Persistable, Configu
         _config = value;
     }
 
-    @Override
-    public File getFile()
+    @Override public File getFile()
     {
         return _file;
     }
 
-    @Override
-    public void setFile(File value)
+    @Override public void setFile(File value)
     {
         _file = value;
     }
 
-    @Override
-    public void load() throws IOException, InvalidFileFormatException
+    @Override public void load() throws IOException, InvalidFileFormatException
     {
         if (_file == null)
         {
@@ -123,20 +129,17 @@ public class Reg extends BasicRegistry implements Registry, Persistable, Configu
         load(_file);
     }
 
-    @Override
-    public void load(InputStream input) throws IOException, InvalidFileFormatException
+    @Override public void load(InputStream input) throws IOException, InvalidFileFormatException
     {
         load(new InputStreamReader(input, getConfig().getFileEncoding()));
     }
 
-    @Override
-    public void load(URL input) throws IOException, InvalidFileFormatException
+    @Override public void load(URL input) throws IOException, InvalidFileFormatException
     {
         load(new InputStreamReader(input.openStream(), getConfig().getFileEncoding()));
     }
 
-    @Override
-    public void load(Reader input) throws IOException, InvalidFileFormatException
+    @Override public void load(Reader input) throws IOException, InvalidFileFormatException
     {
         int newline = 2;
         StringBuilder buff = new StringBuilder();
@@ -170,8 +173,7 @@ public class Reg extends BasicRegistry implements Registry, Persistable, Configu
         IniParser.newInstance(getConfig()).parse(input, newBuilder());
     }
 
-    @Override
-    public void load(File input) throws IOException, InvalidFileFormatException
+    @Override public void load(File input) throws IOException, InvalidFileFormatException
     {
         load(input.toURI().toURL());
     }
@@ -191,8 +193,7 @@ public class Reg extends BasicRegistry implements Registry, Persistable, Configu
         }
     }
 
-    @Override
-    public void store() throws IOException
+    @Override public void store() throws IOException
     {
         if (_file == null)
         {
@@ -202,14 +203,12 @@ public class Reg extends BasicRegistry implements Registry, Persistable, Configu
         store(_file);
     }
 
-    @Override
-    public void store(OutputStream output) throws IOException
+    @Override public void store(OutputStream output) throws IOException
     {
         store(new OutputStreamWriter(output, getConfig().getFileEncoding()));
     }
 
-    @Override
-    public void store(Writer output) throws IOException
+    @Override public void store(Writer output) throws IOException
     {
         output.write(getVersion());
         output.write(getConfig().getLineSeparator());
@@ -217,8 +216,7 @@ public class Reg extends BasicRegistry implements Registry, Persistable, Configu
         store(IniFormatter.newInstance(output, getConfig()));
     }
 
-    @Override
-    public void store(File output) throws IOException
+    @Override public void store(File output) throws IOException
     {
         OutputStream stream = new FileOutputStream(output);
 
@@ -246,20 +244,17 @@ public class Reg extends BasicRegistry implements Registry, Persistable, Configu
         return RegBuilder.newInstance(this);
     }
 
-    @Override
-    boolean isTreeMode()
+    @Override boolean isTreeMode()
     {
         return getConfig().isTree();
     }
 
-    @Override
-    char getPathSeparator()
+    @Override char getPathSeparator()
     {
         return getConfig().getPathSeparator();
     }
 
-    @Override
-    boolean isPropertyFirstUpper()
+    @Override boolean isPropertyFirstUpper()
     {
         return getConfig().isPropertyFirstUpper();
     }
@@ -300,13 +295,13 @@ public class Reg extends BasicRegistry implements Registry, Persistable, Configu
     private void regExport(String registryKey, File file) throws IOException
     {
         requireWindows();
-        exec(new String[]{"cmd", "/c", "reg", "export", registryKey, file.getAbsolutePath()});
+        exec(new String[] { "cmd", "/c", "reg", "export", registryKey, file.getAbsolutePath() });
     }
 
     private void regImport(File file) throws IOException
     {
         requireWindows();
-        exec(new String[]{"cmd", "/c", "reg", "import", file.getAbsolutePath()});
+        exec(new String[] { "cmd", "/c", "reg", "import", file.getAbsolutePath() });
     }
 
     private void requireWindows()

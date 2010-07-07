@@ -13,17 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.tutorial;
 
 import org.ini4j.Ini;
+
 import org.ini4j.sample.Dwarfs;
+
 import org.ini4j.test.DwarfsData;
 
-import java.io.File;
-import java.util.Set;
+import static org.junit.Assert.*;
 
-import static org.junit.Assert.assertEquals;
+import java.io.File;
+
+import java.util.Set;
 
 //<editor-fold defaultstate="collapsed" desc="apt documentation">
 //|
@@ -35,7 +37,6 @@ import static org.junit.Assert.assertEquals;
 //| Option is a name/value pair stored in OptionMap. But OptionMap adds a lot of
 //| usefull data access methods than simple get. OptionMap is base interface for
 //| both Ini.Section, Registry.Key and Options classes, so this tutorial will
-
 //| usefull for all of these.
 //|
 //| So in samples bellow you can use either Ini.Section, Registry.Key or Options
@@ -54,8 +55,7 @@ public class OptionMapTutorial extends AbstractTutorial
         new OptionMapTutorial().run(filearg(args));
     }
 
-    @Override
-    protected void run(File arg) throws Exception
+    @Override protected void run(File arg) throws Exception
     {
         Ini ini = new Ini(arg.toURI().toURL());
 
@@ -66,8 +66,7 @@ public class OptionMapTutorial extends AbstractTutorial
 
 //|* Data model
 //|
-
-    //| OptionMap implements Map\<String,String\>, so you can access options using
+//| OptionMap implements Map\<String,String\>, so you can access options using
 //| standard collection api.
 //{
     void sample01(Ini.Section section)
@@ -93,8 +92,7 @@ public class OptionMapTutorial extends AbstractTutorial
 //|* Macro/variable substitution
 //|
 //| To get a value, besides <<<get()>>> you can also
-
-    //| use <<<fetch()>>> which resolves any occurrent $\{section/option\} format
+//| use <<<fetch()>>> which resolves any occurrent $\{section/option\} format
 //| variable references in the needed value.
 //|
 //{
@@ -137,8 +135,7 @@ public class OptionMapTutorial extends AbstractTutorial
 //|* Multi values
 //|
 //| \[ini4j\] library introduces MultiMap interface, which is extends normal
-
-    //| Map, but allows multiply values per keys. You can simply index values for
+//| Map, but allows multiply values per keys. You can simply index values for
 //| a given key, similar to indexed properties in JavaBeans api.
 //|
 //{

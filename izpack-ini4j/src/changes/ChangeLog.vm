@@ -18,8 +18,8 @@ Change log
 #foreach( $release in $releases )
 * $release.version ($release.dateRelease) - $release.description
 
-    #foreach( $action in $release.actions )
+#foreach( $action in $release.actions )
     * $action.action
-    #end
+#end
 
 #end

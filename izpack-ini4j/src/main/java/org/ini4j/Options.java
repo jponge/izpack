@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j;
 
 import org.ini4j.spi.OptionsBuilder;
@@ -21,7 +20,16 @@ import org.ini4j.spi.OptionsFormatter;
 import org.ini4j.spi.OptionsHandler;
 import org.ini4j.spi.OptionsParser;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.net.URL;
 
 public class Options extends BasicOptionMap implements Persistable, Configurable
@@ -72,32 +80,27 @@ public class Options extends BasicOptionMap implements Persistable, Configurable
         _comment = value;
     }
 
-    @Override
-    public Config getConfig()
+    @Override public Config getConfig()
     {
         return _config;
     }
 
-    @Override
-    public void setConfig(Config value)
+    @Override public void setConfig(Config value)
     {
         _config = value;
     }
 
-    @Override
-    public File getFile()
+    @Override public File getFile()
     {
         return _file;
     }
 
-    @Override
-    public void setFile(File value)
+    @Override public void setFile(File value)
     {
         _file = value;
     }
 
-    @Override
-    public void load() throws IOException, InvalidFileFormatException
+    @Override public void load() throws IOException, InvalidFileFormatException
     {
         if (_file == null)
         {
@@ -107,32 +110,27 @@ public class Options extends BasicOptionMap implements Persistable, Configurable
         load(_file);
     }
 
-    @Override
-    public void load(InputStream input) throws IOException, InvalidFileFormatException
+    @Override public void load(InputStream input) throws IOException, InvalidFileFormatException
     {
         load(new InputStreamReader(input, getConfig().getFileEncoding()));
     }
 
-    @Override
-    public void load(Reader input) throws IOException, InvalidFileFormatException
+    @Override public void load(Reader input) throws IOException, InvalidFileFormatException
     {
         OptionsParser.newInstance(getConfig()).parse(input, newBuilder());
     }
 
-    @Override
-    public void load(URL input) throws IOException, InvalidFileFormatException
+    @Override public void load(URL input) throws IOException, InvalidFileFormatException
     {
         OptionsParser.newInstance(getConfig()).parse(input, newBuilder());
     }
 
-    @Override
-    public void load(File input) throws IOException, InvalidFileFormatException
+    @Override public void load(File input) throws IOException, InvalidFileFormatException
     {
         load(input.toURI().toURL());
     }
 
-    @Override
-    public void store() throws IOException
+    @Override public void store() throws IOException
     {
         if (_file == null)
         {
@@ -142,20 +140,17 @@ public class Options extends BasicOptionMap implements Persistable, Configurable
         store(_file);
     }
 
-    @Override
-    public void store(OutputStream output) throws IOException
+    @Override public void store(OutputStream output) throws IOException
     {
         store(new OutputStreamWriter(output, getConfig().getFileEncoding()));
     }
 
-    @Override
-    public void store(Writer output) throws IOException
+    @Override public void store(Writer output) throws IOException
     {
         store(OptionsFormatter.newInstance(output, getConfig()));
     }
 
-    @Override
-    public void store(File output) throws IOException
+    @Override public void store(File output) throws IOException
     {
         OutputStream stream = new FileOutputStream(output);
 
@@ -175,30 +170,52 @@ public class Options extends BasicOptionMap implements Persistable, Configurable
         for (String name : keySet())
         {
             storeComment(formatter, getComment(name));
-            int n = getConfig().isMultiOption() ? length(name) : 1;
+            int n = getConfig().isMultiOption() || getConfig().isAutoNumbering() ? length(name) : 1;
 
             for (int i = 0; i < n; i++)
             {
                 String value = get(name, i);
 
-                formatter.handleOption(name, value);
+                if (getConfig().isAutoNumbering() && name.endsWith("."))
+                {
+                    if (value != null)
+                    {
+                        formatter.handleOption(name + i, value);
+                    }
+                }
+                else
+                {
+                    formatter.handleOption(name, value);
+                }
             }
         }
 
         formatter.endOptions();
     }
 
-    @Override
-    boolean isPropertyFirstUpper()
+    @Override boolean isPropertyFirstUpper()
     {
         return getConfig().isPropertyFirstUpper();
     }
 
     private void storeComment(OptionsHandler formatter, String comment)
     {
-        if ((comment != null) && (comment.length() != 0))
-        {
-            formatter.handleComment(comment);
-        }
+        formatter.handleComment(comment);
     }
+
+//    public final static void main(String argv[])
+//    {
+//        Config.getGlobal().setHeaderComment(false);
+//        Config.getGlobal().setEmptyLines(true);
+//        Config.getGlobal().setAutoNumbering(true);
+//        try
+//        {
+//            Options options = new Options(new File("/home/rkrell/test/config_patch/test1/sm_server.wrapper.conf.old"));
+//            options.store(new File("/home/rkrell/test/config_patch/test1/sm_server.wrapper.conf.old.stored"));
+//        }
+//        catch (Exception e)
+//        {
+//            e.printStackTrace();
+//        }
+//    }
 }

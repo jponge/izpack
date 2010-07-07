@@ -13,36 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j;
 
 import org.ini4j.sample.Dwarf;
+
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.StringReader;
 
-import static org.junit.Assert.*;
-
-public class OptionsTest
+public class OptionsTest extends Ini4jCase
 {
-    private static final String[] _badOptions = {"=value\n", "\\u000d\\u000d=value\n"};
+    private static final String[] _badOptions = { "=value\n", "\\u000d\\u000d=value\n" };
     private static final String COMMENT_ONLY = "# first line\n# second line\n";
     private static final String COMMENT_ONLY_VALUE = " first line\n second line";
     private static final String OPTIONS_ONE_HEADER = COMMENT_ONLY + "\n\nkey=value\n";
     private static final String MULTI = "option=value\noption=value2\noption=value3\noption=value4\noption=value5\n";
 
-    @Test
-    public void testCommentOnly() throws Exception
+    @Test public void testCommentOnly() throws Exception
     {
         Options opt = new Options(new StringReader(COMMENT_ONLY));
 
         assertEquals(COMMENT_ONLY_VALUE, opt.getComment());
     }
 
-    @Test
-    public void testConfig()
+    @Test public void testConfig()
     {
         Options opts = new Options();
         Config conf = opts.getConfig();
@@ -56,8 +66,7 @@ public class OptionsTest
         assertSame(conf, opts.getConfig());
     }
 
-    @Test
-    public void testDwarfs() throws Exception
+    @Test public void testDwarfs() throws Exception
     {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         Options happy = new Options();
@@ -84,17 +93,16 @@ public class OptionsTest
         file.delete();
     }
 
-    @Test
-    public void testLoad() throws Exception
+    @Test public void testLoad() throws Exception
     {
         Options o1 = new Options(Helper.getResourceURL(Helper.DWARFS_OPT));
         Options o2 = new Options(Helper.getResourceURL(Helper.DWARFS_OPT).openStream());
         Options o3 = new Options(new InputStreamReader(Helper.getResourceURL(Helper.DWARFS_OPT).openStream()));
         Options o4 = new Options(Helper.getResourceURL(Helper.DWARFS_OPT));
-        Options o5 = new Options(Helper.getResourceURL(Helper.DWARFS_OPT));
+        Options o5 = new Options(Helper.getSourceFile(Helper.DWARFS_OPT));
         Options o6 = new Options();
 
-        o6.setFile(new File(Helper.getResourceURL(Helper.DWARFS_OPT).toURI()));
+        o6.setFile(Helper.getSourceFile(Helper.DWARFS_OPT));
         o6.load();
         Helper.assertEquals(DwarfsData.dopey, o1.as(Dwarf.class));
         Helper.assertEquals(DwarfsData.dopey, o2.as(Dwarf.class));
@@ -104,16 +112,22 @@ public class OptionsTest
         Helper.assertEquals(DwarfsData.dopey, o6.as(Dwarf.class));
     }
 
-    @Test(expected = FileNotFoundException.class)
-    public void testLoadException() throws Exception
+    @Test public void testLoadException() throws Exception
     {
         Options opt = new Options();
 
-        opt.load();
+        try
+        {
+            opt.load();
+            missing(FileNotFoundException.class);
+        }
+        catch (FileNotFoundException x)
+        {
+            //
+        }
     }
 
-    @Test
-    public void testLowerCase() throws Exception
+    @Test public void testLowerCase() throws Exception
     {
         Config cfg = new Config();
         Options opts = new Options();
@@ -124,8 +138,7 @@ public class OptionsTest
         assertTrue(opts.containsKey("option"));
     }
 
-    @Test
-    public void testMultiOption() throws Exception
+    @Test public void testMultiOption() throws Exception
     {
         Options opts = new Options(new StringReader(MULTI));
 
@@ -139,22 +152,29 @@ public class OptionsTest
         assertEquals(1, opts.length("option"));
     }
 
-    @Test(expected = InvalidFileFormatException.class)
-    public void testNoEmptyOption() throws Exception
+    @Test public void testNoEmptyOption() throws Exception
     {
         Config cfg = new Config();
         Options opts = new Options();
 
         opts.setConfig(cfg);
+        try
+        {
+            opts.load(new StringReader("foo\n"));
+            missing(InvalidFileFormatException.class);
+        }
+        catch (InvalidFileFormatException x)
+        {
+            //
+        }
+
+        cfg.setEmptyOption(true);
         opts.load(new StringReader("dummy\n"));
         assertTrue(opts.containsKey("dummy"));
         assertNull(opts.get("dummy"));
-        cfg.setEmptyOption(false);
-        opts.load(new StringReader("foo\n"));
     }
 
-    @Test
-    public void testOneHeaderOnly() throws Exception
+    @Test public void testOneHeaderOnly() throws Exception
     {
         Options opt = new Options(new StringReader(OPTIONS_ONE_HEADER));
 
@@ -179,11 +199,49 @@ public class OptionsTest
         }
     }
 
-    @Test(expected = FileNotFoundException.class)
-    public void testStoreException() throws Exception
+    @Test public void testStoreException() throws Exception
     {
         Options opt = new Options();
 
-        opt.store();
+        try
+        {
+            opt.store();
+            missing(FileNotFoundException.class);
+        }
+        catch (FileNotFoundException x)
+        {
+            //
+        }
+    }
+
+    @Test public void testWithComment() throws Exception
+    {
+        Options opts = new Options();
+
+        opts.load(Helper.getResourceStream(Helper.DWARFS_OPT));
+        assertNotNull(opts.getComment());
+    }
+
+    @Test public void testWithoutComment() throws Exception
+    {
+        Options opts = new Options();
+        Config cfg = new Config();
+
+        cfg.setComment(false);
+        opts.setConfig(cfg);
+        opts.load(Helper.getResourceStream(Helper.DWARFS_OPT));
+        assertNull(opts.getComment());
+    }
+
+    @Test public void testWithoutHeaderComment() throws Exception
+    {
+        Options opts = new Options();
+        Config cfg = new Config();
+
+        cfg.setComment(true);
+        cfg.setHeaderComment(false);
+        opts.setConfig(cfg);
+        opts.load(Helper.getResourceStream(Helper.DWARFS_OPT));
+        assertNull(opts.getComment());
     }
 }

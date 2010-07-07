@@ -17,338 +17,358 @@
 
 -->
 <document>
-    <properties>
-        <title>[ini4j] Changes</title>
-    </properties>
-    <body>
-        <release version="0.5.2" description="?">
-            <action type="fix" dev="szkiba">
-            </action>
-        </release>
-        <release version="0.5.1" date="2009-04-08" description="Maintenance release">
-            <action type="fix" dev="szkiba">
-                Removed java.util.NavigableMap reference from code, becasue it is break
-                java 1.5 compatibility.
-            </action>
-            <action type="add" dev="szkiba">
-                Applet support: [ini4j] now able to run in applet environment.
-            </action>
-            <action type="add" dev="szkiba">
-                Demo applet: now project site contains a small demo applet to check
-                [ini4j] interactive mode from browser.
-            </action>
-        </release>
-        <release version="0.5.0" date="2009-04-02"
-                 description="Subsection handling, comment support, Windows registry handling">
-            <action type="add" dev="szkiba">
-                Read/write Windows registry. The new Reg class is able to read/write
-                windows registry. This class is very similar to Ini class, has same data
-                model.
-            </action>
-            <action type="add" dev="szkiba">
-                Support for .REG (windows regedit) format. The file format is similar to .ini,
-                and now the org.ini4j.Reg class can handle it.
-            </action>
-            <action type="add" dev="szkiba">
-                Tree data model for ections. Now sections handled as a tree, with subsections.
-                It is based on section names. With a separator ('/' or '\') sectios can
-                organized into trees (like in .REG format).
-            </action>
-            <action type="update" dev="szkiba">
-                Improve project web site.
-            </action>
-            <action type="add" dev="szkiba">
-                Bean property mapping with upper case first letter in key names (aka Mozilla .ini files)
-                (Feature request #2706511)
-            </action>
-            <action type="add" dev="szkiba">
-                Comment support for Ini and Options. There is a header comment, section
-                comment and option comment. Comments at beginig of file are header
-                comments. Continous comment block before section is a section comment,
-                continous comment bleck before option is an option comment.
-            </action>
-            <action type="update" dev="szkiba">
-                Refactor Ini class, extract Profile interface and BasicProfile superclass.
-            </action>
-            <action type="add" dev="szkiba">
-                Comfortable access methods for OptionBundle and OptionMap.
-            </action>
-            <action type="update" dev="szkiba">
-                Code cleanup, remove deprecated methods, classes.
-            </action>
-            <action type="update" dev="szkiba">
-                Backslash at end of line support: join with next line.
-            </action>
-        </release>
-        <release version="0.4.1" date="2009-03-11"
-                 description="Python like ConfigParser Options as java.util.Properties replacement">
-            <action type="add" dev="szkiba">
-                Added Options as replacement for java.util.Properties. Options has a lot
-                of useful features, like: ${} macro handling, multi value
-                handling, bean marshalling/unmarshalling etc.
-            </action>
-            <action type="add" dev="szkiba">
-                Python ConfigParser interface for .ini files.
-            </action>
-            <action type="update" dev="szkiba">
-                Cleanup code, use PMD+checkstyle.
-            </action>
-            <action type="fix" dev="szkiba">
-                Cleanup deprecated warnings from test code.
-            </action>
-            <action type="fix" dev="szkiba" issue="2623266" due-to="Karl Heinz Marbaise">
-                Skip "class" property in Ini.Section#from method.
-            </action>
-            <action type="fix" dev="szkiba" issue="2623274" due-to="Karl Heinz Marbaise">
-                Added Issue Tracking to Project Information on maven generated site.
-            </action>
-            <action type="fix" dev="szkiba">
-                Fix BeanTool bug: ${} macros an dindexed properties not handled properly in inject().
-            </action>
-        </release>
+  <properties>
+    <title>[ini4j] Changes</title>
+  </properties>
+  <body>
+    <release version="0.5.2" date="2010-04-01" description="Bugfix release">
+      <action type="fix" dev="szkiba" issue="2908623" due-to="Markus">
+      Backport to java 1.4 fixed. There were a lot of problem. Now all junit tests
+      are run both on current java and on 1.4 jvm. This way backported version
+      is junit tested (on real 1.4 jvm) as the normal version.
+      </action>
+      <action type="fix" dev="szkiba" issue="2778337" >
+      Removed UnicodeLittle/UnicodeBig charset references because these break
+      the backported version.
+      </action>
+      <action type="fix" dev="szkiba" issue="2866427" due-to="Lilian Valero">
+      Add BOM (byte order mark) support. Workaround on java BOM/UTF8 problem.
+      </action>
+      <action type="fix" dev="szkiba" issue="2817399" >
+      Fixed typo in Options Tutorial.
+      </action>
+      <action type="fix" dev="szkiba" issue="2817403" dua-to="Gary Pampara">
+      Multiply macro substituton per value fixed. There were a bug in
+      variable/macro substitution if more than one macro used in one option value.
+      </action>
+      <action type="fix" dev="szkiba" issue="2971952" due-to="René Krell">
+      Configurable comment handling. The header comment can be disable/enable via
+      Config.setHeaderComment(boolean). Also the whole comment handling can be
+      disable/enable via Config.setComment(boolean).
+      </action>
+    </release>
+    <release version="0.5.1" date="2009-04-08" description="Maintenance release">
+      <action type="fix" dev="szkiba">
+      Removed java.util.NavigableMap reference from code, becasue it is break
+      java 1.5 compatibility.
+      </action>
+      <action type="add" dev="szkiba">
+      Applet support: [ini4j] now able to run in applet environment.
+      </action>
+      <action type="add" dev="szkiba">
+      Demo applet: now project site contains a small demo applet to check
+      [ini4j] interactive mode from browser.
+      </action>
+    </release>
+    <release version="0.5.0" date="2009-04-02" description="Subsection handling, comment support, Windows registry handling">
+      <action type="add" dev="szkiba">
+      Read/write Windows registry. The new Reg class is able to read/write
+      windows registry. This class is very similar to Ini class, has same data
+      model.
+      </action>
+      <action type="add" dev="szkiba">
+      Support for .REG (windows regedit) format. The file format is similar to .ini,
+      and now the org.ini4j.Reg class can handle it.
+      </action>
+      <action type="add" dev="szkiba">
+      Tree data model for ections. Now sections handled as a tree, with subsections.
+      It is based on section names. With a separator ('/' or '\') sectios can
+      organized into trees (like in .REG format).
+      </action>
+      <action type="update" dev="szkiba">
+      Improve project web site.
+      </action>
+      <action type="add" dev="szkiba">
+      Bean property mapping with upper case first letter in key names (aka Mozilla .ini files)
+      (Feature request #2706511)
+      </action>
+      <action type="add" dev="szkiba">
+      Comment support for Ini and Options. There is a header comment, section
+      comment and option comment. Comments at beginig of file are header
+      comments. Continous comment block before section is a section comment,
+      continous comment bleck before option is an option comment.
+      </action>
+      <action type="update" dev="szkiba">
+      Refactor Ini class, extract Profile interface and BasicProfile superclass.
+      </action>
+      <action type="add" dev="szkiba">
+      Comfortable access methods for OptionBundle and OptionMap.
+      </action>
+      <action type="update" dev="szkiba">
+      Code cleanup, remove deprecated methods, classes.
+      </action>
+      <action type="update" dev="szkiba">
+      Backslash at end of line support: join with next line.
+      </action>
+    </release>
+    <release version="0.4.1" date="2009-03-11" description="Python like ConfigParser Options as java.util.Properties replacement">
+      <action type="add" dev="szkiba">
+      Added Options as replacement for java.util.Properties. Options has a lot
+      of useful features, like: ${} macro handling, multi value
+      handling, bean marshalling/unmarshalling etc.
+      </action>
+      <action type="add" dev="szkiba">
+      Python ConfigParser interface for .ini files.
+      </action>
+      <action type="update" dev="szkiba">
+      Cleanup code, use PMD+checkstyle.
+      </action>
+      <action type="fix" dev="szkiba">
+      Cleanup deprecated warnings from test code.
+      </action>
+      <action type="fix" dev="szkiba" issue="2623266" due-to="Karl Heinz Marbaise">
+      Skip "class" property in Ini.Section#from method.
+      </action>
+      <action type="fix" dev="szkiba" issue="2623274" due-to="Karl Heinz Marbaise">
+      Added Issue Tracking to Project Information on maven generated site.
+      </action>
+      <action type="fix" dev="szkiba">
+      Fix BeanTool bug: ${} macros an dindexed properties not handled properly in inject().
+      </action>
+    </release>
 
-        <release version="0.4.0" date="2009-02-17" description="Refactoring and new features">
-            <action type="add" dev="szkiba">
-                New from() and to() methods in Ini.Section for
-                marshalling/unmarshalling bean properties.
-            </action>
+    <release version="0.4.0" date="2009-02-17" description="Refactoring and new features">
+      <action type="add" dev="szkiba">
+      New from() and to() methods in Ini.Section for
+      marshalling/unmarshalling bean properties.
+      </action>
 
-            <action type="add" dev="szkiba">
-                Indexed property access in bean interafce for multi value options and
-                sections.
-            </action>
+      <action type="add" dev="szkiba">
+      Indexed property access in bean interafce for multi value options and
+      sections.
+      </action>
 
-            <action type="add" dev="szkiba">
-                Configurable multi value handling both for options and sections.
-            </action>
+      <action type="add" dev="szkiba">
+      Configurable multi value handling both for options and sections.
+      </action>
 
-            <action type="add" dev="szkiba">
-                Configurable escape handling. Now possible to handle windows path
-                values (caontains backslases).
-            </action>
+      <action type="add" dev="szkiba">
+      Configurable escape handling. Now possible to handle windows path
+      values (caontains backslases).
+      </action>
 
-            <action type="update" dev="szkiba">
-                Migrate junit test to 4.x version.
-            </action>
+      <action type="update" dev="szkiba">
+      Migrate junit test to 4.x version.
+      </action>
 
-            <action type="update" dev="szkiba">
-                Added MuliMap datatype: multiple value for same key. It used by Ini and
-                Ini.Section classes.
-            </action>
+      <action type="update" dev="szkiba">
+      Added MuliMap datatype: multiple value for same key. It used by Ini and
+      Ini.Section classes. 
+      </action>
 
-            <action type="update" dev="szkiba">
-                Move FancyIniParser and FancyIniFormatter functionality to IniParser and
-                IniFormatter. Make them configurable (enable/disable features via Config
-                object).
-            </action>
+      <action type="update" dev="szkiba">
+      Move FancyIniParser and FancyIniFormatter functionality to IniParser and
+      IniFormatter. Make them configurable (enable/disable features via Config
+      object).
+      </action>
 
-            <action type="update" dev="szkiba">
-                Make bean manipulation (BeanTool) and escaping (EscapeTool) replaceable
-                via standard services mechanism (/META-INF/services/XXX)
-            </action>
+      <action type="update" dev="szkiba">
+      Make bean manipulation (BeanTool) and escaping (EscapeTool) replaceable
+      via standard services mechanism (/META-INF/services/XXX)
+      </action>
 
-            <action type="add" dev="szkiba">
-                Internal changes: migrating changelog.apt to changes.xml, generating text
-                version of ChangeLog and Releasenotes from changes.xml
-            </action>
+      <action type="add" dev="szkiba">
+      Internal changes: migrating changelog.apt to changes.xml, generating text
+      version of ChangeLog and Releasenotes from changes.xml
+      </action>
 
-            <action type="add" dev="szkiba">
-                Internal changes: use wagon plugin for helping SourceForge release
-                upload, use license plugin to keep up to date file headers.
-            </action>
-        </release>
+      <action type="add" dev="szkiba">
+      Internal changes: use wagon plugin for helping SourceForge release
+      upload, use license plugin to keep up to date file headers.
+      </action>
+    </release>
 
-        <release version="0.3.3" date="2009-02-05" description="Bugfixes">
-            <action type="fix" dev="szkiba" issue="2060122" due-to="Julien MARBACH">
-                ini4j now support files with # in the name
-            </action>
-            <action type="fix" dev="szkiba" issue="2120766" due-to="Karl Heinz Marbaise and Gert van Valkenhoef">
-                (Java 1.5 Support) now ini4j compiled for jdk 1.5 by default (and
-                translated to 1.4)
-            </action>
-            <action type="update" dev="szkiba">
-                SVN rename. TRUNK and TAGS renamed to lowercase, to use conventional names
-            </action>
-            <action type="fix" dev="szkiba" issue="1918502">
-                Write Ini file: skip blanks around " = ":
-                Separated IniFormatter class format the .ini file (and XMLFormatter).
-                This class can instantiate using factory pattern (internally use
-                standard jar service locator pattern), and caller can override default
-                IniFormatter implementation. See FancyIniFormatter in addons package,
-                which is by default do not put space around '='.
-            </action>
-            <action type="fix" dev="szkiba" issue="1897071" due-to="Walter Podesser">
-                Ini.store with null values:
-                By default keys with empty (null) values now skipped, but in
-                FancyIniFormatter empty values printed as empty string.
-            </action>
-        </release>
+    <release version="0.3.3" date="2009-02-05" description="Bugfixes">
+      <action type="fix" dev="szkiba" issue="2060122" due-to="Julien MARBACH">
+      ini4j now support files with # in the name
+      </action>
+      <action type="fix" dev="szkiba" issue="2120766" due-to="Karl Heinz Marbaise and Gert van Valkenhoef">
+      (Java 1.5 Support) now ini4j compiled for jdk 1.5 by default (and
+      translated to 1.4)
+      </action>
+      <action type="update" dev="szkiba">
+      SVN rename. TRUNK and TAGS renamed to lowercase, to use conventional names
+      </action>
+      <action type="fix" dev="szkiba" issue="1918502">
+      Write Ini file: skip blanks around " = ":
+      Separated IniFormatter class format the .ini file (and XMLFormatter).
+      This class can instantiate using factory pattern (internally use
+      standard jar service locator pattern), and caller can override default
+      IniFormatter implementation. See FancyIniFormatter in addons package,
+      which is by default do not put space around '='.
+      </action>
+      <action type="fix" dev="szkiba" issue="1897071" due-to="Walter Podesser">
+      Ini.store with null values:
+      By default keys with empty (null) values now skipped, but in
+      FancyIniFormatter empty values printed as empty string.
+      </action>
+    </release>
 
-        <release version="0.3.2" date="2008-02-17" description="Minor bugfixes">
-            <action type="fix" dev="szkiba">
-                Fix file close problem: in some case IniFile and IniParser left files
-                open. This cause file deletion problem on some OS.
-            </action>
-            <action type="fix" dev="szkiba">
-                Fix Unicode escape problem: \u sequences now generated correctly
-                (4 character with leading zeros)
-            </action>
-        </release>
+    <release version="0.3.2" date="2008-02-17" description="Minor bugfixes">
+      <action type="fix" dev="szkiba">
+      Fix file close problem: in some case IniFile and IniParser left files
+      open. This cause file deletion problem on some OS.
+      </action>
+      <action type="fix" dev="szkiba">
+      Fix Unicode escape problem: \u sequences now generated correctly
+      (4 character with leading zeros)
+      </action>
+    </release>
 
-        <release version="0.3.1" date="2008-02-11" description="Maven repository support">
-            <action type="add" dev="szkiba">
-                Added maven repository support: http://www.ini4j.org/repository/release
-                and http://www.ini4j.org/repository/snapshot
-            </action>
-        </release>
+    <release version="0.3.1" date="2008-02-11" description="Maven repository support">
+      <action type="add" dev="szkiba">
+      Added maven repository support: http://www.ini4j.org/repository/release
+      and http://www.ini4j.org/repository/snapshot
+      </action>
+    </release>
 
-        <release version="0.3.0" date="2008-02-10" description="Migrating to SVN and Maven">
-            <action type="update" dev="szkiba">
-                Migration: CVS to SVN
-            </action>
-            <action type="update" dev="szkiba">Migration: Ant to Maven</action>
-        </release>
+    <release version="0.3.0" date="2008-02-10" description="Migrating to SVN and Maven">
+      <action type="update" dev="szkiba">
+      Migration: CVS to SVN
+      </action>
+      <action type="update" dev="szkiba">Migration: Ant to Maven</action>
+    </release>
 
-        <release version="0.2.6" date="2005-11-29" description="Include handling">
-            <action type="update" dev="szkiba">
-                Refactored code for customization: Ini, IniPreferences, IniParser now
-                also handle URL as input. It makes possible to create C like #include
-                directive at IniParser level, when using URL as input source.
-            </action>
-            <action type="add" dev="szkiba">
-                Added include feature to FancyIniParser: &lt;location&gt; mean: '&lt;'
-                and '&gt;' token, location is either relative or absolute URL of include
-                file. Unlimited level of includes allowed. Relative URLs only allowed,
-                when container file loaded via URL (not via stream or reader).
-            </action>
-            <action type="add" dev="szkiba">
-                IniFile got getMode() and getFile() accessor methods.
-            </action>
-            <action type="add" dev="szkiba">
-                PreferencesWrapper class in addon package to support decorator design
-                pattern for java.util.Preferences objects.
-            </action>
-            <action type="add" dev="szkiba">
-                StrictPreferences decorator class, which has getXXX methods without
-                default parameter, and throws java.util.NoSuchElementException on missing
-                values instead of returning default value.
-            </action>
-        </release>
+    <release version="0.2.6" date="2005-11-29" description="Include handling">
+      <action type="update" dev="szkiba">
+      Refactored code for customization: Ini, IniPreferences, IniParser now
+      also handle URL as input. It makes possible to create C like #include
+      directive at IniParser level, when using URL as input source.
+      </action>
+      <action type="add" dev="szkiba">
+      Added include feature to FancyIniParser: &lt;location&gt; mean: '&lt;'
+      and '&gt;' token, location is either relative or absolute URL of include
+      file. Unlimited level of includes allowed. Relative URLs only allowed,
+      when container file loaded via URL (not via stream or reader).
+      </action>
+      <action type="add" dev="szkiba">
+      IniFile got getMode() and getFile() accessor methods.
+      </action>
+      <action type="add" dev="szkiba">
+      PreferencesWrapper class in addon package to support decorator design
+      pattern for java.util.Preferences objects.
+      </action>
+      <action type="add" dev="szkiba">
+      StrictPreferences decorator class, which has getXXX methods without
+      default parameter, and throws java.util.NoSuchElementException on missing
+      values instead of returning default value.
+      </action>
+    </release>
 
-        <release version="0.2.5" date="2005-11-26" description="Backport to JDK 1.4">
-            <action type="fix" dev="szkiba">
-                As per many programmers request, finally [ini4j] backported to JDK 1.4.
-                There is a ini4j-compat.jar and retroweaver-rt*.jar in distribution
-                directory. These 2 jar need for JDK 1.4 to use [ini4j]. Every JUnit test
-                run successfully, so I'm sure that [ini4j] work correctly with JDK 1.4
-                (JUnit test coverage ~ 98% :)
+    <release version="0.2.5" date="2005-11-26" description="Backport to JDK 1.4">
+      <action type="fix" dev="szkiba">
+      As per many programmers request, finally [ini4j] backported to JDK 1.4.
+      There is a ini4j-compat.jar and retroweaver-rt*.jar in distribution
+      directory. These 2 jar need for JDK 1.4 to use [ini4j]. Every JUnit test
+      run successfully, so I'm sure that [ini4j] work correctly with JDK 1.4
+      (JUnit test coverage ~ 98% :)
 
-                I like retroweaver tool, so I'd like to mentoin here:
-                retroweaver.sorceforge.net and forked project (I used for ini4j)
-                retroweaver-ng.sourceforge.net
-            </action>
-        </release>
+      I like retroweaver tool, so I'd like to mentoin here:
+      retroweaver.sorceforge.net and forked project (I used for ini4j)
+      retroweaver-ng.sourceforge.net
+      </action>
+    </release>
 
-        <release version="0.2.4" date="2005-11-25" description="Replaceable parser via factory pattern">
-            <action type="fix" dev="szkiba">removed some private constructor (cosmetic change)</action>
-            <action type="add" dev="szkiba">
-                Added factory design pattern for IniParser class: it is
-                possible now to change IniParser implementation at runtime:
-                either "org.ini4j.IniParser" system property or
-                META-INF/services/org.ini4j.IniParser file is the configuration point.
-                This is conform with JAR specifications service definition.
+    <release version="0.2.4" date="2005-11-25" description="Replaceable parser via factory pattern">
+      <action type="fix" dev="szkiba">removed some private constructor (cosmetic change)</action>
+      <action type="add" dev="szkiba">
+      Added factory design pattern for IniParser class: it is
+      possible now to change IniParser implementation at runtime:
+      either "org.ini4j.IniParser" system property or
+      META-INF/services/org.ini4j.IniParser file is the configuration point.
+      This is conform with JAR specifications service definition.
 
-                Thanx this to James Ahlborn and Steve Buschman. They are suggested some
-                changes in IniParser. I disagree with the changes, but I made the
-                possibility of changing IniParser without change Ini4j source :)
-            </action>
-            <action type="add" dev="szkiba">added org.ini4j.addon package for optional classes.</action>
-            <action type="add" dev="szkiba">
-                added org.ini4j.addon.FancyIniParser as alternate parser with following
-                features:
-                - option without = operator mean empty option
-                - empty section names [] mean empty string as section name
-                - first section tag ([name]) is optional, by default it is same as []
-                - section and/or option names may be converted to lowercase while parsing
-            </action>
-        </release>
+      Thanx this to James Ahlborn and Steve Buschman. They are suggested some
+      changes in IniParser. I disagree with the changes, but I made the
+      possibility of changing IniParser without change Ini4j source :)
+      </action>
+      <action type="add" dev="szkiba">added org.ini4j.addon package for optional classes.</action>
+      <action type="add" dev="szkiba">
+      added org.ini4j.addon.FancyIniParser as alternate parser with following
+      features:
+      - option without = operator mean empty option
+      - empty section names [] mean empty string as section name
+      - first section tag ([name]) is optional, by default it is same as []
+      - section and/or option names may be converted to lowercase while parsing
+      </action>
+    </release>
 
-        <release version="0.2.3" date="2005-02-18" description="Minor bugfixes">
-            <action type="fix" dev="szkiba">
-                fixed xhml bugs in documentation
-            </action>
-            <action type="fix" dev="szkiba">
-                set java.util.prefs.PreferencesFactory property in
-                IniPreferencesFactoryListener
-            </action>
-            <action type="fix" dev="szkiba">
-                fix AbstractBeanInvocationHandler#getProperty(), now it returns zero()
-                if getPropertySpi() returns null
-            </action>
-            <action type="add" dev="szkiba">
-                hasProperty method in AbstractBeanInvocationHandler: if interface has
-                hasXXX method, it will return true if bean has XXX property.
-            </action>
-        </release>
+    <release version="0.2.3" date="2005-02-18" description="Minor bugfixes">
+      <action type="fix" dev="szkiba">
+      fixed xhml bugs in documentation
+      </action>
+      <action type="fix" dev="szkiba">
+      set java.util.prefs.PreferencesFactory property in
+      IniPreferencesFactoryListener
+      </action>
+      <action type="fix" dev="szkiba">
+      fix AbstractBeanInvocationHandler#getProperty(), now it returns zero()
+      if getPropertySpi() returns null
+      </action>
+      <action type="add" dev="szkiba">
+      hasProperty method in AbstractBeanInvocationHandler: if interface has
+      hasXXX method, it will return true if bean has XXX property.
+      </action>
+    </release>
 
-        <release version="0.2.2" date="2005-02-13" description="Webapp support">
-            <action type="fix" dev="szkiba">
-                fixed logo png in CVS
-            </action>
-            <action type="add" dev="szkiba">
-                support for webapps: IniPreferencesFactoryListener
-                webapp can use /WEB-INF/user.ini and /ERB-INF/system.ini
-                as user and system root preferences
-            </action>
-        </release>
+    <release version="0.2.2" date="2005-02-13" description="Webapp support">
+      <action type="fix" dev="szkiba">
+      fixed logo png in CVS
+      </action>
+      <action type="add" dev="szkiba">
+      support for webapps: IniPreferencesFactoryListener
+      webapp can use /WEB-INF/user.ini and /ERB-INF/system.ini
+      as user and system root preferences
+      </action>
+    </release>
 
-        <release version="0.2.1" date="2005-02-12" description="Import to CVS, org.ini4j in package names">
-            <action type="add" dev="szkiba">
-                checked in to CVS CVSROOT: :ext:cvs.sourceforge.net/cvsroot/ini4j/main
-            </action>
-            <action type="update" dev="szkiba">
-                documentation reorganization: footer navigation bar added
-            </action>
-            <action type="add" dev="szkiba">
-                ini4j.org domain registered, java package names modified to org.ini4j
-            </action>
-            <action type="update" dev="szkiba">
-                JUnit tests improved
-            </action>
-            <action type="add" dev="szkiba">
-                Clover code coverage tool used
-            </action>
-            <action type="fix" dev="szkiba">
-                documentation English cleaned
-            </action>
-        </release>
+    <release version="0.2.1" date="2005-02-12" description="Import to CVS, org.ini4j in package names">
+      <action type="add" dev="szkiba">
+      checked in to CVS CVSROOT: :ext:cvs.sourceforge.net/cvsroot/ini4j/main
+      </action>
+      <action type="update" dev="szkiba">
+      documentation reorganization: footer navigation bar added
+      </action>
+      <action type="add" dev="szkiba">
+      ini4j.org domain registered, java package names modified to org.ini4j
+      </action>
+      <action type="update" dev="szkiba">
+      JUnit tests improved
+      </action>
+      <action type="add" dev="szkiba">
+      Clover code coverage tool used
+      </action>
+      <action type="fix" dev="szkiba">
+      documentation English cleaned
+      </action>
+    </release>
 
-        <release version="0.1.1" date="2005-02-05" description="Bean interface and variable substitution">
-            <action type="add" dev="szkiba">
-                Java Beans style interface for sections and for ini too. You should pass
-                interface to Ini.Section.to() (or Ini.to()) and you get a Java object
-                implements passed interface on top of Ini.section (or Ini). Not only setXX
-                and getXX works well, but property change listeners and vetoable change
-                listeners also supported.
-            </action>
-            <action type="add" dev="szkiba">
-                Variable substitution for option values. You can use ${section/option}
-                style substitution expressions in any option value.
-            </action>
-            <action type="update" dev="szkiba">
-                Reorganize XML parsing: now IniParser has parseXML method, which
-                simply translate SAX callbacks to IniHandler callbacks
-            </action>
-            <action type="add" dev="szkiba">
-                Create Convert class for unicode escape conversion: escape and unsecape
-                methods.
-            </action>
-        </release>
+    <release version="0.1.1" date="2005-02-05" description="Bean interface and variable substitution">
+      <action type="add" dev="szkiba">
+      Java Beans style interface for sections and for ini too. You should pass
+      interface to Ini.Section.to() (or Ini.to()) and you get a Java object
+      implements passed interface on top of Ini.section (or Ini). Not only setXX
+      and getXX works well, but property change listeners and vetoable change
+      listeners also supported.
+      </action>
+      <action type="add" dev="szkiba">
+      Variable substitution for option values. You can use ${section/option}
+      style substitution expressions in any option value.
+      </action>
+      <action type="update" dev="szkiba">
+      Reorganize XML parsing: now IniParser has parseXML method, which
+      simply translate SAX callbacks to IniHandler callbacks
+      </action>
+      <action type="add" dev="szkiba">
+      Create Convert class for unicode escape conversion: escape and unsecape
+      methods.
+      </action>
+    </release>
 
-        <release version="0.10" date="2005-01-30" description="First release">
-            <action type="add" dev="szkiba">
-                Initial version
-            </action>
-        </release>
-    </body>
+    <release version="0.1.0" date="2005-01-30" description="First release">
+      <action type="add" dev="szkiba">
+      Initial version
+      </action>
+    </release>
+  </body>
 </document>

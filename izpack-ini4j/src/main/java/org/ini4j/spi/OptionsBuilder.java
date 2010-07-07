@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
 import org.ini4j.Config;
@@ -39,50 +38,83 @@ public class OptionsBuilder implements OptionsHandler
         _options = value;
     }
 
-    @Override
-    public void endOptions()
+    @Override public void endOptions()
     {
 
         // comment only .opt file ...
-        if ((_lastComment != null) && _header && !getConfig().isNoHeader())
+        if ((_lastComment != null) && _header)
         {
-            _options.setComment(_lastComment);
+            setHeaderComment();
         }
     }
 
-    @Override
-    public void handleComment(String comment)
+    @Override public void handleEmptyLine()
     {
-        if ((_lastComment != null) && _header && !getConfig().isNoHeader())
+        if (_lastComment == null)
         {
-            _options.setComment(_lastComment);
+            _lastComment = EMPTY_LINE_MARK;
+        }
+        else
+        {
+            _lastComment = _lastComment + getConfig().getLineSeparator() + EMPTY_LINE_MARK;
+        }
+    }
+
+    @Override public void handleComment(String comment)
+    {
+        if ((_lastComment != null) && _header)
+        {
+            setHeaderComment();
             _header = false;
         }
 
         _lastComment = comment;
     }
 
-    @Override
-    public void handleOption(String name, String value)
+    @Override public void handleOption(String name, String value)
     {
-        if (getConfig().isMultiOption())
+        String newName = name;
+        if (getConfig().isAutoNumbering() && name.matches("([^\\d]+\\.)+[\\d]+"))
         {
-            _options.add(name, value);
+            String[] parts = name.split("\\.");
+            newName = name.substring(0, name.length() - parts[parts.length - 1].length() - 1) + ".";
+            int pos = Integer.parseInt(parts[parts.length - 1]);
+
+            // check whether key has been added before
+            if (!_options.containsKey(newName))
+            {
+                _options.add(newName, null);
+            }
+
+            // resize list for key if it is too small
+            for (int i = _options.getAll(newName).size(); i <= pos; i++)
+            {
+                _options.add(newName, null);
+            }
+
+            _options.put(newName, value, pos);
         }
         else
         {
-            _options.put(name, value);
+            if (getConfig().isMultiOption())
+            {
+                _options.add(newName, value);
+            }
+            else
+            {
+                _options.put(newName, value);
+            }
         }
 
         if (_lastComment != null)
         {
-            if (_header && !getConfig().isNoHeader())
+            if (_header)
             {
-                _options.setComment(_lastComment);
+                setHeaderComment();
             }
             else
             {
-                _options.putComment(name, _lastComment);
+                putComment(newName);
             }
 
             _lastComment = null;
@@ -91,10 +123,12 @@ public class OptionsBuilder implements OptionsHandler
         _header = false;
     }
 
-    @Override
-    public void startOptions()
+    @Override public void startOptions()
     {
-        _header = true;
+        if (getConfig().isHeaderComment())
+        {
+            _header = true;
+        }
     }
 
     protected static OptionsBuilder newInstance()
@@ -105,5 +139,21 @@ public class OptionsBuilder implements OptionsHandler
     private Config getConfig()
     {
         return _options.getConfig();
+    }
+
+    private void setHeaderComment()
+    {
+        if (getConfig().isComment())
+        {
+            _options.setComment(_lastComment);
+        }
+    }
+
+    private void putComment(String key)
+    {
+        if (getConfig().isComment() &&  _lastComment != null)
+        {
+            _options.putComment(key, _lastComment);
+        }
     }
 }

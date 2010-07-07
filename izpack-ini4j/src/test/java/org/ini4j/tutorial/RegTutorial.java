@@ -13,19 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.tutorial;
 
 import org.ini4j.Reg;
+
 import org.ini4j.sample.Dwarf;
+
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
 
+import static org.junit.Assert.*;
+
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 
-import static org.junit.Assert.assertNotNull;
+import java.net.URI;
 
 //<editor-fold defaultstate="collapsed" desc="apt documentation">
 //|
@@ -34,7 +36,6 @@ import static org.junit.Assert.assertNotNull;
 //|
 //|Reg Tutorial - Windows .REG file handling
 //|
-
 //| Windows regedit commands .REG file format is very close to .ini format.
 //| \[ini4j\] provides org.ini4j.Reg class to model .REG format. This tutorial
 //| show the differences between Ini and Reg classes.
@@ -52,8 +53,7 @@ public class RegTutorial extends AbstractTutorial
         new RegTutorial().run(filearg(args));
     }
 
-    @Override
-    protected void run(File arg) throws Exception
+    @Override protected void run(File arg) throws Exception
     {
         Reg reg = new Reg(arg.toURI().toURL());
 
@@ -74,8 +74,7 @@ public class RegTutorial extends AbstractTutorial
 //|
 //| Assume you have a .REG file, with the following section/key:
 //|
-
-    //|+---+
+//|+---+
 //|[HKEY_CURRENT_USER\Software\ini4j-test\dwarfs\bashful]
 //|@="bashful"
 //|"weight"=hex(2):34,00,35,00,2e,00,37,00,00,00
@@ -118,8 +117,7 @@ public class RegTutorial extends AbstractTutorial
 //|
 //|* Types
 //|
-
-    //| When you load data into Reg class, it will preserve meta informations, such as
+//| When you load data into Reg class, it will preserve meta informations, such as
 //| type informations. If you create new values, by default these will have
 //| tpye REG_SZ. Ofcource you may specify type information for values.
 //{

@@ -13,23 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.tutorial;
 
 import org.ini4j.Config;
 import org.ini4j.Ini;
 import org.ini4j.Options;
+
 import org.ini4j.sample.Dwarf;
 import org.ini4j.sample.DwarfBean;
 import org.ini4j.sample.Dwarfs;
+
 import org.ini4j.test.DwarfsData;
+
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.net.URI;
 import java.net.URL;
-
-import static org.junit.Assert.*;
 
 //<editor-fold defaultstate="collapsed" desc="apt documentation">
 //|
@@ -40,7 +42,6 @@ import static org.junit.Assert.*;
 //|
 //| Yes, it can be done! To access the contents of sections you can use any of
 //| your self-defined Java Beans compatible API.
-
 //| In order to do this you only have to create a Java Beans-style interface or class.
 //|
 //| Source code for beans: {{{../sample/Dwarf.java.html}Dwarf}},
@@ -57,8 +58,7 @@ public class BeanTutorial extends AbstractTutorial
         new BeanTutorial().run(filearg(args));
     }
 
-    @Override
-    protected void run(File arg) throws Exception
+    @Override protected void run(File arg) throws Exception
     {
         Ini ini = new Ini(arg.toURI().toURL());
 
@@ -83,8 +83,7 @@ public class BeanTutorial extends AbstractTutorial
 //| While writing a program we usually know the type of the section's values,
 //| so we can define one or more java interfaces to access them. An advantage of
 //| this solution is that the programmer doesn't have to convert the values
-
-    //| because they are converted automatically to the type defined in the
+//| because they are converted automatically to the type defined in the
 //| interface.
 //|
 //| Ofcourse you may use setters as well, not just getters. In this way you can
@@ -113,8 +112,7 @@ public class BeanTutorial extends AbstractTutorial
 //|* Marshalling beans
 //|
 //| Sometimes we want to store existing java beans in text file. This operation
-
-    //| usually called marshalling.
+//| usually called marshalling.
 //|
 //| With [ini4j] it is easy to store bean properties in a section. You simply
 //| create a section, and call the sections's <<<from()>>> method. Thats it.
@@ -139,8 +137,7 @@ public class BeanTutorial extends AbstractTutorial
 //|* Unmarshalling beans
 //|
 //| If you have a marshalled bean in text file then you may want to read it
-
-    //| into bean. This operation usually called unmarshalling.
+//| into bean. This operation usually called unmarshalling.
 //|
 //| With [ini4j] it is easy to load bean properties from a section. You simply
 //| instantiate a bean, and call the sections's <<<to()>>> method. Thats it.
@@ -161,8 +158,7 @@ public class BeanTutorial extends AbstractTutorial
 //|* Indexed properties
 //|
 //| For handling indexed properties, you should allow mulpti option value
-
-    //| handling in configuration. After enabling this feature, option may contains
+//| handling in configuration. After enabling this feature, option may contains
 //| multiply values (multi line in file). These values can mapped to indexed
 //| bean property.
 //{
@@ -197,8 +193,7 @@ public class BeanTutorial extends AbstractTutorial
 //|
 //|* Options
 //|
-
-    //| Not only Ini and Ini.Section has bean interface. There is a bean interface
+//| Not only Ini and Ini.Section has bean interface. There is a bean interface
 //| for OptionMap class and each derived class for example for Options.
 //| Options is an improved java.util.Properties replacement.
 //{
@@ -227,8 +222,7 @@ public class BeanTutorial extends AbstractTutorial
 //|
 //|* Prefixed mapping
 //|
-
-    //| Both Ini.Section and Options has possibility to add a prefix to property
+//| Both Ini.Section and Options has possibility to add a prefix to property
 //| names while mapping from bean property name to Ini.Section or Options
 //| key.
 //{

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
 public class WinEscapeTool extends EscapeTool
@@ -28,16 +27,14 @@ public class WinEscapeTool extends EscapeTool
         return INSTANCE;
     }
 
-    @Override
-    void escapeBinary(StringBuilder buff, char c)
+    @Override void escapeBinary(StringBuilder buff, char c)
     {
         buff.append("\\x");
         buff.append(HEX[(c >>> HEX_DIGIT_3_OFFSET) & HEX_DIGIT_MASK]);
         buff.append(HEX[c & HEX_DIGIT_MASK]);
     }
 
-    @Override
-    int unescapeBinary(StringBuilder buff, char escapeType, String line, int index)
+    @Override int unescapeBinary(StringBuilder buff, char escapeType, String line, int index)
     {
         int ret = index;
 

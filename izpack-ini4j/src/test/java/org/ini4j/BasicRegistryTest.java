@@ -13,21 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-public class BasicRegistryTest
+public class BasicRegistryTest extends Ini4jCase
 {
     private static final String KEY = "key";
     private static final String DUMMY = "dummy";
     private static final String VERSION = "Windows Registry Editor Version 5.00";
 
-    @Test
-    public void testVersion()
+    @Test public void testVersion()
     {
         BasicRegistry reg = new BasicRegistry();
 
@@ -36,8 +37,7 @@ public class BasicRegistryTest
         assertEquals(DUMMY, reg.getVersion());
     }
 
-    @Test
-    public void testWrapped() throws Exception
+    @Test public void testWrapped() throws Exception
     {
         BasicRegistry reg = new BasicRegistry();
         Registry.Key key1 = reg.add(KEY);

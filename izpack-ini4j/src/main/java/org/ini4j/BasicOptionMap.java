@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j;
 
 import org.ini4j.spi.BeanAccess;
@@ -21,6 +20,7 @@ import org.ini4j.spi.BeanTool;
 import org.ini4j.spi.Warnings;
 
 import java.lang.reflect.Array;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,8 +48,7 @@ public class BasicOptionMap extends CommonMultiMap<String, String> implements Op
         _propertyFirstUpper = propertyFirstUpper;
     }
 
-    @Override
-    @SuppressWarnings(Warnings.UNCHECKED)
+    @Override @SuppressWarnings(Warnings.UNCHECKED)
     public <T> T getAll(Object key, Class<T> clazz)
     {
         requireArray(clazz);
@@ -64,40 +63,34 @@ public class BasicOptionMap extends CommonMultiMap<String, String> implements Op
         return value;
     }
 
-    @Override
-    public void add(String key, Object value)
+    @Override public void add(String key, Object value)
     {
         super.add(key, ((value == null) || (value instanceof String)) ? (String) value : String.valueOf(value));
     }
 
-    @Override
-    public void add(String key, Object value, int index)
+    @Override public void add(String key, Object value, int index)
     {
         super.add(key, ((value == null) || (value instanceof String)) ? (String) value : String.valueOf(value), index);
     }
 
-    @Override
-    public <T> T as(Class<T> clazz)
+    @Override public <T> T as(Class<T> clazz)
     {
         return BeanTool.getInstance().proxy(clazz, getDefaultBeanAccess());
     }
 
-    @Override
-    public <T> T as(Class<T> clazz, String keyPrefix)
+    @Override public <T> T as(Class<T> clazz, String keyPrefix)
     {
         return BeanTool.getInstance().proxy(clazz, newBeanAccess(keyPrefix));
     }
 
-    @Override
-    public String fetch(Object key)
+    @Override public String fetch(Object key)
     {
         int len = length(key);
 
         return (len == 0) ? null : fetch(key, len - 1);
     }
 
-    @Override
-    public String fetch(Object key, int index)
+    @Override public String fetch(Object key, int index)
     {
         String value = get(key, index);
 
@@ -112,20 +105,17 @@ public class BasicOptionMap extends CommonMultiMap<String, String> implements Op
         return value;
     }
 
-    @Override
-    public <T> T fetch(Object key, Class<T> clazz)
+    @Override public <T> T fetch(Object key, Class<T> clazz)
     {
         return BeanTool.getInstance().parse(fetch(key), clazz);
     }
 
-    @Override
-    public <T> T fetch(Object key, int index, Class<T> clazz)
+    @Override public <T> T fetch(Object key, int index, Class<T> clazz)
     {
         return BeanTool.getInstance().parse(fetch(key, index), clazz);
     }
 
-    @Override
-    @SuppressWarnings(Warnings.UNCHECKED)
+    @Override @SuppressWarnings(Warnings.UNCHECKED)
     public <T> T fetchAll(Object key, Class<T> clazz)
     {
         requireArray(clazz);
@@ -140,44 +130,37 @@ public class BasicOptionMap extends CommonMultiMap<String, String> implements Op
         return value;
     }
 
-    @Override
-    public void from(Object bean)
+    @Override public void from(Object bean)
     {
         BeanTool.getInstance().inject(getDefaultBeanAccess(), bean);
     }
 
-    @Override
-    public void from(Object bean, String keyPrefix)
+    @Override public void from(Object bean, String keyPrefix)
     {
         BeanTool.getInstance().inject(newBeanAccess(keyPrefix), bean);
     }
 
-    @Override
-    public <T> T get(Object key, Class<T> clazz)
+    @Override public <T> T get(Object key, Class<T> clazz)
     {
         return BeanTool.getInstance().parse(get(key), clazz);
     }
 
-    @Override
-    public <T> T get(Object key, int index, Class<T> clazz)
+    @Override public <T> T get(Object key, int index, Class<T> clazz)
     {
         return BeanTool.getInstance().parse(get(key, index), clazz);
     }
 
-    @Override
-    public String put(String key, Object value)
+    @Override public String put(String key, Object value)
     {
         return super.put(key, ((value == null) || (value instanceof String)) ? (String) value : String.valueOf(value));
     }
 
-    @Override
-    public String put(String key, Object value, int index)
+    @Override public String put(String key, Object value, int index)
     {
         return super.put(key, ((value == null) || (value instanceof String)) ? (String) value : String.valueOf(value), index);
     }
 
-    @Override
-    public void putAll(String key, Object value)
+    @Override public void putAll(String key, Object value)
     {
         if (value != null)
         {
@@ -196,14 +179,12 @@ public class BasicOptionMap extends CommonMultiMap<String, String> implements Op
         }
     }
 
-    @Override
-    public void to(Object bean)
+    @Override public void to(Object bean)
     {
         BeanTool.getInstance().inject(bean, getDefaultBeanAccess());
     }
 
-    @Override
-    public void to(Object bean, String keyPrefix)
+    @Override public void to(Object bean, String keyPrefix)
     {
         BeanTool.getInstance().inject(bean, newBeanAccess(keyPrefix));
     }
@@ -286,44 +267,37 @@ public class BasicOptionMap extends CommonMultiMap<String, String> implements Op
             _prefix = prefix;
         }
 
-        @Override
-        public void propAdd(String propertyName, String value)
+        @Override public void propAdd(String propertyName, String value)
         {
             add(transform(propertyName), value);
         }
 
-        @Override
-        public String propDel(String propertyName)
+        @Override public String propDel(String propertyName)
         {
             return remove(transform(propertyName));
         }
 
-        @Override
-        public String propGet(String propertyName)
+        @Override public String propGet(String propertyName)
         {
             return fetch(transform(propertyName));
         }
 
-        @Override
-        public String propGet(String propertyName, int index)
+        @Override public String propGet(String propertyName, int index)
         {
             return fetch(transform(propertyName), index);
         }
 
-        @Override
-        public int propLength(String propertyName)
+        @Override public int propLength(String propertyName)
         {
             return length(transform(propertyName));
         }
 
-        @Override
-        public String propSet(String propertyName, String value)
+        @Override public String propSet(String propertyName, String value)
         {
             return put(transform(propertyName), value);
         }
 
-        @Override
-        public String propSet(String propertyName, String value, int index)
+        @Override public String propSet(String propertyName, String value, int index)
         {
             return put(transform(propertyName), value, index);
         }

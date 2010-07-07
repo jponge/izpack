@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
 import org.ini4j.Config;
@@ -33,26 +32,22 @@ public class IniFormatter extends AbstractFormatter implements IniHandler
         return instance;
     }
 
-    @Override
-    public void endIni()
+    @Override public void endIni()
     {
         getOutput().flush();
     }
 
-    @Override
-    public void endSection()
+    @Override public void endSection()
     {
         getOutput().print(getConfig().getLineSeparator());
     }
 
-    @Override
-    public void startIni()
+    @Override public void startIni()
     {
         assert true;
     }
 
-    @Override
-    public void startSection(String sectionName)
+    @Override public void startSection(String sectionName)
     {
         setHeader(false);
         if (!getConfig().isGlobalSection() || !sectionName.equals(getConfig().getGlobalSectionName()))

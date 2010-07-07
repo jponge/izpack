@@ -13,41 +13,58 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
 import org.easymock.EasyMock;
+
 import org.ini4j.Config;
+import org.ini4j.Ini4jCase;
 import org.ini4j.InvalidFileFormatException;
+
 import org.ini4j.sample.Dwarf;
 import org.ini4j.sample.Dwarfs;
+
 import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
-import org.junit.Test;
-
-import java.io.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
-public class OptionsParserTest
+import org.junit.Test;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringReader;
+
+public class OptionsParserTest extends Ini4jCase
 {
     private static final String CFG_EMPTY_OPTION = "option\n";
     private static final String NONAME = "=value\n";
     private static final String OPTION = "option";
     private static final String UNICODE_STRING = "áÁéÉíÍóÓöÖőŐúÚüÜűŰ-ÄÖÜäöü";
 
-    @Test(expected = InvalidFileFormatException.class)
-    public void testBad() throws Exception
+    @Test public void testBad() throws Exception
     {
         OptionsParser parser = new OptionsParser();
         OptionsHandler handler = EasyMock.createNiceMock(OptionsHandler.class);
 
-        parser.parse(new ByteArrayInputStream(NONAME.getBytes()), handler);
+        try
+        {
+            parser.parse(new ByteArrayInputStream(NONAME.getBytes()), handler);
+            missing(InvalidFileFormatException.class);
+        }
+        catch (InvalidFileFormatException x)
+        {
+            //
+        }
     }
 
-    @Test
-    public void testEmptyOption() throws Exception
+    @Test public void testEmptyOption() throws Exception
     {
         OptionsParser parser = new OptionsParser();
         OptionsHandler handler = EasyMock.createMock(OptionsHandler.class);
@@ -64,8 +81,7 @@ public class OptionsParserTest
         EasyMock.verify(handler);
     }
 
-    @Test
-    public void testNewInstance() throws Exception
+    @Test public void testNewInstance() throws Exception
     {
         Config cfg = new Config();
         OptionsParser parser = OptionsParser.newInstance();
@@ -76,8 +92,7 @@ public class OptionsParserTest
         assertSame(cfg, parser.getConfig());
     }
 
-    @Test
-    public void testParse() throws Exception
+    @Test public void testParse() throws Exception
     {
         OptionsParser parser = new OptionsParser();
         OptionsHandler handler = EasyMock.createMock(OptionsHandler.class);
@@ -186,8 +201,7 @@ public class OptionsParserTest
         EasyMock.verify(handler);
     }
 
-    @Test
-    public void testUnicode() throws Exception
+    @Test public void testUnicode() throws Exception
     {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         OptionsFormatter formatter = new OptionsFormatter();

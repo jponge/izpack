@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
 import org.ini4j.Config;
 import org.ini4j.Profile;
 import org.ini4j.Reg;
+
 import org.ini4j.Registry.Key;
 import org.ini4j.Registry.Type;
 
@@ -40,8 +40,12 @@ public class RegBuilder extends AbstractProfileBuilder
         _reg = value;
     }
 
-    @Override
-    public void handleOption(String rawName, String rawValue)
+    @Override public void handleEmptyLine()
+    {
+        // do nothing on empty lines for registry
+    }
+
+    @Override public void handleOption(String rawName, String rawValue)
     {
         String name = (rawName.charAt(0) == EscapeTool.DOUBLE_QUOTE) ? RegEscapeTool.getInstance().unquote(rawName) : rawName;
         TypeValuesPair tv = RegEscapeTool.getInstance().decode(rawValue);
@@ -57,14 +61,12 @@ public class RegBuilder extends AbstractProfileBuilder
         }
     }
 
-    @Override
-    Config getConfig()
+    @Override Config getConfig()
     {
         return _reg.getConfig();
     }
 
-    @Override
-    Profile getProfile()
+    @Override Profile getProfile()
     {
         return _reg;
     }

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
 public interface IniHandler extends HandlerBase
@@ -22,11 +21,11 @@ public interface IniHandler extends HandlerBase
 
     void endSection();
 
-    @Override
-    void handleComment(String comment);
+    @Override void handleEmptyLine();
 
-    @Override
-    void handleOption(String optionName, String optionValue);
+    @Override void handleComment(String comment);
+
+    @Override void handleOption(String optionName, String optionValue);
 
     void startIni();
 

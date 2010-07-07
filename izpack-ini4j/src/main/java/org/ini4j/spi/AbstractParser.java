@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ini4j.spi;
 
 import org.ini4j.Config;
@@ -22,20 +21,21 @@ import org.ini4j.InvalidFileFormatException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+
 import java.net.URL;
+
 import java.util.Locale;
 
 abstract class AbstractParser
 {
     private final String _comments;
-    private Config _config;
+    private Config _config = Config.getGlobal();
     private final String _operators;
 
     protected AbstractParser(String operators, String comments)
     {
         _operators = operators;
         _comments = comments;
-        _config = Config.getGlobal();
     }
 
     protected Config getConfig()
@@ -55,17 +55,17 @@ abstract class AbstractParser
 
     IniSource newIniSource(InputStream input, HandlerBase handler)
     {
-        return new IniSource(input, handler, getConfig(), _comments);
+        return new IniSource(input, handler, _comments, getConfig());
     }
 
     IniSource newIniSource(Reader input, HandlerBase handler)
     {
-        return new IniSource(input, handler, getConfig(), _comments);
+        return new IniSource(input, handler, _comments, getConfig());
     }
 
     IniSource newIniSource(URL input, HandlerBase handler) throws IOException
     {
-        return new IniSource(input, handler, getConfig(), _comments);
+        return new IniSource(input, handler, _comments, getConfig());
     }
 
     void parseOptionLine(String line, HandlerBase handler, int lineNumber) throws InvalidFileFormatException
