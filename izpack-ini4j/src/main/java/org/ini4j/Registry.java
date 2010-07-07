@@ -22,30 +22,16 @@ import java.util.Map;
 
 public interface Registry extends Profile
 {
-    enum Hive
-    {
-        HKEY_CLASSES_ROOT,
-        HKEY_CURRENT_CONFIG,
-        HKEY_CURRENT_USER,
-        HKEY_LOCAL_MACHINE,
-        HKEY_USERS;
+    enum Hive {
+        HKEY_CLASSES_ROOT, HKEY_CURRENT_CONFIG, HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, HKEY_USERS;
     }
 
     // TODO handle delete operations with special Type
-    enum Type
-    {
-        REG_NONE("hex(0)"),
-        REG_SZ(""),
-        REG_EXPAND_SZ("hex(2)"),
-        REG_BINARY("hex"),
-        REG_DWORD("dword"),
-        REG_DWORD_BIG_ENDIAN("hex(5)"),
-        REG_LINK("hex(6)"),
-        REG_MULTI_SZ("hex(7)"),
-        REG_RESOURCE_LIST("hex(8)"),
-        REG_FULL_RESOURCE_DESCRIPTOR("hex(9)"),
-        REG_RESOURCE_REQUIREMENTS_LIST("hex(a)"),
-        REG_QWORD("hex(b)");
+    enum Type {
+        REG_NONE("hex(0)"), REG_SZ(""), REG_EXPAND_SZ("hex(2)"), REG_BINARY("hex"), REG_DWORD(
+                "dword"), REG_DWORD_BIG_ENDIAN("hex(5)"), REG_LINK("hex(6)"), REG_MULTI_SZ("hex(7)"), REG_RESOURCE_LIST(
+                "hex(8)"), REG_FULL_RESOURCE_DESCRIPTOR("hex(9)"), REG_RESOURCE_REQUIREMENTS_LIST(
+                "hex(a)"), REG_QWORD("hex(b)");
         private static final Map<String, Type> MAPPING;
 
         static
@@ -58,9 +44,13 @@ public interface Registry extends Profile
         }
 
         public static final char SEPARATOR_CHAR = ':';
+
         public static final String SEPARATOR = String.valueOf(SEPARATOR_CHAR);
+
         public static final char REMOVE_CHAR = '-';
+
         public static final String REMOVE = String.valueOf(REMOVE_CHAR);
+
         private final String _prefix;
 
         private Type(String prefix)
@@ -73,50 +63,66 @@ public interface Registry extends Profile
             return MAPPING.get(str);
         }
 
-        @Override public String toString()
+        @Override
+        public String toString()
         {
             return _prefix;
         }
     }
 
     char ESCAPE_CHAR = '\\';
+
     Charset FILE_ENCODING = Charset.forName("UnicodeLittle");
+
     char KEY_SEPARATOR = '\\';
+
     String LINE_SEPARATOR = "\r\n";
+
     char TYPE_SEPARATOR = ':';
+
     String VERSION = "Windows Registry Editor Version 5.00";
 
     String getVersion();
 
     void setVersion(String value);
 
-    @Override Key get(Object key);
+    @Override
+    Key get(Object key);
 
-    @Override Key get(Object key, int index);
+    @Override
+    Key get(Object key, int index);
 
-    @Override Key put(String key, Section value);
+    @Override
+    Key put(String key, Section value);
 
-    @Override Key put(String key, Section value, int index);
+    @Override
+    Key put(String key, Section value, int index);
 
-    @Override Key remove(Object key);
+    @Override
+    Key remove(Object key);
 
-    @Override Key remove(Object key, int index);
+    @Override
+    Key remove(Object key, int index);
 
     interface Key extends Section
     {
         String DEFAULT_NAME = "@";
 
-        @Override Key getChild(String key);
+        @Override
+        Key getChild(String key);
 
-        @Override Key getParent();
+        @Override
+        Key getParent();
 
         Type getType(Object key);
 
         Type getType(Object key, Type defaulType);
 
-        @Override Key addChild(String key);
+        @Override
+        Key addChild(String key);
 
-        @Override Key lookup(String... path);
+        @Override
+        Key lookup(String... path);
 
         Type putType(String key, Type type);
 

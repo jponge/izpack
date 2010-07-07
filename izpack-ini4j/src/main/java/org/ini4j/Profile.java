@@ -15,7 +15,8 @@
  */
 package org.ini4j;
 
-public interface Profile extends MultiMap<String, Profile.Section>, CommentedMap<String, Profile.Section>
+public interface Profile extends MultiMap<String, Profile.Section>,
+        CommentedMap<String, Profile.Section>
 {
     char PATH_SEPARATOR = '/';
 

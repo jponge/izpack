@@ -23,70 +23,135 @@ import java.nio.charset.Charset;
 public class Config implements Cloneable, Serializable
 {
     public static final String KEY_PREFIX = "org.ini4j.config.";
+
     public static final String PROP_EMPTY_OPTION = "emptyOption";
+
     public static final String PROP_EMPTY_SECTION = "emptySection";
+
     public static final String PROP_GLOBAL_SECTION = "globalSection";
+
     public static final String PROP_GLOBAL_SECTION_NAME = "globalSectionName";
+
     public static final String PROP_INCLUDE = "include";
+
     public static final String PROP_LOWER_CASE_OPTION = "lowerCaseOption";
+
     public static final String PROP_LOWER_CASE_SECTION = "lowerCaseSection";
+
     public static final String PROP_MULTI_OPTION = "multiOption";
+
     public static final String PROP_MULTI_SECTION = "multiSection";
+
     public static final String PROP_STRICT_OPERATOR = "strictOperator";
+
     public static final String PROP_UNNAMED_SECTION = "unnamedSection";
+
     public static final String PROP_ESCAPE = "escape";
+
     public static final String PROP_PATH_SEPARATOR = "pathSeparator";
+
     public static final String PROP_TREE = "tree";
+
     public static final String PROP_PROPERTY_FIRST_UPPER = "propertyFirstUpper";
+
     public static final String PROP_FILE_ENCODING = "fileEncoding";
+
     public static final String PROP_LINE_SEPARATOR = "lineSeparator";
+
     public static final String PROP_COMMENT = "comment";
+
     public static final String PROP_HEADER_COMMENT = "headerComment";
+
     public static final String PROP_EMPTY_LINES = "emptyLines";
+
     public static final String PROP_AUTO_NUMBERING = "autoNumbering";
+
     public static final boolean DEFAULT_EMPTY_OPTION = false;
+
     public static final boolean DEFAULT_EMPTY_SECTION = false;
+
     public static final boolean DEFAULT_GLOBAL_SECTION = false;
+
     public static final String DEFAULT_GLOBAL_SECTION_NAME = "?";
+
     public static final boolean DEFAULT_INCLUDE = false;
+
     public static final boolean DEFAULT_LOWER_CASE_OPTION = false;
+
     public static final boolean DEFAULT_LOWER_CASE_SECTION = false;
+
     public static final boolean DEFAULT_MULTI_OPTION = true;
+
     public static final boolean DEFAULT_MULTI_SECTION = false;
+
     public static final boolean DEFAULT_STRICT_OPERATOR = false;
+
     public static final boolean DEFAULT_UNNAMED_SECTION = false;
+
     public static final boolean DEFAULT_ESCAPE = true;
+
     public static final boolean DEFAULT_TREE = true;
+
     public static final boolean DEFAULT_PROPERTY_FIRST_UPPER = false;
+
     public static final boolean DEFAULT_COMMENT = true;
+
     public static final boolean DEFAULT_HEADER_COMMENT = true;
+
     public static final boolean DEFAULT_EMPTY_LINES = false;
+
     public static final boolean DEFAULT_AUTO_NUMBERING = false;
+
     public static final char DEFAULT_PATH_SEPARATOR = '/';
+
     public static final String DEFAULT_LINE_SEPARATOR = getSystemProperty("line.separator", "\n");
+
     public static final Charset DEFAULT_FILE_ENCODING = Charset.forName("UTF-8");
+
     private static final Config GLOBAL = new Config();
+
     private static final long serialVersionUID = 2865793267410367814L;
+
     private boolean _comment;
+
     private boolean _emptyOption;
+
     private boolean _emptySection;
+
     private boolean _escape;
+
     private Charset _fileEncoding;
+
     private boolean _globalSection;
+
     private String _globalSectionName;
+
     private boolean _headerComment;
+
     private boolean _include;
+
     private String _lineSeparator;
+
     private boolean _lowerCaseOption;
+
     private boolean _lowerCaseSection;
+
     private boolean _multiOption;
+
     private boolean _multiSection;
+
     private char _pathSeparator;
+
     private boolean _propertyFirstUpper;
+
     private boolean _strictOperator;
+
     private boolean _tree;
+
     private boolean _unnamedSection;
+
     private boolean _emptyLines;
+
     private boolean _autoNumbering;
 
     public Config()
@@ -351,7 +416,8 @@ public class Config implements Cloneable, Serializable
         _unnamedSection = value;
     }
 
-    @Override public Config clone()
+    @Override
+    public Config clone()
     {
         try
         {

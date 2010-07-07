@@ -27,12 +27,17 @@ import java.util.prefs.PreferencesFactory;
 public class IniPreferencesFactory implements PreferencesFactory
 {
     public static final String PROPERTIES = "ini4j.properties";
+
     public static final String KEY_USER = "org.ini4j.prefs.user";
+
     public static final String KEY_SYSTEM = "org.ini4j.prefs.system";
+
     private Preferences _system;
+
     private Preferences _user;
 
-    @Override public synchronized Preferences systemRoot()
+    @Override
+    public synchronized Preferences systemRoot()
     {
         if (_system == null)
         {
@@ -42,7 +47,8 @@ public class IniPreferencesFactory implements PreferencesFactory
         return _system;
     }
 
-    @Override public synchronized Preferences userRoot()
+    @Override
+    public synchronized Preferences userRoot()
     {
         if (_user == null)
         {
@@ -62,7 +68,8 @@ public class IniPreferencesFactory implements PreferencesFactory
             {
                 Properties props = new Properties();
 
-                props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(PROPERTIES));
+                props.load(Thread.currentThread().getContextClassLoader()
+                        .getResourceAsStream(PROPERTIES));
                 location = props.getProperty(key);
             }
             catch (Exception x)
