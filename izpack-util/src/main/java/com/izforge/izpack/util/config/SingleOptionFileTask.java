@@ -21,11 +21,13 @@
 
 package com.izforge.izpack.util.config;
 
-import com.izforge.izpack.util.Debug;
-import org.ini4j.Options;
-
 import java.io.File;
 import java.io.IOException;
+
+import org.ini4j.Options;
+
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.util.Debug;
 
 public class SingleOptionFileTask extends ConfigFileTask
 {
@@ -55,11 +57,8 @@ public class SingleOptionFileTask extends ConfigFileTask
         {
             try
             {
-                if (!newFile.exists())
-                {
-                    throw new Exception("Reference file "
-                            + newFile.getAbsolutePath() + " for patch cannot be found");
-                }
+                if (!newFile.exists()) { throw new Exception("Reference file "
+                        + newFile.getAbsolutePath() + " for patch cannot be found"); }
                 Debug.log("Loading options file: " + newFile.getAbsolutePath());
                 configurable = new Options(newFile);
             }
@@ -115,5 +114,13 @@ public class SingleOptionFileTask extends ConfigFileTask
                 Debug.log("File " + oldFile + " could not be cleant up");
             }
         }
+    }
+
+    @Override
+    protected Entry filterEntryFromXML(IXMLElement parent, Entry entry)
+    {
+        entry.setKey(parent.getAttribute("key"));
+        entry.setValue(parent.getAttribute("value"));
+        return entry;
     }
 }

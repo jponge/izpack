@@ -36,13 +36,9 @@ import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.xmlmerge.*;
 
 /**
- * Merge implementation traversing parallelly both element contents. Works when contents are in the
- * same order in both elements.
- *
- * @author Laurent Bovet (LBO)
- * @author Alex Mathey (AMA)
+ * Merge implementation traversing element contents undependend of their order.
  */
-public class OrderedMergeAction extends AbstractMergeAction
+public class FullMergeAction extends AbstractMergeAction
 {
 
     /**
@@ -83,136 +79,91 @@ public class OrderedMergeAction extends AbstractMergeAction
      * Performs the actual merge between two source elements.
      *
      * @param parentOut The merged element
-     * @param parentIn1 The first source element
-     * @param parentIn2 The second source element
+     * @param origElement The first source element
+     * @param patchElement The second source element
      * @throws AbstractXmlMergeException If an error occurred during the merge
      */
-    private void doIt(Element parentOut, Element parentIn1, Element parentIn2)
+    private void doIt(Element parentOut, Element origElement, Element patchElement)
             throws AbstractXmlMergeException
     {
+        addAttributes(parentOut, patchElement);
 
-        addAttributes(parentOut, parentIn2);
+        List<Content> origContentList = origElement.getContent();
+        List<Content> patchContentList = patchElement.getContent();
+        List<Content> unmatchedPatchContentList = new ArrayList<Content>();
+        List<Content> matchedPatchContentList = new ArrayList<Content>();
 
-        Content[] list1 = (Content[]) parentIn1.getContent().toArray(new Content[] {});
-        Content[] list2 = (Content[]) parentIn2.getContent().toArray(new Content[] {});
-
-        int offsetTreated1 = 0;
-        int offsetTreated2 = 0;
-
-        for (Content content1 : list1)
+        for (Content origContent : origContentList)
         {
-
-            Debug.log("List 1: " + content1);
-
-            if (content1 instanceof Comment || content1 instanceof Text)
+            Debug.log("Checking original content: " + origContent + " for matching patch contents");
+            if (origContent instanceof Element)
             {
-                parentOut.addContent((Content) content1.clone());
-                offsetTreated1++;
-            }
-            else if (!(content1 instanceof Element))
-            {
-                throw new DocumentException(content1.getDocument(), "Contents of type "
-                        + content1.getClass().getName() + " not supported");
-            }
-            else
-            {
-                Element e1 = (Element) content1;
+                boolean patchMatched = false;
 
-                // does e1 exist on list2 and has not yet been treated
-                int posInList2 = -1;
-                for (int j = offsetTreated2; j < list2.length; j++)
+                for (Content patchContent : patchContentList)
                 {
+                    Debug.log("Checking patch content: " + patchContent);
 
-                    Debug.log("List 2: " + list2[j]);
-
-                    if (list2[j] instanceof Element)
+                    if (patchContent instanceof Comment || patchContent instanceof Text)
                     {
-
-                        if (((Matcher) m_matcherFactory.getOperation(e1, (Element) list2[j]))
-                                .matches(e1, (Element) list2[j]))
-                        {
-                            Debug.log("Match found: " + e1 + " and " + list2[j]);
-                            posInList2 = j;
-                            break;
-                        }
+                        // skip and leave original comment or text
+                        Debug.log("Skipped patch content: " + patchContent);
                     }
-                    else if (list2[j] instanceof Comment || list2[j] instanceof Text)
+                    else if (!(patchContent instanceof Element))
                     {
-                        // skip
+                        throw new DocumentException(patchContent.getDocument(), "Contents of type "
+                                + patchContent.getClass().getName() + " in patch document not supported");
                     }
                     else
                     {
-                        throw new DocumentException(list2[j].getDocument(), "Contents of type "
-                                + list2[j].getClass().getName() + " not supported");
-                    }
-                }
-
-                // element found in second list, but there is some elements to
-                // be treated before in second list
-                while (posInList2 != -1 && offsetTreated2 < posInList2)
-                {
-                    Content contentToAdd;
-                    if (list2[offsetTreated2] instanceof Element)
-                    {
-                        applyAction(parentOut, null, (Element) list2[offsetTreated2]);
-                    }
-                    else
-                    {
-                        // FIXME prevent double comments in output by enhancing applyAction() to
-                        // Content type instead of Element
-                        // Workaround: Add only comments from original document (List1)
-                        if (!(list2[offsetTreated2] instanceof Comment))
+                        if (((Matcher) m_matcherFactory.getOperation((Element) patchContent, (Element) origContent))
+                                .matches((Element) patchContent, (Element) origContent))
                         {
-                            contentToAdd = (Content) list2[offsetTreated2].clone();
-                            parentOut.addContent(contentToAdd);
+                            Debug.log("Apply matching patch: " + (Element) patchContent + " -> " + (Element) origContent);
+                            applyAction(parentOut, (Element) origContent, (Element) patchContent);
+                            patchMatched = true;
+                            if (!matchedPatchContentList.contains(patchContent))
+                            {
+                                matchedPatchContentList.add(patchContent);
+                            }
                         }
+                        else
+                        {
+                            if (!unmatchedPatchContentList.contains(patchContent))
+                            {
+                                unmatchedPatchContentList.add(patchContent);
+                            }
+                        }
+                        // Continue searching here for finding multiple matches
                     }
-
-                    offsetTreated2++;
                 }
 
-                // element found in all lists
-                if (posInList2 != -1)
+                if (!patchMatched)
                 {
-
-                    applyAction(parentOut, (Element) list1[offsetTreated1],
-                            (Element) list2[offsetTreated2]);
-
-                    offsetTreated1++;
-                    offsetTreated2++;
-                }
-                else
-                {
-                    // element not found in second list
-                    applyAction(parentOut, (Element) list1[offsetTreated1], null);
-                    offsetTreated1++;
+                    Debug.log("Apply original: "+(Element) origContent);
+                    applyAction(parentOut, (Element) origContent, null);
                 }
             }
-        }
-
-        // at the end of list1, are there some elements in list2 which must be still treated?
-        while (offsetTreated2 < list2.length)
-        {
-            Content contentToAdd;
-            if (list2[offsetTreated2] instanceof Element)
+            else if (origContent instanceof Comment || origContent instanceof Text)
             {
-                applyAction(parentOut, null, (Element) list2[offsetTreated2]);
+                // leave original comment or text
+                parentOut.addContent((Content) origContent.clone());
             }
             else
             {
-                // FIXME prevent double comments in output by enhancing applyAction() to Content
-                // type instead of Element
-                // Workaround: Add only comments from original document (List1)
-                if (!(list2[offsetTreated2] instanceof Comment))
-                {
-                    contentToAdd = (Content) list2[offsetTreated2].clone();
-                    parentOut.addContent(contentToAdd);
-                }
+                throw new DocumentException(origContent.getDocument(), "Contents of type "
+                        + origContent.getClass().getName() + " in original document not supported");
             }
-
-            offsetTreated2++;
         }
 
+        for (Content unmatchedPatchContent : unmatchedPatchContentList)
+        {
+            if (!matchedPatchContentList.contains(unmatchedPatchContent))
+            {
+                Debug.log("Apply unmatching patch: "+(Element) unmatchedPatchContent);
+                applyAction(parentOut, null, (Element) unmatchedPatchContent);
+            }
+        }
     }
 
     /**

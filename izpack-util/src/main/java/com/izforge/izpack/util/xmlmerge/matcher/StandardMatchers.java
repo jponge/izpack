@@ -37,9 +37,19 @@ public class StandardMatchers
     public static final TagMatcher TAG = new TagMatcher();
 
     /**
-     * {@link IdMatcher}
+     * {@link AttributeMatcher}
      */
-    public static final IdMatcher ID = new IdMatcher();
+    public static final AttributeMatcher ATTRIBUTE = new AttributeMatcher();
+
+    /**
+     * {@link IdAttributeMatcher}
+     */
+    public static final IdAttributeMatcher ID_ATTRIBUTE = new IdAttributeMatcher();
+
+    /**
+     * {@link NameAttributeMatcher}
+     */
+    public static final NameAttributeMatcher NAME_ATTRIBUTE = new NameAttributeMatcher();
 
     /**
      * {@link SkipMatcher}

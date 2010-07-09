@@ -22,28 +22,32 @@
 
 package com.izforge.izpack.util.xmlmerge.matcher;
 
-import com.izforge.izpack.util.xmlmerge.Matcher;
-import org.jdom.Element;
-
 /**
- * Elements match if their name and 'id' attribute are the same.
- *
- * @author Laurent Bovet (LBO)
- * @author Alex Mathey (AMA)
+ * Elements match if their name and 'name' attribute are the same.
  */
-public class IdMatcher implements Matcher
+public class NameAttributeMatcher extends AbstractAttributeMatcher
 {
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean matches(Element originalElement, Element patchElement)
+    @Override
+    protected final String getAttributeName()
     {
-        return originalElement.getQualifiedName().equals(patchElement.getQualifiedName())
-                && originalElement.getAttribute("id") != null
-                && patchElement.getAttribute("id") != null
-                && originalElement.getAttributeValue("id").equals(
-                patchElement.getAttributeValue("id"));
+        return "name";
     }
 
+    @Override
+    protected boolean ignoreCaseElementName()
+    {
+        return true;
+    }
+
+    @Override
+    protected boolean ignoreCaseAttributeName()
+    {
+        return true;
+    }
+
+    @Override
+    protected boolean ignoreCaseAttributeValue()
+    {
+        return true;
+    }
 }

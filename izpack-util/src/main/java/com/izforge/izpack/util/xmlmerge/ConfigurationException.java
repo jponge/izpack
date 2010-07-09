@@ -53,7 +53,7 @@ public class ConfigurationException extends AbstractXmlMergeException
      * Constructor with message and cause.
      *
      * @param message Exception message
-     * @param cause   Exception cause
+     * @param cause Exception cause
      */
     public ConfigurationException(String message, Throwable cause)
     {

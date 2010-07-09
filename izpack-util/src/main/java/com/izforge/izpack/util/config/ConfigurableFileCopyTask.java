@@ -21,12 +21,12 @@
 
 package com.izforge.izpack.util.config;
 
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.file.FileCopyTask;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
+
+import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.file.FileCopyTask;
 
 public abstract class ConfigurableFileCopyTask extends FileCopyTask implements ConfigurableTask
 {
@@ -59,7 +59,7 @@ public abstract class ConfigurableFileCopyTask extends FileCopyTask implements C
      * configuration.
      *
      * @param preserveValues - true to preserve the values of equal entries from an old
-     *                       configuration
+     * configuration
      */
     public void setPatchPreserveValues(boolean preserveValues)
     {
@@ -78,7 +78,6 @@ public abstract class ConfigurableFileCopyTask extends FileCopyTask implements C
 
     /**
      * Whether to delete the patchfiles after the operation
-     *
      * @param cleanup True, if the patchfiles should be deleted after the operation
      */
     public void setCleanup(boolean cleanup)
@@ -89,15 +88,15 @@ public abstract class ConfigurableFileCopyTask extends FileCopyTask implements C
     /**
      * Do a patch operation.
      *
-     * @param oldFile               original file to patch from
-     * @param newFile               newer reference file to patch certain values or entries to
-     * @param toFile                output file of the patched result
-     * @param patchPreserveEntries  set true to reserve old entries
-     * @param patchPreserveValues   set true to reserver old values
+     * @param oldFile original file to patch from
+     * @param newFile newer reference file to patch certain values or entries to
+     * @param toFile output file of the patched result
+     * @param patchPreserveEntries set true to reserve old entries
+     * @param patchPreserveValues set true to reserver old values
      * @param patchResolveVariables set true to resolve in-text variables during patching
      */
     protected abstract void doFileOperation(File oldFile, File newFile, File toFile,
-                                            boolean patchPreserveEntries, boolean patchPreserveValues, boolean patchResolveVariables)
+            boolean patchPreserveEntries, boolean patchPreserveValues, boolean patchResolveVariables)
             throws Exception;
 
     @Override

@@ -20,46 +20,35 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.xmlmerge;
+package com.izforge.izpack.util.xmlmerge.matcher;
 
 /**
- * Thrown when XML parsing fails.
- *
- * @author Laurent Bovet (LBO)
- * @author Alex Mathey (AMA)
+ * Elements match if their name and 'id' attribute are the same.
  */
-public class ParseException extends AbstractXmlMergeException
+public class IdAttributeMatcher extends AbstractAttributeMatcher
 {
 
-    /**
-     * Constructor with message.
-     *
-     * @param message Exception message
-     */
-    public ParseException(String message)
+    @Override
+    protected final String getAttributeName()
     {
-        super(message);
+        return "id";
     }
 
-    /**
-     * Constructor with message and cause.
-     *
-     * @param message Exception message
-     * @param cause Exception cause
-     */
-    public ParseException(String message, Throwable cause)
+    @Override
+    protected boolean ignoreCaseElementName()
     {
-        super(message, cause);
+        return true;
     }
 
-    /**
-     * Constructor with cause.
-     *
-     * @param cause Exception cause
-     */
-    public ParseException(Throwable cause)
+    @Override
+    protected boolean ignoreCaseAttributeName()
     {
-        super(cause);
+        return true;
     }
 
+    @Override
+    protected boolean ignoreCaseAttributeValue()
+    {
+        return true;
+    }
 }

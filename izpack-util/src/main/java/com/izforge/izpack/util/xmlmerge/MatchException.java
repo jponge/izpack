@@ -54,7 +54,7 @@ public class MatchException extends AbstractXmlMergeException
      * Constructor with cause.
      *
      * @param element Element which caused the exception
-     * @param cause   Exception cause
+     * @param cause Exception cause
      */
     public MatchException(Element element, Throwable cause)
     {

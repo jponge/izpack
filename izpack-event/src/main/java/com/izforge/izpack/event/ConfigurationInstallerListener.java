@@ -269,7 +269,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     /**
      * Returns an ant call which is defined in the given XML element.
      *
-     * @param el    XML element which contains the description of an ant call
+     * @param el XML element which contains the description of an ant call
      * @param idata The installation data
      * @return an ant call which is defined in the given XML element
      * @throws InstallerException
@@ -328,7 +328,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     }
 
     protected List<ConfigurationActionTask> readConfigurableSets(AutomatedInstallData idata,
-                                                                 IXMLElement parent) throws InstallerException
+            IXMLElement parent) throws InstallerException
     {
         List<ConfigurationActionTask> configtasks = new ArrayList<ConfigurationActionTask>();
         Iterator<IXMLElement> iter = parent.getChildrenNamed("configurableset").iterator();
@@ -336,42 +336,35 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         {
             IXMLElement el = iter.next();
 
-            ConfigType type = new ConfigType();
-            try
+            String attrib = requireAttribute(el, "type");
+            ConfigType configType = null;
+            if (attrib != null)
             {
-                type.setValue(requireAttribute(el, "type"));
-            }
-            catch (Exception e)
-            {
-                throw new InstallerException(e);
-            }
-
-            RulesEngine rules = idata.getRules();
-            String condition = getAttribute(el, "condition");
-            if ((condition != null) && (condition.length() > 0) &&
-                    (rules != null) && !rules.isConditionTrue(condition))
-            {
+                configType = ConfigType.getFromAttribute(attrib);
+                if (configType == null)
                 {
-                    Debug.log("ConfigurableSet skipped due to unmatching condition '" + condition + "'");
-                    continue;
+                    throw new InstallerException("Unknown configurableset type '"+attrib+"'");
                 }
+            }
+            else
+            {
+                throw new InstallerException("Missing configurableset type");
             }
 
             ConfigurableTask task;
-            switch (ConfigType.toType(type.getValue()))
+            switch (configType)
             {
-                case ConfigType.OPTIONS:
-                    task = new OptionFileCopyTask();
-                    readConfigurableSetCommonAttributes(idata, el, (ConfigurableFileCopyTask) task);
-                    break;
+            case OPTIONS:
+                task = new OptionFileCopyTask();
+                readConfigurableSetCommonAttributes(idata, el, (ConfigurableFileCopyTask)task);
+                break;
 
-                case ConfigType.INI:
-                    task = new IniFileCopyTask();
-                    readConfigurableSetCommonAttributes(idata, el, (ConfigurableFileCopyTask) task);
-                    break;
-
-                default:
-                    throw new InstallerException("Type '" + type.getValue() + "' not allowed for ConfigurableSet");
+            case INI:
+                task = new IniFileCopyTask();
+                readConfigurableSetCommonAttributes(idata, el, (ConfigurableFileCopyTask)task);
+                break;
+            default:
+                throw new InstallerException("Type '"+configType.getAttribute()+"' currently not allowed for ConfigurableSet");
             }
 
             configtasks.add(new ConfigurationActionTask(task, getAttribute(el, "condition"),
@@ -381,8 +374,8 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     }
 
     private void readConfigurableSetCommonAttributes(AutomatedInstallData idata,
-                                                     IXMLElement el, ConfigurableFileCopyTask task)
-            throws InstallerException
+            IXMLElement el, ConfigurableFileCopyTask task)
+    throws InstallerException
     {
         task.setToDir(FileUtil.getAbsoluteFile(getAttribute(el, "todir"), idata.getInstallPath()));
         task.setToFile(FileUtil.getAbsoluteFile(getAttribute(el, "tofile"), idata.getInstallPath()));
@@ -450,25 +443,25 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     }
 
     private void readSingleConfigurableTaskCommonAttributes(AutomatedInstallData idata,
-                                                            IXMLElement el, SingleConfigurableTask task)
-            throws InstallerException
+            IXMLElement el, SingleConfigurableTask task)
+    throws InstallerException
     {
         String boolattr = getAttribute(el, "create");
         if (boolattr != null)
         {
             task.setCreate(Boolean.parseBoolean(boolattr));
         }
-        boolattr = getAttribute(el, "patchPreserveEntries");
+        boolattr = getAttribute(el, "keepOldKeys");
         if (boolattr != null)
         {
             task.setPatchPreserveEntries(Boolean.parseBoolean(boolattr));
         }
-        boolattr = getAttribute(el, "patchPreserveValues");
+        boolattr = getAttribute(el, "keepOldValues");
         if (boolattr != null)
         {
             task.setPatchPreserveValues(Boolean.parseBoolean(boolattr));
         }
-        boolattr = getAttribute(el, "patchResolveVariables");
+        boolattr = getAttribute(el, "resolveValues");
         if (boolattr != null)
         {
             task.setPatchResolveVariables(Boolean.parseBoolean(boolattr));
@@ -476,8 +469,8 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     }
 
     private void readConfigFileTaskCommonAttributes(AutomatedInstallData idata,
-                                                    IXMLElement el, ConfigFileTask task)
-            throws InstallerException
+            IXMLElement el, ConfigFileTask task)
+    throws InstallerException
     {
         File tofile = FileUtil.getAbsoluteFile(requireAttribute(el, "tofile"), idata.getInstallPath());
         task.setToFile(tofile);
@@ -496,7 +489,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     }
 
     protected List<ConfigurationActionTask> readConfigurables(AutomatedInstallData idata,
-                                                              IXMLElement parent) throws InstallerException
+             IXMLElement parent) throws InstallerException
     {
         List<ConfigurationActionTask> configtasks = new ArrayList<ConfigurationActionTask>();
         Iterator<IXMLElement> iter = parent.getChildrenNamed("configurable").iterator();
@@ -504,77 +497,69 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         {
             IXMLElement el = iter.next();
 
-            ConfigType type = new ConfigType();
-            try
+            String attrib = requireAttribute(el, "type");
+            ConfigType configType = null;
+            if (attrib != null)
             {
-                type.setValue(requireAttribute(el, "type"));
-            }
-            catch (Exception e)
-            {
-                throw new InstallerException(e);
-            }
-
-            RulesEngine rules = idata.getRules();
-            String condition = getAttribute(el, "condition");
-            if ((condition != null) && (condition.length() > 0) &&
-                    (rules != null) && !rules.isConditionTrue(condition))
-            {
+                configType = ConfigType.getFromAttribute(attrib);
+                if (configType == null)
                 {
-                    Debug.log("Configurable skipped due to unmatching condition '" + condition + "'");
-                    continue;
+                    throw new InstallerException("Unknown configurable type '"+attrib+"'");
                 }
+            }
+            else
+            {
+                throw new InstallerException("Missing configurable type");
             }
 
             ConfigurableTask task;
-            switch (ConfigType.toType(type.getValue()))
+            switch (configType)
             {
-                case ConfigType.OPTIONS:
-                    task = new SingleOptionFileTask();
-                    readConfigFileTaskCommonAttributes(idata, el, (ConfigFileTask) task);
-                    readSingleConfigurableTaskCommonAttributes(idata, el, (SingleConfigurableTask) task);
-                    break;
+            case OPTIONS:
+                task = new SingleOptionFileTask();
+                readConfigFileTaskCommonAttributes(idata, el, (ConfigFileTask)task);
+                readSingleConfigurableTaskCommonAttributes(idata, el, (SingleConfigurableTask)task);
+                ((SingleConfigurableTask)task).readFromXML(el);
+                break;
 
-                case ConfigType.INI:
-                    task = new SingleIniFileTask();
-                    readConfigFileTaskCommonAttributes(idata, el, (ConfigFileTask) task);
-                    readSingleConfigurableTaskCommonAttributes(idata, el, (SingleConfigurableTask) task);
-                    break;
+            case INI:
+                task = new SingleIniFileTask();
+                readConfigFileTaskCommonAttributes(idata, el, (ConfigFileTask)task);
+                readSingleConfigurableTaskCommonAttributes(idata, el, (SingleConfigurableTask)task);
+                ((SingleConfigurableTask)task).readFromXML(el);
+                break;
 
-                case ConfigType.XML:
-                    task = new SingleXmlFileMergeTask();
-                    File tofile = FileUtil.getAbsoluteFile(requireAttribute(el, "tofile"), idata.getInstallPath());
-                    ((SingleXmlFileMergeTask) task).setToFile(tofile);
-                    ((SingleXmlFileMergeTask) task).setPatchFile(FileUtil.getAbsoluteFile(getAttribute(el, "patchfile"), idata.getInstallPath()));
-                    File originalfile = FileUtil.getAbsoluteFile(getAttribute(el, "originalfile"), idata.getInstallPath());
-                    if (originalfile == null)
-                    {
-                        originalfile = tofile;
-                    }
-                    ((SingleXmlFileMergeTask) task).setOriginalFile(originalfile);
-                    ((SingleXmlFileMergeTask) task).setConfigFile(FileUtil.getAbsoluteFile(getAttribute(el, "configfile"), idata.getInstallPath()));
-                    String boolattr = getAttribute(el, "cleanup");
-                    if (boolattr != null)
-                    {
-                        ((SingleXmlFileMergeTask) task).setCleanup(Boolean.parseBoolean(boolattr));
-                    }
-                    List<FileSet> fslist = readFileSets(idata, el);
-                    for (FileSet fs : fslist)
-                    {
-                        ((SingleXmlFileMergeTask) task).addFileSet(fs);
-                    }
-                    readAndAddXPathProperties(idata, el, (SingleXmlFileMergeTask) task);
-                    break;
+            case XML:
+                task = new SingleXmlFileMergeTask();
+                File tofile = FileUtil.getAbsoluteFile(requireAttribute(el, "tofile"), idata.getInstallPath());
+                ((SingleXmlFileMergeTask)task).setToFile(tofile);
+                ((SingleXmlFileMergeTask)task).setPatchFile(FileUtil.getAbsoluteFile(getAttribute(el, "patchfile"), idata.getInstallPath()));
+                File originalfile = FileUtil.getAbsoluteFile(getAttribute(el, "originalfile"), idata.getInstallPath());
+                if (originalfile == null)
+                    originalfile = tofile;
+                ((SingleXmlFileMergeTask)task).setOriginalFile(originalfile);
+                ((SingleXmlFileMergeTask)task).setConfigFile(FileUtil.getAbsoluteFile(getAttribute(el, "configfile"), idata.getInstallPath()));
+                String boolattr = getAttribute(el, "cleanup");
+                if (boolattr != null)
+                    ((SingleXmlFileMergeTask)task).setCleanup(Boolean.parseBoolean(boolattr));
+                List<FileSet> fslist = readFileSets(idata, el);
+                for (FileSet fs : fslist)
+                {
+                    ((SingleXmlFileMergeTask)task).addFileSet(fs);
+                }
+                readAndAddXPathProperties(idata, el, (SingleXmlFileMergeTask)task);
+                break;
 
-                case ConfigType.REGISTRY:
-                    task = new RegistryTask();
-                    ((RegistryTask) task).setFromKey(requireAttribute(el, "fromkey"));
-                    ((RegistryTask) task).setKey(requireAttribute(el, "tokey"));
-                    readSingleConfigurableTaskCommonAttributes(idata, el, (SingleConfigurableTask) task);
-                    break;
+            case REGISTRY:
+                task = new RegistryTask();
+                ((RegistryTask)task).setFromKey(requireAttribute(el, "fromkey"));
+                ((RegistryTask)task).setKey(requireAttribute(el, "tokey"));
+                readSingleConfigurableTaskCommonAttributes(idata, el, (SingleConfigurableTask)task);
+                break;
 
-                default:
-                    // This should never happen
-                    throw new InstallerException("Type '" + type.getValue() + "' not allowed for Configurable");
+            default:
+                // This should never happen
+                throw new InstallerException("Type '" + configType.getAttribute() + "' currently not allowed for Configurable");
             }
 
             configtasks.add(new ConfigurationActionTask(task, getAttribute(el, "condition"),
@@ -584,8 +569,8 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     }
 
     private void readAndAddXPathProperties(AutomatedInstallData idata, IXMLElement parent,
-                                           SingleXmlFileMergeTask task)
-            throws InstallerException
+            SingleXmlFileMergeTask task)
+    throws InstallerException
     {
         Iterator<IXMLElement> iter = parent.getChildrenNamed("xpathproperty").iterator();
         while (iter.hasNext())
@@ -596,7 +581,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     }
 
     private List<FileSet> readFileSets(AutomatedInstallData idata, IXMLElement parent)
-            throws InstallerException
+    throws InstallerException
     {
         Iterator<IXMLElement> iter = parent.getChildrenNamed("fileset").iterator();
         List<FileSet> fslist = new ArrayList<FileSet>();
@@ -672,7 +657,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     }
 
     private List<FileNameMapper> readMapper(AutomatedInstallData idata, IXMLElement parent)
-            throws InstallerException
+    throws InstallerException
     {
         Iterator<IXMLElement> iter = parent.getChildrenNamed("mapper").iterator();
         List<FileNameMapper> mappers = new ArrayList<FileNameMapper>();
@@ -682,18 +667,28 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
             {
                 IXMLElement f = iter.next();
 
-                Mapper.MapperType mappertype = new Mapper.MapperType();
-                mappertype.setValue(requireAttribute(f, "type"));
+                String attrib = requireAttribute(f, "type");
+                Mapper.MapperType mappertype = null;
+                if (attrib != null)
+                {
+                    mappertype = Mapper.MapperType.getFromAttribute(attrib);
+                    if (mappertype == null)
+                    {
+                        throw new InstallerException("Unknown filename mapper type '"+attrib+"'");
+                    }
+                }
+                else
+                {
+                    throw new InstallerException("Missing filename mapper type");
+                }
                 FileNameMapper mapper = (FileNameMapper) Class.forName(mappertype.getImplementation()).newInstance();
                 if (mapper instanceof GlobPatternMapper)
                 {
                     String boolval = getAttribute(f, "casesensitive");
-                    if (boolval != null)
-                    {
-                        ((GlobPatternMapper) mapper).setCaseSensitive(Boolean.parseBoolean(boolval));
-                    }
-                    ((GlobPatternMapper) mapper).setFrom(requireAttribute(f, "from"));
-                    ((GlobPatternMapper) mapper).setTo(requireAttribute(f, "to"));
+                    if ( boolval != null )
+                        ((GlobPatternMapper)mapper).setCaseSensitive(Boolean.parseBoolean(boolval));
+                    ((GlobPatternMapper)mapper).setFrom(requireAttribute(f, "from"));
+                    ((GlobPatternMapper)mapper).setTo(requireAttribute(f, "to"));
                 }
                 else
                 {
@@ -711,7 +706,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     }
 
     private void readAndAddIncludes(AutomatedInstallData idata, IXMLElement parent, FileSet fileset)
-            throws InstallerException
+    throws InstallerException
     {
         Iterator<IXMLElement> iter = parent.getChildrenNamed("include").iterator();
         while (iter.hasNext())
@@ -722,7 +717,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     }
 
     private void readAndAddExcludes(AutomatedInstallData idata, IXMLElement parent, FileSet fileset)
-            throws InstallerException
+    throws InstallerException
     {
         Iterator<IXMLElement> iter = parent.getChildrenNamed("exclude").iterator();
         while (iter.hasNext())
@@ -733,7 +728,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     }
 
     private int getConfigFileType(String varname, String type)
-            throws InstallerException
+    throws InstallerException
     {
         int filetype = ConfigFileValue.CONFIGFILE_TYPE_OPTIONS;
         if (type != null)
@@ -759,9 +754,8 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     }
 
     protected Properties readVariables(AutomatedInstallData idata,
-                                       IXMLElement parent) throws InstallerException
+            IXMLElement parent) throws InstallerException
     {
-
         List<DynamicVariable> dynamicVariables = new ArrayList<DynamicVariable>();
 
         Iterator<IXMLElement> iter = parent.getChildrenNamed("variable").iterator();
@@ -921,32 +915,47 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
             value = getAttribute(var, "executable");
             if (value != null)
             {
-                if (dynamicVariable.getValue() == null)
-                {
-                    String exectype = getAttribute(var, "type");
+                if (dynamicVariable.getValue()==null) {
+                    String dir = var.getAttribute("dir");
+                    String exectype = var.getAttribute("type");
+                    String boolval = var.getAttribute("stderr");
+                    boolean stderr = false;
+                    if ( boolval != null )
+                    {
+                        stderr = Boolean.parseBoolean(boolval);
+                    }
 
                     if (value.length() <= 0)
                     {
-                        parseError("No command given in definition of dynamic variable " + name);
+                        parseError("No command given in definition of dynamic variable "+name);
                     }
+                    Vector<String> cmd = new Vector<String>();
+                    cmd.add(value);
+                    List<IXMLElement> args = var.getChildrenNamed("arg");
+                    if (args != null) {
+                        for (IXMLElement arg : args)
+                        {
+                            String content = arg.getContent();
+                            if (content != null)
+                            {
+                                cmd.add(content);
+                            }
+                        }
+                    }
+                    String[] cmdarr = new String[cmd.size()];
                     if (exectype.equalsIgnoreCase("process") || exectype == null)
                     {
-                        dynamicVariable.setValue(
-                                new ExecValue(new String[]{value}, false));
+                        dynamicVariable.setValue(new ExecValue(cmd.toArray(cmdarr), dir, false, stderr));
                     }
                     else if (exectype.equalsIgnoreCase("shell"))
                     {
-                        dynamicVariable.setValue(
-                                new ExecValue(new String[]{value}, true));
+                        dynamicVariable.setValue(new ExecValue(cmd.toArray(cmdarr), dir, true, stderr));
                     }
                     else
                     {
-                        parseError("Bad execution type " + exectype + " given for dynamic variable " + name);
+                        parseError("Bad execution type "+exectype+" given for dynamic variable "+name);
                     }
-                    try
-                    {
-                        dynamicVariable.validate();
-                    }
+                    try { dynamicVariable.validate(); }
                     catch (Exception e)
                     {
                         parseError("Error in definition of dynamic variable " + name + ": " + e.getMessage());
@@ -1029,10 +1038,9 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     }
 
     // FIXME put LinkedList for local variables here to keep their eval order as in xml
-
     private Properties evaluateDynamicVariables(List<DynamicVariable> dynamicvariables,
-                                                AutomatedInstallData installdata)
-            throws InstallerException
+            AutomatedInstallData installdata)
+    throws InstallerException
     {
         VariableSubstitutor subst = new VariableSubstitutorImpl(installdata.getVariables());
         // FIXME change DynamicVariableSubstitutor constructor interface
@@ -1108,7 +1116,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     }
 
     protected String getAttribute(IXMLElement element, String attribute)
-            throws InstallerException
+    throws InstallerException
     {
         String value = element.getAttribute(attribute);
         if (value != null)
@@ -1151,38 +1159,40 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         System.out.println("Warning: " + SPEC_FILE_NAME + ":" + parent.getLineNr() + ": " + message);
     }
 
-    public static class ConfigType extends EnumeratedAttribute
+    public enum ConfigType
     {
-        public static final int OPTIONS = 1;
-        public static final int INI = 2;
-        public static final int XML = 3;
-        public static final int REGISTRY = 4;
+        OPTIONS("options"), INI("ini"), XML("xml"), REGISTRY("registry");
 
-        public String[] getValues()
+        private static Map<String, ConfigType> lookup;
+
+        private String attribute;
+
+        ConfigType(String attribute)
         {
-            return new String[]{"options", "ini", "xml", "registry"};
+            this.attribute = attribute;
         }
 
-        public static int toType(String type)
+        static
         {
-            if ("options".equalsIgnoreCase(type))
+            lookup = new HashMap<String, ConfigType>();
+            for (ConfigType operation : EnumSet.allOf(ConfigType.class))
             {
-                return OPTIONS;
+                lookup.put(operation.getAttribute(), operation);
             }
-            else if ("ini".equals(type))
+        }
+
+        public String getAttribute()
+        {
+            return attribute;
+        }
+
+        public static ConfigType getFromAttribute(String attribute)
+        {
+            if (attribute != null && lookup.containsKey(attribute))
             {
-                return INI;
+                return lookup.get(attribute);
             }
-            else if ("xml".equals(type))
-            {
-                return XML;
-            }
-            else if ("registry".equals(type))
-            {
-                return REGISTRY;
-            }
-            // This should not happen, because setValue already checks for valid values:
-            throw new RuntimeException("Unknown configuration type '" + type + "'");
+            return null;
         }
     }
 

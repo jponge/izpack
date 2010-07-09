@@ -23,14 +23,10 @@
 package com.izforge.izpack.util.xmlmerge.config;
 
 import com.izforge.izpack.util.xmlmerge.*;
-import com.izforge.izpack.util.xmlmerge.action.OrderedMergeAction;
-import com.izforge.izpack.util.xmlmerge.action.StandardActions;
-import com.izforge.izpack.util.xmlmerge.factory.AttributeOperationFactory;
-import com.izforge.izpack.util.xmlmerge.factory.OperationResolver;
-import com.izforge.izpack.util.xmlmerge.factory.StaticOperationFactory;
+import com.izforge.izpack.util.xmlmerge.action.*;
+import com.izforge.izpack.util.xmlmerge.factory.*;
 import com.izforge.izpack.util.xmlmerge.mapper.NamespaceFilterMapper;
-import com.izforge.izpack.util.xmlmerge.matcher.StandardMatchers;
-import com.izforge.izpack.util.xmlmerge.matcher.TagMatcher;
+import com.izforge.izpack.util.xmlmerge.matcher.*;
 
 /**
  * Configure to apply actions declared as attributes in the patch DOM.
@@ -62,7 +58,7 @@ public class AttributeMergeConfigurer implements Configurer
     public void configure(XmlMerge xmlMerge) throws ConfigurationException
     {
 
-        MergeAction defaultMergeAction = new OrderedMergeAction();
+        MergeAction defaultMergeAction = new FullMergeAction();
 
         Mapper mapper = new NamespaceFilterMapper(ATTRIBUTE_NAMESPACE);
 
@@ -75,7 +71,7 @@ public class AttributeMergeConfigurer implements Configurer
                 actionResolver, ACTION_ATTRIBUTE, ATTRIBUTE_NAMESPACE));
 
         // Configure the matcher factory
-        Matcher defaultMatcher = new TagMatcher();
+        Matcher defaultMatcher = new AttributeMatcher();
 
         OperationResolver matcherResolver = new OperationResolver(StandardMatchers.class);
 

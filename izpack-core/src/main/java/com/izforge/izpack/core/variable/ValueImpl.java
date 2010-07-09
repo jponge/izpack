@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.core.variable;
 
+import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Value;
 import com.izforge.izpack.api.regex.RegularExpressionFilter;
 import com.izforge.izpack.api.regex.RegularExpressionProcessor;
@@ -29,6 +30,8 @@ import com.izforge.izpack.core.regex.RegularExpressionProcessorImpl;
 
 public abstract class ValueImpl implements Value
 {
+    private AutomatedInstallData installData;
+
     public abstract void validate() throws Exception;
 
     public abstract String resolve() throws Exception;
@@ -74,4 +77,13 @@ public abstract class ValueImpl implements Value
         return newValue;
     }
 
+    public AutomatedInstallData getInstallData()
+    {
+        return installData;
+    }
+
+    public void setInstallData(AutomatedInstallData installData)
+    {
+        this.installData = installData;
+    }
 }

@@ -42,7 +42,7 @@ public class DocumentException extends AbstractXmlMergeException
      * Constructor with message.
      *
      * @param document Document which caused the exception
-     * @param message  Exception message
+     * @param message Exception message
      */
     public DocumentException(Document document, String message)
     {
@@ -54,7 +54,7 @@ public class DocumentException extends AbstractXmlMergeException
      * Constructor with cause.
      *
      * @param document Document which caused the exception
-     * @param cause    Exception cause
+     * @param cause Exception cause
      */
     public DocumentException(Document document, Throwable cause)
     {

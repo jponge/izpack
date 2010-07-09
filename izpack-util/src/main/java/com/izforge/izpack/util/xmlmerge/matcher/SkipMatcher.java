@@ -22,8 +22,9 @@
 
 package com.izforge.izpack.util.xmlmerge.matcher;
 
-import com.izforge.izpack.util.xmlmerge.Matcher;
 import org.jdom.Element;
+
+import com.izforge.izpack.util.xmlmerge.Matcher;
 
 /**
  * Elements compared with this matcher never match.

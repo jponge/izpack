@@ -22,11 +22,8 @@
 
 package com.izforge.izpack.util.xmlmerge.merge;
 
-import com.izforge.izpack.util.xmlmerge.*;
-import com.izforge.izpack.util.xmlmerge.action.OrderedMergeAction;
-import com.izforge.izpack.util.xmlmerge.factory.StaticOperationFactory;
-import com.izforge.izpack.util.xmlmerge.mapper.IdentityMapper;
-import com.izforge.izpack.util.xmlmerge.matcher.TagMatcher;
+import java.io.*;
+
 import org.jdom.DocType;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -37,7 +34,17 @@ import org.jdom.output.DOMOutputter;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-import java.io.*;
+import com.izforge.izpack.util.xmlmerge.AbstractXmlMergeException;
+import com.izforge.izpack.util.xmlmerge.DocumentException;
+import com.izforge.izpack.util.xmlmerge.Mapper;
+import com.izforge.izpack.util.xmlmerge.Matcher;
+import com.izforge.izpack.util.xmlmerge.MergeAction;
+import com.izforge.izpack.util.xmlmerge.ParseException;
+import com.izforge.izpack.util.xmlmerge.XmlMerge;
+import com.izforge.izpack.util.xmlmerge.action.*;
+import com.izforge.izpack.util.xmlmerge.factory.StaticOperationFactory;
+import com.izforge.izpack.util.xmlmerge.mapper.IdentityMapper;
+import com.izforge.izpack.util.xmlmerge.matcher.*;
 
 /**
  * Default implementation of XmlMerge. Create all JDOM documents, then perform the merge into a new
@@ -52,21 +59,21 @@ public class DefaultXmlMerge implements XmlMerge
     /**
      * Root merge action.
      */
-    private MergeAction m_rootMergeAction = new OrderedMergeAction();
+    private MergeAction m_rootMergeAction = new FullMergeAction();
 
     /**
      * Root matcher.
      */
-    private Matcher m_rootMatcher = new TagMatcher();
+    private Matcher m_rootMatcher = new AttributeMatcher();
 
     /**
      * Creates a new DefaultXmlMerge instance.
      */
     public DefaultXmlMerge()
     {
-        m_rootMergeAction.setActionFactory(new StaticOperationFactory(new OrderedMergeAction()));
+        m_rootMergeAction.setActionFactory(new StaticOperationFactory(new FullMergeAction()));
         m_rootMergeAction.setMapperFactory(new StaticOperationFactory(new IdentityMapper()));
-        m_rootMergeAction.setMatcherFactory(new StaticOperationFactory(new TagMatcher()));
+        m_rootMergeAction.setMatcherFactory(new StaticOperationFactory(new AttributeMatcher()));
     }
 
     /**
@@ -133,7 +140,6 @@ public class DefaultXmlMerge implements XmlMerge
         for (int i = 0; i < sources.length; i++)
         {
             // ask JDOM to parse the given inputStream
-            System.err.println("sources[i]: " + sources[i]);
             docs[i] = domb.build(sources[i]);
         }
 
@@ -239,7 +245,7 @@ public class DefaultXmlMerge implements XmlMerge
 
         try
         {
-            sortie.output(result, new FileOutputStream(sources[0]));
+            sortie.output(result, new FileOutputStream(target));
         }
         catch (IOException ex)
         {
@@ -256,34 +262,33 @@ public class DefaultXmlMerge implements XmlMerge
      */
     private Document doMerge(Document[] docs) throws AbstractXmlMergeException
     {
-        Document temporary = docs[0];
+        Document originalDoc = docs[0];
 
         for (int i = 1; i < docs.length; i++)
         {
 
-            if (!m_rootMatcher.matches(temporary.getRootElement(), docs[i].getRootElement()))
+            if (!m_rootMatcher.matches(originalDoc.getRootElement(), docs[i].getRootElement()))
             {
-                throw new IllegalArgumentException(
-                        "Root elements do not match.");
+                throw new IllegalArgumentException("Root elements do not match.");
             }
 
             Document output = new Document();
-            if (docs[0].getDocType() != null)
+            if (originalDoc.getDocType() != null)
             {
-                output.setDocType((DocType) docs[0].getDocType().clone());
+                output.setDocType((DocType) originalDoc.getDocType().clone());
             }
             output.setRootElement(new Element("root"));
 
-            m_rootMergeAction.perform(temporary.getRootElement(), docs[i].getRootElement(), output
-                    .getRootElement());
+            m_rootMergeAction.perform(originalDoc.getRootElement(), docs[i].getRootElement(),
+                    output.getRootElement());
 
             Element root = (Element) output.getRootElement().getChildren().get(0);
             root.detach();
 
-            temporary.setRootElement(root);
+            originalDoc.setRootElement(root);
         }
 
-        return temporary;
+        return originalDoc;
     }
 
 }

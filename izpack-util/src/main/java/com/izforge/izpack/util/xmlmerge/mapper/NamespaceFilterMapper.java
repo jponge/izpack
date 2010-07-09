@@ -22,13 +22,11 @@
 
 package com.izforge.izpack.util.xmlmerge.mapper;
 
-import com.izforge.izpack.util.xmlmerge.Mapper;
-import org.jdom.Attribute;
-import org.jdom.Element;
-import org.jdom.Namespace;
+import java.util.*;
 
-import java.util.Iterator;
-import java.util.List;
+import org.jdom.*;
+
+import com.izforge.izpack.util.xmlmerge.Mapper;
 
 /**
  * Filters out elements and attributes with a specified namespace.
@@ -48,7 +46,7 @@ public class NamespaceFilterMapper implements Mapper
      * Creates a new NamespaceFilterMapper.
      *
      * @param filteredNamespace String representing the namespace defining the elements and
-     *                          attributes to be filtered out
+     * attributes to be filtered out
      */
     public NamespaceFilterMapper(String filteredNamespace)
     {
@@ -60,10 +58,7 @@ public class NamespaceFilterMapper implements Mapper
      */
     public Element map(Element patchElement)
     {
-        if (patchElement == null)
-        {
-            return null;
-        }
+        if (patchElement == null) { return null; }
         if (patchElement.getNamespace().equals(m_namespace))
         {
             return null;

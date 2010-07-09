@@ -28,7 +28,7 @@ public class IniFileCopyTask extends ConfigurableFileCopyTask
 
     @Override
     protected void doFileOperation(File oldFile, File newFile, File toFile,
-                                   boolean patchPreserveEntries, boolean patchPreserveValues, boolean patchResolveVariables)
+            boolean patchPreserveEntries, boolean patchPreserveValues, boolean patchResolveVariables)
             throws Exception
     {
         SingleIniFileTask task = new SingleIniFileTask();

@@ -20,42 +20,28 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.xmlmerge.factory;
+package com.izforge.izpack.util.xmlmerge.action;
 
 import org.jdom.Element;
 
-import com.izforge.izpack.util.xmlmerge.*;
+import com.izforge.izpack.util.xmlmerge.Action;
 
 /**
- * An operation factory returning always the same operation whatever the specified elements.
- *
- * @author Laurent Bovet (LBO)
- * @author Alex Mathey (AMA)
+ * Copies the patch element if it exists also in original, otherwise nothing is added.
+ * The original element won't be added in any case.
  */
-public class StaticOperationFactory implements OperationFactory
+public class KeepAction implements Action
 {
-
-    /**
-     * The operation operation returned by this factory.
-     */
-    Operation m_operation;
-
-    /**
-     * Creates a StaticOperationFactory returning the given operation.
-     *
-     * @param operation The operation operation returned by this factory.
-     */
-    public StaticOperationFactory(Operation operation)
-    {
-        this.m_operation = operation;
-    }
 
     /**
      * {@inheritDoc}
      */
-    public Operation getOperation(Element originalElement, Element modifiedElement)
+    public void perform(Element originalElement, Element patchElement, Element outputParentElement)
     {
-        return m_operation;
+        if (originalElement != null && patchElement != null)
+        {
+            outputParentElement.addContent((Element) patchElement.clone());
+        }
     }
 
 }

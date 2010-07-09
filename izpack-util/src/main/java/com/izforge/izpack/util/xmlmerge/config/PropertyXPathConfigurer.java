@@ -22,11 +22,16 @@
 
 package com.izforge.izpack.util.xmlmerge.config;
 
-import com.izforge.izpack.util.xmlmerge.ConfigurationException;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
+import com.izforge.izpack.util.xmlmerge.ConfigurationException;
 
 /**
  * Reads the {@link ch.elca.el4j.services.xmlmerge.factory.XPathOperationFactory} configuration from

@@ -22,24 +22,14 @@
 
 package com.izforge.izpack.util.xmlmerge.matcher;
 
-import com.izforge.izpack.util.xmlmerge.Matcher;
-import org.jdom.Element;
-
 /**
  * Compares the qualified name of elements.
- *
- * @author Laurent Bovet (LBO)
- * @author Alex Mathey (AMA)
  */
-public class TagMatcher implements Matcher
+public class TagMatcher extends AbstractTagMatcher
 {
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean matches(Element originalElement, Element patchElement)
+    @Override
+    protected boolean ignoreCaseElementName()
     {
-        return originalElement.getQualifiedName().equals(patchElement.getQualifiedName());
+        return true;
     }
-
 }

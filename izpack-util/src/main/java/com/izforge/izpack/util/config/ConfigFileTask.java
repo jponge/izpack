@@ -72,7 +72,6 @@ public abstract class ConfigFileTask extends SingleConfigurableTask
 
     /**
      * Whether to delete the patchfile after the operation
-     *
      * @param cleanup True, if the patchfile should be deleted after the operation
      */
     public void setCleanup(boolean cleanup)
@@ -95,10 +94,7 @@ public abstract class ConfigFileTask extends SingleConfigurableTask
 
     protected void checkAttributes() throws Exception
     {
-        if (this.toFile == null)
-        {
-            throw new Exception("The \"file\" attribute must be set");
-        }
+        if (this.toFile == null) { throw new Exception("The \"file\" attribute must be set"); }
     }
 
 }

@@ -22,10 +22,9 @@
 
 package com.izforge.izpack.util.xmlmerge.factory;
 
-import com.izforge.izpack.util.xmlmerge.ConfigurationException;
-import com.izforge.izpack.util.xmlmerge.Operation;
-
 import java.lang.reflect.Field;
+
+import com.izforge.izpack.util.xmlmerge.*;
 
 /**
  * Creates an operation instance given a short name (alias) or a class name.

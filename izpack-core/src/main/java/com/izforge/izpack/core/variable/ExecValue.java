@@ -22,6 +22,7 @@
 package com.izforge.izpack.core.variable;
 
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
 
@@ -36,8 +37,10 @@ public class ExecValue extends ValueImpl implements Serializable
     private static final long serialVersionUID = -6438593229737421526L;
 
     private String cmd[];
+    private String dir;
+    private boolean useStdErr = true;
 
-    public ExecValue(String[] command, boolean isShellCommand)
+    public ExecValue(String[] command, String dir, boolean isShellCommand, boolean useStdErr)
     {
         super();
         if (isShellCommand)
@@ -70,6 +73,9 @@ public class ExecValue extends ValueImpl implements Serializable
         {
             this.cmd = command;
         }
+
+        this.dir = dir;
+        this.useStdErr = useStdErr;
     }
 
     public String[] getCmd()
@@ -94,22 +100,41 @@ public class ExecValue extends ValueImpl implements Serializable
     @Override
     public String resolve()
     {
-        return FileExecutor.getExecOutput(cmd);
+        VariableSubstitutor substitutor = new VariableSubstitutorImpl(getInstallData().getVariables());
+        return resolve(substitutor);
     }
 
     @Override
-    public String resolve(VariableSubstitutor... substitutors) throws Exception
+    public String resolve(VariableSubstitutor... substitutors)
     {
-        String _cmd_[] = new String[cmd.length];
+        String _dir_ = null, _cmd_[] = new String[cmd.length];
+
+        for ( VariableSubstitutor substitutor : substitutors )
+        {
+            _dir_ = substitutor.substitute(dir, null);
+        }
+
         for (int i = 0; i < cmd.length; i++)
         {
             String _cmdarg_ = cmd[i];
-            for (VariableSubstitutor substitutor : substitutors)
-            {
-                _cmdarg_ = substitutor.substitute(_cmdarg_);
-            }
+            for ( VariableSubstitutor substitutor : substitutors )
+                _cmdarg_ = substitutor.substitute(_cmdarg_, null);
             _cmd_[i] = _cmdarg_;
         }
-        return FileExecutor.getExecOutput(_cmd_);
+        String[] execOut = new String[2];
+        int ret = new FileExecutor().executeCommand(_cmd_, execOut, _dir_);
+        if (ret == 0)
+        {
+            if (useStdErr)
+            {
+                // Some commands return their output on stderr (as java -version)
+                return execOut[1];
+            }
+            else
+            {
+                return execOut[0];
+            }
+        }
+        return null;
     }
 }

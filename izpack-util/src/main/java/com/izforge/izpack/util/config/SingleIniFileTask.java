@@ -21,28 +21,16 @@
 
 package com.izforge.izpack.util.config;
 
-import com.izforge.izpack.util.Debug;
-import org.ini4j.Ini;
-
 import java.io.File;
 import java.io.IOException;
 
+import org.ini4j.Ini;
+
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.util.Debug;
+
 public class SingleIniFileTask extends ConfigFileTask
 {
-
-    public static class Entry extends ConfigFileTask.Entry
-    {
-
-        /**
-         * Name of the property name/value pair
-         */
-        public void setSection(String value)
-        {
-            this.section = value;
-        }
-
-    }
-
     protected void readSourceConfigurable() throws Exception
     {
         // deal with the single file to patch from
@@ -70,11 +58,8 @@ public class SingleIniFileTask extends ConfigFileTask
         {
             try
             {
-                if (!newFile.exists())
-                {
-                    throw new Exception("Reference file "
-                            + newFile.getAbsolutePath() + " for patch cannot be found");
-                }
+                if (!newFile.exists()) { throw new Exception("Reference file "
+                        + newFile.getAbsolutePath() + " for patch cannot be found"); }
                 Debug.log("Loading INI file: " + newFile.getAbsolutePath());
                 configurable = new Ini(newFile);
             }
@@ -130,5 +115,14 @@ public class SingleIniFileTask extends ConfigFileTask
                 Debug.log("File " + oldFile + " could not be cleant up");
             }
         }
+    }
+
+    @Override
+    protected Entry filterEntryFromXML(IXMLElement parent, Entry entry)
+    {
+        entry.setSection(parent.getAttribute("section"));
+        entry.setKey(parent.getAttribute("key"));
+        entry.setValue(parent.getAttribute("value"));
+        return entry;
     }
 }

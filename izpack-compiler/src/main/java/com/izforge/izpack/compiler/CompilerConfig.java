@@ -64,6 +64,7 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraintHelper;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.tools.ant.DirectoryScanner;
 
@@ -1749,25 +1750,41 @@ public class CompilerConfig extends Thread {
             value = var.getAttribute("executable");
             if (value != null) {
                 if (dynamicVariable.getValue() == null) {
+                    String dir = var.getAttribute("dir");
                     String exectype = var.getAttribute("type");
+                    String boolval = var.getAttribute("stderr");
+                    boolean stderr = true;
+                    if ( boolval != null )
+                    {
+                        stderr = Boolean.parseBoolean(boolval);
+                    }
 
-                    if (value.length() <= 0) {
-                        assertionHelper.parseError("No command given in definition of dynamic variable " + name);
+                    if (value.length() <= 0)
+                        assertionHelper.parseError("No command given in definition of dynamic variable "+name);
+                    Vector<String> cmd = new Vector<String>();
+                    cmd.add(value);
+                    List<IXMLElement> args = var.getChildrenNamed("arg");
+                    if (args != null) {
+                        for (IXMLElement arg : args)
+                        {
+                            String content = arg.getContent();
+                            if (content != null)
+                            {
+                                cmd.add(content);
+                            }
+                        }
                     }
-                    if (exectype.equalsIgnoreCase("process") || exectype == null) {
-                        dynamicVariable.setValue(
-                                new ExecValue(new String[]{value}, false));
-                    } else if (exectype.equalsIgnoreCase("shell")) {
-                        dynamicVariable.setValue(
-                                new ExecValue(new String[]{value}, true));
-                    } else {
-                        assertionHelper.parseError("Bad execution type " + exectype + " given for dynamic variable " + name);
-                    }
-                    try {
-                        dynamicVariable.validate();
-                    }
-                    catch (Exception e) {
-                        assertionHelper.parseError("Error in definition of dynamic variable " + name + ": " + e.getMessage());
+                    String[] cmdarr = new String[cmd.size()];
+                    if (exectype.equalsIgnoreCase("process") || exectype == null)
+                        dynamicVariable.setValue(new ExecValue(cmd.toArray(cmdarr), dir, false, stderr));
+                    else if (exectype.equalsIgnoreCase("shell"))
+                        dynamicVariable.setValue(new ExecValue(cmd.toArray(cmdarr), dir, true, stderr));
+                    else
+                        assertionHelper.parseError("Bad execution type "+exectype+" given for dynamic variable "+name);
+                    try { dynamicVariable.validate(); }
+                    catch (Exception e)
+                    {
+                        assertionHelper.parseError("Error in definition of dynamic variable "+name+": "+e.getMessage());
                     }
                 } else {
                     // unexpected combination of variable attributes

@@ -22,8 +22,9 @@
 
 package com.izforge.izpack.util.xmlmerge.action;
 
-import com.izforge.izpack.util.xmlmerge.Action;
 import org.jdom.Element;
+
+import com.izforge.izpack.util.xmlmerge.Action;
 
 /**
  * Copies the original regardless of the existence of patch element.

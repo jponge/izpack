@@ -21,7 +21,10 @@ import com.izforge.izpack.util.file.CompositeMapper;
 import com.izforge.izpack.util.file.ContainerMapper;
 import com.izforge.izpack.util.file.FileNameMapper;
 
-import java.util.Properties;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Element to define a FileNameMapper.
@@ -172,41 +175,54 @@ public class Mapper extends DataType implements Cloneable
         return Class.forName(classname, true, loader);
     }
 
-    /**
-     * Class as Argument to FileNameMapper.setType.
-     */
-    public static class MapperType extends EnumeratedAttribute
+    public enum MapperType
     {
-        private Properties implementations;
+        IDENTITY("identity"), FLATTEN("flatten"), GLOB("glob"),
+        MERGE("merge"), REGEXP("regexp"), PACKAGE("package"), UNPACKAGE("unpackage");
 
-        public MapperType()
+        private static Map<String, MapperType> lookup;
+        private static Hashtable<MapperType, String> implementations;
+
+        private String attribute;
+
+        MapperType(String attribute)
         {
-            implementations = new Properties();
-            implementations.put("identity",
-                    "com.izforge.izpack.util.file.IdentityMapper");
-            implementations.put("flatten",
-                    "com.izforge.izpack.util.file.FlatFileNameMapper");
-            implementations.put("glob",
-                    "com.izforge.izpack.util.file.GlobPatternMapper");
-            implementations.put("merge",
-                    "com.izforge.izpack.util.file.MergingMapper");
-            implementations.put("regexp",
-                    "com.izforge.izpack.util.file.RegexpPatternMapper");
-            implementations.put("package",
-                    "com.izforge.izpack.util.file.PackageNameMapper");
-            implementations.put("unpackage",
-                    "com.izforge.izpack.util.file.UnPackageNameMapper");
+            this.attribute = attribute;
         }
 
-        public String[] getValues()
+        static
         {
-            return new String[]{"identity", "flatten", "glob",
-                    "merge", "regexp", "package", "unpackage"};
+            lookup = new HashMap<String, MapperType>();
+            for (MapperType mapperType : EnumSet.allOf(MapperType.class))
+            {
+                lookup.put(mapperType.getAttribute(), mapperType);
+            }
+            implementations = new Hashtable<MapperType, String>();
+            implementations.put(IDENTITY, "com.izforge.izpack.util.file.IdentityMapper");
+            implementations.put(FLATTEN, "com.izforge.izpack.util.file.FlatFileNameMapper");
+            implementations.put(GLOB, "com.izforge.izpack.util.file.GlobPatternMapper");
+            implementations.put(MERGE, "com.izforge.izpack.util.file.MergingMapper");
+            implementations.put(REGEXP, "com.izforge.izpack.util.file.RegexpPatternMapper");
+            implementations.put(PACKAGE, "com.izforge.izpack.util.file.PackageNameMapper");
+            implementations.put(UNPACKAGE, "com.izforge.izpack.util.file.UnPackageNameMapper");
         }
 
-        public String getImplementation()
+        public String getAttribute()
         {
-            return implementations.getProperty(getValue());
+            return attribute;
+        }
+
+        public static MapperType getFromAttribute(String attribute)
+        {
+            if (attribute != null && lookup.containsKey(attribute))
+            {
+                return lookup.get(attribute);
+            }
+            return null;
+        }
+
+        public String getImplementation() {
+            return implementations.get(this);
         }
     }
 

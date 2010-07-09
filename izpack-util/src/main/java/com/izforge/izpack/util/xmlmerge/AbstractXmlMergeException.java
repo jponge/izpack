@@ -53,7 +53,7 @@ public abstract class AbstractXmlMergeException extends Exception
      * Constructor with message and cause.
      *
      * @param message Exception message
-     * @param cause   Exception cause
+     * @param cause Exception cause
      */
     public AbstractXmlMergeException(String message, Throwable cause)
     {

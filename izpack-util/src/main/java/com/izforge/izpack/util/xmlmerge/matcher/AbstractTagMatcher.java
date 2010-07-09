@@ -20,42 +20,35 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.xmlmerge.factory;
+package com.izforge.izpack.util.xmlmerge.matcher;
 
 import org.jdom.Element;
 
-import com.izforge.izpack.util.xmlmerge.*;
+import com.izforge.izpack.util.xmlmerge.Matcher;
 
 /**
- * An operation factory returning always the same operation whatever the specified elements.
- *
- * @author Laurent Bovet (LBO)
- * @author Alex Mathey (AMA)
+ * Compares the qualified name of elements.
  */
-public class StaticOperationFactory implements OperationFactory
+public abstract class AbstractTagMatcher implements Matcher
 {
 
-    /**
-     * The operation operation returned by this factory.
-     */
-    Operation m_operation;
+    protected abstract boolean ignoreCaseElementName();
 
-    /**
-     * Creates a StaticOperationFactory returning the given operation.
-     *
-     * @param operation The operation operation returned by this factory.
-     */
-    public StaticOperationFactory(Operation operation)
+    public boolean matches(Element originalElement, Element patchElement)
     {
-        this.m_operation = operation;
+        return equalsString(originalElement.getQualifiedName(), patchElement.getQualifiedName(),
+                ignoreCaseElementName());
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public Operation getOperation(Element originalElement, Element modifiedElement)
+    protected static boolean equalsString(String s1, String s2, boolean ignoreCase)
     {
-        return m_operation;
+        if (ignoreCase)
+        {
+            return s1.equalsIgnoreCase(s2);
+        }
+        else
+        {
+            return s1.equals(s2);
+        }
     }
-
 }

@@ -21,124 +21,89 @@
 
 package com.izforge.izpack.util.config;
 
-import com.izforge.izpack.util.Debug;
-import org.ini4j.Reg;
-
 import java.io.IOException;
 
-public class RegistryTask extends SingleConfigurableTask
-{
+import org.ini4j.Reg;
 
-    /*
-    * Instance variables.
-    */
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.util.Debug;
 
-    protected String key;
-    protected String fromKey;
+public class RegistryTask extends SingleConfigurableTask {
+
+  /*
+   * Instance variables.
+   */
+
+  protected String key;
+  protected String fromKey;
 
 
-    /**
-     * Location of the configuration file to be edited; required.
-     */
-    public void setKey(String key)
-    {
-        this.key = key;
+  /**
+  * Location of the configuration file to be edited; required.
+  */
+  public void setKey(String key) {
+    this.key = key;
+  }
+
+  /**
+  * Location of the configuration file to be patched from; optional.
+  */
+  public void setFromKey(String key) {
+    this.fromKey = key;
+  }
+
+  protected void readSourceConfigurable() throws Exception {
+    // deal with a registry key to patch from
+    if (this.fromKey != null) {
+      try {
+          Debug.log("Loading from registry: " + this.fromKey);
+          fromConfigurable = new Reg(this.fromKey);
+      } catch (IOException ioe) {
+        throw new Exception(ioe.toString());
+      }
+    }
+  }
+
+  protected void readConfigurable() throws Exception {
+    if (this.key != null) {
+      try {
+          Debug.log("Loading from registry: " + this.key);
+          configurable = new Reg(this.key);
+      } catch (IOException ioe) {
+        throw new Exception(ioe.toString());
+      }
+    }
+  }
+
+  protected void writeConfigurable() throws Exception {
+
+    if (configurable == null) {
+        Debug.log("Registry key " +
+          this.key +
+          " did not exist and is not allowed to be created");
+      return;
     }
 
-    /**
-     * Location of the configuration file to be patched from; optional.
-     */
-    public void setFromKey(String key)
-    {
-        this.fromKey = key;
+    try {
+      Reg r = (Reg) configurable;
+      r.store();
+    } catch (IOException ioe) {
+      throw new Exception(ioe);
     }
+  }
 
-    public static class Entry extends SingleConfigurableTask.Entry
-    {
-
-        public void setKey(String key)
-        {
-            // Name of the root key in registry
-            this.section = key;
-        }
-
-        public void setValue(String value)
-        {
-            // Name of the registry value ("value" is a key in registry meaning)
-            this.key = value;
-        }
-
-        /**
-         * Registry data
-         */
-        public void setData(String data)
-        {
-            this.value = data;
-        }
-
+  protected void checkAttributes() throws Exception {
+    if (this.key == null) {
+      throw new Exception("Key attribute must be set");
     }
+  }
 
-    protected void readSourceConfigurable() throws Exception
-    {
-        // deal with a registry key to patch from
-        if (this.fromKey != null)
-        {
-            try
-            {
-                Debug.log("Loading from registry: " + this.fromKey);
-                fromConfigurable = new Reg(this.fromKey);
-            }
-            catch (IOException ioe)
-            {
-                throw new Exception(ioe.toString());
-            }
-        }
-    }
-
-    protected void readConfigurable() throws Exception
-    {
-        if (this.key != null)
-        {
-            try
-            {
-                Debug.log("Loading from registry: " + this.key);
-                configurable = new Reg(this.key);
-            }
-            catch (IOException ioe)
-            {
-                throw new Exception(ioe.toString());
-            }
-        }
-    }
-
-    protected void writeConfigurable() throws Exception
-    {
-
-        if (configurable == null)
-        {
-            Debug.log("Registry key " +
-                    this.key +
-                    " did not exist and is not allowed to be created");
-            return;
-        }
-
-        try
-        {
-            Reg r = (Reg) configurable;
-            r.store();
-        }
-        catch (IOException ioe)
-        {
-            throw new Exception(ioe);
-        }
-    }
-
-    protected void checkAttributes() throws Exception
-    {
-        if (this.key == null)
-        {
-            throw new Exception("Key attribute must be set");
-        }
-    }
-
+  @Override
+  protected Entry filterEntryFromXML(IXMLElement parent, Entry entry)
+  {
+      entry.setSection(parent.getAttribute("key"));
+      entry.setKey(parent.getAttribute("value"));
+      entry.setValue(parent.getAttribute("data"));
+      return entry;
+  }
 }

@@ -37,8 +37,8 @@ public interface Action extends Operation
      * Out of an original element and a second element provided by the patch DOM, applies an
      * operation and modifies the parent node of the result DOM.
      *
-     * @param originalElement     Original element
-     * @param patchElement        Patch element
+     * @param originalElement Original element
+     * @param patchElement Patch element
      * @param outputParentElement Output parent element
      */
     void perform(Element originalElement, Element patchElement, Element outputParentElement)

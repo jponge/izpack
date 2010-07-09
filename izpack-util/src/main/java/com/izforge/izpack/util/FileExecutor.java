@@ -100,7 +100,33 @@ public class FileExecutor
      */
     public static String getExecOutput(String[] aCommandLine)
     {
-        return getExecOutput(aCommandLine, false);
+        return getExecOutput(aCommandLine, null, false);
+
+    }
+
+    /**
+     * Gets the output of the given (console based) commandline
+     *
+     * @param aCommandLine to execute
+     * @param dir the working directory for the execution
+     * @return the result of the command
+     */
+    public static String getExecOutput(String[] aCommandLine, String dir)
+    {
+        return getExecOutput(aCommandLine, dir, false);
+
+    }
+
+    /**
+     * Gets the output of the given (console based) commandline
+     *
+     * @param aCommandLine to execute
+     * @param forceToGetStdOut if true returns stdout
+     * @return the result of the command
+     */
+    public static String getExecOutput(String[] aCommandLine, boolean forceToGetStdOut)
+    {
+        return getExecOutput(aCommandLine, null, forceToGetStdOut);
 
     }
 
@@ -111,13 +137,13 @@ public class FileExecutor
      * @param forceToGetStdOut if true returns stdout
      * @return the result of the command stdout or stderr if exec returns !=0
      */
-    public static String getExecOutput(String[] aCommandLine, boolean forceToGetStdOut)
+    public static String getExecOutput(String[] aCommandLine, String dir, boolean forceToGetStdOut)
     {
         FileExecutor fileExecutor = new FileExecutor();
 
         String[] execOut = new String[2];
 
-        int execResult = fileExecutor.executeCommand(aCommandLine, execOut);
+        int execResult = fileExecutor.executeCommand(aCommandLine, execOut, dir);
 
         if (execResult == 0)
 
@@ -144,6 +170,20 @@ public class FileExecutor
      */
     public int executeCommand(String[] params, String[] output)
     {
+        return executeCommand(params, output, null);
+    }
+
+    /**
+     * Executed a system command and waits for completion.
+     *
+     * @param params system command as string array
+     * @param output contains output of the command index 0 = standard output index 1 = standard
+     *               error
+     * @param dir the working directory for the execution
+     * @return exit status of process
+     */
+    public int executeCommand(String[] params, String[] output, String dir)
+    {
         StringBuffer retval = new StringBuffer();
         retval.append("executeCommand\n");
         if (params != null)
@@ -153,6 +193,10 @@ public class FileExecutor
                 retval.append("\tparams: ").append(param);
                 retval.append("\n");
             }
+        }
+        if (dir != null)
+        {
+            retval.append("working dir: "+dir+"\n");
         }
         Process process = null;
         MonitorInputStream outMonitor = null;
@@ -165,7 +209,16 @@ public class FileExecutor
 
         try
         {
-            // execute command
+            // Resolve ".." and "." in paths which otherwise couldn't be found
+            if (params[0].matches("^.*[\\\\/]+[\\.]+[\\\\/]+.*$"))
+            {
+                params[0] = new File(params[0]).getCanonicalPath();
+            }
+            if (dir != null && dir.matches("^.*[\\\\/]+[\\.]+[\\\\/]+.*$"))
+            {
+                dir = new File(dir).getCanonicalPath();
+            }
+
             process = Runtime.getRuntime().exec(params);
 
             boolean isConsole = false;// TODO: impl from xml <execute

@@ -32,9 +32,14 @@ public final class StandardActions
 {
 
     /**
+     * {@link FullMergeAction}.
+     */
+    public static final FullMergeAction FULLMERGE = new FullMergeAction();
+
+    /**
      * {@link OrderedMergeAction}.
      */
-    public static final OrderedMergeAction MERGE = new OrderedMergeAction();
+    public static final OrderedMergeAction ORDEREDMERGE = new OrderedMergeAction();
 
     /**
      * {@link ReplaceAction}
@@ -45,6 +50,11 @@ public final class StandardActions
      * {@link OverrideAction}
      */
     public static final OverrideAction OVERRIDE = new OverrideAction();
+
+    /**
+     * {@link KeepAction}
+     */
+    public static final KeepAction KEEP = new KeepAction();
 
     /**
      * {@link CompleteAction}

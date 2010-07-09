@@ -20,46 +20,35 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.xmlmerge;
+package com.izforge.izpack.util.xmlmerge.matcher;
 
 /**
- * Thrown when XML parsing fails.
- *
- * @author Laurent Bovet (LBO)
- * @author Alex Mathey (AMA)
+ * Compares the qualified name of elements, their attributes and their attribute values.
  */
-public class ParseException extends AbstractXmlMergeException
+public class AttributeMatcher extends AbstractAttributeMatcher
 {
-
-    /**
-     * Constructor with message.
-     *
-     * @param message Exception message
-     */
-    public ParseException(String message)
+    @Override
+    protected boolean ignoreCaseAttributeName()
     {
-        super(message);
+        return true;
     }
 
-    /**
-     * Constructor with message and cause.
-     *
-     * @param message Exception message
-     * @param cause Exception cause
-     */
-    public ParseException(String message, Throwable cause)
+    @Override
+    protected boolean ignoreCaseAttributeValue()
     {
-        super(message, cause);
+        return true;
     }
 
-    /**
-     * Constructor with cause.
-     *
-     * @param cause Exception cause
-     */
-    public ParseException(Throwable cause)
+    @Override
+    protected String getAttributeName()
     {
-        super(cause);
+        // check all attributes
+        return null;
     }
 
+    @Override
+    protected boolean ignoreCaseElementName()
+    {
+        return true;
+    }
 }

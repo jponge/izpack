@@ -21,15 +21,25 @@
 
 package com.izforge.izpack.util.config;
 
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.file.types.EnumeratedAttribute;
-import org.ini4j.*;
-
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import org.ini4j.BasicProfile;
+import org.ini4j.Config;
+import org.ini4j.Configurable;
+import org.ini4j.Ini;
+import org.ini4j.OptionMap;
+import org.ini4j.Options;
+import org.ini4j.Reg;
+
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.config.SingleConfigurableTask.Entry.LookupType;
+import com.izforge.izpack.util.config.SingleConfigurableTask.Entry.Operation;
+import com.izforge.izpack.util.config.SingleConfigurableTask.Entry.Type;
 
 public abstract class SingleConfigurableTask implements ConfigurableTask
 {
@@ -75,7 +85,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
      * configuration.
      *
      * @param preserveValues - true to preserve the values of equal entries from an old
-     *                       configuration
+     * configuration
      */
     public void setPatchPreserveValues(boolean preserveValues)
     {
@@ -112,15 +122,243 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
         readConfigurable();
         readSourceConfigurable();
         patchConfigurable();
-        executeOperation();
+        executeNestedEntries();
         writeConfigurable();
     }
 
-    public Entry createEntry()
+    private String getValueFromOptionMap(OptionMap map, String key, int index)
     {
-        Entry e = new Entry();
-        entries.addElement(e);
-        return e;
+        return (String) (patchResolveVariables ?
+                map.fetch(key, index)
+                : map.get(key, index));
+    }
+
+    private void keepOptions(String key, String fromValue, String lookupValue, LookupType lookupType)
+    {
+        int found = 0;
+
+        for (int i = 0; i < ((Options) configurable).length(key); i++)
+        {
+            if (lookupValue != null)
+            {
+                String origValue = getValueFromOptionMap((OptionMap) configurable, key, i);
+
+                if (origValue != null)
+                {
+                    switch (lookupType)
+                    {
+                        case REGEXP:
+                            if (origValue.matches(lookupValue))
+                            {
+                                // found in patch target and in patch using reqexp value lookup;
+                                // overwrite in each case at the original position
+                                Debug.log("Preserve option file entry \"" + key + "\"");
+                                ((Options) configurable).put(key, fromValue, i);
+                                found++;
+                            }
+                            break;
+
+                        default:
+                            if (origValue.equals(lookupValue))
+                            {
+                                // found in patch target and in patch using plain value lookup;
+                                // overwrite in each case at the original position
+                                ((Options) configurable).put(key, fromValue, i);
+                                found++;
+                            }
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                // found in patch target and in patch;
+                // not looked up by value - overwrite in each case at the original position
+                ((Options) configurable).put(key, fromValue, i);
+                found++;
+            }
+        }
+
+        Debug.log("Patched " + found + " option file entries for key \"" + key + "\" found in original: " + fromValue);
+
+        if (found == 0)
+        {
+            // nothing existing to patch found in patch target
+            // but force preserving of patch entry
+            Debug.log("Add option file entry for \"" + key + "\": " + fromValue);
+            ((Options) configurable).add(key, fromValue);
+        }
+    }
+
+    private void deleteOptions(String key, String lookupValue, LookupType lookupType)
+    {
+        for (int i = 0; i < ((Options) configurable).length(key); i++)
+        {
+            if (lookupValue == null)
+            {
+                String origValue = getValueFromOptionMap((OptionMap) configurable, key, i);
+
+                if (origValue != null)
+                {
+                    switch (lookupType)
+                    {
+                        case REGEXP:
+                            if (origValue.matches(lookupValue))
+                            {
+                                Debug.log("Remove option key \"" + key + "\"");
+                                ((Options) configurable).remove(key, i);
+                                i--;
+                            }
+                            break;
+
+                        default:
+                            if (origValue.equals(lookupValue))
+                            {
+                                Debug.log("Remove option key \"" + key + "\"");
+                                ((Options) configurable).remove(key, i);
+                                i--;
+                            }
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                Debug.log("Remove option key \"" + key + "\"");
+                ((Options) configurable).remove(key);
+                i--;
+            }
+        }
+    }
+
+    private void deleteConfigurableEntry(String section, String key,
+            String lookupValue, LookupType lookupType)
+    throws Exception
+    {
+        if (configurable instanceof Options)
+        {
+            deleteOptions(key, lookupValue, lookupType);
+        }
+        else if (configurable instanceof Ini)
+        {
+            ((Ini) configurable).remove(section, key);
+        }
+        else if (configurable instanceof Reg)
+        {
+            ((Reg) configurable).remove(section, key);
+        }
+        else
+        {
+            throw new Exception("Unknown configurable type class: "
+                    + configurable.getClass().getName());
+        }
+    }
+
+    private void keepConfigurableValue(String section, String key,
+            String lookupValue, LookupType lookupType)
+    throws Exception
+    {
+        if (fromConfigurable != null)
+        {
+            if (configurable instanceof Options)
+            {
+                for (int i = 0; i < ((Options) fromConfigurable).length(key); i++)
+                {
+                    String fromValue = getValueFromOptionMap((OptionMap) fromConfigurable, key, i);
+                    if (fromValue != null)
+                    {
+                        if (lookupValue != null)
+                        {
+                            switch (lookupType)
+                            {
+                                case REGEXP:
+                                    if (fromValue.matches(lookupValue))
+                                    {
+                                        keepOptions(key, fromValue, lookupValue, lookupType);
+                                    }
+                                    break;
+
+                                default:
+                                    if (!fromValue.equals(lookupValue))
+                                    {
+                                        keepOptions(key, fromValue, lookupValue, lookupType);
+                                    }
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            keepOptions(key, fromValue, lookupValue, lookupType);
+                        }
+                    }
+                }
+            }
+            else if (configurable instanceof Ini)
+            {
+                Ini.Section fromSection = (Ini.Section) ((Ini) fromConfigurable).get(section);
+                Ini.Section toSection = (Ini.Section) ((Ini) configurable).get(section);
+                if (fromSection != null)
+                {
+                    if (toSection == null)
+                    {
+                        Debug.log("Adding new INI section [" + section + "]");
+                        toSection = ((Ini) configurable).add(section);
+                    }
+                    if (toSection != null)
+                    {
+                        String fromValue = (String) (patchResolveVariables ? fromSection
+                                .fetch(key) : fromSection.get(key));
+                        if (!toSection.containsKey(key))
+                        {
+                            Debug.log("Preserve INI file entry \"" + key
+                                    + "\" in section [" + section + "]: " + fromValue);
+                            toSection.add(key, fromValue);
+                        }
+                        else
+                        {
+                            Debug.log("Preserve INI file entry value for key \"" + key
+                                    + "\" in section [" + section + "]: " + fromValue);
+                            toSection.put(key, fromValue);
+                        }
+                    }
+                }
+            }
+            else if (configurable instanceof Reg)
+            {
+                Reg.Key fromRegKey = (Reg.Key) ((Reg) fromConfigurable).get(section);
+                Reg.Key toRegKey = (Reg.Key) ((Reg) configurable).get(section);
+                if (fromRegKey != null)
+                {
+                    if (toRegKey == null)
+                    {
+                        Debug.log("Adding new registry root key " + section);
+                        toRegKey = ((Reg) configurable).add(section);
+                    }
+                    if (toRegKey != null)
+                    {
+                        String fromValue = (String) (patchResolveVariables ? fromRegKey
+                                .fetch(key) : fromRegKey.get(key));
+                        if (!toRegKey.containsKey(key))
+                        {
+                            Debug.log("Preserve registry value " + key + " under root key "
+                                    + section + ": " + fromValue);
+                            toRegKey.add(key, fromValue);
+                        }
+                        else
+                        {
+                            Debug.log("Preserve registry data for value " + key
+                                    + " in root key " + section + ": " + fromValue);
+                            toRegKey.put(key, fromValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("Unknown configurable type class: "
+                        + configurable.getClass().getName());
+            }
+        }
     }
 
     private void patchConfigurable() throws Exception
@@ -133,9 +371,8 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
             {
                 toKeySet = ((Options) configurable).keySet();
                 fromKeySet = ((Options) fromConfigurable).keySet();
-                for (Iterator<String> iterator = fromKeySet.iterator(); iterator.hasNext();)
+                for (String key : fromKeySet)
                 {
-                    String key = iterator.next();
                     String fromValue = (String) (patchResolveVariables ? ((Options) fromConfigurable)
                             .fetch(key)
                             : ((Options) fromConfigurable).get(key));
@@ -156,9 +393,8 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
             {
                 Set<String> sectionKeySet = ((Ini) configurable).keySet();
                 Set<String> fromSectionKeySet = ((Ini) fromConfigurable).keySet();
-                for (Iterator<String> iterator = fromSectionKeySet.iterator(); iterator.hasNext();)
+                for (String fromSectionKey : fromSectionKeySet)
                 {
-                    String fromSectionKey = iterator.next();
                     if (sectionKeySet.contains(fromSectionKey))
                     {
                         Ini.Section fromSection = (Ini.Section) ((Ini) fromConfigurable)
@@ -167,14 +403,9 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                                 .get(fromSectionKey);
                         fromKeySet = fromSection.keySet();
                         toKeySet = null;
-                        if (toSection != null)
+                        if (toSection != null) toKeySet = toSection.keySet();
+                        for (String fromKey : fromKeySet)
                         {
-                            toKeySet = toSection.keySet();
-                        }
-                        for (Iterator<String> iterator2 = fromKeySet.iterator(); iterator2
-                                .hasNext();)
-                        {
-                            String fromKey = (String) iterator2.next();
                             if (toSection == null)
                             {
                                 Debug.log("Adding new INI section [" + fromSectionKey + "]");
@@ -202,23 +433,17 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
             {
                 Set<String> rootKeySet = ((Reg) configurable).keySet();
                 Set<String> fromRootKeySet = ((Reg) fromConfigurable).keySet();
-                for (Iterator<String> iterator = fromRootKeySet.iterator(); iterator.hasNext();)
+                for (String fromRootKey : fromRootKeySet)
                 {
-                    String fromRootKey = iterator.next();
                     if (rootKeySet.contains(fromRootKey))
                     {
                         Reg.Key fromRegKey = ((Reg) fromConfigurable).get(fromRootKey);
                         Reg.Key toRegKey = ((Reg) configurable).get(fromRootKey);
                         fromKeySet = fromRegKey.keySet();
                         toKeySet = null;
-                        if (toRegKey != null)
+                        if (toRegKey != null) toKeySet = toRegKey.keySet();
+                        for (String fromKey : fromKeySet)
                         {
-                            toKeySet = toRegKey.keySet();
-                        }
-                        for (Iterator<String> iterator2 = fromKeySet.iterator(); iterator2
-                                .hasNext();)
-                        {
-                            String fromKey = (String) iterator2.next();
                             if (toRegKey == null)
                             {
                                 Debug.log("Adding new registry root key " + fromRootKey);
@@ -250,12 +475,21 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
         }
     }
 
-    private void executeOperation() throws Exception
+    private void executeNestedEntries() throws Exception
     {
-        for (Enumeration<Entry> e = entries.elements(); e.hasMoreElements();)
+        for (Entry entry : entries)
         {
-            Entry entry = (Entry) e.nextElement();
-            entry.executeOn(configurable);
+            switch (entry.getOperation())
+            {
+            case REMOVE:
+                deleteConfigurableEntry(entry.getSection(), entry.getKey(), entry.getValue(), entry.getLookupType());
+                break;
+            case KEEP:
+                keepConfigurableValue(entry.getSection(), entry.getKey(), entry.getValue(), entry.getLookupType());
+                break;
+            default:
+                entry.executeOn(configurable);
+            }
         }
     }
 
@@ -266,6 +500,47 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
     protected abstract void readConfigurable() throws Exception;
 
     protected abstract void writeConfigurable() throws Exception;
+
+    public void readFromXML(IXMLElement parent)
+    {
+        Iterator<IXMLElement> iter = parent.getChildrenNamed("entry").iterator();
+        while (iter.hasNext())
+        {
+            IXMLElement el = iter.next();
+            entries.addElement(createEntryFromXML(el));
+        }
+    }
+
+    protected Entry createEntryFromXML(IXMLElement parent)
+    {
+        Entry e = new Entry();
+        String attrib = parent.getAttribute("dataType");
+        if (attrib != null)
+        {
+            e.setType(Type.getFromAttribute(attrib));
+        }
+        attrib = parent.getAttribute("lookupType");
+        if (attrib != null)
+        {
+            e.setLookupType(LookupType.getFromAttribute(attrib));
+        }
+        attrib = parent.getAttribute("operation");
+        if (attrib != null)
+        {
+            e.setOperation(Operation.getFromAttribute(attrib));
+        }
+        attrib = parent.getAttribute("unit");
+        if (attrib != null)
+        {
+            e.setUnit(Unit.getFromAttribute(attrib));
+        }
+        e.setDefault(parent.getAttribute("default"));
+        e.setPattern(parent.getAttribute("pattern"));
+        filterEntryFromXML(parent, e);
+        return e;
+    }
+
+    protected abstract Entry filterEntryFromXML(IXMLElement parent, Entry entry);
 
     /**
      * Instance of this class represents nested elements of a task configuration file.
@@ -287,17 +562,36 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
 
         private boolean resolveVariables = false;
 
-        private int type = Type.STRING_TYPE;
+        private LookupType lookupType = LookupType.PLAIN;
 
-        private int operation = Operation.EQUALS_OPER;
+        private Type type = Type.STRING;
+
+        private Operation operation = Operation.SET;
 
         private String defaultValue = null;
 
-        private String newValue = null;
-
         private String pattern = null;
 
-        private int field = Calendar.DATE;
+        private Unit unit = Unit.DAY;
+
+
+        public String getSection()
+        {
+            return section;
+        }
+
+        /**
+         * Name of s INI File section
+         */
+        public void setSection(String section)
+        {
+            this.section = section;
+        }
+
+        public String getKey()
+        {
+            return key;
+        }
 
         /**
          * Name of the key/value pair
@@ -326,21 +620,50 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
             this.resolveVariables = resolve;
         }
 
+        public String getValue()
+        {
+            return value;
+        }
+
+        public LookupType getLookupType()
+        {
+            return lookupType;
+        }
+
+
+        public Type getType()
+        {
+            return type;
+        }
+
+        public Operation getOperation()
+        {
+            return operation;
+        }
+
         /**
          * operation to apply. &quot;+&quot; or &quot;=&quot; (default) for all datatypes;
          * &quot;-&quot; for date and int only)\.
          */
-        public void setOperation(Operation value)
+        public void setOperation(Operation operation)
         {
-            this.operation = Operation.toOperation(value.getValue());
+            this.operation = operation;
         }
 
         /**
          * Regard the value as : int, date or string (default)
          */
-        public void setType(Type value)
+        public void setType(Type type)
         {
-            this.type = Type.toType(value.getValue());
+            this.type = type;
+        }
+
+        /**
+         * Regard the value as : regexp | plain (default)
+         */
+        public void setLookupType(LookupType lookupType)
+        {
+            this.lookupType = lookupType;
         }
 
         /**
@@ -377,60 +700,89 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
          */
         public void setUnit(Unit unit)
         {
-            field = unit.getCalendarField();
+            this.unit = unit;
         }
 
-        protected void executeOn(Configurable configurable) throws Exception
+        private void executeOnOptions(Options configurable) throws Exception
         {
-            checkParameters();
+            List<String> values = configurable.getAll(key);
+            String newValue = null;
+            boolean contains = false;
+            if (values != null)
+            {
+                for (int i = 0; i < values.toArray().length; i++)
+                {
+                    String origValue = getValueFromOptions(configurable, i);
+                    newValue = execute(origValue);
 
-            // type may be null because it wasn't set
-            String oldValue = null;
-            if (configurable instanceof Options)
-            {
-                oldValue = (String) (resolveVariables ? ((Options) configurable).fetch(key)
-                        : ((Options) configurable).get(key));
+                    if (origValue != null && value != null)
+                    {
+                        switch (lookupType)
+                        {
+                            case REGEXP:
+                                if (origValue.matches(value))
+                                {
+                                    Debug.log("Set option value for key \"" + key + "\": \""
+                                            + newValue + "\"");
+                                    configurable.put(key, newValue, i);
+                                    contains = true;
+                                }
+                                break;
+
+                            default:
+                                if (origValue.equals(value))
+                                {
+                                    Debug.log("Set option value for key \"" + key + "\": \""
+                                            + newValue + "\"");
+                                    configurable.put(key, newValue, i);
+                                    contains = true;
+                                }
+                                break;
+                        }
+                    }
+                }
             }
-            else if (configurable instanceof Ini)
+            if (!contains)
             {
-                oldValue = resolveVariables ? ((Ini) configurable).fetch(section, key)
-                        : ((Ini) configurable).get(section, key);
-            }
-            else if (configurable instanceof Reg)
-            {
-                oldValue = resolveVariables ? ((Reg) configurable).fetch(section, key)
-                        : ((Reg) configurable).get(section, key);
-            }
-            else
-            {
-                throw new Exception("Unknown configurable type class: "
-                        + configurable.getClass().getName());
+                Debug.log("Set option value for key \"" + key + "\": \"" + newValue + "\"");
+                configurable.put(key, newValue);
             }
 
-            try
+        }
+
+        private void executeOnProfile(BasicProfile profile) throws Exception
+        {
+            String oldValue = getValueFromProfile(profile);
+            profile.put(section, key, execute(oldValue));
+        }
+
+        private String getValueFromOptions(OptionMap map, int index)
+        {
+            return resolveVariables ? map.fetch(key, index) : map.get(key, index);
+        }
+
+        private String getValueFromProfile(BasicProfile profile)
+        {
+            return resolveVariables ? profile.fetch(section, key) : profile.get(section, key);
+        }
+
+        private String execute(String oldValue) throws Exception
+        {
+            String newValue = null;
+
+            switch (type)
             {
-                if (type == Type.INTEGER_TYPE)
-                {
-                    executeInteger(oldValue);
-                }
-                else if (type == Type.DATE_TYPE)
-                {
-                    executeDate(oldValue);
-                }
-                else if (type == Type.STRING_TYPE)
-                {
-                    executeString(oldValue);
-                }
-                else
-                {
-                    throw new Exception("Unknown operation type: " + type);
-                }
-            }
-            catch (NullPointerException npe)
-            {
-                // Default to string type
-                // which means do nothing
-                npe.printStackTrace();
+            case INTEGER:
+                newValue = executeInteger(oldValue);
+                break;
+            case DATE:
+                newValue = executeDate(oldValue);
+                break;
+            case STRING:
+                newValue = executeString(oldValue);
+                break;
+            default:
+                throw new Exception("Unknown operation type: " + type);
             }
 
             if (newValue == null)
@@ -438,18 +790,24 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                 newValue = "";
             }
 
-            // Insert as a string by default
+            return newValue;
+        }
+
+        protected void executeOn(Configurable configurable) throws Exception
+        {
+            checkParameters();
+
             if (configurable instanceof Options)
             {
-                ((Options) configurable).put(key, newValue);
+                executeOnOptions((Options) configurable);
             }
             else if (configurable instanceof Ini)
             {
-                ((Ini) configurable).put(section, key, newValue);
+                executeOnProfile((BasicProfile) configurable);
             }
             else if (configurable instanceof Reg)
             {
-                ((Reg) configurable).put(section, key, newValue);
+                executeOnProfile((BasicProfile) configurable);
             }
             else
             {
@@ -462,9 +820,9 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
          * Handle operations for type <code>date</code>.
          *
          * @param oldValue the current value read from the configuration file or <code>null</code>
-         *                 if the <code>key</code> was not contained in the configuration file.
+         * if the <code>key</code> was not contained in the configuration file.
          */
-        private void executeDate(String oldValue) throws Exception
+        private String executeDate(String oldValue) throws Exception
         {
             Calendar currentValue = Calendar.getInstance();
 
@@ -496,13 +854,13 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                 }
             }
 
-            if (operation != Operation.EQUALS_OPER)
+            if (operation != Operation.SET)
             {
                 int offset = 0;
                 try
                 {
                     offset = Integer.parseInt(value);
-                    if (operation == Operation.DECREMENT_OPER)
+                    if (operation == Operation.DECREMENT)
                     {
                         offset = -1 * offset;
                     }
@@ -511,19 +869,19 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                 {
                     throw new Exception("Value not an integer on " + key);
                 }
-                currentValue.add(field, offset);
+                currentValue.add(unit.getCalendarField(), offset);
             }
 
-            newValue = fmt.format(currentValue.getTime());
+            return fmt.format(currentValue.getTime());
         }
 
         /**
          * Handle operations for type <code>int</code>.
          *
          * @param oldValue the current value read from the configuration file or <code>null</code>
-         *                 if the <code>key</code> was not contained in the configuration file.
+         * if the <code>key</code> was not contained in the configuration file.
          */
-        private void executeInteger(String oldValue) throws Exception
+        private String executeInteger(String oldValue) throws Exception
         {
             int currentValue = DEFAULT_INT_VALUE;
             int newValue = DEFAULT_INT_VALUE;
@@ -551,7 +909,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                 // swallow
             }
 
-            if (operation == Operation.EQUALS_OPER)
+            if (operation == Operation.SET)
             {
                 newValue = currentValue;
             }
@@ -574,26 +932,26 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                     }
                 }
 
-                if (operation == Operation.INCREMENT_OPER)
+                if (operation == Operation.INCREMENT)
                 {
                     newValue = currentValue + operationValue;
                 }
-                else if (operation == Operation.DECREMENT_OPER)
+                else if (operation == Operation.DECREMENT)
                 {
                     newValue = currentValue - operationValue;
                 }
             }
 
-            this.newValue = fmt.format(newValue);
+            return fmt.format(newValue);
         }
 
         /**
          * Handle operations for type <code>string</code>.
          *
          * @param oldValue the current value read from the configuration file or <code>null</code>
-         *                 if the <code>key</code> was not contained in the configuration file.
+         * if the <code>key</code> was not contained in the configuration file.
          */
-        private void executeString(String oldValue) throws Exception
+        private String executeString(String oldValue) throws Exception
         {
             String newValue = DEFAULT_STRING_VALUE;
 
@@ -604,15 +962,16 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                 currentValue = DEFAULT_STRING_VALUE;
             }
 
-            if (operation == Operation.EQUALS_OPER)
+            if (operation == Operation.SET)
             {
                 newValue = currentValue;
             }
-            else if (operation == Operation.INCREMENT_OPER)
+            else if (operation == Operation.INCREMENT)
             {
                 newValue = currentValue + value;
             }
-            this.newValue = newValue;
+
+            return newValue;
         }
 
         /**
@@ -622,32 +981,20 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
          */
         private void checkParameters() throws Exception
         {
-            if (type == Type.STRING_TYPE && operation == Operation.DECREMENT_OPER)
-            {
-                throw new Exception(
-                        "- is not supported for string " + "properties (key: " + key + ")");
-            }
-            if (value == null && defaultValue == null)
-            {
-                throw new Exception(
-                        "\"value\" and/or \"default\" " + "attribute must be specified (key: " + key
-                                + ")");
-            }
-            if (key == null)
-            {
-                throw new Exception("key is mandatory");
-            }
-            if (type == Type.STRING_TYPE && pattern != null)
-            {
-                throw new Exception(
-                        "pattern is not supported for string " + "properties (key: " + key + ")");
-            }
+            if (type == Type.STRING && operation == Operation.DECREMENT) { throw new Exception(
+                    "- is not supported for string " + "properties (key: " + key + ")"); }
+            if (value == null && defaultValue == null) { throw new Exception(
+                    "\"value\" and/or \"default\" " + "attribute must be specified (key: " + key
+                            + ")"); }
+            if (key == null) { throw new Exception("key is mandatory"); }
+            if (type == Type.STRING && pattern != null) { throw new Exception(
+                    "pattern is not supported for string " + "properties (key: " + key + ")"); }
         }
 
         private String getCurrentValue(String oldValue)
         {
             String ret = null;
-            if (operation == Operation.EQUALS_OPER)
+            if (operation == Operation.SET)
             {
                 // If only value is specified, the value is set to it
                 // regardless of its previous value.
@@ -694,98 +1041,141 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
             return ret;
         }
 
-        /**
-         * Enumerated attribute with the values "+", "-", "="
-         */
-        public static class Operation extends EnumeratedAttribute
+        public enum Operation
         {
+            INCREMENT("+"), DECREMENT("-"), SET("="), REMOVE("remove"), KEEP("keep");
 
-            // Property type operations
-            public static final int INCREMENT_OPER = 0;
+            private static Map<String, Operation> lookup;
 
-            public static final int DECREMENT_OPER = 1;
+            private String attribute;
 
-            public static final int EQUALS_OPER = 2;
-
-            public String[] getValues()
+            Operation(String attribute)
             {
-                return new String[]{"+", "-", "="};
+                this.attribute = attribute;
             }
 
-            public static int toOperation(String oper)
+            static
             {
-                if ("+".equals(oper))
+                lookup = new HashMap<String, Operation>();
+                for (Operation operation : EnumSet.allOf(Operation.class))
                 {
-                    return INCREMENT_OPER;
+                    lookup.put(operation.getAttribute(), operation);
                 }
-                else if ("-".equals(oper))
+            }
+
+            public String getAttribute()
+            {
+                return attribute;
+            }
+
+            public static Operation getFromAttribute(String attribute)
+            {
+                if (attribute != null && lookup.containsKey(attribute))
                 {
-                    return DECREMENT_OPER;
+                    return lookup.get(attribute);
                 }
-                return EQUALS_OPER;
+                return null;
             }
         }
 
-        /**
-         * Enumerated attribute with the values "int", "date" and "string".
-         */
-        public static class Type extends EnumeratedAttribute
+        public enum Type
         {
+            INTEGER("int"), DATE("date"), STRING("string");
 
-            // Property types
-            public static final int INTEGER_TYPE = 0;
+            private static Map<String, Type> lookup;
 
-            public static final int DATE_TYPE = 1;
+            private String attribute;
 
-            public static final int STRING_TYPE = 2;
-
-            public String[] getValues()
+            Type(String attribute)
             {
-                return new String[]{"int", "date", "string"};
+                this.attribute = attribute;
             }
 
-            public static int toType(String type)
+            static
             {
-                if ("int".equals(type))
+                lookup = new HashMap<String, Type>();
+                for (Type type : EnumSet.allOf(Type.class))
                 {
-                    return INTEGER_TYPE;
+                    lookup.put(type.getAttribute(), type);
                 }
-                else if ("date".equals(type))
+            }
+
+            public String getAttribute()
+            {
+                return attribute;
+            }
+
+            public static Type getFromAttribute(String attribute)
+            {
+                if (attribute != null && lookup.containsKey(attribute))
                 {
-                    return DATE_TYPE;
+                    return lookup.get(attribute);
                 }
-                return STRING_TYPE;
+                return null;
             }
         }
 
+        public enum LookupType
+        {
+            PLAIN("plain"), REGEXP("regexp");
+
+            private static Map<String, LookupType> lookup;
+
+            private String attribute;
+
+            LookupType(String attribute)
+            {
+                this.attribute = attribute;
+            }
+
+            static
+            {
+                lookup = new HashMap<String, LookupType>();
+                for (LookupType type : EnumSet.allOf(LookupType.class))
+                {
+                    lookup.put(type.getAttribute(), type);
+                }
+            }
+
+            public String getAttribute()
+            {
+                return attribute;
+            }
+
+            public static LookupType getFromAttribute(String attribute)
+            {
+                if (attribute != null && lookup.containsKey(attribute))
+                {
+                    return lookup.get(attribute);
+                }
+                return null;
+            }
+        }
     }
 
-    public static class Unit extends EnumeratedAttribute
+    public enum Unit
     {
+        MILLISECOND("millisecond"), SECOND("second"), MINUTE("minute"), HOUR("hour"),
+        DAY("day"), WEEK("week"), MONTH("month"), YEAR("year");
 
-        private static final String MILLISECOND = "millisecond";
+        private static Map<String, Unit> lookup;
+        private static Hashtable<Unit, Integer> calendarFields;
 
-        private static final String SECOND = "second";
+        private String attribute;
 
-        private static final String MINUTE = "minute";
-
-        private static final String HOUR = "hour";
-
-        private static final String DAY = "day";
-
-        private static final String WEEK = "week";
-
-        private static final String MONTH = "month";
-
-        private static final String YEAR = "year";
-
-        private static final String[] UNITS = {MILLISECOND, SECOND, MINUTE, HOUR, DAY, WEEK,
-                MONTH, YEAR};
-
-        private Hashtable<String, Integer> calendarFields = new Hashtable<String, Integer>();
-
-        public Unit()
+        Unit(String attribute)
         {
+            this.attribute = attribute;
+        }
+
+        static
+        {
+            lookup = new HashMap<String, Unit>();
+            for (Unit unit : EnumSet.allOf(Unit.class))
+            {
+                lookup.put(unit.getAttribute(), unit);
+            }
+            calendarFields = new Hashtable<Unit, Integer>();
             calendarFields.put(MILLISECOND, new Integer(Calendar.MILLISECOND));
             calendarFields.put(SECOND, new Integer(Calendar.SECOND));
             calendarFields.put(MINUTE, new Integer(Calendar.MINUTE));
@@ -796,17 +1186,25 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
             calendarFields.put(YEAR, new Integer(Calendar.YEAR));
         }
 
+        public String getAttribute()
+        {
+            return attribute;
+        }
+
+        public static Unit getFromAttribute(String attribute)
+        {
+            if (attribute != null && lookup.containsKey(attribute))
+            {
+                return lookup.get(attribute);
+            }
+            return null;
+        }
+
         public int getCalendarField()
         {
-            String key = getValue().toLowerCase();
-            Integer i = (Integer) calendarFields.get(key);
+            Integer i = (Integer) calendarFields.get(this);
             return i.intValue();
         }
 
-        public String[] getValues()
-        {
-            return UNITS;
-        }
     }
-
 }

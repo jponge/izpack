@@ -22,20 +22,29 @@
 
 package com.izforge.izpack.util.xmlmerge.action;
 
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.xmlmerge.AbstractXmlMergeException;
-import com.izforge.izpack.util.xmlmerge.Action;
-import com.izforge.izpack.util.xmlmerge.DocumentException;
-import com.izforge.izpack.util.xmlmerge.ElementException;
-import com.wutka.dtd.*;
-import org.jdom.Element;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.jdom.Element;
+
+import com.wutka.dtd.DTD;
+import com.wutka.dtd.DTDAny;
+import com.wutka.dtd.DTDContainer;
+import com.wutka.dtd.DTDElement;
+import com.wutka.dtd.DTDItem;
+import com.wutka.dtd.DTDName;
+import com.wutka.dtd.DTDParser;
+
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.xmlmerge.*;
 
 /**
  * Copy the patch element in the output parent with the correct position according to the DTD

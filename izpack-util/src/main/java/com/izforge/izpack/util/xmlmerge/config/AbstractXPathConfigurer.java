@@ -22,18 +22,14 @@
 
 package com.izforge.izpack.util.xmlmerge.config;
 
-import com.izforge.izpack.util.xmlmerge.*;
-import com.izforge.izpack.util.xmlmerge.action.OrderedMergeAction;
-import com.izforge.izpack.util.xmlmerge.action.StandardActions;
-import com.izforge.izpack.util.xmlmerge.factory.OperationResolver;
-import com.izforge.izpack.util.xmlmerge.factory.XPathOperationFactory;
-import com.izforge.izpack.util.xmlmerge.mapper.IdentityMapper;
-import com.izforge.izpack.util.xmlmerge.mapper.StandardMappers;
-import com.izforge.izpack.util.xmlmerge.matcher.StandardMatchers;
-import com.izforge.izpack.util.xmlmerge.matcher.TagMatcher;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import com.izforge.izpack.util.xmlmerge.*;
+import com.izforge.izpack.util.xmlmerge.action.*;
+import com.izforge.izpack.util.xmlmerge.factory.*;
+import com.izforge.izpack.util.xmlmerge.mapper.*;
+import com.izforge.izpack.util.xmlmerge.matcher.*;
 
 /**
  * Superclass for configurers using XPathOperationFactory.
@@ -62,12 +58,12 @@ public abstract class AbstractXPathConfigurer implements Configurer
     /**
      * Root merge action.
      */
-    MergeAction m_rootMergeAction = new OrderedMergeAction();
+    MergeAction m_rootMergeAction = new FullMergeAction();
 
     /**
      * Default matcher.
      */
-    Matcher m_defaultMatcher = new TagMatcher();
+    Matcher m_defaultMatcher = new AttributeMatcher();
 
     /**
      * Default mapper.
@@ -77,7 +73,7 @@ public abstract class AbstractXPathConfigurer implements Configurer
     /**
      * Default action.
      */
-    Action m_defaultAction = new OrderedMergeAction();
+    Action m_defaultAction = new FullMergeAction();
 
     /**
      * Map associating XPath expressions with matchers.
@@ -141,7 +137,7 @@ public abstract class AbstractXPathConfigurer implements Configurer
     /**
      * Adds a matcher for a given XPath expression.
      *
-     * @param xPath       An XPath expression
+     * @param xPath An XPath expression
      * @param matcherName The name of the matcher to add
      * @throws ConfigurationException If an error occurred during configuration
      */
@@ -153,7 +149,7 @@ public abstract class AbstractXPathConfigurer implements Configurer
     /**
      * Adds an action for a given XPath expression.
      *
-     * @param xPath      An XPath expression
+     * @param xPath An XPath expression
      * @param actionName The name of the action to add
      * @throws ConfigurationException If an error occurred during configuration
      */
@@ -165,7 +161,7 @@ public abstract class AbstractXPathConfigurer implements Configurer
     /**
      * Adds an mapper for a given XPath expression.
      *
-     * @param xPath      An XPath expression
+     * @param xPath An XPath expression
      * @param mapperName The name of the mapper to add
      * @throws ConfigurationException If an error occurred during configuration
      */
