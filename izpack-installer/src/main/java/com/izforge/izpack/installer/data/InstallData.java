@@ -16,8 +16,11 @@ public class InstallData extends AutomatedInstallData
     @Override
     public void setInstallPath(String path)
     {
-        setVariable(INSTALL_PATH, path);
-        setInstallDriveFromPath(path, INSTALL_DRIVE);
+        if (path != null)
+        {
+            setVariable(INSTALL_PATH, path);
+            setInstallDriveFromPath(path, INSTALL_DRIVE);
+        }
     }
 
     @Override

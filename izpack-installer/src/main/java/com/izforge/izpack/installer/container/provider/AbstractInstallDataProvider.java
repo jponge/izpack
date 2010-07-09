@@ -7,7 +7,6 @@ import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.variable.ValueImpl;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
@@ -72,8 +71,13 @@ public abstract class AbstractInstallDataProvider implements Provider {
         }
 
         installdata.setDefaultInstallPath(installPath);
-        // Set install path immediately in unattended installations from a system property
-        installdata.setInstallPath(System.getProperty(AutomatedInstallData.INSTALL_PATH));
+        // Pre-set install path from a system property,
+        // for instance in unattended installations
+        installPath = System.getProperty(AutomatedInstallData.INSTALL_PATH);
+        if (installPath != null)
+        {
+            installdata.setInstallPath(installPath);
+        }
 
 
         // We read the panels order data
