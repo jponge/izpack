@@ -39,7 +39,6 @@ import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.config.*;
 import com.izforge.izpack.util.file.FileNameMapper;
 import com.izforge.izpack.util.file.GlobPatternMapper;
-import com.izforge.izpack.util.file.types.EnumeratedAttribute;
 import com.izforge.izpack.util.file.types.FileSet;
 import com.izforge.izpack.util.file.types.Mapper;
 import com.izforge.izpack.util.helper.SpecHelper;
