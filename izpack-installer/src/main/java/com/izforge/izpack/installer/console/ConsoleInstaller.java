@@ -98,12 +98,6 @@ public class ConsoleInstaller extends InstallerBase
 
     protected void iterateAndPerformAction(String strAction) throws Exception
     {
-        VariableSubstitutor subst = new VariableSubstitutorImpl(this.installdata.getVariables());
-
-        // Get dynamic variables immediately for being able to use them as
-        // variable condition in installerrequirements
-        InstallerBase.refreshDynamicVariables(this.installdata, subst);
-
         if (!checkCondition.checkInstallerRequirements(this))
         {
             System.out.println("[ Console installation FAILED! ]");
@@ -222,7 +216,8 @@ public class ConsoleInstaller extends InstallerBase
 
                 }
 
-                refreshDynamicVariables(this.installdata, subst);
+                refreshDynamicVariables(this.installdata,
+                        new VariableSubstitutorImpl(this.installdata.getVariables()));
             }
 
             if (this.result)
