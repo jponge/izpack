@@ -259,7 +259,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
      * used for temporary storage of references to password groups that have already been read in a
      * given read cycle.
      */
-    private java.util.List passwordGroupsRead = new ArrayList();
+    private java.util.List<PasswordGroup> passwordGroupsRead = new ArrayList<PasswordGroup>();
 
     /**
      * Used to track search fields. Contains SearchField references.
@@ -680,7 +680,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             }
             else
             {
-                if (set != null && !"".equals(set))
+                if (!"".equals(set))
                 {
                     try
                     {
@@ -1251,10 +1251,10 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             result = input.validateField();
             if (result)
             {
-                this.installData.setVariable(field.getAssociatedVariable(), input.getSelectedFile()
-                        .getAbsolutePath());
-                entries.add(new UserInputPanel.TextValuePair(field.getAssociatedVariable(), input
-                        .getSelectedFile().getAbsolutePath()));
+                String selectFileName = input.getSelectedFile().getName().length() != 0 ? input
+                        .getSelectedFile().getAbsolutePath() : "";
+                this.installData.setVariable(field.getAssociatedVariable(), selectFileName);
+                entries.add(new TextValuePair(field.getAssociatedVariable(), selectFileName));
             }
         }
         catch (Exception e)
