@@ -187,12 +187,20 @@ public class ConsoleInstaller extends InstallerBase
                         {
                             bActionResult = consoleHelperInstance.runGeneratePropertiesFile(
                                     this.installdata, this.printWriter);
+                            if (!validatePanel(panel))
+                            {
+                                bActionResult = false;
+                            }
                         }
                         else if (strAction.equals("doInstallFromPropertiesFile")
                                 && bIsConditionFulfilled)
                         {
                             bActionResult = consoleHelperInstance.runConsoleFromProperties(
                                     this.installdata, this.properties);
+                            if (!validatePanel(panel))
+                            {
+                                bActionResult = false;
+                            }
                         }
                         if (!bActionResult)
                         {
