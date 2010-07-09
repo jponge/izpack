@@ -30,7 +30,7 @@ public abstract class AbstractInstallDataProvider implements Provider {
      * The base name of the XML file that specifies the custom langpack. Searched is for the file
      * with the name expanded by _ISO3.
      */
-    protected static final String LANG_FILE_NAME = "CustomLangpack.xml";
+    protected static final String LANG_FILE_NAME = "CustomLangPack.xml";
     protected ResourceManager resourceManager;
     protected VariableSubstitutor variableSubstitutor;
     protected ClassPathCrawler classPathCrawler;
