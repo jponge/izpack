@@ -28,6 +28,7 @@ import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.DynamicVariableSubstitutor;
+import com.izforge.izpack.util.Debug;
 
 import java.util.Arrays;
 import java.util.List;
@@ -70,34 +71,37 @@ public abstract class InstallerBase implements InstallerRequirementDisplay
         RulesEngine rules = installdata.getRules();
 
         LOGGER.info("refreshing dynamic variables");
-        if (dynamicvariables == null)
+        if (dynamicvariables != null)
         {
-            return;
-        }
-
-        for (List<DynamicVariable> dynamicVariableList : dynamicvariables.values())
-        {
-            for (DynamicVariable dynamicVariable : dynamicVariableList)
+            for (String dynvarname : dynamicvariables.keySet())
             {
-                String conditionid = dynamicVariable.getConditionid();
-                if ((conditionid != null) && (conditionid.length() > 0) && !rules.isConditionTrue(conditionid))
+                LOGGER.info("Dynamic variable: " + dynvarname);
+                for (DynamicVariable dynvar : dynamicvariables.get(dynvarname))
                 {
-                    continue;
-                }
-
-                // Add self replacing of previously replaced dynamic variables
-
-                VariableSubstitutor[] newsubstitutors = Arrays.copyOf(substitutors, substitutors.length + 1);
-                newsubstitutors[substitutors.length] = new DynamicVariableSubstitutor(dynamicvariables, rules);
-
-                String newValue = dynamicVariable.evaluate(newsubstitutors);
-                if (newValue != null)
-                {
-                    //Debug.log("dynamic variable " + dynamicVariable.getName() + ": " + newValue);
-                    installdata.getVariables().setProperty(dynamicVariable.getName(), newValue);
+                    boolean refresh = true;
+                    String conditionid = dynvar.getConditionid();
+                    if ((conditionid != null) && (conditionid.length() > 0))
+                    {
+                        if ((rules != null) && !rules.isConditionTrue(conditionid))
+                        {
+                            LOGGER.info("skipped refreshing dynamic variable due to unmet condition " + conditionid);
+                            refresh = false;
+                        }
+                    }
+                    if (refresh)
+                    {
+                        String newValue = dynvar.evaluate(substitutors);
+                        if (newValue != null) {
+                            LOGGER.info("dynamic variable " + dynvar.getName() + ": " + newValue);
+                            installdata.getVariables().setProperty(dynvar.getName(), newValue);
+                        } else {
+                            LOGGER.info("dynamic variable " + dynvar.getName() + " unchanged: " + dynvar.getValue());
+                        }
+                    }
                 }
             }
         }
+
     }
 
 }
