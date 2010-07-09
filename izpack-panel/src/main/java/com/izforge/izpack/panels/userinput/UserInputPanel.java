@@ -36,7 +36,8 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.core.rules.process.VariableExistenceCondition;
+import com.izforge.izpack.core.rules.process.ExistsCondition;
+import com.izforge.izpack.core.rules.process.ExistsCondition.ContentType;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.TwoColumnConstraints;
@@ -330,10 +331,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     {
         if (variable != null)
         {
-            VariableExistenceCondition variableCondition = new VariableExistenceCondition(variable);
-            variableCondition.setId("izpack.input." + variable);
-            variableCondition.setInstalldata(this.installData);
-            rules.addCondition(variableCondition);
+            ExistsCondition existsCondition = new ExistsCondition();
+            existsCondition.setContentType(ContentType.VARIABLE);
+            existsCondition.setContent(variable);
+            existsCondition.setId("izpack.input." + variable);
+            existsCondition.setInstalldata(this.installData);
+            rules.addCondition(existsCondition);
         }
     }
 

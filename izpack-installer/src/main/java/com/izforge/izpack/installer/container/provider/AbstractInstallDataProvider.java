@@ -7,6 +7,7 @@ import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.variable.ValueImpl;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
@@ -301,8 +302,18 @@ public abstract class AbstractInstallDataProvider implements Provider {
         try {
             InputStream in = resourceManager.getInputStream("dynvariables");
             ObjectInputStream objIn = new ObjectInputStream(in);
-            automatedInstallData.setDynamicvariables((Map<String, List<DynamicVariable>>) objIn.readObject());
+            Map<String, List<DynamicVariable>> dynamicvariables = (Map<String, List<DynamicVariable>>) objIn.readObject();
             objIn.close();
+            // Initialize to prepare variable substition on several attributes
+            for (List<DynamicVariable> dynVarList : dynamicvariables.values())
+            {
+                for (DynamicVariable dynVar : dynVarList)
+                {
+                    Value value = dynVar.getValue();
+                    value.setInstallData(automatedInstallData);
+                }
+            }
+            automatedInstallData.setDynamicvariables(dynamicvariables);
         }
         catch (Exception e) {
             Debug.trace("Cannot find optional dynamic variables");

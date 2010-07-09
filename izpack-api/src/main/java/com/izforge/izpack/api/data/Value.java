@@ -33,4 +33,8 @@ public interface Value
     public abstract String resolve(VariableSubstitutor... substitutors) throws Exception;
 
     public String resolve(RegularExpressionFilter regexp, VariableSubstitutor... substitutors) throws Exception;
+
+    public AutomatedInstallData getInstallData();
+
+    public void setInstallData(AutomatedInstallData installData);
 }

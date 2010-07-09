@@ -77,11 +77,13 @@ public abstract class ValueImpl implements Value
         return newValue;
     }
 
+    @Override
     public AutomatedInstallData getInstallData()
     {
         return installData;
     }
 
+    @Override
     public void setInstallData(AutomatedInstallData installData)
     {
         this.installData = installData;
