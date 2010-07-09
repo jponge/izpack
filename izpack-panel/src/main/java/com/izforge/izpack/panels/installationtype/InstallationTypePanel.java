@@ -21,12 +21,12 @@
 
 package com.izforge.izpack.panels.installationtype;
 
-import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Debug;
 
 import javax.swing.*;
@@ -112,7 +112,7 @@ public class InstallationTypePanel extends IzPanel implements ActionListener
         }
         /*
         if (normalinstall.isSelected()) {
-            
+
         }
         else {
         } */

@@ -20,10 +20,10 @@ package com.izforge.izpack.test;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.test.junit.PicoRunner;
 import org.hamcrest.Matcher;

@@ -1,10 +1,11 @@
 package org.codehaus.izpack.test.provider;
 
-import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.GUIPrefs;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.installer.data.GUIInstallData;
+
 import org.picocontainer.injectors.Provider;
 
 import java.util.Properties;

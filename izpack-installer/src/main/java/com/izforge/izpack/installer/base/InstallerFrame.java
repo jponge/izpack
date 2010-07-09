@@ -25,7 +25,6 @@ package com.izforge.izpack.installer.base;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLWriter;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
-import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.ResourceManager;
@@ -38,6 +37,7 @@ import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.gui.log.Log;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.debugger.Debugger;
@@ -1795,7 +1795,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         this.helpButton.setVisible(show);
     }
 
-    private void refreshDynamicVariables()
+    public void refreshDynamicVariables()
     {
         try
         {

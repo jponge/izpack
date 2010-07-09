@@ -1,10 +1,9 @@
 package com.izforge.izpack.integration;
 
 import com.izforge.izpack.api.GuiId;
-import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.installer.base.InstallerController;
 import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.data.UninstallData;
+import com.izforge.izpack.installer.data.*;
 import com.izforge.izpack.installer.language.LanguageDialog;
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.fixture.DialogFixture;

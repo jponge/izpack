@@ -19,24 +19,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Updated by Fabrice Mirabile the 06/01/2006 
+ * Updated by Fabrice Mirabile the 06/01/2006
  *
  */
 
 package com.izforge.izpack.panels.selectprinter;
 
-import com.izforge.izpack.api.data.GUIInstallData;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import com.izforge.izpack.installer.data.GUIInstallData;
 
 /**
  * The SelectPrinter panel class.

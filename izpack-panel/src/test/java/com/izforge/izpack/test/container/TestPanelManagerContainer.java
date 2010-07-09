@@ -1,14 +1,15 @@
 package com.izforge.izpack.test.container;
 
+import org.mockito.Mockito;
+import org.picocontainer.MutablePicoContainer;
+
 import com.izforge.izpack.api.container.BindeableContainer;
-import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.MergeManagerImpl;
-import org.mockito.Mockito;
-import org.picocontainer.MutablePicoContainer;
 
 /**
  * Container for panel manager

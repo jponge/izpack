@@ -69,7 +69,10 @@ public abstract class AbstractInstallDataProvider implements Provider {
             installPath = IoHelper.translatePath(dir + info.getInstallationSubPath(),
                     variableSubstitutor);
         }
-        installdata.setInstallPath(installPath);
+
+        installdata.setDefaultInstallPath(installPath);
+        // Set install path immediately in unattended installations from a system property
+        installdata.setInstallPath(System.getProperty(AutomatedInstallData.INSTALL_PATH));
 
 
         // We read the panels order data

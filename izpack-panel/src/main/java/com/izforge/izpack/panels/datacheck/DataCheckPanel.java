@@ -21,18 +21,18 @@
  * This panel written by Hal Vaughan
  * http://thresholddigital.com
  * hal@thresholddigital.com
- * 
+ *
  * And updated by Fabrice Mirabile
  * miraodb@hotmail.com
  */
 
 package com.izforge.izpack.panels.datacheck;
 
-import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
 
 import javax.swing.*;
 import java.util.Enumeration;
@@ -78,7 +78,7 @@ public class DataCheckPanel extends IzPanel
         String sInfo = "Debugging installDataGUI.  All GUIInstallData variables and all packs (selected packs are marked).";
         BoxLayout bLayout = new BoxLayout(this, BoxLayout.Y_AXIS);
         setLayout(bLayout);
-//		setLayout(new GridLayout(3,1));
+//        setLayout(new GridLayout(3,1));
         JLabel lInfo = new JLabel(sInfo);
         add(lInfo);
         staticText = new JEditorPane();

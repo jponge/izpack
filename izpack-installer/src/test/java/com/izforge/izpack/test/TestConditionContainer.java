@@ -1,17 +1,18 @@
 package com.izforge.izpack.test;
 
-import com.izforge.izpack.api.data.GUIInstallData;
+import java.util.HashMap;
+import java.util.Properties;
+
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.parameters.ComponentParameter;
+
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.parameters.ComponentParameter;
-
-import java.util.HashMap;
-import java.util.Properties;
 
 /**
  * Container for condition tests

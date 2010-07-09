@@ -28,17 +28,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Vector;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
@@ -47,13 +37,13 @@ import javax.swing.event.ListSelectionListener;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.GUIInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.MultiLineLabel;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;
@@ -67,7 +57,7 @@ import com.izforge.izpack.util.unix.UnixHelper;
  * shortcuts.
  * <p/>
  * Use LateShortcutInstallListener to create the Shortcuts after the Files have been installed.
- * 
+ *
  * @version $Revision$
  */
 public class ShortcutPanel extends IzPanel implements ActionListener, ListSelectionListener
@@ -190,7 +180,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /**
      * This method represents the ActionListener interface, invoked when an action occurs.
-     * 
+     *
      * @param event the action event.
      */
 
@@ -291,7 +281,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /**
      * Returns true when all selections have valid settings. This indicates that it is legal to
      * proceed to the next panel.
-     * 
+     *
      * @return true if it is legal to proceed to the next panel, otherwise false.
      */
     @Override
@@ -419,7 +409,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /**
      * This method is called by the groupList when the user makes a selection. It updates the
      * content of the programGroup with the result of the selection.
-     * 
+     *
      * @param event the list selection event
      */
 
@@ -450,7 +440,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /**
      * This method creates the UI for this panel.
-     * 
+     *
      * @param programsFolder Directory containing the existing program groups.
      */
     private void buildUI(File programsFolder)
@@ -684,7 +674,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /**
      * Adds the grouplist to the panel
-     * 
+     *
      * @param Entries the entries to display
      * @param ListModel the model to use
      * @param aJList the JList to use

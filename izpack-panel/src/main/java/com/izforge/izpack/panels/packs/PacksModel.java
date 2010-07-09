@@ -1,20 +1,20 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2002 Marcus Wolschon
  * Copyright 2002 Jan Blok
  * Copyright 2004 Gaganis Giorgos
  * Copyright 2006,2007 Dennis Reil
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,13 +24,26 @@
 
 package com.izforge.izpack.panels.packs;
 
-import com.izforge.izpack.api.data.*;
-import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.util.Debug;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.swing.table.AbstractTableModel;
-import java.io.*;
-import java.util.*;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.PackColor;
+import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.util.Debug;
 
 /**
  * User: Gaganis Giorgos Date: Sep 17, 2004 Time: 8:33:21 AM
@@ -227,7 +240,7 @@ public class PacksModel extends AbstractTableModel
                         }
                         else
                         {
-                            // just do nothing                       
+                            // just do nothing
                         }
                     }
                     else
@@ -532,7 +545,7 @@ public class PacksModel extends AbstractTableModel
                 updateConditions();
                 if (packadded)
                 {
-                    // redo 
+                    // redo
                     this.packsToInstall.remove(pack);
                 }
                 else

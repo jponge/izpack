@@ -1,15 +1,15 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,14 +17,16 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.api.data;
+package com.izforge.izpack.installer.data;
 
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
 import java.io.Serializable;
 import java.util.Properties;
+
+import javax.swing.UIManager;
+
+import com.izforge.izpack.api.data.GUIPrefs;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
 /**
  * Encloses information about the install process. This class is implemented as a singleton which
@@ -34,7 +36,7 @@ import java.util.Properties;
  * @author Julien Ponge <julien@izforge.com>
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
-public class GUIInstallData extends AutomatedInstallData implements Serializable
+public class GUIInstallData extends InstallData implements Serializable
 {
 
     private static final long serialVersionUID = 4048793450990024505L;
@@ -49,7 +51,7 @@ public class GUIInstallData extends AutomatedInstallData implements Serializable
      * to allow usage of the meta data stored in the Panel object during construction of
      * the IzPanel. Do not use this member at an other place.
      */
-    public Panel currentPanel;
+    public com.izforge.izpack.api.data.Panel currentPanel;
 
     /**
      * The buttons highlighting color.

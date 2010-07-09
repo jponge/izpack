@@ -34,7 +34,7 @@ import java.util.*;
  * @author Julien Ponge <julien@izforge.com>
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
-public class AutomatedInstallData implements Serializable
+public abstract class AutomatedInstallData implements Serializable
 {
 
     // --- Static members -------------------------------------------------
@@ -152,9 +152,21 @@ public class AutomatedInstallData implements Serializable
      */
     private static AutomatedInstallData self = null;
     /**
-     * The install path.
+     * The install path
      */
     public final static String INSTALL_PATH = "INSTALL_PATH";
+    /**
+     * The default install path
+     */
+    public final static String DEFAULT_INSTALL_PATH = "INSTALL_PATH";
+    /**
+     * The install drive (Windows only, otherwise not set)
+     */
+    public final static String INSTALL_DRIVE = "INSTALL_DRIVE";
+    /**
+     * The default install drive (Windows only, otherwise not set)
+     */
+    public final static String DEFAULT_INSTALL_DRIVE = "INSTALL_DRIVE";
     /**
      * Helps information
      */
@@ -217,7 +229,10 @@ public class AutomatedInstallData implements Serializable
      */
     public void setVariable(String var, String val)
     {
-        getVariables().setProperty(var, val);
+        if (val != null)
+        {
+            getVariables().setProperty(var, val);
+        }
     }
 
     /**
@@ -239,10 +254,7 @@ public class AutomatedInstallData implements Serializable
      * @param path the new install path
      * @see #getInstallPath
      */
-    public void setInstallPath(String path)
-    {
-        setVariable(INSTALL_PATH, path);
-    }
+    public abstract void setInstallPath(String path);
 
     /**
      * Returns the install path.
@@ -250,10 +262,23 @@ public class AutomatedInstallData implements Serializable
      * @return the current install path or null if none set yet
      * @see #setInstallPath
      */
-    public String getInstallPath()
-    {
-        return getVariable(INSTALL_PATH);
-    }
+    public abstract String getInstallPath();
+
+    /**
+     * Sets the default install path.
+     *
+     * @param path the default install path
+     * @see #getDefaultInstallPath
+     */
+    public abstract void setDefaultInstallPath(String path);
+
+    /**
+     * Returns the default install path.
+     *
+     * @return the default install path or null if none set yet
+     * @see #setDefaultInstallPath
+     */
+    public abstract String getDefaultInstallPath();
 
     /**
      * Returns the value of the named attribute.

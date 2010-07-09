@@ -4,6 +4,7 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.CustomDataContainer;
+import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
 
@@ -22,7 +23,7 @@ public class AutomatedInstallDataProvider extends AbstractInstallDataProvider
             this.resourceManager = resourceManager;
             this.variableSubstitutor = variableSubstitutor;
             this.classPathCrawler = classPathCrawler;
-            final AutomatedInstallData automatedInstallData = new AutomatedInstallData(variables, variableSubstitutor);
+            final AutomatedInstallData automatedInstallData = new InstallData(variables, variableSubstitutor);
             // Loads the installation data
             loadInstallData(automatedInstallData);
             // Load custom action data.
@@ -37,7 +38,7 @@ public class AutomatedInstallDataProvider extends AbstractInstallDataProvider
         }
         catch (Exception e)
         {
-            // TODO little workaround to get pico message. Should find a better way in the future            
+            // TODO little workaround to get pico message. Should find a better way in the future
             throw new RuntimeException(e);
         }
     }
