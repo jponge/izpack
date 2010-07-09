@@ -73,7 +73,7 @@ public class RefCondition extends Condition
             }
             if (this.referencedcondition != null)
             {
-                this.referencedcondition.setInstalldata(this.getInstalldata());
+                this.referencedcondition.setInstalldata(this.getInstallData());
             }
             return (this.referencedcondition != null) ? this.referencedcondition.isTrue() : false;
         }

@@ -522,7 +522,7 @@ public class RulesEngineImpl implements RulesEngine
 
     public boolean isConditionTrue(Condition cond)
     {
-        if (cond.getInstalldata() == null)
+        if (cond.getInstallData() == null)
         {
             cond.setInstalldata(installdata);
         }

@@ -66,7 +66,7 @@ public class OrCondition extends Condition
         boolean result = false;
         for (Condition condition : nestedConditions)
         {
-            condition.setInstalldata(this.getInstalldata());
+            condition.setInstalldata(this.getInstallData());
             result = result || condition.isTrue();
         }
         return result;

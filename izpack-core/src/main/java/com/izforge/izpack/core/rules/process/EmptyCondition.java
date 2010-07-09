@@ -35,32 +35,41 @@ import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.util.Debug;
 
 /**
- * This condition checks if a certain variable has a value. If it is not
- * in the current list of variables it will evaluate to false.
- *
- * @author Dennis Reil,<izpack@reil-online.de>
+ * This condition checks if a certain type is empty
  */
-public class ExistsCondition extends Condition
+public class EmptyCondition extends Condition
 {
-    private static final long serialVersionUID = -7424383017678759732L;
+    private static final long serialVersionUID = -4626906695822723409L;
 
     private ContentType contentType;
     private String content;
 
-    public ExistsCondition() {}
-    public ExistsCondition(ContentType contentType) { this.contentType = contentType; }
+    public EmptyCondition() {}
 
     @Override
     public boolean isTrue()
     {
         boolean result = false;
+        VariableSubstitutorBase subst = new VariableSubstitutorImpl(this.getInstallData().getVariables());
         switch (contentType)
         {
+            case STRING:
+                if (this.content == null)
+                {
+                    return true;
+                }
+                String s = subst.substitute(this.content);
+                if (s != null && s.length()==0)
+                {
+                    result = true;
+                }
+                break;
+
             case VARIABLE:
                 if (this.content != null)
                 {
                     String value = this.getInstallData().getVariable(this.content);
-                    if (value != null)
+                    if (value != null && value.length()==0)
                     {
                         result = true;
                     }
@@ -70,9 +79,19 @@ public class ExistsCondition extends Condition
             case FILE:
                 if (this.content != null)
                 {
-                    VariableSubstitutorBase subst = new VariableSubstitutorImpl(this.getInstallData().getVariables());
                     File file = new File(subst.substitute(this.content));
-                    if (file.exists())
+                    if (!file.exists() && file.length()==0)
+                    {
+                        result = true;
+                    }
+                }
+                break;
+
+            case DIR:
+                if (this.content != null)
+                {
+                    File file = new File(subst.substitute(this.content));
+                    if (!file.exists() || file.isDirectory() && file.listFiles().length==0)
                     {
                         result = true;
                     }
@@ -145,7 +164,7 @@ public class ExistsCondition extends Condition
 
     public enum ContentType
     {
-        VARIABLE("variable"), FILE("file");
+        VARIABLE("variable"), STRING("string"), FILE("file"), DIR("dir");
 
         private static Map<String, ContentType> lookup;
 

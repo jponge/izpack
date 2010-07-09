@@ -75,7 +75,7 @@ public class AndCondition extends Condition
         boolean result = true;
         for (Condition condition : nestedConditions)
         {
-            condition.setInstalldata(this.getInstalldata());
+            condition.setInstalldata(this.getInstallData());
             result = result && condition.isTrue();
         }
         return result;

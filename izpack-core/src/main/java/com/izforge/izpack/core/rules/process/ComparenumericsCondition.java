@@ -105,9 +105,9 @@ public class ComparenumericsCondition extends Condition
     public boolean isTrue()
     {
         boolean result = false;
-        if (this.getInstalldata() != null)
+        if (this.getInstallData() != null)
         {
-            String val = this.getInstalldata().getVariable(variablename);
+            String val = this.getInstallData().getVariable(variablename);
             if (val != null)
             {
                 if (operator == null)
@@ -161,7 +161,7 @@ public class ComparenumericsCondition extends Condition
         details.append("</b> on variable <b>");
         details.append(this.variablename);
         details.append(" (current value: ");
-        details.append(this.getInstalldata().getVariable(variablename));
+        details.append(this.getInstallData().getVariable(variablename));
         details.append(")");
         details.append("This value has to be " + this.operator);
         details.append("</b><br/>");

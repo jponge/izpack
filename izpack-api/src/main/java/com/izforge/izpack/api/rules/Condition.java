@@ -67,7 +67,7 @@ public abstract class Condition implements Serializable
 
     public abstract boolean isTrue();
 
-    public AutomatedInstallData getInstalldata()
+    public AutomatedInstallData getInstallData()
     {
         return installdata;
     }

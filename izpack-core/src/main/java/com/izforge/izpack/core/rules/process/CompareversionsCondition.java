@@ -104,9 +104,9 @@ public class CompareversionsCondition extends Condition
     public boolean isTrue()
     {
         boolean result = false;
-        if (this.getInstalldata() != null && operand1 != null && operand2 != null)
+        if (this.getInstallData() != null && operand1 != null && operand2 != null)
         {
-            VariableSubstitutorBase subst = new VariableSubstitutorImpl(this.getInstalldata().getVariables());
+            VariableSubstitutorBase subst = new VariableSubstitutorImpl(this.getInstallData().getVariables());
             String arg1 = subst.substitute(operand1);
             String arg2 = subst.substitute(operand2);
             if (operator == null)

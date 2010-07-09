@@ -92,16 +92,16 @@ public class VariableCondition extends Condition
 
     public boolean isTrue()
     {
-        if (this.getInstalldata() != null)
+        if (this.getInstallData() != null)
         {
-            String val = this.getInstalldata().getVariable(variablename);
+            String val = this.getInstallData().getVariable(variablename);
             if (val == null)
             {
                 return false;
             }
             else
             {
-                VariableSubstitutor subst = new VariableSubstitutorImpl(this.getInstalldata().getVariables());
+                VariableSubstitutor subst = new VariableSubstitutorImpl(this.getInstallData().getVariables());
                 return val.equals(subst.substitute(value));
             }
         }
@@ -124,7 +124,7 @@ public class VariableCondition extends Condition
         details.append("</b> on variable <b>");
         details.append(this.variablename);
         details.append(" (current value: ");
-        details.append(this.getInstalldata().getVariable(variablename));
+        details.append(this.getInstallData().getVariable(variablename));
         details.append(")");
         details.append("</b><br/>");
         return details.toString();

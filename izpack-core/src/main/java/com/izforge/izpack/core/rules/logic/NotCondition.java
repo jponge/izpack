@@ -75,7 +75,7 @@ public class NotCondition extends Condition
             Debug.trace("Operand of condition " + this.getId() + " not initialized correctly.");
             return false;
         }
-        this.operand.setInstalldata(this.getInstalldata());
+        this.operand.setInstalldata(this.getInstallData());
         return !operand.isTrue();
     }
 
