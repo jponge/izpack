@@ -97,7 +97,11 @@ public class DynamicVariableImpl implements DynamicVariable
             }
             if (regexp != null)
             {
-                newValue = regexp.getDefaultValue();
+                for ( VariableSubstitutor substitutor : substitutors )
+                {
+                    newValue = substitutor.substitute(regexp.getDefaultValue(), null);
+                }
+
                 if (this.checkonce)
                 {
                     this.currentValue = newValue;
