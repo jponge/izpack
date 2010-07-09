@@ -236,7 +236,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
             return;
         }
 
-        Debug.trace("******* Executing all " + order + " actions of " + packName + " ...");
+        Debug.trace("******* Executing all " + order + " Ant actions of " + packName + " ...");
         for (AntAction act : actList)
         {
             // Inform progress bar if needed. Works only
