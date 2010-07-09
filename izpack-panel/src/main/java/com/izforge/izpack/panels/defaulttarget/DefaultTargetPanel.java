@@ -70,7 +70,7 @@ public class DefaultTargetPanel extends PathInputPanel
         // Resolve the default for chosenPath
 //        super.panelActivate();
         // Set the default or old value to the path selection panel.
-        pathSelectionPanel.setPath(this.installData.getInstallPath());
+        pathSelectionPanel.setPath(this.installData.getDefaultInstallPath());
         parent.skipPanel();
     }
 

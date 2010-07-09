@@ -404,6 +404,9 @@ public class PathInputPanel extends IzPanel implements ActionListener
                 defaultInstallDir = line;
 
                 defaultInstallDir = variableSubstitutor.substitute(defaultInstallDir);
+            } else
+            {
+                defaultInstallDir = installData.getDefaultInstallPath();
             }
         }
         catch (Exception e)
