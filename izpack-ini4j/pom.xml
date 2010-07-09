@@ -67,6 +67,12 @@
     </developers>
     <dependencies>
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>jetty</groupId>
             <artifactId>jetty</artifactId>
             <version>4.2.2</version>
@@ -90,9 +96,16 @@
             <version>2.0b4</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>net.sf.retrotranslator</groupId>
+            <artifactId>retrotranslator-runtime</artifactId>
+            <version>1.2.4</version>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
     <properties>
-        <upload.url>scp://shell.sourceforge.net/incoming/s/sz/szkiba/uploads</upload.url>
+        <upload.url>scp://shell.sourceforge.net//home/frs/project/i/in/ini4j</upload.url>
+        <jdk14.home>/usr/java/j2sdk1.4.2_19</jdk14.home>
     </properties>
     <profiles>
         <profile>
@@ -114,17 +127,11 @@
                                     <value>windows</value>
                                 </property>
                             </systemProperties>
-                            <includes>
-                                <include>**/org/ini4j/RegTest.java</include>
-                                <!--<include>**/org/ini4j/test/SampleRunnerTest.java</include>
-                            -->
-                            </includes>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>release-candidate</id>
             <activation>
@@ -132,10 +139,10 @@
             </activation>
             <build>
                 <plugins>
-                    <!-- This causes issues on Mac OS X 10.6 (jponge)
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-checkstyle-plugin</artifactId>
+                        <version>2.3</version>
                         <configuration>
                             <configLocation>${basedir}/src/conf/checkstyle.xml</configLocation>
                             <failOnViolation>true</failOnViolation>
@@ -152,7 +159,7 @@
                             </execution>
                         </executions>
                     </plugin>
-                    -->
+
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-pmd-plugin</artifactId>
@@ -178,23 +185,142 @@
                                 <phase>verify</phase>
                                 <goals>
                                     <goal>check</goal>
-                                    <!--                                    <goal>cpd-check</goal> -->
                                 </goals>
                             </execution>
                         </executions>
                     </plugin>
-
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-junit</id>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>junit</groupId>
+                                            <artifactId>junit</artifactId>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.easymock</groupId>
+                                            <artifactId>easymock</artifactId>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>
+                                        </artifactItem>
+                                    </artifactItems>
+                                    <outputDirectory>${project.build.directory}/test-deps</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>retrotranslator-maven-plugin</artifactId>
+                        <dependencies>
+                            <dependency>
+                                <groupId>net.sf.retrotranslator</groupId>
+                                <artifactId>retrotranslator-runtime</artifactId>
+                                <version>1.2.4</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <embed>org.ini4j.jdk14</embed>
+                            <advanced>true</advanced>
+                        </configuration>
                         <executions>
                             <execution>
+                                <id>translate-classes</id>
+                                <goals>
+                                    <goal>translate</goal>
+                                </goals>
+                                <phase>process-classes</phase>
+                                <configuration>
+                                    <destdir>${project.build.directory}/classes-jdk14</destdir>
+                                    <filesets>
+                                        <fileset>
+                                            <directory>${project.build.outputDirectory}</directory>
+                                        </fileset>
+                                    </filesets>
+                                    <embed>org.ini4j.jdk14</embed>
+                                    <advanced>true</advanced>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>translate-test-classes</id>
+                                <goals>
+                                    <goal>translate</goal>
+                                </goals>
+                                <phase>process-test-classes</phase>
+                                <configuration>
+                                    <destdir>${project.build.directory}/test-classes-jdk14</destdir>
+                                    <filesets>
+                                        <fileset>
+                                            <directory>${project.build.testOutputDirectory}</directory>
+                                        </fileset>
+                                        <fileset>
+                                            <directory>${project.build.directory}/test-deps</directory>
+                                        </fileset>
+                                    </filesets>
+                                    <embed>org.ini4j.jdk14</embed>
+                                    <advanced>true</advanced>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>translate-project</id>
                                 <goals>
                                     <goal>translate-project</goal>
                                 </goals>
                                 <configuration>
                                     <classifier>jdk14</classifier>
                                     <attach>true</attach>
+                                    <advanced>true</advanced>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant-junit</artifactId>
+                                <version>1.7.0</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>test</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <tasks if="jdk14.home" unless="skip_jdk14_tests" >
+                                        <junit printsummary="on" haltonfailure="true" showoutput="true" fork="yes" forkMode="perBatch" jvm="${jdk14.home}/bin/java">
+                                            <sysproperty key="java.util.prefs.PreferencesFactory" value="org.ini4j.IniPreferencesFactory"/>
+                                            <sysproperty key="org.ini4j.prefs.user" value="org/ini4j/sample/dwarfs.ini"/>
+                                            <sysproperty key="org.ini4j.prefs.system" value="org/ini4j/sample/dwarfs.ini"/>
+                                            <sysproperty key="basedir" value="${basedir}"/>
+                                            <classpath>
+                                                <pathelement location="${basedir}/target/test-classes-jdk14"/>
+                                                <pathelement location="${basedir}/target/classes-jdk14"/>
+                                            </classpath>
+                                            <formatter type="plain" usefile="false" />
+                                            <batchtest>
+                                                <fileset dir="${basedir}/src/test/java">
+                                                    <include name="**/*Test.java"/>
+                                                    <exclude name="**/SampleRunnerTest.java"/>
+                                                </fileset>
+                                            </batchtest>
+                                        </junit>
+                                    </tasks>
                                 </configuration>
                             </execution>
                         </executions>
@@ -290,11 +416,41 @@
                             </tasks>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>release-notes-changelog-copy</id>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <tasks>
+                                <property name="dir" value="${basedir}/target" />
+                                <copy file="target/ReleaseNotes.vm" tofile="target/ReleaseNotes.txt" />
+                                <copy file="target/ChangeLog.vm" tofile="target/ChangeLog.txt" />
+                            </tasks>
+                        </configuration>
+                    </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                    <encoding>UTF-8</encoding>
+                    <compilerArgument>-Xlint</compilerArgument>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <systemProperties>
@@ -311,12 +467,6 @@
                             <value>org/ini4j/sample/dwarfs.ini</value>
                         </property>
                     </systemProperties>
-                    <excludes>
-                        <!-- Exclude due to registry access - windows only -->
-                        <exclude>**/org/ini4j/RegTest.java</exclude>
-                        <!-- Exclude due to undefined NIO charset name UnicodeLittle on JDK 1.5 Linux-->
-                        <exclude>**/org/ini4j/test/SampleRunnerTest.java</exclude>
-                    </excludes>
                 </configuration>
             </plugin>
 
@@ -367,7 +517,7 @@
                 <artifactId>wagon-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>upload</id>
+                        <id>upload-all</id>
                         <goals>
                             <goal>upload</goal>
                         </goals>
@@ -375,10 +525,34 @@
                         <configuration>
                             <serverId>ini4j-upload</serverId>
                             <fromDir>${project.build.directory}</fromDir>
-                            <includes>
-                                ${project.build.finalName}-src*,${project.build.finalName}-bin*,${project.build.finalName}-all*
-                            </includes>
-                            <url>${upload.url}</url>
+                            <includes>${project.build.finalName}-all.zip,ReleaseNotest.txt</includes>
+                            <url>${upload.url}/ini4j/${project.version}</url>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>upload-src</id>
+                        <goals>
+                            <goal>upload</goal>
+                        </goals>
+                        <phase>deploy</phase>
+                        <configuration>
+                            <serverId>ini4j-upload</serverId>
+                            <fromDir>${project.build.directory}</fromDir>
+                            <includes>${project.build.finalName}-src.zip,ReleaseNotest.txt</includes>
+                            <url>${upload.url}/ini4j-src/${project.version}</url>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>upload-bin</id>
+                        <goals>
+                            <goal>upload</goal>
+                        </goals>
+                        <phase>deploy</phase>
+                        <configuration>
+                            <serverId>ini4j-upload</serverId>
+                            <fromDir>${project.build.directory}</fromDir>
+                            <includes>${project.build.finalName}-bin.zip,ReleaseNotest.txt</includes>
+                            <url>${upload.url}/ini4j-bin/${project.version}</url>
                         </configuration>
                     </execution>
                 </executions>
@@ -407,6 +581,7 @@
                         <exclude>**/*.apt</exclude>
                         <exclude>**/*.reg</exclude>
                         <exclude>**/.htaccess</exclude>
+                        <exclude>**/UTF*.ini</exclude>
                     </excludes>
                     <mapping>
                         <java>SLASHSTAR_STYLE</java>

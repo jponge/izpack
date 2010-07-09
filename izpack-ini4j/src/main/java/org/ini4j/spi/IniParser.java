@@ -52,14 +52,12 @@ public class IniParser extends AbstractParser
         return instance;
     }
 
-    public void parse(InputStream input, IniHandler handler) throws IOException,
-            InvalidFileFormatException
+    public void parse(InputStream input, IniHandler handler) throws IOException, InvalidFileFormatException
     {
         parse(newIniSource(input, handler), handler);
     }
 
-    public void parse(Reader input, IniHandler handler) throws IOException,
-            InvalidFileFormatException
+    public void parse(Reader input, IniHandler handler) throws IOException, InvalidFileFormatException
     {
         parse(newIniSource(input, handler), handler);
     }
@@ -69,8 +67,7 @@ public class IniParser extends AbstractParser
         parse(newIniSource(input, handler), handler);
     }
 
-    private void parse(IniSource source, IniHandler handler) throws IOException,
-            InvalidFileFormatException
+    private void parse(IniSource source, IniHandler handler) throws IOException, InvalidFileFormatException
     {
         handler.startIni();
         String sectionName = null;
@@ -113,8 +110,7 @@ public class IniParser extends AbstractParser
         handler.endIni();
     }
 
-    private String parseSectionLine(String line, IniSource source, IniHandler handler)
-            throws InvalidFileFormatException
+    private String parseSectionLine(String line, IniSource source, IniHandler handler) throws InvalidFileFormatException
     {
         String sectionName;
 

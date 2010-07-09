@@ -34,13 +34,9 @@ import java.net.URL;
 
 public class Options extends BasicOptionMap implements Persistable, Configurable
 {
-
     private static final long serialVersionUID = -1119753444859181822L;
-
     private String _comment;
-
     private Config _config;
-
     private File _file;
 
     public Options()
@@ -84,84 +80,77 @@ public class Options extends BasicOptionMap implements Persistable, Configurable
         _comment = value;
     }
 
-    @Override
-    public Config getConfig()
+    @Override public Config getConfig()
     {
         return _config;
     }
 
-    @Override
-    public void setConfig(Config value)
+    @Override public void setConfig(Config value)
     {
         _config = value;
     }
 
-    @Override
-    public File getFile()
+    @Override public File getFile()
     {
         return _file;
     }
 
-    @Override
-    public void setFile(File value)
+    @Override public void setFile(File value)
     {
         _file = value;
     }
 
-    @Override
-    public void load() throws IOException, InvalidFileFormatException
+    @Override public void load() throws IOException, InvalidFileFormatException
     {
-        if (_file == null) { throw new FileNotFoundException(); }
+        if (_file == null)
+        {
+            throw new FileNotFoundException();
+        }
 
         load(_file);
     }
 
-    @Override
-    public void load(InputStream input) throws IOException, InvalidFileFormatException
+    @Override public void load(InputStream input) throws IOException, InvalidFileFormatException
     {
         load(new InputStreamReader(input, getConfig().getFileEncoding()));
     }
 
-    @Override
-    public void load(Reader input) throws IOException, InvalidFileFormatException
+    @Override public void load(Reader input) throws IOException, InvalidFileFormatException
     {
         OptionsParser.newInstance(getConfig()).parse(input, newBuilder());
     }
 
-    @Override
-    public void load(URL input) throws IOException, InvalidFileFormatException
+    @Override public void load(URL input) throws IOException, InvalidFileFormatException
     {
         OptionsParser.newInstance(getConfig()).parse(input, newBuilder());
     }
 
-    @Override
-    public void load(File input) throws IOException, InvalidFileFormatException
+    @Override public void load(File input) throws IOException, InvalidFileFormatException
     {
         load(input.toURI().toURL());
     }
 
-    @Override
-    public void store() throws IOException
+    @Override public void store() throws IOException
     {
-        if (_file == null) { throw new FileNotFoundException(); }
+        if (_file == null)
+        {
+            throw new FileNotFoundException();
+        }
 
         store(_file);
     }
 
-    @Override
-    public void store(OutputStream output) throws IOException
+    @Override public void store(OutputStream output) throws IOException
     {
         store(new OutputStreamWriter(output, getConfig().getFileEncoding()));
     }
 
-    @Override
-    public void store(Writer output) throws IOException
+    @Override public void store(Writer output) throws IOException
     {
         store(OptionsFormatter.newInstance(output, getConfig()));
     }
 
-    @Override
-    public void store(File output) throws IOException
+    @Override public void store(File output) throws IOException
     {
         OutputStream stream = new FileOutputStream(output);
 
@@ -204,8 +193,7 @@ public class Options extends BasicOptionMap implements Persistable, Configurable
         formatter.endOptions();
     }
 
-    @Override
-    boolean isPropertyFirstUpper()
+    @Override boolean isPropertyFirstUpper()
     {
         return getConfig().isPropertyFirstUpper();
     }
@@ -215,21 +203,19 @@ public class Options extends BasicOptionMap implements Persistable, Configurable
         formatter.handleComment(comment);
     }
 
-    // public final static void main(String argv[])
-    // {
-    // Config.getGlobal().setHeaderComment(false);
-    // Config.getGlobal().setEmptyLines(true);
-    // Config.getGlobal().setAutoNumbering(true);
-    // try
-    // {
-    // Options options = new Options(new
-    // File("/home/rkrell/test/config_patch/test1/sm_server.wrapper.conf.old"));
-    // options.store(new
-    // File("/home/rkrell/test/config_patch/test1/sm_server.wrapper.conf.old.stored"));
-    // }
-    // catch (Exception e)
-    // {
-    // e.printStackTrace();
-    // }
-    // }
+//    public final static void main(String argv[])
+//    {
+//        Config.getGlobal().setHeaderComment(false);
+//        Config.getGlobal().setEmptyLines(true);
+//        Config.getGlobal().setAutoNumbering(true);
+//        try
+//        {
+//            Options options = new Options(new File("/home/rkrell/test/config_patch/test1/sm_server.wrapper.conf.old"));
+//            options.store(new File("/home/rkrell/test/config_patch/test1/sm_server.wrapper.conf.old.stored"));
+//        }
+//        catch (Exception e)
+//        {
+//            e.printStackTrace();
+//        }
+//    }
 }

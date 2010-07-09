@@ -36,9 +36,7 @@ import java.net.URL;
 public class Ini extends BasicProfile implements Persistable, Configurable
 {
     private static final long serialVersionUID = -6029486578113700585L;
-
     private Config _config;
-
     private File _file;
 
     public Ini()
@@ -71,84 +69,77 @@ public class Ini extends BasicProfile implements Persistable, Configurable
         load();
     }
 
-    @Override
-    public Config getConfig()
+    @Override public Config getConfig()
     {
         return _config;
     }
 
-    @Override
-    public void setConfig(Config value)
+    @Override public void setConfig(Config value)
     {
         _config = value;
     }
 
-    @Override
-    public File getFile()
+    @Override public File getFile()
     {
         return _file;
     }
 
-    @Override
-    public void setFile(File value)
+    @Override public void setFile(File value)
     {
         _file = value;
     }
 
-    @Override
-    public void load() throws IOException, InvalidFileFormatException
+    @Override public void load() throws IOException, InvalidFileFormatException
     {
-        if (_file == null) { throw new FileNotFoundException(); }
+        if (_file == null)
+        {
+            throw new FileNotFoundException();
+        }
 
         load(_file);
     }
 
-    @Override
-    public void load(InputStream input) throws IOException, InvalidFileFormatException
+    @Override public void load(InputStream input) throws IOException, InvalidFileFormatException
     {
         load(new InputStreamReader(input, getConfig().getFileEncoding()));
     }
 
-    @Override
-    public void load(Reader input) throws IOException, InvalidFileFormatException
+    @Override public void load(Reader input) throws IOException, InvalidFileFormatException
     {
         IniParser.newInstance(getConfig()).parse(input, newBuilder());
     }
 
-    @Override
-    public void load(File input) throws IOException, InvalidFileFormatException
+    @Override public void load(File input) throws IOException, InvalidFileFormatException
     {
         load(input.toURI().toURL());
     }
 
-    @Override
-    public void load(URL input) throws IOException, InvalidFileFormatException
+    @Override public void load(URL input) throws IOException, InvalidFileFormatException
     {
         IniParser.newInstance(getConfig()).parse(input, newBuilder());
     }
 
-    @Override
-    public void store() throws IOException
+    @Override public void store() throws IOException
     {
-        if (_file == null) { throw new FileNotFoundException(); }
+        if (_file == null)
+        {
+            throw new FileNotFoundException();
+        }
 
         store(_file);
     }
 
-    @Override
-    public void store(OutputStream output) throws IOException
+    @Override public void store(OutputStream output) throws IOException
     {
         store(new OutputStreamWriter(output, getConfig().getFileEncoding()));
     }
 
-    @Override
-    public void store(Writer output) throws IOException
+    @Override public void store(Writer output) throws IOException
     {
         store(IniFormatter.newInstance(output, getConfig()));
     }
 
-    @Override
-    public void store(File output) throws IOException
+    @Override public void store(File output) throws IOException
     {
         OutputStream stream = new FileOutputStream(output);
 
@@ -161,8 +152,7 @@ public class Ini extends BasicProfile implements Persistable, Configurable
         return IniBuilder.newInstance(this);
     }
 
-    @Override
-    protected void store(IniHandler formatter, Profile.Section section)
+    @Override protected void store(IniHandler formatter, Profile.Section section)
     {
         if (getConfig().isEmptySection() || (section.size() != 0))
         {
@@ -170,8 +160,7 @@ public class Ini extends BasicProfile implements Persistable, Configurable
         }
     }
 
-    @Override
-    protected void store(IniHandler formatter, Profile.Section section, String option, int index)
+    @Override protected void store(IniHandler formatter, Profile.Section section, String option, int index)
     {
         if (getConfig().isMultiOption() || (index == (section.length(option) - 1)))
         {
@@ -179,20 +168,17 @@ public class Ini extends BasicProfile implements Persistable, Configurable
         }
     }
 
-    @Override
-    boolean isTreeMode()
+    @Override boolean isTreeMode()
     {
         return getConfig().isTree();
     }
 
-    @Override
-    char getPathSeparator()
+    @Override char getPathSeparator()
     {
         return getConfig().getPathSeparator();
     }
 
-    @Override
-    boolean isPropertyFirstUpper()
+    @Override boolean isPropertyFirstUpper()
     {
         return getConfig().isPropertyFirstUpper();
     }

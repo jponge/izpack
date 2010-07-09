@@ -22,15 +22,10 @@ import java.util.regex.Pattern;
 class BasicProfileSection extends BasicOptionMap implements Profile.Section
 {
     private static final long serialVersionUID = 985800697957194374L;
-
     private static final String[] EMPTY_STRING_ARRAY = {};
-
     private static final char REGEXP_ESCAPE_CHAR = '\\';
-
     private final Pattern _childPattern;
-
     private final String _name;
-
     private final BasicProfile _profile;
 
     protected BasicProfileSection(BasicProfile profile, String name)
@@ -40,20 +35,17 @@ class BasicProfileSection extends BasicOptionMap implements Profile.Section
         _childPattern = newChildPattern(name);
     }
 
-    @Override
-    public Profile.Section getChild(String key)
+    @Override public Profile.Section getChild(String key)
     {
         return _profile.get(childName(key));
     }
 
-    @Override
-    public String getName()
+    @Override public String getName()
     {
         return _name;
     }
 
-    @Override
-    public Profile.Section getParent()
+    @Override public Profile.Section getParent()
     {
         Profile.Section ret = null;
         int idx = _name.lastIndexOf(_profile.getPathSeparator());
@@ -68,24 +60,21 @@ class BasicProfileSection extends BasicOptionMap implements Profile.Section
         return ret;
     }
 
-    @Override
-    public String getSimpleName()
+    @Override public String getSimpleName()
     {
         int idx = _name.lastIndexOf(_profile.getPathSeparator());
 
         return (idx < 0) ? _name : _name.substring(idx + 1);
     }
 
-    @Override
-    public Profile.Section addChild(String key)
+    @Override public Profile.Section addChild(String key)
     {
         String name = childName(key);
 
         return _profile.add(name);
     }
 
-    @Override
-    public String[] childrenNames()
+    @Override public String[] childrenNames()
     {
         List<String> names = new ArrayList<String>();
 
@@ -100,8 +89,7 @@ class BasicProfileSection extends BasicOptionMap implements Profile.Section
         return names.toArray(EMPTY_STRING_ARRAY);
     }
 
-    @Override
-    public Profile.Section lookup(String... parts)
+    @Override public Profile.Section lookup(String... parts)
     {
         StringBuilder buff = new StringBuilder();
 
@@ -118,22 +106,19 @@ class BasicProfileSection extends BasicOptionMap implements Profile.Section
         return _profile.get(childName(buff.toString()));
     }
 
-    @Override
-    public void removeChild(String key)
+    @Override public void removeChild(String key)
     {
         String name = childName(key);
 
         _profile.remove(name);
     }
 
-    @Override
-    boolean isPropertyFirstUpper()
+    @Override boolean isPropertyFirstUpper()
     {
         return _profile.isPropertyFirstUpper();
     }
 
-    @Override
-    void resolve(StringBuilder buffer)
+    @Override void resolve(StringBuilder buffer)
     {
         _profile.resolve(buffer, this);
     }

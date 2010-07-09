@@ -15,6 +15,8 @@
  */
 package org.ini4j;
 
+import org.ini4j.Profile.Section;
+
 import org.ini4j.spi.IniHandler;
 import org.ini4j.spi.RegEscapeTool;
 import org.ini4j.spi.TypeValuesPair;
@@ -22,7 +24,6 @@ import org.ini4j.spi.TypeValuesPair;
 public class BasicRegistry extends BasicProfile implements Registry
 {
     private static final long serialVersionUID = -6432826330714504802L;
-
     private String _version;
 
     public BasicRegistry()
@@ -30,79 +31,66 @@ public class BasicRegistry extends BasicProfile implements Registry
         _version = VERSION;
     }
 
-    @Override
-    public String getVersion()
+    @Override public String getVersion()
     {
         return _version;
     }
 
-    @Override
-    public void setVersion(String value)
+    @Override public void setVersion(String value)
     {
         _version = value;
     }
 
-    @Override
-    public Key add(String name)
+    @Override public Key add(String name)
     {
         return (Key) super.add(name);
     }
 
-    @Override
-    public Key get(Object key)
+    @Override public Key get(Object key)
     {
         return (Key) super.get(key);
     }
 
-    @Override
-    public Key get(Object key, int index)
+    @Override public Key get(Object key, int index)
     {
         return (Key) super.get(key, index);
     }
 
-    @Override
-    public Key put(String key, Section value)
+    @Override public Key put(String key, Section value)
     {
         return (Key) super.put(key, value);
     }
 
-    @Override
-    public Key put(String key, Section value, int index)
+    @Override public Key put(String key, Section value, int index)
     {
         return (Key) super.put(key, value, index);
     }
 
-    @Override
-    public Key remove(Section section)
+    @Override public Key remove(Section section)
     {
         return (Key) super.remove(section);
     }
 
-    @Override
-    public Key remove(Object key)
+    @Override public Key remove(Object key)
     {
         return (Key) super.remove(key);
     }
 
-    @Override
-    public Key remove(Object key, int index)
+    @Override public Key remove(Object key, int index)
     {
         return (Key) super.remove(key, index);
     }
 
-    @Override
-    Key newSection(String name)
+    @Override Key newSection(String name)
     {
         return new BasicRegistryKey(this, name);
     }
 
-    @Override
-    void store(IniHandler formatter, Section section, String option)
+    @Override void store(IniHandler formatter, Section section, String option)
     {
         store(formatter, section.getComment(option));
         Type type = ((Key) section).getType(option, Type.REG_SZ);
-        String rawName = option.equals(Key.DEFAULT_NAME) ? option : RegEscapeTool.getInstance()
-                .quote(option);
+        String rawName = option.equals(Key.DEFAULT_NAME) ? option : RegEscapeTool.getInstance().quote(option);
         String[] values = new String[section.length(option)];
 
         for (int i = 0; i < values.length; i++)
