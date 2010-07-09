@@ -1114,16 +1114,6 @@ public class InstallerFrame extends JFrame implements InstallerView
             // panelconditions try to resolve the rules based on unassigned vars.
             final IzPanel panel = (IzPanel) getInstalldata().getPanels().get(startPanel);
             panel.executePreValidationActions();
-
-            try
-            {
-                refreshDynamicVariables();
-            }
-            catch (Exception e)
-            {
-                return;
-            }
-
             boolean isValid = doValidation ? panel.panelValidated() : true;
             panel.executePostValidationActions();
 
