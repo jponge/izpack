@@ -24,6 +24,8 @@ package com.izforge.izpack.core.rules.process;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.rules.Condition;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.util.Debug;
 
 /**
@@ -70,7 +72,7 @@ public class VariableCondition extends Condition
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.api.adaptator.IXMLElement)
      */
 
@@ -99,7 +101,8 @@ public class VariableCondition extends Condition
             }
             else
             {
-                return val.equals(value);
+                VariableSubstitutor subst = new VariableSubstitutorImpl(this.getInstalldata().getVariables());
+                return val.equals(subst.substitute(value));
             }
         }
         else
