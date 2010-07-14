@@ -214,9 +214,13 @@ public class FileExecutor
             {
                 params[0] = new File(params[0]).getCanonicalPath();
             }
-            if (dir != null && dir.matches("^.*[\\\\/]+[\\.]+[\\\\/]+.*$"))
+            if (dir != null)
             {
-                dir = new File(dir).getCanonicalPath();
+                if (dir.matches("^.*[\\\\/]+[\\.]+[\\\\/]+.*$"))
+                {
+                    dir = new File(dir).getCanonicalPath();
+                }
+                params[0] = new File(dir, params[0]).getAbsolutePath();
             }
 
             process = Runtime.getRuntime().exec(params);
