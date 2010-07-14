@@ -220,7 +220,11 @@ public class FileExecutor
                 {
                     dir = new File(dir).getCanonicalPath();
                 }
-                params[0] = new File(dir, params[0]).getAbsolutePath();
+                process = Runtime.getRuntime().exec(params, null, new File(dir));
+            }
+            else
+            {
+                process = Runtime.getRuntime().exec(params);
             }
 
             process = Runtime.getRuntime().exec(params);
