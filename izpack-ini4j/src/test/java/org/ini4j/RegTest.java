@@ -21,9 +21,6 @@ import org.ini4j.test.DwarfsData;
 import org.ini4j.test.Helper;
 
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -126,9 +123,9 @@ public class RegTest extends Ini4jCase
         }
     }
 
-    @Test public void testNonWindwosExec() throws Exception
+    @Test public void testUnixExec() throws Exception
     {
-        if (isSkip(isWindows(), "testNonWindwosExec"))
+        if (isSkip(isUnix(), "testUnixExec"))
         {
             return;
         }
@@ -265,6 +262,13 @@ public class RegTest extends Ini4jCase
         String family = System.getProperty("os.family");
 
         return (family != null) && family.equals("windows");
+    }
+
+    private boolean isUnix()
+    {
+        String family = System.getProperty("os.family");
+
+        return (family != null) && family.equals("unix");
     }
 
     private void checkLoadSave(String path, Reg reg) throws Exception
