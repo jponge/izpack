@@ -66,12 +66,14 @@
         </developer>
     </developers>
     <dependencies>
+        <!--
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.5</version>
             <scope>test</scope>
         </dependency>
+        -->
         <dependency>
             <groupId>jetty</groupId>
             <artifactId>jetty</artifactId>
@@ -105,7 +107,9 @@
     </dependencies>
     <properties>
         <upload.url>scp://shell.sourceforge.net//home/frs/project/i/in/ini4j</upload.url>
-        <jdk14.home>/usr/java/j2sdk1.4.2_19</jdk14.home>
+        <!--
+        jdk14.home>/usr/java/j2sdk1.4.2_19</jdk14.home>
+        -->
     </properties>
     <profiles>
         <profile>
@@ -627,9 +631,8 @@
                     </execution>
                 </executions>
             </plugin>
-
-
         </plugins>
+
         <testResources>
             <testResource>
                 <directory>src/test/java</directory>
@@ -646,6 +649,7 @@
                 <directory>src/test/resources</directory>
             </testResource>
         </testResources>
+
     </build>
 
     <reporting>
