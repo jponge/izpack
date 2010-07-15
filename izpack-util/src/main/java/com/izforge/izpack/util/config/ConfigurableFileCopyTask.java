@@ -71,7 +71,7 @@ public abstract class ConfigurableFileCopyTask extends FileCopyTask implements C
      *
      * @param resolve - true to resolve in-value variables
      */
-    public void setPatchResolveVariables(boolean resolve)
+    public void setPatchResolveExpressions(boolean resolve)
     {
         patchResolveVariables = resolve;
     }

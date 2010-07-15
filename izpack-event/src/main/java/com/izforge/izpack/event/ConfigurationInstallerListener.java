@@ -379,20 +379,20 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         task.setToDir(FileUtil.getAbsoluteFile(getAttribute(el, "todir"), idata.getInstallPath()));
         task.setToFile(FileUtil.getAbsoluteFile(getAttribute(el, "tofile"), idata.getInstallPath()));
         task.setFile(FileUtil.getAbsoluteFile(getAttribute(el, "fromfile"), idata.getInstallPath()));
-        String boolattr = getAttribute(el, "patchPreserveEntries");
+        String boolattr = getAttribute(el, "keepOldKeys");
         if (boolattr != null)
         {
             task.setPatchPreserveEntries(Boolean.parseBoolean(boolattr));
         }
-        boolattr = getAttribute(el, "patchPreserveValues");
+        boolattr = getAttribute(el, "keepOldValues");
         if (boolattr != null)
         {
             task.setPatchPreserveValues(Boolean.parseBoolean(boolattr));
         }
-        boolattr = getAttribute(el, "patchResolveVariables");
+        boolattr = getAttribute(el, "resolveExpressions");
         if (boolattr != null)
         {
-            task.setPatchResolveVariables(Boolean.parseBoolean(boolattr));
+            task.setPatchResolveExpressions(Boolean.parseBoolean(boolattr));
         }
         boolattr = getAttribute(el, "failonerror");
         if (boolattr != null)
@@ -460,7 +460,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         {
             task.setPatchPreserveValues(Boolean.parseBoolean(boolattr));
         }
-        boolattr = getAttribute(el, "resolveValues");
+        boolattr = getAttribute(el, "resolveExpressions");
         if (boolattr != null)
         {
             task.setPatchResolveVariables(Boolean.parseBoolean(boolattr));
