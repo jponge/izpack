@@ -125,7 +125,7 @@ public class RegTest extends Ini4jCase
 
     @Test public void testUnixExec() throws Exception
     {
-        if (isSkip(isUnix(), "testUnixExec"))
+        if (isSkip(!isUnix(), "testUnixExec"))
         {
             return;
         }
