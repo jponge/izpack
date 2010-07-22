@@ -27,8 +27,6 @@ import com.izforge.izpack.util.file.types.Parameterizable;
  * Parameters, so you probably want to use the BaseExtendSelector class
  * as the base class for your custom selector rather than implementing
  * this interface from scratch.
- *
- * @since 1.5
  */
 public interface ExtendFileSelector extends FileSelector, Parameterizable
 {
@@ -36,4 +34,3 @@ public interface ExtendFileSelector extends FileSelector, Parameterizable
     // No further methods necessary. This is just an amalgamation of two other
     // interfaces.
 }
-

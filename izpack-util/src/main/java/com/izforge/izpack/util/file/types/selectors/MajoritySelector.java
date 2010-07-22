@@ -17,10 +17,10 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-
 import java.io.File;
 import java.util.Enumeration;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
 
 /**
  * This selector is here just to shake up your thinking a bit. Don't get
@@ -30,8 +30,6 @@ import java.util.Enumeration;
  * selector, a "weighted-average" selector, and so on. These are left
  * as exercises for the reader (as are the usecases where this would
  * be necessary).
- *
- * @since 1.5
  */
 public class MajoritySelector extends BaseSelectorContainer
 {
@@ -117,4 +115,3 @@ public class MajoritySelector extends BaseSelectorContainer
         return allowtie;
     }
 }
-

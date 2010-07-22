@@ -17,14 +17,10 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import com.izforge.izpack.util.file.types.selectors.modifiedselector.ModifiedSelector;
-
 import java.util.Enumeration;
 
 /**
  * This is the interface for selectors that can contain other selectors.
- *
- * @since 1.5
  */
 public interface SelectorContainer
 {
@@ -56,7 +52,7 @@ public interface SelectorContainer
      *
      * @return an enumerator that goes through each of the selectors
      */
-    Enumeration selectorElements();
+    Enumeration<FileSelector> selectorElements();
 
     /**
      * Add a new selector into this container.
@@ -176,7 +172,6 @@ public interface SelectorContainer
      * add the type selector
      *
      * @param selector the selector to add
-     * @since ant 1.6
      */
     void addType(TypeSelector selector);
 
@@ -184,23 +179,13 @@ public interface SelectorContainer
      * add the different selector
      *
      * @param selector the selector to add
-     * @since ant 1.6
      */
     void addDifferent(DifferentSelector selector);
-
-    /**
-     * add the modified selector
-     *
-     * @param selector the selector to add
-     * @since ant 1.6
-     */
-    void addModified(ModifiedSelector selector);
 
     /**
      * add an arbitary selector
      *
      * @param selector the selector to add
-     * @since Ant 1.6
      */
     void add(FileSelector selector);
 }

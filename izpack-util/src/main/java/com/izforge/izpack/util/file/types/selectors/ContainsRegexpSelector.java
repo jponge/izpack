@@ -26,8 +26,6 @@ import java.io.*;
 
 /**
  * Selector that filters files based on a regular expression.
- *
- * @since Ant 1.6
  */
 public class ContainsRegexpSelector extends BaseExtendSelector
 {

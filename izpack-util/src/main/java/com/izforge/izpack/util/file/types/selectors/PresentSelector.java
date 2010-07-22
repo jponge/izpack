@@ -17,22 +17,21 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
+import java.io.File;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.util.file.FileNameMapper;
 import com.izforge.izpack.util.file.IdentityMapper;
-import com.izforge.izpack.util.file.types.EnumeratedAttribute;
 import com.izforge.izpack.util.file.types.Mapper;
-import org.apache.tools.ant.BuildException;
-
-import java.io.File;
 
 /**
  * Selector that filters files based on whether they appear in another
  * directory tree. It can contain a mapper element, so isn't available
  * as an ExtendSelector (since those parameters can't hold other
  * elements).
- *
- * @since 1.5
  */
 public class PresentSelector extends BaseSelector
 {
@@ -99,7 +98,7 @@ public class PresentSelector extends BaseSelector
      * Defines the FileNameMapper to use (nested mapper element).
      *
      * @return a mapper to be configured
-     * @throws BuildException if more that one mapper defined
+     * @throws Exception if more that one mapper defined
      */
     public Mapper createMapper() throws Exception
     {
@@ -126,7 +125,7 @@ public class PresentSelector extends BaseSelector
      */
     public void setPresent(FilePresence fp)
     {
-        if (fp.getIndex() == 0)
+        if (fp.equals(FilePresence.SRCONLY))
         {
             destmustexist = false;
         }
@@ -190,20 +189,40 @@ public class PresentSelector extends BaseSelector
         return destfile.exists() == destmustexist;
     }
 
-    /**
-     * Enumerated attribute with the values for indicating where a file's
-     * presence is allowed and required.
-     */
-    public static class FilePresence extends EnumeratedAttribute
+    public enum FilePresence
     {
-        /**
-         * @return the values as an array of strings
-         */
-        public String[] getValues()
+        SRCONLY("srconly"), BOTH("both");
+
+        private static Map<String, FilePresence> lookup;
+
+        private String attribute;
+
+        FilePresence(String attribute)
         {
-            return new String[]{"srconly", "both"};
+            this.attribute = attribute;
+        }
+
+        static
+        {
+            lookup = new HashMap<String, FilePresence>();
+            for (FilePresence mapperType : EnumSet.allOf(FilePresence.class))
+            {
+                lookup.put(mapperType.getAttribute(), mapperType);
+            }
+        }
+
+        public String getAttribute()
+        {
+            return attribute;
+        }
+
+        public static FilePresence getFromAttribute(String attribute)
+        {
+            if (attribute != null && lookup.containsKey(attribute))
+            {
+                return lookup.get(attribute);
+            }
+            return null;
         }
     }
-
 }
-

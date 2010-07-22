@@ -21,7 +21,6 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.file.DirectoryScanner;
 import com.izforge.izpack.util.file.FileScanner;
 import com.izforge.izpack.util.file.types.selectors.*;
-import com.izforge.izpack.util.file.types.selectors.modifiedselector.ModifiedSelector;
 
 import java.io.File;
 import java.util.Enumeration;
@@ -490,16 +489,6 @@ public class FileSet extends DataType
      * @param selector the <code>ContainsRegexpSelector</code> to add.
      */
     public void addContainsRegexp(ContainsRegexpSelector selector)
-    {
-        appendSelector(selector);
-    }
-
-    /**
-     * Add the modified selector.
-     *
-     * @param selector the <code>ModifiedSelector</code> to add.
-     */
-    public void addModified(ModifiedSelector selector)
     {
         appendSelector(selector);
     }

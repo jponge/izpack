@@ -17,16 +17,14 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-
 import java.io.File;
 import java.util.Enumeration;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
 
 /**
  * This selector has a collection of other selectors, any of which have to
  * select a file in order for this selector to select it.
- *
- * @since 1.5
  */
 public class OrSelector extends BaseSelectorContainer
 {
@@ -67,7 +65,7 @@ public class OrSelector extends BaseSelectorContainer
             throws Exception
     {
         validate();
-        Enumeration e = selectorElements();
+        Enumeration<FileSelector> e = selectorElements();
         boolean result;
 
         // First, check that all elements are correctly configured
@@ -84,4 +82,3 @@ public class OrSelector extends BaseSelectorContainer
     }
 
 }
-

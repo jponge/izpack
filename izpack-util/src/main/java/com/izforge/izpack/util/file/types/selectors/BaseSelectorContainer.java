@@ -18,7 +18,6 @@
 package com.izforge.izpack.util.file.types.selectors;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.file.types.selectors.modifiedselector.ModifiedSelector;
 
 import java.io.File;
 import java.util.Enumeration;
@@ -31,7 +30,7 @@ public abstract class BaseSelectorContainer extends BaseSelector
         implements SelectorContainer
 {
 
-    private Vector selectorsList = new Vector();
+    private Vector<FileSelector> selectorsList = new Vector<FileSelector>();
 
     /**
      * Default constructor.
@@ -77,7 +76,7 @@ public abstract class BaseSelectorContainer extends BaseSelector
      *
      * @return an enumerator for the selectors
      */
-    public Enumeration selectorElements()
+    public Enumeration<FileSelector> selectorElements()
     {
         return selectorsList.elements();
     }
@@ -92,7 +91,7 @@ public abstract class BaseSelectorContainer extends BaseSelector
     public String toString()
     {
         StringBuffer buf = new StringBuffer();
-        Enumeration e = selectorElements();
+        Enumeration<FileSelector> e = selectorElements();
         if (e.hasMoreElements())
         {
             while (e.hasMoreElements())
@@ -142,7 +141,7 @@ public abstract class BaseSelectorContainer extends BaseSelector
         {
             throw new Exception(errmsg);
         }
-        Enumeration e = selectorElements();
+        Enumeration<FileSelector> e = selectorElements();
         while (e.hasMoreElements())
         {
             Object o = e.nextElement();
@@ -341,21 +340,9 @@ public abstract class BaseSelectorContainer extends BaseSelector
     }
 
     /**
-     * add the modified selector
-     *
-     * @param selector the selector to add
-     * @since ant 1.6
-     */
-    public void addModified(ModifiedSelector selector)
-    {
-        appendSelector(selector);
-    }
-
-    /**
      * add an arbitary selector
      *
      * @param selector the selector to add
-     * @since Ant 1.6
      */
     public void add(FileSelector selector)
     {

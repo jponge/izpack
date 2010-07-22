@@ -17,8 +17,6 @@
 
 package com.izforge.izpack.util.file.types;
 
-import org.apache.tools.ant.BuildException;
-
 import java.io.File;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -33,7 +31,7 @@ import java.util.Vector;
 public class FileList extends DataType
 {
 
-    private Vector filenames = new Vector();
+    private Vector<String> filenames = new Vector<String>();
     private File dir;
 
     /**
@@ -53,47 +51,24 @@ public class FileList extends DataType
     {
         this.dir = filelist.dir;
         this.filenames = filelist.filenames;
-//        setProject(filelist.getProject());
     }
-
-//    /**
-//     * Makes this instance in effect a reference to another FileList
-//     * instance.
-//     *
-//     * <p>You must not set another attribute or nest elements inside
-//     * this element if you make it a reference.</p>
-//     * @param r the reference to another filelist.
-//     * @exception BuildException if an error occurs.
-//     */
-//    public void setRefid(Reference r) throws BuildException {
-//        if ((dir != null) || (filenames.size() != 0)) {
-//            throw tooManyAttributes();
-//        }
-//        super.setRefid(r);
-//    }
 
     /**
      * Set the dir attribute.
      *
      * @param dir the directory this filelist is relative to.
-     * @throws BuildException if an error occurs
+     * @throws Exception if an error occurs
      */
     public void setDir(File dir) throws Exception
     {
-//        if (isReference()) {
-//            throw tooManyAttributes();
-//        }
         this.dir = dir;
     }
 
     /**
      * @return the directory attribute
      */
-    public File getDir(/*Project p*/)
+    public File getDir()
     {
-//        if (isReference()) {
-//            return getRef(p).getDir(p);
-//        }
         return dir;
     }
 
@@ -105,9 +80,6 @@ public class FileList extends DataType
      */
     public void setFiles(String filenames)
     {
-//        if (isReference()) {
-//            throw tooManyAttributes();
-//        }
         if (filenames != null && filenames.length() > 0)
         {
             StringTokenizer tok = new StringTokenizer(
@@ -125,12 +97,8 @@ public class FileList extends DataType
      * @param p the current project
      * @return the list of files represented by this FileList.
      */
-    public String[] getFiles(/*Project p*/) throws Exception
+    public String[] getFiles() throws Exception
     {
-//        if (isReference()) {
-//            return getRef(p).getFiles(p);
-//        }
-
         if (dir == null)
         {
             throw new Exception("No directory specified for filelist.");
@@ -145,28 +113,6 @@ public class FileList extends DataType
         filenames.copyInto(result);
         return result;
     }
-
-//    /**
-//     * Performs the check for circular references and returns the
-//     * referenced FileList.
-//     * @param p the current project
-//     * @return the FileList represented by a referenced filelist.
-//     */
-//    protected FileList getRef(Project p) {
-//        if (!isChecked()) {
-//            Stack stk = new Stack();
-//            stk.push(this);
-//            dieOnCircularReference(stk, p);
-//        }
-//
-//        Object o = getRefid().getReferencedObject(p);
-//        if (!(o instanceof FileList)) {
-//            String msg = getRefid().getRefId() + " doesn\'t denote a filelist";
-//            throw new BuildException(msg);
-//        } else {
-//            return (FileList) o;
-//        }
-//    }
 
     /**
      * Inner class corresponding to the &lt;file&gt; nested element.

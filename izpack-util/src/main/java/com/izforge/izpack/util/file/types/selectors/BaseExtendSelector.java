@@ -27,8 +27,6 @@ import java.io.File;
  * It provides support for gathering the parameters together as well as for
  * assigning an error message and throwing a build exception if an error is
  * detected.
- *
- * @since 1.5
  */
 public abstract class BaseExtendSelector
         extends BaseSelector

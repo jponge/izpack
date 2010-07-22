@@ -17,14 +17,14 @@
 
 package com.izforge.izpack.util.file.types;
 
-import com.izforge.izpack.util.file.CompositeMapper;
-import com.izforge.izpack.util.file.ContainerMapper;
-import com.izforge.izpack.util.file.FileNameMapper;
-
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
+
+import com.izforge.izpack.util.file.CompositeMapper;
+import com.izforge.izpack.util.file.ContainerMapper;
+import com.izforge.izpack.util.file.FileNameMapper;
 
 /**
  * Element to define a FileNameMapper.

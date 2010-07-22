@@ -20,8 +20,6 @@ package com.izforge.izpack.util.file.types.selectors;
 /**
  * An interface used to describe the actions required by any type of
  * directory scanner that supports Selecters.
- *
- * @since 1.5
  */
 public interface SelectorScanner
 {

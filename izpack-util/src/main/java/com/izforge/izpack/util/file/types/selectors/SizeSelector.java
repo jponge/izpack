@@ -17,11 +17,13 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.file.types.EnumeratedAttribute;
-import com.izforge.izpack.util.file.types.Parameter;
-
 import java.io.File;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.util.file.types.Parameter;
 
 /**
  * Selector that filters files based on their size.
@@ -32,7 +34,7 @@ public class SizeSelector extends BaseExtendSelector
     private long size = -1;
     private long multiplier = 1;
     private long sizelimit = -1;
-    private int cmp = 2;
+    private SizeComparisons cmp = SizeComparisons.EQUAL;
     /**
      * Used for parameterized custom selector
      */
@@ -65,18 +67,7 @@ public class SizeSelector extends BaseExtendSelector
         StringBuffer buf = new StringBuffer("{sizeselector value: ");
         buf.append(sizelimit);
         buf.append("compare: ");
-        if (cmp == 0)
-        {
-            buf.append("less");
-        }
-        else if (cmp == 1)
-        {
-            buf.append("more");
-        }
-        else
-        {
-            buf.append("equal");
-        }
+        buf.append(cmp.getAttribute());
         buf.append("}");
         return buf.toString();
     }
@@ -125,40 +116,74 @@ public class SizeSelector extends BaseExtendSelector
      */
     public void setUnits(ByteUnits units)
     {
-        int i = units.getIndex();
         multiplier = 0;
-        if ((i > -1) && (i < 4))
+
+        switch (units)
         {
-            multiplier = 1000;
+            case K:
+            case k:
+            case kilo:
+            case KILO:
+                multiplier = 1000;
+                break;
+
+            case Ki:
+            case KI:
+            case ki:
+            case kibi:
+            case KIBI:
+                multiplier = 1024;
+                break;
+
+            case M:
+            case m:
+            case mega:
+            case MEGA:
+                multiplier = 1000000;
+                break;
+
+            case Mi:
+            case MI:
+            case mi:
+            case mebi:
+            case MEBI:
+                multiplier = 1048576;
+                break;
+
+            case G:
+            case g:
+            case giga:
+            case GIGA:
+                multiplier = 1000000000L;
+                break;
+
+            case Gi:
+            case GI:
+            case gi:
+            case gibi:
+            case GIBI:
+                multiplier = 1073741824L;
+                break;
+
+            case T:
+            case t:
+            case tera:
+            case TERA:
+                multiplier = 1000000000000L;
+                break;
+
+            case Ti:
+            case TI:
+            case ti:
+            case tebi:
+            case TEBI:
+                multiplier = 1099511627776L;
+                break;
+
+            default:
+                break;
         }
-        else if ((i > 3) && (i < 9))
-        {
-            multiplier = 1024;
-        }
-        else if ((i > 8) && (i < 13))
-        {
-            multiplier = 1000000;
-        }
-        else if ((i > 12) && (i < 18))
-        {
-            multiplier = 1048576;
-        }
-        else if ((i > 17) && (i < 22))
-        {
-            multiplier = 1000000000L;
-        }
-        else if ((i > 21) && (i < 27))
-        {
-            multiplier = 1073741824L;
-        }
-        else if ((i > 26) && (i < 31))
-        {
-            multiplier = 1000000000000L;
-        }
-        else if ((i > 30) && (i < 36))
-        {
-            multiplier = 1099511627776L;
-        }
+
         if ((multiplier > 0) && (size > -1))
         {
             sizelimit = size * multiplier;
@@ -174,7 +199,7 @@ public class SizeSelector extends BaseExtendSelector
      */
     public void setWhen(SizeComparisons scmp)
     {
-        this.cmp = scmp.getIndex();
+        this.cmp = scmp;
     }
 
     /**
@@ -205,29 +230,27 @@ public class SizeSelector extends BaseExtendSelector
                 }
                 else if (UNITS_KEY.equalsIgnoreCase(paramname))
                 {
-                    ByteUnits units = new ByteUnits();
-                    try
+                    ByteUnits units = ByteUnits.getFromAttribute(parameters[i].getValue());
+                    if (units != null)
                     {
-                        units.setValue(parameters[i].getValue());
+                        setUnits(units);
                     }
-                    catch (Exception e)
+                    else
                     {
                         setError("Invalid " + UNITS_KEY + " setting " + parameters[i].getValue());
                     }
-                    setUnits(units);
                 }
                 else if (WHEN_KEY.equalsIgnoreCase(paramname))
                 {
-                    SizeComparisons scmp = new SizeComparisons();
-                    try
+                    SizeComparisons cmp = SizeComparisons.getFromAttribute(parameters[i].getValue());
+                    if (cmp != null)
                     {
-                        scmp.setValue(parameters[i].getValue());
+                        setWhen(cmp);
                     }
-                    catch (Exception e)
+                    else
                     {
                         setError("Invalid " + WHEN_KEY + " setting " + parameters[i].getValue());
                     }
-                    setWhen(scmp);
                 }
                 else
                 {
@@ -283,17 +306,16 @@ public class SizeSelector extends BaseExtendSelector
         {
             return true;
         }
-        if (cmp == 0)
+        switch (cmp)
         {
-            return (file.length() < sizelimit);
-        }
-        else if (cmp == 1)
-        {
-            return (file.length() > sizelimit);
-        }
-        else
-        {
-            return (file.length() == sizelimit);
+            case LESS:
+                return (file.length() < sizelimit);
+
+            case MORE:
+                return (file.length() > sizelimit);
+
+            default:
+                return (file.length() == sizelimit);
         }
     }
 
@@ -316,38 +338,84 @@ public class SizeSelector extends BaseExtendSelector
      * its way for approval by other agencies, but it is not an SI
      * standard. It disambiguates things for us, though.
      */
-    public static class ByteUnits extends EnumeratedAttribute
+    public enum ByteUnits
     {
-        /**
-         * @return the values as an array of strings
-         */
-        public String[] getValues()
+        K("K"), k("k"), kilo("kilo"), KILO("KILO"),
+        Ki("Ki"), KI("KI"), ki("ki"), kibi("kibi"), KIBI("KIBI"),
+        M("M"), m("m"), mega("mega"), MEGA("MEGA"),
+        Mi("Mi"), MI("MI"), mi("mi"), mebi("mebi"), MEBI("MEBI"),
+        G("G"), g("g"), giga("giga"), GIGA("GIGA"),
+        Gi("Gi"), GI("GI"), gi("gi"), gibi("gibi"), GIBI("GIBI"),
+        T("T"), t("t"), tera("tera"), TERA("TERA"),
+        Ti("Ti"), TI("TI"), ti("ti"), tebi("tebi"), TEBI("TEBI");
+
+        private static Map<String, ByteUnits> lookup;
+
+        private String attribute;
+
+        ByteUnits(String attribute)
         {
-            return new String[]{"K", "k", "kilo", "KILO",
-                    "Ki", "KI", "ki", "kibi", "KIBI",
-                    "M", "m", "mega", "MEGA",
-                    "Mi", "MI", "mi", "mebi", "MEBI",
-                    "G", "g", "giga", "GIGA",
-                    "Gi", "GI", "gi", "gibi", "GIBI",
-                    "T", "t", "tera", "TERA",
-                    /* You wish! */      "Ti", "TI", "ti", "tebi", "TEBI"
-            };
+            this.attribute = attribute;
+        }
+
+        static
+        {
+            lookup = new HashMap<String, ByteUnits>();
+            for (ByteUnits mapperType : EnumSet.allOf(ByteUnits.class))
+            {
+                lookup.put(mapperType.getAttribute(), mapperType);
+            }
+        }
+
+        public String getAttribute()
+        {
+            return attribute;
+        }
+
+        public static ByteUnits getFromAttribute(String attribute)
+        {
+            if (attribute != null && lookup.containsKey(attribute))
+            {
+                return lookup.get(attribute);
+            }
+            return null;
         }
     }
 
-    /**
-     * Enumerated attribute with the values for size comparison.
-     */
-    public static class SizeComparisons extends EnumeratedAttribute
+    public enum SizeComparisons
     {
-        /**
-         * @return the values as an array of strings
-         */
-        public String[] getValues()
+        LESS("less"), MORE("more"), EQUAL("equal");
+
+        private static Map<String, SizeComparisons> lookup;
+
+        private String attribute;
+
+        SizeComparisons(String attribute)
         {
-            return new String[]{"less", "more", "equal"};
+            this.attribute = attribute;
+        }
+
+        static
+        {
+            lookup = new HashMap<String, SizeComparisons>();
+            for (SizeComparisons mapperType : EnumSet.allOf(SizeComparisons.class))
+            {
+                lookup.put(mapperType.getAttribute(), mapperType);
+            }
+        }
+
+        public String getAttribute()
+        {
+            return attribute;
+        }
+
+        public static SizeComparisons getFromAttribute(String attribute)
+        {
+            if (attribute != null && lookup.containsKey(attribute))
+            {
+                return lookup.get(attribute);
+            }
+            return null;
         }
     }
-
 }
-

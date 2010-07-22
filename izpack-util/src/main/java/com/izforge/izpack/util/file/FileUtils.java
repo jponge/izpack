@@ -90,21 +90,10 @@ public class FileUtils
     }
 
     /**
-     * Factory method.
-     *
-     * @return a new instance of FileUtils.
-     */
-    public static FileUtils newFileUtils()
-    {
-        return new FileUtils();
-    }
-
-    /**
      * Method to retrieve The FileUtils, which is shared by all users of this
      * method.
      *
      * @return an instance of FileUtils.
-     * @since Ant 1.6.3
      */
     public static FileUtils getFileUtils()
     {
@@ -186,7 +175,6 @@ public class FileUtils
      * @param outputEncoding       the encoding used to write the files.
      * @param project              the project instance.
      * @throws IOException if the copying fails.
-     * @since Ant 1.6
      */
     public void copyFile(File sourceFile, File destFile,
                          /*FilterSetCollection filters, Vector filterChains,*/
@@ -522,7 +510,7 @@ public class FileUtils
                 path = path.substring(1);
             }
         }
-        Stack s = new Stack();
+        Stack<String> s = new Stack<String>();
         s.push(root);
         StringTokenizer tok = new StringTokenizer(path, File.separator);
         while (tok.hasMoreTokens())
@@ -657,7 +645,6 @@ public class FileUtils
      * @param parentDir Directory to create the temporary file in;
      *                  java.io.tmpdir used if not specified.
      * @return a File reference to the new temporary file.
-     * @since Ant 1.5
      */
     public File createTempFile(String prefix, String suffix, File parentDir)
     {
@@ -702,7 +689,6 @@ public class FileUtils
      *                 differences in kind of line break are to be ignored.
      * @return true if the content of the files is the same.
      * @throws IOException if the files cannot be read.
-     * @since Ant 1.6.3
      */
     public boolean contentEquals(File f1, File f2, boolean textfile) throws Exception
     {
@@ -828,7 +814,6 @@ public class FileUtils
      * @param f the file whose parent is required.
      * @return the given file's parent, or null if the file does not have a
      *         parent.
-     * @since 1.10
      */
     public File getParentFile(File f)
     {
@@ -890,7 +875,6 @@ public class FileUtils
      * @param f the file to be created.
      * @return true if the file did not exist already.
      * @throws IOException on error.
-     * @since Ant 1.5
      */
     public boolean createNewFile(File f) throws IOException
     {
@@ -904,7 +888,6 @@ public class FileUtils
      * @param mkdirs <code>boolean</code> whether to create parent directories.
      * @return true if the file did not exist already.
      * @throws IOException on error.
-     * @since Ant 1.6.3
      */
     public boolean createNewFile(File f, boolean mkdirs) throws IOException
     {
@@ -927,7 +910,6 @@ public class FileUtils
      * @param name   the name of the file to test.
      * @return true if the file is a symbolic link.
      * @throws IOException on error.
-     * @since Ant 1.5
      */
     public boolean isSymbolicLink(File parent, String name)
             throws IOException
@@ -949,7 +931,6 @@ public class FileUtils
      * @param path    The path to remove from, must not be null, must be absolute.
      * @return path's normalized absolute if it doesn't start with
      *         leading; path's path with leading's path removed otherwise.
-     * @since Ant 1.5
      */
     public String removeLeadingPath(File leading, File path) throws Exception
     {
@@ -979,7 +960,6 @@ public class FileUtils
      *
      * @param path the path in the local file system.
      * @return the URI version of the local path.
-     * @since Ant 1.6
      */
     public String toURI(String path)
     {
@@ -1037,7 +1017,6 @@ public class FileUtils
      * @param f1 the file whose name is to be compared.
      * @param f2 the other file whose name is to be compared.
      * @return true if the file are for the same file.
-     * @since Ant 1.5.3
      */
     public boolean fileNameEquals(File f1, File f2) throws Exception
     {
@@ -1058,7 +1037,6 @@ public class FileUtils
      * @throws IOException if anything bad happens during this
      *                     process.  Note that <code>to</code> may have been deleted
      *                     already when this happens.
-     * @since Ant 1.6
      */
     public void rename(File from, File to) throws IOException
     {
@@ -1109,7 +1087,6 @@ public class FileUtils
      * @param granularity an offset added to the source time.
      * @return true if the source is older than the dest after accounting
      *         for granularity.
-     * @since Ant 1.6.3
      */
     public boolean isUpToDate(File source, File dest, long granularity)
     {
@@ -1131,7 +1108,6 @@ public class FileUtils
      * @param source source file (should be the older).
      * @param dest   dest file (should be the newer).
      * @return true if the source is older than the dest, taking the granularity into account.
-     * @since Ant 1.6.3
      */
     public boolean isUpToDate(File source, File dest)
     {
@@ -1267,4 +1243,3 @@ public class FileUtils
         }
     }
 }
-

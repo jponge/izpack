@@ -25,8 +25,6 @@ import java.io.*;
 /**
  * Selector that filters files based on whether they contain a
  * particular string.
- *
- * @since 1.5
  */
 public class ContainsSelector extends BaseExtendSelector
 {

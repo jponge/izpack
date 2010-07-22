@@ -17,7 +17,6 @@
 
 package com.izforge.izpack.util.file.types;
 
-import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -29,8 +28,8 @@ import java.util.Vector;
  */
 public class PatternSet extends DataType implements Cloneable
 {
-    private Vector includeList = new Vector();
-    private Vector excludeList = new Vector();
+    private Vector<NameEntry> includeList = new Vector<NameEntry>();
+    private Vector<NameEntry> excludeList = new Vector<NameEntry>();
 
     /**
      * inner class to hold a name on list.  "If" and "Unless" attributes
@@ -215,7 +214,7 @@ public class PatternSet extends DataType implements Cloneable
     /**
      * add a name entry to the given list
      */
-    private NameEntry addPatternToList(Vector list)
+    private NameEntry addPatternToList(Vector<NameEntry> list)
     {
         NameEntry result = new NameEntry();
         list.addElement(result);
@@ -282,22 +281,20 @@ public class PatternSet extends DataType implements Cloneable
     /**
      * Convert a vector of NameEntry elements into an array of Strings.
      */
-    private String[] makeArray(Vector list)
+    private String[] makeArray(Vector<NameEntry> list)
     {
         if (list.size() == 0)
         {
             return null;
         }
 
-        Vector tmpNames = new Vector();
-        for (Enumeration e = list.elements(); e.hasMoreElements();)
-        {
-            NameEntry ne = (NameEntry) e.nextElement();
-            String pattern = ne.getName();
-            if (pattern != null && pattern.length() > 0)
-            {
-                tmpNames.addElement(pattern);
-            }
+        Vector<String> tmpNames = new Vector<String>();
+        for (NameEntry ne : list) {
+          String pattern = ne.getName();
+          if (pattern != null && pattern.length() > 0)
+          {
+              tmpNames.addElement(pattern);
+          }
         }
 
         String[] result = new String[tmpNames.size()];

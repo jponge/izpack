@@ -23,10 +23,8 @@ package com.izforge.izpack.util.file.types;
  * This class is meant to be used by classes needing to record path
  * and date/time information about a file, a zip entry or some similar
  * resource (URL, archive in a version control repository, ...).
- *
- * @since Ant 1.5.2
  */
-public class Resource implements Cloneable, Comparable
+public class Resource implements Cloneable, Comparable<Object>
 {
     /**
      * Constant unknown size
@@ -202,7 +200,6 @@ public class Resource implements Cloneable, Comparable
      * Set the size of this Resource.
      *
      * @param size the size, as a long.
-     * @since Ant 1.6.3
      */
     public void setSize(long size)
     {
@@ -214,7 +211,6 @@ public class Resource implements Cloneable, Comparable
      *
      * @return the size, as a long, 0 if the Resource does not exist (for
      *         compatibility with java.io.File), or UNKNOWN_SIZE if not known.
-     * @since Ant 1.6.3
      */
     public long getSize()
     {
@@ -245,14 +241,12 @@ public class Resource implements Cloneable, Comparable
      * @param other the object to compare to.
      * @return a negative integer, zero, or a positive integer as this Resource
      *         is less than, equal to, or greater than the specified Resource.
-     * @since Ant 1.6
      */
     public int compareTo(Object other)
     {
         if (!(other instanceof Resource))
         {
-            throw new IllegalArgumentException("Can only be compared with "
-                    + "Resources");
+            throw new IllegalArgumentException("Can only be compared with Resources");
         }
         Resource r = (Resource) other;
         return getName().compareTo(r.getName());

@@ -17,18 +17,16 @@
 
 package com.izforge.izpack.util.file;
 
+import java.io.File;
+import java.util.Vector;
+
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.file.types.Resource;
 import com.izforge.izpack.util.file.types.ResourceFactory;
 import com.izforge.izpack.util.file.types.selectors.SelectorUtils;
 
-import java.io.File;
-import java.util.Vector;
-
 /**
  * this class provides utility methods to process resources
- *
- * @since Ant 1.5.2
  */
 public class ResourceUtils
 {
@@ -54,7 +52,7 @@ public class ResourceUtils
             throws Exception
     {
         return selectOutOfDateSources(source, mapper, targets,
-                FileUtils.newFileUtils()
+                FileUtils.getFileUtils()
                         .getFileTimestampGranularity());
     }
 
@@ -74,7 +72,6 @@ public class ResourceUtils
      * @return array containing the source files which need to be
      *         copied or processed, because the targets are out of date or do
      *         not exist
-     * @since Ant 1.6.2
      */
     public static Resource[] selectOutOfDateSources(Resource[] source,
                                                     FileNameMapper mapper,
@@ -84,7 +81,7 @@ public class ResourceUtils
     {
         long now = (new java.util.Date()).getTime() + granularity;
 
-        Vector vresult = new Vector();
+        Vector<Resource> vresult = new Vector<Resource>();
         for (int counter = 0; counter < source.length; counter++)
         {
             if (source[counter].getLastModified() > now)

@@ -18,26 +18,19 @@
 package com.izforge.izpack.util.file.types.selectors;
 
 import com.izforge.izpack.util.file.types.DataType;
-import com.izforge.izpack.util.file.types.selectors.modifiedselector.ModifiedSelector;
 
 import java.util.Enumeration;
 import java.util.Vector;
 
-//import org.apache.tools.ant.Project;
-//import org.apache.tools.ant.types.DataType;
-//import org.apache.tools.ant.types.selectors.modifiedselector.ModifiedSelector;
-
 /**
  * This is the a base class a container of selectors - it does
  * not need do be a selector itself.
- *
- * @since 1.7
  */
 public abstract class AbstractSelectorContainer extends DataType
         implements SelectorContainer
 {
 
-    private Vector selectorsList = new Vector();
+    private Vector<FileSelector> selectorsList = new Vector<FileSelector>();
 
     /**
      * Indicates whether there are any selectors here.
@@ -77,7 +70,7 @@ public abstract class AbstractSelectorContainer extends DataType
      *
      * @return an enumerator for the selectors
      */
-    public Enumeration selectorElements()
+    public Enumeration<FileSelector> selectorElements()
     {
         return selectorsList.elements();
     }
@@ -92,7 +85,7 @@ public abstract class AbstractSelectorContainer extends DataType
     public String toString()
     {
         StringBuffer buf = new StringBuffer();
-        Enumeration e = selectorElements();
+        Enumeration<FileSelector> e = selectorElements();
         if (e.hasMoreElements())
         {
             while (e.hasMoreElements())
@@ -136,7 +129,7 @@ public abstract class AbstractSelectorContainer extends DataType
      */
     public void validate() throws Exception
     {
-        Enumeration e = selectorElements();
+        Enumeration<FileSelector> e = selectorElements();
         while (e.hasMoreElements())
         {
             Object o = e.nextElement();
@@ -321,21 +314,9 @@ public abstract class AbstractSelectorContainer extends DataType
     }
 
     /**
-     * add the modified selector
-     *
-     * @param selector the selector to add
-     * @since ant 1.6
-     */
-    public void addModified(ModifiedSelector selector)
-    {
-        appendSelector(selector);
-    }
-
-    /**
      * add an arbitary selector
      *
      * @param selector the selector to add
-     * @since Ant 1.6
      */
     public void add(FileSelector selector)
     {

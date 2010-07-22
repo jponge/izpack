@@ -17,25 +17,22 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.file.types.Parameter;
-import com.izforge.izpack.util.file.types.Path;
-import org.apache.tools.ant.BuildException;
-
 import java.io.File;
 import java.util.Vector;
 
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.util.file.types.Parameter;
+import com.izforge.izpack.util.file.types.Path;
+
 /**
  * Selector that selects files by forwarding the request on to other classes.
- *
- * @since 1.5
  */
 public class ExtendSelector extends BaseSelector
 {
 
     private String classname = null;
     private FileSelector dynselector = null;
-    private Vector paramVec = new Vector();
+    private Vector<Parameter> paramVec = new Vector<Parameter>();
     private Path classpath = null;
 
     /**
@@ -65,18 +62,7 @@ public class ExtendSelector extends BaseSelector
             try
             {
                 Class c = Class.forName(classname);
-//                if (classpath == null) {
-//                    c = Class.forName(classname);
-//                } else {
-//                    AntClassLoader al
-//                            = getProject().createClassLoader(classpath);
-//                    c = Class.forName(classname, true, al);
-//                }
                 dynselector = (FileSelector) c.newInstance();
-//                final Project project = getProject();
-//                if (project != null) {
-//                    project.setProjectReference(dynselector);
-//                }
             }
             catch (ClassNotFoundException cnfexcept)
             {
@@ -118,9 +104,6 @@ public class ExtendSelector extends BaseSelector
      */
     public final void setClasspath(Path classpath) throws Exception
     {
-//        if (isReference()) {
-//            throw tooManyAttributes();
-//        }
         if (this.classpath == null)
         {
             this.classpath = classpath;
@@ -193,7 +176,7 @@ public class ExtendSelector extends BaseSelector
      * both classpath and classname, creating the class is deferred to here
      * as well.
      *
-     * @throws BuildException if an error occurs
+     * @throws Exception if an error occurs
      */
     public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file)
             throws Exception
@@ -210,4 +193,3 @@ public class ExtendSelector extends BaseSelector
     }
 
 }
-

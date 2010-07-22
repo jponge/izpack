@@ -17,10 +17,10 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-
 import java.io.File;
 import java.util.Enumeration;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
 
 /**
  * This selector just holds one other selector and forwards all
@@ -29,8 +29,6 @@ import java.util.Enumeration;
  * project. It overrides all of the reference stuff so that it
  * works as expected. Note that this is the only selector you
  * can reference.
- *
- * @since 1.5
  */
 public class SelectSelector extends BaseSelectorContainer
 {
@@ -70,82 +68,6 @@ public class SelectSelector extends BaseSelectorContainer
         }
         return buf.toString();
     }
-
-//    /**
-//     * Performs the check for circular references and returns the
-//     * referenced Selector.
-//     */
-//    private SelectSelector getRef() {
-//        Object o = getCheckedRef(this.getClass(), "SelectSelector");
-//        return (SelectSelector) o;
-//    }
-
-    /**
-     * Indicates whether there are any selectors here.
-     *
-     * @return whether any selectors are in this container
-     */
-    public boolean hasSelectors()
-    {
-//        if (isReference()) {
-//            return getRef().hasSelectors();
-//        }
-        return super.hasSelectors();
-    }
-
-    /**
-     * Gives the count of the number of selectors in this container
-     *
-     * @return the number of selectors in this container
-     */
-    public int selectorCount()
-    {
-//        if (isReference()) {
-//            return getRef().selectorCount();
-//        }
-        return super.selectorCount();
-    }
-
-    /**
-     * Returns the set of selectors as an array.
-     *
-     * @param p the current project
-     * @return an array of selectors in this container
-     */
-    public FileSelector[] getSelectors()
-    {
-//        if (isReference()) {
-//            return getRef().getSelectors(p);
-//        }
-        return super.getSelectors();
-    }
-
-    /**
-     * Returns an enumerator for accessing the set of selectors.
-     *
-     * @return an enumerator that goes through each of the selectors
-     */
-    public Enumeration selectorElements()
-    {
-//        if (isReference()) {
-//            return getRef().selectorElements();
-//        }
-        return super.selectorElements();
-    }
-
-    /**
-     * Add a new selector into this container.
-     *
-     * @param selector the new selector to add
-     */
-    public void appendSelector(FileSelector selector)
-    {
-//        if (isReference()) {
-//            throw noChildrenAllowed();
-//        }
-        super.appendSelector(selector);
-    }
-
 
     /**
      * Makes sure that there is only one entry, sets an error message if
@@ -229,7 +151,7 @@ public class SelectSelector extends BaseSelectorContainer
             return false;
         }
 
-        Enumeration e = selectorElements();
+        Enumeration<FileSelector> e = selectorElements();
         if (!(e.hasMoreElements()))
         {
             return true;

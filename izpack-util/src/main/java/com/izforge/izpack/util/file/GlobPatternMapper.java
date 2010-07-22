@@ -70,7 +70,6 @@ public class GlobPatternMapper implements FileNameMapper
      * between / and \ (the two common directory characters).
      *
      * @param handleDirSep a boolean, default is false.
-     * @since Ant 1.6.3
      */
     public void setHandleDirSep(boolean handleDirSep)
     {
@@ -82,7 +81,6 @@ public class GlobPatternMapper implements FileNameMapper
      * in the names.
      *
      * @param caseSensitive a boolean, default is false.
-     * @since Ant 1.6.3
      */
     public void setCaseSensitive(boolean caseSensitive)
     {

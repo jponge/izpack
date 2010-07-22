@@ -17,13 +17,13 @@
 
 package com.izforge.izpack.util.file.types;
 
+import java.io.File;
+import java.util.Vector;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.file.FileUtils;
 import com.izforge.izpack.util.file.PathTokenizer;
-
-import java.io.File;
-import java.util.Vector;
 
 
 /**
@@ -54,23 +54,9 @@ import java.util.Vector;
 public class Path extends DataType implements Cloneable
 {
 
-    private static FileUtils fileUtils = FileUtils.newFileUtils();
+    private static FileUtils fileUtils = FileUtils.getFileUtils();
 
-    private Vector elements;
-
-//    /** The system classspath as a Path object */
-//    public static Path systemClasspath =
-//        new Path(/*null, */System.getProperty("java.class.path"));
-//
-//
-//    /**
-//     * The system bootclasspath as a Path object.
-//     *
-//     * @since Ant 1.6.2
-//     */
-//    public static Path systemBootClasspath =
-//        new Path(/*null, */System.getProperty("sun.boot.class.path"));
-
+    private Vector<Object> elements;
 
     /**
      * Helper class, holds the nested <code>&lt;pathelement&gt;</code> values.
@@ -104,7 +90,6 @@ public class Path extends DataType implements Cloneable
      */
     public Path(AutomatedInstallData idata, String path) throws Exception
     {
-//        this(p);
         createPathElement().setPath(idata, path);
     }
 
@@ -115,8 +100,7 @@ public class Path extends DataType implements Cloneable
      */
     public Path()
     {
-//        setProject(project);
-        elements = new Vector();
+        elements = new Vector<Object>();
     }
 
     /**
@@ -248,11 +232,7 @@ public class Path extends DataType implements Cloneable
         for (int i = 0; i < list.length; i++)
         {
             File f = null;
-//            if (getProject() != null) {
-//                f = getProject().resolveFile(list[i]);
-//            } else {
             f = new File(list[i]);
-//            }
             // probably not the best choice, but it solves the problem of
             // relative paths in CLASSPATH
             if (tryUserDir && !f.exists())
@@ -265,8 +245,7 @@ public class Path extends DataType implements Cloneable
             }
             else
             {
-                Debug.log("dropping " + f + " from path as it doesn't exist"/*,
-                    Project.MSG_VERBOSE*/);
+                Debug.log("dropping " + f + " from path as it doesn't exist");
             }
         }
     }
@@ -278,26 +257,10 @@ public class Path extends DataType implements Cloneable
      */
     public String[] list() throws Exception
     {
-//        if (!isChecked()) {
-//            // make sure we don't have a circular reference here
-//            Stack stk = new Stack();
-//            stk.push(this);
-//            dieOnCircularReference(stk, getProject());
-//        }
-
-        Vector result = new Vector(2 * elements.size());
+        Vector<String> result = new Vector<String>(2 * elements.size());
         for (int i = 0; i < elements.size(); i++)
         {
             Object o = elements.elementAt(i);
-//            if (o instanceof Reference) {
-//                Reference r = (Reference) o;
-//                o = r.getReferencedObject(getProject());
-//                // we only support references to paths right now
-//                if (!(o instanceof Path)) {
-//                    String msg = r.getRefId() + " doesn\'t denote a path " + o;
-//                    throw new Exception(msg);
-//                }
-//            }
 
             if (o instanceof String)
             {
@@ -320,9 +283,6 @@ public class Path extends DataType implements Cloneable
             else if (o instanceof Path)
             {
                 Path p = (Path) o;
-//                if (p.getProject() == null) {
-//                    p.setProject(getProject());
-//                }
                 String[] parts = p.list();
                 for (int j = 0; j < parts.length; j++)
                 {
@@ -332,20 +292,20 @@ public class Path extends DataType implements Cloneable
             else if (o instanceof DirSet)
             {
                 DirSet dset = (DirSet) o;
-                addUnlessPresent(result, dset.getDir(/*getProject()*/),
-                        dset.getDirectoryScanner(/*getProject()*/).getIncludedDirectories());
+                addUnlessPresent(result, dset.getDir(),
+                        dset.getDirectoryScanner().getIncludedDirectories());
             }
             else if (o instanceof FileSet)
             {
                 FileSet fs = (FileSet) o;
-                addUnlessPresent(result, fs.getDir(/*getProject()*/),
-                        fs.getDirectoryScanner(/*getProject()*/).getIncludedFiles());
+                addUnlessPresent(result, fs.getDir(),
+                        fs.getDirectoryScanner().getIncludedFiles());
             }
             else if (o instanceof FileList)
             {
                 FileList fl = (FileList) o;
                 addUnlessPresent(result,
-                        fl.getDir(/*getProject()*/), fl.getFiles(/*getProject()*/));
+                        fl.getDir(), fl.getFiles());
             }
         }
         String[] res = new String[result.size()];
@@ -393,7 +353,7 @@ public class Path extends DataType implements Cloneable
      */
     public static String[] translatePath(AutomatedInstallData idata, String source)
     {
-        final Vector result = new Vector();
+        final Vector<String> result = new Vector<String>();
         if (source == null)
         {
             return new String[0];
@@ -477,7 +437,7 @@ public class Path extends DataType implements Cloneable
         try
         {
             Path p = (Path) super.clone();
-            p.elements = (Vector) elements.clone();
+            p.elements = (Vector<Object>) elements.clone();
             return p;
         }
         catch (CloneNotSupportedException e)
@@ -501,7 +461,7 @@ public class Path extends DataType implements Cloneable
     /**
      * Adds a String to the Vector if it isn't already included.
      */
-    private static void addUnlessPresent(Vector v, String s)
+    private static void addUnlessPresent(Vector<String> v, String s)
     {
         if (v.indexOf(s) == -1)
         {
@@ -513,7 +473,7 @@ public class Path extends DataType implements Cloneable
      * Adds absolute path names of listed files in the given directory
      * to the Vector if they are not already included.
      */
-    private static void addUnlessPresent(Vector v, File dir, String[] s)
+    private static void addUnlessPresent(Vector<String> v, File dir, String[] s)
     {
         for (int j = 0; j < s.length; j++)
         {
@@ -522,174 +482,4 @@ public class Path extends DataType implements Cloneable
             addUnlessPresent(v, translateFile(absolutePath));
         }
     }
-
-//    /**
-//     * Concatenates the system class path in the order specified by
-//     * the ${build.sysclasspath} property - using &quot;last&quot; as
-//     * default value.
-//     */
-//    public Path concatSystemClasspath() {
-//        return concatSystemClasspath("last");
-//    }
-
-//    /**
-//     * Concatenates the system class path in the order specified by
-//     * the ${build.sysclasspath} property - using the supplied value
-//     * if ${build.sysclasspath} has not been set.
-//     */
-//    public Path concatSystemClasspath(String defValue) {
-//
-//        Path result = new Path(/*getProject()*/);
-//
-//        String order = defValue;
-//        if (getProject() != null) {
-//            String o = getProject().getProperty("build.sysclasspath");
-//            if (o != null) {
-//                order = o;
-//            }
-//        }
-//
-//        if (order.equals("only")) {
-//            // only: the developer knows what (s)he is doing
-//            result.addExisting(Path.systemClasspath, true);
-//
-//        } else if (order.equals("first")) {
-//            // first: developer could use a little help
-//            result.addExisting(Path.systemClasspath, true);
-//            result.addExisting(this);
-//
-//        } else if (order.equals("ignore")) {
-//            // ignore: don't trust anyone
-//            result.addExisting(this);
-//
-//        } else {
-//            // last: don't trust the developer
-//            if (!order.equals("last")) {
-//                log("invalid value for build.sysclasspath: " + order,
-//                    Project.MSG_WARN);
-//            }
-//
-//            result.addExisting(this);
-//            result.addExisting(Path.systemClasspath, true);
-//        }
-//
-//
-//        return result;
-//
-//    }
-
-//    /**
-//     * Add the Java Runtime classes to this Path instance.
-//     */
-//    public void addJavaRuntime() {
-//        if ("Kaffe".equals(System.getProperty("java.vm.name"))) {
-//            // newer versions of Kaffe (1.1.1+) won't have this,
-//            // but this will be sorted by FileSet anyway.
-//            File kaffeShare = new File(System.getProperty("java.home")
-//                                       + File.separator + "share"
-//                                       + File.separator + "kaffe");
-//            if (kaffeShare.isDirectory()) {
-//                FileSet kaffeJarFiles = new FileSet();
-//                kaffeJarFiles.setDir(kaffeShare);
-//                kaffeJarFiles.setIncludes("*.jar");
-//                addFileset(kaffeJarFiles);
-//            }
-//        } else if ("GNU libgcj".equals(System.getProperty("java.vm.name"))) {
-//            addExisting(systemBootClasspath);
-//        }
-//
-//        if (System.getProperty("java.vendor").toLowerCase(Locale.US).indexOf("microsoft") >= 0) {
-//            // Pull in *.zip from packages directory
-//            FileSet msZipFiles = new FileSet();
-//            msZipFiles.setDir(new File(System.getProperty("java.home")
-//                + File.separator + "Packages"));
-//            msZipFiles.setIncludes("*.ZIP");
-//            addFileset(msZipFiles);
-//        } else if (JavaEnvUtils.isJavaVersion(JavaEnvUtils.JAVA_1_1)) {
-//            addExisting(new Path(null,
-//                                 System.getProperty("java.home")
-//                                 + File.separator + "lib"
-//                                 + File.separator
-//                                 + "classes.zip"));
-//        } else {
-//            // JDK > 1.1 seems to set java.home to the JRE directory.
-//            addExisting(new Path(null,
-//                                 System.getProperty("java.home")
-//                                 + File.separator + "lib"
-//                                 + File.separator + "rt.jar"));
-//            // Just keep the old version as well and let addExisting
-//            // sort it out.
-//            addExisting(new Path(null,
-//                                 System.getProperty("java.home")
-//                                 + File.separator + "jre"
-//                                 + File.separator + "lib"
-//                                 + File.separator + "rt.jar"));
-//
-//            // Sun's and Apple's 1.4 have JCE and JSSE in separate jars.
-//            String[] secJars = {"jce", "jsse"};
-//            for (int i = 0; i < secJars.length; i++) {
-//                addExisting(new Path(null,
-//                                     System.getProperty("java.home")
-//                                     + File.separator + "lib"
-//                                     + File.separator + secJars[i] + ".jar"));
-//                addExisting(new Path(null,
-//                                     System.getProperty("java.home")
-//                                     + File.separator + ".."
-//                                     + File.separator + "Classes"
-//                                     + File.separator + secJars[i] + ".jar"));
-//            }
-//
-//            // IBM's 1.4 has rt.jar split into 4 smaller jars and a combined
-//            // JCE/JSSE in security.jar.
-//            String[] ibmJars
-//                = {"core", "graphics", "security", "server", "xml"};
-//            for (int i = 0; i < ibmJars.length; i++) {
-//                addExisting(new Path(null,
-//                                     System.getProperty("java.home")
-//                                     + File.separator + "lib"
-//                                     + File.separator + ibmJars[i] + ".jar"));
-//            }
-//
-//            // Added for MacOS X
-//            addExisting(new Path(null,
-//                                 System.getProperty("java.home")
-//                                 + File.separator + ".."
-//                                 + File.separator + "Classes"
-//                                 + File.separator + "classes.jar"));
-//            addExisting(new Path(null,
-//                                 System.getProperty("java.home")
-//                                 + File.separator + ".."
-//                                 + File.separator + "Classes"
-//                                 + File.separator + "ui.jar"));
-//        }
-//    }
-//
-//    /**
-//     * Emulation of extdirs feature in java >= 1.2.
-//     * This method adds all files in the given
-//     * directories (but not in sub-directories!) to the classpath,
-//     * so that you don't have to specify them all one by one.
-//     * @param extdirs - Path to append files to
-//     */
-//    public void addExtdirs(Path extdirs) {
-//        if (extdirs == null) {
-//            String extProp = System.getProperty("java.ext.dirs");
-//            if (extProp != null) {
-//                extdirs = new Path(getProject(), extProp);
-//            } else {
-//                return;
-//            }
-//        }
-//
-//        String[] dirs = extdirs.list();
-//        for (int i = 0; i < dirs.length; i++) {
-//            File dir = getProject().resolveFile(dirs[i]);
-//            if (dir.exists() && dir.isDirectory()) {
-//                FileSet fs = new FileSet();
-//                fs.setDir(dir);
-//                fs.setIncludes("*");
-//                addFileset(fs);
-//            }
-//        }
-//    }
 }

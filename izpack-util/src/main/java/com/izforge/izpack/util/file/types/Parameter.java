@@ -22,9 +22,9 @@ package com.izforge.izpack.util.file.types;
  */
 public final class Parameter
 {
-    private String name = null;
-    private String type = null;
-    private String value = null;
+    private String name;
+    private String type;
+    private String value;
 
     public final void setName(final String name)
     {

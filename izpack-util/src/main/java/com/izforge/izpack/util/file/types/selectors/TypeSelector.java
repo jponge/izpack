@@ -17,11 +17,13 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.file.types.EnumeratedAttribute;
-import com.izforge.izpack.util.file.types.Parameter;
-
 import java.io.File;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.util.file.types.Parameter;
 
 /**
  * Selector that selects a certain kind of file: directory or regular.
@@ -29,7 +31,7 @@ import java.io.File;
 public class TypeSelector extends BaseExtendSelector
 {
 
-    private String type = null;
+    private FileType type;
 
     /**
      * Key to used for parameterized custom selector
@@ -49,7 +51,7 @@ public class TypeSelector extends BaseExtendSelector
     public String toString()
     {
         StringBuffer buf = new StringBuffer("{typeselector type: ");
-        buf.append(type);
+        buf.append(type.getAttribute());
         buf.append("}");
         return buf.toString();
     }
@@ -57,11 +59,11 @@ public class TypeSelector extends BaseExtendSelector
     /**
      * Set the type of file to require.
      *
-     * @param fileTypes the type of file - file or dir
+     * @param fileType the type of file - file or dir
      */
-    public void setType(FileType fileTypes)
+    public void setType(FileType fileType)
     {
-        this.type = fileTypes.getValue();
+        this.type = fileType;
     }
 
     /**
@@ -80,16 +82,15 @@ public class TypeSelector extends BaseExtendSelector
                 String paramname = parameters[i].getName();
                 if (TYPE_KEY.equalsIgnoreCase(paramname))
                 {
-                    FileType type = new FileType();
-                    try
+                    FileType type = FileType.getFromAttribute(parameters[i].getValue());
+                    if (type != null)
                     {
-                        type.setValue(parameters[i].getValue());
+                        setType(type);
                     }
-                    catch (Exception e)
+                    else
                     {
                         setError("Invalid " + TYPE_KEY + " setting " + parameters[i].getValue());
                     }
-                    setType(type);
                 }
                 else
                 {
@@ -136,28 +137,40 @@ public class TypeSelector extends BaseExtendSelector
         }
     }
 
-    /**
-     * Enumerated attribute with the values for types of file
-     */
-    public static class FileType extends EnumeratedAttribute
+    public enum FileType
     {
-        /**
-         * the string value for file
-         */
-        public static final String FILE = "file";
-        /**
-         * the string value for dir
-         */
-        public static final String DIR = "dir";
+        FILE("file"), DIR("dir");
 
-        /**
-         * @return the values as an array of strings
-         */
-        public String[] getValues()
+        private static Map<String, FileType> lookup;
+
+        private String attribute;
+
+        FileType(String attribute)
         {
-            return new String[]{FILE, DIR};
+            this.attribute = attribute;
+        }
+
+        static
+        {
+            lookup = new HashMap<String, FileType>();
+            for (FileType mapperType : EnumSet.allOf(FileType.class))
+            {
+                lookup.put(mapperType.getAttribute(), mapperType);
+            }
+        }
+
+        public String getAttribute()
+        {
+            return attribute;
+        }
+
+        public static FileType getFromAttribute(String attribute)
+        {
+            if (attribute != null && lookup.containsKey(attribute))
+            {
+                return lookup.get(attribute);
+            }
+            return null;
         }
     }
-
-
 }

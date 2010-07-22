@@ -20,8 +20,6 @@ package com.izforge.izpack.util.file.types;
 /**
  * this interface should be implemented by classes (Scanners) needing
  * to deliver information about resources.
- *
- * @since Ant 1.5.2
  */
 public interface ResourceFactory
 {

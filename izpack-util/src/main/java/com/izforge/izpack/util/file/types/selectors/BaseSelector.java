@@ -27,8 +27,6 @@ import java.io.File;
  * provides some helpful common behaviour. Note that there is no need
  * for Selectors to inherit from this class, it is only necessary that
  * they implement FileSelector.
- *
- * @since 1.5
  */
 public abstract class BaseSelector extends DataType implements FileSelector
 {

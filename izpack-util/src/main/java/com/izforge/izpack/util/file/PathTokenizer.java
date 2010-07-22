@@ -17,11 +17,11 @@
 
 package com.izforge.izpack.util.file;
 
-import org.apache.tools.ant.taskdefs.condition.Os;
-
 import java.io.File;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+
+import org.apache.tools.ant.taskdefs.condition.Os;
 
 /**
  * A Path tokenizer takes a path and returns the components that make up
@@ -189,4 +189,3 @@ public class PathTokenizer
         return token;
     }
 }
-

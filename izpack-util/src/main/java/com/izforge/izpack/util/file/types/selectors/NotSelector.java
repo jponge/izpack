@@ -17,14 +17,11 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-
 /**
  * This selector has one other selectors whose meaning it inverts. It
  * actually relies on NoneSelector for its implementation of the
  * isSelected() method, but it adds a check to ensure there is only one
  * other selector contained within.
- *
- * @since 1.5
  */
 public class NotSelector extends NoneSelector
 {
@@ -65,4 +62,3 @@ public class NotSelector extends NoneSelector
     }
 
 }
-

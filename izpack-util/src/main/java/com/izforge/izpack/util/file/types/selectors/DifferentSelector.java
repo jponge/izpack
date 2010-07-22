@@ -17,11 +17,10 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.util.FileUtils;
-
 import java.io.File;
-import java.io.IOException;
+
+import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.util.file.FileUtils;
 
 /**
  * This selector selects files against a mapped set of target files, selecting
@@ -48,7 +47,7 @@ import java.io.IOException;
 public class DifferentSelector extends MappingSelector
 {
 
-    private FileUtils fileUtils = FileUtils.newFileUtils();
+    private FileUtils fileUtils = FileUtils.getFileUtils();
 
     private boolean ignoreFileTimes = true;
     private boolean ignoreContents = false;
@@ -68,7 +67,6 @@ public class DifferentSelector extends MappingSelector
      * This flag tells the selector to ignore contents
      *
      * @param ignoreContents if true ignore contents
-     * @since ant 1.6.3
      */
     public void setIgnoreContents(boolean ignoreContents)
     {
@@ -117,9 +115,9 @@ public class DifferentSelector extends MappingSelector
             {
                 return !fileUtils.contentEquals(srcfile, destfile);
             }
-            catch (IOException e)
+            catch (Exception e)
             {
-                throw new BuildException("while comparing " + srcfile + " and "
+                throw new IzPackException("while comparing " + srcfile + " and "
                         + destfile, e);
             }
         }

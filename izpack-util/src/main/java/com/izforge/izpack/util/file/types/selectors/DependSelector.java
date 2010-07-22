@@ -24,8 +24,6 @@ import java.io.File;
  * a matching file in another directory tree. It can contain a mapper
  * element, so isn't available as an ExtendSelector (since those
  * parameters can't hold other elements).
- *
- * @since 1.5
  */
 public class DependSelector extends MappingSelector
 {

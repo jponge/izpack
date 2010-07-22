@@ -17,23 +17,22 @@
 
 package com.izforge.izpack.util.file;
 
-import com.izforge.izpack.util.file.types.Mapper;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import com.izforge.izpack.util.file.types.Mapper;
+
 /**
- * A <code>FileNameMapper</code> that contains
- * other <CODE>FileNameMapper</CODE>s.
+ * A <code>FileNameMapper</code> that contains other <CODE>FileNameMapper</CODE>s.
  *
  * @see FileNameMapper
  */
 public abstract class ContainerMapper implements FileNameMapper
 {
 
-    private List mappers = new ArrayList();
+    private List<FileNameMapper> mappers = new ArrayList<FileNameMapper>();
 
     /**
      * Add a <code>Mapper</code>.
@@ -49,20 +48,17 @@ public abstract class ContainerMapper implements FileNameMapper
      * Add a <code>FileNameMapper</code>.
      *
      * @param fileNameMapper a <CODE>FileNameMapper</CODE>.
-     * @throws <CODE>IllegalArgumentException</CODE>
-     *          if attempting to add this
-     *          <CODE>ContainerMapper</CODE> to itself, or if the specified
-     *          <CODE>FileNameMapper</CODE> is itself a <CODE>ContainerMapper</CODE>
-     *          that contains this <CODE>ContainerMapper</CODE>.
+     * @throws <CODE>IllegalArgumentException</CODE> if attempting to add this
+     * <CODE>ContainerMapper</CODE> to itself, or if the specified <CODE>FileNameMapper</CODE> is
+     * itself a <CODE>ContainerMapper</CODE> that contains this <CODE>ContainerMapper</CODE>.
      */
     public synchronized void add(FileNameMapper fileNameMapper)
     {
         if (this == fileNameMapper
-                || (fileNameMapper instanceof ContainerMapper
-                && ((ContainerMapper) fileNameMapper).contains(this)))
+                || (fileNameMapper instanceof ContainerMapper && ((ContainerMapper) fileNameMapper)
+                        .contains(this)))
         {
-            throw new IllegalArgumentException(
-                    "Circular mapper containment condition detected");
+            throw new IllegalArgumentException("Circular mapper containment condition detected");
         }
         else
         {
@@ -71,8 +67,8 @@ public abstract class ContainerMapper implements FileNameMapper
     }
 
     /**
-     * Return <CODE>true</CODE> if this <CODE>ContainerMapper</CODE> or any of
-     * its sub-elements contains the specified <CODE>FileNameMapper</CODE>.
+     * Return <CODE>true</CODE> if this <CODE>ContainerMapper</CODE> or any of its sub-elements
+     * contains the specified <CODE>FileNameMapper</CODE>.
      *
      * @param fileNameMapper the <CODE>FileNameMapper</CODE> to search for.
      * @return <CODE>boolean</CODE>.
@@ -80,12 +76,11 @@ public abstract class ContainerMapper implements FileNameMapper
     protected synchronized boolean contains(FileNameMapper fileNameMapper)
     {
         boolean foundit = false;
-        for (Iterator iter = mappers.iterator(); iter.hasNext() && !foundit;)
+        for (Iterator<FileNameMapper> iter = mappers.iterator(); iter.hasNext() && !foundit;)
         {
-            FileNameMapper next = (FileNameMapper) (iter.next());
-            foundit |= (next == fileNameMapper
-                    || (next instanceof ContainerMapper
-                    && ((ContainerMapper) next).contains(fileNameMapper)));
+            FileNameMapper next = iter.next();
+            foundit |= (next == fileNameMapper || (next instanceof ContainerMapper && ((ContainerMapper) next)
+                    .contains(fileNameMapper)));
         }
         return foundit;
     }
@@ -95,7 +90,7 @@ public abstract class ContainerMapper implements FileNameMapper
      *
      * @return <CODE>List</CODE>.
      */
-    public synchronized List getMappers()
+    public synchronized List<FileNameMapper> getMappers()
     {
         return Collections.unmodifiableList(mappers);
     }
@@ -115,4 +110,3 @@ public abstract class ContainerMapper implements FileNameMapper
     }
 
 }
-

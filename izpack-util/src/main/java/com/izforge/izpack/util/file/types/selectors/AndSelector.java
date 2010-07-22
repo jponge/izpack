@@ -25,8 +25,6 @@ import java.util.Enumeration;
 /**
  * This selector has a collection of other selectors, all of which have to
  * select a file in order for this selector to select it.
- *
- * @since 1.5
  */
 public class AndSelector extends BaseSelectorContainer
 {
@@ -67,7 +65,7 @@ public class AndSelector extends BaseSelectorContainer
             throws Exception
     {
         validate();
-        Enumeration e = selectorElements();
+        Enumeration<FileSelector> e = selectorElements();
         boolean result;
 
         while (e.hasMoreElements())

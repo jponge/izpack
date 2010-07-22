@@ -17,11 +17,11 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import com.izforge.izpack.util.file.types.Resource;
-
 import java.io.File;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
+import com.izforge.izpack.util.file.types.Resource;
 
 /**
  * <p>This is a utility class used by selectors and DirectoryScanner. The
@@ -30,8 +30,6 @@ import java.util.Vector;
  * support any subclasses of DirectoryScanner that may access these methods.
  * </p>
  * <p>This is a Singleton.</p>
- *
- * @since 1.5
  */
 public final class SelectorUtils
 {
@@ -559,7 +557,7 @@ public final class SelectorUtils
      * @param path Path to tokenize. Must not be <code>null</code>.
      * @return a Vector of path elements from the tokenized path
      */
-    public static Vector tokenizePath(String path)
+    public static Vector<String> tokenizePath(String path)
     {
         return tokenizePath(path, File.separator);
     }
@@ -570,11 +568,10 @@ public final class SelectorUtils
      * @param path      Path to tokenize. Must not be <code>null</code>.
      * @param separator the separator against which to tokenize.
      * @return a Vector of path elements from the tokenized path
-     * @since Ant 1.6
      */
-    public static Vector tokenizePath(String path, String separator)
+    public static Vector<String> tokenizePath(String path, String separator)
     {
-        Vector ret = new Vector();
+        Vector<String> ret = new Vector<String>();
         StringTokenizer st = new StringTokenizer(path, separator);
         while (st.hasMoreTokens())
         {
@@ -735,11 +732,11 @@ public final class SelectorUtils
      */
     public static String rtrimWildcardTokens(String input)
     {
-        Vector v = tokenizePath(input, File.separator);
+        Vector<String> v = tokenizePath(input, File.separator);
         StringBuffer sb = new StringBuffer();
         for (int counter = 0; counter < v.size(); counter++)
         {
-            if (hasWildcards((String) v.elementAt(counter)))
+            if (hasWildcards(v.elementAt(counter)))
             {
                 break;
             }
@@ -747,9 +744,8 @@ public final class SelectorUtils
             {
                 sb.append(File.separator);
             }
-            sb.append((String) v.elementAt(counter));
+            sb.append(v.elementAt(counter));
         }
         return sb.toString();
     }
 }
-

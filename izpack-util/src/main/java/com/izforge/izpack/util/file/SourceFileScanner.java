@@ -17,11 +17,11 @@
 
 package com.izforge.izpack.util.file;
 
-import com.izforge.izpack.util.file.types.Resource;
-import com.izforge.izpack.util.file.types.ResourceFactory;
-
 import java.io.File;
 import java.util.Vector;
+
+import com.izforge.izpack.util.file.types.Resource;
+import com.izforge.izpack.util.file.types.ResourceFactory;
 
 /**
  * Utility class that collects the functionality of the various
@@ -33,19 +33,15 @@ import java.util.Vector;
  */
 public class SourceFileScanner implements ResourceFactory
 {
-
-//    protected Task task;
-
     private FileUtils fileUtils;
-    private File destDir;     // base directory of the fileset
+    private File destDir; // base directory of the fileset
 
     /**
      * @param task The task we should log messages through
      */
-    public SourceFileScanner(/*Task task*/)
+    public SourceFileScanner()
     {
-//        this.task = task;
-        fileUtils = FileUtils.newFileUtils();
+        fileUtils = FileUtils.getFileUtils();
     }
 
     /**
@@ -78,7 +74,6 @@ public class SourceFileScanner implements ResourceFactory
      *                    source file names.
      * @param granularity The number of milliseconds leeway to give
      *                    before deciding a target is out of date.
-     * @since Ant 1.6.2
      */
     public String[] restrict(String[] files, File srcDir, File destDir,
                              FileNameMapper mapper, long granularity)
@@ -86,7 +81,7 @@ public class SourceFileScanner implements ResourceFactory
     {
         // record destdir for later use in getResource
         this.destDir = destDir;
-        Vector v = new Vector();
+        Vector<Resource> v = new Vector<Resource>();
         for (int i = 0; i < files.length; i++)
         {
             File src = fileUtils.resolveFile(srcDir, files[i]);
@@ -125,8 +120,6 @@ public class SourceFileScanner implements ResourceFactory
      * Convinience layer on top of restrict that returns the source
      * files as File objects (containing absolute paths if srcDir is
      * absolute).
-     *
-     * @since Ant 1.6.2
      */
     public File[] restrictAsFiles(String[] files, File srcDir, File destDir,
                                   FileNameMapper mapper, long granularity)
@@ -154,4 +147,3 @@ public class SourceFileScanner implements ResourceFactory
                 src.isDirectory());
     }
 }
-

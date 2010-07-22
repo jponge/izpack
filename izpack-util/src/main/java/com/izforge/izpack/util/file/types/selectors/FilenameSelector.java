@@ -17,15 +17,13 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
+import java.io.File;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.util.file.types.Parameter;
 
-import java.io.File;
-
 /**
  * Selector that filters files based on the filename.
- *
- * @since 1.5
  */
 public class FilenameSelector extends BaseExtendSelector
 {
@@ -192,4 +190,3 @@ public class FilenameSelector extends BaseExtendSelector
     }
 
 }
-

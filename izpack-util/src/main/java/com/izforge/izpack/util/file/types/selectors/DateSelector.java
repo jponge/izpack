@@ -17,16 +17,18 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.file.types.EnumeratedAttribute;
-import com.izforge.izpack.util.file.types.Parameter;
-
 import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.file.types.Parameter;
 
 /**
  * Selector that chooses files based on their last modified date.
@@ -38,7 +40,7 @@ public class DateSelector extends BaseExtendSelector
     private String dateTime = null;
     private boolean includeDirs = false;
     private int granularity = 0;
-    private int cmp = 2;
+    private TimeComparisons cmp = TimeComparisons.EQUAL;
     private String pattern;
     /**
      * Key to used for parameterized custom selector
@@ -84,18 +86,7 @@ public class DateSelector extends BaseExtendSelector
         StringBuffer buf = new StringBuffer("{dateselector date: ");
         buf.append(dateTime);
         buf.append(" compare: ");
-        if (cmp == 0)
-        {
-            buf.append("before");
-        }
-        else if (cmp == 1)
-        {
-            buf.append("after");
-        }
-        else
-        {
-            buf.append("equal");
-        }
+        buf.append(cmp.getAttribute());
         buf.append(" granularity: ");
         buf.append(granularity);
         if (pattern != null)
@@ -164,14 +155,13 @@ public class DateSelector extends BaseExtendSelector
     }
 
     /**
-     * Sets the type of comparison to be done on the file's last modified
-     * date.
+     * Sets the type of comparison to be done on the file's last modified date.
      *
      * @param cmp The comparison to perform, an EnumeratedAttribute
      */
     public void setWhen(TimeComparisons cmp)
     {
-        this.cmp = cmp.getIndex();
+        this.cmp = cmp;
     }
 
     /**
@@ -234,16 +224,15 @@ public class DateSelector extends BaseExtendSelector
                 }
                 else if (WHEN_KEY.equalsIgnoreCase(paramname))
                 {
-                    TimeComparisons cmp = new TimeComparisons();
-                    try
+                    TimeComparisons cmp = TimeComparisons.getFromAttribute(parameters[i].getValue());
+                    if (cmp != null)
                     {
-                        cmp.setValue(parameters[i].getValue());
+                        setWhen(cmp);
                     }
-                    catch (Exception e)
+                    else
                     {
-                        setError(e.getMessage() + ": " + parameters[i].getValue());
+                        setError("Invalid " + WHEN_KEY + " setting " + parameters[i].getValue());
                     }
-                    setWhen(cmp);
                 }
                 else if (PATTERN_KEY.equalsIgnoreCase(paramname))
                 {
@@ -315,35 +304,54 @@ public class DateSelector extends BaseExtendSelector
         {
             return true;
         }
-        if (cmp == 0)
+        switch (cmp)
         {
-            return ((file.lastModified() - granularity) < millis);
-        }
-        else if (cmp == 1)
-        {
-            return ((file.lastModified() + granularity) > millis);
-        }
-        else
-        {
-            return (Math.abs(file.lastModified() - millis) <= granularity);
+            case BEFORE:
+                return ((file.lastModified() - granularity) < millis);
+
+            case AFTER:
+                return ((file.lastModified() + granularity) > millis);
+
+            default:
+                return (Math.abs(file.lastModified() - millis) <= granularity);
         }
     }
 
-    /**
-     * Enumerated attribute with the values for time comparison.
-     * <p/>
-     */
-    public static class TimeComparisons extends EnumeratedAttribute
+    public enum TimeComparisons
     {
-        /**
-         * @return the values as an array of strings
-         */
-        public String[] getValues()
+        BEFORE("before"), AFTER("after"), EQUAL("equal");
+
+        private static Map<String, TimeComparisons> lookup;
+
+        private String attribute;
+
+        TimeComparisons(String attribute)
         {
-            return new String[]{"before", "after", "equal"};
+            this.attribute = attribute;
+        }
+
+        static
+        {
+            lookup = new HashMap<String, TimeComparisons>();
+            for (TimeComparisons mapperType : EnumSet.allOf(TimeComparisons.class))
+            {
+                lookup.put(mapperType.getAttribute(), mapperType);
+            }
+        }
+
+        public String getAttribute()
+        {
+            return attribute;
+        }
+
+        public static TimeComparisons getFromAttribute(String attribute)
+        {
+            if (attribute != null && lookup.containsKey(attribute))
+            {
+                return lookup.get(attribute);
+            }
+            return null;
         }
     }
 
 }
-
-

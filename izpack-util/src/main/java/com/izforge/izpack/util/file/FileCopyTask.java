@@ -20,7 +20,6 @@ package com.izforge.izpack.util.file;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.file.types.FileSet;
 import com.izforge.izpack.util.file.types.Mapper;
-import org.apache.tools.ant.BuildException;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,7 +64,7 @@ public class FileCopyTask
      */
     public FileCopyTask()
     {
-        fileUtils = FileUtils.newFileUtils();
+        fileUtils = FileUtils.getFileUtils();
         granularity = fileUtils.getFileTimestampGranularity();
     }
 
@@ -213,7 +212,7 @@ public class FileCopyTask
      * Defines the mapper to map source to destination files.
      *
      * @return a mapper to be configured
-     * @throws BuildException if more than one mapper is defined
+     * @throws Exception if more than one mapper is defined
      */
     public Mapper createMapper() throws Exception
     {
@@ -248,7 +247,7 @@ public class FileCopyTask
     /**
      * Performs the copy operation.
      *
-     * @throws BuildException if an error occurs
+     * @throws Exception if an error occurs
      */
     public void execute() throws Exception
     {
@@ -386,7 +385,7 @@ public class FileCopyTask
      * any internal flags necessary based on different combinations
      * of attributes.
      *
-     * @throws BuildException if an error occurs
+     * @throws Exception if an error occurs
      */
     protected void validateAttributes() throws Exception
     {

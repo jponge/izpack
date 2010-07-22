@@ -17,17 +17,15 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-
 import java.io.File;
 import java.util.Enumeration;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
 
 /**
  * This selector has a collection of other selectors. All of those selectors
  * must refuse to select a file before the file is considered selected by
  * this selector.
- *
- * @since 1.5
  */
 public class NoneSelector extends BaseSelectorContainer
 {
@@ -84,4 +82,3 @@ public class NoneSelector extends BaseSelectorContainer
     }
 
 }
-

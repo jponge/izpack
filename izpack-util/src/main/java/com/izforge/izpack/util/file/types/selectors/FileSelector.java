@@ -17,14 +17,12 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-
 import java.io.File;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
 
 /**
  * This is the interface to be used by all selectors.
- *
- * @since 1.5
  */
 public interface FileSelector
 {
@@ -32,7 +30,7 @@ public interface FileSelector
     /**
      * Method that each selector will implement to create their
      * selection behaviour. If there is a problem with the setup
-     * of a selector, it can throw a BuildException to indicate
+     * of a selector, it can throw a exception to indicate
      * the problem.
      *
      * @param basedir  A java.io.File object for the base directory
@@ -46,4 +44,3 @@ public interface FileSelector
             throws Exception;
 
 }
-

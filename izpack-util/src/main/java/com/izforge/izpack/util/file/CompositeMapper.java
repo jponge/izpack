@@ -19,7 +19,6 @@ package com.izforge.izpack.util.file;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 
 /**
  * A <CODE>ContainerMapper</CODE> that unites the results of its constituent
@@ -28,16 +27,12 @@ import java.util.Iterator;
 public class CompositeMapper extends ContainerMapper
 {
 
-    //inherit doc
-
     public String[] mapFileName(String sourceFileName)
     {
-        HashSet results = new HashSet();
+        HashSet<String> results = new HashSet<String>();
 
-        FileNameMapper mapper = null;
-        for (Iterator mIter = getMappers().iterator(); mIter.hasNext();)
+        for (FileNameMapper mapper : getMappers())
         {
-            mapper = (FileNameMapper) (mIter.next());
             if (mapper != null)
             {
                 String[] mapped = mapper.mapFileName(sourceFileName);
@@ -47,9 +42,9 @@ public class CompositeMapper extends ContainerMapper
                 }
             }
         }
-        return (results.size() == 0) ? null
-                : (String[]) results.toArray(new String[results.size()]);
+
+        return (results.size() == 0) ? null : (String[]) results
+                .toArray(new String[results.size()]);
     }
 
 }
-
