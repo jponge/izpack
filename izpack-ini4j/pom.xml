@@ -66,14 +66,6 @@
         </developer>
     </developers>
     <dependencies>
-        <!--
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.5</version>
-            <scope>test</scope>
-        </dependency>
-        -->
         <dependency>
             <groupId>jetty</groupId>
             <artifactId>jetty</artifactId>
@@ -98,18 +90,9 @@
             <version>2.0b4</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>net.sf.retrotranslator</groupId>
-            <artifactId>retrotranslator-runtime</artifactId>
-            <version>1.2.4</version>
-            <optional>true</optional>
-        </dependency>
     </dependencies>
     <properties>
         <upload.url>scp://shell.sourceforge.net//home/frs/project/i/in/ini4j</upload.url>
-        <!--
-        jdk14.home>/usr/java/j2sdk1.4.2_19</jdk14.home>
-        -->
     </properties>
     <profiles>
         <profile>
@@ -170,7 +153,7 @@
                         <dependencies>
                             <dependency>
                                 <groupId>pmd</groupId>
-                                <artifactId>pmd-jdk14</artifactId>
+                                <artifactId>pmd</artifactId>
                                 <version>4.2.5</version>
                             </dependency>
                         </dependencies>
@@ -219,112 +202,6 @@
                                         </artifactItem>
                                     </artifactItems>
                                     <outputDirectory>${project.build.directory}/test-deps</outputDirectory>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>retrotranslator-maven-plugin</artifactId>
-                        <dependencies>
-                            <dependency>
-                                <groupId>net.sf.retrotranslator</groupId>
-                                <artifactId>retrotranslator-runtime</artifactId>
-                                <version>1.2.4</version>
-                            </dependency>
-                        </dependencies>
-                        <configuration>
-                            <embed>org.ini4j.jdk14</embed>
-                            <advanced>true</advanced>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>translate-classes</id>
-                                <goals>
-                                    <goal>translate</goal>
-                                </goals>
-                                <phase>process-classes</phase>
-                                <configuration>
-                                    <destdir>${project.build.directory}/classes-jdk14</destdir>
-                                    <filesets>
-                                        <fileset>
-                                            <directory>${project.build.outputDirectory}</directory>
-                                        </fileset>
-                                    </filesets>
-                                    <embed>org.ini4j.jdk14</embed>
-                                    <advanced>true</advanced>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>translate-test-classes</id>
-                                <goals>
-                                    <goal>translate</goal>
-                                </goals>
-                                <phase>process-test-classes</phase>
-                                <configuration>
-                                    <destdir>${project.build.directory}/test-classes-jdk14</destdir>
-                                    <filesets>
-                                        <fileset>
-                                            <directory>${project.build.testOutputDirectory}</directory>
-                                        </fileset>
-                                        <fileset>
-                                            <directory>${project.build.directory}/test-deps</directory>
-                                        </fileset>
-                                    </filesets>
-                                    <embed>org.ini4j.jdk14</embed>
-                                    <advanced>true</advanced>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>translate-project</id>
-                                <goals>
-                                    <goal>translate-project</goal>
-                                </goals>
-                                <configuration>
-                                    <classifier>jdk14</classifier>
-                                    <attach>true</attach>
-                                    <advanced>true</advanced>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.apache.ant</groupId>
-                                <artifactId>ant-junit</artifactId>
-                                <version>1.7.1</version>
-                            </dependency>
-                        </dependencies>
-                        <executions>
-                            <execution>
-                                <id>test</id>
-                                <phase>test</phase>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                                <configuration>
-                                    <tasks if="jdk14.home" unless="skip_jdk14_tests" >
-                                        <junit printsummary="on" haltonfailure="true" showoutput="true" fork="yes" forkMode="perBatch" jvm="${jdk14.home}/bin/java">
-                                            <sysproperty key="java.util.prefs.PreferencesFactory" value="org.ini4j.IniPreferencesFactory"/>
-                                            <sysproperty key="org.ini4j.prefs.user" value="org/ini4j/sample/dwarfs.ini"/>
-                                            <sysproperty key="org.ini4j.prefs.system" value="org/ini4j/sample/dwarfs.ini"/>
-                                            <sysproperty key="basedir" value="${basedir}"/>
-                                            <classpath>
-                                                <pathelement location="${basedir}/target/test-classes-jdk14"/>
-                                                <pathelement location="${basedir}/target/classes-jdk14"/>
-                                            </classpath>
-                                            <formatter type="plain" usefile="false" />
-                                            <batchtest>
-                                                <fileset dir="${basedir}/src/test/java">
-                                                    <include name="**/*Test.java"/>
-                                                    <exclude name="**/SampleRunnerTest.java"/>
-                                                </fileset>
-                                            </batchtest>
-                                        </junit>
-                                    </tasks>
                                 </configuration>
                             </execution>
                         </executions>
