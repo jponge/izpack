@@ -19,7 +19,7 @@
             <artifactId>izpack-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.ini4j</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>izpack-ini4j</artifactId>
         </dependency>
         <dependency>
