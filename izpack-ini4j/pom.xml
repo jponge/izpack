@@ -12,7 +12,7 @@
 
     <artifactId>izpack-ini4j</artifactId>
     <name>IzPack ini4j module</name>
-    <groupId>org.ini4j</groupId>
+    <groupId>org.codehaus.izpack</groupId>
     <version>0.5.2-SNAPSHOT</version>
 
     <description>Java API for handling configuration files in Windows .ini format. The library includes its own Map
@@ -21,31 +21,6 @@
     </description>
     <packaging>jar</packaging>
     <url>http://www.ini4j.org</url>
-    <scm>
-        <connection>scm:svn:https://ini4j.svn.sourceforge.net/svnroot/ini4j/trunk</connection>
-        <developerConnection>scm:svn:https://ini4j.svn.sourceforge.net/svnroot/ini4j/trunk</developerConnection>
-    </scm>
-    <distributionManagement>
-        <repository>
-            <id>ini4j-release</id>
-            <name>[ini4j] releases on SourceForge</name>
-            <url>scp://shell.sourceforge.net/home/groups/i/in/ini4j/repository/release</url>
-        </repository>
-        <snapshotRepository>
-            <id>ini4j-snapshot</id>
-            <name>[ini4j] snapshots on SourceForge</name>
-            <url>scp://shell.sourceforge.net/home/groups/i/in/ini4j/repository/snapshot</url>
-        </snapshotRepository>
-        <site>
-            <id>ini4j-site</id>
-            <name>[ini4j] site on SourceForge</name>
-            <url>scp://shell.sourceforge.net/home/groups/i/in/ini4j/htdocs</url>
-        </site>
-    </distributionManagement>
-    <issueManagement>
-        <system>sourceforge</system>
-        <url>http://sourceforge.net/tracker2/?group_id=129580</url>
-    </issueManagement>
     <licenses>
         <license>
             <name>Apache 2</name>
@@ -91,9 +66,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <properties>
-        <upload.url>scp://shell.sourceforge.net//home/frs/project/i/in/ini4j</upload.url>
-    </properties>
+
     <profiles>
         <profile>
             <id>windows</id>
@@ -235,6 +208,7 @@
             </build>
         </profile>
     </profiles>
+
     <build>
         <plugins>
             <plugin>
@@ -330,7 +304,6 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
@@ -350,140 +323,6 @@
                     </systemProperties>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>zip</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <descriptors>
-                                <descriptor>src/main/assembly/src.xml</descriptor>
-                                <descriptor>src/main/assembly/bin.xml</descriptor>
-                                <descriptor>src/main/assembly/all.xml</descriptor>
-                            </descriptors>
-                            <attach>false</attach>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>demo</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>target/generated-site/resources</outputDirectory>
-                            <finalName>ini4j-demo</finalName>
-                            <appendAssemblyId>false</appendAssemblyId>
-                            <descriptors>
-                                <descriptor>src/main/assembly/demo.xml</descriptor>
-                            </descriptors>
-                            <attach>false</attach>
-                            <archive>
-                                <manifest>
-                                    <mainClass>org.ini4j.demo.DemoMain</mainClass>
-                                </manifest>
-                            </archive>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>wagon-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>upload-all</id>
-                        <goals>
-                            <goal>upload</goal>
-                        </goals>
-                        <phase>deploy</phase>
-                        <configuration>
-                            <serverId>ini4j-upload</serverId>
-                            <fromDir>${project.build.directory}</fromDir>
-                            <includes>${project.build.finalName}-all.zip,ReleaseNotest.txt</includes>
-                            <url>${upload.url}/ini4j/${project.version}</url>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>upload-src</id>
-                        <goals>
-                            <goal>upload</goal>
-                        </goals>
-                        <phase>deploy</phase>
-                        <configuration>
-                            <serverId>ini4j-upload</serverId>
-                            <fromDir>${project.build.directory}</fromDir>
-                            <includes>${project.build.finalName}-src.zip,ReleaseNotest.txt</includes>
-                            <url>${upload.url}/ini4j-src/${project.version}</url>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>upload-bin</id>
-                        <goals>
-                            <goal>upload</goal>
-                        </goals>
-                        <phase>deploy</phase>
-                        <configuration>
-                            <serverId>ini4j-upload</serverId>
-                            <fromDir>${project.build.directory}</fromDir>
-                            <includes>${project.build.finalName}-bin.zip,ReleaseNotest.txt</includes>
-                            <url>${upload.url}/ini4j-bin/${project.version}</url>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>2.0</version>
-                <configuration>
-                    <generatedSiteDirectory>${basedir}/target/generated-site</generatedSiteDirectory>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.google.code.maven-license-plugin</groupId>
-                <artifactId>maven-license-plugin</artifactId>
-                <version>1.4.0</version>
-                <inherited>true</inherited>
-                <configuration>
-                    <aggregate>true</aggregate>
-                    <encoding>UTF-8</encoding>
-                    <useDefaultExcludes>true</useDefaultExcludes>
-                    <header>NOTICE.txt</header>
-                    <excludes>
-                        <exclude>**/META-INF/services/**</exclude>
-                        <exclude>**/*.txt</exclude>
-                        <exclude>**/*.apt</exclude>
-                        <exclude>**/*.reg</exclude>
-                        <exclude>**/.htaccess</exclude>
-                        <exclude>**/UTF*.ini</exclude>
-                    </excludes>
-                    <mapping>
-                        <java>SLASHSTAR_STYLE</java>
-                        <css>SLASHSTAR_STYLE</css>
-                        <js>SLASHSTAR_STYLE</js>
-                        <ini>SEMICOLON_STYLE</ini>
-                        <opt>SCRIPT_STYLE</opt>
-                    </mapping>
-                    <useDefaultMapping>true</useDefaultMapping>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>format</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -579,23 +418,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-changes-plugin</artifactId>
-                <configuration>
-                    <templateEncoding>UTF-8</templateEncoding>
-                    <issueLinkTemplate>http://sourceforge.net/tracker2/?func=detail&amp;atid=715133&amp;group_id=129580&amp;aid=%ISSUE%</issueLinkTemplate>
-                </configuration>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>changes-report</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-
             </plugin>
 
             <plugin>
