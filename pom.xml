@@ -1,14 +1,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>izpack-agregator</artifactId>
+
+    <parent>
+      <artifactId>izpack-parent</artifactId>
+      <groupId>org.codehaus.izpack</groupId>
+      <version>5.0.0-SNAPSHOT</version>
+      <relativePath>${basedir}/izpack-parent/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>izpack-aggregator</artifactId>
     <groupId>org.codehaus.izpack</groupId>
     <version>5.0.0-SNAPSHOT</version>
-    <name>IzPack agregator</name>
-
-    <description>IzPack agregator pom</description>
-
+    <name>IzPack Aggregator</name>
+    <description>IzPack Aggregator POM - contains all modules to be built</description>
     <packaging>pom</packaging>
+
     <modules>
         <module>izpack-parent</module>
         <module>izpack-maven-plugin</module>
@@ -31,6 +38,5 @@
         <module>izpack-test-common</module>
         <module>izpack-test-panel</module>
     </modules>
-
 
 </project>
