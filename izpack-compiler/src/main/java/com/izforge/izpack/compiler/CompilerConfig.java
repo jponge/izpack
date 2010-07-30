@@ -64,9 +64,9 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraintHelper;
+import com.izforge.izpack.util.file.DirectoryScanner;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.tools.ant.DirectoryScanner;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -604,18 +604,27 @@ public class CompilerConfig extends Thread {
             ds.setIncludes(includes);
             ds.setBasedir(dir);
             ds.setCaseSensitive(true);
-            ds.scan();
 
-            // loop through all found fils and handle them as normal refpack files
-            String[] files = ds.getIncludedFiles();
-            for (String file : files) {
-                String refFileName = new File(dir, file).toString();
+               // loop through all found fils and handle them as normal refpack files
+            String[] files;
+            try
+            {
+                ds.scan();
 
-                // parsing ref-pack-set file
-                IXMLElement refXMLData = this.readRefPackData(refFileName, false);
+                files = ds.getIncludedFiles();
+                for (String file : files) {
+                    String refFileName = new File(dir, file).toString();
 
-                // Recursively call myself to add all packs and refpacks from the reference XML
-                addPacksSingle(refXMLData);
+                    // parsing ref-pack-set file
+                    IXMLElement refXMLData = this.readRefPackData(refFileName, false);
+
+                    // Recursively call myself to add all packs and refpacks from the reference XML
+                    addPacksSingle(refXMLData);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new CompilerException(e.getMessage());
             }
         }
 
@@ -958,19 +967,26 @@ public class CompilerConfig extends Thread {
         }
         directoryScanner.setBasedir(dir);
         directoryScanner.setCaseSensitive(casesensitive);
-        directoryScanner.scan();
+        try
+        {
+            directoryScanner.scan();
 
-        String[] files = directoryScanner.getIncludedFiles();
-        String[] dirs = directoryScanner.getIncludedDirectories();
+            String[] files = directoryScanner.getIncludedFiles();
+            String[] dirs = directoryScanner.getIncludedDirectories();
+            // Directory scanner has done recursion, add files and
+            // directories
+            for (String file : files) {
+                includedFiles.add(file);
+            }
+            for (String dir1 : dirs) {
+                includedFiles.add(dir1);
+            }
+        }
+        catch (Exception e)
+        {
+            throw new CompilerException(e.getMessage());
+        }
 
-        // Directory scanner has done recursion, add files and
-        // directories
-        for (String file : files) {
-            includedFiles.add(file);
-        }
-        for (String dir1 : dirs) {
-            includedFiles.add(dir1);
-        }
         return includedFiles.toArray(new String[]{});
     }
 
