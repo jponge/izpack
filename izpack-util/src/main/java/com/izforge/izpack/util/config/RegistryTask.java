@@ -52,6 +52,7 @@ public class RegistryTask extends SingleConfigurableTask {
     this.fromKey = key;
   }
 
+  @Override
   protected void readSourceConfigurable() throws Exception {
     // deal with a registry key to patch from
     if (this.fromKey != null) {
@@ -64,6 +65,7 @@ public class RegistryTask extends SingleConfigurableTask {
     }
   }
 
+  @Override
   protected void readConfigurable() throws Exception {
     if (this.key != null) {
       try {
@@ -75,6 +77,7 @@ public class RegistryTask extends SingleConfigurableTask {
     }
   }
 
+  @Override
   protected void writeConfigurable() throws Exception {
 
     if (configurable == null) {
@@ -92,6 +95,7 @@ public class RegistryTask extends SingleConfigurableTask {
     }
   }
 
+  @Override
   protected void checkAttributes() throws Exception {
     if (this.key == null) {
       throw new Exception("Key attribute must be set");

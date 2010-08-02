@@ -31,26 +31,25 @@ import com.izforge.izpack.util.Debug;
 
 public class SingleOptionFileTask extends ConfigFileTask
 {
+    @Override
     protected void readSourceConfigurable() throws Exception
     {
-        if (!(oldFile != null && oldFile.exists()))
+        if (oldFile != null)
         {
-            Debug.log("No file " + oldFile.getAbsolutePath()
-                    + " to patch from found");
-            return;
-        }
-        try
-        {
-            Debug.log("Loading options file: " + oldFile.getAbsolutePath());
-            // Configuration file type must be the same as the target type
-            fromConfigurable = new Options(this.oldFile);
-        }
-        catch (IOException ioe)
-        {
-            throw new Exception(ioe.toString());
+            try
+            {
+                Debug.log("Loading options file: " + oldFile.getAbsolutePath());
+                // Configuration file type must be the same as the target type
+                fromConfigurable = new Options(this.oldFile);
+            }
+            catch (IOException ioe)
+            {
+                throw new Exception(ioe.toString());
+            }
         }
     }
 
+    @Override
     protected void readConfigurable() throws Exception
     {
         if (newFile != null)
@@ -73,6 +72,7 @@ public class SingleOptionFileTask extends ConfigFileTask
         }
     }
 
+    @Override
     protected void writeConfigurable() throws Exception
     {
 
