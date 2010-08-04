@@ -92,6 +92,7 @@ public abstract class ConfigFileTask extends SingleConfigurableTask
         return this.comment;
     }
 
+    @Override
     protected void checkAttributes() throws Exception
     {
         if (this.toFile == null) { throw new Exception("The \"file\" attribute must be set"); }

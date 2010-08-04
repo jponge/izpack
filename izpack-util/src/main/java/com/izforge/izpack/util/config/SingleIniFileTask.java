@@ -31,27 +31,25 @@ import com.izforge.izpack.util.Debug;
 
 public class SingleIniFileTask extends ConfigFileTask
 {
+    @Override
     protected void readSourceConfigurable() throws Exception
     {
-        // deal with the single file to patch from
-        if (!(oldFile != null && oldFile.exists()))
+        if (oldFile != null)
         {
-            Debug.log("No file " + oldFile.getAbsolutePath()
-                    + " to patch from found");
-            return;
-        }
-        try
-        {
-            Debug.log("Loading INI file: " + oldFile.getAbsolutePath());
-            // Configuration file type must be the same as the target type
-            fromConfigurable = new Ini(this.oldFile);
-        }
-        catch (IOException ioe)
-        {
-            throw new Exception(ioe.toString());
+            try
+            {
+                Debug.log("Loading INI file: " + oldFile.getAbsolutePath());
+                // Configuration file type must be the same as the target type
+                fromConfigurable = new Ini(this.oldFile);
+            }
+            catch (IOException ioe)
+            {
+                throw new Exception(ioe.toString());
+            }
         }
     }
 
+    @Override
     protected void readConfigurable() throws Exception
     {
         if (newFile != null)
@@ -74,6 +72,7 @@ public class SingleIniFileTask extends ConfigFileTask
         }
     }
 
+    @Override
     protected void writeConfigurable() throws Exception
     {
 

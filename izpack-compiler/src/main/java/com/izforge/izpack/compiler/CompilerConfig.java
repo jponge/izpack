@@ -2210,8 +2210,11 @@ public class CompilerConfig extends Thread {
     /**
      * This method parses install.xml for defined listeners and put them in the right position. If
      * posible, the listeners will be validated. Listener declaration is a fragmention in
-     * install.xml like : <listeners> <listener compiler="PermissionCompilerListener"
-     * installer="PermissionInstallerListener"/> </<listeners>
+     * install.xml like:
+     * <br><code>
+     * &lt;listeners&gt;<br>
+     *   &lt;listener compiler="PermissionCompilerListener" installer="PermissionInstallerListener"/&gt;<br>
+     * &lt;/listeners&gt;</code>
      *
      * @throws Exception Description of the Exception
      */

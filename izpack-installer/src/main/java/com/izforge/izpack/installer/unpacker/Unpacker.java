@@ -200,6 +200,9 @@ public class Unpacker extends UnpackerBase
                             }
                         }
 
+                        // Add path to the log
+                        udata.addFile(path, pack.uninstall);
+
                         if (pf.isDirectory())
                         {
                             continue;
@@ -208,8 +211,6 @@ public class Unpacker extends UnpackerBase
                         // Custom action listener stuff --- beforeFile ----
                         informListeners(customActions, InstallerListener.BEFORE_FILE, pathFile, pf,
                                 null);
-                        // We add the path to the log,
-                        udata.addFile(path, pack.uninstall);
 
                         handler.progress(j, path);
 
