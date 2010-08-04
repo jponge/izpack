@@ -23,8 +23,8 @@ package com.izforge.izpack.panels.userinput.validator;
 
 import com.izforge.izpack.panels.userinput.PasswordGroup;
 import com.izforge.izpack.panels.userinput.processorclient.ProcessingClient;
+import com.izforge.izpack.util.Base64;
 import com.izforge.izpack.util.Debug;
-import sun.misc.BASE64Encoder;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -119,7 +119,7 @@ public class PasswordEncryptionValidator implements Validator
         {
             byte[] cryptedbytes = null;
             cryptedbytes = encryptCipher.doFinal(string.getBytes("UTF-8"));
-            result = (new BASE64Encoder()).encode(cryptedbytes);
+            result = Base64.encodeBytes(cryptedbytes);
         }
         catch (Exception e)
         {
