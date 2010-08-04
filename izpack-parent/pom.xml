@@ -3,9 +3,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-      <groupId>org.codehaus</groupId>
-      <artifactId>codehaus-parent</artifactId>
-      <version>1</version>
+        <groupId>org.codehaus</groupId>
+        <artifactId>codehaus-parent</artifactId>
+        <version>1</version>
     </parent>
 
     <artifactId>izpack-parent</artifactId>
@@ -316,7 +316,6 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -403,36 +402,36 @@
     </repositories>
 
     <scm>
-      <connection>scm:git:git://git.codehaus.org/izpack.git</connection>
-      <developerConnection>scm:git:ssh://git@git.codehaus.org/izpack.git</developerConnection>
-      <url>http://git.codehaus.org/gitweb.cgi?p=izpack.git</url>
+        <connection>scm:git:git://git.codehaus.org/izpack.git</connection>
+        <developerConnection>scm:git:ssh://git@git.codehaus.org/izpack.git</developerConnection>
+        <url>http://git.codehaus.org/gitweb.cgi?p=izpack.git</url>
     </scm>
 
     <issueManagement>
-      <system>jira</system>
-      <url>http://jira.codehaus.org/browse/IZPACK</url>
+        <system>jira</system>
+        <url>http://jira.codehaus.org/browse/IZPACK</url>
     </issueManagement>
 
     <distributionManagement>
-      <repository>
-        <id>codehaus.org</id>
-        <name>IzPack Central Repository</name>
-        <url>dav:https://dav.codehaus.org/repository/izpack/</url>
-        <uniqueVersion>false</uniqueVersion>
-      </repository>
-      <snapshotRepository>
-        <id>codehaus.org</id>
-        <name>IzPack Central Development Repository</name>
-        <url>dav:https://dav.codehaus.org/snapshots.repository/izpack/</url>
-        <!--
-        Don't create timestamped snapshots - simply replace the one that's already there.
-          -->
-        <uniqueVersion>false</uniqueVersion>
-      </snapshotRepository>
-      <site>
-        <id>codehaus.org</id>
-        <url>dav:https://dav.codehaus.org/izpack/</url>
-      </site>
+        <repository>
+            <id>codehaus.org</id>
+            <name>IzPack Central Repository</name>
+            <url>dav:https://dav.codehaus.org/repository/izpack/</url>
+            <uniqueVersion>false</uniqueVersion>
+        </repository>
+        <snapshotRepository>
+            <id>codehaus.org</id>
+            <name>IzPack Central Development Repository</name>
+            <url>dav:https://dav.codehaus.org/snapshots.repository/izpack/</url>
+            <!--
+          Don't create timestamped snapshots - simply replace the one that's already there.
+            -->
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+        <site>
+            <id>codehaus.org</id>
+            <url>dav:https://dav.codehaus.org/izpack/</url>
+        </site>
     </distributionManagement>
 
 </project>

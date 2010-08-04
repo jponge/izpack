@@ -37,6 +37,11 @@
         </dependency>
     </dependencies>
 
+    <properties>
+        <izpack.version>${project.version}</izpack.version>
+        <staging.dir>${basedir}/target/staging/</staging.dir>
+    </properties>
+
     <build>
         <resources>
             <resource>
@@ -45,6 +50,7 @@
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
+                <filtering>true</filtering>
             </resource>
         </resources>
         <plugins>
@@ -138,7 +144,5 @@
             </plugin>
         </plugins>
     </build>
-    <properties>
-        <staging.dir>${basedir}/target/staging/</staging.dir>
-    </properties>
+
 </project>
