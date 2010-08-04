@@ -60,8 +60,6 @@ public class PathInputPanel extends IzPanel implements ActionListener
      */
     protected String[] existFiles = null;
 
-    /** The path which was chosen */
-    // protected String chosenPath;
     /**
      * The path selection sub panel
      */

@@ -30,8 +30,11 @@ import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.base.LayoutHelper;
 import com.izforge.izpack.installer.data.GUIInstallData;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -93,7 +96,7 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
      */
     protected void createLayout()
     {
-        // We would use the IzPanelLayout also in this "sub" panel.
+        // We would use the IzPanelLayout also in this "sub" panel.                                                                                      
         // In an IzPanel there is support for this layout manager in
         // more than one place, but not in this panel so we have
         // to make all things needed.
@@ -105,7 +108,7 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
         IzPanelConstraints ipc = IzPanelLayout.getDefaultConstraint(TEXT_CONSTRAINT);
         // The text field should be stretched.
         ipc.setXStretch(1.0);
-        textField = new JTextField(idata.getInstallPath(), 10);
+        textField = new JTextField(idata.getInstallPath(), 50);
         textField.addActionListener(this);
         parent.setInitialFocus(textField);
         add(textField, ipc);
@@ -124,6 +127,7 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
     // There are problems with the size if no other component needs the
     // full size. Sometimes directly, somtimes only after a back step.
 
+    @Override
     public Dimension getMinimumSize()
     {
         Dimension preferredSize = super.getPreferredSize();
