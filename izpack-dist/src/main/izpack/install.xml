@@ -72,15 +72,14 @@
         <res src="splash-3.10.png" id="installer.langsel.img"/>
         <res src="shortcutSpec.xml" id="shortcutSpec.xml"/>
         <res src="Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml"/>
-        <res src="info-border.png" id="Installer.image.0"/>
-        <res src="info-border.png" id="Installer.image.1"/>
-        <res src="info-border.png" id="Installer.image.2"/>
-        <res src="pack-border.png" id="Installer.image.3"/>
-        <res src="pack-border.png" id="Installer.image.4"/>
-        <res src="installing-border.png" id="Installer.image.5"/>
-        <res src="installing-border.png" id="Installer.image.6"/>
-        <res src="installing-border.png" id="Installer.image.7"/>
-        <res src="finished-border.png" id="Installer.image.8"/>
+        <res src="info-border.png" id="Installer.image.hellopanel"/>
+        <res src="info-border.png" id="Installer.image.infopanel"/>
+        <res src="info-border.png" id="Installer.image.targetpanel"/>
+        <res src="pack-border.png" id="Installer.image.packspanel"/>
+        <res src="pack-border.png" id="Installer.image.summarypanel"/>
+        <res src="installing-border.png" id="Installer.image.installpanel"/>
+        <res src="installing-border.png" id="Installer.image.shortcutpanel"/>
+        <res src="finished-border.png" id="Installer.image.finishpanel"/>
         <res src="RegistrySpec.xml" id="RegistrySpec.xml"/>
     </resources>
 
