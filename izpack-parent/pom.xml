@@ -330,6 +330,14 @@
                     <excludes>
                         <exclude>**/Abstract*</exclude>
                         <exclude>**/Test*Container*</exclude>
+                        <exclude>**/LanguageDialogTest.java</exclude>
+                        <exclude>**/TestPanelDisplay.java</exclude>
+                        <exclude>**/InstallationTest.java</exclude>
+                        <exclude>**/UninstallDataWriter.java</exclude>
+                        <exclude>**/UninstallWriteTest.java</exclude>
+                        <exclude>**/ConditionCheckTest.java</exclude>
+                        <exclude>**/EventTest.java</exclude>
+                        <exclude>**/IzpackInstallationTest.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -357,7 +365,7 @@
 
     <profiles>
         <profile>
-            <id>bamboo</id>
+            <id>with-gui-tests</id>
             <build>
                 <plugins>
                     <plugin>
@@ -367,15 +375,17 @@
                             <excludes>
                                 <exclude>**/Abstract*</exclude>
                                 <exclude>**/Test*Container*</exclude>
-                                <exclude>**/LanguageDialogTest.java</exclude>
-                                <exclude>**/TestPanelDisplay.java</exclude>
-                                <exclude>**/InstallationTest.java</exclude>
-                                <exclude>**/UninstallDataWriter.java</exclude>
-                                <exclude>**/UninstallWriteTest.java</exclude>
-                                <exclude>**/ConditionCheckTest.java</exclude>
-                                <exclude>**/EventTest.java</exclude>
-                                <exclude>**/IzpackInstallationTest.java</exclude>
                             </excludes>
+                            <includes>
+                                <include>**/LanguageDialogTest.java</include>
+                                <include>**/TestPanelDisplay.java</include>
+                                <include>**/InstallationTest.java</include>
+                                <include>**/UninstallDataWriter.java</include>
+                                <include>**/UninstallWriteTest.java</include>
+                                <include>**/ConditionCheckTest.java</include>
+                                <include>**/EventTest.java</include>
+                                <include>**/IzpackInstallationTest.java</include>
+                            </includes>
                         </configuration>
                     </plugin>
                 </plugins>
