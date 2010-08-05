@@ -72,8 +72,10 @@
         <res src="splash-3.10.png" id="installer.langsel.img"/>
         <res src="shortcutSpec.xml" id="shortcutSpec.xml"/>
         <res src="Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml"/>
+        <res src="info-border.png" id="Installer.image.0"/>
         <res src="info-border.png" id="Installer.image.hellopanel"/>
         <res src="info-border.png" id="Installer.image.infopanel"/>
+        <res src="info-border.png" id="Installer.image.licencepanel"/>
         <res src="info-border.png" id="Installer.image.targetpanel"/>
         <res src="pack-border.png" id="Installer.image.packspanel"/>
         <res src="pack-border.png" id="Installer.image.summarypanel"/>
