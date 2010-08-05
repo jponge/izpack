@@ -67,7 +67,7 @@ public class ResourceManager
     public final String resourceBasePathDefaultConstant = "/resources/";
 
     /**
-     * Internel used resourceBasePath = "/resources/"
+     * Internally used resourceBasePath = "/resources/"
      */
     private String resourceBasePath = "/resources/";
 
