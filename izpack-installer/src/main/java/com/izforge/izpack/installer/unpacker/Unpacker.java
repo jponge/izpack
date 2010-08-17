@@ -25,7 +25,6 @@ package com.izforge.izpack.installer.unpacker;
 import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.data.ExecutableFile;
@@ -36,7 +35,6 @@ import com.izforge.izpack.installer.web.WebAccessor;
 import com.izforge.izpack.installer.web.WebRepositoryAccessor;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.FileQueue;
-import com.izforge.izpack.util.os.FileQueueMove;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -176,29 +174,7 @@ public class Unpacker extends UnpackerBase
                             dest = pathFile.getParentFile();
                         }
 
-                        if (!dest.exists())
-                        {
-                            // If there are custom actions which would be called
-                            // at
-                            // creating a directory, create it recursively.
-//                            List fileListeners = customActions[customActions.length - 1];
-//                            if (fileListeners != null && fileListeners.size() > 0)
-//                            {
-//                                mkDirsWithEnhancement(dest, pf, customActions);
-//                            }
-//                            else
-                            // Create it in on step.
-                            {
-                                if (!dest.mkdirs())
-                                {
-                                    handler.emitError("Error creating directories",
-                                            "Could not create directory\n" + dest.getPath());
-                                    handler.stopAction();
-                                    this.result = false;
-                                    return;
-                                }
-                            }
-                        }
+                        handleMkDirs(pf, dest);
 
                         // Add path to the log
                         udata.addFile(path, pack.uninstall);
@@ -219,53 +195,7 @@ public class Unpacker extends UnpackerBase
                         // what to do
                         if ((pathFile.exists()) && (pf.override() != OverrideType.OVERRIDE_TRUE))
                         {
-                            boolean overwritefile = false;
-
-                            // don't overwrite file if the user said so
-                            if (pf.override() != OverrideType.OVERRIDE_FALSE)
-                            {
-                                if (pf.override() == OverrideType.OVERRIDE_TRUE)
-                                {
-                                    overwritefile = true;
-                                }
-                                else if (pf.override() == OverrideType.OVERRIDE_UPDATE)
-                                {
-                                    // check mtime of involved files
-                                    // (this is not 100% perfect, because the
-                                    // already existing file might
-                                    // still be modified but the new installed
-                                    // is just a bit newer; we would
-                                    // need the creation time of the existing
-                                    // file or record with which mtime
-                                    // it was installed...)
-                                    overwritefile = (pathFile.lastModified() < pf.lastModified());
-                                }
-                                else
-                                {
-                                    int def_choice = -1;
-
-                                    if (pf.override() == OverrideType.OVERRIDE_ASK_FALSE)
-                                    {
-                                        def_choice = AbstractUIHandler.ANSWER_NO;
-                                    }
-                                    if (pf.override() == OverrideType.OVERRIDE_ASK_TRUE)
-                                    {
-                                        def_choice = AbstractUIHandler.ANSWER_YES;
-                                    }
-
-                                    int answer = handler.askQuestion(idata.getLangpack()
-                                            .getString("InstallPanel.overwrite.title")
-                                            + " - " + pathFile.getName(), idata.getLangpack()
-                                            .getString("InstallPanel.overwrite.question")
-                                            + pathFile.getAbsolutePath(),
-                                            AbstractUIHandler.CHOICES_YES_NO, def_choice);
-
-                                    overwritefile = (answer == AbstractUIHandler.ANSWER_YES);
-                                }
-
-                            }
-
-                            if (!overwritefile)
+                            if (!isOverwriteFile(pf, pathFile))
                             {
                                 if (!pf.isBackReference() && !(packs.get(i)).loose)
                                 {
@@ -282,6 +212,8 @@ public class Unpacker extends UnpackerBase
                             }
 
                         }
+
+                        handleOverrideRename(pf, pathFile);
 
                         // We copy the file
                         InputStream pis = objIn;
@@ -372,16 +304,7 @@ public class Unpacker extends UnpackerBase
                                     }
                                     return;
                                 }
-                                int maxBytes = (int) Math.min(pf.length() - bytesCopied, buffer.length);
-                                int bytesInBuffer = pis.read(buffer, 0, maxBytes);
-                                if (bytesInBuffer == -1)
-                                {
-                                    throw new IOException("Unexpected end of stream (installer corrupted?)");
-                                }
-
-                                out.write(buffer, 0, bytesInBuffer);
-
-                                bytesCopied += bytesInBuffer;
+                                bytesCopied = writeBuffer(pf, buffer, out, pis, bytesCopied);
                             }
                             out.close();
                         }
@@ -391,49 +314,9 @@ public class Unpacker extends UnpackerBase
                             pis.close();
                         }
 
-                        // Set file modification time if specified
-                        if (pf.lastModified() >= 0)
-                        {
-                            if (blockableForCurrentOs(pf))
-                            {
-                                tmpFile.setLastModified(pf.lastModified());
-                            }
-                            else
-                            {
-                                pathFile.setLastModified(pf.lastModified());
-                            }
-                        }
+                        handleTimeStamp( pf, pathFile, tmpFile);
 
-                        if (blockableForCurrentOs(pf))
-                        {
-                            if (fq == null)
-                            {
-                                fq = new FileQueue();
-                            }
-
-                            FileQueueMove fqmv = new FileQueueMove(tmpFile, pathFile);
-                            if (blockableForCurrentOs(pf))
-                            {
-                                fqmv.setForceInUse(true);
-                            }
-                            fqmv.setOverwrite(true);
-                            fq.add(fqmv);
-                            Debug.log(tmpFile.getAbsolutePath()
-                                    + " -> "
-                                    + pathFile.getAbsolutePath()
-                                    + " added to file queue for being copied after reboot"
-                            );
-                            // The temporary file must not be deleted
-                            // until the file queue will be committed
-                            tmpFile.deleteOnExit();
-                        }
-                        else
-                        {
-                            // Custom action listener stuff --- afterFile ----
-                            informListeners(customActions, InstallerListener.AFTER_FILE, pathFile, pf,
-                                    null);
-                        }
-
+                        fq = handleBlockable(pf, pathFile, tmpFile, fq, customActions);
                     }
                     else
                     {
@@ -461,36 +344,8 @@ public class Unpacker extends UnpackerBase
                     parsables.add(pf);
                 }
 
-                // Load information about executable files
-                int numExecutables = objIn.readInt();
-                for (int k = 0; k < numExecutables; k++)
-                {
-                    ExecutableFile ef = (ExecutableFile) objIn.readObject();
-                    if (ef.hasCondition() && (rules != null))
-                    {
-                        if (!rules.isConditionTrue(ef.getCondition()))
-                        {
-                            // skip, condition is false
-                            continue;
-                        }
-                    }
-                    ef.path = IoHelper.translatePath(ef.path, variableSubstitutor);
-                    if (null != ef.argList && !ef.argList.isEmpty())
-                    {
-                        String arg = null;
-                        for (int j = 0; j < ef.argList.size(); j++)
-                        {
-                            arg = ef.argList.get(j);
-                            arg = IoHelper.translatePath(arg, variableSubstitutor);
-                            ef.argList.set(j, arg);
-                        }
-                    }
-                    executables.add(ef);
-                    if (ef.executionStage == ExecutableFile.UNINSTALL)
-                    {
-                        udata.addExecutable(ef);
-                    }
-                }
+                loadExecutables(objIn, executables);
+
                 // Custom action listener stuff --- uninstall data ----
 //                handleAdditionalUninstallData(udata, customActions);
 
