@@ -767,13 +767,12 @@ public class CompilerConfig extends Thread {
                 for (String filePath : srcfiles) {
                     try {
                         abssrcfile = new File(fs.getDir(), filePath);
-                        String absdestfilepath = fs.getTargetDir() + "/" + filePath;
                         if (unpack) {
-                            addArchiveContent(baseDir, abssrcfile, absdestfilepath, fs
+                            addArchiveContent(baseDir, abssrcfile, fs.getTargetDir(), fs
                                     .getOsList(), fs.getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(), pack, fs
                                     .getAdditionals(), fs.getCondition());
                         } else {
-                            pack.addFile(baseDir, abssrcfile, absdestfilepath, fs.getOsList(),
+                            pack.addFile(baseDir, abssrcfile, fs.getTargetDir() + "/" + filePath, fs.getOsList(),
                                     fs.getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(), fs.getAdditionals(),
                                     fs.getCondition());
                         }
