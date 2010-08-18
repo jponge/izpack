@@ -470,92 +470,95 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
 
     protected void performUpdateChecks(ArrayList<UpdateCheck> updatechecks)
     {
-        FileSet fileset = new FileSet();
-        ArrayList<File> files_to_delete = new ArrayList<File>();
-        ArrayList<File> dirs_to_delete = new ArrayList<File>();
-
-        try
+        if (updatechecks != null && updatechecks.size() > 0)
         {
-            fileset.setDir(new File(idata.getInstallPath()).getAbsoluteFile());
+            FileSet fileset = new FileSet();
+            ArrayList<File> files_to_delete = new ArrayList<File>();
+            ArrayList<File> dirs_to_delete = new ArrayList<File>();
 
-            for (UpdateCheck uc : updatechecks)
+            try
             {
-                if (uc.includesList != null)
+                fileset.setDir(new File(idata.getInstallPath()).getAbsoluteFile());
+
+                for (UpdateCheck uc : updatechecks)
                 {
-                    for (String incl : uc.includesList)
+                    if (uc.includesList != null)
                     {
-                        fileset.createInclude().setName(variableSubstitutor.substitute(incl));
+                        for (String incl : uc.includesList)
+                        {
+                            fileset.createInclude().setName(variableSubstitutor.substitute(incl));
+                        }
+                    }
+
+                    if (uc.excludesList != null)
+                    {
+                        for (String excl : uc.excludesList)
+                        {
+                            fileset.createExclude().setName(variableSubstitutor.substitute(excl));
+                        }
                     }
                 }
+                DirectoryScanner ds = fileset.getDirectoryScanner();
+                ds.scan();
+                String[] srcFiles = ds.getIncludedFiles();
+                String[] srcDirs = ds.getIncludedDirectories();
 
-                if (uc.excludesList != null)
+                TreeSet<File> installed_files = new TreeSet<File>();
+
+                for (String fname : this.udata.getInstalledFilesList())
                 {
-                    for (String excl : uc.excludesList)
+                    File f = new File(fname);
+
+                    if (!f.isAbsolute())
                     {
-                        fileset.createExclude().setName(variableSubstitutor.substitute(excl));
+                        f = new File(this.absolute_installpath, fname);
+                    }
+
+                    installed_files.add(f);
+                }
+                for (int i = 0; i < srcFiles.length; i++)
+                {
+                    File newFile = new File(ds.getBasedir(), srcFiles[i]);
+
+                    // skip files we just installed
+                    if (installed_files.contains(newFile))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        files_to_delete.add(newFile);
+                    }
+                }
+                for (int i = 0; i < srcDirs.length; i++)
+                {
+                    File newDir = new File(ds.getBasedir(), srcDirs[i]);
+
+                    // skip directories we just installed
+                    if (installed_files.contains(newDir))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        dirs_to_delete.add(newDir);
                     }
                 }
             }
-            DirectoryScanner ds = fileset.getDirectoryScanner();
-            ds.scan();
-            String[] srcFiles = ds.getIncludedFiles();
-            String[] srcDirs = ds.getIncludedDirectories();
-
-            TreeSet<File> installed_files = new TreeSet<File>();
-
-            for (String fname : this.udata.getInstalledFilesList())
+            catch (Exception e)
             {
-                File f = new File(fname);
-
-                if (!f.isAbsolute())
-                {
-                    f = new File(this.absolute_installpath, fname);
-                }
-
-                installed_files.add(f);
+                this.handler.emitError("Error while performing update checks", e.getMessage());
             }
-            for (int i = 0; i < srcFiles.length; i++)
+
+            for (File f : files_to_delete)
             {
-                File newFile = new File(ds.getBasedir(), srcFiles[i]);
-
-                // skip files we just installed
-                if (installed_files.contains(newFile))
-                {
-                    continue;
-                }
-                else
-                {
-                    files_to_delete.add(newFile);
-                }
+                f.delete();
             }
-            for (int i = 0; i < srcDirs.length; i++)
+            for (File d : dirs_to_delete)
             {
-                File newDir = new File(ds.getBasedir(), srcDirs[i]);
-
-                // skip directories we just installed
-                if (installed_files.contains(newDir))
-                {
-                    continue;
-                }
-                else
-                {
-                    dirs_to_delete.add(newDir);
-                }
+                // Only empty directories will be deleted
+                d.delete();
             }
-        }
-        catch (Exception e)
-        {
-            this.handler.emitError("Error while performing update checks", e.getMessage());
-        }
-
-        for (File f : files_to_delete)
-        {
-            f.delete();
-        }
-        for (File d : dirs_to_delete)
-        {
-            // Only empty directories will be deleted
-            d.delete();
         }
     }
 
