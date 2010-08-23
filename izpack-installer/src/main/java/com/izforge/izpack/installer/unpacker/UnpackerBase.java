@@ -21,25 +21,42 @@
 
 package com.izforge.izpack.installer.unpacker;
 
-import com.izforge.izpack.api.data.*;
-import com.izforge.izpack.api.event.InstallerListener;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.api.unpacker.IDiscardInterruptable;
-import com.izforge.izpack.data.UpdateCheck;
-import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.file.DirectoryScanner;
-import com.izforge.izpack.util.file.types.FileSet;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Blockable;
+import com.izforge.izpack.api.data.OverrideType;
+import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.PackFile;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.event.InstallerListener;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.api.unpacker.IDiscardInterruptable;
+import com.izforge.izpack.data.ExecutableFile;
+import com.izforge.izpack.data.UpdateCheck;
+import com.izforge.izpack.installer.data.UninstallData;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.file.DirectoryScanner;
+import com.izforge.izpack.util.file.GlobPatternMapper;
+import com.izforge.izpack.util.file.types.FileSet;
+import com.izforge.izpack.util.os.FileQueue;
+import com.izforge.izpack.util.os.FileQueueMove;
 
 /**
  * Abstract base class for all unpacker implementations.
@@ -453,92 +470,95 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
 
     protected void performUpdateChecks(ArrayList<UpdateCheck> updatechecks)
     {
-        FileSet fileset = new FileSet();
-        ArrayList<File> files_to_delete = new ArrayList<File>();
-        ArrayList<File> dirs_to_delete = new ArrayList<File>();
-
-        try
+        if (updatechecks != null && updatechecks.size() > 0)
         {
-            fileset.setDir(new File(idata.getInstallPath()).getAbsoluteFile());
+            FileSet fileset = new FileSet();
+            ArrayList<File> files_to_delete = new ArrayList<File>();
+            ArrayList<File> dirs_to_delete = new ArrayList<File>();
 
-            for (UpdateCheck uc : updatechecks)
+            try
             {
-                if (uc.includesList != null)
+                fileset.setDir(new File(idata.getInstallPath()).getAbsoluteFile());
+
+                for (UpdateCheck uc : updatechecks)
                 {
-                    for (String incl : uc.includesList)
+                    if (uc.includesList != null)
                     {
-                        fileset.createInclude().setName(variableSubstitutor.substitute(incl));
+                        for (String incl : uc.includesList)
+                        {
+                            fileset.createInclude().setName(variableSubstitutor.substitute(incl));
+                        }
+                    }
+
+                    if (uc.excludesList != null)
+                    {
+                        for (String excl : uc.excludesList)
+                        {
+                            fileset.createExclude().setName(variableSubstitutor.substitute(excl));
+                        }
                     }
                 }
+                DirectoryScanner ds = fileset.getDirectoryScanner();
+                ds.scan();
+                String[] srcFiles = ds.getIncludedFiles();
+                String[] srcDirs = ds.getIncludedDirectories();
 
-                if (uc.excludesList != null)
+                TreeSet<File> installed_files = new TreeSet<File>();
+
+                for (String fname : this.udata.getInstalledFilesList())
                 {
-                    for (String excl : uc.excludesList)
+                    File f = new File(fname);
+
+                    if (!f.isAbsolute())
                     {
-                        fileset.createExclude().setName(variableSubstitutor.substitute(excl));
+                        f = new File(this.absolute_installpath, fname);
+                    }
+
+                    installed_files.add(f);
+                }
+                for (int i = 0; i < srcFiles.length; i++)
+                {
+                    File newFile = new File(ds.getBasedir(), srcFiles[i]);
+
+                    // skip files we just installed
+                    if (installed_files.contains(newFile))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        files_to_delete.add(newFile);
+                    }
+                }
+                for (int i = 0; i < srcDirs.length; i++)
+                {
+                    File newDir = new File(ds.getBasedir(), srcDirs[i]);
+
+                    // skip directories we just installed
+                    if (installed_files.contains(newDir))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        dirs_to_delete.add(newDir);
                     }
                 }
             }
-            DirectoryScanner ds = fileset.getDirectoryScanner();
-            ds.scan();
-            String[] srcFiles = ds.getIncludedFiles();
-            String[] srcDirs = ds.getIncludedDirectories();
-
-            TreeSet<File> installed_files = new TreeSet<File>();
-
-            for (String fname : this.udata.getInstalledFilesList())
+            catch (Exception e)
             {
-                File f = new File(fname);
-
-                if (!f.isAbsolute())
-                {
-                    f = new File(this.absolute_installpath, fname);
-                }
-
-                installed_files.add(f);
+                this.handler.emitError("Error while performing update checks", e.getMessage());
             }
-            for (int i = 0; i < srcFiles.length; i++)
+
+            for (File f : files_to_delete)
             {
-                File newFile = new File(ds.getBasedir(), srcFiles[i]);
-
-                // skip files we just installed
-                if (installed_files.contains(newFile))
-                {
-                    continue;
-                }
-                else
-                {
-                    files_to_delete.add(newFile);
-                }
+                f.delete();
             }
-            for (int i = 0; i < srcDirs.length; i++)
+            for (File d : dirs_to_delete)
             {
-                File newDir = new File(ds.getBasedir(), srcDirs[i]);
-
-                // skip directories we just installed
-                if (installed_files.contains(newDir))
-                {
-                    continue;
-                }
-                else
-                {
-                    dirs_to_delete.add(newDir);
-                }
+                // Only empty directories will be deleted
+                d.delete();
             }
-        }
-        catch (Exception e)
-        {
-            this.handler.emitError("Error while performing update checks", e.getMessage());
-        }
-
-        for (File f : files_to_delete)
-        {
-            f.delete();
-        }
-        for (File d : dirs_to_delete)
-        {
-            // Only empty directories will be deleted
-            d.delete();
         }
     }
 
@@ -632,5 +652,221 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
     {
         this.handler = handler;
     }
+
+    protected void handleMkDirs(PackFile pf, File dest) throws Exception
+    {
+        if (!dest.exists())
+        {
+            // If there are custom actions which would be called
+            // at
+            // creating a directory, create it recursively.
+//            List fileListeners = customActions[customActions.length - 1];
+//            if (fileListeners != null && fileListeners.size() > 0)
+//            {
+//                mkDirsWithEnhancement(dest, pf, customActions);
+//            }
+//            else
+            // Create it in on step.
+            {
+                if (!dest.mkdirs())
+                {
+                    handler.emitError("Error creating directories",
+                            "Could not create directory\n" + dest.getPath());
+                    handler.stopAction();
+                    this.result = false;
+                    return;
+                }
+            }
+        }
+    }
+
+    protected long writeBuffer(PackFile pf, byte[] buffer,
+            FileOutputStream out, InputStream pis, long bytesCopied)
+    throws IOException
+    {
+        int maxBytes = (int) Math.min(pf.length() - bytesCopied, buffer.length);
+        int bytesInBuffer = pis.read(buffer, 0, maxBytes);
+        if (bytesInBuffer == -1)
+        {
+            throw new IOException("Unexpected end of stream (installer corrupted?)");
+        }
+        out.write(buffer, 0, bytesInBuffer);
+        bytesCopied += bytesInBuffer;
+
+        return bytesCopied;
+    }
+
+    protected boolean isOverwriteFile(PackFile pf, File file)
+    {
+        boolean overwritefile = false;
+
+        // don't overwrite file if the user said so
+        if (pf.override() != OverrideType.OVERRIDE_FALSE)
+        {
+            if (pf.override() == OverrideType.OVERRIDE_TRUE)
+            {
+                overwritefile = true;
+            }
+            else if (pf.override() == OverrideType.OVERRIDE_UPDATE)
+            {
+                // check mtime of involved files
+                // (this is not 100% perfect, because the
+                // already existing file might
+                // still be modified but the new installed
+                // is just a bit newer; we would
+                // need the creation time of the existing
+                // file or record with which mtime
+                // it was installed...)
+                overwritefile = (file.lastModified() < pf.lastModified());
+            }
+            else
+            {
+                int def_choice = -1;
+
+                if (pf.override() == OverrideType.OVERRIDE_ASK_FALSE)
+                {
+                    def_choice = AbstractUIHandler.ANSWER_NO;
+                }
+                if (pf.override() == OverrideType.OVERRIDE_ASK_TRUE)
+                {
+                    def_choice = AbstractUIHandler.ANSWER_YES;
+                }
+
+                int answer = handler.askQuestion(idata.getLangpack()
+                        .getString("InstallPanel.overwrite.title")
+                        + " - " + file.getName(), idata.getLangpack()
+                        .getString("InstallPanel.overwrite.question")
+                        + file.getAbsolutePath(),
+                        AbstractUIHandler.CHOICES_YES_NO, def_choice);
+
+                overwritefile = (answer == AbstractUIHandler.ANSWER_YES);
+            }
+
+        }
+
+        return overwritefile;
+    }
+
+    protected void handleOverrideRename(PackFile pf, File file)
+    {
+        if ((file.exists()) && pf.overrideRenameTo() != null)
+        {
+            GlobPatternMapper mapper = new GlobPatternMapper();
+            mapper.setFrom("*");
+            mapper.setTo(pf.overrideRenameTo());
+            mapper.setCaseSensitive(true);
+            String[] newFileNameArr = mapper.mapFileName(file.getName());
+            if (newFileNameArr != null)
+            {
+                String newFileName = newFileNameArr[0];
+                File newPathFile = new File(file.getParent(), newFileName);
+                if (newPathFile.exists())
+                {
+                    newPathFile.delete();
+                }
+                if (!file.renameTo(newPathFile))
+                {
+                    handler.emitError("Error renaming file", "The file " + file
+                            + " could not be renamed to " + newPathFile);
+                }
+            }
+            else
+            {
+                handler.emitError("Error renaming file", "File name "
+                        + file.getName()
+                        + " cannot be mapped using the expression \""
+                        + pf.overrideRenameTo() + "\"");
+            }
+        }
+    }
+
+    protected void handleTimeStamp(PackFile pf, File file, File tmpFile)
+    {
+        // Set file modification time if specified
+        if (pf.lastModified() >= 0)
+        {
+            if (blockableForCurrentOs(pf))
+            {
+                tmpFile.setLastModified(pf.lastModified());
+            }
+            else
+            {
+                file.setLastModified(pf.lastModified());
+            }
+        }
+    }
+
+    protected FileQueue handleBlockable(PackFile pf, File file, File tmpFile, FileQueue fq,
+            List<InstallerListener> customActions)
+    throws Exception
+    {
+        if (blockableForCurrentOs(pf))
+        {
+            if (fq == null)
+            {
+                fq = new FileQueue();
+            }
+
+            FileQueueMove fqmv = new FileQueueMove(tmpFile, file);
+            if (blockableForCurrentOs(pf))
+            {
+                fqmv.setForceInUse(true);
+            }
+            fqmv.setOverwrite(true);
+            fq.add(fqmv);
+            Debug.log(tmpFile.getAbsolutePath()
+                    + " -> "
+                    + file.getAbsolutePath()
+                    + " added to file queue for being copied after reboot"
+            );
+            // The temporary file must not be deleted
+            // until the file queue will be committed
+            tmpFile.deleteOnExit();
+        }
+        else
+        {
+            // Custom action listener stuff --- afterFile ----
+            informListeners(customActions, InstallerListener.AFTER_FILE, file, pf,
+                    null);
+        }
+
+        return fq;
+    }
+
+    protected void loadExecutables(ObjectInputStream objIn, ArrayList<ExecutableFile> executables)
+    throws IOException, ClassNotFoundException
+    {
+        // Load information about executable files
+        int numExecutables = objIn.readInt();
+        for (int k = 0; k < numExecutables; k++)
+        {
+            ExecutableFile ef = (ExecutableFile) objIn.readObject();
+            if (ef.hasCondition() && (rules != null))
+            {
+                if (!rules.isConditionTrue(ef.getCondition()))
+                {
+                    // skip, condition is false
+                    continue;
+                }
+            }
+            ef.path = IoHelper.translatePath(ef.path, variableSubstitutor);
+            if (null != ef.argList && !ef.argList.isEmpty())
+            {
+                String arg = null;
+                for (int j = 0; j < ef.argList.size(); j++)
+                {
+                    arg = ef.argList.get(j);
+                    arg = IoHelper.translatePath(arg, variableSubstitutor);
+                    ef.argList.set(j, arg);
+                }
+            }
+            executables.add(ef);
+            if (ef.executionStage == ExecutableFile.UNINSTALL)
+            {
+                udata.addExecutable(ef);
+            }
+        }
+    }
+
 }
 
