@@ -423,21 +423,6 @@
     </issueManagement>
 
     <distributionManagement>
-        <repository>
-            <id>codehaus.org</id>
-            <name>IzPack Central Repository</name>
-            <url>dav:https://dav.codehaus.org/repository/izpack/</url>
-            <uniqueVersion>false</uniqueVersion>
-        </repository>
-        <snapshotRepository>
-            <id>codehaus.org</id>
-            <name>IzPack Central Development Repository</name>
-            <url>dav:https://dav.codehaus.org/snapshots.repository/izpack/</url>
-            <!--
-          Don't create timestamped snapshots - simply replace the one that's already there.
-            -->
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
         <site>
             <id>codehaus.org</id>
             <url>dav:https://dav.codehaus.org/izpack/</url>
