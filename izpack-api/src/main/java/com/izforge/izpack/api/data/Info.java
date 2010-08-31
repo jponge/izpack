@@ -22,6 +22,8 @@ package com.izforge.izpack.api.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Contains some informations for an installer, as defined in the <info> section of the XML files.
@@ -132,6 +134,11 @@ public class Info implements Serializable
     private int rebootAction = REBOOT_ACTION_IGNORE;
 
     private String rebootActionConditionID = null;
+
+    /**
+     * A set of temporary directories to be created at run time
+     */
+    private Set<TempDir> tempdirs;
 
     public boolean isPrivilegedExecutionRequired()
     {
@@ -456,6 +463,59 @@ public class Info implements Serializable
     }
 
     /**
+     * Represents a temporary directory with a randomly generated file name starting with
+     * the specified prefix and ending with the specified suffix. The full path to this
+     * directory will be defined in a variable with the specified name.
+     *
+     * @author Thrupoint
+     */
+    public static class TempDir implements Serializable
+    {
+        private final String prefix;
+        private final String suffix;
+        private final String variableName;
+
+        /**
+         * Create a new TempDir with the specified name prefix and suffix
+         *
+         * @param variableName
+         * @param prefix
+         * @param suffix
+         */
+        public TempDir(String variableName, String prefix, String suffix)
+        {
+            this.variableName = variableName;
+            this.prefix = prefix;
+            this.suffix = suffix;
+        }
+
+        /**
+         * @return the prefix to be used to create the temporary directory
+         */
+        public String getPrefix()
+        {
+            return prefix;
+        }
+
+        /**
+         * @return the suffix to be used to create the temporary directory
+         */
+        public String getSuffix()
+        {
+            return suffix;
+        }
+
+        /**
+         * @return the name of the variable which will contain the temporary
+         *         directory path
+         */
+        public String getVariableName()
+        {
+            return variableName;
+        }
+    }
+
+    /**
      * Gets the installation subpath.
      *
      * @return the installation subpath
@@ -552,4 +612,19 @@ public class Info implements Serializable
     {
         this.uninstallerCondition = uninstallerCondition;
     }
+
+    public void addTempDir(TempDir tempDir)
+    {
+        if (null == tempdirs)
+        {
+            tempdirs = new HashSet<TempDir>();
+        }
+        tempdirs.add(tempDir);
+
+    }
+
+    public Set<TempDir> getTempDirs()
+	{
+		return tempdirs;
+	}
 }

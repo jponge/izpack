@@ -1239,7 +1239,27 @@ public class FileUtils
     {
         if (file != null)
         {
-            file.delete();
+        	file.delete();
         }
     }
+
+    /**
+     * Delete a directory recursively
+     * @param fileToDelete
+     */
+    public static boolean deleteRecursively(File fileToDelete)
+    {
+    	boolean retval = true;
+    	if (fileToDelete.isDirectory())
+    	{
+    		for(File fileInDir : fileToDelete.listFiles())
+    		{
+    			retval &= deleteRecursively(fileInDir);
+    		}
+    	}
+    	retval &= fileToDelete.delete();
+    	return retval;
+    }
+
+
 }
