@@ -207,7 +207,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         // TODO:
         // TODO: first Test if a Resource for your protected Instance exists.
         String headline;
-        String headlineSearchBaseKey = getClass().getCanonicalName() + DELIMITER + "headline"; // Results for example in
+        String headlineSearchBaseKey = getClassName() + DELIMITER + "headline"; // Results for example in
         // "ShortcutPanel.headline"
         // :
 
@@ -272,6 +272,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         }
 
         return result;
+    }
+
+    private String getClassName() {
+        String[] splitClassName = getClass().getCanonicalName().split("\\.");
+        return splitClassName[splitClassName.length-1];
     }
 
     /**
@@ -1261,6 +1266,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         this.helpUrl = helpUrl;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "IzPanel{" +
+                "class=" + getClassName() +
+                ", hidden=" + hidden +
+                '}';
+    }
 }
