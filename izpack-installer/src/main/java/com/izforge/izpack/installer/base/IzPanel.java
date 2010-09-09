@@ -96,11 +96,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     protected String myClassname;
 
     /**
-     * i.e. "FinishPanel." useFull for getString()
-     */
-    protected String myPrefix;
-
-    /**
      * internal headline string
      */
     protected String headline;
@@ -351,7 +346,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     {
         myFullClassname = getClass().getName();
         myClassname = myFullClassname.substring(myFullClassname.lastIndexOf(".") + 1);
-        myPrefix = myClassname + ".";
     }
 
     /**
@@ -1312,4 +1306,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     {
         this.helpUrl = helpUrl;
     }
+
+
+
 }
