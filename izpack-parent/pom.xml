@@ -135,6 +135,11 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <artifactId>izpack-tools</artifactId>
+                <groupId>${project.groupId}</groupId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <artifactId>izpack-gui</artifactId>
                 <groupId>${project.groupId}</groupId>
                 <version>${project.version}</version>
@@ -236,6 +241,14 @@
             </dependency>
 
             <!-- inner dependencies to test jar -->
+
+            <dependency>
+                <artifactId>izpack-installer</artifactId>
+                <groupId>${project.groupId}</groupId>
+                <version>${project.version}</version>
+                <classifier>tests</classifier>
+                <scope>test</scope>
+            </dependency>
 
             <dependency>
                 <artifactId>izpack-compiler</artifactId>
