@@ -278,6 +278,8 @@ public class InstallerFrame extends JFrame implements InstallerView
         IzPanel panel_0 = (IzPanel) installdata.getPanels().get(0);
         panelsContainer.add(panel_0);
 
+        LOGGER.log(Level.INFO, "Building gui. The panel list to display is " + installdata.getPanels());
+
         // We add the navigation buttons & labels
 
         NavigationHandler navHandler = new NavigationHandler();
@@ -357,6 +359,7 @@ public class InstallerFrame extends JFrame implements InstallerView
                 iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
                 imgPanel.add(iconLabel, BorderLayout.NORTH);
                 contentPane.add(imgPanel, BorderLayout.WEST);
+                loadAndShowImageForPanelNum(iconLabel, 0);
             }
         }
         catch (Exception e)
@@ -364,7 +367,6 @@ public class InstallerFrame extends JFrame implements InstallerView
             LOGGER.log(Level.WARNING, "Error when loading icon image", e);
             // ignore
         }
-        loadAndShowImageForPanelNum(0);
         getRootPane().setDefaultButton(nextButton);
         callGUIListener(GUIListener.GUI_BUILDED, navPanel);
         createHeading(navPanel);
@@ -433,33 +435,33 @@ public class InstallerFrame extends JFrame implements InstallerView
         }
     }
 
-    private void loadAndShowImageForPanelNum(int panelNo)
+    private void loadAndShowImageForPanelNum(JLabel jLabel, int panelNo)
     {
-        loadAndShowImage(iconLabel, ICON_RESOURCE, panelNo);
+        loadAndShowImage(jLabel, ICON_RESOURCE, panelNo);
     }
 
-    private void loadAndShowImageForPanelOrId(int panelNo, String panelid)
+    private void loadAndShowImageForPanelOrId(JLabel jLabel, int panelNo, String panelId)
     {
-        loadAndShowImage(iconLabel, ICON_RESOURCE, panelNo, panelid);
+        loadAndShowImage(jLabel, ICON_RESOURCE, panelNo, panelId);
     }
 
-    private void loadAndShowImage(JLabel iLabel, String resPrefix, int panelno, String panelid)
+    private void loadAndShowImage(JLabel jLabel, String resPrefix, int panelNo, String panelId)
     {
-        ImageIcon icon = null;
+        ImageIcon icon;
         try
         {
-            icon = loadIcon(resPrefix, panelid);
+            icon = loadIcon(resPrefix, panelId);
         }
         catch (Exception e)
         {
-            icon = loadIcon(resPrefix, panelno + "");
+            icon = loadIcon(resPrefix, panelNo + "");
         }
-        iLabel.setVisible(false);
-        iLabel.setIcon(icon);
-        iLabel.setVisible(true);
+        jLabel.setVisible(false);
+        jLabel.setIcon(icon);
+        jLabel.setVisible(true);
     }
 
-    private void loadAndShowImage(JLabel iLabel, String resPrefix, int panelNo)
+    private void loadAndShowImage(JLabel jLabel, String resPrefix, int panelNo)
     {
         ImageIcon icon = null;
         try
@@ -479,9 +481,9 @@ public class InstallerFrame extends JFrame implements InstallerView
         }
         if (icon != null)
         {
-            iLabel.setVisible(false);
-            iLabel.setIcon(icon);
-            iLabel.setVisible(true);
+            jLabel.setVisible(false);
+            jLabel.setIcon(icon);
+            jLabel.setVisible(true);
         }
     }
 
@@ -497,7 +499,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     public void switchPanel(int oldIndex)
     {
-        LOGGER.log(Level.INFO,"Switching panel, old index is " +oldIndex);
+        LOGGER.log(Level.INFO, "Switching panel, old index is " + oldIndex);
         // refresh dynamic variables every time, a panel switch is done
         try
         {
@@ -631,14 +633,17 @@ public class InstallerFrame extends JFrame implements InstallerView
             newPanel.panelActivate();
             panelsContainer.setVisible(true);
             com.izforge.izpack.api.data.Panel metadata = newPanel.getMetadata();
-            if ((metadata != null) && (!"UNKNOWN".equals(metadata.getPanelid())))
+            if (iconLabel != null)
             {
-                loadAndShowImageForPanelOrId(getCurrentPanelVisbilityNumber(), metadata
-                        .getPanelid());
-            }
-            else
-            {
-                loadAndShowImageForPanelNum(getCurrentPanelVisbilityNumber());
+                if ((metadata != null) && (!"UNKNOWN".equals(metadata.getPanelid())))
+                {
+                    loadAndShowImageForPanelOrId(iconLabel, getCurrentPanelVisbilityNumber(), metadata
+                            .getPanelid());
+                }
+                else
+                {
+                    loadAndShowImageForPanelNum(iconLabel, getCurrentPanelVisbilityNumber());
+                }
             }
             isBack = false;
             callGUIListener(GUIListener.PANEL_SWITCHED);
@@ -665,7 +670,8 @@ public class InstallerFrame extends JFrame implements InstallerView
             unlockNextButton(); // if we push the button back at the license panel
         }
         // Only the exit button in the last panel.
-        else {
+        else
+        {
             if (panelManager.isLast(installdata.getCurPanelNumber()))
             {
                 prevButton.setVisible(false);
@@ -1108,7 +1114,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     public void navigateNext(int startPanel, boolean doValidation)
     {
-        LOGGER.log(Level.INFO,"Navigate to next panel. Start panel is " +startPanel);
+        LOGGER.log(Level.INFO, "Navigate to next panel. Start panel is " + startPanel);
         if ((installdata.getCurPanelNumber() < installdata.getPanels().size() - 1))
         {
             // We must trasfer all fields into the variables before
@@ -1171,6 +1177,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             }
         }
         // Return the result
+        LOGGER.log(Level.INFO, "The next panel of " + startPanel + " is panel number " + res);
         return res;
     }
 
@@ -1468,7 +1475,8 @@ public class InstallerFrame extends JFrame implements InstallerView
                     headingCounterComponent.setAlignmentX(Component.RIGHT_ALIGNMENT);
                 }
             }
-            else {
+            else
+            {
                 if ("text".equalsIgnoreCase(installdata.guiPrefs.modifier
                         .get("headingPanelCounter")))
                 {
