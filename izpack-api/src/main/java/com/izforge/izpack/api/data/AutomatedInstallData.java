@@ -173,7 +173,6 @@ public abstract class AutomatedInstallData implements Serializable
     public final static String HELP_TAG = "help";
     public final static String ISO3_ATTRIBUTE = "iso3";
     public final static String SRC_ATTRIBUTE = "src";
-    private VariableSubstitutor variableSubstitutor;
     private List<InstallerListener> installerListener;
 
     /**
@@ -196,7 +195,6 @@ public abstract class AutomatedInstallData implements Serializable
      */
     public AutomatedInstallData(Properties variables, VariableSubstitutor variableSubstitutor)
     {
-        this.variableSubstitutor = variableSubstitutor;
         setAvailablePacks(new ArrayList<Pack>());
         setSelectedPacks(new ArrayList<Pack>());
         panels = new ArrayList();
