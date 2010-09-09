@@ -1,4 +1,4 @@
-package org.codehaus.izpack.test.provider;
+package com.izforge.izpack.test.provider;
 
 import com.izforge.izpack.api.data.GUIPrefs;
 import com.izforge.izpack.api.data.Info;
