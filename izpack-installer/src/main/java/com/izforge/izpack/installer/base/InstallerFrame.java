@@ -208,7 +208,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     {
         super(title);
         guiListener = new ArrayList<GUIListener>();
-        this.setInstalldata(installdata);
+        this.installdata = installdata;
         this.setLangpack(installdata.getLangpack());
         this.rules = rules;
         this.setIcons(icons);
@@ -1253,11 +1253,6 @@ public class InstallerFrame extends JFrame implements InstallerView
     public void setLangpack(LocaleDatabase langpack)
     {
         this.langpack = langpack;
-    }
-
-    public void setInstalldata(GUIInstallData installdata)
-    {
-        this.installdata = installdata;
     }
 
     public IconsDatabase getIcons()
