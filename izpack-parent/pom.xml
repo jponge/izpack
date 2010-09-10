@@ -12,8 +12,10 @@
     <groupId>org.codehaus.izpack</groupId>
     <version>5.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+
     <name>IzPack Parent</name>
     <description>IzPack Parent Module</description>
+    <url>http://izpack.org/</url>
 
     <dependencies>
         <dependency>
@@ -365,6 +367,32 @@
 
     <profiles>
         <profile>
+            <id>release-sign-artifacts</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>with-gui-tests</id>
             <build>
                 <plugins>
@@ -416,6 +444,30 @@
         <developerConnection>scm:git:ssh://git@git.codehaus.org/izpack.git</developerConnection>
         <url>http://git.codehaus.org/gitweb.cgi?p=izpack.git</url>
     </scm>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <!-- If you are an official/codehaus IzPack developer, please add yourself here! -->
+        <developer>
+            <name>Julien Ponge</name>
+            <url>http://julien.ponge.info/</url>
+            <roles>
+                <role>Founder</role>
+                <role>Developer</role>
+                <role>Maintainer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>A lot of people since 2001!</name>
+        </developer>
+    </developers>
 
     <issueManagement>
         <system>jira</system>
