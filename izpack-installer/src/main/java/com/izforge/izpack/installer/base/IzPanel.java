@@ -86,26 +86,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     protected InstallerFrame parent;
 
     /**
-     * i.e. "com.izforge.izpack.panels.hello.HelloPanel"
-     */
-    protected String myFullClassname;
-
-    /**
-     * myClassname=i.e "FinishPanel"
-     */
-    protected String myClassname;
-
-    /**
-     * i.e. "FinishPanel." useFull for getString()
-     */
-    protected String myPrefix;
-
-    /**
-     * internal headline string
-     */
-    protected String headline;
-
-    /**
      * internal headline Label
      */
     protected JLabel headLineLabel;
@@ -129,29 +109,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     private java.util.List<PanelAction> postValidateActions = null;
 
     /**
-     * X_ORIGIN = 0
-     */
-    public final static int X_ORIGIN = 0;
-
-    /**
-     * Y_ORIGIN = 0
-     */
-    public final static int Y_ORIGIN = 0;
-
-    /**
      * DELIMITER = "." ( dot )
      */
     public final static String DELIMITER = ".";
-
-    /**
-     * COLS_1 = 1
-     */
-    public final static int COLS_1 = 1;
-
-    /**
-     * ROWS_1 = 1
-     */
-    public final static int ROWS_1 = 1;
 
     /**
      * Information about the panel
@@ -247,7 +207,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         // TODO:
         // TODO: first Test if a Resource for your protected Instance exists.
         String headline;
-        String headlineSearchBaseKey = myClassname + DELIMITER + "headline"; // Results for example in
+        String headlineSearchBaseKey = getClassName() + DELIMITER + "headline"; // Results for example in
         // "ShortcutPanel.headline"
         // :
 
@@ -314,6 +274,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         return result;
     }
 
+    private String getClassName() {
+        String[] splitClassName = getClass().getCanonicalName().split("\\.");
+        return splitClassName[splitClassName.length-1];
+    }
+
     /**
      * Gets a language Resource String from the parent, which holds these global resource.
      *
@@ -345,16 +310,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     }
 
     /**
-     * Gets and fills the classname fields
-     */
-    protected void getClassName()
-    {
-        myFullClassname = getClass().getName();
-        myClassname = myFullClassname.substring(myFullClassname.lastIndexOf(".") + 1);
-        myPrefix = myClassname + ".";
-    }
-
-    /**
      * Internal init method
      *
      * @param parent          the parent frame
@@ -363,8 +318,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     protected void init(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
     {
-        getClassName();
-
         this.installData = idata;
         this.parent = parent;
         this.resourceManager = resourceManager;
@@ -1311,5 +1264,13 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     public void setHelpUrl(String helpUrl)
     {
         this.helpUrl = helpUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "IzPanel{" +
+                "class=" + getClassName() +
+                ", hidden=" + hidden +
+                '}';
     }
 }

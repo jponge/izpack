@@ -32,10 +32,5 @@
             <artifactId>junit</artifactId>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.easytesting</groupId>
-            <artifactId>fest-swing</artifactId>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 </project>

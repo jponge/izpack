@@ -14,7 +14,7 @@ import com.izforge.izpack.installer.language.LanguageDialog;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.merge.resolve.PathResolver;
 
-import org.codehaus.izpack.test.provider.GUIInstallDataMockProvider;
+import com.izforge.izpack.test.provider.GUIInstallDataMockProvider;
 import org.fest.swing.fixture.DialogFixture;
 import org.mockito.Mockito;
 import org.picocontainer.Characteristics;

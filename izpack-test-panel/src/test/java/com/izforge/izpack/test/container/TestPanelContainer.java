@@ -16,7 +16,7 @@ import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.language.ConditionCheck;
 import com.izforge.izpack.installer.manager.PanelManager;
-import org.codehaus.izpack.test.provider.GUIInstallDataMockProvider;
+import com.izforge.izpack.test.provider.GUIInstallDataMockProvider;
 import org.fest.swing.fixture.FrameFixture;
 import org.mockito.Mockito;
 import org.picocontainer.Characteristics;
