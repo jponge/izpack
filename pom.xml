@@ -9,10 +9,10 @@
       <relativePath>${basedir}/izpack-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>izpack-aggregator</artifactId>
+    <artifactId>izpack</artifactId>
     <groupId>org.codehaus.izpack</groupId>
     <version>5.0.0-SNAPSHOT</version>
-    <name>IzPack Aggregator</name>
+    <name>IzPack</name>
     <description>IzPack Aggregator POM - contains all modules to be built</description>
     <packaging>pom</packaging>
 
