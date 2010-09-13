@@ -431,14 +431,6 @@
         </plugins>
     </reporting>
 
-    <repositories>
-        <repository>
-            <id>fest</id>
-            <name>Fest repository</name>
-            <url>http://fest.googlecode.com/svn/trunk/fest/m2/repository/</url>
-        </repository>
-    </repositories>
-
     <scm>
         <connection>scm:git:git://git.codehaus.org/izpack.git</connection>
         <developerConnection>scm:git:ssh://git@git.codehaus.org/izpack.git</developerConnection>
