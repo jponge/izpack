@@ -20,6 +20,8 @@ package com.izforge.izpack.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This is a convienient class, which helps you to detect / identify the running OS/Distribution
@@ -30,6 +32,7 @@ import java.io.IOException;
  */
 public final class OsVersion implements OsVersionConstants, StringConstants
 {
+    private static final Logger LOGGER = Logger.getLogger(OsVersion.class.getName());
 
     //~ Static fields/initializers
     // *******************************************************************************************************************************
@@ -345,7 +348,7 @@ public final class OsVersion implements OsVersionConstants, StringConstants
                 }
                 catch (IOException e)
                 {
-                    Debug.log("Unable to get release file contents in 'getOsDetails'.");
+                    LOGGER.log(Level.INFO,"Unable to get release file contents in 'getOsDetails'.");
                 }
             }
         }
