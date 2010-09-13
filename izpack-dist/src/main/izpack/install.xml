@@ -128,7 +128,7 @@
         </pack>
 
         <!-- The documentation -->
-        <pack name="HTML Documentation" required="no">
+        <!-- <pack name="HTML Documentation" required="no">
             <description>The IzPack documentation (HTML version).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="doc/izpack/html/**/*"/>
@@ -145,7 +145,7 @@
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="doc/izpack/javadoc/**/*"/>
             </fileset>
-        </pack>
+        </pack> -->
 
         <!-- Utilities pack -->
         <pack name="Utilities" required="no">
@@ -159,12 +159,12 @@
         </pack>
 
         <!-- A trivial sample to get started -->
-        <pack name="Sample" required="no">
+        <!-- <pack name="Sample" required="no">
             <description>A sample installation.</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="sample/**/*"/>
             </fileset>
-        </pack>
+        </pack> -->
 
         <!-- The source code of this version -->
         <pack name="Sources" required="no">
