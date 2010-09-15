@@ -509,7 +509,7 @@ public class SelfModifier
             return null;
         }
 
-        String path = url.getFile();
+        String path = FileUtil.convertUrlToFilePath(url);
         // starts at "file:..." (use getPath() as of 1.3)
         path = path.substring(0, path.lastIndexOf('!'));
 

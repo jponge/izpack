@@ -3,6 +3,7 @@ package com.izforge.izpack.merge.resolve;
 import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.merge.ClassResolver;
+import com.izforge.izpack.util.FileUtil;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -37,7 +38,7 @@ public class ClassPathCrawler
         StringBuilder stringBuilder = new StringBuilder();
         for (URL url : getClassPathUrl())
         {
-            stringBuilder.append(url.getPath());
+            stringBuilder.append(FileUtil.convertUrlToFilePath(url));
             stringBuilder.append('\n');
         }
         return stringBuilder.toString();
@@ -145,7 +146,7 @@ public class ClassPathCrawler
         Set<URL> result = new HashSet<URL>();
         for (URL url : elligibleList)
         {
-            if (url.getPath().endsWith(expectedEndPath))
+            if (FileUtil.convertUrlToFilePath(url).endsWith(expectedEndPath))
             {
                 result.add(url);
             }
@@ -186,7 +187,7 @@ public class ClassPathCrawler
         {
             for (String regexp : acceptedRegexp)
             {
-                if (url.getPath().matches(regexp))
+                if (FileUtil.convertUrlToFilePath(url).matches(regexp))
                 {
                     result.add(url);
                 }

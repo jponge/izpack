@@ -47,17 +47,6 @@ public class StringTool
     // **************************************************************************************
 
     /**
-     * Standalone callable Test method
-     *
-     * @param args Commandline Args
-     */
-    public static void main(String[] args)
-    {
-        System.out.println("Test: string.replace(abc$defg,$de ,null ):"
-                + StringTool.replace("abc$defg", "$de", null, true));
-    }
-
-    /**
      * Replaces <b>from</b> with <b>to</b> in given String: <b>value</b>
      *
      * @param value original String

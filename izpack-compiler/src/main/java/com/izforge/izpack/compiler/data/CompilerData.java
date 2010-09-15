@@ -1,5 +1,7 @@
 package com.izforge.izpack.compiler.data;
 
+import com.izforge.izpack.util.FileUtil;
+
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
@@ -200,7 +202,7 @@ public class CompilerData
         self = self.replace('.', '/');
         self = "/" + self + ".class";
         URL url = Compiler.class.getResource(self);
-        String name = url.getFile();
+        String name = FileUtil.convertUrlToFilePath(url);
         int start = name.indexOf(self);
         name = name.substring(0, start);
         if (name.endsWith("!"))

@@ -2,6 +2,7 @@ package com.izforge.izpack.merge;
 
 import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.merge.resolve.ResolveUtils;
+import com.izforge.izpack.util.FileUtil;
 
 import java.io.File;
 import java.net.URL;
@@ -34,7 +35,7 @@ public class ClassResolver {
     }
 
     public static String processURLToClassName(URL url) {
-        return processFileToClassName(new File(url.getFile()));
+        return processFileToClassName(FileUtil.convertUrlToFile(url));
     }
 
     public static boolean isFullClassName(String className) {

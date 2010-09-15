@@ -5,6 +5,7 @@ import com.izforge.izpack.merge.panel.PanelMerge;
 import com.izforge.izpack.test.ClassUtils;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.junit.PicoRunner;
+import com.izforge.izpack.util.FileUtil;
 import org.hamcrest.beans.HasPropertyWithValue;
 import org.hamcrest.core.Is;
 import org.hamcrest.text.StringContains;
@@ -46,7 +47,7 @@ public class ClassPathCrawlerTest
     @Test
     public void searchClassInJar() throws Exception
     {
-        File jarResource = new File(ClassLoader.getSystemResource("com/izforge/izpack/merge/test/vim-panel-1.0-SNAPSHOT.jar").getFile());
+        File jarResource = FileUtil.convertUrlToFile(ClassLoader.getSystemResource("com/izforge/izpack/merge/test/vim-panel-1.0-SNAPSHOT.jar"));
         ClassUtils.loadJarInSystemClassLoader(jarResource);
         Class aClass = classPathCrawler.searchClassInClassPath("VimPanel");
         assertThat(aClass.getName(), Is.is("com.sora.panel.VimPanel"));
@@ -56,7 +57,7 @@ public class ClassPathCrawlerTest
     @Test
     public void searchPackageInJarWithSpaces() throws Exception
     {
-        File jarResource = new File(ClassLoader.getSystemResource("com/izforge/izpack/merge/test/test space/vim-panel-1.0-SNAPSHOT.jar").getFile());
+        File jarResource = FileUtil.convertUrlToFile(ClassLoader.getSystemResource("com/izforge/izpack/merge/test/test space/vim-panel-1.0-SNAPSHOT.jar"));
         ClassUtils.loadJarInSystemClassLoader(jarResource);
         Class aClass = classPathCrawler.searchClassInClassPath("VimPanel");
         assertThat(aClass.getName(), Is.is("com.sora.panel.VimPanel"));
@@ -69,7 +70,7 @@ public class ClassPathCrawlerTest
         URL jarUrl = loadVimPanel();
         Set<URL> urlList = classPathCrawler.searchPackageInClassPath("com.sora.panel");
         assertThat(urlList, IsCollectionContaining.hasItems(
-                new File(jarUrl.getFile() + "!com/sora/panel").toURI().toURL()
+                new File(FileUtil.convertUrlToFilePath(jarUrl) + "!com/sora/panel").toURI().toURL()
         ));
         assertThat(urlList.iterator().next().getPath(), StringEndsWith.endsWith("com/sora/panel"));
         ClassUtils.unloadLastJar();
@@ -81,7 +82,7 @@ public class ClassPathCrawlerTest
         URL jarUrl = loadVimPanel();
         Set<URL> urlList = classPathCrawler.searchPackageInClassPath("com/sora/panel/");
         assertThat(urlList, IsCollectionContaining.hasItems(
-                new File(jarUrl.getFile() + "!com/sora/panel").toURI().toURL()
+                new File(FileUtil.convertUrlToFilePath(jarUrl) + "!com/sora/panel").toURI().toURL()
         ));
         assertThat(urlList.iterator().next().getPath(), StringEndsWith.endsWith("com/sora/panel"));
         ClassUtils.unloadLastJar();
@@ -90,7 +91,7 @@ public class ClassPathCrawlerTest
     private URL loadVimPanel() throws Exception
     {
         URL jarUrl = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/vim-panel-1.0-SNAPSHOT.jar");
-        File jarResource = new File(jarUrl.getFile());
+        File jarResource = FileUtil.convertUrlToFile(jarUrl);
         ClassUtils.loadJarInSystemClassLoader(jarResource);
         return jarUrl;
     }

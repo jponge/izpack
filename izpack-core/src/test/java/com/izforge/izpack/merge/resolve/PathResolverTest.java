@@ -6,6 +6,7 @@ import com.izforge.izpack.matcher.MergeMatcher;
 import com.izforge.izpack.merge.jar.JarMerge;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.junit.PicoRunner;
+import com.izforge.izpack.util.FileUtil;
 import org.hamcrest.collection.IsCollectionContaining;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNot;
@@ -148,8 +149,8 @@ public class PathResolverTest
     @Test
     public void testIsJarWithFile() throws Exception
     {
-        File fileResource = new File(ClassLoader.getSystemResource("com/izforge/izpack/merge/AbstractMerge.class").getFile());
-        File jarResource = new File(ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar").getFile());
+        File fileResource = FileUtil.convertUrlToFile(ClassLoader.getSystemResource("com/izforge/izpack/merge/AbstractMerge.class"));
+        File jarResource = FileUtil.convertUrlToFile(ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar"));
         assertThat(ResolveUtils.isJar(
                 fileResource),
                 Is.is(false));

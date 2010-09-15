@@ -3,6 +3,7 @@ package com.izforge.izpack.merge.file;
 import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.merge.AbstractMerge;
 import com.izforge.izpack.merge.resolve.ResolveUtils;
+import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.IoHelper;
 import org.apache.tools.zip.ZipOutputStream;
 
@@ -29,7 +30,7 @@ public class FileMerge extends AbstractMerge {
 
     public FileMerge(URL url, String destination, Map<OutputStream, List<String>> mergeContent) {
         this.mergeContent = mergeContent;
-        this.sourceToCopy = new File(url.getFile());
+        this.sourceToCopy = FileUtil.convertUrlToFile(url);
 
         this.destination = destination;
     }

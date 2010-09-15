@@ -6,6 +6,7 @@ import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.test.ClassUtils;
 import com.izforge.izpack.test.InstallFile;
+import com.izforge.izpack.util.FileUtil;
 import org.apache.commons.io.FileUtils;
 import org.junit.runners.model.FrameworkMethod;
 import org.picocontainer.MutablePicoContainer;
@@ -46,7 +47,7 @@ public class TestCompilerContainer extends AbstractContainer
             }
             String installFileName = installFile.value();
 
-            File installerFile = new File(getClass().getClassLoader().getResource(installFileName).getFile());
+            File installerFile = FileUtil.convertUrlToFile(getClass().getClassLoader().getResource(installFileName));
             File baseDir = installerFile.getParentFile();
 
             File out = new File(baseDir, "out" + Math.random() + ".jar");

@@ -1,12 +1,15 @@
 package com.izforge.izpack.merge.resolve;
 
 import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.util.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLDecoder;
 import java.util.*;
 import java.util.zip.ZipFile;
 
@@ -26,7 +29,7 @@ public class ResolveUtils {
      * @return true if the file is a jar
      */
     public static boolean isJar(URL url) {
-        String file = url.getFile();
+        String file = FileUtil.convertUrlToFilePath(url);
         file = file.substring(file.indexOf(":") + 1);
         if (file.contains("!")) {
             file = file.substring(0, file.lastIndexOf('!'));
@@ -59,7 +62,7 @@ public class ResolveUtils {
     public static String getCurrentClasspath() {
         StringBuilder stringBuilder = new StringBuilder();
         for (URL url : getClassPathUrl()) {
-            stringBuilder.append(url.getPath());
+            stringBuilder.append(FileUtil.convertUrlToFilePath(url));
             stringBuilder.append('\n');
         }
         return stringBuilder.toString();
@@ -101,7 +104,7 @@ public class ResolveUtils {
     }
 
     public static String processUrlToJarPath(URL resource) {
-        String res = resource.getPath();
+        String res = FileUtil.convertUrlToFilePath(resource);
         res = res.replaceAll("file:", "");
         if (res.contains("!")) {
             return res.substring(0, res.lastIndexOf("!"));
@@ -110,7 +113,7 @@ public class ResolveUtils {
     }
 
     public static String processUrlToJarPackage(URL resource) {
-        String res = resource.getPath();
+        String res = FileUtil.convertUrlToFilePath(resource);
         res = res.replaceAll("file:", "");
         res = res.substring(res.lastIndexOf("!") + 1);
         res = res.replaceAll("^/", "");
@@ -133,7 +136,7 @@ public class ResolveUtils {
     }
 
     public static boolean isFile(URL url) {
-        return !new File(url.getFile()).isDirectory();
+        return !FileUtil.convertUrlToFile(url).isDirectory();
     }
 
     public static String convertPathToPosixPath(String path) {

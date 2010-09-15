@@ -473,7 +473,7 @@ public class Librarian implements CleanupClient
     /*--------------------------------------------------------------------------*/
     private String getClientPath(String name, URL clientURL)
     {
-        String path = clientURL.getFile();
+        String path = FileUtil.convertUrlToFilePath(clientURL);
 
         int nameStart = path.lastIndexOf('/') + 1;
 
@@ -504,7 +504,7 @@ public class Librarian implements CleanupClient
         ProtectionDomain domain = client.getClass().getProtectionDomain();
         CodeSource codeSource = domain.getCodeSource();
         URL url = codeSource.getLocation();
-        String path = url.getPath();
+        String path = FileUtil.convertUrlToFilePath(url);
         path = path + nativeDirectory + '/' + name + extension;
         path = path.replace('/', File.separatorChar);
         // Revise the URI-path to a file path; needed in uninstaller because it

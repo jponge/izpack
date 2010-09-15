@@ -5,11 +5,13 @@ import com.izforge.izpack.core.container.TestMergeContainer;
 import com.izforge.izpack.matcher.MergeMatcher;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.junit.PicoRunner;
+import com.izforge.izpack.util.FileUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -36,7 +38,7 @@ public class MergeableResolverTest
     public void before() throws MalformedURLException
     {
         resource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
-        resource = new File(resource.getFile() + "!jar/izforge").toURI().toURL();
+        resource = new File(FileUtil.convertUrlToFilePath(resource) + "!jar/izforge").toURI().toURL();
     }
 
 
@@ -47,8 +49,16 @@ public class MergeableResolverTest
         assertThat(mergeable, MergeMatcher.isMergeableContainingFile("jar/izforge/izpack/panels/hello/HelloPanel.class"));
     }
 
-
     @Test
+    public void testGetMergeableWithSpaces() throws Exception
+    {
+        resource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/test space/vim-panel-1.0-SNAPSHOT.jar");
+        resource = new File(FileUtil.convertUrlToFilePath(resource) + "!com").toURI().toURL();
+        Mergeable mergeable = mergeableResolver.getMergeableFromURL(resource);
+        assertThat(mergeable, MergeMatcher.isMergeableContainingFile("com/sora/panel/VimPanel.class"));
+    }
+
+    @Test           
     public void testGetMergeableFromURLWithDestination() throws Exception
     {
         Mergeable jarMerge = mergeableResolver.getMergeableFromURLWithDestination(resource, "ga");
