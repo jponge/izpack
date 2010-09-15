@@ -54,6 +54,16 @@ public class ClassPathCrawlerTest
     }
 
     @Test
+    public void searchPackageInJarWithSpaces() throws Exception
+    {
+        File jarResource = new File(ClassLoader.getSystemResource("com/izforge/izpack/merge/test/test space/vim-panel-1.0-SNAPSHOT.jar").getFile());
+        ClassUtils.loadJarInSystemClassLoader(jarResource);
+        Class aClass = classPathCrawler.searchClassInClassPath("VimPanel");
+        assertThat(aClass.getName(), Is.is("com.sora.panel.VimPanel"));
+        ClassUtils.unloadLastJar();
+    }
+
+    @Test
     public void searchPackageInJar() throws Exception
     {
         URL jarUrl = loadVimPanel();
