@@ -23,6 +23,7 @@ package com.izforge.izpack.util;
 
 import java.io.*;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,16 +35,24 @@ import java.util.List;
  */
 public class FileUtil
 {
-    //~ Constructors ***********************************************************************
 
-    /**
-     * Creates a new FileUtil object.
-     */
-    public FileUtil()
+    public static File convertUrlToFile(URL url)
     {
+        return new File(convertUrlToFilePath(url));
     }
 
-    //~ Methods ****************************************************************************
+    public static String convertUrlToFilePath(URL url)
+    {
+        try
+        {
+            return URLDecoder.decode(url.getFile(), "UTF-8");
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            // yet another stupid checked exception...
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * Gets the content from a File as StringArray List.
@@ -234,14 +243,5 @@ public class FileUtil
         {
             return new File(basedir, file.getPath());
         }
-    }
-
-    /**
-     * Test main
-     *
-     * @param args
-     */
-    public static void main(String[] args)
-    {
     }
 }
