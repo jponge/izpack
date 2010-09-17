@@ -9,7 +9,7 @@
 
     <artifactId>izpack</artifactId>
     <groupId>org.codehaus.izpack</groupId>
-    <version>5.0.0-beta2-SNAPSHOT</version>
+    <version>5.0.0-beta2</version>
     <packaging>pom</packaging>
 
     <name>IzPack Parent</name>
@@ -228,7 +228,7 @@
             <dependency>
                 <artifactId>izpack-ini4j</artifactId>
                 <groupId>${project.groupId}</groupId>
-                <version>5.0.0-beta2-SNAPSHOT</version>
+                <version>5.0.0-beta2</version>
             </dependency>
             <dependency>
                 <groupId>org.jdom</groupId>
