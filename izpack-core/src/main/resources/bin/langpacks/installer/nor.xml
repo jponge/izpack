@@ -1,145 +1,310 @@
-<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
 <!-- The Norwegian langpack -->
 
 <langpack>
 
-    <!-- General installer strings -->
-    <str id="installer.title" txt="IzPack - Installasjon av " />
-    <str id="installer.next" txt="Neste" />
-    <str id="installer.prev" txt="Forrige" />
-    <str id="installer.quit" txt="Avslutt" />
-    <str id="installer.madewith" txt="(Laget med IzPack - http://izpack.org/)" />
-    <str id="installer.quit.title" txt="Er du sikker p� at du vil avslutte ?" />
-    <str id="installer.quit.message" txt="Dette vil avbryte installasjonen !" />
-    <str id="installer.warning" txt="Advarsel !" />
-    <str id="installer.yes" txt="Ja" />
-    <str id="installer.no" txt="Nei" />
-    <str id="installer.cancel" txt="Annuller" />
-    <str id="installer.error" txt="Feil" />
+  <!-- Heading messages START -->
+  <str id="CheckedHelloPanel.headline" txt="Velkommen" />
+  <str id="CompilePanel.headline" txt="Kompiler Java-kildekode" />
+  <str id="ConditionalUserInputPanel.headline" txt="Brukerdata" />
+  <str id="ExtendedInstallPanel.headline" txt="Installasjon og konfigurasjon" />
+  <str id="FinishPanel.headline" txt="Installasjon fullført" />
 
-    <!-- Uninstaller specific strings -->
-    <str id="uninstaller.warning" txt="Dette vil fjerne installerte applikasjoner !" />
-    <str id="uninstaller.destroytarget" txt=" Tving gjennom sletting av " />
-    <str id="uninstaller.uninstall" txt="Avinstaller" />
+  <str id="HelloPanel.headline" txt="Velkommen" />
+  <str id="HTMLInfoPanel.headline" txt="Informasjon" />
+  <str id="HTMLLicencePanel.headline" txt="Lisensavtaler" />
+  <str id="ImgPacksPanel.headline" txt="Velg installasjonspakker" />
+  <str id="InfoPanel.headline" txt="Informasjon" />
+  <str id="InstallPanel.headline" txt="Installasjon" />
+  <str id="JDKPathPanel.headline" txt="JDK-filsti" />
+  <str id="LicencePanel.headline" txt="Lisensavtaler" />
+  <str id="PacksPanel.headline" txt="Velg installasjonspakker" />
 
-    <!-- The strings for the 'official' IzPack plugins -->
-    <str id="HelloPanel.welcome1" txt="Velkommen til installasjon av " />
-    <str id="HelloPanel.welcome2" txt=" !" />
-    <str id="HelloPanel.authors" txt="Forfatteren til denne applikasjonen er : " />
-    <str id="HelloPanel.url" txt="Applikasjonens hjemmeside er : " />
+  <str id="ProcessPanel.headline" txt="Utfør eksterne prosesser" />
+  <str id="ShortcutPanel.headline" txt="Opprett snarveier" />
+  <str id="SimpleFinishPanel.headline" txt="Installasjon fullført" />
+  <str id="SummaryPanel.headline" txt="Oppsummering av konfigurasjon" />
+  <str id="TargetPanel.headline" txt="Målsti" />
+  <str id="UserInputPanel.headline" txt="Brukerdata" />
+  <str id="UserPathPanel.headline" txt="Velg mål" />
+  <str id="InstallationTypePanel.headline" txt="Installasjonstype" />
 
-    <str id="LicencePanel.info" txt="Les vennligst gjennom f�lgende lisensavtale:" />
-    <str id="LicencePanel.agree" txt="Jeg aksepterer vilk�rene i lisensavtalen." />
-    <str id="LicencePanel.notagree" txt="Jeg aksepterer IKKE vilk�rene i lisensavtalen." />
-    <str id="LicencePanel.yes" txt="Ja" />
-    <str id="LicencePanel.no" txt="Nei" />
+  <!-- General installer strings -->
+  <str id="installer.title" txt="IzPack - Installasjon av " />
+  <str id="installer.next" txt="Neste" />
+  <str id="installer.prev" txt="Forrige" />
+  <str id="installer.quit" txt="Avslutt" />
+  <str id="installer.madewith" txt="(Laget med IzPack - http://izpack.org/)" />
+  <str id="installer.reboot.ask.title" txt="Omstart nødvendig" />
+  <str id="installer.reboot.ask.message"
+    txt="Du må starte datamaskinen på nytt for å aktivere noen endringer. Vil du starte på nytt nå?" />
+  <str id="installer.reboot.notice.title" txt="Omstart er anbefalt" />
 
-    <str id="InfoPanel.info" txt="Vennligst les f�lgende informasjon :" />
+  <str id="installer.reboot.notice.message" txt="Det er anbefalt at du starter på nytt for å ta i bruk noen endringer." />
+  <str id="installer.quit.title" txt="Er du sikker på at du vil avslutte?" />
+  <str id="installer.quit.message" txt="Dette vil avbryte installasjonen!" />
+  <str id="installer.warning" txt="Advarsel!" />
+  <str id="installer.yes" txt="Ja" />
+  <str id="installer.no" txt="Nei" />
+  <str id="installer.cancel" txt="Avbryt" />
+  <str id="installer.error" txt="Feil" />
+  <str id="installer.help" txt="Hjelp" />
 
-    <str id="TargetPanel.info" txt="Velg mappen du vil installere i :" />
-    <str id="TargetPanel.browse" txt="Bla gjennom ..." />
-    <str id="TargetPanel.warn"
-         txt="Katalogen eksisterer allerede ! Er du sikker p� du vil installere og eventuelt overskrive eksisterende filer?" />
-    <str id="TargetPanel.empty_target"
-         txt="Du har ikke angitt et m�lkatalog! Er dette korrekt?" />
-    <str id="TargetPanel.createdir" txt="M�lkatalogen vil bli opprettet :" />
+  <str id="installer.step" txt="Steg" />
+  <str id="installer.of" txt="av" />
+  <str id="installer.Message" txt="Melding" />
 
-    <str id="PacksPanel.info" txt="Velg de pakkene du vil installere :" />
-    <str id="PacksPanel.tip" txt="OBS: Gr� pakker m� installeres." />
-    <str id="PacksPanel.space" txt="Total plass som kreves: " />
-    <str id="PacksPanel.description" txt="Beskrivelse" />
+  <!-- Uninstaller specific strings -->
+  <str id="uninstaller.warning" txt="Dette vil fjerne installerte programmer!" />
+  <str id="uninstaller.destroytarget" txt=" Tving gjennom sletting av " />
+  <str id="uninstaller.uninstall" txt="Avinstaller" />
 
-    <str id="InstallPanel.info" txt="Trykk p� 'Installer !' for � begynne installasjonsprosessen" />
-    <str id="InstallPanel.install" txt="Installer !" />
-    <str id="InstallPanel.tip" txt="Pakke installasjonsprosess :" />
-    <str id="InstallPanel.begin" txt="[Ingenting]" />
-    <str id="InstallPanel.finished" txt="[Ferdig]" />
-    <str id="InstallPanel.progress" txt="Total installasjonsprosess:" />
-    <str id="InstallPanel.overwrite.title" txt="Filen eksisterer allerede" />
-    <str id="InstallPanel.overwrite.question" txt="Den f�lgende filen eksisterer allerede. Skal den overskrives?" />
+  <!-- The strings for the 'official' IzPack plugins -->
 
-    <str id="FinishPanel.success" txt="Installasjonen er gjennomf�rt uten feil." />
-    <str id="FinishPanel.done" txt="Ferdig" />
-    <str id="FinishPanel.fail" txt="Installationen mislyktes!" />
-    <str id="FinishPanel.uninst.info" txt="Et avinstalleringsprogram er oprettet i:" />
-    <str id="FinishPanel.auto" txt="Generer et automatisk installasjonsskript" />
-    <str id="FinishPanel.auto.tip"
-         txt="Bruk dette skriptet til � gjenta installasjonen p� andre datamaskiner." />
+  <!-- HelloPanel strings -->
+  <str id="HelloPanel.welcome1" txt="Velkommen til installasjon av " />
+  <str id="HelloPanel.welcome2" txt="!" />
+  <str id="HelloPanel.authors" txt="Dette programmet utvikles av: " />
+  <str id="HelloPanel.url" txt="Programmets hjemmeside er: " />
 
-    <str id="ImgPacksPanel.packs" txt="F�lgende pakker er tilgjengelig :" />
-    <str id="ImgPacksPanel.snap" txt="Pakke �yeblikksbilde  :" />
-    <str id="ImgPacksPanel.checkbox" txt=" Installer denne pakken" />
+  <!-- LicensePanel strings -->
+  <str id="LicencePanel.info" txt="Les gjennom følgende lisensavtale:" />
+  <str id="LicencePanel.agree" txt="Jeg godtar vilkårene i lisensavtalen." />
 
-    <str id="ShortcutPanel.regular.list" txt="Velg et programgruppe som snarveien skal plasseres i:" />
-    <str id="ShortcutPanel.regular.default" txt="Nullstill" />
-    <str id="ShortcutPanel.regular.desktop" txt="Opprett snarvei p� skrivebordet" />
-    <str id="ShortcutPanel.regular.create" txt="Opprett snarvei" />
-    <str id="ShortcutPanel.regular.userIntro" txt="Opprett snarvei for:" />
-    <str id="ShortcutPanel.regular.currentUser" txt="N�v�rende bruker" />
-    <str id="ShortcutPanel.regular.allUsers" txt="Alle brukere" />
+  <str id="LicencePanel.notagree" txt="Jeg aksepterer IKKE vilkårene i lisensavtalen." />
+  <str id="LicencePanel.yes" txt="Ja" />
+  <str id="LicencePanel.no" txt="Nei" />
 
-    <str id="ShortcutPanel.alternate.apology"
-         txt="Vi beklager men IzPack st�tter ikke opprettelse av snarvei p� operativsystemet ditt. For � opprette en snarvei, les vennligst gjennom ditt operativsystems brukermanual." />
-    <str id="ShortcutPanel.alternate.targetsLabel"
-         txt="F�lgende er en m�lliste, som produsenten av applikasjonen �nsker at du skal ha tilgang til." />
-    <str id="ShortcutPanel.alternate.textFileExplanation"
-         txt="Du kan lagre detaljert informasjon om m�lene i applikasjonen i en tekstfil til senere gjennomsyn." />
-    <str id="ShortcutPanel.alternate.saveButton" txt="Lagre tekstfil" />
+  <!-- PrinterSelect Panel -->
+  <str id="PrinterSelectPanel.select_printer" txt="Velg hvilken skriver som skal benyttes for initielt oppsett og testing." />
 
-    <str id="ShortcutPanel.textFile.header"
-         txt="Snarvei informasjon\n====================\n\nF�lgende er en liste med all relevant informasjon om tenkte\nsnarveier. Denne informasjonen skulle gj�re det mulig � opprette snarveien selv.\n" />
+  <!-- InfoPanel strings -->
+  <str id="InfoPanel.info" txt="Les følgende informasjon:" />
 
-    <str id="ShortcutPanel.textFile.name" txt="Snarvei            : " />
-    <str id="ShortcutPanel.textFile.location" txt="Foresl�tt lokasjon : " />
-    <str id="ShortcutPanel.textFile.description" txt="Beskrivelse        : " />
-    <str id="ShortcutPanel.textFile.target" txt="Snarveiens m�l     : " />
-    <str id="ShortcutPanel.textFile.command" txt="Kommandolinje      : " />
-    <str id="ShortcutPanel.textFile.iconName" txt="Ikon fil           : " />
-    <str id="ShortcutPanel.textFile.iconIndex" txt="Ikon indeks        : " />
-    <str id="ShortcutPanel.textFile.work" txt="Arbeidskatalog     : " />
+  <!-- PathInputPanel strings -->
+  <str id="PathInputPanel.required" txt="Den valgte mappen bør eksistere fra før." />
+  <str id="PathInputPanel.required.forModificationInstallation" txt="Den valget mappen bør eksistere fra før." />
+  <str id="PathInputPanel.notValid"
+    txt="Den valgte mappen inneholder ikke produktet som er påkrevd." />
 
-    <str id="ShortcutPanel.location.desktop" txt="Skrivebord" />
-    <str id="ShortcutPanel.location.applications" txt="Program Meny" />
-    <str id="ShortcutPanel.location.startMenu" txt="Start Meny" />
-    <str id="ShortcutPanel.location.startup" txt="Start- Gruppe" />
+  <!-- TargetPanel strings -->
+  <str id="TargetPanel.info" txt="Velg hvilken mappe du vil installere i: " />
+  <str id="TargetPanel.browse" txt="Bla gjennom ..." />
+  <str id="TargetPanel.warn"
+    txt="Mappen eksisterer allerede! Er du sikker på du vil installere og eventuelt overskrive eksisterende filer?" />
 
-    <str id="UserInputPanel.error.caption" txt="Input Problem" />
-    <str id="UserInputPanel.search.autodetect" txt="Automatisk gjenkjenelse" />
+  <str id="TargetPanel.empty_target"
+    txt="Du har ikke angitt et målkatalog! Er dette korrekt?" />
+  <str id="TargetPanel.createdir" txt="Målkatalogen vil bli opprettet:" />
+  <str id="TargetPanel.nodir" txt="Dette er ikke en mappe! Velg en mappe." />
+  <str id="TargetPanel.notwritable"
+    txt="Denne mappen er ikke skrivbar. Velg en annen mappe!" />
 
-    <!-- more descriptive error message would be cool, like specifying what file we looked for -->
-    <str id="UserInputPanel.search.autodetect.failed.message" txt="Automatisk gjenkjennelse mislyktes." />
-    <str id="UserInputPanel.search.autodetect.failed.caption" txt="Automatisk gjenkjennelse mislyktes." />
-    <str id="UserInputPanel.search.autodetect.tooltip" txt="Kontroller filen eller katalogen beskrevet ovenfor." />
-    <str id="UserInputPanel.search.location" txt="Tast inn plasseringen {0}." />
-    <str id="UserInputPanel.search.location.checkedfile" txt="Unders�ker om {0} eksisterer." />
-    <str id="UserInputPanel.search.browse" txt="Bla gjennom..." />
-    <str id="UserInputPanel.search.wrongselection.message"
-         txt="Filen eller katalogen du har valgt, eksisterer ikke eller er ikke passende." />
-    <str id="UserInputPanel.search.wrongselection.caption" txt="Ugyldig valg." />
+  <!-- JDKPathPanel strings -->
+  <str id="JDKPathPanel.extendedIntro"
+    txt="Det installerte programmet trenger en JDK mellom versjon ${JDKPathPanel.minVersion} og ${JDKPathPanel.maxVersion}. Et Java kjøretidsmiljø (JRE) er ikke nok." />
+  <str id="JDKPathPanel.intro"
+    txt="Det installerte programmet trenger en JDK. Et Java kjøretidsmiljø (JRE) er ikke nok." />
+  <str id="JDKPathPanel.info" txt="Velg JDK-filstien:" />
 
-    <str id="CompilePanel.heading" txt="Kompilering" />
-    <str id="CompilePanel.tip" txt="Kompileringens fremskritt:" />
-    <str id="CompilePanel.browse" txt="Bla gjennom..." />
-    <str id="CompilePanel.browse.approve" txt="Bruk som kompilator" />
-    <str id="CompilePanel.start" txt="Start" />
-    <str id="CompilePanel.progress.initial" txt="[Trykk p� start knappen]" />
-    <str id="CompilePanel.progress.finished" txt="[Ferdig]" />
-    <str id="CompilePanel.progress.overall" txt="Total kompilasjonfremskritt:" />
-    <str id="CompilePanel.error" txt="Kompilasjon mislyktes" />
-    <str id="CompilePanel.error.reconfigure" txt="Konfigurer p� nytt" />
-    <str id="CompilePanel.error.ignore" txt="Ignorer" />
-    <str id="CompilePanel.error.abort" txt="Avbryt" />
-    <str id="CompilePanel.error.seebelow" txt="Se nedenfor for den mislykkede kommandoen og dens utskrift." />
-    <str id="CompilePanel.error.nofiles" txt="Feil mens skanning etter filer til kompilering." />
-    <str id="CompilePanel.error.compilernotfound" txt="Kompilatoren kunne ikke kj�re." />
-    <str id="CompilePanel.error.invalidarguments" txt="Kompilatoren kjenner ikke argumentene du fors�ker � gi den." />
-    <str id="CompilePanel.error.noclassfile" txt="Kompilatoren produserte IKKE en klassefil for kildefilen " />
-    <str id="CompilePanel.choose_compiler" txt="Kompilatoren som skal benyttes:" />
-    <str id="CompilePanel.additional_arguments" txt="Ekstra kompilator argumenter:" />
+  <str id="JDKPathPanel.badVersion1" txt="Den valgte JDK-en har feil versjon (tilgjengelig: " />
+  <str id="JDKPathPanel.badVersion2" txt=" påkrevd: " />
+  <str id="JDKPathPanel.badVersion3" txt=") Skal denne JDK-en brukes likevel?" />
+  <str id="JDKPathPanel.nonValidPathInReg"
+    txt="Windows-registeret inneholder en ugyldig filsti for denne JDK-en. Skal denne JDK-en brukes likevel?" />
 
-    <str id="ProcessPanel.heading" txt="Behandler" />
+  <!-- PacksPanel strings -->
+  <str id="PacksPanel.info" txt="Velg de pakkene du vil installere:" />
+  <str id="PacksPanel.tip" txt="Merk: Utgråede pakker må installeres." />
+  <str id="PacksPanel.space" txt="Påkrevd plass: " />
 
-    <!-- Add your own panels specific strings here if you need -->
+  <str id="PacksPanel.freespace" txt="Tilgjengelig plass: " />
+  <str id="PacksPanel.description" txt="Beskrivelse" />
+  <str id="PacksPanel.dependencyList"
+    txt="Følgende pakker har disse avhengighetene og/eller ekskluderingene" />
+  <str id="PacksPanel.dependencies" txt="Avhengigheter: " />
+  <str id="PacksPanel.excludes" txt="Ekskluderinger: " />
+  <str id="PacksPanel.notEnoughSpace"
+    txt="Ikke nok diskplass for å installere." />
+  <str id="PacksPanel.notAscertainable" txt="kan ikke fastslås" />
+
+  <!-- InstallPanel strings -->
+
+  <str id="InstallPanel.info" txt="Trykk på 'Installer!' for å begynne installasjonsprosessen" />
+  <str id="InstallPanel.install" txt="Installer!" />
+  <str id="InstallPanel.tip" txt="Fremdrift på pakkeinstallasjon:" />
+  <str id="InstallPanel.begin" txt=" " />
+  <str id="InstallPanel.finished" txt="[Fullført]" />
+  <str id="InstallPanel.progress" txt="Total installasjonsfremdrift:" />
+  <str id="InstallPanel.overwrite.title" txt="Filen eksisterer allerede" />
+  <str id="InstallPanel.overwrite.question" txt="Følgende fil finnes allerede. Skal den overskrives?" />
+
+  <!-- InstallationGroupPanel strings -->
+  <str id="InstallationGroupPanel.colNameSelected" txt="Valgt" />
+  <str id="InstallationGroupPanel.colNameInstallType" txt="Installasjonstype" />
+  <str id="InstallationGroupPanel.colNameSize" txt="Størrelse" />
+
+  <!-- InstallationTypePanel strings -->
+  <str id="InstallationTypePanel.info" txt="Velg type installasjon:" />
+  <str id="InstallationTypePanel.normal" txt="Ny installasjon" />
+  <str id="InstallationTypePanel.modify" txt="Endre installasjon" />
+
+  <!-- FinishPanel strings -->
+  <str id="FinishPanel.success" txt="Installasjonen er gjennomført uten feil." />
+  <str id="FinishPanel.done" txt="Ferdig" />
+  <str id="FinishPanel.fail" txt="Installationen mislyktes!" />
+  <str id="FinishPanel.uninst.info" txt="Et avinstalleringsprogram er oprettet i:" />
+  <str id="FinishPanel.auto" txt="Generer et automatisk installasjonsskript" />
+  <str id="FinishPanel.auto.tip"
+    txt="Bruk dette skriptet til å gjenta installasjonen på andre datamaskiner." />
+  <str id="FinishPanel.auto.dialog.filterdesc" txt="XML-filer" />
+
+  <!-- ImgPacksPanel strings -->
+  <str id="ImgPacksPanel.dependencyList" txt="Avhengigheter og/eller ekskluderinger" />
+  <str id="ImgPacksPanel.packs" txt="Følgende pakker er tilgjengelige:" />
+  <str id="ImgPacksPanel.snap" txt="Øyeblikksbilde:" />
+  <str id="ImgPacksPanel.checkbox" txt=" Installer denne pakken" />
+
+  <!-- ShortcutPanel strings -->
+  <str id="ShortcutPanel.regular.list" txt="Velg et programgruppe som snarveien skal plasseres i:" />
+  <str id="ShortcutPanel.regular.default" txt="Standard" />
+
+  <str id="ShortcutPanel.regular.desktop" txt="Opprett snarveier på skrivebordet" />
+  <str id="ShortcutPanel.regular.create" txt="Opprett snarveier på startmenyen" />
+  <str id="ShortcutPanel.regular.userIntro" txt="opprett snarvei for:" />
+  <str id="ShortcutPanel.regular.currentUser" txt="pålogget bruker" />
+  <str id="ShortcutPanel.regular.allUsers" txt="alle brukere" />
+  <str id="ShortcutPanel.alternate.apology"
+    txt="Vi beklager men IzPack støtter ikke opprettelse av snarvei på operativsystemet ditt. For å opprette en snarvei, les gjennom ditt operativsystems brukermanual." />
+  <str id="ShortcutPanel.alternate.targetsLabel"
+    txt="Følgende er en målliste, som produsenten av applikasjonen ønsker at du skal ha tilgang til." />
+  <str id="ShortcutPanel.alternate.textFileExplanation"
+    txt="Du kan lagre detaljert informasjon om målene i applikasjonen i en tekstfil til senere gjennomsyn." />
+  <str id="ShortcutPanel.alternate.saveButton" txt="Lagre tekstfil" />
+
+  <str id="ShortcutPanel.textFile.header"
+    txt="Snarveiinformasjon\n====================\n\nFølgende er en liste med all relevant informasjon om tenkte\nsnarveier. Denne informasjonen skulle gjøre det mulig å opprette snarveien selv.\n" />
+  <str id="ShortcutPanel.textFile.name" txt="Snarvei            : " />
+  <str id="ShortcutPanel.textFile.location" txt="Foreslått lokasjon : " />
+  <str id="ShortcutPanel.textFile.description" txt="Beskrivelse        : " />
+  <str id="ShortcutPanel.textFile.target" txt="Snarveiens mål     : " />
+  <str id="ShortcutPanel.textFile.command" txt="Kommandolinje      : " />
+  <str id="ShortcutPanel.textFile.iconName" txt="Ikonfil            : " />
+  <str id="ShortcutPanel.textFile.iconIndex" txt="Ikonindeks         : " />
+  <str id="ShortcutPanel.textFile.work" txt="Arbeidskatalog     : " />
+
+  <str id="ShortcutPanel.location.desktop" txt="Skrivebord" />
+  <str id="ShortcutPanel.location.applications" txt="Programmer-menyen" />
+  <str id="ShortcutPanel.location.startMenu" txt="Startmenyen" />
+  <str id="ShortcutPanel.location.startup" txt="Oppstartsgruppen" />
+  <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="Startmenyen" />
+  <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="XDG-menyen" />
+
+  <!-- UserInputPanel strings -->
+  <str id="UserInputPanel.error.caption" txt="Feil" />
+
+  <str id="UserInputPanel.dir.nodirectory.message" txt="Du må velge en gyldig mappe." />
+  <str id="UserInputPanel.dir.nodirectory.caption" txt="Ingen mappe valgt" />
+  <str id="UserInputPanel.dir.notdirectory.message"
+    txt="Mappen du valgte fins enten ikke, eller eller er ugyldig." />
+  <str id="UserInputPanel.dir.notdirectory.caption" txt="Ugyldig mappe" />
+  <str id="UserInputPanel.file.nofile.message" txt="Du må velge en gyldig fil." />
+  <str id="UserInputPanel.file.nofile.caption" txt="Ingen fil valgt" />
+  <str id="UserInputPanel.file.notfile.message"
+    txt="Filen du valgte fins enten ikke, eller er ikke gyldig." />
+  <str id="UserInputPanel.file.notfile.caption" txt="Ugyldig fil" />
+  <!-- more descriptive error message would be cool, like specifying what
+    file we looked for -->
+
+  <str id="UserInputPanel.search.autodetect" txt="Oppdag automatisk" />
+  <str id="UserInputPanel.search.autodetect.failed.message" txt="Automatisk gjenkjennelse mislyktes." />
+  <str id="UserInputPanel.search.autodetect.failed.caption" txt="Automatisk gjenkjennelse mislyktes." />
+  <str id="UserInputPanel.search.autodetect.tooltip"
+    txt="Kontroller filen eller katalogen beskrevet ovenfor." />
+  <str id="UserInputPanel.search.location" txt="Tast inn plasseringen {0}." />
+  <str id="UserInputPanel.search.location.checkedfile" txt="Undersøker om {0} eksisterer." />
+  <str id="UserInputPanel.search.browse" txt="Bla gjennom ..." />
+  <str id="UserInputPanel.search.wrongselection.message"
+    txt="Filen eller katalogen du har valgt, eksisterer ikke eller er ikke passende." />
+  <str id="UserInputPanel.search.wrongselection.caption" txt="Ugyldig valg." />
+
+  <!-- UserPathPanel strings -->
+  <str id="UserPathPanel.required" txt="Den valgte mappen bør eksistere." />
+  <str id="UserPathPanel.info" txt="Velg filstien: " />
+  <str id="UserPathPanel.browse" txt="Bla gjennom" />
+  <str id="UserPathPanel.exists_warn"
+    txt="Mappen fins allerede! Er du sikker på at du ønsker å installere her og muligens overskrive eksisterende filer?" />
+  <str id="UserPathPanel.empty_target"
+    txt="Du har ikke angitt en målplassering! Er dette korrekt?" />
+  <str id="UserPathPanel.createdir" txt="Målmappen vil opprettes: " />
+  <str id="UserPathPanel.nodir" txt="Denne filen er ikke en mappe! Velg en mappe." />
+
+  <str id="UserPathPanel.notwritable"
+    txt="Denne mappen kan ikke skrives til. Velg en annen mappe!" />
+
+  <!-- CompilePanel strings -->
+  <str id="CompilePanel.heading" txt="Kompilering" />
+  <str id="CompilePanel.tip" txt="Kompileringens fremskritt:" />
+  <str id="CompilePanel.browse" txt="Bla gjennom ..." />
+  <str id="CompilePanel.browse.approve" txt="Bruk som kompilator" />
+  <str id="CompilePanel.start" txt="Start" />
+  <str id="CompilePanel.progress.initial" txt="[Trykk på start-knappen]" />
+
+  <str id="CompilePanel.progress.finished" txt="[Ferdig]" />
+  <str id="CompilePanel.progress.overall" txt="Total kompilasjonfremdrift:" />
+  <str id="CompilePanel.error" txt="Kompilasjon mislyktes" />
+  <str id="CompilePanel.error.reconfigure" txt="Konfigurer på nytt" />
+  <str id="CompilePanel.error.ignore" txt="Ignorer" />
+  <str id="CompilePanel.error.abort" txt="Avbryt" />
+  <str id="CompilePanel.error.seebelow" txt="Se nedenfor for den mislykkede kommandoen og dens utskrift." />
+  <str id="CompilePanel.error.nofiles" txt="Feil mens skanning etter filer til kompilering." />
+  <str id="CompilePanel.error.compilernotfound" txt="Kompilatoren kunne ikke kjøre." />
+
+  <str id="CompilePanel.error.invalidarguments" txt="Kompilatoren kjenner ikke argumentene du forsøker å gi den." />
+  <str id="CompilePanel.error.noclassfile"
+    txt="Kompilatoren produserte IKKE en klassefil for kildefilen " />
+  <str id="CompilePanel.choose_compiler" txt="Kompilatoren som skal benyttes:" />
+  <str id="CompilePanel.additional_arguments" txt="Ekstra kompilatorargumenter:" />
+
+  <!-- ProcessPanel strings -->
+  <str id="ProcessPanel.heading" txt="Behandler" />
+
+  <!-- SummaryPanel strings -->
+  <str id="SummaryPanel.info"
+    txt="Installasjonen vil fortsette med følgende innstillinger. Trykk på Neste for å fortsette." />
+
+  <str id="TargetPanel.summaryCaption" txt="Installasjonsmål" />
+  <str id="JDKPathPanel.summaryCaption" txt="JDK-filsti" />
+  <str id="PacksPanel.summaryCaption" txt="Valgte installasjonspakker" />
+  <str id="ImgPacksPanel.summaryCaption" txt="Valgte installasjonspakker" />
+  <str id="TreePacksPanel.summaryCaption" txt="Valgte installasjonspakker" />
+  <str id="UserPathPanel.summaryCaption" txt="Valgt mål" />
+  <str id="DefaultTargetPanel.summaryCaption" txt="Installasjonmål" />
+
+  <!-- Strings for the Registry -->
+
+  <str id="functionFailed.RegOpenKeyEx" txt="Klarte ikke åpne registernøkkel {0}\\{1}." />
+
+  <!-- CheckedHelloPanel strings -->
+  <str id="CheckedHelloPanel.productAlreadyExist0"
+    txt="Dette produktet er allerede installert på denne datamaskinen på den valgte stien " />
+  <str id="CheckedHelloPanel.productAlreadyExist1" txt=" . Er du sikker på at du vil installere enda en instans?" />
+  <str id="CheckedHelloPanel.infoOverUninstallKey" txt="Avinstalleringsnøkkelen vil hete: " />
+
+  <!-- Next Media Strings -->
+  <str id="nextmedia.title" txt="Neste installasjonsmedie" />
+  <str id="nextmedia.msg" txt="Velg det neste installasjonsmediet." />
+
+  <str id="nextmedia.browsebtn" txt="Bla gjennom" />
+  <str id="nextmedia.okbtn" txt="Bruk" />
+  <str id="nextmedia.cancelbtn" txt="Avbryt" />
+  <str id="nextmedia.choosertitle" txt="Velg installasjonsmedie" />
+  <str id="nextmedia.filedesc" txt="installasjonspakker (.pak*)" />
+
+  <!-- This string defines the time stamp format in the installation report.
+    The format details are documented in java.text.SimpleDateFormat -->
+  <str id="log.timeStamp" txt="dd.MM.yyyy [HH:mm:ss]  zzzz" />
 
 </langpack>
+
