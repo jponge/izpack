@@ -25,7 +25,7 @@ public class IzPackNewMojoTest extends AbstractMojoTestCase
         File testPom = new File(
                 Thread.currentThread().getContextClassLoader().getResource("basic-pom.xml").toURI()
         );
-        IzPackNewMojo mojo = (IzPackNewMojo) lookupMojo("compile", testPom);
+        IzPackNewMojo mojo = (IzPackNewMojo) lookupMojo("izpack", testPom);
         assertThat(mojo, IsNull.notNullValue());
         initIzpackMojo(mojo);
 

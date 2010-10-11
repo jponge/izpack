@@ -113,7 +113,7 @@
                     <execution>
                         <phase>package</phase>
                         <goals>
-                            <goal>compile</goal>
+                            <goal>izpack</goal>
                         </goals>
                     </execution>
                 </executions>

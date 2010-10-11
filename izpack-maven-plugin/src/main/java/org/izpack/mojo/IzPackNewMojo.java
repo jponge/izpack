@@ -12,7 +12,7 @@ import org.apache.maven.plugin.MojoFailureException;
  * Mojo for izpack
  *
  * @author Anthonin Bonnefoy
- * @goal compile
+ * @goal izpack
  * @phase package
  * @requiresDependencyResolution test
  */
