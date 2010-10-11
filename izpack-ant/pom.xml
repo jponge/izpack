@@ -11,6 +11,11 @@
     <name>IzPack ant module</name>
 
     <dependencies>
+        
+        <dependency>
+            <artifactId>izpack-test-common</artifactId>
+            <groupId>${project.groupId}</groupId>            
+        </dependency>
         <dependency>
             <artifactId>izpack-compiler</artifactId>
             <groupId>${project.groupId}</groupId>

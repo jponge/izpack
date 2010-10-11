@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<installation version="1.0">
+    <info>
+        <appname>Test Installation</appname>
+        <appversion>1.4 beta 666</appversion>
+        <authors>
+            <author name="Super sora" email="sora@superman.org" />
+        </authors>
+        <url>http://www.anotherworld-inspace-website.net/</url>
+    </info>
+
+    <guiprefs width="640" height="480" resizable="yes" />
+    <locale>
+        <langpack iso3="eng" />
+    </locale>
+
+    <panels>
+        <panel classname="HelloPanel" />
+        <panel classname="SimpleFinishPanel" />
+        <panel classname="CheckedHelloPanel" />
+    </panels>
+
+    <packs>
+        <pack name="Base" required="yes">
+            <description>The base files</description>
+        </pack>
+    </packs>
+</installation>
