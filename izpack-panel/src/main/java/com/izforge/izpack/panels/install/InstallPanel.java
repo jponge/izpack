@@ -281,6 +281,7 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
         setMaximumSize(dimension);
         setPreferredSize(dimension);
         parent.lockNextButton();
+        parent.lockPrevButton();
 
         parent.install(this);
     }
