@@ -114,6 +114,7 @@ public class IzPackTask extends Task implements PackagerListener
         compilerContainer.initBindings();
     }
 
+
     /**
      * Called by ant to create the object for the config nested element.
      *
@@ -193,44 +194,10 @@ public class IzPackTask extends Task implements PackagerListener
      */
     public void execute() throws org.apache.tools.ant.BuildException
     {
-
-        // Either the input attribute or config element must be specified
-        if (input == null && config == null)
-        {
-            throw new BuildException(ResourceBundle.getBundle(
-                    "com/izforge/izpack/ant/langpacks/messages").getString(
-                    "input_must_be_specified"));
-        }
-
-        if (input != null)
-        {
-            // AssertionHelper dependency injection
-            compilerContainer.addConfig("installFile", input);
-        }
-
-        if (output == null)
-        {
-            throw new BuildException(ResourceBundle.getBundle(
-                    "com/izforge/izpack/ant/langpacks/messages").getString(
-                    "output_must_be_specified"));
-        }
-
-        // if (installerType == null) now optional
-
-        if (basedir == null)
-        {
-            throw new BuildException(ResourceBundle.getBundle(
-                    "com/izforge/izpack/ant/langpacks/messages").getString(
-                    "basedir_must_be_specified"));
-        }
-
-        // if (izPackDir == null)
-        // throw new
-        // BuildException(java.util.ResourceBundle.getBundle("com/izforge/izpack/ant/langpacks/messages").getString("izPackDir_must_be_specified"));
+        checkInput();
 
         String kind = (installerType == null ? null : installerType.getValue());
 
-        CompilerConfig compilerConfig = null;
         String configText = null;
         if (config != null)
         {// Pass in the embedded configuration
@@ -238,13 +205,15 @@ public class IzPackTask extends Task implements PackagerListener
             input = null;
         }
         // else use external configuration referenced by the input attribute
-        CompilerData compilerData = new CompilerData(compression, kind, null, configText, basedir, output, compressionLevel);
-        compilerContainer.addComponent(CompilerData.class, compilerData);
-        // REFACTOR Create compiler here
-        compilerConfig = compilerContainer.getComponent(CompilerConfig.class);
-        PropertyManager propertyManager = compilerContainer.getComponent(PropertyManager.class);
-        compilerContainer.getComponent(Properties.class);
+        CompilerData compilerData = new CompilerData(compression, kind, input, configText, basedir, output, compressionLevel);
         CompilerData.setIzpackHome(izPackDir);
+
+        compilerContainer.initBindings();
+        compilerContainer.addConfig("installFile", input);
+        compilerContainer.addComponent(CompilerData.class, compilerData);
+
+        CompilerConfig compilerConfig = compilerContainer.getComponent(CompilerConfig.class);
+        PropertyManager propertyManager = compilerContainer.getComponent(PropertyManager.class);
 
         if (properties != null)
         {
@@ -277,8 +246,34 @@ public class IzPackTask extends Task implements PackagerListener
         }
         catch (Exception e)
         {
-            throw new BuildException(e);// Throw an exception if compilation
-            // failed
+            throw new BuildException(e);
+        }
+    }
+
+    private void checkInput()
+    {
+        // Either the input attribute or config element must be specified
+        if (input == null && config == null)
+        {
+            throw new BuildException(ResourceBundle.getBundle(
+                    "com/izforge/izpack/ant/langpacks/messages").getString(
+                    "input_must_be_specified"));
+        }
+
+        if (output == null)
+        {
+            throw new BuildException(ResourceBundle.getBundle(
+                    "com/izforge/izpack/ant/langpacks/messages").getString(
+                    "output_must_be_specified"));
+        }
+
+        // if (installerType == null) now optional
+
+        if (basedir == null)
+        {
+            throw new BuildException(ResourceBundle.getBundle(
+                    "com/izforge/izpack/ant/langpacks/messages").getString(
+                    "basedir_must_be_specified"));
         }
     }
 
