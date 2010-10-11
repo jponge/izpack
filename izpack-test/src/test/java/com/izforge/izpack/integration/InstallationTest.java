@@ -32,7 +32,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(PicoRunner.class)
 @Container(TestInstallationContainer.class)
-public class InstallationTest {
+public class InstallationTest
+{
     @Rule
     public MethodRule globalTimeout = new org.junit.rules.Timeout(HelperTestMethod.TIMEOUT);
     private DialogFixture dialogFrameFixture;
@@ -43,7 +44,8 @@ public class InstallationTest {
     private GUIInstallData installData;
     private InstallerController installerController;
 
-    public InstallationTest(ResourceManager resourceManager, LanguageDialog languageDialog, InstallerFrame installerFrame, GUIInstallData installData, InstallerController installerController) {
+    public InstallationTest(ResourceManager resourceManager, LanguageDialog languageDialog, InstallerFrame installerFrame, GUIInstallData installData, InstallerController installerController)
+    {
         this.installerController = installerController;
         this.resourceManager = resourceManager;
         this.languageDialog = languageDialog;
@@ -52,15 +54,20 @@ public class InstallationTest {
     }
 
     @After
-    public void tearBinding() throws NoSuchFieldException, IllegalAccessException {
-        try {
-            if (dialogFrameFixture != null) {
+    public void tearBinding() throws NoSuchFieldException, IllegalAccessException
+    {
+        try
+        {
+            if (dialogFrameFixture != null)
+            {
                 dialogFrameFixture.cleanUp();
                 dialogFrameFixture = null;
             }
         }
-        finally {
-            if (installerFrameFixture != null) {
+        finally
+        {
+            if (installerFrameFixture != null)
+            {
                 installerFrameFixture.cleanUp();
                 installerFrameFixture = null;
             }
@@ -69,7 +76,8 @@ public class InstallationTest {
 
     @Test
     @InstallFile("samples/helloAndFinish.xml")
-    public void testHelloAndFinishPanels() throws Exception {
+    public void testHelloAndFinishPanels() throws Exception
+    {
         Image image = resourceManager.getImageIconResource("/img/JFrameIcon.png").getImage();
         assertThat(image, IsNull.<Object>notNullValue());
 
@@ -77,7 +85,7 @@ public class InstallationTest {
         installerFrameFixture = HelperTestMethod.prepareFrameFixture(installerFrame, installerController);
 
         // Hello panel
-        installerFrameFixture.requireSize(new Dimension(640, 480));
+//        installerFrameFixture.requireSize(new Dimension(640, 480));
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         installerFrameFixture.requireVisible();
         // Finish panel
@@ -88,7 +96,8 @@ public class InstallationTest {
     @Test
     @Ignore
     @InstallFile("samples/helloAndFinish.xml")
-    public void testHelloAndFinishPanelsCompressed() throws Exception {
+    public void testHelloAndFinishPanelsCompressed() throws Exception
+    {
 //        System.out.println("Using file " + out.getName());
 //        File workingDirectory = getWorkingDirectory("samples");
 //        File out = new File("out.jar");
@@ -110,7 +119,8 @@ public class InstallationTest {
 
     @Test
     @InstallFile("samples/basicInstall/basicInstall.xml")
-    public void testBasicInstall() throws Exception {
+    public void testBasicInstall() throws Exception
+    {
         File installPath = HelperTestMethod.prepareInstallation(installData);
         // Lang picker
         HelperTestMethod.clickDefaultLang(dialogFrameFixture, languageDialog);
@@ -122,7 +132,9 @@ public class InstallationTest {
         Thread.sleep(600);
         // Info Panel
         installerFrameFixture.textBox(GuiId.INFO_PANEL_TEXT_AREA.id).requireText("A readme file ...");
+        installerFrameFixture.button(GuiId.BUTTON_PREV.id).requireVisible();
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        installerFrameFixture.button(GuiId.BUTTON_PREV.id).requireVisible();
         Thread.sleep(300);
         // Licence Panel
         installerFrameFixture.textBox(GuiId.LICENCE_TEXT_AREA.id).requireText("(Consider it as a licence file ...)");
