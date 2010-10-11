@@ -8,6 +8,7 @@ import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.FileUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,12 +49,8 @@ public class ConditionCheck
      */
     public void checkLockFile() throws Exception
     {
-        String tempDir = System.getProperty("java.io.tmpdir");
         String appName = installdata.getInfo().getAppName();
-        String fileName = "iz-" + appName + ".tmp";
-        Debug.trace("Making temp file: " + fileName);
-        Debug.trace("In temp directory: " + tempDir);
-        File file = new File(tempDir, fileName);
+        File file = FileUtil.getLockFile(appName);
         if (file.exists())
         {
             // Ask user if they want to proceed.

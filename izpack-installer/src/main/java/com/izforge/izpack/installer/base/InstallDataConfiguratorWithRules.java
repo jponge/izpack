@@ -4,6 +4,7 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.PrivilegedRunner;
 
 import javax.swing.*;
@@ -16,31 +17,27 @@ import javax.swing.*;
 public class InstallDataConfiguratorWithRules
 {
 
-    private AutomatedInstallData automatedInstallData;
+    private AutomatedInstallData installData;
 
     private RulesEngine rules;
 
-    public InstallDataConfiguratorWithRules(AutomatedInstallData automatedInstallData, RulesEngine rules)
+    public InstallDataConfiguratorWithRules(AutomatedInstallData installData, RulesEngine rules)
     {
-        this.automatedInstallData = automatedInstallData;
+        this.installData = installData;
         this.rules = rules;
     }
 
 
     public void configureInstallData()
     {
-        checkForPrivilegedExecution(automatedInstallData.getInfo());
-        checkForRebootAction(automatedInstallData.getInfo());
+        checkForPrivilegedExecution(installData.getInfo());
+        checkForRebootAction(installData.getInfo());
     }
 
 
     private void checkForPrivilegedExecution(Info info)
     {
-        if (PrivilegedRunner.isPrivilegedMode())
-        {
-            // We have been launched through a privileged execution, so stop the checkings here!
-        }
-        else if (info.isPrivilegedExecutionRequired())
+        if (info.isPrivilegedExecutionRequired())
         {
             boolean shouldElevate = true;
             final String conditionId = info.getPrivilegedExecutionConditionID();
@@ -53,6 +50,7 @@ public class InstallDataConfiguratorWithRules
             {
                 try
                 {
+                    FileUtil.getLockFile(installData.getInfo().getAppName()).delete();
                     if (runner.relaunchWithElevatedRights() == 0)
                     {
                         System.exit(0);
