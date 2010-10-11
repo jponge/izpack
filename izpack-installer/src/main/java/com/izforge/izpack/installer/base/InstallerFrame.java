@@ -306,6 +306,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         navPanel.add(prevButton);
         prevButton.addActionListener(navHandler);
         prevButton.setName(BUTTON_PREV.id);
+        prevButton.setVisible(false);
 
         navPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 
@@ -663,46 +664,36 @@ public class InstallerFrame extends JFrame implements InstallerView
 
     private void configureButtonVisibility()
     {
-        if (panelManager.isVisible(installdata.getCurPanelNumber()))
+        if (panelManager.isLast(installdata.getCurPanelNumber()))
         {
             prevButton.setVisible(false);
-            lockPrevButton();
-            unlockNextButton(); // if we push the button back at the license panel
+            nextButton.setVisible(false);
+            lockNextButton();
         }
-        // Only the exit button in the last panel.
         else
         {
-            if (panelManager.isLast(installdata.getCurPanelNumber()))
+            if (hasNavigatePrevious(installdata.getCurPanelNumber(), true) != -1)
             {
-                prevButton.setVisible(false);
-                nextButton.setVisible(false);
-                lockNextButton();
+                prevButton.setVisible(true);
+                unlockPrevButton();
             }
             else
             {
-                if (hasNavigatePrevious(installdata.getCurPanelNumber(), true) != -1)
-                {
-                    prevButton.setVisible(true);
-                    unlockPrevButton();
-                }
-                else
-                {
-                    lockPrevButton();
-                    prevButton.setVisible(false);
-                }
-
-                if (hasNavigateNext(installdata.getCurPanelNumber(), true) != -1)
-                {
-                    nextButton.setVisible(true);
-                    unlockNextButton();
-                }
-                else
-                {
-                    lockNextButton();
-                    nextButton.setVisible(false);
-                }
-
+                lockPrevButton();
+                prevButton.setVisible(false);
             }
+
+            if (hasNavigateNext(installdata.getCurPanelNumber(), true) != -1)
+            {
+                nextButton.setVisible(true);
+                unlockNextButton();
+            }
+            else
+            {
+                lockNextButton();
+                nextButton.setVisible(false);
+            }
+
         }
     }
 
