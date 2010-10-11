@@ -75,7 +75,7 @@
         <res src="info-border.png" id="Installer.image.0"/>
         <res src="info-border.png" id="Installer.image.hellopanel"/>
         <res src="info-border.png" id="Installer.image.infopanel"/>
-        <res src="info-border.png" id="Installer.image.licencepanel"/>
+        <res src="info-border.png" id="Installer.image.licensepanel"/>
         <res src="info-border.png" id="Installer.image.targetpanel"/>
         <res src="pack-border.png" id="Installer.image.packspanel"/>
         <res src="pack-border.png" id="Installer.image.summarypanel"/>
