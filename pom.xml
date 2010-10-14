@@ -267,6 +267,12 @@
             <!-- inner dependencies to test jar -->
 
             <dependency>
+                <artifactId>izpack-core</artifactId>
+                <groupId>${project.groupId}</groupId>
+                <version>${project.version}</version>
+                <classifier>tests</classifier>
+            </dependency>
+            <dependency>
                 <artifactId>izpack-installer</artifactId>
                 <groupId>${project.groupId}</groupId>
                 <version>${project.version}</version>

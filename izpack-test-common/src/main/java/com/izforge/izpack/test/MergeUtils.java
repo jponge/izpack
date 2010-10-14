@@ -24,4 +24,16 @@ public class MergeUtils
         outputStream.close();
         return tempFile;
     }
+
+    public static File doMerge(Mergeable mergeable)
+            throws IOException
+    {
+        File tempFile = File.createTempFile("test", ".zip");
+        ZipOutputStream outputStream = new ZipOutputStream(new FileOutputStream(tempFile));
+        mergeable.merge(outputStream);
+        outputStream.close();
+        return tempFile;
+    }
+
+
 }
