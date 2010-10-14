@@ -144,6 +144,11 @@
 
             <!-- Internal -->
             <dependency>
+                <artifactId>izpack-ant</artifactId>
+                <groupId>${project.groupId}</groupId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <artifactId>izpack-utils</artifactId>
                 <groupId>${project.groupId}</groupId>
                 <version>${project.version}</version>
