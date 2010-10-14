@@ -2,6 +2,7 @@ package com.izforge.izpack.installer.manager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
@@ -53,13 +54,17 @@ public class PanelManager
     {
         // Initialisation
         // We load each of them
-        java.util.List<Panel> panelsOrder = installdata.getPanelsOrder();
+        List<Panel> panelsOrder = installdata.getPanelsOrder();
         for (Panel panel : panelsOrder)
         {
             if (OsConstraintHelper.oneMatchesCurrentSystem(panel.getOsConstraints()))
             {
-                Class<? extends IzPanel> aClass = classPathCrawler.searchClassInClassPath(panel.getClassName());
-                installerContainer.addComponent(aClass);
+                Class<? extends IzPanel> panelClass = classPathCrawler.searchClassInClassPath(panel.getClassName());
+                Set<Class> classSet = classPathCrawler.searchAllClassesInPackage(panelClass.getPackage());
+                for (Class aClass : classSet)
+                {
+                    installerContainer.addComponent(aClass);
+                }
             }
         }
         return this;
@@ -73,7 +78,7 @@ public class PanelManager
      */
     public void instantiatePanels() throws ClassNotFoundException
     {
-        java.util.List<Panel> panelsOrder = installdata.getPanelsOrder();
+        List<Panel> panelsOrder = installdata.getPanelsOrder();
         int curVisPanelNumber = 0;
         lastVis = 0;
         int count = 0;
