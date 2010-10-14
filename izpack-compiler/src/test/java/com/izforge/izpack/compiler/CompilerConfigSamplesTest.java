@@ -2,12 +2,10 @@ package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.compiler.container.TestCompilerContainer;
 import com.izforge.izpack.matcher.ZipMatcher;
-import com.izforge.izpack.merge.MergeManagerImpl;
-import com.izforge.izpack.merge.resolve.MergeableResolver;
-import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
+import org.hamcrest.core.IsNot;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -20,19 +18,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 @RunWith(PicoRunner.class)
 @Container(TestCompilerContainer.class)
-public class CompilerConfigIzPackInstallTest
+public class CompilerConfigSamplesTest
 {
     private File out;
     private CompilerConfig compilerConfig;
-    private PathResolver pathResolver;
-    private MergeManagerImpl mergeManager;
 
-    public CompilerConfigIzPackInstallTest(File out, CompilerConfig compilerConfig, PathResolver pathResolver, MergeManagerImpl mergeManager, MergeableResolver mergeableResolver)
+    public CompilerConfigSamplesTest(File out, CompilerConfig compilerConfig)
     {
         this.out = out;
         this.compilerConfig = compilerConfig;
-        this.pathResolver = pathResolver;
-        this.mergeManager = mergeManager;
     }
 
     @Test
@@ -44,4 +38,16 @@ public class CompilerConfigIzPackInstallTest
         assertThat(out, ZipMatcher.isZipContainingFile("resources/vars"));
         assertThat(out, ZipMatcher.isZipContainingFile("img/JFrameIcon.png"));
     }
+
+
+    @Test
+    @InstallFile("samples/silverpeas/silverpeas.xml")
+    public void installerShouldMergeProcessPanelCorrectly() throws Exception
+    {
+        compilerConfig.executeCompiler();
+        assertThat(out, IsNot.not(ZipMatcher.isZipContainingFile("com/izforge/izpack/panels/process/VariableCondition.class")));
+    }
+
+
+    
 }

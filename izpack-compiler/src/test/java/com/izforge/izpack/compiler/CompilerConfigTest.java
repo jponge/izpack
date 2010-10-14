@@ -36,15 +36,13 @@ public class CompilerConfigTest
     private CompilerConfig compilerConfig;
     private PathResolver pathResolver;
     private MergeManagerImpl mergeManager;
-    private MergeableResolver mergeableResolver;
 
-    public CompilerConfigTest(File out, CompilerConfig compilerConfig, PathResolver pathResolver, MergeManagerImpl mergeManager, MergeableResolver mergeableResolver)
+    public CompilerConfigTest(File out, CompilerConfig compilerConfig, PathResolver pathResolver, MergeManagerImpl mergeManager)
     {
         this.out = out;
         this.compilerConfig = compilerConfig;
         this.pathResolver = pathResolver;
         this.mergeManager = mergeManager;
-        this.mergeableResolver = mergeableResolver;
     }
 
     @Test
