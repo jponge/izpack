@@ -92,6 +92,13 @@ public class InstallationTest
 
     }
 
+    @Test
+    @InstallFile("samples/silverpeas/silverpeas.xml")
+    public void testSilverPeasInstall() throws Exception
+    {
+        languageDialog.initLangPack();
+        installerFrameFixture = HelperTestMethod.prepareFrameFixture(installerFrame, installerController);
+    }
 
     @Test
     @Ignore

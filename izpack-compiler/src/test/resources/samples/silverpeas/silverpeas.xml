@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<installation version="1.0">
+    <!--
+      Ant properties in this file can be referenced with @{}, otherwise use
+      variables below in installer files with ${}
+    -->
+    <info>
+        <appname>Silverpeas</appname>
+        <appversion>5.4-SNAPSHOT</appversion>
+        <url>http://www.silverpeas.org/</url> 
+        <javaversion>1.6</javaversion>
+    </info>
+
+    <guiprefs width="600" height="480" resizable="yes">
+        <modifier key="useHeadingPanel" value="yes" />
+        <modifier key="useHeadingForSummary" value="yes" />
+        <modifier key="headingImageOnLeft" value="yes" />
+        <modifier key="headingLineCount" value="2" />
+        <modifier key="headingFontSize" value="1.5" />
+        <modifier key="headingBackgroundColor" value="0x00ffffff" />
+        <modifier key="headingPanelCounter" value="text" />
+        <modifier key="headingPanelCounterPos" value="inHeading" />
+    </guiprefs>
+
+    <locale>
+        <langpack iso3="fra" />
+    </locale>
+
+    <resources>
+        <res id="HTMLInfoPanel.info" src="html/readme.html" parse="no" />
+        <res id="LicencePanel.licence" src="license.txt" />
+        <res id="ProcessPanel.Spec.xml" src="postprocess.xml" />
+    </resources>
+
+    <panels>
+        <panel classname="HelloPanel" />
+        <panel classname="HTMLInfoPanel" id="info" />
+        <panel classname="LicencePanel" id="licence" />
+        <panel classname="TargetPanel" id="dir.windows" ShowCreateDirectoryMessage="false" />
+        <panel classname="PacksPanel" />
+        <panel classname="SummaryPanel" />
+        <panel classname="InstallPanel" />
+        <panel classname="ProcessPanel" />
+        <panel classname="SimpleFinishPanel" />
+    </panels>
+
+    <packs>
+        <pack name="Silverpeas" required="yes">
+            <description>Install $APP_NAME $APP_VER</description>           
+        </pack>
+    </packs>
+</installation>
