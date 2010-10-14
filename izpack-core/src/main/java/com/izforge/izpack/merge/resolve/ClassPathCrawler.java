@@ -125,6 +125,22 @@ public class ClassPathCrawler
     }
 
 
+    public Set<Class> searchAllClassesInPackage(final Package aPackage) throws ClassNotFoundException
+    {
+        Set<String> stringSet = classPathContentCache.keySet();
+        HashSet<Class> setClasses = new HashSet<Class>();
+        for (String key : stringSet)
+        {
+            if (key.contains(aPackage.getName()))
+            {
+                URL url = classPathContentCache.get(key).iterator().next();
+                String className = ClassResolver.processURLToClassName(url);
+                setClasses.add(Class.forName(className));
+            }
+        }
+        return setClasses;
+    }
+
     public Set<URL> searchPackageInClassPath(final String packageName)
     {
         processClassPath();
