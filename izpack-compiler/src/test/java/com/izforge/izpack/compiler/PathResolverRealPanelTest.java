@@ -32,8 +32,7 @@ public class PathResolverRealPanelTest
     public void testAddProcessPanel() throws Exception
     {
         PanelMerge panelMerge = pathResolver.getPanelMerge("com.izforge.izpack.panels.process.ProcessPanel");
-        assertThat(panelMerge, IsNot.not(
-                MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/panels/process/VariableCondition.class"
-                )        ));
+        assertThat(panelMerge, IsNot.not(MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/panels/process/VariableCondition.class")));
+        assertThat(panelMerge, MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/panels/process/ProcessPanel.class"));
     }
 }

@@ -3,6 +3,7 @@ package com.izforge.izpack.merge.resolve;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.merge.panel.PanelMerge;
+import com.izforge.izpack.util.FileUtil;
 
 import java.io.IOException;
 import java.net.URL;
@@ -139,7 +140,10 @@ public class PathResolver
         Set<URL> obtainPackages = classPathCrawler.searchPackageInClassPath(listPart[listPart.length - 1]);
         for (URL obtainPackage : obtainPackages)
         {
-            mergeables.add(mergeableResolver.getMergeableFromURLWithDestination(obtainPackage, destination));
+            if (FileUtil.convertUrlToFilePath(obtainPackage).contains(destination))
+            {
+                mergeables.add(mergeableResolver.getMergeableFromURLWithDestination(obtainPackage, destination));
+            }
         }
         return mergeables;
     }
