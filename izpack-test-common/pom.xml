@@ -3,7 +3,7 @@
     <parent>
         <artifactId>izpack</artifactId>
         <groupId>org.codehaus.izpack</groupId>
-        <version>5.0.0-beta3-SNAPSHOT</version>
+        <version>5.0.0-beta4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -16,7 +16,7 @@
             <artifactId>ant</artifactId>
         </dependency>
         <dependency>
-            <groupId>${groupId}</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>izpack-api</artifactId>
             <scope>provided</scope>
         </dependency>
