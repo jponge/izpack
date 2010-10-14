@@ -3,14 +3,14 @@
     <parent>
         <artifactId>izpack</artifactId>
         <groupId>org.codehaus.izpack</groupId>
-        <version>5.0.0-beta3</version>
+        <version>5.0.0-beta4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>izpack-ini4j</artifactId>
     <name>IzPack ini4j module</name>
     <groupId>org.codehaus.izpack</groupId>
-    <version>5.0.0-beta3</version>
+    <version>5.0.0-beta4-SNAPSHOT</version>
 
     <description>Java API for handling configuration files in Windows .ini format. The library includes its own Map
         based API, Java Preferences API and Java Beans API for handling .ini files. Additionally, the library includes a
