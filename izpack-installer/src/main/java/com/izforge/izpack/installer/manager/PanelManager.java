@@ -20,6 +20,7 @@ import com.izforge.izpack.util.OsConstraintHelper;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +80,11 @@ public class PanelManager
                         if (file.isFile())
                         {
                             Class aClass = classPathCrawler.searchClassInClassPath(ClassResolver.processFileToClassName(file, panelClass.getPackage()));
-                            installerContainer.addComponent(aClass);
+                            boolean isAbstract = (aClass.getModifiers() & Modifier.ABSTRACT) == Modifier.ABSTRACT;
+                            if (!aClass.isInterface() && !isAbstract)
+                            {
+                                installerContainer.addComponent(aClass);
+                            }
                         }
                     }
                 }
