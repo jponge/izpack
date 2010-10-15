@@ -8,6 +8,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Helper methods for class
@@ -70,9 +71,21 @@ public class ClassResolver
         return packageName.replaceAll("\\.", "/");
     }
 
-    private static boolean isFilePathContainingPackage(String filePath, Package aPackage)
+    public static boolean isFilePathContainingPackage(String filePath, Package aPackage)
     {
         return filePath.contains(aPackage.getName().replaceAll("\\.", "/"));
+    }
+
+    public static boolean isFilePathInsidePackageSet(String filePath, Set<Package> packageSet)
+    {
+        for (Package aPackage : packageSet)
+        {
+            if (filePath.contains(aPackage.getName().replaceAll("\\.", "/")))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean isUrlContainingPackage(URL url, String aPackage)

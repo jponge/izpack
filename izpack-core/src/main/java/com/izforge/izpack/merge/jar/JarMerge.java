@@ -211,4 +211,32 @@ public class JarMerge extends AbstractMerge
                 ", destination='" + destination + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        JarMerge jarMerge = (JarMerge) o;
+
+        if (jarPath != null ? !jarPath.equals(jarMerge.jarPath) : jarMerge.jarPath != null)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return jarPath != null ? jarPath.hashCode() : 0;
+    }
 }

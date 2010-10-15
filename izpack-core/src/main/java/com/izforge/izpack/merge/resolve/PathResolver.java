@@ -92,12 +92,6 @@ public class PathResolver
         return getMergeableFromPath(dependPackage.replaceAll("\\.", "/") + "/");
     }
 
-    public List<Mergeable> getMergeableFromPackage(Package aPackage)
-    {
-        List<Mergeable> mergeableList = getMergeablePackage(aPackage);
-        return mergeableList;
-    }
-
     /**
      * Return the mergeable from the given path.
      *
@@ -129,7 +123,7 @@ public class PathResolver
 
     }
 
-    private List<Mergeable> getMergeablePackage(Package aPackage)
+    public List<Mergeable> getMergeablePackage(Package aPackage)
     {
         List<Mergeable> mergeables = new ArrayList<Mergeable>();
         String destination = aPackage.getName().replaceAll("\\.", "/");

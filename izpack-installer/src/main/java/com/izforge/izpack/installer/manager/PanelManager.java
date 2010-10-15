@@ -22,7 +22,10 @@ import java.io.File;
 import java.io.FileFilter;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * Load panels in the container
@@ -33,6 +36,7 @@ public class PanelManager
     private BindeableContainer installerContainer;
     private int lastVis;
     private ClassPathCrawler classPathCrawler;
+    private final static Logger LOGGER = Logger.getLogger(PanelManager.class.getName());
 
     /**
      * Mapping from "raw" panel number to visible panel number.
@@ -59,38 +63,50 @@ public class PanelManager
         // Initialisation
         // We load each of them
         List<Panel> panelsOrder = installdata.getPanelsOrder();
+        List<Class> listPanelClass = new ArrayList<Class>();
         for (Panel panel : panelsOrder)
         {
             if (OsConstraintHelper.oneMatchesCurrentSystem(panel.getOsConstraints()))
             {
-                Class<? extends IzPanel> panelClass = classPathCrawler.searchClassInClassPath(panel.getClassName());
-                List<Mergeable> mergeableList = pathResolver.getMergeableFromPackage(panelClass.getPackage());
-                for (Mergeable mergeable : mergeableList)
+                final Class<? extends IzPanel> panelClass = classPathCrawler.searchClassInClassPath(panel.getClassName());
+                installerContainer.addComponent(panelClass);
+                listPanelClass.add(panelClass);
+            }
+        }
+        loadClassesInSamePackage(listPanelClass);
+
+        return this;
+    }
+
+    private void loadClassesInSamePackage(List<Class> listPanelClass)
+    {
+        Set<Mergeable> mergeableSet = new HashSet<Mergeable>();
+        final Set<Package> packageSet = new HashSet<Package>();
+        for (Class aClass : listPanelClass)
+        {
+            mergeableSet.addAll(pathResolver.getMergeablePackage(aClass.getPackage()));
+        }
+
+        for (Mergeable mergeable : mergeableSet)
+        {
+            List<File> files = mergeable.recursivelyListFiles(new FileFilter()
+            {
+                @Override
+                public boolean accept(File pathname)
                 {
-                    List<File> files = mergeable.recursivelyListFiles(new FileFilter()
-                    {
-                        @Override
-                        public boolean accept(File pathname)
-                        {
-                            return pathname.getAbsolutePath().endsWith(".class");
-                        }
-                    });
-                    for (File file : files)
-                    {
-                        if (file.isFile())
-                        {
-                            Class aClass = classPathCrawler.searchClassInClassPath(ClassResolver.processFileToClassName(file, panelClass.getPackage()));
-                            boolean isAbstract = (aClass.getModifiers() & Modifier.ABSTRACT) == Modifier.ABSTRACT;
-                            if (!aClass.isInterface() && !isAbstract)
-                            {
-                                installerContainer.addComponent(aClass);
-                            }
-                        }
-                    }
+                    return ClassResolver.isFilePathInsidePackageSet(pathname.getAbsolutePath(), packageSet);
+                }
+            });
+            for (File file : files)
+            {
+                Class aClass = classPathCrawler.searchClassInClassPath(ClassResolver.processFileToClassName(file));
+                boolean isAbstract = (aClass.getModifiers() & Modifier.ABSTRACT) == Modifier.ABSTRACT;
+                if (!aClass.isInterface() && !isAbstract)
+                {
+                    installerContainer.addComponent(aClass);
                 }
             }
         }
-        return this;
     }
 
     /**
