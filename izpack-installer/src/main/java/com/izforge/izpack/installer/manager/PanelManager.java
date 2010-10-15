@@ -1,9 +1,5 @@
 package com.izforge.izpack.installer.manager;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.container.BindeableContainer;
@@ -11,14 +7,21 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
+import com.izforge.izpack.merge.ClassResolver;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.OsConstraintHelper;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Load panels in the container
@@ -60,10 +63,25 @@ public class PanelManager
             if (OsConstraintHelper.oneMatchesCurrentSystem(panel.getOsConstraints()))
             {
                 Class<? extends IzPanel> panelClass = classPathCrawler.searchClassInClassPath(panel.getClassName());
-                Set<Class> classSet = classPathCrawler.searchAllClassesInPackage(panelClass.getPackage());
-                for (Class aClass : classSet)
+                List<Mergeable> mergeableList = pathResolver.getMergeableFromPackage(panelClass.getPackage());
+                for (Mergeable mergeable : mergeableList)
                 {
-                    installerContainer.addComponent(aClass);
+                    List<File> files = mergeable.recursivelyListFiles(new FileFilter()
+                    {
+                        @Override
+                        public boolean accept(File pathname)
+                        {
+                            return pathname.getAbsolutePath().endsWith(".class");
+                        }
+                    });
+                    for (File file : files)
+                    {
+                        if (file.isFile())
+                        {
+                            Class aClass = classPathCrawler.searchClassInClassPath(ClassResolver.processFileToClassName(file, panelClass.getPackage()));
+                            installerContainer.addComponent(aClass);
+                        }
+                    }
                 }
             }
         }

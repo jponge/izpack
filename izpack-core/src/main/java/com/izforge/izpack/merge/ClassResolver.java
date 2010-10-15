@@ -38,6 +38,17 @@ public class ClassResolver
         throw new MergeException("No standard package begin found in " + file.getPath());
     }
 
+    public static String processFileToClassName(File file, Package aPackage)
+    {
+        String absolutePath = ResolveUtils.convertPathToPosixPath(file.getAbsolutePath());
+        String packagePath = convertPackageToPath(aPackage.getName());
+        if (ClassResolver.isFilePathContainingPackage(file.getAbsolutePath(), aPackage))
+        {
+            return absolutePath.substring(absolutePath.lastIndexOf(packagePath)).replaceAll("\\.class", "").replaceAll("/", ".");
+        }
+        throw new MergeException("The file " + file + " does not contains the package " + aPackage);
+    }
+
     public static String processURLToClassName(URL url)
     {
         return processFileToClassName(FileUtil.convertUrlToFile(url));
@@ -54,15 +65,14 @@ public class ClassResolver
         return packages[packages.length - 1];
     }
 
-    public static String getLastUrlPart(URL url)
+    public static String convertPackageToPath(String packageName)
     {
-        String[] strings = FileUtil.convertUrlToFilePath(url).split("/");
-        return strings[strings.length - 1];
+        return packageName.replaceAll("\\.", "/");
     }
 
-    public static boolean isUrlContainingPackage(URL url, Package aPackage)
+    private static boolean isFilePathContainingPackage(String filePath, Package aPackage)
     {
-        return FileUtil.convertUrlToFilePath(url).contains(aPackage.getName().replaceAll("\\.", "/"));
+        return filePath.contains(aPackage.getName().replaceAll("\\.", "/"));
     }
 
     public static boolean isUrlContainingPackage(URL url, String aPackage)

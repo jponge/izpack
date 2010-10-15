@@ -128,7 +128,6 @@ public class ClassPathCrawler
     {
         processClassPath();
         String formatPackageName = packageName.replaceAll("/", ".").replaceAll("\\.$", "");
-        String expectedEndPath = formatPackageName.replaceAll("\\.", "/");
 
         String[] parts = formatPackageName.replaceAll("/", ".").split("\\.");
         if (parts.length == 1)
@@ -136,21 +135,7 @@ public class ClassPathCrawler
             return classPathContentCache.get(formatPackageName);
         }
 
-        return getAndFilterUrlList(formatPackageName, expectedEndPath);
-    }
-
-    private Set<URL> getAndFilterUrlList(String packageName, String expectedEndPath)
-    {
-        Set<URL> elligibleList = getUrlsForPackage(packageName);
-        Set<URL> result = new HashSet<URL>();
-        for (URL url : elligibleList)
-        {
-            if (FileUtil.convertUrlToFilePath(url).endsWith(expectedEndPath))
-            {
-                result.add(url);
-            }
-        }
-        return result;
+        return getUrlsForPackage(formatPackageName);
     }
 
 

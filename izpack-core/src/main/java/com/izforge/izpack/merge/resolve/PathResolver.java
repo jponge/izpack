@@ -2,15 +2,12 @@ package com.izforge.izpack.merge.resolve;
 
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.merge.Mergeable;
-import com.izforge.izpack.merge.ClassResolver;
 import com.izforge.izpack.merge.panel.PanelMerge;
 
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
-
-import static com.izforge.izpack.merge.ClassResolver.getLastPackagePart;
 
 /**
  * Try to resolve paths by searching inside the classpath or files with the corresponding name
@@ -90,9 +87,15 @@ public class PathResolver
         return result;
     }
 
-    public List<Mergeable> getMergeableFromPackage(String dependPackage)
+    public List<Mergeable> getMergeableFromPackageName(String dependPackage)
     {
         return getMergeableFromPath(dependPackage.replaceAll("\\.", "/") + "/");
+    }
+
+    public List<Mergeable> getMergeableFromPackage(Package aPackage)
+    {
+        List<Mergeable> mergeableList = getMergeablePackage(aPackage);
+        return mergeableList;
     }
 
     /**
@@ -106,7 +109,6 @@ public class PathResolver
     {
         Set<URL> urlList = resolvePath(resourcePath);
         List<Mergeable> result = new ArrayList<Mergeable>();
-//        String fileDestination = (destination + "/" + resourcePath).replaceAll("//", "/");
         for (URL url : urlList)
         {
             result.add(mergeableResolver.getMergeableFromURLWithDestination(url, destination));
@@ -117,34 +119,24 @@ public class PathResolver
     public PanelMerge getPanelMerge(String className)
     {
         Class aClass = classPathCrawler.searchClassInClassPath(className);
-        return getPanelMerge(aClass);
-
-    }
-
-    public PanelMerge getPanelMerge(Class panelClass)
-    {
-        List<Mergeable> mergeableForClass = getMergeablePackageFromClass(panelClass);
-        if (panelDependencies.containsKey(panelClass.getSimpleName()))
+        List<Mergeable> mergeableForClass = getMergeablePackage(aClass.getPackage());
+        if (panelDependencies.containsKey(aClass.getSimpleName()))
         {
-            String dependPackage = (String) panelDependencies.get(panelClass.getSimpleName());
-            mergeableForClass.addAll(getMergeableFromPackage(dependPackage));
+            String dependPackage = (String) panelDependencies.get(aClass.getSimpleName());
+            mergeableForClass.addAll(getMergeableFromPackageName(dependPackage));
         }
-        return new PanelMerge(panelClass, mergeableForClass);
+        return new PanelMerge(aClass, mergeableForClass);
+
     }
 
-
-    private List<Mergeable> getMergeablePackageFromClass(Class aClass)
+    private List<Mergeable> getMergeablePackage(Package aPackage)
     {
         List<Mergeable> mergeables = new ArrayList<Mergeable>();
-        Package aPackage = aClass.getPackage();
         String destination = aPackage.getName().replaceAll("\\.", "/");
-        Set<URL> obtainPackages = classPathCrawler.searchPackageInClassPath(getLastPackagePart(aPackage.getName()));
+        Set<URL> obtainPackages = classPathCrawler.searchPackageInClassPath(aPackage.getName());
         for (URL obtainPackage : obtainPackages)
         {
-            if (ClassResolver.isUrlContainingPackage(obtainPackage, aPackage))
-            {
-                mergeables.add(mergeableResolver.getMergeableFromURLWithDestination(obtainPackage, destination + "/"));
-            }
+            mergeables.add(mergeableResolver.getMergeableFromURLWithDestination(obtainPackage, destination + "/"));
         }
         return mergeables;
     }

@@ -89,11 +89,19 @@ public class JarMerge extends AbstractMerge
         {
             ArrayList<String> fileNameInZip = getFileNameInZip();
             ArrayList<File> result = new ArrayList<File>();
+            ArrayList<File> filteredResult = new ArrayList<File>();
             for (String fileName : fileNameInZip)
             {
                 result.add(new File(jarPath + "!" + fileName));
             }
-            return result;
+            for (File file : result)
+            {
+                if (fileFilter.accept(file))
+                {
+                    filteredResult.add(file);
+                }
+            }
+            return filteredResult;
         }
         catch (IOException e)
         {

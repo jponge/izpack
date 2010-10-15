@@ -118,7 +118,7 @@ public class PathResolverTest
     @Test
     public void testGetMergeableFromPackage() throws Exception
     {
-        List<Mergeable> mergeables = pathResolver.getMergeableFromPackage("com.izforge.izpack.merge");
+        List<Mergeable> mergeables = pathResolver.getMergeableFromPackageName("com.izforge.izpack.merge");
         assertThat(mergeables, IsCollectionContaining.hasItem(
                 MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/merge/resolve/PathResolver.class")));
     }
