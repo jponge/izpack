@@ -70,8 +70,7 @@ public class JarMerge extends AbstractMerge
         this.destination = destination;
         this.mergeContent = mergeContent;
         StringBuilder builder = new StringBuilder().append(pathInsideJar);
-        destination = destination.replaceAll("//", "/");
-        if (destination.endsWith("/"))
+        if (pathInsideJar.endsWith("/"))
         {
             builder.append("+(.*)");
         }
