@@ -89,7 +89,14 @@ public class InstallationTest
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         installerFrameFixture.requireVisible();
         // Finish panel
+    }
 
+    @Test
+    @InstallFile("samples/silverpeas/silverpeas.xml")
+    public void testSilverpeas() throws Exception
+    {
+        languageDialog.initLangPack();
+        installerFrameFixture = HelperTestMethod.prepareFrameFixture(installerFrame, installerController);
     }
 
     @Test
