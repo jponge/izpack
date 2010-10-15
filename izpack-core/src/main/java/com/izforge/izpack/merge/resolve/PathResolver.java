@@ -2,13 +2,15 @@ package com.izforge.izpack.merge.resolve;
 
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.merge.Mergeable;
+import com.izforge.izpack.merge.ClassResolver;
 import com.izforge.izpack.merge.panel.PanelMerge;
-import com.izforge.izpack.util.FileUtil;
 
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
+
+import static com.izforge.izpack.merge.ClassResolver.getLastPackagePart;
 
 /**
  * Try to resolve paths by searching inside the classpath or files with the corresponding name
@@ -135,16 +137,17 @@ public class PathResolver
     {
         List<Mergeable> mergeables = new ArrayList<Mergeable>();
         Package aPackage = aClass.getPackage();
-        String destination = aPackage.getName().replaceAll("\\.", "/") + "/";
-        String[] listPart = aPackage.getName().split("\\.");
-        Set<URL> obtainPackages = classPathCrawler.searchPackageInClassPath(listPart[listPart.length - 1]);
+        String destination = aPackage.getName().replaceAll("\\.", "/");
+        Set<URL> obtainPackages = classPathCrawler.searchPackageInClassPath(getLastPackagePart(aPackage.getName()));
         for (URL obtainPackage : obtainPackages)
         {
-            if (FileUtil.convertUrlToFilePath(obtainPackage).contains(destination))
+            if (ClassResolver.isUrlContainingPackage(obtainPackage, aPackage))
             {
-                mergeables.add(mergeableResolver.getMergeableFromURLWithDestination(obtainPackage, destination));
+                mergeables.add(mergeableResolver.getMergeableFromURLWithDestination(obtainPackage, destination + "/"));
             }
         }
         return mergeables;
     }
+
+
 }

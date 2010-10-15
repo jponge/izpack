@@ -64,4 +64,9 @@ public class ClassResolver
     {
         return FileUtil.convertUrlToFilePath(url).contains(aPackage.getName().replaceAll("\\.", "/"));
     }
+
+    public static boolean isUrlContainingPackage(URL url, String aPackage)
+    {
+        return FileUtil.convertUrlToFilePath(url).contains(aPackage.replaceAll("\\.", "/"));
+    }
 }

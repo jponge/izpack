@@ -124,23 +124,6 @@ public class ClassPathCrawler
         throw new MergeException("Could not find class " + className + " : Current classpath is " + getCurrentClasspath());
     }
 
-
-    public Set<Class> searchAllClassesInPackage(final Package aPackage) throws ClassNotFoundException
-    {
-        Set<String> stringSet = classPathContentCache.keySet();
-        HashSet<Class> setClasses = new HashSet<Class>();
-        for (String key : stringSet)
-        {
-            if (key.contains(aPackage.getName()))
-            {
-                URL url = classPathContentCache.get(key).iterator().next();
-                String className = ClassResolver.processURLToClassName(url);
-                setClasses.add(Class.forName(className));
-            }
-        }
-        return setClasses;
-    }
-
     public Set<URL> searchPackageInClassPath(final String packageName)
     {
         processClassPath();
@@ -158,7 +141,7 @@ public class ClassPathCrawler
 
     private Set<URL> getAndFilterUrlList(String packageName, String expectedEndPath)
     {
-        Set<URL> elligibleList = getUrlsForLastPackage(packageName);
+        Set<URL> elligibleList = getUrlsForPackage(packageName);
         Set<URL> result = new HashSet<URL>();
         for (URL url : elligibleList)
         {
@@ -171,10 +154,18 @@ public class ClassPathCrawler
     }
 
 
-    public Set<URL> getUrlsForLastPackage(String packageName)
+    public Set<URL> getUrlsForPackage(String packageName)
     {
-        String[] packages = packageName.split("\\.");
-        return classPathContentCache.get(packages[packages.length - 1]);
+        Set<URL> resultSet = new HashSet<URL>();
+        Set<URL> urls = classPathContentCache.get(ClassResolver.getLastPackagePart(packageName));
+        for (URL url : urls)
+        {
+            if (ClassResolver.isUrlContainingPackage(url, packageName))
+            {
+                resultSet.add(url);
+            }
+        }
+        return resultSet;
     }
 
     private Collection<URL> getClassPathUrl()
