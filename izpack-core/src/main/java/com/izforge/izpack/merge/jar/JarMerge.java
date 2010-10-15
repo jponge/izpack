@@ -42,7 +42,7 @@ public class JarMerge extends AbstractMerge
         this.jarPath = jarPath;
         this.mergeContent = mergeContent;
         destination = FileUtil.convertUrlToFilePath(resource).replaceAll(this.jarPath, "").replaceAll("file:", "").replaceAll("!/?", "");
-        regexp = new StringBuilder().append(destination).append("/*(.*)").toString();
+        regexp = new StringBuilder().append(destination).append("/+(.*)").toString();
     }
 
     /**

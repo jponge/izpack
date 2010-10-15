@@ -97,6 +97,8 @@ public class InstallationTest
     {
         languageDialog.initLangPack();
         installerFrameFixture = HelperTestMethod.prepareFrameFixture(installerFrame, installerController);
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        installerFrameFixture.requireVisible();
     }
 
     @Test
