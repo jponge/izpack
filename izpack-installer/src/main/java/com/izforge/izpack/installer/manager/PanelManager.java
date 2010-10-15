@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -69,7 +70,6 @@ public class PanelManager
             if (OsConstraintHelper.oneMatchesCurrentSystem(panel.getOsConstraints()))
             {
                 final Class<? extends IzPanel> panelClass = classPathCrawler.searchClassInClassPath(panel.getClassName());
-                installerContainer.addComponent(panelClass);
                 listPanelClass.add(panelClass);
             }
         }
@@ -85,6 +85,7 @@ public class PanelManager
         for (Class aClass : listPanelClass)
         {
             mergeableSet.addAll(pathResolver.getMergeablePackage(aClass.getPackage()));
+            packageSet.add(aClass.getPackage());
         }
 
         for (Mergeable mergeable : mergeableSet)
@@ -99,11 +100,15 @@ public class PanelManager
             });
             for (File file : files)
             {
-                Class aClass = classPathCrawler.searchClassInClassPath(ClassResolver.processFileToClassName(file));
-                boolean isAbstract = (aClass.getModifiers() & Modifier.ABSTRACT) == Modifier.ABSTRACT;
-                if (!aClass.isInterface() && !isAbstract)
+                if (file.getAbsolutePath().endsWith(".class"))
                 {
-                    installerContainer.addComponent(aClass);
+                    Class aClass = classPathCrawler.searchClassInClassPath(ClassResolver.processFileToClassName(file));
+                    boolean isAbstract = (aClass.getModifiers() & Modifier.ABSTRACT) == Modifier.ABSTRACT;
+                    if (!aClass.isInterface() && !isAbstract)
+                    {
+                        LOGGER.log(Level.INFO, "Adding class " + aClass + " in container");
+                        installerContainer.addComponent(aClass);
+                    }
                 }
             }
         }
