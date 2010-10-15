@@ -2,10 +2,10 @@ package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.compiler.container.TestCompilerContainer;
 import com.izforge.izpack.matcher.ZipMatcher;
-import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
+import org.hamcrest.collection.IsCollectionContaining;
 import org.hamcrest.core.IsNot;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,8 +46,8 @@ public class CompilerConfigSamplesTest
     public void installerShouldMergeProcessPanelCorrectly() throws Exception
     {
         compilerConfig.executeCompiler();
-        assertThat(out, IsNot.not(ZipMatcher.isZipContainingFile("com/izforge/izpack/panels/process/VariableCondition.class")));
+        assertThat(out, ZipMatcher.isZipMatching(IsNot.not(IsCollectionContaining.hasItem("com/izforge/izpack/panels/process/VariableCondition.class"))));
     }
 
-    
+
 }
