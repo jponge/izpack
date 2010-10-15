@@ -64,13 +64,11 @@ public class ProcessPanelWorker implements Runnable
      * The constructor.
      *
      * @param idata               The installation data.
-     * @param handler             The handler to notify of progress.
      * @param variableSubstitutor
      */
-    public ProcessPanelWorker(AutomatedInstallData idata, AbstractUIProcessHandler handler, VariableSubstitutor variableSubstitutor, RulesEngine rules)
+    public ProcessPanelWorker(AutomatedInstallData idata, VariableSubstitutor variableSubstitutor, RulesEngine rules)
             throws IOException
     {
-        this.handler = handler;
         this.idata = idata;
         this.vs = variableSubstitutor;
         this.rules = rules;
@@ -80,6 +78,11 @@ public class ProcessPanelWorker implements Runnable
         // throw new IOException("Error reading processing specification");
         this.variableSubstitutor = new VariableSubstitutorImpl(this.idata
                 .getVariables());
+    }
+
+    public void setHandler(AbstractUIProcessHandler handler)
+    {
+        this.handler = handler;
     }
 
     private boolean readSpec() throws IOException
