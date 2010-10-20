@@ -16,6 +16,7 @@ import com.izforge.izpack.merge.ClassResolver;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
+import com.izforge.izpack.merge.resolve.ResolveUtils;
 import com.izforge.izpack.util.OsConstraintHelper;
 
 import java.io.File;
@@ -95,7 +96,7 @@ public class PanelManager
                 @Override
                 public boolean accept(File pathname)
                 {
-                    return ClassResolver.isFilePathInsidePackageSet(pathname.getAbsolutePath(), packageSet);
+                    return ClassResolver.isFilePathInsidePackageSet(ResolveUtils.convertPathToPosixPath(pathname), packageSet);
                 }
             });
             for (File file : files)

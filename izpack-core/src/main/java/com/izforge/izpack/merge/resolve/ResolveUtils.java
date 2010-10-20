@@ -171,4 +171,7 @@ public class ResolveUtils
         return path.replaceAll("\\\\", "/");
     }
 
+    public static String convertPathToPosixPath(File file) {
+        return convertPathToPosixPath(file.getAbsolutePath());
+    }
 }
