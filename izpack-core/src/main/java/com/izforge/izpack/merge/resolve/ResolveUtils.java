@@ -29,8 +29,11 @@ public class ResolveUtils
      */
     public static boolean isJar(URL url)
     {
+        if("jar".equals(url.getProtocol()))
+        {
+            return true;
+        }
         String file = FileUtil.convertUrlToFilePath(url);
-        file = file.substring(file.indexOf(":") + 1);
         if (file.contains("!"))
         {
             file = file.substring(0, file.lastIndexOf('!'));
