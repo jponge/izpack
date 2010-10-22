@@ -65,7 +65,7 @@ public class MergeManagerTest
     @Test
     public void testAddSingleClassToMergeWithDestinationFromAJar() throws Exception
     {
-        mergeManager.addResourceToMerge("org/junit/Assert.class", "com/dest/Assert.class");
+        mergeManager.addResourceToMerge("org/junit/", "com/dest/");
         assertThat(mergeManager, MergeMatcher.isMergeableContainingFiles("com/dest/Assert.class"));
     }
 

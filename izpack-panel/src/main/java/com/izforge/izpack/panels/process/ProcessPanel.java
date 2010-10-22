@@ -21,19 +21,16 @@
 
 package com.izforge.izpack.panels.process;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.io.IOException;
-
-import javax.swing.*;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.handler.AbstractUIProcessHandler;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
 
 /**
  * The process panel class.
@@ -99,7 +96,7 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
         super(parent, idata, resourceManager);
 
         this.worker = processPanelWorker;
-
+        worker.setHandler(this);
         JLabel heading = new JLabel();
         Font font = heading.getFont();
         font = font.deriveFont(Font.BOLD, font.getSize() * 2.0f);

@@ -46,6 +46,7 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
     public ProcessPanelAutomationHelper(ProcessPanelWorker processPanelWorker)
     {
         this.processPanelWorker = processPanelWorker;
+        processPanelWorker.setHandler(this);
     }
 
     /**

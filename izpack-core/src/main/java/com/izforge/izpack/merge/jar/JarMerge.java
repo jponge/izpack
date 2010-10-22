@@ -41,8 +41,19 @@ public class JarMerge extends AbstractMerge
     {
         this.jarPath = jarPath;
         this.mergeContent = mergeContent;
-        destination = FileUtil.convertUrlToFilePath(resource).replaceAll(this.jarPath, "").replaceAll("file:", "").replaceAll("!/?", "");
-        regexp = new StringBuilder().append(destination).append("/*(.*)").toString();
+        destination = FileUtil.convertUrlToFilePath(resource).replaceAll(this.jarPath, "").replaceAll("file:", "").replaceAll("!/?", "").replaceAll("//", "/");
+
+        StringBuilder builder = new StringBuilder().append(destination);
+
+        if (destination.endsWith("/"))
+        {
+            builder.append("+(.*)");
+        }
+        else
+        {
+            builder.append("/*(.*)");
+        }
+        regexp = builder.toString();
     }
 
     /**
@@ -58,7 +69,16 @@ public class JarMerge extends AbstractMerge
         this.jarPath = jarPath;
         this.destination = destination;
         this.mergeContent = mergeContent;
-        regexp = new StringBuilder().append(pathInsideJar).append("/*").append("(.*)").toString();
+        StringBuilder builder = new StringBuilder().append(pathInsideJar);
+        if (pathInsideJar.endsWith("/"))
+        {
+            builder.append("+(.*)");
+        }
+        else
+        {
+            builder.append("/*(.*)");
+        }
+        regexp = builder.toString();
     }
 
 
@@ -150,7 +170,7 @@ public class JarMerge extends AbstractMerge
                         }
                         dest.append(matchFile);
                     }
-                    IoHelper.copyStreamToJar(jarInputStream, outputStream, dest.toString(), zentry.getTime());
+                    IoHelper.copyStreamToJar(jarInputStream, outputStream, dest.toString().replaceAll("//", "/"), zentry.getTime());
                 }
 
             }
@@ -190,7 +210,7 @@ public class JarMerge extends AbstractMerge
                         }
                         dest.append(matchFile);
                     }
-                    IoHelper.copyStreamToJar(jarInputStream, outJar, dest.toString(), zentry.getTime());
+                    IoHelper.copyStreamToJar(jarInputStream, outJar, dest.toString().replaceAll("//", "/"), zentry.getTime());
                 }
 
             }
