@@ -83,15 +83,15 @@ public class OsConstraintHelper
         {
             osList.add(
                     new OsModel(
+                            osElement.getAttribute("arch",
+                                    null),
                             osElement.getAttribute("family",
+                                    null),
+                            osElement.getAttribute("jre",
                                     null),
                             osElement.getAttribute("name",
                                     null),
                             osElement.getAttribute("version",
-                                    null),
-                            osElement.getAttribute("arch",
-                                    null),
-                            osElement.getAttribute("jre",
                                     null))
             );
         }
