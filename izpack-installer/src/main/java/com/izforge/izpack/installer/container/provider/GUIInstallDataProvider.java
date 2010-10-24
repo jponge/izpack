@@ -3,12 +3,12 @@ package com.izforge.izpack.installer.container.provider;
 import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.GUIPrefs;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
-import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;
 
@@ -19,10 +19,10 @@ import java.awt.*;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-import java.util.TreeMap;
 
 /**
  * Provide installData for GUI :
@@ -31,7 +31,28 @@ import java.util.TreeMap;
 public class GUIInstallDataProvider extends AbstractInstallDataProvider
 {
 
-    public GUIInstallData provide(ResourceManager resourceManager, VariableSubstitutor variableSubstitutor, Properties variables, PathResolver pathResolver, ClassPathCrawler classPathCrawler, BindeableContainer container) throws Exception
+    private static Map<String, String> substanceVariants = new HashMap<String, String>();
+    private static Map<String, String> looksVariants = new HashMap<String, String>();
+
+    static
+    {
+        substanceVariants.put("default", "org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel");
+        substanceVariants.put("business", "org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel");
+        substanceVariants.put("business-blue", "org.pushingpixels.substance.api.skin.SubstanceBusinessBlueSteelLookAndFeel");
+        substanceVariants.put("business-black", "org.pushingpixels.substance.api.skin.SubstanceBusinessBlackSteelLookAndFeel");
+        substanceVariants.put("creme", "org.pushingpixels.substance.api.skin.SubstanceCremeLookAndFeel");
+        substanceVariants.put("sahara", "org.pushingpixels.substance.api.skin.SubstanceSaharaLookAndFeel");
+        substanceVariants.put("moderate", "org.pushingpixels.substance.api.skin.SubstanceModerateLookAndFeel");
+        substanceVariants.put("officesilver", "org.pushingpixels.substance.api.skin.SubstanceOfficeSilver2007LookAndFeel");
+
+        looksVariants.put("windows", "com.jgoodies.looks.windows.WindowsLookAndFeel");
+        looksVariants.put("plastic", "com.jgoodies.looks.plastic.PlasticLookAndFeel");
+        looksVariants.put("plastic3D", "com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
+        looksVariants.put("plasticXP", "com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
+    }
+
+
+    public GUIInstallData provide(ResourceManager resourceManager, VariableSubstitutor variableSubstitutor, Properties variables, ClassPathCrawler classPathCrawler, BindeableContainer container) throws Exception
     {
         this.resourceManager = resourceManager;
         this.variableSubstitutor = variableSubstitutor;
@@ -198,20 +219,15 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         // JGoodies Looks (http://looks.dev.java.net/)
         if ("looks".equals(lookAndFeelName))
         {
-            Map<String, String> variants = new TreeMap<String, String>();
-            variants.put("windows", "com.jgoodies.looks.windows.WindowsLookAndFeel");
-            variants.put("plastic", "com.jgoodies.looks.plastic.PlasticLookAndFeel");
-            variants.put("plastic3D", "com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
-            variants.put("plasticXP", "com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
-            String variant = variants.get("plasticXP");
+            String variant = looksVariants.get("plasticXP");
 
             Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(lookAndFeelName);
             if (params.containsKey("variant"))
             {
                 String param = params.get("variant");
-                if (variants.containsKey(param))
+                if (looksVariants.containsKey(param))
                 {
-                    variant = variants.get(param);
+                    variant = looksVariants.get(param);
                 }
             }
 
@@ -222,28 +238,40 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         // Substance (http://substance.dev.java.net/)
         if ("substance".equals(lookAndFeelName))
         {
-            Map<String, String> variants = new TreeMap<String, String>();
-            variants.put("default", "org.jvnet.substance.SubstanceLookAndFeel"); // Ugly!!!
-            variants.put("business", "org.jvnet.substance.skin.SubstanceBusinessLookAndFeel");
-            variants.put("business-blue", "org.jvnet.substance.skin.SubstanceBusinessBlueSteelLookAndFeel");
-            variants.put("business-black", "org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel");
-            variants.put("creme", "org.jvnet.substance.skin.SubstanceCremeLookAndFeel");
-            variants.put("sahara", "org.jvnet.substance.skin.SubstanceSaharaLookAndFeel");
-            variants.put("moderate", "org.jvnet.substance.skin.SubstanceModerateLookAndFeel");
-            variants.put("officesilver", "org.jvnet.substance.skin.SubstanceOfficeSilver2007LookAndFeel");
-            String variant = variants.get("default");
-
+            final String variant;
             Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(lookAndFeelName);
             if (params.containsKey("variant"))
             {
                 String param = params.get("variant");
-                if (variants.containsKey(param))
+                if (substanceVariants.containsKey(param))
                 {
-                    variant = variants.get(param);
+                    variant = substanceVariants.get(param);
+                }
+                else
+                {
+                    variant = substanceVariants.get("default");
                 }
             }
+            else
+            {
+                variant = substanceVariants.get("default");
+            }
 
-            UIManager.setLookAndFeel(variant);
+            SwingUtilities.invokeLater(new Runnable()
+            {
+                public void run()
+                {
+                    try
+                    {
+                        UIManager.setLookAndFeel(variant);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new IzPackException(e);
+                    }
+                }
+            });
+
         }
     }
 
