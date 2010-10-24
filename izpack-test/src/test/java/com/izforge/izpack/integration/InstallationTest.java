@@ -91,6 +91,20 @@ public class InstallationTest
         // Finish panel
     }
 
+
+    @Test
+    @InstallFile("samples/substanceLaf/substanceLaf.xml")
+    public void testSubstanceLaf() throws Exception
+    {
+        languageDialog.initLangPack();
+        installerFrameFixture = HelperTestMethod.prepareFrameFixture(installerFrame, installerController);
+
+        // Hello panel
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        installerFrameFixture.requireVisible();
+        // Finish panel
+    }
+
     @Test
     @InstallFile("samples/silverpeas/silverpeas.xml")
     public void testSilverpeas() throws Exception
