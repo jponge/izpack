@@ -389,11 +389,12 @@ public class CompilerConfig extends Thread
             // make sure jar contents of each are available in installer
             // map is easier to read/modify than if tree
             HashMap<String, String> lafMap = new HashMap<String, String>();
-
             lafMap.put("liquid", "com/birosoft/liquid/");
             lafMap.put("looks", "com/jgoodies/looks");
             lafMap.put("substance", "org/pushingpixels/substance");
             lafMap.put("nimbus", "com/sun/java/swing/plaf/nimbus");
+            lafMap.put("kunststoff", "kunststoff.jar");
+            lafMap.put("metouia", "metouia.jar");
 
             // is this really what we want? a double loop? needed, since above,
             // it's
@@ -408,11 +409,17 @@ public class CompilerConfig extends Thread
                 {
                     assertionHelper.parseError(guiPrefsElement, "Unrecognized Look and Feel: " + lafName);
                 }
+                URL lafJarURL = null;
                 if(!lafJarName.isEmpty())
                 {
-                    URL lafJarURL = findLookAndFeelResource(lafJarName);
-                    packager.addJarContent(lafJarURL);
+                    lafJarURL = findLookAndFeelResource(lafJarName);
                 }
+                if(lafJarURL == null)
+                {
+                  lafJarURL = findIzPackResource("lib/" + lafJarName, "Look and Feel Jar file",
+                        guiPrefsElement);
+                }
+                packager.addJarContent(lafJarURL);
             }
         }
         packager.setGUIPrefs(prefs);
