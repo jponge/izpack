@@ -32,17 +32,8 @@ import com.izforge.izpack.api.adaptator.IXMLWriter;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
 import com.izforge.izpack.api.container.BindeableContainer;
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.Blockable;
-import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
-import com.izforge.izpack.api.data.DynamicVariable;
-import com.izforge.izpack.api.data.GUIPrefs;
-import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.data.Info.TempDir;
-import com.izforge.izpack.api.data.InstallerRequirement;
-import com.izforge.izpack.api.data.OverrideType;
-import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.PanelActionConfiguration;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.data.binding.OsModel;
@@ -66,20 +57,8 @@ import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.core.data.DynamicInstallerRequirementValidatorImpl;
 import com.izforge.izpack.core.data.DynamicVariableImpl;
 import com.izforge.izpack.core.regex.RegularExpressionFilterImpl;
-import com.izforge.izpack.core.variable.ConfigFileValue;
-import com.izforge.izpack.core.variable.EnvironmentValue;
-import com.izforge.izpack.core.variable.ExecValue;
-import com.izforge.izpack.core.variable.JarEntryConfigValue;
-import com.izforge.izpack.core.variable.PlainConfigFileValue;
-import com.izforge.izpack.core.variable.PlainValue;
-import com.izforge.izpack.core.variable.RegistryValue;
-import com.izforge.izpack.core.variable.ZipEntryConfigFileValue;
-import com.izforge.izpack.data.CustomData;
-import com.izforge.izpack.data.ExecutableFile;
-import com.izforge.izpack.data.PackInfo;
-import com.izforge.izpack.data.PanelAction;
-import com.izforge.izpack.data.ParsableFile;
-import com.izforge.izpack.data.UpdateCheck;
+import com.izforge.izpack.core.variable.*;
+import com.izforge.izpack.data.*;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.util.Debug;
@@ -393,8 +372,7 @@ public class CompilerConfig extends Thread
             lafMap.put("looks", "com/jgoodies/looks");
             lafMap.put("substance", "org/pushingpixels/substance");
             lafMap.put("nimbus", "com/sun/java/swing/plaf/nimbus");
-            lafMap.put("kunststoff", "kunststoff.jar");
-            lafMap.put("metouia", "metouia.jar");
+            lafMap.put("kunststoff", "com/incors/plaf");
 
             // is this really what we want? a double loop? needed, since above,
             // it's
@@ -404,22 +382,15 @@ public class CompilerConfig extends Thread
             for (String s : prefs.lookAndFeelMapping.keySet())
             {
                 String lafName = prefs.lookAndFeelMapping.get(s);
-                String lafJarName = lafMap.get(lafName);
-                if (lafJarName == null)
+                if (lafMap.containsKey(lafName))
+                {
+                    String lafPackage = lafMap.get(lafName);
+                    mergeManager.addResourceToMerge(lafPackage);
+                }
+                else
                 {
                     assertionHelper.parseError(guiPrefsElement, "Unrecognized Look and Feel: " + lafName);
                 }
-                URL lafJarURL = null;
-                if(!lafJarName.isEmpty())
-                {
-                    lafJarURL = findLookAndFeelResource(lafJarName);
-                }
-                if(lafJarURL == null)
-                {
-                  lafJarURL = findIzPackResource("lib/" + lafJarName, "Look and Feel Jar file",
-                        guiPrefsElement);
-                }
-                packager.addJarContent(lafJarURL);
             }
         }
         packager.setGUIPrefs(prefs);
@@ -2617,7 +2588,7 @@ public class CompilerConfig extends Thread
         return loader.getResource(lookClassName);
     }
 
-  /**
+    /**
      * Look for an IzPack resource either in the compiler jar, or within IZPACK_HOME. The path must
      * not be absolute. The path must use '/' as the fileSeparator (it's used to access the jar
      * file). If the resource is not found, take appropriate action base on ignoreWhenNotFound flag.
