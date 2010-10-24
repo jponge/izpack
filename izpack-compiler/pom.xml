@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>izpack</artifactId>
@@ -44,7 +45,7 @@
             <artifactId>izpack-core</artifactId>
             <classifier>tests</classifier>
         </dependency>
-        
+
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>izpack-test-common</artifactId>
@@ -81,7 +82,19 @@
             <groupId>xpp3</groupId>
             <artifactId>xpp3</artifactId>
         </dependency>
-
+        <!-- lafs -->
+        <dependency>
+            <groupId>org.java.net.substance</groupId>
+            <artifactId>substance</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.incors</groupId>
+            <artifactId>kunstoff-laf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jgoodies</groupId>
+            <artifactId>looks</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
