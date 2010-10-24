@@ -3,6 +3,8 @@ package com.izforge.izpack.installer.base;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.installer.manager.PanelManager;
 
+import javax.swing.*;
+
 /**
  * Installer frame controller
  *
@@ -29,8 +31,14 @@ public class InstallerController
     {
         panelManager.loadPanelsInContainer();
         panelManager.instantiatePanels();
-        installerFrame.buildGUI();
-        installerFrame.sizeFrame();
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run()
+            {
+                installerFrame.buildGUI();
+                installerFrame.sizeFrame();
+            }
+        });
         return this;
     }
 
