@@ -62,9 +62,9 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
      * defined modifier for language display type.
      */
     private static final String[] LANGUAGE_DISPLAY_TYPES = {"iso3", "native", "default"};
-    private ResourceManager resourceManager;
     private JFrame frame;
     private ConditionCheck conditionCheck;
+    private ResourceManager resourceManager;
 
 
     /**
@@ -81,6 +81,12 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
         this.installdata = installDataGUI;
         this.conditionCheck = conditionCheck;
         this.setName(GuiId.DIALOG_PICKER.id);
+        initLanguageDialog();
+
+    }
+
+    private void initLanguageDialog()
+    {
         // We build the GUI
         addWindowListener(new WindowHandler());
         JPanel contentPane = (JPanel) getContentPane();
