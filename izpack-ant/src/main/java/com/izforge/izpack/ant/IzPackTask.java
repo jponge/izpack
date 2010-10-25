@@ -22,21 +22,19 @@
 
 package com.izforge.izpack.ant;
 
-import com.izforge.izpack.compiler.CompilerConfig;
-import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
-import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.listener.PackagerListener;
+import com.izforge.izpack.merge.resolve.ResolveUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.EnumeratedAttribute;
 import org.apache.tools.ant.types.PropertySet;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Properties;
-import java.util.ResourceBundle;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.*;
 
 /**
  * A IzPack Ant task.
@@ -95,8 +93,6 @@ public class IzPackTask extends Task implements PackagerListener
      */
     private boolean inheritAll = false;
 
-    private CompilerContainer compilerContainer;
-
     /**
      * Creates new IZPackTask
      */
@@ -110,8 +106,6 @@ public class IzPackTask extends Task implements PackagerListener
         izPackDir = null;
         compression = "default";
         compressionLevel = -1;
-        compilerContainer = new CompilerContainer();
-        compilerContainer.initBindings();
     }
 
 
@@ -208,46 +202,37 @@ public class IzPackTask extends Task implements PackagerListener
         CompilerData compilerData = new CompilerData(compression, kind, input, configText, basedir, output, compressionLevel);
         CompilerData.setIzpackHome(izPackDir);
 
-        compilerContainer.initBindings();
-        compilerContainer.addConfig("installFile", input);
-        compilerContainer.addComponent(CompilerData.class, compilerData);
-
-        CompilerConfig compilerConfig = compilerContainer.getComponent(CompilerConfig.class);
-        PropertyManager propertyManager = compilerContainer.getComponent(PropertyManager.class);
-
-        if (properties != null)
-        {
-            Enumeration e = properties.keys();
-            while (e.hasMoreElements())
-            {
-                String name = (String) e.nextElement();
-                String value = properties.getProperty(name);
-                value = fixPathString(value);
-                propertyManager.addProperty(name, value);
-            }
-        }
-
-        if (inheritAll)
-        {
-            Hashtable projectProps = getProject().getProperties();
-            Enumeration e = projectProps.keys();
-            while (e.hasMoreElements())
-            {
-                String name = (String) e.nextElement();
-                String value = (String) projectProps.get(name);
-                value = fixPathString(value);
-                propertyManager.addProperty(name, value);
-            }
-        }
-
         try
         {
-            compilerConfig.executeCompiler();
+            ClassLoader loader = new URLClassLoader(getUrlsForClassloader());
+
+            Class runableClass = loader.loadClass("com.izforge.izpack.ant.IzpackAntRunnable");
+            Object instance = runableClass.getConstructors()[0].newInstance(compilerData, input, properties, inheritAll, getProject().getProperties());
+            final Thread thread = new Thread((Runnable) instance);
+            thread.setContextClassLoader(loader);
+            thread.start();
         }
         catch (Exception e)
         {
             throw new BuildException(e);
         }
+
+    }
+
+    private URL[] getUrlsForClassloader() throws IOException
+    {
+        Collection<URL> result = new HashSet<URL>();
+        ClassLoader currentLoader = Thread.currentThread().getContextClassLoader();
+        Enumeration<URL> urlEnumeration = currentLoader.getResources("");
+        result.addAll(Collections.list(urlEnumeration));
+        urlEnumeration = currentLoader.getResources("META-INF/");
+        while (urlEnumeration.hasMoreElements())
+        {
+            URL url = urlEnumeration.nextElement();
+            result.add(ResolveUtils.processUrlToJarUrl(url));
+        }
+        URL[] urlArray = new URL[result.size()];
+        return result.toArray(urlArray);
     }
 
     private void checkInput()
@@ -275,24 +260,6 @@ public class IzPackTask extends Task implements PackagerListener
                     "com/izforge/izpack/ant/langpacks/messages").getString(
                     "basedir_must_be_specified"));
         }
-    }
-
-    private static String fixPathString(String path)
-    {
-        /*
-        * The following code fixes a bug in in codehaus classworlds loader,
-        * which can't handle mixed path strings like "c:\test\../lib/mylib.jar".
-        * The bug is in org.codehaus.classworlds.UrlUtils.normalizeUrlPath().
-        */
-        StringBuffer fixpath = new StringBuffer(path);
-        for (int q = 0; q < fixpath.length(); q++)
-        {
-            if (fixpath.charAt(q) == '\\')
-            {
-                fixpath.setCharAt(q, '/');
-            }
-        }
-        return fixpath.toString();
     }
 
     /**
