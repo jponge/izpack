@@ -29,7 +29,7 @@ public class ResolveUtils
      */
     public static boolean isJar(URL url)
     {
-        if("jar".equals(url.getProtocol()))
+        if ("jar".equals(url.getProtocol()))
         {
             return true;
         }
@@ -123,6 +123,12 @@ public class ResolveUtils
         return null;
     }
 
+
+    public static URL processUrlToJarUrl(URL url) throws MalformedURLException
+    {
+        return new URL("file", url.getHost(), processUrlToJarPath(url));
+    }
+
     public static String processUrlToJarPath(URL resource)
     {
         String res = FileUtil.convertUrlToFilePath(resource);
@@ -174,7 +180,8 @@ public class ResolveUtils
         return path.replaceAll("\\\\", "/");
     }
 
-    public static String convertPathToPosixPath(File file) {
+    public static String convertPathToPosixPath(File file)
+    {
         return convertPathToPosixPath(file.getAbsolutePath());
     }
 }
