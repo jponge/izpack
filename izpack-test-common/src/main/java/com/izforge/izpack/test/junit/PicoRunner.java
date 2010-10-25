@@ -8,6 +8,7 @@ import org.junit.rules.MethodRule;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.*;
 
+import javax.swing.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -63,10 +64,23 @@ public class PicoRunner extends BlockJUnit4ClassRunner
     protected Object createTest() throws Exception
     {
         containerClass = getTestClass().getJavaClass().getAnnotation(Container.class).value();
-        containerInstance = getContainerInstance(containerClass);
-        containerInstance.initBindings();
-        containerInstance.addComponent(klass);
-        currentTestInstance = containerInstance.getComponent(klass);
+        SwingUtilities.invokeAndWait(new Runnable()
+        {
+            public void run()
+            {
+                try
+                {
+                    containerInstance = getContainerInstance(containerClass);
+                    containerInstance.initBindings();
+                    containerInstance.addComponent(klass);
+                    currentTestInstance = containerInstance.getComponent(klass);
+                }
+                catch (Exception e)
+                {
+                    throw new IzPackException(e);
+                }
+            }
+        });
         return currentTestInstance;
     }
 
