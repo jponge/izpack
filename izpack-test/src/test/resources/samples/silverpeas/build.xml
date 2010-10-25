@@ -9,7 +9,7 @@
 
     <target name="install">
         <echo message="Grou" />
-        <izpack input="install.xml"
+        <izpack input="silverpeas.xml"
                 output="IzPack-install.jar"
                 basedir="${basedir}"
                 izPackDir="${user.home}/Izpack/" />
