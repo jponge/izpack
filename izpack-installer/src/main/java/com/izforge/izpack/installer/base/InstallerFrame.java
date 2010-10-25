@@ -1288,15 +1288,7 @@ public class InstallerFrame extends JFrame implements InstallerView
                         public void run()
                         {
                             blockGUI();
-                        }
-                    });
-
-                    navigate(e);
-
-                    SwingUtilities.invokeLater(new Runnable()
-                    {
-                        public void run()
-                        {
+                            navigate(e);
                             releaseGUI();
                         }
                     });

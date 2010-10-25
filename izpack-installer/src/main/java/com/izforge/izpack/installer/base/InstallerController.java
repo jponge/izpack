@@ -1,6 +1,7 @@
 package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.installer.manager.PanelManager;
 
 import javax.swing.*;
@@ -29,14 +30,21 @@ public class InstallerController
 
     public InstallerController buildInstallation() throws Exception
     {
-        panelManager.loadPanelsInContainer();
-        panelManager.instantiatePanels();
         SwingUtilities.invokeLater(new Runnable()
         {
             public void run()
             {
-                installerFrame.buildGUI();
-                installerFrame.sizeFrame();
+                try
+                {
+                    panelManager.loadPanelsInContainer();
+                    panelManager.instantiatePanels();
+                    installerFrame.buildGUI();
+                    installerFrame.sizeFrame();
+                }
+                catch (ClassNotFoundException e)
+                {
+                    throw new IzPackException(e);
+                }
             }
         });
         return this;
