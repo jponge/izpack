@@ -21,12 +21,9 @@
 
 package com.izforge.izpack.installer.bootstrap;
 
-import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
-import com.izforge.izpack.installer.base.InstallerController;
 import com.izforge.izpack.installer.console.ConsoleInstaller;
 import com.izforge.izpack.installer.container.impl.InstallerContainer;
-import com.izforge.izpack.installer.language.LanguageDialog;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.StringTool;
 
@@ -61,7 +58,6 @@ public class Installer
         try
         {
             Installer installer = new Installer();
-            installer.initContainer();
             installer.start(args);
         }
         catch (Exception e)
@@ -166,19 +162,18 @@ public class Installer
         switch (type)
         {
             case INSTALLER_GUI:
-                BindeableContainer installerContainer = applicationComponent.getComponent(BindeableContainer.class);
-
-                installerContainer.getComponent(LanguageDialog.class).initLangPack();
-                installerContainer.getComponent(InstallerController.class).buildInstallation().launchInstallation();
+                InstallerGui.run();
                 break;
 
             case INSTALLER_AUTO:
+                initContainer();
                 AutomatedInstaller automatedInstaller = applicationComponent.getComponent(AutomatedInstaller.class);
                 automatedInstaller.init(path);
                 automatedInstaller.doInstall();
                 break;
 
             case INSTALLER_CONSOLE:
+                initContainer();
                 ConsoleInstaller consoleInstaller = applicationComponent.getComponent(ConsoleInstaller.class);
                 consoleInstaller.setLangCode(langcode);
                 consoleInstaller.run(consoleAction, path);
