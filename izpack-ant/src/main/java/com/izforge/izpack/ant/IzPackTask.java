@@ -32,6 +32,7 @@ import org.apache.tools.ant.types.EnumeratedAttribute;
 import org.apache.tools.ant.types.PropertySet;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
@@ -91,7 +92,7 @@ public class IzPackTask extends Task implements PackagerListener
     /**
      * should we inherit properties from the Ant file?
      */
-    private boolean inheritAll = false;
+    private Boolean inheritAll = false;
 
     /**
      * Creates new IZPackTask
@@ -194,23 +195,21 @@ public class IzPackTask extends Task implements PackagerListener
 
         String configText = null;
         if (config != null)
-        {// Pass in the embedded configuration
+        {
             configText = config.getText();
             input = null;
         }
-        // else use external configuration referenced by the input attribute
-        CompilerData compilerData = new CompilerData(compression, kind, input, configText, basedir, output, compressionLevel);
-        CompilerData.setIzpackHome(izPackDir);
-
         try
         {
             ClassLoader loader = new URLClassLoader(getUrlsForClassloader());
-
             Class runableClass = loader.loadClass("com.izforge.izpack.ant.IzpackAntRunnable");
-            Object instance = runableClass.getConstructors()[0].newInstance(compilerData, input, properties, inheritAll, getProject().getProperties());
+            Constructor constructor = runableClass.getConstructors()[0];
+            Object instance = constructor.newInstance(compression, kind, input, configText, basedir, output, compressionLevel, properties, inheritAll, getProject().getProperties(), izPackDir);
             final Thread thread = new Thread((Runnable) instance);
             thread.setContextClassLoader(loader);
             thread.start();
+            Thread.sleep(100);
+            thread.join();
         }
         catch (Exception e)
         {
@@ -222,7 +221,7 @@ public class IzPackTask extends Task implements PackagerListener
     private URL[] getUrlsForClassloader() throws IOException
     {
         Collection<URL> result = new HashSet<URL>();
-        ClassLoader currentLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader currentLoader = getClass().getClassLoader();
         Enumeration<URL> urlEnumeration = currentLoader.getResources("");
         result.addAll(Collections.list(urlEnumeration));
         urlEnumeration = currentLoader.getResources("META-INF/");
