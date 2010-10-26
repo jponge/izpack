@@ -61,10 +61,7 @@ import com.izforge.izpack.core.variable.*;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.FileUtil;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.OsConstraintHelper;
+import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.file.DirectoryScanner;
 import org.apache.commons.lang.StringUtils;
 
@@ -408,7 +405,6 @@ public class CompilerConfig extends Thread
         for (IXMLElement ixmlElement : data.getChildrenNamed("jar"))
         {
             String src = xmlCompilerHelper.requireAttribute(ixmlElement, "src");
-            mergeManager.addResourceToMerge(src);
 
             // Additionals for mark a jar file also used in the uninstaller.
             // The contained files will be copied from the installer into the
@@ -426,6 +422,7 @@ public class CompilerConfig extends Thread
                 CustomData customData = new CustomData(null, compilerHelper.getContainedFilePaths(url), null,
                         CustomData.UNINSTALLER_JAR);
                 packager.addCustomJar(customData, url);
+                ClassUtils.loadJarInSystemClassLoader(FileUtil.convertUrlToFile(url));
             }
         }
         notifyCompilerListener("addJars", CompilerListener.END, data);
