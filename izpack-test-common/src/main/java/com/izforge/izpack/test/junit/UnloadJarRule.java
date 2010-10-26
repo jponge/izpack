@@ -1,6 +1,6 @@
 package com.izforge.izpack.test.junit;
 
-import com.izforge.izpack.test.ClassUtils;
+import com.izforge.izpack.util.ClassUtils;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;

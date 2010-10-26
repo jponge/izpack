@@ -2,9 +2,9 @@ package com.izforge.izpack.merge.resolve;
 
 import com.izforge.izpack.core.container.TestMergeContainer;
 import com.izforge.izpack.merge.panel.PanelMerge;
-import com.izforge.izpack.test.ClassUtils;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.junit.PicoRunner;
+import com.izforge.izpack.util.ClassUtils;
 import com.izforge.izpack.util.FileUtil;
 import org.hamcrest.beans.HasPropertyWithValue;
 import org.hamcrest.core.Is;

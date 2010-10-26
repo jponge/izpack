@@ -1,6 +1,5 @@
-package com.izforge.izpack.test;
+package com.izforge.izpack.util;
 
-import com.izforge.izpack.api.exception.IzPackException;
 import sun.misc.URLClassPath;
 
 import java.io.File;
@@ -11,7 +10,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 
 /**
- * Utils methods for tests purpose
+ * jar Classloading manipulation class
  *
  * @author Anthonin Bonnefoy
  */
@@ -37,7 +36,7 @@ public class ClassUtils
         }
         catch (Exception e)
         {
-            throw new IzPackException(e);
+            throw new IllegalStateException(e);
         }
     }
 
@@ -52,7 +51,7 @@ public class ClassUtils
         }
         catch (Exception e)
         {
-            throw new IzPackException(e);
+            throw new IllegalStateException(e);
         }
     }
 }
