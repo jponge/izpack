@@ -47,6 +47,7 @@ public class CompilerConfigSamplesTest
     {
         compilerConfig.executeCompiler();
         assertThat(out, ZipMatcher.isZipMatching(IsNot.not(IsCollectionContaining.hasItem("com/izforge/izpack/panels/process/VariableCondition.class"))));
+        assertThat(out, ZipMatcher.isZipMatching(IsCollectionContaining.hasItem("com/sora/panel/VimPanel.class")));
     }
 
 

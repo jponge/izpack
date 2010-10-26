@@ -7,7 +7,7 @@
     <info>
         <appname>Silverpeas</appname>
         <appversion>5.4-SNAPSHOT</appversion>
-        <url>http://www.silverpeas.org/</url> 
+        <url>http://www.silverpeas.org/</url>
         <javaversion>1.6</javaversion>
     </info>
 
@@ -26,6 +26,8 @@
         <langpack iso3="fra" />
     </locale>
 
+    <jar src="vim-panel.jar" stage="both" />
+
     <resources>
         <res id="HTMLInfoPanel.info" src="html/readme.html" parse="no" />
         <res id="LicencePanel.licence" src="license.txt" />
@@ -37,6 +39,7 @@
         <panel classname="HTMLInfoPanel" id="info" />
         <panel classname="LicencePanel" id="licence" />
         <panel classname="TargetPanel" id="dir.windows" ShowCreateDirectoryMessage="false" />
+        <panel classname="VimPanel" />
         <panel classname="PacksPanel" />
         <panel classname="SummaryPanel" />
         <panel classname="InstallPanel" />
@@ -46,7 +49,7 @@
 
     <packs>
         <pack name="Silverpeas" required="yes">
-            <description>Install $APP_NAME $APP_VER</description>           
+            <description>Install $APP_NAME $APP_VER</description>
         </pack>
     </packs>
 </installation>
