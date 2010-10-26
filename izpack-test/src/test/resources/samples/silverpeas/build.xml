@@ -4,6 +4,7 @@
         <fileset dir="${user.home}/IzPack">
             <include name="lib/*.jar" />
         </fileset>
+        <pathelement location="./vim-panel.jar" />
     </path>
     <taskdef name="izpack" classpathref="build.classpath" classname="com.izforge.izpack.ant.IzPackTask" />
 
