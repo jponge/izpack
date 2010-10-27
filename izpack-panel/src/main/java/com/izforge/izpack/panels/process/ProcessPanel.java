@@ -148,42 +148,55 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
     /**
      * The compiler starts.
      */
-    public void startProcessing(int no_of_jobs)
+    public void startProcessing(final int no_of_jobs)
     {
         this.noOfJobs = no_of_jobs;
-        overallProgressBar.setMaximum(no_of_jobs);
-        overallProgressBar.setIndeterminate(true);
-        parent.lockPrevButton();
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run()
+            {
+                overallProgressBar.setMaximum(no_of_jobs);
+                overallProgressBar.setIndeterminate(true);
+                parent.lockPrevButton();
+            }
+        });
     }
 
     /**
      * The compiler stops.
      */
-    public void finishProcessing(boolean unlockPrev, boolean unlockNext)
+    public void finishProcessing(final boolean unlockPrev, final boolean unlockNext)
     {
-        overallProgressBar.setIndeterminate(false);
-        String no_of_jobs = Integer.toString(this.noOfJobs);
-        overallProgressBar.setString(no_of_jobs + " / " + no_of_jobs);
-
-        processLabel.setText(" ");
-        processLabel.setEnabled(false);
-
-        validated = true;
-        this.installData.setInstallSuccess(worker.getResult());
-        if (this.installData.getPanels().indexOf(this) != (this.installData.getPanels().size() - 1))
+        SwingUtilities.invokeLater(new Runnable()
         {
-            if (unlockNext)
+            public void run()
             {
-                parent.unlockNextButton();
-            }
-        }
-        if (unlockPrev)
-        {
-            parent.unlockPrevButton();
-        }
+                overallProgressBar.setIndeterminate(false);
 
-        // set to finished only in case of success
-        finishedWork = this.installData.isInstallSuccess();
+                String no_of_jobs = Integer.toString(ProcessPanel.this.noOfJobs);
+                overallProgressBar.setString(no_of_jobs + " / " + no_of_jobs);
+
+                processLabel.setText(" ");
+                processLabel.setEnabled(false);
+
+                validated = true;
+                ProcessPanel.this.installData.setInstallSuccess(worker.getResult());
+                if (ProcessPanel.this.installData.getPanels().indexOf(ProcessPanel.this) != (ProcessPanel.this.installData.getPanels().size() - 1))
+                {
+                    if (unlockNext)
+                    {
+                        parent.unlockNextButton();
+                    }
+                }
+                if (unlockPrev)
+                {
+                    parent.unlockPrevButton();
+                }
+
+                // set to finished only in case of success
+                finishedWork = ProcessPanel.this.installData.isInstallSuccess();
+            }
+        });
     }
 
     /**
@@ -212,14 +225,20 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
      *
      * @param jobName The job name.
      */
-    public void startProcess(String jobName)
+    public void startProcess(final String jobName)
     {
-        processLabel.setText(jobName);
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run()
+            {
+                processLabel.setText(jobName);
 
-        this.currentJob++;
-        overallProgressBar.setValue(this.currentJob);
-        overallProgressBar.setString(Integer.toString(this.currentJob) + " / "
-                + Integer.toString(this.noOfJobs));
+                ProcessPanel.this.currentJob++;
+                overallProgressBar.setValue(ProcessPanel.this.currentJob);
+                overallProgressBar.setString(String.valueOf(ProcessPanel.this.currentJob) + " / "
+                        + String.valueOf(ProcessPanel.this.noOfJobs));
+            }
+        });
     }
 
     public void finishProcess()
@@ -256,5 +275,4 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
     {
         // does nothing (no state to save)
     }
-
 }
