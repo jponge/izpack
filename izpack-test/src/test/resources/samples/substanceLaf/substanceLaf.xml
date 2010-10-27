@@ -12,9 +12,11 @@
 
     <guiprefs width="640" height="480" resizable="yes">
         <laf name="substance">
+            <param name="variant" value="graphite" />
             <os family="unix" />
         </laf>
         <laf name="substance">
+            <param name="variant" value="graphite" />
             <os family="windows" />
         </laf>
     </guiprefs>
