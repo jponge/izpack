@@ -41,6 +41,7 @@ import com.izforge.izpack.api.data.binding.Stage;
 import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.installer.DataValidator.Status;
+import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
@@ -61,6 +62,7 @@ import com.izforge.izpack.core.variable.*;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
+import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.file.DirectoryScanner;
 import org.apache.commons.lang.StringUtils;
@@ -125,6 +127,7 @@ public class CompilerConfig extends Thread
     private Map<String, List<URL>> packsLangUrlMap = new HashMap<String, List<URL>>();
     private String unpackerClassname = "com.izforge.izpack.installer.unpacker.Unpacker";
     private String packagerClassname = "com.izforge.izpack.compiler.packager.impl.Packager";
+    private PathResolver pathResolver;
     private VariableSubstitutor variableSubstitutor;
     private XmlCompilerHelper xmlCompilerHelper;
     private PropertyManager propertyManager;
@@ -156,7 +159,7 @@ public class CompilerConfig extends Thread
      *
      * @param compilerData Object containing all informations found in command line
      */
-    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller, AssertionHelper assertionHelper, CompilerContainer compilerContainer, ClassPathCrawler classPathCrawler, RulesEngine rules)
+    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller, AssertionHelper assertionHelper, CompilerContainer compilerContainer, ClassPathCrawler classPathCrawler, RulesEngine rules, PathResolver pathResolver)
     {
         this.assertionHelper = assertionHelper;
         this.rules = rules;
@@ -171,6 +174,7 @@ public class CompilerConfig extends Thread
         this.izpackProjectInstaller = izpackProjectInstaller;
         this.compilerContainer = compilerContainer;
         this.classPathCrawler = classPathCrawler;
+        this.pathResolver = pathResolver;
     }
 
     /**
@@ -362,31 +366,34 @@ public class CompilerConfig extends Thread
                 prefs.modifier.put(key, value);
 
             }
-            // make sure jar contents of each are available in installer
-            // map is easier to read/modify than if tree
-            HashMap<String, String> lafMap = new HashMap<String, String>();
-            lafMap.put("liquid", "com/birosoft/liquid/");
-            lafMap.put("looks", "com/jgoodies/looks");
-            lafMap.put("substance", "org/pushingpixels");
-            lafMap.put("nimbus", "com/sun/java/swing/plaf/nimbus");
-            lafMap.put("kunststoff", "com/incors/plaf");
-
-            // is this really what we want? a double loop? needed, since above,
-            // it's
-            // the /last/ lnf for an os which is used, so can't add during
-            // initial
-            // loop
             for (String s : prefs.lookAndFeelMapping.keySet())
             {
                 String lafName = prefs.lookAndFeelMapping.get(s);
-                if (lafMap.containsKey(lafName))
+                LookAndFeels feels = LookAndFeels.lookup(lafName);
+                List<Mergeable> mergeableList = Collections.emptyList();
+                switch (feels)
                 {
-                    String lafPackage = lafMap.get(lafName);
-                    mergeManager.addResourceToMerge(lafPackage);
+                    case KUNSTSTOFF:
+                        mergeableList = pathResolver.getMergeableFromPackageName("com/incors/plaf");
+                        break;
+                    case LIQUID:
+                        mergeableList = pathResolver.getMergeableFromPackageName("com/birosoft/liquid/");
+                        break;
+                    case LOOKS:
+                        mergeableList = pathResolver.getMergeableFromPackageName("com/jgoodies/looks");
+                        break;
+                    case SUBSTANCE:
+                        mergeableList = pathResolver.getMergeableJarFromPackageName("org/pushingpixels");
+                        break;
+                    case NIMBUS:
+                        mergeableList = pathResolver.getMergeableFromPackageName("com/sun/java/swing/plaf/nimbus");
+                        break;
+                    default:
+                        assertionHelper.parseError(guiPrefsElement, "Unrecognized Look and Feel: " + lafName);
                 }
-                else
+                for (Mergeable mergeable : mergeableList)
                 {
-                    assertionHelper.parseError(guiPrefsElement, "Unrecognized Look and Feel: " + lafName);
+                    mergeManager.addResourceToMerge(mergeable);
                 }
             }
         }
