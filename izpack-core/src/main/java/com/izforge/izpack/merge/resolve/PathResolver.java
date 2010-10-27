@@ -92,6 +92,17 @@ public class PathResolver
         return getMergeableFromPath(dependPackage.replaceAll("\\.", "/") + "/");
     }
 
+    public List<Mergeable> getMergeableJarFromPackageName(String packageName)
+    {
+        Set<URL> urlSet = ResolveUtils.getJarUrlForPackage(packageName);
+        ArrayList<Mergeable> list = new ArrayList<Mergeable>();
+        for (URL url : urlSet)
+        {
+            list.add(mergeableResolver.getMergeableFromURL(url));
+        }
+        return list;
+    }
+
     /**
      * Return the mergeable from the given path.
      *
@@ -123,6 +134,12 @@ public class PathResolver
 
     }
 
+    /**
+     * Create a mergeable containing all files in the given package
+     *
+     * @param aPackage package to merge
+     * @return list of mergeable
+     */
     public List<Mergeable> getMergeablePackage(Package aPackage)
     {
         List<Mergeable> mergeables = new ArrayList<Mergeable>();
