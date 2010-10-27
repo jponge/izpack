@@ -20,6 +20,14 @@
         <modifier key="headingBackgroundColor" value="0x00ffffff" />
         <modifier key="headingPanelCounter" value="text" />
         <modifier key="headingPanelCounterPos" value="inHeading" />
+        <laf name="substance">
+            <param name="variant" value="graphite" />
+            <os family="unix" />
+        </laf>
+        <laf name="substance">
+            <param name="variant" value="graphite" />
+            <os family="windows" />
+        </laf>
     </guiprefs>
 
     <locale>
