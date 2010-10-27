@@ -384,6 +384,7 @@ public class CompilerConfig extends Thread
                         break;
                     case SUBSTANCE:
                         mergeableList = pathResolver.getMergeableJarFromPackageName("org/pushingpixels");
+                        mergeableList.addAll(pathResolver.getMergeableFromPackageName("nanoxml"));
                         break;
                     case NIMBUS:
                         mergeableList = pathResolver.getMergeableFromPackageName("com/sun/java/swing/plaf/nimbus");
