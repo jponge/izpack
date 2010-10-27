@@ -367,7 +367,7 @@ public class CompilerConfig extends Thread
             HashMap<String, String> lafMap = new HashMap<String, String>();
             lafMap.put("liquid", "com/birosoft/liquid/");
             lafMap.put("looks", "com/jgoodies/looks");
-            lafMap.put("substance", "org/pushingpixels/substance");
+            lafMap.put("substance", "org/pushingpixels");
             lafMap.put("nimbus", "com/sun/java/swing/plaf/nimbus");
             lafMap.put("kunststoff", "com/incors/plaf");
 
