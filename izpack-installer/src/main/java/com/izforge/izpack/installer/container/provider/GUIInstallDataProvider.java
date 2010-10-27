@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Provide installData for GUI :
@@ -30,7 +32,7 @@ import java.util.Properties;
  */
 public class GUIInstallDataProvider extends AbstractInstallDataProvider
 {
-
+    private static final Logger LOGGER = Logger.getLogger(GUIInstallDataProvider.class.getName());
     private static Map<String, String> substanceVariants = new HashMap<String, String>();
     private static Map<String, String> looksVariants = new HashMap<String, String>();
 
@@ -43,6 +45,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         substanceVariants.put("creme", "org.pushingpixels.substance.api.skin.SubstanceCremeLookAndFeel");
         substanceVariants.put("creme-coffee", "org.pushingpixels.substance.api.skin.SubstanceCremeCoffeeLookAndFeel");
         substanceVariants.put("sahara", "org.pushingpixels.substance.api.skin.SubstanceSaharaLookAndFeel");
+        substanceVariants.put("graphite", "org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel");
         substanceVariants.put("moderate", "org.pushingpixels.substance.api.skin.SubstanceModerateLookAndFeel");
         substanceVariants.put("nebula", "org.pushingpixels.substance.api.skin.SubstanceNebulaLookAndFeel");
         substanceVariants.put("nebula-brick-wall", "org.pushingpixels.substance.api.skin.SubstanceNebulaBrickWallLookAndFeel");
@@ -275,6 +278,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
                 {
                     try
                     {
+                        LOGGER.log(Level.INFO, "Using laf " + variant);
                         UIManager.setLookAndFeel(variant);
                     }
                     catch (Exception e)
