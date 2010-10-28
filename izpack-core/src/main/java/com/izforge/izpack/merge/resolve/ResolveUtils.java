@@ -5,6 +5,7 @@ import com.izforge.izpack.util.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.JarURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -123,6 +124,25 @@ public class ResolveUtils
         return null;
     }
 
+    public static Set<URL> getJarUrlForPackage(String packageName)
+    {
+        URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
+        Set<URL> result = new HashSet<URL>();
+        try
+        {
+            Enumeration<URL> urls = loader.getResources(packageName);
+            while (urls.hasMoreElements())
+            {
+                URL url = urls.nextElement();
+                JarURLConnection connection = (JarURLConnection) url.openConnection();
+                result.add(connection.getJarFileURL());
+            }
+        }
+        catch (IOException ioex)
+        {
+        }
+        return result;
+    }
 
     public static URL processUrlToJarUrl(URL url) throws MalformedURLException
     {

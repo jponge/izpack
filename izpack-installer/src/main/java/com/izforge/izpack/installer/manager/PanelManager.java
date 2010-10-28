@@ -32,7 +32,8 @@ import java.util.logging.Logger;
 /**
  * Load panels in the container
  */
-public class PanelManager
+public class
+        PanelManager
 {
     private GUIInstallData installdata;
     private BindeableContainer installerContainer;
@@ -89,29 +90,40 @@ public class PanelManager
             packageSet.add(aClass.getPackage());
         }
 
+        Set<File> files = new HashSet<File>();
         for (Mergeable mergeable : mergeableSet)
         {
-            List<File> files = mergeable.recursivelyListFiles(new FileFilter()
+            files.addAll(mergeable.recursivelyListFiles(new FileFilter()
             {
                 @Override
                 public boolean accept(File pathname)
                 {
                     return ClassResolver.isFilePathInsidePackageSet(ResolveUtils.convertPathToPosixPath(pathname), packageSet);
                 }
-            });
-            for (File file : files)
+            }));
+        }
+        processPanelFiles(files);
+    }
+
+    private void processPanelFiles(Set<File> files)
+    {
+        HashSet<Class> panelClass = new HashSet<Class>();
+        for (File file : files)
+        {
+            if (file.getAbsolutePath().endsWith(".class"))
             {
-                if (file.getAbsolutePath().endsWith(".class"))
+                Class aClass = classPathCrawler.searchClassInClassPath(ClassResolver.processFileToClassName(file));
+                boolean isAbstract = (aClass.getModifiers() & Modifier.ABSTRACT) == Modifier.ABSTRACT;
+                if (!aClass.isInterface() && !isAbstract)
                 {
-                    Class aClass = classPathCrawler.searchClassInClassPath(ClassResolver.processFileToClassName(file));
-                    boolean isAbstract = (aClass.getModifiers() & Modifier.ABSTRACT) == Modifier.ABSTRACT;
-                    if (!aClass.isInterface() && !isAbstract)
-                    {
-                        LOGGER.log(Level.INFO, "Adding class " + aClass + " in container");
-                        installerContainer.addComponent(aClass);
-                    }
+                    panelClass.add(aClass);
                 }
             }
+        }
+        for (Class aClass : panelClass)
+        {
+            LOGGER.log(Level.INFO, "Adding class " + aClass + " in container");
+            installerContainer.addComponent(aClass);
         }
     }
 

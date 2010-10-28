@@ -1,5 +1,6 @@
 package com.izforge.izpack.merge.resolve;
 
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.merge.ClassResolver;
@@ -143,6 +144,10 @@ public class ClassPathCrawler
     {
         Set<URL> resultSet = new HashSet<URL>();
         Set<URL> urls = classPathContentCache.get(ClassResolver.getLastPackagePart(packageName));
+        if (urls == null)
+        {
+            throw new IzPackException("The package " + packageName + " has not been found in the classpath and is required by the installer");
+        }
         for (URL url : urls)
         {
             if (ClassResolver.isUrlContainingPackage(url, packageName))
