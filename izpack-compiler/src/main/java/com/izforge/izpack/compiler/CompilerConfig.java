@@ -75,7 +75,8 @@ import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
-
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.FileUtils;
 
 /**
  * A parser for the installer xml configuration. This parses a document conforming to the
@@ -336,6 +337,47 @@ public class CompilerConfig extends Thread
             prefs.resizable = xmlCompilerHelper.requireYesNoAttribute(guiPrefsElement, "resizable");
             prefs.width = xmlCompilerHelper.requireIntAttribute(guiPrefsElement, "width");
             prefs.height = xmlCompilerHelper.requireIntAttribute(guiPrefsElement, "height");
+            
+            for (IXMLElement splashNode : guiPrefsElement.getChildrenNamed("splash"))
+            {
+                File tempDir = new File(System.getProperty("java.io.tmpdir"), System.currentTimeMillis() + "-META-INF");
+                tempDir.deleteOnExit();
+                File manifest =  new File(tempDir, "MANIFEST.MF");
+                manifest.deleteOnExit();                
+                BufferedWriter out = null;
+                try 
+                {
+                    File resourceFile = FileUtils.toFile(findProjectResource(splashNode.getContent(), "Resource", splashNode));
+                    tempDir.mkdirs();
+                    File tempResourceFile = new File(tempDir, resourceFile.getName());
+                    resourceFile.deleteOnExit();
+                    FileUtils.copyFile(resourceFile, tempResourceFile);
+                    out = new BufferedWriter(new OutputStreamWriter((new FileOutputStream(manifest))));
+                    out.write("Manifest-Version: 1.0");
+                    out.newLine();
+                    out.write("Built-By: IzPack");
+                    out.newLine();
+                    out.write("Main-Class: com.izforge.izpack.installer.bootstrap.Installer");
+                    out.newLine();
+                    out.write("SplashScreen-Image: META-INF/");
+                    out.write(resourceFile.getName());
+                    out.newLine();
+                    out.flush();
+                    mergeManager.addResourceToMerge(tempDir.getAbsolutePath(), "META-INF/");                    
+                }
+                catch (FileNotFoundException ex) 
+                {
+                    throw new CompilerException("Couldn't add splash image", ex);
+                }
+                catch (IOException ex) 
+                {
+                    throw new CompilerException("Couldn't add splash image", ex);
+                }
+                finally 
+                {
+                    IOUtils.closeQuietly(out);
+                }             
+            }
 
             // Look and feel mappings
             for (IXMLElement lafNode : guiPrefsElement.getChildrenNamed("laf"))
@@ -1498,7 +1540,7 @@ public class CompilerConfig extends Thread
                     reader.close();
                     writer.close();
 
-                    originalUrl = recodedFile.toURL();
+                    originalUrl = recodedFile.toURI().toURL();
                 }
 
                 if (parsexml || (!"".equals(encoding)) || (substitute && !packager.getVariables().isEmpty()))
@@ -1510,7 +1552,7 @@ public class CompilerConfig extends Thread
                     os = new BufferedOutputStream(outFile);
                     // and specify the substituted file to be added to the
                     // packager
-                    url = parsedFile.toURL();
+                    url = parsedFile.toURI().toURL();
                 }
 
                 if (parsexml)
