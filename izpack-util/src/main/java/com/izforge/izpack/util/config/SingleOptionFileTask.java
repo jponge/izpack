@@ -38,6 +38,12 @@ public class SingleOptionFileTask extends ConfigFileTask
         {
             try
             {
+                if (!oldFile.exists())
+                {
+                    Debug.log("Options file " + oldFile.getAbsolutePath()
+                            + " to patch from could not be found, no patches will be applied");
+                    return;
+                }
                 Debug.log("Loading options file: " + oldFile.getAbsolutePath());
                 // Configuration file type must be the same as the target type
                 fromConfigurable = new Options(this.oldFile);
