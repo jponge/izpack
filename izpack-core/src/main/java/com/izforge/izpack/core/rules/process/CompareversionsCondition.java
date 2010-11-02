@@ -28,7 +28,6 @@ import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorBase;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
-import com.izforge.izpack.util.Debug;
 
 public class CompareversionsCondition extends Condition
 {
@@ -81,23 +80,31 @@ public class CompareversionsCondition extends Condition
     }
 
     @Override
-    public void readFromXML(IXMLElement xmlcondition)
+    public void readFromXML(IXMLElement xmlcondition) throws Exception
     {
-        try
+        operand1 = xmlcondition.getFirstChildNamed("arg1").getContent();
+        if (operand1 == null)
         {
-            this.operand1 = xmlcondition.getFirstChildNamed("arg1").getContent();
-            this.operand2 = xmlcondition.getFirstChildNamed("arg2").getContent();
-            String operatorAttr = xmlcondition.getFirstChildNamed("operator").getContent();
-            if (operatorAttr != null)
+            throw new Exception("Missing \"arg1\" element in condition \"" +  getId() + "\"");
+        }
+        operand2 = xmlcondition.getFirstChildNamed("arg2").getContent();
+        if (operand2 == null)
+        {
+            throw new Exception("Missing \"arg2\" element in condition \"" +  getId() + "\"");
+        }
+        String operatorAttr = xmlcondition.getFirstChildNamed("operator").getContent();
+        if (operatorAttr != null)
+        {
+            operator = ComparisonOperator.getComparisonOperatorFromAttribute(operatorAttr);
+            if (operator == null)
             {
-                operator = ComparisonOperator.getComparisonOperatorFromAttribute(operatorAttr);
+                throw new Exception("Unknown \"operator\" element value \"" + operatorAttr + "\" in condition \"" +  getId() + "\"");
             }
         }
-        catch (Exception e)
+        else
         {
-            Debug.log("Missing element in <condition type=\"compareversions\"/>");
+            throw new Exception("Missing \"operator\" element in condition \"" +  getId() + "\"");
         }
-
     }
 
     @Override

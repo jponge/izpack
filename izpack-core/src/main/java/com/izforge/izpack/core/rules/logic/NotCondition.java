@@ -46,21 +46,17 @@ public class NotCondition extends Condition
      * {@inheritDoc}
      */
     @Override
-    public void readFromXML(IXMLElement xmlcondition)
+    public void readFromXML(IXMLElement xmlcondition) throws Exception
     {
-        try
+        if (xmlcondition.getChildrenCount() <= 0)
         {
-            if (xmlcondition.getChildrenCount() != 1)
-            {
-                Debug.log("not-condition needs one condition as operand");
-                return;
-            }
-            this.operand = rulesEngineImpl.instanciateCondition(xmlcondition.getChildAtIndex(0));
+            throw new Exception("Missing nested element in condition \"" + getId() + "\"");
         }
-        catch (Exception e)
+        else if (xmlcondition.getChildrenCount() != 1)
         {
-            Debug.log("missing element in not-condition");
+            throw new Exception("Condition \"" + getId() + "\" needs exactly one condition as operand");
         }
+        this.operand = rulesEngineImpl.instanciateCondition(xmlcondition.getChildAtIndex(0));
     }
 
 

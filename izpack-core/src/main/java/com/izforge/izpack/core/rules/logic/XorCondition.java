@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.core.rules.logic;
 
+import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 
@@ -35,6 +36,16 @@ public class XorCondition extends OrCondition
     public XorCondition(RulesEngineImpl rulesEngineImpl, Condition... operands)
     {
         super(rulesEngineImpl, operands);
+    }
+
+    @Override
+    public void readFromXML(IXMLElement xmlcondition) throws Exception
+    {
+        if (xmlcondition.getChildrenCount() > 2)
+        {
+            throw new Exception("Not more than two operands allowed in XOR condition \"" + getId() + "\"");
+        }
+        super.readFromXML(xmlcondition);
     }
 
     @Override

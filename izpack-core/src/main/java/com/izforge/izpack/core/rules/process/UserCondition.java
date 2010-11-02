@@ -57,13 +57,13 @@ public class UserCondition extends Condition
         else
         {
             String actualUsername = System.getProperty("user.name");
-            if ((actualUsername != null) || (actualUsername.length() >= 0))
+            if (actualUsername != null &&  !actualUsername.isEmpty())
             {
                 result = this.requiredUsername.equals(actualUsername);
             }
             else
             {
-                Debug.log("No user.name found in system properties. Condition will return false.");
+                Debug.log("Non-existing or empty system property user.name. Condition will return false.");
             }
         }
         return result;
@@ -73,13 +73,13 @@ public class UserCondition extends Condition
      * {@inheritDoc}
      */
     @Override
-    public void readFromXML(IXMLElement xmlcondition)
+    public void readFromXML(IXMLElement xmlcondition) throws Exception
     {
         IXMLElement userElement = xmlcondition.getFirstChildNamed("requiredusername");
 
         if (userElement == null)
         {
-            Debug.log("Condition or type \"user\" requires child element: user");
+            throw new Exception("Missing \"requiredusername\" element in condition \"" +  getId() + "\"");
         }
         else
         {
