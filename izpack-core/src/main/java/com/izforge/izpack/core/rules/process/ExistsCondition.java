@@ -80,34 +80,36 @@ public class ExistsCondition extends Condition
                 break;
 
             default:
-                Debug.log("Illegal content type '"+contentType.getAttribute()+"' of ExistsCondition");
+                Debug.error("Illegal content type '"+contentType.getAttribute()+"' of ExistsCondition");
                 break;
         }
         return result;
     }
 
     @Override
-    public void readFromXML(IXMLElement xmlcondition)
+    public void readFromXML(IXMLElement xmlcondition) throws Exception
     {
         if (xmlcondition != null)
         {
             if (xmlcondition.getChildrenCount() != 1)
             {
-                Debug.error("ExistsCondition needs exactly one nested element");
+                throw new Exception("Condition \"" + getId() + "\" needs exactly one nested element");
             }
-            IXMLElement child = xmlcondition.getChildAtIndex(0);
-            this.contentType = ContentType.getFromAttribute(child.getName());
-            if (this.contentType != null)
-            {
-                this.content = child.getContent();
-            }
-            else
-            {
-                Debug.error("Unknown nested element '"+child.getName()+"' to ExistsCondition");
-            }
-            if (this.content == null || this.content.length() == 0)
-            {
-                Debug.error("ExistsCondition has a nested element without valid contents");
+            else {
+                IXMLElement child = xmlcondition.getChildAtIndex(0);
+                this.contentType = ContentType.getFromAttribute(child.getName());
+                if (this.contentType != null)
+                {
+                    this.content = child.getContent();
+                }
+                else
+                {
+                    throw new Exception("Unknown nested element '"+child.getName()+"' to condition \"" + getId() + "\"");
+                }
+                if (this.content == null || this.content.length() == 0)
+                {
+                    throw new Exception("Condition \"" + getId() + "\" has a nested element without valid contents");
+                }
             }
         }
     }

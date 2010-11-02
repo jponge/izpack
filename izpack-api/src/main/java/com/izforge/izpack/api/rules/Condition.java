@@ -32,6 +32,10 @@ import java.io.Serializable;
  *
  * @author Dennis Reil, <izpack@reil-online.de>
  */
+/**
+ * @author rkrell
+ *
+ */
 public abstract class Condition implements Serializable
 {
 
@@ -63,7 +67,14 @@ public abstract class Condition implements Serializable
         this.id = id;
     }
 
-    public abstract void readFromXML(IXMLElement xmlcondition);
+    /**
+     * Parse and initialize this condition from parsed values. An exception
+     * should be thrown if the condition description has not the expected
+     * XML format, something missing or obviously bad values.
+     * @param The root element to parse from
+     * @throws Exception on a parse error
+     */
+    public abstract void readFromXML(IXMLElement xmlcondition) throws Exception;
 
     public abstract boolean isTrue();
 

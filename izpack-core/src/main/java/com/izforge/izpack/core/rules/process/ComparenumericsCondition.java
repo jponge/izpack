@@ -82,23 +82,31 @@ public class ComparenumericsCondition extends Condition
     }
 
     @Override
-    public void readFromXML(IXMLElement xmlcondition)
+    public void readFromXML(IXMLElement xmlcondition) throws Exception
     {
-        try
+        variablename = xmlcondition.getFirstChildNamed("name").getContent();
+        if (variablename == null)
         {
-            this.variablename = xmlcondition.getFirstChildNamed("name").getContent();
-            this.value = xmlcondition.getFirstChildNamed("value").getContent();
-            String operatorAttr = xmlcondition.getFirstChildNamed("operator").getContent();
-            if (operatorAttr != null)
+            throw new Exception("Missing \"name\" element in condition \"" +  getId() + "\"");
+        }
+        value = xmlcondition.getFirstChildNamed("value").getContent();
+        if (value == null)
+        {
+            throw new Exception("Missing \"value\" element in condition \"" +  getId() + "\"");
+        }
+        String operatorAttr = xmlcondition.getFirstChildNamed("operator").getContent();
+        if (operatorAttr != null)
+        {
+            operator = ComparisonOperator.getComparisonOperatorFromAttribute(operatorAttr);
+            if (operator == null)
             {
-                operator = ComparisonOperator.getComparisonOperatorFromAttribute(operatorAttr);
+                throw new Exception("Unknown \"operator\" element value \"" + operatorAttr + "\" in condition \"" +  getId() + "\"");
             }
         }
-        catch (Exception e)
+        else
         {
-            Debug.log("missing element in <condition type=\"comparenumerics\"/>");
+            throw new Exception("Missing \"operator\" element in condition \"" +  getId() + "\"");
         }
-
     }
 
     @Override

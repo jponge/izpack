@@ -24,7 +24,6 @@ package com.izforge.izpack.core.rules.logic;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
-import com.izforge.izpack.util.Debug;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,11 +47,11 @@ public class OrCondition extends Condition
     }
 
     @Override
-    public void readFromXML(IXMLElement xmlcondition)
+    public void readFromXML(IXMLElement xmlcondition) throws Exception
     {
         if (xmlcondition.getChildrenCount() <= 0)
         {
-            Debug.log("missing element in or-condition");
+            throw new Exception("Missing element in condition \"" + getId() + "\"");
         }
         for (IXMLElement element : xmlcondition.getChildren())
         {

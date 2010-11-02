@@ -26,7 +26,6 @@ import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
-import com.izforge.izpack.util.Debug;
 
 /**
  * @author Dennis Reil, <izpack@reil-online.de>
@@ -34,21 +33,11 @@ import com.izforge.izpack.util.Debug;
 public class VariableCondition extends Condition
 {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 2881336115632480575L;
 
     protected String variablename;
 
     protected String value;
-
-//    public VariableCondition(String variablename, String value, AutomatedInstallData installdata)
-//    {
-//        super(installdata);
-//        this.variablename = variablename;
-//        this.value = value;
-//    }
 
     public String getValue()
     {
@@ -70,13 +59,8 @@ public class VariableCondition extends Condition
         this.variablename = variablename;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.api.adaptator.IXMLElement)
-     */
-
-    public void readFromXML(IXMLElement xmlcondition)
+    @Override
+    public void readFromXML(IXMLElement xmlcondition) throws Exception
     {
         try
         {
@@ -85,11 +69,12 @@ public class VariableCondition extends Condition
         }
         catch (Exception e)
         {
-            Debug.log("missing element in <condition type=\"variable\"/>");
+            throw new Exception("Missing attribute in condition \"" +  getId() + "\"");
         }
 
     }
 
+    @Override
     public boolean isTrue()
     {
         if (this.getInstallData() != null)
@@ -111,10 +96,7 @@ public class VariableCondition extends Condition
         }
     }
 
-    /* (non-Javadoc)
-     * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
-     */
-
+    @Override
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();
