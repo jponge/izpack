@@ -56,7 +56,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         substanceVariants.put("dust-coffee", "org.pushingpixels.substance.api.skin.SubstanceDustCoffeeLookAndFeel");
         substanceVariants.put("gemini", "org.pushingpixels.substance.api.skin.SubstanceGeminiLookAndFeel");
         substanceVariants.put("mariner", "org.pushingpixels.substance.api.skin.SubstanceMarinerLookAndFeel");
-        substanceVariants.put("officesilver", "org.pushingpixels.substance.skin.SubstanceOfficeSilver2007LookAndFeel");
+        substanceVariants.put("officesilver", "org.pushingpixels.substance.api.skin.SubstanceOfficeSilver2007LookAndFeel");
         substanceVariants.put("officeblue", "org.pushingpixels.substance.api.skin.SubstanceOfficeBlue2007LookAndFeel");
         substanceVariants.put("officeblack", "org.pushingpixels.substance.api.skin.SubstanceOfficeBlack2007LookAndFeel");
 
