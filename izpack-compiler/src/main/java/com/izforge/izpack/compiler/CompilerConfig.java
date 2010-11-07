@@ -63,10 +63,10 @@ import com.izforge.izpack.data.*;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
-import com.izforge.izpack.merge.resolve.ResolveUtils;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.file.DirectoryScanner;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.*;
@@ -347,8 +347,8 @@ public class CompilerConfig extends Thread
                     File splashImage = FileUtils.toFile(findProjectResource(splashNode.getContent(), "Resource", splashNode));
                     String destination = String.format("META-INF/%s", splashImage.getName());
                     mergeManager.addResourceToMerge(splashImage.getAbsolutePath(), destination);
-                    // Add splash screen configuration
-                    List<String> lines = FileUtils.readLines(FileUtils.toFile(ResolveUtils.getFileFromPath("installer-META-INF/MANIFEST.MF")));
+                    // Add splash screen configuration                    
+                    List<String> lines = IOUtils.readLines(ClassLoader.getSystemResourceAsStream("installer-META-INF/MANIFEST.MF"));
                     lines.add(String.format("SplashScreen-Image: %s", destination));
                     lines.add("");
                     File tempManifest = File.createTempFile("MANIFEST", ".MF");
