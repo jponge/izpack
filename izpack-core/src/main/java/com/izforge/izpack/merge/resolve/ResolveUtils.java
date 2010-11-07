@@ -109,6 +109,11 @@ public class ResolveUtils
      */
     public static URL getFileFromPath(String path)
     {
+        URL resource = ClassLoader.getSystemResource(path);
+        if (resource != null)
+        {
+            return resource;
+        }
         try
         {
             File file = new File(path);
