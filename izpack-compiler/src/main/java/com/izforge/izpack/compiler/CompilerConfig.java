@@ -63,8 +63,10 @@ import com.izforge.izpack.data.*;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
+import com.izforge.izpack.merge.resolve.ResolveUtils;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.file.DirectoryScanner;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.*;
@@ -75,8 +77,6 @@ import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.FileUtils;
 
 /**
  * A parser for the installer xml configuration. This parses a document conforming to the
@@ -337,46 +337,28 @@ public class CompilerConfig extends Thread
             prefs.resizable = xmlCompilerHelper.requireYesNoAttribute(guiPrefsElement, "resizable");
             prefs.width = xmlCompilerHelper.requireIntAttribute(guiPrefsElement, "width");
             prefs.height = xmlCompilerHelper.requireIntAttribute(guiPrefsElement, "height");
-            
-            for (IXMLElement splashNode : guiPrefsElement.getChildrenNamed("splash"))
+
+            IXMLElement splashNode = guiPrefsElement.getFirstChildNamed("splash");
+            if (splashNode != null)
             {
-                File tempDir = new File(System.getProperty("java.io.tmpdir"), System.currentTimeMillis() + "-META-INF");
-                tempDir.deleteOnExit();
-                File manifest =  new File(tempDir, "MANIFEST.MF");
-                manifest.deleteOnExit();                
-                BufferedWriter out = null;
-                try 
+                try
                 {
-                    File resourceFile = FileUtils.toFile(findProjectResource(splashNode.getContent(), "Resource", splashNode));
-                    tempDir.mkdirs();
-                    File tempResourceFile = new File(tempDir, resourceFile.getName());
-                    resourceFile.deleteOnExit();
-                    FileUtils.copyFile(resourceFile, tempResourceFile);
-                    out = new BufferedWriter(new OutputStreamWriter((new FileOutputStream(manifest))));
-                    out.write("Manifest-Version: 1.0");
-                    out.newLine();
-                    out.write("Built-By: IzPack");
-                    out.newLine();
-                    out.write("Main-Class: com.izforge.izpack.installer.bootstrap.Installer");
-                    out.newLine();
-                    out.write("SplashScreen-Image: META-INF/");
-                    out.write(resourceFile.getName());
-                    out.newLine();
-                    out.flush();
-                    mergeManager.addResourceToMerge(tempDir.getAbsolutePath(), "META-INF/");                    
+                    // Add splash image to installer jar
+                    File splashImage = FileUtils.toFile(findProjectResource(splashNode.getContent(), "Resource", splashNode));
+                    String destination = String.format("META-INF/%s", splashImage.getName());
+                    mergeManager.addResourceToMerge(splashImage.getAbsolutePath(), destination);
+                    // Add splash screen configuration
+                    List<String> lines = FileUtils.readLines(FileUtils.toFile(ResolveUtils.getFileFromPath("installer-META-INF/MANIFEST.MF")));
+                    lines.add(String.format("SplashScreen-Image: %s", destination));
+                    lines.add("");
+                    File tempManifest = File.createTempFile("MANIFEST", ".MF");
+                    FileUtils.writeLines(tempManifest, lines);
+                    mergeManager.addResourceToMerge(tempManifest.getAbsolutePath(), "META-INF/MANIFEST.MF");
                 }
-                catch (FileNotFoundException ex) 
+                catch (IOException ex)
                 {
                     throw new CompilerException("Couldn't add splash image", ex);
                 }
-                catch (IOException ex) 
-                {
-                    throw new CompilerException("Couldn't add splash image", ex);
-                }
-                finally 
-                {
-                    IOUtils.closeQuietly(out);
-                }             
             }
 
             // Look and feel mappings
