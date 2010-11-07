@@ -25,7 +25,6 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.util.Debug;
 
 import java.util.List;
 
@@ -40,11 +39,12 @@ public class PackselectionCondition extends Condition
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.api.adaptator.IXMLElement)
      */
 
-    public void readFromXML(IXMLElement xmlcondition)
+    @Override
+    public void readFromXML(IXMLElement xmlcondition) throws Exception
     {
         try
         {
@@ -52,7 +52,7 @@ public class PackselectionCondition extends Condition
         }
         catch (Exception e)
         {
-            Debug.log("missing element in <condition type=\"variable\"/>");
+            throw new Exception("Missing nested element in condition \"" + getId() + "\"");
         }
     }
 
@@ -73,12 +73,13 @@ public class PackselectionCondition extends Condition
         return false;
     }
 
+    @Override
     public boolean isTrue()
     {
         return this.isTrue(getInstallData().getSelectedPacks());
     }
 
-
+    @Override
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();

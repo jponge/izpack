@@ -48,10 +48,19 @@ public class RefCondition extends Condition
      * {@inheritDoc}
      */
     @Override
-    public void readFromXML(IXMLElement xmlcondition)
+    public void readFromXML(IXMLElement xmlcondition) throws Exception
     {
         this.referencedConditionId = xmlcondition.getAttribute("refid");
+        if (this.referencedConditionId == null)
+        {
+            throw new Exception("Missing attribute \"refid\" in condition \"" + getId() + "\"");
+        }
         this.referencedcondition = rules.getCondition(this.referencedConditionId);
+        if (this.referencedcondition == null)
+        {
+            throw new Exception("Condition \"" + referencedConditionId
+                    + "\" referenced from condition \"" + getId() + "\" does not exist");
+        }
         this.setId("ref." + this.referencedConditionId);
     }
 

@@ -38,6 +38,12 @@ public class SingleIniFileTask extends ConfigFileTask
         {
             try
             {
+                if (!oldFile.exists())
+                {
+                    Debug.log("INI file " + oldFile.getAbsolutePath()
+                            + " to patch from could not be found, no patches will be applied");
+                    return;
+                }
                 Debug.log("Loading INI file: " + oldFile.getAbsolutePath());
                 // Configuration file type must be the same as the target type
                 fromConfigurable = new Ini(this.oldFile);

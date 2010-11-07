@@ -48,7 +48,7 @@ public class JavaCondition extends Condition
     protected String returnvaluetype;
 
 
-    protected Class usedclass;
+    protected Class<?> usedclass;
     protected Field usedfield;
     protected Method usedmethod;
 
@@ -65,6 +65,7 @@ public class JavaCondition extends Condition
         this.returnvaluetype = returnvaluetype;
     }
 
+    @Override
     public boolean isTrue()
     {
         if (!this.complete)
@@ -138,12 +139,12 @@ public class JavaCondition extends Condition
         }
     }
 
-    public void readFromXML(IXMLElement xmlcondition)
+    @Override
+    public void readFromXML(IXMLElement xmlcondition) throws Exception
     {
         if (xmlcondition.getChildrenCount() != 2)
         {
-            Debug.log("Condition of type java needs (java,returnvalue)");
-            return;
+            throw new Exception("Condition of type java needs (java,returnvalue)");
         }
         IXMLElement javael = xmlcondition.getFirstChildNamed("java");
         IXMLElement classel = javael.getFirstChildNamed("class");
@@ -153,8 +154,7 @@ public class JavaCondition extends Condition
         }
         else
         {
-            Debug.log("Java-Element needs (class,method?,field?)");
-            return;
+            throw new Exception("Java-Element needs (class,method?,field?)");
         }
         IXMLElement methodel = javael.getFirstChildNamed("method");
         if (methodel != null)
@@ -168,8 +168,7 @@ public class JavaCondition extends Condition
         }
         if ((this.methodname == null) && (this.fieldname == null))
         {
-            Debug.log("java element needs (class, method?,field?)");
-            return;
+            throw new Exception("java element needs (class, method?,field?)");
         }
         IXMLElement returnvalel = xmlcondition.getFirstChildNamed("returnvalue");
         if (returnvalel != null)
@@ -179,8 +178,7 @@ public class JavaCondition extends Condition
         }
         else
         {
-            Debug.log("no returnvalue-element specified.");
-            return;
+            throw new Exception("Missing \"returnvalue\" element");
         }
         this.complete = true;
     }
@@ -211,10 +209,7 @@ public class JavaCondition extends Condition
         javael.addChild(returnvalel);
     }
 
-    /* (non-Javadoc)
-     * @see com.izforge.izpack.api.rules.Condition#getDependenciesDetails()
-     */
-
+    @Override
     public String getDependenciesDetails()
     {
         StringBuffer details = new StringBuffer();
@@ -239,6 +234,5 @@ public class JavaCondition extends Condition
         details.append("</b><br/>");
         return details.toString();
     }
-
 
 }
