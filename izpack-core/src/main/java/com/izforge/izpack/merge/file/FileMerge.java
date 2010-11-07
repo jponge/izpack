@@ -105,13 +105,12 @@ public class FileMerge extends AbstractMerge
         List<String> mergeList = getMergeList(outputStream);
         try
         {
-            String entryName = resolveName(sourceToCopy, destination);
-            if (mergeList.contains(entryName))
+            if (mergeList.contains(sourceToCopy.getAbsolutePath()))
             {
                 return;
             }
-            mergeList.add(entryName);
-            copyFileToJar(sourceToCopy, outputStream, entryName);
+            mergeList.add(sourceToCopy.getAbsolutePath());
+            copyFileToJar(sourceToCopy, outputStream);
         }
         catch (IOException e)
         {
@@ -121,16 +120,9 @@ public class FileMerge extends AbstractMerge
 
     public void merge(java.util.zip.ZipOutputStream outputStream)
     {
-        List<String> mergeList = getMergeList(outputStream);
         try
         {
-            String entryName = resolveName(sourceToCopy, destination);
-            if (mergeList.contains(entryName))
-            {
-                return;
-            }
-            mergeList.add(entryName);
-            copyFileToJar(sourceToCopy, outputStream, entryName);
+            copyFileToJar(sourceToCopy, outputStream);
         }
         catch (IOException e)
         {
@@ -138,35 +130,51 @@ public class FileMerge extends AbstractMerge
         }
     }
 
-    private void copyFileToJar(File fileToCopy, java.util.zip.ZipOutputStream outputStream, String entryName) throws IOException
+    private void copyFileToJar(File fileToCopy, java.util.zip.ZipOutputStream outputStream) throws IOException
     {
         if (fileToCopy.isDirectory())
         {
             for (File file : fileToCopy.listFiles())
             {
-                copyFileToJar(file, outputStream, entryName);
+                copyFileToJar(file, outputStream);
             }
         }
         else
         {
+            String entryName = resolveName(fileToCopy, this.destination);
+            List<String> mergeList = getMergeList(outputStream);
+            if (mergeList.contains(entryName))
+            {
+                return;
+            }
+            mergeList.add(entryName);
             FileInputStream inputStream = new FileInputStream(fileToCopy);
             IoHelper.copyStreamToJar(inputStream, outputStream, entryName, fileToCopy.lastModified());
+            inputStream.close();
         }
     }
 
-    private void copyFileToJar(File fileToCopy, ZipOutputStream outputStream, String entryName) throws IOException
+    private void copyFileToJar(File fileToCopy, ZipOutputStream outputStream) throws IOException
     {
         if (fileToCopy.isDirectory())
         {
             for (File file : fileToCopy.listFiles())
             {
-                copyFileToJar(file, outputStream, entryName);
+                copyFileToJar(file, outputStream);
             }
         }
         else
         {
+            String entryName = resolveName(fileToCopy, this.destination);
+            List<String> mergeList = getMergeList(outputStream);
+            if (mergeList.contains(entryName))
+            {
+                return;
+            }
+            mergeList.add(entryName);
             FileInputStream inputStream = new FileInputStream(fileToCopy);
             IoHelper.copyStreamToJar(inputStream, outputStream, entryName, fileToCopy.lastModified());
+            inputStream.close();
         }
     }
 
