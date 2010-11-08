@@ -28,6 +28,7 @@
             <param name="variant" value="graphite" />
             <os family="windows" />
         </laf>
+        <splash>Vim_splash.png</splash>
     </guiprefs>
 
     <locale>

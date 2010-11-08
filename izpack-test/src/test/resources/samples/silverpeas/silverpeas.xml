@@ -38,7 +38,6 @@
         <panel classname="HTMLInfoPanel" id="info" />
         <panel classname="LicencePanel" id="licence" />
         <panel classname="TargetPanel" id="dir.windows" ShowCreateDirectoryMessage="false" />
-        <panel classname="VimPanel" />
         <panel classname="PacksPanel" />
         <panel classname="SummaryPanel" />
         <panel classname="InstallPanel" />

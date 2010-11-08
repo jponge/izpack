@@ -65,6 +65,8 @@ import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.file.DirectoryScanner;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.*;
@@ -75,7 +77,6 @@ import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
-
 
 /**
  * A parser for the installer xml configuration. This parses a document conforming to the
@@ -336,6 +337,29 @@ public class CompilerConfig extends Thread
             prefs.resizable = xmlCompilerHelper.requireYesNoAttribute(guiPrefsElement, "resizable");
             prefs.width = xmlCompilerHelper.requireIntAttribute(guiPrefsElement, "width");
             prefs.height = xmlCompilerHelper.requireIntAttribute(guiPrefsElement, "height");
+
+            IXMLElement splashNode = guiPrefsElement.getFirstChildNamed("splash");
+            if (splashNode != null)
+            {
+                try
+                {
+                    // Add splash image to installer jar
+                    File splashImage = FileUtils.toFile(findProjectResource(splashNode.getContent(), "Resource", splashNode));
+                    String destination = String.format("META-INF/%s", splashImage.getName());
+                    mergeManager.addResourceToMerge(splashImage.getAbsolutePath(), destination);
+                    // Add splash screen configuration                    
+                    List<String> lines = IOUtils.readLines(ClassLoader.getSystemResourceAsStream("installer-META-INF/MANIFEST.MF"));
+                    lines.add(String.format("SplashScreen-Image: %s", destination));
+                    lines.add("");
+                    File tempManifest = File.createTempFile("MANIFEST", ".MF");
+                    FileUtils.writeLines(tempManifest, lines);
+                    mergeManager.addResourceToMerge(tempManifest.getAbsolutePath(), "META-INF/MANIFEST.MF");
+                }
+                catch (IOException ex)
+                {
+                    throw new CompilerException("Couldn't add splash image", ex);
+                }
+            }
 
             // Look and feel mappings
             for (IXMLElement lafNode : guiPrefsElement.getChildrenNamed("laf"))
@@ -1498,7 +1522,7 @@ public class CompilerConfig extends Thread
                     reader.close();
                     writer.close();
 
-                    originalUrl = recodedFile.toURL();
+                    originalUrl = recodedFile.toURI().toURL();
                 }
 
                 if (parsexml || (!"".equals(encoding)) || (substitute && !packager.getVariables().isEmpty()))
@@ -1510,7 +1534,7 @@ public class CompilerConfig extends Thread
                     os = new BufferedOutputStream(outFile);
                     // and specify the substituted file to be added to the
                     // packager
-                    url = parsedFile.toURL();
+                    url = parsedFile.toURI().toURL();
                 }
 
                 if (parsexml)
