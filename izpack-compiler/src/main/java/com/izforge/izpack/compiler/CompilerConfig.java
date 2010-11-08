@@ -348,7 +348,7 @@ public class CompilerConfig extends Thread
                     String destination = String.format("META-INF/%s", splashImage.getName());
                     mergeManager.addResourceToMerge(splashImage.getAbsolutePath(), destination);
                     // Add splash screen configuration                    
-                    List<String> lines = IOUtils.readLines(ClassLoader.getSystemResourceAsStream("installer-META-INF/MANIFEST.MF"));
+                    List<String> lines = IOUtils.readLines(getClass().getResourceAsStream("MANIFEST.MF"));
                     lines.add(String.format("SplashScreen-Image: %s", destination));
                     lines.add("");
                     File tempManifest = File.createTempFile("MANIFEST", ".MF");
