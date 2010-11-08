@@ -46,8 +46,11 @@ public class InstallerGui
                     InstallerContainer applicationComponent = new InstallerContainer();
                     applicationComponent.initBindings();
                     BindeableContainer installerContainer = applicationComponent.getComponent(BindeableContainer.class);
+
+                    InstallerController installerController = installerContainer.getComponent(InstallerController.class).preloadInstaller();
+
                     installerContainer.getComponent(LanguageDialog.class).initLangPack();
-                    installerContainer.getComponent(InstallerController.class).buildInstallation().launchInstallation();
+                    installerController.buildInstallation().launchInstallation();
                 }
                 catch (Exception e)
                 {
