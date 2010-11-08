@@ -337,30 +337,28 @@ public class CompilerConfig extends Thread
             prefs.resizable = xmlCompilerHelper.requireYesNoAttribute(guiPrefsElement, "resizable");
             prefs.width = xmlCompilerHelper.requireIntAttribute(guiPrefsElement, "width");
             prefs.height = xmlCompilerHelper.requireIntAttribute(guiPrefsElement, "height");
-
-            IXMLElement splashNode = guiPrefsElement.getFirstChildNamed("splash");
-            if (splashNode != null)
+            try
             {
-                try
+                // Add splash screen configuration
+                List<String> lines = IOUtils.readLines(getClass().getResourceAsStream("MANIFEST.MF"));
+                IXMLElement splashNode = guiPrefsElement.getFirstChildNamed("splash");
+                if (splashNode != null)
                 {
                     // Add splash image to installer jar
                     File splashImage = FileUtils.toFile(findProjectResource(splashNode.getContent(), "Resource", splashNode));
                     String destination = String.format("META-INF/%s", splashImage.getName());
                     mergeManager.addResourceToMerge(splashImage.getAbsolutePath(), destination);
-                    // Add splash screen configuration                    
-                    List<String> lines = IOUtils.readLines(getClass().getResourceAsStream("MANIFEST.MF"));
                     lines.add(String.format("SplashScreen-Image: %s", destination));
-                    lines.add("");
-                    File tempManifest = File.createTempFile("MANIFEST", ".MF");
-                    FileUtils.writeLines(tempManifest, lines);
-                    mergeManager.addResourceToMerge(tempManifest.getAbsolutePath(), "META-INF/MANIFEST.MF");
                 }
-                catch (IOException ex)
-                {
-                    throw new CompilerException("Couldn't add splash image", ex);
-                }
+                lines.add("");
+                File tempManifest = File.createTempFile("MANIFEST", ".MF");
+                FileUtils.writeLines(tempManifest, lines);
+                mergeManager.addResourceToMerge(tempManifest.getAbsolutePath(), "META-INF/MANIFEST.MF");
             }
-
+            catch (IOException ex)
+            {
+                throw new CompilerException("Couldn't add splash image", ex);
+            }
             // Look and feel mappings
             for (IXMLElement lafNode : guiPrefsElement.getChildrenNamed("laf"))
             {
