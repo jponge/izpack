@@ -9,7 +9,9 @@
         <url>http://www.anotherworld-inspace-website.net/</url>
     </info>
 
-    <guiprefs width="640" height="480" resizable="yes" />
+    <guiprefs width="640" height="480" resizable="yes">
+        <splash>Test.png</splash>
+    </guiprefs>
     <locale>
         <langpack iso3="eng" />
     </locale>
