@@ -131,7 +131,7 @@ public class Packager extends PackagerBase
         sendMsg("Copying the skeleton installer", PackagerListener.MSG_VERBOSE);
         mergeManager.addResourceToMerge("com/izforge/izpack/installer/");
         mergeManager.addResourceToMerge("org/picocontainer/");
-        mergeManager.addResourceToMerge("installer-META-INF/", "META-INF/");
+        mergeManager.addResourceToMerge("com/izforge/izpack/compiler/MANIFEST.MF", "META-INF/");
         mergeManager.addResourceToMerge("img/");
         mergeManager.addResourceToMerge("bin/");
         mergeManager.addResourceToMerge("com/izforge/izpack/api/");
