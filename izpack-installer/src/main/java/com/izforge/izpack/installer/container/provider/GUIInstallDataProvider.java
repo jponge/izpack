@@ -85,6 +85,10 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         addCustomLangpack(guiInstallData);
         loadDefaultLocale(guiInstallData);
         loadLookAndFeel(guiInstallData);
+        if(UIManager.getColor("Button.background") != null)
+        {
+            guiInstallData.buttonsHColor = UIManager.getColor("Button.background");
+        }
         return guiInstallData;
     }
 
@@ -94,7 +98,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
      * @param installdata
      * @throws Exception Description of the Exception
      */
-    protected void loadLookAndFeel(GUIInstallData installdata) throws Exception
+    protected void loadLookAndFeel(final GUIInstallData installdata) throws Exception
     {
         // Do we have any preference for this OS ?
         String syskey = "unix";
@@ -271,23 +275,50 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
             {
                 variant = substanceVariants.get("default");
             }
-
-            SwingUtilities.invokeLater(new Runnable()
+            LOGGER.log(Level.INFO, "Using laf " + variant);
+            UIManager.setLookAndFeel(variant);
+            UIManager.getLookAndFeelDefaults().put("ClassLoader", JPanel.class.getClassLoader());
+            try
             {
-                public void run()
+                UIDefaults defaults = UIManager.getDefaults();
+                Object ui = defaults.get("PanelUI");
+                LOGGER.info("PanelUI : " + ui);
+                Object cl = defaults.get("ClassLoader");
+                LOGGER.info("ClassLoader : " + cl);
+                ClassLoader loader = (cl != null) ? (ClassLoader) cl : JPanel.class.getClassLoader();
+                LOGGER.info("ClassLoader : " + loader);
+                String uiClassName = (String) ui;
+                LOGGER.info("UIClassName : " + uiClassName);
+                Class cls = (Class) defaults.get(uiClassName);
+                LOGGER.info("Cached class : " + cls);
+                if (cls == null)
                 {
-                    try
+                    if (loader == null)
                     {
-                        LOGGER.log(Level.INFO, "Using laf " + variant);
-                        UIManager.setLookAndFeel(variant);
+                        LOGGER.info("Using system loader to load " + uiClassName);
+                        cls = Class.forName(uiClassName, true, Thread .currentThread().getContextClassLoader());
+                        LOGGER.info("Done loading");
                     }
-                    catch (Exception e)
+                    else
                     {
-                        throw new IzPackException(e);
+                        LOGGER.info("Using custom loader to load " + uiClassName);
+                        cls = loader.loadClass(uiClassName);
+                        LOGGER.info("Done loading");
+                    }
+                    if (cls != null)
+                    {
+                        LOGGER.info("Loaded class : " + cls.getName());
+                    }
+                    else
+                    {
+                        LOGGER.info("Couldn't load the class");
                     }
                 }
-            });
-
+            }
+            catch (Throwable t)
+            {
+                throw new IzPackException(t);
+            }
         }
     }
 
