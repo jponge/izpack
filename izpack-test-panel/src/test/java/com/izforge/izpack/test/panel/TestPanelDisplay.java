@@ -1,24 +1,30 @@
 package com.izforge.izpack.test.panel;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import java.util.*;
-
-import org.fest.swing.fixture.*;
-import org.hamcrest.text.StringContains;
-import org.junit.*;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-
 import com.izforge.izpack.api.GuiId;
-import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.binding.Help;
 import com.izforge.izpack.installer.base.InstallerController;
-import com.izforge.izpack.installer.data.*;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.container.TestPanelContainer;
 import com.izforge.izpack.test.junit.PicoRunner;
+import org.fest.swing.fixture.DialogFixture;
+import org.fest.swing.fixture.FrameFixture;
+import org.hamcrest.text.StringContains;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Manual test for finish panel
@@ -124,7 +130,7 @@ public class TestPanelDisplay
         {
             guiInstallData.getPanelsOrder().add(panel);
         }
-        installerController.buildInstallation();
+        installerController.preloadInstaller().buildInstallation();
         installerController.launchInstallation();
     }
 
