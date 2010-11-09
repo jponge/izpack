@@ -128,7 +128,7 @@ public class HTMLInfoPanel extends IzPanel
             textArea.setEditable(false);
             textArea.addHyperlinkListener(new HyperlinkHandler());
             JScrollPane scroller = new JScrollPane(textArea);
-            textArea.setPage(loadHTMLInfoContent());
+            //textArea.setPage(loadHTMLInfoContent());
             //set caret so beginning of file is displayed:
             textArea.setCaretPosition(0);
             add(scroller, NEXT_LINE);
