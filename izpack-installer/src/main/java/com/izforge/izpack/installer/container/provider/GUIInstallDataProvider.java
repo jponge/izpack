@@ -3,7 +3,6 @@ package com.izforge.izpack.installer.container.provider;
 import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.GUIPrefs;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
@@ -23,7 +22,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -85,7 +83,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         addCustomLangpack(guiInstallData);
         loadDefaultLocale(guiInstallData);
         loadLookAndFeel(guiInstallData);
-        if(UIManager.getColor("Button.background") != null)
+        if (UIManager.getColor("Button.background") != null)
         {
             guiInstallData.buttonsHColor = UIManager.getColor("Button.background");
         }
@@ -275,50 +273,49 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
             {
                 variant = substanceVariants.get("default");
             }
-            LOGGER.log(Level.INFO, "Using laf " + variant);
+            LOGGER.info("Using laf " + variant);
             UIManager.setLookAndFeel(variant);
             UIManager.getLookAndFeelDefaults().put("ClassLoader", JPanel.class.getClassLoader());
-            try
-            {
-                UIDefaults defaults = UIManager.getDefaults();
-                Object ui = defaults.get("PanelUI");
-                LOGGER.info("PanelUI : " + ui);
-                Object cl = defaults.get("ClassLoader");
-                LOGGER.info("ClassLoader : " + cl);
-                ClassLoader loader = (cl != null) ? (ClassLoader) cl : JPanel.class.getClassLoader();
-                LOGGER.info("ClassLoader : " + loader);
-                String uiClassName = (String) ui;
-                LOGGER.info("UIClassName : " + uiClassName);
-                Class cls = (Class) defaults.get(uiClassName);
-                LOGGER.info("Cached class : " + cls);
-                if (cls == null)
-                {
-                    if (loader == null)
-                    {
-                        LOGGER.info("Using system loader to load " + uiClassName);
-                        cls = Class.forName(uiClassName, true, Thread .currentThread().getContextClassLoader());
-                        LOGGER.info("Done loading");
-                    }
-                    else
-                    {
-                        LOGGER.info("Using custom loader to load " + uiClassName);
-                        cls = loader.loadClass(uiClassName);
-                        LOGGER.info("Done loading");
-                    }
-                    if (cls != null)
-                    {
-                        LOGGER.info("Loaded class : " + cls.getName());
-                    }
-                    else
-                    {
-                        LOGGER.info("Couldn't load the class");
-                    }
-                }
-            }
-            catch (Throwable t)
-            {
-                throw new IzPackException(t);
-            }
+
+            checkSubstanceLafLoaded();
+        }
+    }
+
+    private void checkSubstanceLafLoaded() throws ClassNotFoundException
+    {
+        UIDefaults defaults = UIManager.getDefaults();
+        String uiClassName = (String) defaults.get("PanelUI");
+        ClassLoader cl = (ClassLoader) defaults.get("ClassLoader");
+        ClassLoader classLoader = (cl != null) ? cl : JPanel.class.getClassLoader();
+        Class aClass = (Class) defaults.get(uiClassName);
+
+        LOGGER.info("PanelUI : " + uiClassName);
+        LOGGER.info("ClassLoader : " + classLoader);
+        LOGGER.info("Cached class : " + aClass);
+        if (aClass != null)
+        {
+            return;
+        }
+
+        if (classLoader == null)
+        {
+            LOGGER.info("Using system loader to load " + uiClassName);
+            aClass = Class.forName(uiClassName, true, Thread.currentThread().getContextClassLoader());
+            LOGGER.info("Done loading");
+        }
+        else
+        {
+            LOGGER.info("Using custom loader to load " + uiClassName);
+            aClass = classLoader.loadClass(uiClassName);
+            LOGGER.info("Done loading");
+        }
+        if (aClass != null)
+        {
+            LOGGER.info("Loaded class : " + aClass.getName());
+        }
+        else
+        {
+            LOGGER.info("Couldn't load the class");
         }
     }
 
