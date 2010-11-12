@@ -16,6 +16,7 @@ import java.util.ArrayList;
  */
 public class ClassUtils
 {
+    @SuppressWarnings("unchecked")
     public static void unloadLastJar()
     {
         try
@@ -26,7 +27,7 @@ public class ClassUtils
             URLClassPath ucp = (URLClassPath) ucpField.get(systemClassLoader);
             Field pathField = URLClassPath.class.getDeclaredField("path");
             pathField.setAccessible(true);
-            ArrayList<URL> path = (ArrayList) pathField.get(ucp);
+            ArrayList<URL> path = (ArrayList<URL>) pathField.get(ucp);
             path.remove(path.size() - 1);
 
             Field loaderField = URLClassPath.class.getDeclaredField("loaders");
