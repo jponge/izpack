@@ -25,9 +25,14 @@ public class InstallerController
 
     }
 
-    public InstallerController buildInstallation() throws Exception
+    public InstallerController preloadInstaller() throws ClassNotFoundException
     {
         panelManager.loadPanelsInContainer();
+        return this;
+    }
+
+    public InstallerController buildInstallation() throws Exception
+    {
         panelManager.instantiatePanels();
         installerFrame.buildGUI();
         installerFrame.sizeFrame();

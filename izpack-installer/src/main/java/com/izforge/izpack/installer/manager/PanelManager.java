@@ -22,18 +22,14 @@ import com.izforge.izpack.util.OsConstraintHelper;
 import java.io.File;
 import java.io.FileFilter;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Load panels in the container
  */
-public class
-        PanelManager
+public class PanelManager
 {
     private GUIInstallData installdata;
     private BindeableContainer installerContainer;
@@ -66,28 +62,37 @@ public class
         // Initialisation
         // We load each of them
         List<Panel> panelsOrder = installdata.getPanelsOrder();
-        List<Class> listPanelClass = new ArrayList<Class>();
+
+//        List<Class> listPanelClass = new ArrayList<Class>();
+        Map<Object, Class> mapPanel = new HashMap();
         for (Panel panel : panelsOrder)
         {
             if (OsConstraintHelper.oneMatchesCurrentSystem(panel.getOsConstraints()))
             {
                 final Class<? extends IzPanel> panelClass = classPathCrawler.searchClassInClassPath(panel.getClassName());
-                listPanelClass.add(panelClass);
+                if (panel.getPanelid() != null)
+                {
+                    mapPanel.put(panel.getPanelid(), panelClass);
+                }
+                else
+                {
+                    mapPanel.put(panelClass, panelClass);
+                }
             }
         }
-        loadClassesInSamePackage(listPanelClass);
+        loadClassesInSamePackage(mapPanel);
 
         return this;
     }
 
-    private void loadClassesInSamePackage(List<Class> listPanelClass)
+    private void loadClassesInSamePackage(Map<Object, Class> mapPanel)
     {
         Set<Mergeable> mergeableSet = new HashSet<Mergeable>();
         final Set<Package> packageSet = new HashSet<Package>();
-        for (Class aClass : listPanelClass)
+        for (Map.Entry<Object, Class> entry : mapPanel.entrySet())
         {
-            mergeableSet.addAll(pathResolver.getMergeablePackage(aClass.getPackage()));
-            packageSet.add(aClass.getPackage());
+            mergeableSet.addAll(pathResolver.getMergeablePackage(entry.getValue().getPackage()));
+            packageSet.add(entry.getValue().getPackage());
         }
 
         Set<File> files = new HashSet<File>();
@@ -102,12 +107,11 @@ public class
                 }
             }));
         }
-        processPanelFiles(files);
+        processPanelFiles(files, mapPanel);
     }
 
-    private void processPanelFiles(Set<File> files)
+    private void processPanelFiles(Set<File> files, Map<Object, Class> mapPanel)
     {
-        HashSet<Class> panelClass = new HashSet<Class>();
         for (File file : files)
         {
             if (file.getAbsolutePath().endsWith(".class"))
@@ -116,14 +120,14 @@ public class
                 boolean isAbstract = (aClass.getModifiers() & Modifier.ABSTRACT) == Modifier.ABSTRACT;
                 if (!aClass.isInterface() && !isAbstract)
                 {
-                    panelClass.add(aClass);
+                    mapPanel.put(aClass, aClass);
                 }
             }
         }
-        for (Class aClass : panelClass)
+        for (Map.Entry<Object, Class> entry : mapPanel.entrySet())
         {
-            LOGGER.log(Level.INFO, "Adding class " + aClass + " in container");
-            installerContainer.addComponent(aClass);
+            LOGGER.log(Level.INFO, "Adding class " + entry + " in container");
+            installerContainer.addComponent(entry.getKey(), entry.getValue());
         }
     }
 
@@ -145,7 +149,15 @@ public class
             {
                 Class<? extends IzPanel> aClass = classPathCrawler.searchClassInClassPath(panel.getClassName());
                 executePreBuildActions(panel);
-                IzPanel izPanel = installerContainer.getComponent(aClass);
+                IzPanel izPanel;
+                if (panel.getPanelid() != null)
+                {
+                    izPanel = (IzPanel) installerContainer.getComponent(panel.getPanelid());
+                }
+                else
+                {
+                    izPanel = installerContainer.getComponent(aClass);
+                }
                 izPanel.setMetadata(panel);
                 String dataValidator = panel.getValidator();
                 if (dataValidator != null)

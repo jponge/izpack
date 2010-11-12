@@ -55,6 +55,7 @@ import com.izforge.izpack.compiler.helper.TargetFileSet;
 import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
 import com.izforge.izpack.compiler.listener.CompilerListener;
 import com.izforge.izpack.compiler.packager.IPackager;
+import com.izforge.izpack.compiler.resource.ResourceFinder;
 import com.izforge.izpack.core.data.DynamicInstallerRequirementValidatorImpl;
 import com.izforge.izpack.core.data.DynamicVariableImpl;
 import com.izforge.izpack.core.regex.RegularExpressionFilterImpl;
@@ -65,14 +66,10 @@ import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.file.DirectoryScanner;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -133,6 +130,7 @@ public class CompilerConfig extends Thread
     private XmlCompilerHelper xmlCompilerHelper;
     private PropertyManager propertyManager;
     private IPackager packager;
+    private ResourceFinder resourceFinder;
     private MergeManager mergeManager;
     private IzpackProjectInstaller izpackProjectInstaller;
     private AssertionHelper assertionHelper;
@@ -160,7 +158,7 @@ public class CompilerConfig extends Thread
      *
      * @param compilerData Object containing all informations found in command line
      */
-    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller, AssertionHelper assertionHelper, CompilerContainer compilerContainer, ClassPathCrawler classPathCrawler, RulesEngine rules, PathResolver pathResolver)
+    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller, AssertionHelper assertionHelper, CompilerContainer compilerContainer, ClassPathCrawler classPathCrawler, RulesEngine rules, PathResolver pathResolver, ResourceFinder resourceFinder)
     {
         this.assertionHelper = assertionHelper;
         this.rules = rules;
@@ -176,6 +174,7 @@ public class CompilerConfig extends Thread
         this.compilerContainer = compilerContainer;
         this.classPathCrawler = classPathCrawler;
         this.pathResolver = pathResolver;
+        this.resourceFinder = resourceFinder;
     }
 
     /**
@@ -224,7 +223,7 @@ public class CompilerConfig extends Thread
         propertyManager.setProperty("basedir", base.toString());
 
         // We get the XML data tree
-        IXMLElement data = getXMLTree();
+        IXMLElement data = resourceFinder.getXMLTree();
         // loads the specified packager
         loadPackagingInformation(data);
 
@@ -338,29 +337,6 @@ public class CompilerConfig extends Thread
             prefs.width = xmlCompilerHelper.requireIntAttribute(guiPrefsElement, "width");
             prefs.height = xmlCompilerHelper.requireIntAttribute(guiPrefsElement, "height");
 
-            IXMLElement splashNode = guiPrefsElement.getFirstChildNamed("splash");
-            if (splashNode != null)
-            {
-                try
-                {
-                    // Add splash image to installer jar
-                    File splashImage = FileUtils.toFile(findProjectResource(splashNode.getContent(), "Resource", splashNode));
-                    String destination = String.format("META-INF/%s", splashImage.getName());
-                    mergeManager.addResourceToMerge(splashImage.getAbsolutePath(), destination);
-                    // Add splash screen configuration                    
-                    List<String> lines = IOUtils.readLines(getClass().getResourceAsStream("MANIFEST.MF"));
-                    lines.add(String.format("SplashScreen-Image: %s", destination));
-                    lines.add("");
-                    File tempManifest = File.createTempFile("MANIFEST", ".MF");
-                    FileUtils.writeLines(tempManifest, lines);
-                    mergeManager.addResourceToMerge(tempManifest.getAbsolutePath(), "META-INF/MANIFEST.MF");
-                }
-                catch (IOException ex)
-                {
-                    throw new CompilerException("Couldn't add splash image", ex);
-                }
-            }
-
             // Look and feel mappings
             for (IXMLElement lafNode : guiPrefsElement.getChildrenNamed("laf"))
             {
@@ -450,7 +426,7 @@ public class CompilerConfig extends Thread
             if (stage != null
                     && ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage)))
             {
-                URL url = findProjectResource(src, "Jar file", ixmlElement);
+                URL url = resourceFinder.findProjectResource(src, "Jar file", ixmlElement);
                 CustomData customData = new CustomData(null, compilerHelper.getContainedFilePaths(url), null,
                         CustomData.UNINSTALLER_JAR);
                 packager.addCustomJar(customData, url);
@@ -1392,7 +1368,7 @@ public class CompilerConfig extends Thread
             String jarPath = panelElement.getAttribute("jar");
             if (StringUtils.isNotBlank(jarPath))
             {
-                URL jarUrl = findIzPackResource(jarPath, "Panel jar file", panelElement, true);
+                URL jarUrl = resourceFinder.findIzPackResource(jarPath, "Panel jar file", panelElement, true);
                 panel.className = compilerHelper.getFullClassName(jarUrl, className);
                 packager.addJarContent(jarUrl);
             }
@@ -1451,7 +1427,7 @@ public class CompilerConfig extends Thread
                         resourceId = panelid + "_" + panelCounter + "_help_" + iso3 + ".html";
                     }
 //                    panel.addHelp(iso3, resourceId);
-                    URL originalUrl = findProjectResource(help
+                    URL originalUrl = resourceFinder.findProjectResource(help
                             .getAttribute(AutomatedInstallData.SRC_ATTRIBUTE), "Help", help);
                     packager.addResource(resourceId, originalUrl);
                 }
@@ -1497,7 +1473,7 @@ public class CompilerConfig extends Thread
             }
 
             // basedir is not prepended if src is already an absolute path
-            URL originalUrl = findProjectResource(src, "Resource", resNode);
+            URL originalUrl = resourceFinder.findProjectResource(src, "Resource", resNode);
             URL url = originalUrl;
 
             InputStream is = null;
@@ -1666,10 +1642,10 @@ public class CompilerConfig extends Thread
             String path;
 
             path = "bin/langpacks/installer/" + iso3 + ".xml";
-            URL iso3xmlURL = findIzPackResource(path, "ISO3 file", localNode);
+            URL iso3xmlURL = resourceFinder.findIzPackResource(path, "ISO3 file", localNode);
 
             path = "bin/langpacks/flags/" + iso3 + ".gif";
-            URL iso3FlagURL = findIzPackResource(path, "ISO3 flag image", localNode);
+            URL iso3FlagURL = resourceFinder.findIzPackResource(path, "ISO3 flag image", localNode);
 
             packager.addLangPack(iso3, iso3xmlURL, iso3FlagURL);
         }
@@ -2447,49 +2423,6 @@ public class CompilerConfig extends Thread
         }
     }
 
-    /**
-     * Returns the IXMLElement representing the installation XML file.
-     *
-     * @return The XML tree.
-     * @throws CompilerException For problems with the installation file
-     * @throws IOException       for errors reading the installation file
-     */
-    protected IXMLElement getXMLTree() throws IOException
-    {
-        IXMLParser parser = new XMLParser();
-        IXMLElement data;
-        if (compilerData.getInstallFile() != null)
-        {
-            File file = new File(compilerData.getInstallFile()).getAbsoluteFile();
-            assertionHelper.assertIsNormalReadableFile(file, "Configuration file");
-            FileInputStream inputStream = new FileInputStream(compilerData.getInstallFile());
-            data = parser.parse(inputStream, file.getAbsolutePath());
-            inputStream.close();
-            // add izpack built in property
-            propertyManager.setProperty("izpack.file", file.toString());
-        }
-        else if (compilerData.getInstallText() != null)
-        {
-            data = parser.parse(compilerData.getInstallText());
-        }
-        else
-        {
-            throw new CompilerException("Neither install file nor text specified");
-        }
-        // We check it
-        if (!"installation".equalsIgnoreCase(data.getName()))
-        {
-            assertionHelper.parseError(data, "this is not an IzPack XML installation file");
-        }
-        if (!CompilerData.VERSION.equalsIgnoreCase(xmlCompilerHelper.requireAttribute(data, "version")))
-        {
-            assertionHelper.parseError(data, "the file version is different from the compiler version");
-        }
-
-        // We finally return the tree
-        return data;
-    }
-
     protected OverrideType getOverrideValue(IXMLElement fileElement) throws CompilerException
     {
         String override_val = fileElement.getAttribute("override");
@@ -2564,110 +2497,6 @@ public class CompilerConfig extends Thread
             }
         }
         return blockable;
-    }
-
-    /**
-     * Look for a project specified resources, which, if not absolute, are sought relative to the
-     * projects basedir. The path should use '/' as the fileSeparator. If the resource is not found,
-     * a CompilerException is thrown indicating fault in the parent element.
-     *
-     * @param path   the relative path (using '/' as separator) to the resource.
-     * @param desc   the description of the resource used to report errors
-     * @param parent the IXMLElement the resource is specified in, used to report errors
-     * @return a URL to the resource.
-     */
-    private URL findProjectResource(String path, String desc, IXMLElement parent)
-            throws CompilerException
-    {
-        URL url = null;
-        File resource = new File(path);
-        if (!resource.isAbsolute())
-        {
-            resource = new File(compilerData.getBasedir(), path);
-        }
-
-        if (!resource.exists()) // fatal
-        {
-            assertionHelper.parseError(parent, desc + " not found: " + resource);
-        }
-
-        try
-        {
-            url = resource.toURL();
-        }
-        catch (MalformedURLException how)
-        {
-            assertionHelper.parseError(parent, desc + "(" + resource + ")", how);
-        }
-
-        return url;
-    }
-
-    private URL findIzPackResource(String path, String desc, IXMLElement parent)
-            throws CompilerException
-    {
-        return findIzPackResource(path, desc, parent, false);
-    }
-
-
-    private URL findLookAndFeelResource(String lookClassName)
-            throws CompilerException
-    {
-        URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
-        return loader.getResource(lookClassName);
-    }
-
-    /**
-     * Look for an IzPack resource either in the compiler jar, or within IZPACK_HOME. The path must
-     * not be absolute. The path must use '/' as the fileSeparator (it's used to access the jar
-     * file). If the resource is not found, take appropriate action base on ignoreWhenNotFound flag.
-     *
-     * @param path               the relative path (using '/' as separator) to the resource.
-     * @param desc               the description of the resource used to report errors
-     * @param parent             the IXMLElement the resource is specified in, used to report errors
-     * @param ignoreWhenNotFound when false, throws a CompilerException indicating
-     *                           fault in the parent element when resource not found.
-     * @return a URL to the resource.
-     */
-    private URL findIzPackResource(String path, String desc, IXMLElement parent, boolean ignoreWhenNotFound)
-            throws CompilerException
-    {
-        URL url = getClass().getResource("/" + path);
-        if (url == null)
-        {
-            File resource = new File(path);
-
-            if (!resource.isAbsolute())
-            {
-                resource = new File(CompilerData.IZPACK_HOME, path);
-            }
-
-            if (resource.exists())
-            {
-                try
-                {
-                    url = resource.toURL();
-                }
-                catch (MalformedURLException how)
-                {
-                    assertionHelper.parseError(parent, desc + "(" + resource + ")", how);
-                }
-            }
-            else
-            {
-                if (ignoreWhenNotFound)
-                {
-                    assertionHelper.parseWarn(parent, desc + " not found: " + resource);
-                }
-                else
-                {
-                    assertionHelper.parseError(parent, desc + " not found: " + resource);
-                }
-            }
-
-        }
-
-        return url;
     }
 
     protected boolean validateYesNo(String value)

@@ -3,7 +3,6 @@ package com.izforge.izpack.installer.container.provider;
 import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.GUIPrefs;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
@@ -23,7 +22,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -85,6 +83,10 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         addCustomLangpack(guiInstallData);
         loadDefaultLocale(guiInstallData);
         loadLookAndFeel(guiInstallData);
+        if (UIManager.getColor("Button.background") != null)
+        {
+            guiInstallData.buttonsHColor = UIManager.getColor("Button.background");
+        }
         return guiInstallData;
     }
 
@@ -94,7 +96,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
      * @param installdata
      * @throws Exception Description of the Exception
      */
-    protected void loadLookAndFeel(GUIInstallData installdata) throws Exception
+    protected void loadLookAndFeel(final GUIInstallData installdata) throws Exception
     {
         // Do we have any preference for this OS ?
         String syskey = "unix";
@@ -271,23 +273,49 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
             {
                 variant = substanceVariants.get("default");
             }
+            LOGGER.info("Using laf " + variant);
+            UIManager.setLookAndFeel(variant);
+            UIManager.getLookAndFeelDefaults().put("ClassLoader", JPanel.class.getClassLoader());
 
-            SwingUtilities.invokeLater(new Runnable()
-            {
-                public void run()
-                {
-                    try
-                    {
-                        LOGGER.log(Level.INFO, "Using laf " + variant);
-                        UIManager.setLookAndFeel(variant);
-                    }
-                    catch (Exception e)
-                    {
-                        throw new IzPackException(e);
-                    }
-                }
-            });
+            checkSubstanceLafLoaded();
+        }
+    }
 
+    private void checkSubstanceLafLoaded() throws ClassNotFoundException
+    {
+        UIDefaults defaults = UIManager.getDefaults();
+        String uiClassName = (String) defaults.get("PanelUI");
+        ClassLoader cl = (ClassLoader) defaults.get("ClassLoader");
+        ClassLoader classLoader = (cl != null) ? cl : JPanel.class.getClassLoader();
+        Class aClass = (Class) defaults.get(uiClassName);
+
+        LOGGER.info("PanelUI : " + uiClassName);
+        LOGGER.info("ClassLoader : " + classLoader);
+        LOGGER.info("Cached class : " + aClass);
+        if (aClass != null)
+        {
+            return;
+        }
+
+        if (classLoader == null)
+        {
+            LOGGER.info("Using system loader to load " + uiClassName);
+            aClass = Class.forName(uiClassName, true, Thread.currentThread().getContextClassLoader());
+            LOGGER.info("Done loading");
+        }
+        else
+        {
+            LOGGER.info("Using custom loader to load " + uiClassName);
+            aClass = classLoader.loadClass(uiClassName);
+            LOGGER.info("Done loading");
+        }
+        if (aClass != null)
+        {
+            LOGGER.info("Loaded class : " + aClass.getName());
+        }
+        else
+        {
+            LOGGER.info("Couldn't load the class");
         }
     }
 

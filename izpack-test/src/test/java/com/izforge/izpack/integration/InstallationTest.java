@@ -5,8 +5,10 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.compiler.container.TestInstallationContainer;
 import com.izforge.izpack.installer.base.InstallerController;
 import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.container.impl.InstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.language.LanguageDialog;
+import com.izforge.izpack.panels.hello.HelloPanel;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
@@ -43,14 +45,16 @@ public class InstallationTest
     private InstallerFrame installerFrame;
     private GUIInstallData installData;
     private InstallerController installerController;
+    private InstallerContainer installerContainer;
 
-    public InstallationTest(ResourceManager resourceManager, LanguageDialog languageDialog, InstallerFrame installerFrame, GUIInstallData installData, InstallerController installerController)
+    public InstallationTest(ResourceManager resourceManager, LanguageDialog languageDialog, InstallerFrame installerFrame, GUIInstallData installData, InstallerController installerController, InstallerContainer installerContainer)
     {
         this.installerController = installerController;
         this.resourceManager = resourceManager;
         this.languageDialog = languageDialog;
         this.installData = installData;
         this.installerFrame = installerFrame;
+        this.installerContainer = installerContainer;
     }
 
     @After
@@ -91,6 +95,18 @@ public class InstallationTest
         // Finish panel
     }
 
+    @Test
+    @InstallFile("samples/doublePanel.xml")
+    public void testMultiplePanels() throws Exception
+    {
+        installerController.preloadInstaller().buildInstallation();
+
+        HelloPanel firstHelloPanel = (HelloPanel) installerContainer.getComponent("42");
+        assertThat(firstHelloPanel.getMetadata().getPanelid(), Is.is("42"));
+
+        HelloPanel secondHelloPanel = (HelloPanel) installerContainer.getComponent("34");
+        assertThat(secondHelloPanel.getMetadata().getPanelid(), Is.is("34"));
+    }
 
     @Test
     @InstallFile("samples/substanceLaf/substanceLaf.xml")
