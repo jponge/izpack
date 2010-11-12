@@ -347,6 +347,7 @@ public abstract class PackagerBase implements IPackager
         // write the primary jar. MUST be first so manifest is not overwritten
         // by
         // an included jar
+        writeManifest();
         writeSkeletonInstaller();
 
         writeInstallerObject("izpackInstallModel", izpackInstallModel);
@@ -366,6 +367,7 @@ public abstract class PackagerBase implements IPackager
 
         // Pack File Data may be written to separate jars
         writePacks();
+
     }
 
     protected abstract void writeInstallerObject(String entryName, Object object) throws IOException;
@@ -378,6 +380,7 @@ public abstract class PackagerBase implements IPackager
 
     protected abstract void writePacks() throws Exception;
 
+    protected abstract void writeManifest() throws IOException;
 
     /**
      * @return the dynamic variables

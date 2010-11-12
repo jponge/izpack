@@ -30,6 +30,7 @@ import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.listener.PackagerListener;
+import com.izforge.izpack.compiler.resource.ResourceFinder;
 import com.izforge.izpack.compiler.stream.ByteCountingOutputStream;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
 import com.izforge.izpack.data.ExecutableFile;
@@ -41,6 +42,8 @@ import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.IoHelper;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.net.URL;
@@ -74,6 +77,7 @@ public class Packager extends PackagerBase
      */
     private OutputStream outputStream;
     private MergeManager mergeManager;
+    private ResourceFinder resourceFinder;
 
     /**
      * The constructor.
@@ -81,11 +85,12 @@ public class Packager extends PackagerBase
      * @throws com.izforge.izpack.api.exception.CompilerException
      *
      */
-    public Packager(Properties properties, CompilerData compilerData, CompilerContainer compilerContainer, PackagerListener listener, JarOutputStream jarOutputStream, PackCompressor packCompressor, OutputStream outputStream, MergeManager mergeManager, PathResolver pathResolver, IzpackProjectInstaller izpackInstallModel, MergeableResolver mergeableResolver) throws CompilerException
+    public Packager(Properties properties, CompilerData compilerData, CompilerContainer compilerContainer, PackagerListener listener, JarOutputStream jarOutputStream, PackCompressor packCompressor, OutputStream outputStream, MergeManager mergeManager, PathResolver pathResolver, IzpackProjectInstaller izpackInstallModel, MergeableResolver mergeableResolver, ResourceFinder resourceFinder) throws CompilerException
     {
         super(properties, compilerContainer, listener, mergeManager, pathResolver, izpackInstallModel, mergeableResolver);
         this.compilerData = compilerData;
         this.primaryJarStream = jarOutputStream;
+        this.resourceFinder = resourceFinder;
         this.compressor = packCompressor;
         this.outputStream = outputStream;
         this.mergeManager = mergeManager;
@@ -131,7 +136,6 @@ public class Packager extends PackagerBase
         sendMsg("Copying the skeleton installer", PackagerListener.MSG_VERBOSE);
         mergeManager.addResourceToMerge("com/izforge/izpack/installer/");
         mergeManager.addResourceToMerge("org/picocontainer/");
-        mergeManager.addResourceToMerge("com/izforge/izpack/compiler/MANIFEST.MF", "META-INF/");
         mergeManager.addResourceToMerge("img/");
         mergeManager.addResourceToMerge("bin/");
         mergeManager.addResourceToMerge("com/izforge/izpack/api/");
@@ -198,6 +202,31 @@ public class Packager extends PackagerBase
             ZipInputStream inJarStream = new ZipInputStream(is);
             IoHelper.copyZip(inJarStream, primaryJarStream, (List<String>) includedJarURL[1], alreadyWrittenFiles);
         }
+    }
+
+    /**
+     * Write manifest in the install jar.
+     */
+    @Override
+    public void writeManifest() throws IOException
+    {
+        IXMLElement data = resourceFinder.getXMLTree();
+        IXMLElement guiPrefsElement = data.getFirstChildNamed("guiprefs");
+        // Add splash screen configuration
+        List<String> lines = IOUtils.readLines(getClass().getResourceAsStream("MANIFEST.MF"));
+        IXMLElement splashNode = guiPrefsElement.getFirstChildNamed("splash");
+        if (splashNode != null)
+        {
+            // Add splash image to installer jar
+            File splashImage = FileUtils.toFile(resourceFinder.findProjectResource(splashNode.getContent(), "Resource", splashNode));
+            String destination = String.format("META-INF/%s", splashImage.getName());
+            mergeManager.addResourceToMerge(splashImage.getAbsolutePath(), destination);
+            lines.add(String.format("SplashScreen-Image: %s", destination));
+        }
+        lines.add("");
+        File tempManifest = File.createTempFile("MANIFEST", ".MF");
+        FileUtils.writeLines(tempManifest, lines);
+        mergeManager.addResourceToMerge(tempManifest.getAbsolutePath(), "META-INF/MANIFEST.MF");
     }
 
     /**

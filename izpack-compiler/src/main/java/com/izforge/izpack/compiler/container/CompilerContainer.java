@@ -12,6 +12,7 @@ import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.listener.CmdlinePackagerListener;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.compiler.packager.impl.Packager;
+import com.izforge.izpack.compiler.resource.ResourceFinder;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
@@ -44,6 +45,7 @@ public class CompilerContainer extends AbstractContainer
                 .addComponent(CliAnalyzer.class)
                 .addComponent(CmdlinePackagerListener.class)
                 .addComponent(Compiler.class)
+                .addComponent(ResourceFinder.class)
                 .addComponent(CompilerConfig.class)
                 .addComponent(ConditionContainer.class, ConditionContainer.class)
                 .addComponent(MutablePicoContainer.class, pico)
