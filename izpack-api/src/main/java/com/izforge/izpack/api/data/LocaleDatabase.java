@@ -171,7 +171,7 @@ public class LocaleDatabase extends TreeMap<String, String>
         // don't substitute quoted place holders '{0}'
         message = message.replace('\'', TEMP_QUOTING_CHARACTER);
 
-        message = MessageFormat.format(message, new Object[]{variables});
+        message = MessageFormat.format(message, variables);
 
         // replace all ' characters back
         return message.replace(TEMP_QUOTING_CHARACTER, '\'');
