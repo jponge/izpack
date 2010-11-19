@@ -66,6 +66,7 @@ import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.file.DirectoryScanner;
+import com.izforge.izpack.util.file.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.*;
@@ -1258,7 +1259,7 @@ public class CompilerConfig extends Thread
 
             try
             {
-                File temp = File.createTempFile("izpack", null);
+                File temp = FileUtils.createTempFile("izpack", null);
                 temp.deleteOnExit();
 
                 FileOutputStream out = new FileOutputStream(temp);
@@ -1482,7 +1483,7 @@ public class CompilerConfig extends Thread
             {
                 if (!"".equals(encoding))
                 {
-                    File recodedFile = File.createTempFile("izenc", null);
+                    File recodedFile = FileUtils.createTempFile("izenc", null);
                     recodedFile.deleteOnExit();
 
                     InputStreamReader reader = new InputStreamReader(originalUrl.openStream(), encoding);
@@ -1504,7 +1505,7 @@ public class CompilerConfig extends Thread
                 if (parsexml || (!"".equals(encoding)) || (substitute && !packager.getVariables().isEmpty()))
                 {
                     // make the substitutions into a temp file
-                    File parsedFile = File.createTempFile("izpp", null);
+                    File parsedFile = FileUtils.createTempFile("izpp", null);
                     parsedFile.deleteOnExit();
                     FileOutputStream outFile = new FileOutputStream(parsedFile);
                     os = new BufferedOutputStream(outFile);
@@ -2709,7 +2710,7 @@ public class CompilerConfig extends Thread
                     }
 
                     // writing merged strings to a new file
-                    File mergedPackLangFile = File.createTempFile("izpp", null);
+                    File mergedPackLangFile = FileUtils.createTempFile("izpp", null);
                     mergedPackLangFile.deleteOnExit();
 
                     FileOutputStream outFile = new FileOutputStream(mergedPackLangFile);

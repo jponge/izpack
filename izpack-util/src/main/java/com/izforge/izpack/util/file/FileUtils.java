@@ -19,7 +19,17 @@ package com.izforge.izpack.util.file;
 
 import com.izforge.izpack.util.OsVersion;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.CharacterIterator;
@@ -86,6 +96,30 @@ public class FileUtils
             isSpecial[ch] = true;
             escapedChar1[ch] = Character.forDigit(ch >> 4, 16);
             escapedChar2[ch] = Character.forDigit(ch & 0xf, 16);
+        }
+    }
+
+    /**
+     * Wrapper around java.io.File#createTempFile(String, String) that caters for
+     * Mac OS X issues with "+" characters ending up in paths. It delegates to
+     * java.io.File.createTempFile(String, String) on every platform but Mac OS X, where
+     * it delegates to java.io.File.createTempFile(String, String, new File("/tmp").
+     *
+     * @param prefix temporary file prefix
+     * @param suffix temporary file suffix
+     * @return a temporary file
+     * @throws java.io.IOException when a temporary file cannot be allocated
+     * @see java.io.File#createTempFile(String, String)
+     */
+    public static File createTempFile(String prefix, String suffix) throws IOException
+    {
+        if (OsVersion.IS_OSX)
+        {
+            return File.createTempFile(prefix, suffix, new File("/tmp"));
+        }
+        else
+        {
+            return File.createTempFile(prefix, suffix);
         }
     }
 
@@ -1239,26 +1273,27 @@ public class FileUtils
     {
         if (file != null)
         {
-        	file.delete();
+            file.delete();
         }
     }
 
     /**
      * Delete a directory recursively
+     *
      * @param fileToDelete
      */
     public static boolean deleteRecursively(File fileToDelete)
     {
-    	boolean retval = true;
-    	if (fileToDelete.isDirectory())
-    	{
-    		for(File fileInDir : fileToDelete.listFiles())
-    		{
-    			retval &= deleteRecursively(fileInDir);
-    		}
-    	}
-    	retval &= fileToDelete.delete();
-    	return retval;
+        boolean retval = true;
+        if (fileToDelete.isDirectory())
+        {
+            for (File fileInDir : fileToDelete.listFiles())
+            {
+                retval &= deleteRecursively(fileInDir);
+            }
+        }
+        retval &= fileToDelete.delete();
+        return retval;
     }
 
 

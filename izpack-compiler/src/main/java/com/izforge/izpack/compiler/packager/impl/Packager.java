@@ -45,9 +45,18 @@ import com.izforge.izpack.util.IoHelper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.URL;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.Pack200;
@@ -224,7 +233,7 @@ public class Packager extends PackagerBase
             lines.add(String.format("SplashScreen-Image: %s", destination));
         }
         lines.add("");
-        File tempManifest = File.createTempFile("MANIFEST", ".MF");
+        File tempManifest = com.izforge.izpack.util.file.FileUtils.createTempFile("MANIFEST", ".MF");
         FileUtils.writeLines(tempManifest, lines);
         mergeManager.addResourceToMerge(tempManifest.getAbsolutePath(), "META-INF/MANIFEST.MF");
     }
