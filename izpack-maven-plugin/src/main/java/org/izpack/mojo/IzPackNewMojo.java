@@ -1,12 +1,17 @@
 package org.izpack.mojo;
 
+import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
+import org.apache.maven.model.Developer;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
+
+import java.util.List;
 
 /**
  * Mojo for izpack
@@ -18,6 +23,14 @@ import org.apache.maven.plugin.MojoFailureException;
  */
 public class IzPackNewMojo extends AbstractMojo
 {
+    /**
+     * The Maven Project Object
+     *
+     * @parameter expression="${project}" default-value="${project}"
+     * @required
+     * @readonly
+     */
+    private MavenProject project;
 
     /**
      * Format compression. Choices are bzip2, default
@@ -84,6 +97,18 @@ public class IzPackNewMojo extends AbstractMojo
 
     private CompilerData initCompilerData()
     {
-        return new CompilerData(comprFormat, kind, installFile, null, baseDir, output, comprLevel);
+        Info info = new Info();
+        if(project != null)
+        {
+            if(project.getDevelopers() != null)
+            {
+                for(Developer dev : (List<Developer>)project.getDevelopers())
+                {
+                    info.addAuthor(new Info.Author(dev.getName(), dev.getEmail()));
+                }
+            }
+            info.setAppURL(project.getUrl());
+        }
+        return new CompilerData(comprFormat, kind, installFile, null, baseDir, output, comprLevel, info);
     }
 }

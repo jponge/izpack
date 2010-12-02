@@ -1665,7 +1665,7 @@ public class CompilerConfig extends Thread
         // Initialisation
         IXMLElement root = xmlCompilerHelper.requireChildNamed(data, "info");
 
-        Info info = new Info();
+        Info info = compilerData.getExternalInfo();
         info.setAppName(xmlCompilerHelper.requireContent(xmlCompilerHelper.requireChildNamed(root, "appname")));
         info.setAppVersion(xmlCompilerHelper.requireContent(xmlCompilerHelper.requireChildNamed(root, "appversion")));
         // We get the installation subpath
