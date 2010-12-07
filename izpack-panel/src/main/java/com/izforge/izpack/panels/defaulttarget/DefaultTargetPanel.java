@@ -51,8 +51,6 @@ public class DefaultTargetPanel extends PathInputPanel
     public DefaultTargetPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, DefaultTargetPanelAutomationHelper defaultTargetPanelAutomationHelper)
     {
         super(parent, idata, resourceManager);
-        // load the default directory info (if present)
-        loadDefaultInstallDir(parent);
         if (getDefaultInstallDir() != null)
         {
             // override the system default that uses app name (which is set in
@@ -72,15 +70,6 @@ public class DefaultTargetPanel extends PathInputPanel
         // Set the default or old value to the path selection panel.
         pathSelectionPanel.setPath(this.installData.getDefaultInstallPath());
         parent.skipPanel();
-    }
-
-    /**
-     * This method simple delegates to <code>PathInputPanel.loadDefaultInstallDir</code> with the
-     * current parent as installer frame.
-     */
-    public void loadDefaultDir()
-    {
-        super.loadDefaultInstallDir(parent);
     }
 
     /**

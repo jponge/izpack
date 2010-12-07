@@ -22,9 +22,11 @@
 package com.izforge.izpack.panels.target;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
+import com.izforge.izpack.panels.path.PathInputPanel;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -78,11 +80,12 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
     public boolean runConsole(AutomatedInstallData idata)
     {
 
+        ResourceManager resourceManager = ResourceManager.getInstance();
+        String strDefaultPath = PathInputPanel.loadDefaultInstallDir(
+                resourceManager, variableSubstitutor, idata);
+
         String strTargetPath = "";
-        String strDefaultPath = idata.getVariable("SYSTEM_user_dir"); // this is a special
-        // requirement to make the
-        // default path point to the
-        // current location
+
         System.out.println("Select target path [" + strDefaultPath + "] ");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try

@@ -25,6 +25,7 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
@@ -299,27 +300,38 @@ public class PathInputPanel extends IzPanel implements ActionListener
         existFiles = strings;
     }
 
+    public void loadDefaultInstallDir()
+    {
+        defaultInstallDir = loadDefaultInstallDir(
+                resourceManager, variableSubstitutor, installData);
+    }
+
     /**
      * Loads up the "dir" resource associated with TargetPanel. Acceptable dir resource names:
-     * <code>
+     * <pre>
      * TargetPanel.dir.macosx
      * TargetPanel.dir.mac
      * TargetPanel.dir.windows
      * TargetPanel.dir.unix
-     * TargetPanel.dir.xxx,
+     * TargetPanel.dir.xxx
+     * </pre>
      * where xxx is the lower case version of System.getProperty("os.name"),
      * with any spaces replace with underscores
      * TargetPanel.dir (generic that will be applied if none of above is found)
-     * </code>
-     * As with all IzPack resources, each the above ids should be associated with a separate
+     * As with all IzPack resources, each of the above ids should be associated with a separate
      * filename, which is set in the install.xml file at compile time.
+     * @param resourceManager
+     * @param variableSubstitutor
+     * @param installData
+     * @return the default installation directory for the current installation
      */
-    public void loadDefaultInstallDir(InstallerFrame parentFrame)
+    public static String loadDefaultInstallDir(ResourceManager resourceManager,
+            VariableSubstitutor variableSubstitutor, AutomatedInstallData installData)
     {
-        // Load only once ...
-        if (getDefaultInstallDir() != null)
+        String defaultInstallDir = getDefaultInstallDir();
+        if (defaultInstallDir != null)
         {
-            return;
+            return defaultInstallDir;
         }
         BufferedReader br = null;
         try
@@ -405,6 +417,11 @@ public class PathInputPanel extends IzPanel implements ActionListener
             } else
             {
                 defaultInstallDir = installData.getDefaultInstallPath();
+                if (defaultInstallDir == null)
+                {
+                    // Make the  default path point to the current location
+                    defaultInstallDir = System.getProperty("user.dir");
+                }
             }
         }
         catch (Exception e)
@@ -427,6 +444,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
             {
             }
         }
+        return defaultInstallDir;
     }
 
     /**
