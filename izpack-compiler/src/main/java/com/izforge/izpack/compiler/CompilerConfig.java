@@ -2918,7 +2918,9 @@ public class CompilerConfig extends Thread
         while (iter.hasNext())
         {
             IXMLElement f = iter.next();
-            fileset.createInclude().setName(xmlCompilerHelper.requireAttribute(f, "name"));
+            fileset.createInclude().setName(
+                    variableSubstitutor.substitute(
+                            xmlCompilerHelper.requireAttribute(f, "name")));
         }
     }
 
@@ -2929,7 +2931,9 @@ public class CompilerConfig extends Thread
         while (iter.hasNext())
         {
             IXMLElement f = iter.next();
-            fileset.createExclude().setName(xmlCompilerHelper.requireAttribute(f, "name"));
+            fileset.createExclude().setName(
+                    variableSubstitutor.substitute(
+                            xmlCompilerHelper.requireAttribute(f, "name")));
         }
     }
 
