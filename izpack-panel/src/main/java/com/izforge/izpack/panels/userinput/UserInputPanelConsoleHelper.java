@@ -82,6 +82,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
     private static final String CHOICE = "choice";
 
+    private static final String DIR = "dir";
+
     private static final String FILE = "file";
 
     private static final String PASSWORD = "password";
@@ -182,7 +184,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         {
             if (TEXT_FIELD.equals(input.strFieldType)
                     || FILE.equals(input.strFieldType)
-                    || RULE_FIELD.equals(input.strFieldType))
+                    || RULE_FIELD.equals(input.strFieldType)
+                    || DIR.equals(input.strFieldType))
             {
                 status = status && processTextField(input, idata);
             }
@@ -607,7 +610,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             return new Input(strVariableName, null, null, STATIC_TEXT, strText, 0);
         }
 
-        if (TEXT_FIELD.equals(strFieldType) || FILE.equals(strFieldType))
+        if (TEXT_FIELD.equals(strFieldType) || FILE.equals(strFieldType) || DIR.equals(strFieldType))
         {
             List<Choice> choicesList = new ArrayList<Choice>();
             String strFieldText = null;
