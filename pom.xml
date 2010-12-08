@@ -557,7 +557,37 @@
             </roles>
         </developer>
         <developer>
-            <name>A lot of people since 2001!</name>
+            <name>Rene Krell</name>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>David Duponchel</name>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Emmanuel Hugonnet</name>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Florian Bühlmann</name>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Dirk Raeder</name>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Lots of people since 2001!</name>
         </developer>
     </developers>
 

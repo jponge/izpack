@@ -6,10 +6,7 @@
     <info>
         <appname>IzPack</appname>
         <appversion>@izpack.version</appversion>
-        <authors>
-            <author email="" name="Julien Ponge (project founder)"/>
-            <author email="" name="The fantastic IzPack developers and contributors"/>
-        </authors>
+        <authors><!-- We now get them from the POM :-) --></authors>
         <url>http://izpack.org/</url>
         <javaversion>1.6</javaversion>
         <requiresjdk>no</requiresjdk>
