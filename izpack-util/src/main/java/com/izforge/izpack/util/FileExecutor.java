@@ -457,8 +457,13 @@ public class FileExecutor
     {
         StringBuffer classPath = new StringBuffer();
         List<String> jars = new ArrayList<String>();
-        String rawClassPath = targetFile.replace(':', File.pathSeparatorChar).replace(';', File.pathSeparatorChar);
-        String[] rawJars = rawClassPath.split("" + File.pathSeparatorChar);
+        String rawClassPath =
+            targetFile
+                .replaceAll(":\\\\", "#DRIVE#")
+                .replaceAll(";", "#")
+                .replaceAll(":", "#")
+                .replace("#DRIVE#", ":\\");
+        String[] rawJars = rawClassPath.split("#");
         for (String rawJar : rawJars)
         {
             File file = new File(rawJar);
