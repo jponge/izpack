@@ -108,11 +108,15 @@
 
                 </executions>
             </plugin>
+            
             <!-- Launch izpack compilation -->
             <plugin>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>izpack-maven-plugin</artifactId>
                 <version>${project.version}</version>
+                <configuration>
+                    <comprLevel>9</comprLevel>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>

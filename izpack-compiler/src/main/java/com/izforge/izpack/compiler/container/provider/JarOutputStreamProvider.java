@@ -26,10 +26,13 @@ public class JarOutputStreamProvider implements Provider
         }
         jarOutputStream = new JarOutputStream(file);
         int level = compilerData.getComprLevel();
-        jarOutputStream.setLevel(Deflater.BEST_COMPRESSION);
         if (level >= 0 && level < 10)
         {
             jarOutputStream.setLevel(level);
+        }
+        else
+        {
+            jarOutputStream.setLevel(Deflater.BEST_COMPRESSION);
         }
         jarOutputStream.setPreventClose(true); // Needed at using FilterOutputStreams which calls close
         return jarOutputStream;
