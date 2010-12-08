@@ -7,37 +7,27 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.codehaus.izpack</groupId>
     <artifactId>izpack-maven-plugin</artifactId>
+    
     <packaging>maven-plugin</packaging>
     <name>IzPack Maven Plugin</name>
 
-    <description>Maven plugin for IZPack</description>
-
+    <description>Maven plugin for IzPack</description>
     <inceptionYear>2008</inceptionYear>
-    <url>http://izpack.codehaus.org/izpack-maven-plugin/</url>
-
 
     <prerequisites>
         <maven>2.0.6</maven>
     </prerequisites>
 
-    <scm>
-        <connection>scm:svn:http://svn.codehaus.org/izpack/izpack-maven/trunk/izpack-maven-plugin</connection>
-        <developerConnection>scm:svn:https://svn.codehaus.org/izpack/izpack-maven/trunk/izpack-maven-plugin
-        </developerConnection>
-        <url>http://svn.codehaus.org/izpack/izpack-maven/trunk/izpack-maven-plugin</url>
-    </scm>
-
-    <distributionManagement>
-        <site>
-            <id>codehaus.org</id>
-            <name>IzPack Website</name>
-            <url>dav:https://dav.codehaus.org/izpack/izpack-maven-plugin</url>
-        </site>
-    </distributionManagement>
-
-
     <developers>
+        <developer>
+            <name>Anthonin Bonnefoy</name>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
         <developer>
             <name>Dan Tran</name>
             <email>Dan T. Tran@gmail.com</email>
@@ -59,7 +49,6 @@
             </roles>
         </developer>
     </developers>
-
 
     <dependencies>
 
@@ -100,32 +89,14 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>izpack-test-common</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.plugin-testing</groupId>
             <artifactId>maven-plugin-testing-harness</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-changes-plugin</artifactId>
-                <version>2.0</version>
-                <configuration>
-                    <issueLinkTemplate>%URL%/%ISSUE%</issueLinkTemplate>
-                </configuration>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>changes-report</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-        </plugins>
-    </reporting>
 
     <profiles>
         <profile>
