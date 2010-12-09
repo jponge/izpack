@@ -36,6 +36,15 @@
             </roles>
             <timezone>-1</timezone>
         </developer>
+        <developer>
+            <id>rkrell</id>
+            <name>René Krell</name>
+            <email>renda dot krell at GoogleMail</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-1</timezone>
+        </developer>
     </developers>
     <dependencies>
         <dependency>

@@ -34,6 +34,7 @@ import java.net.URI;
 
 public class BasicOptionMapTest extends Ini4jCase
 {
+    private static final String FOO = "foo";
     private static BasicOptionMap _map;
 
     static
@@ -175,6 +176,34 @@ public class BasicOptionMapTest extends Ini4jCase
         {
             //
         }
+    }
+
+    @Test public void testGetAndFetchDefaultValue()
+    {
+        OptionMap map = new BasicOptionMap();
+
+        Helper.addDwarf(map, DwarfsData.dopey, false);
+        Helper.addDwarf(map, DwarfsData.bashful);
+        Helper.addDwarf(map, DwarfsData.doc);
+
+        // fetch with type
+        assertEquals(DwarfsData.dopey.weight, map.fetch(Dwarf.PROP_WEIGHT, double.class), Helper.DELTA);
+        assertEquals(DwarfsData.dopey.weight, map.fetch(Dwarf.PROP_WEIGHT, double.class, 1.2), Helper.DELTA);
+        map.remove(Dwarf.PROP_WEIGHT);
+        assertEquals(1.2, map.fetch(Dwarf.PROP_WEIGHT, double.class, 1.2), Helper.DELTA);
+
+        // get with type
+        assertEquals(DwarfsData.dopey.age, (int) map.get(Dwarf.PROP_AGE, int.class));
+        assertEquals(DwarfsData.dopey.age, (int) map.get(Dwarf.PROP_AGE, int.class, 11));
+        map.remove(Dwarf.PROP_AGE);
+        assertEquals(11, (int) map.get(Dwarf.PROP_AGE, int.class, 11));
+
+        // get and fetch with strings
+        assertEquals(DwarfsData.dopey.homePage.toString(), map.fetch(Dwarf.PROP_HOME_PAGE, FOO));
+        assertEquals(DwarfsData.dopey.homePage.toString(), map.get(Dwarf.PROP_HOME_PAGE, FOO));
+        map.remove(Dwarf.PROP_HOME_PAGE);
+        assertEquals(FOO, map.fetch(Dwarf.PROP_HOME_PAGE, FOO));
+        assertEquals(FOO, map.get(Dwarf.PROP_HOME_PAGE, FOO));
     }
 
     @Test public void testPropertyFirstUpper()

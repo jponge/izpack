@@ -29,9 +29,13 @@ public interface OptionMap extends MultiMap<String, String>, CommentedMap<String
 
     String fetch(Object key);
 
+    String fetch(Object key, String defaultValue);
+
     String fetch(Object key, int index);
 
     <T> T fetch(Object key, Class<T> clazz);
+
+    <T> T fetch(Object key, Class<T> clazz, T defaultValue);
 
     <T> T fetch(Object key, int index, Class<T> clazz);
 
@@ -41,7 +45,11 @@ public interface OptionMap extends MultiMap<String, String>, CommentedMap<String
 
     void from(Object bean, String keyPrefix);
 
+    String get(Object key, String defaultValue);
+
     <T> T get(Object key, Class<T> clazz);
+
+    <T> T get(Object key, Class<T> clazz, T defaultValue);
 
     <T> T get(Object key, int index, Class<T> clazz);
 

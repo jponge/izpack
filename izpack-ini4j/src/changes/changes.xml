@@ -2,6 +2,7 @@
 <!--
 
     Copyright 2005,2009 Ivan SZKIBA
+    Copyright 2010 René Krell
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -21,12 +22,18 @@
     <title>[ini4j] Changes</title>
   </properties>
   <body>
-    <release version="0.5.2.2" date="2010-11-03" description="IzPack-specific release">
-      <action type="add" dev="szkiba" >
-      Backport of r176 from original trunk:
-			"New Config option: escapeNewline , when true (by default) the line ending \
-			mean: continue in next line unfortunetly escape=false doesn't disable this
-			so this is why this new config options created"
+    <release version="0.5.3.1" date="2010-12-13" description="IzPack-specific release">
+    </release>
+    <release version="0.5.3" date="2010-12-13" description="Bugfix release">
+      <action type="fix" dev="szkiba" issue="3038645" >
+      Fix backslash at end of line problem. Normaly backslash at end of line mean
+      line concatenation. Unfortunetly when escaping disabled, this feature stil remain active.
+      Now there is a new config option: escapeNewline. When this option true, it disables
+      line concatenation. For Wini this otions set true by default.
+      </action>
+      <action type="add" dev="szkiba" issue="3047041">
+      Added support for default value in get and fetch methods. As last parameter, caller
+      may provide default value for missing options.
       </action>
     </release>
     <release version="0.5.2.1" date="2010-11-03" description="IzPack-specific release">

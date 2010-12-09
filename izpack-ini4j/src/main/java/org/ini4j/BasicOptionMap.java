@@ -48,7 +48,8 @@ public class BasicOptionMap extends CommonMultiMap<String, String> implements Op
         _propertyFirstUpper = propertyFirstUpper;
     }
 
-    @Override @SuppressWarnings(Warnings.UNCHECKED)
+    @Override
+    @SuppressWarnings(Warnings.UNCHECKED)
     public <T> T getAll(Object key, Class<T> clazz)
     {
         requireArray(clazz);
@@ -90,6 +91,13 @@ public class BasicOptionMap extends CommonMultiMap<String, String> implements Op
         return (len == 0) ? null : fetch(key, len - 1);
     }
 
+    @Override public String fetch(Object key, String defaultValue)
+    {
+        String str = get(key);
+
+        return (str == null) ? defaultValue : str;
+    }
+
     @Override public String fetch(Object key, int index)
     {
         String value = get(key, index);
@@ -110,12 +118,20 @@ public class BasicOptionMap extends CommonMultiMap<String, String> implements Op
         return BeanTool.getInstance().parse(fetch(key), clazz);
     }
 
+    @Override public <T> T fetch(Object key, Class<T> clazz, T defaultValue)
+    {
+        String str = fetch(key);
+
+        return (str == null) ? defaultValue : BeanTool.getInstance().parse(str, clazz);
+    }
+
     @Override public <T> T fetch(Object key, int index, Class<T> clazz)
     {
         return BeanTool.getInstance().parse(fetch(key, index), clazz);
     }
 
-    @Override @SuppressWarnings(Warnings.UNCHECKED)
+    @Override
+    @SuppressWarnings(Warnings.UNCHECKED)
     public <T> T fetchAll(Object key, Class<T> clazz)
     {
         requireArray(clazz);
@@ -143,6 +159,20 @@ public class BasicOptionMap extends CommonMultiMap<String, String> implements Op
     @Override public <T> T get(Object key, Class<T> clazz)
     {
         return BeanTool.getInstance().parse(get(key), clazz);
+    }
+
+    @Override public String get(Object key, String defaultValue)
+    {
+        String str = get(key);
+
+        return (str == null) ? defaultValue : str;
+    }
+
+    @Override public <T> T get(Object key, Class<T> clazz, T defaultValue)
+    {
+        String str = get(key);
+
+        return (str == null) ? defaultValue : BeanTool.getInstance().parse(str, clazz);
     }
 
     @Override public <T> T get(Object key, int index, Class<T> clazz)
