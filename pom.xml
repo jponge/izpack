@@ -413,6 +413,7 @@
                 <configuration>
                     <localCheckout>true</localCheckout>
                     <pushChanges>false</pushChanges>
+                    <goals>deploy</goals>
                 </configuration>
             </plugin>
         </plugins>
