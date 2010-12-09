@@ -77,6 +77,7 @@ public class IniSourceTest extends Ini4jCase
         Config cfg = new Config();
 
         cfg.setInclude(true);
+        System.err.println("*********************** " + cfg.isEscapeNewline());
         IniSource src = new IniSource(in, handler, COMMENTS, cfg);
 
         assertEquals("1" + OUTER, src.readLine());

@@ -56,16 +56,15 @@ public class Helper
     public static final float DELTA = 0.00000001f;
     private static final String[] CONFIG_PROPERTIES =
         {
-            Config.PROP_EMPTY_OPTION, Config.PROP_GLOBAL_SECTION, Config.PROP_GLOBAL_SECTION_NAME, Config.PROP_INCLUDE,
-            Config.PROP_LOWER_CASE_OPTION, Config.PROP_LOWER_CASE_SECTION, Config.PROP_MULTI_OPTION, Config.PROP_MULTI_SECTION,
-            Config.PROP_STRICT_OPERATOR, Config.PROP_UNNAMED_SECTION, Config.PROP_ESCAPE
+            Config.PROP_EMPTY_OPTION, Config.PROP_GLOBAL_SECTION, Config.PROP_GLOBAL_SECTION_NAME, Config.PROP_INCLUDE, Config.PROP_LOWER_CASE_OPTION,
+            Config.PROP_LOWER_CASE_SECTION, Config.PROP_MULTI_OPTION, Config.PROP_MULTI_SECTION, Config.PROP_STRICT_OPERATOR,
+            Config.PROP_UNNAMED_SECTION, Config.PROP_ESCAPE, Config.PROP_ESCAPE_NEWLINE
         };
     private static final String[] FACTORY_PROPERTIES = { IniFormatter.class.getName(), IniParser.class.getName() };
     public static final String HEADER_COMMENT = " Copyright 2005,2009 Ivan SZKIBA\n" + "\n"
         + " Licensed under the Apache License, Version 2.0 (the \"License\");\n"
         + " you may not use this file except in compliance with the License.\n" + " You may obtain a copy of the License at\n" + "\n"
-        + "      http://www.apache.org/licenses/LICENSE-2.0\n" + "\n"
-        + " Unless required by applicable law or agreed to in writing, software\n"
+        + "      http://www.apache.org/licenses/LICENSE-2.0\n" + "\n" + " Unless required by applicable law or agreed to in writing, software\n"
         + " distributed under the License is distributed on an \"AS IS\" BASIS,\n"
         + " WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n"
         + " See the License for the specific language governing permissions and\n" + " limitations under the License.";

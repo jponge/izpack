@@ -47,6 +47,7 @@ public class ConfigTest extends Ini4jCase
         setBoolean(Config.PROP_STRICT_OPERATOR, exp.isStrictOperator());
         setBoolean(Config.PROP_UNNAMED_SECTION, exp.isUnnamedSection());
         setBoolean(Config.PROP_ESCAPE, exp.isEscape());
+        setBoolean(Config.PROP_ESCAPE_NEWLINE, exp.isEscapeNewline());
         setChar(Config.PROP_PATH_SEPARATOR, exp.getPathSeparator());
         setBoolean(Config.PROP_TREE, exp.isTree());
         setBoolean(Config.PROP_PROPERTY_FIRST_UPPER, exp.isPropertyFirstUpper());
@@ -84,6 +85,7 @@ public class ConfigTest extends Ini4jCase
         Assert.assertEquals(exp.isEmptyOption(), act.isEmptyOption());
         Assert.assertEquals(exp.isEmptySection(), act.isEmptySection());
         Assert.assertEquals(exp.isEscape(), act.isEscape());
+        Assert.assertEquals(exp.isEscapeNewline(), act.isEscapeNewline());
         Assert.assertEquals(exp.isGlobalSection(), act.isGlobalSection());
         Assert.assertEquals(exp.isInclude(), act.isInclude());
         Assert.assertEquals(exp.isLowerCaseOption(), act.isLowerCaseOption());
@@ -109,6 +111,7 @@ public class ConfigTest extends Ini4jCase
         cfg.setEmptyOption(false);
         cfg.setEmptySection(false);
         cfg.setEscape(true);
+        cfg.setEscapeNewline(true);
         cfg.setGlobalSection(false);
         cfg.setGlobalSectionName("?");
         cfg.setInclude(false);
@@ -136,6 +139,7 @@ public class ConfigTest extends Ini4jCase
         cfg.setEmptyOption(!cfg.isEmptyOption());
         cfg.setEmptySection(!cfg.isEmptySection());
         cfg.setEscape(!cfg.isEscape());
+        cfg.setEscapeNewline(!cfg.isEscapeNewline());
         cfg.setGlobalSection(!cfg.isGlobalSection());
         cfg.setGlobalSectionName("+");
         cfg.setInclude(!cfg.isInclude());

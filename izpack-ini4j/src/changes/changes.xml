@@ -21,6 +21,22 @@
     <title>[ini4j] Changes</title>
   </properties>
   <body>
+    <release version="0.5.2.2" date="2010-11-03" description="IzPack-specific release">
+      <action type="add" dev="szkiba" >
+      Backport of r176 from original trunk:
+			"New Config option: escapeNewline , when true (by default) the line ending \
+			mean: continue in next line unfortunetly escape=false doesn't disable this
+			so this is why this new config options created"
+      </action>
+    </release>
+    <release version="0.5.2.1" date="2010-11-03" description="IzPack-specific release">
+      <action type="add" dev="rkrell" >
+      Preserving of empty lines in property and INI files
+      </action>
+      <action type="add" dev="rkrell" >
+      Multi-option and autonumbered options
+      </action>
+    </release>
     <release version="0.5.2" date="2010-04-01" description="Bugfix release">
       <action type="fix" dev="szkiba" issue="2908623" due-to="Markus">
       Backport to java 1.4 fixed. There were a lot of problem. Now all junit tests
@@ -153,7 +169,7 @@
 
       <action type="update" dev="szkiba">
       Added MuliMap datatype: multiple value for same key. It used by Ini and
-      Ini.Section classes. 
+      Ini.Section classes.
       </action>
 
       <action type="update" dev="szkiba">

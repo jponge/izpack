@@ -98,6 +98,18 @@ class IniSource
         _reader.close();
     }
 
+    private int countEndingEscapes(String line)
+    {
+        int escapeCount = 0;
+
+        for (int i = line.length() - 1; (i >= 0) && (line.charAt(i) == ESCAPE_CHAR); i--)
+        {
+            escapeCount++;
+        }
+
+        return escapeCount;
+    }
+
     private void handleComment(StringBuilder buff)
     {
         if (buff.length() != 0)
@@ -112,8 +124,7 @@ class IniSource
     {
         String line = input;
 
-        if (_config.isInclude() && (line.length() > 2) && (line.charAt(0) == INCLUDE_BEGIN)
-              && (line.charAt(line.length() - 1) == INCLUDE_END))
+        if (_config.isInclude() && (line.length() > 2) && (line.charAt(0) == INCLUDE_BEGIN) && (line.charAt(line.length() - 1) == INCLUDE_END))
         {
             line = line.substring(1, line.length() - 1).trim();
             boolean optional = line.charAt(0) == INCLUDE_OPTIONAL;
@@ -183,8 +194,8 @@ class IniSource
                 }
                 else
                 {
-                    handleComment(comment);
-                }
+                handleComment(comment);
+            }
             }
             else if ((_commentChars.indexOf(line.charAt(0)) >= 0) && (buff.length() == 0))
             {
@@ -194,14 +205,7 @@ class IniSource
             else
             {
                 handleComment(comment);
-                int escapeCount = 0;
-
-                for (int i = line.length() - 1; (i >= 0) && (line.charAt(i) == ESCAPE_CHAR); i--)
-                {
-                    escapeCount++;
-                }
-
-                if ((escapeCount & 1) == 0)
+                if (!_config.isEscapeNewline() || ((countEndingEscapes(line) & 1) == 0))
                 {
                     buff.append(line);
                     line = buff.toString();

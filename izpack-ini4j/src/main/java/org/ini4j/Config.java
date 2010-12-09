@@ -35,6 +35,7 @@ public class Config implements Cloneable, Serializable
     public static final String PROP_STRICT_OPERATOR = "strictOperator";
     public static final String PROP_UNNAMED_SECTION = "unnamedSection";
     public static final String PROP_ESCAPE = "escape";
+    public static final String PROP_ESCAPE_NEWLINE = "escapeNewline";
     public static final String PROP_PATH_SEPARATOR = "pathSeparator";
     public static final String PROP_TREE = "tree";
     public static final String PROP_PROPERTY_FIRST_UPPER = "propertyFirstUpper";
@@ -56,6 +57,7 @@ public class Config implements Cloneable, Serializable
     public static final boolean DEFAULT_STRICT_OPERATOR = false;
     public static final boolean DEFAULT_UNNAMED_SECTION = false;
     public static final boolean DEFAULT_ESCAPE = true;
+    public static final boolean DEFAULT_ESCAPE_NEWLINE = true;
     public static final boolean DEFAULT_TREE = true;
     public static final boolean DEFAULT_PROPERTY_FIRST_UPPER = false;
     public static final boolean DEFAULT_COMMENT = true;
@@ -71,6 +73,7 @@ public class Config implements Cloneable, Serializable
     private boolean _emptyOption;
     private boolean _emptySection;
     private boolean _escape;
+    private boolean _escapeNewline;
     private Charset _fileEncoding;
     private boolean _globalSection;
     private String _globalSectionName;
@@ -151,6 +154,11 @@ public class Config implements Cloneable, Serializable
         return _escape;
     }
 
+    public boolean isEscapeNewline()
+    {
+        return _escapeNewline;
+    }
+
     public boolean isInclude()
     {
         return _include;
@@ -174,6 +182,11 @@ public class Config implements Cloneable, Serializable
     public void setEscape(boolean value)
     {
         _escape = value;
+    }
+
+    public void setEscapeNewline(boolean value)
+    {
+        _escapeNewline = value;
     }
 
     public Charset getFileEncoding()
@@ -377,6 +390,7 @@ public class Config implements Cloneable, Serializable
         _strictOperator = getBoolean(PROP_STRICT_OPERATOR, DEFAULT_STRICT_OPERATOR);
         _unnamedSection = getBoolean(PROP_UNNAMED_SECTION, DEFAULT_UNNAMED_SECTION);
         _escape = getBoolean(PROP_ESCAPE, DEFAULT_ESCAPE);
+        _escapeNewline = getBoolean(PROP_ESCAPE_NEWLINE, DEFAULT_ESCAPE_NEWLINE);
         _pathSeparator = getChar(PROP_PATH_SEPARATOR, DEFAULT_PATH_SEPARATOR);
         _tree = getBoolean(PROP_TREE, DEFAULT_TREE);
         _propertyFirstUpper = getBoolean(PROP_PROPERTY_FIRST_UPPER, DEFAULT_PROPERTY_FIRST_UPPER);
