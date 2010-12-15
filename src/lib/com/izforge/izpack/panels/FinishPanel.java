@@ -21,7 +21,6 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.gui.AutomatedInstallScriptFilter;
 import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
@@ -30,6 +29,10 @@ import com.izforge.izpack.util.Log;
 import com.izforge.izpack.util.VariableSubstitutor;
 
 import javax.swing.*;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedOutputStream;
@@ -64,7 +67,7 @@ public class FinishPanel extends IzPanel implements ActionListener
      */
     public FinishPanel(InstallerFrame parent, InstallData idata)
     {
-        super(parent, idata, new IzPanelLayout());
+        super(parent, idata, new GridBagLayout());
 
         vs = new VariableSubstitutor(idata.getVariables());
     }
@@ -88,31 +91,54 @@ public class FinishPanel extends IzPanel implements ActionListener
         parent.lockPrevButton();
         parent.setQuitButtonText(parent.langpack.getString("FinishPanel.done"));
         parent.setQuitButtonIcon("done");
+        
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        
         if (idata.installSuccess)
         {
             // We set the information
-            add(LabelFactory.create(parent.langpack.getString("FinishPanel.success"),
-                    parent.icons.getImageIcon("preferences"), LEADING), NEXT_LINE);
-            add(IzPanelLayout.createVerticalStrut(5));
+            JLabel jLabel = LabelFactory.create(idata.langpack.getString("FinishPanel.success"),
+                    parent.icons.getImageIcon("preferences"), LEADING);
+            
+            constraints.gridx = 0;
+            constraints.gridy = 0;
+            
+            add(jLabel, constraints);
+            
+            
             if (idata.uninstallOutJar != null)
             {
                 // We prepare a message for the uninstaller feature
-                String path = translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
-
+                String path = translatePath(idata.info.getUninstallerPath());
+                
+                constraints.gridx = 0;
+                constraints.gridy = 1;
+                
                 add(LabelFactory.create(parent.langpack
                         .getString("FinishPanel.uninst.info"), parent.icons
-                        .getImageIcon("preferences"), LEADING), NEXT_LINE);
+                        .getImageIcon("preferences"), LEADING), constraints);
+               
+                constraints.gridx = 0;
+                constraints.gridy = 2;
+                
                 add(LabelFactory.create(path, parent.icons.getImageIcon("empty"),
-                        LEADING), NEXT_LINE);
+                        LEADING), constraints);
             }
 
             // We add the autoButton
-            add(IzPanelLayout.createVerticalStrut(5));
             autoButton = ButtonFactory.createButton(parent.langpack.getString("FinishPanel.auto"),
                     parent.icons.getImageIcon("edit"), idata.buttonsHColor);
             autoButton.setToolTipText(parent.langpack.getString("FinishPanel.auto.tip"));
             autoButton.addActionListener(this);
-            add(autoButton, NEXT_LINE);
+            
+            constraints.gridx = 0;
+            constraints.gridy = 3;
+            constraints.weighty = 1.0;   //request any extra vertical space
+            
+            add(autoButton, constraints);
+ 
         }
         else
         {
