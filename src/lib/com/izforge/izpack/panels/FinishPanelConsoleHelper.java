@@ -42,7 +42,7 @@ public class FinishPanelConsoleHelper extends PanelConsoleHelper implements Pane
 
 	public boolean runConsole(AutomatedInstallData idata) {
 		if (idata.installSuccess) {
-			System.out.println("Install was successeful");
+			System.out.println("Install was successful");
 			System.out.println("application installed on " + idata.getInstallPath());
 
 		} else {
