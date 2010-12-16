@@ -663,6 +663,7 @@
         <build-panel name="JDKPathPanel">
             <include name="com/izforge/izpack/panels/JDKPathPanel.java"/>
             <include name="com/izforge/izpack/panels/JDKPathPanelConsoleHelper.java"/>
+            <include name="com/izforge/izpack/panels/JDKPathPanelAutomationHelper.java"/>
             <include name="com/izforge/izpack/panels/PathInputPanel.java"/>
             <include name="com/izforge/izpack/panels/PathSelectionPanel.java"/>
             <include name="com/izforge/izpack/util/os/*RegistryHandler.java"/>
