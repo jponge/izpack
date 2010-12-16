@@ -527,7 +527,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
             while (bKeepAsking)
             {
-                System.out.println("input 1 to select, 0 to deseclect:");
+                System.out.println("input 1 to select, 0 to deselect:");
                 String strIn = br.readLine();
                 // take default value if default value exists and no user input
                 if (strIn.trim().equals(""))
