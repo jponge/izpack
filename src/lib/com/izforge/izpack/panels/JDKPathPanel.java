@@ -24,6 +24,7 @@ package com.izforge.izpack.panels;
 
 import com.coi.tools.os.win.MSWinConstants;
 import com.coi.tools.os.win.NativeLibException;
+import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.util.AbstractUIHandler;
@@ -554,5 +555,15 @@ public class JDKPathPanel extends PathInputPanel
     public String getSummaryBody()
     {
         return (idata.getVariable(getVariableName()));
+    }
+    
+    /**
+     * Asks to make the XML panel data.
+     *
+     * @param panelRoot The tree to put the data in.
+     */
+    public void makeXMLData(IXMLElement panelRoot)
+    {
+        new JDKPathPanelAutomationHelper().makeXMLData(idata, panelRoot);
     }
 }
