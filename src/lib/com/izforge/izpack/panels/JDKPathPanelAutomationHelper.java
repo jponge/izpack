@@ -74,6 +74,6 @@ public class JDKPathPanelAutomationHelper implements PanelAutomation
         String jdkPath = ipath.getContent();
         jdkPath = vs.substitute(jdkPath, null);
 
-        idata.setInstallPath(jdkPath);
+        idata.setVariable(JDK_PATH, jdkPath);
     }
 }
