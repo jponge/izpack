@@ -33,6 +33,14 @@ public class IzpackProjectProviderTest
     }
 
     @Test
+    public void bindingWithXInclude() throws Exception
+    {
+        // TODO : find why this test fails
+        izpackProjectInstaller = izpackProjectProvider.provide(
+                "bindingXInclude/main.xml");
+    }
+
+    @Test
     public void bindingListener() throws Exception
     {
         List<Listener> listenerList = izpackProjectInstaller.getListeners();
