@@ -155,6 +155,9 @@
                             <value>org/ini4j/sample/dwarfs.ini</value>
                         </property>
                     </systemProperties>
+                    <excludes>
+                        <exclude>**/SampleRunnerTest.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
