@@ -385,6 +385,9 @@
                         <exclude>**/EventTest.java</exclude>
                         <exclude>**/IzpackInstallationTest.java</exclude>
                     </excludes>
+                    <parallel>both</parallel>
+                    <perCoreThreadCount>true</perCoreThreadCount>
+                    <threadCount>4</threadCount>
                 </configuration>
             </plugin>
             <plugin>
@@ -416,6 +419,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        
         <pluginManagement>
             <plugins>
                 <plugin>
