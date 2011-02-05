@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
@@ -35,9 +36,10 @@ public class IzpackProjectProviderTest
     @Test
     public void bindingWithXInclude() throws Exception
     {
-        // TODO : find why this test fails
         izpackProjectInstaller = izpackProjectProvider.provide(
                 "bindingXInclude/main.xml");
+        // xincluded 4 panels
+        assertThat(izpackProjectInstaller.getPanels().size(), is(4));
     }
 
     @Test

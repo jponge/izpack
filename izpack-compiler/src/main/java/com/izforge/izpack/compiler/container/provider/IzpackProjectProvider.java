@@ -1,14 +1,23 @@
 package com.izforge.izpack.compiler.container.provider;
 
+import com.izforge.izpack.api.adaptator.IXMLParser;
+import com.izforge.izpack.api.adaptator.XMLException;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.binding.*;
 import com.thoughtworks.xstream.XStream;
 import org.picocontainer.injectors.Provider;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLFilterImpl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.*;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -64,7 +73,53 @@ public class IzpackProjectProvider implements Provider
         {
             inputStream = new FileInputStream(new File(installFile));
         }
-        izpackProjectInstaller = (IzpackProjectInstaller) xStream.fromXML(inputStream);
+
+        StringWriter writer = new StringWriter();
+        StreamResult result = new StreamResult(writer);
+
+        try
+        {
+            InputSource inputSource = new InputSource(inputStream);
+
+            SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+            saxParserFactory.setNamespaceAware(true);
+            saxParserFactory.setXIncludeAware(true);
+            XMLReader xmlReader = saxParserFactory.newSAXParser().getXMLReader();
+            XMLFilterImpl filter = new XMLFilterImpl(xmlReader);
+
+            SAXSource source = new SAXSource(inputSource);
+            source.setXMLReader(filter);
+            URL xslResourceUrl = IXMLParser.class.getResource(IXMLParser.XSL_FILE_NAME);
+            if (xslResourceUrl == null)
+            {
+                throw new XMLException("Can't find IzPack internal file \"" + IXMLParser.XSL_FILE_NAME + "\"");
+            }
+            Source xsltSource = new StreamSource(xslResourceUrl.openStream());
+            Transformer xformer;
+            xformer = TransformerFactory.newInstance().newTransformer(xsltSource);
+            xformer.transform(source, result);
+
+            System.out.println(result.getWriter());
+
+        }
+        catch (TransformerConfigurationException e)
+        {
+            throw new IOException(e);
+        }
+        catch (SAXException e)
+        {
+            throw new IOException(e);
+        }
+        catch (ParserConfigurationException e)
+        {
+            throw new IOException(e);
+        }
+        catch (TransformerException e)
+        {
+            throw new IOException(e);
+        }
+
+        izpackProjectInstaller = (IzpackProjectInstaller) xStream.fromXML(writer.toString());
         izpackProjectInstaller.fillWithDefault();
         return izpackProjectInstaller;
     }

@@ -33,6 +33,13 @@ import java.net.URL;
  */
 public interface IXMLParser
 {
+
+    /**
+     * Path to the xsl style sheet, used to handle xinclude leftovers.
+     * The path is relative to the IXMLParser class
+     */
+    public static final String XSL_FILE_NAME = "styleSheet.xsl";
+    
     /**
      * Parse the given stream to a XML
      *

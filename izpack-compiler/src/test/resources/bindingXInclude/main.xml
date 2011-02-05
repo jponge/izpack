@@ -16,11 +16,7 @@
     </locale>
 
     <panels>
-        <xi:include href="panels.xml"/>
-        <!-- <panel classname="HelloPanel" /> -->
-        <!-- <panel classname="TargetPanel" /> -->
-        <!-- <panel classname="InstallPanel" /> -->
-        <!-- <panel classname="FinishPanel" /> -->
+        <xi:include href="src/test/resources/bindingXInclude/panels.xml"/>
     </panels>
 
     <packs>
