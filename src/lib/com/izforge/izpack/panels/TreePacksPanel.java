@@ -123,7 +123,8 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     //private boolean created = false;   // UNUSED
 
     private CheckTreeController checkTreeController;
-
+    
+    boolean doNotShowPackSize;
     /**
      * The constructor.
      *
@@ -165,6 +166,8 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             Debug.trace(exception);
         }
 
+        doNotShowPackSize = Boolean.parseBoolean(idata.guiPrefs.modifier.get("doNotShowPackSizeColumn"));
+        
         // init the map
         computePacks(idata.availablePacks);
 
@@ -276,7 +279,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
      */
     public boolean isValidated()
     {
-        refreshPacksToInstall();
+  //      refreshPacksToInstall();
         if (IoHelper.supported("getFreeSpace") && freeBytes >= 0 && freeBytes <= bytes)
         {
             JOptionPane.showMessageDialog(this, parent.langpack
@@ -470,7 +473,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     {
         JTree tree = new JTree((CheckBoxNode) populateTreePacks(null));
         packsTree = tree;
-        tree.setCellRenderer(new CheckBoxNodeRenderer(this));
+        tree.setCellRenderer(new CheckBoxNodeRenderer(this, !doNotShowPackSize));
         tree.setEditable(false);
         tree.setShowsRootHandles(true);
         tree.setRootVisible(false);
@@ -545,7 +548,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     private void updateModel(CheckBoxNode rnode)
     {
         int rowIndex = getRowIndex(rnode.getPack());
-        if (rowIndex > 0)
+        if (rowIndex >= 0)
         {
             Integer state = (Integer) packsModel.getValueAt(rowIndex, 0);
             if ((state == -2) && rnode.getChildCount() > 0)
@@ -583,7 +586,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             if (!cbnode.isPartial())
             {
                 int childRowIndex = getRowIndex((Pack) nodePack);
-                if (childRowIndex > 0)
+                if (childRowIndex >= 0)
                 {
                     Integer state = (Integer) packsModel.getValueAt(childRowIndex, 0);
                     cbnode.setEnabled(state >= 0);
@@ -617,7 +620,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             value = -2;
         }
         int rowIndex = getRowIndex((Pack) nodePack);
-        if (rowIndex > 0)
+        if (rowIndex >= 0)
         {
             Integer newValue = value;
             Integer modelValue = (Integer) packsModel.getValueAt(rowIndex, 0);
@@ -779,7 +782,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             while (iter.hasNext())
             {
                 Pack p = (Pack) iter.next();
-                if (p.parent == null)
+                if (p.parent == null && !p.isHidden())
                 {
                     rootNodes.add(populateTreePacks(p.id));
                 }
@@ -848,10 +851,12 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             //initialize helper map to increa performance
             packToRowNumber = new HashMap<Pack, Integer>();
             java.util.Iterator rowpack = idata.availablePacks.iterator();
+            int index = 0;
             while (rowpack.hasNext())
             {
                 Pack p = (Pack) rowpack.next();
-                packToRowNumber.put(p, idata.availablePacks.indexOf(p));
+                if (!p.isHidden())
+                    packToRowNumber.put(p, index++);
             }
 
             // Init tree structures
@@ -961,8 +966,12 @@ class CheckBoxNodeRenderer implements TreeCellRenderer
 
     TreePacksPanel treePacksPanel;
 
-    public CheckBoxNodeRenderer(TreePacksPanel t)
+    private boolean showPackSize;
+    
+    public CheckBoxNodeRenderer(TreePacksPanel t, boolean showPackSize)
     {
+        this.showPackSize = showPackSize;
+        
         selectionForeground = UIManager.getColor("Tree.selectionForeground");
         selectionBackground = UIManager.getColor("Tree.selectionBackground");
         textForeground = UIManager.getColor("Tree.textForeground");
@@ -978,10 +987,11 @@ class CheckBoxNodeRenderer implements TreeCellRenderer
         rendererPanel.setBackground(textBackground);
         rendererPanel.add(java.awt.BorderLayout.WEST, checkbox);
 
-        rendererPanel.setAlignmentX((float) 0);
-        rendererPanel.setAlignmentY((float) 0);
-        rendererPanel.add(java.awt.BorderLayout.EAST, packSizeLabel);
-
+        if (showPackSize) {
+            rendererPanel.setAlignmentX((float) 0);
+            rendererPanel.setAlignmentY((float) 0);
+            rendererPanel.add(java.awt.BorderLayout.EAST, packSizeLabel);
+        }
         rendererPanel.setMinimumSize(new Dimension(cellWidth, height));
         rendererPanel.setPreferredSize(new Dimension(cellWidth, height));
         rendererPanel.setSize(new Dimension(cellWidth, height));
@@ -1034,7 +1044,10 @@ class CheckBoxNodeRenderer implements TreeCellRenderer
 
             checkbox.setText(node.getTranslatedText());
 
-            packSizeLabel.setText(Pack.toByteUnitsString(node.getTotalSize()));
+            if (showPackSize) {
+                packSizeLabel.setText(Pack.toByteUnitsString(node.getTotalSize()));
+            }
+            
 
             if (node.isPartial())
             {
