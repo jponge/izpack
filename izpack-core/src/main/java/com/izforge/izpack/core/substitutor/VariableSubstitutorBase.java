@@ -198,6 +198,11 @@ public abstract class VariableSubstitutorBase implements VariableSubstitutor
         // Check if file type specific default encoding known
         if (encoding == null)
         {
+            if (type == null)
+            {
+                type = SubstitutionType.getDefault();
+            }
+
             switch (type)
             {
                 case TYPE_JAVA_PROPERTIES:
@@ -238,6 +243,11 @@ public abstract class VariableSubstitutorBase implements VariableSubstitutor
         // Check if file type specific default encoding known
         String encoding = PLAIN;
         {
+            if (type == null)
+            {
+                type = SubstitutionType.getDefault();
+            }
+
             switch (type)
             {
                 case TYPE_JAVA_PROPERTIES:
@@ -280,6 +290,11 @@ public abstract class VariableSubstitutorBase implements VariableSubstitutor
      */
     public int substitute(Reader reader, Writer writer, SubstitutionType type) throws Exception
     {
+        if (type == null)
+        {
+            type = SubstitutionType.getDefault();
+        }
+
         // determine character which starts (and ends) a variable
         char variable_start = '$';
         char variable_end = '\0';
@@ -413,6 +428,7 @@ public abstract class VariableSubstitutorBase implements VariableSubstitutor
         {
             return TYPE_PLAIN;
         }
+
         Integer integer = typeNameToConstantMap.get(type);
         if (integer == null)
         {
@@ -436,6 +452,12 @@ public abstract class VariableSubstitutorBase implements VariableSubstitutor
         StringBuffer buffer;
         int len;
         int i;
+
+        if (type == null)
+        {
+            type = SubstitutionType.getDefault();
+        }
+
         switch (type)
         {
             case TYPE_PLAIN:
