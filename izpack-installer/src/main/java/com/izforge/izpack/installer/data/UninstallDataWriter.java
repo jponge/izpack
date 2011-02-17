@@ -10,6 +10,7 @@ import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.PrivilegedRunner;
 
 import java.io.*;
 import java.util.*;
@@ -388,7 +389,7 @@ public class UninstallDataWriter
         }
 
         // Should we relaunch the uninstaller with privileges?
-        if (installdata.getInfo().isPrivilegedExecutionRequiredUninstaller())
+        if (PrivilegedRunner.isPrivilegedMode() && installdata.getInfo().isPrivilegedExecutionRequiredUninstaller())
         {
             outJar.putNextEntry(new ZipEntry("exec-admin"));
             outJar.closeEntry();
