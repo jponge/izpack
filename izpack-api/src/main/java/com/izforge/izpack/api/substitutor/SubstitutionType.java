@@ -70,6 +70,11 @@ public enum SubstitutionType
         return type;
     }
 
+    public static final SubstitutionType getDefault()
+    {
+        return TYPE_PLAIN;
+    }
+
     /**
      * Return the substitution type
      *
@@ -82,6 +87,6 @@ public enum SubstitutionType
         {
             return lookup.get(typeString);
         }
-        return TYPE_PLAIN;
+        return getDefault();
     }
 }
