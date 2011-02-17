@@ -72,8 +72,11 @@ public class UserPathPanelAutomationHelper implements PanelAutomation
 
         // Allow for variable substitution of the installpath value
         VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
-        String path = ipath.getContent();
-        path = vs.substitute(path, null);
-        idata.setVariable(UserPathPanel.pathVariableName, path);
+        if (ipath != null)
+        {
+            String path = ipath.getContent();
+            path = vs.substitute(path, null);
+            idata.setVariable(UserPathPanel.pathVariableName, path);
+        }
     }
 }
