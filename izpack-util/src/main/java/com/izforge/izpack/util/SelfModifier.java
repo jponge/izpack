@@ -404,6 +404,7 @@ public class SelfModifier
         while (true)
         {
             logFile = File.createTempFile(prefix, ".log");
+            System.out.println(logFile.getAbsolutePath());
             String fileName = logFile.toString();
             sandbox = new File(fileName.substring(0, fileName.length() - 4) + ".d");
 

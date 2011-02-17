@@ -397,8 +397,10 @@ public class UninstallDataWriter
 
         // We put the langpack
         List<Mergeable> langPack = pathResolver.getMergeableFromPath("resources/langpacks/" + installdata.getLocaleISO3() + ".xml", "langpack.xml");
+        System.out.println(">>> Langpacks");
         for (Mergeable mergeable : langPack)
         {
+            System.out.println(">>>     " + langPack);
             mergeable.merge(outJar);
         }
     }
