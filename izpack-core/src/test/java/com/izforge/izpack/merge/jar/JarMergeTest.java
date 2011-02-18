@@ -58,7 +58,17 @@ public class JarMergeTest
         Mergeable jarMerge = jarMergeList.get(0);
         assertThat(jarMerge, MergeMatcher.isMergeableContainingFiles("org/fest/assertions/Assert.class"));
     }
+    
+    @Test
+    public void testMergeClassFromJarFileWithDestination() throws Exception
+    {
+        List<Mergeable> jarMergeList = pathResolver.getMergeableFromPath("org/fest/assertions/Assert.class", "foo/SomeRandomClass.class");
 
+        assertThat(jarMergeList.size(), Is.is(1));
+
+        Mergeable jarMerge = jarMergeList.get(0);
+        assertThat(jarMerge, MergeMatcher.isMergeableContainingFiles("foo/SomeRandomClass.class"));
+    }
 
     @Test
     public void testMergeJarFoundDynamicallyLoaded() throws Exception
