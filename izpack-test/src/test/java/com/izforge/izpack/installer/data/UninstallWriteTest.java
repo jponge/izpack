@@ -44,7 +44,8 @@ public class UninstallWriteTest
         String jar = dest + File.separator + idata.getInfo().getUninstallerName();
         File uninstallJar = new File(jar);
         assertThat(uninstallJar.exists(), Is.is(true));
-        assertThat(uninstallJar, ZipMatcher.isZipContainingFiles("com/izforge/izpack/uninstaller/Destroyer.class", "langpack.xml", "META-INF/MANIFEST.MF"));
+        assertThat(uninstallJar, ZipMatcher.isZipContainingFiles("com/izforge/izpack/uninstaller/Destroyer.class",
+                "langpack.xml", "META-INF/MANIFEST.MF", " com/izforge/izpack/gui/IconsDatabase.class"));
 
     }
 }
