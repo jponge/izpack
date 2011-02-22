@@ -320,6 +320,16 @@
                 <groupId>org.java.net.substance</groupId>
                 <artifactId>substance</artifactId>
                 <version>6.0</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.android</groupId>
+                        <artifactId>android</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.pushing-pixels</groupId>
+                        <artifactId>trident</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>com.incors</groupId>
