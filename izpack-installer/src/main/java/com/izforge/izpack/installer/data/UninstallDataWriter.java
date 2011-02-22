@@ -10,6 +10,7 @@ import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.PrivilegedRunner;
 
 import java.io.*;
 import java.util.*;
@@ -375,6 +376,8 @@ public class UninstallDataWriter
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("uninstaller-META-INF/", "META-INF/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/api/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/util/"));
+        uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/gui/"));
+        uninstallerMerge.addAll(pathResolver.getMergeableFromPath("img/"));
 
         // The uninstaller extension is facultative; it will be exist only
         // if a native library was marked for uninstallation.
@@ -388,7 +391,7 @@ public class UninstallDataWriter
         }
 
         // Should we relaunch the uninstaller with privileges?
-        if (installdata.getInfo().isPrivilegedExecutionRequiredUninstaller())
+        if (PrivilegedRunner.isPrivilegedMode() && installdata.getInfo().isPrivilegedExecutionRequiredUninstaller())
         {
             outJar.putNextEntry(new ZipEntry("exec-admin"));
             outJar.closeEntry();

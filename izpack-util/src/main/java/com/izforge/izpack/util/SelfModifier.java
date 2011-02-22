@@ -404,6 +404,7 @@ public class SelfModifier
         while (true)
         {
             logFile = File.createTempFile(prefix, ".log");
+            System.out.println("The uninstaller has put a log file: " + logFile.getAbsolutePath());
             String fileName = logFile.toString();
             sandbox = new File(fileName.substring(0, fileName.length() - 4) + ".d");
 
@@ -808,7 +809,6 @@ public class SelfModifier
                     {
                         printWriter.println(line);
                     }
-                    // System.out.println(name + ">" + line);
                 }
                 if (printWriter != null)
                 {
