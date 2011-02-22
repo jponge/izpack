@@ -8,11 +8,12 @@ import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
 import com.izforge.izpack.util.IoHelper;
-import org.hamcrest.core.Is;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+
+import static org.hamcrest.core.Is.is;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -43,9 +44,17 @@ public class UninstallWriteTest
         String dest = IoHelper.translatePath(idata.getInfo().getUninstallerPath(), variableSubstitutor);
         String jar = dest + File.separator + idata.getInfo().getUninstallerName();
         File uninstallJar = new File(jar);
-        assertThat(uninstallJar.exists(), Is.is(true));
-        assertThat(uninstallJar, ZipMatcher.isZipContainingFiles("com/izforge/izpack/uninstaller/Destroyer.class",
-                "langpack.xml", "META-INF/MANIFEST.MF", " com/izforge/izpack/gui/IconsDatabase.class"));
+        
+        assertThat(uninstallJar.exists(), is(true));
+        
+        assertThat(
+            uninstallJar, 
+            ZipMatcher.isZipContainingFiles(
+                "com/izforge/izpack/uninstaller/Destroyer.class",
+                "langpack.xml", 
+                "META-INF/MANIFEST.MF", 
+                "com/izforge/izpack/gui/IconsDatabase.class",
+                "/img/trash.png"));
 
     }
 }
