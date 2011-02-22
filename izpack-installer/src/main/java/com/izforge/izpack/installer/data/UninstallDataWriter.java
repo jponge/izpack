@@ -377,6 +377,7 @@ public class UninstallDataWriter
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/api/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/util/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/gui/"));
+        uninstallerMerge.addAll(pathResolver.getMergeableFromPath("img/"));
 
         // The uninstaller extension is facultative; it will be exist only
         // if a native library was marked for uninstallation.
