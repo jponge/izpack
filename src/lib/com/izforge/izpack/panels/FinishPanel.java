@@ -19,17 +19,6 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.gui.AutomatedInstallScriptFilter;
-import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.InstallData;
-import com.izforge.izpack.installer.InstallerFrame;
-import com.izforge.izpack.installer.IzPanel;
-import com.izforge.izpack.util.Log;
-import com.izforge.izpack.util.VariableSubstitutor;
-
-import javax.swing.*;
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -38,6 +27,21 @@ import java.awt.event.ActionListener;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import com.izforge.izpack.gui.AutomatedInstallScriptFilter;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.installer.InstallerFrame;
+import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.installer.IzPanel.Filler;
+import com.izforge.izpack.util.Log;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  * The finish panel class.
@@ -93,17 +97,21 @@ public class FinishPanel extends IzPanel implements ActionListener
         parent.setQuitButtonIcon("done");
         
         GridBagConstraints constraints = new GridBagConstraints();
-        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.anchor = GridBagConstraints.NORTHWEST;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        
+        constraints.gridwidth = 1;
+        constraints.gridheight = 4;
         if (idata.installSuccess)
         {
             // We set the information
             JLabel jLabel = LabelFactory.create(idata.langpack.getString("FinishPanel.success"),
                     parent.icons.getImageIcon("preferences"), LEADING);
             
+            constraints.gridy = GridBagConstraints.RELATIVE;
             constraints.gridx = 0;
-            constraints.gridy = 0;
+            
+            Filler dummy = new Filler();
+            add(dummy, constraints);
             
             add(jLabel, constraints);
             
@@ -112,18 +120,17 @@ public class FinishPanel extends IzPanel implements ActionListener
             {
                 // We prepare a message for the uninstaller feature
                 String path = translatePath(idata.info.getUninstallerPath());
-                
+               
+           
                 constraints.gridx = 0;
-                constraints.gridy = 1;
-                
                 add(LabelFactory.create(parent.langpack
                         .getString("FinishPanel.uninst.info"), parent.icons
                         .getImageIcon("preferences"), LEADING), constraints);
-               
-                constraints.gridx = 0;
-                constraints.gridy = 2;
                 
-                add(LabelFactory.create(path, parent.icons.getImageIcon("empty"),
+
+            
+                constraints.gridx = 0;
+                add(LabelFactory.create("  " + path, parent.icons.getImageIcon("empty"),
                         LEADING), constraints);
             }
 
@@ -133,10 +140,9 @@ public class FinishPanel extends IzPanel implements ActionListener
             autoButton.setToolTipText(parent.langpack.getString("FinishPanel.auto.tip"));
             autoButton.addActionListener(this);
             
-            constraints.gridx = 0;
-            constraints.gridy = 3;
             constraints.weighty = 1.0;   //request any extra vertical space
-            
+            constraints.insets = new Insets(40,0,0,0);  //top padding
+            constraints.gridx = 0;
             add(autoButton, constraints);
  
         }
@@ -144,6 +150,7 @@ public class FinishPanel extends IzPanel implements ActionListener
         {
             add(LabelFactory.create(parent.langpack.getString("FinishPanel.fail"),
                     parent.icons.getImageIcon("stop"), LEADING), NEXT_LINE);
+            constraints.gridy++;
         }
         getLayoutHelper().completeLayout(); // Call, or call not?
         Log.getInstance().informUser();
