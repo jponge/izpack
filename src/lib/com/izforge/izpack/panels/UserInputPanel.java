@@ -1903,7 +1903,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         TextValuePair listItem = null;
         JComboBox field = new JComboBox();
         JLabel label;
-        field.addItemListener(this);
+        
+        String causesValidataion = spec.getAttribute(REVALIDATE);
+        if (causesValidataion != null && causesValidataion.equals("yes"))
+        {
+            field.addItemListener(this);
+        }
         boolean userinput = false; // is there already user input?
         // ----------------------------------------------------
         // extract the specification details
