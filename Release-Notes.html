@@ -2,36 +2,49 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <title>Release Notes - IzPack - Version 4.3.3</title>
+  <title>Release Notes - IzPack - Version 4.3.4</title>
 </head>
 <body>
 
 
-            <h1>Release Notes - IzPack - Version 4.3.3</h1>
+           
+            <h1>Release Notes - IzPack - Version 4.3.4</h1>
 
-    <h2>        Bug
-    </h2>
-    <ul>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-452'>IZPACK-452</a>] -         Run-privileged forces GUI installation even if automated install is requested
-    </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-479'>IZPACK-479</a>] -         Missing classes in release 4.3.1
-    </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-493'>IZPACK-493</a>] -         Installation from template and template generation cannot be run headless
-    </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-498'>IZPACK-498</a>] -         Multi-file validation bug
-    </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-500'>IZPACK-500</a>] -         Debug class references Installer class, but Installer class is not included in uninstaller.jar
-    </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-501'>IZPACK-501</a>] -         On unix corporate install (with 30000 users), izpack hangs forever
-    </li>
-    </ul>
+           <h2>        Bug
+           </h2>
+           <ul>
+           <li>[<a href='http://jira.codehaus.org/browse/IZPACK-391'>IZPACK-391</a>] -         hidden=&quot;true&quot; for Packs does not work for TreePacksPanel
+           </li>
+           <li>[<a href='http://jira.codehaus.org/browse/IZPACK-475'>IZPACK-475</a>] -         ProcessPanel is ignored in console mode
+           </li>
+           <li>[<a href='http://jira.codehaus.org/browse/IZPACK-480'>IZPACK-480</a>] -         Console Install option does not invoke Process Panels
+           </li>
+           <li>[<a href='http://jira.codehaus.org/browse/IZPACK-554'>IZPACK-554</a>] -         spec txt and id set without localization files shows the id in the panel
+           </li>
+           <li>[<a href='http://jira.codehaus.org/browse/IZPACK-567'>IZPACK-567</a>] -         FinishPanel (SimpleFinishPanel) repaint
+           </li>
+           <li>[<a href='http://jira.codehaus.org/browse/IZPACK-596'>IZPACK-596</a>] -         Ubuntu 10+ needs .desktop files to be executable
+           </li>
+           <li>[<a href='http://jira.codehaus.org/browse/IZPACK-608'>IZPACK-608</a>] -         deseclect is misspelled in console installer mode for checkboxes
+           </li>
+           <li>[<a href='http://jira.codehaus.org/browse/IZPACK-610'>IZPACK-610</a>] -         FinishPanel has hardcoded path for Uninstaller location
+           </li>
+           <li>[<a href='http://jira.codehaus.org/browse/IZPACK-611'>IZPACK-611</a>] -         Console Installer misspelling: Install was successeful
+           </li>
+           <li>[<a href='http://jira.codehaus.org/browse/IZPACK-636'>IZPACK-636</a>] -         JDKPathPanel does not work in console mode
+           </li>
+           <li>[<a href='http://jira.codehaus.org/browse/IZPACK-637'>IZPACK-637</a>] -         JDKPathPanel does not work in automated mode
+           </li>
+           <li>[<a href='http://jira.codehaus.org/browse/IZPACK-645'>IZPACK-645</a>] -         Null pointer exception at automated install
+           </li>
+           </ul>
 
-    <h2>        Improvement
-    </h2>
-    <ul>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-502'>IZPACK-502</a>] -         UserPathPanel should support multiple paths
-    </li>
-    </ul>
+           <h2>        Improvement
+           </h2>
+           <ul>
+           <li>[<a href='http://jira.codehaus.org/browse/IZPACK-650'>IZPACK-650</a>] -         itemState change events from UserInputPanel combos unconditionally cause revalidation; behavior should be controlled by REVALIDATE attribute instead
+           </li>
+           </ul>
 
         
 
