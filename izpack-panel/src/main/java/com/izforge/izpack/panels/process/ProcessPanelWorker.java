@@ -450,6 +450,7 @@ public class ProcessPanelWorker implements Runnable
 
             ProcessBuilder processBuilder = new ProcessBuilder(params);
             if(workingDir != null && !workingDir.equals("")) {
+                workingDir = IoHelper.translatePath(workingDir, vs);
                 processBuilder.directory(new File(workingDir));
             }
             Map<String, String> environment = processBuilder.environment();
