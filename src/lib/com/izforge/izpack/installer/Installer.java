@@ -103,7 +103,8 @@ public class Installer {
 		    }
 		    
 		    // if headless, just use the console mode
-		    if (type == INSTALLER_GUI && GraphicsEnvironment.isHeadless()) {
+		    if (type == INSTALLER_GUI && GraphicsEnvironment.isHeadless()) 
+		    {
 		        type = INSTALLER_CONSOLE;
 		    }
 		    
