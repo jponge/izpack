@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.installer;
 
+import java.awt.GraphicsEnvironment;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
@@ -99,6 +100,11 @@ public class Installer {
 		            System.err.println("Option \"" + arg + "\" requires an argument!");
 		            System.exit(1);
 		        }
+		    }
+		    
+		    // if headless, just use the console mode
+		    if (type == INSTALLER_GUI && GraphicsEnvironment.isHeadless()) {
+		        type = INSTALLER_CONSOLE;
 		    }
 		    
 		    switch (type)
