@@ -82,9 +82,12 @@ def create_exe(settings):
     if settings.prompt:
         config.write('BeginPrompt="Install %s?"\r\n' % settings.name)
     config.write('Progress="yes"\r\n')
-    config.write('ExecuteFile="%s"\r\n' % filename)
+    config.write('ExecuteFile="javaw"')
+    config.write('ExecuteParameters="-jar \\\"%s\\\"' % filename)
     if settings.launchargs != '':
-        config.write('ExecuteParameters="%s"\r\n' % settings.launchargs)
+        config.write(' %s"\r\n' % settings.launchargs)
+    else:
+        config.write('"\r\n') 
     config.write(';!@InstallEnd@!\r\n')
     config.close()
     
