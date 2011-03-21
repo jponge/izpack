@@ -806,7 +806,9 @@ public class IoHelper
             newEntry.setTime(fileTime); // If found set it into output file.
         }
         out.putNextEntry(newEntry);
-        copyStream(zin, out);
+        if(zin!=null){
+            copyStream(zin, out);
+        }
         out.closeEntry();
     }
 
@@ -820,7 +822,9 @@ public class IoHelper
             newEntry.setTime(fileTime); // If found set it into output file.
         }
         out.putNextEntry(newEntry);
-        copyStream(zin, out);
+        if(zin!=null){
+            copyStream(zin, out);
+        }
         out.closeEntry();
     }
 
