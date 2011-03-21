@@ -163,18 +163,21 @@ public class FileMerge extends AbstractMerge
             {
                 copyFileToJar(file, outputStream);
             }
-        } else{
+        } else
+        {
             inputStream = new FileInputStream(fileToCopy);
         }
 
         String entryName = resolveName(fileToCopy, this.destination);
         List<String> mergeList = getMergeList(outputStream);
-        if (mergeList.contains(entryName)) {
+        if (mergeList.contains(entryName))
+        {
             return;
         }
-        mergeList.add(entryName);
-        IoHelper.copyStreamToJar(inputStream, outputStream, entryName, fileToCopy.lastModified());
-        if(inputStream!=null){
+        mergeList.add(entryName);        
+        if(inputStream != null)
+        {
+            IoHelper.copyStreamToJar(inputStream, outputStream, entryName, fileToCopy.lastModified());
             inputStream.close();
         }
     }
