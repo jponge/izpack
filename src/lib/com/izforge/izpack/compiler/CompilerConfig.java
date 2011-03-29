@@ -1449,18 +1449,18 @@ public class CompilerConfig extends Thread {
             String jarPath = xmlPanel.getAttribute("jar");
             if (jarPath == null)
             {
-				jarPath = "bin/panels/" + className + ".jar";
-			}
-			URL url = null;
-			// jar="" may be used to suppress the warning message ("Panel jar
-			// file not found")
-			if (!jarPath.equals(""))
-			{
-				url = findIzPackResource(jarPath, "Panel jar file", xmlPanel, true);
-			}
+                jarPath = "bin/panels/" + className + ".jar";
+            }
+            URL url = null;
+            // jar="" may be used to suppress the warning message ("Panel jar
+            // file not found")
+            if (!jarPath.equals(""))
+            {
+                url = findIzPackResource(jarPath, "Panel jar file", xmlPanel, true);
+            }
 
-			// when the expected panel jar file is not found, it is assumed that
-			// user will do the jar merge themselves via <jar> tag
+            // when the expected panel jar file is not found, it is assumed that
+            // user will do the jar merge themselves via <jar> tag
 
             String fullClassName = null;
             if (url == null)
@@ -1587,6 +1587,18 @@ public class CompilerConfig extends Thread {
             OutputStream os = null;
             try
             {
+                if (parsexml || (!"".equals(encoding)) || (substitute && !compiler.getVariables().isEmpty()))
+                {
+                    // make the substitutions into a temp file
+                    File parsedFile = File.createTempFile("izpp", null);
+                    parsedFile.deleteOnExit();
+                    FileOutputStream outFile = new FileOutputStream(parsedFile);
+                    os = new BufferedOutputStream(outFile);
+                    // and specify the substituted file to be added to the
+                    // packager
+                    url = parsedFile.toURL();
+                }
+                
                 if (!"".equals(encoding))
                 {
                     File recodedFile = File.createTempFile("izenc", null);
@@ -1605,19 +1617,13 @@ public class CompilerConfig extends Thread {
                     reader.close();
                     writer.close();
 
-                    originalUrl = recodedFile.toURL();
-                }
-
-                if (parsexml || (!"".equals(encoding)) || (substitute && !compiler.getVariables().isEmpty()))
-                {
-                    // make the substitutions into a temp file
-                    File parsedFile = File.createTempFile("izpp", null);
-                    parsedFile.deleteOnExit();
-                    FileOutputStream outFile = new FileOutputStream(parsedFile);
-                    os = new BufferedOutputStream(outFile);
-                    // and specify the substituted file to be added to the
-                    // packager
-                    url = parsedFile.toURL();
+                    if (parsexml)
+                    {
+                        originalUrl = recodedFile.toURL();
+                    } else
+                    {
+                        url = recodedFile.toURL();
+                    }
                 }
 
                 if (parsexml)
