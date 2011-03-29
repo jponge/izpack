@@ -90,7 +90,7 @@ public class SimpleFinishPanel extends IzPanel
             if (idata.uninstallOutJar != null)
             {
                 // We prepare a message for the uninstaller feature
-                String path = translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
+                String path = translatePath(idata.info.getUninstallerPath());
 
                 add(LabelFactory.create(parent.langpack
                         .getString("FinishPanel.uninst.info"), parent.icons
