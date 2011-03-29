@@ -1481,6 +1481,18 @@ public class CompilerConfig extends Thread
             OutputStream os = null;
             try
             {
+                if (parsexml || (!"".equals(encoding)) || (substitute && !packager.getVariables().isEmpty()))
+                {
+                    // make the substitutions into a temp file
+                    File parsedFile = FileUtils.createTempFile("izpp", null);
+                    parsedFile.deleteOnExit();
+                    FileOutputStream outFile = new FileOutputStream(parsedFile);
+                    os = new BufferedOutputStream(outFile);
+                    // and specify the substituted file to be added to the
+                    // packager
+                    url = parsedFile.toURI().toURL();
+                }
+                
                 if (!"".equals(encoding))
                 {
                     File recodedFile = FileUtils.createTempFile("izenc", null);
@@ -1498,20 +1510,13 @@ public class CompilerConfig extends Thread
                     }
                     reader.close();
                     writer.close();
-
-                    originalUrl = recodedFile.toURI().toURL();
-                }
-
-                if (parsexml || (!"".equals(encoding)) || (substitute && !packager.getVariables().isEmpty()))
-                {
-                    // make the substitutions into a temp file
-                    File parsedFile = FileUtils.createTempFile("izpp", null);
-                    parsedFile.deleteOnExit();
-                    FileOutputStream outFile = new FileOutputStream(parsedFile);
-                    os = new BufferedOutputStream(outFile);
-                    // and specify the substituted file to be added to the
-                    // packager
-                    url = parsedFile.toURI().toURL();
+                    if (parsexml)
+                    {
+                        originalUrl = recodedFile.toURI().toURL();
+                    } else 
+                    {
+                        url = recodedFile.toURI().toURL();
+                    }
                 }
 
                 if (parsexml)
