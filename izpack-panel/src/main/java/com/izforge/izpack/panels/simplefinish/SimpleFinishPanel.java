@@ -93,7 +93,7 @@ public class SimpleFinishPanel extends IzPanel
             if (uninstallDataWriter.isUninstallShouldBeWriten())
             {
                 // We prepare a message for the uninstaller feature
-                String path = translatePath(idata.info.getUninstallerPath());
+                String path = translatePath(installData.getInfo().getUninstallerPath());
 
                 JLabel uninstallJLabel = LabelFactory.create(installData.getLangpack()
                         .getString("FinishPanel.uninst.info"), parent.getIcons()
