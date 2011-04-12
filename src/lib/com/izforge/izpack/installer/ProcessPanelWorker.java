@@ -244,6 +244,7 @@ public class ProcessPanelWorker implements Runnable
         // all selected or de-selected
         try
         {
+            jobs.clear();
             if (!readSpec())
             {
                 System.err.println("Error parsing XML specification for processing.");
