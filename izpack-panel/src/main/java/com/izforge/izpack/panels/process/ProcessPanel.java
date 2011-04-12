@@ -261,6 +261,8 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
 
         parent.lockNextButton();
 
+        this.currentJob = 0;
+        
         // only let the process start if the weren't finished before.
         if (!finishedWork)
         {
