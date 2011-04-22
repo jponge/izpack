@@ -48,7 +48,7 @@ public class UserCondition extends Condition
         else
         {
             String actualUsername = System.getProperty("user.name");
-            if ((actualUsername != null) || (actualUsername.length() >= 0)){
+            if ((actualUsername != null) && (actualUsername.length() >= 0)){
                 result = this.requiredUsername.equals(actualUsername);
             }            
             else {
