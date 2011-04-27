@@ -12,8 +12,8 @@
     <version>5.0.0-beta7-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>IzPack Parent</name>
-    <description>IzPack Parent Module</description>
+    <name>IzPack parent</name>
+    <description>IzPack parent module</description>
     <url>http://izpack.org/</url>
 
     <modules>
