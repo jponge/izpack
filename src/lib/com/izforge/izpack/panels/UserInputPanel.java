@@ -1211,14 +1211,17 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         boolean result = false;
         try
         {
-            FileInputField panel = (FileInputField) field.getComponent();
-            result = panel.validateField();
+            FileInputField input = (FileInputField) field.getComponent();
+            result = !validating || input.validateField();
             if (result)
             {
-                idata.setVariable(field.getAssociatedVariable(), panel.getSelectedFile()
-                        .getAbsolutePath());
-                entries.add(new TextValuePair(field.getAssociatedVariable(), panel
-                        .getSelectedFile().getAbsolutePath()));
+                String value = "";
+                File inputFile = input.getSelectedFile();
+                if(inputFile != null && !inputFile.getName().equals("")){
+                    value = input.getSelectedFile().getAbsolutePath();
+                }
+                idata.setVariable(field.getAssociatedVariable(), value);
+                entries.add(new TextValuePair(field.getAssociatedVariable(), value));
             }
         }
         catch (Exception e)
@@ -1237,13 +1240,16 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         try
         {
             FileInputField input = (FileInputField) field.getComponent();
-            result = input.validateField();
+            result = !validating || input.validateField();
             if (result)
             {
-                idata.setVariable(field.getAssociatedVariable(), input.getSelectedFile()
-                        .getAbsolutePath());
-                entries.add(new TextValuePair(field.getAssociatedVariable(), input
-                        .getSelectedFile().getAbsolutePath()));
+                String value = "";
+                File inputFile = input.getSelectedFile();
+                if(inputFile != null && !inputFile.getName().equals("")){
+                    value = input.getSelectedFile().getAbsolutePath();
+                }
+                idata.setVariable(field.getAssociatedVariable(), value);
+                entries.add(new TextValuePair(field.getAssociatedVariable(), value));
             }
         }
         catch (Exception e)
@@ -1262,7 +1268,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         try
         {
             MultipleFileInputField input = (MultipleFileInputField) field.getComponent();
-            result = input.validateField();
+            result = !validating || input.validateField();
             if (result)
             {
                 List<String> files = input.getSelectedFiles();
@@ -1850,7 +1856,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
         // validate the input
         Debug.trace("Validating text field");
-        boolean success = textField.validateContents();
+        boolean success = !validating || textField.validateContents();
         if (!success)
         {
             Debug.trace("Validation did not pass, message: " + message);
@@ -3934,7 +3940,11 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // readInput();
         // panelActivate();
         // validating = true;
+        Debug.trace("Setting validating to false");
+        validating=false;
         updateDialog();
+        Debug.trace("Setting validating back to true");
+        validating=true;
     }
 
     /*--------------------------------------------------------------------------*/
