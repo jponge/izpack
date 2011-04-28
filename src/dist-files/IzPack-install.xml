@@ -26,6 +26,7 @@
         <appversion>4.3.4</appversion>
         <authors>
             <author email="" name="Julien Ponge (project founder)"/>
+            <author email="" name="Mark Miller (backports to make 4.3.4)"/>
             <author email="" name="The fantastic IzPack developers and contributors"/>
         </authors>
         <url>http://izpack.org/</url>
