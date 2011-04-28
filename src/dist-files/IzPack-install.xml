@@ -180,15 +180,6 @@
             </fileset>
         </pack>
 
-        <!-- The source code of this version -->
-        <pack name="Sources" required="no">
-            <description>The full IzPack source code.</description>
-            <fileset dir="" targetdir="$INSTALL_PATH">
-                <include name="src/**/*"/>
-                <exclude name="src/*.manifest"/>
-            </fileset>
-        </pack>
-
     </packs>
 
     <!-- The native libraries to add -->
