@@ -163,12 +163,6 @@
             </fileset>
         </pack> -->
 
-        <!-- The source code of this version -->
-        <pack name="Sources" required="no">
-            <description>The full IzPack source code.</description>
-            <file src="izpack-sources.zip" targetdir="$INSTALL_PATH/src" unpack="true"/>
-        </pack>
-
     </packs>
 
     <!-- The native libraries to add -->
