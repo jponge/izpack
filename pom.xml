@@ -9,7 +9,7 @@
 
     <artifactId>izpack</artifactId>
     <groupId>org.codehaus.izpack</groupId>
-    <version>5.0.0-beta7</version>
+    <version>5.0.0-beta8-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>IzPack parent</name>
@@ -214,7 +214,7 @@
             <dependency>
                 <artifactId>izpack-ini4j</artifactId>
                 <groupId>${project.groupId}</groupId>
-                <version>5.0.0-beta7</version>
+                <version>5.0.0-beta8-SNAPSHOT</version>
             </dependency>
 
             <!-- Parsers -->
