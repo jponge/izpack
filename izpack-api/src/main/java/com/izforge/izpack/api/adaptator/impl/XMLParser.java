@@ -179,6 +179,8 @@ public class XMLParser implements IXMLParser
 
     public IXMLElement parse(InputStream inputStream)
     {
+        checkNotNullStream(inputStream);
+
         this.parsedItem = null;
         InputSource inputSource = new InputSource(inputStream);
         DOMResult result = parseLineNrFromInputSource(inputSource);
@@ -187,6 +189,8 @@ public class XMLParser implements IXMLParser
 
     public IXMLElement parse(InputStream inputStream, String systemId)
     {
+        checkNotNullStream(inputStream);
+        
         this.parsedItem = systemId;
         InputSource inputSource = new InputSource(inputStream);
         inputSource.setSystemId(systemId);
@@ -209,5 +213,11 @@ public class XMLParser implements IXMLParser
         InputSource inputSource = new InputSource(inputURL.toExternalForm());
         DOMResult domResult = parseLineNrFromInputSource(inputSource);
         return searchFirstElement(domResult);
+    }
+
+    private void checkNotNullStream(InputStream inputStream) {
+        if (inputStream == null) {
+            throw new NullPointerException("The input stream must be not null.");
+        }
     }
 }

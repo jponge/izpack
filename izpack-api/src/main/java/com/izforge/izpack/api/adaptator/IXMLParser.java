@@ -43,7 +43,7 @@ public interface IXMLParser
     /**
      * Parse the given stream to a XML
      *
-     * @param inputStream Stream to parse
+     * @param inputStream Stream to parse. Must be not null.
      * @return Root element of the parsed xml
      * @throws XMLException if something went wrong.
      */
@@ -53,7 +53,7 @@ public interface IXMLParser
      * Parse the given stream to a XML and set the systemId to the inputSource.
      * It is useful for the xinclude feature, as the path of the resolution depends on the systemId.
      *
-     * @param inputStream Stran to parse
+     * @param inputStream Stream to parse. Must be not null.
      * @param systemId    System id of the file parsed
      * @return Root element of the parsed XML
      * @throws XMLException if something went wrong.
