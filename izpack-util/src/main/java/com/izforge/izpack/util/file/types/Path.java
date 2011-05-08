@@ -194,12 +194,12 @@ public class Path extends DataType implements Cloneable
         {
             return;
         }
-        String[] l = other.list();
-        for (int i = 0; i < l.length; i++)
+        String[] pathElements = other.list();
+        for (String pathElement : pathElements)
         {
-            if (elements.indexOf(l[i]) == -1)
+            if (elements.indexOf(pathElement) == -1)
             {
-                elements.addElement(l[i]);
+                elements.addElement(pathElement);
             }
         }
     }
@@ -225,19 +225,19 @@ public class Path extends DataType implements Cloneable
      */
     public void addExisting(Path source, boolean tryUserDir) throws Exception
     {
-        String[] list = source.list();
+        String[] pathElements = source.list();
         File userDir = (tryUserDir) ? new File(System.getProperty("user.dir"))
                 : null;
 
-        for (int i = 0; i < list.length; i++)
+        for (String pathElement : pathElements)
         {
             File f = null;
-            f = new File(list[i]);
+            f = new File(pathElement);
             // probably not the best choice, but it solves the problem of
             // relative paths in CLASSPATH
             if (tryUserDir && !f.exists())
             {
-                f = new File(userDir, list[i]);
+                f = new File(userDir, pathElement);
             }
             if (f.exists())
             {
@@ -275,18 +275,18 @@ public class Path extends DataType implements Cloneable
                     throw new Exception("You must either set location or"
                             + " path on <pathelement>");
                 }
-                for (int j = 0; j < parts.length; j++)
+                for (String part : parts)
                 {
-                    addUnlessPresent(result, parts[j]);
+                    addUnlessPresent(result, part);
                 }
             }
             else if (o instanceof Path)
             {
                 Path p = (Path) o;
                 String[] parts = p.list();
-                for (int j = 0; j < parts.length; j++)
+                for (String part : parts)
                 {
-                    addUnlessPresent(result, parts[j]);
+                    addUnlessPresent(result, part);
                 }
             }
             else if (o instanceof DirSet)
@@ -475,9 +475,9 @@ public class Path extends DataType implements Cloneable
      */
     private static void addUnlessPresent(Vector<String> v, File dir, String[] s)
     {
-        for (int j = 0; j < s.length; j++)
+        for (String value : s)
         {
-            File d = new File(dir, s[j]);
+            File d = new File(dir, value);
             String absolutePath = d.getAbsolutePath();
             addUnlessPresent(v, translateFile(absolutePath));
         }

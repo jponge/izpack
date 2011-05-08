@@ -185,58 +185,58 @@ public class DateSelector extends BaseExtendSelector
         super.setParameters(parameters);
         if (parameters != null)
         {
-            for (int i = 0; i < parameters.length; i++)
+            for (Parameter parameter : parameters)
             {
-                String paramname = parameters[i].getName();
+                String paramname = parameter.getName();
                 if (MILLIS_KEY.equalsIgnoreCase(paramname))
                 {
                     try
                     {
-                        setMillis(new Long(parameters[i].getValue()
+                        setMillis(new Long(parameter.getValue()
                         ).longValue());
                     }
                     catch (NumberFormatException nfe)
                     {
                         setError("Invalid millisecond setting "
-                                + parameters[i].getValue());
+                                + parameter.getValue());
                     }
                 }
                 else if (DATETIME_KEY.equalsIgnoreCase(paramname))
                 {
-                    setDatetime(parameters[i].getValue());
+                    setDatetime(parameter.getValue());
                 }
                 else if (CHECKDIRS_KEY.equalsIgnoreCase(paramname))
                 {
-                    setCheckdirs(Boolean.parseBoolean(parameters[i].getValue()));
+                    setCheckdirs(Boolean.parseBoolean(parameter.getValue()));
                 }
                 else if (GRANULARITY_KEY.equalsIgnoreCase(paramname))
                 {
                     try
                     {
-                        setGranularity(new Integer(parameters[i].getValue()
+                        setGranularity(new Integer(parameter.getValue()
                         ).intValue());
                     }
                     catch (NumberFormatException nfe)
                     {
                         setError("Invalid granularity setting "
-                                + parameters[i].getValue());
+                                + parameter.getValue());
                     }
                 }
                 else if (WHEN_KEY.equalsIgnoreCase(paramname))
                 {
-                    TimeComparisons cmp = TimeComparisons.getFromAttribute(parameters[i].getValue());
+                    TimeComparisons cmp = TimeComparisons.getFromAttribute(parameter.getValue());
                     if (cmp != null)
                     {
                         setWhen(cmp);
                     }
                     else
                     {
-                        setError("Invalid " + WHEN_KEY + " setting " + parameters[i].getValue());
+                        setError("Invalid " + WHEN_KEY + " setting " + parameter.getValue());
                     }
                 }
                 else if (PATTERN_KEY.equalsIgnoreCase(paramname))
                 {
-                    setPattern(parameters[i].getValue());
+                    setPattern(parameter.getValue());
                 }
                 else
                 {

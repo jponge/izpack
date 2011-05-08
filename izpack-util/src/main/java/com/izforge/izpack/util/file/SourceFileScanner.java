@@ -82,10 +82,10 @@ public class SourceFileScanner implements ResourceFactory
         // record destdir for later use in getResource
         this.destDir = destDir;
         Vector<Resource> v = new Vector<Resource>();
-        for (int i = 0; i < files.length; i++)
+        for (String file : files)
         {
-            File src = fileUtils.resolveFile(srcDir, files[i]);
-            v.addElement(new Resource(files[i], src.exists(),
+            File src = fileUtils.resolveFile(srcDir, file);
+            v.addElement(new Resource(file, src.exists(),
                     src.lastModified(), src.isDirectory()));
         }
         Resource[] sourceresources = new Resource[v.size()];

@@ -516,9 +516,9 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
 
                     installed_files.add(f);
                 }
-                for (int i = 0; i < srcFiles.length; i++)
+                for (String srcFile : srcFiles)
                 {
-                    File newFile = new File(ds.getBasedir(), srcFiles[i]);
+                    File newFile = new File(ds.getBasedir(), srcFile);
 
                     // skip files we just installed
                     if (installed_files.contains(newFile))
@@ -530,9 +530,9 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
                         files_to_delete.add(newFile);
                     }
                 }
-                for (int i = 0; i < srcDirs.length; i++)
+                for (String srcDir : srcDirs)
                 {
-                    File newDir = new File(ds.getBasedir(), srcDirs[i]);
+                    File newDir = new File(ds.getBasedir(), srcDir);
 
                     // skip directories we just installed
                     if (installed_files.contains(newDir))

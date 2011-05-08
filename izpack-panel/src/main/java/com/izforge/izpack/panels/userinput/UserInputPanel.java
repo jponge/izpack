@@ -518,9 +518,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
             result = new ArrayList<ValidatorContainer>(vsize);
 
-            for (int i = 0; i < vsize; i++)
+            for (IXMLElement element : validatorsElem)
             {
-                IXMLElement element = validatorsElem.get(i);
                 String validator = element.getAttribute(CLASS);
                 String message = getText(element);
                 HashMap<String, String> validateParamMap = new HashMap<String, String>();

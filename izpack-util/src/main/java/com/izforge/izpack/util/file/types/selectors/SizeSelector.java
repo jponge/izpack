@@ -213,43 +213,43 @@ public class SizeSelector extends BaseExtendSelector
         super.setParameters(parameters);
         if (parameters != null)
         {
-            for (int i = 0; i < parameters.length; i++)
+            for (Parameter parameter : parameters)
             {
-                String paramname = parameters[i].getName();
+                String paramname = parameter.getName();
                 if (SIZE_KEY.equalsIgnoreCase(paramname))
                 {
                     try
                     {
-                        setValue(new Long(parameters[i].getValue()
+                        setValue(new Long(parameter.getValue()
                         ).longValue());
                     }
                     catch (NumberFormatException nfe)
                     {
-                        setError("Invalid size setting " + parameters[i].getValue());
+                        setError("Invalid size setting " + parameter.getValue());
                     }
                 }
                 else if (UNITS_KEY.equalsIgnoreCase(paramname))
                 {
-                    ByteUnits units = ByteUnits.getFromAttribute(parameters[i].getValue());
+                    ByteUnits units = ByteUnits.getFromAttribute(parameter.getValue());
                     if (units != null)
                     {
                         setUnits(units);
                     }
                     else
                     {
-                        setError("Invalid " + UNITS_KEY + " setting " + parameters[i].getValue());
+                        setError("Invalid " + UNITS_KEY + " setting " + parameter.getValue());
                     }
                 }
                 else if (WHEN_KEY.equalsIgnoreCase(paramname))
                 {
-                    SizeComparisons cmp = SizeComparisons.getFromAttribute(parameters[i].getValue());
+                    SizeComparisons cmp = SizeComparisons.getFromAttribute(parameter.getValue());
                     if (cmp != null)
                     {
                         setWhen(cmp);
                     }
                     else
                     {
-                        setError("Invalid " + WHEN_KEY + " setting " + parameters[i].getValue());
+                        setError("Invalid " + WHEN_KEY + " setting " + parameter.getValue());
                     }
                 }
                 else

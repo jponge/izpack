@@ -128,20 +128,20 @@ public class ContainsSelector extends BaseExtendSelector
         super.setParameters(parameters);
         if (parameters != null)
         {
-            for (int i = 0; i < parameters.length; i++)
+            for (Parameter parameter : parameters)
             {
-                String paramname = parameters[i].getName();
+                String paramname = parameter.getName();
                 if (CONTAINS_KEY.equalsIgnoreCase(paramname))
                 {
-                    setText(parameters[i].getValue());
+                    setText(parameter.getValue());
                 }
                 else if (CASE_KEY.equalsIgnoreCase(paramname))
                 {
-                    setCasesensitive(Boolean.parseBoolean(parameters[i].getValue()));
+                    setCasesensitive(Boolean.parseBoolean(parameter.getValue()));
                 }
                 else if (WHITESPACE_KEY.equalsIgnoreCase(paramname))
                 {
-                    setIgnorewhitespace(Boolean.parseBoolean(parameters[i].getValue()));
+                    setIgnorewhitespace(Boolean.parseBoolean(parameter.getValue()));
                 }
                 else
                 {

@@ -77,19 +77,19 @@ public class TypeSelector extends BaseExtendSelector
         super.setParameters(parameters);
         if (parameters != null)
         {
-            for (int i = 0; i < parameters.length; i++)
+            for (Parameter parameter : parameters)
             {
-                String paramname = parameters[i].getName();
+                String paramname = parameter.getName();
                 if (TYPE_KEY.equalsIgnoreCase(paramname))
                 {
-                    FileType type = FileType.getFromAttribute(parameters[i].getValue());
+                    FileType type = FileType.getFromAttribute(parameter.getValue());
                     if (type != null)
                     {
                         setType(type);
                     }
                     else
                     {
-                        setError("Invalid " + TYPE_KEY + " setting " + parameters[i].getValue());
+                        setError("Invalid " + TYPE_KEY + " setting " + parameter.getValue());
                     }
                 }
                 else

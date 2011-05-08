@@ -531,10 +531,7 @@ public class DirectoryScanner
     public static void resetDefaultExcludes()
     {
         defaultExcludes = new Vector<String>();
-        for (int i = 0; i < DEFAULTEXCLUDES.length; i++)
-        {
-            defaultExcludes.add(DEFAULTEXCLUDES[i]);
-        }
+        defaultExcludes.addAll(Arrays.asList(DEFAULTEXCLUDES));
     }
 
     /**
@@ -856,10 +853,9 @@ public class DirectoryScanner
         Hashtable<String, String> newroots = new Hashtable<String, String>();
         // put in the newroots vector the include patterns without
         // wildcard tokens
-        for (int icounter = 0; icounter < includes.length; icounter++)
+        for (String include : includes)
         {
-            newroots.put(SelectorUtils.rtrimWildcardTokens(
-                    includes[icounter]), includes[icounter]);
+            newroots.put(SelectorUtils.rtrimWildcardTokens(include), include);
         }
         if (newroots.containsKey(""))
         {
@@ -1035,20 +1031,20 @@ public class DirectoryScanner
                 String[] notIncl = new String[dirsNotIncluded.size()];
                 dirsNotIncluded.copyInto(notIncl);
 
-                for (int i = 0; i < excl.length; i++)
+                for (String anExcl : excl)
                 {
-                    if (!couldHoldIncluded(excl[i]))
+                    if (!couldHoldIncluded(anExcl))
                     {
-                        scandir(new File(basedir, excl[i]),
-                                excl[i] + File.separator, false);
+                        scandir(new File(basedir, anExcl),
+                                anExcl + File.separator, false);
                     }
                 }
-                for (int i = 0; i < notIncl.length; i++)
+                for (String aNotIncl : notIncl)
                 {
-                    if (!couldHoldIncluded(notIncl[i]))
+                    if (!couldHoldIncluded(aNotIncl))
                     {
-                        scandir(new File(basedir, notIncl[i]),
-                                notIncl[i] + File.separator, false);
+                        scandir(new File(basedir, aNotIncl),
+                                aNotIncl + File.separator, false);
                     }
                 }
                 clearCaches();
@@ -1122,20 +1118,20 @@ public class DirectoryScanner
         if (!followSymlinks)
         {
             Vector<String> noLinks = new Vector<String>();
-            for (int i = 0; i < newfiles.length; i++)
+            for (String newfile : newfiles)
             {
                 try
                 {
-                    if (FILE_UTILS.isSymbolicLink(dir, newfiles[i]))
+                    if (FILE_UTILS.isSymbolicLink(dir, newfile))
                     {
-                        String name = vpath + newfiles[i];
-                        File file = new File(dir, newfiles[i]);
+                        String name = vpath + newfile;
+                        File file = new File(dir, newfile);
                         (file.isDirectory()
                                 ? dirsExcluded : filesExcluded).addElement(name);
                     }
                     else
                     {
-                        noLinks.addElement(newfiles[i]);
+                        noLinks.addElement(newfile);
                     }
                 }
                 catch (IOException ioe)
@@ -1144,16 +1140,16 @@ public class DirectoryScanner
                             + "for links, couldn't get canonical path!";
                     // will be caught and redirected to Ant's logging system
                     System.err.println(msg);
-                    noLinks.addElement(newfiles[i]);
+                    noLinks.addElement(newfile);
                 }
             }
             newfiles = new String[noLinks.size()];
             noLinks.copyInto(newfiles);
         }
-        for (int i = 0; i < newfiles.length; i++)
+        for (String newfile : newfiles)
         {
-            String name = vpath + newfiles[i];
-            File file = new File(dir, newfiles[i]);
+            String name = vpath + newfile;
+            File file = new File(dir, newfile);
             if (file.isDirectory())
             {
                 if (isIncluded(name))
@@ -1276,9 +1272,9 @@ public class DirectoryScanner
         {
             return true;
         }
-        for (int i = 0; i < includePatterns.length; i++)
+        for (String includePattern : includePatterns)
         {
-            if (matchPath(includePatterns[i], name, isCaseSensitive()))
+            if (matchPath(includePattern, name, isCaseSensitive()))
             {
                 return true;
             }
@@ -1296,11 +1292,11 @@ public class DirectoryScanner
      */
     protected boolean couldHoldIncluded(String name)
     {
-        for (int i = 0; i < includes.length; i++)
+        for (String include : includes)
         {
-            if (matchPatternStart(includes[i], name, isCaseSensitive())
-                    && isMorePowerfulThanExcludes(name, includes[i])
-                    && isDeeper(includes[i], name))
+            if (matchPatternStart(include, name, isCaseSensitive())
+                    && isMorePowerfulThanExcludes(name, include)
+                    && isDeeper(include, name))
             {
                 return true;
             }
@@ -1341,9 +1337,9 @@ public class DirectoryScanner
     private boolean isMorePowerfulThanExcludes(String name, String includepattern)
     {
         String soughtexclude = name + File.separator + "**";
-        for (int counter = 0; counter < excludes.length; counter++)
+        for (String exclude : excludes)
         {
-            if (excludes[counter].equals(soughtexclude))
+            if (exclude.equals(soughtexclude))
             {
                 return false;
             }
@@ -1360,9 +1356,8 @@ public class DirectoryScanner
     private boolean contentsExcluded(String name)
     {
         name = (name.endsWith(File.separator)) ? name : name + File.separator;
-        for (int i = 0; i < excludes.length; i++)
+        for (String e : excludes)
         {
-            String e = excludes[i];
             if (e.endsWith("**") && SelectorUtils.matchPath(
                     e.substring(0, e.length() - 2), name, isCaseSensitive()))
             {
@@ -1390,9 +1385,9 @@ public class DirectoryScanner
         {
             return true;
         }
-        for (int i = 0; i < excludePatterns.length; i++)
+        for (String excludePattern : excludePatterns)
         {
-            if (matchPath(excludePatterns[i], name, isCaseSensitive()))
+            if (matchPath(excludePattern, name, isCaseSensitive()))
             {
                 return true;
             }
@@ -1412,9 +1407,9 @@ public class DirectoryScanner
     {
         if (selectors != null)
         {
-            for (int i = 0; i < selectors.length; i++)
+            for (FileSelector selector : selectors)
             {
-                if (!selectors[i].isSelected(idata, basedir, name, file))
+                if (!selector.isSelected(idata, basedir, name, file))
                 {
                     return false;
                 }
@@ -1695,14 +1690,14 @@ public class DirectoryScanner
         String current = pathElements.remove(0);
 
         boolean[] matchCase = cs ? CS_SCAN_ONLY : CS_THEN_NON_CS;
-        for (int i = 0; i < matchCase.length; i++)
+        for (boolean aMatchCase : matchCase)
         {
-            for (int j = 0; j < files.length; j++)
+            for (String file : files)
             {
-                if (matchCase[i] ? files[j].equals(current)
-                        : files[j].equalsIgnoreCase(current))
+                if (aMatchCase ? file.equals(current)
+                        : file.equalsIgnoreCase(current))
                 {
-                    return findFile(new File(base, files[j]), pathElements, cs);
+                    return findFile(new File(base, file), pathElements, cs);
                 }
             }
         }
@@ -1809,16 +1804,15 @@ public class DirectoryScanner
     private String[] fillNonPatternSet(Set<String> set, String[] patterns)
     {
         ArrayList<String> al = new ArrayList<String>(patterns.length);
-        for (int i = 0; i < patterns.length; i++)
+        for (String pattern : patterns)
         {
-            if (!SelectorUtils.hasWildcards(patterns[i]))
+            if (!SelectorUtils.hasWildcards(pattern))
             {
-                set.add(isCaseSensitive() ? patterns[i]
-                        : patterns[i].toUpperCase());
+                set.add(isCaseSensitive() ? pattern : pattern.toUpperCase());
             }
             else
             {
-                al.add(patterns[i]);
+                al.add(pattern);
             }
         }
         return set.size() == 0 ? patterns

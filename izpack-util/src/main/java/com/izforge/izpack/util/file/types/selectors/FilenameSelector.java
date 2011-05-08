@@ -133,21 +133,21 @@ public class FilenameSelector extends BaseExtendSelector
         super.setParameters(parameters);
         if (parameters != null)
         {
-            for (int i = 0; i < parameters.length; i++)
+            for (Parameter parameter : parameters)
             {
-                String paramname = parameters[i].getName();
+                String paramname = parameter.getName();
                 if (NAME_KEY.equalsIgnoreCase(paramname))
                 {
-                    setName(parameters[i].getValue());
+                    setName(parameter.getValue());
                 }
                 else if (CASE_KEY.equalsIgnoreCase(paramname))
                 {
                     setCasesensitive(Boolean.parseBoolean(
-                            parameters[i].getValue()));
+                            parameter.getValue()));
                 }
                 else if (NEGATE_KEY.equalsIgnoreCase(paramname))
                 {
-                    setNegate(Boolean.parseBoolean(parameters[i].getValue()));
+                    setNegate(Boolean.parseBoolean(parameter.getValue()));
                 }
                 else
                 {

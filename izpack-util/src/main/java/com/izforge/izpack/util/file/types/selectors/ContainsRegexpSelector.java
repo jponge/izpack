@@ -78,12 +78,12 @@ public class ContainsRegexpSelector extends BaseExtendSelector
         super.setParameters(parameters);
         if (parameters != null)
         {
-            for (int i = 0; i < parameters.length; i++)
+            for (Parameter parameter : parameters)
             {
-                String paramname = parameters[i].getName();
+                String paramname = parameter.getName();
                 if (EXPRESSION_KEY.equalsIgnoreCase(paramname))
                 {
-                    setExpression(parameters[i].getValue());
+                    setExpression(parameter.getValue());
                 }
                 else
                 {

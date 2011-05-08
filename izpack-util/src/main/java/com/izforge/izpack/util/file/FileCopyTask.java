@@ -508,11 +508,11 @@ public class FileCopyTask
         if (forceOverwrite)
         {
             Vector<String> v = new Vector<String>();
-            for (int i = 0; i < names.length; i++)
+            for (String name : names)
             {
-                if (mapper.mapFileName(names[i]) != null)
+                if (mapper.mapFileName(name) != null)
                 {
-                    v.addElement(names[i]);
+                    v.addElement(name);
                 }
             }
             toCopy = new String[v.size()];
@@ -524,11 +524,11 @@ public class FileCopyTask
             toCopy = ds.restrict(names, fromDir, toDir, mapper, granularity);
         }
 
-        for (int i = 0; i < toCopy.length; i++)
+        for (String elementToCopy : toCopy)
         {
-            File src = new File(fromDir, toCopy[i]);
+            File src = new File(fromDir, elementToCopy);
 
-            String[] mappedFiles = mapper.mapFileName(toCopy[i]);
+            String[] mappedFiles = mapper.mapFileName(elementToCopy);
 
             if (!enableMultipleMappings)
             {
@@ -566,10 +566,8 @@ public class FileCopyTask
                 String fromFile = e.nextElement();
                 String[] toFiles = fileCopyMap.get(fromFile);
 
-                for (int i = 0; i < toFiles.length; i++)
+                for (String toFile : toFiles)
                 {
-                    String toFile = toFiles[i];
-
                     if (fromFile.equals(toFile))
                     {
                         Debug.log("Skipping self-copy of " + fromFile);
@@ -604,9 +602,9 @@ public class FileCopyTask
             while (e.hasMoreElements())
             {
                 String[] dirs = e.nextElement();
-                for (int i = 0; i < dirs.length; i++)
+                for (String dir : dirs)
                 {
-                    File d = new File(dirs[i]);
+                    File d = new File(dir);
                     if (!d.exists())
                     {
                         if (!d.mkdirs())

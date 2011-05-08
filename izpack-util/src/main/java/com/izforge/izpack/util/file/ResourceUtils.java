@@ -61,7 +61,7 @@ public class ResourceUtils
      * last modification date of target files
      *
      * @param logTo       where to send (more or less) interesting output
-     * @param source      array of resources bearing relative path and last
+     * @param resources   array of resources bearing relative path and last
      *                    modification date
      * @param mapper      filename mapper indicating how to find the target
      *                    files
@@ -73,7 +73,7 @@ public class ResourceUtils
      *         copied or processed, because the targets are out of date or do
      *         not exist
      */
-    public static Resource[] selectOutOfDateSources(Resource[] source,
+    public static Resource[] selectOutOfDateSources(Resource[] resources,
                                                     FileNameMapper mapper,
                                                     ResourceFactory targets,
                                                     long granularity)
@@ -82,16 +82,16 @@ public class ResourceUtils
         long now = (new java.util.Date()).getTime() + granularity;
 
         Vector<Resource> vresult = new Vector<Resource>();
-        for (int counter = 0; counter < source.length; counter++)
+        for (Resource resource : resources)
         {
-            if (source[counter].getLastModified() > now)
+            if (resource.getLastModified() > now)
             {
-                Debug.log("Warning: " + source[counter].getName()
+                Debug.log("Warning: " + resource.getName()
                         + " modified in the future.");
             }
 
             String[] targetnames =
-                    mapper.mapFileName(source[counter].getName()
+                    mapper.mapFileName(resource.getName()
                             .replace('/', File.separatorChar));
             if (targetnames != null)
             {
@@ -108,21 +108,21 @@ public class ResourceUtils
                     // add the resource to what needs to be copied
                     if (!atarget.isExists())
                     {
-                        Debug.log(source[counter].getName() + " added as "
+                        Debug.log(resource.getName() + " added as "
                                 + atarget.getName()
                                 + " doesn\'t exist.");
-                        vresult.addElement(source[counter]);
+                        vresult.addElement(resource);
                         added = true;
                     }
                     else if (!atarget.isDirectory()
-                            && SelectorUtils.isOutOfDate(source[counter],
+                            && SelectorUtils.isOutOfDate(resource,
                             atarget,
                             (int) granularity))
                     {
-                        Debug.log(source[counter].getName() + " added as "
+                        Debug.log(resource.getName() + " added as "
                                 + atarget.getName()
                                 + " is outdated.");
-                        vresult.addElement(source[counter]);
+                        vresult.addElement(resource);
                         added = true;
                     }
                     else
@@ -137,7 +137,7 @@ public class ResourceUtils
 
                 if (!added)
                 {
-                    Debug.log(source[counter].getName()
+                    Debug.log(resource.getName()
                             + " omitted as " + targetList.toString()
                             + (targetnames.length == 1 ? " is" : " are ")
                             + " up to date.");
@@ -145,7 +145,7 @@ public class ResourceUtils
             }
             else
             {
-                Debug.log(source[counter].getName()
+                Debug.log(resource.getName()
                         + " skipped - don\'t know how to handle it");
             }
         }

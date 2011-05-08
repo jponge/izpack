@@ -86,10 +86,8 @@ public class DtdInsertAction implements Action
 
         // Find the corresponding element
         DTDElement parentDtdElement = null;
-        for (Iterator<DTDElement> it = dtdElements.iterator(); it.hasNext();)
+        for (DTDElement dtdElement : dtdElements)
         {
-            DTDElement dtdElement = it.next();
-
             if (dtdElement.getName().equals(outputParentElement.getName()))
             {
                 parentDtdElement = dtdElement;
@@ -230,16 +228,16 @@ public class DtdInsertAction implements Action
 
         DTDItem[] items = container.getItems();
 
-        for (int i = 0; i < items.length; i++)
+        for (DTDItem item : items)
         {
-            if (items[i] instanceof DTDContainer)
+            if (item instanceof DTDContainer)
             {
                 // recursively add container children
-                result.addAll(getOrderedDtdElements((DTDContainer) items[i]));
+                result.addAll(getOrderedDtdElements((DTDContainer) item));
             }
-            else if (items[i] instanceof DTDName)
+            else if (item instanceof DTDName)
             {
-                result.add(((DTDName) items[i]).getValue());
+                result.add(((DTDName) item).getValue());
             }
         }
 
