@@ -149,7 +149,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         iter = idata.getAvailablePacks().iterator();
         while (iter.hasNext())
         {
-            String currentPack = ((Pack) iter.next()).name;
+            String currentPack = iter.next().name;
             performAllActions(currentPack, ActionBase.BEFOREPACKS, null);
         }
     }

@@ -78,12 +78,12 @@ public class XPathOperationFactory implements OperationFactory
     public Operation getOperation(Element originalElement, Element patchElement)
             throws AbstractXmlMergeException
     {
-        Iterator<String> it = m_map.keySet().iterator();
-        while (it.hasNext())
+        for (String xPath : m_map.keySet())
         {
-            String xPath = (String) it.next();
-            if (matches(originalElement, xPath) || matches(patchElement, xPath)) { return (Operation) m_map
-                    .get(xPath); }
+            if (matches(originalElement, xPath) || matches(patchElement, xPath))
+            {
+                return m_map.get(xPath);
+            }
         }
         return m_defaultOperation;
     }

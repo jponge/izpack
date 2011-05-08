@@ -67,7 +67,7 @@ public class RegexUtil
         {
             if (groupNumber < groups.size())
             {
-                return (String) groups.elementAt(groupNumber);
+                return groups.elementAt(groupNumber);
             }
             else
             {
@@ -173,7 +173,7 @@ public class RegexUtil
         SelectNode node = null;
         while (e.hasMoreElements())
         {
-            node = (SelectNode) e.nextElement();
+            node = e.nextElement();
             buf.append(node.select(groups));
         }
         return buf.toString();

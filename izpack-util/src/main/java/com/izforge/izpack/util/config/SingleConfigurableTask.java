@@ -1202,8 +1202,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
 
         public int getCalendarField()
         {
-            Integer i = (Integer) calendarFields.get(this);
-            return i.intValue();
+            return calendarFields.get(this);
         }
 
     }

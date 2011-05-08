@@ -119,7 +119,7 @@ public class FullMergeAction extends AbstractMergeAction
                         if (((Matcher) m_matcherFactory.getOperation((Element) patchContent, (Element) origContent))
                                 .matches((Element) patchContent, (Element) origContent))
                         {
-                            Debug.log("Apply matching patch: " + (Element) patchContent + " -> " + (Element) origContent);
+                            Debug.log("Apply matching patch: " + patchContent + " -> " + origContent);
                             applyAction(parentOut, (Element) origContent, (Element) patchContent);
                             patchMatched = true;
                             if (!matchedPatchContentList.contains(patchContent))
@@ -140,7 +140,7 @@ public class FullMergeAction extends AbstractMergeAction
 
                 if (!patchMatched)
                 {
-                    Debug.log("Apply original: "+(Element) origContent);
+                    Debug.log("Apply original: "+ origContent);
                     applyAction(parentOut, (Element) origContent, null);
                 }
             }
@@ -160,7 +160,7 @@ public class FullMergeAction extends AbstractMergeAction
         {
             if (!matchedPatchContentList.contains(unmatchedPatchContent))
             {
-                Debug.log("Apply unmatching patch: "+(Element) unmatchedPatchContent);
+                Debug.log("Apply unmatching patch: "+ unmatchedPatchContent);
                 applyAction(parentOut, null, (Element) unmatchedPatchContent);
             }
         }

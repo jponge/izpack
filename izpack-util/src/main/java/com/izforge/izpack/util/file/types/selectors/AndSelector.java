@@ -70,7 +70,7 @@ public class AndSelector extends BaseSelectorContainer
 
         while (e.hasMoreElements())
         {
-            result = ((FileSelector) e.nextElement()).isSelected(idata,
+            result = e.nextElement().isSelected(idata,
                     basedir, filename, file);
             if (!result)
             {

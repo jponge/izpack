@@ -111,7 +111,7 @@ public abstract class ConfigurableFileCopyTask extends FileCopyTask implements C
             while (e.hasMoreElements())
             {
                 String fromFile = e.nextElement();
-                String[] toFiles = (String[]) fileCopyMap.get(fromFile);
+                String[] toFiles = fileCopyMap.get(fromFile);
 
                 for (int i = 0; i < toFiles.length; i++)
                 {

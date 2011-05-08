@@ -258,7 +258,7 @@ public class FileCopyTask
         if (file == null && destFile != null && filesets.size() == 1)
         {
             // will be removed in validateAttributes
-            savedFileSet = (FileSet) filesets.elementAt(0);
+            savedFileSet = filesets.elementAt(0);
         }
 
         // make sure we don't have an illegal set of options
@@ -307,7 +307,7 @@ public class FileCopyTask
             // deal with the filesets
             for (int i = 0; i < filesets.size(); i++)
             {
-                FileSet fs = (FileSet) filesets.elementAt(i);
+                FileSet fs = filesets.elementAt(i);
                 DirectoryScanner ds = null;
                 try
                 {
@@ -420,7 +420,7 @@ public class FileCopyTask
             }
             else
             {
-                FileSet fs = (FileSet) filesets.elementAt(0);
+                FileSet fs = filesets.elementAt(0);
                 DirectoryScanner ds = fs.getDirectoryScanner(/*getProject()*/);
                 String[] srcFiles = ds.getIncludedFiles();
 
@@ -564,7 +564,7 @@ public class FileCopyTask
             while (e.hasMoreElements())
             {
                 String fromFile = e.nextElement();
-                String[] toFiles = (String[]) fileCopyMap.get(fromFile);
+                String[] toFiles = fileCopyMap.get(fromFile);
 
                 for (int i = 0; i < toFiles.length; i++)
                 {
