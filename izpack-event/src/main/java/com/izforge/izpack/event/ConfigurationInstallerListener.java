@@ -176,10 +176,9 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
             handler.nextStep(getMsg("ConfigurationAction.pack"), getProgressBarCallerId(), getActionCount(
                     idata, ActionBase.AFTERPACKS));
         }
-        Iterator<Pack> iter = idata.getSelectedPacks().iterator();
-        while (iter.hasNext())
+        for (Pack pack : idata.getSelectedPacks())
         {
-            String currentPack = iter.next().name;
+            String currentPack = pack.name;
             performAllActions(currentPack, ActionBase.AFTERPACKS, handler);
         }
     }
@@ -187,10 +186,9 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     private int getActionCount(AutomatedInstallData idata, String order)
     {
         int retval = 0;
-        Iterator<Pack> iter = idata.getSelectedPacks().iterator();
-        while (iter.hasNext())
+        for (Pack pack : idata.getSelectedPacks())
         {
-            String currentPack = iter.next().name;
+            String currentPack = pack.name;
             ArrayList<ConfigurationAction> actList = getActions(currentPack, order);
             if (actList != null)
             {
@@ -330,11 +328,8 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
             IXMLElement parent) throws InstallerException
     {
         List<ConfigurationActionTask> configtasks = new ArrayList<ConfigurationActionTask>();
-        Iterator<IXMLElement> iter = parent.getChildrenNamed("configurableset").iterator();
-        while (iter.hasNext())
+        for (IXMLElement el : parent.getChildrenNamed("configurableset"))
         {
-            IXMLElement el = iter.next();
-
             String attrib = requireAttribute(el, "type");
             ConfigType configType = null;
             if (attrib != null)
@@ -491,11 +486,8 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
              IXMLElement parent) throws InstallerException
     {
         List<ConfigurationActionTask> configtasks = new ArrayList<ConfigurationActionTask>();
-        Iterator<IXMLElement> iter = parent.getChildrenNamed("configurable").iterator();
-        while (iter.hasNext())
+        for (IXMLElement el : parent.getChildrenNamed("configurable"))
         {
-            IXMLElement el = iter.next();
-
             String attrib = requireAttribute(el, "type");
             ConfigType configType = null;
             if (attrib != null)
@@ -571,10 +563,8 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
             SingleXmlFileMergeTask task)
     throws InstallerException
     {
-        Iterator<IXMLElement> iter = parent.getChildrenNamed("xpathproperty").iterator();
-        while (iter.hasNext())
+        for (IXMLElement f : parent.getChildrenNamed("xpathproperty"))
         {
-            IXMLElement f = iter.next();
             task.addProperty(requireAttribute(f, "key"), requireAttribute(f, "value"));
         }
     }
@@ -707,10 +697,8 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     private void readAndAddIncludes(AutomatedInstallData idata, IXMLElement parent, FileSet fileset)
     throws InstallerException
     {
-        Iterator<IXMLElement> iter = parent.getChildrenNamed("include").iterator();
-        while (iter.hasNext())
+        for (IXMLElement f : parent.getChildrenNamed("include"))
         {
-            IXMLElement f = iter.next();
             fileset.createInclude().setName(requireAttribute(f, "name"));
         }
     }
@@ -718,10 +706,8 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     private void readAndAddExcludes(AutomatedInstallData idata, IXMLElement parent, FileSet fileset)
     throws InstallerException
     {
-        Iterator<IXMLElement> iter = parent.getChildrenNamed("exclude").iterator();
-        while (iter.hasNext())
+        for (IXMLElement f : parent.getChildrenNamed("exclude"))
         {
-            IXMLElement f = iter.next();
             fileset.createExclude().setName(requireAttribute(f, "name"));
         }
     }
@@ -757,10 +743,8 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     {
         List<DynamicVariable> dynamicVariables = new ArrayList<DynamicVariable>();
 
-        Iterator<IXMLElement> iter = parent.getChildrenNamed("variable").iterator();
-        while (iter.hasNext())
+        for (IXMLElement var : parent.getChildrenNamed("variable"))
         {
-            IXMLElement var = iter.next();
             String name = requireAttribute(var, "name");
 
             DynamicVariable dynamicVariable = new DynamicVariableImpl();

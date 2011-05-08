@@ -167,11 +167,8 @@ public class PropertyXPathConfigurer extends AbstractXPathConfigurer
             }
         }
 
-        Iterator<String> it = m_paths.iterator();
-        while (it.hasNext())
+        for (String path : m_paths)
         {
-            String path = it.next();
-
             token = m_props.getProperty(ACTION_PREFIX + path);
             if (token != null)
             {
