@@ -9,6 +9,7 @@ import com.izforge.izpack.util.FileUtil;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
@@ -158,22 +159,38 @@ public class ClassPathCrawler
         return resultSet;
     }
 
+    private String getCurrentJar() throws IOException {
+        String className = getClass().getName();
+        URL classUrl = getClass().getResource("/" + className.replace('.', '/') + ".class");
+        if(classUrl.getProtocol().equals("jar")){
+            URL jarUrl = ((JarURLConnection) classUrl.openConnection()).getJarFileURL();
+            return jarUrl.getFile();
+        }
+        return null;
+    }
+
     private Collection<URL> getClassPathUrl()
     {
         Collection<URL> result = new HashSet<URL>();
         java.net.URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
         result.addAll(Arrays.asList(loader.getURLs()));
+        List<String> acceptedRegexp = new ArrayList<String>(acceptedJar);
         try
         {
             Enumeration<URL> urlEnumeration = loader.getResources("");
             result.addAll(Collections.list(urlEnumeration));
             urlEnumeration = loader.getResources("META-INF/");
             result.addAll(Collections.list(urlEnumeration));
+            String currentJar = getCurrentJar();
+            if(currentJar!= null){
+                acceptedRegexp.add(".*"+currentJar+".*");
+            }
         }
         catch (IOException ignored)
         {
         }
-        return filterUrl(result, acceptedJar);
+
+        return filterUrl(result, acceptedRegexp);
     }
 
 
