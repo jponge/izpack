@@ -55,7 +55,7 @@ public class ClassPathCrawler
         classPathContentCache = new HashMap<String, Set<URL>>();
         try
         {
-            Collection<URL> urls = getClassPathUrl();
+            Set<URL> urls = getClassPathUrl();
             for (URL url : urls)
             {
                 Mergeable mergeable = mergeableResolver.getMergeableFromURL(url);
@@ -159,42 +159,43 @@ public class ClassPathCrawler
         return resultSet;
     }
 
-    private String getCurrentJar() throws IOException {
+    private URL getCurrentJarUrl() throws IOException {
         String className = getClass().getName();
         URL classUrl = getClass().getResource("/" + className.replace('.', '/') + ".class");
         if(classUrl.getProtocol().equals("jar")){
-            URL jarUrl = ((JarURLConnection) classUrl.openConnection()).getJarFileURL();
-            return jarUrl.getFile();
+            return ((JarURLConnection) classUrl.openConnection()).getJarFileURL();
         }
         return null;
     }
 
-    private Collection<URL> getClassPathUrl()
+    private Set<URL> getClassPathUrl()
     {
-        Collection<URL> result = new HashSet<URL>();
+        Set<URL> result = new HashSet<URL>();
         java.net.URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
         result.addAll(Arrays.asList(loader.getURLs()));
-        List<String> acceptedRegexp = new ArrayList<String>(acceptedJar);
+        URL currentJarUrl = null;
         try
         {
             Enumeration<URL> urlEnumeration = loader.getResources("");
             result.addAll(Collections.list(urlEnumeration));
             urlEnumeration = loader.getResources("META-INF/");
             result.addAll(Collections.list(urlEnumeration));
-            String currentJar = getCurrentJar();
-            if(currentJar!= null){
-                acceptedRegexp.add(".*"+currentJar+".*");
-            }
+            currentJarUrl = getCurrentJarUrl();
         }
         catch (IOException ignored)
         {
         }
 
-        return filterUrl(result, acceptedRegexp);
+        Set<URL> filteredUrls = filterUrl(result, acceptedJar);
+        // ensure that the current jar is in
+        if (currentJarUrl != null) {
+            filteredUrls.add(currentJarUrl);
+        }
+        return filteredUrls;
     }
 
 
-    private Collection<URL> filterUrl(Collection<URL> urlCollection, List<String> acceptedRegexp)
+    private Set<URL> filterUrl(Set<URL> urlCollection, List<String> acceptedRegexp)
     {
         HashSet<URL> result = new HashSet<URL>();
         for (URL url : urlCollection)
