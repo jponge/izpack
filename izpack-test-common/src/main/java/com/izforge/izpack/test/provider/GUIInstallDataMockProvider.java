@@ -28,7 +28,7 @@ public class GUIInstallDataMockProvider implements Provider
         guiInstallData.setInfo(info);
 
         LocaleDatabase localDataBase = new LocaleDatabase(
-                ClassLoader.getSystemClassLoader().getResource("bin/langpacks/installer/eng.xml").openStream());
+                ClassLoader.getSystemClassLoader().getResource("com/izforge/izpack/bin/langpacks/installer/eng.xml").openStream());
         guiInstallData.setAndProcessLocal("eng", localDataBase);
 
         return guiInstallData;

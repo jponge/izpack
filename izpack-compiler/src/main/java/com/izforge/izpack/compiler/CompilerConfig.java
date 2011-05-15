@@ -458,7 +458,7 @@ public class CompilerConfig extends Thread
             String path = ixmlElement.getAttribute("src");
             if (path == null)
             {
-                path = "bin/native/" + type + "/" + name;
+                path = "com/izforge/izpack/bin/native/" + type + "/" + name;
             }
             mergeManager.addResourceToMerge(path);
 
@@ -1647,10 +1647,10 @@ public class CompilerConfig extends Thread
             String iso3 = xmlCompilerHelper.requireAttribute(localNode, "iso3");
             String path;
 
-            path = "bin/langpacks/installer/" + iso3 + ".xml";
+            path = "com/izforge/izpack/bin/langpacks/installer/" + iso3 + ".xml";
             URL iso3xmlURL = resourceFinder.findIzPackResource(path, "ISO3 file", localNode);
 
-            path = "bin/langpacks/flags/" + iso3 + ".gif";
+            path = "com/izforge/izpack/bin/langpacks/flags/" + iso3 + ".gif";
             URL iso3FlagURL = resourceFinder.findIzPackResource(path, "ISO3 flag image", localNode);
 
             packager.addLangPack(iso3, iso3xmlURL, iso3FlagURL);

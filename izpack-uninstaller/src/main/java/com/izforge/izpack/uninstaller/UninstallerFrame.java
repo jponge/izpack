@@ -263,19 +263,19 @@ public class UninstallerFrame extends JFrame
         ImageIcon img;
 
         // We load it
-        url = UninstallerFrame.class.getResource("/img/trash.png");
+        url = UninstallerFrame.class.getResource("/com/izforge/izpack/img/trash.png");
         img = new ImageIcon(url);
         icons.put("delete", img);
 
-        url = UninstallerFrame.class.getResource("/img/stop.png");
+        url = UninstallerFrame.class.getResource("/com/izforge/izpack/img/stop.png");
         img = new ImageIcon(url);
         icons.put("stop", img);
 
-        url = UninstallerFrame.class.getResource("/img/flag.png");
+        url = UninstallerFrame.class.getResource("/com/izforge/izpack/img/flag.png");
         img = new ImageIcon(url);
         icons.put("warning", img);
 
-        url = UninstallerFrame.class.getResource("/img/JFrameIcon.png");
+        url = UninstallerFrame.class.getResource("/com/izforge/izpack/img/JFrameIcon.png");
         img = new ImageIcon(url);
         icons.put("JFrameIcon", img);
     }

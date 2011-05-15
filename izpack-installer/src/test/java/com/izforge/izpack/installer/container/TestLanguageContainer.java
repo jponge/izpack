@@ -60,11 +60,11 @@ public class TestLanguageContainer extends AbstractContainer
                 .addAdapter(new ProviderAdapter(new IconsProvider()));
 
         Mockito.when(resourceManager.getAvailableLangPacks()).thenReturn(Arrays.asList("eng", "fra"));
-        ImageIcon engFlag = new ImageIcon(getClass().getResource("/bin/langpacks/flags/eng.gif"));
-        ImageIcon frFlag = new ImageIcon(getClass().getResource("/bin/langpacks/flags/fra.gif"));
+        ImageIcon engFlag = new ImageIcon(getClass().getResource("/com/izforge/izpack/bin/langpacks/flags/eng.gif"));
+        ImageIcon frFlag = new ImageIcon(getClass().getResource("/com/izforge/izpack/bin/langpacks/flags/fra.gif"));
         Mockito.when(resourceManager.getImageIconResource("flag.eng")).thenReturn(engFlag);
         Mockito.when(resourceManager.getImageIconResource("flag.fra")).thenReturn(frFlag);
-        Mockito.when(resourceManager.getInputStream(Mockito.anyString())).thenReturn(getClass().getResourceAsStream("/bin/langpacks/installer/eng.xml"));
+        Mockito.when(resourceManager.getInputStream(Mockito.anyString())).thenReturn(getClass().getResourceAsStream("/com/izforge/izpack/bin/langpacks/installer/eng.xml"));
     }
 
     private JFrame initFrame()
