@@ -258,9 +258,9 @@ public class UninstallDataWriter
                         byte[] buffer = new byte[5120];
                         long bytesCopied = 0;
                         int bytesInBuffer;
-                        outJar.putNextEntry(new JarEntry("native/" + nativeLibName));
+                        outJar.putNextEntry(new JarEntry("/com/izforge/izpack/bin/native/" + nativeLibName));
                         InputStream in = getClass().getResourceAsStream(
-                                "/native/" + nativeLibName);
+                                "/com/izforge/izpack/bin/native/" + nativeLibName);
                         while ((bytesInBuffer = in.read(buffer)) != -1)
                         {
                             outJar.write(buffer, 0, bytesInBuffer);
@@ -377,7 +377,7 @@ public class UninstallDataWriter
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/api/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/util/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/gui/"));
-        uninstallerMerge.addAll(pathResolver.getMergeableFromPath("img/"));
+        uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/img/"));
 
         // The uninstaller extension is facultative; it will be exist only
         // if a native library was marked for uninstallation.

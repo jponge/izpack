@@ -54,7 +54,7 @@ public class UninstallWriteTest
                 "langpack.xml", 
                 "META-INF/MANIFEST.MF", 
                 "com/izforge/izpack/gui/IconsDatabase.class",
-                "/img/trash.png"));
+                "/com/izforge/izpack/img/trash.png"));
 
     }
 }

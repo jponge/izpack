@@ -42,7 +42,7 @@ public class CompilerConfigSamplesTest
         compilerConfig.executeCompiler();
         assertThat(out, ZipMatcher.isZipContainingFile("com/izforge/izpack/panels/checkedhello/CheckedHelloPanel.class"));
         assertThat(out, ZipMatcher.isZipContainingFile("resources/vars"));
-        assertThat(out, ZipMatcher.isZipContainingFile("img/JFrameIcon.png"));
+        assertThat(out, ZipMatcher.isZipContainingFile("com/izforge/izpack/img/JFrameIcon.png"));
     }
 
     @Test

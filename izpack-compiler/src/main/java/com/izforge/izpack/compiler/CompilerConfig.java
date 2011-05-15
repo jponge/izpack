@@ -458,7 +458,7 @@ public class CompilerConfig extends Thread
             String path = ixmlElement.getAttribute("src");
             if (path == null)
             {
-                path = "bin/native/" + type + "/" + name;
+                path = "com/izforge/izpack/bin/native/" + type + "/" + name;
             }
             mergeManager.addResourceToMerge(path);
 
