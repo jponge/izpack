@@ -29,7 +29,7 @@ JNLP_TEMPLATE = """
     <vendor>$vendor</vendor>
     <homepage href="$homepage"/>
     <description>$description</description>
-    <offline-allowed/> 
+    <offline-allowed/>
   </information>
   <security>
       <all-permissions/>
@@ -38,14 +38,14 @@ JNLP_TEMPLATE = """
     <j2se version="1.6+"/>
     <jar href="$installer"/>
   </resources>
-  <application-desc main-class="com.izforge.izpack.installer.Installer"/>
+  <application-desc main-class="com.izforge.izpack.installer.bootstrap.Installer"/>
 </jnlp>
 """
 
 def parse_options():
     from optparse import OptionParser
     parser = OptionParser()
-    
+
     parser.add_option("--codebase",
                       action="store",
                       dest="codebase",
@@ -74,9 +74,9 @@ def parse_options():
                       action="store",
                       dest="installer",
                       help="Name of the installer JAR file, relative to --codebase")
-                                    
-    (options, args) = parser.parse_args()    
-    
+
+    (options, args) = parser.parse_args()
+
     to_check = (options.codebase,
                 options.jnlp,
                 options.title,
@@ -87,7 +87,7 @@ def parse_options():
     for item in to_check:
         if item is None:
             parser.error("Some arguments were missing, please run again with --help")
-    
+
     return options
 
 def main():

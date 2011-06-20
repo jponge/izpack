@@ -88,8 +88,7 @@ public class AutomatedInstallScriptFilter extends FileFilter
         try
         {
             //All of this will be changed to a few lines of code after the locale database refactor.
-            InputStream in = this.getClass().getResourceAsStream(
-                    "/langpacks/" + locale + ".xml");
+            InputStream in = resourceManager.getInputStream("langpacks/" + locale + ".xml");
             LocaleDatabase langpack = new LocaleDatabase(in);
 
             description = langpack.getString(DESCRIPTION_LOCALE_DATABASE_KEY);

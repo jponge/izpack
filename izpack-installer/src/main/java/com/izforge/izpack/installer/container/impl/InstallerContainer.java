@@ -102,7 +102,7 @@ public class InstallerContainer extends AbstractContainer
         // Dummy Frame
         JFrame frame = new JFrame();
         ImageIcon imageIcon;
-        imageIcon = resourceManager.getImageIconResource("JFrameIcon", "/img/JFrameIcon.png");
+        imageIcon = resourceManager.getImageIconResource("JFrameIcon", "/com/izforge/izpack/img/JFrameIcon.png");
         frame.setIconImage(imageIcon.getImage());
 
         Dimension frameSize = frame.getSize();

@@ -55,14 +55,12 @@ public class HelloPanelConsoleHelper extends PanelConsoleHelper implements Panel
                 + idata.getInfo().getAppVersion() + idata.getLangpack().getString("HelloPanel.welcome2");
         System.out.println(welcomeText);
         ArrayList<Info.Author> authors = idata.getInfo().getAuthors();
-        int size = authors.size();
-        if (size > 0)
+        if (!authors.isEmpty())
         {
             String authorText = idata.getLangpack().getString("HelloPanel.authors");
 
-            for (int i = 0; i < size; i++)
+            for (Info.Author author : authors)
             {
-                Info.Author author = authors.get(i);
                 String email = (author.getEmail() != null && author.getEmail().length() > 0) ? (" <"
                         + author.getEmail() + ">") : "";
                 System.out.println(" - " + author.getName() + email);

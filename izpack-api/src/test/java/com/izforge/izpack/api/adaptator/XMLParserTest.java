@@ -124,4 +124,18 @@ public class XMLParserTest
         parser.parse(input, parseErrorXincludeFilename);
     }
 
+    @Test(expected = NullPointerException.class)
+    public void testNPE()
+    {
+        IXMLParser parser = new XMLParser();
+        parser.parse((InputStream) null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testWithSystemIdNPE()
+    {
+        IXMLParser parser = new XMLParser();
+        parser.parse(null, "bla");
+    }
+
 }

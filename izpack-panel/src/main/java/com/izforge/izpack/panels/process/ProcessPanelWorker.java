@@ -165,6 +165,7 @@ public class ProcessPanelWorker implements Runnable
                         System.err.println("missing \"name\" attribute for <executefile>");
                         return false;
                     }
+                    String ef_working_dir = executeFileElement.getAttribute("workingDir");
 
                     List<String> args = new ArrayList<String>();
 
@@ -184,8 +185,7 @@ public class ProcessPanelWorker implements Runnable
                         envvars.add(env_val);
                     }
 
-
-                    ef_list.add(new ProcessPanelWorker.ExecutableFile(ef_name, args, envvars));
+                    ef_list.add(new ProcessPanelWorker.ExecutableFile(ef_name, args, envvars, ef_working_dir));
                 }
 
                 for (IXMLElement executeClassElement : job_el.getChildrenNamed("executeclass"))
@@ -250,6 +250,7 @@ public class ProcessPanelWorker implements Runnable
         // all selected or de-selected
         try
         {
+            jobs.clear();
             if (!readSpec())
             {
                 System.err.println("Error parsing XML specification for processing.");
@@ -405,6 +406,7 @@ public class ProcessPanelWorker implements Runnable
     {
 
         private String filename;
+        private String workingDir;
 
         private List<String> arguments;
 
@@ -412,11 +414,12 @@ public class ProcessPanelWorker implements Runnable
 
         protected AbstractUIProcessHandler handler;
 
-        public ExecutableFile(String fn, List<String> args, List<String> envvars)
+        public ExecutableFile(String fn, List<String> args, List<String> envvars, String workingDir)
         {
             this.filename = fn;
             this.arguments = args;
             this.envvariables = envvars;
+            this.workingDir = workingDir;
         }
 
         public boolean run(AbstractUIProcessHandler handler, VariableSubstitutor vs)
@@ -447,6 +450,10 @@ public class ProcessPanelWorker implements Runnable
             }
 
             ProcessBuilder processBuilder = new ProcessBuilder(params);
+            if(workingDir != null && !workingDir.equals("")) {
+                workingDir = IoHelper.translatePath(workingDir, vs);
+                processBuilder.directory(new File(workingDir));
+            }
             Map<String, String> environment = processBuilder.environment();
             for (String envvar : envvariables)
             {

@@ -43,7 +43,7 @@ public class CompositeMapper extends ContainerMapper
             }
         }
 
-        return (results.size() == 0) ? null : (String[]) results
+        return (results.size() == 0) ? null : results
                 .toArray(new String[results.size()]);
     }
 

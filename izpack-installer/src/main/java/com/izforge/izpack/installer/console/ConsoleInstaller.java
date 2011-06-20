@@ -76,8 +76,7 @@ public class ConsoleInstaller extends InstallerBase
             this.installdata.setLocaleISO3(resourceManager.getAvailableLangPacks().get(0));
         }
 
-        InputStream in = getClass().getResourceAsStream(
-                "/langpacks/" + this.installdata.getLocaleISO3() + ".xml");
+        InputStream in = resourceManager.getInputStream("langpacks/" + this.installdata.getLocaleISO3() + ".xml");
         this.installdata.setLangpack(new LocaleDatabase(in));
         this.installdata.setVariable(ScriptParserConstant.ISO3_LANG, this.installdata.getLocaleISO3());
         resourceManager.setLocale(this.installdata.getLocaleISO3());

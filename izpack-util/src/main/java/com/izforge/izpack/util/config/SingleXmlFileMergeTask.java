@@ -142,8 +142,9 @@ public class SingleXmlFileMergeTask implements ConfigurableTask {
         for (FileSet fs : filesets) {
             DirectoryScanner ds = fs.getDirectoryScanner();
             String[] includedFiles = ds.getIncludedFiles();
-            for (int i = 0; i < includedFiles.length; i++) {
-                filesToMerge.add(new File(ds.getBasedir(), includedFiles[i]));
+            for (String includedFile : includedFiles)
+            {
+                filesToMerge.add(new File(ds.getBasedir(), includedFile));
             }
         }
 

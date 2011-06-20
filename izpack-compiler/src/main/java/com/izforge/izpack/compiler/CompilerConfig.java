@@ -458,7 +458,7 @@ public class CompilerConfig extends Thread
             String path = ixmlElement.getAttribute("src");
             if (path == null)
             {
-                path = "bin/native/" + type + "/" + name;
+                path = "com/izforge/izpack/bin/native/" + type + "/" + name;
             }
             mergeManager.addResourceToMerge(path);
 
@@ -1481,6 +1481,18 @@ public class CompilerConfig extends Thread
             OutputStream os = null;
             try
             {
+                if (parsexml || (!"".equals(encoding)) || (substitute && !packager.getVariables().isEmpty()))
+                {
+                    // make the substitutions into a temp file
+                    File parsedFile = FileUtils.createTempFile("izpp", null);
+                    parsedFile.deleteOnExit();
+                    FileOutputStream outFile = new FileOutputStream(parsedFile);
+                    os = new BufferedOutputStream(outFile);
+                    // and specify the substituted file to be added to the
+                    // packager
+                    url = parsedFile.toURI().toURL();
+                }
+                
                 if (!"".equals(encoding))
                 {
                     File recodedFile = FileUtils.createTempFile("izenc", null);
@@ -1498,20 +1510,13 @@ public class CompilerConfig extends Thread
                     }
                     reader.close();
                     writer.close();
-
-                    originalUrl = recodedFile.toURI().toURL();
-                }
-
-                if (parsexml || (!"".equals(encoding)) || (substitute && !packager.getVariables().isEmpty()))
-                {
-                    // make the substitutions into a temp file
-                    File parsedFile = FileUtils.createTempFile("izpp", null);
-                    parsedFile.deleteOnExit();
-                    FileOutputStream outFile = new FileOutputStream(parsedFile);
-                    os = new BufferedOutputStream(outFile);
-                    // and specify the substituted file to be added to the
-                    // packager
-                    url = parsedFile.toURI().toURL();
+                    if (parsexml)
+                    {
+                        originalUrl = recodedFile.toURI().toURL();
+                    } else 
+                    {
+                        url = recodedFile.toURI().toURL();
+                    }
                 }
 
                 if (parsexml)
@@ -1642,10 +1647,10 @@ public class CompilerConfig extends Thread
             String iso3 = xmlCompilerHelper.requireAttribute(localNode, "iso3");
             String path;
 
-            path = "bin/langpacks/installer/" + iso3 + ".xml";
+            path = "com/izforge/izpack/bin/langpacks/installer/" + iso3 + ".xml";
             URL iso3xmlURL = resourceFinder.findIzPackResource(path, "ISO3 file", localNode);
 
-            path = "bin/langpacks/flags/" + iso3 + ".gif";
+            path = "com/izforge/izpack/bin/langpacks/flags/" + iso3 + ".gif";
             URL iso3FlagURL = resourceFinder.findIzPackResource(path, "ISO3 flag image", localNode);
 
             packager.addLangPack(iso3, iso3xmlURL, iso3FlagURL);

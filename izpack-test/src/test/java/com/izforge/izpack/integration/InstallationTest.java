@@ -82,7 +82,7 @@ public class InstallationTest
     @InstallFile("samples/helloAndFinish.xml")
     public void testHelloAndFinishPanels() throws Exception
     {
-        Image image = resourceManager.getImageIconResource("/img/JFrameIcon.png").getImage();
+        Image image = resourceManager.getImageIconResource("/com/izforge/izpack/img/JFrameIcon.png").getImage();
         assertThat(image, IsNull.<Object>notNullValue());
 
         languageDialog.initLangPack();

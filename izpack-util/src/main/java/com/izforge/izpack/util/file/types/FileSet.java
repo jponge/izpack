@@ -297,8 +297,7 @@ public class FileSet extends DataType
      */
     public FileSelector[] getSelectors()
     {
-        return (FileSelector[]) (selectors.toArray(
-                new FileSelector[selectors.size()]));
+        return selectors.toArray(new FileSelector[selectors.size()]);
     }
 
     /**

@@ -30,7 +30,7 @@ IzPack Maven Plugin
    
 * Examples
 
-  * {{{http://svn.codehaus.org/izpack/izpack-maven/trunk/izpack-maven-plugin/src/it/sample/} A simple Maven project.}}
+  * {{{http://svn.codehaus.org/izpack-svn/izpack-maven/trunk/izpack-maven-plugin/src/it/sample/} A simple Maven project.}}
 
   * {{{examples/groovy.html} Groovy Installer}}
 

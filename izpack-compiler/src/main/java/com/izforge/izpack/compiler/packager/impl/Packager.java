@@ -145,8 +145,8 @@ public class Packager extends PackagerBase
         sendMsg("Copying the skeleton installer", PackagerListener.MSG_VERBOSE);
         mergeManager.addResourceToMerge("com/izforge/izpack/installer/");
         mergeManager.addResourceToMerge("org/picocontainer/");
-        mergeManager.addResourceToMerge("img/");
-        mergeManager.addResourceToMerge("bin/");
+        mergeManager.addResourceToMerge("com/izforge/izpack/img/");
+        mergeManager.addResourceToMerge("com/izforge/izpack/bin/");
         mergeManager.addResourceToMerge("com/izforge/izpack/api/");
         mergeManager.addResourceToMerge("com/izforge/izpack/event/");
         mergeManager.addResourceToMerge("com/izforge/izpack/core/");

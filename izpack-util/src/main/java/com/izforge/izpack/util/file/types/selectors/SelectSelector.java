@@ -156,7 +156,7 @@ public class SelectSelector extends BaseSelectorContainer
         {
             return true;
         }
-        FileSelector f = (FileSelector) e.nextElement();
+        FileSelector f = e.nextElement();
         return f.isSelected(idata, basedir, filename, file);
     }
 }

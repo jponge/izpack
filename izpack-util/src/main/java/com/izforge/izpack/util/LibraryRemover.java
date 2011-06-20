@@ -288,13 +288,11 @@ public class LibraryRemover
             }
 
             ArrayList<File> files = getFilesList();
-            int size = files.size();
             // We destroy the files
 
             log("deleteing temporary dlls/shls");
-            for (int i = 0; i < size; i++)
+            for (File file : files)
             {
-                File file = files.get(i);
                 file.delete();
                 if (file.exists())
                 {

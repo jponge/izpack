@@ -10,12 +10,13 @@ import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.PrivilegedRunner;
 
 import java.io.*;
 import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipOutputStream;
+import java.util.jar.JarEntry;
+import java.util.jar.JarException;
+import java.util.jar.JarOutputStream;
 
 public class UninstallDataWriter
 {
@@ -27,7 +28,7 @@ public class UninstallDataWriter
     private PathResolver pathResolver;
     private BufferedOutputStream bos;
     private FileOutputStream out;
-    private ZipOutputStream outJar;
+    private JarOutputStream outJar;
     private RulesEngine rules;
 
 
@@ -144,9 +145,9 @@ public class UninstallDataWriter
 
     // We write the files log
 
-    private void writeFilesLog(AutomatedInstallData installdata, BufferedWriter extLogWriter, List<String> files, ZipOutputStream outJar) throws IOException
+    private void writeFilesLog(AutomatedInstallData installdata, BufferedWriter extLogWriter, List<String> files, JarOutputStream outJar) throws IOException
     {
-        outJar.putNextEntry(new ZipEntry("install.log"));
+        outJar.putNextEntry(new JarEntry("install.log"));
         BufferedWriter logWriter = new BufferedWriter(new OutputStreamWriter(outJar));
         logWriter.write(installdata.getInstallPath());
         logWriter.newLine();
@@ -188,9 +189,9 @@ public class UninstallDataWriter
 
     // Write out executables to execute on uninstall
 
-    private void writeExecutables(UninstallData udata, ZipOutputStream outJar) throws IOException
+    private void writeExecutables(UninstallData udata, JarOutputStream outJar) throws IOException
     {
-        outJar.putNextEntry(new ZipEntry("executables"));
+        outJar.putNextEntry(new JarEntry("executables"));
         ObjectOutputStream execStream = new ObjectOutputStream(outJar);
         execStream.writeInt(udata.getExecutablesList().size());
         for (ExecutableFile file : udata.getExecutablesList())
@@ -203,10 +204,10 @@ public class UninstallDataWriter
 
     // We write the uninstaller jar file log
 
-    private void writeUninstallerJarFileLog(UninstallData udata, ZipOutputStream outJar) throws IOException
+    private void writeUninstallerJarFileLog(UninstallData udata, JarOutputStream outJar) throws IOException
     {
         BufferedWriter logWriter;
-        outJar.putNextEntry(new ZipEntry("jarlocation.log"));
+        outJar.putNextEntry(new JarEntry("jarlocation.log"));
         logWriter = new BufferedWriter(new OutputStreamWriter(outJar));
         logWriter.write(udata.getUninstallerJarFilename());
         logWriter.newLine();
@@ -218,7 +219,7 @@ public class UninstallDataWriter
     // write the script files, which will
     // perform several complement and unindependend uninstall actions
 
-    private void writeScriptFiles(UninstallData udata, ZipOutputStream outJar) throws IOException
+    private void writeScriptFiles(UninstallData udata, JarOutputStream outJar) throws IOException
     {
 
         ArrayList<String> unInstallScripts = udata.getUninstallScripts();
@@ -226,7 +227,7 @@ public class UninstallDataWriter
         int idx = 0;
         for (String unInstallScript : unInstallScripts)
         {
-            outJar.putNextEntry(new ZipEntry(UninstallData.ROOTSCRIPT + Integer.toString(idx)));
+            outJar.putNextEntry(new JarEntry(UninstallData.ROOTSCRIPT + Integer.toString(idx)));
             rootStream = new ObjectOutputStream(outJar);
             rootStream.writeUTF(unInstallScript);
             rootStream.flush();
@@ -240,7 +241,7 @@ public class UninstallDataWriter
     // with custom uninstall data. Therefore log it to Debug,
     // but do not throw.
 
-    private void writeAdditionalUninstallData(UninstallData udata, ZipOutputStream outJar) throws IOException
+    private void writeAdditionalUninstallData(UninstallData udata, JarOutputStream outJar) throws IOException
     {
         Map<String, Object> additionalData = udata.getAdditionalData();
         if (additionalData != null && !additionalData.isEmpty())
@@ -257,9 +258,9 @@ public class UninstallDataWriter
                         byte[] buffer = new byte[5120];
                         long bytesCopied = 0;
                         int bytesInBuffer;
-                        outJar.putNextEntry(new ZipEntry("native/" + nativeLibName));
+                        outJar.putNextEntry(new JarEntry("/com/izforge/izpack/bin/native/" + nativeLibName));
                         InputStream in = getClass().getResourceAsStream(
-                                "/native/" + nativeLibName);
+                                "/com/izforge/izpack/bin/native/" + nativeLibName);
                         while ((bytesInBuffer = in.read(buffer)) != -1)
                         {
                             outJar.write(buffer, 0, bytesInBuffer);
@@ -300,15 +301,15 @@ public class UninstallDataWriter
                             exist.add(content);
                             try
                             {
-                                outJar.putNextEntry(new ZipEntry(content));
+                                outJar.putNextEntry(new JarEntry(content));
                             }
-                            catch (ZipException ze)
+                            catch (JarException je)
                             { // Ignore, or ignore not ?? May be it is a
                                 // exception because
                                 // a doubled entry was tried, then we should
                                 // ignore ...
-                                Debug.trace("ZipException in writing custom data: "
-                                        + ze.getMessage());
+                                Debug.trace("JarException in writing custom data: "
+                                        + je.getMessage());
                                 continue;
                             }
                             InputStream in = getClass().getResourceAsStream("/" + content);
@@ -330,7 +331,7 @@ public class UninstallDataWriter
                     }
                     // Third we write the list into the
                     // uninstaller.jar
-                    outJar.putNextEntry(new ZipEntry(key));
+                    outJar.putNextEntry(new JarEntry(key));
                     ObjectOutputStream objOut = new ObjectOutputStream(outJar);
                     objOut.writeObject(subContents);
                     objOut.flush();
@@ -339,7 +340,7 @@ public class UninstallDataWriter
                 }
                 else
                 {
-                    outJar.putNextEntry(new ZipEntry(key));
+                    outJar.putNextEntry(new JarEntry(key));
                     if (contents instanceof ByteArrayOutputStream)
                     {
                         ((ByteArrayOutputStream) contents).writeTo(outJar);
@@ -366,7 +367,7 @@ public class UninstallDataWriter
      * @param outJar
      * @throws Exception Description of the Exception
      */
-    public void writeJarSkeleton(AutomatedInstallData installdata, PathResolver pathResolver, ZipOutputStream outJar) throws Exception
+    public void writeJarSkeleton(AutomatedInstallData installdata, PathResolver pathResolver, JarOutputStream outJar) throws Exception
     {
         // get the uninstaller base, returning if not found so that
         // installData.uninstallOutJar remains null
@@ -375,6 +376,8 @@ public class UninstallDataWriter
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("uninstaller-META-INF/", "META-INF/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/api/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/util/"));
+        uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/gui/"));
+        uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/img/"));
 
         // The uninstaller extension is facultative; it will be exist only
         // if a native library was marked for uninstallation.
@@ -388,9 +391,9 @@ public class UninstallDataWriter
         }
 
         // Should we relaunch the uninstaller with privileges?
-        if (installdata.getInfo().isPrivilegedExecutionRequiredUninstaller())
+        if (PrivilegedRunner.isPrivilegedMode() && installdata.getInfo().isPrivilegedExecutionRequiredUninstaller())
         {
-            outJar.putNextEntry(new ZipEntry("exec-admin"));
+            outJar.putNextEntry(new JarEntry("exec-admin"));
             outJar.closeEntry();
         }
 
@@ -423,9 +426,18 @@ public class UninstallDataWriter
         {
             throw new IzPackException("Problem writing uninstaller jar", e);
         }
-        // Intersect a buffer else byte for byte will be written to the file.
-        bos = new BufferedOutputStream(out);
-        outJar = new ZipOutputStream(bos);
+
+        try 
+        {
+            // Intersect a buffer else byte for byte will be written to the file.
+            bos = new BufferedOutputStream(out);
+            outJar = new JarOutputStream(bos);
+        }
+        catch (IOException e) 
+        {
+            throw new IzPackException("Problem writing uninstaller jar", e);
+        }
+
         outJar.setLevel(9);
         udata.addFile(jar, true);
     }

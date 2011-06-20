@@ -3,8 +3,7 @@ package com.izforge.izpack.merge.resolve;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.util.FileUtil;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.JarURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -69,6 +68,20 @@ public class ResolveUtils
             }
         }
         return true;
+    }
+    
+    /**
+     * Checks if a URL designates a single file in a Jar or not.
+     * This is useful to differentiate packages and single files on merges.
+     * It is assumed that <code>ResolveUtils.isJar(resource)</code> returns <code>true</code>.
+     *
+     * @param resource the resource to test
+     * @return True if the resource is a single file, false otherwise.
+     */
+    public static boolean isFileInJar(URL resource)
+    {
+        // If anyone has a better idea...
+        return resource.getPath().matches(".*(\\.\\w+)");
     }
 
     public static String getCurrentClasspath()
@@ -163,6 +176,16 @@ public class ResolveUtils
             return res.substring(0, res.lastIndexOf("!"));
         }
         return res;
+    }
+    
+    public static String processUrlToInsidePath(URL resource)
+    {
+        String path = resource.getPath();
+        if (path.contains("!"))
+        {
+            return path.substring(path.lastIndexOf("!") + 2);
+        }
+        return path;
     }
 
     public static String processUrlToJarPackage(URL resource)

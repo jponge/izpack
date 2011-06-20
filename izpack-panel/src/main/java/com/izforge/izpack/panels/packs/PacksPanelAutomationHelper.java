@@ -132,10 +132,8 @@ public class PacksPanelAutomationHelper implements PanelAutomation
         // Read all packs from the xml and remember them to merge it with the selected packs from
         // install installDataGUI
         Debug.log("Read pack list from xml definition.");
-        int numberOfPacks = packList.size();
-        for (int packIndex = 0; packIndex < numberOfPacks; packIndex++)
+        for (IXMLElement pack : packList)
         {
-            IXMLElement pack = packList.get(packIndex);
             String index = pack.getAttribute("index");
             String name = pack.getAttribute("name");
             final String selectedString = pack.getAttribute("selected");

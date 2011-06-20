@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.awt.GraphicsEnvironment;
 
 /**
  * The program entry point. Selects between GUI and text install modes.
@@ -159,6 +160,12 @@ public class Installer
 
     private void launchInstall(int type, int consoleAction, String path, String langcode) throws Exception
     {
+        // if headless, just use the console mode
+        if (type == INSTALLER_GUI && GraphicsEnvironment.isHeadless()) 
+        {
+            type = INSTALLER_CONSOLE;
+        }
+        
         switch (type)
         {
             case INSTALLER_GUI:

@@ -503,10 +503,8 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
 
     public void readFromXML(IXMLElement parent)
     {
-        Iterator<IXMLElement> iter = parent.getChildrenNamed("entry").iterator();
-        while (iter.hasNext())
+        for (IXMLElement el : parent.getChildrenNamed("entry"))
         {
-            IXMLElement el = iter.next();
             entries.addElement(createEntryFromXML(el));
         }
     }
@@ -1202,8 +1200,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
 
         public int getCalendarField()
         {
-            Integer i = (Integer) calendarFields.get(this);
-            return i.intValue();
+            return calendarFields.get(this);
         }
 
     }

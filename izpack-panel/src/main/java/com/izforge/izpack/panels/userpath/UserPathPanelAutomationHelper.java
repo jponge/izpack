@@ -78,15 +78,11 @@ public class UserPathPanelAutomationHelper implements PanelAutomation
         IXMLElement ipath = panelRoot.getFirstChildNamed(UserPathPanel.pathElementName);
 
         // Allow for variable substitution of the installpath value
-        String path = ipath.getContent();
-        try
+        if (ipath != null)
         {
-            path = variableSubstitutor.substitute(path);
+            String path = ipath.getContent();
+            path = variableSubstitutor.substitute(path, null);
+            idata.setVariable(UserPathPanel.pathVariableName, path);
         }
-        catch (Exception e)
-        {
-            // ignore
-        }
-        idata.setVariable(UserPathPanel.pathVariableName, path);
     }
 }

@@ -124,7 +124,7 @@ public class ConditionHistory
             Object[] condcomment = values.get(i);
             details.append(i + 1);
             details.append(". ");
-            details.append(((Boolean) condcomment[0]).toString());
+            details.append(condcomment[0].toString());
             details.append(" (");
             details.append(condcomment[1]);
             details.append(")<br>");

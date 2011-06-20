@@ -256,17 +256,15 @@ public class OrderedMergeAction extends AbstractMergeAction
         List<Attribute> outAttributes = new ArrayList<Attribute>(out.getAttributes());
         List<Attribute> inAttributes = new ArrayList<Attribute>(in.getAttributes());
 
-        for (int i = 0; i < outAttributes.size(); i++)
+        for (Attribute attr : outAttributes)
         {
-            Attribute attr = outAttributes.get(i);
             attr.detach();
             allAttributes.put(attr.getQualifiedName(), attr);
             Debug.log("adding attr from out:" + attr);
         }
 
-        for (int i = 0; i < inAttributes.size(); i++)
+        for (Attribute attr : inAttributes)
         {
-            Attribute attr = inAttributes.get(i);
             attr.detach();
             allAttributes.put(attr.getQualifiedName(), attr);
             Debug.log("adding attr from in:" + attr);

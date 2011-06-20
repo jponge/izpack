@@ -143,7 +143,7 @@ public abstract class AbstractXPathConfigurer implements Configurer
      */
     protected final void addMatcher(String xPath, String matcherName) throws ConfigurationException
     {
-        m_matchers.put(xPath, (Matcher) m_matcherResolver.resolve(matcherName));
+        m_matchers.put(xPath, m_matcherResolver.resolve(matcherName));
     }
 
     /**
@@ -155,7 +155,7 @@ public abstract class AbstractXPathConfigurer implements Configurer
      */
     protected final void addAction(String xPath, String actionName) throws ConfigurationException
     {
-        m_actions.put(xPath, (Action) m_actionResolver.resolve(actionName));
+        m_actions.put(xPath, m_actionResolver.resolve(actionName));
     }
 
     /**
@@ -167,7 +167,7 @@ public abstract class AbstractXPathConfigurer implements Configurer
      */
     protected final void addMapper(String xPath, String mapperName) throws ConfigurationException
     {
-        m_mappers.put(xPath, (Mapper) m_mapperResolver.resolve(mapperName));
+        m_mappers.put(xPath, m_mapperResolver.resolve(mapperName));
     }
 
     /**

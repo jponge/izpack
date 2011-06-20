@@ -404,6 +404,7 @@ public class SelfModifier
         while (true)
         {
             logFile = File.createTempFile(prefix, ".log");
+            System.out.println("The uninstaller has put a log file: " + logFile.getAbsolutePath());
             String fileName = logFile.toString();
             sandbox = new File(fileName.substring(0, fileName.length() - 4) + ".d");
 
@@ -446,7 +447,7 @@ public class SelfModifier
     /**
      * Run a new jvm with all the system parameters needed for phases 2 and 3.
      *
-     * @throws IOException if there is an error getting the cononical name of a path
+     * @throws IOException if there is an error getting the canonical name of a path
      */
     private Process spawn(String[] args, int nextPhase) throws IOException
     {
@@ -454,7 +455,7 @@ public class SelfModifier
         base = base.substring(0, base.length() - 4);
 
         // invoke from tmpdir, passing target method arguments as args, and
-        // SelfModifier parameters as sustem properties
+        // SelfModifier parameters as system properties
         String javaCommand = javaCommand();
 
         List<String> command = new ArrayList<String>();
@@ -509,7 +510,7 @@ public class SelfModifier
             return null;
         }
 
-        String path = FileUtil.convertUrlToFilePath(url);
+        String path = url.getFile();
         // starts at "file:..." (use getPath() as of 1.3)
         path = path.substring(0, path.lastIndexOf('!'));
 
@@ -808,7 +809,6 @@ public class SelfModifier
                     {
                         printWriter.println(line);
                     }
-                    // System.out.println(name + ">" + line);
                 }
                 if (printWriter != null)
                 {

@@ -518,9 +518,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
             result = new ArrayList<ValidatorContainer>(vsize);
 
-            for (int i = 0; i < vsize; i++)
+            for (IXMLElement element : validatorsElem)
             {
-                IXMLElement element = validatorsElem.get(i);
                 String validator = element.getAttribute(CLASS);
                 String message = getText(element);
                 HashMap<String, String> validateParamMap = new HashMap<String, String>();
@@ -1954,7 +1953,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         UserInputPanel.TextValuePair listItem = null;
         JComboBox field = new JComboBox();
         JLabel label;
-        field.addItemListener(this);
+        
+        String causesValidataion = spec.getAttribute(REVALIDATE);
+        if (causesValidataion != null && causesValidataion.equals("yes"))
+        {
+            field.addItemListener(this);
+        }
         boolean userinput = false; // is there already user input?
         // ----------------------------------------------------
         // extract the specification details

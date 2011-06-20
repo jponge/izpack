@@ -140,17 +140,17 @@ public class PatternSet extends DataType implements Cloneable
 
         if (nestedIncludes != null)
         {
-            for (int i = 0; i < nestedIncludes.length; i++)
+            for (String nestedInclude : nestedIncludes)
             {
-                createInclude().setName(nestedIncludes[i]);
+                createInclude().setName(nestedInclude);
             }
         }
 
         if (nestedExcludes != null)
         {
-            for (int i = 0; i < nestedExcludes.length; i++)
+            for (String nestedExclude : nestedExcludes)
             {
-                createExclude().setName(nestedExcludes[i]);
+                createExclude().setName(nestedExclude);
             }
         }
     }
@@ -232,18 +232,18 @@ public class PatternSet extends DataType implements Cloneable
         String[] incl = other.getIncludePatterns(/*p*/);
         if (incl != null)
         {
-            for (int i = 0; i < incl.length; i++)
+            for (String anIncl : incl)
             {
-                createInclude().setName(incl[i]);
+                createInclude().setName(anIncl);
             }
         }
 
         String[] excl = other.getExcludePatterns(/*p*/);
         if (excl != null)
         {
-            for (int i = 0; i < excl.length; i++)
+            for (String anExcl : excl)
             {
-                createExclude().setName(excl[i]);
+                createExclude().setName(anExcl);
             }
         }
     }

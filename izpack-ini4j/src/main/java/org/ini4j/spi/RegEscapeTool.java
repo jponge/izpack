@@ -171,10 +171,10 @@ public class RegEscapeTool extends EscapeTool
         {
             byte[] bytes = string2bytes(value);
 
-            for (int i = 0; i < bytes.length; i++)
+            for (byte aByte : bytes)
             {
-                buff.append(Character.forDigit((bytes[i] & UPPER_DIGIT) >> DIGIT_SIZE, HEX_RADIX));
-                buff.append(Character.forDigit(bytes[i] & LOWER_DIGIT, HEX_RADIX));
+                buff.append(Character.forDigit((aByte & UPPER_DIGIT) >> DIGIT_SIZE, HEX_RADIX));
+                buff.append(Character.forDigit(aByte & LOWER_DIGIT, HEX_RADIX));
                 buff.append(',');
             }
 

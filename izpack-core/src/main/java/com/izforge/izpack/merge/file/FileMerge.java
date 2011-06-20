@@ -156,23 +156,27 @@ public class FileMerge extends AbstractMerge
 
     private void copyFileToJar(File fileToCopy, ZipOutputStream outputStream) throws IOException
     {
+        FileInputStream inputStream = null;
         if (fileToCopy.isDirectory())
         {
             for (File file : fileToCopy.listFiles())
             {
                 copyFileToJar(file, outputStream);
             }
-        }
-        else
+        } else
         {
-            String entryName = resolveName(fileToCopy, this.destination);
-            List<String> mergeList = getMergeList(outputStream);
-            if (mergeList.contains(entryName))
-            {
-                return;
-            }
-            mergeList.add(entryName);
-            FileInputStream inputStream = new FileInputStream(fileToCopy);
+            inputStream = new FileInputStream(fileToCopy);
+        }
+
+        String entryName = resolveName(fileToCopy, this.destination);
+        List<String> mergeList = getMergeList(outputStream);
+        if (mergeList.contains(entryName))
+        {
+            return;
+        }
+        mergeList.add(entryName);        
+        if(inputStream != null)
+        {
             IoHelper.copyStreamToJar(inputStream, outputStream, entryName, fileToCopy.lastModified());
             inputStream.close();
         }
