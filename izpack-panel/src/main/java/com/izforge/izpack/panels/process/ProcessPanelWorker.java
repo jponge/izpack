@@ -22,6 +22,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 
 /**
  * This class does alle the work for the process panel.
@@ -496,13 +499,16 @@ public class ProcessPanelWorker implements Runnable
 
                     if (exitStatus != 0)
                     {
-                        if (this.handler.askQuestion("Process execution failed",
-                                "Continue anyway?", AbstractUIHandler.CHOICES_YES_NO,
-                                AbstractUIHandler.ANSWER_YES) == AbstractUIHandler.ANSWER_NO)
-                        {
-                            return false;
-                        }
+                        QuestionErrorDisplayer myErrorAlter = new QuestionErrorDisplayer(handler);
+                        SwingUtilities.invokeAndWait(myErrorAlter);
+                        return myErrorAlter.shouldContinue();
                     }
+                }
+                catch (InvocationTargetException ex)
+                {
+                    process.destroy();
+                    this.handler.emitError("process interrupted", ex.toString());
+                    return false;
                 }
                 catch (InterruptedException ie)
                 {
@@ -782,5 +788,35 @@ public class ProcessPanelWorker implements Runnable
         return (false);
     }
 
+    private static class QuestionErrorDisplayer implements Runnable
+    {
+        private AbstractUIProcessHandler uiHandler;
+        private boolean toBeContinued = true;
+        
+        QuestionErrorDisplayer(AbstractUIProcessHandler uiHandler) 
+        {
+          this.uiHandler = uiHandler;
+        }
+        
+        @Override
+        public void run() 
+        {
+            if (uiHandler.askQuestion("Process execution failed",
+                                "Continue anyway?", AbstractUIHandler.CHOICES_YES_NO,
+                                AbstractUIHandler.ANSWER_YES) == AbstractUIHandler.ANSWER_NO)
+            {
+                mustContinue(false);
+            }
+        }
+        
+        public synchronized boolean shouldContinue()
+        {
+          return toBeContinued;
+        }
+        
+        public synchronized void mustContinue(boolean toBeContinued)
+        {
+          this.toBeContinued = toBeContinued;
+        }
+    }
 }
-
