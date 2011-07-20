@@ -22,6 +22,7 @@ package com.izforge.izpack.rules;
 
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.installer.AutomatedInstallData;
 
 /**
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
@@ -47,9 +48,9 @@ public class XorCondition extends OrCondition
      * @param operand1
      * @param operand2
      */
-    public XorCondition(Condition operand1, Condition operand2)
+    public XorCondition(Condition operand1, Condition operand2, AutomatedInstallData installdata)
     {
-        super(operand1, operand2);
+        super(operand1, operand2, installdata);
     }
 
     /*

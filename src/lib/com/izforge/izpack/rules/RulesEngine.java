@@ -20,7 +20,6 @@
  */
 package com.izforge.izpack.rules;
 
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -31,13 +30,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
 
-import javax.xml.transform.TransformerException;
-
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.XMLException;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.util.Debug;
@@ -367,22 +363,19 @@ public class RulesEngine implements Serializable
                 // and-condition
                 Condition op1 = conditionsmap.get(conditionexpr.substring(0, index));
                 conditionexpr.delete(0, index + 1);
-                result = new AndCondition(op1, getConditionByExpr(conditionexpr));
-                result.setInstalldata(RulesEngine.installdata);
+                result = new AndCondition(op1, getConditionByExpr(conditionexpr), RulesEngine.installdata);
                 break;
             case '|':
                 // or-condition
                 op1 = conditionsmap.get(conditionexpr.substring(0, index));
                 conditionexpr.delete(0, index + 1);
-                result = new OrCondition(op1, getConditionByExpr(conditionexpr));
-                result.setInstalldata(RulesEngine.installdata);
+                result = new OrCondition(op1, getConditionByExpr(conditionexpr), RulesEngine.installdata);
                 break;
             case '\\':
                 // xor-condition
                 op1 = conditionsmap.get(conditionexpr.substring(0, index));
                 conditionexpr.delete(0, index + 1);
-                result = new XorCondition(op1, getConditionByExpr(conditionexpr));
-                result.setInstalldata(RulesEngine.installdata);
+                result = new XorCondition(op1, getConditionByExpr(conditionexpr), RulesEngine.installdata);
                 break;
             case '!':
                 // not-condition
@@ -394,8 +387,7 @@ public class RulesEngine implements Serializable
                 {
                     // delete not symbol
                     conditionexpr.deleteCharAt(index);
-                    result = new NotCondition(getConditionByExpr(conditionexpr));
-                    result.setInstalldata(RulesEngine.installdata);
+                    result = new NotCondition(getConditionByExpr(conditionexpr), RulesEngine.installdata);
                 }
                 break;
             default:
@@ -426,6 +418,10 @@ public class RulesEngine implements Serializable
         else
         {
             Debug.trace("Checking condition");
+            if (cond.getInstalldata() == null)
+            {
+                cond.setInstalldata(installdata);
+            }
             try
             {
                 return cond.isTrue();

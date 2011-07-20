@@ -22,6 +22,7 @@ package com.izforge.izpack.rules;
 
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.installer.AutomatedInstallData;
 
 /**
  * @author Dennis Reil, <izpack@reil-online.de>
@@ -47,8 +48,9 @@ public class OrCondition extends Condition
     /**
      *
      */
-    public OrCondition(Condition operand1, Condition operand2)
+    public OrCondition(Condition operand1, Condition operand2, AutomatedInstallData installdata)
     {
+        this.installdata = installdata;
         this.leftoperand = operand1;
         this.leftoperand.setInstalldata(this.installdata);
         this.rightoperand = operand2;
