@@ -618,6 +618,9 @@
             <include name="com/izforge/izpack/panels/ExtendedInstallPanel.java"/>
             <include name="com/izforge/izpack/panels/ExtendedInstallPanelAutomationHelper.java"/>
             <include name="com/izforge/izpack/panels/InstallPanel.java"/>
+        	<include name="com/izforge/izpack/panels/InstallPanelAutomationHelper.java"/>
+            <include name="com/izforge/izpack/panels/InstallPanelConsoleHelper.java" />
+            <include name="com/izforge/izpack/panels/ExtendedInstallPanelConsoleHelper.java" />
         </build-panel>
         <build-panel name="LicencePanel">
             <include name="com/izforge/izpack/panels/LicencePanel.java"/>
