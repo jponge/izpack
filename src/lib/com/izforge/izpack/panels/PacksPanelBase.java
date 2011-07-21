@@ -670,7 +670,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             Pack pack = (Pack) iter.next();
             retval.append(getI18NPackName(pack));
         }
-        if (packsModel.isModifyinstallation())
+        if (packsModel != null && packsModel.isModifyinstallation())
         {
             Map installedpacks = packsModel.getInstalledpacks();
             iter = installedpacks.keySet().iterator();
