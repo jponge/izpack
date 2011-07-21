@@ -3173,31 +3173,21 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         if (element == null) { return (null); }
 
         String key = element.getAttribute(KEY);
-        String text = null;
-
+        String text = element.getAttribute(TEXT);
+        
         if ((key != null) && (langpack != null))
         {
             try
             {
-                text = langpack.getString(key);
-                if (text.equals(key))
-                {
-                    text = null;
+                String langPackText = langpack.getString(key);
+                if (langPackText != null && !key.equals(langPackText)) {
+                    text = langPackText;
                 }
             }
             catch (Throwable exception)
             {
-                text = null;
+                // no localized text found
             }
-        }
-
-        // if there is no text in the description, then
-        // we were unable to retrieve it form the resource.
-        // In this case try to get the text directly from
-        // the IXMLElement
-        if (text == null)
-        {
-            text = element.getAttribute(TEXT);
         }
 
         // try to parse the text, and substitute any variable it finds
