@@ -41,6 +41,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.*;
 import java.util.List;
 
@@ -346,7 +347,11 @@ public class GUIInstaller extends InstallerBase
 
         // Dummy Frame
         JFrame frame = new JFrame();
-        frame.setIconImage(new ImageIcon(this.getClass().getResource("/img/JFrameIcon.png"))
+        URL icon = this.getClass().getResource("/res/installer.langsel.icon");
+        if (icon == null) {
+            this.getClass().getResource("/img/JFrameIcon.png");
+        }
+        frame.setIconImage(new ImageIcon(icon)
                 .getImage());
 
         Dimension frameSize = frame.getSize();
