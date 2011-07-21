@@ -347,12 +347,17 @@ public class GUIInstaller extends InstallerBase
 
         // Dummy Frame
         JFrame frame = new JFrame();
-        URL icon = this.getClass().getResource("/res/installer.langsel.icon");
-        if (icon == null) {
-            this.getClass().getResource("/img/JFrameIcon.png");
+        
+        ImageIcon img;
+        try
+        {
+            img = new ImageIcon(this.getClass().getResource("/res/installer.langsel.icon"));
         }
-        frame.setIconImage(new ImageIcon(icon)
-                .getImage());
+        catch (NullPointerException err)
+        {
+            img = new ImageIcon(this.getClass().getResource("/img/JFrameIcon.png"));
+        }
+        frame.setIconImage(img.getImage());
 
         Dimension frameSize = frame.getSize();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
