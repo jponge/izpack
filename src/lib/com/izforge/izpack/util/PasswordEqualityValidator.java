@@ -20,11 +20,8 @@
  */
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.panels.PasswordGroup;
 import com.izforge.izpack.panels.ProcessingClient;
 import com.izforge.izpack.panels.Validator;
-
-import java.util.Map;
 
 
 /**
@@ -49,43 +46,15 @@ public class PasswordEqualityValidator implements Validator
     public boolean validate(ProcessingClient client)
     {
         boolean returnValue = false;
-        Map<String, String> params = getParams(client);
         try
         {
             returnValue = fieldsMatch(client);
-            if (returnValue)
-            {
-                // Additional checking if params passed...
-                if (params != null)
-                {
-                    System.out.println("Additional " + params.size() + " params not evaluated");
-                }
-            }
         }
         catch (Exception e)
         {
             System.out.println("validate() Failed: " + e);
         }
         return (returnValue);
-    }
-
-    private Map<String, String> getParams(ProcessingClient client)
-    {
-        PasswordGroup group = null;
-        Map<String, String> params = null;
-        try
-        {
-            group = (PasswordGroup) client;
-            if (group.hasParams())
-            {
-                params = group.getValidatorParams();
-            }
-        }
-        catch (Exception e)
-        {
-            System.out.println("getParams() Failed: " + e);
-        }
-        return (params);
     }
 
     private boolean fieldsMatch(ProcessingClient client)

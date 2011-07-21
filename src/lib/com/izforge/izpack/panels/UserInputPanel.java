@@ -116,9 +116,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
     private static final String VARIABLE = "variable";
 
-    private static final String TEXT = "txt";
+    protected static final String TEXT = "txt";
 
-    private static final String KEY = "id";
+    protected static final String KEY = "id";
 
     private static final String SPEC = "spec";
 
@@ -148,11 +148,11 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
     private static final String SIZE = "size";
 
-    private static final String VALIDATOR = "validator";
+    protected static final String VALIDATOR = "validator";
 
     private static final String PROCESSOR = "processor";
 
-    private static final String CLASS = "class";
+    protected static final String CLASS = "class";
 
     private static final String TITLE_FIELD = "title";
 
@@ -198,11 +198,11 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
     private static final String RULE_ENCRYPTED = "processed";
 
-    private static final String RULE_PARAM_NAME = "name";
+    protected static final String RULE_PARAM_NAME = "name";
 
-    private static final String RULE_PARAM_VALUE = "value";
+    protected static final String RULE_PARAM_VALUE = "value";
 
-    private static final String RULE_PARAM = "param";
+    protected static final String RULE_PARAM = "param";
 
     private static final String PWD_FIELD = "password";
 
