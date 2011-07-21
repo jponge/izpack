@@ -21,6 +21,7 @@
 package com.izforge.izpack.panels;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -70,6 +71,12 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
                                                                       // requirement to make the
                                                                       // default path point to the
                                                                       // current location
+        
+        String path = TargetPanel.loadDefaultDirFromVariables(idata.getVariables());
+        if (path != null) {
+            strDefaultPath = path;
+        }
+        
         System.out.println("Select target path [" + strDefaultPath + "] ");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try
@@ -95,6 +102,22 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
         strTargetPath = vs.substitute(strTargetPath, null);
 
         idata.setInstallPath(strTargetPath);
+        
+        if (strTargetPath != null && strTargetPath.length() > 0) {
+            File selectedDir = new File(strTargetPath);
+            if (selectedDir.exists() && selectedDir.isDirectory() && selectedDir.list().length > 0) {
+                int answer = askNonEmptyDir();
+                if (answer == 2)
+                {
+                    return false;
+                }
+                else if (answer == 3)
+                {
+                    return runConsole(idata);
+                }
+            }
+        }
+        
         int i = askEndOfConsolePanel();
         if (i == 1)
         {
@@ -110,4 +133,33 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
         }
 
     }
+    
+    protected int askNonEmptyDir()
+    {
+        try
+        {
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            while (true)
+            {
+                System.out.println("The directory already exists and is not empty! Are you sure you want to install here and delete all existing files?\nPress 1 to continue, 2 to quit, 3 to redisplay");
+                String strIn = br.readLine();
+                if (strIn.equals("1"))
+                {
+                    return 1;
+                }
+                else if (strIn.equals("2"))
+                {
+                    return 2;
+                }
+                else if (strIn.equals("3")) { return 3; }
+            }
+
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return 2;
+    }
+    
 }

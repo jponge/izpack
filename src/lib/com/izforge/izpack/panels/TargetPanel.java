@@ -21,8 +21,12 @@
 
 package com.izforge.izpack.panels;
 
+import java.util.Properties;
+
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.adaptator.IXMLElement;
 
 /**
@@ -38,6 +42,27 @@ public class TargetPanel extends PathInputPanel
      */
     private static final long serialVersionUID = 3256443616359429170L;
 
+    private boolean noWhitespaces;
+    
+    public static String loadDefaultDirFromVariables(Properties vars)
+    {
+        String os = System.getProperty("os.name").replace(' ', '_').toLowerCase();
+        
+        String path = vars.getProperty("TargetPanel.dir.".concat(os));
+        
+        if (path == null) {
+            path = vars.getProperty("TargetPanel.dir." + (OsVersion.IS_WINDOWS ? "windows" : (OsVersion.IS_OSX ? "macosx" : "unix")));
+            if (path == null) {
+                path = vars.getProperty("TargetPanel.dir");
+            }
+        }
+        if (path != null) {
+            path = new VariableSubstitutor(vars).substitute(path, null);
+        }
+        
+        return path;
+    }
+
     /**
      * The constructor.
      *
@@ -48,13 +73,15 @@ public class TargetPanel extends PathInputPanel
     {
         super(parent, idata);
         // load the default directory info (if present)
-        loadDefaultInstallDir(parent, idata);
-        if (getDefaultInstallDir() != null)
+        loadDefaultDir();
+        String defDir = getDefaultDir();
+        if (defDir != null)
         {
             // override the system default that uses app name (which is set in
             // the Installer class)
-            idata.setInstallPath(getDefaultInstallDir());
+            idata.setInstallPath(defDir);
         }
+        noWhitespaces = Boolean.valueOf(idata.getVariable("TargetPanel.noWhitespaces"));
     }
 
     /**
@@ -74,6 +101,14 @@ public class TargetPanel extends PathInputPanel
      */
     public void loadDefaultDir()
     {
+        String path = loadDefaultDirFromVariables(idata.getVariables());
+        
+        if (path != null) {
+            System.out.println("Found default install dir in variables: " + path);
+            setDefaultInstallDir(path);
+            return;
+        }
+        
         super.loadDefaultInstallDir(parent, idata);
     }
 
@@ -84,6 +119,15 @@ public class TargetPanel extends PathInputPanel
      */
     public boolean isValidated()
     {
+        if (noWhitespaces && pathSelectionPanel.getPath() != null && pathSelectionPanel.getPath().length() > 0
+                && pathSelectionPanel.getPath().contains(" "))
+        {
+            emitError(parent.langpack.getString("installer.error"),
+                    parent.langpack.getString("PathInputPanel.noWhitespaces"));
+
+            return false;
+        }
+        
         // Standard behavior of PathInputPanel.
         if (!super.isValidated())
         {
