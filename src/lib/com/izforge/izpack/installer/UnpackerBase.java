@@ -753,6 +753,17 @@ public abstract class UnpackerBase implements IUnpacker
             read = in2.read();
         }
         outJar.closeEntry();
+
+        // We put the custom langpack if available
+        in2 = Unpacker.class.getResourceAsStream("/res/CustomLangpack.xml_" + idata.localeISO3);
+        outJar.putNextEntry(new ZipEntry("customlangpack.xml"));
+        read = in2.read();
+        while (read != -1)
+        {
+            outJar.write(read);
+            read = in2.read();
+        }
+        outJar.closeEntry();
     }
 
     /**
