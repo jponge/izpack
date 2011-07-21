@@ -86,7 +86,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     private static final String STATIC_TEXT = "staticText";
 
     private static final String CHOICE = "choice";
-    
+
     private static final String DIR = "dir";
     
     private static final String FILE = "file";
@@ -188,37 +188,44 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         }
         boolean status = true;
         Iterator<Input> inputsIterator = listInputs.iterator();
-        while (inputsIterator.hasNext())
+        try
         {
-            Input input = inputsIterator.next();
- 
-            if (TEXT_FIELD.equals(input.strFieldType) 
-        		|| FILE.equals(input.strFieldType) 
-            	|| RULE_FIELD.equals(input.strFieldType)
-                || DIR.equals(input.strFieldType))
+            while (inputsIterator.hasNext())
             {
-                status = status && processTextField(input, idata);
+                Input input = inputsIterator.next();
+     
+                if (TEXT_FIELD.equals(input.strFieldType) 
+            		|| FILE.equals(input.strFieldType) 
+            		|| RULE_FIELD.equals(input.strFieldType)
+                    || DIR.equals(input.strFieldType))
+                {
+                    status = status && processTextField(input, idata);
+                }
+                else if (COMBO_FIELD.equals(input.strFieldType)
+                        || RADIO_FIELD.equals(input.strFieldType))
+                {
+                    status = status && processComboRadioField(input, idata);
+                }
+                else if (CHECK_FIELD.equals(input.strFieldType))
+                {
+                    status = status && processCheckField(input, idata);
+                } 
+               else if(STATIC_TEXT.equals(input.strFieldType) 
+            		   || TITLE_FIELD.equals(input.strFieldType)
+            		   || DIVIDER.equals(input.strFieldType)
+            		   || SPACE.equals(input.strFieldType) )
+               {
+            	   status = status && processSimpleField(input, idata);
+               } 
+               else if (PASSWORD.equals(input.strFieldType) ) {
+                   status = status && processPasswordField(input, idata);
+               }
+    
             }
-            else if (COMBO_FIELD.equals(input.strFieldType)
-                    || RADIO_FIELD.equals(input.strFieldType))
-            {
-                status = status && processComboRadioField(input, idata);
-            }
-            else if (CHECK_FIELD.equals(input.strFieldType))
-            {
-                status = status && processCheckField(input, idata);
-            } 
-           else if(STATIC_TEXT.equals(input.strFieldType) 
-        		   || TITLE_FIELD.equals(input.strFieldType)
-        		   || DIVIDER.equals(input.strFieldType)
-        		   || SPACE.equals(input.strFieldType) )
-           {
-        	   status = status && processSimpleField(input, idata);
-           } 
-           else if (PASSWORD.equals(input.strFieldType) ) {
-               status = status && processPasswordField(input, idata);
-           }
-
+        }
+        catch (RevalidationTriggeredException e)
+        {
+            return runConsole(idata);
         }
 
         int i = askEndOfConsolePanel();
@@ -476,7 +483,11 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         {
             e.printStackTrace();
         }
-        idata.setVariable(variable, input.listChoices.get(input.iSelectedChoice).strValue);
+        String newValue = input.listChoices.get(input.iSelectedChoice).strValue;
+        idata.setVariable(variable, newValue);
+        if (input.revalidate && !currentvariablevalue.equals(newValue)) {
+            throw new RevalidationTriggeredException();
+        }
         return true;
 
     }
@@ -558,7 +569,11 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         {
             e.printStackTrace();
         }
-        idata.setVariable(variable, input.listChoices.get(input.iSelectedChoice).strValue);
+        String newValue = input.listChoices.get(input.iSelectedChoice).strValue;
+        idata.setVariable(variable, newValue);
+        if (input.revalidate && !currentvariablevalue.equals(newValue)) {
+            throw new RevalidationTriggeredException();
+        }
         return true;
 
     }
@@ -770,8 +785,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             if (choicesList.size() == 1) {
                 selection = 0;
             }
-          
-            return new Input(strVariableName, null, choicesList, strFieldType, strFieldText, selection);
+            
+            return new Input(strVariableName, null, choicesList, strFieldType, strFieldText, selection, "yes".equals(spec.getAttribute("revalidate")));
         }
         
         if (CHECK_FIELD.equals(strFieldType))
@@ -807,7 +822,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 strFieldText = description.getAttribute(TEXT);
             }
             return new Input(strVariableName, strSet, choicesList, CHECK_FIELD, strFieldText,
-                    iSelectedChoice);
+                    iSelectedChoice, "yes".equals(spec.getAttribute("revalidate")));
         }
 
 
@@ -961,7 +976,10 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         return false;
     }
 
-    
+    private class RevalidationTriggeredException extends RuntimeException
+    {
+
+    }
 
     public static class Input
     {
@@ -982,6 +1000,13 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             this.iSelectedChoice = iSelectedChoice;
         }
 
+        public Input(String strVariableName, String strDefaultValue, List<Choice> listChoices,
+                String strFieldType, String strFieldText, int iSelectedChoice, boolean revalidate)
+        {
+            this(strVariableName, strDefaultValue, listChoices, strFieldType, strFieldText, iSelectedChoice);
+            this.revalidate = revalidate;
+        }
+
         String strVariableName;
 
         String strDefaultValue;
@@ -993,6 +1018,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         String strText;
 
         int iSelectedChoice = -1;
+        
+        boolean revalidate;
     }
 
     public static class Choice
