@@ -106,40 +106,52 @@ public class ButtonFactory
 
     public static JButton createButton(String text, Color color)
     {
+        JButton btn = null;
         if (useHighlightButtons)
         {
-            return new HighlightJButton(text, color);
+            btn = new HighlightJButton(text, color);
         }
         else
         {
-            return new JButton(text);
+            btn = new JButton(text);
         }
+        if (text != null && text.length() > 0)
+        {
+            btn.setMnemonic(text.toLowerCase().charAt(0));
+        }
+        return btn;
     }
 
     public static JButton createButton(String text, Icon icon, Color color)
     {
+        JButton btn = null;
         if (useHighlightButtons)
         {
             if (useButtonIcons)
             {
-                return new HighlightJButton(text, icon, color);
+                btn = new HighlightJButton(text, icon, color);
             }
             else
             {
-                return new HighlightJButton(text, color);
+                btn = new HighlightJButton(text, color);
             }
         }
         else
         {
             if (useButtonIcons)
             {
-                return new JButton(text, icon);
+                btn = new JButton(text, icon);
             }
             else
             {
-                return new JButton(text);
+                btn = new JButton(text);
             }
         }
+        if (text != null && text.length() > 0)
+        {
+            btn.setMnemonic(text.toLowerCase().charAt(0));
+        }
+        return btn;
     }
 
     public static JButton createButton(Action a, Color color)
