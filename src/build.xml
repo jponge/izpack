@@ -632,6 +632,7 @@
             <include name="com/izforge/izpack/panels/PacksModel.java"/>
             <include name="com/izforge/izpack/panels/PacksPanel.java"/>
             <include name="com/izforge/izpack/panels/PacksPanelAutomationHelper.java"/>
+        	<include name="com/izforge/izpack/panels/PacksPanelConsoleHelper.java"/>
             <include name="com/izforge/izpack/panels/PacksPanelBase.java"/>
             <include name="com/izforge/izpack/panels/PacksPanelInterface.java"/>
         </build-panel>
@@ -642,6 +643,7 @@
             <include name="com/izforge/izpack/panels/PacksPanelBase.java"/>
             <include name="com/izforge/izpack/panels/PacksPanelInterface.java"/>
             <include name="com/izforge/izpack/panels/PacksPanelAutomationHelper.java"/>
+        	<include name="com/izforge/izpack/panels/PacksPanelConsoleHelper.java"/>
         </build-panel>
         <build-panel name="HTMLLicencePanel">
             <include name="com/izforge/izpack/panels/HTMLLicencePanel.java"/>
@@ -762,6 +764,7 @@
             <include name="com/izforge/izpack/panels/ImgPacksPanelBase.java"/>
             <include name="com/izforge/izpack/panels/PacksModel.java"/>
             <include name="com/izforge/izpack/panels/PacksPanelAutomationHelper.java"/>
+        	<include name="com/izforge/izpack/panels/PacksPanelConsoleHelper.java"/>
             <include name="com/izforge/izpack/panels/PacksPanelBase.java"/>
             <include name="com/izforge/izpack/panels/PacksPanelInterface.java"/>
         </build-panel>
