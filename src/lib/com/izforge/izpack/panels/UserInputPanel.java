@@ -160,6 +160,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
     private static final String TEXT_SIZE = "size";
 
+    private static final String TEXT_ROWS = "rows";
+
     private static final String STATIC_TEXT = "staticText";
 
     private static final String COMBO_FIELD = "combo";
@@ -1685,6 +1687,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         JLabel label;
         String set;
         int size;
+        int rows = 1;
         HashMap<String, String> validateParamMap = null;
         Vector<IXMLElement> validateParams = null;
         String validator = null;
@@ -1726,6 +1729,16 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             catch (Throwable exception)
             {
                 size = 1;
+            }
+            if (element.getAttribute(TEXT_ROWS) != null) {
+                try
+                {
+                    rows = Integer.parseInt(element.getAttribute(TEXT_ROWS));
+                }
+                catch (Throwable exception)
+                {
+                    rows = 1;
+                }
             }
         }
         // ----------------------------------------------------
@@ -1784,14 +1797,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // ----------------------------------------------------
         // construct the UI element and add it to the list
         // ----------------------------------------------------
-        if (hasParams)
-        {
-            inputField = new TextInputField(set, size, validator, validateParamMap);
-        }
-        else
-        {
-            inputField = new TextInputField(set, size, validator);
-        }
+        inputField = new TextInputField(set, size, rows, validator, hasParams ? validateParamMap : null);
         inputField.addFocusListener(this);
         TwoColumnConstraints constraints = new TwoColumnConstraints();
         constraints.position = TwoColumnConstraints.WEST;

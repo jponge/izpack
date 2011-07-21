@@ -24,6 +24,8 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.util.Debug;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
+
 import java.util.Map;
 
 /*---------------------------------------------------------------------------*/
@@ -55,48 +57,32 @@ public class TextInputField extends JComponent implements ProcessingClient
     /**
      * This composite can only contain one component ie JTextField
      */
-    private JTextField field;
+    private JTextComponent field;
 
     /**
      * Do we have parameters for validator?
      */
     private boolean hasParams = false;
-
-    /*--------------------------------------------------------------------------*/
-    /**
-     * Constructs a text input field.
-     *
-     * @param set             A default value for field.
-     * @param size            The size of the field.
-     * @param validator       A string that specifies a class to perform validation services. The string
-     *                        must completely identify the class, so that it can be instantiated. The class must implement
-     *                        the <code>RuleValidator</code> interface. If an attempt to instantiate this class fails, no
-     *                        validation will be performed.
-     * @param validatorParams validator parameters.
-     */
-    /*--------------------------------------------------------------------------*/
-    public TextInputField(String set, int size, String validator, Map<String, String> validatorParams)
-    {
-        this(set, size, validator);
-        this.validatorParams = validatorParams;
-        this.hasParams = true;
-    }
-
-
+    
     /*--------------------------------------------------------------------------*/
     /**
      * Constructs a text input field.
      *
      * @param set       A default value for field.
      * @param size      The size of the field.
+     * @param rows      The number of rows in case this is a text area field
      * @param validator A string that specifies a class to perform validation services. The string
      *                  must completely identify the class, so that it can be instantiated. The class must implement
      *                  the <code>RuleValidator</code> interface. If an attempt to instantiate this class fails, no
      *                  validation will be performed.
+     * @param validatorParams validator parameters.
      */
     /*--------------------------------------------------------------------------*/
-    public TextInputField(String set, int size, String validator)
+    public TextInputField(String set, int size, int rows, String validator, Map<String, String> validatorParams)
     {
+        this.validatorParams = validatorParams;
+        this.hasParams = validatorParams != null;
+        
         // ----------------------------------------------------
         // attempt to create an instance of the Validator
         // ----------------------------------------------------
@@ -122,11 +108,20 @@ public class TextInputField extends JComponent implements ProcessingClient
         // ----------------------------------------------------
         // construct the UI element and add it to the composite
         // ----------------------------------------------------
-        field = new JTextField(set, size);
-        field.setCaretPosition(0);
-        add(field);
+        if (rows > 1) {
+            JTextArea area = new JTextArea(set, rows, size);
+            area.setCaretPosition(0);
+            area.setWrapStyleWord(true);
+            area.setLineWrap(true);
+            
+            field = area;
+            add(new JScrollPane(area));
+        } else {
+            field = new JTextField(set, size);
+            field.setCaretPosition(0);
+            add(field);
+        }
     }
-
 
     /*--------------------------------------------------------------------------*/
     /**
