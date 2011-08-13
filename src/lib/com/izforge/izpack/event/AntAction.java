@@ -405,7 +405,7 @@ public class AntAction extends ActionBase
             PrintStream printStream;
             try
             {
-                printStream = new PrintStream(new FileOutputStream(logFile));
+                printStream = new PrintStream(new FileOutputStream(logFile, true));
                 logger.setOutputPrintStream(printStream);
                 logger.setErrorPrintStream(printStream);
             }

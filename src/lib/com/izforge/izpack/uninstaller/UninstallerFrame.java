@@ -97,10 +97,23 @@ public class UninstallerFrame extends JFrame
      */
     public UninstallerFrame(boolean displayForceOption, boolean forceOptionState) throws Exception
     {
-        super("IzPack - Uninstaller");
+        super();
 
         // Initializations
         langpack = new LocaleDatabase(UninstallerFrame.class.getResourceAsStream("/langpack.xml"));
+        InputStream is = UninstallerFrame.class.getResourceAsStream("/customlangpack.xml");
+        if (is != null) {
+            langpack.add(is);
+        }
+        
+        
+        String title = langpack.getString("uninstaller.title");
+        if (null == title || "uninstaller.title".equals(title))
+        {
+            title = "IzPack - Uninstaller";
+        }
+        setTitle(title);
+        
         getInstallPath();
         icons = new IconsDatabase();
         loadIcons();
@@ -116,7 +129,7 @@ public class UninstallerFrame extends JFrame
         addWindowListener(new WindowHandler());
         pack();
         centerFrame(this);
-        setResizable(false);
+        setResizable(true);
         setVisible(true);
     }
 

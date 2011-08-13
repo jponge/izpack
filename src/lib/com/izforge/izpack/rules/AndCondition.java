@@ -22,6 +22,7 @@
 package com.izforge.izpack.rules;
 
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.util.Debug;
 
 /**
@@ -48,8 +49,9 @@ public class AndCondition extends Condition
     /**
      *
      */
-    public AndCondition(Condition operand1, Condition operand2)
+    public AndCondition(Condition operand1, Condition operand2, AutomatedInstallData installdata)
     {
+        this.installdata = installdata;
         this.leftoperand = operand1;
         if (this.leftoperand != null){
             this.leftoperand.setInstalldata(this.installdata);    

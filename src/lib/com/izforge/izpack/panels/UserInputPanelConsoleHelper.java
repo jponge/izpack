@@ -20,13 +20,17 @@
  */
 package com.izforge.izpack.panels;
 
+import static com.izforge.izpack.panels.UserInputPanel.*;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -86,6 +90,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     private static final String STATIC_TEXT = "staticText";
 
     private static final String CHOICE = "choice";
+
+    private static final String DIR = "dir";
     
     private static final String FILE = "file";
     
@@ -140,6 +146,50 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         
     }
 
+    private List<ValidatorContainer> analyzeValidator(IXMLElement specElement, AutomatedInstallData idata)
+    {
+        List<ValidatorContainer> result = null;
+
+        // ----------------------------------------------------
+        // get the validator and processor if they are defined
+        // ----------------------------------------------------
+
+        Vector<IXMLElement> validatorsElem = specElement.getChildrenNamed(VALIDATOR);
+        if (validatorsElem != null && validatorsElem.size() > 0)
+        {
+            int vsize = validatorsElem.size();
+
+            result = new ArrayList<ValidatorContainer>(vsize);
+
+            for (int i = 0; i < vsize; i++)
+            {
+                IXMLElement element = validatorsElem.get(i);
+                String validator = element.getAttribute(CLASS);
+                String message = getText(element, idata);
+                HashMap<String, String> validateParamMap = new HashMap<String, String>();
+                // ----------------------------------------------------------
+                // check and see if we have any parameters for this validator.
+                // If so, then add them to validateParamMap.
+                // ----------------------------------------------------------
+                Vector<IXMLElement> validateParams = element.getChildrenNamed(RULE_PARAM);
+                if (validateParams != null && validateParams.size() > 0)
+                {
+                    Iterator<IXMLElement> iter = validateParams.iterator();
+                    while (iter.hasNext())
+                    {
+                        element = iter.next();
+                        String paramName = element.getAttribute(RULE_PARAM_NAME);
+                        String paramValue = element.getAttribute(RULE_PARAM_VALUE);
+
+                        validateParamMap.put(paramName, paramValue);
+                    }
+                }
+                result.add(new ValidatorContainer(validator, message, validateParamMap));
+            }
+        }
+        return result;
+    }
+    
     public boolean runConsoleFromPropertiesFile(AutomatedInstallData installData, Properties p)
     {
     	
@@ -186,36 +236,44 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         }
         boolean status = true;
         Iterator<Input> inputsIterator = listInputs.iterator();
-        while (inputsIterator.hasNext())
+        try
         {
-            Input input = inputsIterator.next();
- 
-            if (TEXT_FIELD.equals(input.strFieldType) 
-        		|| FILE.equals(input.strFieldType) 
-        		|| RULE_FIELD.equals(input.strFieldType))
+            while (inputsIterator.hasNext())
             {
-                status = status && processTextField(input, idata);
+                Input input = inputsIterator.next();
+     
+                if (TEXT_FIELD.equals(input.strFieldType) 
+            		|| FILE.equals(input.strFieldType) 
+            		|| RULE_FIELD.equals(input.strFieldType)
+                    || DIR.equals(input.strFieldType))
+                {
+                    status = status && processTextField(input, idata);
+                }
+                else if (COMBO_FIELD.equals(input.strFieldType)
+                        || RADIO_FIELD.equals(input.strFieldType))
+                {
+                    status = status && processComboRadioField(input, idata);
+                }
+                else if (CHECK_FIELD.equals(input.strFieldType))
+                {
+                    status = status && processCheckField(input, idata);
+                } 
+               else if(STATIC_TEXT.equals(input.strFieldType) 
+            		   || TITLE_FIELD.equals(input.strFieldType)
+            		   || DIVIDER.equals(input.strFieldType)
+            		   || SPACE.equals(input.strFieldType) )
+               {
+            	   status = status && processSimpleField(input, idata);
+               } 
+               else if (PASSWORD.equals(input.strFieldType) ) {
+                   status = status && processPasswordField(input, idata);
+               }
+    
             }
-            else if (COMBO_FIELD.equals(input.strFieldType)
-                    || RADIO_FIELD.equals(input.strFieldType))
-            {
-                status = status && processComboRadioField(input, idata);
-            }
-            else if (CHECK_FIELD.equals(input.strFieldType))
-            {
-                status = status && processCheckField(input, idata);
-            } 
-           else if(STATIC_TEXT.equals(input.strFieldType) 
-        		   || TITLE_FIELD.equals(input.strFieldType)
-        		   || DIVIDER.equals(input.strFieldType)
-        		   || SPACE.equals(input.strFieldType) )
-           {
-        	   status = status && processSimpleField(input, idata);
-           } 
-           else if (PASSWORD.equals(input.strFieldType) ) {
-               status = status && processPasswordField(input, idata);
-           }
-
+        }
+        catch (RevalidationTriggeredException e)
+        {
+            return runConsole(idata);
         }
 
         int i = askEndOfConsolePanel();
@@ -302,6 +360,14 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 }
                 Input in = getInputFromField(field, idata);
                 if (in != null) {
+                    in.validators = analyzeValidator(field, idata);
+                    if (in instanceof Password)
+                    {
+                        for (Input singleInput : ((Password) in).input)
+                        {
+                            singleInput.validators = in.validators;
+                        }
+                    }
                 	listInputs.add(in);
                 }
             }
@@ -321,13 +387,36 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         Password pwd = (Password) input;
         
         boolean rtn = false;
-        for (int i=0; i < pwd.input.length; i++) {
-            rtn = processTextField(pwd.input[i], idata);
-            if (!rtn) return rtn;
+        List<String> values = new LinkedList<String>();
+        for (int i = 0; i < pwd.input.length; i++)
+        {
+            while (true)
+            {
+                boolean done = true;
+                rtn = processTextField(pwd.input[i], idata);
+                if (!rtn) return rtn;
+                values.add(idata.getVariable(pwd.input[i].strVariableName));
+                if (i > 0 && pwd.validators != null && !pwd.validators.isEmpty())
+                {
+                    MultipleFieldValidator validation = new MultipleFieldValidator(values,
+                            pwd.validators);
+                    if (!validation.validate())
+                    {
+                        values.remove(values.size() - 1);
+                        done = false;
+                        System.out.println("Validation failed, please verify your input.");
+                        System.out.println("Validation error: " + validation.getValidationMessage());
+                    }
+                }
+                if (done)
+                {
+                    break;
+                }
+            }
         }
-    
+
         return rtn;
-        
+
     }
 
     boolean processTextField(Input input, AutomatedInstallData idata)
@@ -360,24 +449,39 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         }
 
         fieldText = input.listChoices.get(0).strText;
-        System.out.println(fieldText + " [" + set + "] ");
-        try
-        {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            String strIn = br.readLine();
-            if (!strIn.trim().equals(""))
+        String value = set;
+        while (true) {
+            boolean done = true;
+            System.out.println(fieldText + " [" + set + "] ");
+            try
             {
-                idata.setVariable(variable, strIn);
+                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                String strIn = br.readLine();
+                value = !strIn.trim().equals("") ? strIn : set;
+                if (input.validators != null && !input.validators.isEmpty())
+                {
+                    StringInputProcessingClient validation = new StringInputProcessingClient(value, input.validators);
+                    if (!validation.validate()) {
+                        done = false;
+                        System.out.println("Validation failed, please verify your input.");
+                        System.out.println("Validation error: " + validation.getValidationMessage());
+                    }
+                }
             }
-            else
+            catch (IOException e)
             {
-                idata.setVariable(variable, set);
+                e.printStackTrace();
+                done = false;
+            }
+            
+            if (done)
+            {
+                break;
             }
         }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        
+        idata.setVariable(variable, value);
+        
         return true;
 
     }
@@ -473,7 +577,11 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         {
             e.printStackTrace();
         }
-        idata.setVariable(variable, input.listChoices.get(input.iSelectedChoice).strValue);
+        String newValue = input.listChoices.get(input.iSelectedChoice).strValue;
+        idata.setVariable(variable, newValue);
+        if (input.revalidate && !currentvariablevalue.equals(newValue)) {
+            throw new RevalidationTriggeredException();
+        }
         return true;
 
     }
@@ -555,7 +663,11 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         {
             e.printStackTrace();
         }
-        idata.setVariable(variable, input.listChoices.get(input.iSelectedChoice).strValue);
+        String newValue = input.listChoices.get(input.iSelectedChoice).strValue;
+        idata.setVariable(variable, newValue);
+        if (input.revalidate && !currentvariablevalue.equals(newValue)) {
+            throw new RevalidationTriggeredException();
+        }
         return true;
 
     }
@@ -578,7 +690,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             return new Input(strVariableName, null, null, STATIC_TEXT, strText, 0);
         }
         
-        if (TEXT_FIELD.equals(strFieldType) || FILE.equals(strFieldType) )
+        if (TEXT_FIELD.equals(strFieldType) || FILE.equals(strFieldType) || DIR.equals(strFieldType))
         {
             List<Choice> choicesList = new ArrayList<Choice>();
             String strFieldText = null;
@@ -767,8 +879,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             if (choicesList.size() == 1) {
                 selection = 0;
             }
-          
-            return new Input(strVariableName, null, choicesList, strFieldType, strFieldText, selection);
+            
+            return new Input(strVariableName, null, choicesList, strFieldType, strFieldText, selection, "yes".equals(spec.getAttribute("revalidate")));
         }
         
         if (CHECK_FIELD.equals(strFieldType))
@@ -804,7 +916,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 strFieldText = description.getAttribute(TEXT);
             }
             return new Input(strVariableName, strSet, choicesList, CHECK_FIELD, strFieldText,
-                    iSelectedChoice);
+                    iSelectedChoice, "yes".equals(spec.getAttribute("revalidate")));
         }
 
 
@@ -958,7 +1070,40 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         return false;
     }
 
+    /*--------------------------------------------------------------------------*/
+    /**
+     * Extracts the text from an <code>IXMLElement</code>. The text must be defined in the resource
+     * file under the key defined in the <code>id</code> attribute or as value of the attribute
+     * <code>txt</code>.
+     *
+     * @param element the <code>IXMLElement</code> from which to extract the text.
+     * @param idata installer data
+     * @return The text defined in the <code>IXMLElement</code>. If no text can be located,
+     * <code>null</code> is returned.
+     */
+    /*--------------------------------------------------------------------------*/
+    private String getText(IXMLElement element, AutomatedInstallData idata)
+    {
+        if (element == null) { return (null); }
+
+        String text = element.getAttribute(TEXT);
+        if (text == null || text.length() == 0) {
+            text = element.getAttribute(KEY);
+        }
+        if (text != null && text.length() > 0) {
+            // try to parse the text, and substitute any variable it finds
+            VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
     
+            return (vs.substitute(text, null));
+        }
+        
+        return text;
+    }
+    
+    private class RevalidationTriggeredException extends RuntimeException
+    {
+
+    }
 
     public static class Input
     {
@@ -979,6 +1124,13 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             this.iSelectedChoice = iSelectedChoice;
         }
 
+        public Input(String strVariableName, String strDefaultValue, List<Choice> listChoices,
+                String strFieldType, String strFieldText, int iSelectedChoice, boolean revalidate)
+        {
+            this(strVariableName, strDefaultValue, listChoices, strFieldType, strFieldText, iSelectedChoice);
+            this.revalidate = revalidate;
+        }
+
         String strVariableName;
 
         String strDefaultValue;
@@ -990,6 +1142,10 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         String strText;
 
         int iSelectedChoice = -1;
+        
+        boolean revalidate;
+        
+        public List<ValidatorContainer> validators;
     }
 
     public static class Choice

@@ -41,6 +41,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.*;
 import java.util.List;
 
@@ -346,8 +347,17 @@ public class GUIInstaller extends InstallerBase
 
         // Dummy Frame
         JFrame frame = new JFrame();
-        frame.setIconImage(new ImageIcon(this.getClass().getResource("/img/JFrameIcon.png"))
-                .getImage());
+        
+        ImageIcon img;
+        try
+        {
+            img = new ImageIcon(this.getClass().getResource("/res/installer.langsel.icon"));
+        }
+        catch (NullPointerException err)
+        {
+            img = new ImageIcon(this.getClass().getResource("/img/JFrameIcon.png"));
+        }
+        frame.setIconImage(img.getImage());
 
         Dimension frameSize = frame.getSize();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

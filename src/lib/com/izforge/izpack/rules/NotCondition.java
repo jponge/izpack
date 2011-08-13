@@ -22,6 +22,7 @@ package com.izforge.izpack.rules;
 
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.installer.AutomatedInstallData;
 
 /**
  * @author Dennis Reil, <izpack@reil-online.de>
@@ -44,8 +45,9 @@ public class NotCondition extends Condition
     /**
      *
      */
-    public NotCondition(Condition operand)
+    public NotCondition(Condition operand, AutomatedInstallData installdata)
     {
+        this.installdata = installdata;
         this.operand = operand;
         if (operand != null){
             this.operand.setInstalldata(this.installdata);

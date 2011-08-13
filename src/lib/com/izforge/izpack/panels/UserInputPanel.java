@@ -116,9 +116,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
     private static final String VARIABLE = "variable";
 
-    private static final String TEXT = "txt";
+    protected static final String TEXT = "txt";
 
-    private static final String KEY = "id";
+    protected static final String KEY = "id";
 
     private static final String SPEC = "spec";
 
@@ -148,17 +148,19 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
     private static final String SIZE = "size";
 
-    private static final String VALIDATOR = "validator";
+    protected static final String VALIDATOR = "validator";
 
     private static final String PROCESSOR = "processor";
 
-    private static final String CLASS = "class";
+    protected static final String CLASS = "class";
 
     private static final String TITLE_FIELD = "title";
 
     private static final String TEXT_FIELD = "text";
 
     private static final String TEXT_SIZE = "size";
+
+    private static final String TEXT_ROWS = "rows";
 
     private static final String STATIC_TEXT = "staticText";
 
@@ -196,11 +198,11 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
     private static final String RULE_ENCRYPTED = "processed";
 
-    private static final String RULE_PARAM_NAME = "name";
+    protected static final String RULE_PARAM_NAME = "name";
 
-    private static final String RULE_PARAM_VALUE = "value";
+    protected static final String RULE_PARAM_VALUE = "value";
 
-    private static final String RULE_PARAM = "param";
+    protected static final String RULE_PARAM = "param";
 
     private static final String PWD_FIELD = "password";
 
@@ -1685,6 +1687,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         JLabel label;
         String set;
         int size;
+        int rows = 1;
         HashMap<String, String> validateParamMap = null;
         Vector<IXMLElement> validateParams = null;
         String validator = null;
@@ -1726,6 +1729,16 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             catch (Throwable exception)
             {
                 size = 1;
+            }
+            if (element.getAttribute(TEXT_ROWS) != null) {
+                try
+                {
+                    rows = Integer.parseInt(element.getAttribute(TEXT_ROWS));
+                }
+                catch (Throwable exception)
+                {
+                    rows = 1;
+                }
             }
         }
         // ----------------------------------------------------
@@ -1784,14 +1797,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // ----------------------------------------------------
         // construct the UI element and add it to the list
         // ----------------------------------------------------
-        if (hasParams)
-        {
-            inputField = new TextInputField(set, size, validator, validateParamMap);
-        }
-        else
-        {
-            inputField = new TextInputField(set, size, validator);
-        }
+        inputField = new TextInputField(set, size, rows, validator, hasParams ? validateParamMap : null);
         inputField.addFocusListener(this);
         TwoColumnConstraints constraints = new TwoColumnConstraints();
         constraints.position = TwoColumnConstraints.WEST;
@@ -3173,31 +3179,21 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         if (element == null) { return (null); }
 
         String key = element.getAttribute(KEY);
-        String text = null;
-
+        String text = element.getAttribute(TEXT);
+        
         if ((key != null) && (langpack != null))
         {
             try
             {
-                text = langpack.getString(key);
-                if (text.equals(key))
-                {
-                    text = null;
+                String langPackText = langpack.getString(key);
+                if (langPackText != null && !key.equals(langPackText)) {
+                    text = langPackText;
                 }
             }
             catch (Throwable exception)
             {
-                text = null;
+                // no localized text found
             }
-        }
-
-        // if there is no text in the description, then
-        // we were unable to retrieve it form the resource.
-        // In this case try to get the text directly from
-        // the IXMLElement
-        if (text == null)
-        {
-            text = element.getAttribute(TEXT);
         }
 
         // try to parse the text, and substitute any variable it finds

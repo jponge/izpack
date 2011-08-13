@@ -83,15 +83,35 @@ public class LicencePanel extends IzPanel implements ActionListener
 
         ButtonGroup group = new ButtonGroup();
 
-        yesRadio = new JRadioButton(parent.langpack.getString("LicencePanel.agree"), false);
+        String label = parent.langpack.getString("LicencePanel.agree");
+        yesRadio = new JRadioButton(label, false);
         group.add(yesRadio);
         add(yesRadio, NEXT_LINE);
         yesRadio.addActionListener(this);
+        char mnemonics = 0;
+        if (label != null && label.length() > 0) {
+            mnemonics = label.toLowerCase().charAt(0);
+            yesRadio.setMnemonic(mnemonics);
+        }
 
-        noRadio = new JRadioButton(parent.langpack.getString("LicencePanel.notagree"), true);
+        label = parent.langpack.getString("LicencePanel.notagree");
+        noRadio = new JRadioButton(label, true);
         group.add(noRadio);
         add(noRadio, NEXT_LINE);
         noRadio.addActionListener(this);
+        if (label != null && label.length() > 0) {
+            char noMnemonics = label.toLowerCase().charAt(0);
+            if (mnemonics == noMnemonics) {
+                if (label.indexOf(" ") != -1 && label.indexOf(" ") < label.length() - 2) {
+                    noMnemonics = label.toLowerCase().charAt(label.indexOf(" ") + 1);
+                } else if (label.length() > 0) {
+                    noMnemonics = label.toLowerCase().charAt(1);
+                }
+            }
+            if (noMnemonics > 0) {
+                noRadio.setMnemonic(noMnemonics);
+            }
+        }
 
         setInitialFocus(noRadio);
         getLayoutHelper().completeLayout();
