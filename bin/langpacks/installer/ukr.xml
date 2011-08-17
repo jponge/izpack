@@ -16,6 +16,7 @@
     <str id="installer.yes" txt="Так"/>
     <str id="installer.no" txt="Ні"/>
     <str id="installer.cancel" txt="Відмінити"/>
+    <str id="installer.error" txt="Помилка"/>
 
     <!-- Uninstaller specific strings -->
     <str id="uninstaller.warning" txt="Інстальовані програми будуть стерті !"/>
@@ -95,4 +96,6 @@
 
     <!-- Add your own panels specific strings here if you need -->
 
+    <str id="data.validation.error.title" txt="Помилка" />
+    <str id="data.validation.warning.title" txt="Застереження" />
 </langpack>
