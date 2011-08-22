@@ -5,6 +5,7 @@ import com.izforge.izpack.api.data.Panel;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Global model that will contain all xml information
@@ -14,7 +15,7 @@ import java.util.List;
 public class IzpackProjectInstaller implements Serializable
 {
 
-    private List<Listener> listeners;
+    private List<Listener> listeners = new ArrayList<Listener>();
 
     private List<Panel> panels;
 

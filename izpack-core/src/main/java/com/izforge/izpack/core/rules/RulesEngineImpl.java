@@ -144,10 +144,10 @@ public class RulesEngineImpl implements RulesEngine
 
     public void readConditionMap(Map<String, Condition> rules)
     {
-        conditionsmap = rules;
-        for (String key : conditionsmap.keySet())
+        conditionsmap.putAll(rules);
+        for (String key : rules.keySet())
         {
-            Condition condition = conditionsmap.get(key);
+            Condition condition = rules.get(key);
             condition.setInstalldata(installdata);
         }
     }

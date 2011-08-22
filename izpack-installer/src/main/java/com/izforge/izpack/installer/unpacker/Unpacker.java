@@ -409,7 +409,7 @@ public class Unpacker extends UnpackerBase
             }
 
             // Custom action listener stuff --- afterPacks ----
-//            informListeners(customActions, InstallerListener.AFTER_PACKS, idata, handler, null);
+            informListeners(customActions, InstallerListener.AFTER_PACKS, idata, npacks, handler);
             if (performInterrupted())
             { // Interrupt was initiated; perform it.
                 return;
