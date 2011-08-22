@@ -5,98 +5,97 @@
 <langpack>
 
     <!-- General installer strings -->
-    <str id="installer.title" txt="IzPack - Ін�?тал�?ці�? "/>
+    <str id="installer.title" txt="IzPack - Інсталяція "/>
     <str id="installer.next" txt="Далі"/>
-    <str id="installer.prev" txt="�?азад"/>
+    <str id="installer.prev" txt="Назад"/>
     <str id="installer.quit" txt="Вийти"/>
-    <str id="installer.madewith" txt="(Ін�?тал�?тор зроблено за допомогою IzPack - http://izpack.org/)"/>
+    <str id="installer.madewith" txt="(Інсталятор зроблено за допомогою IzPack - http://www.izforge.com/)"/>
     <str id="installer.quit.title" txt="Завершити роботу?"/>
-    <str id="installer.quit.message" txt="Ін�?тал�?ці�? буде відмінена !"/>
-    <str id="installer.warning" txt="За�?тереженн�? !"/>
+    <str id="installer.quit.message" txt="Інсталяція буде відмінена !"/>
+    <str id="installer.warning" txt="Застереження !"/>
     <str id="installer.yes" txt="Так"/>
-    <str id="installer.no" txt="�?і"/>
+    <str id="installer.no" txt="Ні"/>
     <str id="installer.cancel" txt="Відмінити"/>
+    <str id="installer.error" txt="Помилка"/>
 
     <!-- Uninstaller specific strings -->
-    <str id="uninstaller.warning" txt="Ін�?тальовані програми будуть �?терті !"/>
-    <str id="uninstaller.destroytarget" txt="Деін�?талювати "/>
-    <str id="uninstaller.uninstall" txt="Деін�?талювати в�?тановлені програми"/>
+    <str id="uninstaller.warning" txt="Інстальовані програми будуть стерті !"/>
+    <str id="uninstaller.destroytarget" txt="Деінсталювати "/>
+    <str id="uninstaller.uninstall" txt="Деінсталювати встановлені програми"/>
 
     <!-- The strings for the 'official' IzPack plugins -->
-    <str id="HelloPanel.welcome1" txt="Ла�?каво про�?имо в програму ін�?тал�?ції "/>
+    <str id="HelloPanel.welcome1" txt="Ласкаво просимо в програму інсталяції "/>
     <str id="HelloPanel.welcome2" txt=" !"/>
-    <str id="HelloPanel.authors" txt="�?втори програми: "/>
-    <str id="HelloPanel.url" txt="Домашн�? �?торінка програми: "/>
+    <str id="HelloPanel.authors" txt="Автори програми: "/>
+    <str id="HelloPanel.url" txt="Домашня сторінка програми: "/>
 
-    <str id="LicencePanel.info" txt="Будь ла�?ка уважно прочитайте ліцензію :"/>
+    <str id="LicencePanel.info" txt="Будь ласка уважно прочитайте ліцензію :"/>
     <str id="LicencePanel.agree" txt="Ви згідні з лiцензією ?"/>
     <str id="LicencePanel.notagree" txt="I do not accept the terms of this license agreement."/>
     <str id="LicencePanel.yes" txt="Так"/>
-    <str id="LicencePanel.no" txt="�?і"/>
+    <str id="LicencePanel.no" txt="Ні"/>
 
-    <str id="InfoPanel.info" txt="Будь ла�?ка уважно прочитайте �?лідуючу інформацію :"/>
+    <str id="InfoPanel.info" txt="Будь ласка уважно прочитайте слідуючу інформацію :"/>
 
-    <str id="TargetPanel.info" txt="Виберіть каталог дл�? ін�?тал�?ції :"/>
+    <str id="TargetPanel.info" txt="Виберіть каталог для інсталяції :"/>
     <str id="TargetPanel.browse" txt="Вказати ..."/>
     <str id="TargetPanel.warn"
-         txt="Каталог вже і�?нує ! Бажаєте в�?тановити програму незважаючи на це ?"/>
+         txt="Каталог вже існує ! Бажаєте встановити програму незважаючи на це ?"/>
 
-    <str id="PacksPanel.info" txt="Виберіть пакети дл�? ін�?тал�?ції :"/>
-    <str id="PacksPanel.tip" txt="Примітка: пакети виділені �?ірим кольором необхідні дл�? ін�?тал�?ції."/>
+    <str id="PacksPanel.info" txt="Виберіть пакети для інсталяції :"/>
+    <str id="PacksPanel.tip" txt="Примітка: пакети виділені сірим кольором необхідні для інсталяції."/>
     <str id="PacksPanel.description" txt="Description"/>
 
-    <str id="InstallPanel.info" txt="Підготовка дл�? ін�?тал�?ції програми завершена :"/>
-    <str id="InstallPanel.install" txt="Ін�?талювати !"/>
-    <str id="InstallPanel.tip" txt="По�?туп:"/>
+    <str id="InstallPanel.info" txt="Підготовка для інсталяції програми завершена :"/>
+    <str id="InstallPanel.install" txt="Інсталювати !"/>
+    <str id="InstallPanel.tip" txt="Поступ:"/>
     <str id="InstallPanel.begin" txt="[Порожньо]"/>
     <str id="InstallPanel.finished" txt="[Завершено]"/>
 
-    <str id="FinishPanel.success" txt="Ін�?тал�?ці�? у�?пішно завершена !"/>
-    <str id="FinishPanel.fail" txt="Ін�?тал�?ці�? зазнала аварійного збою ..."/>
-    <str id="FinishPanel.uninst.info" txt="Програма деін�?тал�?ції розміщена в :"/>
-    <str id="FinishPanel.auto" txt="Створити �?ценарій автоматичної ін�?тал�?ції"/>
+    <str id="FinishPanel.success" txt="Інсталяція успішно завершена !"/>
+    <str id="FinishPanel.fail" txt="Інсталяція зазнала аварійного збою ..."/>
+    <str id="FinishPanel.uninst.info" txt="Програма деінсталяції розміщена в :"/>
+    <str id="FinishPanel.auto" txt="Створити сценарій автоматичної інсталяції"/>
     <str id="FinishPanel.auto.tip"
-         txt="Буде �?творено файл, �?ких дозвол�?є автоматично прове�?ти таку �?аму ін�?тал�?цію програми на іншому комп'ютері."/>
+         txt="Буде створено файл, яких дозволяє автоматично провести таку саму інсталяцію програми на іншому комп'ютері."/>
 
-    <str id="ImgPacksPanel.packs" txt="До�?тупні �?лідуючі пакети :"/>
+    <str id="ImgPacksPanel.packs" txt="Доступні слідуючі пакети :"/>
     <str id="ImgPacksPanel.snap" txt="Знимок пакету :"/>
-    <str id="ImgPacksPanel.checkbox" txt=" В�?тановити цей пакет"/>
+    <str id="ImgPacksPanel.checkbox" txt=" Встановити цей пакет"/>
 
-    <str id="ShortcutPanel.regular.list" txt="Виберіть групу програм дл�? по�?илань:"/>
+    <str id="ShortcutPanel.regular.list" txt="Виберіть групу програм для посилань:"/>
     <str id="ShortcutPanel.regular.default" txt="Скинути"/>
-    <str id="ShortcutPanel.regular.desktop" txt="Створити по�?иланн�? на �?тільниці"/>
-    <str id="ShortcutPanel.regular.create" txt="Створити по�?иланн�?"/>
-    <str id="ShortcutPanel.regular.userIntro" txt="�?творенн�? по�?иланн�? дл�?:"/>
-    <str id="ShortcutPanel.regular.currentUser" txt="поточного кори�?тувача"/>
-    <str id="ShortcutPanel.regular.allUsers" txt="в�?іх кори�?тувачів"/>
+    <str id="ShortcutPanel.regular.desktop" txt="Створити посилання на стільниці"/>
+    <str id="ShortcutPanel.regular.create" txt="Створити посилання"/>
+    <str id="ShortcutPanel.regular.userIntro" txt="створення посилання для:"/>
+    <str id="ShortcutPanel.regular.currentUser" txt="поточного користувача"/>
+    <str id="ShortcutPanel.regular.allUsers" txt="всіх користувачів"/>
 
-    <str id="ShortcutPanel.alternate.apology"
-         txt="Вибачте, але IzPack не підтримує �?творенн�? по�?илань дл�? цієї операційної �?и�?теми. Дл�? �?творенн�? по�?илань зверніть�?�? будь-ла�?ка до відповідного по�?ібника кори�?тувача."/>
-    <str id="ShortcutPanel.alternate.targetsLabel"
-         txt="Спи�?ок по�?илань, рекомендованих розробником цього програмного продукту."/>
-    <str id="ShortcutPanel.alternate.textFileExplanation"
-         txt="Ви можете зберегти детальну інформацію про ці по�?иланн�? в тек�?товий файл."/>
-    <str id="ShortcutPanel.alternate.saveButton" txt="Зберегти тек�?товий файл"/>
+    <str id="ShortcutPanel.alternate.apology" txt="Вибачте, але IzPack не підтримує створення посилань для цієї операційної системи. Для створення посилань зверніться будь-ласка до відповідного посібника користувача."/>
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="Список посилань, рекомендованих розробником цього програмного продукту."/>
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="Ви можете зберегти детальну інформацію про ці посилання в текстовий файл."/>
+    <str id="ShortcutPanel.alternate.saveButton" txt="Зберегти текстовий файл"/>
 
-    <str id="ShortcutPanel.textFile.header"
-         txt="Інформаці�? про по�?иланн�?\n========================\n\n�?ебхідна інформаці�? дл�? �?творенн�? по�?илань вручну.\n"/>
+    <str id="ShortcutPanel.textFile.header" txt="Інформація про посилання\n========================\n\nНебхідна інформація для створення посилань вручну.\n"/>
 
-    <str id="ShortcutPanel.textFile.name" txt="По�?иланн�?         : "/>
-    <str id="ShortcutPanel.textFile.location" txt="Бажане положенн�?  : "/>
-    <str id="ShortcutPanel.textFile.description" txt="Опи�?              : "/>
-    <str id="ShortcutPanel.textFile.target" txt="Ціль по�?иланн�?    : "/>
+    <str id="ShortcutPanel.textFile.name" txt="Посилання         : "/>
+    <str id="ShortcutPanel.textFile.location" txt="Бажане положення  : "/>
+    <str id="ShortcutPanel.textFile.description" txt="Опис              : "/>
+    <str id="ShortcutPanel.textFile.target" txt="Ціль посилання    : "/>
     <str id="ShortcutPanel.textFile.command" txt="Команда виклику   : "/>
     <str id="ShortcutPanel.textFile.iconName" txt="Файл піктограми   : "/>
-    <str id="ShortcutPanel.textFile.iconIndex" txt="Індек�? піктограми : "/>
-    <str id="ShortcutPanel.textFile.work" txt="Каталог виконанн�? : "/>
+    <str id="ShortcutPanel.textFile.iconIndex" txt="Індекс піктограми : "/>
+    <str id="ShortcutPanel.textFile.work" txt="Каталог виконання : "/>
 
-    <str id="ShortcutPanel.location.desktop" txt="Стільниц�?"/>
+    <str id="ShortcutPanel.location.desktop" txt="Стільниця"/>
     <str id="ShortcutPanel.location.applications" txt="Меню програм"/>
-    <str id="ShortcutPanel.location.startMenu" txt="Меню запу�?ку"/>
-    <str id="ShortcutPanel.location.startup" txt="Група запу�?ку"/>
+    <str id="ShortcutPanel.location.startMenu" txt="Меню запуску"/>
+    <str id="ShortcutPanel.location.startup" txt="Група запуску"/>
 
     <str id="UserInputPanel.error.caption" txt="Input Problem"/>
 
     <!-- Add your own panels specific strings here if you need -->
 
+    <str id="data.validation.error.title" txt="Помилка" />
+    <str id="data.validation.warning.title" txt="Застереження" />
 </langpack>
