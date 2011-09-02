@@ -10,3 +10,7 @@ target/
 *.jar
 izpack-test/src/test/resources/samples/izpack/
 izpack-compiler/out.zip
+.project
+.settings
+.classpath
+.metadata
