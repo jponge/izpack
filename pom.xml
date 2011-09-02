@@ -481,6 +481,19 @@
     </build>
 
     <profiles>
+    
+        <profile>
+            <!-- See: http://docs.codehaus.org/display/HAUSMATES/Continuous+Integration+-+Snapshots -->
+            <id>bamboo-deploy</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>izpack-snapshot-bamboo</id>
+                    <name>IzPack's snapshot repository on Bamboo</name>
+                    <url>file:///opt/ci.repository.codehaus.org/</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+    
         <profile>
             <id>release-sign-artifacts</id>
             <activation>
