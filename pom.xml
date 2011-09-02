@@ -405,7 +405,7 @@
                 <artifactId>maven-eclipse-plugin</artifactId>
                 <configuration>
                     <workspace>${basedir}</workspace>
-                    <workspaceCodeStylesURL>file://../src/eclipse-code-formatter.xml</workspaceCodeStylesURL>
+                    <workspaceCodeStylesURL>file:///${project.basedir}/src/eclipse-code-formatter.xml</workspaceCodeStylesURL>
                 </configuration>
             </plugin>
             <plugin>
