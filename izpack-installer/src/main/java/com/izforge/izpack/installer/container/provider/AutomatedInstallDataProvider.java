@@ -33,6 +33,7 @@ public class AutomatedInstallDataProvider extends AbstractInstallDataProvider
             addCustomLangpack(automatedInstallData);
             loadDefaultLocale(automatedInstallData);
             loadDynamicVariables(automatedInstallData);
+            loadDynamicConditions(automatedInstallData);
             loadInstallerRequirements(automatedInstallData);
             return automatedInstallData;
         }

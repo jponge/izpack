@@ -1039,7 +1039,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /*--------------------------------------------------------------------------*/
     private final boolean validatePanel()
     {
-        boolean returnValue = false;
+        boolean returnValue = true;
 
         // Evaluate all global dynamic conditions
         List<DynamicInstallerRequirementValidator> dynConds = installData.getDynamicinstallerrequirements();
