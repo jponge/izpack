@@ -415,9 +415,9 @@ public class CompilerConfig extends Thread
         {
             String src = xmlCompilerHelper.requireAttribute(ixmlElement, "src");
 
-            //all external jars contents regarless of stage type are merge into the installer
-            // but we keep a copy of jar entry that user want to merge into uninstaller 
-            // as "customData" to be merged into uninstaller.jar at the end of installation
+            //all external jars contents regardless of stage type are merged into the installer
+            // but we keep a copy of jar entries that user want to merge into uninstaller 
+            // as "customData", where the installer will get them into uninstaller.jar at the end of installation
             // note if stage is empty or null, it is the same at 'install'
             String stage = ixmlElement.getAttribute("stage");
             URL url = resourceFinder.findProjectResource(src, "Jar file", ixmlElement);
