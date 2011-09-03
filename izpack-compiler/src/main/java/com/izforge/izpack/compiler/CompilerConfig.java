@@ -415,24 +415,21 @@ public class CompilerConfig extends Thread
         {
             String src = xmlCompilerHelper.requireAttribute(ixmlElement, "src");
 
-            // Additionals for mark a jar file also used in the uninstaller.
-            // The contained files will be copied from the installer into the
-            // uninstaller if needed.
-            // Therefore the contained files of the jar should be in the
-            // installer also
-            // they are used only from the uninstaller. This is the reason why
-            // the stage
-            // wiil be only observed for the uninstaller.
+            //all external jars contents regarless of stage type are merge into the installer
+            // but we keep a copy of jar entry that user want to merge into uninstaller 
+            // as "customData" to be merged into uninstaller.jar at the end of installation
+            // note if stage is empty or null, it is the same at 'install'
             String stage = ixmlElement.getAttribute("stage");
-            if (stage != null
-                    && ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage)))
+            URL url = resourceFinder.findProjectResource(src, "Jar file", ixmlElement);
+            CustomData customData = null;
+            if ( "both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage))
             {
-                URL url = resourceFinder.findProjectResource(src, "Jar file", ixmlElement);
-                CustomData customData = new CustomData(null, compilerHelper.getContainedFilePaths(url), null,
+                customData = new CustomData(null, compilerHelper.getContainedFilePaths(url), null,
                         CustomData.UNINSTALLER_JAR);
-                packager.addCustomJar(customData, url);
-                ClassUtils.loadJarInSystemClassLoader(FileUtil.convertUrlToFile(url));
             }
+            packager.addCustomJar(customData, url);
+            ClassUtils.loadJarInSystemClassLoader(FileUtil.convertUrlToFile(url));
+
         }
         notifyCompilerListener("addJars", CompilerListener.END, data);
     }

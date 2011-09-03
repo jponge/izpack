@@ -205,7 +205,11 @@ public abstract class PackagerBase implements IPackager
 
     public void addCustomJar(CustomData ca, URL url)
     {
-        customDataList.add(ca); // serialized to keep order/variables correct
+        if (ca != null && ca.type == CustomData.UNINSTALLER_JAR)
+        {
+            customDataList.add(ca); // serialized to keep order/variables correct
+        }
+        
         if (url != null)
         {
             addJarContent(url); // each included once, no matter how many times added
