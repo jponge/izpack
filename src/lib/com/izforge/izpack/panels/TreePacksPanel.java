@@ -455,6 +455,8 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         {
             add(area);
         }
+        // Hack to make JTree appear correctly - dcheung
+        area.setPreferredSize(new Dimension(500, 10));
         return (area);
 
     }
