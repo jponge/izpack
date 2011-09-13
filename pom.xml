@@ -41,6 +41,7 @@
       <!-- copy the real standlone-compiler to this project and overwrite the implicit jar already built by the jar packaging -->
       <plugin>
          <artifactId>maven-antrun-plugin</artifactId>
+         <version>1.6</version>
          <executions>
            <execution>
              <id>build-izpack-with-ant</id>
@@ -49,9 +50,12 @@
              </goals>
              <phase>package</phase>
              <configuration>
-               <tasks>
-                  <exec executable="${env.ANT_HOME}/bin/ant${antExeExt}" dir="${basedir}/src"/>
-               </tasks>
+               <target>
+                  <exec executable="${env.ANT_HOME}/bin/ant${antExeExt}" dir="${basedir}/src">
+                    <arg value="-Ddebug=true" />
+                  </exec>
+                  <jar destfile="${project.build.directory}/${project.build.finalName}-sources.jar" basedir="${project.basedir}/src/lib"/>
+               </target>
              </configuration>
            </execution>
            
@@ -97,6 +101,10 @@
                <artifacts>
                  <artifact>
                    <file>${basedir}/lib/standalone-compiler.jar</file>
+                 </artifact>
+                 <artifact>
+                   <file>${project.build.directory}/${project.build.finalName}-sources.jar</file>
+                   <classifier>sources</classifier>
                  </artifact>
                </artifacts>
              </configuration>
