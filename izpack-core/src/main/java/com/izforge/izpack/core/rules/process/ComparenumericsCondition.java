@@ -22,172 +22,64 @@
 
 package com.izforge.izpack.core.rules.process;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.api.rules.Condition;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.rules.CompareCondition;
+import com.izforge.izpack.api.rules.ComparisonOperator;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorBase;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.util.Debug;
 
-/**
- * @author Dennis Reil, <izpack@reil-online.de>
- */
-public class ComparenumericsCondition extends Condition
+public class ComparenumericsCondition extends CompareCondition
 {
-    private static final long serialVersionUID = 5631805710151645907L;
-
-    protected String variablename;
-    protected String value;
-    protected ComparisonOperator operator = ComparisonOperator.EQUAL;
-
-    public ComparenumericsCondition(String variablename, String value)
-    {
-        super();
-        this.variablename = variablename;
-        this.value = value;
-    }
-
-    public ComparenumericsCondition()
-    {
-        super();
-    }
-
-    public String getValue()
-    {
-        return value;
-    }
-
-    public void setValue(String value)
-    {
-        this.value = value;
-    }
-
-    public String getVariablename()
-    {
-        return variablename;
-    }
-
-    public void setVariablename(String variablename)
-    {
-        this.variablename = variablename;
-    }
-
-    public ComparisonOperator getOperator()
-    {
-        return operator;
-    }
-
-
-    public void setOperator(ComparisonOperator operator)
-    {
-        this.operator = operator;
-    }
-
-    @Override
-    public void readFromXML(IXMLElement xmlcondition) throws Exception
-    {
-        variablename = xmlcondition.getFirstChildNamed("name").getContent();
-        if (variablename == null)
-        {
-            throw new Exception("Missing \"name\" element in condition \"" +  getId() + "\"");
-        }
-        value = xmlcondition.getFirstChildNamed("value").getContent();
-        if (value == null)
-        {
-            throw new Exception("Missing \"value\" element in condition \"" +  getId() + "\"");
-        }
-        String operatorAttr = xmlcondition.getFirstChildNamed("operator").getContent();
-        if (operatorAttr != null)
-        {
-            operator = ComparisonOperator.getComparisonOperatorFromAttribute(operatorAttr);
-            if (operator == null)
-            {
-                throw new Exception("Unknown \"operator\" element value \"" + operatorAttr + "\" in condition \"" +  getId() + "\"");
-            }
-        }
-        else
-        {
-            throw new Exception("Missing \"operator\" element in condition \"" +  getId() + "\"");
-        }
-    }
+    private static final long serialVersionUID = -5512232923336878003L;
 
     @Override
     public boolean isTrue()
     {
         boolean result = false;
-        if (this.getInstallData() != null)
+        AutomatedInstallData installData = getInstallData();
+        if (installData != null && operand1 != null && operand2 != null)
         {
-            String val = this.getInstallData().getVariable(variablename);
-            if (val != null)
+            VariableSubstitutorBase subst = new VariableSubstitutorImpl(installData.getVariables());
+            String arg1 = subst.substitute(operand1);
+            String arg2 = subst.substitute(operand2);
+            if (operator == null)
             {
-                if (operator == null)
+                operator = ComparisonOperator.EQUAL;
+            }
+            try
+            {
+                int leftValue = Integer.valueOf(arg1);
+                int rightValue = Integer.valueOf(arg2);
+                switch (operator)
                 {
-                    operator = ComparisonOperator.EQUAL;
+                case EQUAL:
+                    result = leftValue == rightValue;
+                    break;
+                case NOTEQUAL:
+                    result = leftValue != rightValue;
+                    break;
+                case GREATER:
+                    result = leftValue > rightValue;
+                    break;
+                case GREATEREQUAL:
+                    result = leftValue >= rightValue;
+                    break;
+                case LESS:
+                    result = leftValue < rightValue;
+                    break;
+                case LESSEQUAL:
+                    result = leftValue <= rightValue;
+                    break;
+                default:
+                    break;
                 }
-                try
-                {
-                   int currentValue = new Integer(val);
-                   int comparisonValue = new Integer(value);
-                   switch (operator)
-                    {
-                    case EQUAL:
-                        result = currentValue == comparisonValue;
-                        break;
-                    case NOTEQUAL:
-                        result = currentValue != comparisonValue;
-                        break;
-                    case GREATER:
-                        result = currentValue > comparisonValue;
-                        break;
-                    case GREATEREQUAL:
-                        result = currentValue >= comparisonValue;
-                        break;
-                    case LESS:
-                        result = currentValue < comparisonValue;
-                        break;
-                    case LESSEQUAL:
-                        result = currentValue <= comparisonValue;
-                        break;
-                    default:
-                        break;
-                    }
-                }
-                catch (NumberFormatException nfe)
-                {
-                    Debug.log("The value of the associated variable is not a numeric value or the value which should be compared is not a number.");
-                }
+            }
+            catch (NumberFormatException nfe)
+            {
+                Debug.log("One of the values to compare is not in numeric format");
             }
         }
         return result;
-    }
-
-    @Override
-    public String getDependenciesDetails()
-    {
-        StringBuffer details = new StringBuffer();
-        details.append(this.getId());
-        details.append(" depends on a value of <b>");
-        details.append(this.value);
-        details.append("</b> on variable <b>");
-        details.append(this.variablename);
-        details.append(" (current value: ");
-        details.append(this.getInstallData().getVariable(variablename));
-        details.append(")");
-        details.append("This value has to be " + this.operator);
-        details.append("</b><br/>");
-        return details.toString();
-    }
-
-
-    @Override
-    public void makeXMLData(IXMLElement conditionRoot)
-    {
-        XMLElementImpl nameXml = new XMLElementImpl("name", conditionRoot);
-        nameXml.setContent(this.variablename);
-        conditionRoot.addChild(nameXml);
-        XMLElementImpl valueXml = new XMLElementImpl("value", conditionRoot);
-        valueXml.setContent(this.value);
-        conditionRoot.addChild(valueXml);
-        XMLElementImpl opXml = new XMLElementImpl("op", conditionRoot);
-        opXml.setContent(this.operator.getAttribute());
-        conditionRoot.addChild(opXml);
     }
 }
