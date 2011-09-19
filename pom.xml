@@ -430,10 +430,10 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>                
+                <artifactId>maven-site-plugin</artifactId>
             </plugin>
         </plugins>
-        
+
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -443,7 +443,7 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-site-plugin</artifactId>                
+                    <artifactId>maven-site-plugin</artifactId>
                     <version>2.2</version>
                 </plugin>
                 <plugin>
@@ -476,12 +476,52 @@
                     <artifactId>maven-release-plugin</artifactId>
                     <version>2.1</version>
                 </plugin>
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-dependency-plugin</artifactId>
+                                        <versionRange>[2.1,)</versionRange>
+                                        <goals>
+                                            <goal>unpack-dependencies</goal>
+                                            <goal>copy-dependencies</goal>
+                                            <goal>unpack</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore/>
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-assembly-plugin</artifactId>
+                                        <versionRange>[2.1,)</versionRange>
+                                        <goals>
+                                            <goal>single</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore/>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
 
     <profiles>
-    
+
         <profile>
             <!-- See: http://docs.codehaus.org/display/HAUSMATES/Continuous+Integration+-+Snapshots -->
             <id>bamboo-deploy</id>
@@ -493,7 +533,7 @@
                 </snapshotRepository>
             </distributionManagement>
         </profile>
-    
+
         <profile>
             <id>release-sign-artifacts</id>
             <activation>
@@ -596,7 +636,7 @@
                 <configuration>
                     <findbugsXmlOutput>true</findbugsXmlOutput>
                     <effort>Max</effort>
-                </configuration>                
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -686,4 +726,4 @@
     </distributionManagement>
 
 </project>
-                 
+
