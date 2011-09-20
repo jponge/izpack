@@ -161,6 +161,9 @@
                     </systemPropertyVariables>
                     <excludes>
                         <exclude>**/SampleRunnerTest.java</exclude>
+                        <exclude>**/IniTest.java</exclude>
+                        <exclude>**/OptionsFormatterTest.java</exclude>
+                        <exclude>**/RegTest.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
