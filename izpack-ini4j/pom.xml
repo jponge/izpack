@@ -39,12 +39,6 @@
     </developers>
     <dependencies>
         <dependency>
-            <groupId>jetty</groupId>
-            <artifactId>jetty</artifactId>
-            <version>4.2.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
@@ -77,22 +71,36 @@
                     <family>windows</family>
                 </os>
             </activation>
-            <properties>
-              <skipTests>true</skipTests>
-            </properties>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
-                            <systemProperties>
-                                <property>
-                                    <name>os.family</name>
-                                    <value>windows</value>
-                                </property>
-                            </systemProperties>
-                            <skipTests>${skipTests}</skipTests>
+                            <systemPropertyVariables>
+                                <os.name>windows</os.name>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>unix</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                </os>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <os.name>unix</os.name>
+                            </systemPropertyVariables>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -143,22 +151,14 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <systemProperties>
-                        <property>
-                            <name>java.util.prefs.PreferencesFactory</name>
-                            <value>org.ini4j.IniPreferencesFactory</value>
-                        </property>
-                        <property>
-                            <name>org.ini4j.prefs.user</name>
-                            <value>org/ini4j/sample/dwarfs.ini</value>
-                        </property>
-                        <property>
-                            <name>org.ini4j.prefs.system</name>
-                            <value>org/ini4j/sample/dwarfs.ini</value>
-                        </property>
-                    </systemProperties>
+                    <systemPropertyVariables>
+                      <java.util.prefs.PreferencesFactory>org.ini4j.IniPreferencesFactory</java.util.prefs.PreferencesFactory>
+                      <org.ini4j.prefs.user>org/ini4j/sample/dwarfs.ini</org.ini4j.prefs.user>
+                      <org.ini4j.prefs.system>org/ini4j/sample/dwarfs.ini</org.ini4j.prefs.system>
+                    </systemPropertyVariables>
                     <excludes>
                         <exclude>**/SampleRunnerTest.java</exclude>
                     </excludes>
