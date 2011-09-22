@@ -6,10 +6,12 @@ import java.io.IOException;
 
 import org.dom4j.dom.DOMElement;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.compiler.resource.ResourceFinder;
+import com.izforge.izpack.merge.MergeManager;
 
 public class PackagerTest {
 
@@ -25,8 +27,9 @@ public class PackagerTest {
 				return new XMLElementImpl(rootNode);
 			}
 		};
+		final MergeManager mockMergeManager = Mockito.mock(MergeManager.class);
 		final Packager packager = new Packager(null, null, null, null, null,
-				null, null, null, null, null, null, resourceFinder);
+				null, null, mockMergeManager, null, null, null, resourceFinder);
 		packager.writeManifest();
 		fail("Not yet implemented");
 	}
