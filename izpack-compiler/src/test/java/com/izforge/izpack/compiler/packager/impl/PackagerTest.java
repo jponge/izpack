@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.compiler.resource.ResourceFinder;
 
 public class PackagerTest {
@@ -13,7 +14,12 @@ public class PackagerTest {
 	@Test
 	public void testWritePacks() throws IOException {
 		final ResourceFinder resourceFinder = new ResourceFinder(null, null,
-				null, null);
+				null, null) {
+			@Override
+			public IXMLElement getXMLTree() throws IOException {
+				return super.getXMLTree();
+			}
+		};
 		final Packager packager = new Packager(null, null, null, null, null,
 				null, null, null, null, null, null, resourceFinder);
 		packager.writeManifest();
