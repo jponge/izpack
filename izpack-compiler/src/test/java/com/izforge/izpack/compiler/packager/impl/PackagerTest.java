@@ -62,4 +62,24 @@ public class PackagerTest {
 		verify(mockMergeManager).addResourceToMerge(anyString(), anyString());
 
 	}
+
+	@Test
+	public void noGuiPrefs() throws IOException {
+		final ResourceFinder resourceFinder = new ResourceFinder(null, null,
+				null, null) {
+			@Override
+			public IXMLElement getXMLTree() throws IOException {
+				return new XMLElementImpl(new DOMElement("installation"));
+			}
+		};
+		final MergeManager mockMergeManager = mock(MergeManager.class);
+
+		final Packager packager = new Packager(null, null, null, null, null,
+				null, null, mockMergeManager, null, null, null, resourceFinder);
+
+		packager.writeManifest();
+
+		verify(mockMergeManager).addResourceToMerge(anyString(), anyString());
+
+	}
 }
