@@ -10,13 +10,16 @@ import java.io.IOException;
 import org.dom4j.dom.DOMElement;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.compiler.resource.ResourceFinder;
 import com.izforge.izpack.merge.MergeManager;
+import com.izforge.izpack.util.file.FileUtils;
 
 @RunWith(PowerMockRunner.class)
+@PrepareForTest(FileUtils.class)
 public class PackagerTest {
 
 	@Test
