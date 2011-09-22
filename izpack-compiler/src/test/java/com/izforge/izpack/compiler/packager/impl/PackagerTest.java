@@ -1,12 +1,13 @@
 package com.izforge.izpack.compiler.packager.impl;
 
-import static org.junit.Assert.fail;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 
 import org.dom4j.dom.DOMElement;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
@@ -27,11 +28,14 @@ public class PackagerTest {
 				return new XMLElementImpl(rootNode);
 			}
 		};
-		final MergeManager mockMergeManager = Mockito.mock(MergeManager.class);
+		final MergeManager mockMergeManager = mock(MergeManager.class);
+
 		final Packager packager = new Packager(null, null, null, null, null,
 				null, null, mockMergeManager, null, null, null, resourceFinder);
-		packager.writeManifest();
-		fail("Not yet implemented");
-	}
 
+		packager.writeManifest();
+
+		verify(mockMergeManager).addResourceToMerge(anyString(), anyString());
+
+	}
 }
