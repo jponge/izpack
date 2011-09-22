@@ -17,13 +17,37 @@ import com.izforge.izpack.merge.MergeManager;
 public class PackagerTest {
 
 	@Test
-	public void testWritePacks() throws IOException {
+	public void guiPrefsWithNoSplash() throws IOException {
 		final ResourceFinder resourceFinder = new ResourceFinder(null, null,
 				null, null) {
 			@Override
 			public IXMLElement getXMLTree() throws IOException {
 				final DOMElement rootNode = new DOMElement("installation");
 				final DOMElement guiPrefsNode = new DOMElement("guiprefs");
+				rootNode.add(guiPrefsNode);
+				return new XMLElementImpl(rootNode);
+			}
+		};
+		final MergeManager mockMergeManager = mock(MergeManager.class);
+
+		final Packager packager = new Packager(null, null, null, null, null,
+				null, null, mockMergeManager, null, null, null, resourceFinder);
+
+		packager.writeManifest();
+
+		verify(mockMergeManager).addResourceToMerge(anyString(), anyString());
+
+	}
+
+	@Test
+	public void guiPrefsWithSplash() throws IOException {
+		final ResourceFinder resourceFinder = new ResourceFinder(null, null,
+				null, null) {
+			@Override
+			public IXMLElement getXMLTree() throws IOException {
+				final DOMElement rootNode = new DOMElement("installation");
+				final DOMElement guiPrefsNode = new DOMElement("guiprefs");
+				guiPrefsNode.add(new DOMElement("splash"));
 				rootNode.add(guiPrefsNode);
 				return new XMLElementImpl(rootNode);
 			}
