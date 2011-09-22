@@ -4,9 +4,11 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
+import org.dom4j.dom.DOMElement;
 import org.junit.Test;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.compiler.resource.ResourceFinder;
 
 public class PackagerTest {
@@ -17,7 +19,10 @@ public class PackagerTest {
 				null, null) {
 			@Override
 			public IXMLElement getXMLTree() throws IOException {
-				return super.getXMLTree();
+				final DOMElement rootNode = new DOMElement("installation");
+				final DOMElement guiPrefsNode = new DOMElement("guiprefs");
+				rootNode.add(guiPrefsNode);
+				return new XMLElementImpl(rootNode);
 			}
 		};
 		final Packager packager = new Packager(null, null, null, null, null,
