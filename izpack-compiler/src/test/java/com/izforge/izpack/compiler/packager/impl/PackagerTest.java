@@ -14,8 +14,9 @@ public class PackagerTest {
 	public void testWritePacks() throws IOException {
 		final ResourceFinder resourceFinder = new ResourceFinder(null, null,
 				null, null);
-		new Packager(null, null, null, null, null, null, null, null, null,
-				null, null, resourceFinder).writeManifest();
+		final Packager packager = new Packager(null, null, null, null, null,
+				null, null, null, null, null, null, resourceFinder);
+		packager.writeManifest();
 		fail("Not yet implemented");
 	}
 
