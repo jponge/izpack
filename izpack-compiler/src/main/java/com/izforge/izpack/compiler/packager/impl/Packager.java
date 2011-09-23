@@ -223,7 +223,11 @@ public class Packager extends PackagerBase
         IXMLElement guiPrefsElement = data.getFirstChildNamed("guiprefs");
         // Add splash screen configuration
         List<String> lines = IOUtils.readLines(getClass().getResourceAsStream("MANIFEST.MF"));
-        IXMLElement splashNode = guiPrefsElement.getFirstChildNamed("splash");
+        IXMLElement splashNode = null;
+        if (guiPrefsElement != null)
+        {
+            splashNode = guiPrefsElement.getFirstChildNamed("splash");
+        }
         if (splashNode != null)
         {
             // Add splash image to installer jar
