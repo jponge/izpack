@@ -59,14 +59,14 @@ public class PackagerTest {
 		when(resourceFinder.getXMLTree()).thenReturn(
 				new XMLElementImpl(rootNode));
 
-		final MergeManager mockMergeManager = mock(MergeManager.class);
+		final MergeManager mergeManager = mock(MergeManager.class);
 
 		final Packager packager = new Packager(null, null, null, null, null,
-				null, null, mockMergeManager, null, null, null, resourceFinder);
+				null, null, mergeManager, null, null, null, resourceFinder);
 
 		packager.writeManifest();
 
-		verify(mockMergeManager, times(2)).addResourceToMerge(anyString(),
+		verify(mergeManager, times(2)).addResourceToMerge(anyString(),
 				anyString());
 	}
 
