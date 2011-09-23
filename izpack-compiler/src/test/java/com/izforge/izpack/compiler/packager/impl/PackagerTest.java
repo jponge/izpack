@@ -24,66 +24,69 @@ import com.izforge.izpack.merge.MergeManager;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(FileUtils.class)
-public class PackagerTest {
+public class PackagerTest
+{
 
-	private ResourceFinder resourceFinder;
-	private MergeManager mergeManager;
+    private ResourceFinder resourceFinder;
 
-	@Before
-	public void setUpMocks() {
-		resourceFinder = mock(ResourceFinder.class);
-		mergeManager = mock(MergeManager.class);
-	}
+    private MergeManager mergeManager;
 
-	@Test
-	public void guiPrefsWithNoSplash() throws IOException {
-		final DOMElement rootNode = new DOMElement("installation");
-		rootNode.add(new DOMElement("guiprefs"));
-		when(resourceFinder.getXMLTree()).thenReturn(
-				new XMLElementImpl(rootNode));
+    @Before
+    public void setUpMocks()
+    {
+        resourceFinder = mock(ResourceFinder.class);
+        mergeManager = mock(MergeManager.class);
+    }
 
-		final Packager packager = new Packager(null, null, null, null, null,
-				null, null, mergeManager, null, null, null, resourceFinder);
+    @Test
+    public void guiPrefsWithNoSplash() throws IOException
+    {
+        final DOMElement rootNode = new DOMElement("installation");
+        rootNode.add(new DOMElement("guiprefs"));
+        when(resourceFinder.getXMLTree()).thenReturn(new XMLElementImpl(rootNode));
 
-		packager.writeManifest();
+        final Packager packager = new Packager(null, null, null, null, null, null, null,
+                mergeManager, null, null, null, resourceFinder);
 
-		verify(mergeManager).addResourceToMerge(anyString(), anyString());
+        packager.writeManifest();
 
-	}
+        verify(mergeManager).addResourceToMerge(anyString(), anyString());
 
-	@Test
-	public void guiPrefsWithSplash() throws IOException {
-		PowerMockito.mockStatic(FileUtils.class);
-		final File splashImage = new File("");
-		when(FileUtils.toFile(null)).thenReturn(splashImage);
+    }
 
-		final DOMElement rootNode = new DOMElement("installation");
-		final DOMElement guiPrefsNode = new DOMElement("guiprefs");
-		guiPrefsNode.add(new DOMElement("splash"));
-		rootNode.add(guiPrefsNode);
-		when(resourceFinder.getXMLTree()).thenReturn(
-				new XMLElementImpl(rootNode));
+    @Test
+    public void guiPrefsWithSplash() throws IOException
+    {
+        PowerMockito.mockStatic(FileUtils.class);
+        final File splashImage = new File("");
+        when(FileUtils.toFile(null)).thenReturn(splashImage);
 
-		final Packager packager = new Packager(null, null, null, null, null,
-				null, null, mergeManager, null, null, null, resourceFinder);
+        final DOMElement rootNode = new DOMElement("installation");
+        final DOMElement guiPrefsNode = new DOMElement("guiprefs");
+        guiPrefsNode.add(new DOMElement("splash"));
+        rootNode.add(guiPrefsNode);
+        when(resourceFinder.getXMLTree()).thenReturn(new XMLElementImpl(rootNode));
 
-		packager.writeManifest();
+        final Packager packager = new Packager(null, null, null, null, null, null, null,
+                mergeManager, null, null, null, resourceFinder);
 
-		verify(mergeManager, times(2)).addResourceToMerge(anyString(),
-				anyString());
-	}
+        packager.writeManifest();
 
-	@Test
-	public void noGuiPrefs() throws IOException {
-		when(resourceFinder.getXMLTree()).thenReturn(
-				new XMLElementImpl(new DOMElement("installation")));
+        verify(mergeManager, times(2)).addResourceToMerge(anyString(), anyString());
+    }
 
-		final Packager packager = new Packager(null, null, null, null, null,
-				null, null, mergeManager, null, null, null, resourceFinder);
+    @Test
+    public void noGuiPrefs() throws IOException
+    {
+        when(resourceFinder.getXMLTree()).thenReturn(
+                new XMLElementImpl(new DOMElement("installation")));
 
-		packager.writeManifest();
+        final Packager packager = new Packager(null, null, null, null, null, null, null,
+                mergeManager, null, null, null, resourceFinder);
 
-		verify(mergeManager).addResourceToMerge(anyString(), anyString());
+        packager.writeManifest();
 
-	}
+        verify(mergeManager).addResourceToMerge(anyString(), anyString());
+
+    }
 }
