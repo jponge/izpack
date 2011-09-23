@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.dom4j.dom.DOMElement;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
@@ -25,16 +26,21 @@ import com.izforge.izpack.merge.MergeManager;
 @PrepareForTest(FileUtils.class)
 public class PackagerTest {
 
+	private ResourceFinder resourceFinder;
+	private MergeManager mergeManager;
+
+	@Before
+	public void setUpMocks() {
+		resourceFinder = mock(ResourceFinder.class);
+		mergeManager = mock(MergeManager.class);
+	}
+
 	@Test
 	public void guiPrefsWithNoSplash() throws IOException {
-		final ResourceFinder resourceFinder = mock(ResourceFinder.class);
-
 		final DOMElement rootNode = new DOMElement("installation");
 		rootNode.add(new DOMElement("guiprefs"));
 		when(resourceFinder.getXMLTree()).thenReturn(
 				new XMLElementImpl(rootNode));
-
-		final MergeManager mergeManager = mock(MergeManager.class);
 
 		final Packager packager = new Packager(null, null, null, null, null,
 				null, null, mergeManager, null, null, null, resourceFinder);
@@ -51,15 +57,12 @@ public class PackagerTest {
 		final File splashImage = new File("");
 		when(FileUtils.toFile(null)).thenReturn(splashImage);
 
-		final ResourceFinder resourceFinder = mock(ResourceFinder.class);
 		final DOMElement rootNode = new DOMElement("installation");
 		final DOMElement guiPrefsNode = new DOMElement("guiprefs");
 		guiPrefsNode.add(new DOMElement("splash"));
 		rootNode.add(guiPrefsNode);
 		when(resourceFinder.getXMLTree()).thenReturn(
 				new XMLElementImpl(rootNode));
-
-		final MergeManager mergeManager = mock(MergeManager.class);
 
 		final Packager packager = new Packager(null, null, null, null, null,
 				null, null, mergeManager, null, null, null, resourceFinder);
@@ -72,11 +75,8 @@ public class PackagerTest {
 
 	@Test
 	public void noGuiPrefs() throws IOException {
-		final ResourceFinder resourceFinder = mock(ResourceFinder.class);
 		when(resourceFinder.getXMLTree()).thenReturn(
 				new XMLElementImpl(new DOMElement("installation")));
-
-		final MergeManager mergeManager = mock(MergeManager.class);
 
 		final Packager packager = new Packager(null, null, null, null, null,
 				null, null, mergeManager, null, null, null, resourceFinder);
