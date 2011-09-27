@@ -1,4 +1,4 @@
-package com.izforge.izpack.core.rules.process;
+package com.izforge.izpack.api.rules;
 
 import java.util.EnumSet;
 import java.util.HashMap;

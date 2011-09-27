@@ -23,97 +23,24 @@ package com.izforge.izpack.core.rules.process;
 
 import java.util.Comparator;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.api.rules.Condition;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.rules.CompareCondition;
+import com.izforge.izpack.api.rules.ComparisonOperator;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorBase;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 
-public class CompareversionsCondition extends Condition
+public class CompareversionsCondition extends CompareCondition
 {
-    private static final long serialVersionUID = 5631805710151645907L;
-
-    protected String operand1;
-    protected String operand2;
-    protected ComparisonOperator operator = ComparisonOperator.EQUAL;
-
-    public CompareversionsCondition(String op1, String op2)
-    {
-        super();
-        operand1 = op1;
-        operand2 = op2;
-    }
-
-    public CompareversionsCondition()
-    {
-        super();
-    }
-
-    public String getLeftOperand()
-    {
-        return operand1;
-    }
-
-    public void setLeftOperand(String value)
-    {
-        operand1 = value;
-    }
-
-    public String getRightOperand()
-    {
-        return operand2;
-    }
-
-    public void setRightOperand(String value)
-    {
-        operand2 = value;
-    }
-
-    public ComparisonOperator getOperator()
-    {
-        return this.operator;
-    }
-
-    public void setOperator(ComparisonOperator operator)
-    {
-        this.operator = operator;
-    }
-
-    @Override
-    public void readFromXML(IXMLElement xmlcondition) throws Exception
-    {
-        operand1 = xmlcondition.getFirstChildNamed("arg1").getContent();
-        if (operand1 == null)
-        {
-            throw new Exception("Missing \"arg1\" element in condition \"" +  getId() + "\"");
-        }
-        operand2 = xmlcondition.getFirstChildNamed("arg2").getContent();
-        if (operand2 == null)
-        {
-            throw new Exception("Missing \"arg2\" element in condition \"" +  getId() + "\"");
-        }
-        String operatorAttr = xmlcondition.getFirstChildNamed("operator").getContent();
-        if (operatorAttr != null)
-        {
-            operator = ComparisonOperator.getComparisonOperatorFromAttribute(operatorAttr);
-            if (operator == null)
-            {
-                throw new Exception("Unknown \"operator\" element value \"" + operatorAttr + "\" in condition \"" +  getId() + "\"");
-            }
-        }
-        else
-        {
-            throw new Exception("Missing \"operator\" element in condition \"" +  getId() + "\"");
-        }
-    }
+    private static final long serialVersionUID = -5845914969794400006L;
 
     @Override
     public boolean isTrue()
     {
         boolean result = false;
-        if (this.getInstallData() != null && operand1 != null && operand2 != null)
+        AutomatedInstallData installData = getInstallData();
+        if (installData != null && operand1 != null && operand2 != null)
         {
-            VariableSubstitutorBase subst = new VariableSubstitutorImpl(this.getInstallData().getVariables());
+            VariableSubstitutorBase subst = new VariableSubstitutorImpl(installData.getVariables());
             String arg1 = subst.substitute(operand1);
             String arg2 = subst.substitute(operand2);
             if (operator == null)
@@ -147,36 +74,6 @@ public class CompareversionsCondition extends Condition
             }
         }
         return result;
-    }
-
-    @Override
-    public String getDependenciesDetails()
-    {
-        StringBuffer details = new StringBuffer();
-        details.append(this.getId());
-        details.append(" depends on the values <b>");
-        details.append(this.operand1);
-        details.append("</b> and <b>");
-        details.append(this.operand2);
-        details.append("</b>");
-        details.append("This value has to be <b>" + this.operator);
-        details.append("</b><br/>");
-        return details.toString();
-    }
-
-
-    @Override
-    public void makeXMLData(IXMLElement conditionRoot)
-    {
-        XMLElementImpl nameXml = new XMLElementImpl("arg1", conditionRoot);
-        nameXml.setContent(this.operand1);
-        conditionRoot.addChild(nameXml);
-        XMLElementImpl valueXml = new XMLElementImpl("arg2", conditionRoot);
-        valueXml.setContent(this.operand2);
-        conditionRoot.addChild(valueXml);
-        XMLElementImpl opXml = new XMLElementImpl("operator", conditionRoot);
-        opXml.setContent(this.operator.getAttribute());
-        conditionRoot.addChild(opXml);
     }
 
     private static class VersionStringComparator implements Comparator<String>

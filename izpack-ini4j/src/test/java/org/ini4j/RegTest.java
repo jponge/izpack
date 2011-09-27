@@ -64,7 +64,7 @@ public class RegTest extends Ini4jCase
         }
     }
 
-    @Test public void testIsWindwos()
+    @Test public void testIsWindows()
     {
         assertEquals(isWindows(), Reg.isWindows());
     }
@@ -125,8 +125,9 @@ public class RegTest extends Ini4jCase
 
     @Test public void testUnixExec() throws Exception
     {
-        if (isSkip(!isUnix(), "testUnixExec"))
+        if (!isUnix())
         {
+            printSkip("testUnixExec");
             return;
         }
 
@@ -174,8 +175,9 @@ public class RegTest extends Ini4jCase
 
     @Test public void testReadWrite() throws Exception
     {
-        if (isSkip(!isWindows(), "testReadWrite"))
+        if (!isWindows())
         {
+            printSkip("testReadWrite");
             return;
         }
 
@@ -219,8 +221,9 @@ public class RegTest extends Ini4jCase
 
     @Test public void testUnsupportedOperatingSystem() throws Exception
     {
-        if (isSkip(isWindows(), "testUnsupportedOperatingSystem"))
+        if (!isWindows())
         {
+            printSkip("testUnsupportedOperatingSystem");
             return;
         }
 
@@ -247,14 +250,9 @@ public class RegTest extends Ini4jCase
         }
     }
 
-    private boolean isSkip(boolean flag, String testName)
+    private void printSkip(String testName)
     {
-        if (!flag)
-        {
-            System.out.println("Skipping " + getClass().getName() + '#' + testName);
-        }
-
-        return flag;
+        System.out.println("Skipping " + getClass().getName() + '#' + testName);
     }
 
     private boolean isWindows()
