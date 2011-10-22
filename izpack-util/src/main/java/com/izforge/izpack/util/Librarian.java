@@ -78,7 +78,7 @@ public class Librarian implements CleanupClient
     /**
      * The default directory for native library files.
      */
-    private static final String NATIVE = "native";
+    private static final String NATIVE = "com/izforge/izpack/bin/native";
 
     /**
      * The block size used for reading and writing data, 4k.
