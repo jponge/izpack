@@ -41,7 +41,7 @@ def parse_options():
                       default=False,
                       help="Do not use UPX to further compress the output")
     parser.add_option("--launch-file", action="store", dest="launch",
-                      default="launcher.exe",
+                      default="",
                       help="File to launch after extract")
     parser.add_option("--launch-args", action="store", dest="launchargs",
                       default="",
@@ -58,17 +58,17 @@ def parse_options():
     return options
 
 def create_exe(settings):
-    if(len(settings.file) == 1):
+    if len(settings.file) > 0:
         filename = os.path.basename(settings.file[0])
     else:
-        filename = settings.launch
+        filename = ''
     
     if settings.p7z == '7za':
         p7z = os.path.join(os.path.dirname(sys.argv[0]), '7za')
     else:
         p7z = settings.p7z
     
-    use_shell = sys.platform != "win32"
+    use_shell = sys.platform != 'win32'
     
     if (os.access('installer.7z', os.F_OK)):
         os.remove('installer.7z')
@@ -77,18 +77,25 @@ def create_exe(settings):
     subprocess.call(p7zcmd, shell=use_shell)
     
     config = open('config.txt', 'w')
-    config.write(';!@Install@!UTF-8!\r\n')
-    config.write('Title="%s"\r\n' % settings.name)
+    config.write(';!@Install@!UTF-8!\n')
+    config.write('Title="%s"\n' % settings.name)
     if settings.prompt:
-        config.write('BeginPrompt="Install %s?"\r\n' % settings.name)
-    config.write('Progress="yes"\r\n')
-    config.write('ExecuteFile="javaw"')
-    config.write('ExecuteParameters="-jar \\\"%s\\\"' % filename)
-    if settings.launchargs != '':
-        config.write(' %s"\r\n' % settings.launchargs)
+        config.write('BeginPrompt="Install %s?"\n' % settings.name)
+    config.write('Progress="yes"\n')
+    
+    if settings.launch == '':
+        config.write('ExecuteFile="javaw"\n')
+        config.write('ExecuteParameters="-jar \\\"%s\\\"' % filename)
+        if settings.launchargs != '':
+            config.write(' %s"\n' % settings.launchargs)
+        else:
+            config.write('"\n') 
     else:
-        config.write('"\r\n') 
-    config.write(';!@InstallEnd@!\r\n')
+        config.write('ExecuteFile="%s"\n' % settings.launch)
+        if settings.launchargs != '':
+            config.write('ExecuteParameters="%s"\n' % settings.launchargs)
+
+    config.write(';!@InstallEnd@!\n')
     config.close()
     
     sfx = os.path.join(os.path.dirname(p7z), '7zS.sfx')
