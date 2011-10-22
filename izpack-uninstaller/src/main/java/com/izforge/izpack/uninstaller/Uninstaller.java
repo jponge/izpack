@@ -23,6 +23,11 @@ import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.PrivilegedRunner;
 import com.izforge.izpack.util.SelfModifier;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import javax.swing.*;
 import java.lang.reflect.Method;
@@ -79,6 +84,25 @@ public class Uninstaller
             uninstall(args);
         }
     }
+    
+    /**
+     * Gets the installation path from the log file.
+     *
+     * @throws Exception Description of the Exception
+     */
+    private static File getInstallPath() {
+        try {
+            InputStream in = Uninstaller.class.getResourceAsStream("/install.log");
+            InputStreamReader inReader = new InputStreamReader(in);
+            BufferedReader reader = new BufferedReader(inReader);
+            String installPath = reader.readLine();
+            reader.close();
+            return new File(installPath);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
 
     private static void checkForPrivilegedExecution()
     {
@@ -91,7 +115,7 @@ public class Uninstaller
         if (elevationShouldBeInvestigated())
         {
             PrivilegedRunner runner = new PrivilegedRunner();
-            if (runner.isPlatformSupported() && runner.isElevationNeeded())
+            if (runner.isPlatformSupported() && isElevationNeeded())
             {
                 try
                 {
@@ -183,5 +207,9 @@ public class Uninstaller
                 }
             }
         });
+    }
+
+    private static boolean isElevationNeeded() {
+        return !getInstallPath().canWrite();
     }
 }
