@@ -39,11 +39,11 @@ import java.io.StringReader;
 
 public class OptionsTest extends Ini4jCase
 {
-    private static final String[] _badOptions = { "=value" +  Helper.EOL, "\\u000d\\u000d=value" +  Helper.EOL };
-    private static final String COMMENT_ONLY = "# first line" +  Helper.EOL + "# second line" +  Helper.EOL;
-    private static final String COMMENT_ONLY_VALUE = " first line" +  Helper.EOL + " second line";
-    private static final String OPTIONS_ONE_HEADER = COMMENT_ONLY + Helper.EOL + "key=value" +  Helper.EOL ;
-    private static final String MULTI = "option=value" +  Helper.EOL + "option=value2"+  Helper.EOL + "option=value3" +  Helper.EOL +"option=value4" +  Helper.EOL +"option=value5" +  Helper.EOL;
+    private static final String[] _badOptions = { "=value\n", "\\u000d\\u000d=value\n" };
+    private static final String COMMENT_ONLY = "# first line\n# second line\n";
+    private static final String COMMENT_ONLY_VALUE = " first line\n second line";
+    private static final String OPTIONS_ONE_HEADER = COMMENT_ONLY + "\n\nkey=value\n";
+    private static final String MULTI = "option=value\noption=value2\noption=value3\noption=value4\noption=value5\n";
 
     @Test public void testCommentOnly() throws Exception
     {
