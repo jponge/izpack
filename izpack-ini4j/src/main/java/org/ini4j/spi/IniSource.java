@@ -30,6 +30,7 @@ class IniSource
     public static final char INCLUDE_END = '>';
     public static final char INCLUDE_OPTIONAL = '?';
     private static final char ESCAPE_CHAR = '\\';
+    private static final String EOL = System.getProperty("line.separator");
     private URL _base;
     private IniSource _chain;
     private final String _commentChars;
@@ -114,7 +115,10 @@ class IniSource
     {
         if (buff.length() != 0)
         {
-            buff.deleteCharAt(buff.length() - 1);
+            if(buff.lastIndexOf(_config.getLineSeparator()) == buff.length() - _config.getLineSeparator().length())
+            {
+               buff.delete(buff.length() - _config.getLineSeparator().length(), buff.length());
+            }
             _handler.handleComment(buff.toString());
             buff.delete(0, buff.length());
         }
