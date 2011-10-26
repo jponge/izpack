@@ -44,6 +44,7 @@ import java.util.Properties;
 
 public class Helper
 {
+    public static final String EOL = System.getProperty("line.separator");
     private static final String RESOURCE_PREFIX = "org/ini4j/sample/";
     private static final File _sourceDir = new File(System.getProperty("basedir") + "/src/test/java/");
     private static final File _targetDir = new File(System.getProperty("basedir") + "/target");
@@ -61,13 +62,14 @@ public class Helper
             Config.PROP_UNNAMED_SECTION, Config.PROP_ESCAPE, Config.PROP_ESCAPE_NEWLINE
         };
     private static final String[] FACTORY_PROPERTIES = { IniFormatter.class.getName(), IniParser.class.getName() };
-    public static final String HEADER_COMMENT = " Copyright 2005,2009 Ivan SZKIBA\n" + "\n"
-        + " Licensed under the Apache License, Version 2.0 (the \"License\");\n"
-        + " you may not use this file except in compliance with the License.\n" + " You may obtain a copy of the License at\n" + "\n"
-        + "      http://www.apache.org/licenses/LICENSE-2.0\n" + "\n" + " Unless required by applicable law or agreed to in writing, software\n"
-        + " distributed under the License is distributed on an \"AS IS\" BASIS,\n"
-        + " WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n"
-        + " See the License for the specific language governing permissions and\n" + " limitations under the License.";
+    public static final String HEADER_COMMENT = " Copyright 2005,2009 Ivan SZKIBA" + EOL + EOL
+        + " Licensed under the Apache License, Version 2.0 (the \"License\")" + EOL
+        + " you may not use this file except in compliance with the License." + EOL + " You may obtain a copy of the License at" + EOL + EOL
+        + "      http://www.apache.org/licenses/LICENSE-2.0" + EOL + EOL + " Unless required by applicable law or agreed to in writing, software"  + EOL
+        + " distributed under the License is distributed on an \"AS IS\" BASIS," + EOL
+        + " WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied." + EOL
+        + " See the License for the specific language governing permissions and" + EOL +  " limitations under the License.";
+
 
     private Helper()
     {
