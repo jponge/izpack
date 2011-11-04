@@ -76,8 +76,8 @@ public class SampleRunnerTest
     private static final String PACKAGE_INFO = "package-info" + JAVA_SUFFIX;
     private static final String APT_SUFFIX = ".apt";
     private static final String APT_INDEX = "index" + APT_SUFFIX;
-    private static final String CODE_BEGIN = "\n+----+\n";
-    private static final String CODE_END = "+----+\n\n";
+    private static final String CODE_BEGIN = Helper.EOL + "+----+" + Helper.EOL;
+    private static final String CODE_END = "+----+" + Helper.EOL + Helper.EOL;
     private static File _documentDir;
 
     static
@@ -130,12 +130,12 @@ public class SampleRunnerTest
                     { PyReadSample.class },
 
                     // tutorials
+                    { BeanTutorial.class },
                     { OneMinuteTutorial.class },
                     { IniTutorial.class },
                     { RegTutorial.class },
                     { WindowsRegistryTutorial.class },
-                    { OptTutorial.class },
-                    { BeanTutorial.class },
+                    { OptTutorial.class },                    
                     { PrefsTutorial.class },
                 });
     }

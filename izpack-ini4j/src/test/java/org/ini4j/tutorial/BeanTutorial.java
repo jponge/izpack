@@ -65,7 +65,7 @@ public class BeanTutorial extends AbstractTutorial
         sample01(ini);
         sample02(ini);
         sample03(ini);
-        sample04(arg.toURI().toURL());
+        //sample04(arg.toURI().toURL());
         Options opts = new Options();
 
         opts.putAll(ini.get(Dwarfs.PROP_BASHFUL));

@@ -48,7 +48,7 @@ public class WindowsRegistryTutorial extends AbstractTutorial
     @Override protected void run(File arg) throws Exception
     {
         sample01();
-        sample02();
+        //sample02();
         sample03();
     }
 

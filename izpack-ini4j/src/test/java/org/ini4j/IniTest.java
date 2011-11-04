@@ -35,11 +35,11 @@ import java.io.StringWriter;
 
 public class IniTest extends Ini4jCase
 {
-    private static final String COMMENT_ONLY = "# first line\n# second line\n";
-    private static final String COMMENT_ONLY_VALUE = " first line\n second line";
-    private static final String INI_ONE_HEADER = COMMENT_ONLY + "\n\n[section]\nkey=value\n";
-    private static final String COMMENTED_OPTION = COMMENT_ONLY + "\n\n[section]\n;comment\nkey=value\n";
-    private static final String MULTI = "[section]\noption=value\noption=value2\n[section]\noption=value3\noption=value4\noption=value5\n";
+    private static final String COMMENT_ONLY = "# first line" + Helper.EOL + "# second line" + Helper.EOL;
+    private static final String COMMENT_ONLY_VALUE = " first line" + Helper.EOL + " second line";
+    private static final String INI_ONE_HEADER = COMMENT_ONLY + Helper.EOL + Helper.EOL + "[section]" + Helper.EOL + "key=value" + Helper.EOL;
+    private static final String COMMENTED_OPTION = COMMENT_ONLY + Helper.EOL + Helper.EOL + "[section]" + Helper.EOL + ";comment" + Helper.EOL + "key=value" + Helper.EOL;
+    private static final String MULTI = "[section]" + Helper.EOL + "option=value" + Helper.EOL + "option=value2" + Helper.EOL + "[section]" + Helper.EOL + "option=value3" + Helper.EOL + "option=value4" + Helper.EOL + "option=value5" + Helper.EOL;
 
     @Test public void testCommentedOption() throws Exception
     {
@@ -213,7 +213,7 @@ public class IniTest extends Ini4jCase
         StringWriter writer = new StringWriter();
 
         ini.store(writer);
-        assertEquals("[section]\noption = value\n\n", writer.toString());
+        assertEquals("[section]" + Helper.EOL + "option = value" + Helper.EOL + Helper.EOL, writer.toString());
     }
 
     @Test public void testWithoutHeaderComment() throws Exception
@@ -241,6 +241,6 @@ public class IniTest extends Ini4jCase
         StringWriter writer = new StringWriter();
 
         ini.store(writer);
-        assertEquals("#section-comment\n[section]\noption = value\n\n", writer.toString());
+        assertEquals("#section-comment" + Helper.EOL + "[section]" + Helper.EOL + "option = value" + Helper.EOL + Helper.EOL, writer.toString());
     }
 }
