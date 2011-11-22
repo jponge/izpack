@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2007 Dennis Reil
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -79,7 +79,7 @@ public abstract class UnpackerBase implements IUnpacker
      * The absolute path of the source installation jar.
      */
     private File absolutInstallSource;
-    
+
     /**
      * The packs locale database.
      */
@@ -745,25 +745,33 @@ public abstract class UnpackerBase implements IUnpacker
 
         // We put the langpack
         InputStream in2 = Unpacker.class.getResourceAsStream("/langpacks/" + idata.localeISO3 + ".xml");
-        outJar.putNextEntry(new ZipEntry("langpack.xml"));
-        int read = in2.read();
-        while (read != -1)
+	if (in2 != null)
         {
-            outJar.write(read);
-            read = in2.read();
-        }
-        outJar.closeEntry();
+            outJar.putNextEntry(new ZipEntry("langpack.xml"));
+            int read = in2.read();
+            while (read != -1)
+            {
+                outJar.write(read);
+                read = in2.read();
+            }
+            outJar.closeEntry();
+            in2.close();
+	}
 
         // We put the custom langpack if available
         in2 = Unpacker.class.getResourceAsStream("/res/CustomLangpack.xml_" + idata.localeISO3);
-        outJar.putNextEntry(new ZipEntry("customlangpack.xml"));
-        read = in2.read();
-        while (read != -1)
+	if (in2 != null)
         {
-            outJar.write(read);
-            read = in2.read();
-        }
-        outJar.closeEntry();
+            outJar.putNextEntry(new ZipEntry("customlangpack.xml"));
+            int read = in2.read();
+            while (read != -1)
+            {
+                outJar.write(read);
+                read = in2.read();
+            }
+            outJar.closeEntry();
+            in2.close();
+	}
     }
 
     /**
@@ -958,7 +966,7 @@ public abstract class UnpackerBase implements IUnpacker
         oout.close();
         fout.close();
     }
-    
+
     protected File getAbsolutInstallSource() throws Exception
     {
         if (absolutInstallSource == null)
