@@ -159,12 +159,13 @@
                       <org.ini4j.prefs.user>org/ini4j/sample/dwarfs.ini</org.ini4j.prefs.user>
                       <org.ini4j.prefs.system>org/ini4j/sample/dwarfs.ini</org.ini4j.prefs.system>
                     </systemPropertyVariables>
+                    <!--
                     <excludes>
                         <exclude>**/SampleRunnerTest.java</exclude>
                         <exclude>**/IniTest.java</exclude>
                         <exclude>**/OptionsFormatterTest.java</exclude>
                         <exclude>**/RegTest.java</exclude>
-                    </excludes>
+                    </excludes>          -->
                 </configuration>
             </plugin>
             <plugin>
