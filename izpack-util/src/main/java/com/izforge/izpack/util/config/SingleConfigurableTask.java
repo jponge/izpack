@@ -55,6 +55,15 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
     private boolean patchResolveVariables = false;
 
     protected boolean createConfigurable = true;
+    /*
+     * ini4j settings
+     */
+    private boolean escape = Config.getGlobal().isEscape();
+    private boolean escapeNewLine = Config.getGlobal().isEscapeNewline();
+    private boolean headerComment = false;
+    private boolean emptyLines = true;
+    private boolean autoNumbering = true;
+
 
     /*
      * Internal variables.
@@ -103,6 +112,57 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
     }
 
     /**
+     * Whether to accept escape sequences
+     *
+     * @param escape - true to resolve escape sequences
+     */
+    public void setEscape(boolean escape)
+    {
+        this.escape = escape;
+    }
+
+    /**
+     * Whether to interpret escape at the end of line for joining lines
+     *
+     * @param escape - true to interpret escape at the end of line for joining lines
+     */
+    public void setEscapeNewLine(boolean escapeNewLine)
+    {
+        this.escapeNewLine = escapeNewLine;
+    }
+
+    /**
+     * Whether to use header comments
+     *
+     * @param headerComment - true to use header comments
+     */
+    public void setHeaderComment(boolean headerComment)
+    {
+        this.headerComment = headerComment;
+    }
+
+    /**
+     * Whether to preserve empty lines
+     *
+     * @param emptyLines - true to preserve empty lines
+     */
+    public void setEmptyLines(boolean emptyLines)
+    {
+        this.emptyLines = emptyLines;
+    }
+
+    /**
+     * Whether to use property auto numbering (for property names
+     * with a trailing '.')
+     *
+     * @param autoNumbering - true to use property auto numbering
+     */
+    public void setAutoNumbering(boolean autoNumbering)
+    {
+        this.autoNumbering = autoNumbering;
+    }
+
+    /**
      * Whether the configuration file or registry root entry should be created if it doesn't already
      * exist (default: true).
      *
@@ -115,9 +175,11 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
 
     public void execute() throws Exception
     {
-        Config.getGlobal().setHeaderComment(false);
-        Config.getGlobal().setEmptyLines(true);
-        Config.getGlobal().setAutoNumbering(true);
+        Config.getGlobal().setHeaderComment(headerComment);
+        Config.getGlobal().setEmptyLines(emptyLines);
+        Config.getGlobal().setAutoNumbering(autoNumbering);
+        Config.getGlobal().setEscape(escape);
+        Config.getGlobal().setEscapeNewline(escapeNewLine);
         checkAttributes();
         readConfigurable();
         readSourceConfigurable();

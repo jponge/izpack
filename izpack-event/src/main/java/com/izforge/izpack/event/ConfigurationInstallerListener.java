@@ -460,6 +460,26 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         {
             task.setPatchResolveVariables(Boolean.parseBoolean(boolattr));
         }
+        boolattr = getAttribute(el, "escape");
+        if (boolattr != null)
+        {
+            task.setEscape(Boolean.parseBoolean(boolattr));
+        }
+        boolattr = getAttribute(el, "escapeNewLine");
+        if (boolattr != null)
+        {
+            task.setEscapeNewLine(Boolean.parseBoolean(boolattr));
+        }
+        boolattr = getAttribute(el, "headerComment");
+        if (boolattr != null)
+        {
+            task.setHeaderComment(Boolean.parseBoolean(boolattr));
+        }
+        boolattr = getAttribute(el, "emptyLines");
+        if (boolattr != null)
+        {
+            task.setEmptyLines(Boolean.parseBoolean(boolattr));
+        }
     }
 
     private void readConfigFileTaskCommonAttributes(AutomatedInstallData idata,
