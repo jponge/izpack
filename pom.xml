@@ -10,7 +10,7 @@
   
   <groupId>org.codehaus.izpack</groupId>
   <artifactId>izpack-standalone-compiler</artifactId>
-  <version>4.3.5-SNAPSHOT</version>
+  <version>4.3.5</version>
   
   <name>IzPack Standalone Compiler</name>
 

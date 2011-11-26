@@ -23,10 +23,11 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>4.3.4</appversion>
+        <appversion>4.3.5</appversion>
         <authors>
             <author email="" name="Julien Ponge (project founder)"/>
             <author email="" name="Mark Miller (backports to make 4.3.4)"/>
+            <author email="" name="Sergiy Shyrkov (most 4.3.5 contributions)"/>
             <author email="" name="The fantastic IzPack developers and contributors"/>
         </authors>
         <url>http://izpack.org/</url>
