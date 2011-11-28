@@ -183,11 +183,12 @@ public class FileInputField extends JPanel implements ActionListener
         boolean result = false;
         String input = filetxt.getText();
 
-        if (allowEmpty && ((input == null) || (input.length() == 0)))
+        boolean empty = (input == null) || (input.length() == 0);
+        if (empty && allowEmpty)
         {
             result = true;
         }
-        else if (input != null)
+        else if (!empty)
         {
             // Expand unix home reference
             if (input.startsWith("~"))

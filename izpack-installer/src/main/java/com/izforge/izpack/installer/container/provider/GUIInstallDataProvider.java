@@ -80,9 +80,9 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         loadInstallerRequirements(guiInstallData);
         loadDynamicVariables(guiInstallData);
         loadDynamicConditions(guiInstallData);        
+        loadDefaultLocale(guiInstallData);
         // Load custom langpack if exist.
         addCustomLangpack(guiInstallData);
-        loadDefaultLocale(guiInstallData);
         loadLookAndFeel(guiInstallData);
         if (UIManager.getColor("Button.background") != null)
         {
