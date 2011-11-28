@@ -440,45 +440,50 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
             IXMLElement el, SingleConfigurableTask task)
     throws InstallerException
     {
-        String boolattr = getAttribute(el, "create");
-        if (boolattr != null)
+        String attr = getAttribute(el, "create");
+        if (attr != null)
         {
-            task.setCreate(Boolean.parseBoolean(boolattr));
+            task.setCreate(Boolean.parseBoolean(attr));
         }
-        boolattr = getAttribute(el, "keepOldKeys");
-        if (boolattr != null)
+        attr = getAttribute(el, "keepOldKeys");
+        if (attr != null)
         {
-            task.setPatchPreserveEntries(Boolean.parseBoolean(boolattr));
+            task.setPatchPreserveEntries(Boolean.parseBoolean(attr));
         }
-        boolattr = getAttribute(el, "keepOldValues");
-        if (boolattr != null)
+        attr = getAttribute(el, "keepOldValues");
+        if (attr != null)
         {
-            task.setPatchPreserveValues(Boolean.parseBoolean(boolattr));
+            task.setPatchPreserveValues(Boolean.parseBoolean(attr));
         }
-        boolattr = getAttribute(el, "resolveExpressions");
-        if (boolattr != null)
+        attr = getAttribute(el, "resolveExpressions");
+        if (attr != null)
         {
-            task.setPatchResolveVariables(Boolean.parseBoolean(boolattr));
+            task.setPatchResolveVariables(Boolean.parseBoolean(attr));
         }
-        boolattr = getAttribute(el, "escape");
-        if (boolattr != null)
+        attr = getAttribute(el, "escape");
+        if (attr != null)
         {
-            task.setEscape(Boolean.parseBoolean(boolattr));
+            task.setEscape(Boolean.parseBoolean(attr));
         }
-        boolattr = getAttribute(el, "escapeNewLine");
-        if (boolattr != null)
+        attr = getAttribute(el, "escapeNewLine");
+        if (attr != null)
         {
-            task.setEscapeNewLine(Boolean.parseBoolean(boolattr));
+            task.setEscapeNewLine(Boolean.parseBoolean(attr));
         }
-        boolattr = getAttribute(el, "headerComment");
-        if (boolattr != null)
+        attr = getAttribute(el, "headerComment");
+        if (attr != null)
         {
-            task.setHeaderComment(Boolean.parseBoolean(boolattr));
+            task.setHeaderComment(Boolean.parseBoolean(attr));
         }
-        boolattr = getAttribute(el, "emptyLines");
-        if (boolattr != null)
+        attr = getAttribute(el, "emptyLines");
+        if (attr != null)
         {
-            task.setEmptyLines(Boolean.parseBoolean(boolattr));
+            task.setEmptyLines(Boolean.parseBoolean(attr));
+        }
+        attr = getAttribute(el, "operator");
+        if (attr != null)
+        {
+            task.setOperator(attr);
         }
     }
 

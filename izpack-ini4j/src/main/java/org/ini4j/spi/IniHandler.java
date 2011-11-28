@@ -21,8 +21,6 @@ public interface IniHandler extends HandlerBase
 
     void endSection();
 
-    @Override void handleEmptyLine();
-
     @Override void handleComment(String comment);
 
     @Override void handleOption(String optionName, String optionValue);

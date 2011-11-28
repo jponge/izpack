@@ -24,4 +24,8 @@ public interface CommentedMap<K, V> extends Map<K, V>
     String putComment(K key, String comment);
 
     String removeComment(Object key);
+
+    int getNewLineCount(Object key);
+
+    Integer addEmptyLine(K key);
 }

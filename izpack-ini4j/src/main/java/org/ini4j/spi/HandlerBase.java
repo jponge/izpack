@@ -17,8 +17,6 @@ package org.ini4j.spi;
 
 interface HandlerBase
 {
-    String EMPTY_LINE_MARK = "\0";
-
     void handleEmptyLine();
 
     void handleComment(String comment);

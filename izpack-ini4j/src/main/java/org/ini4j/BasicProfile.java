@@ -213,6 +213,7 @@ public class BasicProfile extends CommonMultiMap<String, Profile.Section> implem
 
     void store(IniHandler formatter, Section s)
     {
+        store(formatter, getNewLineCount(s.getName()));
         store(formatter, getComment(s.getName()));
         formatter.startSection(s.getName());
         for (String name : s.keySet())
@@ -223,6 +224,14 @@ public class BasicProfile extends CommonMultiMap<String, Profile.Section> implem
         formatter.endSection();
     }
 
+    void store(IniHandler formatter, int emptyLines)
+    {
+        for (int i = 0; i < emptyLines; i++)
+        {
+            formatter.handleEmptyLine();
+        }
+    }
+
     void store(IniHandler formatter, String comment)
     {
         formatter.handleComment(comment);
@@ -230,6 +239,7 @@ public class BasicProfile extends CommonMultiMap<String, Profile.Section> implem
 
     void store(IniHandler formatter, Section section, String option)
     {
+        store(formatter, section.getNewLineCount(option));
         store(formatter, section.getComment(option));
         int n = section.length(option);
 

@@ -21,7 +21,6 @@ import java.io.PrintWriter;
 
 abstract class AbstractFormatter implements HandlerBase
 {
-    private static final char OPERATOR = '=';
     private static final char COMMENT = '#';
     private static final char SPACE = ' ';
     private Config _config = Config.getGlobal();
@@ -30,26 +29,21 @@ abstract class AbstractFormatter implements HandlerBase
 
     @Override public void handleEmptyLine()
     {
-        getOutput().print(getConfig().getLineSeparator());
+        if (getConfig().isEmptyLines())
+        {
+            getOutput().print(getConfig().getLineSeparator());
+        }
     }
 
     @Override public void handleComment(String comment)
     {
         if (getConfig().isComment() && (!_header || getConfig().isHeaderComment()) && (comment != null) && (comment.length() != 0))
         {
-            String[] lines = comment.split(getConfig().getLineSeparator());
-            for (String line : lines)
+            for (String line : comment.split(getConfig().getLineSeparator()))
             {
-                if (getConfig().isEmptyLines() && line.startsWith(EMPTY_LINE_MARK))
-                {
-                    handleEmptyLine();
-                }
-                else
-                {
-                    getOutput().print(COMMENT);
-                    getOutput().print(line);
-                    getOutput().print(getConfig().getLineSeparator());
-                }
+                getOutput().print(COMMENT);
+                getOutput().print(line);
+                getOutput().print(getConfig().getLineSeparator());
             }
 
             if (_header)
@@ -63,12 +57,14 @@ abstract class AbstractFormatter implements HandlerBase
 
     @Override public void handleOption(String optionName, String optionValue)
     {
+        final String operator = getConfig().getOperator();
+
         if (getConfig().isStrictOperator())
         {
             if (getConfig().isEmptyOption() || (optionValue != null))
             {
                 getOutput().print(escapeFilter(optionName));
-                getOutput().print(OPERATOR);
+                getOutput().print(operator);
             }
 
             if (optionValue != null)
@@ -84,13 +80,20 @@ abstract class AbstractFormatter implements HandlerBase
         else
         {
             String value = ((optionValue == null) && getConfig().isEmptyOption()) ? "" : optionValue;
+            final boolean isOperatorDefault = operator.equals(Config.DEFAULT_OPERATOR);
 
             if (value != null)
             {
                 getOutput().print(escapeFilter(optionName));
-                getOutput().print(SPACE);
-                getOutput().print(OPERATOR);
-                getOutput().print(SPACE);
+                if (isOperatorDefault)
+                {
+                    getOutput().print(SPACE);
+                }
+                getOutput().print(operator);
+                if (isOperatorDefault)
+                {
+                    getOutput().print(SPACE);
+                }
                 getOutput().print(escapeFilter(value));
                 getOutput().print(getConfig().getLineSeparator());
             }

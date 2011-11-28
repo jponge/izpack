@@ -25,6 +25,7 @@ abstract class AbstractProfileBuilder implements IniHandler
     private Profile.Section _currentSection;
     private boolean _header;
     private String _lastComment;
+    private int _emptyLines = 0;
 
     @Override public void endIni()
     {
@@ -41,18 +42,6 @@ abstract class AbstractProfileBuilder implements IniHandler
         _currentSection = null;
     }
 
-    @Override public void handleEmptyLine()
-    {
-        if (_lastComment == null)
-        {
-            _lastComment = EMPTY_LINE_MARK;
-        }
-        else
-        {
-            _lastComment = _lastComment + getConfig().getLineSeparator() + EMPTY_LINE_MARK;
-        }
-    }
-
     @Override public void handleComment(String comment)
     {
         if ((_lastComment != null) && _header)
@@ -62,6 +51,11 @@ abstract class AbstractProfileBuilder implements IniHandler
         }
 
         _lastComment = comment;
+    }
+
+    @Override public void handleEmptyLine()
+    {
+        _emptyLines++;
     }
 
     @Override public void handleOption(String name, String value)
@@ -80,6 +74,12 @@ abstract class AbstractProfileBuilder implements IniHandler
         {
             putComment(_currentSection, name);
             _lastComment = null;
+        }
+
+        if (_emptyLines > 0)
+        {
+            putEmptyLines(_currentSection, name);
+            _emptyLines = 0;
         }
     }
 
@@ -118,6 +118,15 @@ abstract class AbstractProfileBuilder implements IniHandler
             _lastComment = null;
         }
 
+        if (_emptyLines > 0)
+        {
+            if (!_header)
+            {
+                putEmptyLines(getProfile(), sectionName);
+            }
+            _emptyLines = 0;
+        }
+
         _header = false;
     }
 
@@ -143,6 +152,17 @@ abstract class AbstractProfileBuilder implements IniHandler
         if (getConfig().isComment())
         {
             map.putComment(key, _lastComment);
+        }
+    }
+
+    private void putEmptyLines(CommentedMap<String, ?> map, String key)
+    {
+        if (getConfig().isEmptyLines())
+        {
+            for (int i = 0; i < _emptyLines; i++)
+            {
+                map.addEmptyLine(key);
+            }
         }
     }
 }

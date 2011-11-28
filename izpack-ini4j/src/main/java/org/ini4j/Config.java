@@ -16,7 +16,6 @@
 package org.ini4j;
 
 import java.io.Serializable;
-
 import java.nio.charset.Charset;
 
 @SuppressWarnings("PMD.ExcessivePublicCount")
@@ -33,6 +32,7 @@ public class Config implements Cloneable, Serializable
     public static final String PROP_MULTI_OPTION = "multiOption";
     public static final String PROP_MULTI_SECTION = "multiSection";
     public static final String PROP_STRICT_OPERATOR = "strictOperator";
+    public static final String PROP_OPERATOR = "operator";
     public static final String PROP_UNNAMED_SECTION = "unnamedSection";
     public static final String PROP_ESCAPE = "escape";
     public static final String PROP_ESCAPE_NEWLINE = "escapeNewline";
@@ -66,6 +66,7 @@ public class Config implements Cloneable, Serializable
     public static final boolean DEFAULT_AUTO_NUMBERING = false;
     public static final char DEFAULT_PATH_SEPARATOR = '/';
     public static final String DEFAULT_LINE_SEPARATOR = getSystemProperty("line.separator", "\n");
+    public static final String DEFAULT_OPERATOR = "=";
     public static final Charset DEFAULT_FILE_ENCODING = Charset.forName("UTF-8");
     private static final Config GLOBAL = new Config();
     private static final long serialVersionUID = 2865793267410367814L;
@@ -87,6 +88,7 @@ public class Config implements Cloneable, Serializable
     private char _pathSeparator;
     private boolean _propertyFirstUpper;
     private boolean _strictOperator;
+    private String _operator;
     private boolean _tree;
     private boolean _unnamedSection;
     private boolean _emptyLines;
@@ -334,6 +336,16 @@ public class Config implements Cloneable, Serializable
         _strictOperator = value;
     }
 
+    public String getOperator()
+    {
+        return _operator;
+    }
+
+    public void setOperator(String _operator)
+    {
+        this._operator = _operator;
+    }
+
     public boolean isComment()
     {
         return _comment;
@@ -388,6 +400,7 @@ public class Config implements Cloneable, Serializable
         _multiOption = getBoolean(PROP_MULTI_OPTION, DEFAULT_MULTI_OPTION);
         _multiSection = getBoolean(PROP_MULTI_SECTION, DEFAULT_MULTI_SECTION);
         _strictOperator = getBoolean(PROP_STRICT_OPERATOR, DEFAULT_STRICT_OPERATOR);
+        _operator = getString(PROP_OPERATOR, DEFAULT_OPERATOR);
         _unnamedSection = getBoolean(PROP_UNNAMED_SECTION, DEFAULT_UNNAMED_SECTION);
         _escape = getBoolean(PROP_ESCAPE, DEFAULT_ESCAPE);
         _escapeNewline = getBoolean(PROP_ESCAPE_NEWLINE, DEFAULT_ESCAPE_NEWLINE);

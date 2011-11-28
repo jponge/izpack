@@ -169,6 +169,7 @@ public class Options extends BasicOptionMap implements Persistable, Configurable
         storeComment(formatter, _comment);
         for (String name : keySet())
         {
+            storeNewLines(formatter, getNewLineCount(name));
             storeComment(formatter, getComment(name));
             int n = getConfig().isMultiOption() || getConfig().isAutoNumbering() ? length(name) : 1;
 
@@ -196,6 +197,14 @@ public class Options extends BasicOptionMap implements Persistable, Configurable
     @Override boolean isPropertyFirstUpper()
     {
         return getConfig().isPropertyFirstUpper();
+    }
+
+    private void storeNewLines(OptionsHandler formatter, int emptyLines)
+    {
+        for (int i = 0; i < emptyLines; i++)
+        {
+            formatter.handleEmptyLine();
+        }
     }
 
     private void storeComment(OptionsHandler formatter, String comment)

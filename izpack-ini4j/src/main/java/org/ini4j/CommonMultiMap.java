@@ -26,11 +26,18 @@ public class CommonMultiMap<K, V> extends BasicMultiMap<K, V> implements Comment
     private static final String FIRST_CATEGORY = "";
     private static final String LAST_CATEGORY = "zzzzzzzzzzzzzzzzzzzzzz";
     private static final String META_COMMENT = "comment";
+    private static final String META_NEWLINE_COUNT = "newline";
     private SortedMap<String, Object> _meta;
 
     @Override public String getComment(Object key)
     {
         return (String) getMeta(META_COMMENT, key);
+    }
+
+    @Override public int getNewLineCount(Object key)
+    {
+        Integer emptyLines = (Integer) getMeta(META_NEWLINE_COUNT, key);
+        return emptyLines==null ? 0 : emptyLines.intValue();
     }
 
     @Override public void clear()
@@ -48,6 +55,7 @@ public class CommonMultiMap<K, V> extends BasicMultiMap<K, V> implements Comment
         super.putAll(map);
         if (map instanceof CommonMultiMap)
         {
+            @SuppressWarnings("rawtypes")
             Map<String, String> meta = ((CommonMultiMap) map)._meta;
 
             if (meta != null)
@@ -60,6 +68,16 @@ public class CommonMultiMap<K, V> extends BasicMultiMap<K, V> implements Comment
     @Override public String putComment(K key, String comment)
     {
         return (String) putMeta(META_COMMENT, key, comment);
+    }
+
+    @Override public Integer addEmptyLine(K key)
+    {
+        Integer newLines = (Integer) getMeta(META_NEWLINE_COUNT, key);
+        if (newLines == null)
+        {
+            newLines = Integer.valueOf(0);
+        }
+        return (Integer) putMeta(META_NEWLINE_COUNT, key, Integer.valueOf(newLines.intValue()+1));
     }
 
     @Override public V remove(Object key)

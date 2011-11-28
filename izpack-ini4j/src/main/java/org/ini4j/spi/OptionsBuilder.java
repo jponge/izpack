@@ -22,6 +22,7 @@ public class OptionsBuilder implements OptionsHandler
 {
     private boolean _header;
     private String _lastComment;
+    private int _emptyLines = 0;
     private Options _options;
 
     public static OptionsBuilder newInstance(Options opts)
@@ -48,18 +49,6 @@ public class OptionsBuilder implements OptionsHandler
         }
     }
 
-    @Override public void handleEmptyLine()
-    {
-        if (_lastComment == null)
-        {
-            _lastComment = EMPTY_LINE_MARK;
-        }
-        else
-        {
-            _lastComment = _lastComment + getConfig().getLineSeparator() + EMPTY_LINE_MARK;
-        }
-    }
-
     @Override public void handleComment(String comment)
     {
         if ((_lastComment != null) && _header)
@@ -68,7 +57,12 @@ public class OptionsBuilder implements OptionsHandler
             _header = false;
         }
 
-        _lastComment = comment;
+        _lastComment = (_lastComment==null ? comment : _lastComment + getConfig().getLineSeparator() + comment);
+    }
+
+    @Override public void handleEmptyLine()
+    {
+        _emptyLines++;
     }
 
     @Override public void handleOption(String name, String value)
@@ -104,6 +98,15 @@ public class OptionsBuilder implements OptionsHandler
             {
                 _options.put(newName, value);
             }
+        }
+
+        if (_emptyLines > 0)
+        {
+            if (!_header)
+            {
+                putEmptyLines(newName);
+            }
+            _emptyLines = 0;
         }
 
         if (_lastComment != null)
@@ -153,7 +156,20 @@ public class OptionsBuilder implements OptionsHandler
     {
         if (getConfig().isComment() &&  _lastComment != null)
         {
+            // TODO Handle comments between multi-options
+            // (currently, the last one appeared replaces the others)
             _options.putComment(key, _lastComment);
+        }
+    }
+
+    private void putEmptyLines(String key)
+    {
+        if (getConfig().isEmptyLines())
+        {
+            for (int i = 0; i < _emptyLines; i++)
+            {
+                _options.addEmptyLine(key);
+            }
         }
     }
 }

@@ -63,6 +63,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
     private boolean headerComment = false;
     private boolean emptyLines = true;
     private boolean autoNumbering = true;
+    private String operator = Config.getGlobal().getOperator();
 
 
     /*
@@ -163,6 +164,16 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
     }
 
     /**
+     * The operator to use for separating name and value
+     *
+     * @param operator - an operator string
+     */
+    public void setOperator(String operator)
+    {
+        this.operator = operator;
+    }
+
+    /**
      * Whether the configuration file or registry root entry should be created if it doesn't already
      * exist (default: true).
      *
@@ -180,6 +191,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
         Config.getGlobal().setAutoNumbering(autoNumbering);
         Config.getGlobal().setEscape(escape);
         Config.getGlobal().setEscapeNewline(escapeNewLine);
+        Config.getGlobal().setOperator(operator);
         checkAttributes();
         readConfigurable();
         readSourceConfigurable();
