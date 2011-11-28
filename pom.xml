@@ -9,7 +9,7 @@
 
     <artifactId>izpack</artifactId>
     <groupId>org.codehaus.izpack</groupId>
-    <version>5.0.0-beta9-SNAPSHOT</version>
+    <version>5.0.0-beta9</version>
     <packaging>pom</packaging>
 
     <name>IzPack parent</name>
@@ -214,7 +214,7 @@
             <dependency>
                 <artifactId>izpack-ini4j</artifactId>
                 <groupId>${project.groupId}</groupId>
-                <version>5.0.0-beta9-SNAPSHOT</version>
+                <version>5.0.0-beta9</version>
             </dependency>
 
             <!-- Parsers -->
@@ -508,7 +508,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -521,7 +521,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
