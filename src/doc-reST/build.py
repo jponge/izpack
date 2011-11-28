@@ -77,7 +77,7 @@ def generate_latex():
 	print('Generating LaTeX for PDF output...')
 	shutil.copyfile('include-empty', 'include-top.inc')
 	shutil.copyfile('include-empty', 'include-bottom.inc')
-	publish(writer_name='newlatex2e', argv=['pdf-version.txt', 'pdf/manual.tex'])
+	publish(writer_name='latex', argv=['pdf-version.txt', 'pdf/manual.tex'])
 
 def compile_latex():
 	print('Generating PDF from LaTeX...')
