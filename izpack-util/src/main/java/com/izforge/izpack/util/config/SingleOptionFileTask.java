@@ -58,18 +58,28 @@ public class SingleOptionFileTask extends ConfigFileTask
     @Override
     protected void readConfigurable() throws Exception
     {
-        if (newFile != null)
+        if (newFile != null && newFile.exists())
         {
             try
             {
-                if (!newFile.exists()) { throw new Exception("Reference file "
-                        + newFile.getAbsolutePath() + " for patch cannot be found"); }
-                Debug.log("Loading options file: " + newFile.getAbsolutePath());
+                Debug.log("Loading original configuration file: " + newFile.getAbsolutePath());
                 configurable = new Options(newFile);
             }
             catch (IOException ioe)
             {
-                throw new Exception(ioe.toString());
+                throw new Exception("Error opening original configuration file: " + ioe.toString());
+            }
+        }
+        else if (toFile != null && toFile.exists())
+        {
+            try
+            {
+                Debug.log("Loading target configuration file: " + toFile.getAbsolutePath());
+                configurable = new Options(toFile);
+            }
+            catch (IOException ioe)
+            {
+                throw new Exception("Error opening target configuration file: " + ioe.toString());
             }
         }
         else

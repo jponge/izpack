@@ -495,10 +495,6 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         task.setToFile(tofile);
         task.setOldFile(FileUtil.getAbsoluteFile(getAttribute(el, "patchfile"), idata.getInstallPath()));
         File newfile = FileUtil.getAbsoluteFile(getAttribute(el, "originalfile"), idata.getInstallPath());
-        if (newfile == null)
-        {
-            newfile = tofile;
-        }
         task.setNewFile(newfile);
         String boolattr = getAttribute(el, "cleanup");
         if (boolattr != null)
