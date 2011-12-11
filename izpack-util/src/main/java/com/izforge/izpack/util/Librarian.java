@@ -1,18 +1,18 @@
 /*
- * $Id$ 
+ * $Id$
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2002 Elmar Grom
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -586,6 +586,16 @@ public class Librarian implements CleanupClient
             input = clientClass.getResourceAsStream('/' + nativeDirectory + '/' + name + extension);
         }
 
+        if (input == null)
+        {
+            input = clientClass.getResourceAsStream('/' + nativeDirectory + "/izpack/" + name + extension);
+        }
+
+        if (input == null)
+        {
+            input = clientClass.getResourceAsStream('/' + nativeDirectory + "/3rdparty/" + name + extension);
+        }
+
         // ----------------------------------------------------
         // if this fails as well, throw an exception
         // ----------------------------------------------------
@@ -611,7 +621,7 @@ public class Librarian implements CleanupClient
     /*--------------------------------------------------------------------------*/
     /*
      * $ @design
-     * 
+     *
      * Avoid overwriting any existing files on the user's system. If by some remote chance a file by
      * the same name should exist on the user's system, modify the temporary file name until a
      * version is found that is unique on the system and thus won't interfere.
