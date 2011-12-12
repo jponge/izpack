@@ -33,7 +33,7 @@
 ExceptionNameRecord WinLibEnv::ExceptionNameMap[] =
 { 
 	ExceptionNameRecord("Exception", "java/lang/Exception", 1, 1 ),
-	ExceptionNameRecord("NativeLibException", "com/coi/tools/os/win/NativeLibException", 2, 2 ),
+	ExceptionNameRecord("NativeLibException", "com/izforge/izpack/api/exception/NativeLibException", 2, 2 ),
 	ExceptionNameRecord("OutOfMemoryError", "java/lang/OutOfMemoryError", 1, 1 ),
 	ExceptionNameRecord("IllegalArgumentException", "java/lang/IllegalArgumentException", 1, 1 ),
 	ExceptionNameRecord("NullPointerException", "java/lang/NullPointerException", 1, 1 ),
