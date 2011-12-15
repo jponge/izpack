@@ -215,6 +215,11 @@ public class TargetFactory
     private static TargetFactory me = null;
 
     /**
+     * The factory for creating instances.
+     */
+    private final TargetPlatformFactory factory = new DefaultTargetPlatformFactory();
+
+    /**
      * identifies the operating system we are running on
      */
     private int os = -1;
@@ -319,6 +324,30 @@ public class TargetFactory
         return me;
     }
 
+    /**
+     * This method returns an OS specific instance of the requested class.
+     * <p/>
+     * This implementation delegates to {@link DefaultTargetPlatformFactory}, falling back to {@link #makeObject(String)}
+     * if the call fails.
+     *
+     * @param clazz the
+     * @return an OS specific instance of <tt>clazz</tt>
+     * @throws Exception for any error
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T makeObject(Class<T> clazz) throws Exception
+    {
+        T result;
+        try
+        {
+            result = factory.create(clazz);
+        } catch (Exception exception)
+        {
+            Debug.log(exception);
+            result = (T) makeObject(clazz.getName());
+        }
+        return result;
+    }
     /*--------------------------------------------------------------------------*/
 
     /**
