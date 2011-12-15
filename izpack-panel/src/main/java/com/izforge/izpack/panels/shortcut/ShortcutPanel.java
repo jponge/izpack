@@ -287,17 +287,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     @Override
     public boolean isValidated()
     {
-        try
+        shortcutPanelLogic.setGroupName(programGroup.getText());
+        if (allowDesktopShortcut != null)
         {
-            shortcutPanelLogic.setGroupName(programGroup.getText());
             shortcutPanelLogic.setCreateDesktopShortcuts(allowDesktopShortcut.isSelected());
-            shortcutPanelLogic.setCreateShortcuts(createShortcuts.isSelected());
         }
-        catch (Throwable exception)
-        {
-            // ignore exception
-            shortcutPanelLogic.setGroupName("");
-        }
+        shortcutPanelLogic.setCreateShortcuts(createShortcuts.isSelected());
 
         if (shortcutPanelLogic.isCreateShortcutsImmediately())
         {
@@ -308,6 +303,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             catch (Exception e)
             {
                 // ignore exception
+                Debug.log(e);
             }
         }
         return (true);
