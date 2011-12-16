@@ -146,7 +146,7 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
             }
             else if (platform.isA(p))
             {
-                if (fallback == null || p.isA(fallback))
+                if (fallback == null || moreSpecific(platform, fallback, p))
                 {
                     fallback = p;
                 }
@@ -275,6 +275,29 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
             str = str.trim();
         }
         return (str == null || str.length() == 0) ? null : str;
+    }
+
+    /**
+     * Determines if a platform is more specific than the current fallback platform.
+     *
+     * @param requested the requested platform
+     * @param fallback  the current fallback platform
+     * @param platform  the platform to check.
+     * @return <tt>true</tt> if <tt>platform</tt> is a <tt>fallback</tt> or has the same version as that requested
+     *         and the fallback doesn't specify a version
+     */
+    private boolean moreSpecific(Platform requested, Platform fallback, Platform platform)
+    {
+        boolean result = platform.isA(fallback);
+        if (!result)
+        {
+            if (requested.getVersion() != null && requested.getVersion().equals(platform.getVersion())
+                    && fallback.getVersion() == null)
+            {
+                result = true;
+            }
+        }
+        return result;
     }
 
     /**

@@ -17,14 +17,14 @@
  */
 package com.izforge.izpack.util;
 
-import static com.izforge.izpack.util.Platform.Arch;
-import static com.izforge.izpack.util.Platform.Name;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static com.izforge.izpack.util.Platform.Arch;
+import static com.izforge.izpack.util.Platform.Name;
 
 
 /**
@@ -256,7 +256,7 @@ public class Platforms
         int bestMatches = 0;
         for (Platform platform : PLATFORMS)
         {
-            if ((pname == Name.UNKNOWN && equals(name, platform.getSymbolicName()))
+            if ((pname == Name.UNKNOWN && equals(name, platform.getSymbolicName(), true))
                     || (pname != Name.UNKNOWN && pname == platform.getName()))
             {
                 int currentMatches = 0;
@@ -572,7 +572,6 @@ public class Platforms
 
     /**
      * Compares two strings for equality.
-     * TODO - can izpack-tools depend on commons-lang for StringUtils.equals()?
      *
      * @param a the first string to compare. May be <tt>null</tt>
      * @param b the second string to compare. May be <tt>null</tt>
@@ -580,7 +579,30 @@ public class Platforms
      */
     private boolean equals(String a, String b)
     {
-        return (a == null && b == null) || (a != null && a.equals(b));
+        return equals(a, b, false);
+    }
+
+    /**
+     * Compares two strings for equality.
+     *
+     * @param a          the first string to compare. May be <tt>null</tt>
+     * @param b          the second string to compare. May be <tt>null</tt>
+     * @param ignoreCase if <tt>true</tt>, ignore case
+     * @return <tt>true</tt> if the strings match
+     */
+    private boolean equals(String a, String b, boolean ignoreCase)
+    {
+        boolean result = false;
+        if (a == null && b == null) {
+            result = true;
+        } else if (a != null) {
+            if (ignoreCase) {
+                result = a.equalsIgnoreCase(b);
+            } else {
+                result = a.equals(b);
+            }
+        }
+        return result;
     }
 
 }

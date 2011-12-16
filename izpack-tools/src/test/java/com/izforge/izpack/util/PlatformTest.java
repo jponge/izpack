@@ -33,7 +33,7 @@ public class PlatformTest extends AbstractPlatformTest
 {
 
     /**
-     * Tests the {@link Platform} cosntructors.
+     * Tests the {@link Platform} constructors.
      */
     @Test
     public void testConstructors()
@@ -52,6 +52,10 @@ public class PlatformTest extends AbstractPlatformTest
 
         checkPlatform(new Platform(Name.MAC_OSX, "mac_osx", OsVersionConstants.MACOSX, Arch.X64), Name.MAC_OSX,
                 "mac_osx", OsVersionConstants.MACOSX, Arch.X64);
+
+        Platform win7 = new Platform(Name.WINDOWS, "windows_7", OsVersionConstants.WINDOWS_7_VERSION);
+        checkPlatform(new Platform(win7, Arch.X64), Name.WINDOWS, "windows_7", OsVersionConstants.WINDOWS_7_VERSION,
+                Arch.X64);
     }
 
     /**
@@ -195,5 +199,17 @@ public class PlatformTest extends AbstractPlatformTest
         } catch (IllegalArgumentException expected) {
             // do nothing
         }
+    }
+
+    /**
+     * Tests the {@link Platform#toString()} method.
+     */
+    @Test
+    public void testToString() {
+        Platform platform1 = new Platform(Name.WINDOWS, "windows_7", OsVersionConstants.WINDOWS_7_VERSION, Arch.X64);
+        assertEquals("windows,version=6.1,arch=x64,symbolicName=windows_7", platform1.toString());
+
+        Platform platform2 = new Platform(Name.SUNOS);
+        assertEquals("sunos,version=null,arch=unknown,symbolicName=null", platform2.toString());
     }
 }

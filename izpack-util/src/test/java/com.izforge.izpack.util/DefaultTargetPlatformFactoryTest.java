@@ -37,15 +37,15 @@ public class DefaultTargetPlatformFactoryTest
     public void testCreate() throws Exception
     {
         TargetPlatformFactory factory = new DefaultTargetPlatformFactory();
+
         assertEquals(WinA.class, factory.create(A.class, Platforms.WINDOWS).getClass());
 
         // all windows versions that don't specify an architecture should use WinA
         assertEquals(WinA.class, factory.create(A.class, Platforms.WINDOWS_2003).getClass());
         assertEquals(WinA.class, factory.create(A.class, Platforms.WINDOWS_XP).getClass());
         assertEquals(WinA.class, factory.create(A.class, Platforms.WINDOWS_VISTA).getClass());
-        assertEquals(WinA.class, factory.create(A.class, Platforms.WINDOWS_7).getClass());
 
-        // vheck windows platforms that specify an architecture
+        // check windows platforms that specify an architecture
         Platform windowsX86 = new Platform(Platform.Name.WINDOWS, Platform.Arch.X86);
         Platform windowsX64 = new Platform(Platform.Name.WINDOWS, Platform.Arch.X64);
         assertEquals(WinX86.class, factory.create(A.class, windowsX86).getClass());
@@ -66,6 +66,16 @@ public class DefaultTargetPlatformFactoryTest
 
         // default impl
         assertEquals(DefaultA.class, factory.create(A.class, Platforms.OS_2).getClass());
+
+        // check implementations registered via symbolic name
+        assertEquals(Win7.class, factory.create(A.class, Platforms.WINDOWS_7).getClass());
+
+        Platform win7x64 = new Platform(Platforms.WINDOWS_7, Platform.Arch.X64);
+        assertEquals(Win7X64.class, factory.create(A.class, win7x64).getClass());
+
+        // no specific implementation registered for x86, so should pick up windows_7 impl
+        Platform win7x32 = new Platform(Platforms.WINDOWS_7, Platform.Arch.X86);
+        assertEquals(Win7.class, factory.create(A.class, win7x32).getClass());
     }
 
 
@@ -80,11 +90,19 @@ public class DefaultTargetPlatformFactoryTest
     {
     }
 
-    public static class WinX86 implements A
+    public static class Win7 extends WinA
     {
     }
 
-    public static class WinX64 implements A
+    public static class WinX86 extends WinA
+    {
+    }
+
+    public static class WinX64 extends WinA
+    {
+    }
+
+    public static class Win7X64 extends WinX64
     {
     }
 

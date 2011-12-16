@@ -172,7 +172,7 @@ public class Platform
     }
 
     /**
-     * Constructs a platform.
+     * Constructs a <tt>Platform</tt>.
      *
      * @param name         the platform name
      * @param symbolicName the symbolic name. May be <tt>null</tt>
@@ -190,6 +190,17 @@ public class Platform
         this.symbolicName = symbolicName;
         this.version = version;
         this.arch = (arch != null) ? arch : Arch.UNKNOWN;
+    }
+
+    /**
+     * Constructs a <tt>Platform</tt> from another, with the specified architecture.
+     *
+     * @param platform the template
+     * @param arch     the architecture
+     */
+    public Platform(Platform platform, Arch arch)
+    {
+        this(platform.name, platform.symbolicName, platform.version, arch);
     }
 
     /**
@@ -325,14 +336,25 @@ public class Platform
     }
 
     /**
+     * Returns a string representation of the platform.
+     *
+     * @return a string representation of the platform
+     */
+    public String toString()
+    {
+        return name.toString().toLowerCase() + ",version=" + version + ",arch=" + arch.toString().toLowerCase()
+                + ",symbolicName=" + symbolicName;
+    }
+
+    /**
      * Determines if the symbolic name matches another.
      *
      * @param other the other name. May be <tt>null</tt>
-     * @return <tt>true</tt> if either <tt>other</tt> or <tt>symbolicName</tt> are null, or if they are equal
+     * @return <tt>true</tt> if <tt>other</tt> is <tt>null</tt> or they are equal
      */
     private boolean hasSymbolicName(String other)
     {
-        return symbolicName == null || other == null || symbolicName.equals(other);
+        return other == null || (symbolicName != null && symbolicName.equals(other));
     }
 
     /**
@@ -350,7 +372,7 @@ public class Platform
      * Determines if the version name matches another.
      *
      * @param other the other version. May be <tt>null</tt>
-     * @return <tt>true</tt> if <tt>other</tt> is null, or if they are equal
+     * @return <tt>true</tt> if <tt>other</tt> is <tt>null</tt> or they are equal
      */
     private boolean hasVersion(String other)
     {
