@@ -1,0 +1,6 @@
+#
+# Visual Studio files to ignore
+#
+*.pdb
+*.user
+*.suo

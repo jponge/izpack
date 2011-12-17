@@ -63,7 +63,7 @@ JNIEXPORT void JNICALL Java_com_coi_tools_os_izpack_COIOSHelper_FreeLibrary
 	HMODULE handle = GetModuleHandle (libraryName);
 
 	// release the string object
-	env->RELEASE_STRING_CHARS (name, (const jchar*)libraryName);
+	env->RELEASE_STRING_CHARS (name, libraryName);
 	
 	// destroy the acl factory
 	// now we are rady to free the library

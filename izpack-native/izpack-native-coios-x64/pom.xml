@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>izpack-native</artifactId>
+        <groupId>org.codehaus.izpack</groupId>
+        <version>5.0.0-beta10-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>izpack-native-coios-x64</artifactId>
+    <name>IzPack COI OS x64 native module</name>
+    <packaging>dll</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>org.codehaus.izpack</groupId>
+            <artifactId>izpack-core</artifactId>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>.</directory>
+                            <includes>
+                                <include>*.pdb</include>
+                            </includes>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <compilerProvider>msvc</compilerProvider>
+                    <envFactoryName>com.izforge.izpack.maven.natives.MSVC2010x64EnvFactory</envFactoryName>
+
+                    <!-- trigger javah execution -->
+                    <javahClassNames>
+                        <javahClassName>com.coi.tools.os.izpack.COIOSHelper</javahClassName>
+                        <javahClassName>com.coi.tools.os.win.RegistryImpl</javahClassName>
+                    </javahClassNames>
+
+                    <sources>
+                        <source>
+                            <directory>../src/main/native/COIOSHelper/src</directory>
+                            <includes>
+                                <include>**/*.cxx</include>
+                            </includes>
+                        </source>
+                    </sources>
+
+                    <compilerStartOptions>
+                        <compilerStartOption>${commonCompilerOptions} /D "X64"</compilerStartOption>
+                        <compilerStartOption>"/I${JAVA_HOME}/include"</compilerStartOption>
+                        <compilerStartOption>"/I${JAVA_HOME}/include/win32"</compilerStartOption>
+                    </compilerStartOptions>
+
+                    <linkerStartOptions>
+                        <linkerStartOption>${commonLinkerOptions}</linkerStartOption>
+                        <linkerStartOption>/MACHINE:X64 </linkerStartOption>
+                    </linkerStartOptions>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.izpack</groupId>
+                        <artifactId>izpack-native-maven-plugin</artifactId>
+                        <version>${pom.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+
+    </build>
+</project>

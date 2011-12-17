@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>izpack</artifactId>
         <groupId>org.codehaus.izpack</groupId>
@@ -9,5 +10,38 @@
 
     <artifactId>izpack-native</artifactId>
     <name>IzPack native module</name>
+    <packaging>pom</packaging>
 
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>native-maven-plugin</artifactId>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <compilerProvider>msvc</compilerProvider>
+                        <envFactoryName>com.izforge.izpack.maven.natives.MSVC2010x86EnvFactory</envFactoryName>
+
+                        <compilerStartOptions>
+                            <compilerStartOption>${commonCompilerOptions}</compilerStartOption>
+                        </compilerStartOptions>
+
+                        <linkerStartOptions>
+                            <linkerStartOption>${commonLinkerOptions}</linkerStartOption>
+                        </linkerStartOptions>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <modules>
+        <module>izpack-native-maven-plugin</module>
+    </modules>
+
+    <properties>
+        <commonCompilerOptions>/Zi /nologo /W3 /WX /O2 /Ob1 /D "NDEBUG" /D "_WINDOWS" /D "_USRDLL" /D "_CRT_SECURE_NO_DEPRECATE" /D "_WINDLL" /D "_UNICODE" /D "UNICODE" /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Gd</commonCompilerOptions>
+        <commonLinkerOptions>/INCREMENTAL:NO /DLL user32.lib advapi32.lib kernel32.lib</commonLinkerOptions>
+    </properties>
 </project>
