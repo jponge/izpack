@@ -1,0 +1,9 @@
+#
+# Visual Studio files to ignore
+#
+*.idb
+*.pdb
+*.user
+*.suo
+*.sdf
+*.opensdf

@@ -25,7 +25,7 @@
         <module>izpack-ini4j</module>
         <module>izpack-uninstaller</module>
         <module>izpack-panel</module>
-        <module>izpack-native</module>
+        <module>izpack-native-parent</module>
         <module>izpack-listener</module>
         <module>izpack-installer</module>
         <module>izpack-event</module>
