@@ -44,6 +44,12 @@
         </dependency>
         <dependency>
             <groupId>org.codehaus.izpack</groupId>
+            <artifactId>izpack-native-setupapi-x64</artifactId>
+            <version>${pom.version}</version>
+            <type>dll</type>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.izpack</groupId>
             <artifactId>izpack-native-shelllink-x64</artifactId>
             <version>${pom.version}</version>
             <type>dll</type>
