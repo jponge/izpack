@@ -104,8 +104,7 @@ public class RegistryUninstallerListener extends NativeUninstallerListener
         RegistryHandler registryHandler = null;
         try
         {
-            registryHandler = (RegistryHandler) (TargetFactory.getInstance()
-                    .makeObject("com.izforge.izpack.core.os.RegistryHandler"));
+            registryHandler = TargetFactory.getInstance().makeObject(RegistryHandler.class);
         }
         catch (Throwable exception)
         {

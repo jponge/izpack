@@ -51,8 +51,7 @@ public class RegistryDefaultHandler
             try
             {
                 // Load the system dependant handler.
-                registryHandler = (RegistryHandler) (TargetFactory.getInstance()
-                        .makeObject("com.izforge.izpack.core.os.RegistryHandler"));
+                registryHandler = TargetFactory.getInstance().makeObject(RegistryHandler.class);
                 // Switch to the default handler to use one for complete logging.
                 registryHandler = registryHandler.getDefaultHandler();
             }

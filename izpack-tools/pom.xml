@@ -11,4 +11,11 @@
     <name>IzPack tools module</name>
     <description>Module containing all utilities classes completly independent</description>
 
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

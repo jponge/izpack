@@ -18,6 +18,9 @@
 
 package com.izforge.izpack.util;
 
+import static com.izforge.izpack.util.Platform.Name;
+import static com.izforge.izpack.util.Platform.Arch;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -53,149 +56,145 @@ public final class OsVersion implements OsVersionConstants, StringConstants
     public static final String OS_VERSION = System.getProperty(OSVERSION);
 
     /**
+     * The current platform.
+     */
+    private static final Platform PLATFORM = new Platforms().getPlatform(OS_NAME, OS_ARCH, OS_VERSION);
+
+    /**
      * True if the processor is in the Intel x86 family. Also true if you're running
      * a x86 JVM on an amd64 CPU. 
      */
-    public static final boolean IS_X86 = StringTool.startsWithIgnoreCase(OS_ARCH, X86) ||
-            StringTool.startsWithIgnoreCase(OS_ARCH, I386);
+    public static final boolean IS_X86 = PLATFORM.isA(Arch.X86);
 
     /**
      * True if the processor is in the AMD64 family AND you're running an x64 JVM.
      */
-    public static final boolean IS_X64 = StringTool.startsWithIgnoreCase(OS_ARCH, X64) ||
-            StringTool.startsWithIgnoreCase(OS_ARCH, AMD64);
+    public static final boolean IS_X64 = PLATFORM.isA(Arch.X64);
+
     /**
      * True if the processor is in the PowerPC family.
      */
-    public static final boolean IS_PPC = StringTool.startsWithIgnoreCase(OS_ARCH, PPC);
+    public static final boolean IS_PPC = PLATFORM.isA(Arch.PPC);
 
     /**
      * True if the processor is in the SPARC family.
      */
-    public static final boolean IS_SPARC = StringTool.startsWithIgnoreCase(OS_ARCH, SPARC);
+    public static final boolean IS_SPARC = PLATFORM.isA(Arch.SPARC);
 
     /**
      * True if this is FreeBSD.
      */
-    public static final boolean IS_FREEBSD = StringTool.startsWithIgnoreCase(OS_NAME, FREEBSD);
+    public static final boolean IS_FREEBSD = PLATFORM.isA(Name.FREEBSD);
 
     /**
      * True if this is Linux.
      */
-    public static final boolean IS_LINUX = StringTool.startsWithIgnoreCase(OS_NAME, LINUX);
+    public static final boolean IS_LINUX = PLATFORM.isA(Name.LINUX);
 
     /**
      * True if this is HP-UX.
      */
-    public static final boolean IS_HPUX = StringTool.startsWithIgnoreCase(OS_NAME, HP_UX);
+    public static final boolean IS_HPUX = PLATFORM.isA(Name.HP_UX);
 
     /**
      * True if this is AIX.
      */
-    public static final boolean IS_AIX = StringTool.startsWithIgnoreCase(OS_NAME, AIX);
+    public static final boolean IS_AIX = PLATFORM.isA(Name.AIX);
 
     /**
      * True if this is SunOS.
      */
-    public static final boolean IS_SUNOS = StringTool.startsWithIgnoreCase(OS_NAME, SUNOS) ||
-            StringTool.startsWithIgnoreCase(OS_NAME, SOLARIS);
+    public static final boolean IS_SUNOS = PLATFORM.isA(Name.SUNOS);
 
     /**
      * True if this is SunOS / x86
      */
-    public static final boolean IS_SUNOS_X86 = IS_SUNOS && IS_X86;
+    public static final boolean IS_SUNOS_X86 = PLATFORM.isA(Platforms.SUNOS_X86);
 
     /**
      * True if this is SunOS / sparc
      */
-    public static final boolean IS_SUNOS_SPARC = IS_SUNOS && IS_SPARC;
+    public static final boolean IS_SUNOS_SPARC = PLATFORM.isA(Platforms.SUNOS_SPARC);
 
     /**
      * True if this is OS/2.
      */
-    public static final boolean IS_OS2 = StringTool.startsWith(OS_NAME, OS_2);
+    public static final boolean IS_OS2 = PLATFORM.isA(Name.OS_2);
 
     /**
      * True is this is Mac OS
      */
-    public static final boolean IS_MAC = StringTool.startsWith(OS_NAME, MAC);
+    public static final boolean IS_MAC = PLATFORM.isA(Name.MAC);
 
     /**
      * True if this is the Mac OS X.
      */
-    public static final boolean IS_OSX = StringTool.startsWithIgnoreCase(OS_NAME, MACOSX);
+    public static final boolean IS_OSX = PLATFORM.isA(Name.MAC_OSX);
 
     /**
      * True if this is Windows.
      */
-    public static final boolean IS_WINDOWS = StringTool.startsWith(OS_NAME, WINDOWS);
+    public static final boolean IS_WINDOWS = PLATFORM.isA(Platforms.WINDOWS);
 
     /**
      * True if this is Windows XP
      */
-    public static final boolean IS_WINDOWS_XP = IS_WINDOWS && OS_VERSION.equals(WINDOWS_XP_VERSION);
+    public static final boolean IS_WINDOWS_XP = PLATFORM.isA(Platforms.WINDOWS_XP);
 
     /**
      * True if this is Windows 2003
      */
-    public static final boolean IS_WINDOWS_2003 = IS_WINDOWS && OS_VERSION.equals(WINDOWS_2003_VERSION);
+    public static final boolean IS_WINDOWS_2003 = PLATFORM.isA(Platforms.WINDOWS_2003);
 
     /**
      * True if this is Windows VISTA
      */
-    public static final boolean IS_WINDOWS_VISTA = IS_WINDOWS && OS_VERSION.equals(WINDOWS_VISTA_VERSION);
+    public static final boolean IS_WINDOWS_VISTA = PLATFORM.isA(Platforms.WINDOWS_VISTA);
 
     /**
      * True if this is Windows 7
      */
-    public static final boolean IS_WINDOWS_7 = IS_WINDOWS && OS_VERSION.equals(WINDOWS_7_VERSION);
+    public static final boolean IS_WINDOWS_7 = PLATFORM.isA(Platforms.WINDOWS_7);
 
     /**
      * True if this is some variant of Unix (OSX, Linux, Solaris, FreeBSD, etc).
      */
-    public static final boolean IS_UNIX = !IS_OS2 && !IS_WINDOWS;
+    public static final boolean IS_UNIX = PLATFORM.isA(Name.UNIX);
 
     /**
      * True if RedHat Linux was detected
      */
-    public static final boolean IS_REDHAT_LINUX = IS_LINUX
-            && ((FileUtil.fileContains(getReleaseFileName(), REDHAT) || FileUtil.fileContains(getReleaseFileName(),
-            RED_HAT)));
+    public static final boolean IS_REDHAT_LINUX = PLATFORM.isA(Name.RED_HAT_LINUX);
 
     /**
      * True if Fedora Linux was detected
      */
-    public static final boolean IS_FEDORA_LINUX = IS_LINUX
-            && FileUtil.fileContains(getReleaseFileName(), FEDORA);
+    public static final boolean IS_FEDORA_LINUX = PLATFORM.isA(Name.FEDORA_LINUX);
 
     /**
      * True if Mandriva(Mandrake) Linux was detected
      */
-    public static final boolean IS_MANDRAKE_LINUX = IS_LINUX
-            && FileUtil.fileContains(getReleaseFileName(), MANDRAKE);
+    public static final boolean IS_MANDRAKE_LINUX = PLATFORM.isA(Name.MANDRAKE_LINUX);
 
     /**
      * True if Mandrake/Mandriva Linux was detected
      */
-    public static final boolean IS_MANDRIVA_LINUX = (IS_LINUX
-            && FileUtil.fileContains(getReleaseFileName(), MANDRIVA)) || IS_MANDRAKE_LINUX;
+    public static final boolean IS_MANDRIVA_LINUX = PLATFORM.isA(Name.MANDRIVA_LINUX) || IS_MANDRAKE_LINUX;
 
     /**
      * True if SuSE Linux was detected
      */
-    public static final boolean IS_SUSE_LINUX = IS_LINUX
-            && FileUtil.fileContains(getReleaseFileName(), SUSE, true);  /*  caseInsensitive , since 'SUSE' 10 */
+    public static final boolean IS_SUSE_LINUX = PLATFORM.isA(Name.SUSE_LINUX);
 
     /**
      * True if Debian Linux or derived was detected
      */
-    public static final boolean IS_DEBIAN_LINUX = (IS_LINUX
-            && FileUtil.fileContains(PROC_VERSION, DEBIAN)) || (IS_LINUX && new File("/etc/debian_version").exists());
+    public static final boolean IS_DEBIAN_LINUX = PLATFORM.isA(Name.DEBIAN_LINUX);
 
     /** 
      * True if Ubuntu Linux or derived was detected
      */ 
-    public static final boolean IS_UBUNTU_LINUX = (IS_LINUX && FileUtil.fileContains(PROC_VERSION, UBUNTU));
+    public static final boolean IS_UBUNTU_LINUX = PLATFORM.isA(Name.UBUNTU_LINUX);
 
     //~ Methods
     // **************************************************************************************************************************************************
@@ -220,7 +219,7 @@ public final class OsVersion implements OsVersionConstants, StringConstants
                     if (etcEntry.getName().endsWith("-release"))
                     {
                         //match :-)
-                        return result = etcEntry.toString();
+                        return etcEntry.toString();
                     }
                 }
             }
