@@ -287,17 +287,9 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
      */
     private ShortcutPanelLogic() throws Exception
     {
-        try
-        {
-            shortcut = (Shortcut) (TargetFactory.getInstance()
-                    .makeObject("com.izforge.izpack.util.os.Shortcut"));
-            shortcut.initialize(Shortcut.APPLICATIONS, "-");
-            Housekeeper.getInstance().registerForCleanup(this);
-        }
-        catch (Exception exception)
-        {
-            throw exception;
-        }
+        shortcut = TargetFactory.getInstance().makeObject(Shortcut.class);
+        shortcut.initialize(Shortcut.APPLICATIONS, "-");
+        Housekeeper.getInstance().registerForCleanup(this);
     }
 
     /**
