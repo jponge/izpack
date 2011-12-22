@@ -22,7 +22,6 @@
         <module>izpack-compiler</module>
         <module>izpack-dist</module>
         <module>izpack-gui</module>
-        <module>izpack-ini4j</module>
         <module>izpack-uninstaller</module>
         <module>izpack-panel</module>
         <module>izpack-native-parent</module>
@@ -210,11 +209,6 @@
                 <artifactId>izpack-core</artifactId>
                 <groupId>${project.groupId}</groupId>
                 <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <artifactId>izpack-ini4j</artifactId>
-                <groupId>${project.groupId}</groupId>
-                <version>5.0.0-beta10-SNAPSHOT</version>
             </dependency>
 
             <!-- Parsers -->

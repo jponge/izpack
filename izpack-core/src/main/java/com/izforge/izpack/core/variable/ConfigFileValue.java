@@ -21,20 +21,26 @@
 
 package com.izforge.izpack.core.variable;
 
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import org.ini4j.Ini;
-import org.ini4j.Options;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.*;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.config.base.Ini;
+import com.izforge.izpack.util.config.base.Options;
 
 public abstract class ConfigFileValue extends ValueImpl implements Serializable
 {

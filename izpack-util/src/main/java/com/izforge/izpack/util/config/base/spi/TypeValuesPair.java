@@ -20,10 +20,29 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.config;
+package com.izforge.izpack.util.config.base.spi;
 
+import com.izforge.izpack.util.config.base.Registry.Type;
 
-public interface ConfigurableTask
+public class TypeValuesPair
 {
-    public void execute() throws Exception;
+    private final Type _type;
+    private final String[] _values;
+
+    @SuppressWarnings("PMD.ArrayIsStoredDirectly")
+    public TypeValuesPair(Type type, String[] values)
+    {
+        _type = type;
+        _values = values;
+    }
+
+    public Type getType()
+    {
+        return _type;
+    }
+
+    public String[] getValues()
+    {
+        return _values;
+    }
 }

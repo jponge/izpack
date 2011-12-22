@@ -20,10 +20,13 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.config;
+package com.izforge.izpack.util.config.base.spi;
 
-
-public interface ConfigurableTask
+interface HandlerBase
 {
-    public void execute() throws Exception;
+    void handleEmptyLine();
+
+    void handleComment(String comment);
+
+    void handleOption(String optionName, String optionValue);
 }

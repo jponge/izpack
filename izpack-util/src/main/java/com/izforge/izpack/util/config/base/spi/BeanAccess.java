@@ -20,10 +20,21 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.config;
+package com.izforge.izpack.util.config.base.spi;
 
-
-public interface ConfigurableTask
+public interface BeanAccess
 {
-    public void execute() throws Exception;
+    void propAdd(String propertyName, String value);
+
+    String propDel(String propertyName);
+
+    String propGet(String propertyName);
+
+    String propGet(String propertyName, int index);
+
+    int propLength(String propertyName);
+
+    String propSet(String propertyName, String value);
+
+    String propSet(String propertyName, String value, int index);
 }

@@ -4,7 +4,8 @@
  * http://izpack.org/
  * http://izpack.codehaus.org/
  *
- * Copyright 2010 Rene Krell
+ * Copyright 2005,2009 Ivan SZKIBA
+ * Copyright 2010,2011 Rene Krell
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +25,9 @@ package com.izforge.izpack.util.config;
 import java.io.File;
 import java.io.IOException;
 
-import org.ini4j.Options;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.config.base.Options;
 
 public class SingleOptionFileTask extends ConfigFileTask
 {

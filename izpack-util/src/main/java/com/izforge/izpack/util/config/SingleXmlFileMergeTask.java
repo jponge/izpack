@@ -4,9 +4,10 @@
  * http://izpack.org/
  * http://izpack.codehaus.org/
  *
- * Copyright 2010 Rene Krell
+ * Copyright 2005,2009 Ivan SZKIBA
+ * Copyright 2010,2011 Rene Krell
  *
- * Licensed under the Apache License, Version 2.0 (the >\n"+License");
+ * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
