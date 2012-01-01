@@ -181,64 +181,20 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
      */
     protected void add(Properties properties, URL url)
     {
-        for (String key : properties.stringPropertyNames())
-        {
-            String[] interfacePlatform = key.split(",");
-            if (interfacePlatform.length >= 1 && interfacePlatform.length <= 3)
-            {
-                String iface = trimToNull(interfacePlatform[0]);
-                String name = (interfacePlatform.length >= 2) ? trimToNull(interfacePlatform[1]) : null;
-                String arch = (interfacePlatform.length == 3) ? trimToNull(interfacePlatform[2]) : null;
-                String impl = trimToNull(properties.getProperty(key));
-                if (iface == null)
-                {
-                    Debug.log("TargetPlatformFactory: Ignoring null interface=" + key + " from " + url);
-                }
-                else if (impl == null)
-                {
-                    Debug.log("TargetPlatformFactory: Ignoring null implementation for key=" + key + " from " + url);
-                }
-                else
-                {
-                    Implementations impls = implementations.get(iface);
-                    if (impls == null)
-                    {
-                        impls = new Implementations();
-                        implementations.put(iface, impls);
-                    }
-                    if (name == null)
-                    {
-                        if (impls.getDefault() == null)
-                        {
-                            impls.setDefault(impl);
-                        }
-                        else
-                        {
-                            Debug.log("TargetFactory: Ignoring duplicate default implementation=" + impl + " from "
-                                    + url);
-                        }
-                    }
-                    else
-                    {
-                        Platform platform = platforms.getPlatform(name, arch);
-                        if (platform.getName() == Platform.Name.UNKNOWN)
-                        {
-                            Debug.log("TargetFactory: Ignoring unsupported platform=" + platform + " for key="
-                                    + key + " from " + url);
-                        }
-                        else if (impls.getImplementation(platform) == null)
-                        {
-                            impls.addImplementation(platform, impl);
-                        }
-                        else
-                        {
-                            Debug.log("TargetFactory: Ignoring duplicate implementation=" + impl + " for platform="
-                                    + platform + " from " + url);
-                        }
-                    }
-                }
-            }
-        }
+        Parser parser = createParser(platforms, url);
+        parser.parse(properties, implementations);
+    }
+
+    /**
+     * Creates a new parser.
+     *
+     * @param platforms the platforms
+     * @param url       the source URL
+     * @return a new parser
+     */
+    protected Parser createParser(Platforms platforms, URL url)
+    {
+        return new Parser(platforms, url);
     }
 
     /**
@@ -274,21 +230,6 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
     }
 
     /**
-     * Trims a string to null if empty.
-     *
-     * @param str the string to trim. May be <tt>null</tt>
-     * @return the trimmed string. May be <tt>null</tt>
-     */
-    private String trimToNull(String str)
-    {
-        if (str != null)
-        {
-            str = str.trim();
-        }
-        return (str == null || str.length() == 0) ? null : str;
-    }
-
-    /**
      * Determines if a platform is more specific than the current fallback platform.
      *
      * @param requested the requested platform
@@ -309,6 +250,135 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
             }
         }
         return result;
+    }
+
+    /**
+     * Properties parser.
+     */
+    protected static class Parser
+    {
+
+        /**
+         * The platforms.
+         */
+        private final Platforms platforms;
+
+        /**
+         * The source URL.
+         */
+        private final URL url;
+
+        /**
+         * Constructs a <tt>Parser</tt>.
+         *
+         * @param platforms the platforms
+         * @param url       the source URL
+         */
+        public Parser(Platforms platforms, URL url)
+        {
+            this.platforms = platforms;
+            this.url = url;
+        }
+
+        /**
+         * Parse properties, adding them to the specified implementations.
+         *
+         * @param properties      the properties to parse
+         * @param implementations the implementations to populate
+         */
+        public void parse(Properties properties, Map<String, Implementations> implementations)
+        {
+            for (String key : properties.stringPropertyNames())
+            {
+                String[] interfacePlatform = key.split(",");
+                if (interfacePlatform.length >= 1 && interfacePlatform.length <= 3)
+                {
+                    String iface = trimToNull(interfacePlatform[0]);
+                    String name = (interfacePlatform.length >= 2) ? trimToNull(interfacePlatform[1]) : null;
+                    String arch = (interfacePlatform.length == 3) ? trimToNull(interfacePlatform[2]) : null;
+                    String impl = trimToNull(properties.getProperty(key));
+                    if (iface == null)
+                    {
+                        warning("Ignoring null interface=" + key + " from " + url);
+                    }
+                    else if (impl == null)
+                    {
+                        warning("Ignoring null implementation for key=" + key + " from " + url);
+                    }
+                    else
+                    {
+                        Implementations impls = implementations.get(iface);
+                        if (impls == null)
+                        {
+                            impls = new Implementations();
+                            implementations.put(iface, impls);
+                        }
+                        if (name == null)
+                        {
+                            if (impls.getDefault() == null)
+                            {
+                                impls.setDefault(impl);
+                            }
+                            else
+                            {
+                                warning("Ignoring duplicate default implementation=" + impl + " from " + url);
+                            }
+                        }
+                        else
+                        {
+                            Platform platform = platforms.getPlatform(name, arch);
+                            if (platform.getName() == Platform.Name.UNKNOWN)
+                            {
+                                warning("Ignoring unsupported platform=" + platform + " for key=" + key + " from "
+                                        + url);
+                            }
+                            else if (impls.getImplementation(platform) == null)
+                            {
+                                impls.addImplementation(platform, impl);
+                            }
+                            else
+                            {
+                                warning("Ignoring duplicate implementation=" + impl + " for platform=" + platform
+                                        + " from " + url);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    warning("Ignoring invalid entry=" + key + ", length=" + interfacePlatform.length + " from " + url);
+                }
+            }
+        }
+
+        /**
+         * Handles parser warnings.
+         * <p/>
+         * This implementation logs the message
+         *
+         * @param message the error message
+         */
+        protected void warning(String message)
+        {
+            Debug.log("TargetPlatformFactory: " + message);
+        }
+
+        /**
+         * Trims a string to null if empty.
+         *
+         * @param str the string to trim. May be <tt>null</tt>
+         * @return the trimmed string. May be <tt>null</tt>
+         */
+        private String trimToNull(String str)
+        {
+            if (str != null)
+            {
+                str = str.trim();
+            }
+            return (str == null || str.length() == 0) ? null : str;
+        }
+
+
     }
 
     /**

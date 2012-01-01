@@ -19,6 +19,8 @@ package com.izforge.izpack.util;
 
 import org.junit.Test;
 
+import java.net.URL;
+
 import static com.izforge.izpack.util.Platform.Arch;
 import static com.izforge.izpack.util.Platform.Name;
 import static org.junit.Assert.assertEquals;
@@ -38,7 +40,19 @@ public class DefaultTargetPlatformFactoryTest
     @Test
     public void testParser()
     {
-        DefaultTargetPlatformFactory factory = new DefaultTargetPlatformFactory();
+        DefaultTargetPlatformFactory factory = new DefaultTargetPlatformFactory() {
+            @Override
+            protected Parser createParser(Platforms platforms, URL url)
+            {
+                return new Parser(platforms, url) {
+                    @Override
+                    protected void warning(String message)
+                    {
+                        throw new IllegalStateException("Unexpected parser warning: " + message);
+                    }
+                };
+            }
+        };
         DefaultTargetPlatformFactory.Implementations implementations = factory.getImplementations(A.class);
         assertNotNull(implementations);
 
