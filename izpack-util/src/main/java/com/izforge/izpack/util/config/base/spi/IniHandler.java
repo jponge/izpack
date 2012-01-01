@@ -20,10 +20,19 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.config;
+package com.izforge.izpack.util.config.base.spi;
 
-
-public interface ConfigurableTask
+public interface IniHandler extends HandlerBase
 {
-    public void execute() throws Exception;
+    void endIni();
+
+    void endSection();
+
+    @Override void handleComment(String comment);
+
+    @Override void handleOption(String optionName, String optionValue);
+
+    void startIni();
+
+    void startSection(String sectionName);
 }

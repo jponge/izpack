@@ -19,11 +19,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.izforge.izpack.util.config.base;
 
-package com.izforge.izpack.util.config;
+import java.util.Map;
 
-
-public interface ConfigurableTask
+public interface CommentedMap<K, V> extends Map<K, V>
 {
-    public void execute() throws Exception;
+    String getComment(Object key);
+
+    String putComment(K key, String comment);
+
+    String removeComment(Object key);
+
+    int getNewLineCount(Object key);
+
+    Integer addEmptyLine(K key);
 }

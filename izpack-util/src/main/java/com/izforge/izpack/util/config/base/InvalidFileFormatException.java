@@ -19,11 +19,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.izforge.izpack.util.config.base;
 
-package com.izforge.izpack.util.config;
+import java.io.IOException;
 
-
-public interface ConfigurableTask
+public class InvalidFileFormatException extends IOException
 {
-    public void execute() throws Exception;
+    private static final long serialVersionUID = -4354616830804732309L;
+
+    public InvalidFileFormatException(String message)
+    {
+        super(message);
+    }
 }

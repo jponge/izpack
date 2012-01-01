@@ -20,10 +20,14 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.config;
+package com.izforge.izpack.util.config.base.spi;
 
-
-public interface ConfigurableTask
+public final class Warnings
 {
-    public void execute() throws Exception;
+    public static final String UNCHECKED = "unchecked";
+
+    private Warnings()
+    {
+        assert true;
+    }
 }

@@ -19,11 +19,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.izforge.izpack.util.config.base;
 
-package com.izforge.izpack.util.config;
+import java.util.List;
+import java.util.Map;
 
-
-public interface ConfigurableTask
+public interface MultiMap<K, V> extends Map<K, V>
 {
-    public void execute() throws Exception;
+    List<V> getAll(Object key);
+
+    void add(K key, V value);
+
+    void add(K key, V value, int index);
+
+    V get(Object key, int index);
+
+    int length(Object key);
+
+    V put(K key, V value, int index);
+
+    List<V> putAll(K key, List<V> values);
+
+    V remove(Object key, int index);
 }

@@ -4,7 +4,8 @@
  * http://izpack.org/
  * http://izpack.codehaus.org/
  *
- * Copyright 2010 Rene Krell
+ * Copyright 2005,2009 Ivan SZKIBA
+ * Copyright 2010,2011 Rene Krell
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,19 +28,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import org.ini4j.BasicProfile;
-import org.ini4j.Config;
-import org.ini4j.Configurable;
-import org.ini4j.Ini;
-import org.ini4j.OptionMap;
-import org.ini4j.Options;
-import org.ini4j.Reg;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.config.SingleConfigurableTask.Entry.LookupType;
 import com.izforge.izpack.util.config.SingleConfigurableTask.Entry.Operation;
 import com.izforge.izpack.util.config.SingleConfigurableTask.Entry.Type;
+import com.izforge.izpack.util.config.base.BasicProfile;
+import com.izforge.izpack.util.config.base.Config;
+import com.izforge.izpack.util.config.base.Configurable;
+import com.izforge.izpack.util.config.base.Ini;
+import com.izforge.izpack.util.config.base.OptionMap;
+import com.izforge.izpack.util.config.base.Options;
+import com.izforge.izpack.util.config.base.Reg;
 
 public abstract class SingleConfigurableTask implements ConfigurableTask
 {

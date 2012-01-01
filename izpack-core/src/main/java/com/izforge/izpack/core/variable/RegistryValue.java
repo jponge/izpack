@@ -21,11 +21,11 @@
 
 package com.izforge.izpack.core.variable;
 
+import java.io.Serializable;
+
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.OsVersion;
-import org.ini4j.Reg;
-
-import java.io.Serializable;
+import com.izforge.izpack.util.config.base.Reg;
 
 
 public class RegistryValue extends ValueImpl implements Serializable
