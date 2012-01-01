@@ -130,7 +130,7 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
     @SuppressWarnings("unchecked")
     public <T> T create(Class<T> clazz, Platform platform) throws Exception
     {
-        Implementations impls = implementations.get(clazz.getName());
+        Implementations impls = getImplementations(clazz);
         if (impls == null)
         {
             throw new IllegalArgumentException("No implementations registered for class=" + clazz.getName());
@@ -242,6 +242,17 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
     }
 
     /**
+     * Returns the implementations registered for the specified class.
+     *
+     * @param clazz the class
+     * @return the corresponding implementations, or <tt>null</tt> if none are found
+     */
+    protected Implementations getImplementations(Class clazz)
+    {
+        return implementations.get(clazz.getName());
+    }
+
+    /**
      * Configures the factory from the specified URL.
      *
      * @param url the URL to load properties from
@@ -303,7 +314,7 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
     /**
      * Manages implementations of a class/interface, for multiple platforms.
      */
-    private static class Implementations
+    protected static class Implementations
     {
 
         /**

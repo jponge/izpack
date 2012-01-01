@@ -17,8 +17,12 @@
  */
 package com.izforge.izpack.util;
 
-import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+
+import static com.izforge.izpack.util.Platform.Arch;
+import static com.izforge.izpack.util.Platform.Name;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests the {@link DefaultTargetPlatformFactory} class.
@@ -27,6 +31,30 @@ import org.junit.Test;
  */
 public class DefaultTargetPlatformFactoryTest
 {
+
+    /**
+     * Verifies that the <tt>TargetPlatformFactory.properties</tt> file has been loaded successfully.
+     */
+    @Test
+    public void testParser()
+    {
+        DefaultTargetPlatformFactory factory = new DefaultTargetPlatformFactory();
+        DefaultTargetPlatformFactory.Implementations implementations = factory.getImplementations(A.class);
+        assertNotNull(implementations);
+
+        assertEquals(DefaultA.class.getName(), implementations.getDefault());
+
+        assertEquals(8, implementations.getPlatforms().size());
+        assertEquals(WinA.class.getName(), implementations.getImplementation(Platforms.WINDOWS));
+        assertEquals(WinX86.class.getName(), implementations.getImplementation(new Platform(Name.WINDOWS, Arch.X86)));
+        assertEquals(WinX64.class.getName(), implementations.getImplementation(new Platform(Name.WINDOWS, Arch.X64)));
+        assertEquals(Win7.class.getName(), implementations.getImplementation(Platforms.WINDOWS_7));
+        assertEquals(Win7X64.class.getName(), implementations.getImplementation(
+                new Platform(Name.WINDOWS, "WINDOWS_7", OsVersionConstants.WINDOWS_7_VERSION, Arch.X64)));
+        assertEquals(DebianA.class.getName(), implementations.getImplementation(Platforms.DEBIAN_LINUX));
+        assertEquals(LinuxA.class.getName(), implementations.getImplementation(Platforms.LINUX));
+        assertEquals(UnixA.class.getName(), implementations.getImplementation(Platforms.UNIX));
+    }
 
     /**
      * Tests the {@link DefaultTargetPlatformFactory#create(Class, Platform)} method.
@@ -46,8 +74,8 @@ public class DefaultTargetPlatformFactoryTest
         assertEquals(WinA.class, factory.create(A.class, Platforms.WINDOWS_VISTA).getClass());
 
         // check windows platforms that specify an architecture
-        Platform windowsX86 = new Platform(Platform.Name.WINDOWS, Platform.Arch.X86);
-        Platform windowsX64 = new Platform(Platform.Name.WINDOWS, Platform.Arch.X64);
+        Platform windowsX86 = new Platform(Name.WINDOWS, Arch.X86);
+        Platform windowsX64 = new Platform(Name.WINDOWS, Arch.X64);
         assertEquals(WinX86.class, factory.create(A.class, windowsX86).getClass());
         assertEquals(WinX64.class, factory.create(A.class, windowsX64).getClass());
 
@@ -70,11 +98,11 @@ public class DefaultTargetPlatformFactoryTest
         // check implementations registered via symbolic name
         assertEquals(Win7.class, factory.create(A.class, Platforms.WINDOWS_7).getClass());
 
-        Platform win7x64 = new Platform(Platforms.WINDOWS_7, Platform.Arch.X64);
+        Platform win7x64 = new Platform(Platforms.WINDOWS_7, Arch.X64);
         assertEquals(Win7X64.class, factory.create(A.class, win7x64).getClass());
 
         // no specific implementation registered for x86, so should pick up windows_7 impl
-        Platform win7x32 = new Platform(Platforms.WINDOWS_7, Platform.Arch.X86);
+        Platform win7x32 = new Platform(Platforms.WINDOWS_7, Arch.X86);
         assertEquals(Win7.class, factory.create(A.class, win7x32).getClass());
     }
 
