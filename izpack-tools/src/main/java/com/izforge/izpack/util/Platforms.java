@@ -169,14 +169,48 @@ public class Platforms
 
     /**
      * Returns the current platform.
+     * <p/>
+     * This may query the underlying OS to determine the platform name.
      *
      * @return the current platform
      */
-    public Platform getPlatform()
+    public Platform getCurrentPlatform()
     {
-        return getPlatform(System.getProperty(OsVersionConstants.OSNAME), System.getProperty(OsVersionConstants.OSARCH),
+        return getCurrentPlatform(System.getProperty(OsVersionConstants.OSNAME),
+                System.getProperty(OsVersionConstants.OSARCH),
                 System.getProperty(OsVersionConstants.OSVERSION));
+    }
 
+    /**
+     * Returns the platform for the specified operating system name and architecture.
+     *
+     * @param name the operating system name
+     * @param arch the operating system architecture, or symbolic architecture
+     * @return the corresponding platform
+     */
+    public Platform getCurrentPlatform(String name, String arch)
+    {
+        return getCurrentPlatform(name, arch, null);
+    }
+
+    /**
+     * Returns the current platform given the operating system name, architecture and version.
+     * <p/>
+     * This may query the underlying OS to determine the platform name.
+     *
+     * @param name    the operating system name
+     * @param arch    the operating system architecture, or symbolic architecture
+     * @param version the operating system version. May be <tt>null</tt>
+     * @return the corresponding platform
+     */
+    public Platform getCurrentPlatform(String name, String arch, String version)
+    {
+        Platform result;
+        Name pname = getCurrentName(name);
+        Arch parch = getArch(arch);
+        Platform match = findMatch(name, pname, parch, version);
+        result = getPlatform(match, parch, version);
+        return result;
     }
 
     /**
@@ -192,15 +226,14 @@ public class Platforms
     }
 
     /**
-     * Returns the platform for the specified operating system name, architecture and version.
+     * Returns the platform given the operating system name, architecture and version.
      *
      * @param name    the operating system name or symbolic name
      * @param arch    the operating system architecture, or symbolic architecture
      * @param version the operating system version. May be <tt>null</tt>
      * @return the corresponding platform
      */
-    public Platform getPlatform(String name, String arch, String version)
-    {
+    public Platform getPlatform(String name, String arch, String version) {
         Platform result;
         Name pname = getName(name);
         Arch parch = getArch(arch);
@@ -264,6 +297,7 @@ public class Platforms
                 boolean optArchMatch = platform.getArch() == Arch.UNKNOWN;
                 boolean versionMatch = version != null && equals(version, platform.getVersion());
                 boolean optVersionMatch = platform.getVersion() == null;
+                boolean symbolicMatch = equals(name, platform.getSymbolicName(), true);
                 if (archMatch)
                 {
                     currentMatches += 2;
@@ -271,6 +305,9 @@ public class Platforms
                 else if (optArchMatch)
                 {
                     currentMatches++;
+                }
+                if (symbolicMatch) {
+                    currentMatches += 2;
                 }
                 if (versionMatch)
                 {
@@ -283,8 +320,9 @@ public class Platforms
                 if (currentMatches > bestMatches)
                 {
                     best = platform;
-                    if (currentMatches == 4)
+                    if (currentMatches == 6)
                     {
+                        // best possible
                         break;
                     }
                     else
@@ -298,13 +336,30 @@ public class Platforms
     }
 
     /**
-     * Returns the platform family name given the operrating system or symbolic name.
+     * Returns the platform family name given the operating system or symbolic name.
      *
      * @param name the operating system name or symbolic name
      * @return the corresponding platform family name
      */
     protected Name getName(String name)
     {
+        for (Platform platform : PLATFORMS) {
+            String platformName = platform.getName().name();
+            String symbolicName = platform.getSymbolicName();
+            if (platformName.equalsIgnoreCase(name) || symbolicName != null && symbolicName.equalsIgnoreCase(name)) {
+                return platform.getName();
+            }
+        }
+        return Name.UNKNOWN;
+    }
+
+    /**
+     * Returns the platform family name for the current platform.
+     *
+     * @param name the operating system name
+     * @return the corresponding platform family name
+     */
+    protected Name getCurrentName(String name) {
         Name result;
         if (StringTool.startsWithIgnoreCase(name, OsVersionConstants.FREEBSD))
         {
@@ -439,7 +494,7 @@ public class Platforms
     }
 
     /**
-     * Returns the platform family name given the operrating system or symbolic name.
+     * Returns the platform family name given the operating system or symbolic name.
      *
      * @param arch the operating system architecture or symbolic architecture. May be <tt>null</tt>
      * @return the corresponding platform architecture

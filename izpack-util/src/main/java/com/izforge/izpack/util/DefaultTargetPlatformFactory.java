@@ -116,7 +116,7 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
      */
     public <T> T create(Class<T> clazz) throws Exception
     {
-        return create(clazz, platforms.getPlatform());
+        return create(clazz, platforms.getCurrentPlatform());
     }
 
     /**

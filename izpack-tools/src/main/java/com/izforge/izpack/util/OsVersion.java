@@ -58,7 +58,7 @@ public final class OsVersion implements OsVersionConstants, StringConstants
     /**
      * The current platform.
      */
-    private static final Platform PLATFORM = new Platforms().getPlatform(OS_NAME, OS_ARCH, OS_VERSION);
+    private static final Platform PLATFORM = new Platforms().getCurrentPlatform(OS_NAME, OS_ARCH, OS_VERSION);
 
     /**
      * True if the processor is in the Intel x86 family. Also true if you're running
