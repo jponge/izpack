@@ -59,6 +59,10 @@ public class DefaultTargetPlatformFactoryTest
         assertEquals(DefaultA.class.getName(), implementations.getDefault());
 
         assertEquals(8, implementations.getPlatforms().size());
+        
+        for (Platform platform: implementations.getPlatforms()) {
+            System.err.println(platform + "=" + implementations.getImplementation(platform));
+        }
         assertEquals(WinA.class.getName(), implementations.getImplementation(Platforms.WINDOWS));
         assertEquals(WinX86.class.getName(), implementations.getImplementation(new Platform(Name.WINDOWS, Arch.X86)));
         assertEquals(WinX64.class.getName(), implementations.getImplementation(new Platform(Name.WINDOWS, Arch.X64)));
