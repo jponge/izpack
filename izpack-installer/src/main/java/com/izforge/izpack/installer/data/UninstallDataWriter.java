@@ -241,6 +241,7 @@ public class UninstallDataWriter
     // with custom uninstall data. Therefore log it to Debug,
     // but do not throw.
 
+    @SuppressWarnings("unchecked")
     private void writeAdditionalUninstallData(UninstallData udata, JarOutputStream outJar) throws IOException
     {
         Map<String, Object> additionalData = udata.getAdditionalData();
@@ -252,15 +253,13 @@ public class UninstallDataWriter
                 Object contents = additionalData.get(key);
                 if ("__uninstallLibs__".equals(key))
                 {
-                    for (Object o : ((List) contents))
+                    for (String nativeLibName: (List<String>) contents)
                     {
-                        String nativeLibName = (String) ((List) o).get(0);
                         byte[] buffer = new byte[5120];
                         long bytesCopied = 0;
                         int bytesInBuffer;
                         outJar.putNextEntry(new JarEntry("/com/izforge/izpack/bin/native/" + nativeLibName));
-                        InputStream in = getClass().getResourceAsStream(
-                                "/com/izforge/izpack/bin/native/" + nativeLibName);
+                        InputStream in = getClass().getResourceAsStream("/com/izforge/izpack/bin/native/" + nativeLibName);
                         while ((bytesInBuffer = in.read(buffer)) != -1)
                         {
                             outJar.write(buffer, 0, bytesInBuffer);
@@ -278,13 +277,12 @@ public class UninstallDataWriter
                     // the first entry of each sub ArrayList.
                     ArrayList<String> subContents = new ArrayList<String>();
 
-                    // Secound put the class into uninstaller.jar
-                    for (Object o : ((List) contents))
+                    // Second put the class into uninstaller.jar
+                    for (CustomData customData : (List<CustomData>) contents)
                     {
                         byte[] buffer = new byte[5120];
                         long bytesCopied = 0;
                         int bytesInBuffer;
-                        CustomData customData = (CustomData) o;
                         // First element of the list contains the listener
                         // class path;
                         // remind it for later.

@@ -140,7 +140,15 @@ public class ClassPathCrawler
         return getUrlsForPackage(formatPackageName);
     }
 
-
+    public URL getURLForClass(String className) {
+        processClassPath();
+        int index = className.lastIndexOf('.');
+        String fileToSearch = (index != -1) ? className.substring(0, index) : className;
+        fileToSearch += ".class";
+        Set<URL> urls = classPathContentCache.get(fileToSearch);
+        return (urls != null) ? urls.iterator().next() : null;
+    }
+    
     public Set<URL> getUrlsForPackage(String packageName)
     {
         Set<URL> resultSet = new HashSet<URL>();

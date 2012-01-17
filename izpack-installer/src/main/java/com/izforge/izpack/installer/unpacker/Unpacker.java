@@ -69,9 +69,8 @@ public class Unpacker extends UnpackerBase
     }
 
     /* (non-Javadoc)
-    * @see com.izforge.izpack.installer.IUnpacker#run()
+    * @see com.izforge.izpack.installer.UnpackerBase#run()
     */
-
     public void run()
     {
         addToInstances();

@@ -27,7 +27,7 @@ public class AutomatedInstallDataProvider extends AbstractInstallDataProvider
             // Loads the installation data
             loadInstallData(automatedInstallData);
             // Load custom action data.
-//            loadCustomData(automatedInstallData, customDataContainer, pathResolver);
+            loadCustomData(automatedInstallData, customDataContainer, pathResolver);
 
             // Load custom langpack if exist.
             addCustomLangpack(automatedInstallData);

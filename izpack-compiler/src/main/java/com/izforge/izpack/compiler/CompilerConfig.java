@@ -422,7 +422,7 @@ public class CompilerConfig extends Thread
             String stage = ixmlElement.getAttribute("stage");
             URL url = resourceFinder.findProjectResource(src, "Jar file", ixmlElement);
             CustomData customData = null;
-            if ( "both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage))
+            if ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage))
             {
                 customData = new CustomData(null, compilerHelper.getContainedFilePaths(url), null,
                         CustomData.UNINSTALLER_JAR);
@@ -457,7 +457,7 @@ public class CompilerConfig extends Thread
             {
                 path = "com/izforge/izpack/bin/native/" + type + "/" + name;
             }
-            mergeManager.addResourceToMerge(path);
+            mergeManager.addResourceToMerge(path, "com/izforge/izpack/bin/native/" + name);
 
             // Additionals for mark a native lib also used in the uninstaller
             // The lib will be copied from the installer into the uninstaller if
@@ -1489,7 +1489,7 @@ public class CompilerConfig extends Thread
                     // packager
                     url = parsedFile.toURI().toURL();
                 }
-                
+
                 if (!"".equals(encoding))
                 {
                     File recodedFile = FileUtils.createTempFile("izenc", null);
@@ -1510,7 +1510,8 @@ public class CompilerConfig extends Thread
                     if (parsexml)
                     {
                         originalUrl = recodedFile.toURI().toURL();
-                    } else 
+                    }
+                    else
                     {
                         url = recodedFile.toURI().toURL();
                     }
@@ -2544,22 +2545,17 @@ public class CompilerConfig extends Thread
             final Stage stage = listener.getStage();
             if (Stage.isInInstaller(stage))
             {
-                // If a jar is defined, add it
-                if (listener.getJar() != null)
+                String className = listener.getClassname();
+                String jar = listener.getJar();
+                if (jar == null)
                 {
-                    mergeManager.addResourceToMerge(listener.getJar());
-                }
-                else
-                {
-                    // Merge the package containing the listener class
-                    Class aClass = classPathCrawler.searchClassInClassPath(listener.getClassname());
-                    if (aClass == null)
-                    {
-                        System.err.println("Warning : Class " + listener.getClassname() + " was not found");
-                        continue;
+                    URL url= classPathCrawler.getURLForClass(className);
+                    if (url != null) {
+                        jar = url.toString();
                     }
-                    mergeManager.addResourceToMerge(aClass.getPackage().getName().replaceAll("\\.", "/") + "/");
                 }
+                int type = (stage == Stage.install) ? CustomData.INSTALLER_LISTENER : CustomData.UNINSTALLER_LISTENER;
+                compiler.addCustomListener(type, className, jar, listener.getOs());
             }
 
         }

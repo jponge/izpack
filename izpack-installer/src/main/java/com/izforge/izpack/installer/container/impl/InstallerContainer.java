@@ -7,7 +7,6 @@ import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.ConditionContainer;
-import com.izforge.izpack.core.container.filler.EventFiller;
 import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
