@@ -72,7 +72,6 @@ public class ConsoleInstaller extends InstallerBase
 
     {
         super(resourceManager);
-//        super(resourceManager);
         this.checkCondition = checkCondition;
         this.installdata = installdata;
         this.rules = rules;
@@ -91,7 +90,10 @@ public class ConsoleInstaller extends InstallerBase
             variableSubstitutor = new VariableSubstitutorImpl(this.installdata.getVariables());
         }
 
-        if (this.installdata.getRules() == null) this.installdata.setRules(this.rules);
+        if (this.installdata.getRules() == null)
+        {
+            this.installdata.setRules(this.rules);
+        }
     }
 
     @Override
