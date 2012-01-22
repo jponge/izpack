@@ -76,9 +76,6 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         final GUIInstallData guiInstallData = new GUIInstallData(variables, variableSubstitutor);
         // Loads the installation data
         loadInstallData(guiInstallData);
-        // Load custom action data.
-        loadCustomData(guiInstallData, container, pathResolver);
-
         loadGUIInstallData(guiInstallData);
         loadInstallerRequirements(guiInstallData);
         loadDynamicVariables(guiInstallData);

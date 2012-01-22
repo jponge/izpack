@@ -19,6 +19,7 @@
 
 package com.izforge.izpack.installer.data;
 
+import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.ExecutableFile;
 
 import java.util.ArrayList;
@@ -58,6 +59,21 @@ public class UninstallData
      * The uninstaller path.
      */
     private String uninstallerPath;
+
+    /**
+     * The uninstaller listeners.
+     */
+    private final List<CustomData> listeners = new ArrayList<CustomData>();
+
+    /**
+     * The uninstall jar.
+     */
+    private final List<CustomData> jars = new ArrayList<CustomData>();
+
+    /**
+     * The native libraries that must be copied to the uninstaller.
+     */
+    private final List<String> nativeLibs = new ArrayList<String>();
 
     /**
      * Additional uninstall data like uninstaller listener list.
@@ -185,7 +201,67 @@ public class UninstallData
     }
 
     /**
-     * Returns additional uninstall data like uninstaller listener list.
+     * Adds an listener to invoke at uninstall.
+     *
+     * @param listener the listener
+     */
+    public void addUninstallerListener(CustomData listener)
+    {
+        listeners.add(listener);
+    }
+
+    /**
+     * Returns the listeners to invoke at uninstall.
+     *
+     * @return the listeners
+     */
+    public List<CustomData> getUninstallerListeners()
+    {
+        return listeners;
+    }
+
+    /**
+     * Adds a reference to a jar to be copied to the uninstaller.
+     *
+     * @param jar the jar
+     */
+    public void addJar(CustomData jar)
+    {
+        jars.add(jar);
+    }
+
+    /**
+     * Returns the jars that must be merged to the uninstaller.
+     *
+     * @return the jar data
+     */
+    public List<CustomData> getJars()
+    {
+        return jars;
+    }
+
+    /**
+     * Adds a reference to a native library, to be copied to the uninstaller.
+     *
+     * @param path the native library resource path
+     */
+    public void addNativeLibrary(String path)
+    {
+        nativeLibs.add(path);
+    }
+
+    /**
+     * Returns the native library paths, to be copied to the uninstaller.
+     *
+     * @return the native library resource paths
+     */
+    public List<String> getNativeLibraries()
+    {
+        return nativeLibs;
+    }
+
+    /**
+     * Returns additional uninstall data.
      *
      * @return additional uninstall data
      */
@@ -195,7 +271,7 @@ public class UninstallData
     }
 
     /**
-     * Sets additional uninstall data like uninstaller listener list.
+     * Sets additional uninstall data.
      *
      * @param name  key for the additional uninstall data
      * @param value the additional uninstall data
@@ -224,6 +300,5 @@ public class UninstallData
     {
         return unInstallScripts;
     }
-
 
 }

@@ -36,6 +36,7 @@
         <module>izpack-ant</module>
         <module>izpack-test-common</module>
         <module>izpack-test-panel</module>
+        <module>izpack-test-listener</module>
     </modules>
 
     <dependencyManagement>

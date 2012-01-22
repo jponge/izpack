@@ -55,7 +55,7 @@ public class CompilerHelper
      * @param url       url of the jar file which contains the class
      * @param className short name of the class for which the full name should be resolved
      * @return full qualified class name
-     * @throws java.io.IOException
+     * @throws IOException if the jar cannot be read
      */
     public String getFullClassName(URL url, String className) throws IOException
     {
@@ -101,9 +101,9 @@ public class CompilerHelper
      *
      * @param url url of the jar file
      * @return full qualified paths of the contained files
-     * @throws Exception
+     * @throws IOException if the jar cannot be read
      */
-    public List<String> getContainedFilePaths(URL url) throws Exception
+    public List<String> getContainedFilePaths(URL url) throws IOException
     {
         JarInputStream jis = new JarInputStream(url.openStream());
         ZipEntry zentry;

@@ -38,6 +38,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>izpack-test-listener</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.easytesting</groupId>
             <artifactId>fest-swing</artifactId>
             <scope>test</scope>
@@ -82,6 +87,18 @@
                             <includeArtifactIds>izpack-utils</includeArtifactIds>
                             <excludeTransitive>true</excludeTransitive>
                             <outputDirectory>${basedir}/src/test/resources/samples/izpack</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Copy test listeners</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <stripVersion>true</stripVersion>
+                            <includeArtifactIds>izpack-test-listener</includeArtifactIds>
+                            <outputDirectory>${basedir}/target/test-classes/samples/event/lib</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>

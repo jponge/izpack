@@ -32,8 +32,18 @@ import com.izforge.izpack.api.adaptator.IXMLWriter;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
 import com.izforge.izpack.api.container.BindeableContainer;
-import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Blockable;
+import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
+import com.izforge.izpack.api.data.DynamicVariable;
+import com.izforge.izpack.api.data.GUIPrefs;
+import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.Info.TempDir;
+import com.izforge.izpack.api.data.InstallerRequirement;
+import com.izforge.izpack.api.data.LookAndFeels;
+import com.izforge.izpack.api.data.OverrideType;
+import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.data.PanelActionConfiguration;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.data.binding.OsModel;
@@ -59,19 +69,60 @@ import com.izforge.izpack.compiler.resource.ResourceFinder;
 import com.izforge.izpack.core.data.DynamicInstallerRequirementValidatorImpl;
 import com.izforge.izpack.core.data.DynamicVariableImpl;
 import com.izforge.izpack.core.regex.RegularExpressionFilterImpl;
-import com.izforge.izpack.core.variable.*;
-import com.izforge.izpack.data.*;
+import com.izforge.izpack.core.variable.ConfigFileValue;
+import com.izforge.izpack.core.variable.EnvironmentValue;
+import com.izforge.izpack.core.variable.ExecValue;
+import com.izforge.izpack.core.variable.JarEntryConfigValue;
+import com.izforge.izpack.core.variable.PlainConfigFileValue;
+import com.izforge.izpack.core.variable.PlainValue;
+import com.izforge.izpack.core.variable.RegistryValue;
+import com.izforge.izpack.core.variable.ZipEntryConfigFileValue;
+import com.izforge.izpack.data.CustomData;
+import com.izforge.izpack.data.ExecutableFile;
+import com.izforge.izpack.data.PackInfo;
+import com.izforge.izpack.data.PanelAction;
+import com.izforge.izpack.data.ParsableFile;
+import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.ClassUtils;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.FileUtil;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.OsConstraintHelper;
 import com.izforge.izpack.util.file.DirectoryScanner;
 import com.izforge.izpack.util.file.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
+import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -223,13 +274,12 @@ public class CompilerConfig extends Thread
         // add izpack built in property
         propertyManager.setProperty("basedir", base.toString());
 
+        addCompilerListeners();
+
         // We get the XML data tree
         IXMLElement data = resourceFinder.getXMLTree();
         // loads the specified packager
         loadPackagingInformation(data);
-
-        // Listeners to various events
-        addCustomListeners();
 
         // Read the properties and perform replacement on the rest of the tree
         substituteProperties(data);
@@ -246,6 +296,7 @@ public class CompilerConfig extends Thread
         addNativeLibraries(data);
         addJars(data);
         addPanels(data);
+        addListeners(data);
         addPacks(data);
         addInstallerRequirement(data);
 
@@ -457,7 +508,8 @@ public class CompilerConfig extends Thread
             {
                 path = "com/izforge/izpack/bin/native/" + type + "/" + name;
             }
-            mergeManager.addResourceToMerge(path, "com/izforge/izpack/bin/native/" + name);
+            String destination = "com/izforge/izpack/bin/native/" + name;
+            mergeManager.addResourceToMerge(path, destination);
 
             // Additionals for mark a native lib also used in the uninstaller
             // The lib will be copied from the installer into the uninstaller if
@@ -469,11 +521,10 @@ public class CompilerConfig extends Thread
             // for the uninstaller.
             String stage = ixmlElement.getAttribute("stage");
             List<OsModel> constraints = OsConstraintHelper.getOsList(ixmlElement);
-            if (stage != null
-                    && ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage)))
+            if ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage))
             {
                 List<String> contents = new ArrayList<String>();
-                contents.add(name);
+                contents.add(destination);
                 CustomData customData = new CustomData(null, contents, constraints, CustomData.UNINSTALLER_LIB);
                 packager.addNativeUninstallerLibrary(customData);
                 needAddOns = true;
@@ -2523,42 +2574,40 @@ public class CompilerConfig extends Thread
     }
 
 
-    // -------------------------------------------------------------------------
-    // ------------- Listener stuff ------------------------- START ------------
+    /**
+     * Adds installer and uninstaller listeners.
+     *
+     * @param data the XML data
+     * @throws CompilerException if listeners cannot be added
+     */
+    private void addListeners(IXMLElement data) throws CompilerException
+    {
+        notifyCompilerListener("addListeners", CompilerListener.BEGIN, data);
+        IXMLElement listeners = data.getFirstChildNamed("listeners");
+        if (listeners != null)
+        {
+            for (IXMLElement listener : listeners.getChildrenNamed("listener"))
+            {
+                String className = xmlCompilerHelper.requireAttribute(listener, "classname");
+                Stage stage = Stage.valueOf(xmlCompilerHelper.requireAttribute(listener, "stage"));
+                if (Stage.isInInstaller(stage))
+                {
+                    String jar = listener.getAttribute("jar");
+                    URL url = (jar != null) ? resourceFinder.findProjectResource(jar, "Jar file", listener) : null;
+                    List<OsModel> constraints = OsConstraintHelper.getOsList(listener);
+                    compiler.addCustomListener(className, url, stage, constraints);
+                }
+            }
+        }
+        notifyCompilerListener("addListeners", CompilerListener.END, data);
+    }
 
     /**
-     * This method parses install.xml for defined listeners and put them in the right position. If
-     * posible, the listeners will be validated. Listener declaration is a fragmention in
-     * install.xml like:
-     * <br><code>
-     * &lt;listeners&gt;<br>
-     * &lt;listener compiler="PermissionCompilerListener" installer="PermissionInstallerListener"/&gt;<br>
-     * &lt;/listeners&gt;</code>
-     *
-     * @throws Exception Description of the Exception
+     * Register compiler listeners to be notified during compilation.
      */
-    public void addCustomListeners() throws Exception
+    private void addCompilerListeners()
     {
-        addCompilerListener(instanciateCompilerListener());
-        for (Listener listener : izpackProjectInstaller.getListeners())
-        {
-            final Stage stage = listener.getStage();
-            if (Stage.isInInstaller(stage))
-            {
-                String className = listener.getClassname();
-                String jar = listener.getJar();
-                if (jar == null)
-                {
-                    URL url= classPathCrawler.getURLForClass(className);
-                    if (url != null) {
-                        jar = url.toString();
-                    }
-                }
-                int type = (stage == Stage.install) ? CustomData.INSTALLER_LISTENER : CustomData.UNINSTALLER_LISTENER;
-                compiler.addCustomListener(type, className, jar, listener.getOs());
-            }
-
-        }
+        compilerListeners.addAll(instantiateCompilerListeners());
     }
 
     /**
@@ -2566,7 +2615,7 @@ public class CompilerConfig extends Thread
      *
      * @return instance of the defined compiler listener
      */
-    private List<CompilerListener> instanciateCompilerListener()
+    private List<CompilerListener> instantiateCompilerListeners()
     {
         ArrayList<CompilerListener> result = new ArrayList<CompilerListener>();
         for (Listener listener : izpackProjectInstaller.getListeners())
@@ -2583,17 +2632,6 @@ public class CompilerConfig extends Thread
             }
         }
         return result;
-    }
-
-    /**
-     * Add a CompilerListener. A registered CompilerListener will be called at every enhancmend
-     * point of compiling.
-     *
-     * @param compilerListeners CompilerListener which should be added
-     */
-    private void addCompilerListener(List<CompilerListener> compilerListeners)
-    {
-        this.compilerListeners.addAll(compilerListeners);
     }
 
     /**
@@ -2720,7 +2758,7 @@ public class CompilerConfig extends Thread
                     os = null;
 
                     // getting the URL to the new merged file
-                    mergedPackLangFileURL = mergedPackLangFile.toURL();
+                    mergedPackLangFileURL = mergedPackLangFile.toURI().toURL();
                 }
 
                 packager.addResource(id, mergedPackLangFileURL);

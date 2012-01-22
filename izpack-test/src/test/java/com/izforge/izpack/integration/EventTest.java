@@ -5,6 +5,7 @@ import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.compiler.container.TestInstallationContainer;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.event.RegistryInstallerListener;
+import com.izforge.izpack.event.RegistryUninstallerListener;
 import com.izforge.izpack.event.SummaryLoggerInstallerListener;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.test.Container;
@@ -50,11 +51,10 @@ public class EventTest
         assertThat(installerListeners.get(0), Is.is(SummaryLoggerInstallerListener.class));
         assertThat(installerListeners.get(1), Is.is(RegistryInstallerListener.class));
         
-        List<CustomData> uninstallListeners 
-                = (List<CustomData>) uninstallData.getAdditionalData().get("uninstallerListeners");
+        List<CustomData> uninstallListeners = uninstallData.getUninstallerListeners();
         assertNotNull(uninstallListeners);
         assertThat(uninstallListeners.size(), Is.is(1));
         CustomData customData = uninstallListeners.get(0);
-        assertEquals("RegistryUninstallerListener", customData.listenerName);
+        assertEquals(RegistryUninstallerListener.class.getName(), customData.listenerName);
     }
 }

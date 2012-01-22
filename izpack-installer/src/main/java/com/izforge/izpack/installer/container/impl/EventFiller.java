@@ -9,6 +9,7 @@ import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.util.OsConstraintHelper;
+import com.izforge.izpack.util.file.FileUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,15 +42,21 @@ public class EventFiller
     }
 
     /**
-     * Loads custom data like listener and lib references if exist and fills the installdata.
+     * Loads custom data.
+     * <p/>
+     * This includes:
+     * <ul>
+     *     <li>installer listeners</li>
+     *     <li>uninstaller listeners</li>
+     *     <li>uninstaller jars</li>
+     *     <li>uninstaller native libraries</li>
+     * </ul>
      */
     @SuppressWarnings("unchecked")
     public void loadCustomData()
     {
         List<CustomData> customData = (List<CustomData>) readObject("customData");
-        List<CustomData> uninstallerListeners = new ArrayList<CustomData>();
-        List<CustomData> uninstallerJars = new ArrayList<CustomData>();
-        List<String> uninstallerLibs = new ArrayList<String>();
+        installdata.setInstallerListener(new ArrayList<InstallerListener>());
         for (CustomData data : customData)
         {
             if (data.osConstraints == null || OsConstraintHelper.oneMatchesCurrentSystem(data.osConstraints))
@@ -60,43 +67,53 @@ public class EventFiller
                         addInstallerListener(data.listenerName);
                         break;
                     case CustomData.UNINSTALLER_LISTENER:
-                        uninstallerListeners.add(data);
+                        uninstallData.addUninstallerListener(data);
                         break;
                     case CustomData.UNINSTALLER_JAR:
-                        uninstallerJars.add(data);
+                        uninstallData.addJar(data);
                         break;
                     case CustomData.UNINSTALLER_LIB:
-                        uninstallerLibs.add(data.contents.get(0));
+                        uninstallData.addNativeLibrary(data.contents.get(0));
                         break;
                 }
             }
         }
-        uninstallData.getAdditionalData().put("uninstallerListeners", uninstallerListeners);
-        uninstallData.getAdditionalData().put("uninstallerJars", uninstallerJars);
-        uninstallData.getAdditionalData().put("__uninstallLibs__", uninstallerLibs);
     }
 
+    /**
+     * Adds an installer listener.
+     * 
+     * @param className the listener class name
+     */
     @SuppressWarnings("unchecked")
-    private void addInstallerListener(String listenerClass)
+    private void addInstallerListener(String className)
     {
-        Class aClass = classPathCrawler.searchClassInClassPath(listenerClass);
+        Class aClass = classPathCrawler.searchClassInClassPath(className);
         bindeableContainer.addComponent(aClass);
-        installdata.getInstallerListener().add((InstallerListener) bindeableContainer.getComponent(aClass));
+        List<InstallerListener> listeners = installdata.getInstallerListener();
+        listeners.add((InstallerListener) bindeableContainer.getComponent(aClass));
     }
 
-    private Object readObject(String resourceId)
+    /**
+     * Reads an object given its resource path.
+     * 
+     * @param path the object's resource path
+     * @return the object
+     * @throws IzPackException if the object cannot be read
+     */
+    private Object readObject(String path)
     {
         Object model;
         ObjectInputStream objIn = null;
         try
         {
-            InputStream inputStream = resourceManager.getInputStream(resourceId);
+            InputStream inputStream = resourceManager.getInputStream(path);
             objIn = new ObjectInputStream(inputStream);
             model = objIn.readObject();
         }
         catch (ClassNotFoundException exception)
         {
-           throw new IzPackException(exception);
+            throw new IzPackException(exception);
         }
         catch (IOException exception)
         {
@@ -104,17 +121,7 @@ public class EventFiller
         }
         finally
         {
-            if (objIn != null)
-            {
-                try
-                {
-                    objIn.close();
-                }
-                catch (IOException ignore)
-                {
-                    // do nothing
-                }
-            }
+            FileUtils.close(objIn);
         }
         return model;
     }
