@@ -586,16 +586,6 @@ public class Librarian implements CleanupClient
             input = clientClass.getResourceAsStream('/' + nativeDirectory + '/' + name + extension);
         }
 
-        if (input == null)
-        {
-            input = clientClass.getResourceAsStream('/' + nativeDirectory + "/izpack/" + name + extension);
-        }
-
-        if (input == null)
-        {
-            input = clientClass.getResourceAsStream('/' + nativeDirectory + "/3rdparty/" + name + extension);
-        }
-
         // ----------------------------------------------------
         // if this fails as well, throw an exception
         // ----------------------------------------------------

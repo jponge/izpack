@@ -3,11 +3,11 @@ package com.izforge.izpack.installer.container.impl;
 import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.ConditionContainer;
-import com.izforge.izpack.core.container.filler.EventFiller;
 import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
@@ -48,7 +48,7 @@ public class InstallerContainer extends AbstractContainer
                 .addAdapter(new ProviderAdapter(new GUIInstallDataProvider()))
                 .addAdapter(new ProviderAdapter(new IconsProvider()))
                 .addAdapter(new ProviderAdapter(new RulesProvider()))
-                ;
+        ;
         pico
                 .addComponent(PanelManager.class)
                 .addComponent(InstallDataConfiguratorWithRules.class)
@@ -92,7 +92,15 @@ public class InstallerContainer extends AbstractContainer
                 .as(Characteristics.USE_NAMES).addComponent(LanguageDialog.class);
 
         // Load custom data in last position
-        pico.getComponent(EventFiller.class).loadCustomData();
+        EventFiller eventFiller = pico.getComponent(EventFiller.class);
+        try
+        {
+            eventFiller.loadCustomData();
+        }
+        catch (InstallerException exception)
+        {
+            throw new IzPackException(exception);
+        }
     }
 
 

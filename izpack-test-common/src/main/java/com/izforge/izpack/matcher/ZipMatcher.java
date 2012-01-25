@@ -35,8 +35,8 @@ public class ZipMatcher extends TypeSafeMatcher<File>
         try
         {
             List<String> fileList = getFileNameListFromZip(file);
-            MatcherAssert.assertThat(fileList, listMatcher);
-            return true;
+            // MatcherAssert.assertThat(fileList, listMatcher); // This prevents the use of IsNot. TODO
+            return listMatcher.matches(fileList);
         }
         catch (IOException e)
         {

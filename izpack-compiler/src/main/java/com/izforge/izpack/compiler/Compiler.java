@@ -28,26 +28,23 @@ package com.izforge.izpack.compiler;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackColor;
 import com.izforge.izpack.api.data.binding.OsModel;
+import com.izforge.izpack.api.data.binding.Stage;
 import com.izforge.izpack.api.exception.CompilerException;
-import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.compiler.data.CompilerData;
-import com.izforge.izpack.compiler.data.PropertyManager;
+import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.PackInfo;
+import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.util.Debug;
 
-import java.io.File;
-import java.net.MalformedURLException;
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.jar.JarInputStream;
-import java.util.zip.ZipEntry;
 
 /**
  * The IzPack compiler class. This is now a java bean style class that can be
@@ -68,30 +65,32 @@ public class Compiler extends Thread
     private IPackager packager;
 
     /**
-     * Error code, set to true if compilation succeeded.
+     * Error code, set to false if compilation succeeded.
      */
     private boolean compileFailed = true;
 
-    private CompilerHelper compilerHelper;
     /**
-     * Replaces the properties in the install.xml file prior to compiling
+     * Compiler helper.
      */
-    private VariableSubstitutor propertySubstitutor;
-
-    public PropertyManager propertyManager;
+    private final CompilerHelper compilerHelper;
 
     /**
-     * The constructor.
+     * Classpath crawler.
+     */
+    private final ClassPathCrawler classPathCrawler;
+
+    /**
+     * Constructs a <tt>Compiler</tt>.
      *
-     * @throws CompilerException
+     * @param compilerHelper   the compiler helper
+     * @param packager         the packager
+     * @param classPathCrawler the class path crawler
      */
-    public Compiler(VariableSubstitutor variableSubstitutor, PropertyManager propertyManager, CompilerHelper compilerHelper, IPackager packager) throws CompilerException
+    public Compiler(CompilerHelper compilerHelper, IPackager packager, ClassPathCrawler classPathCrawler)
     {
-        this.propertyManager = propertyManager;
-        this.propertySubstitutor = variableSubstitutor;
         this.compilerHelper = compilerHelper;
         this.packager = packager;
-        // add izpack built in property
+        this.classPathCrawler = classPathCrawler;
     }
 
     /**
@@ -144,11 +143,9 @@ public class Compiler extends Thread
     }
 
     /**
-     * Checks whether the dependencies stated in the configuration file are correct. Specifically it
-     * checks that no pack point to a non existent pack and also that there are no circular
-     * dependencies in the packs.
+     * Verifies dependencies between packs.
      *
-     * @throws CompilerException
+     * @throws CompilerException if there are circular dependencies between packs, or a dependency doesn't exist
      */
     public void checkDependencies() throws CompilerException
     {
@@ -156,9 +153,9 @@ public class Compiler extends Thread
     }
 
     /**
-     * Checks whether the excluded packs exist. (simply calles the other function)
+     * Verifies that no two preselected packs have the same excludeGroup.
      *
-     * @throws CompilerException
+     * @throws CompilerException if two preselected packs have the same excludeGroup
      */
     public void checkExcludes() throws CompilerException
     {
@@ -166,10 +163,10 @@ public class Compiler extends Thread
     }
 
     /**
-     * This checks if there are more than one preselected packs per excludeGroup.
+     * Verifies that no two preselected packs have the same excludeGroup.
      *
      * @param packs list of packs which should be checked
-     * @throws CompilerException
+     * @throws CompilerException if two preselected packs have the same excludeGroup
      */
     public void checkExcludes(List<PackInfo> packs) throws CompilerException
     {
@@ -188,28 +185,25 @@ public class Compiler extends Thread
                     {
                         if (pack1.preselected && pack2.preselected)
                         {
-                            parseError("Packs " + pack1.name + " and " + pack2.name +
+                            error("Packs " + pack1.name + " and " + pack2.name +
                                     " belong to the same excludeGroup " + pack1.excludeGroup +
                                     " and are both preselected. This is not allowed.");
                         }
                     }
                 }
             }
-
         }
     }
 
     /**
-     * Checks whether the dependencies among the given Packs. Specifically it
-     * checks that no pack point to a non existent pack and also that there are no circular
-     * dependencies in the packs.
+     * Verifies dependencies between packs.
      *
-     * @param packs - List<Pack> representing the packs in the installation
-     * @throws CompilerException
+     * @param packs the packs to check
+     * @throws CompilerException if there are circular dependencies between packs, or a dependency doesn't exist
      */
     public void checkDependencies(List<PackInfo> packs) throws CompilerException
     {
-        // Because we use package names in the configuration file we assosiate
+        // Because we use package names in the configuration file we associate
         // the names with the objects
         Map<String, PackInfo> names = new HashMap<String, PackInfo>();
         for (PackInfo pack : packs)
@@ -220,11 +214,11 @@ public class Compiler extends Thread
         // @todo More informative messages to include the source of the error
         if (result == -2)
         {
-            parseError("Circular dependency detected");
+            error("Circular dependency detected");
         }
         else if (result == -1)
         {
-            parseError("A dependency doesn't exist");
+            error("A dependency doesn't exist");
         }
     }
 
@@ -273,11 +267,6 @@ public class Compiler extends Thread
         }
         return 0;
 
-    }
-
-    public static void parseWarn(String message)
-    {
-        System.out.println("Warning: " + message);
     }
 
     /**
@@ -332,162 +321,105 @@ public class Compiler extends Thread
         return 0;
     }
 
-    public URL findIzPackResource(String path, String desc) throws CompilerException
-    {
-        return findIzPackResource(path, desc, false);
-    }
-
     /**
-     * Look for an IzPack resource either in the compiler jar, or within IZPACK_HOME. The path must
-     * not be absolute. The path must use '/' as the fileSeparator (it's used to access the jar
-     * file). If the resource is not found, take appropriate action base on ignoreWhenNotFound flag.
+     * Raises an exception.
      *
-     * @param path               the relative path (using '/' as separator) to the resource.
-     * @param desc               the description of the resource used to report errors
-     * @param ignoreWhenNotFound when false, throws a CompilerException indicate
-     *                           fault in the parent element when resource not found.
-     * @return a URL to the resource.
-     * @throws CompilerException
+     * @param message a brief error message
+     * @throws CompilerException when invoked
      */
-    public URL findIzPackResource(String path, String desc, boolean ignoreWhenNotFound)
-            throws CompilerException
+    private void error(String message) throws CompilerException
     {
-        URL url = getClass().getResource("/" + path);
-        if (url == null)
-        {
-            File resource = new File(path);
-            if (!resource.isAbsolute())
-            {
-                resource = new File(CompilerData.IZPACK_HOME, path);
-            }
-
-            if (!resource.exists())
-            {
-                if (ignoreWhenNotFound)
-                {
-                    parseWarn(desc + " not found: " + resource);
-                }
-                else
-                {
-                    parseError(desc + " not found: " + resource); // fatal
-                }
-            }
-            else
-            {
-                try
-                {
-                    url = resource.toURI().toURL();
-                }
-                catch (MalformedURLException how)
-                {
-                    parseError(desc + "(" + resource + ")", how);
-                }
-            }
-        }
-
-        return url;
-    }
-
-    /**
-     * Create parse error with consistent messages. Includes file name. For use When parent is
-     * unknown.
-     *
-     * @param message Brief message explaining error
-     * @throws CompilerException
-     */
-    public void parseError(String message) throws CompilerException
-    {
-        this.compileFailed = true;
+        compileFailed = true;
         throw new CompilerException(message);
     }
 
     /**
-     * Create parse error with consistent messages. Includes file name. For use When parent is
-     * unknown.
+     * Adds a listener to be invoked during installation or uninstallation.
      *
-     * @param message Brief message explaining error
-     * @param how     throwable which was catched
-     * @throws CompilerException
+     * @param className   the listener class name
+     * @param url         the jar URL. If <tt>null</</tt>, then <tt>className</tt> must be in the class path
+     * @param stage       the stage when the listener is invoked
+     * @param constraints the list of constraints. May be <tt>null</tt>
+     * @throws CompilerException if the jar referenced by <tt>url</tt> can't be read
      */
-    public void parseError(String message, Throwable how) throws CompilerException
+    public void addCustomListener(String className, URL url, Stage stage, List<OsModel> constraints)
+            throws CompilerException
     {
-        this.compileFailed = true;
-        throw new CompilerException(message, how);
-    }
-
-    // -------------------------------------------------------------------------
-    // ------------- Listener stuff ------------------------- START ------------
-
-    /**
-     * This method parses install.xml for defined listeners and put them in the right position. If
-     * posible, the listeners will be validated. Listener declaration is a fragmention in
-     * install.xml like : &lt;listeners&gt; &lt;listener compiler="PermissionCompilerListener"
-     * installer="PermissionInstallerListener"/1gt; &lt;/listeners&gt;
-     *
-     * @param type        The listener type.
-     * @param className   The class name.
-     * @param jarPath     The jar path.
-     * @param constraints The list of constraints.
-     * @throws Exception Thrown in case an error occurs.
-     */
-    public void addCustomListener(int type, String className, String jarPath, List<OsModel> constraints) throws Exception
-    {
-        jarPath = propertySubstitutor.substitute(jarPath, SubstitutionType.TYPE_AT);
-        String fullClassName = className;
-        List<String> filePaths = null;
-        URL url = findIzPackResource(jarPath, "CustomAction jar file", true);
+        String fullClassName;
+        List<String> paths = new ArrayList<String>();
 
         if (url != null)
         {
-            fullClassName = getFullClassName(url, className);
+            try
+            {
+                paths = compilerHelper.getContainedFilePaths(url);
+            }
+            catch (IOException exception)
+            {
+                throw new CompilerException("Failed to read jar: " + url, exception);
+            }
+            fullClassName = findClass(className, paths);
             if (fullClassName == null)
             {
-                throw new CompilerException("CustomListener class '" + className + "' not found in '"
-                        + url + "'. The class and listener name must match");
+                throw new CompilerException("Custom listener class '" + className + "' not found in '" + url + "'");
             }
-            filePaths = compilerHelper.getContainedFilePaths(url);
+        }
+        else
+        {
+            // No listener jar provided. See if its in the class path
+            try
+            {
+                Class aClass = classPathCrawler.searchClassInClassPath(className);
+                fullClassName = aClass.getName();
+            }
+            catch (MergeException ignore)
+            {
+                // class not found. May be present in a separate jar. TODO - should collate jars before adding listeners
+                fullClassName = className;
+            }
         }
 
-        CustomData ca = new CustomData(fullClassName, filePaths, constraints, type);
-        packager.addCustomJar(ca, url);
+        int type = (stage == Stage.install) ? CustomData.INSTALLER_LISTENER : CustomData.UNINSTALLER_LISTENER;
+        CustomData data = new CustomData(fullClassName, paths, constraints, type);
+        packager.addCustomJar(data, url);
     }
 
     /**
-     * Returns the qualified class name for the given class. This method expects as the url param a
-     * jar file which contains the given class. It scans the zip entries of the jar file.
+     * Finds a class in a list of resource paths.
+     * <p/>
+     * For historical reasons, unqualified class names may be specified.
      *
-     * @param url       url of the jar file which contains the class
-     * @param className short name of the class for which the full name should be resolved
-     * @return full qualified class name
-     * @throws Exception
+     * @param className the class name. May be qualified or unqualified
+     * @param paths     the paths in the jar
+     * @return the fully qualified class name, or <tt>null</tt> if none is found
      */
-    private String getFullClassName(URL url, String className) throws Exception
+    private String findClass(String className, List<String> paths)
     {
-        JarInputStream jis = new JarInputStream(url.openStream());
-        ZipEntry zentry;
-        while ((zentry = jis.getNextEntry()) != null)
+        String result = null;
+        boolean qualified = className.indexOf('.') != -1;
+        String resource = className.replace('.', '/') + ".class"; // resource path of the class
+        int length = resource.length();
+        for (String path : paths)
         {
-            String name = zentry.getName();
-            int lastPos = name.lastIndexOf(".class");
-            if (lastPos < 0)
+            int index = path.lastIndexOf(resource);
+            if (index == 0 && path.length() == length)
             {
-                continue; // No class file.
+                // exact match
+                result = path;
+                break;
             }
-            name = name.replace('/', '.');
-            int pos;
-            if (className != null)
+            else if (index > 0 && !qualified && path.length() == index + length && path.charAt(index - 1) == '/')
             {
-                pos = name.indexOf(className);
-                if (pos >= 0 && name.length() == pos + className.length() + 6) // "Main" class
-                // found
-                {
-                    jis.close();
-                    return (name.substring(0, lastPos));
-                }
+                // unqualified class match
+                result = path;
+                break;
             }
         }
-        jis.close();
-        return (null);
+        if (result != null)
+        {
+            result = result.substring(0, result.length() - 6).replace('/', '.');
+        }
+        return result;
     }
 
 }

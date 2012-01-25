@@ -18,6 +18,9 @@ import java.util.Map;
 
 /**
  * Injection provider for rules.
+ *
+ * @author Anthonin Bonnefoy
+ * @author Tim Anderson
  */
 public class RulesProvider implements Provider
 {
@@ -26,59 +29,90 @@ public class RulesProvider implements Provider
      * Resource name of the conditions specification
      */
     private static final String CONDITIONS_SPECRESOURCENAME = "conditions.xml";
-    private ResourceManager resourceManager;
 
     /**
      * Reads the conditions specification file and initializes the rules engine.
+     *
+     * @param installData        the installation data
+     * @param conditionContainer the condition container
+     * @param resourceManager    the resource manager
+     * @param classPathCrawler   the class path crawler
+     * @return a new rules engine
      */
-    public RulesEngine provide(AutomatedInstallData installdata, ClassPathCrawler classPathCrawler, ConditionContainer conditionContainer, ResourceManager resourceManager)
+    public RulesEngine provide(AutomatedInstallData installData, ClassPathCrawler classPathCrawler,
+                               ConditionContainer conditionContainer, ResourceManager resourceManager)
     {
-        // try to load already parsed conditions
-        RulesEngine res = null;
+        RulesEngine result = new RulesEngineImpl(installData, classPathCrawler, conditionContainer);
+        Map<String, Condition> conditions = readConditions(resourceManager);
+        if (conditions != null && !conditions.isEmpty())
+        {
+            result.readConditionMap(conditions);
+        }
+        else
+        {
+            IXMLElement xml = readConditions();
+            if (xml != null)
+            {
+                result.analyzeXml(xml);
+            }
+        }
+        installData.setRules(result);
+        return result;
+    }
+
+    /**
+     * Reads conditions using the resource manager.
+     * <p/>
+     * This looks for a serialized resource named <em>"rules"</em>.
+     *
+     * @param resourceManager the resource manager
+     * @return the conditions, keyed on id, or <tt>null</tt> if the resource doesn't exist or cannot be read
+     */
+    @SuppressWarnings("unchecked")
+    private Map<String, Condition> readConditions(ResourceManager resourceManager)
+    {
+        Map<String, Condition> rules = null;
         try
         {
             InputStream in = resourceManager.getInputStream("rules");
-            ObjectInputStream objIn = new ObjectInputStream(in);
-            Map<String, Condition> rules = (Map) objIn.readObject();
-            if ((rules != null) && (rules.size() != 0))
+            if (in != null)
             {
-                res = new RulesEngineImpl(installdata, classPathCrawler, conditionContainer);
-                res.readConditionMap(rules);
+                ObjectInputStream objIn = new ObjectInputStream(in);
+                rules = (Map) objIn.readObject();
+                objIn.close();
             }
-            objIn.close();
         }
-        catch (Exception e)
+        catch (Exception exception)
         {
-            Debug.trace("Can not find optional rules");
+            Debug.trace("Cannot find optional rules");
         }
-        if (res != null)
-        {
-            installdata.setRules(res);
-            // rules already read
-            return res;
-        }
+        return rules;
+    }
+
+    /**
+     * Reads conditions from the class path.
+     * <p/>
+     * This looks for an XML resource named <em>"conditions.xml"</em>.
+     *
+     * @return the conditions, or <tt>null</tt> if they cannot be read
+     */
+    private IXMLElement readConditions()
+    {
+        IXMLElement conditions = null;
         try
         {
             InputStream input = ClassLoader.getSystemResourceAsStream(CONDITIONS_SPECRESOURCENAME);
-            if (input == null)
+            if (input != null)
             {
-                res = new RulesEngineImpl(installdata, classPathCrawler, conditionContainer);
-                return res;
+                XMLParser xmlParser = new XMLParser();
+                conditions = xmlParser.parse(input);
             }
-            XMLParser xmlParser = new XMLParser();
-
-            // get the data
-            IXMLElement conditionsxml = xmlParser.parse(input);
-            res = new RulesEngineImpl(installdata, classPathCrawler, conditionContainer);
-            res.analyzeXml(conditionsxml);
         }
         catch (Exception e)
         {
             Debug.trace("Can not find optional resource " + CONDITIONS_SPECRESOURCENAME);
-            // there seem to be no conditions
-            res = new RulesEngineImpl(installdata, classPathCrawler, conditionContainer);
         }
-        installdata.setRules(res);
-        return res;
+        return conditions;
     }
+
 }

@@ -140,7 +140,6 @@ public class ClassPathCrawler
         return getUrlsForPackage(formatPackageName);
     }
 
-
     public Set<URL> getUrlsForPackage(String packageName)
     {
         Set<URL> resultSet = new HashSet<URL>();

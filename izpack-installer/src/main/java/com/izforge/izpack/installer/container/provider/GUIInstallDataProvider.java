@@ -8,6 +8,7 @@ import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
+import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;
 
@@ -65,7 +66,9 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
     }
 
 
-    public GUIInstallData provide(ResourceManager resourceManager, VariableSubstitutor variableSubstitutor, Properties variables, ClassPathCrawler classPathCrawler, BindeableContainer container) throws Exception
+    public GUIInstallData provide(ResourceManager resourceManager, VariableSubstitutor variableSubstitutor,
+                                  Properties variables, PathResolver pathResolver, ClassPathCrawler classPathCrawler,
+                                  BindeableContainer container) throws Exception
     {
         this.resourceManager = resourceManager;
         this.variableSubstitutor = variableSubstitutor;
@@ -73,9 +76,6 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         final GUIInstallData guiInstallData = new GUIInstallData(variables, variableSubstitutor);
         // Loads the installation data
         loadInstallData(guiInstallData);
-        // Load custom action data.
-//        loadCustomData(guiInstallData, container, pathResolver);
-
         loadGUIInstallData(guiInstallData);
         loadInstallerRequirements(guiInstallData);
         loadDynamicVariables(guiInstallData);

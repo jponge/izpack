@@ -1,0 +1,1 @@
+This file is used to test generation of beforeDir, afterDir, beforeFile and afterFile events

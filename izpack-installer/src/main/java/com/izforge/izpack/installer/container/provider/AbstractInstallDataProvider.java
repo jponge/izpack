@@ -1,16 +1,25 @@
 package com.izforge.izpack.installer.container.provider;
 
-import com.izforge.izpack.api.container.BindeableContainer;
-import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
+import com.izforge.izpack.api.data.DynamicVariable;
+import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.Info.TempDir;
-import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
-import com.izforge.izpack.api.data.binding.Listener;
-import com.izforge.izpack.api.event.InstallerListener;
+import com.izforge.izpack.api.data.InstallerRequirement;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.ScriptParserConstant;
+import com.izforge.izpack.api.data.Value;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
-import com.izforge.izpack.merge.resolve.PathResolver;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.OsConstraintHelper;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.TemporaryDirectory;
 import org.picocontainer.injectors.Provider;
 
 import java.io.File;
@@ -18,7 +27,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.InetAddress;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * Abstract class sharing commons instanciation methods beetween installData
@@ -211,37 +226,6 @@ public abstract class AbstractInstallDataProvider implements Provider
         Debug.trace("Custom langpack for " + idata.getLocaleISO3() + " available.");
     }
 
-    /**
-     * Loads custom data like listener and lib references if exist and fills the installdata.
-     *
-     * @param installdata        installdata into which the custom action data should be stored
-     * @param bindeableContainer
-     * @throws Exception
-     */
-    protected void loadCustomData(AutomatedInstallData installdata, BindeableContainer bindeableContainer, PathResolver pathResolver) throws IOException, InstallerException, ClassNotFoundException
-    {
-        IzpackProjectInstaller izpackModel = (IzpackProjectInstaller) readObject("izpackInstallModel");
-        List<InstallerListener> customActions = new ArrayList<InstallerListener>();
-        for (Listener listener : izpackModel.getListeners())
-        {
-            if (!OsConstraintHelper.oneMatchesCurrentSystem(listener.getOs()))
-            {
-                continue;
-            }
-            switch (listener.getStage())
-            {
-                case install:
-                    Class aClass = classPathCrawler.searchClassInClassPath(listener.getClassname());
-                    bindeableContainer.addComponent(aClass);
-                    customActions.add((InstallerListener) bindeableContainer.getComponent(aClass));
-                    break;
-                case uninstall:
-            }
-        }
-        installdata.setInstallerListener(customActions);
-        // uninstallerLib list if exist
-
-    }
 
     private String getDir()
     {

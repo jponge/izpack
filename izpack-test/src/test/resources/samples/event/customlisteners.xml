@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<installation version="1.0">
+    <info>
+        <appname>Test Installation</appname>
+        <appversion>1.4 beta 666</appversion>
+        <authors>
+            <author name="Super sora" email="sora@superman.org" />
+        </authors>
+        <url>http://www.anotherworld-inspace-website.net/</url>
+
+    </info>
+
+    <guiprefs width="640" height="480" resizable="yes" />
+    <locale>
+        <langpack iso3="eng" />
+    </locale>
+
+    <panels>
+        <panel classname="HelloPanel" />
+        <panel classname="InstallPanel" />
+        <panel classname="SimpleFinishPanel" />
+    </panels>
+
+    <packs>
+        <pack name="Base" required="yes">
+            <description>The base files</description>
+            <fileset dir="" targetdir="$INSTALL_PATH">
+                <include name="Readme.txt"/>
+            </fileset>
+        </pack>
+        <pack name="Pack1" required="yes">
+            <description>Pack 1</description>
+            <fileset dir="" targetdir="$INSTALL_PATH/pack1/a">
+                <include name="Readme.txt"/>
+            </fileset>
+            <fileset dir="" targetdir="$INSTALL_PATH/pack1/b">
+                <include name="Readme.txt"/>
+            </fileset>
+        </pack>
+        <pack name="Pack2" required="yes">
+            <description>Pack 2</description>
+            <fileset dir="" targetdir="$INSTALL_PATH/pack2">
+                <include name="Readme.txt"/>
+            </fileset>
+        </pack>
+    </packs>
+
+    <!-- The listeners section for CustomActions -->
+    <listeners>
+        <listener classname="com.izforge.izpack.test.listener.TestInstallerListener" stage="install" jar="lib/izpack-test-listener.jar"/>
+        <listener classname="com.izforge.izpack.test.listener.TestUninstallerListener" stage="uninstall" jar="lib/izpack-test-listener.jar"/>
+    </listeners>
+</installation>

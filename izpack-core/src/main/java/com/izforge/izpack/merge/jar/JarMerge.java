@@ -6,7 +6,11 @@ import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.IoHelper;
 import org.apache.tools.zip.ZipOutputStream;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +37,7 @@ public class JarMerge extends AbstractMerge
     /**
      * Create a new JarMerge with a destination
      *
-     * @param resource
+     * @param resource     the resource to merge
      * @param jarPath      Path to the jar to merge
      * @param mergeContent map linking outputstream to their content to avoir duplication
      */
@@ -43,7 +47,8 @@ public class JarMerge extends AbstractMerge
         this.mergeContent = mergeContent;
         destination = FileUtil.convertUrlToFilePath(resource).replaceAll(this.jarPath, "").replaceAll("file:", "").replaceAll("!/?", "").replaceAll("//", "/");
 
-        StringBuilder builder = new StringBuilder().append(destination);
+        // make sure any $ characters are escaped, otherwise inner classes won't be merged
+        StringBuilder builder = new StringBuilder(destination.replace("$", "\\$"));
 
         if (destination.endsWith("/"))
         {
@@ -246,12 +251,7 @@ public class JarMerge extends AbstractMerge
 
         JarMerge jarMerge = (JarMerge) o;
 
-        if (jarPath != null ? !jarPath.equals(jarMerge.jarPath) : jarMerge.jarPath != null)
-        {
-            return false;
-        }
-
-        return true;
+        return (jarPath != null) ? jarPath.equals(jarMerge.jarPath) : jarMerge.jarPath == null;
     }
 
     @Override

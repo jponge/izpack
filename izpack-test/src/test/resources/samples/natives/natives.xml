@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<installation version="1.0">
+    <info>
+        <appname>Test Installation</appname>
+        <appversion>1.4 beta 666</appversion>
+        <authors>
+            <author name="Super sora" email="sora@superman.org" />
+        </authors>
+        <url>http://www.anotherworld-inspace-website.net/</url>
+
+    </info>
+
+    <guiprefs width="640" height="480" resizable="yes" />
+    <locale>
+        <langpack iso3="eng" />
+    </locale>
+
+    <panels>
+        <panel classname="HelloPanel" />
+        <panel classname="SimpleFinishPanel" />
+    </panels>
+
+    <packs>
+        <pack name="Base" required="yes">
+            <description>The base files</description>
+        </pack>
+    </packs>
+
+    <!-- NOTE - the following stage attributes are only applicable for testing purposes -->
+    <natives>
+        <native type="izpack" name="ShellLink.dll" stage="install"/>
+        <native type="izpack" name="ShellLink_x64.dll" stage="install"/>
+        <native type="izpack" name="WinSetupAPI.dll" stage="both"/>
+        <native type="izpack" name="WinSetupAPI_x64.dll" stage="both"/>
+        <native type="3rdparty" name="COIOSHelper.dll" stage="uninstall"/>
+        <native type="3rdparty" name="COIOSHelper_x64.dll" stage="uninstall"/>
+    </natives>
+</installation>
