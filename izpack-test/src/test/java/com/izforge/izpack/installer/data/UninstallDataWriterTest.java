@@ -202,7 +202,8 @@ public class UninstallDataWriterTest
         File uninstallJar = getUninstallerJar();
 
         assertThat(uninstallJar,
-                ZipMatcher.isZipContainingFiles("com/coi/tools/os/izpack/Registry.class",
+                ZipMatcher.isZipContainingFiles("com/izforge/izpack/core/os/RegistryHandler.class",
+                        "com/coi/tools/os/izpack/Registry.class",
                         "com/coi/tools/os/win/RegistryImpl.class"));
     }
 
