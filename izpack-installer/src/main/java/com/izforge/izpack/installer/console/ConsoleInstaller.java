@@ -21,7 +21,20 @@
 
 package com.izforge.izpack.installer.console;
 
-import com.izforge.izpack.api.data.*;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Properties;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
+import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.ScriptParserConstant;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.installer.DataValidator.Status;
@@ -35,13 +48,6 @@ import com.izforge.izpack.installer.manager.DataValidatorFactory;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraintHelper;
-
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Properties;
 
 /**
  * Runs the console installer
@@ -58,7 +64,7 @@ public class ConsoleInstaller extends InstallerBase
     private Properties properties;
 
     private PrintWriter printWriter;
-    private RulesEngine rules;
+    private final RulesEngine rules;
     private ConditionCheck checkCondition;
     private VariableSubstitutor variableSubstitutor;
 
@@ -66,7 +72,6 @@ public class ConsoleInstaller extends InstallerBase
 
     {
         super(resourceManager);
-//        super(resourceManager);
         this.checkCondition = checkCondition;
         this.installdata = installdata;
         this.rules = rules;
@@ -85,7 +90,10 @@ public class ConsoleInstaller extends InstallerBase
             variableSubstitutor = new VariableSubstitutorImpl(this.installdata.getVariables());
         }
 
-        this.rules = this.installdata.getRules();
+        if (this.installdata.getRules() == null)
+        {
+            this.installdata.setRules(this.rules);
+        }
     }
 
     @Override
