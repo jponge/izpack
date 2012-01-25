@@ -187,6 +187,26 @@ public class UninstallDataWriterTest
     }
 
     /**
+     * Verifies that the <em>com.coi.tools.os</em> packages are written if the OS is Windows.
+     * <p/>
+     * Strictly speaking these are only required if {@link com.izforge.izpack.event.RegistryUninstallerListener}
+     * is used, but for now just right them out for all windows installations.
+     */
+    @Test
+    @InstallFile("samples/natives/natives.xml")
+    public void testWriteWindowsRegistrySupport()
+    {
+        addOSCondition("izpack.windowsinstall");
+        assertTrue(uninstallDataWriter.write());
+
+        File uninstallJar = getUninstallerJar();
+
+        assertThat(uninstallJar,
+                ZipMatcher.isZipContainingFiles("com/coi/tools/os/izpack/Registry.class",
+                        "com/coi/tools/os/win/RegistryImpl.class"));
+    }
+
+    /**
      * Verifies that the <em>run-with-privileges-on-osx</em> script is written for mac installs.
      */
     @Test
@@ -195,11 +215,23 @@ public class UninstallDataWriterTest
     {
         System.setProperty("izpack.mode", "privileged");
         installData.getInfo().setRequirePrivilegedExecutionUninstaller(true);
+        addOSCondition("izpack.macinstall");
+        assertTrue(uninstallDataWriter.write());
+
+        File uninstallJar = getUninstallerJar();
+
+        assertThat(uninstallJar,
+                ZipMatcher.isZipContainingFiles("com/izforge/izpack/installer/run-with-privileges-on-osx"));
+
+    }
+
+    private void addOSCondition(final String ruleId)
+    {
         Map<String, Condition> rules = new HashMap<String, Condition>();
-        rules.put("izpack.macinstall", new Condition()
+        rules.put(ruleId, new Condition()
         {
             {
-                setId("izpack.macinstall");
+                setId(ruleId);
             }
 
             public void readFromXML(IXMLElement condition)
@@ -218,13 +250,6 @@ public class UninstallDataWriterTest
             }
         });
         rulesEngine.readConditionMap(rules); // use this as it doesn't check for rules being registered already
-        assertTrue(uninstallDataWriter.write());
-
-        File uninstallJar = getUninstallerJar();
-
-        assertThat(uninstallJar,
-                ZipMatcher.isZipContainingFiles("com/izforge/izpack/installer/run-with-privileges-on-osx"));
-
     }
 
     /**

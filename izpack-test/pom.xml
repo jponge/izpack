@@ -40,7 +40,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>izpack-test-listener</artifactId>
-            <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.easytesting</groupId>
@@ -103,6 +103,15 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!-- need to always fork as ClassUtils.loadJarInSystemClassLoader() mangles the system class loader -->
+                    <forkMode>always</forkMode>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 

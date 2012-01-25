@@ -199,6 +199,10 @@ public class UninstallDataWriter
         {
             uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/event"));
         }
+        if (installData.getRules().isConditionTrue("izpack.windowsinstall"))
+        {
+            uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/coi/tools/os/"));
+        }
 
         for (Mergeable mergeable : uninstallerMerge)
         {
