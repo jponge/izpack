@@ -8,140 +8,280 @@ import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 
 import java.io.File;
 
+/**
+ * An {@link InstallerListener} that tracks invocations for testing purposes.
+ *
+ * @author Tim Anderson
+ */
 public class TestInstallerListener implements InstallerListener
 {
+
     /**
-     * This method will be called from the unpacker before the installation of all packs will be
-     * performed.
-     *
-     * @param idata   object containing the current installation data
-     * @param npacks  number of packs which are defined for this installation
-     * @param handler a handler to the current used UIProgressHandler
+     * Tracks invocations of {@link #afterInstallerInitialization}.
      */
-    public void beforePacks(AutomatedInstallData idata, Integer npacks, AbstractUIProgressHandler handler) throws Exception
+    private int afterInstallerInitializationCount;
+
+    /**
+     * Tracks invocations of {@link #beforePacks}.
+     */
+    private int beforePacksCount;
+
+    /**
+     * Tracks invocations of {@link #afterPacks}.
+     */
+    private int afterPacksCount;
+
+    /**
+     * Tracks invocations of {@link #beforePack}.
+     */
+    private int beforePackCount;
+
+    /**
+     * Tracks invocations of {@link #afterPack}.
+     */
+    private int afterPackCount;
+
+    /**
+     * Tracks invocations of {@link #beforeDir}.
+     */
+    private int beforeDirCount;
+
+    /**
+     * Tracks invocations of {@link #afterDir}.
+     */
+    private int afterDirCount;
+
+    /**
+     * Tracks invocations of {@link #beforeFile}.
+     */
+    private int beforeFileCount;
+
+    /**
+     * Tracks invocations of {@link #afterFile}.
+     */
+    private int afterFileCount;
+
+
+    /**
+     * Returns the no. of invocations of {@link #afterInstallerInitializationCount}.
+     *
+     * @return the no. of invocations
+     */
+    public int getAfterInstallerInitializationCount()
     {
-        log("beforePacks");
+        return afterInstallerInitializationCount;
     }
 
     /**
-     * This method will be called from the unpacker before the installation of one pack will be
-     * performed.
+     * Returns the no. of invocations of {@link #beforePacksCount}.
      *
-     * @param pack    current pack object
-     * @param i       current pack number
-     * @param handler a handler to the current used UIProgressHandler
-     * @throws Exception
+     * @return the no. of invocations
      */
-    public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
+    public int getBeforePacksCount()
     {
-        log("beforePack");
+        return beforePacksCount;
     }
 
     /**
-     * Returns true if this listener would be informed at every file and directory installation,
-     * else false. If it is true, the listener will be called two times (before and after) for every
-     * action. Handle carefully, else performance problems are possible.
+     * Returns the no. of invocations of {@link #afterPacks}.
      *
-     * @return true if this listener would be informed at every file and directory installation,
-     *         else false
+     * @return the no. of invocations
      */
-    public boolean isFileListener()
+    public int getAfterPacksCount()
     {
-        return false;
+        return afterPacksCount;
     }
 
     /**
-     * This method will be called from the unpacker before one directory should be created. If
-     * parent directories should be created also, this method will be called for every directory
-     * beginning with the base.
+     * Returns the no. of invocations of {@link #beforePack}.
      *
-     * @param dir current File object of the just directory which should be created
-     * @param pf  corresponding PackFile object
-     * @throws Exception
+     * @return the no. of invocations
      */
-    public void beforeDir(File dir, PackFile pf) throws Exception
+    public int getBeforePackCount()
     {
-        log("beforeDir");
+        return beforePackCount;
     }
 
     /**
-     * This method will be called from the unpacker after one directory was created. If parent
-     * directories should be created, this method will be called for every directory beginning with
-     * the base.
+     * Returns the no. of invocations of {@link #afterPack}.
      *
-     * @param dir current File object of the just created directory
-     * @param pf  corresponding PackFile object
-     * @throws Exception
+     * @return the no. of invocations
      */
-    public void afterDir(File dir, PackFile pf) throws Exception
+    public int getAfterPackCount()
     {
-        log("afterDir");
+        return afterPackCount;
     }
 
     /**
-     * This method will be called from the unpacker before one file should be installed.
+     * Returns the no. of invocations of {@link #beforeDir}.
      *
-     * @param file current File object of the file which should be installed
-     * @param pf   corresponding PackFile object
-     * @throws Exception
+     * @return the no. of invocations
      */
-    public void beforeFile(File file, PackFile pf) throws Exception
+    public int getBeforeDirCount()
     {
-        log("beforeFile");
+        return beforeDirCount;
     }
 
     /**
-     * This method will be called from the unpacker after one file was installed.
+     * Returns the no. of invocations of {@link #afterDir}.
      *
-     * @param file current File object of the just installed file
-     * @param pf   corresponding PackFile object
-     * @throws Exception
+     * @return the no. of invocations
      */
-    public void afterFile(File file, PackFile pf) throws Exception
+    public int getAfterDirCount()
     {
-        log("afterFile");
+        return afterDirCount;
     }
 
     /**
-     * This method will be called from the unpacker after the installation of one pack was
-     * performed.
+     * Returns the no. of invocations of {@link #beforeFile}.
      *
-     * @param pack    current pack object
-     * @param i       current pack number
-     * @param handler a handler to the current used UIProgressHandler
+     * @return the no. of invocations
      */
-    public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
+    public int getBeforeFileCount()
     {
-        log("afterPack");
+        return beforeFileCount;
     }
 
     /**
-     * This method will be called from the unpacker after the installation of all packs was
-     * performed.
+     * Returns the no. of invocations of {@link #afterFile}.
      *
-     * @param idata   object containing the current installation data
-     * @param handler a handler to the current used UIProgressHandler
-     * @throws Exception
+     * @return the no. of invocations
      */
-    public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler) throws Exception
+    public int getAfterFileCount()
     {
+        return afterFileCount;
+    }
+
+
+    /**
+     * Called when the installer creates the listener instance, immediately after the install data is parsed.
+     *
+     * @param data object containing the current installation data
+     */
+    public void afterInstallerInitialization(AutomatedInstallData data)
+    {
+        ++afterInstallerInitializationCount;
+        log("afterInstallerInitialization");
+    }
+
+    /**
+     * Invoked before packs are installed.
+     *
+     * @param data    the installation data
+     * @param packs   number of packs which are defined for this installation
+     * @param handler the UI progress handler
+     */
+    public void beforePacks(AutomatedInstallData data, Integer packs, AbstractUIProgressHandler handler)
+    {
+        ++beforePacksCount;
+        log("beforePacks: packs=" + packs);
+    }
+
+    /**
+     * Invoked after packs are installed.
+     *
+     * @param installData the install data
+     * @param handler     the UI progress handler
+     */
+    public void afterPacks(AutomatedInstallData installData, AbstractUIProgressHandler handler)
+    {
+        ++afterPacksCount;
         log("afterPacks");
     }
 
     /**
-     * Called when the installer creates the listener instance, immediately
-     * after the install data is parsed.
+     * Invoked before a pack is installed.
      *
-     * @param data
+     * @param pack    the pack
+     * @param i       the pack number
+     * @param handler the UI progress handler
      */
-    public void afterInstallerInitialization(AutomatedInstallData data) throws Exception
+    public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler)
     {
-        log("afterInstallerInitialization");
+        ++beforePackCount;
+        log("beforePack: pack=" + pack);
     }
 
+    /**
+     * Invoked after a pack is installed.
+     *
+     * @param pack    current pack object
+     * @param i       current pack number
+     * @param handler the UI progress handler
+     */
+    public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler)
+    {
+        ++afterPackCount;
+        log("afterPack: pack=" + pack);
+    }
+
+    /**
+     * Returns true if this listener would be informed at every file and directory installation,
+     * else false.
+     *
+     * @return <tt>true</tt>
+     */
+    public boolean isFileListener()
+    {
+        return true;
+    }
+
+    /**
+     * Invoked before a directory is created.
+     *
+     * @param dir the directory
+     * @param pf  corresponding pack file
+     */
+    public void beforeDir(File dir, PackFile pf)
+    {
+        ++beforeDirCount;
+        log("beforeDir: dir=" + dir);
+    }
+
+    /**
+     * Invoked after a directory is created.
+     *
+     * @param dir the directory
+     * @param pf  corresponding pack file
+     */
+    public void afterDir(File dir, PackFile pf)
+    {
+        ++afterDirCount;
+        log("afterDir: dir=" + dir);
+    }
+
+    /**
+     * Invoked before a file is installed.
+     *
+     * @param file the file
+     * @param pf   corresponding pack file
+     */
+    public void beforeFile(File file, PackFile pf)
+    {
+        ++beforeFileCount;
+        log("beforeFile: file=" + file);
+    }
+
+    /**
+     * Invoked after a file is installed.
+     *
+     * @param file the file
+     * @param pf   corresponding pack file
+     */
+    public void afterFile(File file, PackFile pf)
+    {
+        ++afterFileCount;
+        log("afterFile: file=" + file);
+    }
+
+    /**
+     * Logs a message.
+     *
+     * @param message the message
+     */
     private void log(String message)
     {
-        System.out.println("TestUninstallerListener: " + message);
+        System.out.println("TestInstallerListener: " + message);
     }
 
 }

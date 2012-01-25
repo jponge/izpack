@@ -395,34 +395,34 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
     protected boolean mkDirsWithEnhancement(File dest, PackFile pf, List<InstallerListener> customActions)
             throws Exception
     {
-        String path = "unknown";
-        if (dest != null)
+        boolean ok = true;
+        if (!dest.exists())
         {
-            path = dest.getAbsolutePath();
-        }
-        if (dest != null && !dest.exists() && dest.getParentFile() != null)
-        {
-            if (dest.getParentFile().exists())
+            File parent = dest.getParentFile();
+            if (parent != null)
+            {
+                ok = mkDirsWithEnhancement(parent, pf, customActions);
+            }
+            if (ok)
             {
                 informListeners(customActions, InstallerListener.BEFORE_DIR, dest, pf, null);
-            }
-            if (!dest.mkdir())
-            {
-                mkDirsWithEnhancement(dest.getParentFile(), pf, customActions);
-                if (!dest.mkdir())
+                ok = dest.mkdir();
+                if (!ok)
                 {
-                    dest = null;
+                    handler.emitError("Error creating directories", "Could not create directory\n" + dest);
+                    handler.stopAction();
+                }
+                else
+                {
+                    informListeners(customActions, InstallerListener.AFTER_DIR, dest, pf, null);
                 }
             }
-            informListeners(customActions, InstallerListener.AFTER_DIR, dest, pf, null);
         }
-        if (dest == null)
+        else
         {
-            handler.emitError("Error creating directories", "Could not create directory\n" + path);
-            handler.stopAction();
-            return (false);
+            ok = true;
         }
-        return (true);
+        return ok;
     }
 
     // CUSTOM ACTION STUFF -------------- end -----------------
@@ -657,17 +657,15 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
     {
         if (!dest.exists())
         {
-            // If there are custom actions which would be called
-            // at
+            // If there are custom actions which would be called at
             // creating a directory, create it recursively.
-//            List fileListeners = customActions[customActions.length - 1];
-//            if (fileListeners != null && fileListeners.size() > 0)
-//            {
-//                mkDirsWithEnhancement(dest, pf, customActions);
-//            }
-//            else
-            // Create it in on step.
+            if (!idata.getInstallerListener().isEmpty())
             {
+                mkDirsWithEnhancement(dest, pf, idata.getInstallerListener());
+            }
+            else
+            {
+                // Create it in on step.
                 if (!dest.mkdirs())
                 {
                     handler.emitError("Error creating directories",
@@ -681,8 +679,8 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
     }
 
     protected long writeBuffer(PackFile pf, byte[] buffer,
-            FileOutputStream out, InputStream pis, long bytesCopied)
-    throws IOException
+                               FileOutputStream out, InputStream pis, long bytesCopied)
+            throws IOException
     {
         int maxBytes = (int) Math.min(pf.length() - bytesCopied, buffer.length);
         int bytesInBuffer = pis.read(buffer, 0, maxBytes);
@@ -797,8 +795,8 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
     }
 
     protected FileQueue handleBlockable(PackFile pf, File file, File tmpFile, FileQueue fq,
-            List<InstallerListener> customActions)
-    throws Exception
+                                        List<InstallerListener> customActions)
+            throws Exception
     {
         if (blockableForCurrentOs(pf))
         {
@@ -834,7 +832,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
     }
 
     protected void loadExecutables(ObjectInputStream objIn, ArrayList<ExecutableFile> executables)
-    throws IOException, ClassNotFoundException
+            throws IOException, ClassNotFoundException
     {
         // Load information about executable files
         int numExecutables = objIn.readInt();

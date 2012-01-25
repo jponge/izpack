@@ -4,6 +4,7 @@ import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.event.InstallerListener;
+import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.installer.data.UninstallData;
@@ -46,14 +47,17 @@ public class EventFiller
      * <p/>
      * This includes:
      * <ul>
-     *     <li>installer listeners</li>
-     *     <li>uninstaller listeners</li>
-     *     <li>uninstaller jars</li>
-     *     <li>uninstaller native libraries</li>
+     * <li>installer listeners</li>
+     * <li>uninstaller listeners</li>
+     * <li>uninstaller jars</li>
+     * <li>uninstaller native libraries</li>
      * </ul>
+     * The {@link InstallerListener#afterInstallerInitialization} method will be invoked for each installer listener.
+     *
+     * @throws InstallerException if an {@link InstallerListener} throws an exception
      */
     @SuppressWarnings("unchecked")
-    public void loadCustomData()
+    public void loadCustomData() throws InstallerException
     {
         List<CustomData> customData = (List<CustomData>) readObject("customData");
         installdata.setInstallerListener(new ArrayList<InstallerListener>());
@@ -78,11 +82,37 @@ public class EventFiller
                 }
             }
         }
+        notifyInstallerListeners();
+    }
+
+    /**
+     * Invokes the {@link InstallerListener#afterInstallerInitialization} for each registered listener.
+     *
+     * @throws InstallerException if a listener throws an exception
+     */
+    private void notifyInstallerListeners() throws InstallerException
+    {
+        for (InstallerListener listener : installdata.getInstallerListener())
+        {
+            try
+            {
+                listener.afterInstallerInitialization(installdata);
+            }
+            catch (InstallerException exception)
+            {
+                throw exception;
+            }
+            catch (Exception exception)
+            {
+                throw new InstallerException(exception);
+            }
+        }
+
     }
 
     /**
      * Adds an installer listener.
-     * 
+     *
      * @param className the listener class name
      */
     @SuppressWarnings("unchecked")
@@ -96,7 +126,7 @@ public class EventFiller
 
     /**
      * Reads an object given its resource path.
-     * 
+     *
      * @param path the object's resource path
      * @return the object
      * @throws IzPackException if the object cannot be read

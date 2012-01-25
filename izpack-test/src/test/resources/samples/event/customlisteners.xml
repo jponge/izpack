@@ -17,12 +17,31 @@
 
     <panels>
         <panel classname="HelloPanel" />
+        <panel classname="InstallPanel" />
         <panel classname="SimpleFinishPanel" />
     </panels>
 
     <packs>
         <pack name="Base" required="yes">
             <description>The base files</description>
+            <fileset dir="" targetdir="$INSTALL_PATH">
+                <include name="Readme.txt"/>
+            </fileset>
+        </pack>
+        <pack name="Pack1" required="yes">
+            <description>Pack 1</description>
+            <fileset dir="" targetdir="$INSTALL_PATH/pack1/a">
+                <include name="Readme.txt"/>
+            </fileset>
+            <fileset dir="" targetdir="$INSTALL_PATH/pack1/b">
+                <include name="Readme.txt"/>
+            </fileset>
+        </pack>
+        <pack name="Pack2" required="yes">
+            <description>Pack 2</description>
+            <fileset dir="" targetdir="$INSTALL_PATH/pack2">
+                <include name="Readme.txt"/>
+            </fileset>
         </pack>
     </packs>
 

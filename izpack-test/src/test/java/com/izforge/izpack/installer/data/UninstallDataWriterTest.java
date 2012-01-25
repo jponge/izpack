@@ -36,7 +36,7 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(PicoRunner.class)
 @Container(TestInstallationContainer.class)
-public class UninstallWriteTest
+public class UninstallDataWriterTest
 {
     /**
      * Temporary folder to perform installations to.
@@ -65,15 +65,15 @@ public class UninstallWriteTest
     private final RulesEngine rulesEngine;
 
     /**
-     * Constructs an <tt>UninstallWriteTest</tt>.
+     * Constructs an <tt>UninstallDataWriterTest</tt>.
      *
      * @param uninstallDataWriter the uninstall jar writer
      * @param variableSubstitutor the variable substitutor
      * @param installData         the install data
      * @param rulesEngine         the rules engine
      */
-    public UninstallWriteTest(UninstallDataWriter uninstallDataWriter, VariableSubstitutor variableSubstitutor,
-                              AutomatedInstallData installData, RulesEngine rulesEngine)
+    public UninstallDataWriterTest(UninstallDataWriter uninstallDataWriter, VariableSubstitutor variableSubstitutor,
+                                   AutomatedInstallData installData, RulesEngine rulesEngine)
     {
         this.uninstallDataWriter = uninstallDataWriter;
         this.variableSubstitutor = variableSubstitutor;

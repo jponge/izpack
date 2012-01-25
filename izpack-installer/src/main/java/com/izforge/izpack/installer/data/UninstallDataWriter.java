@@ -423,8 +423,6 @@ public class UninstallDataWriter
 
     /**
      * Writes a resource to the jar, if it is not already present.
-     * <p/>
-     * Note that this ignores missing resources. TODO - why isn't a missing resource fatal?
      *
      * @param path the resource path
      * @throws IOException for any I/O error

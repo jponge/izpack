@@ -21,7 +21,6 @@
 
 package com.izforge.izpack.event;
 
-import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.api.exception.WrappedNativeLibException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
@@ -43,13 +42,11 @@ public class RegistryUninstallerListener extends NativeUninstallerListener
 {
 
     /**
-     * Default constructor
-     *
-     * @param langPack
+     * Constructs a <tt>RegistryUninstallerListener</tt>.
      */
-    public RegistryUninstallerListener(LocaleDatabase langPack)
+    public RegistryUninstallerListener()
     {
-        super(langPack);
+        super();
     }
 
     /*
@@ -101,7 +98,7 @@ public class RegistryUninstallerListener extends NativeUninstallerListener
 
     private RegistryHandler initializeRegistryHandler() throws Exception
     {
-        RegistryHandler registryHandler = null;
+        RegistryHandler registryHandler;
         try
         {
             registryHandler = TargetFactory.getInstance().makeObject(RegistryHandler.class);

@@ -31,6 +31,7 @@ import java.util.List;
  * Implementations of this class are used to handle customizing uninstallation. The defined methods
  * are called from the destroyer at different, well defined points of uninstallation.
  * </p>
+ * Implementations must provide a no-argument constructor - dependency injection is not supported.
  *
  * @author Klaus Bartz
  */
