@@ -1,5 +1,6 @@
 package com.izforge.izpack.merge.jar;
 
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.merge.AbstractMerge;
 import com.izforge.izpack.util.FileUtil;
@@ -183,7 +184,7 @@ public class JarMerge extends AbstractMerge
         }
         catch (IOException e)
         {
-            throw new RuntimeException(e);
+            throw new IzPackException(e);
         }
     }
 

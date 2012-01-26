@@ -24,7 +24,13 @@ package com.izforge.izpack.installer.automation;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
-import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
+import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.ScriptParserConstant;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.installer.DataValidator;
@@ -209,10 +215,20 @@ public class AutomatedInstaller extends InstallerBase
                 refreshDynamicVariables(this.idata, subst);
             }
 
-            // this does nothing if the uninstaller was not included
-            uninstallDataWriter.write();
-
-            if (this.result)
+            if (uninstallDataWriter.isUninstallRequired())
+            {
+                result = uninstallDataWriter.write();
+            }
+        }
+        catch (Exception e)
+        {
+            result = false;
+            System.err.println(e.toString());
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (result)
             {
                 System.out.println("[ Automated installation done ]");
             }
@@ -220,16 +236,7 @@ public class AutomatedInstaller extends InstallerBase
             {
                 System.out.println("[ Automated installation FAILED! ]");
             }
-        }
-        catch (Exception e)
-        {
-            this.result = false;
-            System.err.println(e.toString());
-            e.printStackTrace();
-            System.out.println("[ Automated installation FAILED! ]");
-        }
-        finally
-        {
+
             // Bye
             // FIXME !!! Reboot handling
             boolean reboot = false;

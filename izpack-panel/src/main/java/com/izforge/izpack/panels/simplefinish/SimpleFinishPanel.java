@@ -90,7 +90,7 @@ public class SimpleFinishPanel extends IzPanel
             jLabel.setName(GuiId.SIMPLE_FINISH_LABEL.id);
             add(jLabel, NEXT_LINE);
             add(IzPanelLayout.createVerticalStrut(5));
-            if (uninstallDataWriter.isUninstallShouldBeWriten())
+            if (uninstallDataWriter.isUninstallRequired())
             {
                 // We prepare a message for the uninstaller feature
                 String path = translatePath(installData.getInfo().getUninstallerPath());

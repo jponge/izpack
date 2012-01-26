@@ -90,7 +90,7 @@ public class TestPanelDisplay
     @Test
     public void helloThenFinishPanelShouldDisplay() throws Exception
     {
-        Mockito.when(uninstallDataWriter.isUninstallShouldBeWriten()).thenReturn(true);
+        Mockito.when(uninstallDataWriter.isUninstallRequired()).thenReturn(true);
         addPanelAndShow("com.izforge.izpack.panels.hello.HelloPanel",
                 "com.izforge.izpack.panels.simplefinish.SimpleFinishPanel");
         String welcomLabel = frameFixture.label(GuiId.HELLO_PANEL_LABEL.id).text();

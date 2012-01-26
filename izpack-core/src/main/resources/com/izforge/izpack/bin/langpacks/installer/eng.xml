@@ -50,6 +50,7 @@
   <str id="installer.step" txt="Step" />
   <str id="installer.of" txt="of" />
   <str id="installer.Message" txt="Message" />
+  <str id="installer.uninstall.writefailed" txt="Failed to write uninstallation information." />
 
   <!-- Uninstaller specific strings -->
   <str id="uninstaller.warning" txt="This will remove the installed application!" />

@@ -51,7 +51,12 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.KeyAdapter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -60,7 +65,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.izforge.izpack.api.GuiId.*;
+import static com.izforge.izpack.api.GuiId.BUTTON_HELP;
+import static com.izforge.izpack.api.GuiId.BUTTON_NEXT;
+import static com.izforge.izpack.api.GuiId.BUTTON_PREV;
+import static com.izforge.izpack.api.GuiId.BUTTON_QUIT;
 
 /**
  * The IzPack installer frame.
@@ -720,118 +728,31 @@ public class InstallerFrame extends JFrame implements InstallerView
     }
 
     /**
-     * Makes a clean closing.
+     * Exits the installer.
+     * <p/>
+     * If installation is complete, this writes any uninstallation data, and shuts down.
+     * If installation is incomplete, a confirmation dialog will be displayed.
      */
     public void exit()
     {
         // FIXME !!! Reboot handling
         if (installdata.isCanClose()
-                || ((!nextButton.isVisible() || !nextButton.isEnabled()) && (!prevButton
-                .isVisible() || !prevButton.isEnabled())))
+                || ((!nextButton.isVisible() || !nextButton.isEnabled())
+                && (!prevButton.isVisible() || !prevButton.isEnabled())))
         {
-            // this does nothing if the uninstaller was not included
-            uninstallDataWriter.write();
-
-            boolean reboot = false;
-            if (installdata.isRebootNecessary())
+            if (!writeUninstallData())
             {
-                String message, title;
-                System.out.println("[ There are file operations pending after reboot ]");
-                switch (installdata.getInfo().getRebootAction())
-                {
-                    case Info.REBOOT_ACTION_ALWAYS:
-                        reboot = true;
-                        break;
-                    case Info.REBOOT_ACTION_ASK:
-                        try
-                        {
-                            message = variableSubstitutor.substitute(getLangpack().getString("installer.reboot.ask.message"));
-                        }
-                        catch (Exception e)
-                        {
-                            message = getLangpack().getString("installer.reboot.ask.message");
-                        }
-                        try
-                        {
-                            title = variableSubstitutor.substitute(getLangpack()
-                                    .getString("installer.reboot.ask.title"));
-                        }
-                        catch (Exception e)
-                        {
-                            title = getLangpack().getString("installer.reboot.ask.title");
-                        }
-                        int res = JOptionPane
-                                .showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION);
-                        if (res == JOptionPane.YES_OPTION)
-                        {
-                            reboot = true;
-                        }
-                        break;
-                    case Info.REBOOT_ACTION_NOTICE:
-                        try
-                        {
-                            message = variableSubstitutor.substitute(getLangpack().getString("installer.reboot.notice.message"));
-                        }
-                        catch (Exception e)
-                        {
-                            message = getLangpack().getString("installer.reboot.notice.message");
-                        }
-                        try
-                        {
-                            title = variableSubstitutor.substitute(getLangpack()
-                                    .getString("installer.reboot.notice.title"));
-                        }
-                        catch (Exception e)
-                        {
-                            title = getLangpack().getString("installer.reboot.notice.title");
-                        }
-                        JOptionPane.showConfirmDialog(this, message, title, JOptionPane.OK_OPTION);
-                        break;
-                }
-                if (reboot)
-                {
-                    System.out.println("[ Rebooting now automatically ]");
-                }
+                // TODO - for now just shut down. Alternative approaches include:
+                // . retry
+                // . revert installation - which is what wipeAborted attempts to do, but fails to handle shortcuts and
+                //                         registry changes
             }
-
-            Housekeeper.getInstance().shutDown(0, reboot);
+            shutdown();
         }
         else
         {
             // The installation is not over
-            if (Unpacker.isDiscardInterrupt() && interruptCount < MAX_INTERRUPT)
-            { // But we should not interrupt.
-                interruptCount++;
-                return;
-            }
-            // Use a alternate message and title if defined.
-            final String mkey = "installer.quit.reversemessage";
-            final String tkey = "installer.quit.reversetitle";
-            String message = getLangpack().getString(mkey);
-            String title = getLangpack().getString(tkey);
-            // message equal to key -> no alternate message defined.
-            if (message.contains(mkey))
-            {
-                message = getLangpack().getString("installer.quit.message");
-            }
-            // title equal to key -> no alternate title defined.
-            if (title.contains(tkey))
-            {
-                title = getLangpack().getString("installer.quit.title");
-            }
-            // Now replace variables in message or title.
-            VariableSubstitutor substitutor = variableSubstitutor;
-            message = substitutor.substitute(message);
-            title = substitutor.substitute(title);
-
-
-            int res = JOptionPane
-                    .showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION);
-            if (res == JOptionPane.YES_OPTION)
-            {
-                wipeAborted();
-                Housekeeper.getInstance().shutDown(0);
-            }
+            confirmExit();
         }
     }
 
@@ -1811,6 +1732,140 @@ public class InstallerFrame extends JFrame implements InstallerView
                 Debug.trace("Exiting");
                 System.exit(1);
             }
+        }
+    }
+
+    /**
+     * Writes uninstall data if it is required.
+     * <p/>
+     * An error message will be displayed if the write fails.
+     *
+     * @return <tt>true</tt> if uninstall data was written successfully or is not required, otherwise <tt>false</tt>
+     */
+    private boolean writeUninstallData()
+    {
+        boolean result = true;
+        if (uninstallDataWriter.isUninstallRequired())
+        {
+            result = uninstallDataWriter.write();
+            if (!result)
+            {
+                String title = getLangpack().getString("installer.error");
+                String message = getLangpack().getString("installer.uninstall.writefailed");
+                JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Shuts down the installer after successful installation.
+     * <p/>
+     * This may trigger a reboot.
+     */
+    private void shutdown()
+    {
+        boolean reboot = false;
+        if (installdata.isRebootNecessary())
+        {
+            String message;
+            String title;
+            System.out.println("[ There are file operations pending after reboot ]");
+            switch (installdata.getInfo().getRebootAction())
+            {
+                case Info.REBOOT_ACTION_ALWAYS:
+                    reboot = true;
+                    break;
+                case Info.REBOOT_ACTION_ASK:
+                    try
+                    {
+                        message = variableSubstitutor.substitute(getLangpack().getString("installer.reboot.ask.message"));
+                    }
+                    catch (Exception e)
+                    {
+                        message = getLangpack().getString("installer.reboot.ask.message");
+                    }
+                    try
+                    {
+                        title = variableSubstitutor.substitute(getLangpack()
+                                .getString("installer.reboot.ask.title"));
+                    }
+                    catch (Exception e)
+                    {
+                        title = getLangpack().getString("installer.reboot.ask.title");
+                    }
+                    int res = JOptionPane
+                            .showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION);
+                    if (res == JOptionPane.YES_OPTION)
+                    {
+                        reboot = true;
+                    }
+                    break;
+                case Info.REBOOT_ACTION_NOTICE:
+                    try
+                    {
+                        message = variableSubstitutor.substitute(getLangpack().getString("installer.reboot.notice.message"));
+                    }
+                    catch (Exception e)
+                    {
+                        message = getLangpack().getString("installer.reboot.notice.message");
+                    }
+                    try
+                    {
+                        title = variableSubstitutor.substitute(getLangpack()
+                                .getString("installer.reboot.notice.title"));
+                    }
+                    catch (Exception e)
+                    {
+                        title = getLangpack().getString("installer.reboot.notice.title");
+                    }
+                    JOptionPane.showConfirmDialog(this, message, title, JOptionPane.OK_OPTION);
+                    break;
+            }
+            if (reboot)
+            {
+                System.out.println("[ Rebooting now automatically ]");
+            }
+        }
+
+        Housekeeper.getInstance().shutDown(0, reboot);
+    }
+
+
+    /**
+     * Confirms exit when installation is not complete.
+     */
+    private void confirmExit()
+    {
+        if (Unpacker.isDiscardInterrupt() && interruptCount < MAX_INTERRUPT)
+        { // But we should not interrupt.
+            interruptCount++;
+            return;
+        }
+        // Use a alternate message and title if defined.
+        final String mkey = "installer.quit.reversemessage";
+        final String tkey = "installer.quit.reversetitle";
+        String message = getLangpack().getString(mkey);
+        String title = getLangpack().getString(tkey);
+        // message equal to key -> no alternate message defined.
+        if (message.contains(mkey))
+        {
+            message = getLangpack().getString("installer.quit.message");
+        }
+        // title equal to key -> no alternate title defined.
+        if (title.contains(tkey))
+        {
+            title = getLangpack().getString("installer.quit.title");
+        }
+        // Now replace variables in message or title.
+        message = variableSubstitutor.substitute(message);
+        title = variableSubstitutor.substitute(title);
+
+        int res = JOptionPane.showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION);
+        if (res == JOptionPane.YES_OPTION)
+        {
+            wipeAborted();
+            Housekeeper.getInstance().shutDown(0);
         }
     }
 

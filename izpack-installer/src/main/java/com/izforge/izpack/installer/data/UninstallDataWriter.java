@@ -1,7 +1,6 @@
 package com.izforge.izpack.installer.data;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -11,6 +10,7 @@ import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.PrivilegedRunner;
+import com.izforge.izpack.util.file.FileUtils;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
@@ -64,6 +64,11 @@ public class UninstallDataWriter
     private JarOutputStream jar;
 
     /**
+     * The underlying jar file stream.
+     */
+    private FileOutputStream jarStream;
+
+    /**
      * The rules engine.
      */
     private RulesEngine rules;
@@ -88,16 +93,27 @@ public class UninstallDataWriter
     }
 
     /**
+     * Determines if uninstall data should be written.
+     * <p/>
+     * Uninstall data should be written if {@link com.izforge.izpack.api.data.Info#getUninstallerCondition()} is
+     * empty, or evaluates <tt>true</tt>.
+     *
+     * @return <tt>true</tt> if uninstall data should be written, otherwise <tt>false</tt>
+     */
+    public boolean isUninstallRequired()
+    {
+        String condition = installData.getInfo().getUninstallerCondition();
+        return condition == null || condition.length() == 0 || rules.isConditionTrue(condition);
+    }
+
+    /**
      * Writes the uninstall data.
      *
-     * @return true if the uninstall data was written successfully, otherwise <tt>false</tt>
+     * @return <tt>true</tt> if uninstall data was successfully written, otherwise <tt>false</tt>
      */
     public boolean write()
     {
-        if (!isUninstallShouldBeWriten())
-        {
-            return false;
-        }
+        boolean result = false;
         try
         {
             BufferedWriter extLogWriter = getExternalLogFile();
@@ -115,28 +131,15 @@ public class UninstallDataWriter
             writeAdditionalUninstallData();
             writeScriptFiles();
 
-            // Cleanup
-            jar.flush();
             jar.close();
-            return true;
+            result = true;
         }
-        catch (Exception exception)
+        catch (Throwable exception)
         {
             Debug.error(exception);
-            return false;
+            destroyJar(); // don't keep the jar - it may be incomplete or corrupted
         }
-    }
-
-    /**
-     * Determines if uninstall data should be written.
-     * TODO - this method should not exist in this class.
-     *
-     * @return <tt>true</tt> if uninstall data should be written, otherwise <tt>false</tt>
-     */
-    public boolean isUninstallShouldBeWriten()
-    {
-        String condition = installData.getInfo().getUninstallerCondition();
-        return condition == null || condition.length() == 0 || rules.isConditionTrue(condition);
+        return result;
     }
 
     /**
@@ -186,6 +189,8 @@ public class UninstallDataWriter
      * Writes the uninstaller skeleton.
      *
      * @throws IOException for any I/O error
+     * @throws com.izforge.izpack.api.exception.IzPackException
+     *                     for any IzPack error
      */
     private void writeJarSkeleton() throws IOException
     {
@@ -199,7 +204,7 @@ public class UninstallDataWriter
         {
             uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/event/"));
         }
-        if (installData.getRules().isConditionTrue("izpack.windowsinstall"))
+        if (rules.isConditionTrue("izpack.windowsinstall"))
         {
             uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/core/os/"));
             uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/coi/tools/os/"));
@@ -216,7 +221,7 @@ public class UninstallDataWriter
             jar.putNextEntry(new JarEntry("exec-admin"));
             jar.closeEntry();
 
-            if (installData.getRules().isConditionTrue("izpack.macinstall"))
+            if (rules.isConditionTrue("izpack.macinstall"))
             {
                 writeResource("com/izforge/izpack/installer/run-with-privileges-on-osx");
             }
@@ -405,7 +410,6 @@ public class UninstallDataWriter
         }
     }
 
-
     /**
      * Writes the resources referenced by {@link CustomData#contents}.
      *
@@ -466,9 +470,9 @@ public class UninstallDataWriter
     /**
      * Creates the uninstaller jar file.
      *
-     * @throws IzPackException for any I/O error
+     * @throws IOException for any I/O error
      */
-    private void createOutputJar()
+    private void createOutputJar() throws IOException
     {
         // Create the uninstaller directory
         String dirPath = IoHelper.translatePath(installData.getInfo().getUninstallerPath(), variableSubstitutor);
@@ -476,7 +480,7 @@ public class UninstallDataWriter
         File dir = new File(dirPath);
         if (!dir.exists() && !dir.mkdirs())
         {
-            throw new IzPackException("Failed to create output path: " + dir);
+            throw new IOException("Failed to create output path: " + dir);
         }
 
         // Log the uninstaller deletion information
@@ -484,18 +488,28 @@ public class UninstallDataWriter
         uninstallData.setUninstallerPath(dirPath);
 
         // Create the jar file
-        try
-        {
-            FileOutputStream out = new FileOutputStream(jarPath);
-            jar = new JarOutputStream(new BufferedOutputStream(out));
-        }
-        catch (IOException exception)
-        {
-            throw new IzPackException("Problem writing uninstaller jar", exception);
-        }
-
+        jarStream = new FileOutputStream(jarPath);
+        jar = new JarOutputStream(new BufferedOutputStream(jarStream));
         jar.setLevel(9);
         uninstallData.addFile(jarPath, true);
+    }
+
+    /**
+     * Destroys the uninstaller jar when it cannot be written.
+     */
+    private void destroyJar()
+    {
+        FileUtils.close(jar);
+        FileUtils.close(jarStream); // if jar cannot be closed, then need to close underlying stream
+        String path = uninstallData.getUninstallerJarFilename();
+        if (path != null)
+        {
+            File file = new File(path);
+            if (file.exists() && !file.delete())
+            {
+                Debug.error("Failed to delete incomplete uninstall information: " + path);
+            }
+        }
     }
 
 }
