@@ -197,6 +197,7 @@ public class UninstallDataWriterTest
     public void testWriteWindowsRegistrySupport()
     {
         addOSCondition("izpack.windowsinstall");
+        installData.getInfo().setRequirePrivilegedExecutionUninstaller(true);
         assertTrue(uninstallDataWriter.write());
 
         File uninstallJar = getUninstallerJar();
@@ -204,7 +205,8 @@ public class UninstallDataWriterTest
         assertThat(uninstallJar,
                 ZipMatcher.isZipContainingFiles("com/izforge/izpack/core/os/RegistryHandler.class",
                         "com/coi/tools/os/izpack/Registry.class",
-                        "com/coi/tools/os/win/RegistryImpl.class"));
+                        "com/coi/tools/os/win/RegistryImpl.class",
+                        "com/izforge/izpack/installer/elevate.js"));
     }
 
     /**

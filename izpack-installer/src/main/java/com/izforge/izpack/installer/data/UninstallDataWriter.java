@@ -9,7 +9,6 @@ import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.PrivilegedRunner;
 import com.izforge.izpack.util.file.FileUtils;
 
 import java.io.BufferedOutputStream;
@@ -215,12 +214,16 @@ public class UninstallDataWriter
             mergeable.merge(jar);
         }
 
-        // Should we relaunch the uninstaller with privileges?
-        if (PrivilegedRunner.isPrivilegedMode() && installData.getInfo().isPrivilegedExecutionRequiredUninstaller())
+        if (installData.getInfo().isPrivilegedExecutionRequiredUninstaller())
         {
+            // Add resources required to elevate privileges
             jar.putNextEntry(new JarEntry("exec-admin"));
             jar.closeEntry();
 
+            if (rules.isConditionTrue("izpack.windowsinstall"))
+            {
+                writeResource("com/izforge/izpack/installer/elevate.js");
+            }
             if (rules.isConditionTrue("izpack.macinstall"))
             {
                 writeResource("com/izforge/izpack/installer/run-with-privileges-on-osx");
