@@ -40,6 +40,7 @@ import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.PanelConsoleHelper;
 import com.izforge.izpack.installer.ResourceManager;
+import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
 
 /**
@@ -123,7 +124,7 @@ public class TreePacksPanelConsoleHelper extends PanelConsoleHelper implements P
         }
         // Go through the top-level packs and retrieve their children
         for(String packParentName : packParents) {
-            drawHelper(treeData, selectedPacks, idToPack, packParentName, true, "\t");
+            drawHelper(treeData, selectedPacks, installData, idToPack, packParentName, true, "\t");
         }
 
         out("...pack selection done.");
@@ -150,6 +151,7 @@ public class TreePacksPanelConsoleHelper extends PanelConsoleHelper implements P
      *
      * @param treeData          - Map that contains information on the parent pack and its children
      * @param selectedPacks     - the packs that are selected by the user are added there
+     * @param installData       - Database of izpack
      * @param idToPack          - Map that mapds the id of the available packs to the actual Pack object
      * @param packParent        - The current "parent" pack to process
      * @param packMaster        - boolean to know if packParent is a top-level pack
@@ -157,39 +159,106 @@ public class TreePacksPanelConsoleHelper extends PanelConsoleHelper implements P
      *
      * @return void
      */
-    private void drawHelper(final Map<String, List<String>> treeData, final List<Pack> selectedPacks, 
-                            final Map<String, Pack> idToPack, final String packParent, boolean packMaster, String indent) 
+    private void drawHelper(final Map<String, List<String>> treeData, final List<Pack> selectedPacks,final AutomatedInstallData installData,
+                            final Map<String, Pack> idToPack, final String packParent, boolean packMaster,final String indent) 
     {
+        Pack p                      = null;
+        Boolean conditionSatisfied  = null;
+        Boolean conditionExists     = null;
 
-        if(treeData.containsKey(packParent)) {
-            if(packMaster) {
-                if(!idToPack.get(packParent).required) {
-                    out("[" + packParent + "] [required]");
-                    selectedPacks.add(idToPack.get(packParent));
-                } else {
-                    System.out.print("[" + packParent + "] [y/n] ");
-                    if (readPrompt()) {
-                        selectedPacks.add(idToPack.get(packParent));
-                    } else {
-                        return;
-                    }
-                }
+        /*
+         * If that packParent contains children,
+         * then run recursively and ask whether
+         * you want to install the child packs 
+         * too [if parent pack selected]
+         */
+        if (treeData.containsKey(packParent)) {
+            p = idToPack.get(packParent);
+
+            // If the pack is a top-level pack and that top-level pack was not 
+            // selected, then return. This will avoid prompting the user to
+            // install the child packs.
+            if(packMaster && !selectHelper(treeData, selectedPacks, installData, idToPack, p, packMaster,indent)) {
+                   return;
             }
-
+            // Now iterate through the child packs of the parent pack.
             for (String id : treeData.get(packParent)) {
-                if (idToPack.get(id).required) {
-                    selectedPacks.add(idToPack.get(id));
-                    out(indent + idToPack.get(id).name + " [required]");
-                } else {
-                    System.out.print(indent + idToPack.get(id).name + " [y/n] ");
-                    if (readPrompt()) {
-                        selectedPacks.add(idToPack.get(id));
-                        drawHelper(treeData, selectedPacks, idToPack, id, false, indent + indent);
-                    } else {
-                        System.out.print(" [Not installed] ");
-                    }
-                }
+                p = idToPack.get(id);
+                selectHelper(treeData, selectedPacks, installData, idToPack, p, false, indent);
             }
+        }
+    }
+    /**
+     * Helper method to ask/check if the pack can/needs to be installed
+     * If top-level pack, square brackets will be placed in between
+     * the pack id.
+     *
+     * It asks the user if it wants to install the pack if:
+     * 1. the pack is not required
+     * 2. the pack has no condition string
+     *
+     * @return true     - if pack selected
+     * @return false    - if pack not selected
+     */
+    private boolean selectHelper(final Map<String, List<String>> treeData, final List<Pack> selectedPacks,final AutomatedInstallData installData,
+                            final Map<String, Pack> idToPack, final Pack p, boolean packMaster,final String indent) 
+    {
+        Boolean conditionSatisfied  = checkCondition(installData, p);
+        Boolean conditionExists     = !(conditionSatisfied == null);
+        String packName             = p.name;
+        String id                   = p.id;
+
+        // If a condition is set to that pack
+        if (conditionExists) {
+            if (conditionSatisfied) {
+                out((packMaster ? "[" + p.id + "]" : indent + packName) + " [Already Selected]");
+
+                selectedPacks.add(p);
+                // we call drawHelper again to check if that pack has child packs
+                // If that pack is a top-level pack, then don't run drawHelper as
+                // it will create an infinite loop 
+                if (!packMaster) drawHelper(treeData, selectedPacks, installData, idToPack, id, packMaster, indent + indent);
+                return true;
+            } else {
+                // condition says don't install!
+                out((packMaster ? "[" + p.id + "]" : indent + packName) + " [Not Selected]");
+                return false;
+            }
+        // If no condition specified
+        } else if (p.required) {
+            out((packMaster ? "[" + packName + "]" : indent + packName) + " [required]");
+
+            selectedPacks.add(p);
+            if (!packMaster) drawHelper(treeData, selectedPacks, installData, idToPack, id, packMaster, indent + indent);
+            return true;
+        // Prompt the user
+        } else {
+            System.out.print((packMaster ? "["+ packName + "] ":indent + packName) + " [y/n] ");
+            if (readPrompt()) {
+                selectedPacks.add(p);
+                if (!packMaster) drawHelper(treeData, selectedPacks, installData, idToPack, id, packMaster, indent + indent);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    /**
+     * helper method to know if the condition assigned to the pack is satisfied
+     *
+     * @param installData       - the data of izpack
+     * @param pack              - the pack whose condition needs to be checked 
+     * @return true             - if the condition is satisfied
+     *         false            - if condition not satisfied
+     *         null             - if no condition assigned
+     */
+
+    private Boolean checkCondition(AutomatedInstallData installData, Pack pack) 
+    {
+        if (pack.hasCondition()) {
+            return installData.getRules().isConditionTrue(pack.getCondition());
+        } else {
+            return null;
         }
     }
     /**
