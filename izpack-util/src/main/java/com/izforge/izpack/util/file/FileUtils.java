@@ -21,15 +21,14 @@ import com.izforge.izpack.util.OsVersion;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Reader;
-import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.CharacterIterator;
@@ -38,6 +37,7 @@ import java.text.StringCharacterIterator;
 import java.util.Random;
 import java.util.Stack;
 import java.util.StringTokenizer;
+import java.util.zip.ZipFile;
 
 /**
  * This class also encapsulates methods which allow Files to be
@@ -1082,85 +1082,47 @@ public class FileUtils
     }
 
     /**
-     * Close a Writer without throwing any exception if something went wrong.
-     * Do not attempt to close it if the argument is null.
+     * Unconditionally close a <tt>Closable</tt>.
+     * <p/>
+     * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored.
+     * This is typically used in finally blocks.
      *
-     * @param device output writer, can be null.
+     * @param closeable the <tt>Closable</tt>to close. May be <tt>null</tt> or already closed
      */
-    public static void close(Writer device)
+    public static void close(Closeable closeable)
     {
-        if (device != null)
+        if (closeable != null)
         {
             try
             {
-                device.close();
+                closeable.close();
             }
-            catch (IOException ioex)
+            catch (IOException ignore)
             {
-                //ignore
+                // do nothing
             }
         }
     }
 
     /**
-     * Close a stream without throwing any exception if something went wrong.
-     * Do not attempt to close it if the argument is null.
+     * Unconditionally close a <tt>ZipFile</tt>.
+     * <p/>
+     * Equivalent to {@link ZipFile#close()}, except any exceptions will be ignored.
+     * This is typically used in finally blocks.
      *
-     * @param device Reader, can be null.
+     * @param file the <tt>ZipFile</tt>to close. May be <tt>null</tt> or already closed
      */
-    public static void close(Reader device)
+    public static void close(ZipFile file)
     {
-        if (device != null)
+        if (file != null)
         {
             try
             {
-                device.close();
+                file.close();
             }
-            catch (IOException ioex)
+            catch (IOException ignore)
             {
-                //ignore
-            }
-        }
-    }
-
-    /**
-     * Close a stream without throwing any exception if something went wrong.
-     * Do not attempt to close it if the argument is null.
-     *
-     * @param device stream, can be null.
-     */
-    public static void close(OutputStream device)
-    {
-        if (device != null)
-        {
-            try
-            {
-                device.close();
-            }
-            catch (IOException ioex)
-            {
-                //ignore
-            }
-        }
-    }
-
-    /**
-     * Close a stream without throwing any exception if something went wrong.
-     * Do not attempt to close it if the argument is null.
-     *
-     * @param device stream, can be null.
-     */
-    public static void close(InputStream device)
-    {
-        if (device != null)
-        {
-            try
-            {
-                device.close();
-            }
-            catch (IOException ioex)
-            {
-                //ignore
+                // do nothing
             }
         }
     }

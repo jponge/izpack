@@ -21,7 +21,19 @@
 
 package com.izforge.izpack.util;
 
-import java.io.*;
+import com.izforge.izpack.util.file.FileUtils;
+
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.RandomAccessFile;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URI;
@@ -30,6 +42,7 @@ import java.text.CharacterIterator;
 import java.text.SimpleDateFormat;
 import java.text.StringCharacterIterator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
@@ -151,11 +164,6 @@ public class SelfModifier
     public static final String MEMORY_KEY = "self.memory";
 
     /**
-     * Base prefix name for sandbox and log, used only in phase 1.
-     */
-    private String prefix = "izpack";
-
-    /**
      * Target method to be invoked in sandbox.
      */
     private Method method = null;
@@ -190,6 +198,32 @@ public class SelfModifier
     private long maxmemory = 64;
     private long maxpermgensize = 16;
     private boolean useMemorySettings = false;
+
+    /**
+     * Debug port for phase 2, or <tt>-1</tt> if not set or invalid
+     */
+    private int debugPort2 = Integer.getInteger(DEBUG_PORT2_KEY, -1);
+
+    /**
+     * Debug port for phase 3, or <tt>-1</tt> if not set or invalid
+     */
+    private int debugPort3 = Integer.getInteger(DEBUG_PORT3_KEY, -1);
+
+    /**
+     * System property name of the debug port for phase 2.
+     */
+    private static final String DEBUG_PORT2_KEY = "self.mod.debugPort2";
+
+    /**
+     * System property name of the debug port for phase 3.
+     */
+    private static final String DEBUG_PORT3_KEY = "self.mod.debugPort3";
+
+    /**
+     * Base prefix name for sandbox and log, used only in phase 1.
+     */
+    private static final String prefix = "izpack";
+
 
     public static void test(String[] args)
     {
@@ -320,6 +354,7 @@ public class SelfModifier
     /**
      * Check the method for the required properties (public, static, params:(String[])).
      *
+     * @param method the method
      * @throws NullPointerException     if <code>method</code> is null
      * @throws IllegalArgumentException if <code>method</code> is not public, static, and take a
      *                                  String array as it's only argument, or of it's declaring class is not public.
@@ -447,6 +482,9 @@ public class SelfModifier
     /**
      * Run a new jvm with all the system parameters needed for phases 2 and 3.
      *
+     * @param args      the command line arguments
+     * @param nextPhase the next phase
+     * @return the spawned process
      * @throws IOException if there is an error getting the canonical name of a path
      */
     private Process spawn(String[] args, int nextPhase) throws IOException
@@ -462,10 +500,24 @@ public class SelfModifier
         command.add(javaCommand);
         command.add("-Xmx" + this.maxmemory + "m");
         command.add("-XX:MaxPermSize=" + maxpermgensize + "m");
-// activate for debugging purposes.        
-//        command.add("-Xdebug");        
-//        int debugPort = 8000 + nextPhase;        
-//        command.add("-Xrunjdwp:transport=dt_socket,address=" + debugPort + ",server=y,suspend=y");
+
+        if (nextPhase == 2)
+        {
+            if (debugPort2 != -1)
+            {
+                command.add(getDebug(debugPort2));
+            }
+            if (debugPort3 != -1)
+            {
+                // propagate the phase3 debug port
+                command.add("-D" + DEBUG_PORT3_KEY + "=" + debugPort3);
+            }
+        }
+        else if (nextPhase == 3 && debugPort3 != -1)
+        {
+            command.add(getDebug(debugPort3));
+        }
+
         command.add("-classpath");
         command.add(sandbox.getAbsolutePath());
         command.add("-D" + BASE_KEY + "=" + base);
@@ -476,12 +528,9 @@ public class SelfModifier
         command.add("-D" + MEMORY_KEY + "=" + this.maxmemory);
         command.add(getClass().getName());
 
-        for (String arg : args)
-        {
-            command.add(arg);
-        }
+        Collections.addAll(command, args);
 
-        StringBuffer buffer = new StringBuffer("Spawning phase ");
+        StringBuilder buffer = new StringBuilder("Spawning phase ");
         buffer.append(nextPhase).append(": ");
         for (String anEntireCmd : command)
         {
@@ -572,43 +621,18 @@ public class SelfModifier
                     out.write(buf, 0, n);
                 }
 
-                out.close();
+                FileUtils.close(out);
+                FileUtils.close(in);
                 extracted++;
             }
-            jar.close();
-
             log("Extracted " + extracted + " file" + (extracted > 1 ? "s" : "") + " into "
                     + sandbox.getPath());
         }
         finally
         {
-            try
-            {
-                jar.close();
-            }
-            catch (IOException ioe)
-            {
-            }
-            if (out != null)
-            {
-                try
-                {
-                    out.close();
-                }
-                catch (IOException ioe)
-                {
-                }
-            }
-            if (in != null)
-            {
-                try
-                {
-                    in.close();
-                }
-                catch (IOException ioe)
-                {
-                }
-            }
+            FileUtils.close(jar);
+            FileUtils.close(out);
+            FileUtils.close(in);
         }
     }
 
@@ -870,7 +894,7 @@ public class SelfModifier
             uri = uri.substring(1);
         }
 
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         CharacterIterator iter = new StringCharacterIterator(uri);
         for (char c = iter.first(); c != CharacterIterator.DONE; c = iter.next())
         {
@@ -894,8 +918,7 @@ public class SelfModifier
             }
         }
 
-        String path = buffer.toString();
-        return path;
+        return buffer.toString();
     }
 
     private static String addExtension(String command)
@@ -930,4 +953,16 @@ public class SelfModifier
         }
         return jExecutable.getAbsolutePath();
     }
+
+    /**
+     * Returns the command to enable remote debugging.
+     *
+     * @param port the port to listen on
+     * @return the command
+     */
+    private String getDebug(int port)
+    {
+        return "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=" + port;
+    }
+
 }
