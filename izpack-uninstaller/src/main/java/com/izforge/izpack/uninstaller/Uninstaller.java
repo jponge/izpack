@@ -19,26 +19,35 @@
 
 package com.izforge.izpack.uninstaller;
 
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.util.Housekeeper;
-import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.PrivilegedRunner;
 import com.izforge.izpack.util.SelfModifier;
+
+import javax.swing.*;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
-import javax.swing.*;
 import java.lang.reflect.Method;
 
 /**
  * The uninstaller class.
  *
  * @author Julien Ponge
+ * @author Tim Anderson
  */
 public class Uninstaller
 {
+    /**
+     * The install.log resource path.
+     */
+    private static final String INSTALL_LOG = "/install.log";
+
+    /**
+     * The exec-admin resource path.
+     */
+    private static final String EXEC_ADMIN = "/exec-admin";
 
     /**
      * The main method (program entry point).
@@ -47,7 +56,14 @@ public class Uninstaller
      */
     public static void main(String[] args)
     {
-        checkForPrivilegedExecution();
+        // relaunch the uninstaller with elevated permissions if required
+        if (!PrivilegedRunner.isPrivilegedMode() && isElevationRequired())
+        {
+            if (relaunchWithElevatedRights())
+            {
+                System.exit(0);
+            }
+        }
 
         boolean cmduninstall = false;
         for (String arg : args)
@@ -83,70 +99,6 @@ public class Uninstaller
             System.err.println("The uninstall may not fully complete.");
             uninstall(args);
         }
-    }
-    
-    /**
-     * Gets the installation path from the log file.
-     *
-     * @throws Exception Description of the Exception
-     */
-    private static File getInstallPath() {
-        try {
-            InputStream in = Uninstaller.class.getResourceAsStream("/install.log");
-            InputStreamReader inReader = new InputStreamReader(in);
-            BufferedReader reader = new BufferedReader(inReader);
-            String installPath = reader.readLine();
-            reader.close();
-            return new File(installPath);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-
-    private static void checkForPrivilegedExecution()
-    {
-        if (PrivilegedRunner.isPrivilegedMode())
-        {
-            // We have been launched through a privileged execution, so stop the checkings here!
-            return;
-        }
-
-        if (elevationShouldBeInvestigated())
-        {
-            PrivilegedRunner runner = new PrivilegedRunner();
-            if (runner.isPlatformSupported() && isElevationNeeded())
-            {
-                try
-                {
-                    if (runner.relaunchWithElevatedRights() == 0)
-                    {
-                        System.exit(0);
-                    }
-                    else
-                    {
-                        throw new RuntimeException("Launching an uninstaller with elevated permissions failed.");
-                    }
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "The uninstaller could not launch itself with administrator permissions.\n" +
-                            "The uninstallation will still continue but you may encounter problems due to insufficient permissions.");
-                }
-            }
-            else if (!runner.isPlatformSupported())
-            {
-                JOptionPane.showMessageDialog(null, "This uninstaller should be run by an administrator.\n" +
-                        "The uninstallation will still continue but you may encounter problems due to insufficient permissions.");
-            }
-        }
-    }
-
-    private static boolean elevationShouldBeInvestigated()
-    {
-        return (Uninstaller.class.getResource("/exec-admin") != null) ||
-                (OsVersion.IS_WINDOWS && !(new PrivilegedRunner().canWriteToProgramFiles()));
     }
 
     public static void cmduninstall(String[] args)
@@ -209,7 +161,92 @@ public class Uninstaller
         });
     }
 
-    private static boolean isElevationNeeded() {
-        return !getInstallPath().canWrite();
+    /**
+     * Attempts to relaunch the uninstaller with elevated permissions.
+     *
+     * @return <tt>true</tt> if the relaunch was successful, otherwise <tt>false</tt>
+     */
+    private static boolean relaunchWithElevatedRights()
+    {
+        boolean result = false;
+        PrivilegedRunner runner = new PrivilegedRunner();
+        if (runner.isPlatformSupported())
+        {
+            try
+            {
+                if (runner.relaunchWithElevatedRights() == 0)
+                {
+                    result = true;
+                }
+            }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+            }
+            if (!result)
+            {
+                JOptionPane.showMessageDialog(null, "The uninstaller could not launch itself with administrator permissions.\n" +
+                        "The uninstallation will still continue but you may encounter problems due to insufficient permissions.");
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "This uninstaller should be run by an administrator.\n" +
+                    "The uninstallation will still continue but you may encounter problems due to insufficient permissions.");
+        }
+        return result;
     }
+
+    /**
+     * Determines if permission elevation is required to uninstall the application.
+     * <p/>
+     * Permission elevation is required if:
+     * <ul>
+     * <li>the <em>exec-admin</em> resource exists; and</li>
+     * <li>the current user doesn't have permission to write to the install path</li>
+     * </ul>
+     *
+     * @return <tt>true</tt> if elevation is needed
+     * @throws IzPackException if the installation path cannot be determined
+     */
+    private static boolean isElevationRequired()
+    {
+        boolean result = false;
+        if (Uninstaller.class.getResource(EXEC_ADMIN) != null)
+        {
+            String path = getInstallPath();
+            PrivilegedRunner runner = new PrivilegedRunner();
+            result = runner.isElevationNeeded(path);
+        }
+        return result;
+    }
+
+    /**
+     * Gets the installation path from the log file.
+     *
+     * @return the install path
+     * @throws IzPackException if the <em>install.log</em> resource cannot be read
+     */
+    private static String getInstallPath()
+    {
+        String installPath;
+        try
+        {
+            InputStream in = Uninstaller.class.getResourceAsStream(INSTALL_LOG);
+            if (in == null)
+            {
+                throw new IzPackException(INSTALL_LOG + " resource not found");
+            }
+            InputStreamReader inReader = new InputStreamReader(in);
+            BufferedReader reader = new BufferedReader(inReader);
+            installPath = reader.readLine();
+            reader.close();
+        }
+        catch (IOException exception)
+        {
+            throw new IzPackException(exception);
+        }
+        return installPath;
+    }
+
 }

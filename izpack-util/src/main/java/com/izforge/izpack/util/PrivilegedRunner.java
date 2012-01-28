@@ -21,7 +21,11 @@
 
 package com.izforge.izpack.util;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,18 +34,27 @@ import java.util.List;
  * This class is responsible for allowing the installer to re-launch itself with administrator permissions.
  * The way of achieving this greatly varies among the platforms. The JDK classes are of not help here as there
  * is no way to tell a JVM to run as a different user but to launch a new one.
+ * <p>
+ * TODO - this class has an implicit dependency on izpack-installer as it requires
+ * <em>/com/izforge/izpack/installer/elevate.js</em> and
+ * <em>/com/izforge/izpack/installer/run-with-privileges-on-osx</em>
+ * </p>
  *
  * @author Julien Ponge
  */
 public class PrivilegedRunner
 {
-    private boolean vetoed = false;
+    /**
+     * Determines if elevation should be vetoed.
+     */
+    private boolean vetoed;
 
     /**
      * Builds a default privileged runner.
      */
     public PrivilegedRunner()
     {
+        this(false);
     }
 
     /**
@@ -75,59 +88,55 @@ public class PrivilegedRunner
     }
 
     /**
-     * Checks if the current user is an administrator or not.
+     * Determines if elevated rights are required to install/uninstall the application.
      *
      * @return <code>true</code> if elevation is needed to have administrator permissions, <code>false</code> otherwise.
      */
     public boolean isElevationNeeded()
     {
-        if (vetoed)
-        {
-            return false;
-        }
-
-        if (OsVersion.IS_WINDOWS)
-        {
-            return !isPrivilegedMode() && !canWriteToProgramFiles();
-        }
-        else
-        {
-            return !System.getProperty("user.name").equals("root");
-        }
+        return isElevationNeeded(null);
     }
 
-    public boolean canWriteToProgramFiles()
+    /**
+     * Determines if elevated rights are required to install/uninstall the application.
+     *
+     * @param path the installation path, or <tt>null</tt> if the installation path is unknown
+     * @return <tt>true</tt> if elevation is needed to have administrator permissions, <tt>false</tt> otherwise.
+     */
+    public boolean isElevationNeeded(String path)
     {
-        try
+        boolean result = false;
+        if (!vetoed)
         {
-            String programFiles = System.getenv("ProgramFiles");
-            if (programFiles == null)
+            if (OsVersion.IS_WINDOWS)
             {
-                programFiles = "C:\\Program Files";
-            }
-            File temp = new File(programFiles, "foo.txt");
-            if (temp.createNewFile())
-            {
-                temp.delete();
-                return true;
+                if (path == null || path.trim().length() == 0)
+                {
+                    path = getProgramFiles();
+                }
+                result = !isPrivilegedMode() && !canWrite(path);
             }
             else
             {
-                return false;
+                if (path != null)
+                {
+                    result = !canWrite(path);
+                }
+                else
+                {
+                    result = !System.getProperty("user.name").equals("root");
+                }
             }
         }
-        catch (IOException e)
-        {
-            return false;
-        }
+        return result;
     }
 
     /**
      * Relaunches the installer with elevated rights.
      *
      * @return the status code returned by the launched process (by convention, 0 means a success).
-     * @throws IOException
-     * @throws InterruptedException
+     * @throws IOException          if an I/O error occurs
+     * @throws InterruptedException if the launch was interrupted
      */
     public int relaunchWithElevatedRights() throws IOException, InterruptedException
     {
@@ -213,7 +222,7 @@ public class PrivilegedRunner
     private void copyStream(OutputStream out, InputStream in) throws IOException
     {
         byte[] buffer = new byte[1024];
-        int bytesRead = 0;
+        int bytesRead;
         while ((bytesRead = in.read(buffer)) >= 0)
         {
             out.write(buffer, 0, bytesRead);
@@ -264,4 +273,49 @@ public class PrivilegedRunner
     {
         return "privileged".equals(System.getenv("izpack.mode")) || "privileged".equals(System.getProperty("izpack.mode"));
     }
+
+    /**
+     * Determines if the specified path can be written to.
+     *
+     * @param path the path to check
+     * @return <tt>true</tt> if the path can be written to, otherwise <tt>false</tt>
+     */
+    private boolean canWrite(String path)
+    {
+        File file = new File(path);
+        boolean canWrite = file.canWrite();
+        if (canWrite)
+        {
+            // make sure that the path can actually be written to, for IZPACK-727
+            try
+            {
+                File test = File.createTempFile(".izpackwritecheck", null, file);
+                if (!test.delete())
+                {
+                    test.deleteOnExit();
+                }
+            }
+            catch (IOException exception)
+            {
+                canWrite = false;
+            }
+        }
+        return canWrite;
+    }
+
+    /**
+     * Tries to determine the Windows Program Files directory.
+     *
+     * @return the Windows Program Files directory
+     */
+    private String getProgramFiles()
+    {
+        String path = System.getenv("ProgramFiles");
+        if (path == null)
+        {
+            path = "C:\\Program Files";
+        }
+        return path;
+    }
+
 }
