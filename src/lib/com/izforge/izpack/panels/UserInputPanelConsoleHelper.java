@@ -26,6 +26,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -422,8 +423,11 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     boolean processTextField(Input input, AutomatedInstallData idata)
     {
         String variable = input.strVariableName;
+        boolean passwordText = PASSWORD.equals(input.strFieldType);
         String set;
         String fieldText;
+        String value;
+        String strIn;
         if ((variable == null) || (variable.length() == 0)) { return false; }
 
         if (input.listChoices.size() == 0)
@@ -449,14 +453,31 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         }
 
         fieldText = input.listChoices.get(0).strText;
-        String value = set;
+
+        if(!passwordText) {
+            value = set;
+        } else {
+            value = "";
+            set = "";
+        }
         while (true) {
             boolean done = true;
             System.out.println(fieldText + " [" + set + "] ");
             try
             {
-                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-                String strIn = br.readLine();
+                if(passwordText) {
+                    Console console = System.console();
+                    if (console != null) {
+                        strIn = new String(console.readPassword());
+                    } else {
+                        done = false;
+                        strIn = "";
+                        System.out.println("Error: No console found");
+                    }
+                } else {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                    strIn = br.readLine();
+                }
                 value = !strIn.trim().equals("") ? strIn : set;
                 if (input.validators != null && !input.validators.isEmpty())
                 {
