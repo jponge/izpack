@@ -713,6 +713,7 @@
             <include name="com/izforge/izpack/panels/UserPathInputPanel.java"/>
             <include name="com/izforge/izpack/panels/UserPathSelectionPanel.java"/>
             <include name="com/izforge/izpack/panels/UserPathPanel.java"/>
+            <include name="com/izforge/izpack/panels/UserPathPanelConsoleHelper.java"/>
             <include name="com/izforge/izpack/panels/UserPathPanelAutomationHelper.java"/>
         </build-panel>
         <build-panel name="ConditionalUserInputPanel">
