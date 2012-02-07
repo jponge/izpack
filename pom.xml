@@ -9,7 +9,7 @@
 
     <artifactId>izpack</artifactId>
     <groupId>org.codehaus.izpack</groupId>
-    <version>5.0.0-beta10</version>
+    <version>5.0.0-beta11-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>IzPack parent</name>
