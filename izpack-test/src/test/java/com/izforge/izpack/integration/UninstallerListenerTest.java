@@ -1,7 +1,6 @@
 package com.izforge.izpack.integration;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.container.TestInstallationContainer;
 import com.izforge.izpack.installer.data.UninstallData;
@@ -12,24 +11,15 @@ import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
 import com.izforge.izpack.test.listener.TestUninstallerListener;
 import com.izforge.izpack.uninstaller.Destroyer;
-import com.izforge.izpack.util.IoHelper;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -41,23 +31,12 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(PicoRunner.class)
 @Container(TestInstallationContainer.class)
-public class UninstallerListenerTest
+public class UninstallerListenerTest extends AbstractDestroyerTest
 {
-    /**
-     * Temporary folder to perform installations to.
-     */
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
     /**
      * The uninstall jar writer.
      */
     private final UninstallDataWriter uninstallDataWriter;
-
-    /**
-     * Install data.
-     */
-    private final AutomatedInstallData installData;
 
     /**
      * Uninstall data.
@@ -67,23 +46,23 @@ public class UninstallerListenerTest
     /**
      * Variable substitutor.
      */
-    private final VariableSubstitutor variableSubstitutor;
+    private final VariableSubstitutor substituter;
 
 
     /**
      * Constructs an <tt>UninstallerListenerTest</tt>.
      *
      * @param uninstallDataWriter the uninstall jar writer
-     * @param variableSubstitutor the variable substitutor
+     * @param substituter         the variable substitutor
      * @param installData         the install data
      * @param uninstallData       the uninstall data
      */
-    public UninstallerListenerTest(UninstallDataWriter uninstallDataWriter, VariableSubstitutor variableSubstitutor,
+    public UninstallerListenerTest(UninstallDataWriter uninstallDataWriter, VariableSubstitutor substituter,
                                    AutomatedInstallData installData, UninstallData uninstallData)
     {
+        super(installData);
         this.uninstallDataWriter = uninstallDataWriter;
-        this.variableSubstitutor = variableSubstitutor;
-        this.installData = installData;
+        this.substituter = substituter;
         this.uninstallData = uninstallData;
     }
 
@@ -95,10 +74,7 @@ public class UninstallerListenerTest
     @Before
     public void setUp() throws IOException
     {
-        // write to temporary folder so the test doesn't need to be run with elevated permissions
-        File installPath = new File(temporaryFolder.getRoot(), "izpackTest");
-        assertTrue(installPath.mkdirs());
-        installData.setInstallPath(installPath.getAbsolutePath());
+        super.setUp();
 
         // clean up any existing state file
         removeState();
@@ -122,7 +98,7 @@ public class UninstallerListenerTest
     @InstallFile("samples/event/customlisteners.xml")
     public void testUninstallerListenerInvocation() throws Exception
     {
-        String installPath = installData.getInstallPath();
+        String installPath = getInstallPath();
 
         // add some files to the installation.
         int files = 3;
@@ -136,7 +112,7 @@ public class UninstallerListenerTest
         // write the uninstaller and verify it contains the listeners
         assertTrue(uninstallDataWriter.write());
 
-        File uninstallJar = getUninstallerJar();
+        File uninstallJar = getUninstallerJar(substituter);
 
         assertThat(uninstallJar, ZipMatcher.isZipContainingFiles(
                 "com/izforge/izpack/api/event/UninstallerListener.class",
@@ -156,49 +132,11 @@ public class UninstallerListenerTest
     }
 
     /**
-     * Runs the {@link Destroyer} in the supplied uninstall jar.
-     *
-     * @param uninstallJar the uninstaller jar
-     * @throws Exception for any error
-     */
-    private void runDestroyer(File uninstallJar) throws Exception
-    {
-        String installPath = installData.getInstallPath();
-
-        // create an isolated class loader, as the Destroyer locates resources using its class loader
-        URLClassLoader loader = new URLClassLoader(new URL[]{uninstallJar.toURI().toURL()}, null);
-        Class destroyerClass = loader.loadClass(Destroyer.class.getName());
-        Class<?> handlerClass = loader.loadClass(AbstractUIProgressHandler.class.getName());
-        Constructor constructor = destroyerClass.getConstructors()[0];
-
-        // create the Destroyer
-        Object destroyer = constructor.newInstance(installPath, true, Mockito.mock(handlerClass));
-
-        // and run it
-        Method method = destroyerClass.getMethod("run");
-        method.invoke(destroyer);
-    }
-
-    /**
-     * Returns the uninstaller jar file.
-     *
-     * @return the uninstaller jar file
-     */
-    private File getUninstallerJar()
-    {
-        String dir = IoHelper.translatePath(installData.getInfo().getUninstallerPath(), variableSubstitutor);
-        String path = dir + File.separator + installData.getInfo().getUninstallerName();
-        File jar = new File(path);
-        assertThat(jar.exists(), is(true));
-        return jar;
-    }
-
-    /**
      * Removes any {@link TestUninstallerListener.State} file.
      */
     private void removeState()
     {
-        String path = TestUninstallerListener.getStatePath(installData.getInstallPath());
+        String path = TestUninstallerListener.getStatePath(getInstallPath());
         File file = new File(path);
         if (file.exists())
         {

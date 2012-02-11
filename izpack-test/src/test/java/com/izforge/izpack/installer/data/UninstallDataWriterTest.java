@@ -119,6 +119,7 @@ public class UninstallDataWriterTest
                 ZipMatcher.isZipContainingFiles(
                         "com/izforge/izpack/uninstaller/Uninstaller.class",
                         "com/izforge/izpack/uninstaller/Destroyer.class",
+                        "com/izforge/izpack/data/ExecutableFile.class",
                         "langpack.xml",
                         "META-INF/MANIFEST.MF",
                         "com/izforge/izpack/gui/IconsDatabase.class",

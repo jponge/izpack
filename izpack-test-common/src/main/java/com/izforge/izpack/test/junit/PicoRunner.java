@@ -3,10 +3,18 @@ package com.izforge.izpack.test.junit;
 import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.test.Container;
+import com.izforge.izpack.test.RunOn;
+import com.izforge.izpack.util.Platform;
+import com.izforge.izpack.util.Platforms;
 import org.junit.Rule;
 import org.junit.rules.MethodRule;
+import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
-import org.junit.runners.model.*;
+import org.junit.runners.model.FrameworkField;
+import org.junit.runners.model.FrameworkMethod;
+import org.junit.runners.model.InitializationError;
+import org.junit.runners.model.Statement;
+import org.junit.runners.model.TestClass;
 
 import javax.swing.*;
 import java.lang.reflect.Constructor;
@@ -37,6 +45,42 @@ public class PicoRunner extends BlockJUnit4ClassRunner
     {
     }
 
+    /**
+     * Runs the test corresponding to {@code method}, unless it is ignored, or is not intended to be run on
+     * the current platform.
+     *
+     * @param method   the test method
+     * @param notifier the run notifier
+     */
+    @Override
+    protected void runChild(FrameworkMethod method, RunNotifier notifier)
+    {
+        RunOn runOn = method.getAnnotation(RunOn.class);
+        boolean ignore = false;
+        if (runOn != null)
+        {
+            Platform platform = new Platforms().getCurrentPlatform();
+            boolean found = false;
+            for (Platform.Name name : runOn.value())
+            {
+                if (platform.isA(name))
+                {
+                    found = true;
+                    break;
+                }
+            }
+            ignore = !found;
+        }
+
+        if (!ignore)
+        {
+            super.runChild(method, notifier);
+        }
+        else
+        {
+            notifier.fireTestIgnored(describeChild(method));
+        }
+    }
 
     @Override
     protected Statement methodBlock(FrameworkMethod method)

@@ -48,9 +48,9 @@ public class UninstallDataWriter
     private AutomatedInstallData installData;
 
     /**
-     * The variable substitutor.
+     * The variable substituter.
      */
-    private VariableSubstitutor variableSubstitutor;
+    private VariableSubstitutor substituter;
 
     /**
      * The path resolver.
@@ -75,16 +75,16 @@ public class UninstallDataWriter
     /**
      * Constructs an <tt>UninstallDataWriter</tt>.
      *
-     * @param variableSubstitutor the variable substitutor
-     * @param uninstallData       the uninstall data
-     * @param installData         the install data
-     * @param pathResolver        the path resolver
-     * @param rules               the rules engine
+     * @param substituter   the variable substituter
+     * @param uninstallData the uninstall data
+     * @param installData   the install data
+     * @param pathResolver  the path resolver
+     * @param rules         the rules engine
      */
-    public UninstallDataWriter(VariableSubstitutor variableSubstitutor, UninstallData uninstallData,
+    public UninstallDataWriter(VariableSubstitutor substituter, UninstallData uninstallData,
                                AutomatedInstallData installData, PathResolver pathResolver, RulesEngine rules)
     {
-        this.variableSubstitutor = variableSubstitutor;
+        this.substituter = substituter;
         this.uninstallData = uninstallData;
         this.installData = installData;
         this.pathResolver = pathResolver;
@@ -156,7 +156,7 @@ public class UninstallDataWriter
             {
                 logfile = installData.getInfo().getUninstallerPath() + "/install.log";
             }
-            logfile = IoHelper.translatePath(logfile, variableSubstitutor);
+            logfile = IoHelper.translatePath(logfile, substituter);
             File outFile = new File(logfile);
             if (!outFile.getParentFile().exists())
             {
@@ -196,6 +196,7 @@ public class UninstallDataWriter
         List<Mergeable> uninstallerMerge = pathResolver.getMergeableFromPath("com/izforge/izpack/uninstaller/");
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("uninstaller-META-INF/", "META-INF/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/api/"));
+        uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/data/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/util/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/gui/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/img/"));
@@ -478,7 +479,7 @@ public class UninstallDataWriter
     private void createOutputJar() throws IOException
     {
         // Create the uninstaller directory
-        String dirPath = IoHelper.translatePath(installData.getInfo().getUninstallerPath(), variableSubstitutor);
+        String dirPath = IoHelper.translatePath(installData.getInfo().getUninstallerPath(), substituter);
         String jarPath = dirPath + File.separator + installData.getInfo().getUninstallerName();
         File dir = new File(dirPath);
         if (!dir.exists() && !dir.mkdirs())

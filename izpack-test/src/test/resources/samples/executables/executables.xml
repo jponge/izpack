@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<installation version="1.0">
+    <info>
+        <appname>Test Installation</appname>
+        <appversion>1.4 beta 666</appversion>
+        <authors>
+            <author name="Super sora" email="sora@superman.org"/>
+        </authors>
+        <url>http://www.anotherworld-inspace-website.net/</url>
+
+    </info>
+
+    <guiprefs width="640" height="480" resizable="yes"/>
+    <locale>
+        <langpack iso3="eng"/>
+    </locale>
+
+    <dynamicvariables>
+        <variable name="POSTINSTALL_LOG" value="${INSTALL_PATH}/../postinstall.log"/>
+        <variable name="NEVER_LOG" value="${INSTALL_PATH}/../never.log"/>
+        <variable name="UNINSTALL_LOG" value="${INSTALL_PATH}/../uninstall.log"/>
+    </dynamicvariables>
+
+    <panels>
+        <panel classname="HelloPanel"/>
+        <panel classname="SimpleFinishPanel"/>
+    </panels>
+
+    <packs>
+        <pack name="Base" required="yes">
+            <description>The base files</description>
+            <fileset dir="bin" targetdir="$INSTALL_PATH/bin"/>
+            <parsable targetfile="$INSTALL_PATH/bin/postinstall.bat"/>
+            <parsable targetfile="$INSTALL_PATH/bin/postinstall.sh"/>
+            <parsable targetfile="$INSTALL_PATH/bin/never.bat"/>
+            <parsable targetfile="$INSTALL_PATH/bin/never.sh"/>
+            <parsable targetfile="$INSTALL_PATH/bin/uninstall.bat"/>
+            <parsable targetfile="$INSTALL_PATH/bin/uninstall.sh"/>
+            <executable targetfile="$INSTALL_PATH/bin/never.bat" stage="never" keep="true">
+                <args>
+                    <arg value="install"/>
+                </args>
+                <os family="windows"/>
+            </executable>
+            <executable targetfile="$INSTALL_PATH/bin/never.sh" stage="never" keep="true">
+                <args>
+                    <arg value="install"/>
+                </args>
+                <os family="unix"/>
+            </executable>
+            <executable targetfile="$INSTALL_PATH/bin/postinstall.bat" stage="postinstall" keep="true">
+                <args>
+                    <arg value="install"/>
+                </args>
+                <os family="windows"/>
+            </executable>
+            <executable targetfile="$INSTALL_PATH/bin/postinstall.sh" stage="postinstall" keep="true">
+                <args>
+                    <arg value="install"/>
+                </args>
+                <os family="unix"/>
+            </executable>
+            <executable targetfile="$INSTALL_PATH/bin/uninstall.bat" stage="uninstall">
+                <args>
+                    <arg value="uninstall"/>
+                </args>
+                <os family="windows"/>
+            </executable>
+            <executable targetfile="$INSTALL_PATH/bin/uninstall.sh" stage="uninstall">
+                <args>
+                    <arg value="uninstall"/>
+                </args>
+                <os family="unix"/>
+            </executable>
+        </pack>
+    </packs>
+
+</installation>
