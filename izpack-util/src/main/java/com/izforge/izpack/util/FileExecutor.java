@@ -134,6 +134,7 @@ public class FileExecutor
      * Executes the given Command and gets the result of StdOut, or if exec returns !=0:  StdErr.
      *
      * @param aCommandLine     aCommandLine to execute
+     * @param dir the working directory for the execution
      * @param forceToGetStdOut if true returns stdout
      * @return the result of the command stdout or stderr if exec returns !=0
      */
