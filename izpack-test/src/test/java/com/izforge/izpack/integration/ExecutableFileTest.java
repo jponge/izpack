@@ -12,12 +12,16 @@ import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.RunOn;
 import com.izforge.izpack.test.junit.PicoRunner;
 import com.izforge.izpack.util.FileUtil;
+import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 import static com.izforge.izpack.util.Platform.Name;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -115,12 +119,15 @@ public class ExecutableFileTest extends AbstractDestroyerTest
      * @param name    the file name
      * @param content the expected file content
      * @return the file
+     * @throws IOException for any I/O error
      */
-    private File checkContains(String name, String content)
+    private File checkContains(String name, String content) throws IOException
     {
         checkExists(name);
         File file = new File(temporaryFolder.getRoot(), name);
-        assertTrue(FileUtil.fileContains(file.getPath(), content));
+        List<String> fileContent = FileUtil.getFileContent(file.getPath());
+        assertEquals(1, fileContent.size());
+        assertEquals(content, StringUtils.trim(fileContent.get(0)));
         return file;
     }
 

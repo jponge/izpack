@@ -227,8 +227,6 @@ public class FileExecutor
                 process = Runtime.getRuntime().exec(params);
             }
 
-            process = Runtime.getRuntime().exec(params);
-
             boolean isConsole = false;// TODO: impl from xml <execute
             // in_console=true ...>, but works already
             // if this flag is true

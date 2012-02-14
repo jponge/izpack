@@ -1,1 +1,1 @@
-echo %1 > $UNINSTALL_LOG
+echo %1 >> $UNINSTALL_LOG

@@ -1,1 +1,1 @@
-echo %1 > $POSTINSTALL_LOG
+echo %1 >> $POSTINSTALL_LOG
