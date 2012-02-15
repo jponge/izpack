@@ -37,7 +37,7 @@ import java.util.ArrayList;
  */
 public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConstants
 {
-
+    private static final String USER_PATH_SELECTION_PANEL_CLASS = "com.izforge.izpack.panels.UserPathSelectionPanel";
     /**
      * holds all the components and layout constraints.
      */
@@ -224,7 +224,8 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
             }
             if (PathSelectionPanel.class.isAssignableFrom(clazz)
                     || JCheckBox.class.isAssignableFrom(clazz)
-                    || JRadioButton.class.isAssignableFrom(clazz))
+                    || JRadioButton.class.isAssignableFrom(clazz)
+                    || USER_PATH_SELECTION_PANEL_CLASS.equals(clazz.getName()))
             {
                 return (FULL_LINE_CONTROL_CONSTRAINT);
             }
@@ -1151,7 +1152,8 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
     private boolean needsReEvaluation(Component comp)
     {
         if ((comp instanceof com.izforge.izpack.util.MultiLineLabel)
-                || (comp instanceof com.izforge.izpack.panels.PathSelectionPanel))
+                || (comp instanceof com.izforge.izpack.panels.PathSelectionPanel)
+                || USER_PATH_SELECTION_PANEL_CLASS.equals(comp.getClass().getName()))
         {
             return (true);
         }
