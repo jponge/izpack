@@ -471,7 +471,6 @@ public class RulesEngineImpl implements RulesEngine
     public boolean isConditionTrue(String id, Properties variables)
     {
         Condition cond = getCondition(id);
-        cond.setInstalldata(installdata);
         if (cond == null)
         {
             Debug.trace("Condition (" + id + ") not found.");
@@ -479,6 +478,7 @@ public class RulesEngineImpl implements RulesEngine
         }
         else
         {
+            cond.setInstalldata(installdata);
             Debug.trace("Checking condition");
             try
             {
