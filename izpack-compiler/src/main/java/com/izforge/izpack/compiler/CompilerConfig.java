@@ -467,7 +467,7 @@ public class CompilerConfig extends Thread
             String src = xmlCompilerHelper.requireAttribute(ixmlElement, "src");
 
             //all external jars contents regardless of stage type are merged into the installer
-            // but we keep a copy of jar entries that user want to merge into uninstaller 
+            // but we keep a copy of jar entries that user want to merge into uninstaller
             // as "customData", where the installer will get them into uninstaller.jar at the end of installation
             // note if stage is empty or null, it is the same at 'install'
             String stage = ixmlElement.getAttribute("stage");
@@ -2357,21 +2357,38 @@ public class CompilerConfig extends Thread
         {
             for (IXMLElement conditionNode : root.getChildrenNamed("condition"))
             {
-                Condition condition = rules.instanciateCondition(conditionNode);
-                if (condition != null)
+                try
                 {
-                    String conditionid = condition.getId();
-                    if (conditions.containsKey(conditionid))
+                    Condition condition = rules.instanciateCondition(conditionNode);
+                    if (condition != null)
                     {
-                        assertionHelper.parseWarn(conditionNode, "Condition with id '" + conditionid
-                                + "' will be overwritten");
+                            String conditionid = condition.getId();
+                            if (conditions.put(conditionid, condition) != null)
+                            {
+                                assertionHelper.parseWarn(conditionNode,
+                                        "Condition with id '" + conditionid
+                                        + "' has been overwritten");
+                            }
                     }
-                    conditions.put(conditionid, condition);
+                    else
+                    {
+                        assertionHelper.parseError(conditionNode, "Error instantiating condition");
+                    }
                 }
-                else
-                {
-                    assertionHelper.parseWarn(conditionNode, "Condition couldn't be instantiated.");
+                catch (Exception e) {
+                    throw new CompilerException("Error reading condition at line "
+                    + conditionNode.getLineNr() + ": "
+                    + e.getMessage(), e);
                 }
+            }
+            try
+            {
+                rules.checkConditions();
+            }
+            catch (Exception e)
+            {
+                throw new CompilerException("Conditions check failed: "
+                        + e.getMessage(), e);
             }
         }
         notifyCompilerListener("addConditions", CompilerListener.END, data);

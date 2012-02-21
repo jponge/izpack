@@ -6,13 +6,14 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * Interface of rulesEngine
  */
 public interface RulesEngine extends Serializable
 {
-    String[] getKnownConditionIds();
+    Set<String> getKnownConditionIds();
 
     boolean isConditionTrue(String id, Properties variables);
 
@@ -39,6 +40,12 @@ public interface RulesEngine extends Serializable
     void analyzeXml(IXMLElement conditionsspec);
 
     Condition instanciateCondition(IXMLElement condition);
+
+    /**
+     * Check whether references condition exist This must be done after all conditions have been
+     * read, to not depend on order of their definition in the XML
+     */
+    void checkConditions() throws Exception;
 
     IXMLElement createConditionElement(Condition condition, IXMLElement root);
 }

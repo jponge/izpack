@@ -38,6 +38,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * Class for debugging variables and conditions.
@@ -84,7 +85,7 @@ public class Debugger
             variableHistory.addValue(lasttimevariables.getProperty(variablename), "initial value");
             variableshistory.put(variablename, variableHistory);
         }
-        String[] conditionids = this.rules.getKnownConditionIds();
+        Set<String> conditionids = this.rules.getKnownConditionIds();
         for (String conditionid : conditionids)
         {
             Condition currentcondition = rules.getCondition(conditionid);
@@ -113,7 +114,7 @@ public class Debugger
 
     private void updateChangedConditions(String comment)
     {
-        String[] conditionids = this.rules.getKnownConditionIds();
+        Set<String> conditionids = this.rules.getKnownConditionIds();
         for (String conditionid : conditionids)
         {
             Condition currentcondition = rules.getCondition(conditionid);

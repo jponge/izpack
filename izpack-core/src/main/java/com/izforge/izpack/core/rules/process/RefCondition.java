@@ -42,6 +42,11 @@ public class RefCondition extends Condition
         this.rules = rules;
         this.referencedcondition = null;
         this.referencedConditionId = null;
+   }
+
+    public String getReferencedConditionId()
+    {
+        return referencedConditionId;
     }
 
     /**
@@ -55,13 +60,6 @@ public class RefCondition extends Condition
         {
             throw new Exception("Missing attribute \"refid\" in condition \"" + getId() + "\"");
         }
-        this.referencedcondition = rules.getCondition(this.referencedConditionId);
-        if (this.referencedcondition == null)
-        {
-            throw new Exception("Condition \"" + referencedConditionId
-                    + "\" referenced from condition \"" + getId() + "\" does not exist");
-        }
-        this.setId("ref." + this.referencedConditionId);
     }
 
     /**

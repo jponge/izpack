@@ -38,6 +38,7 @@ import com.izforge.izpack.core.rules.logic.OrCondition;
 import com.izforge.izpack.core.rules.logic.XorCondition;
 import com.izforge.izpack.core.rules.process.JavaCondition;
 import com.izforge.izpack.core.rules.process.PackselectionCondition;
+import com.izforge.izpack.core.rules.process.RefCondition;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.util.Debug;
 
@@ -62,6 +63,7 @@ public class RulesEngineImpl implements RulesEngine
     protected Map<String, String> optionalpackconditions;
 
     protected Map<String, Condition> conditionsmap = new HashMap<String, Condition>();
+    private Set<Condition> refConditions = new HashSet<Condition>();
 
     protected AutomatedInstallData installdata;
     private ClassPathCrawler classPathCrawler;
@@ -157,12 +159,9 @@ public class RulesEngineImpl implements RulesEngine
      *
      * @return
      */
-    public String[] getKnownConditionIds()
+    public Set<String> getKnownConditionIds()
     {
-        String[] conditionids = conditionsmap.keySet().toArray(
-                new String[conditionsmap.size()]);
-        Arrays.sort(conditionids);
-        return conditionids;
+        return conditionsmap.keySet();
     }
 
     public Condition instanciateCondition(IXMLElement condition)
@@ -187,14 +186,22 @@ public class RulesEngineImpl implements RulesEngine
             try
             {
                 Class<Condition> conditionclass = classPathCrawler.searchClassInClassPath(conditionclassname);
+                if (condid == null || condid.isEmpty() || "UNKNOWN".equals(condid))
+                {
+                    condid = conditionclassname + "-"
+                             + UUID.randomUUID().toString();
+                    Debug.trace("Random condition id " + condid + " generated");
+                }
                 container.addComponent(condid, conditionclass);
                 result = (Condition) container.getComponent(condid);
                 result.readFromXML(condition);
-                if (condid != null)
-                {
-                    result.setId(condid);
-                }
+                result.setId(condid);
                 result.setInstalldata(installdata);
+                conditionsmap.put(condid, result);
+                if (result instanceof RefCondition)
+                {
+                    refConditions.add(result);
+                }
             }
             catch (Exception e)
             {
@@ -202,6 +209,21 @@ public class RulesEngineImpl implements RulesEngine
             }
         }
         return result;
+    }
+
+    public void checkConditions() throws Exception {
+        for (Condition refCondition : refConditions)
+        {
+            String referencedConditionId = ((RefCondition) refCondition).getReferencedConditionId();
+
+            Condition referencedCondition = getCondition(referencedConditionId);
+            if (referencedCondition == null)
+            {
+                throw new IzPackException(
+                        "Referenced condition \"" + referencedConditionId
+                        + "\" not found");
+            }
+        }
     }
 
     /**
