@@ -163,8 +163,6 @@ public class TreePacksPanelConsoleHelper extends PanelConsoleHelper implements P
                             final Map<String, Pack> idToPack, final String packParent, boolean packMaster,final String indent) 
     {
         Pack p                      = null;
-        Boolean conditionSatisfied  = null;
-        Boolean conditionExists     = null;
 
         /*
          * If that packParent contains children,
@@ -211,7 +209,7 @@ public class TreePacksPanelConsoleHelper extends PanelConsoleHelper implements P
         // If a condition is set to that pack
         if (conditionExists) {
             if (conditionSatisfied) {
-                out((packMaster ? "[" + p.id + "]" : indent + packName) + " [Already Selected]");
+                out((packMaster ? "[" + id + "]" : indent + packName) + " [Already Selected]");
 
                 selectedPacks.add(p);
                 // we call drawHelper again to check if that pack has child packs
@@ -221,7 +219,7 @@ public class TreePacksPanelConsoleHelper extends PanelConsoleHelper implements P
                 return true;
             } else {
                 // condition says don't install!
-                out((packMaster ? "[" + p.id + "]" : indent + packName) + " [Not Selected]");
+                out((packMaster ? "[" + id + "]" : indent + packName) + " [Not Selected]");
                 return false;
             }
         // If no condition specified
