@@ -4,14 +4,15 @@ import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.container.CompilerContainer;
-import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.compiler.data.*;
+
 import org.apache.maven.model.Developer;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Mojo for izpack
@@ -85,6 +86,10 @@ public class IzPackNewMojo extends AbstractMojo
         compilerContainer.addComponent(CompilerData.class, compilerData);
 
         CompilerConfig compilerConfig = compilerContainer.getComponent(CompilerConfig.class);
+
+        PropertyManager propertyManager = compilerContainer.getComponent(PropertyManager.class);
+        initMavenProperties(propertyManager);
+
         try
         {
             compilerConfig.executeCompiler();
@@ -93,6 +98,25 @@ public class IzPackNewMojo extends AbstractMojo
         {
             throw new AssertionError(e);
         }
+    }
+
+    private void initMavenProperties(PropertyManager propertyManager)
+    {
+      if(project != null)
+      {
+        Properties properties = project.getProperties();
+        for (String propertyName : properties.stringPropertyNames()) {
+          String value = properties.getProperty(propertyName);
+          if (propertyManager.addProperty(propertyName, value))
+          {
+            getLog().debug("Maven property added: " + propertyName + "=" + value);
+          }
+          else
+          {
+            getLog().warn("Maven property " + propertyName + " could not be overridden");
+          }
+        }
+      }
     }
 
     private CompilerData initCompilerData()
@@ -111,4 +135,6 @@ public class IzPackNewMojo extends AbstractMojo
         }
         return new CompilerData(comprFormat, kind, installFile, null, baseDir, output, comprLevel, info);
     }
+
+
 }
