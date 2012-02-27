@@ -60,7 +60,6 @@ import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
-import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.helper.TargetFileSet;
 import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
 import com.izforge.izpack.compiler.listener.CompilerListener;
@@ -86,7 +85,6 @@ import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
-import com.izforge.izpack.util.ClassUtils;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.IoHelper;
@@ -158,11 +156,6 @@ public class CompilerConfig extends Thread
     private CompilerData compilerData;
 
     /**
-     * Compiler helper
-     */
-    private CompilerHelper compilerHelper;
-
-    /**
      * List of CompilerListeners which should be called at packaging
      */
     private List<CompilerListener> compilerListeners = new ArrayList<CompilerListener>();
@@ -210,14 +203,18 @@ public class CompilerConfig extends Thread
      *
      * @param compilerData Object containing all informations found in command line
      */
-    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler, CompilerHelper compilerHelper, XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager, MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller, AssertionHelper assertionHelper, CompilerContainer compilerContainer, ClassPathCrawler classPathCrawler, RulesEngine rules, PathResolver pathResolver, ResourceFinder resourceFinder)
+    public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler,
+                          XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager,
+                          MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller,
+                          AssertionHelper assertionHelper, CompilerContainer compilerContainer,
+                          ClassPathCrawler classPathCrawler, RulesEngine rules, PathResolver pathResolver,
+                          ResourceFinder resourceFinder)
     {
         this.assertionHelper = assertionHelper;
         this.rules = rules;
         this.compilerData = compilerData;
         this.variableSubstitutor = variableSubstitutor;
         this.compiler = compiler;
-        this.compilerHelper = compilerHelper;
         this.xmlCompilerHelper = xmlCompilerHelper;
         this.propertyManager = propertyManager;
         this.packager = packager;
@@ -295,6 +292,8 @@ public class CompilerConfig extends Thread
         addResources(data);
         addNativeLibraries(data);
         addJars(data);
+        addPanelJars(data);
+        addListenerJars(data);
         addPanels(data);
         addListeners(data);
         addPacks(data);
@@ -455,34 +454,124 @@ public class CompilerConfig extends Thread
     }
 
     /**
-     * Add project specific external jar files to the installer.
+     * Adds jars specified by {@code <jar src=.... />}.
      *
-     * @param data The XML data.
+     * @param data the XML install data
+     * @throws CompilerException if a required attribute is not present
+     * @throws IOException       if the jar cannot be read
      */
-    protected void addJars(IXMLElement data) throws Exception
+    protected void addJars(IXMLElement data) throws IOException
     {
         notifyCompilerListener("addJars", CompilerListener.BEGIN, data);
         for (IXMLElement ixmlElement : data.getChildrenNamed("jar"))
         {
             String src = xmlCompilerHelper.requireAttribute(ixmlElement, "src");
 
-            //all external jars contents regardless of stage type are merged into the installer
-            // but we keep a copy of jar entries that user want to merge into uninstaller
+            // all external jars contents regardless of stage type are merged into the installer
+            // but we keep a copy of jar entries that user want to merge into uninstaller 
             // as "customData", where the installer will get them into uninstaller.jar at the end of installation
             // note if stage is empty or null, it is the same at 'install'
             String stage = ixmlElement.getAttribute("stage");
             URL url = resourceFinder.findProjectResource(src, "Jar file", ixmlElement);
-            CustomData customData = null;
-            if ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage))
-            {
-                customData = new CustomData(null, compilerHelper.getContainedFilePaths(url), null,
-                        CustomData.UNINSTALLER_JAR);
-            }
-            packager.addCustomJar(customData, url);
-            ClassUtils.loadJarInSystemClassLoader(FileUtil.convertUrlToFile(url));
-
+            boolean uninstaller = "both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage);
+            compiler.addJar(url, uninstaller);
         }
         notifyCompilerListener("addJars", CompilerListener.END, data);
+    }
+
+    /**
+     * Adds jars specified by {@code <panel jar=.../>;}
+     *
+     * @param data the XML install data
+     * @throws IOException if the jar cannot be read
+     */
+    protected void addPanelJars(IXMLElement data) throws IOException
+    {
+        notifyCompilerListener("addPanelJars", CompilerListener.BEGIN, data);
+
+        IXMLElement panels = xmlCompilerHelper.requireChildNamed(data, "panels");
+        for (IXMLElement panel : panels.getChildrenNamed("panel"))
+        {
+            URL url = getPanelJarURL(panel);
+            if (url != null)
+            {
+                compiler.addJar(url, false);
+            }
+        }
+        notifyCompilerListener("addPanelJars", CompilerListener.END, data);
+    }
+
+    /**
+     * Returns the URL for a panel jar, given the panel configuration.
+     *
+     * @param panel the panel configuration
+     * @return the panel jar URL, or <tt>null</tt> if there is none
+     * @throws CompilerException if a jar is specified but cannot be found
+     */
+    private URL getPanelJarURL(IXMLElement panel) throws CompilerException
+    {
+        return getResourceURL(panel, "jar", "Panel jar file");
+    }
+
+    /**
+     * Returns the URL for a listener jar, given the listener configuration.
+     *
+     * @param listener the listener configuration
+     * @return the listener jar URL, or <tt>null</tt> if there is none
+     * @throws CompilerException if a jar is specified but cannot be found
+     */
+    private URL getListenerJarURL(IXMLElement listener) throws CompilerException
+    {
+        return getResourceURL(listener, "jar", "Listener jar file");
+    }
+
+    /**
+     * Helper to return a resource URL given the XML configuration and resource attribute name.
+     *
+     * @param element     the element
+     * @param attribute   the resource attribute name
+     * @param description a description of the resource, for error reporting purposes
+     * @return the resource URL, or <tt>null</tt> if the attribute is not set
+     * @throws CompilerException if an attribute value exists, but the corresponding resource cannot be found
+     */
+    private URL getResourceURL(IXMLElement element, String attribute, String description) throws CompilerException
+    {
+        String value = element.getAttribute(attribute);
+        if (!StringUtils.isEmpty(value))
+        {
+            return resourceFinder.findIzPackResource(value, description, element, false);
+        }
+        return null;
+    }
+
+    /**
+     * Adds jars specified by {@code <listener jar=.../>;}
+     *
+     * @param data the XML install data
+     * @throws com.izforge.izpack.api.exception.CompilerException
+     *                     if the jar cannot be found
+     * @throws IOException if the jar cannot be read
+     */
+    protected void addListenerJars(IXMLElement data) throws IOException
+    {
+        notifyCompilerListener("addListenerJars", CompilerListener.BEGIN, data);
+        IXMLElement listeners = data.getFirstChildNamed("listeners");
+        if (listeners != null)
+        {
+            for (IXMLElement listener : listeners.getChildrenNamed("listener"))
+            {
+                Stage stage = Stage.valueOf(xmlCompilerHelper.requireAttribute(listener, "stage"));
+                if (Stage.isInInstaller(stage))
+                {
+                    URL url = getListenerJarURL(listener);
+                    if (url != null)
+                    {
+                        compiler.addJar(url, stage == Stage.uninstall);
+                    }
+                }
+            }
+        }
+        notifyCompilerListener("addListenerJars", CompilerListener.END, data);
     }
 
     /**
@@ -1337,46 +1426,6 @@ public class CompilerConfig extends Thread
     }
 
     /**
-     * Recursive method to add files in a pack.
-     *
-     * @param file        The file to add.
-     * @param targetdir   The relative path to the parent.
-     * @param osList      The target OS constraints.
-     * @param override    Overriding behaviour.
-     * @param pack        Pack to be packed into
-     * @param additionals Map which contains additional data
-     * @param condition
-     * @throws FileNotFoundException if the file does not exist
-     */
-    protected void addRecursively(File baseDir, File file, String targetdir,
-                                  List<OsModel> osList, OverrideType override, String overrideRenameTo,
-                                  Blockable blockable, PackInfo pack, Map additionals, String condition) throws IOException
-    {
-        String targetfile = targetdir + "/" + file.getName();
-        if (!file.isDirectory())
-        {
-            pack.addFile(baseDir, file, targetfile, osList, override, overrideRenameTo, blockable, additionals, condition);
-        }
-        else
-        {
-            File[] files = file.listFiles();
-            if (files.length == 0) // The directory is empty so must be added
-            {
-                pack.addFile(baseDir, file, targetfile, osList, override, overrideRenameTo, blockable, additionals, condition);
-            }
-            else
-            {
-                // new targetdir = targetfile;
-                for (File file1 : files)
-                {
-                    addRecursively(baseDir, file1, targetfile, osList, override, overrideRenameTo, blockable,
-                            pack, additionals, condition);
-                }
-            }
-        }
-    }
-
-    /**
      * Parse panels and their paramters, locate the panels resources and add to the Packager.
      *
      * @param data The XML data.
@@ -1407,26 +1456,13 @@ public class CompilerConfig extends Thread
             String className = panelElement.getAttribute("classname");
 
             // add an id
-            String panelid = panelElement.getAttribute("id");
-            panel.setPanelid(panelid);
+            String id = panelElement.getAttribute("id");
+            panel.setPanelid(id);
             String condition = panelElement.getAttribute("condition");
             panel.setCondition(condition);
 
-            // Panel files come in jars packaged w/ IzPack, or they can be
-            // specified via a jar attribute on the panel element
-            String jarPath = panelElement.getAttribute("jar");
-            if (StringUtils.isNotBlank(jarPath))
-            {
-                URL jarUrl = resourceFinder.findIzPackResource(jarPath, "Panel jar file", panelElement, true);
-                panel.className = compilerHelper.getFullClassName(jarUrl, className);
-                packager.addJarContent(jarUrl);
-            }
-            else
-            {
-                //Assume it is merged with <jar> tag
-                panel.className = className;
-            }
-
+            // note - all jars must be added to the classpath prior to invoking this
+            panel.className = compiler.findClass(className, getPanelJarURL(panelElement));
 
             IXMLElement configurationElement = panelElement.getFirstChildNamed("configuration");
             if (configurationElement != null)
@@ -1467,13 +1503,13 @@ public class CompilerConfig extends Thread
                 {
                     String iso3 = help.getAttribute(AutomatedInstallData.ISO3_ATTRIBUTE);
                     String resourceId;
-                    if (panelid == null)
+                    if (id == null)
                     {
                         resourceId = className + "_" + panelCounter + "_help_" + iso3 + ".html";
                     }
                     else
                     {
-                        resourceId = panelid + "_" + panelCounter + "_help_" + iso3 + ".html";
+                        resourceId = id + "_" + panelCounter + "_help_" + iso3 + ".html";
                     }
 //                    panel.addHelp(iso3, resourceId);
                     URL originalUrl = resourceFinder.findProjectResource(help
@@ -2609,10 +2645,9 @@ public class CompilerConfig extends Thread
                 Stage stage = Stage.valueOf(xmlCompilerHelper.requireAttribute(listener, "stage"));
                 if (Stage.isInInstaller(stage))
                 {
-                    String jar = listener.getAttribute("jar");
-                    URL url = (jar != null) ? resourceFinder.findProjectResource(jar, "Jar file", listener) : null;
+                    className = compiler.findClass(className, getListenerJarURL(listener));
                     List<OsModel> constraints = OsConstraintHelper.getOsList(listener);
-                    compiler.addCustomListener(className, url, stage, constraints);
+                    compiler.addCustomListener(className, stage, constraints);
                 }
             }
         }
@@ -2640,7 +2675,7 @@ public class CompilerConfig extends Thread
             if (Stage.compiler.equals(listener.getStage()))
             {
                 listener.getOs();
-                Class<? extends CompilerListener> clazz = classPathCrawler.searchClassInClassPath(listener.getClassname());
+                Class<? extends CompilerListener> clazz = classPathCrawler.findClass(listener.getClassname());
                 if (clazz != null)
                 {
                     compilerContainer.addComponent(clazz);

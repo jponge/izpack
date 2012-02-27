@@ -38,17 +38,21 @@ class ConsoleInstallAction extends AbstractInstallAction
      * @param panelConsole the console implementation of the panel
      * @param console      the console
      * @return <tt>true</tt> if the action was successful, otherwise <tt>false</tt>
-     * @throws com.izforge.izpack.api.exception.InstallerException
-     *          for any installer error
+     * @throws InstallerException for any installer error
      */
     @Override
     protected boolean run(Panel panel, PanelConsole panelConsole, Console console) throws InstallerException
     {
-        boolean result = panelConsole.runConsole(getInstallData(), console);
-        if (result)
+        boolean result;
+        do
         {
-            result = validatePanel(panel, console);
+            result = panelConsole.runConsole(getInstallData(), console);
+            if (!result)
+            {
+                break;
+            }
         }
+        while (!validatePanel(panel, console));
         return result;
     }
 }

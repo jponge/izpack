@@ -185,7 +185,7 @@ public class RulesEngineImpl implements RulesEngine
             }
             try
             {
-                Class<Condition> conditionclass = classPathCrawler.searchClassInClassPath(conditionclassname);
+                Class<Condition> conditionclass = classPathCrawler.findClass(conditionclassname);
                 if (condid == null || condid.isEmpty() || "UNKNOWN".equals(condid))
                 {
                     condid = conditionclassname + "-"
