@@ -47,7 +47,7 @@
 
     <!-- The listeners section for CustomActions -->
     <listeners>
-        <listener classname="com.izforge.izpack.test.listener.TestInstallerListener" stage="install" jar="lib/izpack-test-listener.jar"/>
-        <listener classname="com.izforge.izpack.test.listener.TestUninstallerListener" stage="uninstall" jar="lib/izpack-test-listener.jar"/>
+        <listener classname="com.izforge.izpack.test.listener.TestInstallerListener" stage="install" jar="samples/event/lib/izpack-test-listener.jar"/>
+        <listener classname="com.izforge.izpack.test.listener.TestUninstallerListener" stage="uninstall" jar="samples/event/lib/izpack-test-listener.jar"/>
     </listeners>
 </installation>

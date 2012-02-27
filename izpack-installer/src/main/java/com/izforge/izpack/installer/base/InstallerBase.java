@@ -56,8 +56,6 @@ public abstract class InstallerBase implements InstallerRequirementDisplay
         this.resourceManager = resourceManager;
     }
 
-    public abstract void showMissingRequirementMessage(String message);
-
     /**
      * Refreshes Dynamic Variables.
      */

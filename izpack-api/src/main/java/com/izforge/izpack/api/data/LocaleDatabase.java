@@ -21,6 +21,7 @@ package com.izforge.izpack.api.data;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
+import com.izforge.izpack.api.adaptator.XMLException;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.exception.IzPackException;
 
@@ -65,11 +66,10 @@ public class LocaleDatabase extends TreeMap<String, String>
      * The constructor.
      *
      * @param in An InputStream to read the translation from.
-     * @throws Exception Description of the Exception
+     * @throws XMLException if the stream cannot be parsed
      */
-    public LocaleDatabase(InputStream in) throws Exception
+    public LocaleDatabase(InputStream in)
     {
-        // We call the superclass default constructor
         super();
         add(in);
     }
@@ -79,7 +79,8 @@ public class LocaleDatabase extends TreeMap<String, String>
      * pairs as declared by the DTD langpack.dtd.
      *
      * @param in an InputStream to read the translation from.
-     * @throws Exception
+     * @throws IzPackException if the stream is not an IzPack langpack file
+     * @throws XMLException    if the stream cannot be parsed
      */
     public void add(InputStream in)
     {
@@ -91,8 +92,7 @@ public class LocaleDatabase extends TreeMap<String, String>
         // We check the data
         if (!"langpack".equalsIgnoreCase(data.getName()))
         {
-            throw new IzPackException(
-                    "this is not an IzPack XML langpack file");
+            throw new IzPackException("this is not an IzPack XML langpack file");
         }
 
         // We fill the Hashtable
@@ -108,7 +108,6 @@ public class LocaleDatabase extends TreeMap<String, String>
                 put(child.getAttribute("id"), child.getAttribute("txt"));
             }
         }
-
     }
 
     /**

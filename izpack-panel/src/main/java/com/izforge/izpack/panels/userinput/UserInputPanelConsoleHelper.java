@@ -25,6 +25,7 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.installer.console.Console;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 import com.izforge.izpack.panels.userinput.processor.Processor;
@@ -36,7 +37,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+import java.util.StringTokenizer;
 
 /**
  * The user input panel console helper class.
@@ -171,61 +176,54 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         return true;
     }
 
-    public boolean runConsole(AutomatedInstallData idata)
+    /**
+     * Runs the panel using the specified console.
+     *
+     * @param installData the installation data
+     * @param console     the console
+     * @return <tt>true</tt> if the panel ran successfully, otherwise <tt>false</tt>
+     */
+    @Override
+    public boolean runConsole(AutomatedInstallData installData, Console console)
     {
-
-        boolean processpanel = collectInputs(idata);
+        boolean processpanel = collectInputs(installData);
         if (!processpanel)
         {
             return true;
         }
         boolean status = true;
-        for (Input input : listInputs)
+        for (Input field : listInputs)
         {
-            if (TEXT_FIELD.equals(input.strFieldType)
-                    || FILE.equals(input.strFieldType)
-                    || RULE_FIELD.equals(input.strFieldType)
-                    || DIR.equals(input.strFieldType))
+            if (TEXT_FIELD.equals(field.strFieldType)
+                    || FILE.equals(field.strFieldType)
+                    || RULE_FIELD.equals(field.strFieldType)
+                    || DIR.equals(field.strFieldType))
             {
-                status = status && processTextField(input, idata);
+                status = status && processTextField(field, installData);
             }
-            else if (COMBO_FIELD.equals(input.strFieldType)
-                    || RADIO_FIELD.equals(input.strFieldType))
+            else if (COMBO_FIELD.equals(field.strFieldType)
+                    || RADIO_FIELD.equals(field.strFieldType))
             {
-                status = status && processComboRadioField(input, idata);
+                status = status && processComboRadioField(field, installData);
             }
-            else if (CHECK_FIELD.equals(input.strFieldType))
+            else if (CHECK_FIELD.equals(field.strFieldType))
             {
-                status = status && processCheckField(input, idata);
+                status = status && processCheckField(field, installData);
             }
-            else if (STATIC_TEXT.equals(input.strFieldType)
-                    || TITLE_FIELD.equals(input.strFieldType)
-                    || DIVIDER.equals(input.strFieldType)
-                    || SPACE.equals(input.strFieldType))
+            else if (STATIC_TEXT.equals(field.strFieldType)
+                    || TITLE_FIELD.equals(field.strFieldType)
+                    || DIVIDER.equals(field.strFieldType)
+                    || SPACE.equals(field.strFieldType))
             {
-                status = status && processSimpleField(input, idata);
+                status = status && processSimpleField(field, installData);
             }
-            else if (PASSWORD.equals(input.strFieldType))
+            else if (PASSWORD.equals(field.strFieldType))
             {
-                status = status && processPasswordField(input, idata);
+                status = status && processPasswordField(field, installData);
             }
-
         }
 
-        int i = askEndOfConsolePanel();
-        if (i == 1)
-        {
-            return true;
-        }
-        else if (i == 2)
-        {
-            return false;
-        }
-        else
-        {
-            return runConsole(idata);
-        }
-
+        return promptEndPanel(installData, console);
     }
 
     public boolean collectInputs(AutomatedInstallData idata)

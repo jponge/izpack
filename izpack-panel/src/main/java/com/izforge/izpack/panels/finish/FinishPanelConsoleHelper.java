@@ -22,6 +22,7 @@
 package com.izforge.izpack.panels.finish;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.installer.console.Console;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 
@@ -45,18 +46,26 @@ public class FinishPanelConsoleHelper extends PanelConsoleHelper implements Pane
         return true;
     }
 
-    public boolean runConsole(AutomatedInstallData idata)
+    /**
+     * Runs the panel using the specified console.
+     *
+     * @param installData the installation data
+     * @param console     the console
+     * @return <tt>true</tt> 
+     */
+    @Override
+    public boolean runConsole(AutomatedInstallData installData, Console console)
     {
-        if (idata.isInstallSuccess())
+        if (installData.isInstallSuccess())
         {
-            System.out.println("Installation was successful");
-            System.out.println("application installed on " + idata.getInstallPath());
-
+            console.println("Installation was successful");
+            console.println("application installed on " + installData.getInstallPath());
         }
         else
         {
-            System.out.println("Install Failed!!!");
+            console.println("Install Failed!!!");
         }
         return true;
     }
+
 }

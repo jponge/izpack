@@ -23,6 +23,8 @@ package com.izforge.izpack.panels.hello;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.installer.console.Console;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 
@@ -49,42 +51,39 @@ public class HelloPanelConsoleHelper extends PanelConsoleHelper implements Panel
         return true;
     }
 
-    public boolean runConsole(AutomatedInstallData idata)
+    /**
+     * Runs the panel using the specified console.
+     *
+     * @param installData the installation data
+     * @param console     the console
+     * @return <tt>true</tt> if the panel ran successfully, otherwise <tt>false</tt>
+     */
+    @Override
+    public boolean runConsole(AutomatedInstallData installData, Console console)
     {
-        String welcomeText = idata.getLangpack().getString("HelloPanel.welcome1") + idata.getInfo().getAppName() + " "
-                + idata.getInfo().getAppVersion() + idata.getLangpack().getString("HelloPanel.welcome2");
-        System.out.println(welcomeText);
-        ArrayList<Info.Author> authors = idata.getInfo().getAuthors();
+        LocaleDatabase langPack = installData.getLangpack();
+        Info info = installData.getInfo();
+        String welcomeText = langPack.getString("HelloPanel.welcome1") + info.getAppName() + " "
+                + info.getAppVersion() + langPack.getString("HelloPanel.welcome2");
+        console.println(welcomeText);
+        ArrayList<Info.Author> authors = info.getAuthors();
         if (!authors.isEmpty())
         {
-            String authorText = idata.getLangpack().getString("HelloPanel.authors");
+            console.println(langPack.getString("HelloPanel.authors"));
 
             for (Info.Author author : authors)
             {
                 String email = (author.getEmail() != null && author.getEmail().length() > 0) ? (" <"
                         + author.getEmail() + ">") : "";
-                System.out.println(" - " + author.getName() + email);
+                console.println(" - " + author.getName() + email);
             }
-
         }
 
-        if (idata.getInfo().getAppURL() != null)
+        if (info.getAppURL() != null)
         {
-            String urlText = idata.getLangpack().getString("HelloPanel.url") + idata.getInfo().getAppURL();
-            System.out.println(urlText);
+            String urlText = langPack.getString("HelloPanel.url") + info.getAppURL();
+            console.println(urlText);
         }
-        int i = askEndOfConsolePanel();
-        if (i == 1)
-        {
-            return true;
-        }
-        else if (i == 2)
-        {
-            return false;
-        }
-        else
-        {
-            return runConsole(idata);
-        }
+        return promptEndPanel(installData, console);
     }
 }

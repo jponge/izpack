@@ -24,6 +24,7 @@ package com.izforge.izpack.panels.install;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.installer.console.Console;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
@@ -39,9 +40,17 @@ import java.util.Properties;
 public class InstallPanelConsoleHelper extends PanelConsoleHelper implements PanelConsole,
         AbstractUIProgressHandler
 {
+    /**
+     * The unpacker.
+     */
+    private final IUnpacker unpacker;
 
     private int noOfPacks = 0;
 
+    public InstallPanelConsoleHelper(IUnpacker unpacker)
+    {
+        this.unpacker = unpacker;
+    }
 
     public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
     {
@@ -53,32 +62,21 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
         return runConsole(installData);
     }
 
-    public boolean runConsole(AutomatedInstallData idata)
+    /**
+     * Runs the panel using the specified console.
+     *
+     * @param installData the installation data
+     * @param console     the console
+     * @return <tt>true</tt> if the panel ran successfully, otherwise <tt>false</tt>
+     */
+    @Override
+    public boolean runConsole(AutomatedInstallData installData, Console console)
     {
-
-        //REFACTOR : Use container to get unpacker
-//        IUnpacker unpacker = UnpackerFactory.getUnpacker(idata.getInfo().getUnpackerClassName(), idata, this);
-//                this);
-        IUnpacker unpacker = null;
-        Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
-        unpacker.setRules(idata.getRules());
-        unpackerthread.start();
-        boolean done = false;
-        while (!done && unpackerthread.isAlive())
-        {
-            try
-            {
-                Thread.sleep(100);
-            }
-            catch (InterruptedException e)
-            {
-
-            }
-        }
+        unpacker.setRules(installData.getRules());
+        unpacker.setHandler(this);
+        unpacker.run();
         return unpacker.getResult();
-
     }
-
 
     public void emitNotification(String message)
     {

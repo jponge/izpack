@@ -69,7 +69,7 @@ public class PanelManager
         {
             if (OsConstraintHelper.oneMatchesCurrentSystem(panel.getOsConstraints()))
             {
-                final Class<? extends IzPanel> panelClass = classPathCrawler.searchClassInClassPath(panel.getClassName());
+                final Class<? extends IzPanel> panelClass = classPathCrawler.findClass(panel.getClassName());
                 if (panel.getPanelid() != null)
                 {
                     mapPanel.put(panel.getPanelid(), panelClass);
@@ -116,7 +116,7 @@ public class PanelManager
         {
             if (file.getAbsolutePath().endsWith(".class"))
             {
-                Class aClass = classPathCrawler.searchClassInClassPath(ClassResolver.processFileToClassName(file));
+                Class aClass = classPathCrawler.findClass(ClassResolver.processFileToClassName(file));
                 boolean isAbstract = (aClass.getModifiers() & Modifier.ABSTRACT) == Modifier.ABSTRACT;
                 if (!aClass.isInterface() && !isAbstract)
                 {
@@ -147,7 +147,7 @@ public class PanelManager
         {
             if (OsConstraintHelper.oneMatchesCurrentSystem(panel.getOsConstraints()))
             {
-                Class<? extends IzPanel> aClass = classPathCrawler.searchClassInClassPath(panel.getClassName());
+                Class<? extends IzPanel> aClass = classPathCrawler.findClass(panel.getClassName());
                 executePreBuildActions(panel);
                 IzPanel izPanel;
                 if (panel.getPanelid() != null)

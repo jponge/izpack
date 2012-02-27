@@ -118,7 +118,7 @@ public class EventFiller
     @SuppressWarnings("unchecked")
     private void addInstallerListener(String className)
     {
-        Class aClass = classPathCrawler.searchClassInClassPath(className);
+        Class aClass = classPathCrawler.findClass(className);
         bindeableContainer.addComponent(aClass);
         List<InstallerListener> listeners = installdata.getInstallerListener();
         listeners.add((InstallerListener) bindeableContainer.getComponent(aClass));

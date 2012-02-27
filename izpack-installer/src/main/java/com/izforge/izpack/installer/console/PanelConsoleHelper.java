@@ -21,52 +21,28 @@
 
 package com.izforge.izpack.installer.console;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import com.izforge.izpack.api.data.AutomatedInstallData;
 
 /**
  * Abstract class implementing basic functions needed by all panel console helpers.
  *
  * @author Mounir El Hajj
  */
-abstract public class PanelConsoleHelper
+abstract public class PanelConsoleHelper extends AbstractPanelConsole
 {
 
-
+    /**
+     * Prompts to end the console panel.
+     *
+     * @return <tt>1</tt> to continue, <tt>2</tt> to quit, <tt>3</tt> to redisplay
+     * @see {@link #promptEndPanel(AutomatedInstallData, Console)}
+     * @deprecated
+     */
+    @Deprecated
     public int askEndOfConsolePanel()
     {
-        try
-        {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            while (true)
-            {
-                System.out.println("press 1 to continue, 2 to quit, 3 to redisplay");
-                String strIn = br.readLine();
-                if (strIn.equals("1"))
-                {
-                    return 1;
-                }
-                else if (strIn.equals("2"))
-                {
-                    return 2;
-                }
-                else if (strIn.equals("3"))
-                {
-                    return 3;
-                }
-                else if (strIn.equals("3"))
-                {
-                    return 3;
-                }
-            }
-
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return 2;
+        return prompt(new Console(), "press 1 to continue, 2 to quit, 3 to redisplay", 1, 3, 2);
     }
+
 
 }

@@ -23,6 +23,9 @@ package com.izforge.izpack.installer.console;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.Properties;
 
@@ -55,10 +58,20 @@ public interface PanelConsole
     public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p);
 
     /**
-     * Asks the panel to run in interactive console mode
+     * Runs the panel in interactive console mode.
      *
-     * @param installData The installation data *
+     * @param installData the installation data
+     * @return <tt>true</tt> if the panel ran successfully, otherwise <tt>false</tt>
      */
-    public boolean runConsole(AutomatedInstallData installData);
+    boolean runConsole(AutomatedInstallData installData);
+
+    /**
+     * Runs the panel using the specified console.
+     *
+     * @param installData the installation data
+     * @param console the console
+     * @return <tt>true</tt> if the panel ran successfully, otherwise <tt>false</tt>
+     */
+    boolean runConsole(AutomatedInstallData installData, Console console);
 
 }

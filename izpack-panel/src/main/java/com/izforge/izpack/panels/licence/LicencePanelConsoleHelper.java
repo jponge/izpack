@@ -23,12 +23,10 @@ package com.izforge.izpack.panels.licence;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.installer.console.Console;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -49,9 +47,16 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
         return true;
     }
 
-    public boolean runConsole(AutomatedInstallData idata)
+    /**
+     * Runs the panel using the specified console.
+     *
+     * @param installData the installation data
+     * @param console     the console
+     * @return <tt>true</tt> if the panel ran successfully, otherwise <tt>false</tt>
+     */
+    @Override
+    public boolean runConsole(AutomatedInstallData installData, Console console)
     {
-
         String license = null;
         String resNamePrefix = "LicencePanel.licence";
         try
@@ -62,7 +67,7 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
         catch (Exception err)
         {
             license = "Error : could not load the licence text for defined resource " + resNamePrefix;
-            System.out.println(license);
+            console.println(license);
             return false;
         }
 
@@ -74,11 +79,11 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
         while (tokenizer.hasMoreTokens())
         {
             String token = tokenizer.nextToken();
-            System.out.println(token);
+            console.println(token);
             lineNumber++;
             if (lineNumber >= lines)
             {
-                if (!doContinue())
+                if (!doContinue(console))
                 {
                     return false;
                 }
@@ -87,7 +92,7 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
 
         }
 
-        int i = askToAcceptLicense();
+        int i = askToAcceptLicense(console);
 
         if (i == 1)
         {
@@ -99,70 +104,20 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
         }
         else
         {
-            return runConsole(idata);
+            return runConsole(installData, console);
         }
 
     }
 
-    private boolean doContinue()
+    private boolean doContinue(Console console)
     {
-        try
-        {
-            System.out.println("\r");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            while (true)
-            {
-                System.out.println("press Enter to continue, X to exit");
-                String strIn = reader.readLine();
-                if (strIn.equalsIgnoreCase("x"))
-                {
-                    return false;
-                }
-
-                return true;
-            }
-
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return false;
+        String value = prompt(console, "press Enter to continue, X to exit", "x");
+        return !value.equalsIgnoreCase("x");
     }
 
-    private int askToAcceptLicense()
+    private int askToAcceptLicense(Console console)
     {
-        try
-        {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            while (true)
-            {
-                System.out.println("press 1 to accept, 2 to reject, 3 to redisplay");
-                String strIn = reader.readLine();
-                if (strIn.equals("1"))
-                {
-                    return 1;
-                }
-                else if (strIn.equals("2"))
-                {
-                    return 2;
-                }
-                else if (strIn.equals("3"))
-                {
-                    return 3;
-                }
-                else if (strIn.equals("3"))
-                {
-                    return 3;
-                }
-            }
-
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return 2;
+        return prompt(console, "press 1 to accept, 2 to reject, 3 to redisplay", 1, 3, 2);
     }
 
 }

@@ -22,15 +22,13 @@
 
 package com.izforge.izpack.api.adaptator;
 
+import com.izforge.izpack.api.exception.IzPackException;
+
 /**
  * @author David Duponchel
  */
-public class XMLException extends RuntimeException
+public class XMLException extends IzPackException
 {
-    public XMLException()
-    {
-    }
-
     public XMLException(String message)
     {
         super(message);

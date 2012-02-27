@@ -12,7 +12,13 @@ import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Crawl and store a map of all files in classpath when we can't get package directly
@@ -95,7 +101,16 @@ public class ClassPathCrawler
         return classPathContentCache.get(newKey);
     }
 
-    public Class searchClassInClassPath(final String className)
+    /**
+     * Locates the class corresponding to <tt>className</tt>.
+     * <p/>
+     * If the class name is not fully qualified, the first class with the same unqualified name will be returned.
+     *
+     * @param className the class name
+     * @return the corresponding class
+     * @throws MergeException if the class cannot be found
+     */
+    public Class findClass(final String className)
     {
         if (ClassResolver.isFullClassName(className))
         {
@@ -158,10 +173,12 @@ public class ClassPathCrawler
         return resultSet;
     }
 
-    private URL getCurrentJarUrl() throws IOException {
+    private URL getCurrentJarUrl() throws IOException
+    {
         String className = getClass().getName();
         URL classUrl = getClass().getResource("/" + className.replace('.', '/') + ".class");
-        if(classUrl.getProtocol().equals("jar")){
+        if (classUrl.getProtocol().equals("jar"))
+        {
             return ((JarURLConnection) classUrl.openConnection()).getJarFileURL();
         }
         return null;
@@ -187,7 +204,8 @@ public class ClassPathCrawler
 
         Set<URL> filteredUrls = filterUrl(result, acceptedJar);
         // ensure that the current jar is in
-        if (currentJarUrl != null) {
+        if (currentJarUrl != null)
+        {
             filteredUrls.add(currentJarUrl);
         }
         return filteredUrls;

@@ -27,13 +27,19 @@ import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.os.RegistryHandler;
+import com.izforge.izpack.installer.console.Console;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 /**
  * The Target panel console helper class.
@@ -82,14 +88,22 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
         }
     }
 
-    public boolean runConsole(AutomatedInstallData idata)
+    /**
+     * Runs the panel using the specified console.
+     *
+     * @param installData the installation data
+     * @param console     the console
+     * @return <tt>true</tt> if the panel ran successfully, otherwise <tt>false</tt>
+     */
+    @Override
+    public boolean runConsole(AutomatedInstallData installData, Console console)
     {
-        minVersion = idata.getVariable("JDKPathPanel.minVersion");
-        maxVersion = idata.getVariable("JDKPathPanel.maxVersion");
+        minVersion = installData.getVariable("JDKPathPanel.minVersion");
+        maxVersion = installData.getVariable("JDKPathPanel.maxVersion");
         variableName = "JDKPath";
 
         String strPath = "";
-        String strDefaultPath = idata.getVariable(variableName);
+        String strDefaultPath = installData.getVariable(variableName);
         if (strDefaultPath == null)
         {
             if (OsVersion.IS_OSX)
@@ -99,7 +113,7 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
             else
             {
                 // Try the JAVA_HOME as child dir of the jdk path
-                strDefaultPath = (new File(idata.getVariable("JAVA_HOME"))).getParent();
+                strDefaultPath = (new File(installData.getVariable("JAVA_HOME"))).getParent();
             }
         }
 
@@ -116,69 +130,46 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
 
         while (bKeepAsking)
         {
-            System.out.println("Select JDK path [" + strDefaultPath + "] ");
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            try
+            strPath = prompt(console, "Select JDK path [" + strDefaultPath + "] ", null);
+            if (strPath == null)
             {
-                String strIn = br.readLine();
-                if (!strIn.trim().equals(""))
-                {
-                    strPath = strIn.trim();
-                }
-                else
-                {
-                    strPath = strDefaultPath;
-                }
+                // end of stream
+                return false;
             }
-            catch (IOException e)
+            strPath = strPath.trim();
+            if (strPath.equals(""))
             {
-
-                e.printStackTrace();
+                strPath = strDefaultPath;
             }
             if (!pathIsValid(strPath))
             {
-                System.out.println("Path " + strPath + " is not valid.");
+                console.println("Path " + strPath + " is not valid.");
             }
             else if (!verifyVersion(minVersion, maxVersion, strPath))
             {
-                System.out.println("The chosen JDK has the wrong version (available: " + detectedVersion + " required: " + minVersion + " - " + maxVersion + ").");
-                System.out.println("Continue anyway? [no]");
-                br = new BufferedReader(new InputStreamReader(System.in));
-                try
+                String message = "The chosen JDK has the wrong version (available: " + detectedVersion + " required: "
+                        + minVersion + " - " + maxVersion + ").";
+                message += "\nContinue anyway? [no]";
+                String strIn = prompt(console, message, null);
+                if (strIn == null)
                 {
-                    String strIn = br.readLine();
-                    if (strIn.trim().toLowerCase().equals("y") || strIn.trim().toLowerCase().equals("yes"))
-                    {
-                        bKeepAsking = false;
-                    }
+                    // end of stream
+                    return false;
                 }
-                catch (IOException e)
+                strIn = strIn.toLowerCase();
+                if (strIn != null && (strIn.equals("y") || strIn.equals("yes")))
                 {
-
-                    e.printStackTrace();
+                    bKeepAsking = false;
                 }
             }
             else
             {
                 bKeepAsking = false;
             }
-            idata.setVariable(variableName, strPath);
+            installData.setVariable(variableName, strPath);
         }
 
-        int i = askEndOfConsolePanel();
-        if (i == 1)
-        {
-            return true;
-        }
-        else if (i == 2)
-        {
-            return false;
-        }
-        else
-        {
-            return runConsole(idata);
-        }
-
+        return promptEndPanel(installData, console);
     }
 
     /**

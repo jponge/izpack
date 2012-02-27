@@ -23,12 +23,10 @@ package com.izforge.izpack.panels.htmllicence;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.installer.console.Console;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -49,10 +47,17 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
         return true;
     }
 
-    public boolean runConsole(AutomatedInstallData idata)
+    /**
+     * Runs the panel using the specified console.
+     *
+     * @param installData the installation data
+     * @param console     the console
+     * @return <tt>true</tt> if the panel runs successfully, otherwise <tt>false</tt>
+     */
+    @Override
+    public boolean runConsole(AutomatedInstallData installData, Console console)
     {
-
-        String license = null;
+        String license;
         String resNamePrefix = "HTMLLicencePanel.licence";
         try
         {
@@ -62,7 +67,7 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
         catch (Exception err)
         {
             license = "Error : could not load the licence text for defined resource " + resNamePrefix;
-            System.out.println(license);
+            console.println(license);
             return false;
         }
 
@@ -77,11 +82,11 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
         while (tokenizer.hasMoreTokens())
         {
             String token = tokenizer.nextToken();
-            System.out.println(token);
+            console.println(token);
             lineNumber++;
             if (lineNumber >= lines)
             {
-                if (!doContinue())
+                if (!doContinue(console))
                 {
                     return false;
                 }
@@ -90,82 +95,21 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
 
         }
 
-        int i = askToAcceptLicense();
-
-        if (i == 1)
-        {
-            return true;
-        }
-        else if (i == 2)
-        {
-            return false;
-        }
-        else
-        {
-            return runConsole(idata);
-        }
-
+        return askToAcceptLicense(installData, console);
     }
 
-    private boolean doContinue()
+    private boolean askToAcceptLicense(AutomatedInstallData installData, Console console)
     {
-        try
-        {
-            System.out.println("\r");
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            while (true)
-            {
-                System.out.println("press Enter to continue, X to exit");
-                String strIn = br.readLine();
-                if (strIn.equalsIgnoreCase("x"))
-                {
-                    return false;
-                }
-
-                return true;
-            }
-
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return false;
+        boolean result;
+        int value = prompt(console, "press 1 to accept, 2 to reject, 3 to redisplay", 1, 3, 2);
+        result = value == 1 || value != 2 && runConsole(installData, console);
+        return result;
     }
 
-    private int askToAcceptLicense()
+    private boolean doContinue(Console console)
     {
-        try
-        {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            while (true)
-            {
-                System.out.println("press 1 to accept, 2 to reject, 3 to redisplay");
-                String strIn = br.readLine();
-                if (strIn.equals("1"))
-                {
-                    return 1;
-                }
-                else if (strIn.equals("2"))
-                {
-                    return 2;
-                }
-                else if (strIn.equals("3"))
-                {
-                    return 3;
-                }
-                else if (strIn.equals("3"))
-                {
-                    return 3;
-                }
-            }
-
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return 2;
+        String result = prompt(console, "\npress Enter to continue, X to exit", "x");
+        return !result.equalsIgnoreCase("x");
     }
 
     private String removeHTML(String source)

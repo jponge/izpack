@@ -2,6 +2,7 @@ package com.izforge.izpack.installer.language;
 
 import com.izforge.izpack.api.data.InstallerRequirement;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
@@ -55,7 +56,7 @@ public class ConditionCheck
         {
             // Ask user if they want to proceed.
             Debug.trace("Lock File Exists, asking user for permission to proceed.");
-            StringBuffer msg = new StringBuffer();
+            StringBuilder msg = new StringBuilder();
             msg.append("<html>");
             msg.append("The " + appName + " installer you are attempting to run seems to have a copy already running.<br><br>");
             msg.append("This could be from a previous failed installation attempt or you may have accidentally launched <br>");
@@ -119,7 +120,7 @@ public class ConditionCheck
         String required = installdata.getInfo().getJavaVersion();
         if (version.compareTo(required) < 0)
         {
-            StringBuffer msg = new StringBuffer();
+            StringBuilder msg = new StringBuilder();
             msg.append("The application that you are trying to install requires a ");
             msg.append(required);
             msg.append(" version or later of the Java platform.\n");
@@ -163,8 +164,14 @@ public class ConditionCheck
         }
     }
 
-
-    public boolean checkInstallerRequirements(InstallerRequirementDisplay display) throws Exception
+    /**
+     * Checks installation requirements.
+     *
+     * @param display the display to log missing requirements to
+     * @return <tt>true</tt> if the installation requirements are met, otherwise <tt>false</tt> if not
+     * @throws IzPackException if a {@link InstallerRequirement} condition is not defined
+     */
+    public boolean checkInstallerRequirements(InstallerRequirementDisplay display)
     {
         boolean result = true;
 
@@ -175,7 +182,7 @@ public class ConditionCheck
             if (condition == null)
             {
                 Debug.log(conditionid + " not a valid condition.");
-                throw new Exception(conditionid + " could not be found as a defined condition");
+                throw new IzPackException(conditionid + " could not be found as a defined condition");
             }
             if (!condition.isTrue())
             {

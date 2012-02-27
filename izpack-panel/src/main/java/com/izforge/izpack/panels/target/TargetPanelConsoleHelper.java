@@ -24,13 +24,11 @@ package com.izforge.izpack.panels.target;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.installer.console.Console;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 import com.izforge.izpack.panels.path.PathInputPanel;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Properties;
 
@@ -77,58 +75,40 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
         }
     }
 
-    public boolean runConsole(AutomatedInstallData idata)
+    /**
+     * Runs the panel using the specified console.
+     *
+     * @param installData the installation data
+     * @param console     the console
+     * @return <tt>true</tt> if the panel ran successfully, otherwise <tt>false</tt>
+     */
+    @Override
+    public boolean runConsole(AutomatedInstallData installData, Console console)
     {
-
         ResourceManager resourceManager = ResourceManager.getInstance();
-        String strDefaultPath = PathInputPanel.loadDefaultInstallDir(
-                resourceManager, variableSubstitutor, idata);
+        String strDefaultPath = PathInputPanel.loadDefaultInstallDir(resourceManager, variableSubstitutor, installData);
 
-        String strTargetPath = "";
-
-        System.out.println("Select target path [" + strDefaultPath + "] ");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        try
+        String strTargetPath = prompt(console, "Select target path [" + strDefaultPath + "] ", null);
+        if (strTargetPath != null)
         {
-            String strIn = reader.readLine();
-            if (!strIn.trim().equals(""))
-            {
-                strTargetPath = strIn;
-            }
-            else
+            strTargetPath = strTargetPath.trim();
+            if (strTargetPath.isEmpty())
             {
                 strTargetPath = strDefaultPath;
             }
-        }
-        catch (IOException e)
-        {
+            try
+            {
+                strTargetPath = variableSubstitutor.substitute(strTargetPath);
+            }
+            catch (Exception e)
+            {
+                // ignore
+            }
 
-            e.printStackTrace();
-        }
-
-        try
-        {
-            strTargetPath = variableSubstitutor.substitute(strTargetPath);
-        }
-        catch (Exception e)
-        {
-            // ignore
-        }
-
-        idata.setInstallPath(strTargetPath);
-        int i = askEndOfConsolePanel();
-        if (i == 1)
-        {
-            return true;
-        }
-        else if (i == 2)
-        {
+            installData.setInstallPath(strTargetPath);
+            return promptEndPanel(installData, console);
+        } else {
             return false;
         }
-        else
-        {
-            return runConsole(idata);
-        }
-
     }
 }

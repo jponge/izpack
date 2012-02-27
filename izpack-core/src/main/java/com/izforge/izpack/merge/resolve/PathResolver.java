@@ -123,7 +123,7 @@ public class PathResolver
 
     public PanelMerge getPanelMerge(String className)
     {
-        Class aClass = classPathCrawler.searchClassInClassPath(className);
+        Class aClass = classPathCrawler.findClass(className);
         List<Mergeable> mergeableForClass = getMergeablePackage(aClass.getPackage());
         if (panelDependencies.containsKey(aClass.getSimpleName()))
         {

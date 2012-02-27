@@ -36,12 +36,15 @@ import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
+import com.izforge.izpack.util.ClassUtils;
 import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.FileUtil;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -78,6 +81,16 @@ public class Compiler extends Thread
      * Classpath crawler.
      */
     private final ClassPathCrawler classPathCrawler;
+
+    /**
+     * The paths of resources included in user-specified jars.
+     */
+    private Set<String> resourcePaths = new HashSet<String>();
+
+    /**
+     * The resources by their corresponding jar URL.
+     */
+    private Map<URL, List<String>> resourcesByJar = new HashMap<URL, List<String>>();
 
     /**
      * Constructs a <tt>Compiler</tt>.
@@ -334,92 +347,135 @@ public class Compiler extends Thread
     }
 
     /**
-     * Adds a listener to be invoked during installation or uninstallation.
+     * Adds a jar.
      *
-     * @param className   the listener class name
-     * @param url         the jar URL. If <tt>null</</tt>, then <tt>className</tt> must be in the class path
-     * @param stage       the stage when the listener is invoked
-     * @param constraints the list of constraints. May be <tt>null</tt>
-     * @throws CompilerException if the jar referenced by <tt>url</tt> can't be read
+     * @param url         the JAR url
+     * @param uninstaller if <tt>true</tt>, include jar in the uninstaller
+     * @throws IOException if the jar cannot be read
      */
-    public void addCustomListener(String className, URL url, Stage stage, List<OsModel> constraints)
-            throws CompilerException
+    public void addJar(URL url, boolean uninstaller) throws IOException
     {
-        String fullClassName;
-        List<String> paths = new ArrayList<String>();
-
-        if (url != null)
+        List<String> paths = compilerHelper.getContainedFilePaths(url);
+        resourcePaths.addAll(paths);
+        resourcesByJar.put(url, paths);
+        if (uninstaller)
         {
-            try
-            {
-                paths = compilerHelper.getContainedFilePaths(url);
-            }
-            catch (IOException exception)
-            {
-                throw new CompilerException("Failed to read jar: " + url, exception);
-            }
-            fullClassName = findClass(className, paths);
-            if (fullClassName == null)
-            {
-                throw new CompilerException("Custom listener class '" + className + "' not found in '" + url + "'");
-            }
+            CustomData data = new CustomData(null, paths, null, CustomData.UNINSTALLER_JAR);
+            packager.addCustomJar(data, url);
         }
         else
         {
-            // No listener jar provided. See if its in the class path
-            try
-            {
-                Class aClass = classPathCrawler.searchClassInClassPath(className);
-                fullClassName = aClass.getName();
-            }
-            catch (MergeException ignore)
-            {
-                // class not found. May be present in a separate jar. TODO - should collate jars before adding listeners
-                fullClassName = className;
-            }
+            packager.addJarContent(url);
         }
 
-        int type = (stage == Stage.install) ? CustomData.INSTALLER_LISTENER : CustomData.UNINSTALLER_LISTENER;
-        CustomData data = new CustomData(fullClassName, paths, constraints, type);
-        packager.addCustomJar(data, url);
+        // TODO - not clear why this is required. Would be better if jars were loaded via URLClassLoader
+        ClassUtils.loadJarInSystemClassLoader(FileUtil.convertUrlToFile(url));
     }
 
     /**
-     * Finds a class in a list of resource paths.
-     * <p/>
-     * For historical reasons, unqualified class names may be specified.
+     * Adds a listener to be invoked during installation or uninstallation.
+     *
+     * @param className   the listener class name
+     * @param stage       the stage when the listener is invoked
+     * @param constraints the list of constraints. May be <tt>null</tt>
+     * @throws MergeException if the class cannot be found
+     */
+    public void addCustomListener(String className, Stage stage, List<OsModel> constraints)
+    {
+        checkClassName(className);
+        int type = (stage == Stage.install) ? CustomData.INSTALLER_LISTENER : CustomData.UNINSTALLER_LISTENER;
+        CustomData data = new CustomData(className, null, constraints, type);
+        packager.addCustomJar(data, null);
+    }
+
+    /**
+     * Verifies that the named class exists in the class path.
+     *
+     * @param className the class name
+     * @throws IllegalArgumentException if the class name is not fully qualified
+     * @throws MergeException           if the class cannot be found
+     */
+    private void checkClassName(String className)
+    {
+        String existing = findClass(className, (URL) null);
+        if (!className.equals(existing))
+        {
+            throw new IllegalArgumentException("Expected fully qualified class name for class: " + existing
+                    + ", but got: " + className);
+        }
+    }
+
+    /**
+     * Returns the fully qualified name for a class, verifying that it exists in the class path.
+     * <br/>
+     * For historical reasons, unqualified class names may be specified. The <tt>url</tt> argument may be used
+     * to specify the URL of the jar containing the class, to avoid picking up classes from other jars with the same
+     * name.
      *
      * @param className the class name. May be qualified or unqualified
-     * @param paths     the paths in the jar
-     * @return the fully qualified class name, or <tt>null</tt> if none is found
+     * @param url       the URL of the jar to examine first. May be <tt>null</tt>
+     * @return the fully qualified class name
+     * @throws MergeException if the class cannot be found
      */
-    private String findClass(String className, List<String> paths)
+    public String findClass(String className, URL url)
+    {
+        String result = null;
+        if (url != null)
+        {
+            List<String> resources = resourcesByJar.get(url);
+            if (resources != null)
+            {
+                result = findClass(className, resources);
+            }
+        }
+        if (result == null)
+        {
+            result = findClass(className, resourcePaths);
+        }
+        if (result == null)
+        {
+            // not present in user-specified jars. Try and find it in the class path
+            Class aClass = classPathCrawler.findClass(className);
+            result = aClass.getName();
+        }
+        return result;
+    }
+
+    /**
+     * Finds a class in a list of resources.
+     *
+     * @param className the class name. May be unqualified
+     * @param resources the resources
+     * @return the fully qualified class name, or <tt>null</tt> if it is not found
+     */
+    private String findClass(String className, Collection<String> resources)
     {
         String result = null;
         boolean qualified = className.indexOf('.') != -1;
         String resource = className.replace('.', '/') + ".class"; // resource path of the class
         int length = resource.length();
-        for (String path : paths)
+        if (resources.contains(resource))
         {
-            int index = path.lastIndexOf(resource);
-            if (index == 0 && path.length() == length)
+            // exact match
+            result = resource;
+        }
+        else if (!qualified)
+        {
+            // looking for an unqualified class name
+            for (String path : resources)
             {
-                // exact match
-                result = path;
-                break;
-            }
-            else if (index > 0 && !qualified && path.length() == index + length && path.charAt(index - 1) == '/')
-            {
-                // unqualified class match
-                result = path;
-                break;
+                int index = path.lastIndexOf(resource);
+                if (index > 0 && path.length() == index + length && path.charAt(index - 1) == '/')
+                {
+                    result = path;
+                }
             }
         }
         if (result != null)
         {
+            // strip off .class suffix
             result = result.substring(0, result.length() - 6).replace('/', '.');
         }
         return result;
     }
-
 }

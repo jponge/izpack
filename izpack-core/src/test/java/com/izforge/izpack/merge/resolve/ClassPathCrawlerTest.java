@@ -40,7 +40,7 @@ public class ClassPathCrawlerTest
     @Test
     public void searchClassInFile() throws Exception
     {
-        Class aClass = classPathCrawler.searchClassInClassPath(PanelMerge.class.getSimpleName());
+        Class aClass = classPathCrawler.findClass(PanelMerge.class.getSimpleName());
         assertThat(aClass.getName(), Is.is(PanelMerge.class.getName()));
     }
 
@@ -49,7 +49,7 @@ public class ClassPathCrawlerTest
     {
         File jarResource = FileUtil.convertUrlToFile(ClassLoader.getSystemResource("com/izforge/izpack/merge/test/vim-panel-1.0-SNAPSHOT.jar"));
         ClassUtils.loadJarInSystemClassLoader(jarResource);
-        Class aClass = classPathCrawler.searchClassInClassPath("VimPanel");
+        Class aClass = classPathCrawler.findClass("VimPanel");
         assertThat(aClass.getName(), Is.is("com.sora.panel.VimPanel"));
         ClassUtils.unloadLastJar();
     }
@@ -59,7 +59,7 @@ public class ClassPathCrawlerTest
     {
         File jarResource = FileUtil.convertUrlToFile(ClassLoader.getSystemResource("com/izforge/izpack/merge/test/test space/vim-panel-1.0-SNAPSHOT.jar"));
         ClassUtils.loadJarInSystemClassLoader(jarResource);
-        Class aClass = classPathCrawler.searchClassInClassPath("VimPanel");
+        Class aClass = classPathCrawler.findClass("VimPanel");
         assertThat(aClass.getName(), Is.is("com.sora.panel.VimPanel"));
         ClassUtils.unloadLastJar();
     }
