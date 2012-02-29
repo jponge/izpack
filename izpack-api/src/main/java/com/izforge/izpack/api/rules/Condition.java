@@ -1,10 +1,11 @@
 /*
- * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
+ * IzPack - Copyright 2001-2012 Julien Ponge, All Rights Reserved.
  *
  * http://izpack.org/
  * http://izpack.codehaus.org/
  *
  * Copyright 2007-2009 Dennis Reil
+ * Copyright 2010-2012 René Krell
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,11 +31,7 @@ import java.io.Serializable;
  * Abstract base class for all conditions. Implementations of custom conditions
  * have to derive from this class.
  *
- * @author Dennis Reil, <izpack@reil-online.de>
- */
-/**
- * @author rkrell
- *
+ * @author Dennis Reil <izpack@reil-online.de>
  */
 public abstract class Condition implements Serializable
 {
