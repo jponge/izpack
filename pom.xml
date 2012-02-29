@@ -407,6 +407,7 @@
                     <excludes>
                         <exclude>**/Abstract*</exclude>
                         <exclude>**/Test*Container*</exclude>
+                        <exclude>**/ConsoleInstallationTest.java</exclude>
                         <exclude>**/LanguageDialogTest.java</exclude>
                         <exclude>**/TestPanelDisplay.java</exclude>
                         <exclude>**/InstallationTest.java</exclude>
