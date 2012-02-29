@@ -23,6 +23,7 @@ import com.izforge.izpack.api.data.binding.OsModel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,7 @@ public class XPackFile extends PackFile implements Comparable<XPackFile>
      * @throws FileNotFoundException
      */
     public XPackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override, String overrideRenameTo, Blockable blockable)
-            throws FileNotFoundException
+    throws IOException
     {
         super(baseDir, src, target, osList, override, overrideRenameTo, blockable);
         this.archivefileposition = 0;
@@ -59,7 +60,7 @@ public class XPackFile extends PackFile implements Comparable<XPackFile>
      * @throws FileNotFoundException
      */
     public XPackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override, String overrideRenameTo, Blockable blockable, Map additionals)
-            throws FileNotFoundException
+    throws IOException
     {
         super(baseDir, src, target, osList, override, overrideRenameTo, blockable, additionals);
         this.archivefileposition = 0;

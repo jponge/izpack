@@ -23,9 +23,11 @@ package com.izforge.izpack.api.data;
 
 
 import com.izforge.izpack.api.data.binding.OsModel;
+import com.izforge.izpack.util.FileUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -128,9 +130,9 @@ public class PackFile implements Serializable
      * @throws FileNotFoundException if the specified file does not exist.
      */
     public PackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override, String overrideRenameTo, Blockable blockable)
-            throws FileNotFoundException
+    throws IOException
     {
-        this(src, computeRelativePathFrom(baseDir, src), target, osList, override, overrideRenameTo, blockable, null);
+        this(src, FileUtil.getRelativeFileName(src, baseDir), target, osList, override, overrideRenameTo, blockable, null);
     }
 
     /**
@@ -196,40 +198,9 @@ public class PackFile implements Serializable
      * @throws FileNotFoundException if the specified file does not exist.
      */
     public PackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override, String overrideRenameTo, Blockable blockable, Map additionals)
-            throws FileNotFoundException
+    throws IOException
     {
-        this(src, computeRelativePathFrom(baseDir, src), target, osList, override, overrideRenameTo, blockable, additionals);
-    }
-
-    /**
-     * Builds the relative path of file to the baseDir.
-     *
-     * @param baseDir The Base Directory to build the relative path from
-     * @param file    the file inside basDir
-     * @return null if file is not a inside baseDir
-     */
-    public static String computeRelativePathFrom(File baseDir, File file)
-    {
-        if (baseDir == null || file == null)
-        {
-            return null;
-        }
-        try
-        { // extract relative path...
-            if (file.getAbsolutePath().startsWith(baseDir.getAbsolutePath()))
-            {
-                return file.getAbsolutePath().substring(baseDir.getAbsolutePath().length() + 1);
-            }
-        }
-        catch (Exception x)// don't throw an exception here. return null instead!
-        {
-            // if we cannot build the relative path because of an error, the developer should be
-            // informed about.
-            x.printStackTrace();
-        }
-
-        // we can not build a relative path for whatever reason
-        return null;
+        this(src, FileUtil.getRelativeFileName(src, baseDir), target, osList, override, overrideRenameTo, blockable, additionals);
     }
 
     public void setPreviousPackFileRef(String previousPackId, Long offsetInPreviousPack)

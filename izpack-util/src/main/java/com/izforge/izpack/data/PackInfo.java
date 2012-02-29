@@ -26,6 +26,7 @@ import com.izforge.izpack.api.data.binding.OsModel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 
@@ -232,7 +233,7 @@ public class PackInfo implements Serializable
      * then, if the file is deleted in between.
      */
     public void addFile(File baseDir, File file, String targetfile, List<OsModel> osList, OverrideType override, String overrideRenameTo, Blockable blockable, Map additionals, String condition)
-            throws FileNotFoundException
+    throws IOException
     {
         if (!file.exists())
         {

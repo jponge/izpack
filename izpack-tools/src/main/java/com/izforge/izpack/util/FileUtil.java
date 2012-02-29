@@ -250,4 +250,29 @@ public class FileUtil
             return new File(basedir, file.getPath());
         }
     }
+
+    /**
+     * Gets a relative file from a filename against a base directory.
+     * Enclosed '.' and '..' characters are resolved for all parameters.
+     *
+     * @param filename The filename to build a relative file from
+     * @param basedir  The base directory for a relative filename
+     * @return The relative file name, or null, if one input parameter was null
+     * @throws IOException if the file paths cannot be canonicalized
+     */
+    public static String getRelativeFileName(File file, File basedir) throws IOException
+    {
+        String canonicalFilePath = file.getCanonicalPath();
+        String canonicalBaseDirPath = basedir.getCanonicalPath();
+        if (canonicalFilePath.startsWith(canonicalBaseDirPath))
+        {
+            int length = canonicalBaseDirPath.length();
+            if (length < canonicalFilePath.length())
+            {
+                return canonicalFilePath.substring(length + 1);
+            }
+        }
+        return null;
+    }
+
 }

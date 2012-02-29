@@ -468,7 +468,7 @@ public class CompilerConfig extends Thread
             String src = xmlCompilerHelper.requireAttribute(ixmlElement, "src");
 
             // all external jars contents regardless of stage type are merged into the installer
-            // but we keep a copy of jar entries that user want to merge into uninstaller 
+            // but we keep a copy of jar entries that user want to merge into uninstaller
             // as "customData", where the installer will get them into uninstaller.jar at the end of installation
             // note if stage is empty or null, it is the same at 'install'
             String stage = ixmlElement.getAttribute("stage");
@@ -888,17 +888,15 @@ public class CompilerConfig extends Thread
                     {
                         for (String filePath : filesOrDirs)
                         {
-                            try
+                            if (!filePath.isEmpty()) // not the basedir itself
                             {
                                 File file = new File(fs.getDir(), filePath);
                                 String target = new File(fs.getTargetDir(), filePath).getPath();
+                                //FIXME replace by a listener call and different reporting
+                                System.out.println("Adding file: " + file + ", as target file=" + target);
                                 pack.addFile(baseDir, file, target, fs.getOsList(), fs
                                         .getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(), fs.getAdditionals(), fs
                                         .getCondition());
-                            }
-                            catch (FileNotFoundException x)
-                            {
-                                assertionHelper.parseError(packElement, x.getMessage(), x);
                             }
                         }
                     }
@@ -906,7 +904,7 @@ public class CompilerConfig extends Thread
             }
             catch (Exception e)
             {
-                throw new CompilerException(e.getMessage());
+                assertionHelper.parseError(packElement, e.getMessage(), e);
             }
         }
     }
@@ -945,9 +943,11 @@ public class CompilerConfig extends Thread
 
             try
             {
+                //FIXME replace by a listener call and different reporting
+                System.out.println("Adding file: " + file + ", as target file=" + target);
                 pack.addFile(baseDir, file, target, osList, override, overrideRenameTo, blockable, additionals, condition);
             }
-            catch (FileNotFoundException x)
+            catch (IOException x)
             {
                 assertionHelper.parseError(singleFileNode, x.getMessage(), x);
             }
@@ -1013,7 +1013,7 @@ public class CompilerConfig extends Thread
                 }
                 for (String filePath : srcfiles)
                 {
-                    try
+                    if (!filePath.isEmpty())
                     {
                         abssrcfile = new File(fs.getDir(), filePath);
                         if (unpack)
@@ -1024,15 +1024,13 @@ public class CompilerConfig extends Thread
                         }
                         else
                         {
-                            pack.addFile(baseDir, abssrcfile, fs.getTargetDir() + "/" + filePath, fs.getOsList(),
+                            String target = fs.getTargetDir() + "/" + filePath;
+                            //FIXME replace by a listener call and different reporting
+                            System.out.println("Adding file: " + abssrcfile + ", as target file=" + target);
+                            pack.addFile(baseDir, abssrcfile, target, fs.getOsList(),
                                     fs.getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(), fs.getAdditionals(),
                                     fs.getCondition());
                         }
-
-                    }
-                    catch (FileNotFoundException x)
-                    {
-                        assertionHelper.parseError(packElement, x.getMessage(), x);
                     }
                 }
             }
@@ -1403,7 +1401,10 @@ public class CompilerConfig extends Thread
                 IoHelper.copyStream(zin, out);
                 out.close();
 
-                pack.addFile(baseDir, temp, targetdir + "/" + zentry.getName(), osList, override,
+                String target = targetdir + "/" + zentry.getName();
+                //FIXME replace by a listener call and different reporting
+                System.out.println("Adding file: " + temp + ", as target file=" + target);
+                pack.addFile(baseDir, temp, target, osList, override,
                         overrideRenameTo, blockable, additionals, condition);
             }
             catch (IOException e)
@@ -1419,7 +1420,10 @@ public class CompilerConfig extends Thread
             File tmp = new File(dirName);
             tmp.mkdirs();
             tmp.deleteOnExit();
-            pack.addFile(baseDir, tmp, targetdir + "/" + dirName, osList,
+            String target = targetdir + "/" + dirName;
+            //FIXME replace by a listener call and different reporting
+            System.out.println("Adding file: " + tmp + ", as target file=" + target);
+            pack.addFile(baseDir, tmp, target, osList,
                     override, overrideRenameTo, blockable, additionals, condition);
         }
         fin.close();
