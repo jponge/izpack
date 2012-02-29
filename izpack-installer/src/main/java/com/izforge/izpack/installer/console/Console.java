@@ -71,6 +71,14 @@ public class Console
     }
 
     /**
+     * Prints a new line.
+     */
+    public void println()
+    {
+        out.println();
+    }
+
+    /**
      * Prints a message to the console with a new line.
      *
      * @param message the message to print

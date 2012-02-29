@@ -23,9 +23,6 @@ package com.izforge.izpack.installer.console;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.Properties;
 
@@ -37,25 +34,26 @@ import java.util.Properties;
  *
  * @author Mounir El Hajj
  */
-
 public interface PanelConsole
 {
 
     /**
-     * Asks the panel to return all inputed fields/variables in a string with a properties file
-     * style
+     * Generates a properties file for each input field or variable.
      *
-     * @param installData The installation data
+     * @param installData the installation data
+     * @param printWriter the properties file to write to
+     * @return <tt>true</tt> if the generation is successful, otherwise <tt>false</tt>
      */
-    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter);
+    boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter);
 
     /**
-     * Asks the panel to run and do its work, given a set of properties to use as variables
+     * Runs the panel using the supplied properties.
      *
-     * @param installData The installation data
-     * @param p           The the properties
+     * @param installData the installation data
+     * @param properties  the properties
+     * @return <tt>true</tt> if the installation is successful, otherwise <tt>false</tt>
      */
-    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p);
+    boolean runConsoleFromProperties(AutomatedInstallData installData, Properties properties);
 
     /**
      * Runs the panel in interactive console mode.
@@ -69,7 +67,7 @@ public interface PanelConsole
      * Runs the panel using the specified console.
      *
      * @param installData the installation data
-     * @param console the console
+     * @param console     the console
      * @return <tt>true</tt> if the panel ran successfully, otherwise <tt>false</tt>
      */
     boolean runConsole(AutomatedInstallData installData, Console console);

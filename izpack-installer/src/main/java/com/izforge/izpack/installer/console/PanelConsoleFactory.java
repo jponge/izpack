@@ -1,29 +1,96 @@
-/*
- *  Version: 1.0
- *
- *  The contents of this file are subject to the OpenVPMS License Version
- *  1.0 (the 'License'); you may not use this file except in compliance with
- *  the License. You may obtain a copy of the License at
- *  http://www.openvpms.org/license/
- *
- *  Software distributed under the License is distributed on an 'AS IS' basis,
- *  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- *  for the specific language governing rights and limitations under the
- *  License.
- *
- *  Copyright 2011 (C) OpenVPMS Ltd. All Rights Reserved.
- *
- *  $Id: $
- */
-
 package com.izforge.izpack.installer.console;
 
+import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.util.Debug;
+
 /**
- * Enter descroption.
+ * Factory for {@link PanelConsole} instances.
  *
- * @author <a href="mailto:support@openvpms.org">OpenVPMS Team</a>
- * @version $LastChangedDate: $
+ * @author Tim Anderson
  */
-public class PanelConsoleFactory
+class PanelConsoleFactory
 {
+    /**
+     * The container.
+     */
+    private final BindeableContainer container;
+
+    /**
+     * Constructs a <tt>PanelConsoleFactory</tt>.
+     *
+     * @param container the container
+     */
+    public PanelConsoleFactory(BindeableContainer container)
+    {
+        this.container = container;
+    }
+
+    /**
+     * Attempts to create an {@link PanelConsole} corresponding to the specified panel.
+     *
+     * @param panel the panel
+     * @return the corresponding {@link PanelConsole}
+     * @throws InstallerException if there is no {@link PanelConsole} for the panel
+     */
+    public PanelConsole create(Panel panel) throws InstallerException
+    {
+        Class<PanelConsole> impl = getClass(panel);
+        if (impl == null)
+        {
+            throw new InstallerException("No PanelConsole implementation exists for panel: " + panel.getClassName());
+        }
+        container.addComponent(impl);
+        return container.getComponent(impl);
+    }
+
+    /**
+     * Returns the PanelConsole class corresponding to the specified panel.
+     *
+     * @param panel the panel
+     * @return the corresponding {@link PanelConsole} implementation class, or <tt>null</tt> if none is found
+     */
+    public Class<PanelConsole> getClass(Panel panel)
+    {
+        Class<PanelConsole> result = getClass(panel.getClassName() + "Console");
+        if (result == null)
+        {
+            // use the old ConsoleHelper suffix convention
+            result = getClass(panel.getClassName() + "ConsoleHelper");
+        }
+        return result;
+    }
+
+
+    /**
+     * Returns the {@link PanelConsole} class for the specified class name.
+     *
+     * @param name the class name
+     * @return the corresponding class, or <tt>null</tt> if it cannot be found or does not implement
+     *         {@link PanelConsole}.
+     */
+    @SuppressWarnings("unchecked")
+    private Class<PanelConsole> getClass(String name)
+    {
+        Class<PanelConsole> result = null;
+        try
+        {
+            Class type = Class.forName(name);
+            if (!PanelConsole.class.isAssignableFrom(type))
+            {
+                Debug.log(name + " does not implement " + PanelConsole.class.getName() + ", ignoring");
+            }
+            else
+            {
+                result = (Class<PanelConsole>) type;
+            }
+        }
+        catch (ClassNotFoundException ignore)
+        {
+            Debug.log(ignore.getMessage());
+        }
+        return result;
+    }
+
 }

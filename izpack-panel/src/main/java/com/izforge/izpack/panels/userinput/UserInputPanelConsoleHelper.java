@@ -142,7 +142,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
     }
 
-    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p)
+    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties properties)
     {
 
         collectInputs(installData);
@@ -151,7 +151,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             String strVariableName = listInput.strVariableName;
             if (strVariableName != null)
             {
-                String strVariableValue = p.getProperty(strVariableName);
+                String strVariableValue = properties.getProperty(strVariableName);
                 if (strVariableValue != null)
                 {
                     installData.setVariable(strVariableName, strVariableValue);

@@ -1,6 +1,5 @@
 package com.izforge.izpack.installer.console;
 
-import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -23,16 +22,16 @@ public abstract class AbstractInstallAction extends ConsoleAction
     /**
      * Constructs an <tt>AbstractConsoleInstallAction</tt>.
      *
-     * @param container   the container
-     * @param installData the installation date
+     * @param factory     the panel console factory
+     * @param installData the installation data
      * @param substituter the variable substituter
      * @param rules       the rules engine
      * @param writer      the uninstallation data writer
      */
-    public AbstractInstallAction(BindeableContainer container, AutomatedInstallData installData,
+    public AbstractInstallAction(PanelConsoleFactory factory, AutomatedInstallData installData,
                                  VariableSubstitutor substituter, RulesEngine rules, UninstallDataWriter writer)
     {
-        super(container, installData, substituter, rules);
+        super(factory, installData, substituter, rules);
         this.writer = writer;
     }
 

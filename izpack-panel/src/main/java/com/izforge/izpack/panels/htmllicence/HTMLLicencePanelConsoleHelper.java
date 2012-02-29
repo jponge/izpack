@@ -21,95 +21,41 @@
 
 package com.izforge.izpack.panels.htmllicence;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.installer.console.Console;
-import com.izforge.izpack.installer.console.PanelConsole;
-import com.izforge.izpack.installer.console.PanelConsoleHelper;
+import com.izforge.izpack.panels.licence.AbstractLicensePanelConsole;
+import com.izforge.izpack.util.Debug;
 
-import java.io.PrintWriter;
-import java.util.Properties;
-import java.util.StringTokenizer;
 
 /**
  * HTML License Panel console helper
  */
-public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements PanelConsole
+public class HTMLLicencePanelConsoleHelper extends AbstractLicensePanelConsole
 {
 
-    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
+    /**
+     * Constructs a <tt>HTMLLicencePanelConsoleHelper</tt>.
+     *
+     * @param resources the resources
+     */
+    public HTMLLicencePanelConsoleHelper(ResourceManager resources)
     {
-        return true;
-    }
-
-    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p)
-    {
-        return true;
+        super(resources);
     }
 
     /**
-     * Runs the panel using the specified console.
+     * Returns the text to display.
      *
-     * @param installData the installation data
-     * @param console     the console
-     * @return <tt>true</tt> if the panel runs successfully, otherwise <tt>false</tt>
+     * @return the text. A <tt>null</tt> indicates failure
      */
     @Override
-    public boolean runConsole(AutomatedInstallData installData, Console console)
+    protected String getText()
     {
-        String license;
-        String resNamePrefix = "HTMLLicencePanel.licence";
-        try
+        String text = getText("HTMLLicencePanel.licence");
+        if (text != null)
         {
-            // We read it
-            license = ResourceManager.getInstance().getTextResource(resNamePrefix);
+            text = removeHTML(text);
         }
-        catch (Exception err)
-        {
-            license = "Error : could not load the licence text for defined resource " + resNamePrefix;
-            console.println(license);
-            return false;
-        }
-
-        // controls # of lines to display at a time, to allow simulated scrolling down
-        int lines = 25;
-        int lineNumber = 0;
-
-
-        String strippedHTML = this.removeHTML(license);
-
-        StringTokenizer tokenizer = new StringTokenizer(strippedHTML, "\n");
-        while (tokenizer.hasMoreTokens())
-        {
-            String token = tokenizer.nextToken();
-            console.println(token);
-            lineNumber++;
-            if (lineNumber >= lines)
-            {
-                if (!doContinue(console))
-                {
-                    return false;
-                }
-                lineNumber = 0;
-            }
-
-        }
-
-        return askToAcceptLicense(installData, console);
-    }
-
-    private boolean askToAcceptLicense(AutomatedInstallData installData, Console console)
-    {
-        boolean result;
-        int value = prompt(console, "press 1 to accept, 2 to reject, 3 to redisplay", 1, 3, 2);
-        result = value == 1 || value != 2 && runConsole(installData, console);
-        return result;
-    }
-
-    private boolean doContinue(Console console)
-    {
-        String result = prompt(console, "\npress Enter to continue, X to exit", "x");
-        return !result.equalsIgnoreCase("x");
+        return text;
     }
 
     private String removeHTML(String source)
@@ -191,8 +137,7 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
         }
         catch (Exception e)
         {
-            e.printStackTrace();
-
+            Debug.error(e);
         }
 
         return result;

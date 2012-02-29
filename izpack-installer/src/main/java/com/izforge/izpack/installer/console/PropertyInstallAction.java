@@ -1,6 +1,5 @@
 package com.izforge.izpack.installer.console;
 
-import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.exception.InstallerException;
@@ -26,18 +25,18 @@ class PropertyInstallAction extends AbstractInstallAction
     /**
      * Constructs a <tt>PropertyInstallAction</tt>.
      *
-     * @param container   the container
-     * @param installData the installation date
+     * @param factory     the panel console factory
+     * @param installData the installation data
      * @param substituter the variable substituter
      * @param rules       the rules engine
      * @param writer      the uninstallation data writer
      * @param properties  the installation properties
      */
-    public PropertyInstallAction(BindeableContainer container, AutomatedInstallData installData,
+    public PropertyInstallAction(PanelConsoleFactory factory, AutomatedInstallData installData,
                                  VariableSubstitutor substituter, RulesEngine rules, UninstallDataWriter writer,
                                  Properties properties)
     {
-        super(container, installData, substituter, rules, writer);
+        super(factory, installData, substituter, rules, writer);
         this.properties = properties;
     }
 

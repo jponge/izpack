@@ -52,9 +52,9 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
         return true;
     }
 
-    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p)
+    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties properties)
     {
-        String strTargetPath = p.getProperty(AutomatedInstallData.INSTALL_PATH);
+        String strTargetPath = properties.getProperty(AutomatedInstallData.INSTALL_PATH);
         if (strTargetPath == null || "".equals(strTargetPath.trim()))
         {
             System.err.println("Missing mandatory target path!");

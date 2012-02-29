@@ -26,6 +26,7 @@ import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.ScriptParserConstant;
 import com.izforge.izpack.api.exception.IzPackException;
@@ -55,9 +56,9 @@ import java.util.Properties;
 public class ConsoleInstaller extends InstallerBase
 {
     /**
-     * The container.
+     * The panel console factory.
      */
-    private BindeableContainer container;
+    private PanelConsoleFactory factory;
 
     /**
      * The installation data.
@@ -105,7 +106,7 @@ public class ConsoleInstaller extends InstallerBase
                             UninstallDataWriter uninstallDataWriter)
     {
         super(resourceManager);
-        this.container = container;
+        factory = new PanelConsoleFactory(container);
         this.checkCondition = checkCondition;
         this.installData = installData;
         this.rules = rules;
@@ -133,7 +134,29 @@ public class ConsoleInstaller extends InstallerBase
     }
 
     /**
+     * Determines if console installation is supported.
+     *
+     * @return <tt>true</tt> if there are {@link PanelConsole} implementations for each panel
+     */
+    public boolean canInstall()
+    {
+        boolean success = true;
+        for (Panel panel : installData.getPanelsOrder())
+        {
+            if (factory.getClass(panel) == null)
+            {
+                success = false;
+                Debug.log("No console implementation of panel: " + panel.getClassName());
+            }
+        }
+        return success;
+    }
+
+    /**
      * Runs the installation.
+     * <p/>
+     * This method does not return - it invokes {@code System.exit(0)} on successful installation, or
+     * {@code System.exit()} on failure.
      *
      * @param type the type of the action to perform
      * @param path the path to use for the action. May be <tt>null</tt>
@@ -142,37 +165,37 @@ public class ConsoleInstaller extends InstallerBase
     {
         boolean success = false;
         ConsoleAction action = null;
-        try
+        if (!canInstall())
         {
-            // TODO - InstallerBase shouldn't implement InstallerRequirementDisplay
-            if (checkCondition.checkInstallerRequirements(this))
-            {
-                action = createConsoleAction(type, path, console);
-                success = run(action);
-            }
+            console.println("Console installation is not supported by this installer");
+            shutdown(false, false);
         }
-        catch (Throwable exception)
+        else
         {
-            success = false;
-            Debug.error(exception);
-        }
-        finally
-        {
-            if (success)
+            try
             {
-                console.println("[ Console installation done ]");
+                // TODO - InstallerBase shouldn't implement InstallerRequirementDisplay
+                if (checkCondition.checkInstallerRequirements(this))
+                {
+                    action = createConsoleAction(type, path, console);
+                    success = run(action);
+                }
             }
-            else
+            catch (Throwable exception)
             {
-                console.println("[ Console installation FAILED! ]");
+                success = false;
+                Debug.error(exception);
             }
-            if (action != null && action.isInstall())
+            finally
             {
-                shutdown(success, console);
-            }
-            else
-            {
-                shutdown(success, false);
+                if (action != null && action.isInstall())
+                {
+                    shutdown(success, console);
+                }
+                else
+                {
+                    shutdown(success, false);
+                }
             }
         }
     }
@@ -219,9 +242,35 @@ public class ConsoleInstaller extends InstallerBase
      * Shuts down the installer.
      *
      * @param exitSuccess if <tt>true</tt>, exits with a <tt>0</tt> exit code, else exits with a <tt>1</tt> exit code
-     * @param reboot if <tt>true</tt> perform a reboot
+     * @param reboot      if <tt>true</tt> perform a reboot
      */
     protected void shutdown(boolean exitSuccess, boolean reboot)
+    {
+        if (exitSuccess && !installData.isInstallSuccess())
+        {
+            Debug.error("Expected successful exit status, but installation data is reporting failure");
+            exitSuccess = false;
+        }
+        installData.setInstallSuccess(exitSuccess);
+        if (exitSuccess)
+        {
+            console.println("[ Console installation done ]");
+        }
+        else
+        {
+            console.println("[ Console installation FAILED! ]");
+        }
+
+        terminate(exitSuccess, reboot);
+    }
+
+    /**
+     * Terminates the installation process.
+     *
+     * @param exitSuccess if <tt>true</tt>, exits with a <tt>0</tt> exit code, else exits with a <tt>1</tt> exit code
+     * @param reboot      if <tt>true</tt> perform a reboot
+     */
+    protected void terminate(boolean exitSuccess, boolean reboot)
     {
         Housekeeper.getInstance().shutDown(exitSuccess ? 0 : 1, reboot);
     }
@@ -230,7 +279,7 @@ public class ConsoleInstaller extends InstallerBase
      * Runs a console action.
      *
      * @param action the action to run
-     * @return <tt>true</tt> if the action was sucessful, otherwise <tt>false</tt>
+     * @return <tt>true</tt> if the action was successful, otherwise <tt>false</tt>
      */
     protected boolean run(ConsoleAction action)
     {
@@ -279,7 +328,7 @@ public class ConsoleInstaller extends InstallerBase
      */
     private ConsoleAction createInstallAction()
     {
-        return new ConsoleInstallAction(container, installData, variableSubstitutor, rules, uninstallDataWriter);
+        return new ConsoleInstallAction(factory, installData, variableSubstitutor, rules, uninstallDataWriter);
     }
 
     /**
@@ -291,7 +340,7 @@ public class ConsoleInstaller extends InstallerBase
      */
     private ConsoleAction createGeneratePropertiesAction(String path) throws IOException
     {
-        return new GeneratePropertiesAction(container, installData, variableSubstitutor, rules, path);
+        return new GeneratePropertiesAction(factory, installData, variableSubstitutor, rules, path);
     }
 
     /**
@@ -308,7 +357,7 @@ public class ConsoleInstaller extends InstallerBase
         {
             Properties properties = new Properties();
             properties.load(in);
-            return new PropertyInstallAction(container, installData, variableSubstitutor, rules,
+            return new PropertyInstallAction(factory, installData, variableSubstitutor, rules,
                     uninstallDataWriter, properties);
         }
         finally
@@ -345,7 +394,7 @@ public class ConsoleInstaller extends InstallerBase
                             + oldValue + "' --> '" + newValue + "'");
                 }
             }
-            return new PropertyInstallAction(container, installData, variableSubstitutor, rules,
+            return new PropertyInstallAction(factory, installData, variableSubstitutor, rules,
                     uninstallDataWriter, properties);
         }
         finally

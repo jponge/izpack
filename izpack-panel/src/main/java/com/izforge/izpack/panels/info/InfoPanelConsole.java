@@ -1,29 +1,48 @@
-/*
- *  Version: 1.0
- *
- *  The contents of this file are subject to the OpenVPMS License Version
- *  1.0 (the 'License'); you may not use this file except in compliance with
- *  the License. You may obtain a copy of the License at
- *  http://www.openvpms.org/license/
- *
- *  Software distributed under the License is distributed on an 'AS IS' basis,
- *  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- *  for the specific language governing rights and limitations under the
- *  License.
- *
- *  Copyright 2011 (C) OpenVPMS Ltd. All Rights Reserved.
- *
- *  $Id: $
- */
-
 package com.izforge.izpack.panels.info;
 
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.installer.console.AbstractTextPanelConsole;
+
 /**
- * Enter descroption.
+ * Console implementation of {@link InfoPanel}.
  *
- * @author <a href="mailto:support@openvpms.org">OpenVPMS Team</a>
- * @version $LastChangedDate: $
+ * @author Tim Anderson
  */
-public class InfoPanelConsole
+public class InfoPanelConsole extends AbstractTextPanelConsole
 {
+
+    /**
+     * The resources.
+     */
+    private final ResourceManager resources;
+
+    /**
+     * Constructs an <tt>InfoPanelConsole</tt>.
+     *
+     * @param resources the resources
+     */
+    public InfoPanelConsole(ResourceManager resources)
+    {
+        this.resources = resources;
+    }
+
+    /**
+     * Returns the text to display.
+     *
+     * @return the text
+     */
+    @Override
+    protected String getText()
+    {
+        String result;
+        try
+        {
+            result = resources.getTextResource("InfoPanel.info", "UTF-8");
+        }
+        catch (Exception exception)
+        {
+            result = "Error: could not load the info text!";
+        }
+        return result;
+    }
 }

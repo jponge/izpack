@@ -120,6 +120,7 @@ public class TestConsole extends Console
             {
                 result = result.substring(0, result.length() - 1);
             }
+            println(result); // echo it out
         }
         return result;
     }

@@ -52,12 +52,7 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
         this.unpacker = unpacker;
     }
 
-    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
-    {
-        return true;
-    }
-
-    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p)
+    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties properties)
     {
         return runConsole(installData);
     }

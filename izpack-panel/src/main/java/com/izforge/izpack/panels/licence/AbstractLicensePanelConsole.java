@@ -1,29 +1,74 @@
-/*
- *  Version: 1.0
- *
- *  The contents of this file are subject to the OpenVPMS License Version
- *  1.0 (the 'License'); you may not use this file except in compliance with
- *  the License. You may obtain a copy of the License at
- *  http://www.openvpms.org/license/
- *
- *  Software distributed under the License is distributed on an 'AS IS' basis,
- *  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- *  for the specific language governing rights and limitations under the
- *  License.
- *
- *  Copyright 2011 (C) OpenVPMS Ltd. All Rights Reserved.
- *
- *  $Id: $
- */
-
 package com.izforge.izpack.panels.licence;
 
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.installer.console.AbstractTextPanelConsole;
+import com.izforge.izpack.installer.console.Console;
+import com.izforge.izpack.util.Debug;
+
+import java.io.IOException;
+
 /**
- * Enter descroption.
+ * Abstract panel for displaying license text to the console.
  *
- * @author <a href="mailto:support@openvpms.org">OpenVPMS Team</a>
- * @version $LastChangedDate: $
+ * @author Tim Anderson
  */
-public class AbstractLicensePanelConsole
+public abstract class AbstractLicensePanelConsole extends AbstractTextPanelConsole
 {
+
+    /**
+     * The resources.
+     */
+    private final ResourceManager resources;
+
+    /**
+     * Constructs a <tt>AbstractLicensePanelConsole</tt>.
+     *
+     * @param resources the resources
+     */
+    public AbstractLicensePanelConsole(ResourceManager resources)
+    {
+        this.resources = resources;
+    }
+
+    /**
+     * Returns the named text resource
+     *
+     * @param resourceName the resource name
+     * @return the text resource, or <tt>null</tt> if it cannot be found
+     */
+    protected String getText(String resourceName)
+    {
+        String result = null;
+        try
+        {
+            result = resources.getTextResource(resourceName);
+        }
+        catch (IOException exception)
+        {
+            Debug.error("Could not load the licence text for resource: " + resourceName);
+        }
+        return result;
+    }
+
+    /**
+     * Prompts to end the license panel.
+     * <p/>
+     * This displays a prompt to accept, reject, or redisplay. On redisplay, it invokes
+     * {@link #runConsole(AutomatedInstallData, Console)}.
+     *
+     * @param installData the installation date
+     * @param console     the console to use
+     * @return <tt>true</tt> to accept, <tt>false</tt> to reject. If redisplaying the panel, the result of
+     *         {@link #runConsole(AutomatedInstallData, Console)} is returned
+     */
+    @Override
+    protected boolean promptEndPanel(AutomatedInstallData installData, Console console)
+    {
+        boolean result;
+        int value = prompt(console, "Press 1 to accept, 2 to reject, 3 to redisplay", 1, 3, 2);
+        result = value == 1 || value != 2 && runConsole(installData, console);
+        return result;
+    }
+
 }

@@ -1,6 +1,5 @@
 package com.izforge.izpack.installer.console;
 
-import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.Panel;
@@ -25,9 +24,9 @@ abstract class ConsoleAction
 {
 
     /**
-     * The container.
+     * The panel console factory.
      */
-    private final BindeableContainer container;
+    private final PanelConsoleFactory factory;
 
     /**
      * The installation data.
@@ -48,15 +47,15 @@ abstract class ConsoleAction
     /**
      * Constructs a <tt>ConsoleAction</tt>.
      *
-     * @param container   the container
-     * @param installData the installation date
+     * @param factory     the factory for PanelConsole instances
+     * @param installData the installation data
      * @param substituter the variable substituter
      * @param rules       the rules engine
      */
-    public ConsoleAction(BindeableContainer container, AutomatedInstallData installData,
+    public ConsoleAction(PanelConsoleFactory factory, AutomatedInstallData installData,
                          VariableSubstitutor substituter, RulesEngine rules)
     {
-        this.container = container;
+        this.factory = factory;
         this.installData = installData;
         this.substituter = substituter;
         this.rules = rules;
@@ -95,6 +94,10 @@ abstract class ConsoleAction
             result = false;
             Debug.error(exception);
         }
+        if (!result && isInstall())
+        {
+           installData.setInstallSuccess(false);
+        }
         return result;
     }
 
@@ -126,18 +129,9 @@ abstract class ConsoleAction
 
         try
         {
-            PanelConsole action = createPanelConsole(panel);
-            if (action != null)
-            {
-                Debug.log("Running panel " + panel.getClassName());
-                result = run(panel, action, console);
-            }
-            else
-            {
-                // No corresponding console panel. For now, just ignore it. TODO
-                Debug.log("No console for panel " + panel.getClassName());
-                result = true;
-            }
+            PanelConsole action = factory.create(panel);
+            Debug.log("Running panel " + panel.getClassName());
+            result = run(panel, action, console);
         }
         catch (Exception exception)
         {
@@ -197,35 +191,6 @@ abstract class ConsoleAction
             Debug.trace("Showing panel with panelid=" + id);
         }
         return result;
-    }
-
-    /**
-     * Attempts to create an {@link PanelConsole} corresponding to the specified panel.
-     *
-     * @param panel the panel
-     * @return the corresponding {@link PanelConsole} or <tt>null</tt> if none exists
-     */
-    @SuppressWarnings("unchecked")
-    protected PanelConsole createPanelConsole(Panel panel)
-    {
-        String panelClassName = panel.className;
-        String consoleHelperClassName = panelClassName + "ConsoleHelper";
-        Class<PanelConsole> consoleHelperClass;
-        PanelConsole consoleHelperInstance = null;
-
-        Debug.log("ConsoleHelper:" + consoleHelperClassName);
-        try
-        {
-            consoleHelperClass = (Class<PanelConsole>) Class.forName(consoleHelperClassName);
-            Debug.log("Instantiate :" + consoleHelperClassName);
-            container.addComponent(consoleHelperClass);
-            consoleHelperInstance = container.getComponent(consoleHelperClass);
-        }
-        catch (ClassNotFoundException ignore)
-        {
-            Debug.log(ignore.getMessage());
-        }
-        return consoleHelperInstance;
     }
 
     /**

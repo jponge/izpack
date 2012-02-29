@@ -1,6 +1,5 @@
 package com.izforge.izpack.installer.console;
 
-import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.exception.InstallerException;
@@ -27,19 +26,19 @@ class GeneratePropertiesAction extends ConsoleAction
     /**
      * Constructs a <tt>GeneratePropertiesAction</tt>.
      *
-     * @param container   the container
-     * @param installData the installation date
+     * @param factory     the panel console factory
+     * @param installData the installation data
      * @param substituter the variable substituter
      * @param rules       the rules engine
      * @param path        the path to write properties to
      * @throws FileNotFoundException if the file exists but is a directory rather than a regular file, does not exist
      *                               but cannot be created, or cannot be opened for any other reason
      */
-    public GeneratePropertiesAction(BindeableContainer container, AutomatedInstallData installData,
+    public GeneratePropertiesAction(PanelConsoleFactory factory, AutomatedInstallData installData,
                                     VariableSubstitutor substituter, RulesEngine rules, String path)
             throws FileNotFoundException
     {
-        super(container, installData, substituter, rules);
+        super(factory, installData, substituter, rules);
         writer = new PrintWriter(new FileOutputStream(path), true);
     }
 

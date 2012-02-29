@@ -21,103 +21,33 @@
 
 package com.izforge.izpack.panels.licence;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.installer.console.Console;
-import com.izforge.izpack.installer.console.PanelConsole;
-import com.izforge.izpack.installer.console.PanelConsoleHelper;
 
-import java.io.PrintWriter;
-import java.util.Properties;
-import java.util.StringTokenizer;
 
 /**
- * License Panel console helper
+ * Console based License Panel.
  */
-public class LicencePanelConsoleHelper extends PanelConsoleHelper implements PanelConsole
+public class LicencePanelConsoleHelper extends AbstractLicensePanelConsole
 {
-
-    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
+    /**
+     * Constructs a <tt>LicencePanelConsoleHelper</tt>.
+     *
+     * @param resources the resources
+     */
+    public LicencePanelConsoleHelper(ResourceManager resources)
     {
-        return true;
-    }
-
-    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p)
-    {
-        return true;
+        super(resources);
     }
 
     /**
-     * Runs the panel using the specified console.
+     * Returns the text to display.
      *
-     * @param installData the installation data
-     * @param console     the console
-     * @return <tt>true</tt> if the panel ran successfully, otherwise <tt>false</tt>
+     * @return the text. A <tt>null</tt> indicates failure
      */
     @Override
-    public boolean runConsole(AutomatedInstallData installData, Console console)
+    protected String getText()
     {
-        String license = null;
-        String resNamePrefix = "LicencePanel.licence";
-        try
-        {
-            // We read it
-            license = ResourceManager.getInstance().getTextResource(resNamePrefix);
-        }
-        catch (Exception err)
-        {
-            license = "Error : could not load the licence text for defined resource " + resNamePrefix;
-            console.println(license);
-            return false;
-        }
-
-        // controls # of lines to display at a time, to allow simulated scrolling down
-        int lines = 25;
-        int lineNumber = 0;
-
-        StringTokenizer tokenizer = new StringTokenizer(license, "\n");
-        while (tokenizer.hasMoreTokens())
-        {
-            String token = tokenizer.nextToken();
-            console.println(token);
-            lineNumber++;
-            if (lineNumber >= lines)
-            {
-                if (!doContinue(console))
-                {
-                    return false;
-                }
-                lineNumber = 0;
-            }
-
-        }
-
-        int i = askToAcceptLicense(console);
-
-        if (i == 1)
-        {
-            return true;
-        }
-        else if (i == 2)
-        {
-            return false;
-        }
-        else
-        {
-            return runConsole(installData, console);
-        }
-
-    }
-
-    private boolean doContinue(Console console)
-    {
-        String value = prompt(console, "press Enter to continue, X to exit", "x");
-        return !value.equalsIgnoreCase("x");
-    }
-
-    private int askToAcceptLicense(Console console)
-    {
-        return prompt(console, "press 1 to accept, 2 to reject, 3 to redisplay", 1, 3, 2);
+        return getText("LicencePanel.licence");
     }
 
 }

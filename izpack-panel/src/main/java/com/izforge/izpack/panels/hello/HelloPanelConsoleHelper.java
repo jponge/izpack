@@ -40,13 +40,7 @@ import java.util.Properties;
 public class HelloPanelConsoleHelper extends PanelConsoleHelper implements PanelConsole
 {
 
-    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p)
-    {
-        return true;
-    }
-
-    public boolean runGeneratePropertiesFile(AutomatedInstallData installData,
-                                             PrintWriter printWriter)
+    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties properties)
     {
         return true;
     }

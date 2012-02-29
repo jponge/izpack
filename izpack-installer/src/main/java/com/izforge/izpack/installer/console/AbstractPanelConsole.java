@@ -4,6 +4,7 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.util.Debug;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 
 /**
@@ -13,6 +14,21 @@ import java.io.IOException;
  */
 public abstract class AbstractPanelConsole implements PanelConsole
 {
+
+    /**
+     * Generates a properties file for each input field or variable.
+     * <p/>
+     * This implementation is a no-op.
+     *
+     * @param installData the installation data
+     * @param printWriter the properties file to write to
+     * @return <tt>true</tt>
+     */
+    @Override
+    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
+    {
+        return true;
+    }
 
     /**
      * Runs the panel in interactive console mode.
@@ -114,7 +130,7 @@ public abstract class AbstractPanelConsole implements PanelConsole
     protected boolean promptEndPanel(AutomatedInstallData installData, Console console)
     {
         boolean result;
-        int value = prompt(console, "press 1 to continue, 2 to quit, 3 to redisplay", 1, 3, 2);
+        int value = prompt(console, "Press 1 to continue, 2 to quit, 3 to redisplay", 1, 3, 2);
         result = value == 1 || value != 2 && runConsole(installData, console);
         return result;
     }

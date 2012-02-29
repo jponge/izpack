@@ -67,13 +67,13 @@ public class TestConsoleInstaller extends ConsoleInstaller
     }
 
     /**
-     * Shuts down the installer.
+     * Terminates the installation process.
      *
      * @param exitSuccess if <tt>true</tt>, exits with a <tt>0</tt> exit code, else exits with a <tt>1</tt> exit code
      * @param reboot      if <tt>true</tt> perform a reboot
      */
     @Override
-    protected void shutdown(boolean exitSuccess, boolean reboot)
+    protected void terminate(boolean exitSuccess, boolean reboot)
     {
         // Disable exit/reboot so the test can complete
     }

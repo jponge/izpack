@@ -23,10 +23,8 @@ package com.izforge.izpack.panels.finish;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.installer.console.Console;
-import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 
-import java.io.PrintWriter;
 import java.util.Properties;
 
 /**
@@ -34,14 +32,18 @@ import java.util.Properties;
  *
  * @author Mounir el hajj
  */
-public class FinishPanelConsoleHelper extends PanelConsoleHelper implements PanelConsole
+public class FinishPanelConsoleHelper extends PanelConsoleHelper
 {
-    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
-    {
-        return true;
-    }
 
-    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p)
+    /**
+     * Runs the panel using the supplied properties.
+     *
+     * @param installData the installation data
+     * @param properties  the properties
+     * @return <tt>true</tt>
+     */
+    @Override
+    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties properties)
     {
         return true;
     }
@@ -51,7 +53,7 @@ public class FinishPanelConsoleHelper extends PanelConsoleHelper implements Pane
      *
      * @param installData the installation data
      * @param console     the console
-     * @return <tt>true</tt> 
+     * @return <tt>true</tt>
      */
     @Override
     public boolean runConsole(AutomatedInstallData installData, Console console)
