@@ -18,14 +18,8 @@
 
 package com.izforge.izpack.test;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.core.container.ConditionContainer;
-import com.izforge.izpack.core.rules.RulesEngineImpl;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.merge.resolve.ClassPathCrawler;
-import com.izforge.izpack.test.junit.PicoRunner;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.hamcrest.Matcher;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
@@ -34,7 +28,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.core.container.ConditionContainer;
+import com.izforge.izpack.core.rules.RulesEngineImpl;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.merge.resolve.ClassPathCrawler;
+import com.izforge.izpack.test.junit.PicoRunner;
 
 
 /**
@@ -71,7 +72,7 @@ public class ConditionTest
 //        conditionspec.addChild(createNotCondition("test.not.true", createVariableCondition("test.true", "TEST", "true", ownerDocument), ownerDocument));
         conditionspec.addChild(createNotCondition("test.not.true", createRefCondition("", "test.true", ownerDocument), ownerDocument));
         rules = new RulesEngineImpl(idata, classPathCrawler, conditionContainer);
-        conditionContainer.addComponent(RulesEngine.class, rules);
+        idata.setRules(rules);
         rules.analyzeXml(conditionspec);
     }
 

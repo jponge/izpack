@@ -4,7 +4,7 @@
  * http://izpack.org/
  * http://izpack.codehaus.org/
  *
- * Copyright 2007-2009 Dennis Reil
+ * Copyright 2007-2009 Dennis Reil <izpack@reil-online.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,35 +23,21 @@ package com.izforge.izpack.core.rules.process;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.api.rules.RulesEngine;
 
 /**
  * References an already defined condition
- *
- * @author Dennis Reil, <izpack@reil-online.de>
  */
 public class RefCondition extends Condition
 {
     private static final long serialVersionUID = -2880915036530702269L;
     Condition referencedcondition;
     private String referencedConditionId;
-    private RulesEngine rules;
-
-    public RefCondition(RulesEngine rules)
-    {
-        this.rules = rules;
-        this.referencedcondition = null;
-        this.referencedConditionId = null;
-   }
 
     public String getReferencedConditionId()
     {
         return referencedConditionId;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void readFromXML(IXMLElement xmlcondition) throws Exception
     {
@@ -62,9 +48,6 @@ public class RefCondition extends Condition
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isTrue()
     {
@@ -76,7 +59,7 @@ public class RefCondition extends Condition
         {
             if (this.referencedcondition == null)
             {
-                this.referencedcondition = rules.getCondition(this.referencedConditionId);
+                this.referencedcondition = getInstallData().getRules().getCondition(this.referencedConditionId);
             }
             if (this.referencedcondition != null)
             {
@@ -86,9 +69,6 @@ public class RefCondition extends Condition
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getDependenciesDetails()
     {
@@ -100,9 +80,6 @@ public class RefCondition extends Condition
         return details.toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {

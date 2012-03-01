@@ -21,6 +21,15 @@
 
 package com.izforge.izpack.core.rules;
 
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.UUID;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.XMLException;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
@@ -41,9 +50,6 @@ import com.izforge.izpack.core.rules.process.PackselectionCondition;
 import com.izforge.izpack.core.rules.process.RefCondition;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.util.Debug;
-
-import java.io.OutputStream;
-import java.util.*;
 
 
 /**
@@ -144,6 +150,7 @@ public class RulesEngineImpl implements RulesEngine
         conditionsmap.put(condition.getId(), condition);
     }
 
+    @Override
     public void readConditionMap(Map<String, Condition> rules)
     {
         conditionsmap.putAll(rules);
@@ -159,11 +166,13 @@ public class RulesEngineImpl implements RulesEngine
      *
      * @return
      */
+    @Override
     public Set<String> getKnownConditionIds()
     {
         return conditionsmap.keySet();
     }
 
+    @Override
     public Condition instanciateCondition(IXMLElement condition)
     {
         String condid = condition.getAttribute("id");
@@ -194,9 +203,9 @@ public class RulesEngineImpl implements RulesEngine
                 }
                 container.addComponent(condid, conditionclass);
                 result = (Condition) container.getComponent(condid);
-                result.readFromXML(condition);
                 result.setId(condid);
                 result.setInstalldata(installdata);
+                result.readFromXML(condition);
                 conditionsmap.put(condid, result);
                 if (result instanceof RefCondition)
                 {
@@ -211,6 +220,7 @@ public class RulesEngineImpl implements RulesEngine
         return result;
     }
 
+    @Override
     public void checkConditions() throws Exception {
         for (Condition refCondition : refConditions)
         {
@@ -231,6 +241,7 @@ public class RulesEngineImpl implements RulesEngine
      *
      * @param conditionsspec
      */
+    @Override
     public void analyzeXml(IXMLElement conditionsspec)
     {
         if (conditionsspec == null)
@@ -300,6 +311,7 @@ public class RulesEngineImpl implements RulesEngine
      * @param id
      * @return
      */
+    @Override
     public Condition getCondition(String id)
     {
         Condition result = conditionsmap.get(id);
@@ -425,10 +437,7 @@ public class RulesEngineImpl implements RulesEngine
     private Condition parseComplexNotCondition(String expression)
     {
         Condition result = null;
-
-        result = NotCondition.createFromCondition(parseComplexCondition(expression.substring(1).trim()),
-                this, installdata);
-
+        result = NotCondition.createFromCondition(parseComplexCondition(expression.substring(1).trim()));
         return result;
     }
 
@@ -470,7 +479,7 @@ public class RulesEngineImpl implements RulesEngine
                     {
                         // delete not symbol
                         conditionexpr.deleteCharAt(index);
-                        result = NotCondition.createFromCondition(getConditionByExpr(conditionexpr), this, installdata);
+                        result = NotCondition.createFromCondition(getConditionByExpr(conditionexpr));
                     }
                     break;
                 default:
@@ -490,6 +499,7 @@ public class RulesEngineImpl implements RulesEngine
         return result;
     }
 
+    @Override
     public boolean isConditionTrue(String id, Properties variables)
     {
         Condition cond = getCondition(id);
@@ -514,6 +524,7 @@ public class RulesEngineImpl implements RulesEngine
         }
     }
 
+    @Override
     public boolean isConditionTrue(Condition cond, Properties variables)
     {
         if (cond == null)
@@ -528,6 +539,7 @@ public class RulesEngineImpl implements RulesEngine
         }
     }
 
+    @Override
     public boolean isConditionTrue(String id)
     {
         Condition cond = getCondition(id);
@@ -542,6 +554,7 @@ public class RulesEngineImpl implements RulesEngine
         }
     }
 
+    @Override
     public boolean isConditionTrue(Condition cond)
     {
         if (cond.getInstallData() == null)
@@ -559,6 +572,7 @@ public class RulesEngineImpl implements RulesEngine
      * @return true - there is no condition or condition is met false - there is a condition and the
      *         condition was not met
      */
+    @Override
     public boolean canShowPanel(String panelid, Properties variables)
     {
         Debug.trace("can show panel with id " + panelid + " ?");
@@ -584,6 +598,7 @@ public class RulesEngineImpl implements RulesEngine
      * @return true - there is no condition or condition is met false - there is a condition and the
      *         condition was not met
      */
+    @Override
     public boolean canInstallPack(String packid, Properties variables)
     {
         if (packid == null)
@@ -612,6 +627,7 @@ public class RulesEngineImpl implements RulesEngine
      * @param variables
      * @return
      */
+    @Override
     public boolean canInstallPackOptional(String packid, Properties variables)
     {
         Debug.trace("can install pack optional with id " + packid + "?");
@@ -630,6 +646,7 @@ public class RulesEngineImpl implements RulesEngine
     /**
      * @param condition
      */
+    @Override
     public void addCondition(Condition condition)
     {
         if (condition != null)
@@ -649,6 +666,7 @@ public class RulesEngineImpl implements RulesEngine
         }
     }
 
+    @Override
     public void writeRulesXML(OutputStream out)
     {
         XMLWriter xmlOut = new XMLWriter();
@@ -671,6 +689,7 @@ public class RulesEngineImpl implements RulesEngine
         }
     }
 
+    @Override
     public IXMLElement createConditionElement(Condition condition, IXMLElement root)
     {
         XMLElementImpl xml = new XMLElementImpl("condition", root);

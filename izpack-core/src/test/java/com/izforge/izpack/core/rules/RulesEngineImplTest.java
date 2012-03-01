@@ -1,17 +1,18 @@
 package com.izforge.izpack.core.rules;
 
 
-import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.core.rules.logic.NotCondition;
-import com.izforge.izpack.core.rules.process.JavaCondition;
-import org.junit.Before;
-import org.junit.Test;
+import static junit.framework.Assert.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static junit.framework.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.izforge.izpack.api.rules.Condition;
+import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.core.rules.logic.NotCondition;
+import com.izforge.izpack.core.rules.process.JavaCondition;
 
 
 public class RulesEngineImplTest
@@ -27,7 +28,7 @@ public class RulesEngineImplTest
         Condition alwaysFalse = new JavaCondition();
         conditionsmap.put("false", alwaysFalse);
 
-        Condition alwaysTrue = NotCondition.createFromCondition(alwaysFalse, engine, null);
+        Condition alwaysTrue = NotCondition.createFromCondition(alwaysFalse);
         conditionsmap.put("true", alwaysTrue);
 
         engine.readConditionMap(conditionsmap);

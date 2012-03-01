@@ -4,7 +4,7 @@
  * http://izpack.org/
  * http://izpack.codehaus.org/
  *
- * Copyright 2007-2009 Dennis Reil
+ * Copyright 2007-2009 Dennis Reil <izpack@reil-online.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,29 +22,18 @@
 package com.izforge.izpack.core.rules.logic;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
 
 /**
- * @author Dennis Reil, <izpack@reil-online.de>
+ * Negation of a referenced condition
  */
 public class NotCondition extends Condition
 {
 
     private static final long serialVersionUID = 3194843222487006309L;
     protected Condition operand;
-    private RulesEngine rulesEngineImpl;
 
-    public NotCondition(RulesEngine rulesEngineImpl)
-    {
-        this.rulesEngineImpl = rulesEngineImpl;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void readFromXML(IXMLElement xmlcondition) throws Exception
     {
@@ -56,13 +45,10 @@ public class NotCondition extends Condition
         {
             throw new Exception("Condition \"" + getId() + "\" needs exactly one condition as operand");
         }
-        this.operand = rulesEngineImpl.instanciateCondition(xmlcondition.getChildAtIndex(0));
+        this.operand = getInstallData().getRules().instanciateCondition(xmlcondition.getChildAtIndex(0));
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isTrue()
     {
@@ -76,9 +62,6 @@ public class NotCondition extends Condition
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getDependenciesDetails()
     {
@@ -91,25 +74,21 @@ public class NotCondition extends Condition
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {
-        IXMLElement conditionElement = rulesEngineImpl.createConditionElement(this.operand, conditionRoot);
+        IXMLElement conditionElement = getInstallData().getRules().createConditionElement(this.operand, conditionRoot);
         this.operand.makeXMLData(conditionElement);
         conditionRoot.addChild(conditionElement);
     }
 
-    public static Condition createFromCondition(Condition conditionByExpr, RulesEngine rulesEngine, AutomatedInstallData installData)
+    public static Condition createFromCondition(Condition conditionByExpr)
     {
-        NotCondition notCondition = new NotCondition(rulesEngine);
-        notCondition.setInstalldata(installData);
+        NotCondition notCondition = new NotCondition();
         notCondition.operand = conditionByExpr;
         if (conditionByExpr != null)
         {
-            notCondition.operand.setInstalldata(installData);
+            notCondition.operand.setInstalldata(notCondition.getInstallData());
         }
         return notCondition;
     }

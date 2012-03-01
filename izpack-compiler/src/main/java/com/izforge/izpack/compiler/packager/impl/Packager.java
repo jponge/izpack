@@ -1,16 +1,16 @@
 /*
  * $Id$
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,26 @@
  */
 
 package com.izforge.izpack.compiler.packager.impl;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.Pack200;
+import java.util.zip.ZipInputStream;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
@@ -42,25 +62,6 @@ import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.IoHelper;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.jar.Pack200;
-import java.util.zip.ZipInputStream;
 
 /**
  * The packager class. The packager is used by the compiler to put files into an installer, and
@@ -109,6 +110,7 @@ public class Packager extends PackagerBase
     * @see com.izforge.izpack.compiler.packager.IPackager#createInstaller(java.io.File)
     */
 
+    @Override
     public void createInstaller() throws Exception
     {
         // preliminary work
@@ -124,7 +126,7 @@ public class Packager extends PackagerBase
 
         // Finish up. closeAlways is a hack for pack compressions other than
         // default. Some of it (e.g. BZip2) closes the slave of it also.
-        // But this should not be because the jar stream should be open 
+        // But this should not be because the jar stream should be open
         // for the next pack. Therefore an own JarOutputStream will be used
         // which close method will be blocked.
         primaryJarStream.closeAlways();
@@ -140,6 +142,7 @@ public class Packager extends PackagerBase
      * Write skeleton installer to primary jar. It is just an included jar, except that we copy the
      * META-INF as well.
      */
+    @Override
     protected void writeSkeletonInstaller() throws IOException
     {
         sendMsg("Copying the skeleton installer", PackagerListener.MSG_VERBOSE);
@@ -163,18 +166,32 @@ public class Packager extends PackagerBase
     /**
      * Write an arbitrary object to primary jar.
      */
+    @Override
     protected void writeInstallerObject(String entryName, Object object) throws IOException
     {
         primaryJarStream.putNextEntry(new org.apache.tools.zip.ZipEntry(RESOURCES_PATH + entryName));
         ObjectOutputStream out = new ObjectOutputStream(primaryJarStream);
-        out.writeObject(object);
-        out.flush();
-        primaryJarStream.closeEntry();
+        try
+        {
+            out.writeObject(object);
+        }
+        catch(IOException e)
+        {
+            throw new IOException("Error serializing instance of "
+                 + object.getClass().getSimpleName()
+                 + " as entry \"" + entryName + "\"", e);
+        }
+        finally
+        {
+            out.flush();
+            primaryJarStream.closeEntry();
+        }
     }
 
     /**
      * Write the data referenced by URL to primary jar.
      */
+    @Override
     protected void writeInstallerResources() throws IOException
     {
         sendMsg("Copying " + installerResourceURLMap.size() + " files into installer");
@@ -201,6 +218,7 @@ public class Packager extends PackagerBase
     /**
      * Copy included jars to primary jar.
      */
+    @Override
     protected void writeIncludedJars() throws IOException
     {
         sendMsg("Merging " + includedJarURLs.size() + " jars into installer");
@@ -245,6 +263,7 @@ public class Packager extends PackagerBase
     /**
      * Write Packs to primary jar or each to a separate jar.
      */
+    @Override
     protected void writePacks() throws Exception
     {
         final int num = packsList.size();
@@ -330,7 +349,7 @@ public class Packager extends PackagerBase
                     {
                         /*
                          * Warning!
-                         * 
+                         *
                          * Pack200 archives must be stored in separated streams, as the Pack200 unpacker
                          * reads the entire stream...
                          *
@@ -473,6 +492,7 @@ public class Packager extends PackagerBase
     /* (non-Javadoc)
     * @see com.izforge.izpack.compiler.packager.IPackager#addConfigurationInformation(com.izforge.izpack.api.adaptator.IXMLElement)
     */
+    @Override
     public void addConfigurationInformation(IXMLElement data)
     {
         // TODO Auto-generated method stub
