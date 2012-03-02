@@ -34,7 +34,6 @@ public final class DataValidatorFactory
 
             try
             {
-                validator = (DataValidator) Class.forName(className).newInstance();
                 try
                 {
                     // try fully qualified class name
