@@ -2423,7 +2423,7 @@ public class CompilerConfig extends Thread
             }
             try
             {
-                rules.checkConditions();
+                rules.resolveConditions();
             }
             catch (Exception e)
             {

@@ -1,6 +1,7 @@
 package com.izforge.izpack.api.rules;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.AutomatedInstallData;
 
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -15,12 +16,9 @@ public interface RulesEngine extends Serializable
 {
     Set<String> getKnownConditionIds();
 
-    boolean isConditionTrue(String id, Properties variables);
-
-    boolean isConditionTrue(Condition cond, Properties variables);
-
+    boolean isConditionTrue(String id, AutomatedInstallData installData);
+    boolean isConditionTrue(Condition cond, AutomatedInstallData installData);
     boolean isConditionTrue(String id);
-
     boolean isConditionTrue(Condition cond);
 
     boolean canShowPanel(String panelid, Properties variables);
@@ -45,7 +43,7 @@ public interface RulesEngine extends Serializable
      * Check whether references condition exist This must be done after all conditions have been
      * read, to not depend on order of their definition in the XML
      */
-    void checkConditions() throws Exception;
+    void resolveConditions() throws Exception;
 
     IXMLElement createConditionElement(Condition condition, IXMLElement root);
 }

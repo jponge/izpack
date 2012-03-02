@@ -22,16 +22,27 @@
 package com.izforge.izpack.core.rules.process;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.rules.Condition;
+import com.izforge.izpack.api.rules.ConditionReference;
+import com.izforge.izpack.api.rules.RulesEngine;
 
 /**
  * References an already defined condition
  */
-public class RefCondition extends Condition
+public class RefCondition extends ConditionReference
 {
     private static final long serialVersionUID = -2880915036530702269L;
+
+    protected transient RulesEngine rules;
+
     Condition referencedcondition;
     private String referencedConditionId;
+
+    public RefCondition(RulesEngine rules)
+    {
+        this.rules = rules;
+    }
 
     public String getReferencedConditionId()
     {
@@ -49,24 +60,29 @@ public class RefCondition extends Condition
     }
 
     @Override
+    public void resolveReference()
+    {
+        Condition condition = null;
+        if (referencedConditionId != null)
+        {
+            condition = rules.getCondition(referencedConditionId);
+        }
+        if (condition == null)
+        {
+            throw new IzPackException("Referenced condition \"" +  referencedConditionId + "\" not found");
+        }
+        setReferencedCondition(condition);
+    }
+
+    @Override
     public boolean isTrue()
     {
-        if (this.referencedConditionId == null)
+        Condition condition = getReferencedCondition();
+        if (condition == null)
         {
             return false;
         }
-        else
-        {
-            if (this.referencedcondition == null)
-            {
-                this.referencedcondition = getInstallData().getRules().getCondition(this.referencedConditionId);
-            }
-            if (this.referencedcondition != null)
-            {
-                this.referencedcondition.setInstalldata(this.getInstallData());
-            }
-            return (this.referencedcondition != null) ? this.referencedcondition.isTrue() : false;
-        }
+        return condition.isTrue();
     }
 
     @Override

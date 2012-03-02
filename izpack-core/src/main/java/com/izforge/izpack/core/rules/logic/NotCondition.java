@@ -22,17 +22,32 @@
 package com.izforge.izpack.core.rules.logic;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.api.rules.ConditionReference;
+import com.izforge.izpack.api.rules.RulesEngine;
 
 /**
  * Negation of a referenced condition
  */
-public class NotCondition extends Condition
+public class NotCondition extends ConditionReference
 {
 
     private static final long serialVersionUID = 3194843222487006309L;
-    protected Condition operand;
+
+    protected transient RulesEngine rules;
+
+    private IXMLElement referencedConditionXMLElement;
+
+    public NotCondition(RulesEngine rules)
+    {
+        this.rules = rules;
+    }
+
+    public IXMLElement getReferencedConditionXMLElement()
+    {
+        return referencedConditionXMLElement;
+    }
 
     @Override
     public void readFromXML(IXMLElement xmlcondition) throws Exception
@@ -45,22 +60,42 @@ public class NotCondition extends Condition
         {
             throw new Exception("Condition \"" + getId() + "\" needs exactly one condition as operand");
         }
-        this.operand = getInstallData().getRules().instanciateCondition(xmlcondition.getChildAtIndex(0));
+
+        this.referencedConditionXMLElement = xmlcondition.getChildAtIndex(0);
     }
 
 
     @Override
-    public boolean isTrue()
+    public void resolveReference()
     {
-        if ((this.operand == null))
+        String refid = referencedConditionXMLElement.getAttribute("refid");
+
+        Condition condition;
+        if (refid != null)
         {
-            Debug.trace("Operand of condition " + this.getId() + " not initialized correctly.");
-            return false;
+            condition = rules.getCondition(refid);
         }
-        this.operand.setInstalldata(this.getInstallData());
-        return !operand.isTrue();
+        else
+        {
+            condition = rules.instanciateCondition(referencedConditionXMLElement);
+        }
+        if (condition == null)
+        {
+            throw new IzPackException("Referenced condition \"" +  refid + "\" not found");
+        }
+        setReferencedCondition(condition);
     }
 
+    @Override
+    public boolean isTrue()
+    {
+        Condition condition = getReferencedCondition();
+        if (condition == null)
+        {
+            return false;
+        }
+        return !condition.isTrue();
+    }
 
     @Override
     public String getDependenciesDetails()
@@ -68,7 +103,7 @@ public class NotCondition extends Condition
         StringBuffer details = new StringBuffer();
         details.append(this.getId());
         details.append(" depends on:<ul><li>NOT ");
-        details.append(operand.getDependenciesDetails());
+        details.append(getReferencedCondition().getDependenciesDetails());
         details.append("</li></ul>");
         return details.toString();
     }
@@ -77,18 +112,20 @@ public class NotCondition extends Condition
     @Override
     public void makeXMLData(IXMLElement conditionRoot)
     {
-        IXMLElement conditionElement = getInstallData().getRules().createConditionElement(this.operand, conditionRoot);
-        this.operand.makeXMLData(conditionElement);
+        IXMLElement conditionElement = getInstallData().getRules().createConditionElement(getReferencedCondition(), conditionRoot);
+        getReferencedCondition().makeXMLData(conditionElement);
         conditionRoot.addChild(conditionElement);
     }
 
-    public static Condition createFromCondition(Condition conditionByExpr)
+    public static Condition createFromCondition(Condition referencedCondition,
+            RulesEngine rules)
     {
-        NotCondition notCondition = new NotCondition();
-        notCondition.operand = conditionByExpr;
-        if (conditionByExpr != null)
+        NotCondition notCondition = null;
+        if (referencedCondition != null)
         {
-            notCondition.operand.setInstalldata(notCondition.getInstallData());
+            notCondition = new NotCondition(rules);
+            notCondition.setReferencedCondition(referencedCondition);
+            notCondition.setInstalldata(referencedCondition.getInstallData());
         }
         return notCondition;
     }

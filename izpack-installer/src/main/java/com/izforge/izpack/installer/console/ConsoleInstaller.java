@@ -125,10 +125,10 @@ public class ConsoleInstaller extends InstallerBase
             variableSubstitutor = new VariableSubstitutorImpl(installData.getVariables());
         }
 
-        if (installData.getRules() == null)
-        {
-            installData.setRules(rules);
-        }
+//        if (installData.getRules() == null)
+//        {
+//            installData.setRules(rules);
+//        }
         this.uninstallDataWriter = uninstallDataWriter;
         console = new Console();
     }

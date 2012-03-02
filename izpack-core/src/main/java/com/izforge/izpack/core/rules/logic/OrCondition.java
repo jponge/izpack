@@ -36,7 +36,7 @@ public class OrCondition extends Condition
 {
     private static final long serialVersionUID = 8341350377205144199L;
 
-    protected RulesEngineImpl rulesEngineImpl;
+    protected transient RulesEngineImpl rulesEngineImpl;
 
     protected Collection<Condition> nestedConditions = new ArrayList<Condition>();
 
@@ -65,7 +65,6 @@ public class OrCondition extends Condition
         boolean result = false;
         for (Condition condition : nestedConditions)
         {
-            condition.setInstalldata(this.getInstallData());
             result = result || condition.isTrue();
         }
         return result;

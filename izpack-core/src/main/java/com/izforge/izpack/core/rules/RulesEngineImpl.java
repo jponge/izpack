@@ -22,13 +22,7 @@
 package com.izforge.izpack.core.rules;
 
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.XMLException;
@@ -39,6 +33,7 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.rules.Condition;
+import com.izforge.izpack.api.rules.ConditionReference;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.rules.logic.AndCondition;
@@ -47,7 +42,6 @@ import com.izforge.izpack.core.rules.logic.OrCondition;
 import com.izforge.izpack.core.rules.logic.XorCondition;
 import com.izforge.izpack.core.rules.process.JavaCondition;
 import com.izforge.izpack.core.rules.process.PackselectionCondition;
-import com.izforge.izpack.core.rules.process.RefCondition;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.util.Debug;
 
@@ -69,7 +63,7 @@ public class RulesEngineImpl implements RulesEngine
     protected Map<String, String> optionalpackconditions;
 
     protected Map<String, Condition> conditionsmap = new HashMap<String, Condition>();
-    private Set<Condition> refConditions = new HashSet<Condition>();
+    private Set<ConditionReference> refConditions = new HashSet<ConditionReference>();
 
     protected AutomatedInstallData installdata;
     private ClassPathCrawler classPathCrawler;
@@ -207,9 +201,9 @@ public class RulesEngineImpl implements RulesEngine
                 result.setInstalldata(installdata);
                 result.readFromXML(condition);
                 conditionsmap.put(condid, result);
-                if (result instanceof RefCondition)
+                if (result instanceof ConditionReference)
                 {
-                    refConditions.add(result);
+                    refConditions.add((ConditionReference)result);
                 }
             }
             catch (Exception e)
@@ -221,18 +215,10 @@ public class RulesEngineImpl implements RulesEngine
     }
 
     @Override
-    public void checkConditions() throws Exception {
-        for (Condition refCondition : refConditions)
+    public void resolveConditions() throws Exception {
+        for (ConditionReference refCondition : refConditions)
         {
-            String referencedConditionId = ((RefCondition) refCondition).getReferencedConditionId();
-
-            Condition referencedCondition = getCondition(referencedConditionId);
-            if (referencedCondition == null)
-            {
-                throw new IzPackException(
-                        "Referenced condition \"" + referencedConditionId
-                        + "\" not found");
-            }
+            refCondition.resolveReference();
         }
     }
 
@@ -437,7 +423,9 @@ public class RulesEngineImpl implements RulesEngine
     private Condition parseComplexNotCondition(String expression)
     {
         Condition result = null;
-        result = NotCondition.createFromCondition(parseComplexCondition(expression.substring(1).trim()));
+        result = NotCondition.createFromCondition(
+                parseComplexCondition(expression.substring(1).trim()),
+                this);
         return result;
     }
 
@@ -479,7 +467,9 @@ public class RulesEngineImpl implements RulesEngine
                     {
                         // delete not symbol
                         conditionexpr.deleteCharAt(index);
-                        result = NotCondition.createFromCondition(getConditionByExpr(conditionexpr));
+                        result = NotCondition.createFromCondition(
+                                getConditionByExpr(conditionexpr),
+                                this);
                     }
                     break;
                 default:
@@ -500,43 +490,29 @@ public class RulesEngineImpl implements RulesEngine
     }
 
     @Override
-    public boolean isConditionTrue(String id, Properties variables)
+    public boolean isConditionTrue(String id, AutomatedInstallData installData)
     {
         Condition cond = getCondition(id);
-        if (cond == null)
+        if (cond != null)
         {
-            Debug.trace("Condition (" + id + ") not found.");
-            return true;
+            return isConditionTrue(cond, installData);
         }
-        else
-        {
-            cond.setInstalldata(installdata);
-            Debug.trace("Checking condition");
-            try
-            {
-                return cond.isTrue();
-            }
-            catch (NullPointerException npe)
-            {
-                Debug.error("Nullpointerexception checking condition: " + id);
-                return false;
-            }
-        }
+        Debug.trace("Condition " + id + " not found");
+        return false;
     }
 
     @Override
-    public boolean isConditionTrue(Condition cond, Properties variables)
+    public boolean isConditionTrue(Condition cond, AutomatedInstallData installData)
     {
-        if (cond == null)
+        if (cond != null)
         {
-            Debug.trace("Condition not found.");
-            return true;
+            if (installData != null)
+            {
+                cond.setInstalldata(installData);
+            }
+            return isConditionTrue(cond);
         }
-        else
-        {
-            Debug.trace("Checking condition");
-            return cond.isTrue();
-        }
+        return false;
     }
 
     @Override
@@ -545,13 +521,10 @@ public class RulesEngineImpl implements RulesEngine
         Condition cond = getCondition(id);
         if (cond != null)
         {
-            cond.setInstalldata(installdata);
-            return this.isConditionTrue(cond);
+            return isConditionTrue(cond);
         }
-        else
-        {
-            return false;
-        }
+        Debug.trace("Condition " + id + " not found");
+        return false;
     }
 
     @Override
@@ -559,8 +532,9 @@ public class RulesEngineImpl implements RulesEngine
     {
         if (cond.getInstallData() == null)
         {
-            cond.setInstalldata(installdata);
+            cond.setInstalldata(this.installdata);
         }
+        Debug.trace("Checking condition " + cond.getId());
         return cond.isTrue();
     }
 

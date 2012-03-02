@@ -30,11 +30,8 @@ import org.w3c.dom.Document;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.core.container.ConditionContainer;
-import com.izforge.izpack.core.rules.RulesEngineImpl;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.test.junit.PicoRunner;
 
 
@@ -51,15 +48,12 @@ public class ConditionTest
     private static final Matcher<Object> IS_NULL = IsNull.nullValue();
     private static final Matcher<Object> IS_NOT_NULL = IsNull.notNullValue();
     private RulesEngine rules;
-    private GUIInstallData idata;
-    private ClassPathCrawler classPathCrawler;
-    private ConditionContainer conditionContainer;
+    private AutomatedInstallData idata;
 
-    public ConditionTest(ClassPathCrawler classPathCrawler, GUIInstallData idata, ConditionContainer conditionContainer)
+    public ConditionTest(AutomatedInstallData idata, RulesEngine rules)
     {
-        this.classPathCrawler = classPathCrawler;
+        this.rules = rules;
         this.idata = idata;
-        this.conditionContainer = conditionContainer;
     }
 
     @Before
@@ -71,9 +65,9 @@ public class ConditionTest
         conditionspec.addChild(createRefCondition("test.true2", "test.true", ownerDocument));
 //        conditionspec.addChild(createNotCondition("test.not.true", createVariableCondition("test.true", "TEST", "true", ownerDocument), ownerDocument));
         conditionspec.addChild(createNotCondition("test.not.true", createRefCondition("", "test.true", ownerDocument), ownerDocument));
-        rules = new RulesEngineImpl(idata, classPathCrawler, conditionContainer);
         idata.setRules(rules);
         rules.analyzeXml(conditionspec);
+        rules.resolveConditions();
     }
 
     public IXMLElement createNotCondition(String id, IXMLElement condition, Document ownerDocument)
@@ -117,11 +111,11 @@ public class ConditionTest
     {
         assertThat(rules.getCondition("test.not"), IS_NULL);
         assertThat(rules.getCondition("test.not.true"), IS_NOT_NULL);
-        assertThat(rules.isConditionTrue("test.not.true", idata.getVariables()), IS_TRUE);
+        assertThat(rules.isConditionTrue("test.not.true", idata), IS_TRUE);
 
         assertThat(rules.getCondition("!test.not.true"), IS_NOT_NULL);
 
-        assertThat(rules.isConditionTrue("!test.not.true", idata.getVariables()), IS_FALSE);
+        assertThat(rules.isConditionTrue("!test.not.true", idata), IS_FALSE);
     }
 
     @Test
@@ -130,24 +124,24 @@ public class ConditionTest
         assertThat(rules.getCondition("test.true"), IS_NOT_NULL);
         assertThat(rules.getCondition("test.true2"), IS_NOT_NULL);
 
-        assertThat(rules.isConditionTrue("test.true", idata.getVariables()), IS_FALSE);
-        assertThat(rules.isConditionTrue("test.true2", idata.getVariables()), IS_FALSE);
+        assertThat(rules.isConditionTrue("test.true", idata), IS_FALSE);
+        assertThat(rules.isConditionTrue("test.true2", idata), IS_FALSE);
 
         idata.setVariable("TEST", "true");
 
-        assertThat(rules.isConditionTrue("test.true", idata.getVariables()), IS_TRUE);
-        assertThat(rules.isConditionTrue("test.true2", idata.getVariables()), IS_TRUE);
+        assertThat(rules.isConditionTrue("test.true", idata), IS_TRUE);
+        assertThat(rules.isConditionTrue("test.true2", idata), IS_TRUE);
 
-        assertThat(rules.isConditionTrue("!test.true", idata.getVariables()), IS_FALSE);
-        assertThat(rules.isConditionTrue("!test.true2", idata.getVariables()), IS_FALSE);
+        assertThat(rules.isConditionTrue("!test.true", idata), IS_FALSE);
+        assertThat(rules.isConditionTrue("!test.true2", idata), IS_FALSE);
 
-        assertThat(rules.isConditionTrue("test.true+test.true2", idata.getVariables()), IS_TRUE);
-        assertThat(rules.isConditionTrue("test.true2+test.true", idata.getVariables()), IS_TRUE);
+        assertThat(rules.isConditionTrue("test.true+test.true2", idata), IS_TRUE);
+        assertThat(rules.isConditionTrue("test.true2+test.true", idata), IS_TRUE);
 
-        assertThat(rules.isConditionTrue("!test.true2+test.true", idata.getVariables()), IS_FALSE);
+        assertThat(rules.isConditionTrue("!test.true2+test.true", idata), IS_FALSE);
 
-        assertThat(rules.isConditionTrue("test.true2|test.true", idata.getVariables()), IS_TRUE);
+        assertThat(rules.isConditionTrue("test.true2|test.true", idata), IS_TRUE);
 
-        assertThat(rules.isConditionTrue("test.true2\\test.true", idata.getVariables()), IS_FALSE);
+        assertThat(rules.isConditionTrue("test.true2\\test.true", idata), IS_FALSE);
     }
 }

@@ -226,7 +226,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         return promptEndPanel(installData, console);
     }
 
-    public boolean collectInputs(AutomatedInstallData idata)
+    public boolean collectInputs(AutomatedInstallData installData)
     {
 
         listInputs.clear();
@@ -234,7 +234,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         List<IXMLElement> specElements;
         String attribute;
         String dataID;
-        String panelid = idata.getPanelsOrder().get(idata.getCurPanelNumber()).getPanelid();
+        String panelid = installData.getPanelsOrder().get(installData.getCurPanelNumber()).getPanelid();
         String instance = Integer.toString(instanceNumber);
 
         SpecHelper specHelper = new SpecHelper();
@@ -261,7 +261,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 List<IXMLElement> forPacks = data.getChildrenNamed(SELECTEDPACKS);
                 List<IXMLElement> forOs = data.getChildrenNamed(OS);
 
-                if (itemRequiredFor(forPacks, idata) && itemRequiredForOs(forOs))
+                if (itemRequiredFor(forPacks, installData) && itemRequiredForOs(forOs))
                 {
                     spec = data;
                     break;
@@ -279,19 +279,19 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             List<IXMLElement> forPacks = field.getChildrenNamed(SELECTEDPACKS);
             List<IXMLElement> forOs = field.getChildrenNamed(OS);
 
-            if (itemRequiredFor(forPacks, idata) && itemRequiredForOs(forOs))
+            if (itemRequiredFor(forPacks, installData) && itemRequiredForOs(forOs))
             {
 
                 String conditionid = field.getAttribute(ATTRIBUTE_CONDITIONID_NAME);
                 if (conditionid != null)
                 {
                     // check if condition is fulfilled
-                    if (!idata.getRules().isConditionTrue(conditionid, idata.getVariables()))
+                    if (!installData.getRules().isConditionTrue(conditionid, installData))
                     {
                         continue;
                     }
                 }
-                Input in = getInputFromField(field, idata);
+                Input in = getInputFromField(field, installData);
                 if (in != null)
                 {
                     listInputs.add(in);

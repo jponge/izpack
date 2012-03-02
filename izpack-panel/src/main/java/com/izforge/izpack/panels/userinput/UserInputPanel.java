@@ -435,7 +435,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             if (conditionid != null)
             {
                 // check if condition is fulfilled
-                if (!rules.isConditionTrue(conditionid, this.installData.getVariables()))
+                if (!rules.isConditionTrue(conditionid, this.installData))
                 {
                     continue;
                 }
@@ -1953,7 +1953,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         UserInputPanel.TextValuePair listItem = null;
         JComboBox field = new JComboBox();
         JLabel label;
-        
+
         String causesValidataion = spec.getAttribute(REVALIDATE);
         if (causesValidataion != null && causesValidataion.equals("yes"))
         {
@@ -4081,7 +4081,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             if (conditionid != null)
             {
                 // check if condition for this variable is fulfilled
-                if (!rules.isConditionTrue(conditionid, this.installData.getVariables()))
+                if (!rules.isConditionTrue(conditionid, this.installData))
                 {
                     continue;
                 }

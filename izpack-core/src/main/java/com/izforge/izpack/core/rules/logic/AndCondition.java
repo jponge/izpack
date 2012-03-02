@@ -26,7 +26,7 @@ import java.util.Set;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.core.rules.RulesEngineImpl;
+import com.izforge.izpack.api.rules.RulesEngine;
 
 /**
  * Defines a condition where both operands have to be true
@@ -37,18 +37,18 @@ public class AndCondition extends Condition
 {
     private static final long serialVersionUID = -5854944262991488370L;
 
-    protected RulesEngineImpl rulesEngineImpl;
+    protected transient RulesEngine rules;
 
     protected Set<Condition> nestedConditions = new HashSet<Condition>();
 
-    public AndCondition(RulesEngineImpl rulesEngineImpl)
+    public AndCondition(RulesEngine rules)
     {
-        this.rulesEngineImpl = rulesEngineImpl;
+        this.rules = rules;
     }
 
-    public AndCondition(RulesEngineImpl rulesEngineImpl, Condition ... operands)
+    public AndCondition(RulesEngine rules, Condition ... operands)
     {
-        this.rulesEngineImpl = rulesEngineImpl;
+        this.rules = rules;
         for (Condition condition : operands)
         {
             nestedConditions.add(condition);
@@ -64,7 +64,7 @@ public class AndCondition extends Condition
         }
         for (IXMLElement element : xmlcondition.getChildren())
         {
-            nestedConditions.add(rulesEngineImpl.instanciateCondition(element));
+            nestedConditions.add(rules.instanciateCondition(element));
         }
     }
 
@@ -74,7 +74,6 @@ public class AndCondition extends Condition
         boolean result = true;
         for (Condition condition : nestedConditions)
         {
-            condition.setInstalldata(this.getInstallData());
             result = result && condition.isTrue();
         }
         return result;
@@ -100,7 +99,7 @@ public class AndCondition extends Condition
     {
         for (Condition condition : nestedConditions)
         {
-            IXMLElement left = rulesEngineImpl.createConditionElement(condition, conditionRoot);
+            IXMLElement left = rules.createConditionElement(condition, conditionRoot);
             condition.makeXMLData(left);
             conditionRoot.addChild(left);
         }

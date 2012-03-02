@@ -54,7 +54,6 @@ public class XorCondition extends OrCondition
         Boolean result = null;
         for (Condition condition : nestedConditions)
         {
-            condition.setInstalldata(this.getInstallData());
             if (result == null)
             {
                 result = condition.isTrue();

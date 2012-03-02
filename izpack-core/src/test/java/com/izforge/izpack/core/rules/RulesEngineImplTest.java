@@ -5,6 +5,7 @@ import static junit.framework.Assert.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +14,8 @@ import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.rules.logic.NotCondition;
 import com.izforge.izpack.core.rules.process.JavaCondition;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.installer.data.InstallData;
 
 
 public class RulesEngineImplTest
@@ -22,13 +25,16 @@ public class RulesEngineImplTest
     @Before
     public void setUp() throws Exception
     {
-        engine = new RulesEngineImpl(null, null);
+        Properties variables = new Properties();
+        engine = new RulesEngineImpl(
+                new InstallData(variables, new VariableSubstitutorImpl(variables)), null, null);
 
         Map<String, Condition> conditionsmap = new HashMap<String, Condition>();
         Condition alwaysFalse = new JavaCondition();
         conditionsmap.put("false", alwaysFalse);
 
-        Condition alwaysTrue = NotCondition.createFromCondition(alwaysFalse);
+        Condition alwaysTrue =
+                NotCondition.createFromCondition(alwaysFalse, engine);
         conditionsmap.put("true", alwaysTrue);
 
         engine.readConditionMap(conditionsmap);

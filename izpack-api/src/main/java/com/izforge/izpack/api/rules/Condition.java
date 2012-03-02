@@ -40,7 +40,7 @@ public abstract class Condition implements Serializable
 
     private String id;
 
-    private AutomatedInstallData installdata;
+    private AutomatedInstallData installData;
 
     public Condition()
     {
@@ -77,13 +77,13 @@ public abstract class Condition implements Serializable
 
     public AutomatedInstallData getInstallData()
     {
-        return installdata;
+        return installData;
     }
 
 
-    public void setInstalldata(AutomatedInstallData installdata)
+    public void setInstalldata(AutomatedInstallData installData)
     {
-        this.installdata = installdata;
+        this.installData = installData;
     }
 
     public String getDependenciesDetails()

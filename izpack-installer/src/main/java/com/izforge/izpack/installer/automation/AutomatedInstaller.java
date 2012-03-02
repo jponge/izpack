@@ -75,7 +75,7 @@ public class AutomatedInstaller extends InstallerBase
     /**
      * The automated installation data.
      */
-    private AutomatedInstallData idata;
+    private AutomatedInstallData installData;
 
     /**
      * The result of the installation.
@@ -120,16 +120,16 @@ public class AutomatedInstaller extends InstallerBase
     {
         File input = new File(inputFilename);
         // Loads the xml data
-        this.idata.setXmlData(getXMLData(input));
+        this.installData.setXmlData(getXMLData(input));
 
         // Loads the langpack
-        this.idata.setLocaleISO3(this.idata.getXmlData().getAttribute("langpack", "eng"));
-        InputStream in = resourceManager.getLangPack(this.idata.getLocaleISO3());
-        this.idata.setLangpack(new LocaleDatabase(in));
-        this.idata.setVariable(ScriptParserConstant.ISO3_LANG, this.idata.getLocaleISO3());
+        this.installData.setLocaleISO3(this.installData.getXmlData().getAttribute("langpack", "eng"));
+        InputStream in = resourceManager.getLangPack(this.installData.getLocaleISO3());
+        this.installData.setLangpack(new LocaleDatabase(in));
+        this.installData.setVariable(ScriptParserConstant.ISO3_LANG, this.installData.getLocaleISO3());
 
         // create the resource manager singleton
-        resourceManager.setLocale(this.idata.getLocaleISO3());
+        resourceManager.setLocale(this.installData.getLocaleISO3());
 //        ResourceManager.create(this.installData);
     }
 
@@ -147,11 +147,11 @@ public class AutomatedInstaller extends InstallerBase
      */
     public void doInstall() throws Exception
     {
-        VariableSubstitutor subst = new VariableSubstitutorImpl(this.idata.getVariables());
+        VariableSubstitutor subst = new VariableSubstitutorImpl(this.installData.getVariables());
 
         // Get dynamic variables immediately for being able to use them as
         // variable condition in installerrequirements
-        InstallerBase.refreshDynamicVariables(this.idata, subst);
+        InstallerBase.refreshDynamicVariables(this.installData, subst);
 
         // check installer conditions
         if (!checkCondition.checkInstallerRequirements(this))
@@ -173,11 +173,11 @@ public class AutomatedInstaller extends InstallerBase
             this.result = true;
 
             // walk the panels in order
-            for (Panel p : this.idata.getPanelsOrder())
+            for (Panel p : this.installData.getPanelsOrder())
             {
-                RulesEngine rules = this.idata.getRules();
+                RulesEngine rules = this.installData.getRules();
                 if (p.hasCondition()
-                        && !rules.isConditionTrue(p.getCondition(), this.idata.getVariables()))
+                        && !rules.isConditionTrue(p.getCondition(), this.installData))
                 {
                     Debug.log("Condition for panel " + p.getPanelid() + "is not fulfilled, skipping panel!");
                     if (this.panelInstanceCount.containsKey(p.className))
@@ -212,7 +212,7 @@ public class AutomatedInstaller extends InstallerBase
                 // execute the installation logic for the current panel
                 installPanel(p, automationHelper, panelRoot);
 
-                refreshDynamicVariables(this.idata, subst);
+                refreshDynamicVariables(this.installData, subst);
             }
 
             if (uninstallDataWriter.isUninstallRequired())
@@ -240,10 +240,10 @@ public class AutomatedInstaller extends InstallerBase
             // Bye
             // FIXME !!! Reboot handling
             boolean reboot = false;
-            if (idata.isRebootNecessary())
+            if (installData.isRebootNecessary())
             {
                 System.out.println("[ There are file operations pending after reboot ]");
-                switch (idata.getInfo().getRebootAction())
+                switch (installData.getInfo().getRebootAction())
                 {
                     case Info.REBOOT_ACTION_ALWAYS:
                         reboot = true;
@@ -273,7 +273,7 @@ public class AutomatedInstaller extends InstallerBase
         Debug.log("automationHelperInstance.runAutomated :"
                 + automationHelper.getClass().getName() + " entered.");
 
-        automationHelper.runAutomated(this.idata, panelRoot);
+        automationHelper.runAutomated(this.installData, panelRoot);
 
         Debug.log("automationHelperInstance.runAutomated :"
                 + automationHelper.getClass().getName() + " successfully done.");
@@ -295,7 +295,7 @@ public class AutomatedInstaller extends InstallerBase
         String panelClassName = p.className;
 
         // We get the panels root xml markup
-        List<IXMLElement> panelRoots = this.idata.getXmlData().getChildrenNamed(panelClassName);
+        List<IXMLElement> panelRoots = this.installData.getXmlData().getChildrenNamed(panelClassName);
         int panelRootNo = 0;
 
         if (this.panelInstanceCount.containsKey(panelClassName))
@@ -377,8 +377,8 @@ public class AutomatedInstaller extends InstallerBase
     {
         try
         {
-            InstallerBase.refreshDynamicVariables(this.idata,
-                    new VariableSubstitutorImpl(this.idata.getVariables()));
+            InstallerBase.refreshDynamicVariables(this.installData,
+                    new VariableSubstitutorImpl(this.installData.getVariables()));
         }
         catch (Exception e)
         {
@@ -386,19 +386,19 @@ public class AutomatedInstaller extends InstallerBase
         }
 
         // Evaluate all global dynamic conditions
-        List<DynamicInstallerRequirementValidator> dynConds = idata.getDynamicinstallerrequirements();
+        List<DynamicInstallerRequirementValidator> dynConds = installData.getDynamicinstallerrequirements();
         if (dynConds != null)
         {
             for (DynamicInstallerRequirementValidator validator : dynConds)
             {
-                Status validationResult = validator.validateData(idata);
+                Status validationResult = validator.validateData(installData);
                 if (validationResult != DataValidator.Status.OK)
                 {
                     String errorMessage;
                     try
                     {
-                        errorMessage = idata.getLangpack().getString("data.validation.error.title")
-                                + ": " + variableSubstitutor.substitute(idata.getLangpack().getString(validator
+                        errorMessage = installData.getLangpack().getString("data.validation.error.title")
+                                + ": " + variableSubstitutor.substitute(installData.getLangpack().getString(validator
                                 .getErrorMessageId()));
                     }
                     catch (Exception e)
@@ -423,14 +423,14 @@ public class AutomatedInstaller extends InstallerBase
         if (dataValidator != null)
         {
             DataValidator validator = DataValidatorFactory.createDataValidator(dataValidator);
-            Status validationResult = validator.validateData(idata);
+            Status validationResult = validator.validateData(installData);
             if (validationResult != DataValidator.Status.OK)
             {
                 String errorMessage;
                 try
                 {
-                    errorMessage = idata.getLangpack().getString("data.validation.error.title")
-                            + ": " + variableSubstitutor.substitute(idata.getLangpack().getString(validator
+                    errorMessage = installData.getLangpack().getString("data.validation.error.title")
+                            + ": " + variableSubstitutor.substitute(installData.getLangpack().getString(validator
                             .getErrorMessageId()));
                 }
                 catch (Exception e)
@@ -504,7 +504,7 @@ public class AutomatedInstaller extends InstallerBase
         {
             for (PanelAction preConstructAction : preConstructActions)
             {
-                preConstructAction.executeAction(idata, handler);
+                preConstructAction.executeAction(installData, handler);
             }
         }
     }
@@ -517,7 +517,7 @@ public class AutomatedInstaller extends InstallerBase
         {
             for (PanelAction preActivateAction : preActivateActions)
             {
-                preActivateAction.executeAction(idata, handler);
+                preActivateAction.executeAction(installData, handler);
             }
         }
     }
@@ -530,7 +530,7 @@ public class AutomatedInstaller extends InstallerBase
         {
             for (PanelAction preValidateAction : preValidateActions)
             {
-                preValidateAction.executeAction(idata, handler);
+                preValidateAction.executeAction(installData, handler);
             }
         }
     }
@@ -543,7 +543,7 @@ public class AutomatedInstaller extends InstallerBase
         {
             for (PanelAction postValidateAction : postValidateActions)
             {
-                postValidateAction.executeAction(idata, handler);
+                postValidateAction.executeAction(installData, handler);
             }
         }
     }
