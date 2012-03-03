@@ -66,7 +66,7 @@ public abstract class AbstractLicensePanelConsole extends AbstractTextPanelConso
     protected boolean promptEndPanel(AutomatedInstallData installData, Console console)
     {
         boolean result;
-        int value = prompt(console, "Press 1 to accept, 2 to reject, 3 to redisplay", 1, 3, 2);
+        int value = console.prompt("Press 1 to accept, 2 to reject, 3 to redisplay", 1, 3, 2);
         result = value == 1 || value != 2 && runConsole(installData, console);
         return result;
     }

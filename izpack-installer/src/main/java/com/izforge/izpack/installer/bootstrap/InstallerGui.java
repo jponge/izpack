@@ -24,6 +24,7 @@ package com.izforge.izpack.installer.bootstrap;
 import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.installer.base.InstallerController;
+import com.izforge.izpack.installer.container.impl.GUIInstallerContainer;
 import com.izforge.izpack.installer.container.impl.InstallerContainer;
 import com.izforge.izpack.installer.language.LanguageDialog;
 
@@ -43,7 +44,7 @@ public class InstallerGui
             {
                 try
                 {
-                    InstallerContainer applicationComponent = new InstallerContainer();
+                    InstallerContainer applicationComponent = new GUIInstallerContainer();
                     applicationComponent.initBindings();
                     BindeableContainer installerContainer = applicationComponent.getComponent(BindeableContainer.class);
 

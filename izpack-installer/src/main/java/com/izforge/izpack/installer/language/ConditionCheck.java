@@ -1,5 +1,6 @@
 package com.izforge.izpack.installer.language;
 
+import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.InstallerRequirement;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.IzPackException;
@@ -17,15 +18,18 @@ import java.io.File;
 
 /**
  * Checker for java version, JDK and running install
+ * 
+ * @deprecated See {@link com.izforge.izpack.installer.requirement.RequirementsChecker}
  */
+@Deprecated
 public class ConditionCheck
 {
-    private GUIInstallData installdata;
+    private AutomatedInstallData installdata;
     private ResourceManager resourceManager;
     private RulesEngine rules;
 
 
-    public ConditionCheck(GUIInstallData installdata, ResourceManager resourceManager, RulesEngine rules)
+    public ConditionCheck(AutomatedInstallData installdata, ResourceManager resourceManager, RulesEngine rules)
     {
         this.installdata = installdata;
         this.resourceManager = resourceManager;

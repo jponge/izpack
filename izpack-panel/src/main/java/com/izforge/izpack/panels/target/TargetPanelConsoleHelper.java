@@ -88,7 +88,7 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
         ResourceManager resourceManager = ResourceManager.getInstance();
         String strDefaultPath = PathInputPanel.loadDefaultInstallDir(resourceManager, variableSubstitutor, installData);
 
-        String strTargetPath = prompt(console, "Select target path [" + strDefaultPath + "] ", null);
+        String strTargetPath = console.prompt("Select target path [" + strDefaultPath + "] ", null);
         if (strTargetPath != null)
         {
             strTargetPath = strTargetPath.trim();

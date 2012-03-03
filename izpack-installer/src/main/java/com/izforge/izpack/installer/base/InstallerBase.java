@@ -39,7 +39,7 @@ import java.util.logging.Logger;
  * @author Jonathan Halliday
  * @author Julien Ponge
  */
-public abstract class InstallerBase implements InstallerRequirementDisplay
+public abstract class InstallerBase
 {
 
     private static final Logger LOGGER = Logger.getLogger(InstallerBase.class.getName());

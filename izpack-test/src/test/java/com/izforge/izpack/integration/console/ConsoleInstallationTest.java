@@ -4,13 +4,14 @@ import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.compiler.container.TestInstallationContainer;
+import com.izforge.izpack.compiler.container.TestConsoleInstallationContainer;
 import com.izforge.izpack.installer.bootstrap.Installer;
+import com.izforge.izpack.installer.console.Console;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.TestConsole;
 import com.izforge.izpack.installer.console.TestConsoleInstaller;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
-import com.izforge.izpack.installer.language.ConditionCheck;
+import com.izforge.izpack.installer.requirement.RequirementsChecker;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
@@ -35,7 +36,7 @@ import static org.junit.Assert.assertTrue;
  * @author Tim Anderson
  */
 @RunWith(PicoRunner.class)
-@Container(TestInstallationContainer.class)
+@Container(TestConsoleInstallationContainer.class)
 public class ConsoleInstallationTest
 {
     @Rule
@@ -58,15 +59,17 @@ public class ConsoleInstallationTest
      * @param installData     the installation date
      * @param rules           the rules engine
      * @param resourceManager the resource manager
-     * @param check           the condition check
+     * @param requirements    the installation requirements
      * @param writer          the uninstallation data writer
+     * @param console console
      * @throws Exception for any error
      */
     public ConsoleInstallationTest(BindeableContainer container, AutomatedInstallData installData,
                                    RulesEngine rules, ResourceManager resourceManager,
-                                   ConditionCheck check, UninstallDataWriter writer) throws Exception
+                                   RequirementsChecker requirements, UninstallDataWriter writer, Console console)
+            throws Exception
     {
-        installer = new TestConsoleInstaller(container, installData, rules, resourceManager, check, writer);
+        installer = new TestConsoleInstaller(container, installData, rules, resourceManager, requirements, writer, console);
         this.installData = installData;
     }
 

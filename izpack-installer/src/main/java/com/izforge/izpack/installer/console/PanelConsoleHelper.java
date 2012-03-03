@@ -41,7 +41,7 @@ abstract public class PanelConsoleHelper extends AbstractPanelConsole
     @Deprecated
     public int askEndOfConsolePanel()
     {
-        return prompt(new Console(), "press 1 to continue, 2 to quit, 3 to redisplay", 1, 3, 2);
+        return new Console().prompt("press 1 to continue, 2 to quit, 3 to redisplay", 1, 3, 2);
     }
 
 

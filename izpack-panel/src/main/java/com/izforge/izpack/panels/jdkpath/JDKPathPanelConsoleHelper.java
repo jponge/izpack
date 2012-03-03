@@ -130,7 +130,7 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
 
         while (bKeepAsking)
         {
-            strPath = prompt(console, "Select JDK path [" + strDefaultPath + "] ", null);
+            strPath = console.prompt("Select JDK path [" + strDefaultPath + "] ", null);
             if (strPath == null)
             {
                 // end of stream
@@ -150,7 +150,7 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
                 String message = "The chosen JDK has the wrong version (available: " + detectedVersion + " required: "
                         + minVersion + " - " + maxVersion + ").";
                 message += "\nContinue anyway? [no]";
-                String strIn = prompt(console, message, null);
+                String strIn = console.prompt(message, null);
                 if (strIn == null)
                 {
                     // end of stream

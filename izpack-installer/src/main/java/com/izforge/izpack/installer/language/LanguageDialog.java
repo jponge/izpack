@@ -3,10 +3,10 @@ package com.izforge.izpack.installer.language;
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.requirement.RequirementsChecker;
 import com.izforge.izpack.util.Debug;
 
 import javax.swing.*;
@@ -29,7 +29,7 @@ import java.util.TreeMap;
  * @author Christian Murphy
  * @author Klaus Bartz
  */
-public class LanguageDialog extends JDialog implements ActionListener, InstallerRequirementDisplay
+public class LanguageDialog extends JDialog implements ActionListener
 {
 
     private static final long serialVersionUID = 3256443616359887667L;
@@ -63,7 +63,7 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
      */
     private static final String[] LANGUAGE_DISPLAY_TYPES = {"iso3", "native", "default"};
     private JFrame frame;
-    private ConditionCheck conditionCheck;
+    private RequirementsChecker requirements;
     private ResourceManager resourceManager;
 
 
@@ -71,15 +71,16 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
      * The constructor.
      *
      * @param installDataGUI
-     * @param conditionCheck
+     * @param requirements
      */
-    public LanguageDialog(JFrame frame, ResourceManager resourceManager, GUIInstallData installDataGUI, ConditionCheck conditionCheck) throws Exception
+    public LanguageDialog(JFrame frame, ResourceManager resourceManager, GUIInstallData installDataGUI,
+                          RequirementsChecker requirements) throws Exception
     {
         super(frame);
         this.frame = frame;
         this.resourceManager = resourceManager;
         this.installdata = installDataGUI;
-        this.conditionCheck = conditionCheck;
+        this.requirements = requirements;
         this.setName(GuiId.DIALOG_PICKER.id);
         initLanguageDialog();
 
@@ -505,9 +506,6 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
 
     public void initLangPack() throws Exception
     {
-        // Checks the Java version
-        conditionCheck.check();
-
         // Loads the suitable langpack
         java.util.List<String> availableLangPacks = resourceManager.getAvailableLangPacks();
         int npacks = availableLangPacks.size();
@@ -523,11 +521,10 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
                 new VariableSubstitutorImpl(installdata.getVariables()));
 
         // check installer conditions
-        if (!conditionCheck.checkInstallerRequirements(this))
+        if (!requirements.check())
         {
             Debug.log("not all installerconditions are fulfilled.");
             System.exit(-1);
-            return;
         }
     }
 
@@ -544,8 +541,4 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
         resourceManager.setLocale(selectedPack);
     }
 
-    public void showMissingRequirementMessage(String message)
-    {
-        JOptionPane.showMessageDialog(null, message);
-    }
 }

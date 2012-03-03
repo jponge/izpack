@@ -45,6 +45,7 @@ import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.language.ConditionCheck;
 import com.izforge.izpack.installer.manager.DataValidatorFactory;
 import com.izforge.izpack.installer.manager.PanelActionFactory;
+import com.izforge.izpack.installer.requirement.RequirementsChecker;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraintHelper;
@@ -83,9 +84,9 @@ public class AutomatedInstaller extends InstallerBase
     private boolean result = false;
 
     /**
-     * Manager for conditions
+     * Installation requirements.
      */
-    private ConditionCheck checkCondition;
+    private RequirementsChecker requirements;
 
     /**
      * Manager for writing uninstall data
@@ -100,10 +101,11 @@ public class AutomatedInstaller extends InstallerBase
      * @param resourceManager
      * @throws Exception Description of the Exception
      */
-    public AutomatedInstaller(ResourceManager resourceManager, ConditionCheck checkCondition, UninstallDataWriter uninstallDataWriter, VariableSubstitutor variableSubstitutor)
+    public AutomatedInstaller(ResourceManager resourceManager, RequirementsChecker requirements,
+                              UninstallDataWriter uninstallDataWriter, VariableSubstitutor variableSubstitutor)
     {
         super(resourceManager);
-        this.checkCondition = checkCondition;
+        this.requirements= requirements;
         this.uninstallDataWriter = uninstallDataWriter;
 
         this.panelInstanceCount = new TreeMap<String, Integer>();
@@ -133,13 +135,6 @@ public class AutomatedInstaller extends InstallerBase
 //        ResourceManager.create(this.installData);
     }
 
-    @Override
-    public void showMissingRequirementMessage(String message)
-    {
-        Debug.log("Missing installer requirement: " + message);
-        System.out.println(message);
-    }
-
     /**
      * Runs the automated installation logic for each panel in turn.
      *
@@ -154,7 +149,7 @@ public class AutomatedInstaller extends InstallerBase
         InstallerBase.refreshDynamicVariables(this.installData, subst);
 
         // check installer conditions
-        if (!checkCondition.checkInstallerRequirements(this))
+        if (!requirements.check())
         {
             System.out.println("[ Automated installation FAILED! ]");
             System.exit(-1);

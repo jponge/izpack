@@ -23,15 +23,16 @@ package com.izforge.izpack.installer.bootstrap;
 
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
 import com.izforge.izpack.installer.console.ConsoleInstaller;
+import com.izforge.izpack.installer.container.impl.ConsoleInstallerContainer;
 import com.izforge.izpack.installer.container.impl.InstallerContainer;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.StringTool;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.awt.GraphicsEnvironment;
 
 /**
  * The program entry point. Selects between GUI and text install modes.
@@ -44,9 +45,6 @@ public class Installer
     public static final int INSTALLER_GUI = 0, INSTALLER_AUTO = 1, INSTALLER_CONSOLE = 2;
     public static final int CONSOLE_INSTALL = 0, CONSOLE_GEN_TEMPLATE = 1, CONSOLE_FROM_TEMPLATE = 2,
             CONSOLE_FROM_SYSTEMPROPERTIES = 3, CONSOLE_FROM_SYSTEMPROPERTIESMERGE = 4;
-
-    private InstallerContainer applicationComponent;
-
 
     /*
     * The main method (program entry point).
@@ -67,13 +65,6 @@ public class Installer
         }
 
     }
-
-    private void initContainer() throws Exception
-    {
-        applicationComponent = new InstallerContainer();
-        applicationComponent.initBindings();
-    }
-
 
     private void start(String[] args)
     {
@@ -161,11 +152,11 @@ public class Installer
     private void launchInstall(int type, int consoleAction, String path, String langcode) throws Exception
     {
         // if headless, just use the console mode
-        if (type == INSTALLER_GUI && GraphicsEnvironment.isHeadless()) 
+        if (type == INSTALLER_GUI && GraphicsEnvironment.isHeadless())
         {
             type = INSTALLER_CONSOLE;
         }
-        
+
         switch (type)
         {
             case INSTALLER_GUI:
@@ -173,19 +164,44 @@ public class Installer
                 break;
 
             case INSTALLER_AUTO:
-                initContainer();
-                AutomatedInstaller automatedInstaller = applicationComponent.getComponent(AutomatedInstaller.class);
-                automatedInstaller.init(path);
-                automatedInstaller.doInstall();
+                launchAutomatedInstaller(path);
                 break;
 
             case INSTALLER_CONSOLE:
-                initContainer();
-                ConsoleInstaller consoleInstaller = applicationComponent.getComponent(ConsoleInstaller.class);
-                consoleInstaller.setLangCode(langcode);
-                consoleInstaller.run(consoleAction, path);
+                launchConsoleInstaller(consoleAction, path, langcode);
                 break;
         }
+    }
+
+    /**
+     * Launches an {@link AutomatedInstaller}.
+     *
+     * @param path the input file path
+     * @throws Exception for any error
+     */
+    private void launchAutomatedInstaller(String path) throws Exception
+    {
+        InstallerContainer container = new ConsoleInstallerContainer();
+        container.initBindings();
+        AutomatedInstaller automatedInstaller = container.getComponent(AutomatedInstaller.class);
+        automatedInstaller.init(path);
+        automatedInstaller.doInstall();
+    }
+
+    /**
+     * Launches an {@link ConsoleInstaller}.
+     *
+     * @param consoleAction the type of the action to perform
+     * @param path          the path to use for the action. May be <tt>null</tt>
+     * @param langCode      the language code. May be <tt>null</tt>
+     */
+    private void launchConsoleInstaller(int consoleAction, String path, String langCode)
+    {
+        InstallerContainer container = new ConsoleInstallerContainer();
+        container.initBindings();
+        ConsoleInstaller consoleInstaller = container.getComponent(ConsoleInstaller.class);
+        consoleInstaller.setLangCode(langCode);
+        consoleInstaller.run(consoleAction, path);
     }
 
 }

@@ -99,7 +99,7 @@ public abstract class AbstractTextPanelConsole extends AbstractPanelConsole
      */
     protected boolean promptContinue(Console console)
     {
-        String value = prompt(console, "\nPress Enter to continue, X to exit", "x");
+        String value = console.prompt("\nPress Enter to continue, X to exit", "x");
         console.println();
         return !value.equalsIgnoreCase("x");
     }

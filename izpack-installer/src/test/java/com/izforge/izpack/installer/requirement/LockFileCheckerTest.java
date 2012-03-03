@@ -1,0 +1,115 @@
+package com.izforge.izpack.installer.requirement;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.installer.console.ConsolePrompt;
+import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.test.io.TestConsole;
+import com.izforge.izpack.util.FileExecutor;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+/**
+ * Tests the {@link com.izforge.izpack.installer.requirement.JDKChecker} class.
+ *
+ * @author Tim Anderson
+ */
+public class LockFileCheckerTest
+{
+    /**
+     * The installation data.
+     */
+    private InstallData installData;
+
+    /**
+     * Constructs a <tt>JavaVersionCheckerTest</tt>.
+     */
+    public LockFileCheckerTest()
+    {
+        installData = new InstallData(null, null);
+        Info info = new Info();
+        installData.setInfo(info);
+    }
+
+    /**
+     * Tests the {@link com.izforge.izpack.installer.requirement.JDKChecker} when the JDK is not required.
+     */
+    @Test
+    public void testNotRequired()
+    {
+        TestConsole console = new TestConsole();
+        ConsolePrompt prompt = new ConsolePrompt(console);
+        TestJDKChecker checker = new TestJDKChecker(installData, prompt);
+
+        installData.getInfo().setJdkRequired(false);
+        checker.setExists(true);
+        assertTrue(checker.check());
+        checker.setExists(false);
+        assertTrue(checker.check());
+    }
+
+    /**
+     * Tests the {@link com.izforge.izpack.installer.requirement.JDKChecker} when the JDK is required.
+     */
+    @Test
+    public void testRequired()
+    {
+        TestConsole console = new TestConsole();
+        ConsolePrompt prompt = new ConsolePrompt(console);
+        TestJDKChecker checker = new TestJDKChecker(installData, prompt);
+
+        installData.getInfo().setJdkRequired(true);
+        checker.setExists(true);
+        assertTrue(checker.check());
+
+        console.addScript("NoJDK-enter-N", "n");
+        checker.setExists(false);
+        assertFalse(checker.check());
+        assertTrue(console.scriptCompleted());
+
+        // re-run the check, but this time enter Y to continue
+        console.addScript("NoJDK-enter-Y", "y");
+        assertTrue(checker.check());
+    }
+
+    /**
+     * Verifies that when the JDK is required, the {@link com.izforge.izpack.installer.requirement.JDKChecker} determines the existence of the JDK correctly.
+     */
+    @Test
+    public void testLocalJDKInstallation() {
+        String[] output = new String[2];
+        int code = new FileExecutor().executeCommand(new String[]{"javac", "-help"}, output, null);
+        boolean exists = (code == 0); // exists if javac is in the path
+        installData.getInfo().setJdkRequired(true);
+
+        TestConsole console = new TestConsole();
+        ConsolePrompt prompt = new ConsolePrompt(console);
+        JDKChecker checker = new JDKChecker(installData, prompt);
+        assertEquals(exists, checker.check());
+    }
+
+    private static class TestJDKChecker extends JDKChecker
+    {
+
+        private boolean exists = true;
+
+        public TestJDKChecker(AutomatedInstallData installData, Prompt prompt)
+        {
+            super(installData, prompt);
+        }
+
+        public void setExists(boolean exists)
+        {
+            this.exists = exists;
+        }
+
+        @Override
+        protected boolean exists()
+        {
+            return exists;
+        }
+    }
+}
