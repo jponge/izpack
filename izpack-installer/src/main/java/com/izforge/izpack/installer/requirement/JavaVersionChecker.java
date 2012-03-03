@@ -1,8 +1,14 @@
 package com.izforge.izpack.installer.requirement;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.installer.RequirementChecker;
 
+/**
+ * Verifies that the correct java version is available for installation to proceed.
+ *
+ * @author Tim Anderson
+ */
 public class JavaVersionChecker implements RequirementChecker
 {
 
@@ -11,8 +17,18 @@ public class JavaVersionChecker implements RequirementChecker
      */
     private final AutomatedInstallData installData;
 
+    /**
+     * The prompt.
+     */
     private final Prompt prompt;
 
+
+    /**
+     * Constructs a <tt>JavaVersionChecker</tt>.
+     *
+     * @param installData the installation data
+     * @param prompt      the prompt
+     */
     public JavaVersionChecker(AutomatedInstallData installData, Prompt prompt)
     {
         this.installData = installData;
@@ -29,7 +45,7 @@ public class JavaVersionChecker implements RequirementChecker
     {
         String version = getJavaVersion();
         String required = installData.getInfo().getJavaVersion();
-        boolean result = version.compareTo(required) >= 0;
+        boolean result = required == null || version == null || version.compareTo(required) >= 0;
         if (!result)
         {
             versionNotAvailable(version, required);
@@ -37,10 +53,24 @@ public class JavaVersionChecker implements RequirementChecker
         return result;
     }
 
-    protected void versionNotAvailable(String version, String requiredVersion) {
+    /**
+     * Invoked when the required java version is not available.
+     *
+     * @param version         the current version
+     * @param requiredVersion the required version
+     */
+    protected void versionNotAvailable(String version, String requiredVersion)
+    {
         prompt.message(Prompt.Type.ERROR, getVersionNotAvailable(version, requiredVersion));
     }
 
+    /**
+     * Formats a message indicating the required java version isn't available.
+     *
+     * @param version         the current version
+     * @param requiredVersion the required version
+     * @return the formatted message
+     */
     protected String getVersionNotAvailable(String version, String requiredVersion)
     {
         StringBuilder msg = new StringBuilder();
@@ -54,6 +84,11 @@ public class JavaVersionChecker implements RequirementChecker
         return msg.toString();
     }
 
+    /**
+     * Returns the java version.
+     *
+     * @return the java version, as determined by the <em>java.version</em> system property
+     */
     protected String getJavaVersion()
     {
         return System.getProperty("java.version");

@@ -32,7 +32,7 @@ import com.izforge.izpack.api.data.ScriptParserConstant;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.util.Console;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.bootstrap.Installer;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
@@ -78,7 +78,7 @@ public class ConsoleInstaller extends InstallerBase
     /**
      * The variable substituter.
      */
-    private VariableSubstitutor variableSubstitutor;
+    private VariableSubstitutor substituter;
 
     /**
      * The uninstallation data writer.
@@ -98,13 +98,14 @@ public class ConsoleInstaller extends InstallerBase
      * @param rules               the rules engine
      * @param resourceManager     the resource manager
      * @param requirements        the installation requirements
+     * @param substituter         the variable substituter
      * @param uninstallDataWriter the uninstallation data writer
      * @param console             the console
      * @throws IzPackException for any IzPack error
      */
     public ConsoleInstaller(BindeableContainer container, AutomatedInstallData installData, RulesEngine rules,
                             ResourceManager resourceManager, RequirementsChecker requirements,
-                            UninstallDataWriter uninstallDataWriter, Console console)
+                            VariableSubstitutor substituter, UninstallDataWriter uninstallDataWriter, Console console)
     {
         super(resourceManager);
         factory = new PanelConsoleFactory(container);
@@ -121,10 +122,7 @@ public class ConsoleInstaller extends InstallerBase
         installData.setLangpack(new LocaleDatabase(in));
         installData.setVariable(ScriptParserConstant.ISO3_LANG, installData.getLocaleISO3());
         resourceManager.setLocale(installData.getLocaleISO3());
-        if (installData.getRules() == null)
-        {
-            installData.setRules(rules);
-        }
+        this.substituter = substituter;
         this.uninstallDataWriter = uninstallDataWriter;
         this.console = console;
     }
@@ -316,7 +314,7 @@ public class ConsoleInstaller extends InstallerBase
      */
     private ConsoleAction createInstallAction()
     {
-        return new ConsoleInstallAction(factory, installData, variableSubstitutor, rules, uninstallDataWriter);
+        return new ConsoleInstallAction(factory, installData, substituter, rules, uninstallDataWriter);
     }
 
     /**
@@ -328,7 +326,7 @@ public class ConsoleInstaller extends InstallerBase
      */
     private ConsoleAction createGeneratePropertiesAction(String path) throws IOException
     {
-        return new GeneratePropertiesAction(factory, installData, variableSubstitutor, rules, path);
+        return new GeneratePropertiesAction(factory, installData, substituter, rules, path);
     }
 
     /**
@@ -345,7 +343,7 @@ public class ConsoleInstaller extends InstallerBase
         {
             Properties properties = new Properties();
             properties.load(in);
-            return new PropertyInstallAction(factory, installData, variableSubstitutor, rules,
+            return new PropertyInstallAction(factory, installData, substituter, rules,
                     uninstallDataWriter, properties);
         }
         finally
@@ -382,7 +380,7 @@ public class ConsoleInstaller extends InstallerBase
                             + oldValue + "' --> '" + newValue + "'");
                 }
             }
-            return new PropertyInstallAction(factory, installData, variableSubstitutor, rules,
+            return new PropertyInstallAction(factory, installData, substituter, rules,
                     uninstallDataWriter, properties);
         }
         finally

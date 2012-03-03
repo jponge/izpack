@@ -2,16 +2,50 @@ package com.izforge.izpack.installer.requirement;
 
 import com.izforge.izpack.api.installer.RequirementChecker;
 
+
+/**
+ * Verifies all installation requirements are met. This should be used prior to installation commencing.
+ *
+ * @author Tim Anderson
+ */
 public class RequirementsChecker implements RequirementChecker
 {
-    private JavaVersionChecker versionChecker;
-    private JDKChecker jdkChecker;
-    private LockFileChecker lockChecker;
+    /**
+     * The language pack checker.
+     */
     private LangPackChecker langChecker;
+
+    /**
+     * The version checker.
+     */
+    private JavaVersionChecker versionChecker;
+
+    /**
+     * The JDK checker.
+     */
+    private JDKChecker jdkChecker;
+
+    /**
+     * The lock file checker.
+     */
+    private LockFileChecker lockChecker;
+
+    /**
+     * The installer requirement checker.
+     */
     private InstallerRequirementChecker installerRequirementChecker;
 
-    public RequirementsChecker(JavaVersionChecker versionChecker, JDKChecker jdkChecker, LockFileChecker lockChecker,
-                               LangPackChecker langChecker, InstallerRequirementChecker installerRequirementChecker)
+    /**
+     * Constructs a <tt>RequirementsChecker</tt>.
+     *
+     * @param langChecker the language pack checker
+     * @param versionChecker the java version checker
+     * @param jdkChecker the JDK checker
+     * @param lockChecker the lock file checker
+     * @param installerRequirementChecker the installer requirement checker
+     */
+    public RequirementsChecker(LangPackChecker langChecker, JavaVersionChecker versionChecker, JDKChecker jdkChecker,
+                               LockFileChecker lockChecker, InstallerRequirementChecker installerRequirementChecker)
     {
         this.versionChecker = versionChecker;
         this.jdkChecker = jdkChecker;
@@ -28,7 +62,7 @@ public class RequirementsChecker implements RequirementChecker
     @Override
     public boolean check()
     {
-        return versionChecker.check() && jdkChecker.check() && lockChecker.check() && langChecker.check() &&
+        return langChecker.check() && versionChecker.check() && jdkChecker.check() && lockChecker.check() &&
                 installerRequirementChecker.check();
     }
 }

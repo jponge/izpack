@@ -1,36 +1,43 @@
-/*
- *  Version: 1.0
- *
- *  The contents of this file are subject to the OpenVPMS License Version
- *  1.0 (the 'License'); you may not use this file except in compliance with
- *  the License. You may obtain a copy of the License at
- *  http://www.openvpms.org/license/
- *
- *  Software distributed under the License is distributed on an 'AS IS' basis,
- *  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- *  for the specific language governing rights and limitations under the
- *  License.
- *
- *  Copyright 2011 (C) OpenVPMS Ltd. All Rights Reserved.
- *
- *  $Id: $
- */
-
 package com.izforge.izpack.installer.requirement;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.InstallerRequirement;
+import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.installer.RequirementChecker;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
 
+/**
+ * Evaluates each {@link InstallerRequirement} returned by {@link AutomatedInstallData#getInstallerrequirements()}
+ * to determine if installation should proceed.
+ *
+ * @author Tim Anderson
+ */
 public class InstallerRequirementChecker implements RequirementChecker
 {
+    /**
+     * The installation data.
+     */
     private final AutomatedInstallData installData;
+
+    /**
+     * The rules engine.
+     */
     private final RulesEngine rules;
+
+    /**
+     * The prompt.
+     */
     private final Prompt prompt;
 
+    /**
+     * Constructs a <tt>InstallerRequirementChecker</tt>.
+     *
+     * @param installData the installation data.
+     * @param rules       the rules engine
+     * @param prompt      the prompt
+     */
     public InstallerRequirementChecker(AutomatedInstallData installData, RulesEngine rules, Prompt prompt)
     {
         this.installData = installData;

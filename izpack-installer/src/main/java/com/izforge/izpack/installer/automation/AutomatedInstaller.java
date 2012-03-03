@@ -42,7 +42,6 @@ import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.console.ConsolePanelAutomationHelper;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
-import com.izforge.izpack.installer.language.ConditionCheck;
 import com.izforge.izpack.installer.manager.DataValidatorFactory;
 import com.izforge.izpack.installer.manager.PanelActionFactory;
 import com.izforge.izpack.installer.requirement.RequirementsChecker;

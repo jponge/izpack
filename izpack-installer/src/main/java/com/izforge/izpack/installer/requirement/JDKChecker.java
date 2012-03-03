@@ -1,16 +1,35 @@
 package com.izforge.izpack.installer.requirement;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.installer.RequirementChecker;
 import com.izforge.izpack.util.FileExecutor;
 
+
+/**
+ * Verifies that the correct JDK version is available for installation to proceed.
+ *
+ * @author Tim Anderson
+ */
 public class JDKChecker implements RequirementChecker
 {
 
+    /**
+     * The installation data.
+     */
     private final AutomatedInstallData installData;
 
+    /**
+     * The prompt.
+     */
     private final Prompt prompt;
 
+    /**
+     * Constructs a <tt>JDKChecker</tt>.
+     *
+     * @param installData the installation data
+     * @param prompt      the prompt
+     */
     public JDKChecker(AutomatedInstallData installData, Prompt prompt)
     {
         this.installData = installData;
@@ -26,15 +45,7 @@ public class JDKChecker implements RequirementChecker
     public boolean check()
     {
         boolean result;
-        boolean required = installData.getInfo().isJdkRequired();
-        if (!required || exists())
-        {
-            result = true;
-        }
-        else
-        {
-            result = notFound();
-        }
+        result = !installData.getInfo().isJdkRequired() || exists() || notFound();
         return result;
     }
 
@@ -51,6 +62,12 @@ public class JDKChecker implements RequirementChecker
         return (exec.executeCommand(params, output) == 0);
     }
 
+    /**
+     * Invoked when the JDK is not found.
+     * <p/>
+     * This prompts the user to proceed with the installation or cancel it
+     * @return <tt>true</tt> if the user proceeds with the installation, <tt>false</tt> if they cancel it
+     */
     protected boolean notFound()
     {
         String message = "It looks like your system does not have a Java Development Kit (JDK) available.\n"
@@ -58,6 +75,5 @@ public class JDKChecker implements RequirementChecker
                 + "Do you still want to proceed with the installation process?";
         Prompt.Option selected = prompt.confirm(Prompt.Type.WARNING, message, Prompt.Options.YES_NO);
         return selected == Prompt.Option.YES;
-
     }
 }

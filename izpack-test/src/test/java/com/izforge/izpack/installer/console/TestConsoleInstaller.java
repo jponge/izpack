@@ -4,6 +4,8 @@ import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.Console;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.requirement.RequirementsChecker;
 
@@ -30,16 +32,18 @@ public class TestConsoleInstaller extends ConsoleInstaller
      * @param rules           the rules engine
      * @param resourceManager the resource manager
      * @param requirements    the installation requirements
+     * @param substituter     the variable substituter
      * @param writer          the uninstallation data writer
      * @param console         the console
      * @throws Exception for any error
      */
     public TestConsoleInstaller(BindeableContainer container, AutomatedInstallData installData,
                                 RulesEngine rules, ResourceManager resourceManager,
-                                RequirementsChecker requirements, UninstallDataWriter writer, Console console)
+                                RequirementsChecker requirements, VariableSubstitutor substituter,
+                                UninstallDataWriter writer, Console console)
             throws Exception
     {
-        super(container, installData, rules, resourceManager, requirements, writer, console);
+        super(container, installData, rules, resourceManager, requirements, substituter, writer, console);
     }
 
     /**

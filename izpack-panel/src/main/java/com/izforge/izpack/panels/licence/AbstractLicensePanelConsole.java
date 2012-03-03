@@ -2,8 +2,8 @@ package com.izforge.izpack.panels.licence;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.util.Console;
 import com.izforge.izpack.installer.console.AbstractTextPanelConsole;
-import com.izforge.izpack.installer.console.Console;
 import com.izforge.izpack.util.Debug;
 
 import java.io.IOException;

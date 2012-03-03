@@ -7,7 +7,6 @@ import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.FileUtil;
@@ -19,7 +18,8 @@ import java.io.File;
 /**
  * Checker for java version, JDK and running install
  * 
- * @deprecated See {@link com.izforge.izpack.installer.requirement.RequirementsChecker}
+ * @deprecated This doesn't support console installations. For a replacement, see
+ * {@link com.izforge.izpack.installer.requirement.RequirementsChecker}
  */
 @Deprecated
 public class ConditionCheck

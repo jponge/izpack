@@ -4,11 +4,12 @@ import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.container.TestConsoleInstallationContainer;
+import com.izforge.izpack.util.Console;
+import com.izforge.izpack.test.io.TestConsole;
 import com.izforge.izpack.installer.bootstrap.Installer;
-import com.izforge.izpack.installer.console.Console;
 import com.izforge.izpack.installer.console.PanelConsole;
-import com.izforge.izpack.installer.console.TestConsole;
 import com.izforge.izpack.installer.console.TestConsoleInstaller;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.requirement.RequirementsChecker;
@@ -60,16 +61,19 @@ public class ConsoleInstallationTest
      * @param rules           the rules engine
      * @param resourceManager the resource manager
      * @param requirements    the installation requirements
+     * @param substituter     the variable substituter
      * @param writer          the uninstallation data writer
-     * @param console console
+     * @param console         console
      * @throws Exception for any error
      */
     public ConsoleInstallationTest(BindeableContainer container, AutomatedInstallData installData,
                                    RulesEngine rules, ResourceManager resourceManager,
-                                   RequirementsChecker requirements, UninstallDataWriter writer, Console console)
+                                   RequirementsChecker requirements, VariableSubstitutor substituter,
+                                   UninstallDataWriter writer, Console console)
             throws Exception
     {
-        installer = new TestConsoleInstaller(container, installData, rules, resourceManager, requirements, writer, console);
+        installer = new TestConsoleInstaller(container, installData, rules, resourceManager, requirements, substituter,
+                writer, console);
         this.installData = installData;
     }
 

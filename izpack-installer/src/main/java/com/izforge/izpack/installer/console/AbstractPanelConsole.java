@@ -1,6 +1,7 @@
 package com.izforge.izpack.installer.console;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.util.Console;
 
 import java.io.PrintWriter;
 

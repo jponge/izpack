@@ -22,6 +22,7 @@
 package com.izforge.izpack.installer.console;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.util.Console;
 
 /**
  * Abstract class implementing basic functions needed by all panel console helpers.

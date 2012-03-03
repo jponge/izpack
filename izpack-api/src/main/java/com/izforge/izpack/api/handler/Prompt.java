@@ -28,7 +28,7 @@ public interface Prompt
      */
     enum Options
     {
-        YES_NO, YES_NO_CANCEL, OK_CANCEL  // Note: OK in this instance returns YES
+        YES_NO, YES_NO_CANCEL
     }
 
     /**

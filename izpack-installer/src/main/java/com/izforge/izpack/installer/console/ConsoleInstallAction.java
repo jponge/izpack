@@ -5,6 +5,7 @@ import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.Console;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 
 /**

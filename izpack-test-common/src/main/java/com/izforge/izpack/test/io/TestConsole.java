@@ -1,7 +1,7 @@
 package com.izforge.izpack.test.io;
 
 
-import com.izforge.izpack.core.io.Console;
+import com.izforge.izpack.util.Console;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -22,7 +22,7 @@
 package com.izforge.izpack.panels.finish;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.installer.console.Console;
+import com.izforge.izpack.util.Console;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 
 import java.util.Properties;

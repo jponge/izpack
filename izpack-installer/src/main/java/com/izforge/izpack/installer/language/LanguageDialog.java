@@ -512,7 +512,7 @@ public class LanguageDialog extends JDialog implements ActionListener
         // We get the langpack name
         if (npacks != 1)
         {
-            this.runPicker();
+            runPicker();
         }
 
         // Get dynamic variables immediately for being able to use them as
