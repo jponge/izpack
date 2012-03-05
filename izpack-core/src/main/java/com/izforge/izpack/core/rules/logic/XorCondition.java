@@ -51,16 +51,19 @@ public class XorCondition extends OrCondition
     @Override
     public boolean isTrue()
     {
-        Boolean result = null;
+        boolean result = false;
+        boolean marked = false;
         for (Condition condition : nestedConditions)
         {
-            if (result == null)
+            boolean currentResult = condition.isTrue();
+            if (!marked)
             {
-                result = condition.isTrue();
+                result = currentResult;
+                marked = true;
             }
             else
             {
-                result = !(result && condition.isTrue()) && (result || condition.isTrue());
+                result ^= currentResult;
             }
         }
         return result;

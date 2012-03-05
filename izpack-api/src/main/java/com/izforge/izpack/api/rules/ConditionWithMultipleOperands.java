@@ -1,11 +1,11 @@
 package com.izforge.izpack.api.rules;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ConditionWithMultipleOperands extends Condition
 {
-    protected Set<Condition> nestedConditions = new HashSet<Condition>();
+    protected List<Condition> nestedConditions = new ArrayList<Condition>();
 
     public void addOperands(Condition ... operands)
     {
