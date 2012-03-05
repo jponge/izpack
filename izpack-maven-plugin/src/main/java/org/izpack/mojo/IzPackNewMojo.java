@@ -75,6 +75,18 @@ public class IzPackNewMojo extends AbstractMojo
      */
     private int comprLevel;
 
+    /**
+     * Whether to automatically include project.url from Maven into
+     * IzPack info header
+     */
+    private boolean autoIncludeUrl = false;
+
+    /**
+     * Whether to automatically include developer list from Maven into
+     * IzPack info header
+     */
+    private boolean autoIncludeDevelopers = false;
+
 
     public void execute() throws MojoExecutionException, MojoFailureException
     {
@@ -124,14 +136,20 @@ public class IzPackNewMojo extends AbstractMojo
         Info info = new Info();
         if(project != null)
         {
-            if(project.getDevelopers() != null)
+            if (autoIncludeDevelopers)
             {
-                for(Developer dev : (List<Developer>)project.getDevelopers())
-                {
-                    info.addAuthor(new Info.Author(dev.getName(), dev.getEmail()));
-                }
+              if(project.getDevelopers() != null)
+              {
+                  for(Developer dev : (List<Developer>)project.getDevelopers())
+                  {
+                      info.addAuthor(new Info.Author(dev.getName(), dev.getEmail()));
+                  }
+              }
             }
-            info.setAppURL(project.getUrl());
+            if (autoIncludeUrl)
+            {
+              info.setAppURL(project.getUrl());
+            }
         }
         return new CompilerData(comprFormat, kind, installFile, null, baseDir, output, comprLevel, info);
     }
