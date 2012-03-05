@@ -7,6 +7,7 @@ import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.Console;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.manager.DataValidatorFactory;
@@ -16,7 +17,7 @@ import com.izforge.izpack.util.OsConstraintHelper;
 import java.util.List;
 
 /**
- * Console install action.
+ * Console installer action.
  *
  * @author Tim Anderson
  */

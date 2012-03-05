@@ -1,6 +1,6 @@
 package com.izforge.izpack.compiler.container;
 
-import com.izforge.izpack.installer.container.impl.GUIInstallerContainer;
+import com.izforge.izpack.installer.container.impl.ConsoleInstallerContainer;
 import com.izforge.izpack.installer.container.impl.InstallerContainer;
 import org.junit.runners.model.FrameworkMethod;
 import org.picocontainer.MutablePicoContainer;
@@ -10,10 +10,9 @@ import org.picocontainer.MutablePicoContainer;
  *
  * @author Anthonin Bonnefoy
  */
-public class TestInstallationContainer extends AbstractTestInstallationContainer
+public class TestConsoleInstallationContainer extends AbstractTestInstallationContainer
 {
-
-    public TestInstallationContainer(Class klass, FrameworkMethod frameworkMethod)
+    public TestConsoleInstallationContainer(Class klass, FrameworkMethod frameworkMethod)
     {
         super(klass, frameworkMethod);
     }
@@ -21,7 +20,6 @@ public class TestInstallationContainer extends AbstractTestInstallationContainer
     @Override
     protected InstallerContainer createInstallerContainer()
     {
-        return new GUIInstallerContainer();
+        return new ConsoleInstallerContainer();
     }
-
 }

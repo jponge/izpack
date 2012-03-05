@@ -24,11 +24,10 @@ package com.izforge.izpack.panels.hello;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.installer.console.Console;
+import com.izforge.izpack.util.Console;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Properties;
 

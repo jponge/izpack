@@ -407,7 +407,6 @@
                     <excludes>
                         <exclude>**/Abstract*</exclude>
                         <exclude>**/Test*Container*</exclude>
-                        <exclude>**/ConsoleInstallationTest.java</exclude>
                         <exclude>**/LanguageDialogTest.java</exclude>
                         <exclude>**/TestPanelDisplay.java</exclude>
                         <exclude>**/InstallationTest.java</exclude>
@@ -735,6 +734,12 @@
         </developer>
         <developer>
             <name>Dirk Raeder</name>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Tim Anderson</name>
             <roles>
                 <role>Developer</role>
             </roles>

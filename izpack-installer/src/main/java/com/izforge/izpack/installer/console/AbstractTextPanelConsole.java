@@ -1,6 +1,7 @@
 package com.izforge.izpack.installer.console;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.util.Console;
 import com.izforge.izpack.util.Debug;
 
 import java.util.Properties;
@@ -99,7 +100,7 @@ public abstract class AbstractTextPanelConsole extends AbstractPanelConsole
      */
     protected boolean promptContinue(Console console)
     {
-        String value = prompt(console, "\nPress Enter to continue, X to exit", "x");
+        String value = console.prompt("\nPress Enter to continue, X to exit", "x");
         console.println();
         return !value.equalsIgnoreCase("x");
     }

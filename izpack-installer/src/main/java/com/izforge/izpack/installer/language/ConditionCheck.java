@@ -1,12 +1,12 @@
 package com.izforge.izpack.installer.language;
 
+import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.InstallerRequirement;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.FileUtil;
@@ -17,15 +17,19 @@ import java.io.File;
 
 /**
  * Checker for java version, JDK and running install
+ * 
+ * @deprecated This doesn't support console installations. For a replacement, see
+ * {@link com.izforge.izpack.installer.requirement.RequirementsChecker}
  */
+@Deprecated
 public class ConditionCheck
 {
-    private GUIInstallData installdata;
+    private AutomatedInstallData installdata;
     private ResourceManager resourceManager;
     private RulesEngine rules;
 
 
-    public ConditionCheck(GUIInstallData installdata, ResourceManager resourceManager, RulesEngine rules)
+    public ConditionCheck(AutomatedInstallData installdata, ResourceManager resourceManager, RulesEngine rules)
     {
         this.installdata = installdata;
         this.resourceManager = resourceManager;

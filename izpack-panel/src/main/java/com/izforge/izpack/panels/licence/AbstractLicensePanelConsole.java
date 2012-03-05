@@ -2,8 +2,8 @@ package com.izforge.izpack.panels.licence;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.util.Console;
 import com.izforge.izpack.installer.console.AbstractTextPanelConsole;
-import com.izforge.izpack.installer.console.Console;
 import com.izforge.izpack.util.Debug;
 
 import java.io.IOException;
@@ -66,7 +66,7 @@ public abstract class AbstractLicensePanelConsole extends AbstractTextPanelConso
     protected boolean promptEndPanel(AutomatedInstallData installData, Console console)
     {
         boolean result;
-        int value = prompt(console, "Press 1 to accept, 2 to reject, 3 to redisplay", 1, 3, 2);
+        int value = console.prompt("Press 1 to accept, 2 to reject, 3 to redisplay", 1, 3, 2);
         result = value == 1 || value != 2 && runConsole(installData, console);
         return result;
     }

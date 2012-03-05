@@ -24,7 +24,11 @@ package com.izforge.izpack.util;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.data.ExecutableFile;
 
-import java.io.*;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -108,7 +112,7 @@ public class FileExecutor
      * Gets the output of the given (console based) commandline
      *
      * @param aCommandLine to execute
-     * @param dir the working directory for the execution
+     * @param dir          the working directory for the execution
      * @return the result of the command
      */
     public static String getExecOutput(String[] aCommandLine, String dir)
@@ -120,7 +124,7 @@ public class FileExecutor
     /**
      * Gets the output of the given (console based) commandline
      *
-     * @param aCommandLine to execute
+     * @param aCommandLine     to execute
      * @param forceToGetStdOut if true returns stdout
      * @return the result of the command
      */
@@ -134,7 +138,7 @@ public class FileExecutor
      * Executes the given Command and gets the result of StdOut, or if exec returns !=0:  StdErr.
      *
      * @param aCommandLine     aCommandLine to execute
-     * @param dir the working directory for the execution
+     * @param dir              the working directory for the execution
      * @param forceToGetStdOut if true returns stdout
      * @return the result of the command stdout or stderr if exec returns !=0
      */
@@ -180,7 +184,7 @@ public class FileExecutor
      * @param params system command as string array
      * @param output contains output of the command index 0 = standard output index 1 = standard
      *               error
-     * @param dir the working directory for the execution
+     * @param dir    the working directory for the execution
      * @return exit status of process
      */
     public int executeCommand(String[] params, String[] output, String dir)
@@ -197,7 +201,7 @@ public class FileExecutor
         }
         if (dir != null)
         {
-            retval.append("working dir: "+dir+"\n");
+            retval.append("working dir: " + dir + "\n");
         }
         Process process = null;
         MonitorInputStream outMonitor = null;
@@ -228,46 +232,32 @@ public class FileExecutor
                 process = Runtime.getRuntime().exec(params);
             }
 
-            boolean isConsole = false;// TODO: impl from xml <execute
-            // in_console=true ...>, but works already
-            // if this flag is true
-            if (isConsole)
-            {
-                Console console = new Console(process);
-                // save command output
-                output[0] = console.getOutputData();
-                output[1] = console.getErrorData();
-                exitStatus = process.exitValue();
-            }
-            else
-            {
-                StringWriter outWriter = new StringWriter();
-                StringWriter errWriter = new StringWriter();
+            StringWriter outWriter = new StringWriter();
+            StringWriter errWriter = new StringWriter();
 
-                InputStreamReader outStreamReader = new InputStreamReader(process.getInputStream());
-                InputStreamReader errStreamReader = new InputStreamReader(process.getErrorStream());
-                outMonitor = new MonitorInputStream(outStreamReader, outWriter);
-                errMonitor = new MonitorInputStream(errStreamReader, errWriter);
-                outMonitorThread = new Thread(outMonitor);
-                errMonitorThread = new Thread(errMonitor);
-                outMonitorThread.setDaemon(true);
-                errMonitorThread.setDaemon(true);
-                outMonitorThread.start();
-                errMonitorThread.start();
+            InputStreamReader outStreamReader = new InputStreamReader(process.getInputStream());
+            InputStreamReader errStreamReader = new InputStreamReader(process.getErrorStream());
+            outMonitor = new MonitorInputStream(outStreamReader, outWriter);
+            errMonitor = new MonitorInputStream(errStreamReader, errWriter);
+            outMonitorThread = new Thread(outMonitor);
+            errMonitorThread = new Thread(errMonitor);
+            outMonitorThread.setDaemon(true);
+            errMonitorThread.setDaemon(true);
+            outMonitorThread.start();
+            errMonitorThread.start();
 
-                // wait for command to complete
-                exitStatus = process.waitFor();
-                outMonitorThread.join();
-                errMonitorThread.join();
+            // wait for command to complete
+            exitStatus = process.waitFor();
+            outMonitorThread.join();
+            errMonitorThread.join();
 
-                // save command output
-                output[0] = outWriter.toString();
-                Debug.trace("stdout:");
-                Debug.trace(output[0]);
-                output[1] = errWriter.toString();
-                Debug.trace("stderr:");
-                Debug.trace(output[1]);
-            }
+            // save command output
+            output[0] = outWriter.toString();
+            Debug.trace("stdout:");
+            Debug.trace(output[0]);
+            output[1] = errWriter.toString();
+            Debug.trace("stderr:");
+            Debug.trace(output[1]);
             Debug.trace("exit status: " + Integer.toString(exitStatus));
         }
         catch (InterruptedException e)
@@ -457,11 +447,11 @@ public class FileExecutor
         StringBuffer classPath = new StringBuffer();
         List<String> jars = new ArrayList<String>();
         String rawClassPath =
-            targetFile
-                .replaceAll(":\\\\", "#DRIVE#")
-                .replaceAll(";", "#")
-                .replaceAll(":", "#")
-                .replace("#DRIVE#", ":\\");
+                targetFile
+                        .replaceAll(":\\\\", "#DRIVE#")
+                        .replaceAll(";", "#")
+                        .replaceAll(":", "#")
+                        .replace("#DRIVE#", ":\\");
         String[] rawJars = rawClassPath.split("#");
         for (String rawJar : rawJars)
         {

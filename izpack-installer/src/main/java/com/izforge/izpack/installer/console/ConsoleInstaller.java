@@ -32,11 +32,11 @@ import com.izforge.izpack.api.data.ScriptParserConstant;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.util.Console;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.bootstrap.Installer;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
-import com.izforge.izpack.installer.language.ConditionCheck;
+import com.izforge.izpack.installer.requirement.RequirementsChecker;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.file.FileUtils;
@@ -73,12 +73,12 @@ public class ConsoleInstaller extends InstallerBase
     /**
      * Verifies the installation requirements.
      */
-    private final ConditionCheck checkCondition;
+    private final RequirementsChecker requirements;
 
     /**
      * The variable substituter.
      */
-    private VariableSubstitutor variableSubstitutor;
+    private VariableSubstitutor substituter;
 
     /**
      * The uninstallation data writer.
@@ -97,17 +97,19 @@ public class ConsoleInstaller extends InstallerBase
      * @param installData         the installation date
      * @param rules               the rules engine
      * @param resourceManager     the resource manager
-     * @param checkCondition      the check to verify installation requirements
+     * @param requirements        the installation requirements
+     * @param substituter         the variable substituter
      * @param uninstallDataWriter the uninstallation data writer
+     * @param console             the console
      * @throws IzPackException for any IzPack error
      */
     public ConsoleInstaller(BindeableContainer container, AutomatedInstallData installData, RulesEngine rules,
-                            ResourceManager resourceManager, ConditionCheck checkCondition,
-                            UninstallDataWriter uninstallDataWriter)
+                            ResourceManager resourceManager, RequirementsChecker requirements,
+                            VariableSubstitutor substituter, UninstallDataWriter uninstallDataWriter, Console console)
     {
         super(resourceManager);
         factory = new PanelConsoleFactory(container);
-        this.checkCondition = checkCondition;
+        this.requirements = requirements;
         this.installData = installData;
         this.rules = rules;
         // Fallback: choose the first listed language pack if not specified via commandline
@@ -118,19 +120,11 @@ public class ConsoleInstaller extends InstallerBase
 
         InputStream in = resourceManager.getInputStream("langpacks/" + this.installData.getLocaleISO3() + ".xml");
         installData.setLangpack(new LocaleDatabase(in));
-        installData.setVariable(ScriptParserConstant.ISO3_LANG, this.installData.getLocaleISO3());
+        installData.setVariable(ScriptParserConstant.ISO3_LANG, installData.getLocaleISO3());
         resourceManager.setLocale(installData.getLocaleISO3());
-        if (!checkCondition.checkInstallerRequirements(this))
-        {
-            variableSubstitutor = new VariableSubstitutorImpl(installData.getVariables());
-        }
-
-//        if (installData.getRules() == null)
-//        {
-//            installData.setRules(rules);
-//        }
+        this.substituter = substituter;
         this.uninstallDataWriter = uninstallDataWriter;
-        console = new Console();
+        this.console = console;
     }
 
     /**
@@ -156,7 +150,7 @@ public class ConsoleInstaller extends InstallerBase
      * Runs the installation.
      * <p/>
      * This method does not return - it invokes {@code System.exit(0)} on successful installation, or
-     * {@code System.exit()} on failure.
+     * {@code System.exit(1)} on failure.
      *
      * @param type the type of the action to perform
      * @param path the path to use for the action. May be <tt>null</tt>
@@ -174,8 +168,7 @@ public class ConsoleInstaller extends InstallerBase
         {
             try
             {
-                // TODO - InstallerBase shouldn't implement InstallerRequirementDisplay
-                if (checkCondition.checkInstallerRequirements(this))
+                if (requirements.check())
                 {
                     action = createConsoleAction(type, path, console);
                     success = run(action);
@@ -203,13 +196,6 @@ public class ConsoleInstaller extends InstallerBase
     public void setLangCode(String langCode)
     {
         installData.setLocaleISO3(langCode);
-    }
-
-    @Override
-    public void showMissingRequirementMessage(String message)
-    {
-        Debug.log("Missing installer requirement: " + message);
-        console.println(message);
     }
 
     /**
@@ -328,7 +314,7 @@ public class ConsoleInstaller extends InstallerBase
      */
     private ConsoleAction createInstallAction()
     {
-        return new ConsoleInstallAction(factory, installData, variableSubstitutor, rules, uninstallDataWriter);
+        return new ConsoleInstallAction(factory, installData, substituter, rules, uninstallDataWriter);
     }
 
     /**
@@ -340,7 +326,7 @@ public class ConsoleInstaller extends InstallerBase
      */
     private ConsoleAction createGeneratePropertiesAction(String path) throws IOException
     {
-        return new GeneratePropertiesAction(factory, installData, variableSubstitutor, rules, path);
+        return new GeneratePropertiesAction(factory, installData, substituter, rules, path);
     }
 
     /**
@@ -357,7 +343,7 @@ public class ConsoleInstaller extends InstallerBase
         {
             Properties properties = new Properties();
             properties.load(in);
-            return new PropertyInstallAction(factory, installData, variableSubstitutor, rules,
+            return new PropertyInstallAction(factory, installData, substituter, rules,
                     uninstallDataWriter, properties);
         }
         finally
@@ -394,7 +380,7 @@ public class ConsoleInstaller extends InstallerBase
                             + oldValue + "' --> '" + newValue + "'");
                 }
             }
-            return new PropertyInstallAction(factory, installData, variableSubstitutor, rules,
+            return new PropertyInstallAction(factory, installData, substituter, rules,
                     uninstallDataWriter, properties);
         }
         finally

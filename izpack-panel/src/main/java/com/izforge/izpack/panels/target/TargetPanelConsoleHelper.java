@@ -24,7 +24,7 @@ package com.izforge.izpack.panels.target;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.installer.console.Console;
+import com.izforge.izpack.util.Console;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 import com.izforge.izpack.panels.path.PathInputPanel;
@@ -88,7 +88,7 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
         ResourceManager resourceManager = ResourceManager.getInstance();
         String strDefaultPath = PathInputPanel.loadDefaultInstallDir(resourceManager, variableSubstitutor, installData);
 
-        String strTargetPath = prompt(console, "Select target path [" + strDefaultPath + "] ", null);
+        String strTargetPath = console.prompt("Select target path [" + strDefaultPath + "] ", null);
         if (strTargetPath != null)
         {
             strTargetPath = strTargetPath.trim();

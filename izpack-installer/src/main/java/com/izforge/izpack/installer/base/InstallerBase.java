@@ -24,7 +24,6 @@ package com.izforge.izpack.installer.base;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.DynamicVariable;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
@@ -40,7 +39,7 @@ import java.util.logging.Logger;
  * @author Jonathan Halliday
  * @author Julien Ponge
  */
-public abstract class InstallerBase implements InstallerRequirementDisplay
+public abstract class InstallerBase
 {
 
     private static final Logger LOGGER = Logger.getLogger(InstallerBase.class.getName());
@@ -50,7 +49,7 @@ public abstract class InstallerBase implements InstallerRequirementDisplay
     /**
      * Abstract constructor which need resource manager
      *
-     * @param resourceManager
+     * @param resourceManager the resource manager
      */
     protected InstallerBase(ResourceManager resourceManager)
     {
