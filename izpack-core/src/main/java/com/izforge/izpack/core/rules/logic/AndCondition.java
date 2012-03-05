@@ -21,11 +21,9 @@
 
 package com.izforge.izpack.core.rules.logic;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.rules.Condition;
+import com.izforge.izpack.api.rules.ConditionWithMultipleOperands;
 import com.izforge.izpack.api.rules.RulesEngine;
 
 /**
@@ -33,26 +31,15 @@ import com.izforge.izpack.api.rules.RulesEngine;
  *
  * @author Dennis Reil, <izpack@reil-online.de>
  */
-public class AndCondition extends Condition
+public class AndCondition extends ConditionWithMultipleOperands
 {
     private static final long serialVersionUID = -5854944262991488370L;
 
     protected transient RulesEngine rules;
 
-    protected Set<Condition> nestedConditions = new HashSet<Condition>();
-
     public AndCondition(RulesEngine rules)
     {
         this.rules = rules;
-    }
-
-    public AndCondition(RulesEngine rules, Condition ... operands)
-    {
-        this.rules = rules;
-        for (Condition condition : operands)
-        {
-            nestedConditions.add(condition);
-        }
     }
 
     @Override

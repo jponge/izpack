@@ -64,7 +64,16 @@ public class ConditionTest
         conditionspec.addChild(createVariableCondition("test.true", "TEST", "true", ownerDocument));
         conditionspec.addChild(createRefCondition("test.true2", "test.true", ownerDocument));
 //        conditionspec.addChild(createNotCondition("test.not.true", createVariableCondition("test.true", "TEST", "true", ownerDocument), ownerDocument));
-        conditionspec.addChild(createNotCondition("test.not.true", createRefCondition("", "test.true", ownerDocument), ownerDocument));
+        conditionspec.addChild(createNotCondition("test.not.true", createRefCondition("test.true", ownerDocument), ownerDocument));
+
+        conditionspec.addChild(createVariableExistsCondition("haveInstallPath", "INSTALL_PATH", ownerDocument));
+        conditionspec.addChild(createVariableCondition("isNewVersion", "previous.version", "UNKNOWN", ownerDocument));
+        conditionspec.addChild(createNotCondition("isUpgradeVersion", createRefCondition("isNewVersion", ownerDocument), ownerDocument));
+        conditionspec.addChild(createAndCondition("isNew", "isNewVersion", "haveInstallPath", ownerDocument));
+        conditionspec.addChild(createAndCondition("isUpgrade", "isUpgradeVersion", "haveInstallPath", ownerDocument));
+
+        conditionspec.addChild(createOrCondition("newOrUpgrade", "isNew", "isUpgrade", ownerDocument));
+
         idata.setRules(rules);
         rules.analyzeXml(conditionspec);
         rules.resolveConditions();
@@ -96,14 +105,64 @@ public class ConditionTest
         return variablecondition;
     }
 
+    public IXMLElement createRefCondition(String refid, Document ownerDocument)
+    {
+        return createRefCondition(null, refid, ownerDocument);
+    }
+
     public IXMLElement createRefCondition(String id, String refid, Document ownerDocument)
     {
         IXMLElement refcondition = new XMLElementImpl("condition", ownerDocument);
         refcondition.setAttribute("type", "ref");
         refcondition.setAttribute("refid", refid);
-        refcondition.setAttribute("id", id);
+        if (id != null)
+        {
+            // ID on ref conditions is optional per definition
+            refcondition.setAttribute("id", id);
+        }
 
         return refcondition;
+    }
+
+    public IXMLElement createAndCondition(String id, String refid1, String refid2, Document ownerDocument)
+    {
+        IXMLElement andcondition = new XMLElementImpl("condition", ownerDocument);
+        andcondition.setAttribute("type", "and");
+        andcondition.setAttribute("id", id);
+        IXMLElement ref1 = createRefCondition(refid1, ownerDocument);
+        IXMLElement ref2 = createRefCondition(refid2, ownerDocument);
+
+        andcondition.addChild(ref1);
+        andcondition.addChild(ref2);
+
+        return andcondition;
+    }
+
+    public IXMLElement createOrCondition(String id, String refid1, String refid2, Document ownerDocument)
+    {
+        IXMLElement andcondition = new XMLElementImpl("condition", ownerDocument);
+        andcondition.setAttribute("type", "or");
+        andcondition.setAttribute("id", id);
+        IXMLElement ref1 = createRefCondition(refid1, ownerDocument);
+        IXMLElement ref2 = createRefCondition(refid2, ownerDocument);
+
+        andcondition.addChild(ref1);
+        andcondition.addChild(ref2);
+
+        return andcondition;
+    }
+
+    public IXMLElement createVariableExistsCondition(String id, String variable, Document ownerDocument)
+    {
+        IXMLElement existscondition = new XMLElementImpl("condition", ownerDocument);
+        existscondition.setAttribute("type", "exists");
+        existscondition.setAttribute("id", id);
+        IXMLElement name = new XMLElementImpl("variable", ownerDocument);
+        name.setContent(variable);
+
+        existscondition.addChild(name);
+
+        return existscondition;
     }
 
     @Test
@@ -144,4 +203,28 @@ public class ConditionTest
 
         assertThat(rules.isConditionTrue("test.true2\\test.true", idata), IS_FALSE);
     }
+
+    @Test
+    public void testNestedReferenceConditions()
+    {
+        assertThat(rules.isConditionTrue("newOrUpgrade", idata), IS_FALSE);
+
+        idata.setVariable("INSTALL_PATH", "/usr/local/my_app");
+        assertThat(rules.isConditionTrue("haveInstallPath", idata), IS_TRUE);
+
+        idata.setVariable("previous.version", "UNKNOWN");
+        assertThat(rules.isConditionTrue("isNewVersion", idata), IS_TRUE);
+        assertThat(rules.isConditionTrue("isUpgradeVersion", idata), IS_FALSE);
+        assertThat(rules.isConditionTrue("isNew", idata), IS_TRUE);
+        assertThat(rules.isConditionTrue("isUpgrade", idata), IS_FALSE);
+
+        idata.setVariable("previous.version", "1.0");
+        assertThat(rules.isConditionTrue("isNewVersion", idata), IS_FALSE);
+        assertThat(rules.isConditionTrue("isUpgradeVersion", idata), IS_TRUE);
+        assertThat(rules.isConditionTrue("isNew", idata), IS_FALSE);
+        assertThat(rules.isConditionTrue("isUpgrade", idata), IS_TRUE);
+
+        assertThat(rules.isConditionTrue("newOrUpgrade", idata), IS_TRUE);
+    }
+
 }

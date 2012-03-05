@@ -23,27 +23,21 @@ package com.izforge.izpack.core.rules.logic;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.core.rules.RulesEngineImpl;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import com.izforge.izpack.api.rules.ConditionWithMultipleOperands;
+import com.izforge.izpack.api.rules.RulesEngine;
 
 /**
  * @author Dennis Reil, <izpack@reil-online.de>
  */
-public class OrCondition extends Condition
+public class OrCondition extends ConditionWithMultipleOperands
 {
     private static final long serialVersionUID = 8341350377205144199L;
 
-    protected transient RulesEngineImpl rulesEngineImpl;
+    protected transient RulesEngine rules;
 
-    protected Collection<Condition> nestedConditions = new ArrayList<Condition>();
-
-    public OrCondition(RulesEngineImpl rulesEngineImpl, Condition... operands)
+    public OrCondition(RulesEngine rules)
     {
-        this.rulesEngineImpl = rulesEngineImpl;
-        nestedConditions.addAll(Arrays.asList(operands));
+        this.rules = rules;
     }
 
     @Override
@@ -55,7 +49,7 @@ public class OrCondition extends Condition
         }
         for (IXMLElement element : xmlcondition.getChildren())
         {
-            nestedConditions.add(rulesEngineImpl.instanciateCondition(element));
+            nestedConditions.add(rules.instanciateCondition(element));
         }
     }
 
@@ -90,7 +84,7 @@ public class OrCondition extends Condition
     {
         for (Condition condition : nestedConditions)
         {
-            IXMLElement left = rulesEngineImpl.createConditionElement(condition, conditionRoot);
+            IXMLElement left = rules.createConditionElement(condition, conditionRoot);
             condition.makeXMLData(left);
             conditionRoot.addChild(left);
         }

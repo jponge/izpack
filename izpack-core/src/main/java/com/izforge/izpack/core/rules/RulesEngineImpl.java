@@ -23,6 +23,8 @@ package com.izforge.izpack.core.rules;
 
 import java.io.OutputStream;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.XMLException;
@@ -34,6 +36,7 @@ import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.ConditionReference;
+import com.izforge.izpack.api.rules.ConditionWithMultipleOperands;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.rules.logic.AndCondition;
@@ -53,6 +56,7 @@ import com.izforge.izpack.util.Debug;
  */
 public class RulesEngineImpl implements RulesEngine
 {
+    private static final Logger LOGGER = Logger.getLogger(RulesEngineImpl.class.getName());
 
     private static final long serialVersionUID = 3966346766966632860L;
 
@@ -370,12 +374,11 @@ public class RulesEngineImpl implements RulesEngine
      */
     private Condition parseComplexOrCondition(String expression)
     {
-        Condition result = null;
-
         String[] parts = expression.split("\\|\\|", 2);
-        result = new OrCondition(this, parseComplexCondition(parts[0].trim()), parseComplexCondition(parts[1].trim()));
+        OrCondition orCondition = new OrCondition(this);
+        orCondition.addOperands(parseComplexCondition(parts[0].trim()), parseComplexCondition(parts[1].trim()));
 
-        return result;
+        return orCondition;
     }
 
     /**
@@ -386,13 +389,11 @@ public class RulesEngineImpl implements RulesEngine
      */
     private Condition parseComplexXorCondition(String expression)
     {
-        Condition result = null;
-
         String[] parts = expression.split("\\^", 2);
-        result = new XorCondition(this, parseComplexCondition(parts[0].trim()), parseComplexCondition(parts[1].trim()));
+        XorCondition xorCondition = new XorCondition(this);
+        xorCondition.addOperands(parseComplexCondition(parts[0].trim()), parseComplexCondition(parts[1].trim()));
 
-        return result;
-
+        return xorCondition;
     }
 
     /**
@@ -405,12 +406,11 @@ public class RulesEngineImpl implements RulesEngine
      */
     private Condition parseComplexAndCondition(String expression)
     {
-        Condition result = null;
-
         String[] parts = expression.split("\\&\\&", 2);
-        result = new AndCondition(this, parseComplexCondition(parts[0].trim()), parseComplexCondition(parts[1].trim()));
+        AndCondition andCondition = new AndCondition(this);
+        andCondition.addOperands(parseComplexCondition(parts[0].trim()), parseComplexCondition(parts[1].trim()));
 
-        return result;
+        return andCondition;
     }
 
     /**
@@ -442,20 +442,23 @@ public class RulesEngineImpl implements RulesEngine
                     // and-condition
                     Condition op1 = conditionsmap.get(conditionexpr.substring(0, index));
                     conditionexpr.delete(0, index + 1);
-                    result = new AndCondition(this, op1, getConditionByExpr(conditionexpr));
+                    result = new AndCondition(this);
+                    ((ConditionWithMultipleOperands)result).addOperands(op1, getConditionByExpr(conditionexpr));
                     break;
                 case '|':
                     // or-condition
                     op1 = conditionsmap.get(conditionexpr.substring(0, index));
                     conditionexpr.delete(0, index + 1);
-                    result = new OrCondition(this, op1, getConditionByExpr(conditionexpr));
+                    result = new OrCondition(this);
+                    ((ConditionWithMultipleOperands)result).addOperands(op1, getConditionByExpr(conditionexpr));
 
                     break;
                 case '\\':
                     // xor-condition
                     op1 = conditionsmap.get(conditionexpr.substring(0, index));
                     conditionexpr.delete(0, index + 1);
-                    result = new XorCondition(this, op1, getConditionByExpr(conditionexpr));
+                    result = new XorCondition(this);
+                    ((ConditionWithMultipleOperands)result).addOperands(op1, getConditionByExpr(conditionexpr));
                     break;
                 case '!':
                     // not-condition
@@ -497,7 +500,7 @@ public class RulesEngineImpl implements RulesEngine
         {
             return isConditionTrue(cond, installData);
         }
-        Debug.trace("Condition " + id + " not found");
+        LOGGER.warning("Condition " + id + " not found");
         return false;
     }
 
@@ -523,7 +526,7 @@ public class RulesEngineImpl implements RulesEngine
         {
             return isConditionTrue(cond);
         }
-        Debug.trace("Condition " + id + " not found");
+        LOGGER.warning("Condition " + id + " not found");
         return false;
     }
 
@@ -534,8 +537,9 @@ public class RulesEngineImpl implements RulesEngine
         {
             cond.setInstalldata(this.installdata);
         }
-        Debug.trace("Checking condition " + cond.getId());
-        return cond.isTrue();
+        boolean value = cond.isTrue();
+        LOGGER.log(Level.FINER, "Condition " + cond.getId() + ": " + Boolean.toString(value));
+        return value;
     }
 
     /**
