@@ -19,9 +19,9 @@ package com.izforge.izpack.util.file.types;
 
 import java.io.File;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.file.FileUtils;
 import com.izforge.izpack.util.file.PathTokenizer;
 
@@ -53,6 +53,7 @@ import com.izforge.izpack.util.file.PathTokenizer;
 
 public class Path extends DataType implements Cloneable
 {
+    private static final Logger logger = Logger.getLogger(Path.class.getName());
 
     private static FileUtils fileUtils = FileUtils.getFileUtils();
 
@@ -245,7 +246,7 @@ public class Path extends DataType implements Cloneable
             }
             else
             {
-                Debug.log("dropping " + f + " from path as it doesn't exist");
+                logger.warning("Dropping " + f + " from path as it doesn't exist");
             }
         }
     }
@@ -320,6 +321,7 @@ public class Path extends DataType implements Cloneable
      *
      * @return a textual representation of the path.
      */
+    @Override
     public String toString()
     {
         try
@@ -370,8 +372,8 @@ public class Path extends DataType implements Cloneable
             }
             catch (Exception e)
             {
-                Debug.log("Dropping path element " + pathElement
-                        + " as it is not valid relative to the project"/*,
+                logger.warning("Dropping path element " + pathElement
+                        + " as it is not a valid relative to the project"/*,
                     Project.MSG_VERBOSE*/);
             }
             for (int i = 0; i < element.length(); i++)
@@ -432,6 +434,7 @@ public class Path extends DataType implements Cloneable
     /**
      * Return a Path that holds the same elements as this instance.
      */
+    @Override
     public Object clone()
     {
         try

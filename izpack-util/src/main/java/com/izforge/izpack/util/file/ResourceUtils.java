@@ -19,8 +19,8 @@ package com.izforge.izpack.util.file;
 
 import java.io.File;
 import java.util.Vector;
+import java.util.logging.Logger;
 
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.file.types.Resource;
 import com.izforge.izpack.util.file.types.ResourceFactory;
 import com.izforge.izpack.util.file.types.selectors.SelectorUtils;
@@ -30,6 +30,7 @@ import com.izforge.izpack.util.file.types.selectors.SelectorUtils;
  */
 public class ResourceUtils
 {
+    private static final Logger logger = Logger.getLogger(ResourceUtils.class.getName());
 
     /**
      * tells which source files should be reprocessed based on the
@@ -86,8 +87,7 @@ public class ResourceUtils
         {
             if (resource.getLastModified() > now)
             {
-                Debug.log("Warning: " + resource.getName()
-                        + " modified in the future.");
+                logger.warning(resource.getName() + " modified in the future.");
             }
 
             String[] targetnames =
@@ -108,7 +108,7 @@ public class ResourceUtils
                     // add the resource to what needs to be copied
                     if (!atarget.isExists())
                     {
-                        Debug.log(resource.getName() + " added as "
+                        logger.warning(resource.getName() + " added as "
                                 + atarget.getName()
                                 + " doesn\'t exist.");
                         vresult.addElement(resource);
@@ -119,7 +119,7 @@ public class ResourceUtils
                             atarget,
                             (int) granularity))
                     {
-                        Debug.log(resource.getName() + " added as "
+                        logger.warning(resource.getName() + " added as "
                                 + atarget.getName()
                                 + " is outdated.");
                         vresult.addElement(resource);
@@ -137,7 +137,7 @@ public class ResourceUtils
 
                 if (!added)
                 {
-                    Debug.log(resource.getName()
+                    logger.fine(resource.getName()
                             + " omitted as " + targetList.toString()
                             + (targetnames.length == 1 ? " is" : " are ")
                             + " up to date.");
@@ -145,7 +145,7 @@ public class ResourceUtils
             }
             else
             {
-                Debug.log(resource.getName()
+                logger.warning(resource.getName()
                         + " skipped - don\'t know how to handle it");
             }
         }

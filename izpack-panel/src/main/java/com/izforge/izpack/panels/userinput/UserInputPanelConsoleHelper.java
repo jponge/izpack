@@ -21,18 +21,6 @@
 
 package com.izforge.izpack.panels.userinput;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.Console;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
-import com.izforge.izpack.installer.console.PanelConsole;
-import com.izforge.izpack.installer.console.PanelConsoleHelper;
-import com.izforge.izpack.panels.userinput.processor.Processor;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.helper.SpecHelper;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -42,6 +30,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.installer.console.PanelConsole;
+import com.izforge.izpack.installer.console.PanelConsoleHelper;
+import com.izforge.izpack.panels.userinput.processor.Processor;
+import com.izforge.izpack.util.Console;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.helper.SpecHelper;
 
 /**
  * The user input panel console helper class.
@@ -50,6 +51,7 @@ import java.util.StringTokenizer;
  */
 public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements PanelConsole
 {
+    private static final Logger logger = Logger.getLogger(UserInputPanelConsoleHelper.class.getName());
 
     protected int instanceNumber = 0;
 
@@ -142,6 +144,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
     }
 
+    @Override
     public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties properties)
     {
 
@@ -161,6 +164,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         return true;
     }
 
+    @Override
     public boolean runGeneratePropertiesFile(AutomatedInstallData installData,
                                              PrintWriter printWriter)
     {
@@ -346,7 +350,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
         if (input.listChoices.size() == 0)
         {
-            Debug.trace("Error: no spec element defined in file field");
+            logger.warning("No 'spec' element defined in file field");
             return false;
         }
 
@@ -369,6 +373,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             }
             catch (Exception e)
             {
+                logger.log(Level.WARNING, e.toString(), e);
                 // ignore
             }
         }
@@ -417,7 +422,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         List<Choice> lisChoices = input.listChoices;
         if (lisChoices.size() == 0)
         {
-            Debug.trace("Error: no spec element defined in file field");
+            logger.warning("No 'spec' element defined in file field");
             return false;
         }
         if (currentvariablevalue != null)
@@ -512,7 +517,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         List<Choice> lisChoices = input.listChoices;
         if (lisChoices.size() == 0)
         {
-            Debug.trace("Error: no spec element defined in check field");
+            logger.warning("No 'spec' element defined in check field");
             return false;
         }
         Choice choice = null;

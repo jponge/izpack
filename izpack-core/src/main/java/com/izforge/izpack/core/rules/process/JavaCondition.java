@@ -21,13 +21,14 @@
 
 package com.izforge.izpack.core.rules.process;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.util.Debug;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 /**
  * A condition based on the value of a static java field or static java method.
@@ -36,10 +37,10 @@ import java.lang.reflect.Method;
  */
 public class JavaCondition extends Condition
 {
-    /**
-     *
-     */
     private static final long serialVersionUID = -7649870719815066537L;
+
+    private static final transient Logger logger = Logger.getLogger(JavaCondition.class.getName());
+
     protected String classname;
     protected String methodname;
     protected String fieldname;
@@ -82,7 +83,7 @@ public class JavaCondition extends Condition
                 }
                 catch (ClassNotFoundException e)
                 {
-                    Debug.log("Can't find class " + this.classname);
+                    logger.warning("Can't find class " + this.classname);
                     return false;
                 }
             }
@@ -94,18 +95,18 @@ public class JavaCondition extends Condition
                 }
                 catch (SecurityException e)
                 {
-                    Debug.log("No permission to access specified field: " + this.fieldname);
+                    logger.warning("No permission to access specified field: " + this.fieldname);
                     return false;
                 }
                 catch (NoSuchFieldException e)
                 {
-                    Debug.log("No such field: " + this.fieldname);
+                    logger.warning("No such field: " + this.fieldname);
                     return false;
                 }
             }
             if ((this.usedmethod == null) && (this.methodname != null))
             {
-                Debug.log("not implemented yet.");
+                logger.warning("Method not implemented yet");
                 return false;
             }
 
@@ -122,16 +123,16 @@ public class JavaCondition extends Condition
                     }
                     catch (IllegalArgumentException e)
                     {
-                        Debug.log("IllegalArgumentexeption " + this.fieldname);
+                        logger.log(Level.WARNING, this.fieldname + ": " + e.getMessage(), e);
                     }
                     catch (IllegalAccessException e)
                     {
-                        Debug.log("IllegalAccessException " + this.fieldname);
+                        logger.log(Level.WARNING, this.fieldname + ": " + e.getMessage(), e);
                     }
                 }
                 else
                 {
-                    Debug.log("not implemented yet.");
+                    logger.warning("Field not implemented yet");
                     return false;
                 }
             }

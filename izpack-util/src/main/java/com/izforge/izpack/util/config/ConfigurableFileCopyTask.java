@@ -25,12 +25,13 @@ package com.izforge.izpack.util.config;
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.logging.Logger;
 
-import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.file.FileCopyTask;
 
 public abstract class ConfigurableFileCopyTask extends FileCopyTask implements ConfigurableTask
 {
+    private static final Logger logger = Logger.getLogger(ConfigurableFileCopyTask.class.getName());
 
     private boolean patchPreserveEntries = true;
 
@@ -105,7 +106,7 @@ public abstract class ConfigurableFileCopyTask extends FileCopyTask implements C
     {
         if (fileCopyMap.size() > 0)
         {
-            Debug.log("Merge/copy " + fileCopyMap.size() + " file"
+            logger.fine("Merge/copy " + fileCopyMap.size() + " file"
                     + (fileCopyMap.size() == 1 ? "" : "s") + " in " + destDir.getAbsolutePath());
 
             Enumeration<String> e = fileCopyMap.keys();
@@ -118,11 +119,11 @@ public abstract class ConfigurableFileCopyTask extends FileCopyTask implements C
                 {
                     if (fromFile.equals(toFile))
                     {
-                        Debug.log("Skipping self-merge/copy of " + fromFile);
+                        logger.warning("Skipping self-merge/copy of " + fromFile);
                         continue;
                     }
 
-                    Debug.log("Merge/copy " + fromFile + " into " + toFile);
+                    logger.fine("Merge/copy " + fromFile + " into " + toFile);
 
                     File to = new File(toFile);
                     File parent = to.getParentFile();
@@ -153,7 +154,7 @@ public abstract class ConfigurableFileCopyTask extends FileCopyTask implements C
                         {
                             if (!from.delete())
                             {
-                                Debug.log("File " + from + " could not be cleant up");
+                                logger.warning("File " + from + " could not be cleant up");
                             }
                         }
                     }

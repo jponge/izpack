@@ -1,9 +1,11 @@
 package com.izforge.izpack.installer.console;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.util.Debug;
 
 /**
  * Factory for {@link PanelConsole} instances.
@@ -12,6 +14,8 @@ import com.izforge.izpack.util.Debug;
  */
 class PanelConsoleFactory
 {
+    private static final Logger logger = Logger.getLogger(PanelConsoleFactory.class.getName());
+
     /**
      * The container.
      */
@@ -79,16 +83,17 @@ class PanelConsoleFactory
             Class type = Class.forName(name);
             if (!PanelConsole.class.isAssignableFrom(type))
             {
-                Debug.log(name + " does not implement " + PanelConsole.class.getName() + ", ignoring");
+                logger.warning(name + " does not implement " + PanelConsole.class.getName() + ", ignoring");
             }
             else
             {
                 result = (Class<PanelConsole>) type;
             }
         }
-        catch (ClassNotFoundException ignore)
+        catch (ClassNotFoundException e)
         {
-            Debug.log(ignore.getMessage());
+            // Ignore
+            logger.fine("No PanelConsole found for class " + name + ": " + e.toString());
         }
         return result;
     }

@@ -1,15 +1,15 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/ http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2007 Dennis Reil
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -18,12 +18,11 @@
 
 package com.izforge.izpack.core.io;
 
-import com.izforge.izpack.util.Debug;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -34,6 +33,7 @@ import java.util.zip.GZIPInputStream;
  */
 public class FileSpanningInputStream extends InputStream
 {
+    private static final Logger logger = Logger.getLogger(FileSpanningInputStream.class.getName());
 
     private static final int EOF = -1;
 
@@ -66,7 +66,7 @@ public class FileSpanningInputStream extends InputStream
         this.magicnumber = new byte[FileSpanningOutputStream.MAGIC_NUMER_LENGTH];
         zippedinputstream.read(this.magicnumber);
         // this.read(this.magicnumber);
-        Debug.trace("Opening stream to " + volume + " magicnr is " + magicnumber);
+        logger.fine("Opening stream to " + volume + " magicnr is " + magicnumber);
         // reset filepointer
         filepointer = 0;
     }
@@ -84,14 +84,14 @@ public class FileSpanningInputStream extends InputStream
      */
     private boolean isMagicNumberValid() throws IOException
     {
-        Debug.trace("trying to read magic number");
+        logger.fine("Trying to read magic number");
         boolean valid = false;
         byte[] magicnumberofvolume = new byte[FileSpanningOutputStream.MAGIC_NUMER_LENGTH];
         long oldfilepointer = this.filepointer;
         // this.read(magicnumberofvolume);
         this.zippedinputstream.read(magicnumberofvolume);
         this.filepointer = oldfilepointer;
-        Debug.trace("MagicNr is " + magicnumberofvolume);
+        logger.fine("Magic number is " + magicnumberofvolume);
         if ((magicnumberofvolume != null) && (this.magicnumber != null))
         {
             if (magicnumberofvolume.length != this.magicnumber.length)
@@ -132,21 +132,21 @@ public class FileSpanningInputStream extends InputStream
         // have we reached the last volume?
         if (currentvolumeindex >= volumestotal)
         {
-            Debug.trace("last volume reached.");
+            logger.fine("Last volume reached");
             return false;
         }
         // the next volume name
         String nextvolumename = volumename + "." + currentvolumeindex;
-        Debug.trace("Trying to use next volume: " + nextvolumename);
+        logger.fine("Trying to use next volume: " + nextvolumename);
         File nextvolumefile = new File(nextvolumename);
         if (!nextvolumefile.exists())
         {
             currentvolumeindex--;
             nextvolumenotfound = true;
-            Debug.trace("volume not found");
+            logger.fine("Volume not found: " + nextvolumefile);
             throw new VolumeNotFoundException(nextvolumename + "was not found.", nextvolumename);
         }
-        Debug.trace("next volume found.");
+        logger.fine("Next volume found: " + nextvolumefile);
         // try to open new stream to next volume
         fileinputstream = new FileInputStream(nextvolumefile);
         zippedinputstream = new GZIPInputStream(fileinputstream);
@@ -155,11 +155,11 @@ public class FileSpanningInputStream extends InputStream
         {
             currentvolumeindex--;
             nextvolumenotfound = true;
-            Debug
-                    .trace("volume found, but magic number incorrect. Maybe not a volume of the same version.");
-            throw new CorruptVolumeException(nextvolumename
-                    + "was found, but has magic number error. Maybe not the right version?",
-                    nextvolumename);
+            final String msg = "Volume "
+                    + nextvolumename
+                    + " has a magic number error. Maybe not the right version?";
+            logger.fine(msg);
+            throw new CorruptVolumeException(msg, nextvolumename);
         }
         // everything fine
         nextvolumenotfound = false;
@@ -168,10 +168,10 @@ public class FileSpanningInputStream extends InputStream
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.io.InputStream#available()
      */
-
+    @Override
     public int available() throws IOException
     {
         if (nextvolumenotfound)
@@ -184,10 +184,10 @@ public class FileSpanningInputStream extends InputStream
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.io.InputStream#close()
      */
-
+    @Override
     public void close() throws IOException
     {
         zippedinputstream.close();
@@ -196,10 +196,11 @@ public class FileSpanningInputStream extends InputStream
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.io.InputStream#read()
      */
 
+    @Override
     public int read() throws IOException
     {
         if (nextvolumenotfound)
@@ -234,10 +235,11 @@ public class FileSpanningInputStream extends InputStream
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.io.InputStream#read(byte[], int, int)
      */
 
+    @Override
     public int read(byte[] b, int off, int len) throws IOException
     {
         if (nextvolumenotfound)
@@ -264,7 +266,7 @@ public class FileSpanningInputStream extends InputStream
             if (createInputStreamToNextVolume())
             {
                 // try to read next bytes
-                Debug.trace("next volume opened, continuing read");
+                logger.fine("Next volume opened, continuing read");
                 bytesread = zippedinputstream.read(b, off, len);
                 filepointer += bytesread;
                 // System.out.println("read into buffer: " + bytesread + " Bytes");
@@ -276,10 +278,11 @@ public class FileSpanningInputStream extends InputStream
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.io.InputStream#read(byte[])
      */
 
+    @Override
     public int read(byte[] b) throws IOException
     {
         return this.read(b, 0, b.length);
@@ -287,10 +290,11 @@ public class FileSpanningInputStream extends InputStream
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.io.InputStream#skip(long)
      */
 
+    @Override
     public long skip(long n) throws IOException
     {
         if (nextvolumenotfound)
@@ -340,7 +344,7 @@ public class FileSpanningInputStream extends InputStream
      */
     public void setVolumename(String volumename)
     {
-        Debug.trace("new volumename: " + volumename);
+        logger.fine("New volume name: " + volumename);
         // try to get the volumename from the given volume file
         // the first volume has no suffix, additional volumes have a .INDEX# suffix
         String volumesuffix = "." + currentvolumeindex;
@@ -357,7 +361,7 @@ public class FileSpanningInputStream extends InputStream
         {
             this.volumename = volumename;
         }
-        Debug.trace("Set volumename to: " + this.volumename);
+        logger.fine("Set volume name to: " + this.volumename);
     }
 
     /**

@@ -22,16 +22,19 @@
 
 package com.izforge.izpack.core.rules.process;
 
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.rules.CompareCondition;
 import com.izforge.izpack.api.rules.ComparisonOperator;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorBase;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
-import com.izforge.izpack.util.Debug;
 
 public class ComparenumericsCondition extends CompareCondition
 {
     private static final long serialVersionUID = -5512232923336878003L;
+
+    private static final transient Logger logger = Logger.getLogger(ComparenumericsCondition.class.getName());
 
     @Override
     public boolean isTrue()
@@ -77,7 +80,7 @@ public class ComparenumericsCondition extends CompareCondition
             }
             catch (NumberFormatException nfe)
             {
-                Debug.log("One of the values to compare is not in numeric format");
+                logger.warning("One of the values to compare is not in numeric format");
             }
         }
         return result;

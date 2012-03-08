@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Blockable;
@@ -49,7 +50,6 @@ import com.izforge.izpack.api.unpacker.IDiscardInterruptable;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.file.DirectoryScanner;
@@ -65,6 +65,8 @@ import com.izforge.izpack.util.os.FileQueueMove;
  */
 public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
 {
+    private static final Logger logger = Logger.getLogger(UnpackerBase.class.getName());
+
     /**
      * The installdata.
      */
@@ -154,12 +156,12 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
      *
      * @return a copy of active unpacker instances
      */
-    public static HashMap getRunningInstances()
+    public static HashMap<Object, String> getRunningInstances()
     {
         synchronized (instances)
         { // Return a shallow copy to prevent a
             // ConcurrentModificationException.
-            return (HashMap) (instances.clone());
+            return (HashMap<Object, String>) (instances.clone());
         }
     }
 
@@ -573,10 +575,10 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
     {
         if (!idata.getInfo().isWriteInstallationInformation())
         {
-            Debug.trace("skip writing installation information");
+            logger.fine("Skip writing installation information");
             return;
         }
-        Debug.trace("writing installation information");
+        logger.fine("Writing installation information");
         String installdir = idata.getInstallPath();
 
         List<Pack> installedpacks = new ArrayList<Pack>(idata.getSelectedPacks());
@@ -584,12 +586,12 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
         File installationinfo = new File(installdir + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION);
         if (!installationinfo.exists())
         {
-            Debug.trace("creating info file" + installationinfo.getAbsolutePath());
+            logger.fine("Creating info file" + installationinfo.getAbsolutePath());
             installationinfo.createNewFile();
         }
         else
         {
-            Debug.trace("installation information found");
+            logger.fine("Previous installation information found");
             // read in old information and update
             FileInputStream fin = new FileInputStream(installationinfo);
             ObjectInputStream oin = new ObjectInputStream(fin);
@@ -617,7 +619,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
         }
         */
         oout.writeObject(idata.getVariables());
-        Debug.trace("done.");
+        logger.fine("Writing installation information finished");
         oout.close();
         fout.close();
     }
@@ -812,7 +814,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
             }
             fqmv.setOverwrite(true);
             fq.add(fqmv);
-            Debug.log(tmpFile.getAbsolutePath()
+            logger.fine(tmpFile.getAbsolutePath()
                     + " -> "
                     + file.getAbsolutePath()
                     + " added to file queue for being copied after reboot"

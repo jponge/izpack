@@ -19,6 +19,27 @@
 
 package com.izforge.izpack.panels.installationgroup;
 
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.*;
+import java.util.logging.Logger;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
@@ -26,20 +47,7 @@ import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraintHelper;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.*;
-import java.awt.*;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.*;
-import java.util.List;
 
 
 /**
@@ -54,7 +62,12 @@ import java.util.List;
 public class InstallationGroupPanel extends IzPanel
         implements ListSelectionListener
 {
-    private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -8080249125208860785L;
+
+    private static final transient Logger logger = Logger.getLogger(InstallationGroupPanel.class.getName());
 
     /**
      * HashMap<String, Pack> of the GUIInstallData.availablePacks
@@ -77,6 +90,7 @@ public class InstallationGroupPanel extends IzPanel
      * If there are no packs with an installGroups attribute, this panel is
      * skipped. Otherwise, the unique installGroups are displayed in a table.
      */
+    @Override
     public void panelActivate()
     {
         // Set/restore availablePacks from allPacks; consider OS constraints
@@ -89,7 +103,7 @@ public class InstallationGroupPanel extends IzPanel
             }
         }
 
-        Debug.trace("InstallationGroupPanel.panelActivate, selectedGroup=" + selectedGroup);
+        logger.fine("selectedGroup=" + selectedGroup);
         // If there are no groups, skip this panel
         Map<String, GroupData> installGroups = getInstallGroups(this.installData);
         if (installGroups.size() == 0)
@@ -108,6 +122,7 @@ public class InstallationGroupPanel extends IzPanel
         // renders the radio buttons and adjusts their state
         TableCellRenderer radioButtonRenderer = new TableCellRenderer()
         {
+            @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
                                                            boolean isSelected, boolean hasFocus,
                                                            int row, int column)
@@ -169,16 +184,17 @@ public class InstallationGroupPanel extends IzPanel
      * that do not list the selected installation group. Packs without any
      * installGroups are always included.
      */
+    @Override
     public void panelDeactivate()
     {
 
-        Debug.trace("InstallationGroupPanel.panelDeactivate, selectedGroup=" + selectedGroup);
+        logger.fine("selectedGroup=" + selectedGroup);
         if (selectedGroup >= 0)
         {
             removeUnusedPacks();
             GroupData group = this.rows[selectedGroup];
             this.installData.setVariable("INSTALL_GROUP", group.name);
-            Debug.trace("Added variable INSTALL_GROUP=" + group.name);
+            logger.fine("Added variable INSTALL_GROUP=" + group.name);
         }
     }
 
@@ -187,9 +203,10 @@ public class InstallationGroupPanel extends IzPanel
      *
      * @return true if selectedGroup >= 0, false otherwise
      */
+    @Override
     public boolean isValidated()
     {
-        Debug.trace("InstallationGroupPanel.isValidated, selectedGroup=" + selectedGroup);
+        logger.fine("selectedGroup=" + selectedGroup);
         return selectedGroup >= 0;
     }
 
@@ -198,9 +215,10 @@ public class InstallationGroupPanel extends IzPanel
      *
      * @param e
      */
+    @Override
     public void valueChanged(ListSelectionEvent e)
     {
-        Debug.trace("valueChanged: " + e);
+        logger.fine("Event: " + e);
         if (!e.getValueIsAdjusting())
         {
             ListSelectionModel listSelectionModel = (ListSelectionModel) e.getSource();
@@ -217,7 +235,7 @@ public class InstallationGroupPanel extends IzPanel
                     descriptionField.setText(data.description);
                     ((JRadioButton) groupTableModel.getValueAt(selectedGroup, 0)).setSelected(true);
                 }
-                Debug.trace("selectedGroup set to: " + selectedGroup);
+                logger.fine("selectedGroup set to: " + selectedGroup);
             }
         }
     }
@@ -226,6 +244,7 @@ public class InstallationGroupPanel extends IzPanel
     * @see com.izforge.izpack.installer.IzPanel#makeXMLData(com.izforge.izpack.api.adaptator.IXMLElement)
     */
 
+    @Override
     public void makeXMLData(IXMLElement panelRoot)
     {
         InstallationGroupPanelAutomationHelper helper = new InstallationGroupPanelAutomationHelper();
@@ -275,7 +294,7 @@ public class InstallationGroupPanel extends IzPanel
     protected void removeUnusedPacks()
     {
         GroupData data = rows[selectedGroup];
-        Debug.trace("InstallationGroupPanel.removeUnusedPacks, GroupData=" + data.name);
+        logger.fine("data=" + data.name);
 
         // Now remove the packs not in groupPackNames
         Iterator<Pack> iter = this.installData.getAvailablePacks().iterator();
@@ -290,7 +309,7 @@ public class InstallationGroupPanel extends IzPanel
             if (!data.packNames.contains(pack.name))
             {
                 iter.remove();
-                Debug.trace("Removed AvailablePack: " + pack.name);
+                logger.fine("Removed available pack: " + pack.name);
             }
         }
 
@@ -315,18 +334,18 @@ public class InstallationGroupPanel extends IzPanel
     {
         data.packNames.add(p.name);
         data.size += p.nbytes;
-        Debug.trace("addDependents, added pack: " + p.name);
+        logger.fine("Added pack: " + p.name);
         if (p.dependencies == null || p.dependencies.size() == 0)
         {
             return;
         }
 
-        Debug.trace(p.name + " dependencies: " + p.dependencies);
+        logger.fine(p.name + " dependencies: " + p.dependencies);
         for (String dependent : p.dependencies)
         {
             if (!data.packNames.contains(dependent))
             {
-                Debug.trace("Need dependent: " + dependent);
+                logger.fine("Need dependent: " + dependent);
                 Pack dependentPack = packsByName.get(dependent);
                 addDependents(dependentPack, packsByName, data);
             }
@@ -353,7 +372,7 @@ public class InstallationGroupPanel extends IzPanel
         {
             packsByName.put(pack.name, pack);
             Set<String> groups = pack.installGroups;
-            Debug.trace("Pack: " + pack.name + ", installGroups: " + groups);
+            logger.fine("Pack: " + pack.name + ", installGroups: " + groups);
             for (String group : groups)
             {
                 GroupData data = installGroups.get(group);
@@ -366,14 +385,14 @@ public class InstallationGroupPanel extends IzPanel
                 }
             }
         }
-        Debug.trace("Found installGroups: " + installGroups.keySet());
+        logger.fine("Found installGroups: " + installGroups.keySet());
 
         /* Build up a set of the packs to include in the installation by finding
         all packs in the selected group, and then include their dependencies.
         */
         for (GroupData data : installGroups.values())
         {
-            Debug.trace("Adding dependents for: " + data.name);
+            logger.fine("Adding dependents for: " + data.name);
             for (Pack pack : idata.getAvailablePacks())
             {
                 Set<String> groups = pack.installGroups;
@@ -386,11 +405,7 @@ public class InstallationGroupPanel extends IzPanel
                     }
                 }
             }
-            Debug.trace("Completed dependents for: " + data);
-            if (Debug.tracing())
-            {
-                Debug.trace(data);
-            }
+            logger.fine("Completed dependents for: " + data);
         }
 
         return installGroups;
@@ -529,6 +544,7 @@ public class InstallationGroupPanel extends IzPanel
         String[] columns = {c1, c3};
         DefaultTableModel model = new DefaultTableModel(columns, 0)
         {
+            @Override
             public boolean isCellEditable(int row, int column)
             {
                 return false;
@@ -537,10 +553,11 @@ public class InstallationGroupPanel extends IzPanel
         rows = new GroupData[groupData.size()];
         // The name of the group to select if there is no current selection
         String defaultGroup = this.installData.getVariable("InstallationGroupPanel.defaultGroup");
-        Debug.trace("InstallationGroupPanel.defaultGroup=" + defaultGroup + ", selectedGroup=" + selectedGroup);
+        logger.fine("InstallationGroupPanel.defaultGroup=" + defaultGroup + ", selectedGroup=" + selectedGroup);
         List<GroupData> values = new ArrayList<GroupData>(groupData.values());
         Collections.sort(values, new Comparator<GroupData>()
         {
+            @Override
             public int compare(GroupData g1, GroupData g2)
             {
                 if (g1.sortKey == null || g2.sortKey == null)
@@ -558,12 +575,12 @@ public class InstallationGroupPanel extends IzPanel
         for (GroupData gd : values)
         {
             rows[count] = gd;
-            Debug.trace("Creating button#" + count + ", group=" + gd.name);
+            logger.fine("Creating button #" + count + ", group=" + gd.name);
             JRadioButton button = new JRadioButton(getLocalizedGroupName(gd.name));
             if (selectedGroup == count)
             {
                 button.setSelected(true);
-                Debug.trace("Selected button#" + count);
+                logger.fine("Selected button #" + count);
             }
             else if (selectedGroup < 0 && !madeSelection)
             {
@@ -581,7 +598,7 @@ public class InstallationGroupPanel extends IzPanel
                 if (madeSelection)
                 {
                     button.setSelected(true);
-                    Debug.trace("Selected button#" + count);
+                    logger.fine("Selected button #" + count);
                     selectedGroup = count;
                 }
             }
@@ -640,6 +657,7 @@ public class InstallationGroupPanel extends IzPanel
             return s;
         }
 
+        @Override
         public String toString()
         {
             StringBuffer tmp = new StringBuffer("GroupData(");

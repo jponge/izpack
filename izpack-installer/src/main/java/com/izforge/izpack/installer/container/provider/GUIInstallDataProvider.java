@@ -1,21 +1,6 @@
 package com.izforge.izpack.installer.container.provider;
 
-import com.izforge.izpack.api.container.BindeableContainer;
-import com.izforge.izpack.api.data.GUIPrefs;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.merge.resolve.ClassPathCrawler;
-import com.izforge.izpack.merge.resolve.PathResolver;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.OsVersion;
-
-import javax.swing.*;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.plaf.metal.MetalTheme;
-import java.awt.*;
+import java.awt.Color;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Method;
@@ -25,13 +10,34 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.LookAndFeel;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.MetalTheme;
+
+import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.api.data.GUIPrefs;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.merge.resolve.ClassPathCrawler;
+import com.izforge.izpack.merge.resolve.PathResolver;
+import com.izforge.izpack.util.OsVersion;
+
 /**
  * Provide installData for GUI :
  * Load install data with l&f and GUIPrefs
  */
 public class GUIInstallDataProvider extends AbstractInstallDataProvider
 {
-    private static final Logger LOGGER = Logger.getLogger(GUIInstallDataProvider.class.getName());
+    private static final Logger logger = Logger.getLogger(GUIInstallDataProvider.class.getName());
+
     private static Map<String, String> substanceVariants = new HashMap<String, String>();
     private static Map<String, String> looksVariants = new HashMap<String, String>();
 
@@ -79,7 +85,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         loadGUIInstallData(guiInstallData);
         loadInstallerRequirements(guiInstallData);
         loadDynamicVariables(guiInstallData);
-        loadDynamicConditions(guiInstallData);        
+        loadDynamicConditions(guiInstallData);
         loadDefaultLocale(guiInstallData);
         // Load custom langpack if exist.
         addCustomLangpack(guiInstallData);
@@ -143,7 +149,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
             }
             catch (NumberFormatException ex)
             {      //error parsing value; log message
-                Debug.log("Error parsing guiprefs 'labelFontSize' value (" +
+                logger.warning("Error parsing guiprefs 'labelFontSize' value (" +
                         valStr + ')');
             }
         }
@@ -274,7 +280,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
             {
                 variant = substanceVariants.get("default");
             }
-            LOGGER.info("Using laf " + variant);
+            logger.info("Using laf " + variant);
             UIManager.setLookAndFeel(variant);
             UIManager.getLookAndFeelDefaults().put("ClassLoader", JPanel.class.getClassLoader());
 
@@ -290,9 +296,9 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         ClassLoader classLoader = (cl != null) ? cl : JPanel.class.getClassLoader();
         Class aClass = (Class) defaults.get(uiClassName);
 
-        LOGGER.info("PanelUI : " + uiClassName);
-        LOGGER.info("ClassLoader : " + classLoader);
-        LOGGER.info("Cached class : " + aClass);
+        logger.info("PanelUI : " + uiClassName);
+        logger.info("ClassLoader : " + classLoader);
+        logger.info("Cached class : " + aClass);
         if (aClass != null)
         {
             return;
@@ -300,23 +306,23 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
 
         if (classLoader == null)
         {
-            LOGGER.info("Using system loader to load " + uiClassName);
+            logger.info("Using system loader to load " + uiClassName);
             aClass = Class.forName(uiClassName, true, Thread.currentThread().getContextClassLoader());
-            LOGGER.info("Done loading");
+            logger.info("Done loading");
         }
         else
         {
-            LOGGER.info("Using custom loader to load " + uiClassName);
+            logger.info("Using custom loader to load " + uiClassName);
             aClass = classLoader.loadClass(uiClassName);
-            LOGGER.info("Done loading");
+            logger.info("Done loading");
         }
         if (aClass != null)
         {
-            LOGGER.info("Loaded class : " + aClass.getName());
+            logger.info("Loaded class : " + aClass.getName());
         }
         else
         {
-            LOGGER.info("Couldn't load the class");
+            logger.info("Couldn't load the class");
         }
     }
 

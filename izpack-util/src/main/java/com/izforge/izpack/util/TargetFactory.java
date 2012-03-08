@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2002 Elmar Grom
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,6 +26,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*---------------------------------------------------------------------------*/
 
@@ -42,9 +44,9 @@ import java.util.StringTokenizer;
 /*---------------------------------------------------------------------------*/
 /*
  * $ @design
- * 
+ *
  * Reports actually observed on some systems:
- * 
+ *
  * OS OS Name Version Architecture Native Report (ver)
  * ----------------------------------------------------------------------------------------------------------
  * Windows 95 Windows 98 Windows 98 4.10 x86 Windows 98 [Version 4.10.1998] Windows-ME Windows Me
@@ -52,11 +54,12 @@ import java.util.StringTokenizer;
  * Windows NT Version 4.0 Windows 2000 Windows 2000 5.0 x86 Microsoft Windows 2000 [Version
  * 5.00.2195] Windows-XP Windows 2000 5.1 x86 Microsoft Windows XP [Version 5.1.2600] Windows-XP
  * Windows XP 5.1 x86 Mac Mac OS-X Linux Linux 2.4.7-10 i386 Linux Linux 2.4.18-4GB i386 Solaris
- * 
+ *
  * ---------------------------------------------------------------------------
  */
 public class TargetFactory
 {
+    private static final Logger logger = Logger.getLogger(TargetFactory.class.getName());
 
     // ------------------------------------------------------------------------
     // Constant Definitions
@@ -247,9 +250,9 @@ public class TargetFactory
     /*--------------------------------------------------------------------------*/
     /*
      * $ @design
-     * 
+     *
      * Identify the following about the target system: - OS type - architecture - version
-     * 
+     *
      * and store this information for later use.
      * --------------------------------------------------------------------------
      */
@@ -341,9 +344,9 @@ public class TargetFactory
         try
         {
             result = factory.create(clazz);
-        } catch (Exception exception)
+        } catch (Exception e)
         {
-            Debug.log(exception);
+            logger.log(Level.WARNING, e.getMessage(), e);
             result = (T) makeObject(clazz.getName());
         }
         return result;
@@ -431,14 +434,14 @@ public class TargetFactory
         try
         {
             actualName = packageName + CLASS_PREFIX[os] + CLASS_FLAVOR_PREFIX[osFlavor] + className;
-            Class temp = Class.forName(actualName);
+            Class<?> temp = Class.forName(actualName);
             return temp.newInstance();
         }
         catch (Throwable exception1)
         {
             try
             {
-                Class temp = Class.forName(packageName + CLASS_PREFIX[os] + className);
+                Class<?> temp = Class.forName(packageName + CLASS_PREFIX[os] + className);
                 return temp.newInstance();
             }
             catch (Throwable exception2)
@@ -446,7 +449,7 @@ public class TargetFactory
                 try
                 {
                     actualName = name;
-                    Class temp = Class.forName(actualName);
+                    Class<?> temp = Class.forName(actualName);
                     return temp.newInstance();
                 }
                 catch (Throwable exception3)
@@ -470,11 +473,11 @@ public class TargetFactory
     /*--------------------------------------------------------------------------*/
     /*
      * $ @design
-     * 
+     *
      * Version numbers are assumed to be constructed as follows: - a list of one or more numbers,
      * separated by periods as in X.X.X. ... or periods and dashes as in X.X.X-Y. ... - the numbers
      * follow the decimal number system - the left most number is of highest significance
-     * 
+     *
      * The process compares each set of numbers, beginning at the most significant and working down
      * the ranks (this is working left to right). The process is stopped as soon as the pair of
      * numbers compaired is not equal. If the numer for the target system is higher, flase is
@@ -604,7 +607,7 @@ public class TargetFactory
     /*--------------------------------------------------------------------------*/
     /*
      * $ @design
-     * 
+     *
      * First try to read a path string from a resource file. This approach allows the user to
      * customize the default install path that is suggested to the end user by IzPack. There are a
      * number of choices for the naming of this resource, so we need to go through a few steps in

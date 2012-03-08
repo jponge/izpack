@@ -1,12 +1,13 @@
 package com.izforge.izpack.panels.licence;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.util.Console;
 import com.izforge.izpack.installer.console.AbstractTextPanelConsole;
-import com.izforge.izpack.util.Debug;
-
-import java.io.IOException;
+import com.izforge.izpack.util.Console;
 
 /**
  * Abstract panel for displaying license text to the console.
@@ -15,6 +16,7 @@ import java.io.IOException;
  */
 public abstract class AbstractLicensePanelConsole extends AbstractTextPanelConsole
 {
+    private static final Logger logger = Logger.getLogger(AbstractLicensePanelConsole.class.getName());
 
     /**
      * The resources.
@@ -44,9 +46,11 @@ public abstract class AbstractLicensePanelConsole extends AbstractTextPanelConso
         {
             result = resources.getTextResource(resourceName);
         }
-        catch (IOException exception)
+        catch (IOException e)
         {
-            Debug.error("Could not load the licence text for resource: " + resourceName);
+            logger.log(Level.WARNING,
+                    "Could not load the licence text for resource: " + resourceName,
+                    e);
         }
         return result;
     }

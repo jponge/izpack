@@ -5,7 +5,7 @@
  * http://izpack.codehaus.org/
  *
  * Copyright 2005,2009 Ivan SZKIBA
- * Copyright 2010,2011 Rene Krell
+ * Copyright 2010,2012 Rene Krell
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +24,15 @@ package com.izforge.izpack.util.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.config.base.Ini;
 
 public class SingleIniFileTask extends ConfigFileTask
 {
+    private static final Logger logger = Logger.getLogger(SingleIniFileTask.class.getName());
+
     @Override
     protected void readSourceConfigurable() throws Exception
     {
@@ -40,11 +42,11 @@ public class SingleIniFileTask extends ConfigFileTask
             {
                 if (!oldFile.exists())
                 {
-                    Debug.log("INI file " + oldFile.getAbsolutePath()
+                    logger.warning("INI file " + oldFile.getAbsolutePath()
                             + " to patch from could not be found, no patches will be applied");
                     return;
                 }
-                Debug.log("Loading INI file: " + oldFile.getAbsolutePath());
+                logger.fine("Loading INI file: " + oldFile.getAbsolutePath());
                 // Configuration file type must be the same as the target type
                 fromConfigurable = new Ini(this.oldFile);
             }
@@ -62,7 +64,7 @@ public class SingleIniFileTask extends ConfigFileTask
         {
             try
             {
-                Debug.log("Loading original configuration file: " + newFile.getAbsolutePath());
+                logger.fine("Loading original configuration file: " + newFile.getAbsolutePath());
                 configurable = new Ini(newFile);
             }
             catch (IOException ioe)
@@ -74,7 +76,7 @@ public class SingleIniFileTask extends ConfigFileTask
         {
             try
             {
-                Debug.log("Loading target configuration file: " + toFile.getAbsolutePath());
+                logger.fine("Loading target configuration file: " + toFile.getAbsolutePath());
                 configurable = new Ini(toFile);
             }
             catch (IOException ioe)
@@ -103,12 +105,12 @@ public class SingleIniFileTask extends ConfigFileTask
                     {
                         parent.mkdirs();
                     }
-                    Debug.log("Creating empty INI file: " + toFile.getAbsolutePath());
+                    logger.fine("Creating empty INI file: " + toFile.getAbsolutePath());
                     toFile.createNewFile();
                 }
                 else
                 {
-                    Debug.log("INI file " + toFile.getAbsolutePath()
+                    logger.warning("INI file " + toFile.getAbsolutePath()
                             + " did not exist and is not allowed to be created");
                     return;
                 }
@@ -127,7 +129,7 @@ public class SingleIniFileTask extends ConfigFileTask
         {
             if (!oldFile.delete())
             {
-                Debug.log("File " + oldFile + " could not be cleant up");
+                logger.warning("File " + oldFile + " could not be cleant up");
             }
         }
     }

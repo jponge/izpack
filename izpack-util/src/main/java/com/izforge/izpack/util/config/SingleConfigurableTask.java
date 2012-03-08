@@ -27,9 +27,9 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.config.SingleConfigurableTask.Entry.LookupType;
 import com.izforge.izpack.util.config.SingleConfigurableTask.Entry.Operation;
 import com.izforge.izpack.util.config.SingleConfigurableTask.Entry.Type;
@@ -43,10 +43,7 @@ import com.izforge.izpack.util.config.base.Reg;
 
 public abstract class SingleConfigurableTask implements ConfigurableTask
 {
-
-    /*
-     * Instance variables.
-     */
+    private static final Logger logger = Logger.getLogger(SingleConfigurableTask.class.getName());
 
     private boolean patchPreserveEntries = true;
 
@@ -55,6 +52,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
     private boolean patchResolveVariables = false;
 
     protected boolean createConfigurable = true;
+
     /*
      * ini4j settings
      */
@@ -184,6 +182,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
         createConfigurable = create;
     }
 
+    @Override
     public void execute() throws Exception
     {
         Config.getGlobal().setHeaderComment(headerComment);
@@ -202,7 +201,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
 
     private String getValueFromOptionMap(OptionMap map, String key, int index)
     {
-        return (String) (patchResolveVariables ?
+        return (patchResolveVariables ?
                 map.fetch(key, index)
                 : map.get(key, index));
     }
@@ -226,7 +225,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                             {
                                 // found in patch target and in patch using reqexp value lookup;
                                 // overwrite in each case at the original position
-                                Debug.log("Preserve option file entry \"" + key + "\"");
+                                logger.fine("Preserve option file entry \"" + key + "\"");
                                 ((Options) configurable).put(key, fromValue, i);
                                 found++;
                             }
@@ -253,13 +252,13 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
             }
         }
 
-        Debug.log("Patched " + found + " option file entries for key \"" + key + "\" found in original: " + fromValue);
+        logger.fine("Patched " + found + " option file entries for key \"" + key + "\" found in original: " + fromValue);
 
         if (found == 0)
         {
             // nothing existing to patch found in patch target
             // but force preserving of patch entry
-            Debug.log("Add option file entry for \"" + key + "\": " + fromValue);
+            logger.fine("Add option file entry for \"" + key + "\": " + fromValue);
             ((Options) configurable).add(key, fromValue);
         }
     }
@@ -279,7 +278,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                         case REGEXP:
                             if (origValue.matches(lookupValue))
                             {
-                                Debug.log("Remove option key \"" + key + "\"");
+                                logger.fine("Remove option key \"" + key + "\"");
                                 ((Options) configurable).remove(key, i);
                                 i--;
                             }
@@ -288,7 +287,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                         default:
                             if (origValue.equals(lookupValue))
                             {
-                                Debug.log("Remove option key \"" + key + "\"");
+                                logger.fine("Remove option key \"" + key + "\"");
                                 ((Options) configurable).remove(key, i);
                                 i--;
                             }
@@ -298,7 +297,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
             }
             else
             {
-                Debug.log("Remove option key \"" + key + "\"");
+                logger.fine("Remove option key \"" + key + "\"");
                 ((Options) configurable).remove(key);
                 i--;
             }
@@ -369,28 +368,28 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
             }
             else if (configurable instanceof Ini)
             {
-                Ini.Section fromSection = (Ini.Section) ((Ini) fromConfigurable).get(section);
-                Ini.Section toSection = (Ini.Section) ((Ini) configurable).get(section);
+                Ini.Section fromSection = ((Ini) fromConfigurable).get(section);
+                Ini.Section toSection = ((Ini) configurable).get(section);
                 if (fromSection != null)
                 {
                     if (toSection == null)
                     {
-                        Debug.log("Adding new INI section [" + section + "]");
+                        logger.fine("Adding new INI section [" + section + "]");
                         toSection = ((Ini) configurable).add(section);
                     }
                     if (toSection != null)
                     {
-                        String fromValue = (String) (patchResolveVariables ? fromSection
+                        String fromValue = (patchResolveVariables ? fromSection
                                 .fetch(key) : fromSection.get(key));
                         if (!toSection.containsKey(key))
                         {
-                            Debug.log("Preserve INI file entry \"" + key
+                            logger.fine("Preserve INI file entry \"" + key
                                     + "\" in section [" + section + "]: " + fromValue);
                             toSection.add(key, fromValue);
                         }
                         else
                         {
-                            Debug.log("Preserve INI file entry value for key \"" + key
+                            logger.fine("Preserve INI file entry value for key \"" + key
                                     + "\" in section [" + section + "]: " + fromValue);
                             toSection.put(key, fromValue);
                         }
@@ -399,28 +398,28 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
             }
             else if (configurable instanceof Reg)
             {
-                Reg.Key fromRegKey = (Reg.Key) ((Reg) fromConfigurable).get(section);
-                Reg.Key toRegKey = (Reg.Key) ((Reg) configurable).get(section);
+                Reg.Key fromRegKey = ((Reg) fromConfigurable).get(section);
+                Reg.Key toRegKey = ((Reg) configurable).get(section);
                 if (fromRegKey != null)
                 {
                     if (toRegKey == null)
                     {
-                        Debug.log("Adding new registry root key " + section);
+                        logger.fine("Adding new registry root key " + section);
                         toRegKey = ((Reg) configurable).add(section);
                     }
                     if (toRegKey != null)
                     {
-                        String fromValue = (String) (patchResolveVariables ? fromRegKey
+                        String fromValue = (patchResolveVariables ? fromRegKey
                                 .fetch(key) : fromRegKey.get(key));
                         if (!toRegKey.containsKey(key))
                         {
-                            Debug.log("Preserve registry value " + key + " under root key "
+                            logger.fine("Preserve registry value " + key + " under root key "
                                     + section + ": " + fromValue);
                             toRegKey.add(key, fromValue);
                         }
                         else
                         {
-                            Debug.log("Preserve registry data for value " + key
+                            logger.fine("Preserve registry data for value " + key
                                     + " in root key " + section + ": " + fromValue);
                             toRegKey.put(key, fromValue);
                         }
@@ -447,17 +446,17 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                 fromKeySet = ((Options) fromConfigurable).keySet();
                 for (String key : fromKeySet)
                 {
-                    String fromValue = (String) (patchResolveVariables ? ((Options) fromConfigurable)
+                    String fromValue = (patchResolveVariables ? ((Options) fromConfigurable)
                             .fetch(key)
                             : ((Options) fromConfigurable).get(key));
                     if (patchPreserveEntries && !toKeySet.contains(key))
                     {
-                        Debug.log("Preserve option file entry \"" + key + "\"");
+                        logger.fine("Preserve option file entry \"" + key + "\"");
                         ((Options) configurable).add(key, fromValue);
                     }
                     else if (patchPreserveValues && ((Options) configurable).keySet().contains(key))
                     {
-                        Debug.log("Preserve option value for key \"" + key + "\": \"" + fromValue
+                        logger.fine("Preserve option value for key \"" + key + "\": \"" + fromValue
                                 + "\"");
                         ((Options) configurable).put(key, fromValue);
                     }
@@ -471,9 +470,9 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                 {
                     if (sectionKeySet.contains(fromSectionKey))
                     {
-                        Ini.Section fromSection = (Ini.Section) ((Ini) fromConfigurable)
+                        Ini.Section fromSection = ((Ini) fromConfigurable)
                                 .get(fromSectionKey);
-                        Ini.Section toSection = (Ini.Section) ((Ini) configurable)
+                        Ini.Section toSection = ((Ini) configurable)
                                 .get(fromSectionKey);
                         fromKeySet = fromSection.keySet();
                         toKeySet = null;
@@ -482,20 +481,20 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                         {
                             if (toSection == null)
                             {
-                                Debug.log("Adding new INI section [" + fromSectionKey + "]");
+                                logger.fine("Adding new INI section [" + fromSectionKey + "]");
                                 toSection = ((Ini) configurable).add(fromSectionKey);
                             }
-                            String fromValue = (String) (patchResolveVariables ? fromSection
+                            String fromValue = (patchResolveVariables ? fromSection
                                     .fetch(fromKey) : fromSection.get(fromKey));
                             if (patchPreserveEntries && !toKeySet.contains(fromKey))
                             {
-                                Debug.log("Preserve INI file entry \"" + fromKey
+                                logger.fine("Preserve INI file entry \"" + fromKey
                                         + "\" in section [" + fromSectionKey + "]: " + fromValue);
                                 toSection.add(fromKey, fromValue);
                             }
                             else if (patchPreserveValues && toKeySet.contains(fromKey))
                             {
-                                Debug.log("Preserve INI file entry value for key \"" + fromKey
+                                logger.fine("Preserve INI file entry value for key \"" + fromKey
                                         + "\" in section [" + fromSectionKey + "]: " + fromValue);
                                 toSection.put(fromKey, fromValue);
                             }
@@ -520,20 +519,20 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                         {
                             if (toRegKey == null)
                             {
-                                Debug.log("Adding new registry root key " + fromRootKey);
+                                logger.fine("Adding new registry root key " + fromRootKey);
                                 toRegKey = ((Reg) configurable).add(fromRootKey);
                             }
-                            String fromValue = (String) (patchResolveVariables ? fromRegKey
+                            String fromValue = (patchResolveVariables ? fromRegKey
                                     .fetch(fromKey) : fromRegKey.get(fromKey));
                             if (patchPreserveEntries && !toKeySet.contains(fromKey))
                             {
-                                Debug.log("Preserve registry value " + fromKey + " under root key "
+                                logger.fine("Preserve registry value " + fromKey + " under root key "
                                         + fromRootKey + ": " + fromValue);
                                 toRegKey.add(fromKey, fromValue);
                             }
                             else if (patchPreserveValues && toKeySet.contains(fromKey))
                             {
-                                Debug.log("Preserve registry data for value " + fromKey
+                                logger.fine("Preserve registry data for value " + fromKey
                                         + " in root key " + fromRootKey + ": " + fromValue);
                                 toRegKey.put(fromKey, fromValue);
                             }
@@ -794,7 +793,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                             case REGEXP:
                                 if (origValue.matches(value))
                                 {
-                                    Debug.log("Set option value for key \"" + key + "\": \""
+                                    logger.fine("Set option value for key \"" + key + "\": \""
                                             + newValue + "\"");
                                     configurable.put(key, newValue, i);
                                     contains = true;
@@ -804,7 +803,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
                             default:
                                 if (origValue.equals(value))
                                 {
-                                    Debug.log("Set option value for key \"" + key + "\": \""
+                                    logger.fine("Set option value for key \"" + key + "\": \""
                                             + newValue + "\"");
                                     configurable.put(key, newValue, i);
                                     contains = true;
@@ -816,7 +815,7 @@ public abstract class SingleConfigurableTask implements ConfigurableTask
             }
             if (!contains)
             {
-                Debug.log("Set option value for key \"" + key + "\": \"" + newValue + "\"");
+                logger.fine("Set option value for key \"" + key + "\": \"" + newValue + "\"");
                 configurable.put(key, newValue);
             }
 

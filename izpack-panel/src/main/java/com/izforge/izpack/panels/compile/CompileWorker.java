@@ -21,6 +21,18 @@
 
 package com.izforge.izpack.panels.compile;
 
+import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
@@ -31,14 +43,8 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsConstraintHelper;
-
-import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
 
 /**
  * This class does alle the work for compiling sources.
@@ -54,6 +60,7 @@ import java.util.*;
  */
 public class CompileWorker implements Runnable
 {
+    private static final Logger logger = Logger.getLogger(CompileWorker.class.getName());
 
     /**
      * Compilation jobs
@@ -199,6 +206,7 @@ public class CompileWorker implements Runnable
      * <p/>
      * Can also be called directly if asynchronous processing is not desired.
      */
+    @Override
     public void run()
     {
         try
@@ -428,7 +436,7 @@ public class CompileWorker implements Runnable
             }
         }
 
-        Debug.trace("compilation finished.");
+        logger.fine("Compilation finished");
         return new CompileResult();
     }
 
@@ -504,7 +512,7 @@ public class CompileWorker implements Runnable
 
                 if (!found)
                 {
-                    Debug.trace("skipping job because pack " + name + " was not selected.");
+                    logger.fine("Skipping job because pack " + name + " was not selected.");
                     return null;
                 }
 
@@ -568,7 +576,7 @@ public class CompileWorker implements Runnable
      */
     private ArrayList<File> scanDirectory(File path)
     {
-        Debug.trace("scanning directory " + path.getAbsolutePath());
+        logger.fine("scanning directory " + path.getAbsolutePath());
 
         ArrayList<File> scan_result = new ArrayList<File>();
 
@@ -675,7 +683,7 @@ public class CompileWorker implements Runnable
          */
         public CompileResult perform(String compiler, ArrayList<String> arguments)
         {
-            Debug.trace("starting job " + this.name);
+            logger.fine("starting job " + this.name);
             // we have some maximum command line length - need to count
             int cmdline_len = 0;
 
@@ -739,7 +747,7 @@ public class CompileWorker implements Runnable
             {
                 String fpath = file.getAbsolutePath();
 
-                Debug.trace("processing " + fpath);
+                logger.fine("processing " + fpath);
 
                 // we add the file _first_ to the arguments to have a better
                 // chance to get something done if the command line is almost
@@ -752,7 +760,7 @@ public class CompileWorker implements Runnable
                 // start compilation if maximum command line length reached
                 if (!isEclipseCompiler && cmdline_len >= MAX_CMDLINE_SIZE)
                 {
-                    Debug.trace("compiling " + jobfiles);
+                    logger.fine("compiling " + jobfiles);
 
                     // display useful progress bar (avoid showing 100% while
                     // still compiling a lot)
@@ -878,7 +886,7 @@ public class CompileWorker implements Runnable
 
             }
 
-            Debug.trace("job " + this.name + " done (" + fileno + " files compiled)");
+            logger.fine("Job " + this.name + " done (" + fileno + " files compiled)");
 
             return new CompileResult();
         }
@@ -909,7 +917,7 @@ public class CompileWorker implements Runnable
                 // remove compiler name from argument list
                 final_cmdline.remove(0);
 
-                Class eclipseCompiler = Class.forName(ECLIPSE_COMPILER_CLASS);
+                Class<?> eclipseCompiler = Class.forName(ECLIPSE_COMPILER_CLASS);
 
                 Method compileMethod = eclipseCompiler.getMethod("main", new Class[]{String[].class});
 
@@ -919,7 +927,9 @@ public class CompileWorker implements Runnable
 
                 File _logfile = new File(this.idata.getInstallPath(), "compile-" + getName() + ".log");
 
-                if (Debug.isTRACE())
+                final boolean isTrace = LogManager.getLogManager().getLogger("").isLoggable(Level.FINE);
+
+                if (isTrace)
                 {
                     final_cmdline.add(0, _logfile.getPath());
                     final_cmdline.add(0, "-log");
@@ -949,7 +959,7 @@ public class CompileWorker implements Runnable
                         output[1] = errStream.toString();
                         error_count = ownStderr.getErrorCount();
                         // for debugging: write output to log files
-                        if (error_count > 0 || Debug.isTRACE())
+                        if (error_count > 0 || isTrace)
                         {
                             File _out = new File(_logfile.getPath() + ".stdout");
                             FileOutputStream _fout = new FileOutputStream(_out);
@@ -1046,7 +1056,7 @@ public class CompileWorker implements Runnable
             FileExecutor executor = new FileExecutor();
             String[] output = new String[2];
 
-            Debug.trace("checking whether \"" + compiler + " -help\" works");
+            logger.fine("checking whether \"" + compiler + " -help\" works");
 
             {
                 List<String> args = new ArrayList<String>();
@@ -1068,7 +1078,7 @@ public class CompileWorker implements Runnable
                 }
             }
 
-            Debug.trace("checking whether \"" + compiler + " -help +arguments\" works");
+            logger.fine("Checking whether \"" + compiler + " -help +arguments\" works");
 
             // used to collect the arguments for executing the compiler
             LinkedList<String> args = new LinkedList<String>(arguments);
@@ -1148,6 +1158,7 @@ public class CompileWorker implements Runnable
          * <p/>
          * {@inheritDoc}
          */
+        @Override
         public void println(String x)
         {
             if (x.startsWith("[completed "))
@@ -1160,9 +1171,11 @@ public class CompileWorker implements Runnable
                     int fileno = Integer.parseInt(fileno_str);
                     this.listener.progress(fileno, x);
                 }
-                catch (NumberFormatException _nfe)
+                catch (NumberFormatException e)
                 {
-                    Debug.log("could not parse eclipse compiler output: '" + x + "': " + _nfe.getMessage());
+                    logger.log(Level.WARNING,
+                            "Could not parse eclipse compiler output: '" + x + "': " + e.getMessage(),
+                            e);
                 }
             }
 
@@ -1176,6 +1189,7 @@ public class CompileWorker implements Runnable
          * <p/>
          * {@inheritDoc}
          */
+        @Override
         public void write(byte[] buf, int off, int len)
         {
             super.write(buf, off, len);
@@ -1222,6 +1236,7 @@ public class CompileWorker implements Runnable
          * <p/>
          * {@inheritDoc}
          */
+        @Override
         public void println(String x)
         {
             if (x.indexOf(". ERROR in ") > 0)
@@ -1239,6 +1254,7 @@ public class CompileWorker implements Runnable
          * <p/>
          * {@inheritDoc}
          */
+        @Override
         public void write(byte[] buf, int off, int len)
         {
             super.write(buf, off, len);
@@ -1410,6 +1426,7 @@ public class CompileWorker implements Runnable
         int jobSize;
         String lastFilename;
 
+        @Override
         int parse(byte[] buf, int off, int len)
         {
             super.init(buf, off, len);
@@ -1519,6 +1536,7 @@ public class CompileWorker implements Runnable
     {
         int errorCount;
 
+        @Override
         int parse(byte[] buf, int off, int len)
         {
             super.init(buf, off, len);
@@ -1538,11 +1556,6 @@ public class CompileWorker implements Runnable
                 }
             }
             while (true);
-        }
-
-        int getErrorCount()
-        {
-            return this.errorCount;
         }
     }
 }

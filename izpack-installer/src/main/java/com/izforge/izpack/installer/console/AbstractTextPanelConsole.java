@@ -1,11 +1,11 @@
 package com.izforge.izpack.installer.console;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.Console;
-import com.izforge.izpack.util.Debug;
-
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.util.Console;
 
 /**
  * Abstract console panel for displaying paginated text.
@@ -14,6 +14,8 @@ import java.util.StringTokenizer;
  */
 public abstract class AbstractTextPanelConsole extends AbstractPanelConsole
 {
+    private static final Logger logger = Logger.getLogger(AbstractTextPanelConsole.class.getName());
+
     /**
      * Runs the panel using the supplied properties.
      *
@@ -47,7 +49,7 @@ public abstract class AbstractTextPanelConsole extends AbstractPanelConsole
         }
         else
         {
-            Debug.error("No text to display");
+            logger.warning("No text to display");
             result = false;
         }
         return result && promptEndPanel(installData, console);

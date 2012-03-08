@@ -1,12 +1,13 @@
 package com.izforge.izpack.util.os;
 
-import com.izforge.izpack.util.Debug;
-
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public class WinSetupFileQueue extends WinSetupAPIBase
 {
+    private static final Logger logger = Logger.getLogger(WinSetupFileQueue.class.getName());
+
     private int reboot = 0;
 
     /**
@@ -143,15 +144,15 @@ public class WinSetupFileQueue extends WinSetupAPIBase
 
             if ((reboot & SPFILEQ_FILE_IN_USE) != 0)
             {
-                Debug.log("There are file operations pending");
+                logger.info("There are file operations pending");
             }
             if ((reboot & SPFILEQ_REBOOT_RECOMMENDED) != 0)
             {
-                Debug.log("System reboot is recommended");
+                logger.info("System reboot is recommended");
             }
             if ((reboot & SPFILEQ_REBOOT_IN_PROGRESS) != 0)
             {
-                Debug.log("System shutdown is already in progress");
+                logger.info("System shutdown is already in progress");
             }
         }
 

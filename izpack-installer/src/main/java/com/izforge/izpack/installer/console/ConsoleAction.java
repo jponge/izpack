@@ -1,5 +1,9 @@
 package com.izforge.izpack.installer.console;
 
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.Panel;
@@ -7,14 +11,11 @@ import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.Console;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.manager.DataValidatorFactory;
-import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.Console;
 import com.izforge.izpack.util.OsConstraintHelper;
-
-import java.util.List;
 
 /**
  * Console installer action.
@@ -23,6 +24,7 @@ import java.util.List;
  */
 abstract class ConsoleAction
 {
+    private static final Logger logger = Logger.getLogger(ConsoleAction.class.getName());
 
     /**
      * The panel console factory.
@@ -90,10 +92,10 @@ abstract class ConsoleAction
                         new VariableSubstitutorImpl(installData.getVariables()));
             }
         }
-        catch (Throwable exception)
+        catch (Throwable t)
         {
             result = false;
-            Debug.error(exception);
+            logger.log(Level.SEVERE, t.getMessage(), t);
         }
         if (!result && isInstall())
         {
@@ -131,18 +133,17 @@ abstract class ConsoleAction
         try
         {
             PanelConsole action = factory.create(panel);
-            Debug.log("Running panel " + panel.getClassName());
+            logger.info("Running panel " + panel.getClassName());
             result = run(panel, action, console);
         }
-        catch (Exception exception)
+        catch (Exception e)
         {
-            Debug.log("ERROR: console installation failed for panel " + panel.getClassName());
-            Debug.log(exception);
+            logger.log(Level.SEVERE, "Console installation failed for panel " + panel.getClassName(), e);
             result = false;
         }
         if (result)
         {
-            Debug.log("Panel: " + panel.getClassName() + " completed successfully");
+            logger.info("Panel: " + panel.getClassName() + " completed successfully");
         }
         return result;
     }
@@ -184,12 +185,12 @@ abstract class ConsoleAction
         if (!result)
         {
             // skip panel, if conditions for panel aren't met
-            Debug.trace("Skip panel with panelid=" + id);
+            logger.fine("Skip panel with panelid=" + id);
             // panel should be skipped, so we have to decrement panelnumber for skipping
         }
         else
         {
-            Debug.trace("Showing panel with panelid=" + id);
+            logger.fine("Showing panel with panelid=" + id);
         }
         return result;
     }

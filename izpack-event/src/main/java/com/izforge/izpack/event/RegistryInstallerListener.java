@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2004 Klaus Bartz
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,6 +41,7 @@ import com.izforge.izpack.util.helper.SpecHelper;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 /**
  * Installer custom action for handling registry entries on Windows. On Unix nothing will be done.
@@ -53,6 +54,7 @@ import java.util.StringTokenizer;
  */
 public class RegistryInstallerListener extends NativeInstallerListener implements CleanupClient
 {
+    private static final Logger logger = Logger.getLogger(RegistryInstallerListener.class.getName());
 
     /**
      * The name of the XML file that specifies the registry entries.
@@ -104,7 +106,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.izforge.izpack.compiler.InstallerListener#beforePacks(com.izforge.izpack.installer.AutomatedInstallData,
      * int, com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
@@ -119,7 +121,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
      * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
@@ -240,11 +242,11 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
         String packcondition = pack.getAttribute("condition");
         if (packcondition != null)
         {
-            Debug.trace("condition " + packcondition + " found for pack of registry entries.");
+            logger.fine("Condition \"" + packcondition + "\" found for pack of registry entries");
             if (!rules.isConditionTrue(packcondition))
             {
                 // condition not fulfilled, continue with next element.
-                Debug.trace("not fulfilled.");
+                logger.fine("Condition \"" + packcondition + "\" not true");
                 return;
             }
         }
@@ -260,11 +262,11 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             String condition = regEntry.getAttribute("condition");
             if (condition != null)
             {
-                Debug.trace("condition " + condition + " found for registry entry.");
+                logger.fine("Condition " + condition + " found for registry entry");
                 if (!rules.isConditionTrue(condition))
                 {
                     // condition not fulfilled, continue with next element.
-                    Debug.trace("not fulfilled.");
+                    logger.fine("Condition \"" + condition + "\" not true");
                     continue;
                 }
             }

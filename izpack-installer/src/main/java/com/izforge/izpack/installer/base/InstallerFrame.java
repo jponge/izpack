@@ -22,6 +22,30 @@
 
 package com.izforge.izpack.installer.base;
 
+import static com.izforge.izpack.api.GuiId.BUTTON_HELP;
+import static com.izforge.izpack.api.GuiId.BUTTON_NEXT;
+import static com.izforge.izpack.api.GuiId.BUTTON_PREV;
+import static com.izforge.izpack.api.GuiId.BUTTON_QUIT;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.KeyAdapter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseMotionAdapter;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.text.JTextComponent;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLWriter;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
@@ -43,32 +67,9 @@ import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.debugger.Debugger;
 import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
-import com.izforge.izpack.installer.unpacker.Unpacker;
+import com.izforge.izpack.installer.unpacker.UnpackerBase;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
-
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import javax.swing.text.JTextComponent;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.KeyAdapter;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseMotionAdapter;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static com.izforge.izpack.api.GuiId.BUTTON_HELP;
-import static com.izforge.izpack.api.GuiId.BUTTON_NEXT;
-import static com.izforge.izpack.api.GuiId.BUTTON_PREV;
-import static com.izforge.izpack.api.GuiId.BUTTON_QUIT;
 
 /**
  * The IzPack installer frame.
@@ -79,8 +80,9 @@ import static com.izforge.izpack.api.GuiId.BUTTON_QUIT;
  */
 public class InstallerFrame extends JFrame implements InstallerView
 {
-
     private static final long serialVersionUID = 3257852069162727473L;
+
+    private static final transient Logger logger = Logger.getLogger(InstallerFrame.class.getName());
 
     private static final String ICON_RESOURCE = "Installer.image";
 
@@ -93,7 +95,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      * Heading icon resource name.
      */
     private static final String HEADING_ICON_RESOURCE = "Heading.image";
-    private final static Logger LOGGER = Logger.getLogger(InstallerFrame.class.getName());
+
     /**
      * The language pack.
      */
@@ -286,7 +288,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         IzPanel panel_0 = (IzPanel) installdata.getPanels().get(0);
         panelsContainer.add(panel_0);
 
-        LOGGER.log(Level.INFO, "Building gui. The panel list to display is " + installdata.getPanels());
+        logger.fine("Building GUI. The panel list to display is " + installdata.getPanels());
 
         // We add the navigation buttons & labels
 
@@ -373,7 +375,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         }
         catch (Exception e)
         {
-            LOGGER.log(Level.WARNING, "Error when loading icon image", e);
+            logger.log(Level.WARNING, "Error when loading icon image", e);
             // ignore
         }
         getRootPane().setDefaultButton(nextButton);
@@ -508,7 +510,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     public void switchPanel(int oldIndex)
     {
-        LOGGER.log(Level.INFO, "Switching panel, old index is " + oldIndex);
+        logger.fine("Switching panel, old index is " + oldIndex);
         // refresh dynamic variables every time, a panel switch is done
         try
         {
@@ -516,7 +518,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         }
         catch (Exception e)
         {
-            Debug.trace("Refreshing dynamic variables failed, asking user whether to proceed.");
+            logger.fine("Refreshing dynamic variables failed, asking user whether to proceed.");
             StringBuffer msg = new StringBuffer();
             msg.append("<html>");
             msg.append("The following error occured during refreshing panel contents:<br>");
@@ -529,14 +531,14 @@ public class InstallerFrame extends JFrame implements InstallerView
             int selectedOption = JOptionPane.showOptionDialog(null, label, "Warning",
                     JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, optionValues,
                     optionValues[1]);
-            Debug.trace("Selected option: " + selectedOption);
+            logger.fine("Selected option: " + selectedOption);
             if (selectedOption == 0)
             {
-                Debug.trace("Continuing installation");
+                logger.fine("Continuing installation");
             }
             else
             {
-                Debug.trace("Exiting");
+                logger.fine("Exiting");
                 System.exit(1);
             }
         }
@@ -574,6 +576,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             SwingUtilities.invokeLater(new Runnable()
             {
 
+                @Override
                 public void run()
                 {
                     JButton cdb = null;
@@ -617,6 +620,7 @@ public class InstallerFrame extends JFrame implements InstallerView
                 SwingUtilities.invokeLater(new Runnable()
                 {
 
+                    @Override
                     public void run()
                     {
                         inFoc.requestFocusInWindow();
@@ -659,9 +663,9 @@ public class InstallerFrame extends JFrame implements InstallerView
             Log.getInstance().addDebugMessage("InstallerFrame.switchPanel: switched", null,
                     Log.PANEL_TRACE, null);
         }
-        catch (Exception err)
+        catch (Exception e)
         {
-            LOGGER.log(Level.SEVERE, "Error when switching panel", err);
+            logger.log(Level.SEVERE, "Error when switching panel", e);
         }
     }
 
@@ -763,7 +767,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     {
         // We set interrupt to all running Unpacker and wait 40 sec for maximum.
         // If interrupt is discarded (return value false), return immediately:
-        if (!Unpacker.interruptAll(40000))
+        if (!UnpackerBase.interruptAll(40000))
         {
             return;
         }
@@ -934,11 +938,11 @@ public class InstallerFrame extends JFrame implements InstallerView
             getRootPane().setDefaultButton(nextButton);
             if (this.getFocusOwner() != null)
             {
-                Debug.trace("Current focus owner: " + this.getFocusOwner().getName());
+                logger.fine("Current focus owner: " + this.getFocusOwner().getName());
             }
             if (!(getRootPane().getDefaultButton() == nextButton))
             {
-                Debug.trace("Next button not default button, setting...");
+                logger.fine("Next button not default button, setting...");
                 quitButton.setDefaultCapable(false);
                 prevButton.setDefaultCapable(false);
                 nextButton.setDefaultCapable(true);
@@ -976,7 +980,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         IzPanel panel = (IzPanel) installdata.getPanels().get(panelnumber);
         com.izforge.izpack.api.data.Panel panelmetadata = panel.getMetadata();
         String panelid = panelmetadata.getPanelid();
-        Debug.trace("Current Panel: " + panelid);
+        logger.fine("Current Panel: " + panelid);
         boolean canShow = false;
 
         refreshDynamicVariables();
@@ -984,14 +988,14 @@ public class InstallerFrame extends JFrame implements InstallerView
         if (panelmetadata.hasCondition())
         {
             canShow = rules.isConditionTrue(panelmetadata.getCondition());
-            Debug.log("Skipping panel " + panelid + " due to unmet condition " + panelmetadata.getCondition());
+            logger.fine("Skipping panel " + panelid + " due to unmet condition " + panelmetadata.getCondition());
         }
         else
         {
             if (!rules.canShowPanel(panelid, installdata.getVariables()))
             {
                 // skip panel, if conditions for panel aren't met
-                Debug.log("Can't show panel " + panelid);
+                logger.fine("Can't show panel " + panelid);
                 // panel should be skipped, so we have to decrement panelnumber for skipping
                 return false;
             }
@@ -1026,7 +1030,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     public void navigateNext(int startPanel, boolean doValidation)
     {
-        LOGGER.log(Level.INFO, "Navigate to next panel. Start panel is " + startPanel);
+        logger.fine("Navigate to next panel. Start panel is " + startPanel);
         if ((installdata.getCurPanelNumber() < installdata.getPanels().size() - 1))
         {
             // We must trasfer all fields into the variables before
@@ -1089,7 +1093,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             }
         }
         // Return the result
-        LOGGER.log(Level.INFO, "The next panel of " + startPanel + " is panel number " + res);
+        logger.fine("The next panel of " + startPanel + " is panel number " + res);
         return res;
     }
 
@@ -1192,6 +1196,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     class NavigationHandler implements ActionListener
     {
 
+        @Override
         public void actionPerformed(final ActionEvent e)
         {
             /*
@@ -1201,11 +1206,13 @@ public class InstallerFrame extends JFrame implements InstallerView
              */
             new Thread(new Runnable()
             {
+                @Override
                 public void run()
                 {
 
                     SwingUtilities.invokeLater(new Runnable()
                     {
+                        @Override
                         public void run()
                         {
                             blockGUI();
@@ -1243,6 +1250,7 @@ public class InstallerFrame extends JFrame implements InstallerView
          *
          * @param e The event.
          */
+        @Override
         public void actionPerformed(ActionEvent e)
         {
             showHelp();
@@ -1263,6 +1271,7 @@ public class InstallerFrame extends JFrame implements InstallerView
          * @param aComp the component to check
          * @return true if aComp is the block panel
          */
+        @Override
         protected boolean accept(Component aComp)
         {
             return aComp == getGlassPane();
@@ -1708,8 +1717,8 @@ public class InstallerFrame extends JFrame implements InstallerView
         }
         catch (Exception e)
         {
-            LOGGER.log(Level.SEVERE, "Error when refreshing variable", e);
-            Debug.trace("Refreshing dynamic variables failed, asking user whether to proceed.");
+            logger.log(Level.SEVERE, "Error when refreshing variable", e);
+            logger.fine("Refreshing dynamic variables failed, asking user whether to proceed.");
             StringBuffer msg = new StringBuffer();
             msg.append("<html>");
             msg.append("The following error occured during refreshing panel contents:<br>");
@@ -1722,14 +1731,14 @@ public class InstallerFrame extends JFrame implements InstallerView
             int selectedOption = JOptionPane.showOptionDialog(null, label, "Warning",
                     JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, optionValues,
                     optionValues[1]);
-            Debug.trace("Selected option: " + selectedOption);
+            logger.fine("Selected option: " + selectedOption);
             if (selectedOption == 0)
             {
-                Debug.trace("Continuing installation");
+                logger.fine("Continuing installation");
             }
             else
             {
-                Debug.trace("Exiting");
+                logger.fine("Exiting");
                 System.exit(1);
             }
         }
@@ -1837,7 +1846,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     private void confirmExit()
     {
-        if (Unpacker.isDiscardInterrupt() && interruptCount < MAX_INTERRUPT)
+        if (UnpackerBase.isDiscardInterrupt() && interruptCount < MAX_INTERRUPT)
         { // But we should not interrupt.
             interruptCount++;
             return;

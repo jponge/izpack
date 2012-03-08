@@ -4,7 +4,7 @@
  * http://izpack.org/
  * http://izpack.codehaus.org/
  *
- * Copyright 2010 Rene Krell
+ * Copyright 2010, 2012 René Krell
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,16 @@
 
 package com.izforge.izpack.event;
 
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.config.ConfigurableTask;
 
 
 public class ConfigurationActionTask
 {
+    private static final Logger logger = Logger.getLogger(ConfigurationActionTask.class.getName());
+
     private String condition;
     private ConfigurableTask task;
     private RulesEngine rules;
@@ -64,12 +67,12 @@ public class ConfigurationActionTask
     {
         if (condition == null || condition.trim().length() == 0 || rules.isConditionTrue(condition))
         {
-            Debug.trace("Executing configuration task class " + task.getClass().getName());
+            logger.fine("Executing configuration task class " + task.getClass().getName());
             this.task.execute();
         }
         else
         {
-            Debug.trace("Condition " + condition + " not met - skipping configuration task class " + task.getClass().getName());
+            logger.fine("Condition " + condition + " not met - skipping configuration task class " + task.getClass().getName());
         }
     }
 }

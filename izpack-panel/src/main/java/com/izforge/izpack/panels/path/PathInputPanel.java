@@ -21,6 +21,16 @@
 
 package com.izforge.izpack.panels.path;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
@@ -30,13 +40,8 @@ import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsVersion;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.*;
 
 /**
  * Base class for panels which asks for paths.
@@ -45,11 +50,9 @@ import java.io.*;
  */
 public class PathInputPanel extends IzPanel implements ActionListener
 {
-
-    /**
-     *
-     */
     private static final long serialVersionUID = 3257566217698292531L;
+
+    private static final transient Logger logger = Logger.getLogger(PathInputPanel.class.getName());
 
     /**
      * Flag whether the choosen path must exist or not
@@ -126,6 +129,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
      *
      * @param e The event.
      */
+    @Override
     public void actionPerformed(ActionEvent e)
     {
         Object source = e.getSource();
@@ -141,12 +145,13 @@ public class PathInputPanel extends IzPanel implements ActionListener
      *
      * @return Wether the panel has been validated or not.
      */
+    @Override
     public boolean isValidated()
     {
         String chosenPath = pathSelectionPanel.getPath();
         boolean ok = true;
 
-        boolean modifyinstallation = Boolean.valueOf(this.installData.getVariable(GUIInstallData.MODIFY_INSTALLATION));
+        boolean modifyinstallation = Boolean.valueOf(this.installData.getVariable(AutomatedInstallData.MODIFY_INSTALLATION));
         if (modifyinstallation)
         {
             // installation directory has to exist in a modification installation
@@ -472,7 +477,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
             }
             catch (IOException e)
             {
-                Debug.trace(e.toString());
+                logger.log(Level.WARNING, e.toString(), e);
                 return false;
             }
             return true;

@@ -24,6 +24,29 @@
 
 package com.izforge.izpack.panels.packs;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Pack;
@@ -36,23 +59,7 @@ import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.debugger.Debugger;
 import com.izforge.izpack.panels.imgpacks.ImgPacksPanelAutomationHelper;
 import com.izforge.izpack.panels.treepacks.PackValidator;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
-
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * The base class for Packs panels. It brings the common member and methods of the different packs
@@ -67,6 +74,9 @@ import java.util.Map;
 public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterface,
         ListSelectionListener
 {
+    private static final long serialVersionUID = -727171695900867059L;
+
+    private static final transient Logger logger = Logger.getLogger(PacksPanelBase.class.getName());
 
     // Common used Swing fields
     /**
@@ -156,9 +166,9 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             this.langpack.add(inputStream);
             this.debugger = parent.getDebugger();
         }
-        catch (Throwable exception)
+        catch (Throwable t)
         {
-            Debug.trace(exception);
+            logger.log(Level.WARNING, "Error loading language pack" + t.toString(), t);
         }
         // init the map
         computePacks(idata.getAvailablePacks());
@@ -188,45 +198,25 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      */
     abstract protected void createNormalLayout();
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.izforge.izpack.panels.packs.PacksPanelInterface#getLangpack()
-     */
-
+    @Override
     public LocaleDatabase getLangpack()
     {
         return (langpack);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.izforge.izpack.panels.packs.PacksPanelInterface#getBytes()
-     */
-
+    @Override
     public long getBytes()
     {
         return bytes;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.izforge.izpack.panels.packs.PacksPanelInterface#setBytes(int)
-     */
-
+    @Override
     public void setBytes(long bytes)
     {
         this.bytes = bytes;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.izforge.izpack.panels.packs.PacksPanelInterface#showSpaceRequired()
-     */
-
+    @Override
     public void showSpaceRequired()
     {
         if (spaceLabel != null)
@@ -235,12 +225,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.izforge.izpack.panels.packs.PacksPanelInterface#showFreeSpace()
-     */
-
+    @Override
     public void showFreeSpace()
     {
         if (IoHelper.supported("getFreeSpace") && freeSpaceLabel != null)
@@ -265,6 +250,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      *
      * @return true if the needed space is less than the free space, else false
      */
+    @Override
     public boolean isValidated()
     {
         if (IoHelper.supported("getFreeSpace") && freeBytes >= 0 && freeBytes <= bytes)
@@ -327,17 +313,13 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      *
      * @param panelRoot The XML tree to write the installDataGUI in.
      */
+    @Override
     public void makeXMLData(IXMLElement panelRoot)
     {
         new ImgPacksPanelAutomationHelper().makeXMLData(this.installData, panelRoot);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
-     */
-
+    @Override
     public void valueChanged(ListSelectionEvent e)
     {
         int selectedRow = packsTable.getSelectedRow();
@@ -614,12 +596,18 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * Called when the panel becomes active. If a derived class implements this method also, it is
      * recomanded to call this method with the super operator first.
      */
+    @Override
     public void panelActivate()
     {
         try
         {
             packsModel = new PacksModel(this, installData, rules)
             {
+                /**
+                 *
+                 */
+                private static final long serialVersionUID = -8566131431416593277L;
+
                 @Override
                 public boolean isCellEditable(int rowIndex, int columnIndex)
                 {
@@ -672,12 +660,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         packsTable.setRowSelectionInterval(0, 0);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.izforge.izpack.installer.IzPanel#getSummaryBody()
-     */
-
+    @Override
     public String getSummaryBody()
     {
         StringBuffer retval = new StringBuffer(256);
@@ -724,6 +707,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             checkbox.setHorizontalAlignment(CENTER);
         }
 
+        @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                                                        boolean isSelected, boolean hasFocus, int row, int column)
         {
@@ -765,6 +749,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             return 13;
         }
 
+        @Override
         public void paintIcon(Component component, Graphics graphics, int x, int y)
         {
             ButtonModel model = ((JCheckBox) component).getModel();
@@ -869,11 +854,13 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             graphics.drawLine(x + (controlSize - 4) - 4, y + 4 + 4, x + (controlSize - 4) - 4 - 2, y + 4 + 4 - 2);
         }
 
+        @Override
         public int getIconWidth()
         {
             return getControlSize();
         }
 
+        @Override
         public int getIconHeight()
         {
             return getControlSize();
@@ -887,6 +874,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
          */
         private static final long serialVersionUID = -9089892183236584242L;
 
+        @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                                                        boolean isSelected, boolean hasFocus, int row, int column)
         {
@@ -925,6 +913,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
     }
 
+    @Override
     public Debugger getDebugger()
     {
         return this.debugger;

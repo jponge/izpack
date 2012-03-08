@@ -21,10 +21,11 @@
 
 package com.izforge.izpack.core.rules.process;
 
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.util.Debug;
 
 /**
  * Checks to see whether the user who is running the installer is the same as the user who should be
@@ -36,6 +37,9 @@ import com.izforge.izpack.util.Debug;
 public class UserCondition extends Condition
 {
     private static final long serialVersionUID = -2076347348048202718L;
+
+    private static final transient Logger logger = Logger.getLogger(UserCondition.class.getName());
+
     private String requiredUsername;
 
     public UserCondition(String requiredUsername)
@@ -52,7 +56,7 @@ public class UserCondition extends Condition
         boolean result = false;
         if (this.requiredUsername == null)
         {
-            Debug.log("Expected user name not set in user condition. Condition will return false.");
+            logger.warning("Condition \"" + getId() + "\": Expected user name not set, condition will return false");
         }
         else
         {
@@ -63,7 +67,7 @@ public class UserCondition extends Condition
             }
             else
             {
-                Debug.log("Non-existing or empty system property user.name. Condition will return false.");
+                logger.warning("Condition \"" + getId() + "\": Non-existing or empty system property user.name, condition will return false.");
             }
         }
         return result;

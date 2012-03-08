@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2005 Klaus Bartz
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,8 +21,10 @@
 
 package com.izforge.izpack.core.os;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.Debug;
 
 /*---------------------------------------------------------------------------*/
 
@@ -35,6 +37,7 @@ import com.izforge.izpack.util.Debug;
 /*---------------------------------------------------------------------------*/
 public class OSClassHelper
 {
+    private static final Logger logger = Logger.getLogger(OSClassHelper.class.getName());
 
     protected AutomatedInstallData installdata;
 
@@ -68,23 +71,23 @@ public class OSClassHelper
         }
         catch (InstantiationException e)
         {
-            e.printStackTrace();
+            logger.log(Level.WARNING, "", e);
         }
         catch (IllegalAccessException e)
         {
-            e.printStackTrace();
+            logger.log(Level.WARNING, "", e);
         }
         catch (ClassNotFoundException e)
         {
-            e.printStackTrace();
+            logger.log(Level.WARNING, "", e);
             // Do nothing, class not bound.
         }
-        catch (Exception e4)
+        catch (Exception e)
         {   // If the native lib is not found an unqualified Exception will be raised.
-            Debug.trace("Ctor OSClassHelper for " + className + ": worker not available (" + e4.getMessage() + ").");
+            logger.warning("Ctor OSClassHelper for " + className + ": worker not available (" + e.getMessage() + ")");
             return;
         }
-        Debug.trace("Ctor OSClassHelper for " + className + " is good: " + good());
+        logger.fine("Ctor OSClassHelper for " + className + " is good: " + good());
 
     }
 

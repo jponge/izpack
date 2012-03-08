@@ -22,16 +22,16 @@
 
 package com.izforge.izpack.panels.userinput;
 
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.automation.PanelAutomation;
-import com.izforge.izpack.util.Debug;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Functions to support automated usage of the UserInputPanel
@@ -41,6 +41,7 @@ import java.util.Map;
  */
 public class UserInputPanelAutomationHelper implements PanelAutomation
 {
+    private static final Logger logger = Logger.getLogger(UserInputPanelAutomationHelper.class.getName());
 
     // ------------------------------------------------------
     // automatic script section keys
@@ -89,6 +90,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
      * @param idata     The installation installDataGUI.
      * @param panelRoot The XML root element of the panels blackbox tree.
      */
+    @Override
     public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot)
     {
         IXMLElement userInput;
@@ -121,6 +123,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
      * @param panelRoot The XML root element of the panels blackbox tree.
      * @throws InstallerException if some elements are missing.
      */
+    @Override
     public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException
     {
         IXMLElement userInput;
@@ -163,7 +166,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
                 // ignore
             }
 
-            Debug.trace("UserInputPanel: setting variable " + variable + " to " + value);
+            logger.fine("Setting variable " + variable + " to " + value);
             idata.setVariable(variable, value);
         }
     }

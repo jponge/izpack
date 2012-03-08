@@ -21,10 +21,9 @@
 
 package com.izforge.izpack.event;
 
-import com.izforge.izpack.util.Debug;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * This class contains data and 'perform' logic for configuration action listeners.
@@ -34,6 +33,8 @@ import java.util.List;
 public class ConfigurationAction extends ActionBase
 {
     private static final long serialVersionUID = 3258131345250005557L;
+
+    private static final transient Logger logger = Logger.getLogger(ConfigurationAction.class.getName());
 
     public static final String CONFIGACTIONS = "configurationactions";
     public static final String CONFIGACTION = "configurationaction";
@@ -58,7 +59,7 @@ public class ConfigurationAction extends ActionBase
      */
     public void performInstallAction() throws Exception
     {
-        Debug.trace("Found " + actionTasks.size() + " configuration tasks");
+        logger.fine("Found " + actionTasks.size() + " configuration tasks");
         for (ConfigurationActionTask task : actionTasks)
         {
             task.execute();

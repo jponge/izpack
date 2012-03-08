@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyrght 2008 Patrick Zbinden.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,26 +21,33 @@
 
 package com.izforge.izpack.installer.base;
 
-import com.izforge.izpack.util.Debug;
+import static java.awt.Desktop.getDesktop;
 
-import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-import java.awt.*;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import static java.awt.Desktop.getDesktop;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JEditorPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 
 /**
  * Common HTML Help Window (modal)
  */
 public class HelpWindow extends JDialog implements HyperlinkListener, ActionListener
 {
-
     private static final long serialVersionUID = -357544689286217809L;
+
+    private static final Logger logger = Logger.getLogger(HelpWindow.class.getName());
 
     private JPanel contentPane = null;
 
@@ -110,7 +117,7 @@ public class HelpWindow extends JDialog implements HyperlinkListener, ActionList
             }
             catch (java.lang.Throwable e)
             {
-                Debug.log(e.getLocalizedMessage());
+                logger.log(Level.WARNING, e.getMessage(), e);
             }
         }
         return htmlHelp;
@@ -126,7 +133,7 @@ public class HelpWindow extends JDialog implements HyperlinkListener, ActionList
             }
             catch (java.lang.Throwable e)
             {
-                Debug.log(e.getLocalizedMessage());
+                logger.log(Level.WARNING, e.getMessage(), e);
             }
         }
         return scrollPane;
@@ -149,12 +156,13 @@ public class HelpWindow extends JDialog implements HyperlinkListener, ActionList
             }
             catch (java.lang.Throwable e)
             {
-                Debug.log(e.getLocalizedMessage());
+                logger.log(Level.WARNING, e.getMessage(), e);
             }
         }
         return closeButton;
     }
 
+    @Override
     public void hyperlinkUpdate(HyperlinkEvent e)
     {
         try
@@ -162,21 +170,21 @@ public class HelpWindow extends JDialog implements HyperlinkListener, ActionList
             if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
             {
                 if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-    				String url = e.getURL().toString();
-    				if (url.startsWith("#"))
+                    String url = e.getURL().toString();
+                    if (url.startsWith("#"))
                     {
-    					getHtmlHelp().setPage(e.getURL());
-    				}
+                        getHtmlHelp().setPage(e.getURL());
+                    }
                     else
                     {
-    					getDesktop().browse(e.getURL().toURI());
-    				}
-    			}
+                        getDesktop().browse(e.getURL().toURI());
+                    }
+                }
             }
         }
-        catch (Exception err)
+        catch (Exception ex)
         {
-            Debug.log(err);
+            logger.log(Level.WARNING, ex.getMessage(), ex);
         }
     }
 
@@ -195,11 +203,12 @@ public class HelpWindow extends JDialog implements HyperlinkListener, ActionList
         }
         catch (IOException e)
         {
-            Debug.log(e.getLocalizedMessage());
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
         setVisible(true);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e)
     {
         // Close button pressed

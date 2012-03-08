@@ -1,15 +1,15 @@
 /*
  * IzPack - Copyright 2001-2011 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/ http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2011 Tim Anderson
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -20,8 +20,13 @@ package com.izforge.izpack.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.*;
-
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Factory for constructing platform specific implementation implementations of interfaces or classes.
@@ -62,6 +67,7 @@ import java.util.*;
  */
 public class DefaultTargetPlatformFactory implements TargetPlatformFactory
 {
+    private static final Logger logger = Logger.getLogger(DefaultTargetPlatformFactory.class.getName());
 
     /**
      * Map of interfaces to their corresponding platform implementations.
@@ -95,15 +101,15 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
                 {
                     add(url);
                 }
-                catch (IOException exception)
+                catch (IOException e)
                 {
-                    Debug.log(exception);
+                    logger.log(Level.WARNING, e.getMessage(), e);
                 }
             }
         }
-        catch (IOException exception)
+        catch (IOException e)
         {
-            Debug.log(exception);
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
@@ -114,6 +120,7 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
      * @return the instance for the specified platform
      * @throws Exception for any error
      */
+    @Override
     public <T> T create(Class<T> clazz) throws Exception
     {
         return create(clazz, platforms.getCurrentPlatform());
@@ -127,6 +134,7 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
      * @return the instance for the specified platform
      * @throws Exception for any error
      */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T create(Class<T> clazz, Platform platform) throws Exception
     {
@@ -165,7 +173,7 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
             throw new IllegalStateException("No implementation registered for class=" + clazz.getName()
                     + " and platform=" + platform);
         }
-        Class impl = Class.forName(implName);
+        Class<?> impl = Class.forName(implName);
         if (clazz.isAssignableFrom(impl))
         {
             return (T) impl.newInstance();
@@ -360,7 +368,7 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
          */
         protected void warning(String message)
         {
-            Debug.log("TargetPlatformFactory: " + message);
+            logger.warning(message);
         }
 
         /**

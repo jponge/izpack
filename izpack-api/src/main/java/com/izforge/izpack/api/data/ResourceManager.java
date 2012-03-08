@@ -21,10 +21,6 @@
 
 package com.izforge.izpack.api.data;
 
-import com.izforge.izpack.api.exception.IzPackException;
-import com.izforge.izpack.api.exception.ResourceNotFoundException;
-
-import javax.swing.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +30,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
+
+import javax.swing.ImageIcon;
+
+import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.api.exception.ResourceNotFoundException;
 
 /**
  * With this ResourceManager you are able to get resources from the jar file.
@@ -51,7 +52,6 @@ import java.util.logging.Logger;
  */
 public class ResourceManager
 {
-
     private final static Logger LOGGER = Logger.getLogger(ResourceManager.class.getName());
 
     /**
@@ -184,17 +184,6 @@ public class ResourceManager
         // + this.resourceBasePath + resource + "' AND '" + this.resourceBasePath + resource
         // + localeSuffix + "'");
 
-    }
-
-    private boolean resourceExists(String resourcePath)
-    {
-        boolean result = true;
-        InputStream in = ResourceManager.class.getResourceAsStream(resourcePath);
-        if (in == null)
-        {
-            result = false;
-        }
-        return result;
     }
 
     /**

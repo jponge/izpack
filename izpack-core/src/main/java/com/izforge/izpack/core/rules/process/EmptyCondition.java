@@ -26,13 +26,13 @@ import java.io.File;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorBase;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
-import com.izforge.izpack.util.Debug;
 
 /**
  * This condition checks if a certain type is empty
@@ -40,6 +40,8 @@ import com.izforge.izpack.util.Debug;
 public class EmptyCondition extends Condition
 {
     private static final long serialVersionUID = -4626906695822723409L;
+
+    private static final transient Logger logger = Logger.getLogger(EmptyCondition.class.getName());
 
     private ContentType contentType;
     private String content;
@@ -99,7 +101,7 @@ public class EmptyCondition extends Condition
                 break;
 
             default:
-                Debug.error("Illegal content type '"+contentType.getAttribute()+"' of ExistsCondition");
+                logger.warning("Illegal content type '"+contentType.getAttribute()+"' of ExistsCondition");
                 break;
         }
         return result;

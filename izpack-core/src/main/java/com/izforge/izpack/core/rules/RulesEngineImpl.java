@@ -22,8 +22,13 @@
 package com.izforge.izpack.core.rules;
 
 import java.io.OutputStream;
-import java.util.*;
-import java.util.logging.Level;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
@@ -46,7 +51,6 @@ import com.izforge.izpack.core.rules.logic.XorCondition;
 import com.izforge.izpack.core.rules.process.JavaCondition;
 import com.izforge.izpack.core.rules.process.PackselectionCondition;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
-import com.izforge.izpack.util.Debug;
 
 
 /**
@@ -56,7 +60,7 @@ import com.izforge.izpack.util.Debug;
  */
 public class RulesEngineImpl implements RulesEngine
 {
-    private static final Logger LOGGER = Logger.getLogger(RulesEngineImpl.class.getName());
+    private static final Logger logger = Logger.getLogger(RulesEngineImpl.class.getName());
 
     private static final long serialVersionUID = 3966346766966632860L;
 
@@ -91,15 +95,15 @@ public class RulesEngineImpl implements RulesEngine
     }
 
     /**
-     * initializes builtin conditions like os conditions and package conditions
+     * initializes built-in conditions like os conditions and package conditions
      */
     private void initStandardConditions()
     {
-        Debug.trace("RulesEngine.initStandardConditions()");
+        logger.fine("Initializing built-in conditions");
         initOsConditions();
         if ((installdata != null) && (installdata.getAllPacks() != null))
         {
-            Debug.trace("Initializing builtin conditions for packs.");
+            logger.fine("Initializing built-in conditions for packs");
             for (Pack pack : installdata.getAllPacks())
             {
                 if (pack.id != null)
@@ -111,13 +115,14 @@ public class RulesEngineImpl implements RulesEngine
                     packselcond.setPackid(pack.id);
                     conditionsmap.put(packselcond.getId(), packselcond);
 
-                    Debug.trace("Pack.getCondition(): " + pack.getCondition() + " for pack "
-                            + pack.id);
-                    if ((pack.getCondition() != null) && pack.getCondition().length() > 0)
+                    String condition = pack.getCondition();
+                    logger.fine("Checking pack condition \"" + condition + "\" for pack \""
+                            + pack.id + "\"");
+                    if ((condition != null) && !condition.isEmpty())
                     {
-                        Debug.trace("Adding pack condition " + pack.getCondition() + " for pack "
-                                + pack.id);
-                        packconditions.put(pack.id, pack.getCondition());
+                        logger.fine("Adding pack condition \"" + condition + "\" for pack \""
+                                + pack.id + "\"");
+                        packconditions.put(pack.id, condition);
                     }
                 }
             }
@@ -197,7 +202,7 @@ public class RulesEngineImpl implements RulesEngine
                 {
                     condid = conditionclassname + "-"
                              + UUID.randomUUID().toString();
-                    Debug.trace("Random condition id " + condid + " generated");
+                    logger.fine("Random condition id " + condid + " generated");
                 }
                 container.addComponent(condid, conditionclass);
                 result = (Condition) container.getComponent(condid);
@@ -236,7 +241,7 @@ public class RulesEngineImpl implements RulesEngine
     {
         if (conditionsspec == null)
         {
-            Debug.trace("No specification for conditions found.");
+            logger.fine("No conditions specification found");
             return;
         }
         if (conditionsspec.hasChildren())
@@ -464,7 +469,7 @@ public class RulesEngineImpl implements RulesEngine
                     // not-condition
                     if (index > 0)
                     {
-                        Debug.trace("error: ! operator only allowed at position 0");
+                        logger.warning("! operator only allowed at position 0");
                     }
                     else
                     {
@@ -500,7 +505,7 @@ public class RulesEngineImpl implements RulesEngine
         {
             return isConditionTrue(cond, installData);
         }
-        LOGGER.warning("Condition " + id + " not found");
+        logger.warning("Condition " + id + " not found");
         return false;
     }
 
@@ -526,7 +531,7 @@ public class RulesEngineImpl implements RulesEngine
         {
             return isConditionTrue(cond);
         }
-        LOGGER.warning("Condition " + id + " not found");
+        logger.warning("Condition " + id + " not found");
         return false;
     }
 
@@ -538,7 +543,7 @@ public class RulesEngineImpl implements RulesEngine
             cond.setInstalldata(this.installdata);
         }
         boolean value = cond.isTrue();
-        LOGGER.log(Level.FINER, "Condition " + cond.getId() + ": " + Boolean.toString(value));
+        logger.fine("Condition " + cond.getId() + ": " + Boolean.toString(value));
         return value;
     }
 
@@ -553,19 +558,16 @@ public class RulesEngineImpl implements RulesEngine
     @Override
     public boolean canShowPanel(String panelid, Properties variables)
     {
-        Debug.trace("can show panel with id " + panelid + " ?");
         if (!this.panelconditions.containsKey(panelid))
         {
-            Debug.trace("no condition, show panel");
+            logger.fine("Panel " + panelid + " unconditionally activated");
             return true;
         }
-        Debug.trace("there is a condition");
         Condition condition = getCondition(this.panelconditions.get(panelid));
-        if (condition != null)
-        {
-            return condition.isTrue();
-        }
-        return false;
+        boolean b = condition.isTrue();
+        logger.fine("Panel " + panelid + ": activation depends on condition "
+        + condition.getId() + " -> " + b);
+        return b;
     }
 
     /**
@@ -583,19 +585,16 @@ public class RulesEngineImpl implements RulesEngine
         {
             return true;
         }
-        Debug.trace("can install pack with id " + packid + "?");
         if (!this.packconditions.containsKey(packid))
         {
-            Debug.trace("no condition, can install pack");
+            logger.fine("Package " + packid + " unconditionally installable");
             return true;
         }
-        Debug.trace("there is a condition");
         Condition condition = getCondition(this.packconditions.get(packid));
-        if (condition != null)
-        {
-            return condition.isTrue();
-        }
-        return false;
+        boolean b = condition.isTrue();
+        logger.fine("Package " + packid + ": installation depends on condition "
+        + condition.getId() + " -> " + b);
+        return b;
     }
 
     /**
@@ -608,15 +607,14 @@ public class RulesEngineImpl implements RulesEngine
     @Override
     public boolean canInstallPackOptional(String packid, Properties variables)
     {
-        Debug.trace("can install pack optional with id " + packid + "?");
         if (!this.optionalpackconditions.containsKey(packid))
         {
-            Debug.trace("not in optionalpackconditions.");
+            logger.fine("Package " + packid + " unconditionally installable");
             return false;
         }
         else
         {
-            Debug.trace("optional install possible");
+            logger.fine("Package " + packid + " optional installation possible");
             return true;
         }
     }
@@ -629,18 +627,19 @@ public class RulesEngineImpl implements RulesEngine
     {
         if (condition != null)
         {
-            if (conditionsmap.containsKey(condition.getId()))
+            String id = condition.getId();
+            if (conditionsmap.containsKey(id))
             {
-                Debug.error("Condition already registered.");
+                logger.warning("Condition " + id + " already registered");
             }
             else
             {
-                conditionsmap.put(condition.getId(), condition);
+                conditionsmap.put(id, condition);
             }
         }
         else
         {
-            Debug.error("Cannot add condition. Condition was null.");
+            logger.warning("Could not add condition, was null");
         }
     }
 
@@ -656,7 +655,7 @@ public class RulesEngineImpl implements RulesEngine
             condition.makeXMLData(conditionEl);
             conditionsel.addChild(conditionEl);
         }
-        Debug.trace("Writing generated conditions specification.");
+        logger.fine("Writing generated conditions specification");
         try
         {
             xmlOut.write(conditionsel);

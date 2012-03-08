@@ -29,12 +29,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.jdom.Element;
 
+import com.izforge.izpack.util.xmlmerge.AbstractXmlMergeException;
+import com.izforge.izpack.util.xmlmerge.Action;
+import com.izforge.izpack.util.xmlmerge.DocumentException;
+import com.izforge.izpack.util.xmlmerge.ElementException;
 import com.wutka.dtd.DTD;
 import com.wutka.dtd.DTDAny;
 import com.wutka.dtd.DTDContainer;
@@ -42,9 +46,6 @@ import com.wutka.dtd.DTDElement;
 import com.wutka.dtd.DTDItem;
 import com.wutka.dtd.DTDName;
 import com.wutka.dtd.DTDParser;
-
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.xmlmerge.*;
 
 /**
  * Copy the patch element in the output parent with the correct position according to the DTD
@@ -55,6 +56,7 @@ import com.izforge.izpack.util.xmlmerge.*;
  */
 public class DtdInsertAction implements Action
 {
+    private static final Logger logger = Logger.getLogger(DtdInsertAction.class.getName());
 
     /**
      * Map containing (ID, DTD) pairs, where ID represents the system ID of a DTD, and DTD
@@ -65,6 +67,7 @@ public class DtdInsertAction implements Action
     /**
      * {@inheritDoc}
      */
+    @Override
     public void perform(Element originalElement, Element patchElement, Element outputParentElement)
             throws AbstractXmlMergeException
     {
@@ -126,7 +129,7 @@ public class DtdInsertAction implements Action
                     List<String> orderedDtdElements = getOrderedDtdElements((DTDContainer) item);
 
                     int indexOfNewElementInDtd = orderedDtdElements.indexOf(element.getName());
-                    Debug.log("index of element " + element.getName() + ": "
+                    logger.fine("index of element " + element.getName() + ": "
                             + indexOfNewElementInDtd);
 
                     int pos = existingChildren.size();
@@ -136,7 +139,7 @@ public class DtdInsertAction implements Action
                     for (int i = 0; i < existingChildren.size(); i++)
                     {
                         String elementName = (existingChildren.get(i)).getName();
-                        Debug.log("index of child " + elementName + ": "
+                        logger.fine("index of child " + elementName + ": "
                                 + orderedDtdElements.indexOf(elementName));
                         if (orderedDtdElements.indexOf(elementName) > indexOfNewElementInDtd)
                         {
@@ -145,7 +148,7 @@ public class DtdInsertAction implements Action
                         }
                     }
 
-                    Debug.log("adding element " + element.getName() + " add in pos " + pos);
+                    logger.fine("adding element " + element.getName() + " add in pos " + pos);
                     outputParentElement.addContent(pos, element);
 
                 }

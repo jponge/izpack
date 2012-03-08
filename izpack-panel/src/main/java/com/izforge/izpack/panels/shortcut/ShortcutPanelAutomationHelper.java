@@ -29,19 +29,17 @@ import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.automation.PanelAutomationHelper;
 import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 
 /**
  * The ShortcutPanelAutomationHelper is responsible to create Shortcuts during the automated
  * installation.
- * 
+ *
  * @author Marc Eppelmann (marc.eppelmann&#064;gmx.de)
  * @version $Revision: 1540 $
  */
 public class ShortcutPanelAutomationHelper extends PanelAutomationHelper implements PanelAutomation
 {
-
     private UninstallData uninstallData;
 
     private VariableSubstitutor variableSubstitutor;
@@ -75,13 +73,13 @@ public class ShortcutPanelAutomationHelper extends PanelAutomationHelper impleme
     /**
      * Create the xml configuration content for automatic installation. Normally this method is not
      * used because we are in an automatic installation step.
-     * 
+     *
      * @param installData Installation data
      * @param panelRoot panel specific data for autoinstall.xml
      */
+    @Override
     public void makeXMLData(AutomatedInstallData installData, IXMLElement panelRoot)
     {
-        Debug.log("entering makeXMLData");
         for (IXMLElement element : shortcutPanelLogic.getAutoinstallXMLData())
         {
             panelRoot.addChild(element);
@@ -90,10 +88,11 @@ public class ShortcutPanelAutomationHelper extends PanelAutomationHelper impleme
 
     /**
      * Implementation of the Shortcut specific automation code.
-     * 
+     *
      * @param installData Installation data
      * @param panelRoot panel specific data from autoinstall.xml
      */
+    @Override
     public void runAutomated(AutomatedInstallData installData, IXMLElement panelRoot)
     {
         try

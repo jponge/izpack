@@ -1,15 +1,15 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,20 +19,16 @@
 
 package com.izforge.izpack.uninstaller;
 
+import java.io.*;
+import java.util.*;
+import java.util.logging.*;
+
 import com.izforge.izpack.api.event.UninstallerListener;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.unix.ShellScript;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.TreeSet;
 
 
 /**
@@ -42,6 +38,7 @@ import java.util.TreeSet;
  */
 public class Destroyer extends Thread
 {
+  private static final Logger logger = Logger.getLogger(Destroyer.class.getName());
 
     /**
      * True if the destroyer must force the recursive deletion.
@@ -77,6 +74,7 @@ public class Destroyer extends Thread
     /**
      * The run method.
      */
+    @Override
     public void run()
     {
         try
@@ -238,7 +236,7 @@ public class Destroyer extends Thread
             }
             catch (Exception e)
             {
-                Debug.log("Last RootScript Index=" + idx);
+                logger.fine("Last RootScript Index=" + idx);
                 break;
             }
             idx++;
@@ -255,18 +253,20 @@ public class Destroyer extends Thread
     {
         if (!"".equals(aRootScript))
         {
-            Debug.log("Will Execute: " + aRootScript);
+            logger.fine("Will Execute: " + aRootScript);
 
             try
             {
                 String result = ShellScript.execAndDelete(new StringBuffer(aRootScript), File.createTempFile(
                         this.getClass().getName(),
                         Long.toString(System.currentTimeMillis()) + ".sh").toString());
-                Debug.log("Result: " + result);
+                logger.fine("Result: " + result);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Debug.log("Exeption during su remove: " + ex.getMessage());
+                logger.log(Level.WARNING,
+                    "Exeption during su remove: " + e.getMessage(),
+                    e);
             }
         }
     }
@@ -353,10 +353,10 @@ public class Destroyer extends Thread
                 switch (action)
                 {
                     case UninstallerListener.BEFORE_DELETION:
-                        listener.beforeDeletion((List) param, handler);
+                        listener.beforeDeletion((List<?>) param, handler);
                         break;
                     case UninstallerListener.AFTER_DELETION:
-                        listener.afterDeletion((List) param, handler);
+                        listener.afterDeletion((List<?>) param, handler);
                         break;
                     case UninstallerListener.BEFORE_DELETE:
                         listener.beforeDelete((File) param, handler);

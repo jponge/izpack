@@ -1,5 +1,25 @@
 package com.izforge.izpack.panels.process;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.SwingUtilities;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
@@ -13,18 +33,8 @@ import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraintHelper;
-
-import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.SwingUtilities;
 
 /**
  * This class does alle the work for the process panel.
@@ -39,6 +49,7 @@ import javax.swing.SwingUtilities;
  */
 public class ProcessPanelWorker implements Runnable
 {
+    private static final Logger logger = Logger.getLogger(ProcessPanelWorker.class.getName());
 
     /**
      * Name of resource for specifying processing parameters.
@@ -132,16 +143,16 @@ public class ProcessPanelWorker implements Runnable
             String conditionid = job_el.hasAttribute("condition") ? job_el.getAttribute("condition") : job_el.hasAttribute("conditionid") ? job_el.getAttribute("conditionid") : null;
             if ((conditionid != null) && (conditionid.length() > 0))
             {
-                Debug.trace("Condition for job.");
+                logger.fine("Checking condition for job: " + conditionid);
                 Condition cond = rules.getCondition(conditionid);
                 if ((cond != null) && !cond.isTrue())
                 {
-                    Debug.trace("condition is not fulfilled.");
+                    logger.fine("condition " + conditionid + " is not fulfilled.");
                     // skip, if there is a condition and this condition isn't true
                     continue;
                 }
             }
-            Debug.trace("Condition is fulfilled or not existent.");
+            logger.fine("Condition " + conditionid + " is fulfilled or does not exist");
             // ExecuteForPack Patch
             // Check if processing required for pack
             List<IXMLElement> forPacks = job_el.getChildrenNamed("executeForPack");
@@ -212,7 +223,7 @@ public class ProcessPanelWorker implements Runnable
 
                 if (ef_list.isEmpty())
                 {
-                    Debug.trace("Nothing to do for job '" + job_name + "'");
+                    logger.fine("Nothing to do for job '" + job_name + "'");
                 }
                 else
                 {
@@ -246,6 +257,7 @@ public class ProcessPanelWorker implements Runnable
      * <p/>
      * Can also be called directly if asynchronous processing is not desired.
      */
+    @Override
     public void run()
     {
         // ExecuteForPack patch
@@ -295,7 +307,7 @@ public class ProcessPanelWorker implements Runnable
             }
             catch (IOException e)
             {
-                Debug.error(e);
+                logger.log(Level.WARNING, e.getMessage(), e);
                 // TODO throw or throw not, that's the question...
             }
         }
@@ -325,11 +337,11 @@ public class ProcessPanelWorker implements Runnable
             String conditionid = buttonConfig.getConditionid();
             if ((conditionid != null) && (conditionid.length() > 0))
             {
-                Debug.trace("Condition for job.");
+                logger.fine("Condition for job: " + conditionid);
                 Condition cond = rules.getCondition(conditionid);
                 if ((cond != null) && !cond.isTrue())
                 {
-                    Debug.trace("condition is not fulfilled.");
+                    logger.fine("Condition " + conditionid + " is not fulfilled");
                     // skip, if there is a condition and this condition isn't true
                     continue;
                 }
@@ -390,6 +402,7 @@ public class ProcessPanelWorker implements Runnable
             this.processables = processables;
         }
 
+        @Override
         public boolean run(AbstractUIProcessHandler handler, VariableSubstitutor vs)
         {
             for (ProcessPanelWorker.Processable processable : this.processables)
@@ -425,6 +438,7 @@ public class ProcessPanelWorker implements Runnable
             this.workingDir = workingDir;
         }
 
+        @Override
         public boolean run(AbstractUIProcessHandler handler, VariableSubstitutor vs)
         {
             this.handler = handler;
@@ -573,6 +587,7 @@ public class ProcessPanelWorker implements Runnable
                 this.handler = handler;
             }
 
+            @Override
             public void run()
             {
                 try
@@ -645,6 +660,7 @@ public class ProcessPanelWorker implements Runnable
             myArguments = args;
         }
 
+        @Override
         public boolean run(AbstractUIProcessHandler aHandler, VariableSubstitutor varSubstitutor)
         {
             boolean result = false;
@@ -669,7 +685,7 @@ public class ProcessPanelWorker implements Runnable
             try
             {
                 ClassLoader loader = this.getClass().getClassLoader();
-                Class procClass = loader.loadClass(myClassName);
+                Class<?> procClass = loader.loadClass(myClassName);
 
                 Object instance = procClass.newInstance();
                 Method method = procClass.getMethod("run", new Class[]{AbstractUIProcessHandler.class,
@@ -792,14 +808,14 @@ public class ProcessPanelWorker implements Runnable
     {
         private AbstractUIProcessHandler uiHandler;
         private boolean toBeContinued = true;
-        
-        QuestionErrorDisplayer(AbstractUIProcessHandler uiHandler) 
+
+        QuestionErrorDisplayer(AbstractUIProcessHandler uiHandler)
         {
           this.uiHandler = uiHandler;
         }
-        
+
         @Override
-        public void run() 
+        public void run()
         {
             if (uiHandler.askQuestion("Process execution failed",
                                 "Continue anyway?", AbstractUIHandler.CHOICES_YES_NO,
@@ -808,12 +824,12 @@ public class ProcessPanelWorker implements Runnable
                 mustContinue(false);
             }
         }
-        
+
         public synchronized boolean shouldContinue()
         {
           return toBeContinued;
         }
-        
+
         public synchronized void mustContinue(boolean toBeContinued)
         {
           this.toBeContinued = toBeContinued;

@@ -21,17 +21,20 @@
 
 package com.izforge.izpack.panels.installationtype;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.logging.Logger;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JRadioButton;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.util.Debug;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 
 /**
@@ -40,6 +43,10 @@ import java.awt.event.ActionListener;
  */
 public class InstallationTypePanel extends IzPanel implements ActionListener
 {
+    private static final long serialVersionUID = -8178770882900584122L;
+
+    private static final transient Logger logger = Logger.getLogger(InstallationTypePanel.class.getName());
+
     private JRadioButton normalinstall;
     private JRadioButton modifyinstall;
 
@@ -59,7 +66,7 @@ public class InstallationTypePanel extends IzPanel implements ActionListener
 
         ButtonGroup group = new ButtonGroup();
 
-        boolean modifyinstallation = Boolean.valueOf(this.installData.getVariable(GUIInstallData.MODIFY_INSTALLATION));
+        boolean modifyinstallation = Boolean.valueOf(this.installData.getVariable(AutomatedInstallData.MODIFY_INSTALLATION));
 
         normalinstall = new JRadioButton(installData.getLangpack().getString("InstallationTypePanel.normal"), !modifyinstallation);
         normalinstall.addActionListener(this);
@@ -75,18 +82,13 @@ public class InstallationTypePanel extends IzPanel implements ActionListener
         getLayoutHelper().completeLayout();
     }
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = -8178770882900584122L;
-
     /* (non-Javadoc)
     * @see com.izforge.izpack.installer.IzPanel#panelActivate()
     */
-
+    @Override
     public void panelActivate()
     {
-        boolean modifyinstallation = Boolean.valueOf(this.installData.getVariable(GUIInstallData.MODIFY_INSTALLATION));
+        boolean modifyinstallation = Boolean.valueOf(this.installData.getVariable(AutomatedInstallData.MODIFY_INSTALLATION));
         if (modifyinstallation)
         {
             modifyinstall.setSelected(true);
@@ -97,26 +99,19 @@ public class InstallationTypePanel extends IzPanel implements ActionListener
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent e)
     {
-        Debug.trace("installation type changed");
         if (e.getSource() == normalinstall)
         {
-            Debug.trace("normal installation");
-            this.installData.setVariable(GUIInstallData.MODIFY_INSTALLATION, "false");
+            logger.fine("Installation type: Normal installation");
+            this.installData.setVariable(AutomatedInstallData.MODIFY_INSTALLATION, "false");
         }
         else
         {
-            Debug.trace("modification installation");
-            this.installData.setVariable(GUIInstallData.MODIFY_INSTALLATION, "true");
+            logger.fine("Installation type: Modification installation");
+            this.installData.setVariable(AutomatedInstallData.MODIFY_INSTALLATION, "true");
         }
-        /*
-        if (normalinstall.isSelected()) {
-
-        }
-        else {
-        } */
-
     }
 }
 

@@ -1,18 +1,21 @@
 package com.izforge.izpack.installer.multiunpacker;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.installer.unpacker.IMultiVolumeUnpackerHelper;
-import com.izforge.izpack.util.Debug;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.installer.unpacker.IMultiVolumeUnpackerHelper;
 
 
 public class MultiVolumeUnpackerAutomationHelper implements IMultiVolumeUnpackerHelper
 {
+    private static final Logger logger = Logger.getLogger(MultiVolumeUnpackerAutomationHelper.class.getName());
+
     private AutomatedInstallData idata;
     private AbstractUIProgressHandler handler;
 
@@ -29,7 +32,7 @@ public class MultiVolumeUnpackerAutomationHelper implements IMultiVolumeUnpacker
             System.err.println(idata.getLangpack().getString("nextmedia.corruptmedia"));
             System.err.println(idata.getLangpack().getString("nextmedia.corruptmedia"));
         }
-        Debug.trace("Enter next media: " + volumename);
+        logger.fine("Enter next media: " + volumename);
 
         File nextvolume = new File(volumename);
 
@@ -46,7 +49,7 @@ public class MultiVolumeUnpackerAutomationHelper implements IMultiVolumeUnpacker
             }
             catch (IOException e)
             {
-                Debug.error("Error reading next media path: " + e.getMessage());
+                logger.log(Level.WARNING, "Error reading next media path: " + e.getMessage(), e);
                 e.printStackTrace();
             }
 
@@ -56,7 +59,7 @@ public class MultiVolumeUnpackerAutomationHelper implements IMultiVolumeUnpacker
             }
             else
             {
-                Debug.trace("Input from NextMediaDialog was null");
+                logger.fine("Input from NextMediaDialog was null");
                 nextvolume = new File(volumename);
             }
             // selection equal to last selected which was corrupt?

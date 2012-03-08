@@ -1,18 +1,18 @@
 /*
  * $Id$
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2005 Klaus Bartz
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,19 +22,20 @@
 
 package com.izforge.izpack.core.os;
 
-import com.coi.tools.os.win.MSWinConstants;
-import com.coi.tools.os.win.RegDataContainer;
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.exception.NativeLibException;
-import com.izforge.izpack.util.Debug;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.coi.tools.os.win.MSWinConstants;
+import com.coi.tools.os.win.RegDataContainer;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.exception.NativeLibException;
 
 /**
  * This class represents a registry handler in a operating system independent way. OS specific
@@ -45,6 +46,7 @@ import java.util.Map;
  */
 public class RegistryHandler extends OSClassHelper implements MSWinConstants
 {
+    private static final Logger logger = Logger.getLogger(RegistryHandler.class.getName());
 
     public static final String UNINSTALL_ROOT = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
 
@@ -416,7 +418,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
         }
         catch (NativeLibException exception)
         { // Users without administrative rights should be able to install the app for themselves
-            Debug.trace("Failed to register uninstaller in HKEY_LOCAL_MACHINE hive, trying HKEY_CURRENT_USER: " + exception.getMessage());
+            logger.warning("Failed to register uninstaller in HKEY_LOCAL_MACHINE hive, trying HKEY_CURRENT_USER: " + exception.getMessage());
             setRoot(HKEY_CURRENT_USER);
             setValue(keyName, "DisplayName", uninstallName);
         }
@@ -445,9 +447,10 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
             out.close();
             setValue(keyName, "DisplayIcon", iconPath);
         }
-        catch (Exception exception)
-        { // May be no icon resource defined; ignore it
-            Debug.trace(exception);
+        catch (Exception e)
+        {
+            // May be no icon resource defined; ignore it
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
         setRoot(oldVal);
     }
@@ -455,6 +458,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
     /**
      * @param idata
      */
+    @Override
     public boolean verify(AutomatedInstallData idata) throws Exception
     {
         super.verify(idata);

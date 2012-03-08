@@ -17,15 +17,16 @@
 
 package com.izforge.izpack.util.file;
 
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.file.types.FileSet;
-import com.izforge.izpack.util.file.types.Mapper;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.izforge.izpack.util.file.types.FileSet;
+import com.izforge.izpack.util.file.types.Mapper;
 
 /**
  * Copies a file or directory to a new file
@@ -39,6 +40,8 @@ import java.util.Vector;
  */
 public class FileCopyTask
 {
+    private static final Logger logger = Logger.getLogger(FileCopyTask.class.getName());
+
     protected File file = null;     // the source file
     protected File destFile = null; // the destination file
     protected File destDir = null;  // the destination directory
@@ -286,7 +289,7 @@ public class FileCopyTask
                     }
                     else
                     {
-                        Debug.log(file + " omitted as " + destFile + " is up to date.");
+                        logger.fine(file + " omitted as " + destFile + " is up to date.");
                     }
                 }
                 else
@@ -295,7 +298,7 @@ public class FileCopyTask
                             + file.getAbsolutePath() + " to copy.";
                     if (!failonerror)
                     {
-                        Debug.log(message);
+                        logger.fine(message);
                     }
                     else
                     {
@@ -322,7 +325,9 @@ public class FileCopyTask
                     }
                     else
                     {
-                        Debug.log("Warning: " + e.getMessage());
+                        logger.log(Level.WARNING,
+                                "Warning: " + e.getMessage(),
+                                e);
                         continue;
                     }
                 }
@@ -556,7 +561,7 @@ public class FileCopyTask
     {
         if (fileCopyMap.size() > 0)
         {
-            Debug.log("Copying " + fileCopyMap.size()
+            logger.fine("Copying " + fileCopyMap.size()
                     + " file" + (fileCopyMap.size() == 1 ? "" : "s")
                     + " to " + destDir.getAbsolutePath());
 
@@ -570,13 +575,13 @@ public class FileCopyTask
                 {
                     if (fromFile.equals(toFile))
                     {
-                        Debug.log("Skipping self-copy of " + fromFile);
+                        logger.warning("Skipping self-copy of " + fromFile);
                         continue;
                     }
 
                     try
                     {
-                        Debug.log("Copying " + fromFile + " to " + toFile);
+                        logger.fine("Copying " + fromFile + " to " + toFile);
                         fileUtils.copyFile(fromFile, toFile, forceOverwrite,
                                 preserveLastModified);
                     }
@@ -621,7 +626,7 @@ public class FileCopyTask
             }
             if (createCount > 0)
             {
-                Debug.log("Copied " + dirCopyMap.size()
+                logger.fine("Copied " + dirCopyMap.size()
                         + " empty director"
                         + (dirCopyMap.size() == 1 ? "y" : "ies")
                         + " to " + createCount

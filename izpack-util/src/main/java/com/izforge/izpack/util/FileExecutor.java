@@ -21,9 +21,6 @@
 
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.data.ExecutableFile;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -33,6 +30,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.data.ExecutableFile;
 
 /**
  * Executes a bunch of files. This class is intended to do a system dependent installation
@@ -44,6 +46,8 @@ import java.util.List;
  */
 public class FileExecutor
 {
+    private static final Logger logger = Logger.getLogger(FileExecutor.class.getName());
+
     private static final String JAR_FILE_SUFFIX = ".jar";
 
     private boolean stopThread(Thread t, MonitorInputStream monitorInputStream)
@@ -210,7 +214,7 @@ public class FileExecutor
         Thread errMonitorThread = null;
         int exitStatus = -1;
 
-        Debug.trace(retval);
+        logger.fine(retval.toString());
 
         try
         {
@@ -253,19 +257,16 @@ public class FileExecutor
 
             // save command output
             output[0] = outWriter.toString();
-            Debug.trace("stdout:");
-            Debug.trace(output[0]);
+            logger.fine("stdout:");
+            logger.fine(output[0]);
             output[1] = errWriter.toString();
-            Debug.trace("stderr:");
-            Debug.trace(output[1]);
-            Debug.trace("exit status: " + Integer.toString(exitStatus));
+            logger.fine("stderr:");
+            logger.fine(output[1]);
+            logger.fine("exit status: " + Integer.toString(exitStatus));
         }
         catch (InterruptedException e)
         {
-            if (Debug.tracing())
-            {
-                e.printStackTrace(System.err);
-            }
+            logger.log(Level.FINE, e.toString(), e);
             stopThread(outMonitorThread, outMonitor);
             stopThread(errMonitorThread, errMonitor);
             output[0] = "";
@@ -273,10 +274,7 @@ public class FileExecutor
         }
         catch (IOException e)
         {
-            if (Debug.tracing())
-            {
-                e.printStackTrace(System.err);
-            }
+            logger.log(Level.WARNING, e.toString(), e);
             output[0] = "";
             output[1] = e.getMessage() + "\n";
         }
@@ -315,7 +313,7 @@ public class FileExecutor
             ExecutableFile efile = efileIterator.next();
             boolean deleteAfterwards = !efile.keepFile;
             File file = new File(efile.path);
-            Debug.trace("handling executable file " + efile);
+            logger.fine("Handling executable file " + efile);
 
             // skip file if not for current OS (it might not have been installed
             // at all)
@@ -327,7 +325,7 @@ public class FileExecutor
             if (ExecutableFile.BIN == efile.type && currentStage != ExecutableFile.UNINSTALL && OsVersion.IS_UNIX)
             {
                 // fix executable permission for unix systems
-                Debug.trace("making file executable (setting executable flag)");
+                logger.fine("Making file executable (setting executable flag)");
                 String[] params = {"/bin/chmod", permissions, file.toString()};
                 exitStatus = executeCommand(params, output);
                 if (exitStatus != 0)
@@ -364,7 +362,7 @@ public class FileExecutor
                     catch (Exception e)
                     {
                         exitStatus = -1;
-                        Debug.error(e);
+                        logger.log(Level.WARNING, e.getMessage(), e);
                     }
                     paramList.add(efile.mainClass);
                 }
@@ -463,6 +461,7 @@ public class FileExecutor
                 String[] subDirJars = FileUtil.getFileNames(rawJar,
                         new FilenameFilter()
                         {
+                            @Override
                             public boolean accept(File dir, String name)
                             {
                                 return name.toLowerCase().endsWith(JAR_FILE_SUFFIX);

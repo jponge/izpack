@@ -15,7 +15,6 @@ import com.izforge.izpack.api.data.Value;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraintHelper;
 import com.izforge.izpack.util.OsVersion;
@@ -27,19 +26,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Abstract class sharing commons instanciation methods beetween installData
  */
 public abstract class AbstractInstallDataProvider implements Provider
 {
+    private static final Logger logger = Logger.getLogger(AbstractInstallDataProvider.class.getName());
+
     /**
      * The base name of the XML file that specifies the custom langpack. Searched is for the file
      * with the name expanded by _ISO3.
@@ -149,10 +146,9 @@ public abstract class AbstractInstallDataProvider implements Provider
         installdata.setVariable(ScriptParserConstant.HOST_NAME, hostname);
         installdata.setVariable(ScriptParserConstant.FILE_SEPARATOR, File.separator);
 
-        Enumeration systemProperties = System.getProperties().keys();
-        while (systemProperties.hasMoreElements())
+        Set<String> systemProperties = System.getProperties().stringPropertyNames();
+        for (String varName : systemProperties)
         {
-            String varName = (String) systemProperties.nextElement();
             String varValue = System.getProperty(varName);
             if (varValue != null)
             {
@@ -163,14 +159,10 @@ public abstract class AbstractInstallDataProvider implements Provider
 
         if (null != variables)
         {
-            Enumeration enumeration = variables.keys();
-            String varName;
-            String varValue;
-            while (enumeration.hasMoreElements())
+            Set<String> vars = variables.stringPropertyNames();
+            for (String varName : vars)
             {
-                varName = (String) enumeration.nextElement();
-                varValue = variables.getProperty(varName);
-                installdata.setVariable(varName, varValue);
+                installdata.setVariable(varName, variables.getProperty(varName));
             }
         }
 
@@ -195,11 +187,7 @@ public abstract class AbstractInstallDataProvider implements Provider
             {
                 TemporaryDirectory directory = new TemporaryDirectory(tempDir, installdata);
                 directory.create();
-                // Clean up on exit unless tracing is enabled
-                if (!Debug.tracing())
-                {
-                    directory.cleanUp();
-                }
+                directory.cleanUp();
             }
         }
 
@@ -220,10 +208,10 @@ public abstract class AbstractInstallDataProvider implements Provider
         }
         catch (Throwable exception)
         {
-            Debug.trace("No custom langpack available.");
+            logger.warning("No custom langpack available");
             return;
         }
-        Debug.trace("Custom langpack for " + idata.getLocaleISO3() + " available.");
+        logger.fine("Found custom langpack for " + idata.getLocaleISO3());
     }
 
 
@@ -368,8 +356,8 @@ public abstract class AbstractInstallDataProvider implements Provider
         }
         catch (Exception e)
         {
-            Debug.trace("Cannot find optional dynamic variables");
-            System.out.println(e);
+            logger.log(Level.WARNING,
+                    "Cannot find optional dynamic variables", e);
         }
     }
 
@@ -389,8 +377,8 @@ public abstract class AbstractInstallDataProvider implements Provider
         }
         catch (Exception e)
         {
-            Debug.trace("Cannot find optional dynamic conditions");
-            System.out.println(e);
+            logger.log(Level.WARNING,
+                    "Cannot find optional dynamic conditions", e);
         }
     }
 

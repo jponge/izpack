@@ -21,16 +21,18 @@
 
 package com.izforge.izpack.panels.htmllicence;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.panels.licence.AbstractLicensePanelConsole;
-import com.izforge.izpack.util.Debug;
-
 
 /**
  * HTML License Panel console helper
  */
 public class HTMLLicencePanelConsoleHelper extends AbstractLicensePanelConsole
 {
+    private static final Logger logger = Logger.getLogger(HTMLLicencePanelConsoleHelper.class.getName());
 
     /**
      * Constructs a <tt>HTMLLicencePanelConsoleHelper</tt>.
@@ -137,7 +139,7 @@ public class HTMLLicencePanelConsoleHelper extends AbstractLicensePanelConsole
         }
         catch (Exception e)
         {
-            Debug.error(e);
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
 
         return result;

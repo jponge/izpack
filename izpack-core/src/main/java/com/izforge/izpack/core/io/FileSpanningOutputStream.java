@@ -1,15 +1,15 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/ http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2007 Dennis Reil
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -18,14 +18,13 @@
 
 package com.izforge.izpack.core.io;
 
-import com.izforge.izpack.util.Debug;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.Random;
+import java.util.logging.Logger;
 import java.util.zip.GZIPOutputStream;
 
 /**
@@ -36,6 +35,7 @@ import java.util.zip.GZIPOutputStream;
  */
 public class FileSpanningOutputStream extends OutputStream
 {
+    private static final Logger logger = Logger.getLogger(FileSpanningOutputStream.class.getName());
 
     public static final long KB = 1000;
 
@@ -77,7 +77,7 @@ public class FileSpanningOutputStream extends OutputStream
 
     private GZIPOutputStream zippedoutputstream;
 
-    // 
+    //
     private byte[] magicnumber;
 
     // the current position in the open file
@@ -136,11 +136,11 @@ public class FileSpanningOutputStream extends OutputStream
             // create random number generator
             Random random = new Random(currenttimeseconds);
             random.nextBytes(magicnumber);
-            Debug.trace("created new magic number for FileOutputstream: "
+            logger.fine("Created new magic number for FileOutputstream: "
                     + new String(magicnumber));
             for (int i = 0; i < magicnumber.length; i++)
             {
-                Debug.trace(i + " - " + magicnumber[i]);
+                logger.fine(i + " - " + magicnumber[i]);
             }
         }
     }
@@ -264,6 +264,7 @@ public class FileSpanningOutputStream extends OutputStream
     /**
      * @see java.io.OutputStream#close()
      */
+    @Override
     public void close() throws IOException
     {
         this.flush();
@@ -276,6 +277,7 @@ public class FileSpanningOutputStream extends OutputStream
     /**
      * @see java.io.OutputStream#write(byte[], int, int)
      */
+    @Override
     public void write(byte[] b, int off, int len) throws IOException
     {
         if (len > maxvolumesize)
@@ -291,8 +293,9 @@ public class FileSpanningOutputStream extends OutputStream
 
         if (available < len)
         {
-            Debug.trace("Not enough space left on volume. available: " + available);
-            Debug.trace("current size is: " + currentsize);
+            logger.fine(
+                    "Not enough space left on volume. (available: " + available
+                    + ", current size: " + currentsize + ")");
             // there's not enough space available
             // create the next volume
             this.createStreamToNextVolume();
@@ -306,6 +309,7 @@ public class FileSpanningOutputStream extends OutputStream
     /**
      * @see java.io.OutputStream#write(byte[])
      */
+    @Override
     public void write(byte[] b) throws IOException
     {
         this.write(b, 0, b.length);
@@ -314,6 +318,7 @@ public class FileSpanningOutputStream extends OutputStream
     /**
      * @see java.io.OutputStream#write(int)
      */
+    @Override
     public void write(int b) throws IOException
     {
         long availablebytes = maxvolumesize - getCurrentVolumeSize();
@@ -336,6 +341,7 @@ public class FileSpanningOutputStream extends OutputStream
     /**
      * @see java.io.OutputStream#flush()
      */
+    @Override
     public void flush() throws IOException
     {
         zippedoutputstream.flush();

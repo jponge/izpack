@@ -1,23 +1,27 @@
 package com.izforge.izpack.installer.container.provider;
 
+import java.io.InputStream;
+import java.net.URL;
+import java.util.logging.Logger;
+
+import javax.swing.ImageIcon;
+import javax.swing.UIManager;
+
+import org.picocontainer.injectors.Provider;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.util.Debug;
-import org.picocontainer.injectors.Provider;
-
-import javax.swing.*;
-import java.io.InputStream;
-import java.net.URL;
 
 /**
  * Provide icons database
  */
 public class IconsProvider implements Provider
 {
+    private static final Logger logger = Logger.getLogger(IconsProvider.class.getName());
 
     /**
      * Resource name for custom icons
@@ -62,11 +66,11 @@ public class IconsProvider implements Provider
         }
         catch (Throwable exception)
         {
-            Debug.trace("Resource " + CUSTOM_ICONS_RESOURCEFILE
-                    + " not defined. No custom icons available.");
+            logger.warning("Resource " + CUSTOM_ICONS_RESOURCEFILE
+                    + " not defined. No custom icons available");
             return;
         }
-        Debug.trace("Custom icons available.");
+        logger.fine("Custom icons available");
 
         parseXML(inXML, icons);
     }
@@ -91,7 +95,7 @@ public class IconsProvider implements Provider
         {
             url = InstallerFrame.class.getResource(icon.getAttribute("res"));
             img = new ImageIcon(url);
-            Debug.trace("Icon with id found: " + icon.getAttribute("id"));
+            logger.fine("Icon with id found: " + icon.getAttribute("id"));
             icons.put(icon.getAttribute("id"), img);
         }
 

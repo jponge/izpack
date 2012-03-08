@@ -1,14 +1,14 @@
 package com.izforge.izpack.installer.requirement;
 
+import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.handler.Prompt;
+import com.izforge.izpack.api.handler.Prompt.Option;
 import com.izforge.izpack.api.installer.RequirementChecker;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileUtil;
-
-import java.io.File;
-
-import static com.izforge.izpack.api.handler.Prompt.Option;
 
 /**
  * Determines if another installation is in progress, by checking for the existence of a lock file.
@@ -17,6 +17,7 @@ import static com.izforge.izpack.api.handler.Prompt.Option;
  */
 public class LockFileChecker implements RequirementChecker
 {
+    private static final Logger logger = Logger.getLogger(LockFileChecker.class.getName());
 
     /**
      * The installation data.
@@ -62,19 +63,19 @@ public class LockFileChecker implements RequirementChecker
                 // Create the new lock file
                 if (file.createNewFile())
                 {
-                    Debug.trace("Created lock file:" + file.getPath());
+                    logger.fine("Created lock file:" + file.getPath());
                     file.deleteOnExit();
                 }
                 else
                 {
-                    Debug.trace("Failed to create lock file: " + file.getPath());
-                    Debug.trace("*** Multiple instances of installer will be allowed ***");
+                    logger.warning("Failed to create lock file: " + file.getPath());
+                    logger.warning("*** Multiple instances of installer will be allowed ***");
                 }
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
-                Debug.trace("Lock file could not be created: " + exception);
-                Debug.trace("*** Multiple instances of installer will be allowed ***");
+                logger.log(Level.WARNING, "Lock file could not be created: " + e.getMessage(), e);
+                logger.warning("*** Multiple instances of installer will be allowed ***");
             }
             result = true;
         }
@@ -83,14 +84,14 @@ public class LockFileChecker implements RequirementChecker
 
     /**
      * Invoked when the lock file already exists.
-     * 
+     *
      * @param file the lock file
      * @return <tt>true</tt> if the user wants to proceed with installation, <tt>false</tt> if they want to cancel
      */
     protected boolean lockFileExists(File file)
     {
         boolean result = false;
-        Debug.trace("Lock File Exists, asking user for permission to proceed.");
+        logger.fine("Lock File Exists, asking user for permission to proceed.");
         StringBuilder msg = new StringBuilder();
         String appName = installData.getInfo().getAppName();
         msg.append("The " + appName + " installer you are attempting to run seems to have a copy already running.\n\n");
@@ -103,14 +104,14 @@ public class LockFileChecker implements RequirementChecker
         if (selected == Option.NO)
         {
             // Take control of the file so it gets deleted after this installer instance exits.
-            Debug.trace("Setting temp file to delete on exit");
+            logger.fine("Setting temp file to delete on exit");
             file.deleteOnExit();
         }
         else
         {
             // Leave the file as it is.
             result = true;
-            Debug.trace("Leaving temp file alone and exiting");
+            logger.fine("Leaving temp file alone and exiting");
         }
         return result;
     }

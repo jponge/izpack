@@ -21,6 +21,10 @@
 
 package com.izforge.izpack.event;
 
+import java.io.File;
+import java.util.*;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.DynamicVariable;
@@ -33,7 +37,6 @@ import com.izforge.izpack.core.data.DynamicVariableImpl;
 import com.izforge.izpack.core.regex.RegularExpressionFilterImpl;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.core.variable.*;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.config.*;
@@ -43,12 +46,11 @@ import com.izforge.izpack.util.file.types.FileSet;
 import com.izforge.izpack.util.file.types.Mapper;
 import com.izforge.izpack.util.helper.SpecHelper;
 
-import java.io.File;
-import java.util.*;
-
 
 public class ConfigurationInstallerListener extends SimpleInstallerListener
 {
+    private static final Logger logger = Logger.getLogger(ConfigurationInstallerListener.class.getName());
+
     /**
      * Name of the specification file
      */
@@ -96,7 +98,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         while (iter != null && iter.hasNext())
         {
             p = iter.next();
-            Debug.trace("Entering beforepacks configuration action for pack " + p.name);
+            logger.fine("Entering beforepacks configuration action for pack " + p.name);
 
             // Resolve data for current pack.
             IXMLElement pack = getSpecHelper().getPackForName(p.name);
@@ -105,7 +107,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                 continue;
             }
 
-            Debug.trace("Found configuration action descriptor for pack " + p.name);
+            logger.fine("Found configuration action descriptor for pack " + p.name);
             // Prepare the action cache
             HashMap<Object, ArrayList<ConfigurationAction>> packActions = new HashMap<Object, ArrayList<ConfigurationAction>>();
             packActions.put(ActionBase.BEFOREPACK, new ArrayList<ConfigurationAction>());
@@ -117,7 +119,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
             List<IXMLElement> configActionEntries = pack.getChildrenNamed(ConfigurationAction.CONFIGACTION);
             if (configActionEntries != null)
             {
-                Debug.trace("Found " + configActionEntries.size() + " configuration actions");
+                logger.fine("Found " + configActionEntries.size() + " configuration actions");
                 if (configActionEntries.size() >= 1)
                 {
                     Iterator<IXMLElement> entriesIter = configActionEntries.iterator();
@@ -126,7 +128,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                         ConfigurationAction act = readConfigAction(entriesIter.next(), idata);
                         if (act != null)
                         {
-                            Debug.trace("Adding " + act.getOrder() + "configuration action with "
+                            logger.fine("Adding " + act.getOrder() + "configuration action with "
                                     + act.getActionTasks().size() + " tasks");
                             (packActions.get(act.getOrder())).add(act);
                         }
@@ -238,7 +240,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
             return;
         }
 
-        Debug.trace("******* Executing all " + order + " configuration actions for " + packName + " ...");
+        logger.fine("Executing all " + order + " configuration actions for " + packName + " ...");
         for (ConfigurationAction act : actList)
         {
             // Inform progress bar if needed. Works only on AFTER_PACKS
@@ -1051,27 +1053,30 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         //DynamicVariableSubstitutor dynsubst = new DynamicVariableSubstitutor((List)dynamicvariables, installdata.getRules());
         Properties props = new Properties();
         RulesEngine rules = installdata.getRules();
-        Debug.log("Evaluating configuration variables");
+        logger.fine("Evaluating configuration variables");
         if (dynamicvariables != null)
         {
             for (DynamicVariable dynvar : dynamicvariables)
             {
-                Debug.log("Configuration variable: " + dynvar.getName());
+                String name = dynvar.getName();
+                logger.fine("Configuration variable: " + name);
                 boolean refresh = false;
                 String conditionid = dynvar.getConditionid();
-                Debug.log("condition: " + conditionid);
+                logger.fine("condition: " + conditionid);
                 if ((conditionid != null) && (conditionid.length() > 0))
                 {
                     if ((rules != null) && rules.isConditionTrue(conditionid))
                     {
-                        Debug.log("refresh condition");
+                        logger.fine("Refresh configuration variable \"" + name
+                                + "\" based on global condition \" "+ conditionid + "\"");
                         // condition for this rule is true
                         refresh = true;
                     }
                 }
                 else
                 {
-                    Debug.log("refresh condition");
+                    logger.fine("Refresh configuration variable \"" + name
+                            + "\" based on local condition \" "+ conditionid + "\"");
                     // empty condition
                     refresh = true;
                 }
@@ -1082,12 +1087,12 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                         String newValue = dynvar.evaluate(subst);
                         if (newValue != null)
                         {
-                            Debug.log("Configuration variable " + dynvar.getName() + ": " + newValue);
-                            props.setProperty(dynvar.getName(), newValue);
+                            logger.fine("Configuration variable " + name + ": " + newValue);
+                            props.setProperty(name, newValue);
                         }
                         else
                         {
-                            Debug.log("Configuration variable " + dynvar.getName() + " unchanged: " + dynvar.getValue());
+                            logger.fine("Configuration variable " + name + " unchanged: " + dynvar.getValue());
                         }
                     }
                     catch (Exception e)

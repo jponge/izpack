@@ -27,6 +27,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -45,7 +47,6 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.StringTool;
 import com.izforge.izpack.util.os.Shortcut;
@@ -62,6 +63,7 @@ import com.izforge.izpack.util.unix.UnixHelper;
  */
 public class ShortcutPanel extends IzPanel implements ActionListener, ListSelectionListener
 {
+    private static final Logger logger = Logger.getLogger(ShortcutPanel.class.getName());
 
     /**
      * serialVersionUID = 3256722870838112311L
@@ -185,6 +187,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
 
     /*--------------------------------------------------------------------------*/
+    @Override
     public void actionPerformed(ActionEvent event)
     {
         Object eventSource = event.getSource();
@@ -302,8 +305,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             }
             catch (Exception e)
             {
+                logger.log(Level.WARNING, e.getMessage(), e);
                 // ignore exception
-                Debug.log(e);
             }
         }
         return (true);
@@ -323,7 +326,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 File allUsersProgramsFolder = shortcutPanelLogic
                         .getProgramsFolder(Shortcut.ALL_USERS);
 
-                Debug.log("All UsersProgramsFolder: '" + allUsersProgramsFolder + "'");
+                logger.fine("All Users Program Folder: '" + allUsersProgramsFolder + "'");
 
                 File forceTest = new File(allUsersProgramsFolder + File.separator
                         + System.getProperty("user.name") + System.currentTimeMillis());
@@ -335,29 +338,26 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 catch (Exception e)
                 {
                     isRootUser = false;
-                    Debug.log("IOException: " + "'" + e.getLocalizedMessage() + "'");
-                    Debug.log("You cannot create '" + forceTest + "'");
+                    logger.log(Level.WARNING, "Temporary file '" + forceTest + "' could not be created: " + e.getMessage(), e);
 
                 }
 
                 if (forceTest.exists())
                 {
-                    Debug.log("Delete temporary File: '" + forceTest + "'");
+                    logger.fine("Delete temporary file: '" + forceTest + "'");
                     forceTest.delete();
                 }
 
-                String perm = isRootUser ? "can" : "cannot";
-
-                Debug.log("You " + perm + " write into '" + allUsersProgramsFolder + "'");
+                logger.fine((isRootUser?"Can":"Cannot") + " write into '" + allUsersProgramsFolder + "'");
 
                 final boolean rUserFlag;
                 if (shortcutPanelLogic.isDefaultCurrentUserFlag())
-                { // 'defaultCurrentUser' element was specified
+                {
                     rUserFlag = false;
-                    Debug.log("The flag defaultCurrentUser was specified");
+                    logger.fine("Element 'defaultCurrentUser' was set");
                 }
                 else
-                { // 'defaultCurrentUser' element not specified
+                {
                     rUserFlag = isRootUser;
                 }
 
@@ -410,6 +410,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
 
     /*--------------------------------------------------------------------------*/
+    @Override
     public void valueChanged(ListSelectionEvent event)
     {
         if (programGroup == null) { return; }
@@ -510,7 +511,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         }
 
         listLabel = LabelFactory.create(installData.getLangpack().getString(
-                "ShortcutPanel.regular.list"), JLabel.LEADING);
+                "ShortcutPanel.regular.list"), SwingConstants.LEADING);
         if (OsVersion.IS_WINDOWS)
         {
             constraints.gridx = col;
@@ -590,7 +591,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             allUsers = new JRadioButton(installData.getLangpack().getString(
                     "ShortcutPanel.regular.allUsers"), rUserFlag);
 
-            Debug.log("allUsers.setEnabled(), I'm Root: " + isRootUser);
+            logger.fine("allUsers.setEnabled(), am I root?: " + isRootUser);
 
             allUsers.setEnabled(isRootUser);
 
@@ -860,7 +861,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     @Override
     public void makeXMLData(IXMLElement panelRoot)
     {
-        Debug.log("entering makeXMLData");
         for (IXMLElement element : shortcutPanelLogic.getAutoinstallXMLData())
         {
             panelRoot.addChild(element);

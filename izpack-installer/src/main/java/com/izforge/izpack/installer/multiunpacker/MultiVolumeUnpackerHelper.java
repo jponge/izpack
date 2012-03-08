@@ -1,18 +1,20 @@
 package com.izforge.izpack.installer.multiunpacker;
 
+import java.awt.Component;
+import java.io.File;
+import java.util.logging.Logger;
+
+import javax.swing.JOptionPane;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.unpacker.IMultiVolumeUnpackerHelper;
-import com.izforge.izpack.util.Debug;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
 
 public class MultiVolumeUnpackerHelper implements IMultiVolumeUnpackerHelper
 {
+    private static final Logger logger = Logger.getLogger(MultiVolumeUnpackerHelper.class.getName());
 
     private AutomatedInstallData idata;
 
@@ -36,7 +38,7 @@ public class MultiVolumeUnpackerHelper implements IMultiVolumeUnpackerHelper
                     .getString("nextmedia.corruptmedia"), idata.getLangpack()
                     .getString("nextmedia.corruptmedia.title"), JOptionPane.ERROR_MESSAGE);
         }
-        Debug.trace("Enter next media: " + volumename);
+        logger.fine("Enter next media: " + volumename);
 
         File nextvolume = new File(volumename);
         NextMediaDialog nextMediaDialog = null;
@@ -60,7 +62,7 @@ public class MultiVolumeUnpackerHelper implements IMultiVolumeUnpackerHelper
             }
             else
             {
-                Debug.trace("Input from NextMediaDialog was null");
+                logger.fine("Input from NextMediaDialog was null");
                 nextvolume = new File(volumename);
             }
             // selection equal to last selected which was corrupt?

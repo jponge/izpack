@@ -20,6 +20,21 @@
 
 package com.izforge.izpack.installer.base;
 
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.LayoutManager2;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.swing.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
@@ -36,15 +51,6 @@ import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
 import com.izforge.izpack.gui.MultiLineLabel;
 import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.util.Debug;
-
-import javax.swing.*;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import java.awt.*;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Defines the base class for the IzPack panels. Any panel should be a subclass of it and should
@@ -62,8 +68,9 @@ import java.util.Map;
  */
 public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstants, ISummarisable
 {
-
     private static final long serialVersionUID = 3256442495255786038L;
+
+    private static final transient Logger logger = Logger.getLogger(IzPanel.class.getName());
 
     /**
      * The helper object which handles layout
@@ -218,11 +225,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
             String instanceHeadline = getString(instanceSearchKey);
 
-            if (Debug.isLOG())
-            {
-                System.out.println("found headline: " + instanceHeadline + DELIMITER + " for instance # "
-                        + instanceNumber);
-            }
+            logger.info("found headline: " + instanceHeadline + DELIMITER + " for instance # "
+                    + instanceNumber);
             if (!instanceSearchKey.equals(instanceHeadline))
             {
                 headline = instanceHeadline;
@@ -388,6 +392,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @return The user's choice.
      * @see AbstractUIHandler#askQuestion(String, String, int)
      */
+    @Override
     public int askQuestion(String title, String question, int choices)
     {
         return askQuestion(title, question, choices, -1);
@@ -403,6 +408,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @return The user's choice.
      * @see AbstractUIHandler#askQuestion(String, String, int, int)
      */
+    @Override
     public int askQuestion(String title, String question, int choices, int default_choice)
     {
         int jo_choices = 0;
@@ -454,6 +460,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *
      * @param message The notification.
      */
+    @Override
     public void emitNotification(String message)
     {
         JOptionPane.showMessageDialog(this, message);
@@ -464,6 +471,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *
      * @param message The warning message.
      */
+    @Override
     public boolean emitWarning(String title, String message)
     {
         return (JOptionPane.showConfirmDialog(this, message, title, JOptionPane.WARNING_MESSAGE,
@@ -476,6 +484,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *
      * @param message The error message.
      */
+    @Override
     public void emitError(String title, String message)
     {
         JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
@@ -486,6 +495,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *
      * @param message The error message.
      */
+    @Override
     public void emitErrorAndBlockNext(String title, String message)
     {
         parent.lockNextButton();
@@ -524,7 +534,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     public String getI18nStringForClass(String subkey)
     {
         String retval = null;
-        Class clazz = this.getClass();
+        Class<?> clazz = this.getClass();
         while (retval == null && !clazz.getName().endsWith(".IzPanel"))
         {
             retval = getI18nStringForClass(clazz.getName(), subkey, null);
@@ -926,6 +936,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *
      * @return the summary for this class
      */
+    @Override
     public String getSummaryBody()
     {
         return null;
@@ -940,6 +951,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *
      * @return the caption for this class
      */
+    @Override
     public String getSummaryCaption()
     {
         String caption;
@@ -1096,7 +1108,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         }
         else
         {
-            Debug.trace("Validation did not pass!");
+            logger.fine("Validation did not pass!");
             // try to parse the text, and substitute any variable it finds
             if (this.validationService.getWarningMessageId() != null
                     && state == DataValidator.Status.WARNING)
@@ -1116,7 +1128,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
                 if (this.emitWarning(getString("data.validation.warning.title"), warningMessage))
                 {
                     returnValue = true;
-                    Debug.trace("... but user decided to go on!");
+                    logger.fine("... but user decided to go on!");
                 }
             }
             else
@@ -1154,13 +1166,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             err.printStackTrace();
         }
         return string_to_parse;
-    }
-
-    private Map<String, String> helps = null;
-
-    public void setHelps(Map<String, String> helps)
-    {
-        this.helps = helps;
     }
 
     /**

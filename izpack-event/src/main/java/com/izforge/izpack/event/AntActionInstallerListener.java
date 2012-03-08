@@ -22,6 +22,18 @@
 
 package com.izforge.izpack.event;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
@@ -30,15 +42,9 @@ import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.helper.SpecHelper;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Installer listener for performing ANT actions. The definition what should be done will be made in
@@ -52,6 +58,8 @@ import java.util.List;
  */
 public class AntActionInstallerListener extends SimpleInstallerListener
 {
+    private static final Logger logger = Logger.getLogger(AntActionInstallerListener.class.getName());
+
     // ------------------------------------------------------------------------
     // Constant Definitions
     // ------------------------------------------------------------------------
@@ -236,7 +244,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
             return;
         }
 
-        Debug.trace("******* Executing all " + order + " Ant actions of " + packName + " ...");
+        logger.fine("Executing all " + order + " Ant actions of pack " + packName + " ...");
         for (AntAction act : actList)
         {
             // Inform progress bar if needed. Works only

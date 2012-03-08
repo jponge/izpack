@@ -1,10 +1,11 @@
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.binding.OsModel;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.binding.OsModel;
 
 /**
  * Encapsulates OS constraints specified on creation time and allows to check them against the
@@ -17,6 +18,8 @@ import java.util.List;
  */
 public class OsConstraintHelper
 {
+    private static final Logger logger = Logger.getLogger(OsConstraintHelper.class.getName());
+
     /**
      * Matches OS specification in this class against current system properties.
      *
@@ -124,16 +127,16 @@ public class OsConstraintHelper
         }
         for (OsModel osModel : constraint_list)
         {
-            Debug.trace("checking if os constraints " + osModel + " match current OS");
+            logger.fine("Checking if os constraints " + osModel + " match current OS");
             // check for match
             if (matchCurrentSystem(osModel))
             {
-                Debug.trace("matched current OS.");
+                logger.fine("OS constraints matched current OS");
                 return true;    // bail out on first match
             }    // end if
         }    // end while
 
-        Debug.trace("no match with current OS!");
+        logger.fine("OS constraints do not match current OS");
 
         // no match found
         return false;

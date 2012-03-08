@@ -19,6 +19,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -49,7 +51,6 @@ import com.izforge.izpack.panels.userinput.processor.Processor;
 import com.izforge.izpack.panels.userinput.processorclient.RuleInputField;
 import com.izforge.izpack.panels.userinput.processorclient.TextInputField;
 import com.izforge.izpack.panels.userinput.validator.ValidatorContainer;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.HyperlinkHandler;
 import com.izforge.izpack.util.OsConstraintHelper;
 import com.izforge.izpack.util.OsVersion;
@@ -61,6 +62,7 @@ import com.izforge.izpack.util.OsVersion;
  */
 public class UserInputPanel extends IzPanel implements ActionListener, ItemListener, FocusListener
 {
+    private static final Logger logger = Logger.getLogger(UserInputPanel.class.getName());
 
     /**
      *
@@ -359,11 +361,11 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
         catch (ResourceNotFoundException e)
         {
-            Debug.trace(e);
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
 
 
@@ -566,7 +568,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         IXMLElement element = field.getFirstChildNamed(SPEC);
         if (element == null)
         {
-            Debug.trace("Error: no spec element defined in file field");
+            logger.warning("No 'spec' element defined in file field");
             return;
         }
         else
@@ -675,7 +677,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         IXMLElement element = field.getFirstChildNamed(SPEC);
         if (element == null)
         {
-            Debug.trace("Error: no spec element defined in multi file field");
+            logger.warning("No 'spec' element defined in multi file field");
             return;
         }
         else
@@ -739,7 +741,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 }
                 catch (Exception e)
                 {
-                    Debug.error("Illegal value for visibleRows found.");
+                    logger.log(Level.WARNING,
+                            "Illegal value for 'visibleRows'",
+                            e);
                 }
             }
 
@@ -752,7 +756,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 }
                 catch (Exception e)
                 {
-                    Debug.error("Illegal value for prefX found.");
+                    logger.log(Level.WARNING,
+                            "Illegal value for 'prefX'",
+                            e);
                 }
             }
             String prefY = element.getAttribute("prefY");
@@ -764,7 +770,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 }
                 catch (Exception e)
                 {
-                    Debug.error("Illegal value for prefY found.");
+                    logger.log(Level.WARNING,
+                            "Illegal value for 'prefY'",
+                            e);
                 }
             }
 
@@ -817,7 +825,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         IXMLElement element = field.getFirstChildNamed(SPEC);
         if (element == null)
         {
-            Debug.trace("Error: no spec element defined in file field");
+            logger.fine("No 'spec' element defined in file field");
             return;
         }
         else
@@ -919,7 +927,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 String variable = element.getAssociatedVariable();
                 String value = this.installData.getVariable(variable);
 
-                Debug.trace("updateUIElements() variable=" + variable + " value=" + value + "\n");
+                logger.fine("variable=" + variable + ", value=" + value);
                 if (element.getType() == UIElementType.RADIOBUTTON)
                 {
                     // we have a radio field, which should be updated
@@ -1055,6 +1063,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
      * @return A boolean stating wether the panel has been validated or not.
      */
     /*--------------------------------------------------------------------------*/
+    @Override
     public boolean isValidated()
     {
         return readInput();
@@ -1066,6 +1075,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
      * This method is called when the panel becomes active.
      */
     /*--------------------------------------------------------------------------*/
+    @Override
     public void panelActivate()
     {
         this.init();
@@ -1114,6 +1124,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
      * @param panelRoot The XML root element of the panels blackbox tree.
      */
     /*--------------------------------------------------------------------------*/
+    @Override
     public void makeXMLData(IXMLElement panelRoot)
     {
         Map<String, String> entryMap = new HashMap<String, String>();
@@ -1249,10 +1260,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
         catch (Exception e)
         {
-            if (Debug.stackTracing())
-            {
-                Debug.trace(e);
-            }
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
         return result;
     }
@@ -1274,10 +1282,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
         catch (Exception e)
         {
-            if (Debug.stackTracing())
-            {
-                Debug.trace(e);
-            }
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
         return result;
     }
@@ -1325,10 +1330,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
         catch (Exception e)
         {
-            if (Debug.stackTracing())
-            {
-                Debug.trace(e);
-            }
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
         return result;
     }
@@ -1433,11 +1435,13 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             try
             {
                 imgicon = parent.getIcons().get(icon);
-                label = LabelFactory.create(title, imgicon, JLabel.TRAILING, true);
+                label = LabelFactory.create(title, imgicon, SwingConstants.TRAILING, true);
             }
             catch (Exception e)
             {
-                Debug.trace("Icon " + icon + " not found in icon list. " + e.getMessage());
+                logger.log(Level.WARNING,
+                        "Icon " + icon + " not found in icon list: " + e.getMessage(),
+                        e);
                 label = LabelFactory.create(title);
             }
             Font font = label.getFont();
@@ -1773,7 +1777,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // ----------------------------------------------------
         else
         {
-            Debug.trace("No specification element, returning.");
+            logger.warning("No specification element, returning");
             return;
         }
 
@@ -1784,7 +1788,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         if (element != null)
         {
             validator = element.getAttribute(CLASS);
-            Debug.trace("Validator found for text field: " + validator);
+            logger.fine("Validator found for text field: " + validator);
             message = getText(element);
             // ----------------------------------------------------------
             // check and see if we have any parameters for this validator.
@@ -1793,7 +1797,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             validateParams = element.getChildrenNamed(RULE_PARAM);
             if (validateParams != null && validateParams.size() > 0)
             {
-                Debug.trace("Validator has " + validateParams.size() + " parameters.");
+                logger.fine("Validator has " + validateParams.size() + " parameters.");
                 hasParams = true;
 
                 if (validateParamMap == null)
@@ -1898,11 +1902,11 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
 
         // validate the input
-        Debug.trace("Validating text field");
+        logger.fine("Validating text field");
         boolean success = textField.validateContents();
         if (!success)
         {
-            Debug.trace("Validation did not pass, message: " + message);
+            logger.fine("Validation did not pass, message: " + message);
             if (message == null)
             {
                 message = "Text entered did not pass validation.";
@@ -1910,7 +1914,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             showWarningMessageDialog(parentFrame, message);
             return (false);
         }
-        Debug.trace("Field validated");
+        logger.fine("Field validated");
         this.installData.setVariable(variable, value);
         entries.add(new UserInputPanel.TextValuePair(variable, value));
         return (true);
@@ -2014,7 +2018,6 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     }
 
                     StringTokenizer tokenizer = new StringTokenizer(choiceValues, ":");
-                    int counter = 0;
                     while (tokenizer.hasMoreTokens())
                     {
                         String token = tokenizer.nextToken();
@@ -2024,7 +2027,6 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                         {
                             field.setSelectedIndex(field.getItemCount() - 1);
                         }
-                        counter++;
                     }
                 }
                 else
@@ -2582,7 +2584,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             falseValue = detail.getAttribute(FALSE);
             causesValidataion = detail.getAttribute(REVALIDATE);
             String value = this.installData.getVariable(variable);
-            Debug.trace("check: value: " + value + ", set: " + set);
+            logger.fine("check: value: " + value + ", set: " + set);
             if (value != null)
             {
                 // Default is not checked so we only need to check for true
@@ -2686,21 +2688,21 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 falseValue = "";
             }
         }
-        catch (Throwable exception)
+        catch (Throwable e)
         {
-            Debug.trace("readCheckBox(): failed: " + exception);
+            logger.log(Level.WARNING, "Failed: " + e.getMessage(), e);
             return (true);
         }
 
         if (box.isSelected())
         {
-            Debug.trace("readCheckBox(): selected, setting " + variable + " to " + trueValue);
+            logger.fine("Selected, setting " + variable + " to " + trueValue);
             this.installData.setVariable(variable, trueValue);
             entries.add(new UserInputPanel.TextValuePair(variable, trueValue));
         }
         else
         {
-            Debug.trace("readCheckBox(): not selected, setting " + variable + " to " + falseValue);
+            logger.fine("Not selected, setting " + variable + " to " + falseValue);
             this.installData.setVariable(variable, falseValue);
             entries.add(new UserInputPanel.TextValuePair(variable, falseValue));
         }
@@ -3583,40 +3585,13 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             this.value = value;
         }
 
-        /*--------------------------------------------------------------------------*/
-
-        /**
-         * Sets the text
-         *
-         * @param text the text for this object
-         */
-        /*--------------------------------------------------------------------------*/
-        public void setText(String text)
-        {
-            this.text = text;
-        }
-
-        /*--------------------------------------------------------------------------*/
-
-        /**
-         * Sets the value of this object
-         *
-         * @param value the value for this object
-         */
-        /*--------------------------------------------------------------------------*/
-        public void setValue(String value)
-        {
-            this.value = value;
-        }
-
-        /*--------------------------------------------------------------------------*/
-
         /**
          * This method returns the text that was set for the object
          *
          * @return the object's text
          */
         /*--------------------------------------------------------------------------*/
+        @Override
         public String toString()
         {
             return (text);
@@ -3733,16 +3708,19 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     .addDocumentListener(new DocumentListener()
                     {
 
+                        @Override
                         public void changedUpdate(DocumentEvent e)
                         {
                             checkNextButtonState();
                         }
 
+                        @Override
                         public void insertUpdate(DocumentEvent e)
                         {
                             checkNextButtonState();
                         }
 
+                        @Override
                         public void removeUpdate(DocumentEvent e)
                         {
                             checkNextButtonState();
@@ -3956,6 +3934,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
          * It checks, which button caused the action and acts accordingly.
          */
         /*--------------------------------------------------------------------------*/
+        @Override
         public void actionPerformed(ActionEvent event)
         {
             // System.out.println ("autodetection button pressed.");
@@ -4129,6 +4108,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
     // Repaint all controls and validate them agains the current variables
 
+    @Override
     public void actionPerformed(ActionEvent e)
     {
         // validating = false;
@@ -4180,6 +4160,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 JOptionPane.WARNING_MESSAGE);
     }
 
+    @Override
     public void itemStateChanged(ItemEvent arg0)
     {
         updateDialog();
@@ -4206,12 +4187,14 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
     }
 
+    @Override
     public void focusGained(FocusEvent e)
     {
         // TODO Auto-generated method stub
 
     }
 
+    @Override
     public void focusLost(FocusEvent e)
     {
         updateDialog();

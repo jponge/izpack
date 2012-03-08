@@ -17,14 +17,14 @@
 
 package com.izforge.izpack.util.file.types;
 
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.file.DirectoryScanner;
-import com.izforge.izpack.util.file.FileScanner;
-import com.izforge.izpack.util.file.types.selectors.*;
-
 import java.io.File;
 import java.util.Enumeration;
 import java.util.Vector;
+import java.util.logging.Logger;
+
+import com.izforge.izpack.util.file.DirectoryScanner;
+import com.izforge.izpack.util.file.FileScanner;
+import com.izforge.izpack.util.file.types.selectors.*;
 
 /**
  * Class that holds an implicit patternset and supports nested
@@ -34,6 +34,7 @@ import java.util.Vector;
 public class FileSet extends DataType
         implements Cloneable, SelectorContainer
 {
+    private static final Logger logger = Logger.getLogger(FileSet.class.getName());
 
     private PatternSet defaultPatterns = new PatternSet();
     private Vector<PatternSet> additionalPatterns = new Vector<PatternSet>();
@@ -228,7 +229,7 @@ public class FileSet extends DataType
             Object o = additionalPatterns.elementAt(i);
             defaultPatterns.append((PatternSet) o);
         }
-        Debug.log("Fileset setup scanner in dir " + dir
+        logger.fine("Fileset setup scanner in dir " + dir
                 + " with " + defaultPatterns);
 
         ds.setIncludes(defaultPatterns.getIncludePatterns());
@@ -252,6 +253,7 @@ public class FileSet extends DataType
      *
      * @return whether any selectors are in this container.
      */
+    @Override
     public boolean hasSelectors()
     {
         return !(selectors.isEmpty());
@@ -271,7 +273,7 @@ public class FileSet extends DataType
         Enumeration<PatternSet> e = additionalPatterns.elements();
         while (e.hasMoreElements())
         {
-            PatternSet ps = (PatternSet) e.nextElement();
+            PatternSet ps = e.nextElement();
             if (ps.hasPatterns())
             {
                 return true;
@@ -285,6 +287,7 @@ public class FileSet extends DataType
      *
      * @return the number of selectors in this container as an <code>int</code>.
      */
+    @Override
     public int selectorCount()
     {
         return selectors.size();
@@ -295,6 +298,7 @@ public class FileSet extends DataType
      *
      * @return a <code>FileSelector[]</code> of the selectors in this container.
      */
+    @Override
     public FileSelector[] getSelectors()
     {
         return selectors.toArray(new FileSelector[selectors.size()]);
@@ -305,6 +309,7 @@ public class FileSet extends DataType
      *
      * @return an <code>Enumeration</code> of selectors.
      */
+    @Override
     public Enumeration<FileSelector> selectorElements()
     {
         return selectors.elements();
@@ -315,6 +320,7 @@ public class FileSet extends DataType
      *
      * @param selector the new <code>FileSelector</code> to add.
      */
+    @Override
     public void appendSelector(FileSelector selector)
     {
         selectors.addElement(selector);
@@ -327,6 +333,7 @@ public class FileSet extends DataType
      *
      * @param selector the <code>SelectSelector</code> to add.
      */
+    @Override
     public void addSelector(SelectSelector selector)
     {
         appendSelector(selector);
@@ -337,6 +344,7 @@ public class FileSet extends DataType
      *
      * @param selector the <code>AndSelector</code> to add.
      */
+    @Override
     public void addAnd(AndSelector selector)
     {
         appendSelector(selector);
@@ -347,6 +355,7 @@ public class FileSet extends DataType
      *
      * @param selector the <code>OrSelector</code> to add.
      */
+    @Override
     public void addOr(OrSelector selector)
     {
         appendSelector(selector);
@@ -357,6 +366,7 @@ public class FileSet extends DataType
      *
      * @param selector the <code>NotSelector</code> to add.
      */
+    @Override
     public void addNot(NotSelector selector)
     {
         appendSelector(selector);
@@ -367,6 +377,7 @@ public class FileSet extends DataType
      *
      * @param selector the <code>NoneSelector</code> to add.
      */
+    @Override
     public void addNone(NoneSelector selector)
     {
         appendSelector(selector);
@@ -377,6 +388,7 @@ public class FileSet extends DataType
      *
      * @param selector the <code>MajoritySelector</code> to add.
      */
+    @Override
     public void addMajority(MajoritySelector selector)
     {
         appendSelector(selector);
@@ -387,6 +399,7 @@ public class FileSet extends DataType
      *
      * @param selector the <code>DateSelector</code> to add.
      */
+    @Override
     public void addDate(DateSelector selector)
     {
         appendSelector(selector);
@@ -397,6 +410,7 @@ public class FileSet extends DataType
      *
      * @param selector the <code>SizeSelector</code> to add.
      */
+    @Override
     public void addSize(SizeSelector selector)
     {
         appendSelector(selector);
@@ -407,6 +421,7 @@ public class FileSet extends DataType
      *
      * @param selector the <code>DifferentSelector</code> to add.
      */
+    @Override
     public void addDifferent(DifferentSelector selector)
     {
         appendSelector(selector);
@@ -417,6 +432,7 @@ public class FileSet extends DataType
      *
      * @param selector the <code>FilenameSelector</code> to add.
      */
+    @Override
     public void addFilename(FilenameSelector selector)
     {
         appendSelector(selector);
@@ -427,6 +443,7 @@ public class FileSet extends DataType
      *
      * @param selector the <code>TypeSelector</code> to add.
      */
+    @Override
     public void addType(TypeSelector selector)
     {
         appendSelector(selector);
@@ -437,6 +454,7 @@ public class FileSet extends DataType
      *
      * @param selector the <code>ExtendSelector</code> to add.
      */
+    @Override
     public void addCustom(ExtendSelector selector)
     {
         appendSelector(selector);
@@ -447,6 +465,7 @@ public class FileSet extends DataType
      *
      * @param selector the <code>ContainsSelector</code> to add.
      */
+    @Override
     public void addContains(ContainsSelector selector)
     {
         appendSelector(selector);
@@ -457,6 +476,7 @@ public class FileSet extends DataType
      *
      * @param selector the <code>PresentSelector</code> to add.
      */
+    @Override
     public void addPresent(PresentSelector selector)
     {
         appendSelector(selector);
@@ -467,6 +487,7 @@ public class FileSet extends DataType
      *
      * @param selector the <code>DepthSelector</code> to add.
      */
+    @Override
     public void addDepth(DepthSelector selector)
     {
         appendSelector(selector);
@@ -477,6 +498,7 @@ public class FileSet extends DataType
      *
      * @param selector the <code>DependSelector</code> to add.
      */
+    @Override
     public void addDepend(DependSelector selector)
     {
         appendSelector(selector);
@@ -487,6 +509,7 @@ public class FileSet extends DataType
      *
      * @param selector the <code>ContainsRegexpSelector</code> to add.
      */
+    @Override
     public void addContainsRegexp(ContainsRegexpSelector selector)
     {
         appendSelector(selector);
@@ -497,6 +520,7 @@ public class FileSet extends DataType
      *
      * @param selector the <code>FileSelector</code> to add.
      */
+    @Override
     public void add(FileSelector selector)
     {
         appendSelector(selector);

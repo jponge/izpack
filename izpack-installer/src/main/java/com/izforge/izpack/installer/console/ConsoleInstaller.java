@@ -22,6 +22,14 @@
 
 package com.izforge.izpack.installer.console;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Info;
@@ -32,20 +40,13 @@ import com.izforge.izpack.api.data.ScriptParserConstant;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.Console;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.bootstrap.Installer;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.requirement.RequirementsChecker;
-import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.Console;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.file.FileUtils;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.Properties;
 
 /**
  * Runs the console installer.
@@ -55,6 +56,8 @@ import java.util.Properties;
  */
 public class ConsoleInstaller extends InstallerBase
 {
+    private static final Logger logger = Logger.getLogger(ConsoleInstaller.class.getName());
+
     /**
      * The panel console factory.
      */
@@ -140,7 +143,7 @@ public class ConsoleInstaller extends InstallerBase
             if (factory.getClass(panel) == null)
             {
                 success = false;
-                Debug.log("No console implementation of panel: " + panel.getClassName());
+                logger.warning("No console implementation of panel: " + panel.getClassName());
             }
         }
         return success;
@@ -174,10 +177,10 @@ public class ConsoleInstaller extends InstallerBase
                     success = run(action);
                 }
             }
-            catch (Throwable exception)
+            catch (Throwable t)
             {
                 success = false;
-                Debug.error(exception);
+                logger.log(Level.SEVERE, t.getMessage(), t);
             }
             finally
             {
@@ -234,7 +237,7 @@ public class ConsoleInstaller extends InstallerBase
     {
         if (exitSuccess && !installData.isInstallSuccess())
         {
-            Debug.error("Expected successful exit status, but installation data is reporting failure");
+            logger.severe("Expected successful exit status, but installation data is reporting failure");
             exitSuccess = false;
         }
         installData.setInstallSuccess(exitSuccess);

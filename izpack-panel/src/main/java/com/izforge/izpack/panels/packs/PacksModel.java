@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -43,18 +44,15 @@ import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackColor;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.util.Debug;
 
 /**
  * User: Gaganis Giorgos Date: Sep 17, 2004 Time: 8:33:21 AM
  */
 public class PacksModel extends AbstractTableModel
 {
-
-    /**
-     *
-     */
     private static final long serialVersionUID = 3258128076746733110L;
+
+    private static final transient Logger logger = Logger.getLogger(PacksModel.class.getName());
 
     private static final String INITAL_PACKSELECTION = "initial.pack.selection";
 
@@ -91,7 +89,7 @@ public class PacksModel extends AbstractTableModel
     public PacksModel(PacksPanelInterface panel, GUIInstallData idata, RulesEngine rules)
     {
         this.idata = idata;
-        modifyinstallation = Boolean.valueOf(idata.getVariable(GUIInstallData.MODIFY_INSTALLATION));
+        modifyinstallation = Boolean.valueOf(idata.getVariable(AutomatedInstallData.MODIFY_INSTALLATION));
         this.installedpacks = new HashMap<String, Pack>();
 
         if (modifyinstallation)
@@ -103,7 +101,7 @@ public class PacksModel extends AbstractTableModel
             {
                 FileInputStream fin = new FileInputStream(new File(idata.getInstallPath() + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION));
                 ObjectInputStream oin = new ObjectInputStream(fin);
-                List<Pack> packsinstalled = (List) oin.readObject();
+                List<Pack> packsinstalled = (List<Pack>) oin.readObject();
                 for (Pack installedpack : packsinstalled)
                 {
                     if ((installedpack.id != null) && (installedpack.id.length() > 0))
@@ -116,7 +114,7 @@ public class PacksModel extends AbstractTableModel
                     }
                 }
                 this.removeAlreadyInstalledPacks(idata.getSelectedPacks());
-                Debug.trace("Found " + packsinstalled.size() + " installed packs");
+                logger.fine("Found " + packsinstalled.size() + " installed packs");
 
                 Properties variables = (Properties) oin.readObject();
 
@@ -220,14 +218,14 @@ public class PacksModel extends AbstractTableModel
             for (Pack pack : packs)
             {
                 int pos = getPos(pack.name);
-                Debug.trace("Conditions fulfilled for: " + pack.name + "?");
+                logger.fine("Conditions fulfilled for: " + pack.name + "?");
                 if (!this.rules.canInstallPack(pack.id, this.variables))
                 {
-                    Debug.trace("no");
+                    logger.fine("no");
                     if (this.rules.canInstallPackOptional(pack.id, this.variables))
                     {
-                        Debug.trace("optional");
-                        Debug.trace(pack.id + " can be installed optionally.");
+                        logger.fine("optional");
+                        logger.fine(pack.id + " can be installed optionally.");
                         if (initial)
                         {
                             if (checkValues[pos] != 0)
@@ -238,14 +236,10 @@ public class PacksModel extends AbstractTableModel
                                 break;
                             }
                         }
-                        else
-                        {
-                            // just do nothing
-                        }
                     }
                     else
                     {
-                        Debug.trace(pack.id + " can not be installed.");
+                        logger.fine("Pack" + pack.id + " cannot be installed");
                         if (checkValues[pos] != -2)
                         {
                             checkValues[pos] = -2;
@@ -383,6 +377,7 @@ public class PacksModel extends AbstractTableModel
      * @see TableModel#getRowCount()
      */
 
+    @Override
     public int getRowCount()
     {
         return packs.size();
@@ -392,6 +387,7 @@ public class PacksModel extends AbstractTableModel
      * @see TableModel#getColumnCount()
      */
 
+    @Override
     public int getColumnCount()
     {
         boolean doNotShowPackSize = Boolean.parseBoolean(idata.guiPrefs.modifier.get("doNotShowPackSizeColumn"));
@@ -412,7 +408,8 @@ public class PacksModel extends AbstractTableModel
      * @see TableModel#getColumnClass(int)
      */
 
-    public Class getColumnClass(int columnIndex)
+    @Override
+    public Class<?> getColumnClass(int columnIndex)
     {
         switch (columnIndex)
         {
@@ -428,6 +425,7 @@ public class PacksModel extends AbstractTableModel
      * @see TableModel#isCellEditable(int, int)
      */
 
+    @Override
     public boolean isCellEditable(int rowIndex, int columnIndex)
     {
         if (checkValues[rowIndex] < 0)
@@ -444,6 +442,7 @@ public class PacksModel extends AbstractTableModel
      * @see TableModel#getValueAt(int, int)
      */
 
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex)
     {
         Pack pack = packs.get(rowIndex);
@@ -478,6 +477,7 @@ public class PacksModel extends AbstractTableModel
      * @see TableModel#setValueAt(Object, int, int)
      */
 
+    @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex)
     {
         if (columnIndex == 0)

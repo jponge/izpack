@@ -1,16 +1,15 @@
 package com.izforge.izpack.util.os;
 
-import com.izforge.izpack.util.Debug;
-
 import java.io.File;
 import java.io.IOException;
-
+import java.util.logging.Logger;
 
 /**
  * File queue move operation (Windows Setup API)
  */
 public class FileQueueMove extends FileQueueCopy
 {
+    private static final Logger logger = Logger.getLogger(FileQueueMove.class.getName());
 
     public FileQueueMove(File fromFile, File toFile)
     {
@@ -27,7 +26,7 @@ public class FileQueueMove extends FileQueueCopy
     {
         try
         {
-            Debug.log("Enqueueing moving " + fromFile + " to " + toFile
+            logger.fine("Enqueueing moving " + fromFile + " to " + toFile
                     + " (0x" + Integer.toHexString(copyStyle) + ")");
             filequeue.addMove(fromFile, toFile);
         }

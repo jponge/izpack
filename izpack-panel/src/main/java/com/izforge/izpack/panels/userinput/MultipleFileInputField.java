@@ -30,6 +30,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.swing.*;
 
@@ -38,12 +39,13 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.userinput.processorclient.StringInputProcessingClient;
 import com.izforge.izpack.panels.userinput.validator.ValidatorContainer;
-import com.izforge.izpack.util.Debug;
 
 
 public class MultipleFileInputField extends JPanel implements ActionListener, FocusListener
 {
     private static final long serialVersionUID = 4673684743657328492L;
+
+    private static final transient Logger logger = Logger.getLogger(MultipleFileInputField.class.getName());
 
     boolean isDirectory;
     InstallerFrame parentFrame;
@@ -142,11 +144,12 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
         add(main);
     }
 
+    @Override
     public void actionPerformed(ActionEvent arg0)
     {
         if (arg0.getSource() == browseBtn)
         {
-            Debug.trace("Show dirchooser");
+            logger.fine("Show directory chooser");
             String initialPath = ".";
             if (fileList.getSelectedValue() != null)
             {
@@ -173,12 +176,12 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
             {
                 String selectedFile = filechooser.getSelectedFile().getAbsolutePath();
                 model.addElement(selectedFile);
-                Debug.trace("Setting current file chooser directory to: " + selectedFile);
+                logger.fine("Setting current file chooser directory to: " + selectedFile);
             }
         }
         if (arg0.getSource() == deleteBtn)
         {
-            Debug.trace("Delete selected file from list");
+            logger.fine("Delete selected file from list");
             if (fileList.getSelectedValue() != null)
             {
                 model.removeElement(fileList.getSelectedValue());
@@ -283,29 +286,25 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
 
     }
 
-
     public boolean isAllowEmptyInput()
     {
         return allowEmpty;
     }
-
 
     public void setAllowEmptyInput(boolean allowEmpty)
     {
         this.allowEmpty = allowEmpty;
     }
 
+    @Override
     public void focusGained(FocusEvent e)
     {
-        // TODO Auto-generated method stub
-
     }
 
+    @Override
     public void focusLost(FocusEvent e)
     {
-
     }
-
 
     public boolean isCreateMultipleVariables()
     {

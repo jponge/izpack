@@ -1,15 +1,15 @@
 package com.izforge.izpack.util.os;
 
-import com.izforge.izpack.util.Debug;
-
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /*
  * File queue delete operation (Windows Setup API)
  */
 public class FileQueueDelete implements FileQueueOperation
 {
+    private static final Logger logger = Logger.getLogger(FileQueueDelete.class.getName());
 
     protected File file;
 
@@ -31,12 +31,12 @@ public class FileQueueDelete implements FileQueueOperation
             {
                 if (file.isDirectory())
                 {
-                    Debug.log("Directory " + file.getAbsolutePath()
+                    logger.warning("Directory " + file.getAbsolutePath()
                             + " cannot be removed in a file queue");
                 }
                 else
                 {
-                    Debug.log("Enqueueing deletion of " + file.getAbsolutePath());
+                    logger.fine("Enqueueing deletion of " + file.getAbsolutePath());
                     try
                     {
                         fileQueue.addDelete(file);
@@ -51,7 +51,7 @@ public class FileQueueDelete implements FileQueueOperation
             }
             else
             {
-                Debug.log("Could not find file " + file.getAbsolutePath() + " to delete.");
+                logger.warning("Could not find file " + file.getAbsolutePath() + " to delete.");
             }
         }
     }

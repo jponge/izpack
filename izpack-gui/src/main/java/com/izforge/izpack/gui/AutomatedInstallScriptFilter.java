@@ -21,13 +21,12 @@
 
 package com.izforge.izpack.gui;
 
-import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.util.Debug;
+import java.io.*;
+import java.util.logging.*;
 
 import javax.swing.filechooser.FileFilter;
-import java.io.File;
-import java.io.InputStream;
+
+import com.izforge.izpack.api.data.*;
 
 /**
  * Allows a file if it is a directory or if it ends with .xml. The description
@@ -46,6 +45,8 @@ import java.io.InputStream;
  */
 public class AutomatedInstallScriptFilter extends FileFilter
 {
+    private static final Logger logger = Logger.getLogger(AutomatedInstallScriptFilter.class.getName());
+
     /**
      * The default description for the file filter if it cannot be loaded from
      * the LocaleDatabase.
@@ -59,11 +60,11 @@ public class AutomatedInstallScriptFilter extends FileFilter
     public static final String DESCRIPTION_LOCALE_DATABASE_KEY = "FinishPanel.auto.dialog.filterdesc";
 
     /*
-      * (non-Javadoc)
-      *
-      * @see java.io.FileFilter#accept(java.io.File)
-      */
-
+     * (non-Javadoc)
+     *
+     * @see java.io.FileFilter#accept(java.io.File)
+     */
+    @Override
     public boolean accept(File pathname)
     {
         /*
@@ -74,9 +75,7 @@ public class AutomatedInstallScriptFilter extends FileFilter
                 ".xml"));
     }
 
-    /**
-     *
-     */
+    @Override
     public String getDescription()
     {
         // Load the lang pack using the current locale
@@ -100,7 +99,7 @@ public class AutomatedInstallScriptFilter extends FileFilter
                 * We'll just log the exception if something happens and provide the
                 * default value.
                 */
-            Debug.log(e);
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
 
         if (description == null)

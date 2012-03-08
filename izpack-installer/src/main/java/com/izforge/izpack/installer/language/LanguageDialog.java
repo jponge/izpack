@@ -1,15 +1,5 @@
 package com.izforge.izpack.installer.language;
 
-import com.izforge.izpack.api.GuiId;
-import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
-import com.izforge.izpack.installer.base.InstallerBase;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.installer.requirement.RequirementsChecker;
-import com.izforge.izpack.util.Debug;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +9,17 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.TreeMap;
+import java.util.logging.Logger;
+
+import javax.swing.*;
+
+import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.installer.base.InstallerBase;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.requirement.RequirementsChecker;
 
 /**
  * Used to prompt the user for the language. Languages can be displayed in iso3 or the native
@@ -31,8 +32,9 @@ import java.util.TreeMap;
  */
 public class LanguageDialog extends JDialog implements ActionListener
 {
-
     private static final long serialVersionUID = 3256443616359887667L;
+
+    private static transient final Logger logger = Logger.getLogger(LanguageDialog.class.getName());
 
     /**
      * The combo box.
@@ -51,7 +53,7 @@ public class LanguageDialog extends JDialog implements ActionListener
     /**
      * holds language to ISO-3 language code translation
      */
-    private static HashMap isoTable;
+    private static HashMap<Object, Object> isoTable;
     private static final String[][] LANG_CODES = {{"cat", "ca"}, {"chn", "zh"}, {"cze", "cs"},
             {"dan", "da"}, {"deu", "de"}, {"eng", "en"}, {"fin", "fi"}, {"fra", "fr"},
             {"hun", "hu"}, {"ita", "it"}, {"jpn", "ja"}, {"mys", "ms"}, {"ned", "nl"},
@@ -208,7 +210,7 @@ public class LanguageDialog extends JDialog implements ActionListener
         if (iso3Toiso2 == null)
         { // Loasd predefined langs into HashMap.
             iso3Toiso2 = new HashMap<String, String>(32);
-            isoTable = new HashMap();
+            isoTable = new HashMap<Object, Object>();
             for (i = 0; i < LANG_CODES.length; ++i)
             {
                 iso3Toiso2.put(LANG_CODES[i][0], LANG_CODES[i][1]);
@@ -482,7 +484,7 @@ public class LanguageDialog extends JDialog implements ActionListener
                     return (val);
                 }
             }
-            Debug.trace("Value for language display type not valid; value: " + val);
+            logger.fine("Value for language display type not valid; value: " + val);
         }
         return (LANGUAGE_DISPLAY_TYPES[0]);
     }
@@ -523,7 +525,7 @@ public class LanguageDialog extends JDialog implements ActionListener
         // check installer conditions
         if (!requirements.check())
         {
-            Debug.log("not all installerconditions are fulfilled.");
+            logger.info("Not all installer requirements are fulfilled.");
             System.exit(-1);
         }
     }

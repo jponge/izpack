@@ -22,18 +22,22 @@
 
 package com.izforge.izpack.util;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Info.TempDir;
 import com.izforge.izpack.util.file.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * Manages the life-cycle of a temporary directory
  */
 public class TemporaryDirectory implements CleanupClient
 {
+    private static final Logger logger = Logger.getLogger(TemporaryDirectory.class.getName());
+
     private File tempdir;
     private final AutomatedInstallData installData;
     private final TempDir tempDirDescription;
@@ -75,8 +79,9 @@ public class TemporaryDirectory implements CleanupClient
         }
         catch (IOException e)
         {
-            Debug.error("Unable to create temporary directory for install. IOException: ");
-            Debug.error(e);
+            logger.log(Level.SEVERE,
+                    "Unable to create temporary directory for installation: " + e.getMessage(),
+                    e);
             throw e;
         }
         installData.setVariable(tempDirDescription.getVariableName(), tempdir.getAbsolutePath());
@@ -104,22 +109,22 @@ public class TemporaryDirectory implements CleanupClient
             {
                 if (!FileUtils.deleteRecursively(tempdir))
                 {
-                    Debug.error("Failed to properly clean up files in "
+                    logger.warning("Failed to properly clean up files in "
                             + tempdir.getAbsolutePath()
                             + " manual clean up may be required.");
                 }
             }
             else
             {
-                Debug.log("Temporary directory has not been cleaned up. Files have been left in: " + tempdir.getAbsolutePath());
+                logger.warning("Temporary directory has not been cleaned up. Files have been left in: " + tempdir.getAbsolutePath());
 
             }
         }
         else
         {
-            Debug.log("TemporaryDirectory registered for cleanup but there is no temp directory to clean up.");
-		}
-	}
+            logger.warning("Temporary directory registered for cleanup but there is no such directory");
+        }
+    }
 
 
 

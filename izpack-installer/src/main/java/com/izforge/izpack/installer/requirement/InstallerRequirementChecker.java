@@ -1,12 +1,13 @@
 package com.izforge.izpack.installer.requirement;
 
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.InstallerRequirement;
 import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.installer.RequirementChecker;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.util.Debug;
 
 /**
  * Evaluates each {@link InstallerRequirement} returned by {@link AutomatedInstallData#getInstallerrequirements()}
@@ -16,6 +17,8 @@ import com.izforge.izpack.util.Debug;
  */
 public class InstallerRequirementChecker implements RequirementChecker
 {
+    private static final Logger logger = Logger.getLogger(InstallerRequirementChecker.class.getName());
+
     /**
      * The installation data.
      */
@@ -62,7 +65,7 @@ public class InstallerRequirementChecker implements RequirementChecker
             if (condition == null)
             {
                 fail = true;
-                Debug.error(id + " is not a valid condition.");
+                logger.warning(id + " is not a valid condition.");
                 break;
             }
             if (!condition.isTrue())

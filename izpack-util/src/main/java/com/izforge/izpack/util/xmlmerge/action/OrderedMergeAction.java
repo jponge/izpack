@@ -25,6 +25,7 @@ package com.izforge.izpack.util.xmlmerge.action;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.jdom.Attribute;
 import org.jdom.Comment;
@@ -32,8 +33,12 @@ import org.jdom.Content;
 import org.jdom.Element;
 import org.jdom.Text;
 
-import com.izforge.izpack.util.*;
-import com.izforge.izpack.util.xmlmerge.*;
+import com.izforge.izpack.util.xmlmerge.AbstractXmlMergeException;
+import com.izforge.izpack.util.xmlmerge.Action;
+import com.izforge.izpack.util.xmlmerge.DocumentException;
+import com.izforge.izpack.util.xmlmerge.Mapper;
+import com.izforge.izpack.util.xmlmerge.Matcher;
+import com.izforge.izpack.util.xmlmerge.MergeAction;
 
 /**
  * Merge implementation traversing parallelly both element contents. Works when contents are in the
@@ -44,15 +49,17 @@ import com.izforge.izpack.util.xmlmerge.*;
  */
 public class OrderedMergeAction extends AbstractMergeAction
 {
+    private static final Logger logger = Logger.getLogger(OrderedMergeAction.class.getName());
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void perform(Element originalElement, Element patchElement, Element outputParentElement)
             throws AbstractXmlMergeException
     {
 
-        Debug.log("Merging: " + originalElement + "(List 1) and " + patchElement + "(List 2)");
+        logger.fine("Merging: " + originalElement + "(List 1) and " + patchElement + "(List 2)");
 
         Mapper mapper = (Mapper) m_mapperFactory.getOperation(originalElement, patchElement);
 
@@ -71,7 +78,7 @@ public class OrderedMergeAction extends AbstractMergeAction
                     .getNamespacePrefix(), originalElement.getNamespaceURI());
             addAttributes(workingElement, originalElement);
 
-            Debug.log("Adding " + workingElement);
+            logger.fine("Adding " + workingElement);
             outputParentElement.addContent(workingElement);
 
             doIt(workingElement, originalElement, patchElement);
@@ -102,7 +109,7 @@ public class OrderedMergeAction extends AbstractMergeAction
         for (Content content1 : list1)
         {
 
-            Debug.log("List 1: " + content1);
+            logger.fine("List 1: " + content1);
 
             if (content1 instanceof Comment || content1 instanceof Text)
             {
@@ -123,7 +130,7 @@ public class OrderedMergeAction extends AbstractMergeAction
                 for (int j = offsetTreated2; j < list2.length; j++)
                 {
 
-                    Debug.log("List 2: " + list2[j]);
+                    logger.fine("List 2: " + list2[j]);
 
                     if (list2[j] instanceof Element)
                     {
@@ -131,7 +138,7 @@ public class OrderedMergeAction extends AbstractMergeAction
                         if (((Matcher) m_matcherFactory.getOperation(e1, (Element) list2[j]))
                                 .matches(e1, (Element) list2[j]))
                         {
-                            Debug.log("Match found: " + e1 + " and " + list2[j]);
+                            logger.fine("Match found: " + e1 + " and " + list2[j]);
                             posInList2 = j;
                             break;
                         }
@@ -260,14 +267,14 @@ public class OrderedMergeAction extends AbstractMergeAction
         {
             attr.detach();
             allAttributes.put(attr.getQualifiedName(), attr);
-            Debug.log("adding attr from out:" + attr);
+            logger.fine("adding attr from out:" + attr);
         }
 
         for (Attribute attr : inAttributes)
         {
             attr.detach();
             allAttributes.put(attr.getQualifiedName(), attr);
-            Debug.log("adding attr from in:" + attr);
+            logger.fine("adding attr from in:" + attr);
         }
 
         out.setAttributes(new ArrayList<Attribute>(allAttributes.values()));

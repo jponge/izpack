@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2009 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2009 Matthew Inger
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,6 +20,14 @@
  */
 
 package com.izforge.izpack.event;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
@@ -30,20 +38,14 @@ import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 import com.izforge.izpack.util.helper.SpecHelper;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 
 public class BSFInstallerListener extends SimpleInstallerListener
 {
+    private static final Logger logger = Logger.getLogger(BSFInstallerListener.class.getName());
+
     public static final String SPEC_FILE_NAME = "BSFActionsSpec.xml";
 
     private HashMap<String, ArrayList<BSFAction>> actions = null;
@@ -62,6 +64,7 @@ public class BSFInstallerListener extends SimpleInstallerListener
         this.uninstallData = uninstallData;
     }
 
+    @Override
     public void beforePacks(AutomatedInstallData idata, Integer npacks, AbstractUIProgressHandler handler) throws Exception
     {
         if (installdata == null)
@@ -124,6 +127,7 @@ public class BSFInstallerListener extends SimpleInstallerListener
         }
     }
 
+    @Override
     public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
     {
         performAllActions(pack.name, ActionBase.AFTERPACK, handler,
@@ -131,6 +135,7 @@ public class BSFInstallerListener extends SimpleInstallerListener
         currentPack = null;
     }
 
+    @Override
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler) throws Exception
     {
         if (informProgressBar())
@@ -150,33 +155,39 @@ public class BSFInstallerListener extends SimpleInstallerListener
         installdata = null;
     }
 
+    @Override
     public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
     {
         currentPack = pack.name;
         performAllActions(pack.name, ActionBase.BEFOREPACK, handler, new Object[]{pack, i, handler});
     }
 
+    @Override
     public void afterDir(File file, PackFile pack) throws Exception
     {
         performAllActions(currentPack, BSFAction.AFTERDIR, null, new Object[]{file, pack});
 
     }
 
+    @Override
     public void afterFile(File file, PackFile pack) throws Exception
     {
         performAllActions(currentPack, BSFAction.AFTERFILE, null, new Object[]{file, pack});
     }
 
+    @Override
     public void beforeDir(File file, PackFile pack) throws Exception
     {
         performAllActions(currentPack, BSFAction.BEFOREDIR, null, new Object[]{file, pack});
     }
 
+    @Override
     public void beforeFile(File file, PackFile pack) throws Exception
     {
         performAllActions(currentPack, BSFAction.BEFOREFILE, null, new Object[]{file, pack});
     }
 
+    @Override
     public boolean isFileListener()
     {
         return true;
@@ -219,7 +230,7 @@ public class BSFInstallerListener extends SimpleInstallerListener
             return;
         }
 
-        Debug.trace("******* Executing all " + order + " actions of " + packName + " ...");
+        logger.fine("Executing all " + order + " BSF actions of pack " + packName + " ...");
         for (BSFAction act : actList)
         {
             // Inform progress bar if needed. Works only

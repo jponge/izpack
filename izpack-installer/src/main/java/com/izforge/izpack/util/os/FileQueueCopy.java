@@ -1,15 +1,15 @@
 package com.izforge.izpack.util.os;
 
-import com.izforge.izpack.util.Debug;
-
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * File queue copy operation (Windows Setup API)
  */
 public class FileQueueCopy implements FileQueueOperation
 {
+    private static final Logger logger = Logger.getLogger(FileQueueCopy.class.getName());
 
     protected File fromFile = null; // source file
     protected File toFile = null; // destination file
@@ -134,13 +134,13 @@ public class FileQueueCopy implements FileQueueOperation
     {
         if (fromFile.equals(toFile))
         {
-            Debug.log("Skipping self-copy of " + fromFile);
+            logger.warning("Skipping self-copy of " + fromFile);
         }
         else
         {
             try
             {
-                Debug.log("Enqueueing copying " + fromFile + " to " + toFile
+                logger.fine("Enqueueing copying " + fromFile + " to " + toFile
                         + " (0x" + Integer.toHexString(copyStyle) + ")");
                 filequeue.addCopy(fromFile, toFile, copyStyle);
             }

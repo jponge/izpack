@@ -21,25 +21,33 @@
 
 package com.izforge.izpack.panels.userinput;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.userinput.processorclient.StringInputProcessingClient;
 import com.izforge.izpack.panels.userinput.validator.ValidatorContainer;
-import com.izforge.izpack.util.Debug;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.List;
 
 public class FileInputField extends JPanel implements ActionListener
 {
-
     private static final long serialVersionUID = 4673684743657328492L;
+
+    private static final transient Logger logger = Logger.getLogger(FileInputField.class.getName());
 
     InstallerFrame parentFrame;
 
@@ -115,11 +123,12 @@ public class FileInputField extends JPanel implements ActionListener
         filetxt.setText(filename);
     }
 
+    @Override
     public void actionPerformed(ActionEvent arg0)
     {
         if (arg0.getSource() == browseBtn)
         {
-            Debug.trace("Show dirchooser");
+            logger.fine("Show directory chooser");
             String initialPath = ".";
             if (filetxt.getText() != null)
             {
@@ -132,7 +141,7 @@ public class FileInputField extends JPanel implements ActionListener
             {
                 String selectedFile = filechooser.getSelectedFile().getAbsolutePath();
                 filetxt.setText(selectedFile);
-                Debug.trace("Setting current file chooser directory to: " + selectedFile);
+                logger.fine("Setting current file chooser directory to: " + selectedFile);
             }
         }
     }

@@ -25,6 +25,17 @@
 
 package com.izforge.izpack.compiler;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackColor;
 import com.izforge.izpack.api.data.binding.OsModel;
@@ -37,17 +48,7 @@ import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.util.ClassUtils;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileUtil;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * The IzPack compiler class. This is now a java bean style class that can be
@@ -62,6 +63,8 @@ import java.util.Set;
  */
 public class Compiler extends Thread
 {
+    private static final Logger logger = Logger.getLogger(Compiler.class.getName());
+
     /**
      * Collects and packs files into installation jars, as told.
      */
@@ -109,27 +112,20 @@ public class Compiler extends Thread
     /**
      * The run() method.
      */
+    @Override
     public void run()
     {
         try
         {
-            createInstaller(); // Execute the compiler - may send info to
-            // System.out
+            createInstaller();
         }
         catch (CompilerException ce)
         {
-            System.out.println(ce.getMessage() + "\n");
+            logger.severe(ce.getMessage());
         }
         catch (Exception e)
         {
-            if (Debug.stackTracing())
-            {
-                e.printStackTrace();
-            }
-            else
-            {
-                System.out.println("ERROR: " + e.getMessage());
-            }
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -435,7 +431,7 @@ public class Compiler extends Thread
         if (result == null)
         {
             // not present in user-specified jars. Try and find it in the class path
-            Class aClass = classPathCrawler.findClass(className);
+            Class<?> aClass = classPathCrawler.findClass(className);
             result = aClass.getName();
         }
         return result;

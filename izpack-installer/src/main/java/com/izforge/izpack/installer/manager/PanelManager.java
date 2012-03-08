@@ -1,5 +1,16 @@
 package com.izforge.izpack.installer.manager;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.container.BindeableContainer;
@@ -19,13 +30,6 @@ import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.merge.resolve.ResolveUtils;
 import com.izforge.izpack.util.OsConstraintHelper;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.lang.reflect.Modifier;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  * Load panels in the container
  */
@@ -35,7 +39,8 @@ public class PanelManager
     private BindeableContainer installerContainer;
     private int lastVis;
     private ClassPathCrawler classPathCrawler;
-    private final static Logger LOGGER = Logger.getLogger(PanelManager.class.getName());
+
+    private final static Logger logger = Logger.getLogger(PanelManager.class.getName());
 
     /**
      * Mapping from "raw" panel number to visible panel number.
@@ -126,7 +131,7 @@ public class PanelManager
         }
         for (Map.Entry<Object, Class> entry : mapPanel.entrySet())
         {
-            LOGGER.log(Level.INFO, "Adding class " + entry + " in container");
+            logger.fine("Adding class " + entry + " in container");
             installerContainer.addComponent(entry.getKey(), entry.getValue());
         }
     }

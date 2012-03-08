@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2004 Klaus Bartz
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,9 +21,10 @@
 
 package com.izforge.izpack.event;
 
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 
 /**
@@ -35,10 +36,8 @@ import com.izforge.izpack.util.ExtendedUIProgressHandler;
  */
 public class ProgressBarInstallerListener extends SimpleInstallerListener
 {
+    private static final Logger logger = Logger.getLogger(ProgressBarInstallerListener.class.getName());
 
-    /**
-     *
-     */
     public ProgressBarInstallerListener()
     {
         super(false);
@@ -47,11 +46,12 @@ public class ProgressBarInstallerListener extends SimpleInstallerListener
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
      * com.izforge.izpack.api.handler.AbstractUIProgressHandler)
      */
 
+    @Override
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
             throws Exception
     {
@@ -61,8 +61,7 @@ public class ProgressBarInstallerListener extends SimpleInstallerListener
             String tip = getMsg("CustomActions.tip");
             if ("CustomActions.tip".equals(tip) || "CustomActions.progress".equals(progress))
             {
-                Debug
-                        .trace("No messages found for custom action progress bar interactions; skiped.");
+                logger.fine("No messages found for custom action progress bar interactions; skipped");
                 return;
             }
             ((ExtendedUIProgressHandler) handler).restartAction("Configure", progress, tip,

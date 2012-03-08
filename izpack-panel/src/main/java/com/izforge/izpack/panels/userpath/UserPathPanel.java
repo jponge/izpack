@@ -21,12 +21,14 @@
 
 package com.izforge.izpack.panels.userpath;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.util.Debug;
 
 /**
  * The target directory selection panel.
@@ -36,10 +38,9 @@ import com.izforge.izpack.util.Debug;
  */
 public class UserPathPanel extends UserPathInputPanel
 {
-
     private static final long serialVersionUID = 3256443616359429170L;
 
-    private static String thisName = "UserPathPanel";
+    private static final Logger logger = Logger.getLogger(UserPathPanel.class.getName());
 
     private boolean skip = false;
 
@@ -55,7 +56,7 @@ public class UserPathPanel extends UserPathInputPanel
      */
     public UserPathPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
     {
-        super(parent, idata, thisName, resourceManager);
+        super(parent, idata, UserPathPanel.class.getSimpleName(), resourceManager);
         // load the default directory info (if present)
         if (getDefaultDir() != null)
         {
@@ -63,25 +64,23 @@ public class UserPathPanel extends UserPathInputPanel
         }
     }
 
-    /**
-     * Called when the panel becomes active.
-     */
+    @Override
     public void panelActivate()
     {
         boolean found = false;
-        Debug.trace(thisName + " looking for activation condition");
+        logger.fine("Looking for activation condition");
         // Need to have a way to supress panel if not in selected packs.
         String dependsName = installData.getVariable(pathPackDependsName);
         if (dependsName != null && !(dependsName.equalsIgnoreCase("")))
         {
-            Debug.trace("Checking for pack dependency of " + dependsName);
+            logger.fine("Checking for pack dependency of " + dependsName);
             for (Pack pack : installData.getSelectedPacks())
             {
-                Debug.trace("- Checking if " + pack.name + " equals " + dependsName);
+                logger.fine("- Checking if " + pack.name + " equals " + dependsName);
                 if (pack.name.equalsIgnoreCase(dependsName))
                 {
                     found = true;
-                    Debug.trace("-- Found " + dependsName + ", panel will be shown");
+                    logger.fine("-- Found " + dependsName + ", panel will be shown");
                     break;
                 }
             }
@@ -89,12 +88,12 @@ public class UserPathPanel extends UserPathInputPanel
         }
         else
         {
-            Debug.trace("Not Checking for a pack dependency, panel will be shown");
+            logger.fine("Not Checking for a pack dependency, panel will be shown");
             skip = false;
         }
         if (skip)
         {
-            Debug.trace(thisName + " will not be shown");
+            logger.fine(UserPathPanel.class.getSimpleName() + " will not be shown");
             parent.skipPanel();
             return;
         }
@@ -107,6 +106,7 @@ public class UserPathPanel extends UserPathInputPanel
         }
         catch (Exception e)
         {
+            logger.log(Level.WARNING, e.toString(), e);
             // ignore
         }
         _pathSelectionPanel.setPath(expandedPath);
@@ -117,6 +117,7 @@ public class UserPathPanel extends UserPathInputPanel
      *
      * @return Whether the panel has been validated or not.
      */
+    @Override
     public boolean isValidated()
     {
         // Standard behavior of PathInputPanel.
@@ -133,6 +134,7 @@ public class UserPathPanel extends UserPathInputPanel
      *
      * @param panelRoot The tree to put the installDataGUI in.
      */
+    @Override
     public void makeXMLData(IXMLElement panelRoot)
     {
         if (!(skip))
@@ -147,6 +149,7 @@ public class UserPathPanel extends UserPathInputPanel
     * @see com.izforge.izpack.installer.IzPanel#getSummaryBody()
     */
 
+    @Override
     public String getSummaryBody()
     {
         if (skip)

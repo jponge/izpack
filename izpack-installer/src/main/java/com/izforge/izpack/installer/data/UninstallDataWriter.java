@@ -1,5 +1,15 @@
 package com.izforge.izpack.installer.data;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.api.rules.RulesEngine;
@@ -7,31 +17,16 @@ import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.merge.resolve.PathResolver;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.file.FileUtils;
-
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.jar.JarEntry;
-import java.util.jar.JarOutputStream;
 
 /**
  * Writes uninstall data to an executable jar file.
  */
 public class UninstallDataWriter
 {
+    private static final Logger logger = Logger.getLogger(UninstallDataWriter.class.getName());
+
     /**
      * Log file path variable name.
      */
@@ -133,9 +128,9 @@ public class UninstallDataWriter
             jar.close();
             result = true;
         }
-        catch (Throwable exception)
+        catch (Throwable t)
         {
-            Debug.error(exception);
+            logger.log(Level.SEVERE, t.getMessage(), t);
             destroyJar(); // don't keep the jar - it may be incomplete or corrupted
         }
         return result;
@@ -162,7 +157,7 @@ public class UninstallDataWriter
             {
                 if (!outFile.getParentFile().mkdirs())
                 {
-                    Debug.log("Failed to create directory: " + outFile.getParentFile().getPath());
+                    logger.warning("Failed to create directory: " + outFile.getParentFile().getPath());
                 }
             }
             FileOutputStream out = null;
@@ -172,8 +167,7 @@ public class UninstallDataWriter
             }
             catch (FileNotFoundException e)
             {
-                Debug.trace("Cannot create logfile!");
-                Debug.error(e);
+                logger.log(Level.WARNING, "Cannot create logfile", e);
             }
             if (out != null)
             {
@@ -379,7 +373,6 @@ public class UninstallDataWriter
      *
      * @throws IOException for any I/O error
      */
-    @SuppressWarnings("unchecked")
     private void writeAdditionalUninstallData() throws IOException
     {
         Map<String, Object> additionalData = uninstallData.getAdditionalData();
@@ -511,7 +504,7 @@ public class UninstallDataWriter
             File file = new File(path);
             if (file.exists() && !file.delete())
             {
-                Debug.error("Failed to delete incomplete uninstall information: " + path);
+                logger.warning("Failed to delete incomplete uninstall information: " + path);
             }
         }
     }

@@ -1,5 +1,13 @@
 package com.izforge.izpack.installer.language;
 
+import java.awt.Font;
+import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.InstallerRequirement;
 import com.izforge.izpack.api.data.ResourceManager;
@@ -7,23 +15,20 @@ import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.FileUtil;
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
-
 /**
  * Checker for java version, JDK and running install
- * 
+ *
  * @deprecated This doesn't support console installations. For a replacement, see
  * {@link com.izforge.izpack.installer.requirement.RequirementsChecker}
  */
 @Deprecated
 public class ConditionCheck
 {
+    private static final Logger logger = Logger.getLogger(ConditionCheck.class.getName());
+
     private AutomatedInstallData installdata;
     private ResourceManager resourceManager;
     private RulesEngine rules;
@@ -59,7 +64,7 @@ public class ConditionCheck
         if (file.exists())
         {
             // Ask user if they want to proceed.
-            Debug.trace("Lock File Exists, asking user for permission to proceed.");
+            logger.fine("Lock File Exists, asking user for permission to proceed.");
             StringBuilder msg = new StringBuilder();
             msg.append("<html>");
             msg.append("The " + appName + " installer you are attempting to run seems to have a copy already running.<br><br>");
@@ -75,17 +80,17 @@ public class ConditionCheck
             int selectedOption = JOptionPane.showOptionDialog(null, label, "Warning",
                     JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, optionValues,
                     optionValues[1]);
-            Debug.trace("Selected option: " + selectedOption);
+            logger.fine("Selected option: " + selectedOption);
             if (selectedOption == 0)
             {
                 // Take control of the file so it gets deleted after this installer instance exits.
-                Debug.trace("Setting temp file to delete on exit");
+                logger.fine("Setting temporary file to delete on exit");
                 file.deleteOnExit();
             }
             else
             {
                 // Leave the file as it is.
-                Debug.trace("Leaving temp file alone and exiting");
+                logger.fine("Leaving temporary file alone and exiting");
                 System.exit(1);
             }
         }
@@ -96,19 +101,19 @@ public class ConditionCheck
                 // Create the new lock file
                 if (file.createNewFile())
                 {
-                    Debug.trace("Temp file created");
+                    logger.fine("Temporary file created");
                     file.deleteOnExit();
                 }
                 else
                 {
-                    Debug.trace("Temp file could not be created");
-                    Debug.trace("*** Multiple instances of installer will be allowed ***");
+                    logger.warning("Temporary file could not be created");
+                    logger.warning("*** Multiple instances of installer will be allowed ***");
                 }
             }
             catch (Exception e)
             {
-                Debug.trace("Temp file could not be created: " + e);
-                Debug.trace("*** Multiple instances of installer will be allowed ***");
+                logger.log(Level.WARNING, "Temporary file could not be created: " + e.getMessage(), e);
+                logger.warning("*** Multiple instances of installer will be allowed ***");
             }
         }
     }
@@ -185,7 +190,7 @@ public class ConditionCheck
             Condition condition = rules.getCondition(conditionid);
             if (condition == null)
             {
-                Debug.log(conditionid + " not a valid condition.");
+                logger.warning(conditionid + " is not a valid condition.");
                 throw new IzPackException(conditionid + " could not be found as a defined condition");
             }
             if (!condition.isTrue())

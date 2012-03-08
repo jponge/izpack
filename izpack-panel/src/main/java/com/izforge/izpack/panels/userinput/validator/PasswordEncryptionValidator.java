@@ -21,24 +21,29 @@
 
 package com.izforge.izpack.panels.userinput.validator;
 
-import com.izforge.izpack.panels.userinput.PasswordGroup;
-import com.izforge.izpack.panels.userinput.processorclient.ProcessingClient;
-import com.izforge.izpack.util.Base64;
-import com.izforge.izpack.util.Debug;
+import java.security.SecureRandom;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.SecureRandom;
-import java.util.Map;
+
+import com.izforge.izpack.panels.userinput.PasswordGroup;
+import com.izforge.izpack.panels.userinput.processorclient.ProcessingClient;
+import com.izforge.izpack.util.Base64;
 
 /**
  * @author Jeff Gordon
  */
 public class PasswordEncryptionValidator implements Validator
 {
+    private static final Logger logger = Logger.getLogger(PasswordEncryptionValidator.class.getName());
+
     private Cipher encryptCipher;
 
+    @Override
     public boolean validate(ProcessingClient client)
     {
         boolean returnValue = true;
@@ -67,7 +72,7 @@ public class PasswordEncryptionValidator implements Validator
         }
         catch (Exception e)
         {
-            Debug.trace("Password Encryption Failed: " + e);
+            logger.log(Level.WARNING, "Password encryption failed: " + e, e);
             returnValue = false;
         }
         return (returnValue);
@@ -87,7 +92,7 @@ public class PasswordEncryptionValidator implements Validator
         }
         catch (Exception e)
         {
-            Debug.trace("getParams() Failed: " + e);
+            logger.log(Level.WARNING, "Getting validator parameters failed: " + e, e);
         }
         return params;
     }
@@ -107,7 +112,7 @@ public class PasswordEncryptionValidator implements Validator
         }
         catch (Exception e)
         {
-            Debug.trace("Error initializing password encryption " + e.getMessage());
+            logger.log(Level.WARNING, "Error initializing password encryption: " + e, e);
             throw e;
         }
     }
@@ -123,7 +128,7 @@ public class PasswordEncryptionValidator implements Validator
         }
         catch (Exception e)
         {
-            Debug.trace("Error encrypting string: " + e.getMessage());
+            logger.log(Level.WARNING, "Error encrypting string: " + e, e);
             throw e;
         }
         return result;

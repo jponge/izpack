@@ -21,10 +21,13 @@
 
 package com.izforge.izpack.util;
 
-import java.io.*;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Properties;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 /**
  * This class is for debug purposes. It is highly recommended to use it on critical or experimental
@@ -53,48 +56,51 @@ public class Debug
 
     // ~ Static fields/initializers *********************************************************
 
+//    /**
+//     * Parameter for public javacall "java -jar izpack.jar -DLOG" (Class.internal.variable: (DLOG =
+//     * "LOG"))
+//     */
+//    public static final String DLOG = "LOG";
+//
     /**
-     * Parameter for public javacall "java -jar izpack.jar -DLOG" (Class.internal.variable: (DLOG =
-     * "LOG"))
+     * Parameter for public javacall "java -DSTACKTRACE -jar izpack.jar"
      */
-    public static final String DLOG = "LOG";
+    public static final String SYSPROP_NAME_STACKTRACE = "STACKTRACE";
 
     /**
-     * Parameter for public javacall "java -jar izpack.jar -DSTACKTRACE" (Class.internal.variable:
-     * (DSTACKTRACE = "STACKTRACE"))
+     * Parameter for public javacall "java -DTRACE -jar izpack.jar"
      */
-    public static final String DSTACKTRACE = "STACKTRACE";
+    public static final String SYSPROP_NAME_TRACE = "TRACE";
 
     /**
-     * Parameter for public javacall "java -jar izpack.jar -DTRACE" (Class.internal.variable:
-     * (DTRACE = "TRACE"))
+     * Parameter for public javacall "java -DDEBUG -jar izpack.jar"
      */
-    public static final String DTRACE = "TRACE";
+    public static final String SYSPROP_NAME_DEBUG = "DEBUG";
 
-    /**
-     * System.Property Key: IZPACK_LOGFILE = "izpack.logfile"
-     */
-    public static final String IZPACK_LOGFILE = "izpack.logfile";
-
-    /**
-     * LOG_WITHOUT_DATE = 0
-     */
-    public static final int LOG_WITHOUT_DATE = 0;
-
-    /**
-     * LOG_WITH_DATE = 1
-     */
-    public static final int LOG_WITH_DATE = 1;
-
-    /**
-     * LOG_WITH_TIME_STAMP = 2
-     */
-    public static final int LOG_WITH_TIME_STAMP = 2;
-
-    /**
-     * LOG_WITH_TIME_AND_DATE= LOG_WITH_DATE | LOG_WITH_TIME_STAMP = 3
-     */
-    public static final int LOG_WITH_TIME_AND_DATE = LOG_WITH_DATE | LOG_WITH_TIME_STAMP;
+//    /**
+//     * System.Property Key: IZPACK_LOGFILE = "izpack.logfile"
+//     */
+//    public static final String IZPACK_LOGFILE = "izpack.logfile";
+//
+//    /**
+//     * LOG_WITHOUT_DATE = 0
+//     */
+//    public static final int LOG_WITHOUT_DATE = 0;
+//
+//    /**
+//     * LOG_WITH_DATE = 1
+//     */
+//    public static final int LOG_WITH_DATE = 1;
+//
+//    /**
+//     * LOG_WITH_TIME_STAMP = 2
+//     */
+//    public static final int LOG_WITH_TIME_STAMP = 2;
+//
+//    /**
+//     * LOG_WITH_TIME_AND_DATE= LOG_WITH_DATE | LOG_WITH_TIME_STAMP = 3
+//     */
+//    public static final int LOG_WITH_TIME_AND_DATE = LOG_WITH_DATE | LOG_WITH_TIME_STAMP;
 
     /**
      * internally initial unintialized TRACE-flag
@@ -107,366 +113,329 @@ public class Debug
     private static boolean STACKTRACE;
 
     /**
-     * internal initial unintialized LOG-flag
+     * internal initial unintialized DEBUG-flag
      */
-    private static boolean LOG;
+    private static boolean DEBUG;
+
+//    /**
+//     * internal initial unintialized LOG-flag
+//     */
+//    private static boolean LOG;
+//
+//    /**
+//     * LOGFILE_PREFIX = "IzPack_Logfile_at_"
+//     */
+//    public static String LOGFILE_PREFIX = "IzPack_Logfile_at_";
+//
+//    /**
+//     * LOGFILE_EXTENSION = ".txt"
+//     */
+//    public static String LOGFILE_EXTENSION = ".txt";
+//
+//    /**
+//     * LOGFILENAME = LOGFILE_PREFIX + System.currentTimeMillis() + LOGFILE_EXTENSION
+//     */
+//    public static String LOGFILENAME = LOGFILE_PREFIX + System.currentTimeMillis()
+//            + LOGFILE_EXTENSION;
+//
+//    public static boolean LOG_TRACE_STATEMENTS = false;
 
     /**
-     * LOGFILE_PREFIX = "IzPack_Logfile_at_"
-     */
-    public static String LOGFILE_PREFIX = "IzPack_Logfile_at_";
-
-    /**
-     * LOGFILE_EXTENSION = ".txt"
-     */
-    public static String LOGFILE_EXTENSION = ".txt";
-
-    /**
-     * LOGFILENAME = LOGFILE_PREFIX + System.currentTimeMillis() + LOGFILE_EXTENSION
-     */
-    public static String LOGFILENAME = LOGFILE_PREFIX + System.currentTimeMillis()
-            + LOGFILE_EXTENSION;
-
-    public static boolean LOG_TRACE_STATEMENTS = false;
-
-    /**
-     * The log initializion bloc.
+     * The log initializion block.
      */
     static
     {
-        boolean useStackTrace = false;
+        STACKTRACE = Boolean.getBoolean(SYSPROP_NAME_STACKTRACE);
+        TRACE = Boolean.getBoolean(SYSPROP_NAME_TRACE);
+        DEBUG = Boolean.getBoolean(SYSPROP_NAME_DEBUG);
 
-        try
-        {
-            useStackTrace = Boolean.getBoolean(DSTACKTRACE);
-        }
-        catch (Exception ex)
-        {
-            // ignore
-        }
-
-        STACKTRACE = useStackTrace;
-
-        boolean log = false;
-
-        try
-        {
-            log = Boolean.getBoolean(DLOG);
-        }
-        catch (Exception ex)
-        {
-            // ignore
-        }
-
-        LOG = log;
-
-        boolean useTrace = false;
-
-        try
-        {
-            if (STACKTRACE)
-            {
-                useTrace = true;
-            }
-            else
-            {
-                useTrace = Boolean.getBoolean(DTRACE);
-            }
-        }
-        catch (Exception ex)
-        {
-            // ignore
-        }
-
-        TRACE = useTrace;
-
-        if (LOG)
-        {
-            System.out.println(DLOG + " enabled.");
-            PrintWriter logfile = createLogFile();
-
-            Debug.log("IzPack LogFile created at ");
-
-            // ** write some runtime system properties into the logfile **
-            Debug.log("System.Properties:", LOG_WITH_TIME_STAMP);
-
-            Properties sysProps = System.getProperties();
-
-            Enumeration spe = sysProps.keys();
-
-            while (spe.hasMoreElements())
-            {
-                String aKey = (String) spe.nextElement();
-                Debug.log(aKey + "  =  " + sysProps.getProperty(aKey), LOG_WITHOUT_DATE);
-            }
-            Debug.log("\n==========================================\n", LOG_WITHOUT_DATE);
-            Debug.log("\n IzPack runs on: \n", LOG_WITHOUT_DATE);
-            Debug.log(OsVersion.getOsDetails(), LOG_WITHOUT_DATE);
-            Debug.log("\n==========================================\n", LOG_WITHOUT_DATE);
-        }
-
-        if (TRACE)
-        {
-            System.out.println(DTRACE + " enabled.");
-        }
-
-        if (STACKTRACE)
-        {
-            System.out.println(DSTACKTRACE + " enabled.");
-        }
+//        if (LOG)
+//        {
+//            System.out.println(DLOG + " enabled.");
+//            PrintWriter logfile = createLogFile();
+//
+//            Debug.log("IzPack LogFile created at ");
+//
+//            // ** write some runtime system properties into the logfile **
+//            Debug.log("System.Properties:", LOG_WITH_TIME_STAMP);
+//
+//            Properties sysProps = System.getProperties();
+//
+//            Enumeration spe = sysProps.keys();
+//
+//            while (spe.hasMoreElements())
+//            {
+//                String aKey = (String) spe.nextElement();
+//                Debug.log(aKey + "  =  " + sysProps.getProperty(aKey), LOG_WITHOUT_DATE);
+//            }
+//            Debug.log("\n==========================================\n", LOG_WITHOUT_DATE);
+//            Debug.log("\n IzPack runs on: \n", LOG_WITHOUT_DATE);
+//            Debug.log(OsVersion.getOsDetails(), LOG_WITHOUT_DATE);
+//            Debug.log("\n==========================================\n", LOG_WITHOUT_DATE);
+//        }
+//
+//        if (TRACE)
+//        {
+//            System.out.println(DTRACE + " enabled");
+//        }
+//
+//        if (STACKTRACE)
+//        {
+//            System.out.println(DSTACKTRACE + " enabled.");
+//        }
     }
 
     // ~ Methods ****************************************************************************
 
-    /**
-     * Traces the internal status of the given Object
-     *
-     * @param s
-     */
-    public static void trace(Object s)
-    {
-        if (TRACE)
-        {
-            // console.println(s.toString());
-            if (LOG_TRACE_STATEMENTS)
-            {
-                log(s);
-            }
-            System.out.println(s);
+//    /**
+//     * Traces the internal status of the given Object
+//     *
+//     * @param s
+//     */
+//    public static void trace(Object s)
+//    {
+//        if (TRACE)
+//        {
+//            // console.println(s.toString());
+//            if (LOG_TRACE_STATEMENTS)
+//            {
+//                log(s);
+//            }
+//            System.out.println(s);
+//
+//            if (STACKTRACE && (s instanceof Throwable))
+//            {
+//                // StringWriter sw = new StringWriter();
+//                // PrintWriter pw = new PrintWriter(sw);
+//                // ((Throwable)s).printStackTrace(pw);
+//                // console.println(sw.toString());
+//                ((Throwable) s).printStackTrace();
+//            }
+//
+//            System.out.flush();
+//        }
+//    }
+//
+//    /**
+//     * Traces the given object and additional write their status in the LOGFILE.
+//     *
+//     * @param s
+//     */
+//    public static void error(Object s)
+//    {
+//        trace(s);
+//        System.err.println(s);
+//        System.err.flush();
+//        log(s);
+//    }
+//
+//    /**
+//     * Logs the given Object in the created Logfile if -DLOG=true was given on commandline i.e: java
+//     * -DLOG=true -jar izpack-installer.jar
+//     *
+//     * @param o The Object to log, can be also an exception.
+//     */
+//    public static void log(Object o)
+//    {
+//        log(o, LOG_WITH_TIME_AND_DATE);
+//    }
+//
+//    /**
+//     * Logs the given Object in the created Logfile if -DLOG=true was given on commandline i.e: java
+//     * -DLOG=true -jar izpack-installer.jar
+//     *
+//     * @param o              The Object to log
+//     * @param withWhatFormat if the given MASK is greater than 0, Log with Date/Timestamp
+//     */
+//    public static void log(Object o, int withWhatFormat)
+//    {
+//        // if LOG was given
+//        if (LOG)
+//        {
+//            PrintWriter logfile;
+//            if ((logfile = getLogFile()) == null)
+//            {
+//                logfile = createLogFile();
+//            }
+//
+//            if (logfile != null)
+//            {
+//                if (o == null)
+//                {
+//                    o = "null";
+//                }
+//
+//                StringBuffer entry = new StringBuffer();
+//                if (logWithTimeStamp(withWhatFormat))
+//                {
+//                    entry.append(System.currentTimeMillis());
+//                    entry.append(';');
+//                    entry.append(' ');
+//                }
+//                if (logWithDate(withWhatFormat))
+//                {
+//                    entry.append(new Date());
+//                    entry.append(';');
+//                    entry.append(' ');
+//                }
+//
+//                entry.append(o);
+//
+//                logfile.println(entry.toString());
+//
+//                if (o instanceof Throwable)
+//                {
+//                    ((Throwable) o).printStackTrace(logfile);
+//                }
+//
+//                logfile.flush();
+//
+//                // logfile.close();
+//                // logFile = null;
+//            }
+//            else
+//            {
+//                System.err.println("Cannot write into logfile: (" + logfile + ") <- '" + o + "'");
+//            }
+//        }
+//    }
+//
+//    /**
+//     * Indicates that to log with Date.
+//     *
+//     * @param withWhatFormat The whished Format
+//     * @return true if to log with Date
+//     */
+//    private static boolean logWithDate(int withWhatFormat)
+//    {
+//
+//        return (withWhatFormat & LOG_WITH_DATE) == LOG_WITH_DATE;
+//    }
+//
+//    /**
+//     * Indicates that to log with Timestamp.
+//     *
+//     * @param withWhatFormat The whished Format
+//     * @return true if to log with Timestamp
+//     */
+//    private static boolean logWithTimeStamp(int withWhatFormat)
+//    {
+//
+//        return (withWhatFormat & LOG_WITH_DATE) == LOG_WITH_DATE;
+//    }
+//
+//    /**
+//     * Creates the logfile to write log-infos into.
+//     *
+//     * @return The writer object instance
+//     */
+//    private static PrintWriter createLogFile()
+//    {
+//        String tempDir = System.getProperty("java.io.tmpdir");
+//
+//        File tempDirFile = new File(tempDir);
+//
+//        try
+//        {
+//            tempDirFile.mkdirs();
+//        }
+//        catch (RuntimeException e)
+//        {
+//            e.printStackTrace();
+//        }
+//
+//        String logfilename = LOGFILENAME;
+//        System.out.println("creating Logfile: '" + logfilename + "' in: '" + tempDir + "'");
+//
+//        File out = new File(tempDir, logfilename);
+//
+//        PrintWriter logfile;
+//        if (tempDirFile.canWrite())
+//        {
+//            try
+//            {
+//                BufferedWriter fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
+//                        out), "UTF-8"));
+//                logfile = setLogFile(new PrintWriter(fw));
+//            }
+//            catch (Exception e)
+//            {
+//                logfile = null;
+//                e.printStackTrace();
+//            }
+//        }
+//        else
+//        {
+//            logfile = null;
+//            System.err.println("Fatal: cannot write File: '" + logfilename + "' into: "
+//                    + tempDirFile);
+//        }
+//
+//        return logfile;
+//    }
 
-            if (STACKTRACE && (s instanceof Throwable))
-            {
-                // StringWriter sw = new StringWriter();
-                // PrintWriter pw = new PrintWriter(sw);
-                // ((Throwable)s).printStackTrace(pw);
-                // console.println(sw.toString());
-                ((Throwable) s).printStackTrace();
-            }
-
-            System.out.flush();
-        }
-    }
-
-    /**
-     * Traces the given object and additional write their status in the LOGFILE.
-     *
-     * @param s
-     */
-    public static void error(Object s)
-    {
-        trace(s);
-        System.err.println(s);
-        System.err.flush();
-        log(s);
-    }
-
-    /**
-     * Logs the given Object in the created Logfile if -DLOG=true was given on commandline i.e: java
-     * -DLOG=true -jar izpack-installer.jar
-     *
-     * @param o The Object to log, can be also an exception.
-     */
-    public static void log(Object o)
-    {
-        log(o, LOG_WITH_TIME_AND_DATE);
-    }
-
-    /**
-     * Logs the given Object in the created Logfile if -DLOG=true was given on commandline i.e: java
-     * -DLOG=true -jar izpack-installer.jar
-     *
-     * @param o              The Object to log
-     * @param withWhatFormat if the given MASK is greater than 0, Log with Date/Timestamp
-     */
-    public static void log(Object o, int withWhatFormat)
-    {
-        // if LOG was given
-        if (LOG)
-        {
-            PrintWriter logfile;
-            if ((logfile = getLogFile()) == null)
-            {
-                logfile = createLogFile();
-            }
-
-            if (logfile != null)
-            {
-                if (o == null)
-                {
-                    o = "null";
-                }
-
-                StringBuffer entry = new StringBuffer();
-                if (logWithTimeStamp(withWhatFormat))
-                {
-                    entry.append(System.currentTimeMillis());
-                    entry.append(';');
-                    entry.append(' ');
-                }
-                if (logWithDate(withWhatFormat))
-                {
-                    entry.append(new Date());
-                    entry.append(';');
-                    entry.append(' ');
-                }
-
-                entry.append(o);
-
-                logfile.println(entry.toString());
-
-                if (o instanceof Throwable)
-                {
-                    ((Throwable) o).printStackTrace(logfile);
-                }
-
-                logfile.flush();
-
-                // logfile.close();
-                // logFile = null;
-            }
-            else
-            {
-                System.err.println("Cannot write into logfile: (" + logfile + ") <- '" + o + "'");
-            }
-        }
-    }
-
-    /**
-     * Indicates that to log with Date.
-     *
-     * @param withWhatFormat The whished Format
-     * @return true if to log with Date
-     */
-    private static boolean logWithDate(int withWhatFormat)
-    {
-
-        return (withWhatFormat & LOG_WITH_DATE) == LOG_WITH_DATE;
-    }
-
-    /**
-     * Indicates that to log with Timestamp.
-     *
-     * @param withWhatFormat The whished Format
-     * @return true if to log with Timestamp
-     */
-    private static boolean logWithTimeStamp(int withWhatFormat)
-    {
-
-        return (withWhatFormat & LOG_WITH_DATE) == LOG_WITH_DATE;
-    }
-
-    /**
-     * Creates the logfile to write log-infos into.
-     *
-     * @return The writer object instance
-     */
-    private static PrintWriter createLogFile()
-    {
-        String tempDir = System.getProperty("java.io.tmpdir");
-
-        File tempDirFile = new File(tempDir);
-
-        try
-        {
-            tempDirFile.mkdirs();
-        }
-        catch (RuntimeException e)
-        {
-            e.printStackTrace();
-        }
-
-        String logfilename = LOGFILENAME;
-        System.out.println("creating Logfile: '" + logfilename + "' in: '" + tempDir + "'");
-
-        File out = new File(tempDir, logfilename);
-
-        PrintWriter logfile;
-        if (tempDirFile.canWrite())
-        {
-            try
-            {
-                BufferedWriter fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
-                        out), "UTF-8"));
-                logfile = setLogFile(new PrintWriter(fw));
-            }
-            catch (Exception e)
-            {
-                logfile = null;
-                e.printStackTrace();
-            }
-        }
-        else
-        {
-            logfile = null;
-            System.err.println("Fatal: cannot write File: '" + logfilename + "' into: "
-                    + tempDirFile);
-        }
-
-        return logfile;
-    }
-
-    /**
-     * Indicates if debug is tracing
-     *
-     * @return true if tracing otherwise false
-     */
-    public static boolean tracing()
-    {
-        return TRACE;
-    }
-
-    /**
-     * Indicates if debug is stacktracing
-     *
-     * @return true if stacktracing otherwise false
-     */
-    public static boolean stackTracing()
-    {
-        return STACKTRACE;
-    }
-
-    /**
-     * Returns the LOG flag.
-     *
-     * @return Returns the LOG flag.
-     */
-    public static boolean isLOG()
-    {
-        return LOG;
-    }
-
-    /**
-     * Sets The LOG like the given value
-     *
-     * @param aFlag The LOG status to set to or not.
-     */
-    public static void setLOG(boolean aFlag)
-    {
-        System.out.println(DLOG + " = " + aFlag);
-        LOG = aFlag;
-    }
-
-    /**
-     * Returns the current STACKTRACE flag
-     *
-     * @return Returns the STACKTRACE.
-     */
-    public static boolean isSTACKTRACE()
-    {
-        return STACKTRACE;
-    }
-
-    /**
-     * Sets the STACKTRACE like the given value
-     *
-     * @param aFlag The STACKTRACE to set / unset.
-     */
-    public static void setSTACKTRACE(boolean aFlag)
-    {
-        System.out.println(DSTACKTRACE + " = " + aFlag);
-        STACKTRACE = aFlag;
-    }
-
+//    /**
+//     * Indicates if debug is tracing
+//     *
+//     * @return true if tracing otherwise false
+//     */
+//    public static boolean tracing()
+//    {
+//        return TRACE;
+//    }
+//
+//    /**
+//     * Indicates if debug is stacktracing
+//     *
+//     * @return true if stacktracing otherwise false
+//     */
+//    public static boolean stackTracing()
+//    {
+//        return STACKTRACE;
+//    }
+//
+//    /**
+//     * Returns the LOG flag.
+//     *
+//     * @return Returns the LOG flag.
+//     */
+//    public static boolean isLOG()
+//    {
+//        return LOG;
+//    }
+//
+//    /**
+//     * Sets The LOG like the given value
+//     *
+//     * @param aFlag The LOG status to set to or not.
+//     */
+//    public static void setLOG(boolean aFlag)
+//    {
+//        System.out.println(DLOG + " = " + aFlag);
+//        LOG = aFlag;
+//    }
+//
+//    /**
+//     * Returns the current STACKTRACE flag
+//     *
+//     * @return Returns the STACKTRACE.
+//     */
+//    public static boolean isSTACKTRACE()
+//    {
+//        return STACKTRACE;
+//    }
+//
+//    /**
+//     * Sets the STACKTRACE like the given value
+//     *
+//     * @param aFlag The STACKTRACE to set / unset.
+//     */
+//    public static void setSTACKTRACE(boolean aFlag)
+//    {
+//        System.out.println(DSTACKTRACE + " = " + aFlag);
+//        STACKTRACE = aFlag;
+//    }
+//
     /**
      * Gets the current TRACE flag
      *
@@ -478,45 +447,66 @@ public class Debug
     }
 
     /**
-     * Sets the TRACE flag like the given value
+     * Gets the current TRACE flag
      *
-     * @param aFlag The TRACE to set / unset.
+     * @return Returns the TRACE.
      */
-    public static void setTRACE(boolean aFlag)
+    public static boolean isSTACKTRACE()
     {
-        System.out.println(DTRACE + " = " + aFlag);
-        TRACE = aFlag;
+        return STACKTRACE;
     }
 
     /**
-     * Get the Logfile
+     * Gets the current TRACE flag
      *
-     * @return Returns the logFile.
+     * @return Returns the TRACE.
      */
-    public static PrintWriter getLogFile()
+    public static boolean isDEBUG()
     {
-        PrintWriter logfile = (PrintWriter) System.getProperties().get(IZPACK_LOGFILE);
-
-        return logfile;
+        return DEBUG;
     }
 
-    /**
-     * Sets the Logfile
-     *
-     * @param aLogFile The logFile to set. *
-     * @return The logfile to write into
-     */
-    public static synchronized PrintWriter setLogFile(PrintWriter aLogFile)
-    {
-        System.getProperties().put(IZPACK_LOGFILE, aLogFile);
+//    /**
+//     * Sets the TRACE flag like the given value
+//     *
+//     * @param aFlag The TRACE to set / unset.
+//     */
+//    public static void setTRACE(boolean aFlag)
+//    {
+//        System.out.println(DTRACE + " = " + aFlag);
+//        TRACE = aFlag;
+//    }
 
-        PrintWriter logfile = (PrintWriter) System.getProperties().get(IZPACK_LOGFILE);
+//    /**
+//     * Get the Logfile
+//     *
+//     * @return Returns the logFile.
+//     */
+//    public static PrintWriter getLogFile()
+//    {
+//        PrintWriter logfile = (PrintWriter) System.getProperties().get(IZPACK_LOGFILE);
+//
+//        return logfile;
+//    }
+//
+//    /**
+//     * Sets the Logfile
+//     *
+//     * @param aLogFile The logFile to set. *
+//     * @return The logfile to write into
+//     */
+//    public static synchronized PrintWriter setLogFile(PrintWriter aLogFile)
+//    {
+//        System.getProperties().put(IZPACK_LOGFILE, aLogFile);
+//
+//        PrintWriter logfile = (PrintWriter) System.getProperties().get(IZPACK_LOGFILE);
+//
+//        if (logfile == null)
+//        {
+//            System.err.println("Set::logfile == null");
+//        }
+//
+//        return logfile;
+//    }
 
-        if (logfile == null)
-        {
-            System.err.println("Set::logfile == null");
-        }
-
-        return logfile;
-    }
 }

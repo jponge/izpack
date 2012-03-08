@@ -13,6 +13,8 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.*;
 import javax.swing.tree.TreeModel;
@@ -33,7 +35,6 @@ import com.izforge.izpack.installer.web.WebAccessor;
 import com.izforge.izpack.panels.imgpacks.ImgPacksPanelAutomationHelper;
 import com.izforge.izpack.panels.packs.PacksModel;
 import com.izforge.izpack.panels.packs.PacksPanelInterface;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 
 /**
@@ -43,10 +44,10 @@ import com.izforge.izpack.util.IoHelper;
  */
 public class TreePacksPanel extends IzPanel implements PacksPanelInterface
 {
-    /**
-     * Required (serializable)
-     */
     private static final long serialVersionUID = 5684716698930628262L;
+
+    private static final transient Logger logger = Logger.getLogger(TreePacksPanel.class.getName());
+
 
     // Common used Swing fields
     /**
@@ -162,9 +163,9 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             this.langpack.add(langPackStream);
             langPackStream.close();
         }
-        catch (Throwable exception)
+        catch (Throwable t)
         {
-            Debug.trace(exception);
+            logger.log(Level.WARNING, t.toString(), t);
         }
 
         // init the map
@@ -176,7 +177,6 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     /**
      * The Implementation of this method should create the layout for the current class.
      */
-
     protected void createNormalLayout()
     {
         this.removeAll();
@@ -200,45 +200,25 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         }
     }
 
-    /*
-    * (non-Javadoc)
-    *
-    * @see com.izforge.izpack.panels.packs.PacksPanelInterface#getLangpack()
-    */
-
+    @Override
     public LocaleDatabase getLangpack()
     {
         return (langpack);
     }
 
-    /*
-    * (non-Javadoc)
-    *
-    * @see com.izforge.izpack.panels.packs.PacksPanelInterface#getBytes()
-    */
-
+    @Override
     public long getBytes()
     {
         return (bytes);
     }
 
-    /*
-    * (non-Javadoc)
-    *
-    * @see com.izforge.izpack.panels.packs.PacksPanelInterface#setBytes(int)
-    */
-
+    @Override
     public void setBytes(long bytes)
     {
         this.bytes = bytes;
     }
 
-    /*
-    * (non-Javadoc)
-    *
-    * @see com.izforge.izpack.panels.packs.PacksPanelInterface#showSpaceRequired()
-    */
-
+    @Override
     public void showSpaceRequired()
     {
         if (spaceLabel != null)
@@ -247,12 +227,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         }
     }
 
-    /*
-    * (non-Javadoc)
-    *
-    * @see com.izforge.izpack.panels.packs.PacksPanelInterface#showFreeSpace()
-    */
-
+    @Override
     public void showFreeSpace()
     {
         if (IoHelper.supported("getFreeSpace") && freeSpaceLabel != null)
@@ -272,6 +247,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         }
     }
 
+    @Override
     public Debugger getDebugger()
     {
         return null;
@@ -282,6 +258,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
      *
      * @return true if the needed space is less than the free space, else false
      */
+    @Override
     public boolean isValidated()
     {
         refreshPacksToInstall();
@@ -300,6 +277,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
      *
      * @param panelRoot The XML tree to write the installDataGUI in.
      */
+    @Override
     public void makeXMLData(IXMLElement panelRoot)
     {
         new ImgPacksPanelAutomationHelper().makeXMLData(this.installData, panelRoot);
@@ -397,10 +375,10 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     {
         this.installData.getSelectedPacks().clear();
         CheckBoxNode rootCheckBoxNode = (CheckBoxNode) getTree().getModel().getRoot();
-        Enumeration checkBoxNodeEnumeration = rootCheckBoxNode.depthFirstEnumeration();
-        while (checkBoxNodeEnumeration.hasMoreElements())
+        Enumeration<CheckBoxNode> cbNodes = rootCheckBoxNode.depthFirstEnumeration();
+        while (cbNodes.hasMoreElements())
         {
-            CheckBoxNode checkBox = (CheckBoxNode) checkBoxNodeEnumeration.nextElement();
+            CheckBoxNode checkBox = cbNodes.nextElement();
             if (checkBox.isSelected() || checkBox.isPartial())
             {
                 this.installData.getSelectedPacks().add(checkBox.getPack());
@@ -504,7 +482,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
      *
      * @param packs
      */
-    private void computePacks(java.util.List packs)
+    private void computePacks(List<Pack> packs)
     {
         names = new HashMap<String, Pack>();
         dependenciesExist = false;
@@ -554,10 +532,10 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             if ((state == -2) && rnode.getChildCount() > 0)
             {
                 boolean dirty = false;
-                Enumeration toBeDeselected = rnode.depthFirstEnumeration();
+                Enumeration<CheckBoxNode> toBeDeselected = rnode.depthFirstEnumeration();
                 while (toBeDeselected.hasMoreElements())
                 {
-                    CheckBoxNode checkBoxNode = (CheckBoxNode) toBeDeselected.nextElement();
+                    CheckBoxNode checkBoxNode = toBeDeselected.nextElement();
                     boolean chDirty = checkBoxNode.isSelected() || checkBoxNode.isPartial() || checkBoxNode.isEnabled();
                     dirty = dirty || chDirty;
                     if (chDirty)
@@ -576,11 +554,10 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             }
         }
 
-        Enumeration e = rnode.children();
+        Enumeration<CheckBoxNode> e = rnode.children();
         while (e.hasMoreElements())
         {
-            Object next = e.nextElement();
-            CheckBoxNode cbnode = (CheckBoxNode) next;
+            CheckBoxNode cbnode = e.nextElement();
             String nodeText = cbnode.getId();
             Object nodePack = idToPack.get(nodeText);
             if (!cbnode.isPartial())
@@ -827,6 +804,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
      * Called when the panel becomes active. If a derived class implements this method also, it is
      * recomanded to call this method with the super operator first.
      */
+    @Override
     public void panelActivate()
     {
         try
@@ -842,6 +820,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
                  */
                 private static final long serialVersionUID = 697462278279845304L;
 
+                @Override
                 public boolean isCellEditable(int rowIndex, int columnIndex)
                 {
                     return false;
@@ -907,6 +886,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     * @see com.izforge.izpack.installer.IzPanel#getSummaryBody()
     */
 
+    @Override
     public String getSummaryBody()
     {
         StringBuffer retval = new StringBuffer(256);
@@ -954,10 +934,10 @@ class CheckTreeController extends MouseAdapter
     {
         current.setPartial(false);
         treePacksPanel.setModelValue(current);
-        Enumeration e = current.depthFirstEnumeration();
+        Enumeration<CheckBoxNode> e = current.depthFirstEnumeration();
         while (e.hasMoreElements())
         {
-            CheckBoxNode child = (CheckBoxNode) e.nextElement();
+            CheckBoxNode child = e.nextElement();
             child.setSelected(current.isSelected() || child.getPack().required);
             if (!child.isSelected())
             {
@@ -970,10 +950,10 @@ class CheckTreeController extends MouseAdapter
 
     private boolean hasExcludes(CheckBoxNode node)
     {
-        Enumeration e = node.depthFirstEnumeration();
+        Enumeration<CheckBoxNode> e = node.depthFirstEnumeration();
         while (e.hasMoreElements())
         {
-            CheckBoxNode checkBoxNode = (CheckBoxNode) e.nextElement();
+            CheckBoxNode checkBoxNode = e.nextElement();
             if (checkBoxNode.getPack().excludeGroup != null)
             {
                 return true;
@@ -982,6 +962,7 @@ class CheckTreeController extends MouseAdapter
         return false;
     }
 
+    @Override
     public void mouseReleased(MouseEvent me)
     {
         TreePath path = tree.getPathForLocation(me.getX(), me.getY());
@@ -1035,10 +1016,10 @@ class CheckTreeController extends MouseAdapter
 
     public void selectAllChildNodes(CheckBoxNode cbn)
     {
-        Enumeration e = cbn.children();
+        Enumeration<CheckBoxNode> e = cbn.children();
         while (e.hasMoreElements())
         {
-            CheckBoxNode subCbn = (CheckBoxNode) e.nextElement();
+            CheckBoxNode subCbn = e.nextElement();
             selectAllDependencies(subCbn);
             if (subCbn.getChildCount() > 0)
             {
@@ -1089,10 +1070,10 @@ class CheckTreeController extends MouseAdapter
      */
     public void updateAllParents(CheckBoxNode root)
     {
-        Enumeration rootEnum = root.depthFirstEnumeration();
+        Enumeration<CheckBoxNode> rootEnum = root.depthFirstEnumeration();
         while (rootEnum.hasMoreElements())
         {
-            CheckBoxNode child = (CheckBoxNode) rootEnum.nextElement();
+            CheckBoxNode child = rootEnum.nextElement();
             if (child.getParent() != null && !child.getParent().equals(root))
             {
                 updateParents(child);
@@ -1110,12 +1091,12 @@ class CheckTreeController extends MouseAdapter
         CheckBoxNode parent = (CheckBoxNode) node.getParent();
         if (parent != null && !parent.equals(parent.getRoot()))
         {
-            Enumeration ne = parent.children();
+            Enumeration<CheckBoxNode> ne = parent.children();
             boolean allSelected = true;
             boolean allDeselected = true;
             while (ne.hasMoreElements())
             {
-                CheckBoxNode child = (CheckBoxNode) ne.nextElement();
+                CheckBoxNode child = ne.nextElement();
                 if (child.isSelected())
                 {
                     allDeselected = false;
@@ -1177,7 +1158,7 @@ class CheckTreeController extends MouseAdapter
         {
             return node.getPack().nbytes;
         }
-        Enumeration e = node.children();
+        Enumeration<CheckBoxNode> e = node.children();
         Pack nodePack = node.getPack();
         long bytes = 0;
         if (nodePack != null)
@@ -1186,7 +1167,7 @@ class CheckTreeController extends MouseAdapter
         }
         while (e.hasMoreElements())
         {
-            CheckBoxNode checkBoxNode = (CheckBoxNode) e.nextElement();
+            CheckBoxNode checkBoxNode = e.nextElement();
             long size = initTotalSize(checkBoxNode, markChanged);
             if (checkBoxNode.isSelected() || checkBoxNode.isPartial())
             {

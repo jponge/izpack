@@ -21,22 +21,25 @@
 
 package com.izforge.izpack.panels.userinput;
 
-import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.panels.userinput.validator.ValidatorContainer;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.OsVersion;
-
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.JFileChooser;
+
+import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.panels.userinput.validator.ValidatorContainer;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.OsVersion;
 
 public class DirInputField extends FileInputField
 {
-
     private static final long serialVersionUID = 8494549823214831160L;
+
+    private static final transient Logger logger = Logger.getLogger(DirInputField.class.getName());
 
     private final boolean mustExist;
 
@@ -141,7 +144,7 @@ public class DirInputField extends FileInputField
             }
             catch (IOException e)
             {
-                Debug.trace(e.toString());
+                logger.log(Level.WARNING, e.getMessage(), e);
                 return false;
             }
             return true;

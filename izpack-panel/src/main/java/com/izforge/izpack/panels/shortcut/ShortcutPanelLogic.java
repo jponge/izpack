@@ -1,16 +1,16 @@
 /*
  * IzPack - Copyright 2001-2009 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/ http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2002 Elmar Grom
  * Copyright 2010 Florian Buehlmann
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -18,6 +18,16 @@
  */
 
 package com.izforge.izpack.panels.shortcut;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Vector;
+import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
@@ -32,18 +42,15 @@ import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.CleanupClient;
+import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.OsConstraintHelper;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.StringTool;
+import com.izforge.izpack.util.TargetFactory;
 import com.izforge.izpack.util.os.Shortcut;
 import com.izforge.izpack.util.xml.XMLHelper;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Vector;
 
 //
 // import com.izforge.izpack.panels.ShortcutData;
@@ -59,11 +66,7 @@ import java.util.Vector;
  */
 public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
 {
-
-    /**
-     * serialVersionUID = 3256722870838112311L
-     */
-    private static final long serialVersionUID = 3256722870838112311L;
+    private static transient final Logger logger = Logger.getLogger(ShortcutPanelLogic.class.getName());
 
     public final static String SPEC_ATTRIBUTE_CONDITION = "condition";
 
@@ -312,6 +315,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
     /**
      * {@inheritDoc}
      */
+    @Override
     public final boolean isCreateShortcutsImmediately()
     {
         return createShortcutsImmediately;
@@ -320,6 +324,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
     /**
      * {@inheritDoc}
      */
+    @Override
     public final void setCreateShortcutsImmediately(boolean createShortcutsImmediately)
     {
         this.createShortcutsImmediately = createShortcutsImmediately;
@@ -328,6 +333,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
     /**
      * {@inheritDoc}
      */
+    @Override
     public void createAndRegisterShortcuts() throws Exception
     {
         String groupName = this.groupName;
@@ -590,6 +596,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
     /**
      * Called by {@link Housekeeper} to cleanup after installation.
      */
+    @Override
     public void cleanUp()
     {
         if (!installData.isInstallSuccess())
@@ -907,13 +914,13 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
                 continue;
             }
 
-            Debug.log("Checking Condition for " + shortcutSpec.getAttribute(SPEC_ATTRIBUTE_NAME));
+            logger.fine("Checking Condition for " + shortcutSpec.getAttribute(SPEC_ATTRIBUTE_NAME));
             if (!checkConditions(shortcutSpec))
             {
                 continue;
             }
 
-            Debug.log("Checked Condition for " + shortcutSpec.getAttribute(SPEC_ATTRIBUTE_NAME));
+            logger.fine("Checked Condition for " + shortcutSpec.getAttribute(SPEC_ATTRIBUTE_NAME));
             data = new ShortcutData();
 
             data.name = shortcutSpec.getAttribute(SPEC_ATTRIBUTE_NAME);
@@ -1093,15 +1100,15 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
             result = installData.getRules().isConditionTrue(conditionid);
         }
         // Vector conditions = shortcutSpec.getChildrenNamed( Condition.CONDITION );
-        //          
+        //
         // for( int i = 0; i < conditions.size(); i++ ) { Condition condition = new Condition(
         // conditions.elementAt( i ) );
-        //          
+        //
         // //System.out.println( "Readed: " + condition.toString( true ) ); boolean result =
         // condition.eval();
-        //          
+        //
         // if( result == false ) { System.out.println( "Unresolved Condition: " + condition );
-        //          
+        //
         // return result; } }
 
         return result; // If there is no Condition defined, just create the shortcut.
@@ -1114,7 +1121,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
     {
         if (!createShortcuts)
         {
-            Debug.log(this.getClass().getName() + "::createShortcuts():create=" + createShortcuts);
+            logger.warning("No shortcuts to be created");
             return;
         }
 
@@ -1243,7 +1250,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
             {
                 FileExecutor executor = new FileExecutor(execFiles);
 
-                // 
+                //
                 // TODO: Hi Guys,
                 // TODO The following commented-out line sometimes produces an uncatchable
                 // nullpointer Exception!
@@ -1398,7 +1405,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
         catch (Exception ignore)
         {
             failed = true;
-            Debug.log("Failed to create menu for gnome.");
+            logger.warning("Failed to create Gnome menu");
         }
         if (!failed)
         {

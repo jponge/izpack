@@ -22,16 +22,28 @@
 
 package com.izforge.izpack.util.config;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.file.DirectoryScanner;
 import com.izforge.izpack.util.file.types.FileSet;
-import com.izforge.izpack.util.xmlmerge.*;
-import com.izforge.izpack.util.xmlmerge.config.*;
+import com.izforge.izpack.util.xmlmerge.AbstractXmlMergeException;
+import com.izforge.izpack.util.xmlmerge.ConfigurationException;
+import com.izforge.izpack.util.xmlmerge.XmlMerge;
+import com.izforge.izpack.util.xmlmerge.config.ConfigurableXmlMerge;
+import com.izforge.izpack.util.xmlmerge.config.PropertyXPathConfigurer;
 
-public class SingleXmlFileMergeTask implements ConfigurableTask {
+public class SingleXmlFileMergeTask implements ConfigurableTask
+{
+    private static final Logger logger = Logger.getLogger(SingleXmlFileMergeTask.class.getName());
 
     protected File origfile;
     protected File patchfile;
@@ -113,6 +125,7 @@ public class SingleXmlFileMergeTask implements ConfigurableTask {
         }
     }
 
+    @Override
     public void execute() throws Exception {
         validate();
 
@@ -127,13 +140,13 @@ public class SingleXmlFileMergeTask implements ConfigurableTask {
             }
             else
             {
-                Debug.log("XML merge skipped, target file "+origfile+" not found");
+                logger.warning("XML merge skipped, target file "+origfile+" not found");
                 return;
             }
         }
         else
         {
-            Debug.log("XML merge skipped, target file not defined");
+            logger.warning("XML merge skipped, target file not defined");
             return;
         }
 
@@ -151,7 +164,7 @@ public class SingleXmlFileMergeTask implements ConfigurableTask {
 
         if (filesToMerge.size() < 2)
         {
-            Debug.log("XML merge skipped, not enough XML input files to merge");
+            logger.warning("XML merge skipped, not enough XML input files to merge");
             return;
         }
 
@@ -167,8 +180,9 @@ public class SingleXmlFileMergeTask implements ConfigurableTask {
                     try {
                         configIn.close();
                     } catch (IOException e) {
-                        Debug.log(
-                            "Error closing file '" + conffile + "': " + e.getMessage());
+                        logger.log(Level.WARNING,
+                                "Error closing file '" + conffile + "': " + e.getMessage(),
+                                e);
                     }
                 }
             }
@@ -196,7 +210,7 @@ public class SingleXmlFileMergeTask implements ConfigurableTask {
                 {
                     if (!file.delete())
                     {
-                        Debug.log("File " + file + " could not be cleant up");
+                        logger.warning("File " + file + " could not be cleant up");
                     }
                 }
             }

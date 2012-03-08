@@ -22,7 +22,12 @@
 
 package com.izforge.izpack.util;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
@@ -30,8 +35,8 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.List;
-
-/*---------------------------------------------------------------------------*/
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class handles loading of native libraries. There must only be one instance of
@@ -44,15 +49,11 @@ import java.util.List;
  * development environment, without the need to actually packing the application into a *.jar file.
  *
  * @author Elmar Grom
- * @version 1.0 / 1/30/02
  */
 /*---------------------------------------------------------------------------*/
 public class Librarian implements CleanupClient
 {
-
-    // ------------------------------------------------------------------------
-    // Constant Definitions
-    // ------------------------------------------------------------------------
+    private static final Logger logger = Logger.getLogger(Librarian.class.getName());
 
     /**
      * Used to identify jar URL protocols
@@ -236,7 +237,7 @@ public class Librarian implements CleanupClient
         {
             String path = System.getProperty("DLL_PATH") + "/" + name + extension;
             path = path.replace('/', File.separatorChar);
-            Debug.trace("Try to load library " + path);
+            logger.fine("Try to load library " + path);
             System.load(path);
             return;
 
@@ -259,7 +260,7 @@ public class Librarian implements CleanupClient
         // ----------------------------------------------------
         // Next, try to get the protocol for loading the resource.
         // ----------------------------------------------------
-        Class clientClass = client.getClass();
+        Class<? extends NativeLibraryClient> clientClass = client.getClass();
         String resourceName = clientClass.getName();
         int nameStart = resourceName.lastIndexOf('.') + 1;
         resourceName = resourceName.substring(nameStart, resourceName.length()) + CLIENT_EXTENSION;
@@ -569,7 +570,7 @@ public class Librarian implements CleanupClient
     /*--------------------------------------------------------------------------*/
     private InputStream openInputStream(String name, NativeLibraryClient client) throws Exception
     {
-        Class clientClass = client.getClass();
+        Class<? extends NativeLibraryClient> clientClass = client.getClass();
         // ----------------------------------------------------
         // try to open an input stream, assuming the library
         // is located with the client
@@ -691,6 +692,7 @@ public class Librarian implements CleanupClient
      * VMs which are compatible with it.  (Klaus Bartz 2006.06.20)
      */
     /*--------------------------------------------------------------------------*/
+    @Override
     public void cleanUp()
     {
         // This method will be used the SelfModifier stuff of uninstall
@@ -701,10 +703,11 @@ public class Librarian implements CleanupClient
         {
             LibraryRemover.invoke(temporaryFileNames);
         }
-        catch (IOException e1)
+        catch (IOException e)
         {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+            logger.log(Level.WARNING,
+                    "Cleanup failed for native libraries: " + e.getMessage(),
+                    e);
         }
 
     }

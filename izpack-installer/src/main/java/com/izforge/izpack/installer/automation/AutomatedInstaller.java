@@ -21,6 +21,16 @@
 
 package com.izforge.izpack.installer.automation;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
@@ -45,17 +55,8 @@ import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.manager.DataValidatorFactory;
 import com.izforge.izpack.installer.manager.PanelActionFactory;
 import com.izforge.izpack.installer.requirement.RequirementsChecker;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraintHelper;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
 
 /**
  * Runs the install process in text only (no GUI) mode.
@@ -66,6 +67,7 @@ import java.util.TreeMap;
  */
 public class AutomatedInstaller extends InstallerBase
 {
+    private static final Logger logger = Logger.getLogger(AutomatedInstaller.class.getName());
 
     // there are panels which can be instantiated multiple times
     // we therefore need to select the right XML section for each
@@ -157,7 +159,7 @@ public class AutomatedInstaller extends InstallerBase
 
         // TODO: i18n
         System.out.println("[ Starting automated installation ]");
-        Debug.log("[ Starting automated installation ]");
+        logger.info("[ Starting automated installation ]");
 
         ConsolePanelAutomationHelper uihelper = new ConsolePanelAutomationHelper();
 
@@ -173,7 +175,7 @@ public class AutomatedInstaller extends InstallerBase
                 if (p.hasCondition()
                         && !rules.isConditionTrue(p.getCondition(), this.installData))
                 {
-                    Debug.log("Condition for panel " + p.getPanelid() + "is not fulfilled, skipping panel!");
+                    logger.fine("Condition for panel " + p.getPanelid() + "is not fulfilled, skipping panel!");
                     if (this.panelInstanceCount.containsKey(p.className))
                     {
                         // get number of panel instance to process
@@ -264,12 +266,12 @@ public class AutomatedInstaller extends InstallerBase
     {
         executePreActivateActions(p, null);
 
-        Debug.log("automationHelperInstance.runAutomated :"
+        logger.fine("automationHelperInstance.runAutomated: "
                 + automationHelper.getClass().getName() + " entered.");
 
         automationHelper.runAutomated(this.installData, panelRoot);
 
-        Debug.log("automationHelperInstance.runAutomated :"
+        logger.fine("automationHelperInstance.runAutomated: "
                 + automationHelper.getClass().getName() + " successfully done.");
 
         executePreValidateActions(p, null);
@@ -327,14 +329,14 @@ public class AutomatedInstaller extends InstallerBase
 
         try
         {
-            Debug.log("AutomationHelper:" + automationHelperClassName);
+            logger.fine("AutomationHelper: " + automationHelperClassName);
             // determine if the panel supports automated install
             automationHelperClass = (Class<PanelAutomation>) Class.forName(automationHelperClassName);
         }
         catch (ClassNotFoundException e)
         {
             // this is OK - not all panels have/need automation support.
-            Debug.log("ClassNotFoundException-skip :" + automationHelperClassName);
+            logger.log(Level.WARNING, "AutomationHelper class not found: " + automationHelperClassName, e);
         }
 
         executePreConstructActions(p, null);
@@ -344,16 +346,16 @@ public class AutomatedInstaller extends InstallerBase
             try
             {
                 // instantiate the automation logic for the panel
-                Debug.log("Instantiate :" + automationHelperClassName);
+                logger.fine("Instantiate :" + automationHelperClassName);
                 automationHelperInstance = automationHelperClass.newInstance();
             }
             catch (IllegalAccessException e)
             {
-                Debug.log("ERROR: no default constructor for " + automationHelperClassName + ", skipping...");
+                logger.log(Level.WARNING, "no default constructor for " + automationHelperClassName + ", skipping...", e);
             }
             catch (InstantiationException e)
             {
-                Debug.log("ERROR: no default constructor for " + automationHelperClassName + ", skipping...");
+                logger.log(Level.WARNING, "no default constructor for " + automationHelperClassName + ", skipping...", e);
             }
         }
 

@@ -25,6 +25,7 @@ package com.izforge.izpack.util.xmlmerge.action;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.jdom.Attribute;
 import org.jdom.Comment;
@@ -32,23 +33,29 @@ import org.jdom.Content;
 import org.jdom.Element;
 import org.jdom.Text;
 
-import com.izforge.izpack.util.*;
-import com.izforge.izpack.util.xmlmerge.*;
+import com.izforge.izpack.util.xmlmerge.AbstractXmlMergeException;
+import com.izforge.izpack.util.xmlmerge.Action;
+import com.izforge.izpack.util.xmlmerge.DocumentException;
+import com.izforge.izpack.util.xmlmerge.Mapper;
+import com.izforge.izpack.util.xmlmerge.Matcher;
+import com.izforge.izpack.util.xmlmerge.MergeAction;
 
 /**
  * Merge implementation traversing element contents undependend of their order.
  */
 public class FullMergeAction extends AbstractMergeAction
 {
+    private static final Logger logger = Logger.getLogger(FullMergeAction.class.getName());
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void perform(Element originalElement, Element patchElement, Element outputParentElement)
             throws AbstractXmlMergeException
     {
 
-        Debug.log("Merging: " + originalElement + "(List 1) and " + patchElement + "(List 2)");
+        logger.fine("Merging: " + originalElement + "(List 1) and " + patchElement + "(List 2)");
 
         Mapper mapper = (Mapper) m_mapperFactory.getOperation(originalElement, patchElement);
 
@@ -67,7 +74,7 @@ public class FullMergeAction extends AbstractMergeAction
                     .getNamespacePrefix(), originalElement.getNamespaceURI());
             addAttributes(workingElement, originalElement);
 
-            Debug.log("Adding " + workingElement);
+            logger.fine("Adding " + workingElement);
             outputParentElement.addContent(workingElement);
 
             doIt(workingElement, originalElement, patchElement);
@@ -95,19 +102,19 @@ public class FullMergeAction extends AbstractMergeAction
 
         for (Content origContent : origContentList)
         {
-            Debug.log("Checking original content: " + origContent + " for matching patch contents");
+            logger.fine("Checking original content: " + origContent + " for matching patch contents");
             if (origContent instanceof Element)
             {
                 boolean patchMatched = false;
 
                 for (Content patchContent : patchContentList)
                 {
-                    Debug.log("Checking patch content: " + patchContent);
+                    logger.fine("Checking patch content: " + patchContent);
 
                     if (patchContent instanceof Comment || patchContent instanceof Text)
                     {
                         // skip and leave original comment or text
-                        Debug.log("Skipped patch content: " + patchContent);
+                        logger.fine("Skipped patch content: " + patchContent);
                     }
                     else if (!(patchContent instanceof Element))
                     {
@@ -119,7 +126,7 @@ public class FullMergeAction extends AbstractMergeAction
                         if (((Matcher) m_matcherFactory.getOperation((Element) patchContent, (Element) origContent))
                                 .matches((Element) patchContent, (Element) origContent))
                         {
-                            Debug.log("Apply matching patch: " + patchContent + " -> " + origContent);
+                            logger.fine("Apply matching patch: " + patchContent + " -> " + origContent);
                             applyAction(parentOut, (Element) origContent, (Element) patchContent);
                             patchMatched = true;
                             if (!matchedPatchContentList.contains(patchContent))
@@ -140,7 +147,7 @@ public class FullMergeAction extends AbstractMergeAction
 
                 if (!patchMatched)
                 {
-                    Debug.log("Apply original: "+ origContent);
+                    logger.fine("Apply original: "+ origContent);
                     applyAction(parentOut, (Element) origContent, null);
                 }
             }
@@ -160,7 +167,7 @@ public class FullMergeAction extends AbstractMergeAction
         {
             if (!matchedPatchContentList.contains(unmatchedPatchContent))
             {
-                Debug.log("Apply unmatching patch: "+ unmatchedPatchContent);
+                logger.fine("Apply unmatching patch: "+ unmatchedPatchContent);
                 applyAction(parentOut, null, (Element) unmatchedPatchContent);
             }
         }
@@ -211,14 +218,14 @@ public class FullMergeAction extends AbstractMergeAction
         {
             attr.detach();
             allAttributes.put(attr.getQualifiedName(), attr);
-            Debug.log("adding attr from out:" + attr);
+            logger.fine("adding attr from out:" + attr);
         }
 
         for (Attribute attr : inAttributes)
         {
             attr.detach();
             allAttributes.put(attr.getQualifiedName(), attr);
-            Debug.log("adding attr from in:" + attr);
+            logger.fine("adding attr from in:" + attr);
         }
 
         out.setAttributes(new ArrayList<Attribute>(allAttributes.values()));

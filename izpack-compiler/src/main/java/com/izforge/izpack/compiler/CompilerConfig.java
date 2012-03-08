@@ -26,24 +26,25 @@
 
 package com.izforge.izpack.compiler;
 
+import java.io.*;
+import java.net.URL;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
+
+import org.apache.commons.lang.StringUtils;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.IXMLWriter;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
 import com.izforge.izpack.api.container.BindeableContainer;
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.Blockable;
-import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
-import com.izforge.izpack.api.data.DynamicVariable;
-import com.izforge.izpack.api.data.GUIPrefs;
-import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.data.*;
 import com.izforge.izpack.api.data.Info.TempDir;
-import com.izforge.izpack.api.data.InstallerRequirement;
-import com.izforge.izpack.api.data.LookAndFeels;
-import com.izforge.izpack.api.data.OverrideType;
-import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.PanelActionConfiguration;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.data.binding.OsModel;
@@ -68,14 +69,7 @@ import com.izforge.izpack.compiler.resource.ResourceFinder;
 import com.izforge.izpack.core.data.DynamicInstallerRequirementValidatorImpl;
 import com.izforge.izpack.core.data.DynamicVariableImpl;
 import com.izforge.izpack.core.regex.RegularExpressionFilterImpl;
-import com.izforge.izpack.core.variable.ConfigFileValue;
-import com.izforge.izpack.core.variable.EnvironmentValue;
-import com.izforge.izpack.core.variable.ExecValue;
-import com.izforge.izpack.core.variable.JarEntryConfigValue;
-import com.izforge.izpack.core.variable.PlainConfigFileValue;
-import com.izforge.izpack.core.variable.PlainValue;
-import com.izforge.izpack.core.variable.RegistryValue;
-import com.izforge.izpack.core.variable.ZipEntryConfigFileValue;
+import com.izforge.izpack.core.variable.*;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.data.PackInfo;
@@ -85,45 +79,11 @@ import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.PathResolver;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraintHelper;
 import com.izforge.izpack.util.file.DirectoryScanner;
 import com.izforge.izpack.util.file.FileUtils;
-import org.apache.commons.lang.StringUtils;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.TreeMap;
-import java.util.Vector;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 /**
  * A parser for the installer xml configuration. This parses a document conforming to the
@@ -134,6 +94,7 @@ import java.util.zip.ZipInputStream;
  */
 public class CompilerConfig extends Thread
 {
+    private static final Logger logger = Logger.getLogger(CompilerConfig.class.getName());
 
     /**
      * Constant for checking attributes.
@@ -229,6 +190,7 @@ public class CompilerConfig extends Thread
     /**
      * The run() method.
      */
+    @Override
     public void run()
     {
         try
@@ -237,18 +199,11 @@ public class CompilerConfig extends Thread
         }
         catch (CompilerException ce)
         {
-            System.out.println(ce.getMessage() + "\n");
+            logger.severe(ce.getMessage());
         }
         catch (Exception e)
         {
-            if (Debug.stackTracing())
-            {
-                e.printStackTrace();
-            }
-            else
-            {
-                System.out.println("ERROR: " + e.getMessage());
-            }
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -788,7 +743,7 @@ public class CompilerConfig extends Thread
             // parsing ref-pack-set file
             IXMLElement refXMLData = this.readRefPackData(refFileName, isselfcontained);
 
-            Debug.log("Reading refpack from " + refFileName);
+            logger.info("Reading refpack from " + refFileName);
             // Recursively call myself to add all packs and refpacks from the reference XML
             addPacksSingle(refXMLData);
         }
@@ -892,8 +847,7 @@ public class CompilerConfig extends Thread
                             {
                                 File file = new File(fs.getDir(), filePath);
                                 String target = new File(fs.getTargetDir(), filePath).getPath();
-                                //FIXME replace by a listener call and different reporting
-                                System.out.println("Adding file: " + file + ", as target file=" + target);
+                                logger.info("Adding file: " + file + ", as target file=" + target);
                                 pack.addFile(baseDir, file, target, fs.getOsList(), fs
                                         .getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(), fs.getAdditionals(), fs
                                         .getCondition());
@@ -943,8 +897,7 @@ public class CompilerConfig extends Thread
 
             try
             {
-                //FIXME replace by a listener call and different reporting
-                System.out.println("Adding file: " + file + ", as target file=" + target);
+                logger.info("Adding file: " + file + ", as target file=" + target);
                 pack.addFile(baseDir, file, target, osList, override, overrideRenameTo, blockable, additionals, condition);
             }
             catch (IOException x)
@@ -1025,8 +978,7 @@ public class CompilerConfig extends Thread
                         else
                         {
                             String target = fs.getTargetDir() + "/" + filePath;
-                            //FIXME replace by a listener call and different reporting
-                            System.out.println("Adding file: " + abssrcfile + ", as target file=" + target);
+                            logger.info("Adding file: " + abssrcfile + ", as target file=" + target);
                             pack.addFile(baseDir, abssrcfile, target, fs.getOsList(),
                                     fs.getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(), fs.getAdditionals(),
                                     fs.getCondition());
@@ -1402,8 +1354,7 @@ public class CompilerConfig extends Thread
                 out.close();
 
                 String target = targetdir + "/" + zentry.getName();
-                //FIXME replace by a listener call and different reporting
-                System.out.println("Adding file: " + temp + ", as target file=" + target);
+                logger.info("Adding file: " + temp + ", as target file=" + target);
                 pack.addFile(baseDir, temp, target, osList, override,
                         overrideRenameTo, blockable, additionals, condition);
             }
@@ -1421,8 +1372,7 @@ public class CompilerConfig extends Thread
             tmp.mkdirs();
             tmp.deleteOnExit();
             String target = targetdir + "/" + dirName;
-            //FIXME replace by a listener call and different reporting
-            System.out.println("Adding file: " + tmp + ", as target file=" + target);
+            logger.info("Adding file: " + tmp + ", as target file=" + target);
             pack.addFile(baseDir, tmp, target, osList,
                     override, overrideRenameTo, blockable, additionals, condition);
         }
@@ -1471,7 +1421,7 @@ public class CompilerConfig extends Thread
             IXMLElement configurationElement = panelElement.getFirstChildNamed("configuration");
             if (configurationElement != null)
             {
-                Debug.trace("found a configuration for this panel.");
+                logger.fine("Found a configuration for panel " + panel.getPanelid());
                 List<IXMLElement> params = configurationElement.getChildrenNamed("param");
                 if (params != null)
                 {
@@ -2624,7 +2574,6 @@ public class CompilerConfig extends Thread
         }
         else
         {
-            Debug.trace("yes/no not found. trying true/false");
             result = Boolean.valueOf(value);
         }
         return result;
@@ -2871,7 +2820,7 @@ public class CompilerConfig extends Thread
                             IXMLElement valueElement = param.getFirstChildNamed("value");
                             if ((keyElement != null) && (valueElement != null))
                             {
-                                Debug.trace("Adding configuration property " + keyElement.getContent() + " with value " + valueElement.getContent() + " for action " + actionName);
+                                logger.fine("Adding configuration property " + keyElement.getContent() + " with value " + valueElement.getContent() + " for action " + actionName);
                                 config.addProperty(keyElement.getContent(), valueElement.getContent());
                             }
                         }

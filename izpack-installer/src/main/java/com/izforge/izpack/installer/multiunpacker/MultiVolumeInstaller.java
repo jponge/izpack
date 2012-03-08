@@ -1,15 +1,15 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/ http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2007 Dennis Reil
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -18,13 +18,14 @@
 
 package com.izforge.izpack.installer.multiunpacker;
 
-import com.izforge.izpack.installer.bootstrap.Installer;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.SelfModifier;
-
-import java.awt.*;
+import java.awt.HeadlessException;
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.izforge.izpack.installer.bootstrap.Installer;
+import com.izforge.izpack.util.SelfModifier;
 
 /**
  * Main class, for starting the installer if it was build to support more than one volume.
@@ -33,6 +34,7 @@ import java.lang.reflect.Method;
  */
 public class MultiVolumeInstaller
 {
+    private static final Logger logger = Logger.getLogger(MultiVolumeInstaller.class.getName());
 
     // where is the installer looking for media files
     protected static String mediadirectory;
@@ -51,9 +53,9 @@ public class MultiVolumeInstaller
         }
         catch (HeadlessException ex)
         {
-            // this exception is expected if we're running in console or 
+            // this exception is expected if we're running in console or
             // auto installation mode
-            Debug.log("Progress will not be shown. No display found.");
+            logger.warning("Progress will not be shown. No display found.");
         }
         // default is to look in the current directory
         MultiVolumeInstaller.setMediadirectory(new File(".").getParent());
@@ -78,7 +80,7 @@ public class MultiVolumeInstaller
             try
             {
                 long maxmem = Runtime.getRuntime().maxMemory() / (1024 * 1024);
-                Debug.trace("Currently using maximum memory of " + maxmem + "m");
+                logger.fine("Currently using maximum memory of " + maxmem + "m");
                 // just use a static fraction of memory for perm gen size.
                 long maxpermgensize = maxmem / 4;
 
@@ -90,7 +92,7 @@ public class MultiVolumeInstaller
                 // try to find the directory, where the jar file is located, this class was loaded
                 // from
 //                newargs[0] = "-Xmx" + maxmem + "m";
-//                newargs[1] = "-XX:MaxPermSize=" + maxpermgensize + "m";               
+//                newargs[1] = "-XX:MaxPermSize=" + maxpermgensize + "m";
                 newargs[0] = "-mediadir";
                 newargs[1] = SelfModifier.findJarFile(clazz).getParent();
                 System.out.println("Setting mediadir: " + newargs[1]);
@@ -100,7 +102,7 @@ public class MultiVolumeInstaller
             }
             catch (Exception e)
             {
-                Debug.trace(e);
+                logger.log(Level.WARNING, e.getMessage(), e);
             }
         }
         if (progressDialog != null)

@@ -1,5 +1,12 @@
 package com.izforge.izpack.installer.container.provider;
 
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.util.Map;
+import java.util.logging.Logger;
+
+import org.picocontainer.injectors.Provider;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.AutomatedInstallData;
@@ -9,12 +16,6 @@ import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
-import com.izforge.izpack.util.Debug;
-import org.picocontainer.injectors.Provider;
-
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.util.Map;
 
 /**
  * Injection provider for rules.
@@ -24,6 +25,7 @@ import java.util.Map;
  */
 public class RulesProvider implements Provider
 {
+    private static final Logger logger = Logger.getLogger(RulesProvider.class.getName());
 
     /**
      * Resource name of the conditions specification
@@ -84,7 +86,7 @@ public class RulesProvider implements Provider
         }
         catch (Exception exception)
         {
-            Debug.trace("Cannot find optional rules");
+            logger.fine("No optional rules found");
         }
         return rules;
     }
@@ -110,7 +112,7 @@ public class RulesProvider implements Provider
         }
         catch (Exception e)
         {
-            Debug.trace("Can not find optional resource " + CONDITIONS_SPECRESOURCENAME);
+            logger.fine("No optional resource found: " + CONDITIONS_SPECRESOURCENAME);
         }
         return conditions;
     }
