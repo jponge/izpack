@@ -42,7 +42,7 @@ import java.util.logging.Logger;
 public abstract class InstallerBase
 {
 
-    private static final Logger LOGGER = Logger.getLogger(InstallerBase.class.getName());
+    private static final Logger logger = Logger.getLogger(InstallerBase.class.getName());
 
     protected ResourceManager resourceManager;
 
@@ -65,7 +65,7 @@ public abstract class InstallerBase
         Map<String, List<DynamicVariable>> dynamicvariables = installdata.getDynamicvariables();
         RulesEngine rules = installdata.getRules();
 
-        LOGGER.log(Level.FINER, "Start refreshing dynamic variables");
+        logger.fine("Start refreshing dynamic variables");
         if (dynamicvariables != null)
         {
             for (String dynvarname : dynamicvariables.keySet())
@@ -78,7 +78,7 @@ public abstract class InstallerBase
                     {
                         if ((rules != null) && !rules.isConditionTrue(conditionid))
                         {
-                            LOGGER.log(Level.FINER, "Refreshing dynamic variable " + dynvarname + " skipped due to unmet condition " + conditionid);
+                            logger.fine("Refreshing dynamic variable " + dynvarname + " skipped due to unmet condition " + conditionid);
                             refresh = false;
                         }
                     }
@@ -86,16 +86,16 @@ public abstract class InstallerBase
                     {
                         String newValue = dynvar.evaluate(substitutors);
                         if (newValue != null) {
-                            LOGGER.log(Level.FINER, "Dynamic variable " + dynvar.getName() + " set: " + newValue);
+                            logger.fine("Dynamic variable " + dynvar.getName() + " set: " + newValue);
                             installdata.getVariables().setProperty(dynvar.getName(), newValue);
                         } else {
-                            LOGGER.log(Level.FINER, "Dynamic variable " + dynvar.getName() + " unchanged: " + dynvar.getValue());
+                            logger.fine("Dynamic variable " + dynvar.getName() + " unchanged: " + dynvar.getValue());
                         }
                     }
                 }
             }
         }
-        LOGGER.log(Level.FINER, "Finished refreshing dynamic variables");
+        logger.fine("Finished refreshing dynamic variables");
 
     }
 
