@@ -23,6 +23,8 @@
 
 package com.izforge.izpack.core.data;
 
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.data.DynamicVariable;
 import com.izforge.izpack.api.data.Value;
 import com.izforge.izpack.api.regex.RegularExpressionFilter;
@@ -30,8 +32,9 @@ import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
 public class DynamicVariableImpl implements DynamicVariable
 {
-
     private static final long serialVersionUID = -7985397187206803090L;
+
+    private static final transient Logger logger = Logger.getLogger(DynamicVariableImpl.class.getName());
 
     private String name;
 
@@ -107,6 +110,7 @@ public class DynamicVariableImpl implements DynamicVariable
                     this.currentValue = newValue;
                 }
             }
+            logger.fine("Error evaluating dynamic variable '" + getName() + "': " + e);
         }
 
         return newValue;
