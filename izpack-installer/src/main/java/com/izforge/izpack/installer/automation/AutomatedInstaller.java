@@ -409,6 +409,7 @@ public class AutomatedInstaller extends InstallerBase
                     }
                     // make installation fail instantly
                     this.result = false;
+                    logger.warning("Dynamic installer requirement validation (" + validator.getClass().getName() + ") failed");
                     throw new InstallerException(errorMessage);
                 }
             }
@@ -442,6 +443,7 @@ public class AutomatedInstaller extends InstallerBase
                 }
                 // make installation fail instantly
                 this.result = false;
+                logger.warning("Data validation (" + validator.getClass().getName() + ") failed");
                 throw new InstallerException(errorMessage);
             }
         }

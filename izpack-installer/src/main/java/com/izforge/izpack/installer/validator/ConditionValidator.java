@@ -1,14 +1,18 @@
 package com.izforge.izpack.installer.validator;
 
 import java.util.Set;
+import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.installer.base.IzPanel;
 
 
 public class ConditionValidator implements DataValidator
 {
+    private static final Logger logger = Logger.getLogger(IzPanel.class.getName());
+
     private String lastFailedConditionId;
 
     @Override
@@ -22,6 +26,7 @@ public class ConditionValidator implements DataValidator
             {
                 if (!rules.getCondition(conditionId).isTrue())
                 {
+                    logger.fine("Validation failed on condition: " +conditionId);
                     lastFailedConditionId = conditionId;
                     return Status.ERROR;
                 }

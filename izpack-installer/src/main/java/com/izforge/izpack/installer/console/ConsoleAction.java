@@ -240,8 +240,12 @@ abstract class ConsoleAction
                     {
                         console.println(errorMessage + " - ignoring");
                     }
-                    // make installation fail instantly
-                    return false;
+                    else
+                    {
+                        logger.warning("Data validation (" + validator.getClass().getName() + ") failed");
+                        // make installation fail instantly
+                        return false;
+                    }
                 }
             }
         }

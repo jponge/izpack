@@ -225,7 +225,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
             String instanceHeadline = getString(instanceSearchKey);
 
-            logger.info("found headline: " + instanceHeadline + DELIMITER + " for instance # "
+            logger.fine("found headline: " + instanceHeadline + DELIMITER + " for instance # "
                     + instanceNumber);
             if (!instanceSearchKey.equals(instanceHeadline))
             {
@@ -1066,7 +1066,12 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
                 parent.refreshDynamicVariables();
                 for (DynamicInstallerRequirementValidator validator : dynConds)
                 {
-                    returnValue = processValidationState(validator.validateData(installData));
+                    Status status =  validator.validateData(installData);
+                    if (status == Status.ERROR)
+                    {
+                        logger.fine("Dynamic installer requirement validation (" + validator.getClass().getName() + ") failed");
+                    }
+                    returnValue = processValidationState(status);
                 }
             }
             finally
@@ -1075,7 +1080,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             }
         }
 
-        if (this.validationService != null && returnValue == true)
+        if (this.validationService != null && returnValue)
         {
             Component guiComponent = getTopLevelAncestor();
             Cursor originalCursor = guiComponent.getCursor();
@@ -1084,7 +1089,12 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             {
                 guiComponent.setCursor(newCursor);
                 // validating the data
-                returnValue = processValidationState(this.validationService.validateData(this.installData));
+                Status status =  this.validationService.validateData(this.installData);
+                if (status == Status.ERROR)
+                {
+                    logger.fine("Data validation (" + validationService.getClass().getName() + ") failed");
+                }
+                returnValue = processValidationState(status);
             }
             finally
             {
@@ -1108,7 +1118,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         }
         else
         {
-            logger.fine("Validation did not pass!");
+            logger.fine("Validation did not pass");
             // try to parse the text, and substitute any variable it finds
             if (this.validationService.getWarningMessageId() != null
                     && state == DataValidator.Status.WARNING)
