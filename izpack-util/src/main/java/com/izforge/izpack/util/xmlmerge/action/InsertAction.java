@@ -30,7 +30,7 @@ import com.izforge.izpack.util.xmlmerge.Action;
 
 /**
  * Copies the patch element into the output by inserting it after already existing elements of the
- * same name. Usually applied with the {@link ch.elca.el4j.services.xmlmerge.matcher.SkipMatcher}.
+ * same name. Usually applied with the {@link com.izforge.izpack.util.xmlmerge.matcher.SkipMatcher}.
  *
  * @author Laurent Bovet (LBO)
  * @author Alex Mathey (AMA)

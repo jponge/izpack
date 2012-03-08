@@ -40,7 +40,7 @@ public class AttributeMergeConfigurer implements Configurer
     /**
      * Attribute namespace.
      */
-    public static final String ATTRIBUTE_NAMESPACE = "http://xmlmerge.el4j.elca.ch";
+    public static final String ATTRIBUTE_NAMESPACE = "http://izpack.org";
 
     /**
      * Action attribute.
