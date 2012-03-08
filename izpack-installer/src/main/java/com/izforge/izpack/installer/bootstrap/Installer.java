@@ -108,7 +108,7 @@ public class Installer
         }
 
         logger = Logger.getLogger(Installer.class.getName());
-        logger.info("Logger initialized at level '" + logger.getParent().getLevel() + "'");
+        logger.info("Logging initialized at level '" + rootLogger.getLevel() + "'");
     }
 
     private void start(String[] args)
