@@ -1,6 +1,7 @@
 package com.izforge.izpack.util;
 
 import java.util.logging.Formatter;
+import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
 import java.util.logging.StreamHandler;
@@ -37,6 +38,15 @@ public class LogHandler extends StreamHandler
         }
 
         setFormatter(formatter);
+
+        if (Debug.isDEBUG())
+        {
+            setLevel(Level.FINE);
+        }
+        else
+        {
+            setLevel(Level.INFO);
+        }
     }
 
     /**
