@@ -82,6 +82,8 @@ public class LogFormatter extends Formatter
             {}
         }
 
+        sb.append(lineSeparator);
+
         return sb.toString();
     }
 }

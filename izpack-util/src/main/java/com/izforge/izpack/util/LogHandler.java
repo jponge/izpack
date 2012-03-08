@@ -41,7 +41,7 @@ public class LogHandler extends StreamHandler
 
         if (Debug.isDEBUG())
         {
-            setLevel(Level.ALL);
+            setLevel(Level.FINE);
         }
         else
         {
@@ -50,7 +50,7 @@ public class LogHandler extends StreamHandler
     }
 
     /**
-     * Create a <tt>LogHandler</tt> for <tt>System.out</tt>.
+     * Create a <tt>LogHandler</tt> for <tt>System.err</tt>.
      * <p>
      * The <tt>LogHandler</tt> is configured based on <tt>LogManager</tt> properties (or their
      * default values).     *
@@ -58,7 +58,7 @@ public class LogHandler extends StreamHandler
     public LogHandler()
     {
         configure();
-        setOutputStream(System.out);
+        setOutputStream(System.err);
     }
 
     /**
@@ -78,7 +78,7 @@ public class LogHandler extends StreamHandler
     }
 
     /**
-     * Override <tt>StreamHandler.close</tt> to do a flush but not to close the output stream. That
+     * Override <tt>LogHandler.close</tt> to do a flush but not to close the output stream. That
      * is, we do <b>not</b> close <tt>System.err</tt>.
      */
     public void close()

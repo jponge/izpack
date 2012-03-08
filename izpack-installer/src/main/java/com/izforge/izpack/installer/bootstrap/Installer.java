@@ -25,10 +25,8 @@ import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -44,6 +42,7 @@ import com.izforge.izpack.util.StringTool;
  * The program entry point. Selects between GUI and text install modes.
  *
  * @author Jonathan Halliday
+ * @author René Krell
  */
 public class Installer
 {
@@ -55,40 +54,6 @@ public class Installer
 
     public static final String LOGGING_CONFIGURATION = "/com/izforge/izpack/installer/logging/logging.properties";
 
-    public Installer()
-    {
-        Logger rootLogger  = Logger.getLogger("");
-        if (Debug.isTRACE() || Debug.isDEBUG())
-        {
-            rootLogger.setLevel(Level.ALL);
-        }
-        else
-        {
-            rootLogger.setLevel(Level.INFO);
-        }
-
-        LogManager manager = LogManager.getLogManager();
-        InputStream stream = null;
-        try
-        {
-            stream = Installer.class.getResourceAsStream(LOGGING_CONFIGURATION);
-            if (stream != null)
-            {
-                manager.readConfiguration(stream);
-            }
-            else
-            {
-                rootLogger.warning("Resource " + LOGGING_CONFIGURATION + " not found");
-            }
-        }
-        catch (IOException e)
-        {
-            rootLogger.log(Level.WARNING, "Error loading resource " + LOGGING_CONFIGURATION + ": " + e, e);
-        }
-
-        logger = Logger.getLogger(Installer.class.getName());
-    }
-
     /*
      * The main method (program entry point).
      *
@@ -98,6 +63,7 @@ public class Installer
     {
         try
         {
+            initializeLogging();
             Installer installer = new Installer();
             installer.start(args);
         }
@@ -108,16 +74,46 @@ public class Installer
 
     }
 
-    private void start(String[] args)
+    private static void initializeLogging()
     {
-        Handler handlers[] = Logger.getLogger("").getHandlers();
-        for (int i = 0; i < handlers.length; i++)
+        LogManager manager = LogManager.getLogManager();
+        InputStream stream = null;
+        try
         {
-            handlers[i].setLevel(Level.FINEST);
+            stream = Installer.class.getResourceAsStream(LOGGING_CONFIGURATION);
+            if (stream != null)
+            {
+                manager.readConfiguration(stream);
+                //System.out.println("Read logging configuration from resource " + LOGGING_CONFIGURATION);
+            }
+            else
+            {
+                //System.err.println("Logging configuration resource " + LOGGING_CONFIGURATION + " not found");
+            }
+        }
+        catch (IOException e)
+        {
+            //System.err.println("Error loading logging configuration resource " + LOGGING_CONFIGURATION + ": " + e);
         }
 
-        logger.info(" - Logger initialized at '" + new Date(System.currentTimeMillis()) + "'.");
-        logger.info(" - commandline args: " + StringTool.stringArrayToSpaceSeparatedString(args));
+        Logger rootLogger = Logger.getLogger("com.izforge.izpack");
+        rootLogger.setUseParentHandlers(false);
+        if (Debug.isDEBUG())
+        {
+            rootLogger.setLevel(Level.FINE);
+        }
+        else
+        {
+            rootLogger.setLevel(Level.INFO);
+        }
+
+        logger = Logger.getLogger(Installer.class.getName());
+        logger.info("Logger initialized at level '" + logger.getLevel() + "'");
+    }
+
+    private void start(String[] args)
+    {
+        logger.info("Commandline arguments: " + StringTool.stringArrayToSpaceSeparatedString(args));
 
         // OS X tweakings
         if (System.getProperty("mrj.version") != null)
