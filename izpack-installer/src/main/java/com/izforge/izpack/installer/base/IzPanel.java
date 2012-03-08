@@ -1138,7 +1138,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
                 if (this.emitWarning(getString("data.validation.warning.title"), warningMessage))
                 {
                     returnValue = true;
-                    logger.fine("... but user decided to go on!");
+                    logger.fine("User decided to skip validation warning");
                 }
             }
             else
