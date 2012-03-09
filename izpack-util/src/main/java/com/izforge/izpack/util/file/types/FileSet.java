@@ -18,6 +18,7 @@
 package com.izforge.izpack.util.file.types;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -60,6 +61,10 @@ public class FileSet extends DataType
      */
     public void setDir(File dir) throws Exception
     {
+        if (!dir.exists())
+        {
+            throw new FileNotFoundException("Directory " + dir + " not found");
+        }
         this.dir = dir;
     }
 
@@ -103,6 +108,10 @@ public class FileSet extends DataType
      */
     public void setFile(File file) throws Exception
     {
+        if (!file.exists())
+        {
+            throw new FileNotFoundException("File " + file + " not found");
+        }
         setDir(file.getParentFile());
         createInclude().setName(file.getName());
     }

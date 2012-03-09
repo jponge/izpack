@@ -643,7 +643,7 @@ public class CompilerConfig extends Thread
             String id = packElement.getAttribute("id");
             String packImgId = packElement.getAttribute("packImgId");
 
-            boolean loose = "true".equalsIgnoreCase(packElement.getAttribute("loose", "false"));
+            boolean loose = Boolean.parseBoolean(packElement.getAttribute("loose", "false"));
             String description = xmlCompilerHelper.requireChildNamed(packElement, "description").getContent();
             boolean required = xmlCompilerHelper.requireYesNoAttribute(packElement, "required");
             String group = packElement.getAttribute("group");
@@ -651,7 +651,7 @@ public class CompilerConfig extends Thread
             String excludeGroup = packElement.getAttribute("excludeGroup");
             boolean uninstall = "yes".equalsIgnoreCase(packElement.getAttribute("uninstall", "yes"));
             String parent = packElement.getAttribute("parent");
-            boolean hidden = "true".equalsIgnoreCase(packElement.getAttribute("hidden", "false"));
+            boolean hidden = Boolean.parseBoolean(packElement.getAttribute("hidden", "false"));
 
             String conditionid = packElement.getAttribute("condition");
 
@@ -912,13 +912,17 @@ public class CompilerConfig extends Thread
         for (IXMLElement fileNode : packElement.getChildrenNamed("file"))
         {
             String src = xmlCompilerHelper.requireAttribute(fileNode, "src");
-            boolean unpack = "true".equalsIgnoreCase(fileNode.getAttribute("unpack"));
+            boolean unpack = Boolean.parseBoolean(fileNode.getAttribute("unpack"));
 
             TargetFileSet fs = new TargetFileSet();
             try
             {
                 File relsrcfile = new File(src);
                 File abssrcfile = FileUtil.getAbsoluteFile(src, compilerData.getBasedir());
+                if (!relsrcfile.exists())
+                {
+                    throw new FileNotFoundException("Source file " + relsrcfile + " not found");
+                }
                 if (relsrcfile.isDirectory())
                 {
                     fs.setDir(abssrcfile.getParentFile());
@@ -971,6 +975,7 @@ public class CompilerConfig extends Thread
                         abssrcfile = new File(fs.getDir(), filePath);
                         if (unpack)
                         {
+                            logger.info("Adding content from archive: " + abssrcfile);
                             addArchiveContent(baseDir, abssrcfile, fs.getTargetDir(), fs
                                     .getOsList(), fs.getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(), pack, fs
                                     .getAdditionals(), fs.getCondition());
@@ -1040,7 +1045,7 @@ public class CompilerConfig extends Thread
 
             // whether to keep the executable after executing it
             val = executableNode.getAttribute("keep");
-            executable.keepFile = "true".equalsIgnoreCase(val);
+            executable.keepFile = Boolean.parseBoolean(val);
 
             // get arguments for this executable
             IXMLElement args = executableNode.getFirstChildNamed("args");
