@@ -1359,7 +1359,7 @@ public class CompilerConfig extends Thread
                 out.close();
 
                 String target = targetdir + "/" + zentry.getName();
-                logger.info("Adding file: " + temp + ", as target file=" + target);
+                logger.info("Adding file " + zentry.getName() + " from archive as target file=" + target);
                 pack.addFile(baseDir, temp, target, osList, override,
                         overrideRenameTo, blockable, additionals, condition);
             }
