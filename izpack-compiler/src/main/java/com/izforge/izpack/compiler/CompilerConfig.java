@@ -1068,7 +1068,7 @@ public class CompilerConfig extends Thread
     {
         for (IXMLElement parsableNode : parsableChildren)
         {
-            String target = xmlCompilerHelper.requireAttribute(parsableNode, "targetfile");
+            String target = parsableNode.getAttribute("targetfile");
             SubstitutionType type = SubstitutionType.lookup(parsableNode.getAttribute("type", "plain"));
             String encoding = parsableNode.getAttribute("encoding", null);
             List<OsModel> osList = OsConstraintHelper.getOsList(parsableNode); // TODO: unverified
@@ -1079,6 +1079,7 @@ public class CompilerConfig extends Thread
                 parsable.setCondition(condition);
                 pack.addParsable(parsable);
             }
+            //FIXME Use different type of fileset to scan already added files instead of the local filesystem
             for (IXMLElement fileSetElement : parsableNode.getChildrenNamed("fileset"))
             {
                 String targetdir = xmlCompilerHelper.requireAttribute(fileSetElement, "targetdir");
