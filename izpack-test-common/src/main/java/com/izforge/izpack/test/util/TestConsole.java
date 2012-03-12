@@ -1,4 +1,4 @@
-package com.izforge.izpack.test.io;
+package com.izforge.izpack.test.util;
 
 
 import com.izforge.izpack.util.Console;
