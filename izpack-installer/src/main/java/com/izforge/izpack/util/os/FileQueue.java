@@ -1,5 +1,7 @@
 package com.izforge.izpack.util.os;
 
+import com.izforge.izpack.util.Librarian;
+
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
@@ -13,6 +15,21 @@ public class FileQueue
 
     protected WinSetupFileQueue filequeue;
 
+    /**
+     * The librarian.
+     */
+    private final Librarian librarian;
+
+
+    /**
+     * Constructs a <tt>FileQueue</tt>.
+     *
+     * @param librarian the librarian
+     */
+    public FileQueue(Librarian librarian)
+    {
+        this.librarian = librarian;
+    }
 
     /**
      * Add a file queue operation.
@@ -29,7 +46,7 @@ public class FileQueue
         WinSetupDefaultCallbackHandler handler = new WinSetupDefaultCallbackHandler();
         try
         {
-            filequeue = new WinSetupFileQueue(handler);
+            filequeue = new WinSetupFileQueue(librarian, handler);
         }
         catch (IOException ioe)
         {

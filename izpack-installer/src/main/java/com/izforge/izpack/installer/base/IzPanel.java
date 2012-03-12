@@ -310,7 +310,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     protected void initLayoutHelper()
     {
-        layoutHelper = new LayoutHelper(this);
+        layoutHelper = new LayoutHelper(this, installData);
     }
 
     /**

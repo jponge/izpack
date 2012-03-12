@@ -22,17 +22,14 @@
 
 package com.izforge.izpack.util;
 
+import com.izforge.izpack.util.file.FileUtils;
+
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.security.CodeSource;
-import java.security.ProtectionDomain;
-import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -50,9 +47,11 @@ import java.util.logging.Logger;
  *
  * @author Elmar Grom
  */
-/*---------------------------------------------------------------------------*/
 public class Librarian implements CleanupClient
 {
+    /**
+     * The logger.
+     */
     private static final Logger logger = Logger.getLogger(Librarian.class.getName());
 
     /**
@@ -66,35 +65,9 @@ public class Librarian implements CleanupClient
     private static final String FILE_PROTOCOL = "file";
 
     /**
-     * The key used to retrieve the location of temporary files form the system properties.
-     */
-    private static final String TEMP_LOCATION_KEY = "java.io.tmpdir";
-
-    /**
-     * The extension appended to the client name when searching for it as a resource. Since the
-     * client is an object, the extension should always be '.class'
-     */
-    private static final String CLIENT_EXTENSION = ".class";
-
-    /**
      * The default directory for native library files.
      */
-    private static final String NATIVE = "com/izforge/izpack/bin/native";
-
-    /**
-     * The block size used for reading and writing data, 4k.
-     */
-    private static final int BLOCK_SIZE = 4096;
-
-    // ------------------------------------------------------------------------
-    // Variable Declarations
-    // ------------------------------------------------------------------------
-
-    /**
-     * The reference to the single instance of <code>Librarian</code>. Used in static methods in
-     * place of <code>this</code>.
-     */
-    private static Librarian me = null;
+    private static final String NATIVE = "com/izforge/izpack/bin/native/";
 
     /**
      * A list that is used to track all libraries that have been loaded. This list is used to ensure
@@ -109,13 +82,6 @@ public class Librarian implements CleanupClient
     private List<NativeLibraryClient> clients = new ArrayList<NativeLibraryClient>();
 
     /**
-     * A list of library names as they appear in the temporary directory. This is needed to free
-     * each library through the client. The index of each name corresponds to the index of the
-     * respective client in the <code>clients</code> list.
-     */
-    private List<String> libraryNames = new ArrayList<String>();
-
-    /**
      * A list of fully qualified library names. This is needed to delete the temporary library files
      * after use. The index of each name corresponds to the index of the respective client in the
      * <code>clients</code> list.
@@ -127,63 +93,102 @@ public class Librarian implements CleanupClient
      */
     private String extension = "";
 
-    /**
-     * The directory that is used to hold all native libraries.
-     */
-    private String nativeDirectory = NATIVE;
-
-    /*--------------------------------------------------------------------------*/
 
     /**
-     * This class is implemented as a 'Singleton'. Therefore the constructor is private to prevent
-     * instantiation of this class. Use <code>getInstance()</code> to obtain an instance for use.
-     * <br>
-     * <br>
-     * For more information about the 'Singleton' pattern I highly recommend the book Design
-     * Patterns by Gamma, Helm, Johnson and Vlissides ISBN 0-201-63361-2.
-     */
-    /*--------------------------------------------------------------------------*/
-    private Librarian()
-    {
-        Housekeeper.getInstance().registerForCleanup(this);
-        extension = '.' + TargetFactory.getInstance().getNativeLibraryExtension();
-    }
-
-    /*--------------------------------------------------------------------------*/
-
-    /**
-     * Returns an instance of <code>Librarian</code> to use.
+     * Constructs a <tt>Librarian</tt>.
      *
-     * @return an instance of <code>Librarian</code>.
+     * @param factory     the factory
+     * @param housekeeper the house keeper
      */
-    /*--------------------------------------------------------------------------*/
-    public static Librarian getInstance()
+    public Librarian(TargetFactory factory, Housekeeper housekeeper)
     {
-        if (me == null)
-        {
-            me = new Librarian();
-        }
-
-        return (me);
+        housekeeper.registerForCleanup(this);
+        extension = '.' + factory.getNativeLibraryExtension();
     }
 
-    public synchronized void loadLibrary(String name, NativeLibraryClient client) throws Exception
+    /**
+     * Loads a library.
+     *
+     * @param name   the library name
+     * @param client the native library client
+     * @throws UnsatisfiedLinkError if the library cannot be loaded
+     */
+    public synchronized void loadLibrary(String name, NativeLibraryClient client) throws UnsatisfiedLinkError
     {
+        name = strip(name);
+        if (!trackList.contains(name))
+        {
+            // no attempt has been made to load the library yet
+            boolean loaded = loadArchSpecificLibrary(name, client);
+            if (!loaded)
+            {
+                String name64 = name + "_x64";
+                loaded = loadArchSpecificLibrary(name64, client);
+            }
+            if (loaded)
+            {
+                trackList.add(name);
+            }
+            else
+            {
+                throw new UnsatisfiedLinkError("Failed to load library: " + name);
+
+            }
+        }
+    }
+
+    /*--------------------------------------------------------------------------*/
+
+    /**
+     * This method attempts to remove all native libraries that have been temporarily created from
+     * the system.
+     * This method calls LibraryRemover which starts a new process which
+     * waits a little bit for exit of this process and tries than to delete the given files.
+     * If the version is 1.5.x or higher this process should be exit in one second, else
+     * the native libraries will be not deleted.
+     * Tests with the different methods produces hinds that the
+     * FreeLibraryAndExitThread (handle, 0) call in the dlls are the
+     * reason for VM crashes (version 1.5.x). May be this is a bug in the VM.
+     * But never seen a docu that this behavior is compatible with a VM.
+     * Since more than a year all 1.5 versions produce this crash. Therfore we make
+     * now a work around for it.
+     * But the idea to exit the thread for removing the file locking to give the
+     * possibility to delete the dlls are really nice. Therefore we use it with
+     * VMs which are compatible with it.  (Klaus Bartz 2006.06.20)
+     */
+    @Override
+    public void cleanUp()
+    {
+        // This method will be used the SelfModifier stuff of uninstall
+        // instead of killing the thread in the dlls which provokes a
+        // segmentation violation with a 1.5 (also known as 5.0) VM.
+
         try
         {
-            loadArchSpecificLibrary(name, client);
+            LibraryRemover.invoke(temporaryFileNames);
         }
-        catch (Exception ex)
+        catch (IOException exception)
         {
-            loadArchSpecificLibrary(name + "_x64", client);
+            logger.log(Level.WARNING, "Cleanup failed for native libraries: " + exception.getMessage(), exception);
         }
+        clients.clear();
     }
 
-    /*--------------------------------------------------------------------------*/
+    /**
+     * Returns the resource URL for the named library.
+     *
+     * @param name the library name
+     * @return the library's resource URL, or <tt>null</tt> if it is not found
+     */
+    protected URL getResourcePath(String name)
+    {
+        String resource = "/" + NATIVE + name + extension;
+        return getClass().getResource(resource);
+    }
 
     /**
      * Loads the requested library. If the library is already loaded, this method returns
-     * immediately, without an attempt to load the library again. <br>
+     * immediately, without an attempt to load the library again.
      * <br>
      * <b>Invocation Example:</b> This assumes that the call is made from the class that links with
      * the library. If this is not the case, <code>this</code> must be replaced by the reference
@@ -215,138 +220,166 @@ public class Librarian implements CleanupClient
      * @param name   the name of the library. A file extension and path are not needed, in fact if
      *               supplied, both is stripped off. A specific extension is appended.
      * @param client the object that made the load request
-     * @throws Exception if all attempts to load the library fail.
-     * @see #setNativeDirectory
+     * @return <tt>true</tt> if the
      */
-    /*--------------------------------------------------------------------------*/
-    public synchronized void loadArchSpecificLibrary(String name, NativeLibraryClient client) throws Exception
+    private boolean loadArchSpecificLibrary(String name, NativeLibraryClient client)
     {
-        String libraryName = strip(name);
-        String tempFileName = "";
-
-        // ----------------------------------------------------
-        // Return if the library is already loaded
-        // ----------------------------------------------------
-        if (loaded(libraryName))
+        boolean result = false;
+        if (loadFromDLLPath(name, client) || loadSystemLibrary(name, client) || loadFromClassPath(name, client))
         {
-            return;
+            result = true;
         }
-
-
-        if (System.getProperty("DLL_PATH") != null)
-        {
-            String path = System.getProperty("DLL_PATH") + "/" + name + extension;
-            path = path.replace('/', File.separatorChar);
-            logger.fine("Try to load library " + path);
-            System.load(path);
-            return;
-
-        }
-        // ----------------------------------------------------
-        // First try a straight load
-        // ----------------------------------------------------
-        try
-        {
-            System.loadLibrary(libraryName);
-            return;
-        }
-        catch (UnsatisfiedLinkError exception)
-        {
-        }
-        catch (SecurityException exception)
-        {
-        }
-
-        // ----------------------------------------------------
-        // Next, try to get the protocol for loading the resource.
-        // ----------------------------------------------------
-        Class<? extends NativeLibraryClient> clientClass = client.getClass();
-        String resourceName = clientClass.getName();
-        int nameStart = resourceName.lastIndexOf('.') + 1;
-        resourceName = resourceName.substring(nameStart, resourceName.length()) + CLIENT_EXTENSION;
-        URL url = clientClass.getResource(resourceName);
-        if (url == null)
-        {
-            throw (new Exception("can't identify load protocol for " + libraryName
-                    + extension));
-        }
-        String protocol = url.getProtocol();
-
-        // ----------------------------------------------------
-        // If it's a local file, load it from the current location
-        // ----------------------------------------------------
-        if (protocol.equalsIgnoreCase(FILE_PROTOCOL))
-        {
-            try
-            {
-                System.load(getClientPath(name, url));
-            }
-            catch (Throwable exception)
-            {
-                try
-                {
-                    System.load(getNativePath(name, client));
-                }
-                catch (Throwable exception2)
-                {
-                    throw (new Exception("error loading library"));
-                }
-            }
-        }
-
-        // ----------------------------------------------------
-        // If it is in a *.jar file, extract it to 'java.io.tmpdir'
-        // ----------------------------------------------------
-
-        else if (protocol.equalsIgnoreCase(JAR_PROTOCOL))
-        {
-            tempFileName = getTempFileName(libraryName);
-            try
-            {
-                extractFromJar(libraryName, tempFileName, client);
-
-                clients.add(client);
-                temporaryFileNames.add(tempFileName);
-                libraryNames.add(tempFileName.substring((tempFileName
-                        .lastIndexOf(File.separatorChar) + 1), tempFileName.length()));
-
-                // --------------------------------------------------
-                // Try loading the temporary file from 'java.io.tmpdir'.
-                // --------------------------------------------------
-                System.load(tempFileName);
-            }
-            catch (Throwable exception)
-            {
-                throw (new Exception("error loading library\n" + exception.toString()));
-            }
-        }
+        return result;
     }
 
-    /*--------------------------------------------------------------------------*/
+    /**
+     * Attempts to load a library from the <em>DLL_PATH</em> system property.
+     *
+     * @param name   the library name
+     * @param client the native library client
+     * @return <tt>true</tt> if the library was loaded successfully, otherwise <tt>false</tt>
+     */
+    private boolean loadFromDLLPath(String name, NativeLibraryClient client)
+    {
+        String property = System.getProperty("DLL_PATH");
+        if (property != null)
+        {
+            String path = property + "/" + name + extension;
+            path = path.replace('/', File.separatorChar);
+            return load(path, client);
+        }
+        return false;
+    }
 
     /**
-     * Verifies if the library has already been loaded and keeps track of all libraries that are
-     * verified.
+     * Attempts  to load a library from the classpath.
      *
-     * @param name name of the library to verify
-     * @return <code>true</code> if the library had already been loaded, otherwise
-     *         <code>false</code>.
+     * @param name   the library name
+     * @param client the native library client
+     * @return <tt>true</tt> if the library was loaded successfully, otherwise <tt>false</tt>
      */
-    /*--------------------------------------------------------------------------*/
-    private boolean loaded(String name)
+    private boolean loadFromClassPath(String name, NativeLibraryClient client)
     {
-        if (trackList.contains(name))
+        boolean result = false;
+        URL url = getResourcePath(name);
+        if (url != null)
         {
-            return (true);
+            String protocol = url.getProtocol();
+            if (protocol.equalsIgnoreCase(FILE_PROTOCOL))
+            {
+                // its a local file
+                try
+                {
+                    String path = new File(url.toURI()).getPath();
+                    result = load(path, client);
+                }
+                catch (URISyntaxException exception)
+                {
+                    logger.log(Level.WARNING, "Failed to load library: " + name + ": " + exception.getMessage(),
+                            exception);
+                }
+            }
+            else if (protocol.equalsIgnoreCase(JAR_PROTOCOL))
+            {
+                // its a jar file. Extract and load it from 'java.io.tmpdir'
+                result = loadJarLibrary(name, url, client);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Attempts to load a library from a jar.
+     *
+     * @param name   the library name
+     * @param url    the library URL within the jar
+     * @param client the native library client
+     * @return <tt>true</tt> if the library was loaded successfully, otherwise <tt>false</tt>
+     */
+    private boolean loadJarLibrary(String name, URL url, NativeLibraryClient client)
+    {
+        boolean result = false;
+        File file = null;
+        InputStream in = null;
+        FileOutputStream out = null;
+        String path = null;
+        try
+        {
+            file = FileUtils.createTempFile(name, extension);
+            in = url.openStream();
+            out = new FileOutputStream(file);
+            IoHelper.copyStream(in, out);
+            path = file.getAbsolutePath();
+        }
+        catch (IOException exception)
+        {
+            logger.log(Level.WARNING, "Failed to load library: " + name + ": " + exception.getMessage(), exception);
+        }
+        finally
+        {
+            FileUtils.close(in);
+            FileUtils.close(out);
+        }
+        if (path != null)
+        {
+            result = load(path, client);
+        }
+        if (!result)
+        {
+            FileUtils.delete(file);
         }
         else
         {
-            trackList.add(name);
-            return (false);
+            temporaryFileNames.add(path);
+            file.deleteOnExit();
         }
+        return result;
     }
 
-    /*--------------------------------------------------------------------------*/
+    /**
+     * Loads a system library.
+     *
+     * @param name   the library name
+     * @param client the native library client
+     * @return <tt>true</tt> if the library was loaded successfully, otherwise <tt>false</tt>
+     */
+    private boolean loadSystemLibrary(String name, NativeLibraryClient client)
+    {
+        try
+        {
+            System.loadLibrary(name);
+            clients.add(client);
+            return true;
+        }
+        catch (Throwable exception)
+        {
+            logger.log(Level.FINE, "Failed to load library: " + name + ": " + exception.getMessage(), exception);
+        }
+        return false;
+    }
+
+    /**
+     * Loads a library given its path.
+     *
+     * @param path   the library path
+     * @param client the native library client
+     * @return <tt>true</tt> if the library was loaded successfully, otherwise <tt>false</tt>
+     */
+    private boolean load(String path, NativeLibraryClient client)
+    {
+        boolean result = false;
+        try
+        {
+            System.load(path);
+            clients.add(client);
+            result = true;
+        }
+        catch (Throwable exception)
+        {
+            logger.log(Level.FINE, "Failed to load library: " + path + ": " + exception.getMessage(), exception);
+        }
+        return result;
+    }
 
     /**
      * Strips the extension of the library name, if it has one.
@@ -354,7 +387,6 @@ public class Librarian implements CleanupClient
      * @param name the name of the library
      * @return the name without an extension
      */
-    /*--------------------------------------------------------------------------*/
     private String strip(String name)
     {
         int extensionStart = name.lastIndexOf('.');
@@ -379,337 +411,4 @@ public class Librarian implements CleanupClient
         return (shortName);
     }
 
-    /*--------------------------------------------------------------------------*/
-
-    /**
-     * Makes an attempt to extract the named library from the jar file and to store it on the local
-     * file system for temporary use. If the attempt is successful, the fully qualified file name of
-     * the library on the local file system is returned.
-     *
-     * @param name        the simple name of the library
-     * @param destination the fully qualified name of the destination file.
-     * @param client      the class that made the load request.
-     * @throws Exception             if the library can not be extracted from the *.jar file.
-     * @throws FileNotFoundException if the *.jar file does not exist. The way things operate
-     *                               here, this should actually never happen.
-     */
-    /*--------------------------------------------------------------------------*/
-    private void extractFromJar(String name, String destination, NativeLibraryClient client)
-            throws Exception
-    {
-        int bytesRead = 0;
-        OutputStream output = null;
-
-        // ----------------------------------------------------
-        // open an input stream for the library file
-        // ----------------------------------------------------
-        InputStream input = openInputStream(name, client);
-
-        // ----------------------------------------------------
-        // open an output stream for the temporary file
-        // ----------------------------------------------------
-        try
-        {
-            output = new FileOutputStream(destination);
-        }
-        catch (FileNotFoundException exception)
-        {
-            input.close();
-            throw (new Exception("can't create destination file"));
-        }
-        catch (SecurityException exception)
-        {
-            input.close();
-            throw (new Exception("creation of destination file denied"));
-        }
-        catch (Throwable exception)
-        {
-            input.close();
-            throw (new Exception("unknown problem creating destination file\n"
-                    + exception.toString()));
-        }
-
-        // ----------------------------------------------------
-        // pump the data
-        // ----------------------------------------------------
-        byte[] buffer = new byte[BLOCK_SIZE];
-        try
-        {
-            do
-            {
-                bytesRead = input.read(buffer);
-                if (bytesRead > 0)
-                {
-                    output.write(buffer, 0, bytesRead);
-                }
-            }
-            while (bytesRead > 0);
-        }
-        catch (Throwable exception)
-        {
-            throw (new Exception("error writing to destination file\n" + exception.toString()));
-        }
-
-        // ----------------------------------------------------
-        // flush the data and close both streams
-        // ----------------------------------------------------
-        finally
-        {
-            input.close();
-            output.flush();
-            output.close();
-        }
-    }
-
-    /*--------------------------------------------------------------------------*/
-
-    /**
-     * Returns the complete path (including file name) for the native library, assuming the native
-     * library is located in the same directory from which the client was loaded.
-     *
-     * @param name      the simple name of the library
-     * @param clientURL a URL that points to the client class
-     * @return the path to the client
-     */
-    /*--------------------------------------------------------------------------*/
-    private String getClientPath(String name, URL clientURL)
-    {
-        String path = FileUtil.convertUrlToFilePath(clientURL);
-
-        int nameStart = path.lastIndexOf('/') + 1;
-
-        path = path.substring(0, nameStart);
-        path = path + name + extension;
-        path = path.replace('/', File.separatorChar);
-        // Revise the URI-path to a file path; needed in uninstaller because it
-        // writes the jar contents into a sandbox; may be with blanks in the
-        // path.
-        path = revisePath(path);
-
-        return (path);
-    }
-
-    /*--------------------------------------------------------------------------*/
-
-    /**
-     * Returns the complete path (including file name) for the native library, assuming the native
-     * library is located in a directory where native libraries are ordinarily expected.
-     *
-     * @param name   the simple name of the library
-     * @param client the class that made the load request.
-     * @return the path to the location of the native libraries.
-     */
-    /*--------------------------------------------------------------------------*/
-    private String getNativePath(String name, NativeLibraryClient client)
-    {
-        ProtectionDomain domain = client.getClass().getProtectionDomain();
-        CodeSource codeSource = domain.getCodeSource();
-        URL url = codeSource.getLocation();
-        String path = FileUtil.convertUrlToFilePath(url);
-        path = path + nativeDirectory + '/' + name + extension;
-        path = path.replace('/', File.separatorChar);
-        // Revise the URI-path to a file path; needed in uninstaller because it
-        // writes the jar contents into a sandbox; may be with blanks in the
-        // path.
-        path = revisePath(path);
-
-        return (path);
-    }
-
-    /*--------------------------------------------------------------------------*/
-
-    /**
-     * Revises the given path to a file compatible path. In fact this method replaces URI-like
-     * entries with it chars (e.g. %20 with a space).
-     *
-     * @param in path to be revised
-     * @return revised path
-     */
-    /*--------------------------------------------------------------------------*/
-    private String revisePath(String in)
-    {
-        // This was "stolen" from com.izforge.izpack.util.SelfModifier
-
-        StringBuffer buffer = new StringBuffer();
-        CharacterIterator iter = new StringCharacterIterator(in);
-        for (char c = iter.first(); c != CharacterIterator.DONE; c = iter.next())
-        {
-            if (c == '%')
-            {
-                char c1 = iter.next();
-                if (c1 != CharacterIterator.DONE)
-                {
-                    int i1 = Character.digit(c1, 16);
-                    char c2 = iter.next();
-                    if (c2 != CharacterIterator.DONE)
-                    {
-                        int i2 = Character.digit(c2, 16);
-                        buffer.append((char) ((i1 << 4) + i2));
-                    }
-                }
-            }
-            else
-            {
-                buffer.append(c);
-            }
-        }
-        String path = buffer.toString();
-        return path;
-    }
-
-    /*--------------------------------------------------------------------------*/
-
-    /**
-     * Opens an <code>InputStream</code> to the native library.
-     *
-     * @param name   the simple name of the library
-     * @param client the class that made the load request.
-     * @return an <code>InputStream</code> from which the library can be read.
-     * @throws Exception if the library can not be located.
-     */
-    /*--------------------------------------------------------------------------*/
-    private InputStream openInputStream(String name, NativeLibraryClient client) throws Exception
-    {
-        Class<? extends NativeLibraryClient> clientClass = client.getClass();
-        // ----------------------------------------------------
-        // try to open an input stream, assuming the library
-        // is located with the client
-        // ----------------------------------------------------
-        InputStream input = clientClass.getResourceAsStream(name + extension);
-
-        // ----------------------------------------------------
-        // if this is not successful, try to load from the
-        // location where all native libraries are supposed
-        // to be located.
-        // ----------------------------------------------------
-        if (input == null)
-        {
-            input = clientClass.getResourceAsStream('/' + nativeDirectory + '/' + name + extension);
-        }
-
-        // ----------------------------------------------------
-        // if this fails as well, throw an exception
-        // ----------------------------------------------------
-        if (input == null)
-        {
-            throw (new Exception("can't locate library"));
-        }
-        else
-        {
-            return (input);
-        }
-    }
-
-    /*--------------------------------------------------------------------------*/
-
-    /**
-     * Builds a temporary file name for the native library.
-     *
-     * @param name the file name of the library
-     * @return a fully qualified file name that can be used to store the file on the local file
-     *         system.
-     */
-    /*--------------------------------------------------------------------------*/
-    /*
-     * $ @design
-     *
-     * Avoid overwriting any existing files on the user's system. If by some remote chance a file by
-     * the same name should exist on the user's system, modify the temporary file name until a
-     * version is found that is unique on the system and thus won't interfere.
-     * --------------------------------------------------------------------------
-     */
-    private String getTempFileName(String name)
-    {
-        StringBuffer fileName = new StringBuffer();
-        String path = System.getProperty(TEMP_LOCATION_KEY);
-        if (path.charAt(path.length() - 1) == File.separatorChar)
-        {
-            path = path.substring(0, (path.length() - 1));
-        }
-        String modifier = "";
-        int counter = 0;
-        File file = null;
-
-        do
-        {
-            fileName.delete(0, fileName.length());
-            fileName.append(path);
-            fileName.append(File.separatorChar);
-            fileName.append(name);
-            fileName.append(modifier);
-            fileName.append(extension);
-
-            modifier = Integer.toString(counter);
-            counter++;
-
-            file = new File(fileName.toString());
-        }
-        while (file.exists());
-
-        return (fileName.toString());
-    }
-
-    /*--------------------------------------------------------------------------*/
-
-    /**
-     * Sets the directory where <code>Librarian</code> will search for native files. Directories
-     * are denoted relative to the root, where the root is the same location where the top level
-     * Java package directory is located (usually called <code>com</code>). The default directory
-     * is <code>native</code>.
-     *
-     * @param directory the directory where native files are located.
-     */
-    /*--------------------------------------------------------------------------*/
-    public void setNativeDirectory(String directory)
-    {
-        if (directory == null)
-        {
-            nativeDirectory = "";
-        }
-        else
-        {
-            nativeDirectory = directory;
-        }
-    }
-
-    /*--------------------------------------------------------------------------*/
-
-    /**
-     * This method attempts to remove all native libraries that have been temporarily created from
-     * the system.
-     * This method calls LibraryRemover which starts a new process which
-     * waits a little bit for exit of this process and tries than to delete the given files.
-     * If the ersion is 1.5.x or higher this process should be exit in one second, else
-     * the native libraries will be not deleted.
-     * Tests with the different methods produces hinds that the
-     * FreeLibraryAndExitThread (handle, 0) call in the dlls are the
-     * reason for VM crashes (version 1.5.x). May be this is a bug in the VM.
-     * But never seen a docu that this behavior is compatible with a VM.
-     * Since more than a year all 1.5 versions produce this crash. Therfore we make
-     * now a work around for it.
-     * But the idea to exit the thread for removing the file locking to give the
-     * possibility to delete the dlls are really nice. Therefore we use it with
-     * VMs which are compatible with it.  (Klaus Bartz 2006.06.20)
-     */
-    /*--------------------------------------------------------------------------*/
-    @Override
-    public void cleanUp()
-    {
-        // This method will be used the SelfModifier stuff of uninstall
-        // instead of killing the thread in the dlls which provokes a
-        // segmentation violation with a 1.5 (also known as 5.0) VM.
-
-        try
-        {
-            LibraryRemover.invoke(temporaryFileNames);
-        }
-        catch (IOException e)
-        {
-            logger.log(Level.WARNING,
-                    "Cleanup failed for native libraries: " + e.getMessage(),
-                    e);
-        }
-
-    }
 }
-/*---------------------------------------------------------------------------*/

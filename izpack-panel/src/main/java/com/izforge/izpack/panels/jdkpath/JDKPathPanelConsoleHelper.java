@@ -25,11 +25,11 @@ import com.coi.tools.os.win.MSWinConstants;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.Console;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.os.RegistryHandler;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
+import com.izforge.izpack.util.Console;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
 
@@ -52,11 +52,19 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
     private String maxVersion;
     private String variableName;
     private String detectedVersion;
-    private VariableSubstitutor variableSubstitutor;
+    private final VariableSubstitutor variableSubstitutor;
+    private final RegistryDefaultHandler handler;
 
-    public JDKPathPanelConsoleHelper(VariableSubstitutor variableSubstitutor)
+    /**
+     * Constructs a <tt>JDKPathPanelConsoleHelper</tt>.
+     *
+     * @param variableSubstitutor the variable substituter
+     * @param handler             the registry handler
+     */
+    public JDKPathPanelConsoleHelper(VariableSubstitutor variableSubstitutor, RegistryDefaultHandler handler)
     {
         this.variableSubstitutor = variableSubstitutor;
+        this.handler = handler;
     }
 
     public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
@@ -356,7 +364,7 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
         try
         {
             // Get the default registry handler.
-            registryHandler = RegistryDefaultHandler.getInstance();
+            registryHandler = handler.getInstance();
             if (registryHandler == null)
             // We are on a os which has no registry or the
             // needed dll was not bound to this installation. In

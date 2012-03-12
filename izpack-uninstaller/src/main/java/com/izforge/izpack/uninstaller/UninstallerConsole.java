@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.uninstaller;
 
+import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
@@ -42,9 +43,11 @@ public class UninstallerConsole
      */
     protected static LocaleDatabase langpack;
 
-    public UninstallerConsole() throws Exception
+    private final BindeableContainer container;
+
+    public UninstallerConsole(BindeableContainer container) throws Exception
     {
-        // Initializations
+        this.container = container;
         langpack = new LocaleDatabase(UninstallerFrame.class.getResourceAsStream("/langpack.xml"));
         getInstallPath();
     }
@@ -56,7 +59,7 @@ public class UninstallerConsole
      */
     private void getInstallPath() throws Exception
     {
-        InputStream in = UninstallerFrame.class.getResourceAsStream("/install.log");
+        InputStream in = getClass().getResourceAsStream("/install.log");
         InputStreamReader inReader = new InputStreamReader(in);
         BufferedReader reader = new BufferedReader(inReader);
         installPath = reader.readLine();
@@ -66,13 +69,12 @@ public class UninstallerConsole
     /**
      * Runs the cmd line uninstaller.
      *
-     * @param destroy Equivallen to the destroy option in the GUI.
+     * @param destroy equivalent to the destroy option in the GUI.
      */
     public void runUninstall(boolean destroy)
     {
-        Destroyer destroyer = new Destroyer(installPath,
-                destroy, new DestroyerHandler());
-        destroyer.start();
+        Destroyer destroyer = new Destroyer(installPath, destroy, new DestroyerHandler(), container);
+        destroyer.run();
     }
 
     /**
@@ -323,10 +325,6 @@ public class UninstallerConsole
             }
 
             return choice;
-
-
         }
-
-
     }
 }

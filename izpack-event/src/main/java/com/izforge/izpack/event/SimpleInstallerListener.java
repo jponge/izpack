@@ -21,7 +21,11 @@
 
 package com.izforge.izpack.event;
 
-import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.PackFile;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.util.helper.SpecHelper;
@@ -53,7 +57,7 @@ public class SimpleInstallerListener implements InstallerListener
     /**
      * The packs locale database.
      */
-    protected static LocaleDatabase langpack = null;
+    protected LocaleDatabase langpack = null;
 
     protected static boolean doInformProgressBar = false;
 
@@ -62,26 +66,35 @@ public class SimpleInstallerListener implements InstallerListener
     private SpecHelper specHelper = null;
 
     /**
-     * The default constructor.
+     * The resource manager.
      */
-    public SimpleInstallerListener()
+    private final ResourceManager resources;
+
+
+    /**
+     * Constructs a <tt>SimpleInstallerListener</tt>.
+     *
+     * @param resources the resource manager
+     */
+    public SimpleInstallerListener(ResourceManager resources)
     {
-        this(false);
+        this(resources, false);
     }
 
     /**
-     * Constructs a simple installer listener. If useSpecHelper is true, a specification helper will
-     * be created.
+     * Constructs a <tt>SimpleInstallerListener</tt>.
      *
-     * @param useSpecHelper
+     * @param resources     the resource manager
+     * @param useSpecHelper if <tt>true</tt> a specification helper will be created
      */
-    public SimpleInstallerListener(boolean useSpecHelper)
+    public SimpleInstallerListener(ResourceManager resources, boolean useSpecHelper)
     {
         super();
         if (useSpecHelper)
         {
-            setSpecHelper(new SpecHelper());
+            setSpecHelper(new SpecHelper(resources));
         }
+        this.resources = resources;
     }
 
     /*
@@ -149,14 +162,13 @@ public class SimpleInstallerListener implements InstallerListener
         {
             installdata = idata;
         }
-        if (installdata != null && SimpleInstallerListener.langpack == null)
+        if (installdata != null && langpack == null)
         {
             // Load langpack.
             try
             {
                 String resource = LANG_FILE_NAME + "_" + installdata.getLocaleISO3();
-                SimpleInstallerListener.langpack = new LocaleDatabase(ResourceManager.getInstance()
-                        .getInputStream(resource));
+                langpack = new LocaleDatabase(resources.getInputStream(resource));
             }
             catch (Throwable exception)
             {
@@ -315,9 +327,9 @@ public class SimpleInstallerListener implements InstallerListener
     protected String getMsg(String id)
     {
         String retval = id;
-        if (SimpleInstallerListener.langpack != null)
+        if (langpack != null)
         {
-            retval = SimpleInstallerListener.langpack.getString(id);
+            retval = langpack.getString(id);
         }
         if (retval.equals(id) && getInstalldata() != null)
         {

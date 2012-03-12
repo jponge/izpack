@@ -42,6 +42,9 @@ import java.util.List;
  */
 public class SpecHelper
 {
+    public static final String YES = "yes";
+
+    public static final String NO = "no";
 
     private String specFilename;
 
@@ -49,20 +52,24 @@ public class SpecHelper
 
     private boolean _haveSpec;
 
-    public static final String YES = "yes";
-
-    public static final String NO = "no";
+    /**
+     * The resource manager.
+     */
+    private final ResourceManager resources;
 
     private static final String PACK_KEY = "pack";
 
     private static final String PACK_NAME = "name";
 
     /**
-     * The default constructor.
+     * Constructs a <tt>SpecHelper</tt>.
+     *
+     * @param resources the resource manager
      */
-    public SpecHelper()
+    public SpecHelper(ResourceManager resources)
     {
         super();
+        this.resources = resources;
     }
 
     /*--------------------------------------------------------------------------*/
@@ -160,7 +167,7 @@ public class SpecHelper
         try
         {
             // System.out.println ("retrieving resource " + res);
-            return ResourceManager.getInstance().getInputStream(res);
+            return resources.getInputStream(res);
         }
         catch (Exception e)
         { // Cannot catch ResourceNotFoundException because it is not public.

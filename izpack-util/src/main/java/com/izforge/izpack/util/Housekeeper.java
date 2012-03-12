@@ -24,14 +24,14 @@ package com.izforge.izpack.util;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*---------------------------------------------------------------------------*/
 
 /**
- * This class performs housekeeping and cleanup tasks. There can only be one instance of
- * <code>Housekeeper</code> per Java runtime, therefore this class is implemented as a
- * 'Singleton'. <br>
- * <br>
+ * This class performs housekeeping and cleanup tasks.
+ * <br/>
  * It is VERY important to perform pre-shutdown cleanup operations through this class. Do NOT rely
  * on operations like <code>deleteOnExit()</code> shutdown hooks or <code>finalize()</code>for
  * cleanup. Because <code>shutDown()</code> uses <code>System.exit()</code> to terminate, these
@@ -44,44 +44,20 @@ import java.util.List;
 public class Housekeeper
 {
 
-    // ------------------------------------------------------------------------
-    // Variable Declarations
-    // ------------------------------------------------------------------------
-    private static Housekeeper me = null;
-
     private List<CleanupClient> cleanupClients = new ArrayList<CleanupClient>();
 
-    /*--------------------------------------------------------------------------*/
-
     /**
-     * This class is implemented as a 'Singleton'. Therefore the constructor is private to prevent
-     * instantiation of this class. Use <code>getInstance()</code> to obtain an instance for use.
-     * <br>
-     * <br>
-     * For more information about the 'Singleton' pattern I highly recommend the book Design
-     * Patterns by Gamma, Helm, Johnson and Vlissides ISBN 0-201-63361-2.
+     * The logger.
      */
-    /*--------------------------------------------------------------------------*/
-    private Housekeeper()
-    {
-    }
+    private static final Logger logger = Logger.getLogger(Housekeeper.class.getName());
 
     /*--------------------------------------------------------------------------*/
 
     /**
-     * Returns an instance of <code>Housekeeper</code> to use.
-     *
-     * @return an instance of <code>Housekeeper</code>.
+     * Default constructor.
      */
-    /*--------------------------------------------------------------------------*/
-    public static Housekeeper getInstance()
+    public Housekeeper()
     {
-        if (me == null)
-        {
-            me = new Housekeeper();
-        }
-
-        return (me);
     }
 
     /*--------------------------------------------------------------------------*/
@@ -137,25 +113,27 @@ public class Housekeeper
             }
             catch (Throwable exception)
             {
-                // At this point we can not afford to treat exceptions. Cleanup
-                // that
-                // can not be completed might unfortunately leave some garbage
-                // behind.
-                // If we have a logging module, any exceptions received here
-                // should
-                // be written to the log.
+                // At this point we can not afford to treat exceptions. Cleanup that can not be completed might
+                // unfortunately leave some garbage behind.
+                logger.log(Level.WARNING, exception.getMessage(), exception);
             }
         }
 
+        terminate(exitCode, reboot);
+    }
+
+    protected void terminate(int exitCode, boolean reboot)
+    {
         if (reboot)
         {
             try
             {
                 systemReboot();
             }
-            catch (IOException e)
+            catch (IOException exception)
             {
                 // Do nothing at the moment
+                logger.log(Level.WARNING, exception.getMessage(), exception);
             }
         }
 

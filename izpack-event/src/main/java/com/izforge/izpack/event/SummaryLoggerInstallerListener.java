@@ -22,6 +22,7 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.IoHelper;
@@ -41,13 +42,14 @@ public class SummaryLoggerInstallerListener extends SimpleInstallerListener
     private VariableSubstitutor variableSubstitutor;
 
     /**
-     * Default constructor.
+     * Constructs a <tt>SummaryLoggerInstallerListener</tt>.
      *
-     * @param variableSubstitutor
+     * @param resources           the resource manager
+     * @param variableSubstitutor the variable substituter
      */
-    public SummaryLoggerInstallerListener(VariableSubstitutor variableSubstitutor)
+    public SummaryLoggerInstallerListener(ResourceManager resources, VariableSubstitutor variableSubstitutor)
     {
-        super(false);
+        super(resources, false);
         this.variableSubstitutor = variableSubstitutor;
     }
 

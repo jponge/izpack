@@ -191,9 +191,11 @@ public class UninstallDataWriter
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("uninstaller-META-INF/", "META-INF/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/api/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/data/"));
+        uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/core/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/util/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/gui/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/img/"));
+        uninstallerMerge.addAll(pathResolver.getMergeableFromPath("org/picocontainer/"));
         if (!uninstallData.getUninstallerListeners().isEmpty())
         {
             uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/event/"));

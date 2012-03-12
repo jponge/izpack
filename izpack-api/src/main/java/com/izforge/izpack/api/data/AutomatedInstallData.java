@@ -23,10 +23,14 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Encloses information about the install process. This implementation is not thread safe.
@@ -146,12 +150,6 @@ public abstract class AutomatedInstallData implements Serializable
     private Map<String, Object> attributes;
 
     /**
-     * This class should be a singleton. Therefore
-     * the one possible object will be stored in this
-     * static member.
-     */
-    private static AutomatedInstallData self = null;
-    /**
      * The install path
      */
     public final static String INSTALL_PATH = "INSTALL_PATH";
@@ -176,24 +174,11 @@ public abstract class AutomatedInstallData implements Serializable
     private List<InstallerListener> installerListener;
 
     /**
-     * Returns the one possible object of this class.
+     * Constructs an <tt>AutomatedInstallData</tt>.
      *
-     * @return the one possible object of this class
+     * @param variables the variables
      */
-    public static AutomatedInstallData getInstance()
-    {
-        return (self);
-    }
-
-    /**
-     * Constructs a new instance of this class.
-     * Only one should be possible, at a scound call a RuntimeException
-     * will be raised.
-     *
-     * @param variables
-     * @param variableSubstitutor
-     */
-    public AutomatedInstallData(Properties variables, VariableSubstitutor variableSubstitutor)
+    public AutomatedInstallData(Properties variables)
     {
         setAvailablePacks(new ArrayList<Pack>());
         setSelectedPacks(new ArrayList<Pack>());
@@ -203,7 +188,6 @@ public abstract class AutomatedInstallData implements Serializable
         setVariables(variables);
         setAttributes(new HashMap<String, Object>());
         setCustomData(new HashMap<String, List>());
-        self = this;
     }
 
     /**
@@ -314,11 +298,11 @@ public abstract class AutomatedInstallData implements Serializable
     }
 
     /**
-     * Set Locale in xml, installdata, and langpack
+     * Set Locale in xml, installdata, and langpack.
      *
      * @param locale         Locale to set
-     * @param localeDatabase LocaleDatabse containing the desired locale
-     * @throws Exception
+     * @param localeDatabase database containing the desired locale
+     * @throws Exception for any error
      */
     public void setAndProcessLocal(String locale, LocaleDatabase localeDatabase) throws Exception
     {

@@ -21,6 +21,17 @@
 
 package com.izforge.izpack.panels.userpath;
 
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.exception.ResourceNotFoundException;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.gui.IzPanelLayout;
+import com.izforge.izpack.gui.log.Log;
+import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.OsVersion;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -30,16 +41,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.exception.ResourceNotFoundException;
-import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.gui.IzPanelLayout;
-import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.OsVersion;
 
 /**
  * Base class for panels which asks for paths.
@@ -83,14 +84,18 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
     protected String _variableName = "pathVariable";
 
     /**
-     * The constructor.
+     * Constructs an <tt>UserPathInputPanel</tt>.
      *
-     * @param parent The parent window.
-     * @param idata  The installation installDataGUI.
+     * @param parent          the parent window
+     * @param installData     the installation data
+     * @param targetPanel     the target panel
+     * @param resourceManager the resource manager
+     * @param log             the log
      */
-    public UserPathInputPanel(InstallerFrame parent, GUIInstallData idata, String targetPanel, ResourceManager resourceManager)
+    public UserPathInputPanel(InstallerFrame parent, GUIInstallData installData, String targetPanel,
+                              ResourceManager resourceManager, Log log)
     {
-        super(parent, idata, new IzPanelLayout(), resourceManager);
+        super(parent, installData, new IzPanelLayout(log), resourceManager);
         _targetPanel = targetPanel;
         _variableName = installData.getLangpack().getString(targetPanel + ".variableName");
         // Set default values
@@ -112,7 +117,7 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
         // row 1 column 0.
         add(createLabel("info", _targetPanel, "open", LEFT, true), NEXT_LINE);
         // Create path selection components and add they to this panel.
-        _pathSelectionPanel = new UserPathSelectionPanel(this, idata, _targetPanel, _variableName);
+        _pathSelectionPanel = new UserPathSelectionPanel(this, installData, _targetPanel, _variableName, log);
         add(_pathSelectionPanel, NEXT_LINE);
         createLayoutBottom();
         getLayoutHelper().completeLayout();

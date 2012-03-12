@@ -21,14 +21,6 @@
 
 package com.izforge.izpack.event;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Logger;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
@@ -39,7 +31,16 @@ import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
+import com.izforge.izpack.util.file.FileUtils;
 import com.izforge.izpack.util.helper.SpecHelper;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Logger;
 
 
 public class BSFInstallerListener extends SimpleInstallerListener
@@ -54,14 +55,24 @@ public class BSFInstallerListener extends SimpleInstallerListener
     private AutomatedInstallData installdata = null;
     private VariableSubstitutor variableSubstitutor;
     private UninstallData uninstallData;
+    private final ResourceManager resources;
 
-    public BSFInstallerListener(VariableSubstitutor variableSubstitutor, UninstallData uninstallData)
+    /**
+     * Constructs a <tt>BSFFInstallerListener</tt>.
+     *
+     * @param variableSubstitutor the variable substituter
+     * @param resources           the resource manager
+     * @param uninstallData       the uninstallation data
+     */
+    public BSFInstallerListener(VariableSubstitutor variableSubstitutor, ResourceManager resources,
+                                UninstallData uninstallData)
     {
-        super(true);
+        super(resources, true);
         this.variableSubstitutor = variableSubstitutor;
         actions = new HashMap<String, ArrayList<BSFAction>>();
         uninstActions = new ArrayList<BSFAction>();
         this.uninstallData = uninstallData;
+        this.resources = resources;
     }
 
     @Override
@@ -276,8 +287,8 @@ public class BSFInstallerListener extends SimpleInstallerListener
             {
                 byte buf[] = new byte[10 * 1024];
                 int read = 0;
-                is = ResourceManager.getInstance().getInputStream(src);
-                subis = new SpecHelper().substituteVariables(is, variableSubstitutor);
+                is = resources.getInputStream(src);
+                subis = new SpecHelper(resources).substituteVariables(is, variableSubstitutor);
 
                 while ((read = subis.read(buf, 0, 10 * 1024)) != -1)
                 {
@@ -292,28 +303,8 @@ public class BSFInstallerListener extends SimpleInstallerListener
             }
             finally
             {
-                try
-                {
-                    if (subis != null)
-                    {
-                        subis.close();
-                    }
-                }
-                catch (java.io.IOException e)
-                {
-                    e.printStackTrace();
-                }
-                try
-                {
-                    if (is != null)
-                    {
-                        is.close();
-                    }
-                }
-                catch (java.io.IOException e)
-                {
-                    e.printStackTrace();
-                }
+                FileUtils.close(subis);
+                FileUtils.close(is);
             }
         }
         else

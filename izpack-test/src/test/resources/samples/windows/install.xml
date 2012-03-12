@@ -12,7 +12,7 @@
     </locale>
 
     <resources>
-        <res src="shortcutSpec.xml" id="shortcutSpec.xml"/>
+        <res id="shortcutSpec.xml" src="shortcutSpec.xml"/>
     </resources>
 
     <panels>

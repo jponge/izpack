@@ -23,13 +23,14 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.panels.IShortcutPanelLogic;
 
 /**
  * Creates the Shortcuts after files have been installed. Use this listener, if you place the
  * ShortcutPanel before the Installation of the files.
- * 
+ *
  * @author Marcus Schlegel, Pulinco
  */
 public class LateShortcutInstallListener extends SimpleInstallerListener
@@ -37,8 +38,15 @@ public class LateShortcutInstallListener extends SimpleInstallerListener
 
     private IShortcutPanelLogic shortcutPanelLogic;
 
-    public LateShortcutInstallListener(IShortcutPanelLogic logic)
+    /**
+     * Constructs a <tt>LateShortcutInstallListener</tt>.
+     *
+     * @param logic     the shortcut panel behaviour
+     * @param resources the resource manager
+     */
+    public LateShortcutInstallListener(IShortcutPanelLogic logic, ResourceManager resources)
     {
+        super(resources);
         this.shortcutPanelLogic = logic;
         logic.setCreateShortcutsImmediately(false);
     }

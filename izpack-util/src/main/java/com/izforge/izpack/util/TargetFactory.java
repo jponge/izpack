@@ -211,16 +211,11 @@ public class TargetFactory
     // ------------------------------------------------------------------------
     // Variable Declarations
     // ------------------------------------------------------------------------
-    /**
-     * The reference to the single instance of <code>TargetFactory</code>. Used in static methods
-     * in place of <code>this</code>.
-     */
-    private static TargetFactory me = null;
 
     /**
      * The factory for creating instances.
      */
-    private final TargetPlatformFactory factory = new DefaultTargetPlatformFactory();
+    private final TargetPlatformFactory factory;
 
     /**
      * identifies the operating system we are running on
@@ -242,22 +237,14 @@ public class TargetFactory
      */
     private String version = "";
 
-    /*--------------------------------------------------------------------------*/
-
     /**
-     * Constructor
-     */
-    /*--------------------------------------------------------------------------*/
-    /*
-     * $ @design
+     * Constructs a <tt>TargetFactory</tt>.
      *
-     * Identify the following about the target system: - OS type - architecture - version
-     *
-     * and store this information for later use.
-     * --------------------------------------------------------------------------
+     * @param factory the factory to delegate to
      */
-    private TargetFactory()
+    public TargetFactory(TargetPlatformFactory factory)
     {
+        this.factory = factory;
         version = System.getProperty("os.version");
 
         // ----------------------------------------------------
@@ -307,24 +294,6 @@ public class TargetFactory
                 architecture = X86;
             }
         }
-    }
-
-    /*--------------------------------------------------------------------------*/
-
-    /**
-     * Returns an instance of <code>TargetFactory</code> to use.
-     *
-     * @return an instance of <code>TargetFactory</code>.
-     */
-    /*--------------------------------------------------------------------------*/
-    public static TargetFactory getInstance()
-    {
-        if (me == null)
-        {
-            me = new TargetFactory();
-        }
-
-        return me;
     }
 
     /**

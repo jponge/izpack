@@ -17,7 +17,7 @@
             iconIndex="31"
             description="This uninstalls the test">
 
-        <createForPack name="Core"/>
+        <createForPack name="Base"/>
     </shortcut>
 
 </shortcuts>

@@ -19,16 +19,6 @@
 
 package com.izforge.izpack.panels.shortcut;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Vector;
-import java.util.logging.Logger;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
@@ -52,10 +42,16 @@ import com.izforge.izpack.util.TargetFactory;
 import com.izforge.izpack.util.os.Shortcut;
 import com.izforge.izpack.util.xml.XMLHelper;
 
-//
-// import com.izforge.izpack.panels.ShortcutData;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Vector;
+import java.util.logging.Logger;
 
-/*---------------------------------------------------------------------------*/
 
 /**
  * This class implements a the logic for the creation of shortcuts. The logic is used in the
@@ -282,34 +278,29 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
     private boolean createShortcutsImmediately = true;
 
     /**
-     * Private Constructor for this singleton. Use {@link #getInstance()} and
-     * {@link #initInstance(AutomatedInstallData, ResourceManager, UninstallData, VariableSubstitutor)}
-     * instead.
+     * Constructs a <tt>ShortcutPanelLogic</tt>.
      *
-     * @throws Exception
+     * @param installData         the installation data
+     * @param resourceManager     the resources
+     * @param uninstallData       the uninstallation data
+     * @param variableSubstitutor the variable substituter
+     * @param housekeeper         the house keeper
+     * @param factory             the factory for platform-specific implementations
+     * @throws Exception for any error
      */
-    private ShortcutPanelLogic() throws Exception
+    public ShortcutPanelLogic(AutomatedInstallData installData, ResourceManager resourceManager,
+                              UninstallData uninstallData, VariableSubstitutor variableSubstitutor,
+                              Housekeeper housekeeper, TargetFactory factory) throws Exception
     {
-        shortcut = TargetFactory.getInstance().makeObject(Shortcut.class);
+        this.installData = installData;
+        this.resourceManager = resourceManager;
+        this.uninstallData = uninstallData;
+        this.variableSubstitutor = variableSubstitutor;
+        shortcut = factory.makeObject(Shortcut.class);
         shortcut.initialize(Shortcut.APPLICATIONS, "-");
-        Housekeeper.getInstance().registerForCleanup(this);
-    }
-
-    /**
-     * For initialization of the singleton call
-     * {@link #initInstance(AutomatedInstallData, ResourceManager, UninstallData, VariableSubstitutor)}
-     * after {@link #getInstance()}.
-     *
-     * @return the instance of the singleton {@link ShortcutPanelLogic}
-     * @throws Exception
-     */
-    public static final ShortcutPanelLogic getInstance() throws Exception
-    {
-        if (instance == null)
-        {
-            instance = new ShortcutPanelLogic();
-        }
-        return instance;
+        housekeeper.registerForCleanup(this);
+        readShortcutSpec();
+        analyzeShortcutSpec();
     }
 
     /**
@@ -503,28 +494,6 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
     public boolean hasDesktopShortcuts()
     {
         return hasDesktopShortcuts;
-    }
-
-    /**
-     * Initializes the singleton instance. This method should be called after {@link #getInstance()}
-     * .
-     *
-     * @param installData         {@link AutomatedInstallData}
-     * @param resourceManager     {@link ResourceManager}
-     * @param uninstallData       {@link UninstallData}
-     * @param variableSubstitutor {@link VariableSubstitutor}
-     * @throws Exception
-     */
-    public final void initInstance(AutomatedInstallData installData,
-                                   ResourceManager resourceManager, UninstallData uninstallData,
-                                   VariableSubstitutor variableSubstitutor) throws Exception
-    {
-        this.installData = installData;
-        this.resourceManager = resourceManager;
-        this.uninstallData = uninstallData;
-        this.variableSubstitutor = variableSubstitutor;
-        readShortcutSpec();
-        analyzeShortcutSpec();
     }
 
     /**

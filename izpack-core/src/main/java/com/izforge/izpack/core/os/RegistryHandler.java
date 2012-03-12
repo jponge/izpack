@@ -22,6 +22,12 @@
 
 package com.izforge.izpack.core.os;
 
+import com.coi.tools.os.win.MSWinConstants;
+import com.coi.tools.os.win.RegDataContainer;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.exception.NativeLibException;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -30,12 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.coi.tools.os.win.MSWinConstants;
-import com.coi.tools.os.win.RegDataContainer;
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.exception.NativeLibException;
 
 /**
  * This class represents a registry handler in a operating system independent way. OS specific
@@ -46,17 +46,24 @@ import com.izforge.izpack.api.exception.NativeLibException;
  */
 public class RegistryHandler extends OSClassHelper implements MSWinConstants
 {
-    private static final Logger logger = Logger.getLogger(RegistryHandler.class.getName());
-
     public static final String UNINSTALL_ROOT = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
 
     public static final Map<String, Integer> ROOT_KEY_MAP = new HashMap<String, Integer>();
 
     protected String uninstallName = null;
 
+    /**
+     * The resource manager.
+     */
+    private final ResourceManager resources;
+
+    /**
+     * The logger.
+     */
+    private static final Logger logger = Logger.getLogger(RegistryHandler.class.getName());
+
     private static final String UNINSTALLER_ICON = "UninstallerIcon";
 
-    private static RegistryHandler defaultHandler = null;
 
     static
     {
@@ -78,33 +85,13 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
     }
 
     /**
-     * Default constructor.
-     */
-    public RegistryHandler()
-    {
-        super();
-    }
-
-    /**
-     * Creates an registry handler which uses an oblect of the given class as worker.
+     * Constructs a <tt>RegistryHandler</tt>.
      *
-     * @param className full qualified class name of the class which should be used as worker
+     * @param resources the resource manager
      */
-    public RegistryHandler(String className)
+    public RegistryHandler(ResourceManager resources)
     {
-        super(className);
-        setDefault();
-    }
-
-    /**
-     * Set this object as default handler if it is not done earlier.
-     */
-    private synchronized void setDefault()
-    {
-        if (defaultHandler == null)
-        {
-            defaultHandler = this;
-        }
+        this.resources = resources;
     }
 
     /**
@@ -431,7 +418,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
         // Try to write the uninstaller icon out.
         try
         {
-            InputStream input = ResourceManager.getInstance().getInputStream(UNINSTALLER_ICON);
+            InputStream input = resources.getInputStream(UNINSTALLER_ICON);
             String iconPath = installdata.getVariable("INSTALL_PATH") + File.separator
                     + "Uninstaller" + File.separator + "UninstallerIcon.ico";
             FileOutputStream out = new FileOutputStream(iconPath);
@@ -476,14 +463,5 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
         return true;
     }
 
-    /**
-     * Returns the default handler which is the first created registry handler.
-     *
-     * @return Returns the default handler.
-     */
-    public RegistryHandler getDefaultHandler()
-    {
-        return defaultHandler;
-    }
 
 }

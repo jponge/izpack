@@ -94,6 +94,11 @@ public class ConsoleInstaller extends InstallerBase
     private Console console;
 
     /**
+     * The house-keeper.
+     */
+    private final Housekeeper housekeeper;
+
+    /**
      * Constructs a <tt>ConsoleInstaller</tt>
      *
      * @param container           the container
@@ -104,11 +109,13 @@ public class ConsoleInstaller extends InstallerBase
      * @param substituter         the variable substituter
      * @param uninstallDataWriter the uninstallation data writer
      * @param console             the console
+     * @param housekeeper         the house-keeper
      * @throws IzPackException for any IzPack error
      */
     public ConsoleInstaller(BindeableContainer container, AutomatedInstallData installData, RulesEngine rules,
                             ResourceManager resourceManager, RequirementsChecker requirements,
-                            VariableSubstitutor substituter, UninstallDataWriter uninstallDataWriter, Console console)
+                            VariableSubstitutor substituter, UninstallDataWriter uninstallDataWriter, Console console,
+                            Housekeeper housekeeper)
     {
         super(resourceManager);
         factory = new PanelConsoleFactory(container);
@@ -128,6 +135,7 @@ public class ConsoleInstaller extends InstallerBase
         this.substituter = substituter;
         this.uninstallDataWriter = uninstallDataWriter;
         this.console = console;
+        this.housekeeper = housekeeper;
     }
 
     /**
@@ -261,7 +269,7 @@ public class ConsoleInstaller extends InstallerBase
      */
     protected void terminate(boolean exitSuccess, boolean reboot)
     {
-        Housekeeper.getInstance().shutDown(exitSuccess ? 0 : 1, reboot);
+        housekeeper.shutDown(exitSuccess ? 0 : 1, reboot);
     }
 
     /**

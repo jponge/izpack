@@ -23,6 +23,7 @@ package com.izforge.izpack.panels.defaulttarget;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -43,21 +44,23 @@ public class DefaultTargetPanel extends PathInputPanel
     /**
      * The constructor.
      *
-     * @param defaultTargetPanelAutomationHelper
-     *
-     * @param parent The parent window.
-     * @param idata  The installation installDataGUI.
+     * @param parent          the parent window
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
+     * @param helper          the automation helper
+     * @param log             the log
      */
-    public DefaultTargetPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, DefaultTargetPanelAutomationHelper defaultTargetPanelAutomationHelper)
+    public DefaultTargetPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+                              DefaultTargetPanelAutomationHelper helper, Log log)
     {
-        super(parent, idata, resourceManager);
+        super(parent, installData, resourceManager, log);
         if (getDefaultInstallDir() != null)
         {
             // override the system default that uses app name (which is set in
             // the Installer class)
-            idata.setInstallPath(getDefaultInstallDir());
+            installData.setInstallPath(getDefaultInstallDir());
         }
-        this.defaultTargetPanelAutomationHelper = defaultTargetPanelAutomationHelper;
+        this.defaultTargetPanelAutomationHelper = helper;
     }
 
     /**

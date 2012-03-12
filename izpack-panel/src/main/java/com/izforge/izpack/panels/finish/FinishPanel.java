@@ -30,8 +30,13 @@ import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedOutputStream;
@@ -56,15 +61,24 @@ public class FinishPanel extends IzPanel implements ActionListener
     private UninstallDataWriter uninstallDataWriter;
 
     /**
-     * The constructor.
-     *
-     * @param parent The parent.
-     * @param idata  The installation installDataGUI.
+     * The log.
      */
-    public FinishPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, UninstallDataWriter uninstallDataWriter)
+    private final Log log;
+
+    /**
+     * Constructs a <tt>FinishPanel</tt>.
+     *
+     * @param parent              the parent window
+     * @param installData         the installation data
+     * @param resourceManager     the resource manager
+     * @param uninstallDataWriter the uninstallation data writer
+     * @param log                 the log
+     */
+    public FinishPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager, UninstallDataWriter uninstallDataWriter, Log log)
     {
-        super(parent, idata, new GridBagLayout(), resourceManager);
+        super(parent, installData, new GridBagLayout(), resourceManager);
         this.uninstallDataWriter = uninstallDataWriter;
+        this.log = log;
     }
 
     /**
@@ -125,7 +139,7 @@ public class FinishPanel extends IzPanel implements ActionListener
                     parent.getIcons().get("stop"), LEADING), constraints);
         }
         getLayoutHelper().completeLayout(); // Call, or call not?
-        Log.getInstance().informUser();
+        log.informUser();
     }
 
     /**
@@ -140,7 +154,7 @@ public class FinishPanel extends IzPanel implements ActionListener
         fileChooser.setName(GuiId.FINISH_PANEL_FILE_CHOOSER.id);
         fileChooser.setCurrentDirectory(new File(this.installData.getInstallPath()));
         fileChooser.setMultiSelectionEnabled(false);
-        fileChooser.addChoosableFileFilter(new AutomatedInstallScriptFilter());
+        fileChooser.addChoosableFileFilter(new AutomatedInstallScriptFilter(resourceManager));
         // fileChooser.setCurrentDirectory(new File("."));
 
         // Shows it

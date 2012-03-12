@@ -5,9 +5,10 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.Console;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.requirement.RequirementsChecker;
+import com.izforge.izpack.util.Console;
+import com.izforge.izpack.util.Housekeeper;
 
 /**
  * Test implementation of the {@link ConsoleInstaller}.
@@ -35,15 +36,16 @@ public class TestConsoleInstaller extends ConsoleInstaller
      * @param substituter     the variable substituter
      * @param writer          the uninstallation data writer
      * @param console         the console
+     * @param housekeeper     the house-keeper
      * @throws Exception for any error
      */
     public TestConsoleInstaller(BindeableContainer container, AutomatedInstallData installData,
                                 RulesEngine rules, ResourceManager resourceManager,
                                 RequirementsChecker requirements, VariableSubstitutor substituter,
-                                UninstallDataWriter writer, Console console)
+                                UninstallDataWriter writer, Console console, Housekeeper housekeeper)
             throws Exception
     {
-        super(container, installData, rules, resourceManager, requirements, substituter, writer, console);
+        super(container, installData, rules, resourceManager, requirements, substituter, writer, console, housekeeper);
     }
 
     /**

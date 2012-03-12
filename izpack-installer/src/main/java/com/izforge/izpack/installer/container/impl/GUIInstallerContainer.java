@@ -4,6 +4,7 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.gui.GUIPrompt;
+import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.base.InstallerController;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.container.provider.GUIInstallDataProvider;
@@ -41,6 +42,7 @@ public class GUIInstallerContainer extends InstallerContainer
                 .addComponent(GUIPrompt.class)
                 .addComponent(InstallerController.class)
                 .addComponent(InstallerFrame.class)
+                .addComponent(Log.class)
                 .as(Characteristics.USE_NAMES).addComponent(LanguageDialog.class);
     }
 

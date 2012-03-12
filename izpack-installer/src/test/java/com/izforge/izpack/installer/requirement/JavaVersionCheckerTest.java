@@ -3,7 +3,7 @@ package com.izforge.izpack.installer.requirement;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.installer.console.ConsolePrompt;
 import com.izforge.izpack.installer.data.InstallData;
-import com.izforge.izpack.test.io.TestConsole;
+import com.izforge.izpack.test.util.TestConsole;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -26,7 +26,7 @@ public class JavaVersionCheckerTest
      */
     public JavaVersionCheckerTest()
     {
-        installData = new InstallData(null, null);
+        installData = new InstallData(null);
         Info info = new Info();
         installData.setInfo(info);
     }

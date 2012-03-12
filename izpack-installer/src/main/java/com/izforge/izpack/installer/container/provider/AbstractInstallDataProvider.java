@@ -15,6 +15,7 @@ import com.izforge.izpack.api.data.Value;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
+import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraintHelper;
 import com.izforge.izpack.util.OsVersion;
@@ -26,7 +27,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.InetAddress;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,6 +51,7 @@ public abstract class AbstractInstallDataProvider implements Provider
     protected ResourceManager resourceManager;
     protected VariableSubstitutor variableSubstitutor;
     protected ClassPathCrawler classPathCrawler;
+    protected Housekeeper housekeeper;
 
     /**
      * Loads the installation data. Also sets environment variables to <code>installdata</code>.
@@ -185,7 +192,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         {
             for (TempDir tempDir : tempDirs)
             {
-                TemporaryDirectory directory = new TemporaryDirectory(tempDir, installdata);
+                TemporaryDirectory directory = new TemporaryDirectory(tempDir, installdata, housekeeper);
                 directory.create();
                 directory.cleanUp();
             }

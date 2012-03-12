@@ -24,8 +24,8 @@ package com.izforge.izpack.event;
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.api.exception.WrappedNativeLibException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.os.RegistryHandler;
-import com.izforge.izpack.util.TargetFactory;
 
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -40,13 +40,17 @@ import java.util.List;
  */
 public class RegistryUninstallerListener extends NativeUninstallerListener
 {
+    private final RegistryDefaultHandler handler;
 
     /**
      * Constructs a <tt>RegistryUninstallerListener</tt>.
+     *
+     * @param handler the handler
      */
-    public RegistryUninstallerListener()
+    public RegistryUninstallerListener(RegistryDefaultHandler handler)
     {
         super();
+        this.handler = handler;
     }
 
     /*
@@ -61,7 +65,7 @@ public class RegistryUninstallerListener extends NativeUninstallerListener
         // Load the defined actions.
         InputStream in = getClass().getResourceAsStream("/registryEntries");
         if (in == null)
-        { // No actions, nothing todo.
+        { // No actions, nothing to do.
             return;
         }
         ObjectInputStream objIn = new ObjectInputStream(in);
@@ -74,7 +78,7 @@ public class RegistryUninstallerListener extends NativeUninstallerListener
         }
         try
         {
-            RegistryHandler registryHandler = initializeRegistryHandler();
+            RegistryHandler registryHandler = this.handler.getInstance();
             if (registryHandler == null)
             {
                 return;
@@ -96,25 +100,6 @@ public class RegistryUninstallerListener extends NativeUninstallerListener
         }
     }
 
-    private RegistryHandler initializeRegistryHandler() throws Exception
-    {
-        RegistryHandler registryHandler;
-        try
-        {
-            registryHandler = TargetFactory.getInstance().makeObject(RegistryHandler.class);
-        }
-        catch (Throwable exception)
-        {
-            exception.printStackTrace();
-            registryHandler = null; // Do nothing, do not set permissions ...
-        }
-        if (registryHandler != null && (!registryHandler.good() || !registryHandler.doPerform()))
-        {
-            System.out.println("initializeRegistryHandler is Bad " + registryHandler.good()
-                    + registryHandler.doPerform());
-            registryHandler = null;
-        }
-        return (registryHandler);
-    }
+
 
 }

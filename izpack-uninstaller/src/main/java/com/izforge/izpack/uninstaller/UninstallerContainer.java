@@ -9,13 +9,19 @@ import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.TargetFactory;
 import org.picocontainer.MutablePicoContainer;
 
+
 /**
- * Enter description.
+ * Uninstaller container.
  *
  * @author Tim Anderson
  */
 public class UninstallerContainer extends AbstractContainer
 {
+    /**
+     * Registers components with the Pico container.
+     *
+     * @param container the Pico container
+     */
     @Override
     public void fillContainer(MutablePicoContainer container)
     {

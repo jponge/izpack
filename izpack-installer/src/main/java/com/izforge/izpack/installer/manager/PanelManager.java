@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.container.BindeableContainer;
-import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
@@ -35,7 +34,7 @@ import com.izforge.izpack.util.OsConstraintHelper;
  */
 public class PanelManager
 {
-    private GUIInstallData installdata;
+    private GUIInstallData installData;
     private BindeableContainer installerContainer;
     private int lastVis;
     private ClassPathCrawler classPathCrawler;
@@ -48,9 +47,9 @@ public class PanelManager
     protected ArrayList<Integer> visiblePanelMapping;
     private PathResolver pathResolver;
 
-    public PanelManager(GUIInstallData installDataGUI, BindeableContainer installerContainer, PathResolver pathResolver, MergeableResolver mergeableResolver, ClassPathCrawler classPathCrawler) throws ClassNotFoundException
+    public PanelManager(GUIInstallData installData, BindeableContainer installerContainer, PathResolver pathResolver, MergeableResolver mergeableResolver, ClassPathCrawler classPathCrawler) throws ClassNotFoundException
     {
-        this.installdata = installDataGUI;
+        this.installData = installData;
         this.installerContainer = installerContainer;
         this.pathResolver = pathResolver;
         this.classPathCrawler = classPathCrawler;
@@ -66,7 +65,7 @@ public class PanelManager
     {
         // Initialisation
         // We load each of them
-        List<Panel> panelsOrder = installdata.getPanelsOrder();
+        List<Panel> panelsOrder = installData.getPanelsOrder();
 
 //        List<Class> listPanelClass = new ArrayList<Class>();
         Map<Object, Class> mapPanel = new HashMap();
@@ -144,7 +143,7 @@ public class PanelManager
      */
     public void instantiatePanels() throws ClassNotFoundException
     {
-        List<Panel> panelsOrder = installdata.getPanelsOrder();
+        List<Panel> panelsOrder = installData.getPanelsOrder();
         int curVisPanelNumber = 0;
         lastVis = 0;
         int count = 0;
@@ -169,12 +168,12 @@ public class PanelManager
                 {
                     izPanel.setValidationService(DataValidatorFactory.createDataValidator(dataValidator));
                 }
-                izPanel.setHelpUrl(panel.getHelpUrl(installdata.getLocaleISO3()));
+                izPanel.setHelpUrl(panel.getHelpUrl(installData.getLocaleISO3()));
 
                 preValidateAction(panel, izPanel);
                 postValidateAction(panel, izPanel);
 
-                installdata.getPanels().add(izPanel);
+                installData.getPanels().add(izPanel);
                 if (izPanel.isHidden())
                 {
                     visiblePanelMapping.add(count, -1);
@@ -187,14 +186,14 @@ public class PanelManager
                 }
                 count++;
                 // We add the XML installDataGUI izPanel root
-                IXMLElement panelRoot = new XMLElementImpl(panel.getClassName(), installdata.getXmlData());
+                IXMLElement panelRoot = new XMLElementImpl(panel.getClassName(), installData.getXmlData());
                 // if set, we add the id as an attribute to the panelRoot
                 String panelId = panel.getPanelid();
                 if (panelId != null)
                 {
                     panelRoot.setAttribute("id", panelId);
                 }
-                installdata.getXmlData().addChild(panelRoot);
+                installData.getXmlData().addChild(panelRoot);
             }
             visiblePanelMapping.add(count, lastVis);
         }
@@ -210,7 +209,7 @@ public class PanelManager
             {
                 PanelAction action = PanelActionFactory.createPanelAction(preConstgructionAction);
                 action.initialize(panel.getPanelActionConfiguration(preConstgructionAction));
-                action.executeAction(AutomatedInstallData.getInstance(), null);
+                action.executeAction(installData, null);
             }
         }
     }
@@ -250,7 +249,7 @@ public class PanelManager
 
     public boolean isLast(int panelNumber)
     {
-        return (visiblePanelMapping.get(installdata.getPanels().size()) == panelNumber);
+        return (visiblePanelMapping.get(installData.getPanels().size()) == panelNumber);
     }
 
     public int getPanelVisibilityNumber(int panel)

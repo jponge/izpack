@@ -22,8 +22,18 @@
 package com.izforge.izpack.installer.console;
 
 import com.izforge.izpack.installer.automation.PanelAutomationHelper;
+import com.izforge.izpack.util.Housekeeper;
 
 public class ConsolePanelAutomationHelper extends PanelAutomationHelper
 {
+    /**
+     * Constructs a <tt>ConsolePanelAutomationHelper</tt>
+     *
+     * @param housekeeper the house-keeper
+     */
+    public ConsolePanelAutomationHelper(Housekeeper housekeeper)
+    {
+        super(housekeeper);
+    }
 
 }

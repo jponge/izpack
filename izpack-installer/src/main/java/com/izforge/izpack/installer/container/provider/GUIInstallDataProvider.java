@@ -1,14 +1,14 @@
 package com.izforge.izpack.installer.container.provider;
 
-import java.awt.Color;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.logging.Logger;
+import com.izforge.izpack.api.data.GUIPrefs;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.merge.resolve.ClassPathCrawler;
+import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.OsVersion;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -18,17 +18,15 @@ import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.MetalTheme;
-
-import com.izforge.izpack.api.container.BindeableContainer;
-import com.izforge.izpack.api.data.GUIPrefs;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.merge.resolve.ClassPathCrawler;
-import com.izforge.izpack.merge.resolve.PathResolver;
-import com.izforge.izpack.util.OsVersion;
+import java.awt.Color;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * Provide installData for GUI :
@@ -73,13 +71,14 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
 
 
     public GUIInstallData provide(ResourceManager resourceManager, VariableSubstitutor variableSubstitutor,
-                                  Properties variables, PathResolver pathResolver, ClassPathCrawler classPathCrawler,
-                                  BindeableContainer container) throws Exception
+                                  Properties variables, ClassPathCrawler classPathCrawler, Housekeeper housekeeper)
+            throws Exception
     {
         this.resourceManager = resourceManager;
         this.variableSubstitutor = variableSubstitutor;
         this.classPathCrawler = classPathCrawler;
-        final GUIInstallData guiInstallData = new GUIInstallData(variables, variableSubstitutor);
+        this.housekeeper = housekeeper;
+        final GUIInstallData guiInstallData = new GUIInstallData(variables);
         // Loads the installation data
         loadInstallData(guiInstallData);
         loadGUIInstallData(guiInstallData);

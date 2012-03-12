@@ -19,16 +19,29 @@
 
 package com.izforge.izpack.uninstaller;
 
-import java.io.*;
-import java.util.*;
-import java.util.logging.*;
-
+import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.event.UninstallerListener;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.unix.ShellScript;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -38,7 +51,7 @@ import com.izforge.izpack.util.unix.ShellScript;
  */
 public class Destroyer extends Thread
 {
-  private static final Logger logger = Logger.getLogger(Destroyer.class.getName());
+    private static final Logger logger = Logger.getLogger(Destroyer.class.getName());
 
     /**
      * True if the destroyer must force the recursive deletion.
@@ -56,19 +69,27 @@ public class Destroyer extends Thread
     private AbstractUIProgressHandler handler;
 
     /**
+     * The container.
+     */
+    private final BindeableContainer container;
+
+    /**
      * The constructor.
      *
      * @param installPath  The installation path.
      * @param forceDestroy Shall we force the recursive deletion.
-     * @param handler      The destroyer listener.
+     * @param handler      The destroyer listener
+     * @param container    the container
      */
-    public Destroyer(String installPath, boolean forceDestroy, AbstractUIProgressHandler handler)
+    public Destroyer(String installPath, boolean forceDestroy, AbstractUIProgressHandler handler,
+                     BindeableContainer container)
     {
         super("IzPack - Destroyer");
 
         this.installPath = installPath;
         this.forceDestroy = forceDestroy;
         this.handler = handler;
+        this.container = container;
     }
 
     /**
@@ -265,8 +286,8 @@ public class Destroyer extends Thread
             catch (Exception e)
             {
                 logger.log(Level.WARNING,
-                    "Exeption during su remove: " + e.getMessage(),
-                    e);
+                        "Exeption during su remove: " + e.getMessage(),
+                        e);
             }
         }
     }
@@ -322,7 +343,8 @@ public class Destroyer extends Thread
             for (String listener : listeners)
             {
                 Class<UninstallerListener> clazz = (Class<UninstallerListener>) Class.forName(listener);
-                UninstallerListener uninstallerListener = clazz.newInstance();
+                container.addComponent(clazz);
+                UninstallerListener uninstallerListener = container.getComponent(clazz);
                 if (uninstallerListener.isFileListener())
                 {
                     uninstaller[1].add(uninstallerListener);

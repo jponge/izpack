@@ -22,6 +22,7 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.WrappedNativeLibException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 
@@ -35,22 +36,24 @@ public class NativeInstallerListener extends SimpleInstallerListener
 {
 
     /**
-     * Default constructor
+     * Constructs a <tt>NativeInstallerListener</tt>.
+     *
+     * @param resources the resource manager
      */
-    public NativeInstallerListener()
+    public NativeInstallerListener(ResourceManager resources)
     {
-        super();
+        super(resources);
     }
 
     /**
-     * Constructs a native installer listener. If useSpecHelper is true, a specification helper will
-     * be created.
+     * Constructs a <tt>NativeInstallerListener</tt>.
      *
-     * @param useSpecHelper
+     * @param resources the resource manager
+     * @param useSpecHelper if <tt>true</tt> a specification helper will be created
      */
-    public NativeInstallerListener(boolean useSpecHelper)
+    public NativeInstallerListener(ResourceManager resources, boolean useSpecHelper)
     {
-        super(useSpecHelper);
+        super(resources, useSpecHelper);
     }
 
     /*
@@ -65,9 +68,9 @@ public class NativeInstallerListener extends SimpleInstallerListener
     {
         super.beforePacks(idata, npacks, handler);
 
-        if (SimpleInstallerListener.langpack != null)
+        if (idata.getLangpack()!= null)
         { // Initialize WrappedNativeLibException with the langpack for error messages.
-            WrappedNativeLibException.setLangpack(SimpleInstallerListener.langpack);
+            WrappedNativeLibException.setLangpack(idata.getLangpack());
         }
 
     }

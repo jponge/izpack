@@ -257,14 +257,14 @@ public class ShellLink implements NativeLibraryClient
      * <code>set()</code> For this reason, the dummy string is placed here. Observed with version:
      * <p/>
      * <pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     *
+     *
+     *
      *        java version &quot;1.3.0&quot;
      *        Java(TM) 2 Runtime Environment, Standard Edition (build 1.3.0-C)
      *        Java HotSpot(TM) Client VM (build 1.3.0-C, mixed mode)
-     * <p/>
-     * <p/>
+     *
+     *
      * </pre>
      */
     private String dummyString = "";
@@ -280,6 +280,11 @@ public class ShellLink implements NativeLibraryClient
     private int userType = CURRENT_USER;
 
     private boolean initializeSucceeded = false;
+
+    /**
+     * The librarian.
+     */
+    private final Librarian librarian;
 
     // ------------------------------------------------------------------------
     // Native Methods
@@ -350,20 +355,21 @@ public class ShellLink implements NativeLibraryClient
      * <p/>
      * If both linkPaths are empty, an IllegalArgumentException is thrown.
      *
-     * @param type The type of link desired. The following values can be set:<br>
-     *             <ul>
-     *             <li><code>ShellLink.DESKTOP</code>
-     *             <li><code>ShellLink.PROGRAM_MENU</code>
-     *             <li><code>ShellLink.START_MENU</code>
-     *             <li><code>ShellLink.STARTUP</code>
-     *             </ul>
-     * @param name The name that the link should display on a menu or on the desktop. Do not include
-     *             a file extension.
+     * @param type      The type of link desired. The following values can be set:<br>
+     *                  <ul>
+     *                  <li><code>ShellLink.DESKTOP</code>
+     *                  <li><code>ShellLink.PROGRAM_MENU</code>
+     *                  <li><code>ShellLink.START_MENU</code>
+     *                  <li><code>ShellLink.STARTUP</code>
+     *                  </ul>
+     * @param name      The name that the link should display on a menu or on the desktop. Do not include
+     *                  a file extension.
+     * @param librarian the librarian
      * @throws IllegalArgumentException if any of the call parameters are incorrect, or if no
      *                                  linkPaths are returned.
      * @throws Exception                if problems are encountered in initializing the native interface
      */
-    public ShellLink(int type, String name) throws Exception, IllegalArgumentException
+    public ShellLink(int type, String name, Librarian librarian) throws Exception
     {
         if ((type < MIN_TYPE) || (type > MAX_TYPE))
         {
@@ -377,6 +383,7 @@ public class ShellLink implements NativeLibraryClient
 
         linkName = name;
         linkType = type;
+        this.librarian = librarian;
 
         initialize(); // com
 
@@ -389,14 +396,15 @@ public class ShellLink implements NativeLibraryClient
     /**
      * Creates an instance of <code>ShellLink</code> from an existing shell link on disk.
      *
-     * @param name     the fully qualified file name of the link.
-     * @param userType the type of user for the link path.
+     * @param name      the file name of the link. May be fully qualified or relative
+     * @param userType  the type of user for the link path.
+     * @param librarian the librarian
      * @throws IllegalArgumentException if the name was null
      * @throws Exception                if problems are encountered in reading the file
      * @see #CURRENT_USER
      * @see #ALL_USERS
      */
-    public ShellLink(String name, int userType) throws Exception, IllegalArgumentException
+    public ShellLink(String name, int userType, Librarian librarian) throws Exception
     {
         if (name == null)
         {
@@ -404,6 +412,7 @@ public class ShellLink implements NativeLibraryClient
         }
 
         this.userType = userType;
+        this.librarian = librarian;
 
         initialize(); // com
 
@@ -442,26 +451,26 @@ public class ShellLink implements NativeLibraryClient
     /**
      * Creates an instance of <code>ShellLink</code> from an existing shell link on disk.
      *
-     * @param type     The type of link, one of the following values: <br>
-     *                 <ul>
-     *                 <li><code>ShellLink.DESKTOP</code>
-     *                 <li><code>ShellLink.PROGRAM_MENU</code>
-     *                 <li><code>ShellLink.START_MENU</code>
-     *                 <li><code>ShellLink.STARTUP</code>
-     *                 </ul>
-     * @param userType the type of user for the link path.
-     * @param group    The program group (directory) of this link. If the link is not part of a program
-     *                 group, pass an empty string or null for this parameter. (...\\Desktop\\group).
-     * @param name     The file name of this link. Do not include a file extension.
+     * @param linkType  the type of link, one of the following values: <br>
+     *                  <ul>
+     *                  <li><code>ShellLink.DESKTOP</code>
+     *                  <li><code>ShellLink.PROGRAM_MENU</code>
+     *                  <li><code>ShellLink.START_MENU</code>
+     *                  <li><code>ShellLink.STARTUP</code>
+     *                  </ul>
+     * @param userType  the type of user for the link path.
+     * @param group     The program group (directory) of this link. If the link is not part of a program
+     *                  group, pass an empty string or null for this parameter. (...\\Desktop\\group).
+     * @param name      The file name of this link. Do not include a file extension.
+     * @param librarian the librarian
      * @throws IllegalArgumentException if any of the call parameters are incorrect
      * @throws Exception                if problems are encountered in initializing the native interface
      * @see #CURRENT_USER
      * @see #ALL_USERS
      */
-    public ShellLink(int type, int userType, String group, String name) throws Exception,
-            IllegalArgumentException
+    public ShellLink(int linkType, int userType, String group, String name, Librarian librarian) throws Exception
     {
-        if ((type < MIN_TYPE) || (type > MAX_TYPE))
+        if ((linkType < MIN_TYPE) || (linkType > MAX_TYPE))
         {
             throw (new IllegalArgumentException(
                     "the type parameter used an illegal value"));
@@ -471,7 +480,9 @@ public class ShellLink implements NativeLibraryClient
             throw (new IllegalArgumentException("the name parameter was null"));
         }
 
+        this.linkType = linkType;
         this.userType = userType;
+        this.librarian = librarian;
 
         initialize(); // com
 
@@ -488,8 +499,7 @@ public class ShellLink implements NativeLibraryClient
         linkFileName = fullLinkName(userType);
         if (loadLink(linkFileName) != SL_OK)
         {
-            throw (new Exception(
-                    "reading of the file did not succeed"));
+            throw new Exception("Failed to read link: " + linkFileName);
         }
 
         // get a settings from the native side
@@ -507,11 +517,11 @@ public class ShellLink implements NativeLibraryClient
     {
         try
         {
-            Librarian.getInstance().loadLibrary("ShellLink", this);
+            librarian.loadLibrary("ShellLink", this);
         }
         catch (UnsatisfiedLinkError exception)
         {
-            throw (new Exception("could not locate native library"));
+            throw new Exception("Could not locate native library", exception);
         }
 
         try

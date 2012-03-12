@@ -18,6 +18,40 @@
  */
 package com.izforge.izpack.panels.shortcut;
 
+import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.gui.MultiLineLabel;
+import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.data.UninstallData;
+import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.StringTool;
+import com.izforge.izpack.util.TargetFactory;
+import com.izforge.izpack.util.os.Shortcut;
+import com.izforge.izpack.util.unix.UnixHelper;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -30,28 +64,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import com.izforge.izpack.api.GuiId;
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.gui.MultiLineLabel;
-import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.StringTool;
-import com.izforge.izpack.util.os.Shortcut;
-import com.izforge.izpack.util.unix.UnixHelper;
-
 /**
  * This class implements a panel for the creation of shortcuts. The panel prompts the user to select
  * a program group for shortcuts, accept the creation of desktop shortcuts and actually creates the
@@ -63,7 +75,6 @@ import com.izforge.izpack.util.unix.UnixHelper;
  */
 public class ShortcutPanel extends IzPanel implements ActionListener, ListSelectionListener
 {
-    private static final Logger logger = Logger.getLogger(ShortcutPanel.class.getName());
 
     /**
      * serialVersionUID = 3256722870838112311L
@@ -147,15 +158,25 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     private boolean shortcutLogicInitialized;
 
     /**
-     * @param parent reference to the application frame
-     * @param installDataGUI shared information about the installation. {@link GUIInstallData}
-     * @param resourceManager reference to the {@link ResourceManager}
-     * @param uninstallData reference to the {@link UninstallData}
+     * The logger.
      */
-    public ShortcutPanel(InstallerFrame parent, GUIInstallData installDataGUI,
-            ResourceManager resourceManager, UninstallData uninstallData)
+    private static final Logger logger = Logger.getLogger(ShortcutPanel.class.getName());
+
+
+    /**
+     * Constructs a <tt>ShortcutPanel</tt>.
+     *
+     * @param parent          reference to the application frame
+     * @param installData     the installation data
+     * @param resourceManager the resources
+     * @param uninstallData   the uninstallation data
+     * @param housekeeper     the house keeper
+     * @param factory         the factory for platform-specific implementations
+     */
+    public ShortcutPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+                         UninstallData uninstallData, Housekeeper housekeeper, TargetFactory factory)
     {
-        super(parent, installDataGUI, "link16x16", resourceManager);
+        super(parent, installData, "link16x16", resourceManager);
         layout = (GridBagLayout) super.getLayout();
         Object con = getLayoutHelper().getDefaultConstraints();
         if (con instanceof GridBagConstraints)
@@ -169,13 +190,13 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         setLayout(super.getLayout());
         try
         {
-            shortcutPanelLogic = ShortcutPanelLogic.getInstance();
-            shortcutPanelLogic.initInstance(installData, resourceManager, uninstallData,
-                    variableSubstitutor);
+            shortcutPanelLogic = new ShortcutPanelLogic(installData, resourceManager, uninstallData,
+                    variableSubstitutor, housekeeper, factory);
             shortcutLogicInitialized = true;
         }
-        catch (Exception e)
+        catch (Exception exception)
         {
+            logger.log(Level.WARNING, "Failed to initialise shortcuts: " + exception.getMessage(), exception);
             shortcutLogicInitialized = false;
         }
     }
@@ -348,7 +369,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                     forceTest.delete();
                 }
 
-                logger.fine((isRootUser?"Can":"Cannot") + " write into '" + allUsersProgramsFolder + "'");
+                logger.fine((isRootUser ? "Can" : "Cannot") + " write into '" + allUsersProgramsFolder + "'");
 
                 final boolean rUserFlag;
                 if (shortcutPanelLogic.isDefaultCurrentUserFlag())
@@ -413,7 +434,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     @Override
     public void valueChanged(ListSelectionEvent event)
     {
-        if (programGroup == null) { return; }
+        if (programGroup == null)
+        {
+            return;
+        }
 
         String value = "";
 
@@ -672,18 +696,18 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /**
      * Adds the grouplist to the panel
      *
-     * @param Entries the entries to display
-     * @param ListModel the model to use
-     * @param aJList the JList to use
-     * @param aGridx The X position in the gridbag layout.
-     * @param aGridy The Y position in the gridbag layout.
-     * @param aGridwidth the gridwith to use in the gridbag layout.
+     * @param Entries     the entries to display
+     * @param ListModel   the model to use
+     * @param aJList      the JList to use
+     * @param aGridx      The X position in the gridbag layout.
+     * @param aGridy      The Y position in the gridbag layout.
+     * @param aGridwidth  the gridwith to use in the gridbag layout.
      * @param aGridheight the gridheight to use in the gridbag layout.
-     * @param aFill the FILL to use in the gridbag layout.
+     * @param aFill       the FILL to use in the gridbag layout.
      * @return the filled JList
      */
     private JList addList(Vector<String> Entries, int ListModel, JList aJList, int aGridx,
-            int aGridy, int aGridwidth, int aGridheight, int aFill)
+                          int aGridy, int aGridwidth, int aGridheight, int aFill)
     {
         if (aJList == null)
         {

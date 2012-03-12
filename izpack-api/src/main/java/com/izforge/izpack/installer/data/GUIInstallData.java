@@ -19,14 +19,12 @@
 
 package com.izforge.izpack.installer.data;
 
+import com.izforge.izpack.api.data.GUIPrefs;
+
+import javax.swing.UIManager;
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.Properties;
-
-import javax.swing.UIManager;
-
-import com.izforge.izpack.api.data.GUIPrefs;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
 /**
  * Encloses information about the install process. This class is implemented as a singleton which
@@ -58,9 +56,9 @@ public class GUIInstallData extends InstallData implements Serializable
      */
     public Color buttonsHColor = new Color(230, 230, 230);
 
-    public GUIInstallData(Properties variables, VariableSubstitutor variableSubstitutor)
+    public GUIInstallData(Properties variables)
     {
-        super(variables, variableSubstitutor);
+        super(variables);
     }
 
     public void configureGuiButtons()

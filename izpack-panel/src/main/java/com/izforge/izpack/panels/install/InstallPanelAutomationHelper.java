@@ -28,6 +28,7 @@ import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.automation.PanelAutomationHelper;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
+import com.izforge.izpack.util.Housekeeper;
 
 /**
  * Functions to support automated usage of the InstallPanel
@@ -39,6 +40,16 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
 {
 
     private int noOfPacks = 0;
+
+    /**
+     * Constructs an <tt>InstallPanelAutomationHelper</tt>.
+     *
+     * @param housekeeper the house-keeper
+     */
+    public InstallPanelAutomationHelper(Housekeeper housekeeper)
+    {
+        super(housekeeper);
+    }
 
     /**
      * Null op - this panel type has no state to serialize.

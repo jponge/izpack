@@ -44,7 +44,7 @@ public class UninstallerListenerTest extends AbstractDestroyerTest
     private final UninstallData uninstallData;
 
     /**
-     * Variable substitutor.
+     * Variable substituter.
      */
     private final VariableSubstitutor substituter;
 

@@ -21,20 +21,6 @@
 
 package com.izforge.izpack.installer.unpacker;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeSet;
-import java.util.logging.Logger;
-
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Blockable;
 import com.izforge.izpack.api.data.OverrideType;
@@ -51,12 +37,27 @@ import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.file.DirectoryScanner;
 import com.izforge.izpack.util.file.GlobPatternMapper;
 import com.izforge.izpack.util.file.types.FileSet;
 import com.izforge.izpack.util.os.FileQueue;
 import com.izforge.izpack.util.os.FileQueueMove;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.TreeSet;
+import java.util.logging.Logger;
 
 /**
  * Abstract base class for all unpacker implementations.
@@ -68,9 +69,9 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
     private static final Logger logger = Logger.getLogger(UnpackerBase.class.getName());
 
     /**
-     * The installdata.
+     * The installation data.
      */
-    protected AutomatedInstallData idata;
+    protected AutomatedInstallData installData;
 
     /**
      * The installer listener.
@@ -80,7 +81,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
     /**
      * The uninstallation data.
      */
-    protected UninstallData udata;
+    protected UninstallData uinstallData;
 
     /**
      * The absolute path of the installation. (NOT the canonical!)
@@ -129,21 +130,29 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
     protected VariableSubstitutor variableSubstitutor;
 
     /**
-     * The constructor.
-     *
-     * @param idata               The installation data.
-     * @param rules
-     * @param variableSubstitutor
-     * @param udata
+     * The librarian.
      */
-    public UnpackerBase(AutomatedInstallData idata, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata)
+    private final Librarian librarian;
+
+    /**
+     * Constructs an <tt>UnpackerBase</tt>.
+     *
+     * @param installData         the installation data
+     * @param resourceManager     the resource manager
+     * @param rules               the rules engine
+     * @param variableSubstitutor the variable substituter
+     * @param uninstallData       the uninstallation data
+     * @param librarian           the librarian
+     */
+    public UnpackerBase(AutomatedInstallData installData, ResourceManager resourceManager, RulesEngine rules,
+                        VariableSubstitutor variableSubstitutor, UninstallData uninstallData, Librarian librarian)
     {
-        this.idata = idata;
+        this.installData = installData;
         this.resourceManager = resourceManager;
         this.rules = rules;
-        // Initialize the variable substitutor
         this.variableSubstitutor = variableSubstitutor;
-        this.udata = udata;
+        this.uinstallData = uninstallData;
+        this.librarian = librarian;
     }
 
     public void setRules(RulesEngine rules)
@@ -480,7 +489,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
 
             try
             {
-                fileset.setDir(new File(idata.getInstallPath()).getAbsoluteFile());
+                fileset.setDir(new File(installData.getInstallPath()).getAbsoluteFile());
 
                 for (UpdateCheck uc : updatechecks)
                 {
@@ -507,7 +516,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
 
                 TreeSet<File> installed_files = new TreeSet<File>();
 
-                for (String fname : this.udata.getInstalledFilesList())
+                for (String fname : this.uinstallData.getInstalledFilesList())
                 {
                     File f = new File(fname);
 
@@ -573,15 +582,15 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
      */
     public void writeInstallationInformation() throws IOException, ClassNotFoundException
     {
-        if (!idata.getInfo().isWriteInstallationInformation())
+        if (!installData.getInfo().isWriteInstallationInformation())
         {
             logger.fine("Skip writing installation information");
             return;
         }
         logger.fine("Writing installation information");
-        String installdir = idata.getInstallPath();
+        String installdir = installData.getInstallPath();
 
-        List<Pack> installedpacks = new ArrayList<Pack>(idata.getSelectedPacks());
+        List<Pack> installedpacks = new ArrayList<Pack>(installData.getSelectedPacks());
 
         File installationinfo = new File(installdir + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION);
         if (!installationinfo.exists())
@@ -618,7 +627,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
             oout.writeObject(pack);
         }
         */
-        oout.writeObject(idata.getVariables());
+        oout.writeObject(installData.getVariables());
         logger.fine("Writing installation information finished");
         oout.close();
         fout.close();
@@ -661,9 +670,9 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
         {
             // If there are custom actions which would be called at
             // creating a directory, create it recursively.
-            if (!idata.getInstallerListener().isEmpty())
+            if (!installData.getInstallerListener().isEmpty())
             {
-                mkDirsWithEnhancement(dest, pf, idata.getInstallerListener());
+                mkDirsWithEnhancement(dest, pf, installData.getInstallerListener());
             }
             else
             {
@@ -732,9 +741,9 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
                     def_choice = AbstractUIHandler.ANSWER_YES;
                 }
 
-                int answer = handler.askQuestion(idata.getLangpack()
+                int answer = handler.askQuestion(installData.getLangpack()
                         .getString("InstallPanel.overwrite.title")
-                        + " - " + file.getName(), idata.getLangpack()
+                        + " - " + file.getName(), installData.getLangpack()
                         .getString("InstallPanel.overwrite.question")
                         + file.getAbsolutePath(),
                         AbstractUIHandler.CHOICES_YES_NO, def_choice);
@@ -804,7 +813,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
         {
             if (fq == null)
             {
-                fq = new FileQueue();
+                fq = new FileQueue(librarian);
             }
 
             FileQueueMove fqmv = new FileQueueMove(tmpFile, file);
@@ -863,7 +872,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
             executables.add(ef);
             if (ef.executionStage == ExecutableFile.UNINSTALL)
             {
-                udata.addExecutable(ef);
+                uinstallData.addExecutable(ef);
             }
         }
     }

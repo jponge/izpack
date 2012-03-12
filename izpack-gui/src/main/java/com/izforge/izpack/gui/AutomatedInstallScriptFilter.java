@@ -21,12 +21,14 @@
 
 package com.izforge.izpack.gui;
 
-import java.io.*;
-import java.util.logging.*;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.ResourceManager;
 
 import javax.swing.filechooser.FileFilter;
-
-import com.izforge.izpack.api.data.*;
+import java.io.File;
+import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Allows a file if it is a directory or if it ends with .xml. The description
@@ -59,11 +61,26 @@ public class AutomatedInstallScriptFilter extends FileFilter
      */
     public static final String DESCRIPTION_LOCALE_DATABASE_KEY = "FinishPanel.auto.dialog.filterdesc";
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.io.FileFilter#accept(java.io.File)
+    /**
+     * The resource manager.
      */
+    private final ResourceManager resources;
+
+    /**
+     * Constructs a <tt>AutomatedInstallScriptFilter</tt>.
+     *
+     * @param resources the resources
+     */
+    public AutomatedInstallScriptFilter(ResourceManager resources)
+    {
+        this.resources = resources;
+    }
+
+    /*
+    * (non-Javadoc)
+    *
+    * @see java.io.FileFilter#accept(java.io.File)
+    */
     @Override
     public boolean accept(File pathname)
     {
@@ -79,15 +96,14 @@ public class AutomatedInstallScriptFilter extends FileFilter
     public String getDescription()
     {
         // Load the lang pack using the current locale
-        ResourceManager resourceManager = ResourceManager.getInstance();
-        String locale = resourceManager.getLocale();
+        String locale = resources.getLocale();
 
         String description = null;
 
         try
         {
             //All of this will be changed to a few lines of code after the locale database refactor.
-            InputStream in = resourceManager.getInputStream("langpacks/" + locale + ".xml");
+            InputStream in = resources.getInputStream("langpacks/" + locale + ".xml");
             LocaleDatabase langpack = new LocaleDatabase(in);
 
             description = langpack.getString(DESCRIPTION_LOCALE_DATABASE_KEY);

@@ -52,10 +52,9 @@ public class HelperTestMethod
     public static FrameFixture prepareFrameFixture(InstallerFrame installerFrame, InstallerController installerController) throws Exception
     {
         FrameFixture installerFrameFixture = new FrameFixture(installerFrame);
-        installerController.preloadInstaller().buildInstallation();
-        installerFrameFixture.show();
-        installerFrame.sizeFrame();
-        // wait center
+        installerController.preloadInstaller();
+        installerController.buildInstallation();
+        installerController.launchInstallation();
         return installerFrameFixture;
     }
 

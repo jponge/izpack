@@ -19,6 +19,7 @@
 
 package com.izforge.izpack.uninstaller;
 
+import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
@@ -26,9 +27,32 @@ import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.util.Housekeeper;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -87,17 +111,21 @@ public class UninstallerFrame extends JFrame
      */
     protected String installPath;
 
+    private final Housekeeper housekeeper;
+    private final BindeableContainer container;
+
     /**
      * The constructor.
      *
-     * @param displayForceOption If true, display to the user the option permitting to force
-     *                           all files deletion.
-     * @param forceOptionState   If true, force deletion is activated.
+     * @param housekeeper the housekeeper
+     * @param container   the container
      * @throws Exception Description of the Exception
      */
-    public UninstallerFrame(boolean displayForceOption, boolean forceOptionState) throws Exception
+    public UninstallerFrame(Housekeeper housekeeper, BindeableContainer container) throws Exception
     {
         super("IzPack - Uninstaller");
+        this.housekeeper = housekeeper;
+        this.container = container;
 
         // Initializations
         langpack = new LocaleDatabase(UninstallerFrame.class.getResourceAsStream("/langpack.xml"));
@@ -110,8 +138,16 @@ public class UninstallerFrame extends JFrame
 
         // Sets the frame icon
         setIconImage(icons.get("JFrameIcon").getImage());
+    }
 
-        // We build the GUI & show it
+    /**
+     * Initialises the frame
+     *
+     * @param displayForceOption If true, display to the user the option permitting to force all files deletion.
+     * @param forceOptionState   If true, force deletion is activated.
+     */
+    public void init(boolean displayForceOption, boolean forceOptionState)
+    {
         buildGUI(displayForceOption, forceOptionState);
         addWindowListener(new WindowHandler());
         pack();
@@ -315,7 +351,7 @@ public class UninstallerFrame extends JFrame
          */
         public void windowClosing(WindowEvent e)
         {
-            Housekeeper.getInstance().shutDown(0);
+            housekeeper.shutDown(0);
         }
     }
 
@@ -523,13 +559,13 @@ public class UninstallerFrame extends JFrame
             Object src = e.getSource();
             if (src == quitButton)
             {
-                Housekeeper.getInstance().shutDown(0);
+                housekeeper.shutDown(0);
             }
             else if (src == destroyButton)
             {
                 destroyButton.setEnabled(false);
                 Destroyer destroyer = new Destroyer(installPath,
-                        targetDestroyCheckbox.isSelected(), new DestroyerHandler());
+                        targetDestroyCheckbox.isSelected(), new DestroyerHandler(), container);
                 destroyer.start();
             }
         }
