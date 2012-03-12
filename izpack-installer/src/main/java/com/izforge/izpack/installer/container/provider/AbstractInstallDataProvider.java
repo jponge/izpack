@@ -208,7 +208,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         }
         catch (Throwable exception)
         {
-            logger.warning("No custom langpack available");
+            logger.warning("No custom langpack for " + idata.getLocaleISO3() + " available");
             return;
         }
         logger.fine("Found custom langpack for " + idata.getLocaleISO3());
