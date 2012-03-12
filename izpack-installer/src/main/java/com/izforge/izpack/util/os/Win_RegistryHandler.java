@@ -24,13 +24,17 @@ package com.izforge.izpack.util.os;
 
 import com.coi.tools.os.izpack.Registry;
 import com.coi.tools.os.win.RegDataContainer;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.os.RegistryHandler;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.util.Librarian;
 
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This is the Microsoft Windows specific implementation of <code>RegistryHandler</code>.
@@ -40,18 +44,34 @@ import java.util.Properties;
 public class Win_RegistryHandler extends RegistryHandler
 {
 
-    Registry regWorker = null;
+    /**
+     * The registry.
+     */
+    private final Registry registry;
 
     /**
-     * Default constructor.
+     * The logger.
      */
-    public Win_RegistryHandler()
+    private static final Logger log = Logger.getLogger(Win_RegistryHandler.class.getName());
+
+    /**
+     * Constructs a <tt>Win_RegistryHandler</tt>.
+     *
+     * @param resources the resource manager
+     * @param librarian the librarian
+     */
+    public Win_RegistryHandler(ResourceManager resources, Librarian librarian)
     {
-        super("com.coi.tools.os.izpack.Registry");
-        if (good())
+        super(resources);
+        try
         {
-            regWorker = (Registry) worker;
+            worker = new Registry(librarian);
         }
+        catch (UnsatisfiedLinkError exception)
+        {
+            log.log(Level.SEVERE, exception.getMessage(), exception);
+        }
+        registry = (Registry) worker;
     }
 
     /**
@@ -63,7 +83,6 @@ public class Win_RegistryHandler extends RegistryHandler
      * @param value    the registry value into which the contents should be set
      * @param contents the contents for the value
      * @throws NativeLibException
-     * @throws NativeLibException
      */
     public void setValue(String key, String value, String contents) throws NativeLibException
     {
@@ -71,9 +90,9 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return;
         }
-        if (contents.contains("OLD_KEY_VALUE") && regWorker.valueExist(key, value))
+        if (contents.contains("OLD_KEY_VALUE") && registry.valueExist(key, value))
         {
-            Object ob = regWorker.getValueAsObject(key, value);
+            Object ob = registry.getValueAsObject(key, value);
             if (ob instanceof String)
             {
                 Properties props = new Properties();
@@ -89,7 +108,7 @@ public class Win_RegistryHandler extends RegistryHandler
                 }
             }
         }
-        regWorker.setValue(key, value, contents);
+        registry.setValue(key, value, contents);
     }
 
     /**
@@ -108,7 +127,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return;
         }
-        regWorker.setValue(key, value, contents);
+        registry.setValue(key, value, contents);
     }
 
     /**
@@ -127,7 +146,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return;
         }
-        regWorker.setValue(key, value, contents);
+        registry.setValue(key, value, contents);
     }
 
     /**
@@ -146,7 +165,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return;
         }
-        regWorker.setValue(key, value, contents);
+        registry.setValue(key, value, contents);
     }
 
     /**
@@ -184,7 +203,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return (false);
         }
-        return (regWorker.keyExist(key));
+        return (registry.keyExist(key));
     }
 
     /**
@@ -201,7 +220,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return (false);
         }
-        return (regWorker.valueExist(key, value));
+        return (registry.valueExist(key, value));
     }
 
     /**
@@ -217,7 +236,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return (null);
         }
-        return (regWorker.getSubkeys(key));
+        return (registry.getSubkeys(key));
     }
 
     /**
@@ -233,7 +252,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return (null);
         }
-        return (regWorker.getValueNames(key));
+        return (registry.getValueNames(key));
     }
 
     /**
@@ -250,7 +269,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return (null);
         }
-        return (regWorker.getValue(key, value));
+        return (registry.getValue(key, value));
     }
 
     /**
@@ -265,7 +284,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return;
         }
-        regWorker.createKey(key);
+        registry.createKey(key);
     }
 
     /**
@@ -280,7 +299,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return;
         }
-        regWorker.deleteKey(key);
+        registry.deleteKey(key);
     }
 
     /**
@@ -295,7 +314,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return;
         }
-        regWorker.deleteKeyIfEmpty(key);
+        registry.deleteKeyIfEmpty(key);
     }
 
     /**
@@ -312,7 +331,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return;
         }
-        regWorker.deleteValue(key, value);
+        registry.deleteValue(key, value);
     }
 
     /**
@@ -327,7 +346,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return;
         }
-        regWorker.setRoot(i);
+        registry.setRoot(i);
     }
 
     /**
@@ -342,7 +361,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return (0);
         }
-        return (regWorker.getRoot());
+        return (registry.getRoot());
     }
 
     /**
@@ -362,7 +381,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return;
         }
-        regWorker.setLogPrevSetValueFlag(flagVal);
+        registry.setLogPrevSetValueFlag(flagVal);
     }
 
     /**
@@ -378,7 +397,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return (true);
         }
-        return (regWorker.getLogPrevSetValueFlag());
+        return (registry.getLogPrevSetValueFlag());
     }
 
     /**
@@ -392,7 +411,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return;
         }
-        regWorker.activateLogging();
+        registry.activateLogging();
     }
 
     /**
@@ -406,7 +425,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return;
         }
-        regWorker.suspendLogging();
+        registry.suspendLogging();
     }
 
     /**
@@ -420,7 +439,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return;
         }
-        regWorker.resetLogging();
+        registry.resetLogging();
     }
 
     public List<Object> getLoggingInfo() throws NativeLibException
@@ -429,7 +448,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return (null);
         }
-        return (regWorker.getLoggingInfo());
+        return (registry.getLoggingInfo());
     }
 
     public void setLoggingInfo(List info) throws NativeLibException
@@ -438,7 +457,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return;
         }
-        regWorker.setLoggingInfo(info);
+        registry.setLoggingInfo(info);
     }
 
     public void addLoggingInfo(List info) throws NativeLibException
@@ -447,7 +466,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return;
         }
-        regWorker.addLoggingInfo(info);
+        registry.addLoggingInfo(info);
     }
 
     public void rewind() throws NativeLibException
@@ -456,7 +475,7 @@ public class Win_RegistryHandler extends RegistryHandler
         {
             return;
         }
-        regWorker.rewind();
+        registry.rewind();
     }
 
 }

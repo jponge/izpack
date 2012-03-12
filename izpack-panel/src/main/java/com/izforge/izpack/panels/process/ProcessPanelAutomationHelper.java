@@ -27,6 +27,7 @@ import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProcessHandler;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.automation.PanelAutomationHelper;
+import com.izforge.izpack.util.Housekeeper;
 
 /**
  * Functions to support automated usage of the CompilePanel
@@ -43,8 +44,15 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
     private int currentJob = 0;
     private ProcessPanelWorker processPanelWorker;
 
-    public ProcessPanelAutomationHelper(ProcessPanelWorker processPanelWorker)
+    /**
+     * Constructs a <tt>ProcessPanelAutomationHelper</tt>.
+     *
+     * @param processPanelWorker the process panel worker
+     * @param housekeeper        the house-keeper
+     */
+    public ProcessPanelAutomationHelper(ProcessPanelWorker processPanelWorker, Housekeeper housekeeper)
     {
+        super(housekeeper);
         this.processPanelWorker = processPanelWorker;
         processPanelWorker.setHandler(this);
     }

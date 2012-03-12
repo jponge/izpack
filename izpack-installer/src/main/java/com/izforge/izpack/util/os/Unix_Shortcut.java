@@ -51,6 +51,16 @@
 
 package com.izforge.izpack.util.os;
 
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.exception.ResourceNotFoundException;
+import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.StringTool;
+import com.izforge.izpack.util.unix.ShellScript;
+import com.izforge.izpack.util.unix.UnixHelper;
+import com.izforge.izpack.util.unix.UnixUser;
+import com.izforge.izpack.util.unix.UnixUsers;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -65,16 +75,6 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.exception.ResourceNotFoundException;
-import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.StringTool;
-import com.izforge.izpack.util.unix.ShellScript;
-import com.izforge.izpack.util.unix.UnixHelper;
-import com.izforge.izpack.util.unix.UnixUser;
-import com.izforge.izpack.util.unix.UnixUsers;
 
 /**
  * This is the Implementation of the RFC-Based Desktop-Link. Used in KDE and GNOME.
@@ -195,18 +195,28 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     public final String myHome = System.getProperty("user.home");
 
     /**
-     * Internal Constant: su = UnixHelper.getSuCommand() *
+     * Cached value from {@link UnixHelper#getSuCommand()}.
      */
-    public final String su = UnixHelper.getSuCommand();
+    private String su;
 
     /**
-     * Internal Constant: xdgDesktopIconCmd = UnixHelper.getCustomCommand("xdg-desktop-icon") *
+     * Cached value from <tt>UnixHelper.getCustomCommand("xdg-desktop-icon")</tt>.
      */
-    public final String xdgDesktopIconCmd = UnixHelper.getCustomCommand("xdg-desktop-icon");
+    private String xdgDesktopIconCmd;
 
-    public String myXdgDesktopIconScript;
+    private String myXdgDesktopIconScript;
 
-    public String myXdgDesktopIconCmd;
+    private String myXdgDesktopIconCmd;
+
+    /**
+     * The resource manager.
+     */
+    private final ResourceManager resources;
+
+    /**
+     * The installation data.
+     */
+    private final AutomatedInstallData installData;
 
     // ~ Constructors ***********************************************************************
 
@@ -214,12 +224,16 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     // *********************************************************************************************************************************************
 
     /**
-     * Creates a new Unix_Shortcut object.
+     * Constructs a <tt>Unix_Shortcut</tt>.
+     *
+     * @param resources   the resource manager
+     * @param installData the installation data
      */
-    public Unix_Shortcut()
+    public Unix_Shortcut(ResourceManager resources, AutomatedInstallData installData)
     {
+        this.resources = resources;
+        this.installData = installData;
         hlp = new StringBuffer();
-        users = UnixUsers.getUsersWithValidShellsExistingHomesAndDesktops();
 
         String userLanguage = System.getProperty("user.language", "en");
 
@@ -454,14 +468,12 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         {
 
             this.itsFileName = target;
-            AutomatedInstallData idata;
-            idata = AutomatedInstallData.getInstance();
 
             // read the userdefined / overridden / wished Shortcut Location
             // This can be an absolute Path name or a relative Path to the InstallPath
             File shortCutLocation = null;
             File ApplicationShortcutPath;
-            String ApplicationShortcutPathName = idata.getVariable("ApplicationShortcutPath"/**
+            String ApplicationShortcutPathName = installData.getVariable("ApplicationShortcutPath"/**
              * TODO
              * <-- Put in Docu and in Un/InstallerConstantsClass
              */
@@ -486,7 +498,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                 }
                 else
                 {
-                    File relativePath = new File(idata.getInstallPath() + FS
+                    File relativePath = new File(installData.getInstallPath() + FS
                             + ApplicationShortcutPath);
                     relativePath.mkdirs();
                     shortCutLocation = new File(relativePath.toString());
@@ -494,7 +506,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
             }
             else
             {
-                shortCutLocation = new File(idata.getInstallPath());
+                shortCutLocation = new File(installData.getInstallPath());
             }
 
             // write the App ShortCut
@@ -505,7 +517,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
             // Now install my Own with xdg-if available // Note the The reverse Uninstall-Task is on
             // TODO: "WHICH another place"
 
-            if (xdgDesktopIconCmd != null)
+            String cmd = getXdgDesktopIconCmd();
+            if (cmd != null)
             {
                 createExtXdgDesktopIconCmd(shortCutLocation);
                 // / TODO: DELETE the ScriptFiles
@@ -534,7 +547,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
             // If I'm root and this Desktop.ShortCut should be for all other users
             if (rootUser4All && create4All)
             {
-                if (xdgDesktopIconCmd != null)
+                if (cmd != null)
                 {
                     installDesktopFileToAllUsersDesktop(writtenDesktopFile);
                 }
@@ -581,7 +594,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                     {
                         logger.log(Level.WARNING,
                                 "Could not copy " + theIcon + " to " + commonIcon + "( "
-                                + e.getMessage() + " )",
+                                        + e.getMessage() + " )",
                                 e);
                     }
 
@@ -630,7 +643,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                 {
                     logger.log(Level.WARNING,
                             "Could not copy " + theIcon + " to " + commonIcon + "( "
-                            + e.getMessage() + " )",
+                                    + e.getMessage() + " )",
                             e);
                 }
 
@@ -662,12 +675,11 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         ShellScript myXdgDesktopIconScript = new ShellScript(null);
         String lines = "";
 
-        ResourceManager resourceManager = ResourceManager.getInstance();
-        resourceManager.setDefaultOrResourceBasePath("");
+        resources.setDefaultOrResourceBasePath("");
 
-        lines = resourceManager.getTextResource("/com/izforge/izpack/util/unix/xdgdesktopiconscript.sh");
+        lines = resources.getTextResource("/com/izforge/izpack/util/unix/xdgdesktopiconscript.sh");
 
-        resourceManager.setDefaultOrResourceBasePath(null);
+        resources.setDefaultOrResourceBasePath(null);
 
         myXdgDesktopIconScript.append(lines);
 
@@ -686,7 +698,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     private void installDesktopFileToAllUsersDesktop(File writtenDesktopFile)
     {
-        for (UnixUser user : users)
+        for (UnixUser user : getUsers())
         {
             if (user.getHome().equals(myHome))
             {
@@ -697,11 +709,11 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
             {
                 // / THE Following does such as #> su username -c "xdg-desktopicon install
                 // --novendor /Path/to/Filename\ with\ or\ without\ Space.desktop"
-                rootScript.append(new String[]{su, user.getName(), "-c"});
+                rootScript.append(new String[]{getSuCommand(), user.getName(), "-c"});
                 rootScript.appendln(new String[]{"\"" + myXdgDesktopIconCmd, "install", "--novendor",
                         StringTool.escapeSpaces(writtenDesktopFile.toString()) + "\""});
 
-                uninstallScript.append(new String[]{su, user.getName(), "-c"});
+                uninstallScript.append(new String[]{getSuCommand(), user.getName(), "-c"});
                 uninstallScript
                         .appendln(new String[]{"\"" + myXdgDesktopIconCmd, "uninstall", "--novendor",
                                 StringTool.escapeSpaces(writtenDesktopFile.toString()) + "\""});
@@ -713,6 +725,33 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         }
         logger.fine("==============================");
         logger.fine(rootScript.getContentAsString());
+    }
+
+    private String getSuCommand()
+    {
+        if (su == null)
+        {
+            su = UnixHelper.getSuCommand();
+        }
+        return su;
+    }
+
+    private String getXdgDesktopIconCmd()
+    {
+        if (xdgDesktopIconCmd == null)
+        {
+            xdgDesktopIconCmd = UnixHelper.getCustomCommand("xdg-desktop-icon");
+        }
+        return xdgDesktopIconCmd;
+    }
+
+    private List<UnixUser> getUsers()
+    {
+        if (users == null)
+        {
+            users = UnixUsers.getUsersWithValidShellsExistingHomesAndDesktops();
+        }
+        return users;
     }
 
     /**
@@ -742,7 +781,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         // su marc.eppelmann -c "/bin/cp /home/marc.eppelmann/backup.job.out.txt
         // /home/marc.eppelmann/backup.job.out2.txt"
 
-        for (UnixUser user : users)
+        for (UnixUser user : getUsers())
         {
             if (user.getHome().equals(myHome))
             {
@@ -765,7 +804,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
                 // Debug.log("Will Copy: " + tempFile.toString() + " to " + dest.toString());
 
-                rootScript.append(su);
+                rootScript.append(getSuCommand());
                 rootScript.append(S);
                 rootScript.append(user.getName());
                 rootScript.append(S);
@@ -793,7 +832,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
                 // Debug.log("Will exec: " + script.toString());
 
-                uninstallScript.append(su);
+                uninstallScript.append(getSuCommand());
                 uninstallScript.append(S);
                 uninstallScript.append(user.getName());
                 uninstallScript.append(S);
@@ -1160,69 +1199,6 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         }
 
         return result;
-    }
-
-    /**
-     * Test Method
-     *
-     * @param args
-     * @throws IOException
-     * @throws ResourceNotFoundException
-     */
-    public static void main(String[] args) throws IOException, ResourceNotFoundException
-    {
-
-        Unix_Shortcut aSample = new Unix_Shortcut();
-        System.out.println(">>" + aSample.getClass().getName() + "- Test Main Program\n\n");
-
-        try
-        {
-            aSample.initialize(APPLICATIONS, "Start Tomcat");
-        }
-        catch (Exception exc)
-        {
-            System.err.println("Could not init Unix_Shourtcut");
-        }
-
-        aSample.replace();
-        System.out.println(aSample);
-        //
-        //
-        //
-        // File targetFileName = new File(System.getProperty("user.home") + File.separator
-        // + "Start Tomcat" + DESKTOP_EXT);
-        // FileWriter fileWriter = null;
-        //
-        // try
-        // {
-        // fileWriter = new FileWriter(targetFileName);
-        // }
-        // catch (IOException e1)
-        // {
-        // e1.printStackTrace();
-        // }
-        //
-        // try
-        // {
-        // fileWriter.write( aSample.toString() );
-        // }
-        // catch (IOException e)
-        // {
-        // e.printStackTrace();
-        // }
-        //
-        // try
-        // {
-        // fileWriter.close();
-        // }
-        // catch (IOException e2)
-        // {
-        // e2.printStackTrace();
-        // }
-
-        aSample.createExtXdgDesktopIconCmd(new File(System.getProperty("user.home")));
-
-        System.out.println("DONE.\n");
     }
 
     /**

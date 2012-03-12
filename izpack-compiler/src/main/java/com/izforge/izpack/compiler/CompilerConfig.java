@@ -919,7 +919,7 @@ public class CompilerConfig extends Thread
             {
                 File relsrcfile = new File(src);
                 File abssrcfile = FileUtil.getAbsoluteFile(src, compilerData.getBasedir());
-                if (!relsrcfile.exists())
+                if (!abssrcfile.exists())
                 {
                     throw new FileNotFoundException("Source file " + relsrcfile + " not found");
                 }
@@ -993,7 +993,7 @@ public class CompilerConfig extends Thread
             }
             catch (Exception e)
             {
-                throw new CompilerException(e.getMessage());
+                throw new CompilerException(e.getMessage(), e);
             }
         }
     }

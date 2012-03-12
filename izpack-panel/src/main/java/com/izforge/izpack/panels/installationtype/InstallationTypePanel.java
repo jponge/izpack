@@ -21,20 +21,20 @@
 
 package com.izforge.izpack.panels.installationtype;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.logging.Logger;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JRadioButton;
-
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JRadioButton;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.logging.Logger;
 
 
 /**
@@ -50,9 +50,19 @@ public class InstallationTypePanel extends IzPanel implements ActionListener
     private JRadioButton normalinstall;
     private JRadioButton modifyinstall;
 
-    public InstallationTypePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+
+    /**
+     * Constructs an <tt>InstallationTypePanel</tt>.
+     *
+     * @param parent          the parent window
+     * @param installData           the installation data
+     * @param resourceManager the resource manager
+     * @param log             the log
+     */
+    public InstallationTypePanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+                                 Log log)
     {
-        super(parent, idata, new IzPanelLayout(), resourceManager);
+        super(parent, installData, new IzPanelLayout(log), resourceManager);
         buildGUI();
     }
 

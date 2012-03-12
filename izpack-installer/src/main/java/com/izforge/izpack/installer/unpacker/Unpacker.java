@@ -22,7 +22,11 @@
 
 package com.izforge.izpack.installer.unpacker;
 
-import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.OverrideType;
+import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.PackFile;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.rules.RulesEngine;
@@ -33,10 +37,20 @@ import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.web.WebAccessor;
 import com.izforge.izpack.installer.web.WebRepositoryAccessor;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.Librarian;
+import com.izforge.izpack.util.OsConstraintHelper;
 import com.izforge.izpack.util.os.FileQueue;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
@@ -55,17 +69,29 @@ public class Unpacker extends UnpackerBase
 
     private Pack200.Unpacker unpacker;
 
+    /**
+     * The house-keeper.
+     */
+    private final Housekeeper housekeeper;
+
 
     /**
-     * The constructor.
+     * Constructs an <tt>Unpacker</tt>.
      *
-     * @param variableSubstitutor
-     * @param udata
-     * @param idata               The installation data.
+     * @param installData         the installation data
+     * @param resourceManager     the resource manager
+     * @param rules               the rules engine
+     * @param variableSubstitutor the variable substituter
+     * @param uninstallData       the uninstallation data
+     * @param librarian           the librarian
+     * @param housekeeper         the housekeeper
      */
-    public Unpacker(AutomatedInstallData idata, ResourceManager resourceManager, RulesEngine rules, VariableSubstitutor variableSubstitutor, UninstallData udata)
+    public Unpacker(AutomatedInstallData installData, ResourceManager resourceManager, RulesEngine rules,
+                    VariableSubstitutor variableSubstitutor, UninstallData uninstallData,
+                    Librarian librarian, Housekeeper housekeeper)
     {
-        super(idata, resourceManager, rules, variableSubstitutor, udata);
+        super(installData, resourceManager, rules, variableSubstitutor, uninstallData, librarian);
+        this.housekeeper = housekeeper;
     }
 
     /* (non-Javadoc)
@@ -83,14 +109,14 @@ public class Unpacker extends UnpackerBase
             ArrayList<ParsableFile> parsables = new ArrayList<ParsableFile>();
             ArrayList<ExecutableFile> executables = new ArrayList<ExecutableFile>();
             ArrayList<UpdateCheck> updatechecks = new ArrayList<UpdateCheck>();
-            List<Pack> packs = idata.getSelectedPacks();
+            List<Pack> packs = installData.getSelectedPacks();
             int npacks = packs.size();
             handler.startAction("Unpacking", npacks);
             // Custom action listener stuff --- load listeners ----
-            List<InstallerListener> customActions = idata.getInstallerListener();
+            List<InstallerListener> customActions = installData.getInstallerListener();
             // Custom action listener stuff --- beforePacks ----
-            informListeners(customActions, InstallerListener.BEFORE_PACKS, idata, npacks, handler);
-            packs = idata.getSelectedPacks();
+            informListeners(customActions, InstallerListener.BEFORE_PACKS, installData, npacks, handler);
+            packs = installData.getSelectedPacks();
             npacks = packs.size();
 
             // We unpack the selected packs
@@ -132,7 +158,7 @@ public class Unpacker extends UnpackerBase
                 // installpanel
                 if (!(pack.id == null || "".equals(pack.id)))
                 {
-                    final String name = idata.getLangpack().getString(pack.id);
+                    final String name = installData.getLangpack().getString(pack.id);
                     if (name != null && !"".equals(name))
                     {
                         stepname = name;
@@ -176,7 +202,7 @@ public class Unpacker extends UnpackerBase
                         handleMkDirs(pf, dest);
 
                         // Add path to the log
-                        udata.addFile(path, pack.uninstall);
+                        uinstallData.addFile(path, pack.uninstall);
 
                         if (pf.isDirectory())
                         {
@@ -313,7 +339,7 @@ public class Unpacker extends UnpackerBase
                             pis.close();
                         }
 
-                        handleTimeStamp( pf, pathFile, tmpFile);
+                        handleTimeStamp(pf, pathFile, tmpFile);
 
                         fq = handleBlockable(pf, pathFile, tmpFile, fq, customActions);
                     }
@@ -375,7 +401,7 @@ public class Unpacker extends UnpackerBase
             if (fq != null)
             {
                 fq.execute();
-                idata.setRebootNecessary(fq.isRebootNecessary());
+                installData.setRebootNecessary(fq.isRebootNecessary());
             }
 
             // We use the scripts parser
@@ -408,7 +434,7 @@ public class Unpacker extends UnpackerBase
             }
 
             // Custom action listener stuff --- afterPacks ----
-            informListeners(customActions, InstallerListener.AFTER_PACKS, idata, npacks, handler);
+            informListeners(customActions, InstallerListener.AFTER_PACKS, installData, npacks, handler);
             if (performInterrupted())
             { // Interrupt was initiated; perform it.
                 return;
@@ -439,7 +465,7 @@ public class Unpacker extends UnpackerBase
                 err.printStackTrace();
             }
             this.result = false;
-            Housekeeper.getInstance().shutDown(4);
+            housekeeper.shutDown(4);
         }
         finally
         {
@@ -467,7 +493,7 @@ public class Unpacker extends UnpackerBase
     {
         InputStream in;
 
-        String webDirURL = idata.getInfo().getWebDirURL();
+        String webDirURL = installData.getInfo().getWebDirURL();
 
         packid = "-" + packid;
 
@@ -483,14 +509,14 @@ public class Unpacker extends UnpackerBase
             // TODO: download and cache them all before starting copy process
 
             // See compiler.Packager#getJarOutputStream for the counterpart
-            String baseName = idata.getInfo().getInstallerBase();
+            String baseName = installData.getInfo().getInstallerBase();
             String packURL = webDirURL + "/" + baseName + ".pack" + packid + ".jar";
-            String tempFolder = IoHelper.translatePath(idata.getInfo().getUninstallerPath() + Unpacker.tempSubPath, variableSubstitutor);
+            String tempFolder = IoHelper.translatePath(installData.getInfo().getUninstallerPath() + Unpacker.tempSubPath, variableSubstitutor);
             String tempfile;
             try
             {
                 tempfile = WebRepositoryAccessor.getCachedUrl(packURL, tempFolder);
-                udata.addFile(tempfile, uninstall);
+                uinstallData.addFile(tempfile, uninstall);
             }
             catch (Exception e)
             {
@@ -517,9 +543,9 @@ public class Unpacker extends UnpackerBase
                 throw new InstallerException(url.toString() + " not available", new FileNotFoundException(url.toString()));
             }
         }
-        if (in != null && idata.getInfo().getPackDecoderClassName() != null)
+        if (in != null && installData.getInfo().getPackDecoderClassName() != null)
         {
-            Class<Object> decoder = (Class<Object>) Class.forName(idata.getInfo().getPackDecoderClassName());
+            Class<Object> decoder = (Class<Object>) Class.forName(installData.getInfo().getPackDecoderClassName());
             Class[] paramsClasses = new Class[1];
             paramsClasses[0] = Class.forName("java.io.InputStream");
             Constructor<Object> constructor = decoder.getDeclaredConstructor(paramsClasses);
@@ -532,7 +558,7 @@ public class Unpacker extends UnpackerBase
             instance = constructor.newInstance(params);
             if (!InputStream.class.isInstance(instance))
             {
-                throw new InstallerException("'" + idata.getInfo().getPackDecoderClassName()
+                throw new InstallerException("'" + installData.getInfo().getPackDecoderClassName()
                         + "' must be derived from "
                         + InputStream.class.toString());
             }

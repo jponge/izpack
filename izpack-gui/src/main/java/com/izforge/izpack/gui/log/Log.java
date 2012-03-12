@@ -24,21 +24,26 @@ package com.izforge.izpack.gui.log;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 
-import javax.swing.*;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import java.io.File;
 import java.io.FileWriter;
 import java.text.DateFormatSymbols;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /*---------------------------------------------------------------------------*/
 
 /**
  * This class handles informing the user about unusual events during the installation process and
  * therefore about the possibility that the installation may not have succeeded at all or may have
- * succeeded only partially. Because the logger represents a single resource it is implemented as
- * singleton.
+ * succeeded only partially.
  * <p/>
  * <h1>Usage</h1>
  * To add a message to the install log call one of the <code>addMessage()</code> methods, using
@@ -161,10 +166,6 @@ public class Log implements LogError, LogWarning, LogMessage
     // --------------------------------------------------------------------------
     // Variable Declarations
     // --------------------------------------------------------------------------
-    /**
-     * The only instance of <code>Messenger</code>
-     */
-    private static Log me = null;
 
     /**
      * The system dependent newline character sequence
@@ -225,16 +226,13 @@ public class Log implements LogError, LogWarning, LogMessage
     /*--------------------------------------------------------------------------*/
 
     /**
-     * This class is installed as singleton. Therefore the constructor is declared private. Use
-     * <code>getInstance()</code> to get an instance.
+     * Constructs a <tt>Log</tt>.
+     *
+     * @param installData the installation data
      */
-    /*--------------------------------------------------------------------------*/
-    private Log()
+    public Log(AutomatedInstallData installData)
     {
-        // ----------------------------------------------------
-        // gain access to the install data
-        // ----------------------------------------------------
-        installData = AutomatedInstallData.getInstance();
+        this.installData = installData;
 
         // ----------------------------------------------------
         // get the debug setting
@@ -270,26 +268,6 @@ public class Log implements LogError, LogWarning, LogMessage
             }
         }
     }
-
-    /*--------------------------------------------------------------------------*/
-
-    /**
-     * Returns the only instance of <code>Log</code>
-     *
-     * @return the only instance of <code>Log</code>
-     */
-    /*--------------------------------------------------------------------------*/
-    public static Log getInstance()
-    {
-        if (me == null)
-        {
-            me = new Log();
-        }
-
-        return (me);
-    }
-
-    /*--------------------------------------------------------------------------*/
 
     /**
      * This method records general installation message

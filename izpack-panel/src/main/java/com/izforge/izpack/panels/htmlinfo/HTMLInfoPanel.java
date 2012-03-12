@@ -23,12 +23,14 @@ import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.HyperlinkHandler;
 
-import javax.swing.*;
+import javax.swing.JEditorPane;
+import javax.swing.JScrollPane;
 import javax.swing.text.Document;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -62,30 +64,33 @@ public class HTMLInfoPanel extends IzPanel
     private JEditorPane textArea;
 
     /**
-     * The constructor.
+     * Constructs an <tt>HTMLInfoPanel</tt>.
      *
-     * @param parent The parent.
-     * @param idata  The installation installDataGUI.
+     * @param parent          the parent window
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
+     * @param log             the log
      */
-    public HTMLInfoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    public HTMLInfoPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager, Log log)
     {
-        this(parent, idata, "HTMLInfoPanel", true, resourceManager);
+        this(parent, installData, "HTMLInfoPanel", true, resourceManager, log);
     }
 
     /**
-     * Alternate constructor with additional parameters.  For use with
-     * subclasses.
+     * Constructs an <tt>HTMLInfoPanel</tt>.
      *
-     * @param parent            The parent.
-     * @param idata             The installation installDataGUI.
+     * @param parent            the parent window
+     * @param installData       the installation data
      * @param resPrefixStr      prefix string for content resource name.
-     * @param showInfoLabelFlag true to show "please read..." label
-     *                          above content.
+     * @param showInfoLabelFlag true to show "please read..." label above content
+     * @param resourceManager   the resource manager
+     * @param log               the log
      */
-    public HTMLInfoPanel(InstallerFrame parent, GUIInstallData idata,
-                         String resPrefixStr, boolean showInfoLabelFlag, ResourceManager resourceManager)
+    public HTMLInfoPanel(InstallerFrame parent, GUIInstallData installData,
+                         String resPrefixStr, boolean showInfoLabelFlag, ResourceManager resourceManager,
+                         Log log)
     {
-        super(parent, idata, new IzPanelLayout(), resourceManager);
+        super(parent, installData, new IzPanelLayout(log), resourceManager);
         //setup given resource prefix and name:
         panelResourcePrefixStr = resPrefixStr;
         panelResourceNameStr = resPrefixStr + ".info";

@@ -21,6 +21,18 @@
 
 package com.izforge.izpack.panels.userinput;
 
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.installer.console.PanelConsole;
+import com.izforge.izpack.installer.console.PanelConsoleHelper;
+import com.izforge.izpack.panels.userinput.processor.Processor;
+import com.izforge.izpack.util.Console;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.helper.SpecHelper;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -32,17 +44,6 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
-import com.izforge.izpack.installer.console.PanelConsole;
-import com.izforge.izpack.installer.console.PanelConsoleHelper;
-import com.izforge.izpack.panels.userinput.processor.Processor;
-import com.izforge.izpack.util.Console;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.helper.SpecHelper;
 
 /**
  * The user input panel console helper class.
@@ -137,11 +138,21 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
     public List<Input> listInputs;
 
-    public UserInputPanelConsoleHelper()
+    /**
+     * The resource manager.
+     */
+    private final ResourceManager resources;
+
+    /**
+     * Constructs an <tt>UserInputPanelConsoleHelper</tt>.
+     *
+     * @param resources the resource manager
+     */
+    public UserInputPanelConsoleHelper(ResourceManager resources)
     {
         instanceNumber = instanceCount++;
         listInputs = new ArrayList<Input>();
-
+        this.resources = resources;
     }
 
     @Override
@@ -241,7 +252,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         String panelid = installData.getPanelsOrder().get(installData.getCurPanelNumber()).getPanelid();
         String instance = Integer.toString(instanceNumber);
 
-        SpecHelper specHelper = new SpecHelper();
+        SpecHelper specHelper = new SpecHelper(resources);
         try
         {
             specHelper.readSpec(specHelper.getResource(SPEC_FILE_NAME));

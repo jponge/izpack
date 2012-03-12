@@ -21,14 +21,15 @@
 
 package com.izforge.izpack.panels.userpath;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The target directory selection panel.
@@ -49,18 +50,20 @@ public class UserPathPanel extends UserPathInputPanel
     public static String pathElementName = "UserPathPanelElement";
 
     /**
-     * The constructor.
+     * Constructs an <tt>UserPathPanel</tt>.
      *
-     * @param parent The parent window.
-     * @param idata  The installation installDataGUI.
+     * @param parent          the parent window
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
+     * @param log             the log
      */
-    public UserPathPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    public UserPathPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager, Log log)
     {
-        super(parent, idata, UserPathPanel.class.getSimpleName(), resourceManager);
+        super(parent, installData, UserPathPanel.class.getSimpleName(), resourceManager, log);
         // load the default directory info (if present)
         if (getDefaultDir() != null)
         {
-            idata.setVariable(pathVariableName, getDefaultDir());
+            installData.setVariable(pathVariableName, getDefaultDir());
         }
     }
 

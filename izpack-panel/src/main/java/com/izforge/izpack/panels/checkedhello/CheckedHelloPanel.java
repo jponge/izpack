@@ -25,9 +25,12 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.os.RegistryHandler;
+import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.hello.HelloPanel;
+
+import java.util.logging.Logger;
 
 /**
  * An extended hello panel class which detects whether the product was already installed or not.
@@ -50,14 +53,30 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants
     protected boolean abortInstallation;
 
     /**
+     * The registry handler, or <tt>null</tt> if the platform doesn't support it.
+     */
+    private final RegistryHandler registryHandler;
+
+    /**
+     * The logger.
+     */
+    private static Logger logger = Logger.getLogger(CheckedHelloPanel.class.getName());
+
+    /**
      * The constructor.
      *
-     * @param parent The parent.
-     * @param idata  The installation installDataGUI.
+     * @param parent          the parent frame
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
+     * @param handler         the registry handler instance
+     * @param log             the log
+     * @throws Exception if it cannot be determined if the application is registered
      */
-    public CheckedHelloPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    public CheckedHelloPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+                             RegistryDefaultHandler handler, Log log) throws Exception
     {
-        super(parent, idata, resourceManager);
+        super(parent, installData, resourceManager, log);
+        registryHandler = handler.getInstance();
         abortInstallation = isRegistered();
     }
 
@@ -74,10 +93,6 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants
         // Let us play a little bit with the regstry...
         // Just for fun we would resolve the path of the already
         // installed application.
-        // First we need a handler. There is no overhead at a
-        // secound call of getInstance, therefore we do not buffer
-        // the handler in this class.
-        RegistryHandler registryHandler = RegistryDefaultHandler.getInstance();
         int oldVal = registryHandler.getRoot(); // Only for security...
         // We know, that the product is already installed, else we
         // would not in this method. Now we search for the path...
@@ -173,35 +188,21 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants
     }
 
     /**
-     * Returns wether the handled application is already registered or not. The validation will be
+     * Returns whether the handled application is already registered or not. The validation will be
      * made only on systems which contains a registry (Windows).
      *
-     * @return wether the handled application is already registered or not
+     * @return <tt>true</tt> if the application is registered
+     * @throws Exception if it cannot be determined if the application is registered
      */
-    protected boolean isRegistered()
+    protected boolean isRegistered() throws Exception
     {
-        boolean retval = false;
-        try
+        boolean result = false;
+        if (registryHandler != null)
         {
-            // Get the default registry handler.
-            RegistryHandler registryHandler = RegistryDefaultHandler.getInstance();
-            if (registryHandler != null)
-            {
-                registryHandler.verify(installData);
-                retval = registryHandler.isProductRegistered();
-
-            }
-            // else we are on a os which has no registry or the
-            // needed dll was not bound to this installation. In
-            // both cases we forget the "already exist" check.
-
+            registryHandler.verify(installData);
+            result = registryHandler.isProductRegistered();
         }
-        catch (Exception e)
-        { // Will only be happen if registry handler is good, but an
-            // exception at performing was thrown. This is an error...
-            e.printStackTrace();
-        }
-        return (retval);
+        return result;
     }
 
     /**
@@ -241,7 +242,6 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants
             }
 
         }
-        RegistryHandler registryHandler = RegistryDefaultHandler.getInstance();
         if (registryHandler != null)
         {
             installData.setVariable("UNINSTALL_NAME", registryHandler.getUninstallName());
@@ -255,10 +255,6 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants
     {
         // Let us play a little bit with the regstry again...
         // Now we search for an unique uninstall key.
-        // First we need a handler. There is no overhead at a
-        // secound call of getInstance, therefore we do not buffer
-        // the handler in this class.
-        RegistryHandler registryHandler = RegistryDefaultHandler.getInstance();
         int oldVal = registryHandler.getRoot(); // Only for security...
         // We know, that the product is already installed, else we
         // would not in this method. First we get the

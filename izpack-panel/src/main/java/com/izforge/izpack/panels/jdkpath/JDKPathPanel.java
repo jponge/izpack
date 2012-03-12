@@ -28,6 +28,7 @@ import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.os.RegistryHandler;
+import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.path.PathInputPanel;
@@ -73,23 +74,30 @@ public class JDKPathPanel extends PathInputPanel
 
     private Set<String> badRegEntries = null;
 
+    private final RegistryDefaultHandler handler;
+
 
     /**
-     * The constructor.
+     * Constructs a <tt>JDKPathPanel</tt>.
      *
-     * @param parent The parent window.
-     * @param idata  The installation installDataGUI.
+     * @param parent          the parent window
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
+     * @param handler         the registry handler
+     * @param log             the log
      */
-    public JDKPathPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    public JDKPathPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+                        RegistryDefaultHandler handler, Log log)
     {
-        super(parent, idata, resourceManager);
+        super(parent, installData, resourceManager, log);
+        this.handler = handler;
         setMustExist(true);
         if (!OsVersion.IS_OSX)
         {
             setExistFiles(JDKPathPanel.testFiles);
         }
-        setMinVersion(idata.getVariable("JDKPathPanel.minVersion"));
-        setMaxVersion(idata.getVariable("JDKPathPanel.maxVersion"));
+        setMinVersion(installData.getVariable("JDKPathPanel.minVersion"));
+        setMaxVersion(installData.getVariable("JDKPathPanel.maxVersion"));
         setVariableName("JDKPath");
     }
 
@@ -122,7 +130,7 @@ public class JDKPathPanel extends PathInputPanel
                 case BAD_VERSION:
                     String min = getMinVersion();
                     String max = getMaxVersion();
-                    StringBuffer message = new StringBuffer();
+                    StringBuilder message = new StringBuilder();
                     message.append(installData.getLangpack().getString("JDKPathPanel.badVersion1")).append(
                             getDetectedVersion()).append(
                             installData.getLangpack().getString("JDKPathPanel.badVersion2"));
@@ -221,7 +229,7 @@ public class JDKPathPanel extends PathInputPanel
         try
         {
             // Get the default registry handler.
-            registryHandler = RegistryDefaultHandler.getInstance();
+            registryHandler = handler.getInstance();
             if (registryHandler == null)
             // We are on a os which has no registry or the
             // needed dll was not bound to this installation. In

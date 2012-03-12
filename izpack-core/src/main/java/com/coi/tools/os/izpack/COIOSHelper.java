@@ -34,13 +34,11 @@ import com.izforge.izpack.util.NativeLibraryClient;
 public class COIOSHelper
 {
 
-    private static COIOSHelper self = null;
+    private int used = 0;
 
-    private static int used = 0;
+    private boolean destroyed = false;
 
-    private static boolean destroyed = false;
-
-    private boolean failed = false;
+    private final Librarian librarian;
 
     /**
      * This method is used to free the library at the end of progam execution. After this call, any
@@ -52,29 +50,15 @@ public class COIOSHelper
     private native void FreeLibrary(String name);
 
     /**
-     * Default constructor, do not use
-     */
-    private COIOSHelper()
-    {
-        super();
-    }
-
-    /**
-     * Returns the one existent object of this class.
+     * Constructs a <tt>COIOSHelper</tt>.
      *
-     * @return the one existent object of this class
+     * @param librarian the librarian
      */
-    public static synchronized COIOSHelper getInstance()
+    public COIOSHelper(Librarian librarian)
     {
-        if (self == null)
-        {
-            self = new COIOSHelper();
-        }
-        return (self);
-
+        this.librarian = librarian;
     }
 
-    /*--------------------------------------------------------------------------*/
     /**
      * This method is used to free the library at the end of progam execution. This is the method of
      * the helper class which will be called from other objects. After this call, any instance of
@@ -95,7 +79,7 @@ public class COIOSHelper
     /**
      * @param name
      */
-    public void freeLibrary(String name)
+    public synchronized void freeLibrary(String name)
     {
         used--;
         if (!destroyed)
@@ -110,30 +94,12 @@ public class COIOSHelper
      * library COIOSHelper which should contain native methods for the dependant.
      *
      * @param dependant to be added
-     * @throws Exception if loadLibrary for the needed lib fails
+     * @throws UnsatisfiedLinkError if the library cannot be loaded
      */
-    public void addDependant(NativeLibraryClient dependant) throws Exception
+    public synchronized void addDependant(NativeLibraryClient dependant)
     {
         used++;
-        if (failed)
-        {
-            throw (new Exception("load native library failed"));
-        }
-        try
-        {
-            Librarian.getInstance().loadLibrary("COIOSHelper", dependant);
-        }
-        catch (UnsatisfiedLinkError exception)
-        {
-            failed = true;
-            throw (new Exception("could not locate native library"));
-        }
-        catch (Throwable t)
-        {
-            failed = true;
-            throw (new Exception(t));
-        }
-
+        librarian.loadLibrary("COIOSHelper", dependant);
     }
 
 }

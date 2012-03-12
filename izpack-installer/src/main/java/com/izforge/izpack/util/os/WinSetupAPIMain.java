@@ -1,5 +1,10 @@
 package com.izforge.izpack.util.os;
 
+import com.izforge.izpack.util.DefaultTargetPlatformFactory;
+import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.Librarian;
+import com.izforge.izpack.util.TargetFactory;
+
 import java.io.File;
 
 public class WinSetupAPIMain
@@ -24,8 +29,9 @@ public class WinSetupAPIMain
 
             try
             {
+                Librarian librarian = new Librarian(new TargetFactory(new DefaultTargetPlatformFactory()), new Housekeeper());
                 System.out.println("(Java) Opening new file queue...");
-                WinSetupFileQueue fq = new WinSetupFileQueue(new WinSetupDefaultCallbackHandler());
+                WinSetupFileQueue fq = new WinSetupFileQueue(librarian, new WinSetupDefaultCallbackHandler());
 
                 String name = args[0];
                 char c = name.charAt(0);

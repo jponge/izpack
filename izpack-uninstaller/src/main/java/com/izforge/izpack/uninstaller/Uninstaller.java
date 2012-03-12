@@ -103,9 +103,10 @@ public class Uninstaller
 
     public static void cmduninstall(String[] args)
     {
+        UninstallerContainer container = createContainer();
         try
         {
-            UninstallerConsole uninstallerConsole = new UninstallerConsole();
+            UninstallerConsole uninstallerConsole = container.getComponent(UninstallerConsole.class);
             boolean force = false;
             for (String arg : args)
             {
@@ -121,7 +122,7 @@ public class Uninstaller
         {
             System.err.println("- Error -");
             err.printStackTrace();
-            Housekeeper.getInstance().shutDown(0);
+            container.getComponent(Housekeeper.class).shutDown(0);
         }
     }
 
@@ -131,6 +132,7 @@ public class Uninstaller
         {
             public void run()
             {
+                UninstallerContainer container = createContainer();
                 try
                 {
                     boolean displayForceOption = true;
@@ -149,16 +151,24 @@ public class Uninstaller
                     }
 
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                    new UninstallerFrame(displayForceOption, forceOptionState);
+                    UninstallerFrame uninstaller = container.getComponent(UninstallerFrame.class);
+                    uninstaller.init(displayForceOption, forceOptionState);
                 }
                 catch (Exception err)
                 {
                     System.err.println("- Error -");
                     err.printStackTrace();
-                    Housekeeper.getInstance().shutDown(0);
+                    container.getComponent(Housekeeper.class).shutDown(0);
                 }
             }
         });
+    }
+
+    private static UninstallerContainer createContainer()
+    {
+        UninstallerContainer container = new UninstallerContainer();
+        container.initBindings();
+        return container;
     }
 
     /**

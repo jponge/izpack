@@ -44,12 +44,18 @@ public class TemporaryDirectory implements CleanupClient
     private boolean deleteOnExit = false;
 
     /**
+     * The house-keeper.
+     */
+    private final Housekeeper housekeeper;
+
+    /**
      * Define a temporary directory
      *
      * @param tempDirDescription describes the parameters of the directory to be created
      * @param installData        The install data in to which the temporary directories variable will be written
+     * @param housekeeper the house-keeper
      */
-    public TemporaryDirectory(TempDir tempDirDescription, AutomatedInstallData installData)
+    public TemporaryDirectory(TempDir tempDirDescription, AutomatedInstallData installData, Housekeeper housekeeper)
     {
         if (null == tempDirDescription)
         {
@@ -61,6 +67,7 @@ public class TemporaryDirectory implements CleanupClient
         }
         this.installData = installData;
         this.tempDirDescription = tempDirDescription;
+        this.housekeeper = housekeeper;
 
     }
 
@@ -85,7 +92,7 @@ public class TemporaryDirectory implements CleanupClient
             throw e;
         }
         installData.setVariable(tempDirDescription.getVariableName(), tempdir.getAbsolutePath());
-        Housekeeper.getInstance().registerForCleanup(this);
+        housekeeper.registerForCleanup(this);
     }
 
     /**

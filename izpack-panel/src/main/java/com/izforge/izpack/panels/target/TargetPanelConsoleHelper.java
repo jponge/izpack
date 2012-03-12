@@ -24,10 +24,10 @@ package com.izforge.izpack.panels.target;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.Console;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 import com.izforge.izpack.panels.path.PathInputPanel;
+import com.izforge.izpack.util.Console;
 
 import java.io.PrintWriter;
 import java.util.Properties;
@@ -39,10 +39,26 @@ import java.util.Properties;
  */
 public class TargetPanelConsoleHelper extends PanelConsoleHelper implements PanelConsole
 {
+
+    /**
+     * The resource manager.
+     */
+    private final ResourceManager resources;
+
+    /**
+     * The variable substituter.
+     */
     private VariableSubstitutor variableSubstitutor;
 
-    public TargetPanelConsoleHelper(VariableSubstitutor variableSubstitutor)
+    /**
+     * Constructs a <tt>TargetPanelConsoleHelper</tt>.
+     *
+     * @param resources           the resource manager
+     * @param variableSubstitutor the variable substituter
+     */
+    public TargetPanelConsoleHelper(ResourceManager resources, VariableSubstitutor variableSubstitutor)
     {
+        this.resources = resources;
         this.variableSubstitutor = variableSubstitutor;
     }
 
@@ -85,8 +101,7 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
     @Override
     public boolean runConsole(AutomatedInstallData installData, Console console)
     {
-        ResourceManager resourceManager = ResourceManager.getInstance();
-        String strDefaultPath = PathInputPanel.loadDefaultInstallDir(resourceManager, variableSubstitutor, installData);
+        String strDefaultPath = PathInputPanel.loadDefaultInstallDir(resources, variableSubstitutor, installData);
 
         String strTargetPath = console.prompt("Select target path [" + strDefaultPath + "] ", null);
         if (strTargetPath != null)
@@ -107,7 +122,9 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
 
             installData.setInstallPath(strTargetPath);
             return promptEndPanel(installData, console);
-        } else {
+        }
+        else
+        {
             return false;
         }
     }

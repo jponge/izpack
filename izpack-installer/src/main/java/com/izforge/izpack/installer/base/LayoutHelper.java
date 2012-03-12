@@ -27,8 +27,11 @@ import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LayoutConstants;
 import com.izforge.izpack.installer.data.GUIInstallData;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.LayoutManager2;
 
 /**
  * This class manages the layout for IzPanels. The layout related methods in IzPanel delegates the
@@ -88,6 +91,11 @@ public class LayoutHelper implements LayoutConstants
     protected static Double DOUBLE_ZERO = 0.0;
 
     /**
+     * The installation data.
+     */
+    private final AutomatedInstallData installData;
+
+    /**
      * Look-up table for gap identifier to gap names for the x direction. The gap names can be used
      * in the XML installation configuration file. Be aware that case sensitivity should be used.
      */
@@ -118,13 +126,14 @@ public class LayoutHelper implements LayoutConstants
     public final static String ALL_Y_GAP = "allYGap";
 
     /**
-     * Only useable constructor. Creates a layout manager for special purpose.
+     * Creates a layout manager for special purpose.
      *
-     * @param parent for which this layout manager will be used
+     * @param parent      for which this layout manager will be used
+     * @param installData the installation data
      */
-    public LayoutHelper(JComponent parent)
+    public LayoutHelper(JComponent parent, AutomatedInstallData installData)
     {
-        this();
+        this(installData);
         this.parent = parent;
         izPanelLayout = new GridBagLayout();
         parent.setLayout(izPanelLayout);
@@ -132,11 +141,13 @@ public class LayoutHelper implements LayoutConstants
     }
 
     /**
-     * The default constructor is only useable by derived classes.
+     * Constructs a <tt>LayoutHelper</tt>.
+     *
+     * @param installData the installation data
      */
-    protected LayoutHelper()
+    protected LayoutHelper(AutomatedInstallData installData)
     {
-        super();
+        this.installData = installData;
     }
 
     /**
@@ -431,22 +442,21 @@ public class LayoutHelper implements LayoutConstants
      *
      * @return the anchor defined in the IzPanel.LayoutType variable.
      */
-    public static int getAnchor()
+    public int getAnchor()
     {
         if (ANCHOR >= 0)
         {
             return (ANCHOR);
         }
-        AutomatedInstallData idata = AutomatedInstallData.getInstance();
         String todo;
-        if (idata instanceof GUIInstallData
-                && ((GUIInstallData) idata).guiPrefs.modifier.containsKey("layoutAnchor"))
+        if (installData instanceof GUIInstallData
+                && ((GUIInstallData) installData).guiPrefs.modifier.containsKey("layoutAnchor"))
         {
-            todo = ((GUIInstallData) idata).guiPrefs.modifier.get("layoutAnchor");
+            todo = ((GUIInstallData) installData).guiPrefs.modifier.get("layoutAnchor");
         }
         else
         {
-            todo = idata.getVariable("IzPanel.LayoutType");
+            todo = installData.getVariable("IzPanel.LayoutType");
         }
         if (todo == null) // No command, no work.
         {
@@ -500,20 +510,19 @@ public class LayoutHelper implements LayoutConstants
      * @param gapId index in array GAP_NAME_LOOK_UP for the needed gap
      * @return the gap depend on the xml-configurable guiprefs modifier
      */
-    public static int getXGap(int gapId)
+    public int getXGap(int gapId)
     {
         gapId = IzPanelLayout.verifyGapId(gapId);
         if (IzPanelLayout.getDefaultXGap(GAP_LOAD_MARKER) >= 0)
         {
             return (IzPanelLayout.getDefaultXGap(gapId));
         }
-        AutomatedInstallData idata = AutomatedInstallData.getInstance();
-        if (!(idata instanceof GUIInstallData))
+        if (!(installData instanceof GUIInstallData))
         {
             return (IzPanelLayout.getDefaultXGap(gapId));
         }
-        String var = null;
-        GUIInstallData id = (GUIInstallData) idata;
+        String var;
+        GUIInstallData id = (GUIInstallData) installData;
         int commonDefault = -1;
         if (id.guiPrefs.modifier.containsKey(ALL_X_GAP))
         {
@@ -567,20 +576,19 @@ public class LayoutHelper implements LayoutConstants
      * @param gapId index in array GAP_NAME_LOOK_UP for the needed gap
      * @return the gap depend on the xml-configurable guiprefs modifier
      */
-    public static int getYGap(int gapId)
+    public int getYGap(int gapId)
     {
         gapId = IzPanelLayout.verifyGapId(gapId);
         if (IzPanelLayout.getDefaultYGap(GAP_LOAD_MARKER) >= 0)
         {
             return (IzPanelLayout.getDefaultYGap(gapId));
         }
-        AutomatedInstallData idata = AutomatedInstallData.getInstance();
-        if (!(idata instanceof GUIInstallData))
+        if (!(installData instanceof GUIInstallData))
         {
             return (IzPanelLayout.getDefaultYGap(gapId));
         }
-        String var = null;
-        GUIInstallData id = (GUIInstallData) idata;
+        String var;
+        GUIInstallData id = (GUIInstallData) installData;
         int commonDefault = -1;
         if (id.guiPrefs.modifier.containsKey(ALL_Y_GAP))
         {
@@ -637,7 +645,7 @@ public class LayoutHelper implements LayoutConstants
      *
      * @return used stretch type
      */
-    public static int getXStretchType()
+    public int getXStretchType()
     {
         if (X_STRETCH_TYPE > -1)
         {
@@ -645,7 +653,7 @@ public class LayoutHelper implements LayoutConstants
         }
         X_STRETCH_TYPE = ABSOLUTE_STRETCH;
         String var = ((String) getModifierValue(null, "RELATIVE_STRETCH", null,
-                "layoutXStretchType"));
+                "layoutXStretchType", installData));
         if (var != null)
         {
             if ("RELATIVE_STRETCH".equalsIgnoreCase(var) || "RELATIVE".equalsIgnoreCase(var))
@@ -676,15 +684,14 @@ public class LayoutHelper implements LayoutConstants
      *
      * @return used stretch type
      */
-    public static int getYStretchType()
+    public int getYStretchType()
     {
         if (Y_STRETCH_TYPE > -1)
         {
             return (Y_STRETCH_TYPE);
         }
         Y_STRETCH_TYPE = ABSOLUTE_STRETCH;
-        String var = ((String) getModifierValue(null, "RELATIVE_STRETCH", null,
-                "layoutYStretchType"));
+        String var = ((String) getModifierValue(null, "RELATIVE_STRETCH", null, "layoutYStretchType", installData));
         if (var != null)
         {
             if ("RELATIVE_STRETCH".equalsIgnoreCase(var) || "RELATIVE".equalsIgnoreCase(var))
@@ -712,11 +719,10 @@ public class LayoutHelper implements LayoutConstants
      * @return the default value for stretching to a full line
      */
 
-    public static double getFullLineStretch()
+    public double getFullLineStretch()
     {
         FULL_LINE_STRETCH_DEFAULT = (Double) getModifierValue(
-                FULL_LINE_STRETCH_DEFAULT, INITIAL_STRETCH_DEFAULT, DOUBLE_ZERO,
-                "layoutFullLineStretch");
+                FULL_LINE_STRETCH_DEFAULT, INITIAL_STRETCH_DEFAULT, DOUBLE_ZERO, "layoutFullLineStretch", installData);
         return (FULL_LINE_STRETCH_DEFAULT);
     }
 
@@ -729,15 +735,15 @@ public class LayoutHelper implements LayoutConstants
      * @return the default value for stretching to a full column
      */
 
-    public static double getFullColumnStretch()
+    public double getFullColumnStretch()
     {
         FULL_COLUMN_STRETCH_DEFAULT = (Double) getModifierValue(FULL_COLUMN_STRETCH_DEFAULT, INITIAL_STRETCH_DEFAULT, DOUBLE_ZERO,
-                "layoutFullColumnStretch");
+                "layoutFullColumnStretch", installData);
         return (FULL_COLUMN_STRETCH_DEFAULT);
     }
 
     private static Object getModifierValue(Object currentVal, Object defaultVal, Object readLimit,
-                                           String key)
+                                           String key, AutomatedInstallData idata)
     {
         if (defaultVal instanceof Integer)
         {
@@ -754,7 +760,6 @@ public class LayoutHelper implements LayoutConstants
             }
         }
         Object retval = defaultVal;
-        AutomatedInstallData idata = AutomatedInstallData.getInstance();
         if (!(idata instanceof GUIInstallData))
         {
             return (retval);

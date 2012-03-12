@@ -3,7 +3,9 @@ package com.izforge.izpack.integration;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.uninstaller.Destroyer;
+import com.izforge.izpack.uninstaller.UninstallerContainer;
 import com.izforge.izpack.util.IoHelper;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.Is;
@@ -82,9 +84,15 @@ public class AbstractDestroyerTest
         Class<?> handlerClass = loader.loadClass(AbstractUIProgressHandler.class.getName());
         Constructor constructor = destroyerClass.getConstructors()[0];
 
+        // create the container using the isolated class loader
+        Class containerClass = loader.loadClass(UninstallerContainer.class.getName());
+        Object container = containerClass.newInstance();
+        Method initBindings = containerClass.getMethod("initBindings");
+        initBindings.invoke(container);
+
         // create the Destroyer
         String installPath = getInstallPath();
-        Object destroyer = constructor.newInstance(installPath, true, Mockito.mock(handlerClass));
+        Object destroyer = constructor.newInstance(installPath, true, Mockito.mock(handlerClass), container);
 
         // and run it
         Method method = destroyerClass.getMethod("run");
@@ -109,6 +117,16 @@ public class AbstractDestroyerTest
     protected AutomatedInstallData getInstallData()
     {
         return installData;
+    }
+
+    /**
+     * Returns the uninstaller jar file.
+     *
+     * @return the uninstaller jar file
+     */
+    protected File getUninstallerJar()
+    {
+        return getUninstallerJar(new VariableSubstitutorImpl(installData.getVariables()));
     }
 
     /**

@@ -1,7 +1,6 @@
 package com.izforge.izpack.compiler.container;
 
 import com.izforge.izpack.core.container.AbstractContainer;
-import com.izforge.izpack.installer.container.impl.ConsoleInstallerContainer;
 import com.izforge.izpack.installer.container.impl.InstallerContainer;
 import com.izforge.izpack.test.junit.UnloadJarRule;
 import org.junit.Rule;
@@ -37,6 +36,6 @@ public abstract class AbstractTestInstallationContainer extends AbstractContaine
         InstallerContainer installerContainer = createInstallerContainer();
         installerContainer.fillContainer(pico);
     }
-    
+
     protected abstract InstallerContainer createInstallerContainer();
 }

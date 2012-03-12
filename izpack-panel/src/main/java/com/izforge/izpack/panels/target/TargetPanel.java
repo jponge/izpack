@@ -23,6 +23,7 @@ package com.izforge.izpack.panels.target;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.path.PathInputPanel;
@@ -41,14 +42,16 @@ public class TargetPanel extends PathInputPanel
     private static final long serialVersionUID = 3256443616359429170L;
 
     /**
-     * The constructor.
+     * Constructs a <tt>TargetPanel</tt>.
      *
-     * @param parent The parent window.
-     * @param idata  The installation installDataGUI.
+     * @param parent          the parent window
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
+     * @param log             the log
      */
-    public TargetPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    public TargetPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager, Log log)
     {
-        super(parent, idata, resourceManager);
+        super(parent, installData, resourceManager, log);
     }
 
     /**

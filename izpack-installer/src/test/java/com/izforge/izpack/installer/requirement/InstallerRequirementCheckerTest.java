@@ -9,10 +9,9 @@ import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.core.rules.logic.NotCondition;
 import com.izforge.izpack.core.rules.process.JavaCondition;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.console.ConsolePrompt;
 import com.izforge.izpack.installer.data.InstallData;
-import com.izforge.izpack.test.io.TestConsole;
+import com.izforge.izpack.test.util.TestConsole;
 import org.apache.tools.ant.filters.StringInputStream;
 import org.junit.Test;
 
@@ -46,7 +45,7 @@ public class InstallerRequirementCheckerTest
      */
     public InstallerRequirementCheckerTest() {
         Properties variables = new Properties();
-        installData = new InstallData(variables, new VariableSubstitutorImpl(variables));
+        installData = new InstallData(variables);
         installData.setInstallerrequirements(new ArrayList<InstallerRequirement>());
         installData.setLangpack(new LocaleDatabase(new StringInputStream("<langpack/>")));
         rules = new RulesEngineImpl(installData, null, null);

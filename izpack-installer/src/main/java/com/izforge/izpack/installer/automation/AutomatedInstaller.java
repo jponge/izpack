@@ -21,16 +21,6 @@
 
 package com.izforge.izpack.installer.automation;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
@@ -58,6 +48,16 @@ import com.izforge.izpack.installer.requirement.RequirementsChecker;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraintHelper;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Runs the install process in text only (no GUI) mode.
  *
@@ -77,7 +77,7 @@ public class AutomatedInstaller extends InstallerBase
     /**
      * The automated installation data.
      */
-    private AutomatedInstallData installData;
+    private final AutomatedInstallData installData;
 
     /**
      * The result of the installation.
@@ -93,24 +93,36 @@ public class AutomatedInstaller extends InstallerBase
      * Manager for writing uninstall data
      */
     private UninstallDataWriter uninstallDataWriter;
+
     private VariableSubstitutor variableSubstitutor;
 
     /**
-     * Constructing an instance triggers the install.
-     *
-     * @param variableSubstitutor
-     * @param resourceManager
-     * @throws Exception Description of the Exception
+     * The house-keeper.
      */
-    public AutomatedInstaller(ResourceManager resourceManager, RequirementsChecker requirements,
-                              UninstallDataWriter uninstallDataWriter, VariableSubstitutor variableSubstitutor)
+    private final Housekeeper housekeeper;
+
+    /**
+     * Constructs an <tt>AutomatedInstaller</tt>.
+     *
+     * @param installData         the installation data
+     * @param resourceManager     the resource manager
+     * @param requirements        the installation requirements checker
+     * @param uninstallDataWriter the uninstallation data writer
+     * @param variableSubstitutor the variable substituter
+     * @param housekeeper         the house-keeper
+     */
+    public AutomatedInstaller(AutomatedInstallData installData, ResourceManager resourceManager,
+                              RequirementsChecker requirements, UninstallDataWriter uninstallDataWriter,
+                              VariableSubstitutor variableSubstitutor, Housekeeper housekeeper)
     {
         super(resourceManager);
-        this.requirements= requirements;
+        this.installData = installData;
+        this.requirements = requirements;
         this.uninstallDataWriter = uninstallDataWriter;
 
         this.panelInstanceCount = new TreeMap<String, Integer>();
         this.variableSubstitutor = variableSubstitutor;
+        this.housekeeper = housekeeper;
     }
 
     /**
@@ -161,7 +173,7 @@ public class AutomatedInstaller extends InstallerBase
         System.out.println("[ Starting automated installation ]");
         logger.info("[ Starting automated installation ]");
 
-        ConsolePanelAutomationHelper uihelper = new ConsolePanelAutomationHelper();
+        ConsolePanelAutomationHelper uihelper = new ConsolePanelAutomationHelper(housekeeper);
 
         try
         {
@@ -249,7 +261,7 @@ public class AutomatedInstaller extends InstallerBase
                     System.out.println("[ Rebooting now automatically ]");
                 }
             }
-            Housekeeper.getInstance().shutDown(this.result ? 0 : 1, reboot);
+            housekeeper.shutDown(this.result ? 0 : 1, reboot);
         }
     }
 

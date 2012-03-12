@@ -5,6 +5,7 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.merge.resolve.ClassPathCrawler;
+import com.izforge.izpack.util.Housekeeper;
 
 import java.util.Properties;
 
@@ -15,14 +16,17 @@ public class AutomatedInstallDataProvider extends AbstractInstallDataProvider
 {
 
     public AutomatedInstallData provide(ResourceManager resourceManager, VariableSubstitutor variableSubstitutor,
-                                        Properties variables, ClassPathCrawler classPathCrawler)
+                                        Properties variables, ClassPathCrawler classPathCrawler,
+                                        Housekeeper housekeeper)
     {
         try
         {
             this.resourceManager = resourceManager;
             this.variableSubstitutor = variableSubstitutor;
             this.classPathCrawler = classPathCrawler;
-            final AutomatedInstallData automatedInstallData = new InstallData(variables, variableSubstitutor);
+            this.housekeeper = housekeeper;
+
+            final AutomatedInstallData automatedInstallData = new InstallData(variables);
             // Loads the installation data
             loadInstallData(automatedInstallData);
 

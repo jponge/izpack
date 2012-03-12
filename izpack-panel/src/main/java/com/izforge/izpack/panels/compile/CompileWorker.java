@@ -21,18 +21,6 @@
 
 package com.izforge.izpack.panels.compile;
 
-import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
@@ -45,6 +33,25 @@ import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsConstraintHelper;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 /**
  * This class does alle the work for compiling sources.
@@ -98,19 +105,24 @@ public class CompileWorker implements Runnable
 
     private CompileResult result = null;
 
+    private final ResourceManager resources;
+
     /**
      * The constructor.
      *
-     * @param idata               The installation data.
-     * @param handler             The handler to notify of progress.
-     * @param variableSubstitutor
-     * @throws IOException
+     * @param installData         the installation data
+     * @param handler             the handler to notify of progress
+     * @param variableSubstitutor the variable substituter
+     * @param resources           the resource manager
+     * @throws IOException for any I/O error
      */
-    public CompileWorker(AutomatedInstallData idata, CompileHandler handler, VariableSubstitutor variableSubstitutor) throws IOException
+    public CompileWorker(AutomatedInstallData installData, CompileHandler handler,
+                         VariableSubstitutor variableSubstitutor, ResourceManager resources) throws IOException
     {
-        this.idata = idata;
+        this.idata = installData;
         this.handler = handler;
         this.vs = variableSubstitutor;
+        this.resources = resources;
         if (!readSpec())
         {
             throw new IOException("Error reading compilation specification");
@@ -237,7 +249,7 @@ public class CompileWorker implements Runnable
         InputStream input;
         try
         {
-            input = ResourceManager.getInstance().getInputStream(SPEC_RESOURCE_NAME);
+            input = resources.getInputStream(SPEC_RESOURCE_NAME);
         }
         catch (Exception e)
         {

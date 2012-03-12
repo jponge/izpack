@@ -1,5 +1,22 @@
 package com.izforge.izpack.panels.process;
 
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLParser;
+import com.izforge.izpack.api.adaptator.impl.XMLParser;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.binding.OsModel;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.handler.AbstractUIProcessHandler;
+import com.izforge.izpack.api.rules.Condition;
+import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.api.substitutor.SubstitutionType;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.OsConstraintHelper;
+
+import javax.swing.SwingUtilities;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,24 +34,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.swing.SwingUtilities;
-
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.adaptator.IXMLParser;
-import com.izforge.izpack.api.adaptator.impl.XMLParser;
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.data.binding.OsModel;
-import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.api.handler.AbstractUIProcessHandler;
-import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.OsConstraintHelper;
 
 /**
  * This class does alle the work for the process panel.
@@ -75,15 +74,24 @@ public class ProcessPanelWorker implements Runnable
     private RulesEngine rules;
 
     /**
-     * The constructor.
-     *
-     * @param idata               The installation data.
-     * @param variableSubstitutor
+     * The resource manager.
      */
-    public ProcessPanelWorker(AutomatedInstallData idata, VariableSubstitutor variableSubstitutor, RulesEngine rules)
+    private final ResourceManager resources;
+
+    /**
+     * Constructs a <tt>ProcessPanelWorker</tt>.
+     *
+     * @param installData         the installation data
+     * @param variableSubstitutor the variable substituter
+     * @param rules               the rules engine
+     * @param resources           the resource manager
+     * @throws IOException for any I/O error
+     */
+    public ProcessPanelWorker(AutomatedInstallData installData, VariableSubstitutor variableSubstitutor,
+                              RulesEngine rules, ResourceManager resources)
             throws IOException
     {
-        this.idata = idata;
+        this.idata = installData;
         this.vs = variableSubstitutor;
         this.rules = rules;
         // Removed this test in order to move out of the CTOR (ExecuteForPack
@@ -92,6 +100,7 @@ public class ProcessPanelWorker implements Runnable
         // throw new IOException("Error reading processing specification");
         this.variableSubstitutor = new VariableSubstitutorImpl(this.idata
                 .getVariables());
+        this.resources = resources;
     }
 
     public void setHandler(AbstractUIProcessHandler handler)
@@ -104,7 +113,7 @@ public class ProcessPanelWorker implements Runnable
         InputStream input;
         try
         {
-            input = ResourceManager.getInstance().getInputStream(SPEC_RESOURCE_NAME);
+            input = resources.getInputStream(SPEC_RESOURCE_NAME);
         }
         catch (Exception e)
         {
@@ -467,7 +476,8 @@ public class ProcessPanelWorker implements Runnable
             }
 
             ProcessBuilder processBuilder = new ProcessBuilder(params);
-            if(workingDir != null && !workingDir.equals("")) {
+            if (workingDir != null && !workingDir.equals(""))
+            {
                 workingDir = IoHelper.translatePath(workingDir, vs);
                 processBuilder.directory(new File(workingDir));
             }
@@ -811,15 +821,15 @@ public class ProcessPanelWorker implements Runnable
 
         QuestionErrorDisplayer(AbstractUIProcessHandler uiHandler)
         {
-          this.uiHandler = uiHandler;
+            this.uiHandler = uiHandler;
         }
 
         @Override
         public void run()
         {
             if (uiHandler.askQuestion("Process execution failed",
-                                "Continue anyway?", AbstractUIHandler.CHOICES_YES_NO,
-                                AbstractUIHandler.ANSWER_YES) == AbstractUIHandler.ANSWER_NO)
+                    "Continue anyway?", AbstractUIHandler.CHOICES_YES_NO,
+                    AbstractUIHandler.ANSWER_YES) == AbstractUIHandler.ANSWER_NO)
             {
                 mustContinue(false);
             }
@@ -827,12 +837,12 @@ public class ProcessPanelWorker implements Runnable
 
         public synchronized boolean shouldContinue()
         {
-          return toBeContinued;
+            return toBeContinued;
         }
 
         public synchronized void mustContinue(boolean toBeContinued)
         {
-          this.toBeContinued = toBeContinued;
+            this.toBeContinued = toBeContinued;
         }
     }
 }

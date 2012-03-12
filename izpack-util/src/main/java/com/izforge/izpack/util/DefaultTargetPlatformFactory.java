@@ -17,6 +17,9 @@
  */
 package com.izforge.izpack.util;
 
+import com.izforge.izpack.api.container.BindeableContainer;
+import org.picocontainer.MutablePicoContainer;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -67,7 +70,11 @@ import java.util.logging.Logger;
  */
 public class DefaultTargetPlatformFactory implements TargetPlatformFactory
 {
-    private static final Logger logger = Logger.getLogger(DefaultTargetPlatformFactory.class.getName());
+
+    /**
+     * The container.
+     */
+    private final BindeableContainer container;
 
     /**
      * Map of interfaces to their corresponding platform implementations.
@@ -80,17 +87,36 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
     private Platforms platforms = new Platforms();
 
     /**
+     * The logger.
+     */
+    private static final Logger logger = Logger.getLogger(DefaultTargetPlatformFactory.class.getName());
+
+    /**
      * The TargetPlatformFactory properties.
      */
     private static final String RESOURCE_PATH = "com/izforge/izpack/util/TargetPlatformFactory.properties";
 
+    /**
+     * Constructs a <tt>DefaultTargetPlatformFactory</tt>.
+     * <p/>
+     * This does not support dependency injection - classes must provide a no-arg constructor.
+     */
+    public DefaultTargetPlatformFactory()
+    {
+        this(null);
+    }
 
     /**
      * Constructs a <tt>DefaultTargetPlatformFactory</tt>, configured from <em>TargetPlatformFactory.properties</em>
      * resources.
+     * <p/>
+     * When <tt>container</tt> is provided, dependency injection is supported
+     *
+     * @param container the container. If non-null, dependency injection is supported
      */
-    public DefaultTargetPlatformFactory()
+    public DefaultTargetPlatformFactory(BindeableContainer container)
     {
+        this.container = container;
         try
         {
             Enumeration<URL> urls = getClass().getClassLoader().getResources(RESOURCE_PATH);
@@ -101,15 +127,15 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
                 {
                     add(url);
                 }
-                catch (IOException e)
+                catch (IOException exception)
                 {
-                    logger.log(Level.WARNING, e.getMessage(), e);
+                    logger.log(Level.WARNING, exception.getMessage(), exception);
                 }
             }
         }
-        catch (IOException e)
+        catch (IOException exception)
         {
-            logger.log(Level.WARNING, e.getMessage(), e);
+            logger.log(Level.WARNING, exception.getMessage(), exception);
         }
     }
 
@@ -137,6 +163,34 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
     @Override
     @SuppressWarnings("unchecked")
     public <T> T create(Class<T> clazz, Platform platform) throws Exception
+    {
+        T result;
+        Class<?> impl = getImplementation(clazz, platform);
+        if (container != null)
+        {
+            MutablePicoContainer child = container.makeChildContainer();
+            child.addComponent(impl);
+            result = (T) child.getComponent(impl);
+            container.getContainer().removeChildContainer(child);
+        }
+        else
+        {
+            result = (T) impl.newInstance();
+        }
+        return result;
+    }
+
+    /**
+     * Returns the implementation of a class for the specified platform.
+     *
+     * @param clazz    the clazz
+     * @param platform the platform
+     * @return the implementation class of <tt>clazz</tt> for <tt>platform</tt>
+     * @throws ClassNotFoundException if a class is registered but cannot be found
+     * @throws IllegalStateException  if no class is registered, or the registered class does not implement nor
+     *                                extend <tt>clazz</tt>
+     */
+    protected <T> Class<?> getImplementation(Class<T> clazz, Platform platform) throws ClassNotFoundException
     {
         Implementations impls = getImplementations(clazz);
         if (impls == null)
@@ -173,12 +227,12 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
             throw new IllegalStateException("No implementation registered for class=" + clazz.getName()
                     + " and platform=" + platform);
         }
-        Class<?> impl = Class.forName(implName);
-        if (clazz.isAssignableFrom(impl))
+        Class impl = Class.forName(implName);
+        if (!clazz.isAssignableFrom(impl))
         {
-            return (T) impl.newInstance();
+            throw new IllegalStateException(impl.getName() + " does not extend " + clazz.getName());
         }
-        throw new IllegalStateException(impl.getName() + " does not extend " + clazz.getName());
+        return impl;
     }
 
     /**
@@ -385,7 +439,6 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
             }
             return (str == null || str.length() == 0) ? null : str;
         }
-
 
     }
 

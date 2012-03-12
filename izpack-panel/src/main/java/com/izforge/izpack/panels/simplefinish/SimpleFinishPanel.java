@@ -19,10 +19,6 @@
 
 package com.izforge.izpack.panels.simplefinish;
 
-import java.io.File;
-
-import javax.swing.JLabel;
-
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
@@ -32,6 +28,9 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
+
+import javax.swing.JLabel;
+import java.io.File;
 
 /**
  * The simple finish panel class.
@@ -48,16 +47,25 @@ public class SimpleFinishPanel extends IzPanel
     private UninstallDataWriter uninstallDataWriter;
 
     /**
-     * The constructor.
-     *
-     * @param parent              The parent.
-     * @param idata               The installation installDataGUI.
-     * @param uninstallDataWriter
+     * The log.
      */
-    public SimpleFinishPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, UninstallDataWriter uninstallDataWriter)
+    private final Log log;
+
+    /**
+     * Constructs a <tt>SimpleFinishPanel</tt>.
+     *
+     * @param parent              the parent window
+     * @param installData         the installation data
+     * @param resourceManager     the resource manager
+     * @param uninstallDataWriter the uninstallation data writer
+     * @param log                 the log
+     */
+    public SimpleFinishPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+                             UninstallDataWriter uninstallDataWriter, Log log)
     {
-        super(parent, idata, new IzPanelLayout(), resourceManager);
+        super(parent, installData, new IzPanelLayout(log), resourceManager);
         this.uninstallDataWriter = uninstallDataWriter;
+        this.log = log;
     }
 
     /**
@@ -110,7 +118,7 @@ public class SimpleFinishPanel extends IzPanel
                     parent.getIcons().get("stop"), LEADING));
         }
         getLayoutHelper().completeLayout(); // Call, or call not?
-        Log.getInstance().informUser();
+        log.informUser();
     }
 
     /**

@@ -21,23 +21,23 @@
 
 package com.izforge.izpack.panels.userpath;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.IzPanelConstraints;
+import com.izforge.izpack.gui.IzPanelLayout;
+import com.izforge.izpack.gui.LayoutConstants;
+import com.izforge.izpack.gui.log.Log;
+import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.base.LayoutHelper;
+import com.izforge.izpack.installer.data.GUIInstallData;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.IzPanelConstraints;
-import com.izforge.izpack.gui.IzPanelLayout;
-import com.izforge.izpack.gui.LayoutConstants;
-import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.base.LayoutHelper;
-import com.izforge.izpack.installer.data.GUIInstallData;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 /**
  * This is a sub panel which contains a text field and a browse button for path selection. This is
@@ -72,24 +72,30 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
     /**
      * The installer internal installDataGUI.
      */
-    private GUIInstallData idata;
+    private GUIInstallData installData;
     private String targetPanel;
     private String variableName;
     private String defaultPanelName = "TargetPanel";
+    private final Log log;
 
     /**
-     * The constructor. Be aware, parent is the parent IzPanel, not the installer frame.
+     * Constructs an <tt>UserPathSelectionPanel</tt>.
      *
-     * @param parent The parent IzPanel.
-     * @param idata  The installer internal installDataGUI.
+     * @param parent       the parent panel
+     * @param installData  the installation data
+     * @param targetPanel  the target panel
+     * @param variableName the name of the variable whose value should be displayed
+     * @param log          the log
      */
-    public UserPathSelectionPanel(IzPanel parent, GUIInstallData idata, String targetPanel, String variableName)
+    public UserPathSelectionPanel(IzPanel parent, GUIInstallData installData, String targetPanel, String variableName,
+                                  Log log)
     {
         super();
         this.parent = parent;
-        this.idata = idata;
+        this.installData = installData;
         this.variableName = variableName;
         this.targetPanel = targetPanel;
+        this.log = log;
         createLayout();
     }
 
@@ -103,14 +109,14 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
         // more than one places. In this panel not, therefore we have
         // to make all things needed.
         // First create a layout helper.
-        LayoutHelper layoutHelper = new LayoutHelper(this);
+        LayoutHelper layoutHelper = new LayoutHelper(this, installData);
         // Start the layout.
-        layoutHelper.startLayout(new IzPanelLayout());
+        layoutHelper.startLayout(new IzPanelLayout(log));
         // One of the rare points we need explicit a constraints.
         IzPanelConstraints ipc = IzPanelLayout.getDefaultConstraint(TEXT_CONSTRAINT);
         // The text field should be stretched.
         ipc.setXStretch(1.0);
-        textField = new JTextField(idata.getVariable(variableName), 10);
+        textField = new JTextField(installData.getVariable(variableName), 10);
         textField.addActionListener(this);
         parent.setInitialFocus(textField);
         add(textField, ipc);
@@ -123,7 +129,7 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
         {
             buttonText = parent.getInstallerFrame().getLangpack().getString(defaultPanelName + ".browse");
         }
-        browseButton = ButtonFactory.createButton(buttonText, parent.getInstallerFrame().getIcons().get("open"), idata.buttonsHColor);
+        browseButton = ButtonFactory.createButton(buttonText, parent.getInstallerFrame().getIcons().get("open"), installData.buttonsHColor);
         browseButton.addActionListener(this);
         add(browseButton);
     }

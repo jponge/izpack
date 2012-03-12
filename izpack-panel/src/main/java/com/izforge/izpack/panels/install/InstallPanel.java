@@ -23,13 +23,17 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
+import java.awt.Dimension;
 
 /**
  * The install panel class. Launches the actual installation job.
@@ -82,15 +86,18 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     private int noOfPacks = 0;
 
     /**
-     * The constructor.
+     * Constructs an <tt>InstallPanel</tt>.
      *
-     * @param parent   The parent window.
-     * @param idata    The installation installDataGUI.
-     * @param unpacker
+     * @param parent          the parent window
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
+     * @param unpacker        the unpacker
+     * @param log             the log
      */
-    public InstallPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, IUnpacker unpacker)
+    public InstallPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+                        IUnpacker unpacker, Log log)
     {
-        super(parent, idata, new IzPanelLayout(), resourceManager);
+        super(parent, installData, new IzPanelLayout(log), resourceManager);
         unpacker.setHandler(this);
         this.tipLabel = LabelFactory.create(installData.getLangpack().getString("InstallPanel.tip"),
                 parent.getIcons().get(iconName), LEADING);

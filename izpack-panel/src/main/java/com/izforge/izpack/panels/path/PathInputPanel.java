@@ -37,6 +37,7 @@ import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.gui.IzPanelLayout;
+import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -76,14 +77,16 @@ public class PathInputPanel extends IzPanel implements ActionListener
     protected static String defaultInstallDir = null;
 
     /**
-     * The constructor.
+     * Constructs a <tt>PathInputPanel</tt>.
      *
-     * @param parent The parent window.
-     * @param idata  The installation installDataGUI.
+     * @param parent          the parent window
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
+     * @param log             the log
      */
-    public PathInputPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    public PathInputPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager, Log log)
     {
-        super(parent, idata, new IzPanelLayout(), resourceManager);
+        super(parent, installData, new IzPanelLayout(log), resourceManager);
         // Set default values
         emptyTargetMsg = getI18nStringForClass("empty_target", "TargetPanel");
         warnMsg = getI18nStringForClass("warn", "TargetPanel");
@@ -109,7 +112,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
         add(createLabel("info", "TargetPanel", "open",
                 LEFT, true), NEXT_LINE);
         // Create path selection components and add they to this panel.
-        pathSelectionPanel = new PathSelectionPanel(this, idata);
+        pathSelectionPanel = new PathSelectionPanel(this, installData, log);
         add(pathSelectionPanel, NEXT_LINE);
         createLayoutBottom();
         getLayoutHelper().completeLayout();

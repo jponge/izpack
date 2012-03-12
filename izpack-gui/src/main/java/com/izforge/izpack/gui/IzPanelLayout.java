@@ -24,9 +24,19 @@ package com.izforge.izpack.gui;
 
 import com.izforge.izpack.gui.log.Log;
 
-import javax.swing.*;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.text.JTextComponent;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.LayoutManager;
+import java.awt.LayoutManager2;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 /**
@@ -64,6 +74,11 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
     private int columnFillOutRule;
 
     private double[] overallYStretch = {-1.0, 0.0};
+
+    /**
+     * The log.
+     */
+    private final Log log;
 
     protected static int[] DEFAULT_Y_GAPS = {-1, 0, 5, 5, 10, 5, 5, 5, 5, 5, 5, 5, 5, 5, 15, 12,
             9, 6, 3, 0};
@@ -141,23 +156,27 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
             {NO_GAP, NO_GAP, NO_GAP, NO_GAP, NO_GAP, NO_GAP, NO_GAP, NO_GAP}};
 
     /**
-     * Default constructor
+     * Constructs an <tt>IzPanelLayout</tt>.
+     *
+     * @param log the log
      */
-    public IzPanelLayout()
+    public IzPanelLayout(Log log)
     {
-        this(NO_FILL_OUT_COLUMN);
+        this(NO_FILL_OUT_COLUMN, log);
     }
 
     /**
      * Creates an layout manager which consider the given column fill out rule. Valid rules are
      * NO_FILL_OUT_COLUMN, FILL_OUT_COLUMN_WIDTH, FILL_OUT_HEIGHT and FILL_OUT_COLUMN_SIZE
      *
-     * @param colFillOutRule
+     * @param colFillOutRule the column fill out rule
+     * @param log            the log
      */
-    public IzPanelLayout(int colFillOutRule)
+    public IzPanelLayout(int colFillOutRule, Log log)
     {
         super();
         columnFillOutRule = colFillOutRule;
+        this.log = log;
     }
 
     /**
@@ -802,8 +821,8 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
         prefLayoutDim = null;
         preferredLayoutSize(parent);
         Dimension realSizeDim = parent.getSize();
-        Log.getInstance().addDebugMessage("IzPanelLayout.layoutContainer parent size: {0}",
-                new String[]{parent.getSize().toString()}, "LayoutTrace", null);
+        log.addDebugMessage("IzPanelLayout.layoutContainer parent size: {0}", new String[]{parent.getSize().toString()},
+                "LayoutTrace", null);
         Insets insets = parent.getInsets();
 
         int rowHeight = 0;
@@ -971,10 +990,8 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                             curBounds.width = curWidth;
                         }
                         int newWidth = curPixel + curBounds.width;
-                        Log
-                                .getInstance()
-                                .addDebugMessage(
-                                        "IzPanelLayout.layoutContainer resize bounds for {2}|{3} old width {0} new width {1}",
+                        log.addDebugMessage(
+                                "IzPanelLayout.layoutContainer resize bounds for {2}|{3} old width {0} new width {1}",
                                         new String[]{Integer.toString(curBounds.width),
                                                 Integer.toString(newWidth),
                                                 Integer.toString(row), Integer.toString(i)},
@@ -1003,18 +1020,14 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                             overallHeight = curMax - minHeight;
                         }
 
-                        Log
-                                .getInstance()
-                                .addDebugMessage(
+                        log.addDebugMessage(
                                         "IzPanelLayout.layoutContainer resize bounds for {2}|{3} ({0}): {1}",
                                         new String[]{
                                                 colConstraints[i].component.getClass().getName(),
                                                 curRect.toString(), Integer.toString(row),
                                                 Integer.toString(i)}, "LayoutTrace", null);
 
-                        Log
-                                .getInstance()
-                                .addDebugMessage(
+                        log.addDebugMessage(
                                         "IzPanelLayout.layoutContainer resize bounds for {2}|{3}: maxWidth = {0} maxHeight = {1}",
                                         new String[]{
                                                 Integer.toString(maxWidth),
@@ -1058,7 +1071,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                 IzPanelConstraints currentConst = getConstraints(col, row);
                 if (currentConst != null)
                 {
-                    Log.getInstance().addDebugMessage("IzPanelLayout.fastLayoutContainer bounds: {0}",
+                    log.addDebugMessage("IzPanelLayout.fastLayoutContainer bounds: {0}",
                             new String[]{currentConst.getBounds().toString()}, "LayoutTrace", null);
                     currentConst.component.setBounds(currentConst.getBounds());
                 }

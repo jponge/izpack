@@ -1,5 +1,7 @@
 package com.izforge.izpack.util.os;
 
+import com.izforge.izpack.util.Librarian;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -16,23 +18,27 @@ public class WinSetupFileQueue extends WinSetupAPIBase
     private int /* HSPFILEQ */handle = INVALID_HANDLE_VALUE;
 
     /**
-     * Creates a new file queue which uses the default setup callback handler from the Windows Setup
-     * API.
+     * Creates a new file queue which uses the default setup callback handler from the Windows Setup API.
+     *
+     * @param librarian the librarian
+     * @throws Exception if the WinSetupAPI library cannot be loaded
      */
-    public WinSetupFileQueue() throws Exception
+    public WinSetupFileQueue(Librarian librarian) throws Exception
     {
-        this(null);
+        this(librarian, null);
     }
 
     /**
      * Creates a new file queue and defines a Java callback handler for it that is used instead of
      * the default setup callback handler from the Windows Setup API.
      *
-     * @param handler Java callback handler
+     * @param librarian the librarian
+     * @param handler   Java callback handler
+     * @throws Exception if the WinSetupAPI library cannot be loaded
      */
-    public WinSetupFileQueue(WinSetupQueueCallbackInterface handler) throws Exception
+    public WinSetupFileQueue(Librarian librarian, WinSetupQueueCallbackInterface handler) throws Exception
     {
-        super();
+        super(librarian);
         this.handle = SetupOpenFileQueue(handler);
     }
 
@@ -41,7 +47,7 @@ public class WinSetupFileQueue extends WinSetupAPIBase
      *
      * @param sourcefile Copy source file
      * @param targetfile Copy target file
-     * @param style      A bitwise 'or-ed' combination of copy styles
+     * @param copyStyle  A bitwise 'or-ed' combination of copy styles
      */
     protected void addCopy(File sourcefile, File targetfile, int /* DWORD */copyStyle) throws IOException
     {

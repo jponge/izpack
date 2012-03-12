@@ -9,6 +9,7 @@ import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
+import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.base.InstallDataConfiguratorWithRules;
 import com.izforge.izpack.installer.container.provider.RulesProvider;
@@ -22,6 +23,10 @@ import com.izforge.izpack.installer.requirement.LockFileChecker;
 import com.izforge.izpack.installer.requirement.RequirementsChecker;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.merge.MergeManagerImpl;
+import com.izforge.izpack.util.DefaultTargetPlatformFactory;
+import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.Librarian;
+import com.izforge.izpack.util.TargetFactory;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.injectors.ProviderAdapter;
 
@@ -64,7 +69,13 @@ public abstract class InstallerContainer extends AbstractContainer
                 .addComponent(ResourceManager.class)
                 .addComponent(UninstallDataWriter.class)
                 .addComponent(EventFiller.class)
-                .addComponent(BindeableContainer.class, this);
+                .addComponent(BindeableContainer.class, this)
+                .addComponent(RegistryDefaultHandler.class)
+                .addComponent(Housekeeper.class)
+                .addComponent(Librarian.class)
+                .addComponent(TargetFactory.class)
+                .addComponent(DefaultTargetPlatformFactory.class);
+
     }
 
     /**

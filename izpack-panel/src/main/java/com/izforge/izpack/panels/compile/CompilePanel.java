@@ -32,8 +32,23 @@ import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -117,21 +132,22 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
      */
     private int noOfJobs;
 
-    private IUnpacker unpacker;
-
     /**
-     * The constructor.
+     * Constructs a <tt>CompilePanel</tt>.
      *
-     * @param variableSubstitutor
-     * @param parent              The parent window.
-     * @param idata               The installation installDataGUI.
-     * @throws IOException
+     * @param parent              the parent window
+     * @param variableSubstitutor the variable substituter
+     * @param installData         the installation data
+     * @param resourceManager     the resource manager
+     * @param unpacker            the unpacker
+     * @throws IOException for any I/O error
      */
-    public CompilePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, VariableSubstitutor variableSubstitutor, IUnpacker unpacker) throws IOException
+    public CompilePanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+                        VariableSubstitutor variableSubstitutor, IUnpacker unpacker) throws IOException
     {
-        super(parent, idata, resourceManager);
+        super(parent, installData, resourceManager);
         unpacker.setHandler(this);
-        this.worker = new CompileWorker(idata, this, variableSubstitutor);
+        this.worker = new CompileWorker(installData, this, variableSubstitutor, resourceManager);
 
         GridBagConstraints gridBagConstraints;
 
@@ -142,11 +158,11 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         JLabel compilerLabel = new JLabel();
         compilerComboBox = new JComboBox();
         this.browseButton = ButtonFactory.createButton(installData.getLangpack()
-                .getString("CompilePanel.browse"), idata.buttonsHColor);
+                .getString("CompilePanel.browse"), installData.buttonsHColor);
         JLabel argumentsLabel = new JLabel();
         this.argumentsComboBox = new JComboBox();
         this.startButton = ButtonFactory.createButton(installData.getLangpack()
-                .getString("CompilePanel.start"), idata.buttonsHColor);
+                .getString("CompilePanel.start"), installData.buttonsHColor);
         this.tipLabel = LabelFactory.create(installData.getLangpack().getString("CompilePanel.tip"),
                 parent.getIcons().get("tip"), SwingConstants.TRAILING);
         this.opLabel = new JLabel();

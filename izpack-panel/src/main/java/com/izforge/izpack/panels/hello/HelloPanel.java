@@ -27,6 +27,7 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
+import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -49,14 +50,16 @@ public class HelloPanel extends IzPanel
     private static final long serialVersionUID = 3257848774955905587L;
 
     /**
-     * The constructor.
+     * Constructs a <tt>HelloPanel</tt>.
      *
-     * @param parent The parent.
-     * @param idata  The installation installDataGUI.
+     * @param parent              the parent window
+     * @param installData         the installation data
+     * @param resourceManager     the resource manager
+     * @param log                 the log
      */
-    public HelloPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    public HelloPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager, Log log)
     {
-        this(parent, idata, new IzPanelLayout(), resourceManager);
+        this(parent, installData, new IzPanelLayout(log), resourceManager);
     }
 
     /**

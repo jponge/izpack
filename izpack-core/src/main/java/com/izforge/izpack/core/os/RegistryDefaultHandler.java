@@ -23,6 +23,9 @@ package com.izforge.izpack.core.os;
 
 import com.izforge.izpack.util.TargetFactory;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * This class provides on windows a registry handler. All classes which needs registry access should
  * be use only one handler.
@@ -31,33 +34,49 @@ import com.izforge.izpack.util.TargetFactory;
  */
 public class RegistryDefaultHandler
 {
-
-    private static RegistryHandler registryHandler = null;
-
-    private static boolean initialized = false;
+    
+    /**
+     * The registry handler.
+     */
+    private RegistryHandler registryHandler = null;
 
     /**
-     * Default constructor. No instance of this class should be created.
+     * The factory for creating {@link RegistryHandler} instances for the current platform.
      */
-    private RegistryDefaultHandler()
+    private TargetFactory factory;
+
+    /**
+     * True if an attempt has been made to initialise {@link #registryHandler}. 
+     */
+    private boolean initialized = false;
+
+    /**
+     * The logger.
+     */
+    private static final Logger log = Logger.getLogger(RegistryDefaultHandler.class.getName());
+
+    /**
+     * Constructs a <tt>RegistryDefaultHandler</tt>.
+     *
+     * @param factory the factory for creating {@link RegistryHandler} instances for the current platform
+     */
+    public RegistryDefaultHandler(TargetFactory factory)
     {
-        super();
+        this.factory = factory;
     }
 
-    public synchronized static RegistryHandler getInstance()
+    public synchronized RegistryHandler getInstance()
     {
         if (!initialized)
         {
             try
             {
                 // Load the system dependant handler.
-                registryHandler = TargetFactory.getInstance().makeObject(RegistryHandler.class);
-                // Switch to the default handler to use one for complete logging.
-                registryHandler = registryHandler.getDefaultHandler();
+                registryHandler = factory.makeObject(RegistryHandler.class);
             }
             catch (Throwable exception)
             {
-                registryHandler = null; // 
+                log.log(Level.WARNING, "Failed to create RegistryHandler: " + exception.getMessage(), exception);
             }
             initialized = true;
         }

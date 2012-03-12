@@ -21,14 +21,15 @@
 
 package com.izforge.izpack.util.os;
 
+import com.izforge.izpack.util.Librarian;
+import com.izforge.izpack.util.StringTool;
+
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.izforge.izpack.util.StringTool;
 
 /*---------------------------------------------------------------------------*/
 
@@ -44,6 +45,21 @@ public class Win_Shortcut extends Shortcut
     private static final Logger logger = Logger.getLogger(Win_Shortcut.class.getName());
 
     private ShellLink shortcut;
+
+    /**
+     * The librarian.
+     */
+    private final Librarian librarian;
+
+    /**
+     * Constructs a <tt>Win_Shortcut</tt>.
+     *
+     * @param librarian the librarian
+     */
+    public Win_Shortcut(Librarian librarian)
+    {
+        this.librarian = librarian;
+    }
 
     /**
      * This method initializes the object. It is used as a replacement for the constructor because
@@ -66,27 +82,27 @@ public class Win_Shortcut extends Shortcut
         {
             case APPLICATIONS:
             {
-                shortcut = new ShellLink(ShellLink.PROGRAM_MENU, name);
+                shortcut = new ShellLink(ShellLink.PROGRAM_MENU, name, librarian);
                 break;
             }
             case START_MENU:
             {
-                shortcut = new ShellLink(ShellLink.START_MENU, name);
+                shortcut = new ShellLink(ShellLink.START_MENU, name, librarian);
                 break;
             }
             case DESKTOP:
             {
-                shortcut = new ShellLink(ShellLink.DESKTOP, name);
+                shortcut = new ShellLink(ShellLink.DESKTOP, name, librarian);
                 break;
             }
             case START_UP:
             {
-                shortcut = new ShellLink(ShellLink.STARTUP, name);
+                shortcut = new ShellLink(ShellLink.STARTUP, name, librarian);
                 break;
             }
             default:
             {
-                shortcut = new ShellLink(ShellLink.PROGRAM_MENU, name);
+                shortcut = new ShellLink(ShellLink.PROGRAM_MENU, name, librarian);
                 break;
             }
         }

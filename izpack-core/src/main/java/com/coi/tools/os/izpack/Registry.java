@@ -22,6 +22,7 @@
 package com.coi.tools.os.izpack;
 
 import com.coi.tools.os.win.RegistryImpl;
+import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.NativeLibraryClient;
 
 /**
@@ -35,31 +36,25 @@ public class Registry extends RegistryImpl implements NativeLibraryClient
 {
 
     /**
-     * Default constructor.
-     *
-     * @throws Exception if initialize of native part fails
+     * The helper to load the COIOSHelper library.
      */
-    public Registry() throws Exception
+    private final COIOSHelper helper;
+
+    /**
+     * Constructs a <tt>Registry</tt>.
+     *
+     * @param librarian the librarian
+     * @throws UnsatisfiedLinkError if initialize of native part fails
+     */
+    public Registry(Librarian librarian)
     {
         super();
-        initialize();
+        helper = new COIOSHelper(librarian);
+        helper.addDependant(this);
     }
 
     /**
-     * Initialize native part of this class and other settings.
-     *
-     * @throws Exception if problems are encountered
-     */
-    /*--------------------------------------------------------------------------*/
-    private void initialize() throws Exception
-    {
-        COIOSHelper.getInstance().addDependant(this);
-    }
-
-    /*--------------------------------------------------------------------------*/
-
-    /**
-     * This method is used to free the library at the end of progam execution. This class has no own
+     * This method is used to free the library at the end of program execution. This class has no own
      * library else it shares it in the COI common lib. To free the library, the helper class is
      * called. After this call, any instance of this class will not be usable any more! <b><i>
      * <u>Note that this method does NOT return </u> at the first call, but at any other </i> </b>
@@ -76,8 +71,7 @@ public class Registry extends RegistryImpl implements NativeLibraryClient
     /*--------------------------------------------------------------------------*/
     public void freeLibrary(String name)
     {
-
-        COIOSHelper.getInstance().freeLibrary(name);
+        helper.freeLibrary(name);
     }
 
 }

@@ -17,13 +17,23 @@
  */
 package com.izforge.izpack.util;
 
+import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.os.RegistryHandler;
+import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.util.os.Shortcut;
 import com.izforge.izpack.util.os.Unix_Shortcut;
 import com.izforge.izpack.util.os.Win_RegistryHandler;
 import com.izforge.izpack.util.os.Win_Shortcut;
-import static org.junit.Assert.assertEquals;
+import org.junit.Before;
 import org.junit.Test;
+import org.picocontainer.MutablePicoContainer;
+
+import java.net.URL;
+import java.util.Properties;
+
+import static org.junit.Assert.assertEquals;
 
 
 /**
@@ -36,8 +46,34 @@ public class InstallerTargetPlatformFactoryTest
     /**
      * The factory.
      */
-    private TargetPlatformFactory factory = new DefaultTargetPlatformFactory();
+    private TargetPlatformFactory factory;
 
+
+    /**
+     * Sets up the test case.
+     *
+     * @throws Exception for any error
+     */
+    @Before
+    public void setUp() throws Exception
+    {
+        BindeableContainer container = new AbstractContainer()
+        {
+            @Override
+            public void fillContainer(MutablePicoContainer picoContainer)
+            {
+                picoContainer.addComponent(Properties.class);
+                picoContainer.addComponent(ResourceManager.class);
+                picoContainer.addComponent(InstallData.class);
+                picoContainer.addComponent(TestLibrarian.class);
+                picoContainer.addComponent(Housekeeper.class);
+                picoContainer.addComponent(TargetFactory.class);
+                picoContainer.addComponent(DefaultTargetPlatformFactory.class);
+            }
+        };
+        container.initBindings();
+        factory = new DefaultTargetPlatformFactory(container);
+    }
 
     /**
      * Verifies that the correct {@link Shortcut} is created for a platform.
@@ -111,4 +147,39 @@ public class InstallerTargetPlatformFactoryTest
         T object = factory.create(clazz, platform);
         assertEquals(impl, object.getClass());
     }
+
+    /**
+     * Test implementation of {@link Librarian} that can find COIOSHelper.dll.
+     */
+    public static class TestLibrarian extends Librarian {
+        
+        /**
+         * Constructs a <tt>TestLibrarian</tt>.
+         *
+         * @param factory     the factory
+         * @param housekeeper the house keeper
+         */
+        public TestLibrarian(TargetFactory factory, Housekeeper housekeeper)
+        {
+            super(factory, housekeeper);
+        }
+
+        /**
+         * Returns the resource URL for the named library.
+         *
+         * @param name the library name
+         * @return the library's resource URL, or <tt>null</tt> if it is not found
+         */
+        @Override
+        protected URL getResourcePath(String name)
+        {
+            if (name.startsWith("COIOSHelper")) {
+                String resource = "/com/izforge/izpack/bin/native/3rdparty/" + name + ".dll";
+                return getClass().getResource(resource);
+            }
+            return super.getResourcePath(name);
+        }
+    }
+    
 }
+

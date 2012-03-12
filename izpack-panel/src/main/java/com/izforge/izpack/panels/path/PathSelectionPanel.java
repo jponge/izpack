@@ -26,6 +26,7 @@ import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IzPanelConstraints;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LayoutConstants;
+import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.base.LayoutHelper;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -73,21 +74,28 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
     private IzPanel parent;
 
     /**
-     * The installer internal installDataGUI.
+     * The installation data.
      */
-    private GUIInstallData idata;
+    private GUIInstallData installData;
 
     /**
-     * The constructor. Be aware, parent is the parent IzPanel, not the installer frame.
-     *
-     * @param parent The parent IzPanel.
-     * @param idata  The installer internal installDataGUI.
+     * The log.
      */
-    public PathSelectionPanel(IzPanel parent, GUIInstallData idata)
+    private final Log log;
+
+    /**
+     * Constructs a <tt>PathSelectionPanel</tt>.
+     *
+     * @param parent          the parent panel
+     * @param installData     the installation data
+     * @param log             the log
+     */
+    public PathSelectionPanel(IzPanel parent, GUIInstallData installData, Log log)
     {
         super();
         this.parent = parent;
-        this.idata = idata;
+        this.installData = installData;
+        this.log = log;
         createLayout();
     }
 
@@ -101,14 +109,14 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
         // more than one place, but not in this panel so we have
         // to make all things needed.
         // First create a layout helper.
-        LayoutHelper layoutHelper = new LayoutHelper(this);
+        LayoutHelper layoutHelper = new LayoutHelper(this, installData);
         // Start the layout.
-        layoutHelper.startLayout(new IzPanelLayout());
+        layoutHelper.startLayout(new IzPanelLayout(log));
         // One of the rare points we need explicit a constraints.
         IzPanelConstraints ipc = IzPanelLayout.getDefaultConstraint(TEXT_CONSTRAINT);
         // The text field should be stretched.
         ipc.setXStretch(1.0);
-        textField = new JTextField(idata.getInstallPath(), 50);
+        textField = new JTextField(installData.getInstallPath(), 50);
         textField.addActionListener(this);
         parent.setInitialFocus(textField);
         add(textField, ipc);
@@ -118,7 +126,7 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
         // defaults are OK.
         browseButton = ButtonFactory.createButton(parent.getInstallerFrame().getLangpack()
                 .getString("TargetPanel.browse"), parent.getInstallerFrame().getIcons()
-                .get("open"), idata.buttonsHColor);
+                .get("open"), installData.buttonsHColor);
         browseButton.setName(GuiId.BUTTON_BROWSE.id);
         browseButton.addActionListener(this);
         add(browseButton);

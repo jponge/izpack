@@ -22,30 +22,6 @@
 
 package com.izforge.izpack.installer.base;
 
-import static com.izforge.izpack.api.GuiId.BUTTON_HELP;
-import static com.izforge.izpack.api.GuiId.BUTTON_NEXT;
-import static com.izforge.izpack.api.GuiId.BUTTON_PREV;
-import static com.izforge.izpack.api.GuiId.BUTTON_QUIT;
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.KeyAdapter;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseMotionAdapter;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import javax.swing.text.JTextComponent;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLWriter;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
@@ -70,6 +46,50 @@ import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.installer.unpacker.UnpackerBase;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JSeparator;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
+import javax.swing.border.TitledBorder;
+import javax.swing.text.JTextComponent;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.KeyAdapter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseMotionAdapter;
+import java.io.File;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static com.izforge.izpack.api.GuiId.BUTTON_HELP;
+import static com.izforge.izpack.api.GuiId.BUTTON_NEXT;
+import static com.izforge.izpack.api.GuiId.BUTTON_PREV;
+import static com.izforge.izpack.api.GuiId.BUTTON_QUIT;
 
 /**
  * The IzPack installer frame.
@@ -205,21 +225,41 @@ public class InstallerFrame extends JFrame implements InstallerView
     private UninstallData uninstallData;
 
     /**
-     * The constructor (normal mode).
-     *
-     * @param variableSubstitutor
-     * @param uninstallData
-     * @param title               The window title.
-     * @param installdata         The installation data.
-     * @throws Exception Description of the Exception
+     * The house keeper.
      */
-    public InstallerFrame(String title, GUIInstallData installdata, RulesEngine rules, IconsDatabase icons, PanelManager panelManager, UninstallDataWriter uninstallDataWriter, ResourceManager resourceManager, UninstallData uninstallData, VariableSubstitutor variableSubstitutor)
+    private final Housekeeper housekeeper;
+
+    /**
+     * The log.
+     */
+    private final Log log;
+
+    /**
+     * Constructs an <tt>InstallerFrame</tt>.
+     *
+     * @param title               the window title
+     * @param installData         the installation data
+     * @param rules               the rules engine
+     * @param icons               the icons database
+     * @param panelManager        the panel manager
+     * @param uninstallDataWriter the uninstallation data writer
+     * @param resourceManager     the resource manager
+     * @param uninstallData       the uninstallation data
+     * @param variableSubstitutor the variable substituter
+     * @param housekeeper         the house-keeper
+     * @param log                 the log
+     * @throws Exception for any error
+     */
+    public InstallerFrame(String title, GUIInstallData installData, RulesEngine rules, IconsDatabase icons,
+                          PanelManager panelManager, UninstallDataWriter uninstallDataWriter,
+                          ResourceManager resourceManager, UninstallData uninstallData,
+                          VariableSubstitutor variableSubstitutor, Housekeeper housekeeper, Log log)
             throws Exception
     {
         super(title);
         guiListener = new ArrayList<GUIListener>();
-        this.installdata = installdata;
-        this.setLangpack(installdata.getLangpack());
+        this.installdata = installData;
+        this.setLangpack(installData.getLangpack());
         this.rules = rules;
         this.setIcons(icons);
         this.resourceManager = resourceManager;
@@ -229,6 +269,8 @@ public class InstallerFrame extends JFrame implements InstallerView
         // Sets the window events handler
         addWindowListener(new WindowHandler(this));
         this.variableSubstitutor = variableSubstitutor;
+        this.housekeeper = housekeeper;
+        this.log = log;
     }
 
     @Override
@@ -403,7 +445,6 @@ public class InstallerFrame extends JFrame implements InstallerView
      * @param panelid   panel id.
      * @return image icon
      * @throws ResourceNotFoundException
-     * @throws IOException
      */
     private ImageIcon loadIcon(String resPrefix, String panelid)
     {
@@ -519,7 +560,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         catch (Exception e)
         {
             logger.fine("Refreshing dynamic variables failed, asking user whether to proceed.");
-            StringBuffer msg = new StringBuffer();
+            StringBuilder msg = new StringBuilder();
             msg.append("<html>");
             msg.append("The following error occured during refreshing panel contents:<br>");
             msg.append("<i>" + e.getMessage() + "</i><br>");
@@ -556,7 +597,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             {
                 debugger.switchPanel(newPanel.getMetadata(), oldPanel.getMetadata());
             }
-            Log.getInstance().addDebugMessage(
+            log.addDebugMessage(
                     "InstallerFrame.switchPanel: try switching newPanel from {0} to {1} ({2} to {3})",
                     new String[]{oldPanel.getClass().getName(), newPanel.getClass().getName(),
                             Integer.toString(oldIndex), Integer.toString(installdata.getCurPanelNumber())},
@@ -597,7 +638,7 @@ public class InstallerFrame extends JFrame implements InstallerView
                         nextButton.setDefaultCapable(false);
                     }
                     getRootPane().setDefaultButton(cdb);
-                    Log.getInstance().addDebugMessage(
+                    log.addDebugMessage(
                             "InstallerFrame.switchPanel: setting {0} as default button",
                             new String[]{buttonName}, Log.PANEL_TRACE, null);
                 }
@@ -660,8 +701,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             }
             isBack = false;
             callGUIListener(GUIListener.PANEL_SWITCHED);
-            Log.getInstance().addDebugMessage("InstallerFrame.switchPanel: switched", null,
-                    Log.PANEL_TRACE, null);
+            log.addDebugMessage("InstallerFrame.switchPanel: switched", null, Log.PANEL_TRACE, null);
         }
         catch (Exception e)
         {
@@ -981,7 +1021,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         com.izforge.izpack.api.data.Panel panelmetadata = panel.getMetadata();
         String panelid = panelmetadata.getPanelid();
         logger.fine("Current Panel: " + panelid);
-        boolean canShow = false;
+        boolean canShow;
 
         refreshDynamicVariables();
 
@@ -1315,7 +1355,7 @@ public class InstallerFrame extends JFrame implements InstallerView
 
         // Updated by Daniel Azarov, Exadel Inc.
         // start
-        Color foreground = null;
+        Color foreground;
         if (installdata.guiPrefs.modifier.containsKey("headingForegroundColor"))
         {
             foreground = Color.decode(installdata.guiPrefs.modifier.get("headingForegroundColor"));
@@ -1406,7 +1446,7 @@ public class InstallerFrame extends JFrame implements InstallerView
 
                     // Updated by Daniel Azarov, Exadel Inc.
                     // start
-                    Color foreground = null;
+                    Color foreground;
                     if (installdata.guiPrefs.modifier.containsKey("headingForegroundColor"))
                     {
                         foreground = Color.decode(installdata.guiPrefs.modifier
@@ -1507,7 +1547,6 @@ public class InstallerFrame extends JFrame implements InstallerView
             headingLines = Integer.parseInt(installdata.guiPrefs.modifier.get("headingLineCount"));
         }
         Color back = null;
-        int i = 0;
         // It is possible to determine the used background color of the heading panel.
         if (installdata.guiPrefs.modifier.containsKey("headingBackgroundColor"))
         {
@@ -1540,7 +1579,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         {
             leftHeadingPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 8));
         }
-        for (i = 0; i < headingLines; ++i)
+        for (int i = 0; i < headingLines; ++i)
         {
             leftHeadingPanel.add(headingLabels[i]);
         }
@@ -1578,7 +1617,6 @@ public class InstallerFrame extends JFrame implements InstallerView
 
         // contentPane.add(northPanel, BorderLayout.NORTH);
         contentPane.add(headingPanel, BorderLayout.NORTH);
-
     }
 
     /**
@@ -1719,7 +1757,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         {
             logger.log(Level.SEVERE, "Error when refreshing variable", e);
             logger.fine("Refreshing dynamic variables failed, asking user whether to proceed.");
-            StringBuffer msg = new StringBuffer();
+            StringBuilder msg = new StringBuilder();
             msg.append("<html>");
             msg.append("The following error occured during refreshing panel contents:<br>");
             msg.append("<i>" + e.getMessage() + "</i><br>");
@@ -1837,7 +1875,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             }
         }
 
-        Housekeeper.getInstance().shutDown(0, reboot);
+        housekeeper.shutDown(0, reboot);
     }
 
 
@@ -1874,7 +1912,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         if (res == JOptionPane.YES_OPTION)
         {
             wipeAborted();
-            Housekeeper.getInstance().shutDown(0);
+            housekeeper.shutDown(0);
         }
     }
 

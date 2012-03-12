@@ -30,6 +30,7 @@ import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.automation.PanelAutomationHelper;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.TargetFactory;
 
 /**
  * The ShortcutPanelAutomationHelper is responsible to create Shortcuts during the automated
@@ -40,33 +41,31 @@ import com.izforge.izpack.util.Housekeeper;
  */
 public class ShortcutPanelAutomationHelper extends PanelAutomationHelper implements PanelAutomation
 {
-    private UninstallData uninstallData;
-
-    private VariableSubstitutor variableSubstitutor;
-
-    private ResourceManager resourceManager;
-
     private ShortcutPanelLogic shortcutPanelLogic;
 
     /**
-     * @param resourceManager
-     * @param uninstallData
-     * @param variableSubstitutor
+     * Constructs a <tt>ShortcutPanel</tt>.
+     *
+     * @param installData         the installation data
+     * @param resourceManager     the resources
+     * @param uninstallData       the uninstallation data
+     * @param variableSubstitutor the variable substituter
+     * @param housekeeper         the house keeper
+     * @param factory             the factory for platform-specific implementations
      */
-    public ShortcutPanelAutomationHelper(ResourceManager resourceManager,
-            UninstallData uninstallData, VariableSubstitutor variableSubstitutor)
+    public ShortcutPanelAutomationHelper(AutomatedInstallData installData, ResourceManager resourceManager,
+                                         UninstallData uninstallData, VariableSubstitutor variableSubstitutor,
+                                         Housekeeper housekeeper, TargetFactory factory)
     {
-        super();
-        this.resourceManager = resourceManager;
-        this.uninstallData = uninstallData;
-        this.variableSubstitutor = variableSubstitutor;
+        super(housekeeper);
         try
         {
-            shortcutPanelLogic = ShortcutPanelLogic.getInstance();
+            shortcutPanelLogic = new ShortcutPanelLogic(installData, resourceManager, uninstallData,
+                    variableSubstitutor, housekeeper, factory);
         }
         catch (Exception e)
         {
-            Housekeeper.getInstance().shutDown(4);
+            getHousekeeper().shutDown(4);
         }
     }
 
@@ -75,7 +74,7 @@ public class ShortcutPanelAutomationHelper extends PanelAutomationHelper impleme
      * used because we are in an automatic installation step.
      *
      * @param installData Installation data
-     * @param panelRoot panel specific data for autoinstall.xml
+     * @param panelRoot   panel specific data for autoinstall.xml
      */
     @Override
     public void makeXMLData(AutomatedInstallData installData, IXMLElement panelRoot)
@@ -90,20 +89,11 @@ public class ShortcutPanelAutomationHelper extends PanelAutomationHelper impleme
      * Implementation of the Shortcut specific automation code.
      *
      * @param installData Installation data
-     * @param panelRoot panel specific data from autoinstall.xml
+     * @param panelRoot   panel specific data from autoinstall.xml
      */
     @Override
     public void runAutomated(AutomatedInstallData installData, IXMLElement panelRoot)
     {
-        try
-        {
-            shortcutPanelLogic.initInstance(installData, resourceManager, uninstallData,
-                    variableSubstitutor);
-        }
-        catch (Exception e)
-        {
-            Housekeeper.getInstance().shutDown(4);
-        }
         shortcutPanelLogic.setAutoinstallXMLData(panelRoot);
         if (shortcutPanelLogic.isCreateShortcutsImmediately())
         {

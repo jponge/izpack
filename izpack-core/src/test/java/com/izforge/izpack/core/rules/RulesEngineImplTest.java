@@ -14,7 +14,6 @@ import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.rules.logic.NotCondition;
 import com.izforge.izpack.core.rules.process.JavaCondition;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.data.InstallData;
 
 
@@ -26,8 +25,7 @@ public class RulesEngineImplTest
     public void setUp() throws Exception
     {
         Properties variables = new Properties();
-        engine = new RulesEngineImpl(
-                new InstallData(variables, new VariableSubstitutorImpl(variables)), null, null);
+        engine = new RulesEngineImpl(new InstallData(variables), null, null);
 
         Map<String, Condition> conditionsmap = new HashMap<String, Condition>();
         Condition alwaysFalse = new JavaCondition();

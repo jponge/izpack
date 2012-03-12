@@ -25,21 +25,21 @@ public class WinSetupAPIBase implements NativeLibraryClient
     /**
      * Copy only if source newer than or same as target
      *
-     * @see SP_COPY_NEWER_OR_SAME
+     * @see #SP_COPY_NEWER_OR_SAME
      */
     public static final int SP_COPY_NEWER = 0x0000004;
 
     /**
      * Copy only if source newer than or same as target
      *
-     * @see SP_COPY_NEWER
+     * @see #SP_COPY_NEWER
      */
     public static final int SP_COPY_NEWER_OR_SAME = SP_COPY_NEWER;
 
     /**
      * Copy only if target doesn't exist
      *
-     * @see SP_COPY_FORCE_NOOVERWRITE
+     * @see #SP_COPY_FORCE_NOOVERWRITE
      */
     public static final int SP_COPY_NOOVERWRITE = 0x0000008;
 
@@ -86,7 +86,7 @@ public class WinSetupAPIBase implements NativeLibraryClient
     /**
      * Like NOOVERWRITE but no callback nofitication
      *
-     * @see SP_COPY_NOOVERWRITE
+     * @see #SP_COPY_NOOVERWRITE
      */
     public static final int SP_COPY_FORCE_NOOVERWRITE = 0x0001000;
 
@@ -140,15 +140,21 @@ public class WinSetupAPIBase implements NativeLibraryClient
 
     // ----------------------------- Constructor -------------------------------
 
-    public WinSetupAPIBase() throws Exception
+    /**
+     * Constructs a <tt>WinSetupAPIBase</tt>.
+     *
+     * @param librarian the librarian
+     * @throws Exception if the WinSetupAPI library cannot be loaded
+     */
+    public WinSetupAPIBase(Librarian librarian) throws Exception
     {
         try
         {
-            Librarian.getInstance().loadLibrary("WinSetupAPI", this);
+            librarian.loadLibrary("WinSetupAPI", this);
         }
-        catch (UnsatisfiedLinkError exception)
+        catch (UnsatisfiedLinkError error)
         {
-            throw (new Exception("could not locate native library"));
+            throw new Exception("Failed to load WinSetupAPI", error);
         }
     }
 

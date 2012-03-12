@@ -6,8 +6,6 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.container.TestConsoleInstallationContainer;
-import com.izforge.izpack.util.Console;
-import com.izforge.izpack.test.io.TestConsole;
 import com.izforge.izpack.installer.bootstrap.Installer;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.TestConsoleInstaller;
@@ -16,6 +14,9 @@ import com.izforge.izpack.installer.requirement.RequirementsChecker;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
+import com.izforge.izpack.test.util.TestConsole;
+import com.izforge.izpack.util.Console;
+import com.izforge.izpack.util.Housekeeper;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -63,17 +64,18 @@ public class ConsoleInstallationTest
      * @param requirements    the installation requirements
      * @param substituter     the variable substituter
      * @param writer          the uninstallation data writer
-     * @param console         console
+     * @param console         the console
+     * @param housekeeper     the house-keeper
      * @throws Exception for any error
      */
     public ConsoleInstallationTest(BindeableContainer container, AutomatedInstallData installData,
                                    RulesEngine rules, ResourceManager resourceManager,
                                    RequirementsChecker requirements, VariableSubstitutor substituter,
-                                   UninstallDataWriter writer, Console console)
+                                   UninstallDataWriter writer, Console console, Housekeeper housekeeper)
             throws Exception
     {
         installer = new TestConsoleInstaller(container, installData, rules, resourceManager, requirements, substituter,
-                writer, console);
+                writer, console, housekeeper);
         this.installData = installData;
     }
 

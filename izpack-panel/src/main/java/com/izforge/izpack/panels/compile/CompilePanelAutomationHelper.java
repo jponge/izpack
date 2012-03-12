@@ -24,10 +24,12 @@ package com.izforge.izpack.panels.compile;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.automation.PanelAutomationHelper;
+import com.izforge.izpack.util.Housekeeper;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -55,9 +57,24 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
     private PrintStream stderr;
     private VariableSubstitutor variableSubstitutor;
 
-    public CompilePanelAutomationHelper(VariableSubstitutor variableSubstitutor)
+    /**
+     * The resource manager.
+     */
+    private final ResourceManager resources;
+
+    /**
+     * Constructs a <tt>CompilePanelAutomationHelper</tt>.
+     *
+     * @param variableSubstitutor the variable substituter
+     * @param resources           the resource manager
+     * @param housekeeper         the house-keeper
+     */
+    public CompilePanelAutomationHelper(VariableSubstitutor variableSubstitutor, ResourceManager resources,
+                                        Housekeeper housekeeper)
     {
+        super(housekeeper);
         this.variableSubstitutor = variableSubstitutor;
+        this.resources = resources;
     }
 
     /**
@@ -111,7 +128,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
         try
         {
 
-            this.worker = new CompileWorker(idata, this, variableSubstitutor);
+            this.worker = new CompileWorker(idata, this, variableSubstitutor, resources);
             this.worker.setCompiler(compiler);
             this.worker.setCompilerArguments(args);
 

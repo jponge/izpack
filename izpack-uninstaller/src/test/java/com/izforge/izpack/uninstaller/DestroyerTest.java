@@ -1,5 +1,6 @@
 package com.izforge.izpack.uninstaller;
 
+import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
@@ -27,7 +28,8 @@ public class DestroyerTest
     @Test
     public void testGetInstallFiles() throws Exception
     {
-        Destroyer destroyer = new Destroyer("", false, Mockito.mock(AbstractUIProgressHandler.class));
+        Destroyer destroyer = new Destroyer("", false, Mockito.mock(AbstractUIProgressHandler.class),
+                Mockito.mock(BindeableContainer.class));
         ArrayList<File> files = createTestFiles();
         ArrayList<File> filesList = destroyer.readBufferForFileList(
                 new BufferedReader(

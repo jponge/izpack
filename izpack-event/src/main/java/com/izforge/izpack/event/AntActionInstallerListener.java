@@ -22,6 +22,19 @@
 
 package com.izforge.izpack.event;
 
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.installer.data.UninstallData;
+import com.izforge.izpack.util.ExtendedUIProgressHandler;
+import com.izforge.izpack.util.FileUtil;
+import com.izforge.izpack.util.helper.SpecHelper;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -33,18 +46,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
-
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.Pack;
-import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
-import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.ExtendedUIProgressHandler;
-import com.izforge.izpack.util.FileUtil;
-import com.izforge.izpack.util.helper.SpecHelper;
 
 /**
  * Installer listener for performing ANT actions. The definition what should be done will be made in
@@ -77,11 +78,16 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     private UninstallData uninstallData;
 
     /**
-     * Default constructor
+     * Constructs an <tt>AntActionInstallerListener</tt>.
+     *
+     * @param variableSubstitutor the variable substituter
+     * @param resources           the resource manager
+     * @param uninstallData       the uninstallation data
      */
-    public AntActionInstallerListener(VariableSubstitutor variableSubstitutor, UninstallData uninstallData)
+    public AntActionInstallerListener(VariableSubstitutor variableSubstitutor, ResourceManager resources,
+                                      UninstallData uninstallData)
     {
-        super(true);
+        super(resources, true);
         this.variableSubstitutor = variableSubstitutor;
         actions = new HashMap<String, HashMap<Object, ArrayList<AntAction>>>();
         uninstActions = new ArrayList<AntAction>();
