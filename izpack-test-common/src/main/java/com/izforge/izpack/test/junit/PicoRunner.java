@@ -56,6 +56,9 @@ public class PicoRunner extends BlockJUnit4ClassRunner
     protected void runChild(FrameworkMethod method, RunNotifier notifier)
     {
         RunOn runOn = method.getAnnotation(RunOn.class);
+        if (runOn == null) {
+            runOn = method.getMethod().getDeclaringClass().getAnnotation(RunOn.class);
+        }
         boolean ignore = false;
         if (runOn != null)
         {

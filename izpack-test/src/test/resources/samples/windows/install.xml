@@ -18,6 +18,7 @@
     <panels>
         <panel classname="CheckedHelloPanel" id="hellopanel"/>
         <panel classname="PacksPanel" id="packspanel"/>
+        <panel classname="InstallPanel" id="installpanel"/>
         <panel classname="ShortcutPanel" id="shortcutpanel"/>
         <panel classname="SimpleFinishPanel" />
     </panels>

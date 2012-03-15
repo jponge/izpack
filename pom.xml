@@ -417,6 +417,7 @@
                         <exclude>**/IzpackInstallationTest.java</exclude>
                         <exclude>**/InstallerListenerTest.java</exclude>
                         <exclude>**/UninstallerListenerTest.java</exclude>
+                        <exclude>**/WindowsInstallationTest.java</exclude>
                     </excludes>
                     <parallel>both</parallel>
                     <perCoreThreadCount>true</perCoreThreadCount>
@@ -612,6 +613,7 @@
                                 <include>**/IzpackInstallationTest.java</include>
                                 <include>**/InstallerListenerTest.java</include>
                                 <include>**/UninstallerListenerTest.java</include>
+                                <include>**/WindowsInstallationTest.java</include>
                             </includes>
                         </configuration>
                     </plugin>

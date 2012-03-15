@@ -70,9 +70,10 @@ public class UninstallerListenerTest extends AbstractDestroyerTest
      * Sets up the test case.
      *
      * @throws IOException if the install directory cannot be created
+     * @throws Exception   for any other error
      */
     @Before
-    public void setUp() throws IOException
+    public void setUp() throws Exception
     {
         super.setUp();
 
