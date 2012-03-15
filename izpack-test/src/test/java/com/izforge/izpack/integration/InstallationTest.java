@@ -20,7 +20,8 @@ import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.MethodRule;
+import org.junit.rules.TestRule;
+import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 
 import java.awt.*;
@@ -37,7 +38,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class InstallationTest
 {
     @Rule
-    public MethodRule globalTimeout = new org.junit.rules.Timeout(HelperTestMethod.TIMEOUT);
+    public TestRule globalTimeout = new Timeout(HelperTestMethod.TIMEOUT);
     private DialogFixture dialogFrameFixture;
     private FrameFixture installerFrameFixture;
     private ResourceManager resourceManager;
