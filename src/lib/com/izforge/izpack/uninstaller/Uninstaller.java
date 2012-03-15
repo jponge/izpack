@@ -19,6 +19,7 @@
 
 package com.izforge.izpack.uninstaller;
 
+import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.installer.PrivilegedRunner;
 import com.izforge.izpack.util.OsVersion;
@@ -31,6 +32,11 @@ import java.io.InputStreamReader;
 import javax.swing.*;
 import java.lang.reflect.Method;
 
+import java.util.List;
+import java.util.LinkedList;
+import java.util.Arrays;
+
+import java.awt.GraphicsEnvironment;
 /**
  * The uninstaller class.
  *
@@ -44,21 +50,52 @@ public class Uninstaller
      *
      * @param args The arguments passed on the command line.
      */
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
         checkForPrivilegedExecution();
 
+        boolean forceUninstall = false;
         boolean cmduninstall = false;
-        for (String arg : args)
-        {
-            if (arg.equals("-c"))
+        if (GraphicsEnvironment.isHeadless()) {
+            cmduninstall = true;
+        } else {
+            for (String arg : args)
             {
-                cmduninstall = true;
+                if (arg.equals("-c"))
+                {
+                    cmduninstall = true;
+                }
             }
         }
-        if (cmduninstall)
+        for (String arg : args)
+        {
+            if (arg.equals("-f"))
+            {
+                forceUninstall = true;
+            }
+        }
+        if (cmduninstall && (forceUninstall == false))
         {
             System.out.println("Command line uninstaller.\n");
+            LocaleDatabase langpack = new LocaleDatabase(UninstallerFrame.class.getResourceAsStream("/langpack.xml"));
+            String ans = null;
+            while (true) {
+                ans = System.console().readLine(langpack.getString("uninstaller.destroytarget") + 
+                        (new UninstallerConsole()).installPath +
+                        " [y/n] ");
+
+                ans = ans.trim();
+
+                if (ans.equalsIgnoreCase("y") || ans.equalsIgnoreCase("yes")) {
+                    List<String> argsList = new LinkedList<String>(Arrays.asList(args));
+                    // add the -f option
+                    argsList.add("-f");
+                    args = argsList.toArray(new String[0]);
+                    break;
+                } else if (ans.equalsIgnoreCase("n") || ans.equalsIgnoreCase("no")) {
+                    break;
+                } // for any other case, repeat the question
+            }
         }
         try
         {
