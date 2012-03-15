@@ -61,10 +61,6 @@ public class FileSet extends DataType
      */
     public void setDir(File dir) throws Exception
     {
-        if (!dir.exists())
-        {
-            throw new FileNotFoundException("Directory " + dir + " not found");
-        }
         this.dir = dir;
     }
 
