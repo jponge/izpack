@@ -123,8 +123,9 @@ public class AbstractDestroyerTest
      * Returns the uninstaller jar file.
      *
      * @return the uninstaller jar file
+     * @throws IOException
      */
-    protected File getUninstallerJar()
+    protected File getUninstallerJar() throws IOException
     {
         return getUninstallerJar(new VariableSubstitutorImpl(installData.getVariables()));
     }
@@ -134,8 +135,9 @@ public class AbstractDestroyerTest
      *
      * @param substituter the variable substituter
      * @return the uninstaller jar file
+     * @throws IOException
      */
-    protected File getUninstallerJar(VariableSubstitutor substituter)
+    protected File getUninstallerJar(VariableSubstitutor substituter) throws IOException
     {
         String dir = IoHelper.translatePath(installData.getInfo().getUninstallerPath(), substituter);
         String path = dir + File.separator + installData.getInfo().getUninstallerName();

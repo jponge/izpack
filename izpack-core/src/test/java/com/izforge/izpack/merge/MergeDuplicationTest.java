@@ -9,11 +9,13 @@ import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.MergeUtils;
 import com.izforge.izpack.test.junit.PicoRunner;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.net.URL;
+import java.util.zip.ZipFile;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -41,7 +43,8 @@ public class MergeDuplicationTest
         URL resource = ClassLoader.getSystemResource("com/izforge/izpack/merge/test/jar-hellopanel-1.0-SNAPSHOT.jar");
         Mergeable jarMerge = mergeableResolver.getMergeableFromURL(resource);
         File tempFile = MergeUtils.doDoubleMerge(jarMerge);
-        assertThat(tempFile, ZipMatcher.isZipMatching(
+        ZipFile tempZipFile = new ZipFile(tempFile);
+        assertThat(tempZipFile, ZipMatcher.isZipMatching(
                 DuplicateMatcher.isEntryUnique("jar/izforge/izpack/panels/hello/HelloPanelConsoleHelper.class")
         ));
     }
@@ -51,7 +54,8 @@ public class MergeDuplicationTest
     {
         Mergeable mergeable = mergeableResolver.getMergeableFromURL(getClass().getResource("MergeDuplicationTest.class"), "destFile");
         File tempFile = MergeUtils.doDoubleMerge(mergeable);
-        assertThat(tempFile, ZipMatcher.isZipMatching(
+        ZipFile tempZipFile = new ZipFile(tempFile);
+        assertThat(tempZipFile, ZipMatcher.isZipMatching(
                 DuplicateMatcher.isEntryUnique("destFile")
         ));
     }

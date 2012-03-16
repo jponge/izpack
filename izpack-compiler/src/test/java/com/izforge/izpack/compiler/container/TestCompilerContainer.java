@@ -5,6 +5,7 @@ import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.test.InstallFile;
+import com.izforge.izpack.test.provider.JarFileProvider;
 import com.izforge.izpack.util.ClassUtils;
 import com.izforge.izpack.util.FileUtil;
 import org.apache.commons.io.FileUtils;
@@ -24,10 +25,10 @@ public class TestCompilerContainer extends AbstractContainer
 
     public static final String APPNAME = "Test Installation";
 
-    private Class klass;
+    private Class<?> klass;
     private FrameworkMethod frameworkMethod;
 
-    public TestCompilerContainer(Class klass, FrameworkMethod frameworkMethod)
+    public TestCompilerContainer(Class<?> klass, FrameworkMethod frameworkMethod)
     {
         this.klass = klass;
         this.frameworkMethod = frameworkMethod;
@@ -56,6 +57,8 @@ public class TestCompilerContainer extends AbstractContainer
             pico.addConfig("installFile", installerFile.getAbsolutePath());
             pico.addComponent(CompilerData.class, data);
             pico.addComponent(File.class, out);
+            pico.addAdapter(new JarFileProvider());
+            pico.addComponent(this);
         }
         catch (Exception e)
         {

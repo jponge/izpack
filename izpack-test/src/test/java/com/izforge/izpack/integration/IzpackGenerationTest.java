@@ -12,7 +12,8 @@ import org.junit.rules.TestRule;
 import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 
-import java.io.File;
+import java.util.jar.JarFile;
+import java.util.zip.ZipFile;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -26,24 +27,27 @@ public class IzpackGenerationTest {
     @Rule
     public TestRule globalTimeout = new Timeout(HelperTestMethod.TIMEOUT);
 
-    private File generatedInstallJar;
+    private JarFile jar;
 
-    private TestCompilationContainer testInstallationContainer;
+    private TestCompilationContainer container;
 
-    public IzpackGenerationTest(File generatedInstallJar, TestCompilationContainer testInstallationContainer) {
-        this.generatedInstallJar = generatedInstallJar;
-        this.testInstallationContainer = testInstallationContainer;
+    public IzpackGenerationTest(TestCompilationContainer container)
+    {
+        this.container = container;
     }
 
     @Before
-    public void before() {
-        testInstallationContainer.launchCompilation();
+    public void before()
+    {
+        container.launchCompilation();
+        jar = container.getComponent(JarFile.class);
     }
 
     @Test
     @InstallFile("samples/izpack/install.xml")
-    public void testGeneratedIzpackInstaller() throws Exception {
-        assertThat(generatedInstallJar, ZipMatcher.isZipContainingFiles(
+    public void testGeneratedIzpackInstaller() throws Exception
+    {
+        assertThat((ZipFile)jar, ZipMatcher.isZipContainingFiles(
                 "com/izforge/izpack/panels/hello/HelloPanel.class"
         ));
     }

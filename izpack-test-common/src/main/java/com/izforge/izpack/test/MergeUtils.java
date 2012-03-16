@@ -1,11 +1,11 @@
 package com.izforge.izpack.test;
 
 import com.izforge.izpack.api.merge.Mergeable;
-import org.apache.tools.zip.ZipOutputStream;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Created by IntelliJ IDEA.

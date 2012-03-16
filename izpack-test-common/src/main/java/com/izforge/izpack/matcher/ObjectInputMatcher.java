@@ -5,19 +5,18 @@ import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.TypeSafeMatcher;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.Enumeration;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.zip.ZipFile;
 
 /**
  * Matcher for object serialized inside a jar
  *
  * @author Anthonin Bonnefoy
  */
-public class ObjectInputMatcher extends TypeSafeMatcher<File>
+public class ObjectInputMatcher extends TypeSafeMatcher<ZipFile>
 {
     private Matcher<Object> listMatcher;
     private String resourceId;
@@ -29,7 +28,7 @@ public class ObjectInputMatcher extends TypeSafeMatcher<File>
     }
 
     @Override
-    public boolean matchesSafely(File file)
+    public boolean matchesSafely(ZipFile file)
     {
         try
         {
@@ -43,24 +42,19 @@ public class ObjectInputMatcher extends TypeSafeMatcher<File>
         }
     }
 
-
-    public static Object getObjectFromZip(File file, String resourceId)
-            throws IOException, ClassNotFoundException
+    public static Object getObjectFromZip(ZipFile file, String resourceId)
+        throws IOException, ClassNotFoundException
     {
-        FileInputStream fis = new FileInputStream(file);
-        ZipInputStream zis = new ZipInputStream(fis);
         Object result = null;
-        ZipEntry ze;
-        while ((ze = zis.getNextEntry()) != null)
-        {
-            if (ze.getName().equals(resourceId))
-            {
-                ObjectInputStream inputStream = new ObjectInputStream(zis);
-                result = inputStream.readObject();
-            }
-            zis.closeEntry();
+        Enumeration<? extends ZipEntry> zipEntries = file.entries();
+        while (zipEntries.hasMoreElements()) {
+          ZipEntry zipEntry = zipEntries.nextElement();
+          if (zipEntry.getName().equals(resourceId))
+          {
+              ObjectInputStream inputStream = new ObjectInputStream(file.getInputStream(zipEntry));
+              result = inputStream.readObject();
+          }
         }
-        zis.close();
         return result;
     }
 

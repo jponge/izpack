@@ -43,8 +43,8 @@ public class FileMergeTest
     {
         URL url = ClassLoader.getSystemResource("com/izforge/izpack/merge/test");
         FileMerge fileMerge = new FileMerge(url, "my/dest/path/", mergeContent);
-        assertThat(fileMerge,
-                MergeMatcher.isMergeableContainingFiles("my/dest/path/.placeholder", "my/dest/path/izpack-panel-5.0.0-SNAPSHOT.jar"));
+        assertThat(fileMerge, MergeMatcher.isMergeableContainingFile("my/dest/path/.placeholder"));
+        assertThat(fileMerge, MergeMatcher.isMergeableContainingFile("my/dest/path/izpack-panel-5.0.0-SNAPSHOT.jar"));
     }
 
     @Test
@@ -52,7 +52,7 @@ public class FileMergeTest
     {
         URL url = ClassLoader.getSystemResource("com/izforge/izpack/merge/file/FileMergeTest.class");
         FileMerge fileMerge = new FileMerge(url, "my/dest/path/NewFile.ga", mergeContent);
-        assertThat(fileMerge, MergeMatcher.isMergeableContainingFiles("my/dest/path/NewFile.ga"));
+        assertThat(fileMerge, MergeMatcher.isMergeableContainingFile("my/dest/path/NewFile.ga"));
     }
 
     @Test
@@ -60,7 +60,7 @@ public class FileMergeTest
     {
         URL url = ClassLoader.getSystemResource("com/izforge/izpack/merge/file/FileMergeTest.class");
         FileMerge fileMerge = new FileMerge(url, "NewFile.ga", mergeContent);
-        assertThat(fileMerge, MergeMatcher.isMergeableContainingFiles("NewFile.ga"));
+        assertThat(fileMerge, MergeMatcher.isMergeableContainingFile("NewFile.ga"));
     }
 
 

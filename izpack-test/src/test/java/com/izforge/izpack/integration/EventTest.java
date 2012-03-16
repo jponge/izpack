@@ -23,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
 
 /**
  * Test for event binding.
- * 
+ *
  * @see com.izforge.izpack.installer.container.impl.EventFiller
  * @author Anthonin Bonnefoy
  */
@@ -32,7 +32,7 @@ import static org.junit.Assert.assertNotNull;
 public class EventTest
 {
     private final AutomatedInstallData automatedInstallData;
-    
+
     private final UninstallData uninstallData;
 
     public EventTest(AutomatedInstallData automatedInstallData, UninstallData uninstallData)
@@ -48,9 +48,9 @@ public class EventTest
     {
         List<InstallerListener> installerListeners = automatedInstallData.getInstallerListener();
         assertThat(installerListeners.size(), Is.is(2));
-        assertThat(installerListeners.get(0), Is.is(SummaryLoggerInstallerListener.class));
-        assertThat(installerListeners.get(1), Is.is(RegistryInstallerListener.class));
-        
+        assertThat((SummaryLoggerInstallerListener)installerListeners.get(0), Is.is(SummaryLoggerInstallerListener.class));
+        assertThat((RegistryInstallerListener)installerListeners.get(1), Is.is(RegistryInstallerListener.class));
+
         List<CustomData> uninstallListeners = uninstallData.getUninstallerListeners();
         assertNotNull(uninstallListeners);
         assertThat(uninstallListeners.size(), Is.is(1));

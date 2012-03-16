@@ -1,15 +1,18 @@
 package com.izforge.izpack.ant;
 
-import com.izforge.izpack.matcher.ZipMatcher;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.zip.ZipFile;
+
 import org.apache.tools.ant.Project;
 import org.hamcrest.collection.IsCollectionContaining;
 import org.hamcrest.core.Is;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.File;
-
-import static org.hamcrest.MatcherAssert.assertThat;
+import com.izforge.izpack.matcher.ZipMatcher;
 
 /**
  * @author Anthonin Bonnefoy
@@ -19,7 +22,7 @@ public class IzPackTaskTest
 
     @Test
     @Ignore
-    public void testExecuteAntAction() throws IllegalAccessException, InterruptedException
+    public void testExecuteAntAction() throws IllegalAccessException, InterruptedException, IOException
     {
 
         IzPackTask task = new IzPackTask();
@@ -27,15 +30,12 @@ public class IzPackTaskTest
         task.execute();
 
         Thread.sleep(30000);
-        File outputResult = new File("target/izpackResult.jar");
-        assertThat(outputResult.exists(), Is.is(true));
-        assertThat(outputResult, ZipMatcher.isZipMatching(IsCollectionContaining.hasItem(
-                "com/izforge/izpack/panels/checkedhello/CheckedHelloPanel.class"
-        )));
-        assertThat(outputResult, ZipMatcher.isZipMatching(IsCollectionContaining.hasItem(
-                "com/izforge/izpack/core/container/AbstractContainer.class"
-        )));
-        assertThat(outputResult, ZipMatcher.isZipMatching(IsCollectionContaining.hasItem(
+        File file = new File("target/izpackResult.jar");
+        ZipFile zipFile = new ZipFile(file);
+        assertThat(file.exists(), Is.is(true));
+        assertThat(zipFile, ZipMatcher.isZipMatching(IsCollectionContaining.hasItems(
+                "com/izforge/izpack/panels/checkedhello/CheckedHelloPanel.class",
+                "com/izforge/izpack/core/container/AbstractContainer.class",
                 "com/izforge/izpack/uninstaller/Destroyer.class"
         )));
 

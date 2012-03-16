@@ -1,42 +1,56 @@
 package com.izforge.izpack.matcher;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
 import org.hamcrest.Description;
+import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.collection.IsCollectionContaining;
 import org.hamcrest.core.Is;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 /**
  * Matcher for zip files
  *
  * @author Anthonin Bonnefoy
  */
-public class ZipMatcher extends TypeSafeMatcher<File>
+public class ZipMatcher extends TypeSafeMatcher<ZipFile>
 {
+    private static final Logger logger = Logger.getLogger(ZipMatcher.class.getName());
+
     private Matcher<Iterable<String>> listMatcher;
 
-    ZipMatcher(Matcher<Iterable<String>> listMatcher)
+    ZipMatcher(Matcher<Iterable<String>> matcher)
     {
-        this.listMatcher = listMatcher;
+        this.listMatcher = matcher;
     }
 
     @Override
-    public boolean matchesSafely(File file)
+    public boolean matchesSafely(ZipFile file)
     {
         try
         {
             List<String> fileList = getFileNameListFromZip(file);
             // MatcherAssert.assertThat(fileList, listMatcher); // This prevents the use of IsNot. TODO
-            return listMatcher.matches(fileList);
+            boolean match = listMatcher.matches(fileList);
+            if (logger.isLoggable(Level.FINE) && !match)
+            {
+                logger.fine("++++++++++++++++++++++++++++++++++++++");
+                logger.fine("\nContents of zip file " + file.getName() + ":\n");
+                for (String f : fileList) {
+                  logger.fine("\t" + f);
+                }
+                logger.fine("\nMATCH: " + match + "\n");
+                logger.fine("++++++++++++++++++++++++++++++++++++++");
+            }
+            return match;
         }
         catch (IOException e)
         {
@@ -45,41 +59,39 @@ public class ZipMatcher extends TypeSafeMatcher<File>
     }
 
 
-    public static List<String> getFileNameListFromZip(File file)
+    public static List<String> getFileNameListFromZip(ZipFile file)
             throws IOException
     {
-        List<String> fileList = new ArrayList<String>();
-        FileInputStream fis = new FileInputStream(file);
-        ZipInputStream zis = new ZipInputStream(fis);
-        ZipEntry ze;
-        while ((ze = zis.getNextEntry()) != null)
-        {
-            fileList.add(ze.getName());
-            zis.closeEntry();
+        List<String> entryList = new ArrayList<String>();
+        Enumeration<? extends ZipEntry> zipEntries = file.entries();
+        while (zipEntries.hasMoreElements()) {
+          ZipEntry zipEntry = zipEntries.nextElement();
+          entryList.add(zipEntry.getName());
         }
-        zis.close();
-        return fileList;
+        return entryList;
     }
 
+    @Override
     public void describeTo(Description description)
     {
-        description.appendText("Excepting collection containing ").appendValue(listMatcher);
+        description.appendText("Expecting ").appendValue(listMatcher);
     }
 
-    public static ZipMatcher isZipContainingFile(String fileName)
+    @Factory
+    public static Matcher<ZipFile> isZipContainingFile(String fileName)
     {
         return new ZipMatcher(IsCollectionContaining.hasItem(Is.is(fileName)));
     }
 
-    public static ZipMatcher isZipContainingFiles(String... fileName)
+    @Factory
+    public static Matcher<ZipFile> isZipContainingFiles(String... fileNames)
     {
-        return new ZipMatcher(IsCollectionContaining.hasItems(fileName));
+        return new ZipMatcher(IsCollectionContaining.hasItems(fileNames));
     }
 
-    public static ZipMatcher isZipMatching(Matcher<Iterable<String>> matcher)
+    @Factory
+    public static Matcher<ZipFile> isZipMatching(Matcher<Iterable<String>> matcher)
     {
         return new ZipMatcher(matcher);
     }
-
-
 }

@@ -43,8 +43,8 @@ import com.izforge.izpack.test.junit.PicoRunner;
 public class ConditionTest
 {
 
-    private static final Matcher<Boolean> IS_TRUE = Is.is(true);
-    private static final Matcher<Boolean> IS_FALSE = Is.is(false);
+    private static final Matcher<? super Boolean> IS_TRUE = Is.is(true);
+    private static final Matcher<? super Boolean> IS_FALSE = Is.is(false);
     private static final Matcher<Object> IS_NULL = IsNull.nullValue();
     private static final Matcher<Object> IS_NOT_NULL = IsNull.notNullValue();
     private RulesEngine rules;

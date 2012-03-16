@@ -1,13 +1,14 @@
 package com.izforge.izpack.merge;
 
-import com.izforge.izpack.api.merge.Mergeable;
-import com.izforge.izpack.merge.resolve.PathResolver;
-import org.apache.tools.zip.ZipOutputStream;
-
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.tools.zip.ZipOutputStream;
+
+import com.izforge.izpack.api.merge.Mergeable;
+import com.izforge.izpack.merge.resolve.PathResolver;
 
 /**
  * A mergeable file allow to chose files to merge in the installer.<br />
@@ -28,21 +29,25 @@ public class MergeManagerImpl implements MergeManager
         mergeableList = new ArrayList<Mergeable>();
     }
 
+    @Override
     public void addResourceToMerge(Mergeable mergeable)
     {
         mergeableList.add(mergeable);
     }
 
+    @Override
     public void addResourceToMerge(String resourcePath)
     {
         mergeableList.addAll(pathResolver.getMergeableFromPath(resourcePath));
     }
 
+    @Override
     public void addResourceToMerge(String resourcePath, String destination)
     {
         mergeableList.addAll(pathResolver.getMergeableFromPath(resourcePath, destination));
     }
 
+    @Override
     public void merge(ZipOutputStream outputStream)
     {
         for (Mergeable mergeable : mergeableList)
@@ -52,6 +57,7 @@ public class MergeManagerImpl implements MergeManager
         mergeableList.clear();
     }
 
+    @Override
     public void merge(java.util.zip.ZipOutputStream outputStream)
     {
         for (Mergeable mergeable : mergeableList)
@@ -61,6 +67,7 @@ public class MergeManagerImpl implements MergeManager
         mergeableList.clear();
     }
 
+    @Override
     public List<File> recursivelyListFiles(FileFilter fileFilter)
     {
         ArrayList<File> result = new ArrayList<File>();
@@ -71,6 +78,7 @@ public class MergeManagerImpl implements MergeManager
         return result;
     }
 
+    @Override
     public File find(FileFilter fileFilter)
     {
         for (Mergeable mergeable : mergeableList)

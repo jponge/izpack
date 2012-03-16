@@ -18,6 +18,8 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.jar.JarFile;
+import java.util.zip.ZipFile;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -112,14 +114,15 @@ public class UninstallerListenerTest extends AbstractDestroyerTest
         // write the uninstaller and verify it contains the listeners
         assertTrue(uninstallDataWriter.write());
 
-        File uninstallJar = getUninstallerJar(substituter);
+        File file = getUninstallerJar(substituter);
+        JarFile uninstallJar = new JarFile(file);
 
-        assertThat(uninstallJar, ZipMatcher.isZipContainingFiles(
+        assertThat((ZipFile)uninstallJar, ZipMatcher.isZipContainingFiles(
                 "com/izforge/izpack/api/event/UninstallerListener.class",
                 "com/izforge/izpack/test/listener/TestUninstallerListener.class"));
 
         // perform uninstallation.
-        runDestroyer(uninstallJar);
+        runDestroyer(file);
 
         // verify the listener methods have been invoked the expected no. of times
         String path = TestUninstallerListener.getStatePath(installPath);

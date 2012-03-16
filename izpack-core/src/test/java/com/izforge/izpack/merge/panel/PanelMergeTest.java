@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.util.zip.ZipFile;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -81,7 +82,8 @@ public class PanelMergeTest
     {
         Mergeable mergeable = pathResolver.getPanelMerge("com.izforge.izpack.panels.hello.HelloPanelTestClass");
         File tempFile = MergeUtils.doDoubleMerge(mergeable);
-        assertThat(tempFile, ZipMatcher.isZipMatching(
+        ZipFile tempZipFile = new ZipFile(tempFile);
+        assertThat(tempZipFile, ZipMatcher.isZipMatching(
                 DuplicateMatcher.isEntryUnique("com/izforge/izpack/panels/hello/HelloPanelTestClass.class")
         ));
     }

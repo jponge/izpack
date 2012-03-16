@@ -1,8 +1,14 @@
 package org.izpack.mojo;
 
-import com.izforge.izpack.matcher.ZipMatcher;
-import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
-import org.apache.commons.compress.archivers.zip.ZipFile;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.io.File;
+import java.io.InputStream;
+import java.util.List;
+import java.util.jar.JarFile;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.hamcrest.collection.IsCollectionContaining;
@@ -10,11 +16,7 @@ import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.InputStream;
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
+import com.izforge.izpack.matcher.ZipMatcher;
 
 /**
  * Test of new IzPack mojo
@@ -36,18 +38,18 @@ public class IzPackNewMojoTest extends AbstractMojoTestCase
 
         mojo.execute();
 
-        File outputResult = new File("target/izpackResult.jar");
-        assertThat(outputResult.exists(), Is.is(true));
-        assertThat(outputResult, ZipMatcher.isZipMatching(IsCollectionContaining.hasItems(
-                "com/izforge/izpack/core/container/AbstractContainer.class",
-                "com/izforge/izpack/uninstaller/Destroyer.class",
-                "com/izforge/izpack/panels/checkedhello/CheckedHelloPanel.class",
-                "META-INF/Test.png"
+        File file = new File("target/izpackResult.jar");
+        JarFile jar = new JarFile(file);
+        assertThat(file.exists(), Is.is(true));
+        assertThat((ZipFile)jar, ZipMatcher.isZipMatching(IsCollectionContaining.hasItems(
+            "com/izforge/izpack/core/container/AbstractContainer.class",
+            "com/izforge/izpack/uninstaller/Destroyer.class",
+            "com/izforge/izpack/panels/checkedhello/CheckedHelloPanel.class",
+            "META-INF/Test.png"
         )));
 
-        ZipFile zipFile = new ZipFile(outputResult);
-        ZipArchiveEntry entry = zipFile.getEntry("META-INF/MANIFEST.MF");
-        InputStream content = zipFile.getInputStream(entry);
+        ZipEntry entry = jar.getEntry("META-INF/MANIFEST.MF");
+        InputStream content = jar.getInputStream(entry);
         try
         {
             List<String> list = IOUtils.readLines(content);

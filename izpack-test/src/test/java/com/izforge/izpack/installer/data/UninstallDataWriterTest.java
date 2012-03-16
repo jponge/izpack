@@ -11,6 +11,7 @@ import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
 import com.izforge.izpack.util.IoHelper;
+
 import org.hamcrest.core.IsNot;
 import org.junit.After;
 import org.junit.Before;
@@ -23,6 +24,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -112,7 +115,7 @@ public class UninstallDataWriterTest
     {
         assertTrue(uninstallDataWriter.write());
 
-        File uninstallJar = getUninstallerJar();
+        ZipFile uninstallJar = getUninstallerJar();
 
         assertThat(
                 uninstallJar,
@@ -134,14 +137,16 @@ public class UninstallDataWriterTest
 
     /**
      * Verifies that standard listeners are written.
+     * @throws IOException
+     * @throws ZipException
      */
     @Test
     @InstallFile("samples/event/event.xml")
-    public void testWriteStandardListener()
+    public void testWriteStandardListener() throws IOException
     {
         assertTrue(uninstallDataWriter.write());
 
-        File uninstallJar = getUninstallerJar();
+        ZipFile uninstallJar = getUninstallerJar();
 
         assertThat(uninstallJar,
                 ZipMatcher.isZipContainingFile("com/izforge/izpack/event/RegistryUninstallerListener.class"));
@@ -152,11 +157,11 @@ public class UninstallDataWriterTest
      */
     @Test
     @InstallFile("samples/event/customlisteners.xml")
-    public void testWriteCustomListener()
+    public void testWriteCustomListener() throws IOException
     {
         assertTrue(uninstallDataWriter.write());
 
-        File uninstallJar = getUninstallerJar();
+        ZipFile uninstallJar = getUninstallerJar();
 
         assertThat(uninstallJar,
                 ZipMatcher.isZipContainingFiles("com/izforge/izpack/test/listener/TestUninstallerListener.class",
@@ -169,11 +174,11 @@ public class UninstallDataWriterTest
      */
     @Test
     @InstallFile("samples/natives/natives.xml")
-    public void testWriteNatives()
+    public void testWriteNatives() throws IOException
     {
         assertTrue(uninstallDataWriter.write());
 
-        File uninstallJar = getUninstallerJar();
+        ZipFile uninstallJar = getUninstallerJar();
 
         assertThat(uninstallJar,
                 ZipMatcher.isZipContainingFiles("com/izforge/izpack/bin/native/WinSetupAPI.dll",
@@ -195,13 +200,13 @@ public class UninstallDataWriterTest
      */
     @Test
     @InstallFile("samples/natives/natives.xml")
-    public void testWriteWindowsRegistrySupport()
+    public void testWriteWindowsRegistrySupport() throws IOException
     {
         addOSCondition("izpack.windowsinstall");
         installData.getInfo().setRequirePrivilegedExecutionUninstaller(true);
         assertTrue(uninstallDataWriter.write());
 
-        File uninstallJar = getUninstallerJar();
+        ZipFile uninstallJar = getUninstallerJar();
 
         assertThat(uninstallJar,
                 ZipMatcher.isZipContainingFiles("com/izforge/izpack/core/os/RegistryHandler.class",
@@ -212,17 +217,19 @@ public class UninstallDataWriterTest
 
     /**
      * Verifies that the <em>run-with-privileges-on-osx</em> script is written for mac installs.
+     * @throws IOException
+     * @throws
      */
     @Test
     @InstallFile("samples/basicInstall/basicInstall.xml")
-    public void testRunWithPrivilegesOnOSX()
+    public void testRunWithPrivilegesOnOSX() throws IOException
     {
         System.setProperty("izpack.mode", "privileged");
         installData.getInfo().setRequirePrivilegedExecutionUninstaller(true);
         addOSCondition("izpack.macinstall");
         assertTrue(uninstallDataWriter.write());
 
-        File uninstallJar = getUninstallerJar();
+        ZipFile uninstallJar = getUninstallerJar();
 
         assertThat(uninstallJar,
                 ZipMatcher.isZipContainingFiles("com/izforge/izpack/installer/run-with-privileges-on-osx"));
@@ -260,13 +267,15 @@ public class UninstallDataWriterTest
      * Returns the uninstaller jar file.
      *
      * @return the uninstaller jar file
+     * @throws IOException
+     * @throws
      */
-    private File getUninstallerJar()
+    private ZipFile getUninstallerJar() throws IOException
     {
         String dir = IoHelper.translatePath(installData.getInfo().getUninstallerPath(), variableSubstitutor);
         String path = dir + File.separator + installData.getInfo().getUninstallerName();
         File jar = new File(path);
         assertThat(jar.exists(), is(true));
-        return jar;
+        return new ZipFile(jar);
     }
 }

@@ -1,14 +1,16 @@
 package com.izforge.izpack.compiler;
 
+import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.compiler.container.TestCompilerContainer;
+import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.matcher.MergeMatcher;
 import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.merge.MergeManagerImpl;
-import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
+
 import org.apache.maven.shared.jar.JarAnalyzer;
 import org.apache.maven.shared.jar.classes.JarClasses;
 import org.apache.maven.shared.jar.classes.JarClassesAnalysis;
@@ -18,9 +20,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.jar.JarFile;
+import java.util.zip.ZipFile;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -32,14 +37,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @InstallFile("samples/helloAndFinish.xml")
 public class CompilerConfigTest
 {
-    private File out;
+    private JarFile jar;
     private CompilerConfig compilerConfig;
     private PathResolver pathResolver;
     private MergeManagerImpl mergeManager;
+    private AbstractContainer testContainer;
 
-    public CompilerConfigTest(File out, CompilerConfig compilerConfig, PathResolver pathResolver, MergeManagerImpl mergeManager)
+    public CompilerConfigTest(TestCompilerContainer container, CompilerConfig compilerConfig, PathResolver pathResolver, MergeManagerImpl mergeManager)
     {
-        this.out = out;
+        this.testContainer = container;
         this.compilerConfig = compilerConfig;
         this.pathResolver = pathResolver;
         this.mergeManager = mergeManager;
@@ -49,10 +55,12 @@ public class CompilerConfigTest
     public void installerShouldContainInstallerClassResourcesAndImages() throws Exception
     {
         compilerConfig.executeCompiler();
-        assertThat(out, ZipMatcher.isZipContainingFile("com/izforge/izpack/installer/bootstrap/Installer.class"));
-        assertThat(out, ZipMatcher.isZipContainingFile("com/izforge/izpack/panels/hello/HelloPanel.class"));
-        assertThat(out, ZipMatcher.isZipContainingFile("resources/vars"));
-        assertThat(out, ZipMatcher.isZipContainingFile("com/izforge/izpack/img/JFrameIcon.png"));
+        jar = testContainer.getComponent(JarFile.class);
+        assertThat((ZipFile)jar, ZipMatcher.isZipContainingFiles(
+                "com/izforge/izpack/installer/bootstrap/Installer.class",
+                "com/izforge/izpack/panels/hello/HelloPanel.class",
+                "resources/vars",
+                "com/izforge/izpack/img/JFrameIcon.png"));
     }
 
     @Test
@@ -61,7 +69,13 @@ public class CompilerConfigTest
         mergeManager.addResourceToMerge(pathResolver.getPanelMerge("HelloPanel"));
         mergeManager.addResourceToMerge(pathResolver.getPanelMerge("CheckedHelloPanel"));
 
-        assertThat(mergeManager, MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/panels/hello/HelloPanelConsoleHelper.class",
+        // Must evaluate this once, MergeManagerImpl clears the list after first merge
+        // Therefore, the second of the following three lines will fail
+        //assertThat((Mergeable)mergeManager, MergeMatcher.isMergeableContainingFile("com/izforge/izpack/panels/hello/HelloPanelConsoleHelper.class"));
+        //assertThat((Mergeable)mergeManager, MergeMatcher.isMergeableContainingFile("com/izforge/izpack/panels/hello/HelloPanel.class"));
+        //assertThat((Mergeable)mergeManager, MergeMatcher.isMergeableContainingFile("com/izforge/izpack/panels/checkedhello/CheckedHelloPanel.class"));
+        assertThat((Mergeable)mergeManager, MergeMatcher.isMergeableContainingFiles(
+                "com/izforge/izpack/panels/hello/HelloPanelConsoleHelper.class",
                 "com/izforge/izpack/panels/hello/HelloPanel.class",
                 "com/izforge/izpack/panels/checkedhello/CheckedHelloPanel.class"));
     }
@@ -70,11 +84,11 @@ public class CompilerConfigTest
     @Ignore
     public void testImportAreResolved() throws Exception
     {
-        JarAnalyzer jarAnalyzer = new JarAnalyzer(out);
+        JarAnalyzer jarAnalyzer = new JarAnalyzer(new File(jar.getName()));
         JarClassesAnalysis jarClassAnalyzer = new JarClassesAnalysis();
         JarClasses jarClasses = jarClassAnalyzer.analyze(jarAnalyzer);
         List<String> imports = jarClasses.getImports();
-        List<String> listFromZip = ZipMatcher.getFileNameListFromZip(out);
+        List<String> listFromZip = ZipMatcher.getFileNameListFromZip(jar);
         ArrayList<String> result = new ArrayList<String>();
         List<String> ignorePackage = Arrays.asList("java/", "org/w3c/", "org/xml/", "javax/", "text/html", "packs/pack", "com/thoughtworks");
         for (String anImport : imports)

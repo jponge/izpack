@@ -1,15 +1,11 @@
 package com.izforge.izpack.integration;
 
-import com.izforge.izpack.api.GuiId;
-import com.izforge.izpack.compiler.container.TestInstallationContainer;
-import com.izforge.izpack.installer.base.InstallerController;
-import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.installer.language.LanguageDialog;
-import com.izforge.izpack.test.Container;
-import com.izforge.izpack.test.InstallFile;
-import com.izforge.izpack.test.junit.PicoRunner;
-import com.izforge.izpack.util.OsVersion;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.timing.Timeout;
@@ -22,11 +18,16 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
+import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.compiler.container.TestInstallationContainer;
+import com.izforge.izpack.installer.base.InstallerController;
+import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.language.LanguageDialog;
+import com.izforge.izpack.test.Container;
+import com.izforge.izpack.test.InstallFile;
+import com.izforge.izpack.test.junit.PicoRunner;
+import com.izforge.izpack.util.OsVersion;
 
 /**
  * Test for an installation
