@@ -111,20 +111,7 @@ public class XmlCompilerHelper
     public boolean requireYesNoAttribute(IXMLElement element, String attribute)
             throws CompilerException
     {
-        String value = requireAttribute(element, attribute);
-        if ("yes".equalsIgnoreCase(value))
-        {
-            return true;
-        }
-        if ("no".equalsIgnoreCase(value))
-        {
-            return false;
-        }
-
-        assertionHelper.parseError(element, "<" + element.getName() + "> invalid attribute '" + attribute
-                + "': Expected (yes|no)");
-
-        return false; // never happens
+        return validateYesNoAttribute(element, attribute, null);
     }
 
     /**
@@ -136,29 +123,36 @@ public class XmlCompilerHelper
      * @param defaultValue Value returned if attribute not present or invalid
      */
     public boolean validateYesNoAttribute(IXMLElement element, String attribute,
-                                          boolean defaultValue)
+            Boolean defaultValue) throws CompilerException
     {
-        if (element == null)
+        if (element != null)
         {
-            return defaultValue;
+            String value = element.getAttribute(attribute);
+            if (value != null)
+            {
+                if ("yes".equalsIgnoreCase(value.trim()) || "true".equalsIgnoreCase(value.trim()))
+                {
+                    return true;
+                }
+                else
+                {
+                    if ("no".equalsIgnoreCase(value.trim()) || "false".equalsIgnoreCase(value.trim())) { return false; }
+                }
+            }
+
+            final String msg = "<" + element.getName() + "> invalid value for attribute '" + attribute
+                    + "': Expected (yes|no|true|false)";
+            if (defaultValue != null)
+            {
+                assertionHelper.parseWarn(element, msg);
+            }
+            else
+            {
+                assertionHelper.parseError(element, msg);
+            }
         }
 
-        String value = element.getAttribute(attribute, (defaultValue ? "yes" : "no"));
-        if ("yes".equalsIgnoreCase(value))
-        {
-            return true;
-        }
-        if ("no".equalsIgnoreCase(value))
-        {
-            return false;
-        }
-
-        // TODO: should this be an error if it's present but "none of the
-        // above"?
-        assertionHelper.parseWarn(element, "<" + element.getName() + "> invalid attribute '" + attribute
-                + "': Expected (yes|no) if present");
-
-        return defaultValue;
+        return defaultValue.booleanValue();
     }
 
     /**

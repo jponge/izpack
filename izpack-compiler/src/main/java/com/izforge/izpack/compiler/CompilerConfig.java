@@ -99,12 +99,12 @@ public class CompilerConfig extends Thread
     /**
      * Constant for checking attributes.
      */
-    private static boolean YES = true;
+    private static final boolean YES = Boolean.TRUE;
 
     /**
      * Constant for checking attributes.
      */
-    private static boolean NO = false;
+    private static final Boolean NO = Boolean.FALSE;
 
     /**
      * The installer packager compiler
@@ -1826,7 +1826,7 @@ public class CompilerConfig extends Thread
 
         // Add the uninstaller as a resource if specified
         IXMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
-        if (xmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", YES))
+        if (xmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", NO))
         {
             //REFACTOR Change the way uninstaller is created
             mergeManager.addResourceToMerge("com/izforge/izpack/uninstaller/");
