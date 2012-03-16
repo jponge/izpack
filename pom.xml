@@ -90,12 +90,13 @@
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version>2.0.1</version>
+                <version>2.1</version>
             </dependency>
+
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
-                <version>1.1</version>
+                <version>1.3</version>
             </dependency>
 
             <!-- Maven plugins libs -->
@@ -286,12 +287,17 @@
 
             <!-- Tests -->
             <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-all</artifactId>
+                <version>1.1</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.10</version>
                 <scope>test</scope>
             </dependency>
-
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-all</artifactId>
@@ -308,12 +314,6 @@
                 <groupId>org.powermock</groupId>
                 <artifactId>powermock-api-mockito</artifactId>
                 <version>1.4.9</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.hamcrest</groupId>
-                <artifactId>hamcrest-all</artifactId>
-                <version>1.1</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -349,6 +349,10 @@
                     <exclusion>
                         <groupId>org.pushing-pixels</groupId>
                         <artifactId>trident</artifactId>
+                    </exclusion>
+                    <exclusion>
+                      <artifactId>ant</artifactId>
+                      <groupId>ant</groupId>
                     </exclusion>
                 </exclusions>
             </dependency>
