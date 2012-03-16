@@ -97,7 +97,13 @@ public class UninstallDataWriter
     public boolean isUninstallRequired()
     {
         String condition = installData.getInfo().getUninstallerCondition();
-        return condition == null || condition.length() == 0 || rules.isConditionTrue(condition);
+
+        return (installData.getInfo().getUninstallerPath() != null)
+               && (
+                       condition == null
+                       || condition.length() == 0
+                       || rules.isConditionTrue(condition)
+                   );
     }
 
     /**

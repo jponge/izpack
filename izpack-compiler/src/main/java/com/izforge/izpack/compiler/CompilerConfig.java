@@ -1826,8 +1826,10 @@ public class CompilerConfig extends Thread
 
         // Add the uninstaller as a resource if specified
         IXMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
-        if (xmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", NO))
+        if (xmlCompilerHelper.validateYesNoAttribute(uninstallInfo, "write", YES))
         {
+            logger.info("Adding uninstaller");
+
             //REFACTOR Change the way uninstaller is created
             mergeManager.addResourceToMerge("com/izforge/izpack/uninstaller/");
             mergeManager.addResourceToMerge("uninstaller-META-INF/");
@@ -1858,6 +1860,11 @@ public class CompilerConfig extends Thread
                     info.setUninstallerCondition(uninstallerCondition);
                 }
             }
+        }
+        else
+        {
+            logger.info("Disable uninstaller");
+            info.setUninstallerPath(null);
         }
 
         // Add the path for the summary log file if specified

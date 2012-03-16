@@ -85,6 +85,24 @@ public class ConsoleInstallationTest
      * @throws Exception for any error
      */
     @Test
+    @InstallFile("samples/console/install_no_uninstall.xml")
+    public void testInstallationWithDisabledUnInstaller() throws Exception
+    {
+        TestConsole console = new TestConsole();
+        console.addScript("HelloPanel", "1");
+        console.addScript("InfoPanel", "1");
+        console.addScript("LicensePanel", "\n", "1");
+        console.addScript("TargetPanel", "\n", "1");
+
+        checkInstall(console, false);
+    }
+
+    /**
+     * Runs the console installer against a script, and verifies expected files are installed.
+     *
+     * @throws Exception for any error
+     */
+    @Test
     @InstallFile("samples/console/install.xml")
     public void testInstallation() throws Exception
     {
@@ -224,6 +242,17 @@ public class ConsoleInstallationTest
      */
     private void checkInstall(TestConsole console)
     {
+      checkInstall(console, true);
+    }
+
+    /**
+     * Verifies that console installation completes successfully.
+     *
+     * @param console the console
+     * @param expectUninstaller whether to expect an uninstaller to be created
+     */
+    private void checkInstall(TestConsole console, boolean expectUninstaller)
+    {
         File installPath = new File(temporaryFolder.getRoot(), "izpackTest");
 
         installer.setConsole(console);
@@ -239,7 +268,14 @@ public class ConsoleInstallationTest
         // make sure some of the expected files are installed
         assertTrue(new File(installPath, "Licence.txt").exists());
         assertTrue(new File(installPath, "Readme.txt").exists());
-        assertTrue(new File(installPath, "Uninstaller/uninstaller.jar").exists());
+        if (expectUninstaller)
+        {
+          assertTrue(new File(installPath, "Uninstaller/uninstaller.jar").exists());
+        }
+        else
+        {
+          assertFalse(new File(installPath, "Uninstaller/uninstaller.jar").exists());
+        }
     }
 
 }
