@@ -15,7 +15,6 @@ import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -57,16 +56,16 @@ public class AbstractDestroyerTest
      * Sets up the test case.
      *
      * @throws java.io.IOException if the install directory cannot be created
+     * @throws Exception           for any other error
      */
     @Before
-    public void setUp() throws IOException
+    public void setUp() throws Exception
     {
         // write to temporary folder so the test doesn't need to be run with elevated permissions
         File installPath = new File(temporaryFolder.getRoot(), "izpackTest");
         assertTrue(installPath.mkdirs());
         installData.setInstallPath(installPath.getAbsolutePath());
     }
-
 
     /**
      * Runs the {@link Destroyer} in the supplied uninstall jar.

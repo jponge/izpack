@@ -1,6 +1,7 @@
 package com.izforge.izpack.uninstaller;
 
 import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.util.DefaultTargetPlatformFactory;
@@ -8,6 +9,8 @@ import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.TargetFactory;
 import org.picocontainer.MutablePicoContainer;
+
+import java.util.Properties;
 
 
 /**
@@ -32,6 +35,8 @@ public class UninstallerContainer extends AbstractContainer
         container.addComponent(RegistryDefaultHandler.class);
         container.addComponent(UninstallerFrame.class);
         container.addComponent(BindeableContainer.class, this);
+        container.addComponent(Properties.class);
+        container.addComponent(ResourceManager.class);
         container.addComponent(UninstallerConsole.class);
     }
 }

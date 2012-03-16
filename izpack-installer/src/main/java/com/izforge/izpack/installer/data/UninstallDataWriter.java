@@ -196,6 +196,10 @@ public class UninstallDataWriter
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/gui/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/img/"));
         uninstallerMerge.addAll(pathResolver.getMergeableFromPath("org/picocontainer/"));
+
+        // indirectly required by Librarian, which pulls in IoHelper. TODO
+        uninstallerMerge.addAll(pathResolver.getMergeableFromPath("org/apache/tools/zip/"));
+
         if (!uninstallData.getUninstallerListeners().isEmpty())
         {
             uninstallerMerge.addAll(pathResolver.getMergeableFromPath("com/izforge/izpack/event/"));

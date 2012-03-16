@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  * @author Tim Anderson
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Inherited
 public @interface RunOn
 {
