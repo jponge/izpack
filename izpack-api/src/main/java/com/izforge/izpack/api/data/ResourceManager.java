@@ -21,6 +21,10 @@
 
 package com.izforge.izpack.api.data;
 
+import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.api.exception.ResourceNotFoundException;
+
+import javax.swing.ImageIcon;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,11 +34,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
-
-import javax.swing.ImageIcon;
-
-import com.izforge.izpack.api.exception.IzPackException;
-import com.izforge.izpack.api.exception.ResourceNotFoundException;
 
 /**
  * With this ResourceManager you are able to get resources from the jar file.
@@ -79,32 +78,14 @@ public class ResourceManager
     private String bundleName = null;
 
     /**
-     * The instance of this class.
-     */
-    private static ResourceManager instance = null;
-
-    /**
-     * Return the resource manager.
+     * Constructs a <tt>ResourceManager</tt>.
      *
-     * @return the resource manager instance, null if no instance has been created
-     */
-    public static ResourceManager getInstance()
-    {
-        if (ResourceManager.instance == null)
-        {
-            ResourceManager.instance = new ResourceManager(new Properties());
-        }
-        return ResourceManager.instance;
-    }
-
-    /**
-     * Constructor. Protected because this is a singleton.
+     * @param properties the properties
      */
     public ResourceManager(Properties properties)
     {
         this.locale = "eng";
-        final String systemPropertyBundleName = properties
-                .getProperty("resource.bundle.system.property");
+        final String systemPropertyBundleName = properties.getProperty("resource.bundle.system.property");
         if (systemPropertyBundleName != null)
         {
             setBundleName(System.getProperty(systemPropertyBundleName));
