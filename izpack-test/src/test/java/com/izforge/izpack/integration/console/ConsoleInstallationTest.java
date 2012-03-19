@@ -1,8 +1,8 @@
 package com.izforge.izpack.integration.console;
 
-import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.container.TestConsoleInstallationContainer;
@@ -57,7 +57,7 @@ public class ConsoleInstallationTest
     /**
      * Constructs a <tt>ConsoleInstallationTest</tt>
      *
-     * @param container       the container
+     * @param factory         the object factory
      * @param installData     the installation date
      * @param rules           the rules engine
      * @param resourceManager the resource manager
@@ -68,13 +68,13 @@ public class ConsoleInstallationTest
      * @param housekeeper     the house-keeper
      * @throws Exception for any error
      */
-    public ConsoleInstallationTest(BindeableContainer container, AutomatedInstallData installData,
+    public ConsoleInstallationTest(ObjectFactory factory, AutomatedInstallData installData,
                                    RulesEngine rules, ResourceManager resourceManager,
                                    RequirementsChecker requirements, VariableSubstitutor substituter,
                                    UninstallDataWriter writer, Console console, Housekeeper housekeeper)
             throws Exception
     {
-        installer = new TestConsoleInstaller(container, installData, rules, resourceManager, requirements, substituter,
+        installer = new TestConsoleInstaller(factory, installData, rules, resourceManager, requirements, substituter,
                 writer, console, housekeeper);
         this.installData = installData;
     }
@@ -242,13 +242,13 @@ public class ConsoleInstallationTest
      */
     private void checkInstall(TestConsole console)
     {
-      checkInstall(console, true);
+        checkInstall(console, true);
     }
 
     /**
      * Verifies that console installation completes successfully.
      *
-     * @param console the console
+     * @param console           the console
      * @param expectUninstaller whether to expect an uninstaller to be created
      */
     private void checkInstall(TestConsole console, boolean expectUninstaller)
@@ -270,11 +270,11 @@ public class ConsoleInstallationTest
         assertTrue(new File(installPath, "Readme.txt").exists());
         if (expectUninstaller)
         {
-          assertTrue(new File(installPath, "Uninstaller/uninstaller.jar").exists());
+            assertTrue(new File(installPath, "Uninstaller/uninstaller.jar").exists());
         }
         else
         {
-          assertFalse(new File(installPath, "Uninstaller/uninstaller.jar").exists());
+            assertFalse(new File(installPath, "Uninstaller/uninstaller.jar").exists());
         }
     }
 

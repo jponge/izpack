@@ -3,10 +3,12 @@ package com.izforge.izpack.installer.console;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.factory.ObjectFactory;
+import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.Console;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
+import com.izforge.izpack.util.Console;
 
 import java.util.Properties;
 
@@ -26,18 +28,20 @@ class PropertyInstallAction extends AbstractInstallAction
     /**
      * Constructs a <tt>PropertyInstallAction</tt>.
      *
-     * @param factory     the panel console factory
-     * @param installData the installation data
-     * @param substituter the variable substituter
-     * @param rules       the rules engine
-     * @param writer      the uninstallation data writer
-     * @param properties  the installation properties
+     * @param factory       the panel console factory
+     * @param installData   the installation data
+     * @param substituter   the variable substituter
+     * @param objectFactory the factory for {@link DataValidator} instances
+     * @param rules         the rules engine
+     * @param writer        the uninstallation data writer
+     * @param properties    the installation properties
      */
     public PropertyInstallAction(PanelConsoleFactory factory, AutomatedInstallData installData,
-                                 VariableSubstitutor substituter, RulesEngine rules, UninstallDataWriter writer,
+                                 VariableSubstitutor substituter, ObjectFactory objectFactory, RulesEngine rules,
+                                 UninstallDataWriter writer,
                                  Properties properties)
     {
-        super(factory, installData, substituter, rules, writer);
+        super(factory, installData, substituter, objectFactory, rules, writer);
         this.properties = properties;
     }
 

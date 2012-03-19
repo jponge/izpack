@@ -32,6 +32,7 @@ import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.ScriptParserConstant;
 import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.installer.DataValidator.Status;
@@ -42,8 +43,6 @@ import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.console.ConsolePanelAutomationHelper;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
-import com.izforge.izpack.installer.manager.DataValidatorFactory;
-import com.izforge.izpack.installer.manager.PanelActionFactory;
 import com.izforge.izpack.installer.requirement.RequirementsChecker;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraintHelper;
@@ -97,6 +96,11 @@ public class AutomatedInstaller extends InstallerBase
     private VariableSubstitutor variableSubstitutor;
 
     /**
+     * The factory for {@link DataValidator} and {@link PanelAction} instances.
+     */
+    private final ObjectFactory factory;
+
+    /**
      * The house-keeper.
      */
     private final Housekeeper housekeeper;
@@ -109,11 +113,12 @@ public class AutomatedInstaller extends InstallerBase
      * @param requirements        the installation requirements checker
      * @param uninstallDataWriter the uninstallation data writer
      * @param variableSubstitutor the variable substituter
+     * @param factory             the factory for {@link DataValidator} and {@link PanelAction} instances
      * @param housekeeper         the house-keeper
      */
     public AutomatedInstaller(AutomatedInstallData installData, ResourceManager resourceManager,
                               RequirementsChecker requirements, UninstallDataWriter uninstallDataWriter,
-                              VariableSubstitutor variableSubstitutor, Housekeeper housekeeper)
+                              VariableSubstitutor variableSubstitutor, ObjectFactory factory, Housekeeper housekeeper)
     {
         super(resourceManager);
         this.installData = installData;
@@ -122,6 +127,7 @@ public class AutomatedInstaller extends InstallerBase
 
         this.panelInstanceCount = new TreeMap<String, Integer>();
         this.variableSubstitutor = variableSubstitutor;
+        this.factory = factory;
         this.housekeeper = housekeeper;
     }
 
@@ -431,7 +437,7 @@ public class AutomatedInstaller extends InstallerBase
         String dataValidator = p.getValidator();
         if (dataValidator != null)
         {
-            DataValidator validator = DataValidatorFactory.createDataValidator(dataValidator);
+            DataValidator validator = factory.create(dataValidator, DataValidator.class);
             Status validationResult = validator.validateData(installData);
             if (validationResult != DataValidator.Status.OK)
             {
@@ -498,7 +504,7 @@ public class AutomatedInstaller extends InstallerBase
             actionList = new ArrayList<PanelAction>();
             for (String actionClassName : actions)
             {
-                PanelAction action = PanelActionFactory.createPanelAction(actionClassName);
+                PanelAction action = factory.create(actionClassName, PanelAction.class);
                 action.initialize(panel.getPanelActionConfiguration(actionClassName));
                 actionList.add(action);
             }

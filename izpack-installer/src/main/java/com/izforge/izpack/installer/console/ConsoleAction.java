@@ -1,21 +1,21 @@
 package com.izforge.izpack.installer.console;
 
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.base.InstallerBase;
-import com.izforge.izpack.installer.manager.DataValidatorFactory;
 import com.izforge.izpack.util.Console;
 import com.izforge.izpack.util.OsConstraintHelper;
+
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Console installer action.
@@ -42,6 +42,11 @@ abstract class ConsoleAction
     private final VariableSubstitutor substituter;
 
     /**
+     * The factory for {@link DataValidator} instances.
+     */
+    private final ObjectFactory objectFactory;
+
+    /**
      * The rules engine.
      */
     private final RulesEngine rules;
@@ -50,17 +55,19 @@ abstract class ConsoleAction
     /**
      * Constructs a <tt>ConsoleAction</tt>.
      *
-     * @param factory     the factory for PanelConsole instances
-     * @param installData the installation data
-     * @param substituter the variable substituter
-     * @param rules       the rules engine
+     * @param factory       the factory for PanelConsole instances
+     * @param installData   the installation data
+     * @param substituter   the variable substituter
+     * @param objectFactory the factory for {@link DataValidator} instances
+     * @param rules         the rules engine
      */
     public ConsoleAction(PanelConsoleFactory factory, AutomatedInstallData installData,
-                         VariableSubstitutor substituter, RulesEngine rules)
+                         VariableSubstitutor substituter, ObjectFactory objectFactory, RulesEngine rules)
     {
         this.factory = factory;
         this.installData = installData;
         this.substituter = substituter;
+        this.objectFactory = objectFactory;
         this.rules = rules;
     }
 
@@ -99,7 +106,7 @@ abstract class ConsoleAction
         }
         if (!result && isInstall())
         {
-           installData.setInstallSuccess(false);
+            installData.setInstallSuccess(false);
         }
         return result;
     }
@@ -254,7 +261,7 @@ abstract class ConsoleAction
         String dataValidator = panel.getValidator();
         if (dataValidator != null)
         {
-            DataValidator validator = DataValidatorFactory.createDataValidator(dataValidator);
+            DataValidator validator = objectFactory.create(dataValidator, DataValidator.class);
             DataValidator.Status validationResult = validator.validateData(installData);
             if (validationResult != DataValidator.Status.OK)
             {

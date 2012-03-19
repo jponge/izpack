@@ -1,11 +1,11 @@
 package com.izforge.izpack.installer.console;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.factory.ObjectFactory;
+
+import java.util.logging.Logger;
+
 
 /**
  * Factory for {@link PanelConsole} instances.
@@ -14,21 +14,25 @@ import com.izforge.izpack.api.exception.InstallerException;
  */
 class PanelConsoleFactory
 {
-    private static final Logger logger = Logger.getLogger(PanelConsoleFactory.class.getName());
+    /**
+     * The factory to delegate to.
+     */
+    private final ObjectFactory factory;
 
     /**
-     * The container.
+     * The logger.
      */
-    private final BindeableContainer container;
+    private static final Logger logger = Logger.getLogger(PanelConsoleFactory.class.getName());
+
 
     /**
      * Constructs a <tt>PanelConsoleFactory</tt>.
      *
-     * @param container the container
+     * @param factory the factory to delegate to
      */
-    public PanelConsoleFactory(BindeableContainer container)
+    public PanelConsoleFactory(ObjectFactory factory)
     {
-        this.container = container;
+        this.factory = factory;
     }
 
     /**
@@ -41,12 +45,7 @@ class PanelConsoleFactory
     public PanelConsole create(Panel panel) throws InstallerException
     {
         Class<PanelConsole> impl = getClass(panel);
-        if (impl == null)
-        {
-            throw new InstallerException("No PanelConsole implementation exists for panel: " + panel.getClassName());
-        }
-        container.addComponent(impl);
-        return container.getComponent(impl);
+        return factory.create(impl);
     }
 
     /**

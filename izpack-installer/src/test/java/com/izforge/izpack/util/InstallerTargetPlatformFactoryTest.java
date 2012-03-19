@@ -20,6 +20,7 @@ package com.izforge.izpack.util;
 import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.core.container.AbstractContainer;
+import com.izforge.izpack.core.factory.DefaultObjectFactory;
 import com.izforge.izpack.core.os.RegistryHandler;
 import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.util.os.Shortcut;
@@ -72,7 +73,7 @@ public class InstallerTargetPlatformFactoryTest
             }
         };
         container.initBindings();
-        factory = new DefaultTargetPlatformFactory(container);
+        factory = new DefaultTargetPlatformFactory(new DefaultObjectFactory(container));
     }
 
     /**

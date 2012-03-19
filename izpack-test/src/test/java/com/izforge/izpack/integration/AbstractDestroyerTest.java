@@ -15,7 +15,6 @@ import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -123,9 +122,8 @@ public class AbstractDestroyerTest
      * Returns the uninstaller jar file.
      *
      * @return the uninstaller jar file
-     * @throws IOException
      */
-    protected File getUninstallerJar() throws IOException
+    protected File getUninstallerJar()
     {
         return getUninstallerJar(new VariableSubstitutorImpl(installData.getVariables()));
     }
@@ -135,9 +133,8 @@ public class AbstractDestroyerTest
      *
      * @param substituter the variable substituter
      * @return the uninstaller jar file
-     * @throws IOException
      */
-    protected File getUninstallerJar(VariableSubstitutor substituter) throws IOException
+    protected File getUninstallerJar(VariableSubstitutor substituter)
     {
         String dir = IoHelper.translatePath(installData.getInfo().getUninstallerPath(), substituter);
         String path = dir + File.separator + installData.getInfo().getUninstallerName();

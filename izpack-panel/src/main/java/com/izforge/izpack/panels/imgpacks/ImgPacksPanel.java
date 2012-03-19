@@ -25,11 +25,13 @@ package com.izforge.izpack.panels.imgpacks;
 
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.LayoutHelper;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.packs.PacksPanelBase;
+import com.izforge.izpack.panels.treepacks.PackValidator;
 import com.izforge.izpack.util.IoHelper;
 
 import javax.swing.*;
@@ -67,15 +69,18 @@ public class ImgPacksPanel extends PacksPanelBase
     private JLabel imgLabel;
 
     /**
-     * The constructor.
+     * Constructs a <tt>ImgPacksPanel</tt>.
      *
-     * @param rules
-     * @param parent The parent window.
-     * @param idata  The installation installDataGUI.
+     * @param parent          fhe parent window
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
+     * @param factory         the factory for creating {@link PackValidator} instances
+     * @param rules           the rules engine
      */
-    public ImgPacksPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, RulesEngine rules)
+    public ImgPacksPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+                         ObjectFactory factory, RulesEngine rules)
     {
-        super(parent, idata, resourceManager, rules);
+        super(parent, installData, resourceManager, factory, rules);
     }
 
     /*

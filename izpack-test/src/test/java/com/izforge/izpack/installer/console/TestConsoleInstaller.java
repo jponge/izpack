@@ -1,8 +1,8 @@
 package com.izforge.izpack.installer.console;
 
-import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
@@ -28,7 +28,7 @@ public class TestConsoleInstaller extends ConsoleInstaller
     /**
      * Constructs a <tt>TestConsoleInstaller</tt>
      *
-     * @param container       the container
+     * @param factory         the object factory
      * @param installData     the installation date
      * @param rules           the rules engine
      * @param resourceManager the resource manager
@@ -39,13 +39,13 @@ public class TestConsoleInstaller extends ConsoleInstaller
      * @param housekeeper     the house-keeper
      * @throws Exception for any error
      */
-    public TestConsoleInstaller(BindeableContainer container, AutomatedInstallData installData,
+    public TestConsoleInstaller(ObjectFactory factory, AutomatedInstallData installData,
                                 RulesEngine rules, ResourceManager resourceManager,
                                 RequirementsChecker requirements, VariableSubstitutor substituter,
                                 UninstallDataWriter writer, Console console, Housekeeper housekeeper)
             throws Exception
     {
-        super(container, installData, rules, resourceManager, requirements, substituter, writer, console, housekeeper);
+        super(factory, installData, rules, resourceManager, requirements, substituter, writer, console, housekeeper);
     }
 
     /**

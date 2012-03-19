@@ -9,6 +9,7 @@ import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
+import com.izforge.izpack.core.factory.DefaultObjectFactory;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.base.InstallDataConfiguratorWithRules;
@@ -74,8 +75,8 @@ public abstract class InstallerContainer extends AbstractContainer
                 .addComponent(Housekeeper.class)
                 .addComponent(Librarian.class)
                 .addComponent(TargetFactory.class)
-                .addComponent(DefaultTargetPlatformFactory.class);
-
+                .addComponent(DefaultTargetPlatformFactory.class)
+                .addComponent(DefaultObjectFactory.class);
     }
 
     /**

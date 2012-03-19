@@ -1,5 +1,24 @@
 package com.izforge.izpack.installer.manager;
 
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.factory.ObjectFactory;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.installer.DataValidator;
+import com.izforge.izpack.api.merge.Mergeable;
+import com.izforge.izpack.data.PanelAction;
+import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.unpacker.IUnpacker;
+import com.izforge.izpack.merge.ClassResolver;
+import com.izforge.izpack.merge.resolve.ClassPathCrawler;
+import com.izforge.izpack.merge.resolve.PathResolver;
+import com.izforge.izpack.merge.resolve.ResolveUtils;
+import com.izforge.izpack.util.OsConstraintHelper;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.lang.reflect.Modifier;
@@ -11,24 +30,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.api.container.BindeableContainer;
-import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.api.merge.Mergeable;
-import com.izforge.izpack.data.PanelAction;
-import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.installer.unpacker.IUnpacker;
-import com.izforge.izpack.merge.ClassResolver;
-import com.izforge.izpack.merge.resolve.ClassPathCrawler;
-import com.izforge.izpack.merge.resolve.MergeableResolver;
-import com.izforge.izpack.merge.resolve.PathResolver;
-import com.izforge.izpack.merge.resolve.ResolveUtils;
-import com.izforge.izpack.util.OsConstraintHelper;
-
 /**
  * Load panels in the container
  */
@@ -39,19 +40,40 @@ public class PanelManager
     private int lastVis;
     private ClassPathCrawler classPathCrawler;
 
-    private final static Logger logger = Logger.getLogger(PanelManager.class.getName());
-
     /**
      * Mapping from "raw" panel number to visible panel number.
      */
     protected ArrayList<Integer> visiblePanelMapping;
+
     private PathResolver pathResolver;
 
-    public PanelManager(GUIInstallData installData, BindeableContainer installerContainer, PathResolver pathResolver, MergeableResolver mergeableResolver, ClassPathCrawler classPathCrawler) throws ClassNotFoundException
+    /**
+     * The factory for {@link DataValidator} and {@link PanelAction} instances.
+     */
+    private final ObjectFactory factory;
+
+    /**
+     * The logger.
+     */
+    private final static Logger logger = Logger.getLogger(PanelManager.class.getName());
+
+
+    /**
+     * Constructs a <tt>PanelManager</tt>.
+     *
+     * @param installData        the installation data
+     * @param installerContainer the installer container
+     * @param pathResolver       the path resolver
+     * @param classPathCrawler   the class path crawler
+     * @param factory            the factory for {@link DataValidator} instances
+     */
+    public PanelManager(GUIInstallData installData, BindeableContainer installerContainer, PathResolver pathResolver,
+                        ObjectFactory factory, ClassPathCrawler classPathCrawler)
     {
         this.installData = installData;
         this.installerContainer = installerContainer;
         this.pathResolver = pathResolver;
+        this.factory = factory;
         this.classPathCrawler = classPathCrawler;
         visiblePanelMapping = new ArrayList<Integer>();
     }
@@ -59,7 +81,8 @@ public class PanelManager
     /**
      * Parse XML to search all used panels and add them in the pico installerContainer.
      *
-     * @throws ClassNotFoundException
+     * @return this
+     * @throws ClassNotFoundException if a panel implementation cannot be found
      */
     public PanelManager loadPanelsInContainer() throws ClassNotFoundException
     {
@@ -67,13 +90,12 @@ public class PanelManager
         // We load each of them
         List<Panel> panelsOrder = installData.getPanelsOrder();
 
-//        List<Class> listPanelClass = new ArrayList<Class>();
-        Map<Object, Class> mapPanel = new HashMap();
+        Map<Object, Class> mapPanel = new HashMap<Object, Class>();
         for (Panel panel : panelsOrder)
         {
             if (OsConstraintHelper.oneMatchesCurrentSystem(panel.getOsConstraints()))
             {
-                final Class<? extends IzPanel> panelClass = classPathCrawler.findClass(panel.getClassName());
+                Class<IzPanel> panelClass = getPanelClass(panel);
                 if (panel.getPanelid() != null)
                 {
                     mapPanel.put(panel.getPanelid(), panelClass);
@@ -89,6 +111,8 @@ public class PanelManager
         return this;
     }
 
+    // TODO - can't see why this is required. The only class that should need to be registered with the pico container
+    // is the panel class. Everything else can be constructed within the panel as required
     private void loadClassesInSamePackage(Map<Object, Class> mapPanel)
     {
         Set<Mergeable> mergeableSet = new HashSet<Mergeable>();
@@ -139,7 +163,8 @@ public class PanelManager
      * Construct all panels present in the installerContainer.<br />
      * Executing prebuild, prevalidate, postvalidate and postconstruct actions.
      *
-     * @throws ClassNotFoundException
+     * @throws ClassNotFoundException if the class cannot be found
+     * @throws IllegalStateException  if the specified class does not extend {@link IzPanel}.
      */
     public void instantiatePanels() throws ClassNotFoundException
     {
@@ -151,7 +176,7 @@ public class PanelManager
         {
             if (OsConstraintHelper.oneMatchesCurrentSystem(panel.getOsConstraints()))
             {
-                Class<? extends IzPanel> aClass = classPathCrawler.findClass(panel.getClassName());
+                Class<IzPanel> panelClass = getPanelClass(panel);
                 executePreBuildActions(panel);
                 IzPanel izPanel;
                 if (panel.getPanelid() != null)
@@ -160,16 +185,17 @@ public class PanelManager
                 }
                 else
                 {
-                    izPanel = installerContainer.getComponent(aClass);
+                    izPanel = installerContainer.getComponent(panelClass);
                 }
                 izPanel.setMetadata(panel);
                 String dataValidator = panel.getValidator();
                 if (dataValidator != null)
                 {
-                    izPanel.setValidationService(DataValidatorFactory.createDataValidator(dataValidator));
+                    izPanel.setValidationService(factory.create(dataValidator, DataValidator.class));
                 }
                 izPanel.setHelpUrl(panel.getHelpUrl(installData.getLocaleISO3()));
 
+                preActivateActions(panel, izPanel);
                 preValidateAction(panel, izPanel);
                 postValidateAction(panel, izPanel);
 
@@ -202,41 +228,55 @@ public class PanelManager
 
     public void executePreBuildActions(Panel panel)
     {
-        List<String> preConstgructionActions = panel.getPreConstructionActions();
-        if (preConstgructionActions != null)
+        List<String> preConstructionActions = panel.getPreConstructionActions();
+        if (preConstructionActions != null)
         {
-            for (String preConstgructionAction : preConstgructionActions)
+            for (String preConstructionAction : preConstructionActions)
             {
-                PanelAction action = PanelActionFactory.createPanelAction(preConstgructionAction);
-                action.initialize(panel.getPanelActionConfiguration(preConstgructionAction));
+                PanelAction action = factory.create(preConstructionAction, PanelAction.class);
+                action.initialize(panel.getPanelActionConfiguration(preConstructionAction));
                 action.executeAction(installData, null);
+            }
+        }
+    }
+
+    private void preActivateActions(Panel panel, IzPanel izPanel)
+    {
+        List<String> classNames = panel.getPreActivationActions();
+        if (classNames != null)
+        {
+            for (String className : classNames)
+            {
+                PanelAction action = factory.create(className, PanelAction.class);
+                action.initialize(panel.getPanelActionConfiguration(className));
+                izPanel.addPreActivationAction(action);
             }
         }
     }
 
     private void preValidateAction(Panel panel, IzPanel izPanel)
     {
-        List<String> preActivateActions = panel.getPreActivationActions();
-        if (preActivateActions != null)
+        List<String> classNames = panel.getPreValidationActions();
+        if (classNames != null)
         {
-            for (String panelActionClass : preActivateActions)
+            for (String className : classNames)
             {
-                PanelAction action = PanelActionFactory.createPanelAction(panelActionClass);
-                action.initialize(panel.getPanelActionConfiguration(panelActionClass));
-                izPanel.addPreActivationAction(action);
+                PanelAction action = factory.create(className, PanelAction.class);
+                action.initialize(panel.getPanelActionConfiguration(className));
+                izPanel.addPreValidationAction(action);
             }
         }
     }
 
     private void postValidateAction(Panel panel, IzPanel izPanel)
     {
-        List<String> postValidateActions = panel.getPostValidationActions();
-        if (postValidateActions != null)
+        List<String> classNames = panel.getPostValidationActions();
+        if (classNames != null)
         {
-            for (String panelActionClass : postValidateActions)
+            for (String className : classNames)
             {
-                PanelAction action = PanelActionFactory.createPanelAction(panelActionClass);
-                action.initialize(panel.getPanelActionConfiguration(panelActionClass));
+                PanelAction action = factory.create(className, PanelAction.class);
+                action.initialize(panel.getPanelActionConfiguration(className));
                 izPanel.addPostValidationAction(action);
             }
         }
@@ -273,4 +313,25 @@ public class PanelManager
         setAbstractUIHandlerInContainer(listener);
         return installerContainer.getComponent(IUnpacker.class);
     }
+
+    /**
+     * Returns the implementing class for a panel.
+     *
+     * @param panel the panel
+     * @return the class that implements the panel
+     * @throws ClassNotFoundException if the class cannot be found
+     * @throws IllegalStateException  if the specified class does not extend {@link IzPanel}.
+     */
+    @SuppressWarnings("unchecked")
+    private Class<IzPanel> getPanelClass(Panel panel) throws ClassNotFoundException
+    {
+        Class result = Class.forName(panel.getClassName()); // compiler emits fully qualified class names
+        if (!IzPanel.class.isAssignableFrom(result))
+        {
+            throw new IllegalStateException("Class " + result + " does not extend "
+                    + IzPanel.class.getName());
+        }
+        return result;
+    }
+
 }

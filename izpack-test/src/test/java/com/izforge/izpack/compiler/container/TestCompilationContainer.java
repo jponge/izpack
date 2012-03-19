@@ -14,6 +14,7 @@ import org.picocontainer.MutablePicoContainer;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * Container for compilation test
@@ -48,7 +49,11 @@ public class TestCompilationContainer extends AbstractContainer
             }
             String installFileName = installFile.value();
 
-            File installerFile = FileUtil.convertUrlToFile(getClass().getClassLoader().getResource(installFileName));
+            URL resource = getClass().getClassLoader().getResource(installFileName);
+            if (resource == null) {
+                throw new IllegalStateException("Cannot find install file: " + installFileName);
+            }
+            File installerFile = FileUtil.convertUrlToFile(resource);
             File baseDir = installerFile.getParentFile();
 
             File out = new File(baseDir, "out" + Math.random() + ".jar");

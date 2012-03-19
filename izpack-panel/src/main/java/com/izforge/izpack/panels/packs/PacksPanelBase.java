@@ -24,6 +24,39 @@
 
 package com.izforge.izpack.panels.packs;
 
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.factory.ObjectFactory;
+import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.debugger.Debugger;
+import com.izforge.izpack.panels.imgpacks.ImgPacksPanelAutomationHelper;
+import com.izforge.izpack.panels.treepacks.PackValidator;
+import com.izforge.izpack.util.IoHelper;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonModel;
+import javax.swing.Icon;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -39,27 +72,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
-
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.api.data.Pack;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.installer.debugger.Debugger;
-import com.izforge.izpack.panels.imgpacks.ImgPacksPanelAutomationHelper;
-import com.izforge.izpack.panels.treepacks.PackValidator;
-import com.izforge.izpack.util.IoHelper;
 
 /**
  * The base class for Packs panels. It brings the common member and methods of the different packs
@@ -146,18 +158,29 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     private static final String LANG_FILE_NAME = "packsLang.xml";
 
     private Debugger debugger;
+
+    /**
+     * The factory for creating {@link PackValidator} instances.
+     */
+    private final transient ObjectFactory factory;
+
     private RulesEngine rules;
 
     /**
-     * The constructor.
+     * Constructs a <tt>PacksPanelBase</tt>.
      *
-     * @param parent The parent window.
-     * @param idata  The installation installDataGUI.
+     * @param parent          fhe parent window
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
+     * @param factory         the factory for creating {@link PackValidator} instances
+     * @param rules           the rules engine
      */
-    public PacksPanelBase(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, RulesEngine rules)
+    public PacksPanelBase(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+                          ObjectFactory factory, RulesEngine rules)
     {
-        super(parent, idata, resourceManager);
+        super(parent, installData, resourceManager);
         this.rules = rules;
+        this.factory = factory;
         // Load langpack.
         try
         {
@@ -171,7 +194,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             logger.log(Level.WARNING, "Error loading language pack" + t.toString(), t);
         }
         // init the map
-        computePacks(idata.getAvailablePacks());
+        computePacks(installData.getAvailablePacks());
 
         createNormalLayout();
 
@@ -265,43 +288,20 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         {
             for (String validator : pack.getValidators())
             {
-                /*
-                 * This will call
-                 * public static boolean validate(AbstractUIHandler handler,
-                 *   GUIInstallData installData, String packsId, boolean isSelected)
-                 * from the validator class
-                 */
-
-                PackValidator validatorInst;
+                boolean selected = installData.getSelectedPacks().indexOf(pack) > -1;
                 try
                 {
-                    validatorInst = (PackValidator) Class.forName(validator).newInstance();
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                    System.err.println("Error: Validator class " + validator
-                            + " for pack " + pack.name + " not available.");
-                    continue;
-                }
-
-                try
-                {
-                    if (validatorInst.validate(this, this.installData, pack.id, (this.installData.getSelectedPacks().indexOf(pack) > -1)))
-                    {
-                        continue;
-                    }
-                    else
+                    PackValidator validatorInst = factory.create(validator, PackValidator.class);
+                    if (!validatorInst.validate(this, installData, pack.id, selected))
                     {
                         return false;
                     }
                 }
                 catch (Exception e)
                 {
-                    e.printStackTrace();
-                    System.err.println("Error: Exception in " + validator + ".validate("
-                            + (this.installData.getSelectedPacks().indexOf(pack) > -1) + ") for pack " + pack.name);
-                    continue;
+                    logger.log(Level.WARNING, "Validator threw exception for pack " + pack.name + ": " + e.getMessage(),
+                            e);
+                    return false;
                 }
             }
         }

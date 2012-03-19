@@ -17,8 +17,9 @@
  */
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.api.container.BindeableContainer;
-import org.picocontainer.MutablePicoContainer;
+import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.api.factory.AbstractObjectFactory;
+import com.izforge.izpack.api.factory.ObjectFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -72,9 +73,9 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
 {
 
     /**
-     * The container.
+     * The factory to delegate to.
      */
-    private final BindeableContainer container;
+    private final ObjectFactory factory;
 
     /**
      * Map of interfaces to their corresponding platform implementations.
@@ -99,24 +100,22 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
     /**
      * Constructs a <tt>DefaultTargetPlatformFactory</tt>.
      * <p/>
-     * This does not support dependency injection - classes must provide a no-arg constructor.
+     * This constructor only supports the creation of objects whose classes provide a public no-arg constructor
      */
     public DefaultTargetPlatformFactory()
     {
-        this(null);
+        this(NoDependencyInjectionFactory.INSTANCE);
     }
 
     /**
      * Constructs a <tt>DefaultTargetPlatformFactory</tt>, configured from <em>TargetPlatformFactory.properties</em>
      * resources.
-     * <p/>
-     * When <tt>container</tt> is provided, dependency injection is supported
      *
-     * @param container the container. If non-null, dependency injection is supported
+     * @param factory the factory to delegate to
      */
-    public DefaultTargetPlatformFactory(BindeableContainer container)
+    public DefaultTargetPlatformFactory(ObjectFactory factory)
     {
-        this.container = container;
+        this.factory = factory;
         try
         {
             Enumeration<URL> urls = getClass().getClassLoader().getResources(RESOURCE_PATH);
@@ -155,47 +154,36 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
     /**
      * Creates a platform specific instance of a class, for the specified platform.
      *
-     * @param clazz    the class to create a platform specific instance of
+     * @param type     the type to create a platform specific instance of
      * @param platform the platform
      * @return the instance for the specified platform
      * @throws Exception for any error
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T create(Class<T> clazz, Platform platform) throws Exception
+    public <T> T create(Class<T> type, Platform platform) throws Exception
     {
-        T result;
-        Class<?> impl = getImplementation(clazz, platform);
-        if (container != null)
-        {
-            MutablePicoContainer child = container.makeChildContainer();
-            child.addComponent(impl);
-            result = (T) child.getComponent(impl);
-            container.getContainer().removeChildContainer(child);
-        }
-        else
-        {
-            result = (T) impl.newInstance();
-        }
-        return result;
+        Class<T> impl = getImplementation(type, platform);
+        return factory.create(impl);
     }
 
     /**
-     * Returns the implementation of a class for the specified platform.
+     * Returns the implementation of a type for the specified platform.
      *
-     * @param clazz    the clazz
+     * @param type     the type
      * @param platform the platform
-     * @return the implementation class of <tt>clazz</tt> for <tt>platform</tt>
+     * @return the implementation class of <tt>type</tt> for <tt>platform</tt>
      * @throws ClassNotFoundException if a class is registered but cannot be found
      * @throws IllegalStateException  if no class is registered, or the registered class does not implement nor
-     *                                extend <tt>clazz</tt>
+     *                                extend <tt>type</tt>
      */
-    protected <T> Class<?> getImplementation(Class<T> clazz, Platform platform) throws ClassNotFoundException
+    @SuppressWarnings("unchecked")
+    protected <T> Class<T> getImplementation(Class<T> type, Platform platform) throws ClassNotFoundException
     {
-        Implementations impls = getImplementations(clazz);
+        Implementations impls = getImplementations(type);
         if (impls == null)
         {
-            throw new IllegalArgumentException("No implementations registered for class=" + clazz.getName());
+            throw new IllegalArgumentException("No implementations registered for class=" + type.getName());
         }
         Platform match = null;
         Platform fallback = null;
@@ -224,15 +212,15 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
         String implName = (match != null) ? impls.getImplementation(match) : impls.getDefault();
         if (implName == null)
         {
-            throw new IllegalStateException("No implementation registered for class=" + clazz.getName()
+            throw new IllegalStateException("No implementation registered for class=" + type.getName()
                     + " and platform=" + platform);
         }
         Class impl = Class.forName(implName);
-        if (!clazz.isAssignableFrom(impl))
+        if (!type.isAssignableFrom(impl))
         {
-            throw new IllegalStateException(impl.getName() + " does not extend " + clazz.getName());
+            throw new IllegalStateException(impl.getName() + " does not extend " + type.getName());
         }
-        return impl;
+        return (Class<T>) impl;
     }
 
     /**
@@ -510,5 +498,32 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
             implementations.put(platform, implementation);
         }
 
+    }
+
+    private static class NoDependencyInjectionFactory extends AbstractObjectFactory
+    {
+        /**
+         * The singleton instance.
+         */
+        public static ObjectFactory INSTANCE = new NoDependencyInjectionFactory();
+
+        /**
+         * Creates a new instance of the specified type.
+         *
+         * @param type the object type
+         * @return a new instance
+         */
+        @Override
+        public <T> T create(Class<T> type)
+        {
+            try
+            {
+                return type.newInstance();
+            }
+            catch (Exception exception)
+            {
+                throw new IzPackException(exception);
+            }
+        }
     }
 }

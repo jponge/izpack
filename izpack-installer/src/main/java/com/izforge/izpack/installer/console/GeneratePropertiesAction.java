@@ -3,6 +3,8 @@ package com.izforge.izpack.installer.console;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.factory.ObjectFactory;
+import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.Console;
@@ -30,16 +32,18 @@ class GeneratePropertiesAction extends ConsoleAction
      * @param factory     the panel console factory
      * @param installData the installation data
      * @param substituter the variable substituter
+     * @param objectFactory the factory for {@link DataValidator} instances
      * @param rules       the rules engine
      * @param path        the path to write properties to
      * @throws FileNotFoundException if the file exists but is a directory rather than a regular file, does not exist
      *                               but cannot be created, or cannot be opened for any other reason
      */
     public GeneratePropertiesAction(PanelConsoleFactory factory, AutomatedInstallData installData,
-                                    VariableSubstitutor substituter, RulesEngine rules, String path)
+                                    VariableSubstitutor substituter, ObjectFactory objectFactory, RulesEngine rules, 
+                                    String path)
             throws FileNotFoundException
     {
-        super(factory, installData, substituter, rules);
+        super(factory, installData, substituter, objectFactory, rules);
         writer = new PrintWriter(new FileOutputStream(path), true);
     }
 

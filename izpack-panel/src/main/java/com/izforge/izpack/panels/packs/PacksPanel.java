@@ -29,9 +29,11 @@ import javax.swing.BoxLayout;
 import javax.swing.JScrollPane;
 
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.panels.treepacks.PackValidator;
 import com.izforge.izpack.util.IoHelper;
 
 /**
@@ -51,15 +53,18 @@ public class PacksPanel extends PacksPanelBase
     private static final long serialVersionUID = 4051327842505668403L;
 
     /**
-     * The constructor.
+     * Constructs a <tt>PacksPanel</tt>.
      *
-     * @param rules
-     * @param parent The parent window.
-     * @param idata  The installation installDataGUI.
+     * @param parent          fhe parent window
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
+     * @param factory         the factory for creating {@link PackValidator} instances
+     * @param rules           the rules engine
      */
-    public PacksPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, RulesEngine rules)
+    public PacksPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager, 
+                      ObjectFactory factory, RulesEngine rules)
     {
-        super(parent, idata, resourceManager, rules);
+        super(parent, installData, resourceManager, factory, rules);
     }
 
     /*

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<installation version="1.0">
+    <info>
+        <appname>Test Installation</appname>
+        <appversion>1.4 beta 666</appversion>
+    </info>
+
+    <guiprefs width="640" height="480" resizable="yes"/>
+    <locale>
+        <langpack iso3="eng"/>
+    </locale>
+
+    <panels>
+        <panel classname="HelloPanel" id="HelloPanel">
+            <validator classname="TestDataValidator"/>
+            <actions>
+                <action stage="preconstruct" classname="PreConstructPanelAction"/>
+                <action stage="preactivate" classname="PreActivatePanelAction"/>
+                <action stage="prevalidate" classname="PreValidatePanelAction"/>
+                <action stage="postvalidate" classname="PostValidatePanelAction"/>
+            </actions>
+        </panel>
+
+        <panel classname="SimpleFinishPanel"> <!-- MOTE: validator and actions associated with last panel are ignored -->
+            <!--validator classname="TestDataValidator"/>
+            <actions>
+                <action stage="preconstruct" classname="com.izforge.izpack.integration.panelaction.PreConstructPanelAction"/>
+                <action stage="preactivate" classname="com.izforge.izpack.integration.panelaction.PreActivatePanelAction"/>
+                <action stage="prevalidate" classname="com.izforge.izpack.integration.panelaction.PreValidatePanelAction"/>
+                <action stage="postvalidate" classname="com.izforge.izpack.integration.panelaction.PostValidatePanelAction"/>
+            </actions-->
+        </panel>
+    </panels>
+
+    <packs>
+        <pack name="Base" required="yes">
+            <description>The base files</description>
+        </pack>
+    </packs>
+</installation>

@@ -26,25 +26,24 @@
 
 package com.izforge.izpack.compiler;
 
-import java.io.*;
-import java.net.URL;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.IXMLWriter;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
 import com.izforge.izpack.api.container.BindeableContainer;
-import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Blockable;
+import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
+import com.izforge.izpack.api.data.DynamicVariable;
+import com.izforge.izpack.api.data.GUIPrefs;
+import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.Info.TempDir;
+import com.izforge.izpack.api.data.InstallerRequirement;
+import com.izforge.izpack.api.data.LookAndFeels;
+import com.izforge.izpack.api.data.OverrideType;
+import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.data.PanelActionConfiguration;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.data.binding.Listener;
 import com.izforge.izpack.api.data.binding.OsModel;
@@ -69,7 +68,14 @@ import com.izforge.izpack.compiler.resource.ResourceFinder;
 import com.izforge.izpack.core.data.DynamicInstallerRequirementValidatorImpl;
 import com.izforge.izpack.core.data.DynamicVariableImpl;
 import com.izforge.izpack.core.regex.RegularExpressionFilterImpl;
-import com.izforge.izpack.core.variable.*;
+import com.izforge.izpack.core.variable.ConfigFileValue;
+import com.izforge.izpack.core.variable.EnvironmentValue;
+import com.izforge.izpack.core.variable.ExecValue;
+import com.izforge.izpack.core.variable.JarEntryConfigValue;
+import com.izforge.izpack.core.variable.PlainConfigFileValue;
+import com.izforge.izpack.core.variable.PlainValue;
+import com.izforge.izpack.core.variable.RegistryValue;
+import com.izforge.izpack.core.variable.ZipEntryConfigFileValue;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.data.PackInfo;
@@ -84,6 +90,41 @@ import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraintHelper;
 import com.izforge.izpack.util.file.DirectoryScanner;
 import com.izforge.izpack.util.file.FileUtils;
+import org.apache.commons.lang.StringUtils;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 /**
  * A parser for the installer xml configuration. This parses a document conforming to the
@@ -725,7 +766,8 @@ public class CompilerConfig extends Thread
 
             for (IXMLElement validatorNode : packElement.getChildrenNamed("validator"))
             {
-                pack.addValidator(xmlCompilerHelper.requireContent(validatorNode));
+                String validatorClassName = compiler.findClass(xmlCompilerHelper.requireContent(validatorNode), null);
+                pack.addValidator(validatorClassName);
             }
 
             // We add the pack
@@ -1422,7 +1464,8 @@ public class CompilerConfig extends Thread
             panel.setCondition(condition);
 
             // note - all jars must be added to the classpath prior to invoking this
-            panel.className = compiler.findClass(className, getPanelJarURL(panelElement));
+            className = compiler.findClass(className, getPanelJarURL(panelElement));
+            panel.setClassName(className);
 
             IXMLElement configurationElement = panelElement.getFirstChildNamed("configuration");
             if (configurationElement != null)
@@ -1452,7 +1495,7 @@ public class CompilerConfig extends Thread
                         .getAttribute(DataValidator.DATA_VALIDATOR_CLASSNAME_TAG);
                 if (!"".equals(validator))
                 {
-                    panel.setValidator(validator);
+                    panel.setValidator(compiler.findClass(validator, null));
                 }
             }
 //            // adding helps
@@ -1477,10 +1520,10 @@ public class CompilerConfig extends Thread
                     packager.addResource(resourceId, originalUrl);
                 }
             }
-            // adding actions
+            // add actions
             addPanelActions(panelElement, panel);
-            // insert into the packager
 
+            // insert into the packager
             packager.addPanel(panel);
         }
         notifyCompilerListener("addPanels", CompilerListener.END, data);
@@ -2365,23 +2408,24 @@ public class CompilerConfig extends Thread
                     Condition condition = rules.instanciateCondition(conditionNode);
                     if (condition != null)
                     {
-                            String conditionid = condition.getId();
-                            if (conditions.put(conditionid, condition) != null)
-                            {
-                                assertionHelper.parseWarn(conditionNode,
-                                        "Condition with id '" + conditionid
-                                        + "' has been overwritten");
-                            }
+                        String conditionid = condition.getId();
+                        if (conditions.put(conditionid, condition) != null)
+                        {
+                            assertionHelper.parseWarn(conditionNode,
+                                    "Condition with id '" + conditionid
+                                            + "' has been overwritten");
+                        }
                     }
                     else
                     {
                         assertionHelper.parseError(conditionNode, "Error instantiating condition");
                     }
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
                     throw new CompilerException("Error reading condition at line "
-                    + conditionNode.getLineNr() + ": "
-                    + e.getMessage(), e);
+                            + conditionNode.getLineNr() + ": "
+                            + e.getMessage(), e);
                 }
             }
             try
@@ -2820,25 +2864,26 @@ public class CompilerConfig extends Thread
             {
                 for (IXMLElement action : actionList)
                 {
-                    String stage = action.getAttribute(PanelAction.PANEL_ACTION_STAGE_TAG);
-                    String actionName = action.getAttribute(PanelAction.PANEL_ACTION_CLASSNAME_TAG);
-                    if (actionName != null)
-                    {
-                        List<IXMLElement> params = action.getChildrenNamed("param");
-                        PanelActionConfiguration config = new PanelActionConfiguration();
+                    String stage = xmlCompilerHelper.requireAttribute(action, PanelAction.PANEL_ACTION_STAGE_TAG);
+                    String actionName = xmlCompilerHelper.requireAttribute(action,
+                            PanelAction.PANEL_ACTION_CLASSNAME_TAG);
+                    actionName = compiler.findClass(actionName, null);
 
-                        for (IXMLElement param : params)
+                    List<IXMLElement> params = action.getChildrenNamed("param");
+                    PanelActionConfiguration config = new PanelActionConfiguration();
+
+                    for (IXMLElement param : params)
+                    {
+                        IXMLElement keyElement = param.getFirstChildNamed("key");
+                        IXMLElement valueElement = param.getFirstChildNamed("value");
+                        if ((keyElement != null) && (valueElement != null))
                         {
-                            IXMLElement keyElement = param.getFirstChildNamed("key");
-                            IXMLElement valueElement = param.getFirstChildNamed("value");
-                            if ((keyElement != null) && (valueElement != null))
-                            {
-                                logger.fine("Adding configuration property " + keyElement.getContent() + " with value " + valueElement.getContent() + " for action " + actionName);
-                                config.addProperty(keyElement.getContent(), valueElement.getContent());
-                            }
+                            logger.fine("Adding configuration property " + keyElement.getContent() + " with value "
+                                    + valueElement.getContent() + " for action " + actionName);
+                            config.addProperty(keyElement.getContent(), valueElement.getContent());
                         }
-                        panel.putPanelActionConfiguration(actionName, config);
                     }
+                    panel.putPanelActionConfiguration(actionName, config);
                     try
                     {
                         PanelAction.ActionStage actionStage = PanelAction.ActionStage.valueOf(stage);

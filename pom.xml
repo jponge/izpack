@@ -422,6 +422,9 @@
                         <exclude>**/InstallerListenerTest.java</exclude>
                         <exclude>**/UninstallerListenerTest.java</exclude>
                         <exclude>**/WindowsInstallationTest.java</exclude>
+                        <exclude>**/PanelActionTest.java</exclude>
+                        <exclude>**/DataValidatorTest.java</exclude>
+                        <exclude>**/PackValidatorTest.java</exclude>
                     </excludes>
                     <parallel>both</parallel>
                     <perCoreThreadCount>true</perCoreThreadCount>
@@ -618,6 +621,9 @@
                                 <include>**/InstallerListenerTest.java</include>
                                 <include>**/UninstallerListenerTest.java</include>
                                 <include>**/WindowsInstallationTest.java</include>
+                                <include>**/PanelActionTest.java</include>
+                                <include>**/DataValidatorTest.java</include>
+                                <include>**/PackValidatorTest.java</include>
                             </includes>
                         </configuration>
                     </plugin>
