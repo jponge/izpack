@@ -24,6 +24,10 @@ public class JarOutputStreamProvider implements Provider
         {
             file.delete();
         }
+        if (compilerData.isMkdirs())
+        {
+            file.getParentFile().mkdirs();
+        }
         jarOutputStream = new JarOutputStream(file);
         int level = compilerData.getComprLevel();
         if (level >= 0 && level < 10)

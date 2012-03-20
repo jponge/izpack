@@ -21,9 +21,9 @@ public class IzpackAntRunnable implements Runnable
     private final Boolean inheritAll;
     private Hashtable projectProps;
 
-    public IzpackAntRunnable(String compression, String kind, String input, String configText, String basedir, String output, int compressionLevel, Properties properties, Boolean inheritAll, Hashtable antProjectProperties, String izPackDir)
+    public IzpackAntRunnable(String compression, String kind, String input, String configText, String basedir, String output, boolean mkdirs, int compressionLevel, Properties properties, Boolean inheritAll, Hashtable antProjectProperties, String izPackDir)
     {
-        this.compilerData = new CompilerData(compression, kind, input, configText, basedir, output, compressionLevel);
+        this.compilerData = new CompilerData(compression, kind, input, configText, basedir, output, mkdirs, compressionLevel);
         this.input = input;
         this.properties = properties;
         this.inheritAll = inheritAll;

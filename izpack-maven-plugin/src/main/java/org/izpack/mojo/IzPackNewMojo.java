@@ -69,6 +69,13 @@ public class IzPackNewMojo extends AbstractMojo
     private String output;
 
     /**
+     * Whether to automatically create parent directories of the output file
+     *
+     * @parameter default-value="false"
+     */
+    private boolean mkdirs;
+
+    /**
      * Compression level of the installation. Desactivated by default (-1)
      *
      * @parameter default-value="-1"
@@ -78,14 +85,18 @@ public class IzPackNewMojo extends AbstractMojo
     /**
      * Whether to automatically include project.url from Maven into
      * IzPack info header
+     *
+     * @parameter default-value="false"
      */
-    private boolean autoIncludeUrl = false;
+    private boolean autoIncludeUrl;
 
     /**
      * Whether to automatically include developer list from Maven into
      * IzPack info header
+     *
+     * @parameter default-value="false"
      */
-    private boolean autoIncludeDevelopers = false;
+    private boolean autoIncludeDevelopers;
 
 
     public void execute() throws MojoExecutionException, MojoFailureException
@@ -151,7 +162,7 @@ public class IzPackNewMojo extends AbstractMojo
               info.setAppURL(project.getUrl());
             }
         }
-        return new CompilerData(comprFormat, kind, installFile, null, baseDir, output, comprLevel, info);
+        return new CompilerData(comprFormat, kind, installFile, null, baseDir, output, mkdirs, comprLevel, info);
     }
 
 

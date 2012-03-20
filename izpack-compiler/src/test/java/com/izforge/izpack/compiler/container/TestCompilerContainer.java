@@ -53,7 +53,7 @@ public class TestCompilerContainer extends AbstractContainer
 
             File out = new File(baseDir, "out" + Math.random() + ".jar");
             out.deleteOnExit();
-            CompilerData data = new CompilerData(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), out.getAbsolutePath());
+            CompilerData data = new CompilerData(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), out.getAbsolutePath(), false);
             pico.addConfig("installFile", installerFile.getAbsolutePath());
             pico.addComponent(CompilerData.class, data);
             pico.addComponent(File.class, out);

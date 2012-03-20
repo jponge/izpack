@@ -20,7 +20,7 @@ public class CompressorTest
     @Test
     public void testBzip2Compression() throws IOException, CompressorException
     {
-        CompilerData data = new CompilerData("", "", "output.jar");
+        CompilerData data = new CompilerData("", "", "output.jar", false);
         data.setComprFormat("bzip2");
         data.setComprLevel(5);
         JarOutputStreamProvider jarOutputStreamProvider = new JarOutputStreamProvider();

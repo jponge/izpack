@@ -130,7 +130,7 @@ public class CliAnalyzer {
         if (commandLine.hasOption(ARG_OUTPUT)) {
             output = commandLine.getOptionValue(ARG_OUTPUT).trim();
         }
-        CompilerData compilerData = new CompilerData(installFile, baseDir, output);
+        CompilerData compilerData = new CompilerData(installFile, baseDir, output, false);
 
 
         if (commandLine.hasOption(ARG_COMPRESSION_FORMAT)) {

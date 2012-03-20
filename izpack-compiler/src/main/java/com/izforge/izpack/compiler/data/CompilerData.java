@@ -61,6 +61,11 @@ public class CompilerData
     private String output;
 
     /**
+     * Whether to recursively create parent directories of output
+     */
+    private boolean mkdirs = false;
+
+    /**
      * Compression level
      */
     private int comprLevel = -1;
@@ -97,26 +102,27 @@ public class CompilerData
         }
     }
 
-    public CompilerData(String installFile, String basedir, String output)
+    public CompilerData(String installFile, String basedir, String output, boolean mkdirs)
     {
         this();
         this.installFile = installFile;
         this.basedir = basedir;
         this.output = output;
+        this.mkdirs = mkdirs;
     }
 
-    public CompilerData(String comprFormat, String kind, String installFile, String installText, String basedir, String output, int comprLevel)
+    public CompilerData(String comprFormat, String kind, String installFile, String installText, String basedir, String output, boolean mkdirs, int comprLevel)
     {
-        this(installFile, basedir, output);
+        this(installFile, basedir, output, mkdirs);
         this.comprFormat = comprFormat;
         this.kind = kind;
         this.installText = installText;
         this.comprLevel = comprLevel;
     }
 
-    public CompilerData(String comprFormat, String kind, String installFile, String installText, String basedir, String output, int comprLevel, Info externalInfo)
+    public CompilerData(String comprFormat, String kind, String installFile, String installText, String basedir, String output, boolean mkdirs, int comprLevel, Info externalInfo)
     {
-        this(comprFormat, kind, installFile, installText, basedir, output, comprLevel);
+        this(comprFormat, kind, installFile, installText, basedir, output, mkdirs, comprLevel);
         this.externalInfo = externalInfo;
     }
 
@@ -168,6 +174,16 @@ public class CompilerData
     public String getOutput()
     {
         return output;
+    }
+
+    public boolean isMkdirs()
+    {
+        return mkdirs;
+    }
+
+    public void setMkdirs(boolean mkdirs)
+    {
+        this.mkdirs = mkdirs;
     }
 
     public String getComprFormat()
