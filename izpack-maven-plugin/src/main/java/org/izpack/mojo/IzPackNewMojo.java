@@ -11,7 +11,9 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectHelper;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -20,6 +22,8 @@ import java.util.*;
  * @author Anthonin Bonnefoy
  * @goal izpack
  * @phase package
+ * @requiresProject
+ * @threadSafe
  * @requiresDependencyResolution test
  */
 public class IzPackNewMojo extends AbstractMojo
@@ -32,6 +36,14 @@ public class IzPackNewMojo extends AbstractMojo
      * @readonly
      */
     private MavenProject project;
+
+    /**
+     * Maven ProjectHelper.
+     *
+     * @component
+     * @readonly
+     */
+    private MavenProjectHelper projectHelper;
 
     /**
      * Format compression. Choices are bzip2, default
@@ -65,6 +77,7 @@ public class IzPackNewMojo extends AbstractMojo
      * Output where compilation result will be situate
      *
      * @parameter default-value="${project.build.directory}/${project.build.finalName}-installer.jar"
+     * @deprecated Use outputDirectory, finalName and optional classifier instead
      */
     private String output;
 
@@ -98,10 +111,58 @@ public class IzPackNewMojo extends AbstractMojo
      */
     private boolean autoIncludeDevelopers;
 
+    /**
+     * Directory containing the generated JAR.
+     *
+     * @parameter default-value="${project.build.directory}"
+     * @required
+     */
+    private File outputDirectory;
+
+    /**
+     * Name of the generated JAR.
+     *
+     * @parameter alias="jarName" expression="${jar.finalName}" default-value="${project.build.finalName}"
+     * @required
+     */
+    private String finalName;
+
+    /**
+     * Classifier to add to the artifact generated. If given, the artifact is attachable.
+     * Furthermore, the output file name gets -<i>classifier</i> as suffix.
+     * If this is not given,it will merely be written to the output directory
+     * according to the finalName.
+     *
+     * @parameter
+     */
+    private String classifier;
+
+    /**
+     * Whether to attach the generated installer jar to the project
+     * as artifact if a classifier is specified.
+     * This has no effect if no classifier was specified.
+     *
+     * @parameter default-value="true"
+     */
+    private boolean enableAttachArtifact;
+
+    /**
+     * Whether to override the artifact file by the generated installer jar,
+     * if no classifier is specified.
+     * This will set the artifact file to the given name based on
+     * <i>outputDirectory</i> + <i>finalName</i> or on <i>output</i>.
+     * This has no effect if a classifier was specified.
+     *
+     * @parameter default-value="false"
+     */
+    private boolean enableOverrideArtifact;
+
 
     public void execute() throws MojoExecutionException, MojoFailureException
     {
-        CompilerData compilerData = initCompilerData();
+        File jarFile = getJarFile();
+
+        CompilerData compilerData = initCompilerData( jarFile );
         CompilerContainer compilerContainer = new CompilerContainer();
         compilerContainer.initBindings();
         compilerContainer.addConfig("installFile", installFile);
@@ -121,49 +182,98 @@ public class IzPackNewMojo extends AbstractMojo
         {
             throw new AssertionError(e);
         }
+
+        if (classifier != null && !classifier.isEmpty())
+        {
+            if (enableAttachArtifact)
+            {
+                projectHelper.attachArtifact(project, getType(), classifier, jarFile);
+            }
+        }
+        else
+        {
+            if (enableOverrideArtifact)
+            {
+                project.getArtifact().setFile(jarFile);
+            }
+        }
+    }
+
+    /**
+     * @return type of the generated artifact - is "jar"
+     */
+    protected static final String getType()
+    {
+        return "jar";
+    }
+
+    private File getJarFile()
+    {
+        File file;
+
+        if (output != null)
+        {
+            file = new File(output);
+        }
+        else
+        {
+          if ( classifier == null || classifier.trim().isEmpty())
+          {
+              classifier = "";
+          }
+          else if ( !classifier.startsWith( "-" ) )
+          {
+              classifier = "-" + classifier;
+          }
+          file = new File( outputDirectory, finalName + classifier + ".jar" );
+        }
+
+        return file;
     }
 
     private void initMavenProperties(PropertyManager propertyManager)
     {
-      if(project != null)
-      {
-        Properties properties = project.getProperties();
-        for (String propertyName : properties.stringPropertyNames()) {
-          String value = properties.getProperty(propertyName);
-          if (propertyManager.addProperty(propertyName, value))
-          {
-            getLog().debug("Maven property added: " + propertyName + "=" + value);
-          }
-          else
-          {
-            getLog().warn("Maven property " + propertyName + " could not be overridden");
-          }
+        if (project != null)
+        {
+            Properties properties = project.getProperties();
+            for (String propertyName : properties.stringPropertyNames())
+            {
+                String value = properties.getProperty(propertyName);
+                if (propertyManager.addProperty(propertyName, value))
+                {
+                    getLog().debug("Maven property added: " + propertyName + "=" + value);
+                }
+                else
+                {
+                    getLog().warn("Maven property " + propertyName + " could not be overridden");
+                }
+            }
         }
-      }
     }
 
-    private CompilerData initCompilerData()
+    private CompilerData initCompilerData(File jarFile)
     {
         Info info = new Info();
-        if(project != null)
+
+        if (project != null)
         {
             if (autoIncludeDevelopers)
             {
-              if(project.getDevelopers() != null)
-              {
-                  for(Developer dev : (List<Developer>)project.getDevelopers())
-                  {
-                      info.addAuthor(new Info.Author(dev.getName(), dev.getEmail()));
-                  }
-              }
+                if (project.getDevelopers() != null)
+                {
+                    for (Developer dev : (List<Developer>) project.getDevelopers())
+                    {
+                        info.addAuthor(new Info.Author(dev.getName(), dev.getEmail()));
+                    }
+                }
             }
             if (autoIncludeUrl)
             {
-              info.setAppURL(project.getUrl());
+                info.setAppURL(project.getUrl());
             }
         }
-        return new CompilerData(comprFormat, kind, installFile, null, baseDir, output, mkdirs, comprLevel, info);
+        return new CompilerData(comprFormat, kind, installFile, null, baseDir, jarFile.getPath(),
+                mkdirs, comprLevel, info);
     }
-
 
 }

@@ -8,9 +8,8 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.codehaus.izpack</groupId>
     <artifactId>izpack-maven-plugin</artifactId>
-    
+
     <packaging>maven-plugin</packaging>
     <name>IzPack Maven Plugin</name>
 
@@ -31,6 +30,12 @@
         <developer>
             <name>Dan Tran</name>
             <email>Dan T. Tran@gmail.com</email>
+            <roles>
+                <role>Project Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>René Krell</name>
             <roles>
                 <role>Project Developer</role>
             </roles>
@@ -128,6 +133,5 @@
             </build>
         </profile>
     </profiles>
-
 
 </project>
