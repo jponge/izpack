@@ -76,7 +76,7 @@ public class IzPackNewMojo extends AbstractMojo
     /**
      * Output where compilation result will be situate
      *
-     * @parameter default-value="${project.build.directory}/${project.build.finalName}-installer.jar"
+     * @parameter
      * @deprecated Use outputDirectory, finalName and optional classifier instead
      */
     private String output;
