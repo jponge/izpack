@@ -80,10 +80,6 @@ public class RegistryDefaultHandler
             }
             initialized = true;
         }
-        if (registryHandler != null && (!registryHandler.good() || !registryHandler.doPerform()))
-        {
-            registryHandler = null;
-        }
 
         return (registryHandler);
     }

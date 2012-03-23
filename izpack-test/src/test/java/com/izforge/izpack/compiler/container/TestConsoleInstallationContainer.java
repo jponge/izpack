@@ -18,8 +18,11 @@ public class TestConsoleInstallationContainer extends AbstractTestInstallationCo
     }
 
     @Override
-    protected InstallerContainer createInstallerContainer()
+    protected InstallerContainer fillInstallerContainer(MutablePicoContainer container)
     {
-        return new ConsoleInstallerContainer();
+        ConsoleInstallerContainer result = new TestConsoleInstallerContainer();
+        result.fillContainer(container);
+        return result;
     }
+
 }

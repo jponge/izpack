@@ -596,7 +596,16 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
         if (!installationinfo.exists())
         {
             logger.fine("Creating info file" + installationinfo.getAbsolutePath());
-            installationinfo.createNewFile();
+            File dir = new File(installData.getInstallPath());
+            if (!dir.exists()) {
+                // if no packs have been installed, then the installation directory won't exist
+                if (!dir.mkdirs()) {
+                    throw new IOException("Failed to create directory: " + dir);
+                }
+            }
+            if (!installationinfo.createNewFile()) {
+                throw new IOException("Failed to create file: " + installationinfo);
+            }
         }
         else
         {

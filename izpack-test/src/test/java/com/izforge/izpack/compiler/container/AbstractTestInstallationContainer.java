@@ -33,9 +33,8 @@ public abstract class AbstractTestInstallationContainer extends AbstractContaine
         testInstallationContainer.initBindings();
         testInstallationContainer.launchCompilation();
 
-        InstallerContainer installerContainer = createInstallerContainer();
-        installerContainer.fillContainer(pico);
+        fillInstallerContainer(picoContainer);
     }
 
-    protected abstract InstallerContainer createInstallerContainer();
+    protected abstract InstallerContainer fillInstallerContainer(MutablePicoContainer picoContainer);
 }

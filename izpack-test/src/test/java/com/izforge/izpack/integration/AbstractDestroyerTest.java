@@ -20,7 +20,6 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-import static org.junit.Assert.assertTrue;
 
 /**
  * Base class for integration tests invoking the {@link Destroyer}.
@@ -55,15 +54,13 @@ public class AbstractDestroyerTest
     /**
      * Sets up the test case.
      *
-     * @throws java.io.IOException if the install directory cannot be created
-     * @throws Exception           for any other error
+     * @throws Exception           for any error
      */
     @Before
     public void setUp() throws Exception
     {
         // write to temporary folder so the test doesn't need to be run with elevated permissions
         File installPath = new File(temporaryFolder.getRoot(), "izpackTest");
-        assertTrue(installPath.mkdirs());
         installData.setInstallPath(installPath.getAbsolutePath());
     }
 

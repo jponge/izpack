@@ -24,18 +24,11 @@ package com.izforge.izpack.core.os;
 
 import com.coi.tools.os.win.MSWinConstants;
 import com.coi.tools.os.win.RegDataContainer;
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.NativeLibException;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This class represents a registry handler in a operating system independent way. OS specific
@@ -44,25 +37,13 @@ import java.util.logging.Logger;
  *
  * @author Klaus Bartz
  */
-public class RegistryHandler extends OSClassHelper implements MSWinConstants
+public class RegistryHandler implements MSWinConstants
 {
     public static final String UNINSTALL_ROOT = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
 
     public static final Map<String, Integer> ROOT_KEY_MAP = new HashMap<String, Integer>();
 
     protected String uninstallName = null;
-
-    /**
-     * The resource manager.
-     */
-    private final ResourceManager resources;
-
-    /**
-     * The logger.
-     */
-    private static final Logger logger = Logger.getLogger(RegistryHandler.class.getName());
-
-    private static final String UNINSTALLER_ICON = "UninstallerIcon";
 
 
     static
@@ -86,12 +67,9 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     /**
      * Constructs a <tt>RegistryHandler</tt>.
-     *
-     * @param resources the resource manager
      */
-    public RegistryHandler(ResourceManager resources)
+    public RegistryHandler()
     {
-        this.resources = resources;
     }
 
     /**
@@ -259,6 +237,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     /**
      * Sets the root for the next registry access.
+     * <p/>
+     * TODO - this doesn't support multi-threaded access
      *
      * @param i an integer which refers to a HKEY
      * @throws NativeLibException
@@ -351,117 +331,13 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     public String getUninstallName()
     {
-        if (uninstallName != null)
-        {
-            return (uninstallName);
-        }
-        if (installdata == null)
-        {
-            return (null);
-        }
-        return (installdata.getVariable("APP_NAME") + " " + installdata.getVariable("APP_VER"));
+        return uninstallName;
     }
 
-    public boolean isProductRegistered() throws NativeLibException
-    {
-        String uninstallName = getUninstallName();
-        if (uninstallName == null)
-        {
-            return (false);
-        }
-        String keyName = UNINSTALL_ROOT + uninstallName;
-        int oldVal = getRoot();
-        setRoot(HKEY_LOCAL_MACHINE);
-        boolean retval = keyExist(keyName);
-        setRoot(HKEY_CURRENT_USER);
-        retval = retval || keyExist(keyName);
-        setRoot(oldVal);
-        return (retval);
-    }
 
     public void setUninstallName(String name)
     {
         uninstallName = name;
     }
-
-    public void registerUninstallKey() throws NativeLibException
-    {
-        String uninstallName = getUninstallName();
-        if (uninstallName == null)
-        {
-            return;
-        }
-        String keyName = UNINSTALL_ROOT + uninstallName;
-        String cmd = "\"" + installdata.getVariable("JAVA_HOME") + "\\bin\\javaw.exe\" -jar \""
-                + installdata.getVariable("INSTALL_PATH") + "\\uninstaller\\uninstaller.jar\"";
-        String appVersion = installdata.getVariable("APP_VER");
-        String appUrl = installdata.getVariable("APP_URL");
-
-        int oldVal = getRoot();
-        try
-        {
-            setRoot(HKEY_LOCAL_MACHINE);
-            setValue(keyName, "DisplayName", uninstallName);
-        }
-        catch (NativeLibException exception)
-        { // Users without administrative rights should be able to install the app for themselves
-            logger.warning("Failed to register uninstaller in HKEY_LOCAL_MACHINE hive, trying HKEY_CURRENT_USER: " + exception.getMessage());
-            setRoot(HKEY_CURRENT_USER);
-            setValue(keyName, "DisplayName", uninstallName);
-        }
-        setValue(keyName, "UninstallString", cmd);
-        setValue(keyName, "DisplayVersion", appVersion);
-        if (appUrl != null && appUrl.length() > 0)
-        {
-            setValue(keyName, "HelpLink", appUrl);
-        }
-        // Try to write the uninstaller icon out.
-        try
-        {
-            InputStream input = resources.getInputStream(UNINSTALLER_ICON);
-            String iconPath = installdata.getVariable("INSTALL_PATH") + File.separator
-                    + "Uninstaller" + File.separator + "UninstallerIcon.ico";
-            FileOutputStream out = new FileOutputStream(iconPath);
-            byte[] buffer = new byte[5120];
-            long bytesCopied = 0;
-            int bytesInBuffer;
-            while ((bytesInBuffer = input.read(buffer)) != -1)
-            {
-                out.write(buffer, 0, bytesInBuffer);
-                bytesCopied += bytesInBuffer;
-            }
-            input.close();
-            out.close();
-            setValue(keyName, "DisplayIcon", iconPath);
-        }
-        catch (Exception e)
-        {
-            // May be no icon resource defined; ignore it
-            logger.log(Level.WARNING, e.getMessage(), e);
-        }
-        setRoot(oldVal);
-    }
-
-    /**
-     * @param idata
-     */
-    @Override
-    public boolean verify(AutomatedInstallData idata) throws Exception
-    {
-        super.verify(idata);
-        return (true);
-
-    }
-
-    /**
-     * Returns whether an action with this handler should be performed or not.
-     *
-     * @return always true
-     */
-    public boolean doPerform()
-    {
-        return true;
-    }
-
 
 }

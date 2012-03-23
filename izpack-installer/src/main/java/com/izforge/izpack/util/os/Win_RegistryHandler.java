@@ -33,8 +33,6 @@ import com.izforge.izpack.util.Librarian;
 
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This is the Microsoft Windows specific implementation of <code>RegistryHandler</code>.
@@ -49,29 +47,15 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     private final Registry registry;
 
-    /**
-     * The logger.
-     */
-    private static final Logger log = Logger.getLogger(Win_RegistryHandler.class.getName());
 
     /**
      * Constructs a <tt>Win_RegistryHandler</tt>.
      *
-     * @param resources the resource manager
      * @param librarian the librarian
      */
-    public Win_RegistryHandler(ResourceManager resources, Librarian librarian)
+    public Win_RegistryHandler(Librarian librarian)
     {
-        super(resources);
-        try
-        {
-            worker = new Registry(librarian);
-        }
-        catch (UnsatisfiedLinkError exception)
-        {
-            log.log(Level.SEVERE, exception.getMessage(), exception);
-        }
-        registry = (Registry) worker;
+        registry = new Registry(librarian);
     }
 
     /**
@@ -86,10 +70,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public void setValue(String key, String value, String contents) throws NativeLibException
     {
-        if (!good())
-        {
-            return;
-        }
         if (contents.contains("OLD_KEY_VALUE") && registry.valueExist(key, value))
         {
             Object ob = registry.getValueAsObject(key, value);
@@ -123,10 +103,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public void setValue(String key, String value, String[] contents) throws NativeLibException
     {
-        if (!good())
-        {
-            return;
-        }
         registry.setValue(key, value, contents);
     }
 
@@ -142,10 +118,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public void setValue(String key, String value, byte[] contents) throws NativeLibException
     {
-        if (!good())
-        {
-            return;
-        }
         registry.setValue(key, value, contents);
     }
 
@@ -161,10 +133,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public void setValue(String key, String value, long contents) throws NativeLibException
     {
-        if (!good())
-        {
-            return;
-        }
         registry.setValue(key, value, contents);
     }
 
@@ -179,10 +147,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public RegDataContainer getValue(String key, String value, RegDataContainer defaultVal) throws NativeLibException
     {
-        if (!good())
-        {
-            return (null);
-        }
         if (valueExist(key, value))
         {
             return (getValue(key, value));
@@ -199,10 +163,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public boolean keyExist(String key) throws NativeLibException
     {
-        if (!good())
-        {
-            return (false);
-        }
         return (registry.keyExist(key));
     }
 
@@ -216,10 +176,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public boolean valueExist(String key, String value) throws NativeLibException
     {
-        if (!good())
-        {
-            return (false);
-        }
         return (registry.valueExist(key, value));
     }
 
@@ -232,10 +188,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public String[] getSubkeys(String key) throws NativeLibException
     {
-        if (!good())
-        {
-            return (null);
-        }
         return (registry.getSubkeys(key));
     }
 
@@ -248,10 +200,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public String[] getValueNames(String key) throws NativeLibException
     {
-        if (!good())
-        {
-            return (null);
-        }
         return (registry.getValueNames(key));
     }
 
@@ -265,10 +213,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public RegDataContainer getValue(String key, String value) throws NativeLibException
     {
-        if (!good())
-        {
-            return (null);
-        }
         return (registry.getValue(key, value));
     }
 
@@ -280,10 +224,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public void createKey(String key) throws NativeLibException
     {
-        if (!good())
-        {
-            return;
-        }
         registry.createKey(key);
     }
 
@@ -295,10 +235,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public void deleteKey(String key) throws NativeLibException
     {
-        if (!good())
-        {
-            return;
-        }
         registry.deleteKey(key);
     }
 
@@ -310,10 +246,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public void deleteKeyIfEmpty(String key) throws NativeLibException
     {
-        if (!good())
-        {
-            return;
-        }
         registry.deleteKeyIfEmpty(key);
     }
 
@@ -327,10 +259,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public void deleteValue(String key, String value) throws NativeLibException
     {
-        if (!good())
-        {
-            return;
-        }
         registry.deleteValue(key, value);
     }
 
@@ -342,10 +270,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public void setRoot(int i) throws NativeLibException
     {
-        if (!good())
-        {
-            return;
-        }
         registry.setRoot(i);
     }
 
@@ -357,10 +281,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public int getRoot() throws NativeLibException
     {
-        if (!good())
-        {
-            return (0);
-        }
         return (registry.getRoot());
     }
 
@@ -377,10 +297,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public void setLogPrevSetValueFlag(boolean flagVal)
     {
-        if (!good())
-        {
-            return;
-        }
         registry.setLogPrevSetValueFlag(flagVal);
     }
 
@@ -393,10 +309,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public boolean getLogPrevSetValueFlag()
     {
-        if (!good())
-        {
-            return (true);
-        }
         return (registry.getLogPrevSetValueFlag());
     }
 
@@ -407,10 +319,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public void activateLogging() throws NativeLibException
     {
-        if (!good())
-        {
-            return;
-        }
         registry.activateLogging();
     }
 
@@ -421,10 +329,6 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public void suspendLogging() throws NativeLibException
     {
-        if (!good())
-        {
-            return;
-        }
         registry.suspendLogging();
     }
 
@@ -435,46 +339,26 @@ public class Win_RegistryHandler extends RegistryHandler
      */
     public void resetLogging() throws NativeLibException
     {
-        if (!good())
-        {
-            return;
-        }
         registry.resetLogging();
     }
 
     public List<Object> getLoggingInfo() throws NativeLibException
     {
-        if (!good())
-        {
-            return (null);
-        }
         return (registry.getLoggingInfo());
     }
 
     public void setLoggingInfo(List info) throws NativeLibException
     {
-        if (!good())
-        {
-            return;
-        }
         registry.setLoggingInfo(info);
     }
 
     public void addLoggingInfo(List info) throws NativeLibException
     {
-        if (!good())
-        {
-            return;
-        }
         registry.addLoggingInfo(info);
     }
 
     public void rewind() throws NativeLibException
     {
-        if (!good())
-        {
-            return;
-        }
         registry.rewind();
     }
 

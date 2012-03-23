@@ -21,7 +21,6 @@ import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.PrivilegedRunner;
 import com.izforge.izpack.util.os.ShellLink;
-import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
 import org.junit.After;
 import org.junit.Before;
@@ -30,9 +29,11 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 
+import static com.izforge.izpack.integration.windows.WindowsHelper.checkShortcut;
+import static com.izforge.izpack.integration.windows.WindowsHelper.registryDeleteUninstallKey;
+import static com.izforge.izpack.integration.windows.WindowsHelper.registryKeyExists;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 
@@ -87,12 +88,7 @@ public class WindowsInstallationTest extends AbstractDestroyerTest
     private FrameFixture installerFrameFixture;
 
     /**
-     * The dialog frame fixture.
-     */
-    private DialogFixture dialogFrameFixture;
-
-    /**
-     * Registry uninstallation key.
+     * Registry uninstallation key. Hard-coded so we don't delete too much on cleanup if something unexpected happens.
      */
     private static final String UNINSTALL_KEY = RegistryHandler.UNINSTALL_ROOT + "IzPack Windows Installation Test 1.0";
 
@@ -131,34 +127,33 @@ public class WindowsInstallationTest extends AbstractDestroyerTest
         destroyRegistryEntries();
     }
 
+    /**
+     * Cleans up after the test.
+     *
+     * @throws Exception for any error
+     */
     @After
     public void tearDown() throws Exception
     {
         destroyRegistryEntries();
-        try
+        if (installerFrameFixture != null)
         {
-            if (dialogFrameFixture != null)
-            {
-                dialogFrameFixture.cleanUp();
-                dialogFrameFixture = null;
-            }
-        }
-        finally
-        {
-            if (installerFrameFixture != null)
-            {
-                installerFrameFixture.cleanUp();
-                installerFrameFixture = null;
-            }
+            installerFrameFixture.cleanUp();
+            installerFrameFixture = null;
         }
     }
 
+    /**
+     * Tests installation on windows.
+     *
+     * @throws Exception for any error
+     */
     @Test
     @InstallFile("samples/windows/install.xml")
     public void testInstallation() throws Exception
     {
         assertFalse("This test must be run as administrator, or with Windows UAC turned off",
-                new PrivilegedRunner().isElevationNeeded());
+                    new PrivilegedRunner().isElevationNeeded());
 
         installerFrameFixture = HelperTestMethod.prepareFrameFixture(frame, controller);
 
@@ -190,25 +185,17 @@ public class WindowsInstallationTest extends AbstractDestroyerTest
         File uninstaller = getUninstallerJar();
 
         // make sure there is an Uninstall entry for the installation
-        RegistryHandler registry = getRegistryHandler();
-        assertTrue(registry.keyExist(UNINSTALL_KEY));
+        assertTrue(registryKeyExists(handler, UNINSTALL_KEY));
 
         // make sure a shortcut to the uninstaller exists
-        ShellLink link = new ShellLink(ShellLink.PROGRAM_MENU, ShellLink.ALL_USERS, "IzPack Windows Installation Test",
-                "Uninstaller", librarian);
-        assertEquals(ShellLink.PROGRAM_MENU, link.getLinkType());
-        assertEquals(uninstaller, new File(link.getTargetPath()));
-        assertEquals(link.getDescription(), "This uninstalls the test");
-
-        // verify the shortcut file exists
-        File shortcut = new File(link.getFileName());
-        assertTrue(shortcut.exists());
+        File shortcut = checkShortcut(ShellLink.PROGRAM_MENU, ShellLink.ALL_USERS, "IzPack Windows Installation Test",
+                                      "Uninstaller", uninstaller, "This uninstalls the test", librarian);
 
         // run the uninstaller
         runDestroyer(uninstaller);
 
         // make sure the Uninstall entry has been removed
-        assertFalse(registry.keyExist(UNINSTALL_KEY));
+        assertFalse(registryKeyExists(handler, UNINSTALL_KEY));
 
         // verify the shortcut no longer exists
         assertFalse(shortcut.exists());
@@ -222,25 +209,7 @@ public class WindowsInstallationTest extends AbstractDestroyerTest
      */
     private void destroyRegistryEntries() throws NativeLibException
     {
-        RegistryHandler registry = getRegistryHandler();
-        if (registry.keyExist(UNINSTALL_KEY))
-        {
-            registry.deleteKey(UNINSTALL_KEY);
-        }
-    }
-
-    /**
-     * Returns the registry handler.
-     *
-     * @return the registry handler
-     * @throws NativeLibException for any registry error
-     */
-    private RegistryHandler getRegistryHandler() throws NativeLibException
-    {
-        RegistryHandler registry = handler.getInstance();
-        assertNotNull(registry);
-        registry.setRoot(RegistryHandler.HKEY_LOCAL_MACHINE);
-        return registry;
+        registryDeleteUninstallKey(handler, UNINSTALL_KEY);
     }
 
 }

@@ -3,6 +3,7 @@ package com.izforge.izpack.uninstaller;
 import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.core.container.AbstractContainer;
+import com.izforge.izpack.core.factory.DefaultObjectFactory;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.util.DefaultTargetPlatformFactory;
 import com.izforge.izpack.util.Housekeeper;
@@ -31,6 +32,7 @@ public class UninstallerContainer extends AbstractContainer
         container.addComponent(Housekeeper.class);
         container.addComponent(Librarian.class);
         container.addComponent(TargetFactory.class);
+        container.addComponent(DefaultObjectFactory.class);
         container.addComponent(DefaultTargetPlatformFactory.class);
         container.addComponent(RegistryDefaultHandler.class);
         container.addComponent(UninstallerFrame.class);

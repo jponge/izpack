@@ -70,6 +70,7 @@ public class Console
     public void print(String message)
     {
         out.print(message);
+        out.flush();
     }
 
     /**

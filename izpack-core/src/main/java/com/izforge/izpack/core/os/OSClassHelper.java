@@ -33,8 +33,10 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
  * subclasses.
  *
  * @author Klaus Bartz
+ * @deprecated no replacement
  */
 /*---------------------------------------------------------------------------*/
+@Deprecated
 public class OSClassHelper
 {
     private static final Logger logger = Logger.getLogger(OSClassHelper.class.getName());

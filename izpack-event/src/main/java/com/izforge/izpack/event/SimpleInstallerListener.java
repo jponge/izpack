@@ -226,7 +226,7 @@ public class SimpleInstallerListener implements InstallerListener
         // Do nothing
     }
 
-    public void afterInstallerInitialization(AutomatedInstallData data)
+    public void afterInstallerInitialization(AutomatedInstallData data) throws Exception
     {
         this.installdata = data;
     }
@@ -336,5 +336,15 @@ public class SimpleInstallerListener implements InstallerListener
             retval = getInstalldata().getLangpack().getString(id);
         }
         return (retval);
+    }
+
+    /**
+     * Returns the resource manager.
+     *
+     * @return the resource manager
+     */
+    protected ResourceManager getResources()
+    {
+        return resources;
     }
 }
