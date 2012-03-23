@@ -237,7 +237,6 @@ public class JDKPathPanel extends PathInputPanel
             {
                 return (retval);
             }
-            registryHandler.verify(this.installData);
             oldVal = registryHandler.getRoot(); // Only for security...
             registryHandler.setRoot(MSWinConstants.HKEY_LOCAL_MACHINE);
             String[] keys = registryHandler.getSubkeys(JDK_ROOT_KEY);

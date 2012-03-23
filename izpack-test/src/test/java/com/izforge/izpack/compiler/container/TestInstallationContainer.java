@@ -21,9 +21,9 @@ public class TestInstallationContainer extends AbstractTestInstallationContainer
     }
 
     @Override
-    protected InstallerContainer createInstallerContainer()
+    protected InstallerContainer fillInstallerContainer(MutablePicoContainer container)
     {
-        return new GUIInstallerContainer() {
+        GUIInstallerContainer result = new GUIInstallerContainer() {
             @Override
             protected void registerComponents(MutablePicoContainer pico)
             {
@@ -32,6 +32,8 @@ public class TestInstallationContainer extends AbstractTestInstallationContainer
                 pico.addComponent(TestHousekeeper.class);
             }
         };
+        result.fillContainer(container);
+        return result;
     }
 
 }

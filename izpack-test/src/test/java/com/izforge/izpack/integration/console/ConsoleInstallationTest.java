@@ -1,25 +1,16 @@
 package com.izforge.izpack.integration.console;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.factory.ObjectFactory;
-import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.container.TestConsoleInstallationContainer;
 import com.izforge.izpack.installer.bootstrap.Installer;
+import com.izforge.izpack.installer.console.ConsoleInstaller;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.TestConsoleInstaller;
-import com.izforge.izpack.installer.data.UninstallDataWriter;
-import com.izforge.izpack.installer.requirement.RequirementsChecker;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
 import com.izforge.izpack.test.util.TestConsole;
-import com.izforge.izpack.util.Console;
-import com.izforge.izpack.util.Housekeeper;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 
 import java.io.File;
@@ -33,50 +24,32 @@ import static org.junit.Assert.assertTrue;
 
 
 /**
- * Tests the {@link com.izforge.izpack.installer.console.ConsoleInstaller}.
+ * Tests the {@link ConsoleInstaller}.
  *
  * @author Tim Anderson
  */
 @RunWith(PicoRunner.class)
 @Container(TestConsoleInstallationContainer.class)
-public class ConsoleInstallationTest
+public class ConsoleInstallationTest extends AbstractConsoleInstallationTest
 {
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     /**
-     * The console installer.
+     * The installer.
      */
     private final TestConsoleInstaller installer;
 
-    /**
-     * The installation data.
-     */
-    private final AutomatedInstallData installData;
 
     /**
      * Constructs a <tt>ConsoleInstallationTest</tt>
      *
-     * @param factory         the object factory
-     * @param installData     the installation date
-     * @param rules           the rules engine
-     * @param resourceManager the resource manager
-     * @param requirements    the installation requirements
-     * @param substituter     the variable substituter
-     * @param writer          the uninstallation data writer
-     * @param console         the console
-     * @param housekeeper     the house-keeper
+     * @param installer   the installer
+     * @param installData the installation data
      * @throws Exception for any error
      */
-    public ConsoleInstallationTest(ObjectFactory factory, AutomatedInstallData installData,
-                                   RulesEngine rules, ResourceManager resourceManager,
-                                   RequirementsChecker requirements, VariableSubstitutor substituter,
-                                   UninstallDataWriter writer, Console console, Housekeeper housekeeper)
-            throws Exception
+    public ConsoleInstallationTest(TestConsoleInstaller installer, AutomatedInstallData installData) throws Exception
     {
-        installer = new TestConsoleInstaller(factory, installData, rules, resourceManager, requirements, substituter,
-                writer, console, housekeeper);
-        this.installData = installData;
+        super(installData);
+        this.installer = installer;
     }
 
     /**
@@ -88,13 +61,13 @@ public class ConsoleInstallationTest
     @InstallFile("samples/console/install_no_uninstall.xml")
     public void testInstallationWithDisabledUnInstaller() throws Exception
     {
-        TestConsole console = new TestConsole();
+        TestConsole console = installer.getConsole();
         console.addScript("HelloPanel", "1");
         console.addScript("InfoPanel", "1");
         console.addScript("LicensePanel", "\n", "1");
         console.addScript("TargetPanel", "\n", "1");
 
-        checkInstall(console, false);
+        checkInstall(installer, getInstallData(), false);
     }
 
     /**
@@ -106,13 +79,13 @@ public class ConsoleInstallationTest
     @InstallFile("samples/console/install.xml")
     public void testInstallation() throws Exception
     {
-        TestConsole console = new TestConsole();
+        TestConsole console = installer.getConsole();
         console.addScript("HelloPanel", "1");
         console.addScript("InfoPanel", "1");
         console.addScript("LicensePanel", "\n", "1");
         console.addScript("TargetPanel", "\n", "1");
 
-        checkInstall(console);
+        checkInstall(installer, getInstallData());
     }
 
     /**
@@ -122,14 +95,15 @@ public class ConsoleInstallationTest
     @InstallFile("samples/console/install.xml")
     public void testRejectLicence()
     {
+        AutomatedInstallData installData = getInstallData();
+
         File installPath = new File(temporaryFolder.getRoot(), "izpackTest");
 
-        TestConsole console = new TestConsole();
+        TestConsole console = installer.getConsole();
         console.addScript("HelloPanel", "1");
         console.addScript("InfoPanel", "1");
         console.addScript("LicensePanel", "\n", "2");
 
-        installer.setConsole(console);
         installData.setInstallPath(installPath.getAbsolutePath());
         installer.run(Installer.CONSOLE_INSTALL, null);
 
@@ -147,14 +121,13 @@ public class ConsoleInstallationTest
     @InstallFile("samples/console/install.xml")
     public void testRedisplayAndAcceptLicence()
     {
-
-        TestConsole console = new TestConsole();
+        TestConsole console = installer.getConsole();
         console.addScript("HelloPanel", "1");
         console.addScript("InfoPanel", "1");
         console.addScript("LicensePanel", "\n", "3", "\n", "1");
         console.addScript("TargetPanel", "\n", "1");
 
-        checkInstall(console);
+        checkInstall(installer, getInstallData());
     }
 
     /**
@@ -166,6 +139,8 @@ public class ConsoleInstallationTest
     @InstallFile("samples/console/install.xml")
     public void testGenerateProperties() throws Exception
     {
+        AutomatedInstallData installData = getInstallData();
+
         File file = new File(temporaryFolder.getRoot(), "IZPackInstall.properties");
         File installPath = new File(temporaryFolder.getRoot(), "izpackTest");
         installData.setInstallPath(installPath.getAbsolutePath());
@@ -192,14 +167,15 @@ public class ConsoleInstallationTest
     @InstallFile("samples/console/install.xml")
     public void testInstallFromProperties() throws Exception
     {
-        File file = new File(temporaryFolder.getRoot(), "IZPackInstall.properties");
+        AutomatedInstallData installData = getInstallData();
+
+        File file = new File(temporaryFolder.getRoot(), "IzPackInstall.properties");
         File installPath = new File(temporaryFolder.getRoot(), "izpackTest");
         Properties properties = new Properties();
         properties.put(AutomatedInstallData.INSTALL_PATH, installPath.getPath());
-        properties.store(new FileOutputStream(file), "IZPack installation properties");
+        properties.store(new FileOutputStream(file), "IzPack installation properties");
 
-        TestConsole console = new TestConsole();
-        installer.setConsole(console);
+        TestConsole console = installer.getConsole();
         installer.run(Installer.CONSOLE_FROM_TEMPLATE, file.getPath());
 
         // make sure there were no attempts to read from the console, as no prompting should occur
@@ -221,6 +197,8 @@ public class ConsoleInstallationTest
     @InstallFile("samples/basicInstall/basicInstall.xml")
     public void testUnsupportedInstaller()
     {
+        AutomatedInstallData installData = getInstallData();
+
         File installPath = new File(temporaryFolder.getRoot(), "izpackTest");
         installData.setInstallPath(installPath.getAbsolutePath());
 
@@ -237,45 +215,22 @@ public class ConsoleInstallationTest
 
     /**
      * Verifies that console installation completes successfully.
+     * \
      *
-     * @param console the console
-     */
-    private void checkInstall(TestConsole console)
-    {
-        checkInstall(console, true);
-    }
-
-    /**
-     * Verifies that console installation completes successfully.
-     *
-     * @param console           the console
+     * @param installer         the installer
+     * @param installData       the installation data
      * @param expectUninstaller whether to expect an uninstaller to be created
      */
-    private void checkInstall(TestConsole console, boolean expectUninstaller)
+    @Override
+    protected void checkInstall(TestConsoleInstaller installer, AutomatedInstallData installData,
+                                boolean expectUninstaller)
     {
-        File installPath = new File(temporaryFolder.getRoot(), "izpackTest");
+        super.checkInstall(installer, installData, expectUninstaller);
 
-        installer.setConsole(console);
-        installData.setInstallPath(installPath.getAbsolutePath());
-        installer.run(Installer.CONSOLE_INSTALL, null);
-
-        // verify the installation thinks it was successful
-        assertTrue(installData.isInstallSuccess());
-
-        // make sure the script has completed
-        assertTrue("Script still running panel: " + console.getScriptName(), console.scriptCompleted());
+        String installPath = installData.getInstallPath();
 
         // make sure some of the expected files are installed
         assertTrue(new File(installPath, "Licence.txt").exists());
         assertTrue(new File(installPath, "Readme.txt").exists());
-        if (expectUninstaller)
-        {
-            assertTrue(new File(installPath, "Uninstaller/uninstaller.jar").exists());
-        }
-        else
-        {
-            assertFalse(new File(installPath, "Uninstaller/uninstaller.jar").exists());
-        }
     }
-
 }

@@ -16,7 +16,7 @@ public class ConsolePrompt implements Prompt
     private final Console console;
 
     /**
-     * Cosntructs a <tt>ConsolePrompt</tt>.
+     * Constructs a <tt>ConsolePrompt</tt>.
      *
      * @param console the console
      */

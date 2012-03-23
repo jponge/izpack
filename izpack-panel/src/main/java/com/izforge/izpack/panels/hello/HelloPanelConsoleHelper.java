@@ -54,6 +54,18 @@ public class HelloPanelConsoleHelper extends PanelConsoleHelper implements Panel
     @Override
     public boolean runConsole(AutomatedInstallData installData, Console console)
     {
+        display(installData, console);
+        return promptEndPanel(installData, console);
+    }
+
+    /**
+     * Displays the panel.
+     *
+     * @param installData the installation data
+     * @param console     the console
+     */
+    protected void display(AutomatedInstallData installData, Console console)
+    {
         LocaleDatabase langPack = installData.getLangpack();
         Info info = installData.getInfo();
         String welcomeText = langPack.getString("HelloPanel.welcome1") + info.getAppName() + " "
@@ -77,6 +89,5 @@ public class HelloPanelConsoleHelper extends PanelConsoleHelper implements Panel
             String urlText = langPack.getString("HelloPanel.url") + info.getAppURL();
             console.println(urlText);
         }
-        return promptEndPanel(installData, console);
     }
 }

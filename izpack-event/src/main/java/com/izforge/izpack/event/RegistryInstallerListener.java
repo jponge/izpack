@@ -25,6 +25,7 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.api.exception.WrappedNativeLibException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
@@ -36,8 +37,13 @@ import com.izforge.izpack.core.os.RegistryHandler;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.util.CleanupClient;
 import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.file.FileUtils;
 import com.izforge.izpack.util.helper.SpecHelper;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -86,12 +92,15 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
 
     private static final String SAVE_PREVIOUS = "saveprevious";
 
-    private RulesEngine rules;
 
     private List registryModificationLog;
 
     private IDiscardInterruptable unpacker;
-    private VariableSubstitutor variableSubstitutor;
+
+    /**
+     * The variable substituter.
+     */
+    private VariableSubstitutor substituter;
 
     /**
      * The installation data.
@@ -104,52 +113,57 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
     private final UninstallData uninstallData;
 
     /**
+     * The rules.
+     */
+    private final RulesEngine rules;
+
+    /**
      * The house-keeper.
      */
     private final Housekeeper housekeeper;
 
     /**
-     * The registry handler reference.
+     * The registry handler. May be <tt>null</tt>
      */
-    private final RegistryDefaultHandler handler;
+    private final RegistryHandler registry;
+
+    /**
+     * The uninstaller icon.
+     */
+    private static final String UNINSTALLER_ICON = "UninstallerIcon";
 
 
     /**
      * Constructs a <tt>RegistryInstallerListener</tt>.
      *
-     * @param unpacker            the unpacker
-     * @param variableSubstitutor the variable substituter
-     * @param installData         the installation data
-     * @param uninstallData       the uninstallation data
-     * @param resources           the resource manager
-     * @param housekeeper         the housekeeper
-     * @param handler             the registry handler reference
+     * @param unpacker      the unpacker
+     * @param substituter   the variable substituter
+     * @param installData   the installation data
+     * @param uninstallData the uninstallation data
+     * @param rules         the rules
+     * @param resources     the resource manager
+     * @param housekeeper   the housekeeper
+     * @param handler       the registry handler reference
      */
-    public RegistryInstallerListener(IDiscardInterruptable unpacker, VariableSubstitutor variableSubstitutor,
+    public RegistryInstallerListener(IDiscardInterruptable unpacker, VariableSubstitutor substituter,
                                      AutomatedInstallData installData, UninstallData uninstallData,
-                                     ResourceManager resources, Housekeeper housekeeper, RegistryDefaultHandler handler)
+                                     ResourceManager resources, RulesEngine rules, Housekeeper housekeeper,
+                                     RegistryDefaultHandler handler)
     {
         super(resources, true);
-        this.variableSubstitutor = variableSubstitutor;
+        this.substituter = substituter;
         this.unpacker = unpacker;
         this.installData = installData;
         this.uninstallData = uninstallData;
+        this.rules = rules;
         this.housekeeper = housekeeper;
-        this.handler = handler;
+        this.registry = handler.getInstance();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.izforge.izpack.compiler.InstallerListener#beforePacks(com.izforge.izpack.installer.AutomatedInstallData,
-     * int, com.izforge.izpack.api.handler.AbstractUIProgressHandler)
-     */
-
-    public void beforePacks(AutomatedInstallData installData, Integer npacks,
-                            AbstractUIProgressHandler handler) throws Exception
+    @Override
+    public void afterInstallerInitialization(AutomatedInstallData data) throws Exception
     {
-        super.beforePacks(installData, npacks, handler);
-        rules = installData.getRules();
+        super.afterInstallerInitialization(data);
         initializeRegistryHandler(installData);
     }
 
@@ -163,94 +177,40 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
             throws Exception
     {
-        RegistryHandler registryHandler = this.handler.getInstance();
-        if (registryHandler == null)
+        if (registry != null)
         {
-            return;
-        }
-        try
-        {
-            // Register for cleanup
-            housekeeper.registerForCleanup(this);
-
-            // Start logging
-            IXMLElement uninstallerPack = null;
-            // No interrupt desired after writing registry entries.
-            unpacker.setDiscardInterrupt(true);
-            registryHandler.activateLogging();
-
-            if (getSpecHelper().getSpec() != null)
+            try
             {
-                // Get the special pack "UninstallStuff" which contains values
-                // for the uninstaller entry.
-                uninstallerPack = getSpecHelper().getPackForName("UninstallStuff");
-                performPack(uninstallerPack, variableSubstitutor, registryHandler);
-
-                // Now perform the selected packs.
-                for (Pack selectedPack : idata.getSelectedPacks())
+                afterPacks();
+            }
+            catch (Exception e)
+            {
+                if (e instanceof NativeLibException)
                 {
-                    // Resolve data for current pack.
-                    IXMLElement pack = getSpecHelper().getPackForName(selectedPack.name);
-                    performPack(pack, variableSubstitutor, registryHandler);
-
+                    throw new WrappedNativeLibException(e);
                 }
-            }
-            String uninstallSuffix = idata.getVariable("UninstallKeySuffix");
-            if (uninstallSuffix != null)
-            {
-                registryHandler.setUninstallName(registryHandler.getUninstallName() + " " + uninstallSuffix);
-            }
-            // Generate uninstaller key automatically if not defined in spec.
-            if (uninstallerPack == null)
-            {
-                registryHandler.registerUninstallKey();
-            }
-            // Get the logging info from the registry class and put it into
-            // the uninstaller. The RegistryUninstallerListener loads that data
-            // and rewind the made entries.
-            // This is the common way to transport informations from an
-            // installer CustomAction to the corresponding uninstaller
-            // CustomAction.
-            List<Object> info = registryHandler.getLoggingInfo();
-            if (info != null)
-            {
-                uninstallData.addAdditionalData("registryEntries", info);
-            }
-            // Remember all registry info to rewind registry modifications in case of failed installation
-            registryModificationLog = info;
-        }
-        catch (Exception e)
-        {
-            if (e instanceof NativeLibException)
-            {
-                throw new WrappedNativeLibException(e);
-            }
-            else
-            {
-                throw e;
+                else
+                {
+                    throw e;
+                }
             }
         }
     }
 
-
     /**
-     * Remove all registry entries on failed installation
+     * Remove all registry entries on failed installation.
      */
+
     public void cleanUp()
     {
         // installation was not successful now rewind all registry changes
-        if (installData.isInstallSuccess() || registryModificationLog == null || registryModificationLog.size() < 1)
-        {
-            return;
-        }
-        RegistryHandler registryHandler = handler.getInstance();
-        if (registryHandler != null)
+        if (!installData.isInstallSuccess() && registryModificationLog != null && !registryModificationLog.isEmpty())
         {
             try
             {
-                registryHandler.activateLogging();
-                registryHandler.setLoggingInfo(registryModificationLog);
-                registryHandler.rewind();
+                registry.activateLogging();
+                registry.setLoggingInfo(registryModificationLog);
+                registry.rewind();
             }
             catch (Exception e)
             {
@@ -259,28 +219,79 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
         }
     }
 
+    private void afterPacks() throws NativeLibException, InstallerException
+    {
+        // Register for cleanup
+        housekeeper.registerForCleanup(this);
+
+        // Start logging
+        IXMLElement uninstallerPack = null;
+        // No interrupt desired after writing registry entries.
+        unpacker.setDiscardInterrupt(true);
+        registry.activateLogging();
+
+        if (getSpecHelper().getSpec() != null)
+        {
+            // Get the special pack "UninstallStuff" which contains values
+            // for the uninstaller entry.
+            uninstallerPack = getSpecHelper().getPackForName("UninstallStuff");
+            performPack(uninstallerPack);
+
+            // Now perform the selected packs.
+            for (Pack selectedPack : installData.getSelectedPacks())
+            {
+                // Resolve data for current pack.
+                IXMLElement pack = getSpecHelper().getPackForName(selectedPack.name);
+                performPack(pack);
+
+            }
+        }
+        String uninstallSuffix = installData.getVariable("UninstallKeySuffix");
+        if (uninstallSuffix != null)
+        {
+            registry.setUninstallName(registry.getUninstallName() + " " + uninstallSuffix);
+        }
+        // Generate uninstaller key automatically if not defined in spec.
+        if (uninstallerPack == null)
+        {
+            registerUninstallKey();
+        }
+        // Get the logging info from the registry class and put it into
+        // the uninstaller. The RegistryUninstallerListener loads that data
+        // and rewind the made entries.
+        // This is the common way to transport informations from an
+        // installer CustomAction to the corresponding uninstaller
+        // CustomAction.
+        List<Object> info = registry.getLoggingInfo();
+        if (info != null)
+        {
+            uninstallData.addAdditionalData("registryEntries", info);
+        }
+        // Remember all registry info to rewind registry modifications in case of failed installation
+        registryModificationLog = info;
+    }
+
     /**
      * Performs the registry settings for the given pack.
      *
-     * @param pack            XML elemtent which contains the registry settings for one pack
-     * @param registryHandler the registry handler
-     * @throws Exception
+     * @param pack XML element which contains the registry settings for one pack
+     * @throws InstallerException if a required attribute is missing
+     * @throws NativeLibException for any native library error
      */
-    private void performPack(IXMLElement pack, VariableSubstitutor substitutor, RegistryHandler registryHandler)
-            throws Exception
+    private void performPack(IXMLElement pack) throws InstallerException, NativeLibException
     {
         if (pack == null)
         {
             return;
         }
-        String packcondition = pack.getAttribute("condition");
-        if (packcondition != null)
+        String packCondition = pack.getAttribute("condition");
+        if (packCondition != null)
         {
-            logger.fine("Condition \"" + packcondition + "\" found for pack of registry entries");
-            if (!rules.isConditionTrue(packcondition))
+            logger.fine("Condition \"" + packCondition + "\" found for pack of registry entries");
+            if (!rules.isConditionTrue(packCondition))
             {
                 // condition not fulfilled, continue with next element.
-                logger.fine("Condition \"" + packcondition + "\" not true");
+                logger.fine("Condition \"" + packCondition + "\" not true");
                 return;
             }
         }
@@ -309,17 +320,17 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             String type = regEntry.getName();
             if (type.equalsIgnoreCase(REG_KEY))
             {
-                performKeySetting(regEntry, substitutor, registryHandler);
+                performKeySetting(regEntry);
             }
             else if (type.equalsIgnoreCase(REG_VALUE))
             {
-                performValueSetting(regEntry, substitutor, registryHandler);
+                performValueSetting(regEntry);
             }
             else
-            // No valid type.
             {
+                // No valid type.
                 getSpecHelper().parseError(regEntry,
-                        "Non-valid type of entry; only 'key' and 'value' are allowed.");
+                                           "Non-valid type of entry; only 'key' and 'value' are allowed.");
             }
 
         }
@@ -329,29 +340,27 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
     /**
      * Perform the setting of one value.
      *
-     * @param regEntry        element which contains the description of the value to be set
-     * @param substitutor     variable substitutor to be used for revising the regEntry contents
-     * @param registryHandler the registry handler
+     * @param regEntry element which contains the description of the value to be set
+     * @throws InstallerException if a required attribute is missing
+     * @throws NativeLibException for any native library error
      */
-    private void performValueSetting(IXMLElement regEntry, VariableSubstitutor substitutor,
-                                     RegistryHandler registryHandler)
-            throws Exception
+    private void performValueSetting(IXMLElement regEntry) throws InstallerException, NativeLibException
     {
         SpecHelper specHelper = getSpecHelper();
         String name = specHelper.getRequiredAttribute(regEntry, REG_BASENAME);
-        name = substitutor.substitute(name);
+        name = substituter.substitute(name);
         String keypath = specHelper.getRequiredAttribute(regEntry, REG_KEYPATH);
-        keypath = substitutor.substitute(keypath);
+        keypath = substituter.substitute(keypath);
         String root = specHelper.getRequiredAttribute(regEntry, REG_ROOT);
-        int rootId = resolveRoot(regEntry, root, substitutor);
+        int rootId = resolveRoot(regEntry, root);
 
-        registryHandler.setRoot(rootId);
+        registry.setRoot(rootId);
 
         String override = regEntry.getAttribute(REG_OVERRIDE, "true");
         if (!"true".equalsIgnoreCase(override))
         { // Do not set value if override is not true and the value exist.
 
-            if (registryHandler.getValue(keypath, name, null) != null)
+            if (registry.getValue(keypath, name, null) != null)
             {
                 return;
             }
@@ -359,21 +368,20 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
 
         //set flag for logging previous contents if "saveprevious"
         // attribute not specified or specified as 'true':
-        registryHandler.setLogPrevSetValueFlag("true".equalsIgnoreCase(
-                regEntry.getAttribute(SAVE_PREVIOUS, "true")));
+        registry.setLogPrevSetValueFlag("true".equalsIgnoreCase(regEntry.getAttribute(SAVE_PREVIOUS, "true")));
 
         String value = regEntry.getAttribute(REG_DWORD);
         if (value != null)
         { // Value type is DWord; placeholder possible.
-            value = substitutor.substitute(value);
-            registryHandler.setValue(keypath, name, Long.parseLong(value));
+            value = substituter.substitute(value);
+            registry.setValue(keypath, name, Long.parseLong(value));
             return;
         }
         value = regEntry.getAttribute(REG_STRING);
         if (value != null)
         { // Value type is string; placeholder possible.
-            value = substitutor.substitute(value);
-            registryHandler.setValue(keypath, name, value);
+            value = substituter.substitute(value);
+            registry.setValue(keypath, name, value);
             return;
         }
         List<IXMLElement> values = regEntry.getChildrenNamed(REG_MULTI);
@@ -385,9 +393,9 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             {
                 IXMLElement element = multiIter.next();
                 multiString[i] = specHelper.getRequiredAttribute(element, REG_DATA);
-                multiString[i] = substitutor.substitute(multiString[i]);
+                multiString[i] = substituter.substitute(multiString[i]);
             }
-            registryHandler.setValue(keypath, name, multiString);
+            registry.setValue(keypath, name, multiString);
             return;
         }
         values = regEntry.getChildrenNamed(REG_BIN);
@@ -396,8 +404,8 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             // ...
             Iterator<IXMLElement> multiIter = values.iterator();
 
-            StringBuffer buf = new StringBuffer();
-            for (int i = 0; multiIter.hasNext(); ++i)
+            StringBuilder buf = new StringBuilder();
+            while (multiIter.hasNext())
             {
                 IXMLElement element = multiIter.next();
                 String tmp = specHelper.getRequiredAttribute(element, REG_DATA);
@@ -407,15 +415,15 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
                     buf.append(",");
                 }
             }
-            byte[] bytes = extractBytes(regEntry, substitutor.substitute(buf.toString()));
-            registryHandler.setValue(keypath, name, bytes);
+            byte[] bytes = extractBytes(regEntry, substituter.substitute(buf.toString()));
+            registry.setValue(keypath, name, bytes);
             return;
         }
         specHelper.parseError(regEntry, "No data found.");
 
     }
 
-    private byte[] extractBytes(IXMLElement element, String byteString) throws Exception
+    private byte[] extractBytes(IXMLElement element, String byteString) throws InstallerException
     {
         StringTokenizer st = new StringTokenizer(byteString, ",");
         byte[] retval = new byte[st.countTokens()];
@@ -425,11 +433,12 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             byte value = 0;
             String token = st.nextToken().trim();
             try
-            { // Unfortenly byte is signed ...
+            {
+                // Unfortunately byte is signed ...
                 int tval = Integer.parseInt(token, 16);
                 if (tval < 0 || tval > 0xff)
                 {
-                    throw new NumberFormatException("Value out of range.");
+                    throw new InstallerException("Byte value out of range: " + tval);
                 }
                 if (tval > 0x7f)
                 {
@@ -441,7 +450,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             {
                 getSpecHelper()
                         .parseError(element,
-                                "Bad entry for REG_BINARY; a byte should be written as 2 digit hexvalue followed by a ','.");
+                                    "Bad entry for REG_BINARY; a byte should be written as 2 digit hexvalue followed by a ','.");
             }
             retval[i++] = value;
         }
@@ -452,46 +461,104 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
     /**
      * Perform the setting of one key.
      *
-     * @param regEntry        element which contains the description of the key to be created
-     * @param substitutor     variable substitutor to be used for revising the regEntry contents
-     * @param registryHandler the registry handler
+     * @param regEntry element which contains the description of the key to be created
+     * @throws InstallerException if a required attribute is missing
+     * @throws NativeLibException for any native library error
      */
-    private void performKeySetting(IXMLElement regEntry, VariableSubstitutor substitutor,
-                                   RegistryHandler registryHandler)
-            throws Exception
+    private void performKeySetting(IXMLElement regEntry) throws InstallerException, NativeLibException
     {
-        String keypath = getSpecHelper().getRequiredAttribute(regEntry, REG_KEYPATH);
-        keypath = substitutor.substitute(keypath);
+        String path = getSpecHelper().getRequiredAttribute(regEntry, REG_KEYPATH);
+        path = substituter.substitute(path);
         String root = getSpecHelper().getRequiredAttribute(regEntry, REG_ROOT);
-        int rootId = resolveRoot(regEntry, root, substitutor);
-        registryHandler.setRoot(rootId);
-        if (!registryHandler.keyExist(keypath))
+        int rootId = resolveRoot(regEntry, root);
+        registry.setRoot(rootId);
+        if (!registry.keyExist(path))
         {
-            registryHandler.createKey(keypath);
+            registry.createKey(path);
         }
     }
 
-    private int resolveRoot(IXMLElement regEntry, String root, VariableSubstitutor substitutor)
-            throws Exception
+    private int resolveRoot(IXMLElement regEntry, String root) throws InstallerException
     {
-        String root1 = substitutor.substitute(root);
+        String root1 = substituter.substitute(root);
         Integer tmp = RegistryHandler.ROOT_KEY_MAP.get(root1);
         if (tmp != null)
         {
             return (tmp);
         }
-        getSpecHelper().parseError(regEntry, "Unknown value (" + root1 + ")for registry root.");
+        getSpecHelper().parseError(regEntry, "Unknown value (" + root1 + ") for registry root.");
         return 0;
     }
 
-    private void initializeRegistryHandler(AutomatedInstallData idata) throws Exception
+    private void initializeRegistryHandler(AutomatedInstallData installData) throws Exception
     {
-        RegistryHandler registryHandler = handler.getInstance();
-        if (registryHandler != null)
+        if (registry != null)
         {
-            registryHandler.verify(idata);
+            String uninstallName = installData.getVariable("APP_NAME") + " " + installData.getVariable("APP_VER");
+            registry.setUninstallName(uninstallName);
             getSpecHelper().readSpec(SPEC_FILE_NAME);
         }
     }
+
+    /**
+     * Registers the uninstaller.
+     *
+     * @throws NativeLibException for any native library exception.
+     */
+    private void registerUninstallKey() throws NativeLibException
+    {
+        String uninstallName = registry.getUninstallName();
+        if (uninstallName == null)
+        {
+            return;
+        }
+        String keyName = RegistryHandler.UNINSTALL_ROOT + uninstallName;
+        String cmd = "\"" + installData.getVariable("JAVA_HOME") + "\\bin\\javaw.exe\" -jar \""
+                + installData.getVariable("INSTALL_PATH") + "\\uninstaller\\uninstaller.jar\"";
+        String appVersion = installData.getVariable("APP_VER");
+        String appUrl = installData.getVariable("APP_URL");
+
+        try
+        {
+            registry.setRoot(RegistryHandler.HKEY_LOCAL_MACHINE);
+            registry.setValue(keyName, "DisplayName", uninstallName);
+        }
+        catch (NativeLibException exception)
+        { // Users without administrative rights should be able to install the app for themselves
+            logger.warning(
+                    "Failed to register uninstaller in HKEY_LOCAL_MACHINE hive, trying HKEY_CURRENT_USER: " + exception.getMessage());
+            registry.setRoot(RegistryHandler.HKEY_CURRENT_USER);
+            registry.setValue(keyName, "DisplayName", uninstallName);
+        }
+        registry.setValue(keyName, "UninstallString", cmd);
+        registry.setValue(keyName, "DisplayVersion", appVersion);
+        if (appUrl != null && appUrl.length() > 0)
+        {
+            registry.setValue(keyName, "HelpLink", appUrl);
+        }
+        // Try to write the uninstaller icon out.
+        InputStream in = null;
+        FileOutputStream out = null;
+        try
+        {
+            in = getResources().getInputStream(UNINSTALLER_ICON);
+            String iconPath = installData.getVariable("INSTALL_PATH") + File.separator
+                    + "Uninstaller" + File.separator + "UninstallerIcon.ico";
+            out = new FileOutputStream(iconPath);
+            IoHelper.copyStream(in, out);
+            registry.setValue(keyName, "DisplayIcon", iconPath);
+        }
+        catch (Exception e)
+        {
+            // May be no icon resource defined; ignore it
+            logger.log(Level.WARNING, e.getMessage(), e);
+        }
+        finally
+        {
+            FileUtils.close(in);
+            FileUtils.close(out);
+        }
+    }
+
 
 }

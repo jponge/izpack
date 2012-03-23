@@ -56,7 +56,6 @@ import java.util.logging.Logger;
  */
 public class ConsoleInstaller extends InstallerBase
 {
-    private static final Logger logger = Logger.getLogger(ConsoleInstaller.class.getName());
 
     /**
      * The panel console factory.
@@ -103,6 +102,12 @@ public class ConsoleInstaller extends InstallerBase
      */
     private final Housekeeper housekeeper;
 
+    /**
+     * The logger.
+     */
+    private static final Logger logger = Logger.getLogger(ConsoleInstaller.class.getName());
+
+    
     /**
      * Constructs a <tt>ConsoleInstaller</tt>
      *
@@ -287,6 +292,15 @@ public class ConsoleInstaller extends InstallerBase
     protected boolean run(ConsoleAction action)
     {
         return action.run(console);
+    }
+
+    /**
+     * Returns the console.
+     *
+     * @return the console
+     */
+    protected Console getConsole() {
+        return console;
     }
 
     /**
