@@ -269,7 +269,7 @@ public class RegistryHandler implements MSWinConstants
      * @param flagVal true to have the previous contents of registry
      *                values logged by the 'setValue()' method.
      */
-    public void setLogPrevSetValueFlag(boolean flagVal)
+    public void setLogPrevSetValueFlag(boolean flagVal) throws NativeLibException
     {
     }
 
@@ -279,8 +279,9 @@ public class RegistryHandler implements MSWinConstants
      *
      * @return true if the previous contents of registry values will be
      *         logged by the 'setValue()' method.
+     * @throws NativeLibException for any native library error
      */
-    public boolean getLogPrevSetValueFlag()
+    public boolean getLogPrevSetValueFlag() throws NativeLibException
     {
         return (true);
     }
