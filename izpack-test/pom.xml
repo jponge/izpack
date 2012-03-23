@@ -12,9 +12,14 @@
 
     <dependencies>
 
-        <dependency>
+        <!--dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>izpack-dist</artifactId>
+        </dependency-->
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>izpack-compiler</artifactId>
         </dependency>
 
         <dependency>
@@ -60,7 +65,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
-                    <execution>
+                    <!--execution>
                         <id>Unpack izpack installer files</id>
                         <phase>process-resources</phase>
                         <goals>
@@ -70,9 +75,10 @@
                             <includeArtifactIds>izpack-dist</includeArtifactIds>
                             <excludeTransitive>true</excludeTransitive>
                             <outputDirectory>${basedir}/src/test/resources/samples/izpack</outputDirectory>
+                            <excludes>**/*.class</excludes>
                         </configuration>
-                    </execution>
-                    <execution>
+                    </execution-->
+                    <!--execution>
                         <id>Unpack izpack utils</id>
                         <phase>process-resources</phase>
                         <goals>
@@ -83,7 +89,7 @@
                             <excludeTransitive>true</excludeTransitive>
                             <outputDirectory>${basedir}/src/test/resources/samples/izpack</outputDirectory>
                         </configuration>
-                    </execution>
+                    </execution-->
                     <execution>
                         <id>Copy test listeners</id>
                         <phase>process-resources</phase>

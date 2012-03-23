@@ -425,6 +425,7 @@
                         <exclude>**/PanelActionTest.java</exclude>
                         <exclude>**/DataValidatorTest.java</exclude>
                         <exclude>**/PackValidatorTest.java</exclude>
+                        <exclude>**/IzpackGenerationTest.java</exclude>
                     </excludes>
                     <parallel>both</parallel>
                     <perCoreThreadCount>true</perCoreThreadCount>
