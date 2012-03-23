@@ -41,7 +41,7 @@ public class CompilerLauncherTest
     @Test
     public void testJarOutputStream() throws Exception
     {
-        compilerContainer.addComponent(CompilerData.class, new CompilerData("bindingTest.xml", "", "out.zip"));
+        compilerContainer.addComponent(CompilerData.class, new CompilerData("bindingTest.xml", "", "out.zip", false));
         JarOutputStream jarOutputStream = compilerContainer.getComponent(JarOutputStream.class);
         assertThat(jarOutputStream, IsNull.notNullValue());
     }
@@ -57,7 +57,7 @@ public class CompilerLauncherTest
     @Test
     public void testCompilerDataBinding()
     {
-        compilerContainer.addComponent(CompilerData.class, new CompilerData("bindingTest.xml", "", "out.zip"));
+        compilerContainer.addComponent(CompilerData.class, new CompilerData("bindingTest.xml", "", "out.zip", false));
         CompilerData data = compilerContainer.getComponent(CompilerData.class);
         assertThat(data, IsNull.notNullValue());
     }

@@ -65,6 +65,11 @@ public class IzPackTask extends Task implements PackagerListener
     private String output;
 
     /**
+     * Whether to automatically create parent directories of the output file
+     */
+    private boolean mkdirs;
+
+    /**
      * Holds value of property compression.
      */
     private String compression;
@@ -204,7 +209,7 @@ public class IzPackTask extends Task implements PackagerListener
             ClassLoader loader = new URLClassLoader(getUrlsForClassloader());
             Class runableClass = loader.loadClass("com.izforge.izpack.ant.IzpackAntRunnable");
             Constructor constructor = runableClass.getConstructors()[0];
-            Object instance = constructor.newInstance(compression, kind, input, configText, basedir, output, compressionLevel, properties, inheritAll, getProject().getProperties(), izPackDir);
+            Object instance = constructor.newInstance(compression, kind, input, configText, basedir, output, mkdirs, compressionLevel, properties, inheritAll, getProject().getProperties(), izPackDir);
             final Thread thread = new Thread((Runnable) instance);
             thread.setContextClassLoader(loader);
             thread.start();
@@ -289,6 +294,16 @@ public class IzPackTask extends Task implements PackagerListener
     public void setOutput(String output)
     {
         this.output = output;
+    }
+
+    /**
+     * Setter for property mkdirs.
+     *
+     * @param mkdirs New value of property mkdirs.
+     */
+    public void setMkdirs(boolean mkdirs)
+    {
+        this.mkdirs = mkdirs;
     }
 
     /**

@@ -38,9 +38,9 @@ public class IzPackNewMojoTest extends AbstractMojoTestCase
 
         mojo.execute();
 
-        File file = new File("target/izpackResult.jar");
-        JarFile jar = new JarFile(file);
+        File file = new File("target/sample/izpackResult.jar");
         assertThat(file.exists(), Is.is(true));
+        JarFile jar = new JarFile(file);
         assertThat((ZipFile)jar, ZipMatcher.isZipMatching(IsCollectionContaining.hasItems(
             "com/izforge/izpack/core/container/AbstractContainer.class",
             "com/izforge/izpack/uninstaller/Destroyer.class",
@@ -69,7 +69,8 @@ public class IzPackNewMojoTest extends AbstractMojoTestCase
         setVariableValueToObject(mojo, "installFile", installFile.getAbsolutePath());
         setVariableValueToObject(mojo, "kind", "standard");
         setVariableValueToObject(mojo, "baseDir", new File("target/test-classes/").getAbsolutePath());
-        setVariableValueToObject(mojo, "output", "target/izpackResult.jar");
+        setVariableValueToObject(mojo, "output", "target/sample/izpackResult.jar");
         setVariableValueToObject(mojo, "comprLevel", -1);
+        setVariableValueToObject(mojo, "mkdirs", true); // autoboxing
     }
 }
