@@ -12,10 +12,13 @@
 
     <dependencies>
 
-        <!--dependency>
+        <dependency>
+            <!-- required by IzpackGenerationTest -->
             <groupId>${project.groupId}</groupId>
             <artifactId>izpack-dist</artifactId>
-        </dependency-->
+            <version>${project.version}</version>
+            <classifier>sources</classifier>
+        </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -65,19 +68,26 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
-                    <!--execution>
+                    <execution>
+                        <!-- copies sources from izpack-dist to test-classes/samples/izpack -->
+                        <!-- for IzpackGenerationTest                                       -->
                         <id>Unpack izpack installer files</id>
                         <phase>process-resources</phase>
                         <goals>
-                            <goal>unpack-dependencies</goal>
+                            <goal>unpack</goal>
                         </goals>
                         <configuration>
-                            <includeArtifactIds>izpack-dist</includeArtifactIds>
-                            <excludeTransitive>true</excludeTransitive>
-                            <outputDirectory>${basedir}/src/test/resources/samples/izpack</outputDirectory>
-                            <excludes>**/*.class</excludes>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>izpack-dist</artifactId>
+                                    <classifier>sources</classifier>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${basedir}/target/test-classes/samples/izpack</outputDirectory>
                         </configuration>
-                    </execution-->
+                    </execution>
                     <!--execution>
                         <id>Unpack izpack utils</id>
                         <phase>process-resources</phase>

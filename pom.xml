@@ -425,7 +425,6 @@
                         <exclude>**/PanelActionTest.java</exclude>
                         <exclude>**/DataValidatorTest.java</exclude>
                         <exclude>**/PackValidatorTest.java</exclude>
-                        <exclude>**/IzpackGenerationTest.java</exclude>
                     </excludes>
                     <parallel>both</parallel>
                     <perCoreThreadCount>true</perCoreThreadCount>
@@ -513,6 +512,11 @@
                     <artifactId>maven-release-plugin</artifactId>
                     <version>2.1</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
                 <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
@@ -525,7 +529,7 @@
                                     <pluginExecutionFilter>
                                         <groupId>org.apache.maven.plugins</groupId>
                                         <artifactId>maven-dependency-plugin</artifactId>
-                                        <versionRange>[2.1,)</versionRange>
+                                        <versionRange>[2.4,)</versionRange>
                                         <goals>
                                             <goal>unpack-dependencies</goal>
                                             <goal>copy-dependencies</goal>
