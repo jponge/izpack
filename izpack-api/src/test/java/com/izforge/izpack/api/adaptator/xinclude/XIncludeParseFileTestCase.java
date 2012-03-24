@@ -36,8 +36,8 @@ public class XIncludeParseFileTestCase extends BaseXIncludeTestCase
     {
         URL inputURL = getClass().getResource(fileBase + "-input.xml");
         URL expectURL = getClass().getResource(fileBase + "-expect.xml");
-        File fileInput = new File(inputURL.getFile());
-        File fileExcept = new File(expectURL.getFile());
+        File fileInput = new File(inputURL.toURI());
+        File fileExcept = new File(expectURL.toURI());
         IXMLParser parser = new XMLParser();
         IXMLElement inputElement = parser.parse(new FileInputStream(fileInput), fileInput.getAbsolutePath());
         IXMLElement expectedElement = parser.parse(new FileInputStream(fileExcept), fileInput.getAbsolutePath());

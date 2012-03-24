@@ -70,7 +70,7 @@ public class XMLParserTest
     public void testParseString() throws Exception
     {
         IXMLElement spec;
-        String substitutedSpec = FileUtils.readFileToString(new File(XMLParserTest.class.getResource(filename).getFile()));
+        String substitutedSpec = FileUtils.readFileToString(new File(XMLParserTest.class.getResource(filename).toURI()));
         IXMLParser parser = new XMLParser();
         spec = parser.parse(substitutedSpec);
         Assert.assertEquals("shortcuts", spec.getName());
