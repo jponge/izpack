@@ -100,7 +100,7 @@ public class InstallationTest
     @InstallFile("samples/doublePanel.xml")
     public void testMultiplePanels() throws Exception
     {
-        installerController.preloadInstaller().buildInstallation();
+        installerController.buildInstallation();
 
         HelloPanel firstHelloPanel = (HelloPanel) installerContainer.getComponent("42");
         assertThat(firstHelloPanel.getMetadata().getPanelid(), Is.is("42"));

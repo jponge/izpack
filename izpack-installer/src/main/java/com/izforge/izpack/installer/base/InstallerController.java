@@ -27,13 +27,12 @@ public class InstallerController
 
     public InstallerController preloadInstaller() throws ClassNotFoundException
     {
-        panelManager.loadPanelsInContainer();
         return this;
     }
 
     public InstallerController buildInstallation() throws Exception
     {
-        panelManager.instantiatePanels();
+        panelManager.createPanels();
         installerFrame.buildGUI();
         installerFrame.sizeFrame();
         return this;

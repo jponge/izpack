@@ -1222,7 +1222,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         {
             preActivateActions = new ArrayList<PanelAction>();
         }
-        this.preActivateActions.add(preActivateAction);
+        preActivateActions.add(preActivateAction);
     }
 
     public void addPreValidationAction(PanelAction preValidateAction)
@@ -1231,7 +1231,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         {
             preValidateActions = new ArrayList<PanelAction>();
         }
-        this.preValidateActions.add(preValidateAction);
+        preValidateActions.add(preValidateAction);
     }
 
     public void addPostValidationAction(PanelAction postValidateAction)
@@ -1240,7 +1240,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         {
             postValidateActions = new ArrayList<PanelAction>();
         }
-        this.postValidateActions.add(postValidateAction);
+        postValidateActions.add(postValidateAction);
     }
 
     protected final void executePreActivationActions()

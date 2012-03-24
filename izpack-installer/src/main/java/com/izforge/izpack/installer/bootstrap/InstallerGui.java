@@ -48,10 +48,10 @@ public class InstallerGui
                     applicationComponent.initBindings();
                     BindeableContainer installerContainer = applicationComponent.getComponent(BindeableContainer.class);
 
-                    InstallerController installerController = installerContainer.getComponent(InstallerController.class).preloadInstaller();
+                    InstallerController controller = installerContainer.getComponent(InstallerController.class);
 
                     installerContainer.getComponent(LanguageDialog.class).initLangPack();
-                    installerController.buildInstallation().launchInstallation();
+                    controller.buildInstallation().launchInstallation();
                 }
                 catch (Exception e)
                 {

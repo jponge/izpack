@@ -225,6 +225,11 @@ public class InstallerFrame extends JFrame implements InstallerView
     private UninstallData uninstallData;
 
     /**
+     * The unpacker.
+     */
+    private final IUnpacker unpacker;
+
+    /**
      * The house keeper.
      */
     private final Housekeeper housekeeper;
@@ -246,6 +251,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      * @param resourceManager     the resource manager
      * @param uninstallData       the uninstallation data
      * @param variableSubstitutor the variable substituter
+     * @param unpacker            the unpacker
      * @param housekeeper         the house-keeper
      * @param log                 the log
      * @throws Exception for any error
@@ -253,24 +259,27 @@ public class InstallerFrame extends JFrame implements InstallerView
     public InstallerFrame(String title, GUIInstallData installData, RulesEngine rules, IconsDatabase icons,
                           PanelManager panelManager, UninstallDataWriter uninstallDataWriter,
                           ResourceManager resourceManager, UninstallData uninstallData,
-                          VariableSubstitutor variableSubstitutor, Housekeeper housekeeper, Log log)
+                          VariableSubstitutor variableSubstitutor, IUnpacker unpacker, Housekeeper housekeeper, Log log)
             throws Exception
     {
         super(title);
         guiListener = new ArrayList<GUIListener>();
         this.installdata = installData;
-        this.setLangpack(installData.getLangpack());
         this.rules = rules;
-        this.setIcons(icons);
         this.resourceManager = resourceManager;
         this.uninstallDataWriter = uninstallDataWriter;
         this.uninstallData = uninstallData;
         this.panelManager = panelManager;
-        // Sets the window events handler
-        addWindowListener(new WindowHandler(this));
+        this.unpacker = unpacker;
         this.variableSubstitutor = variableSubstitutor;
         this.housekeeper = housekeeper;
         this.log = log;
+
+        this.setLangpack(installData.getLangpack());
+        this.setIcons(icons);
+
+        // Sets the window events handler
+        addWindowListener(new WindowHandler(this));
     }
 
     @Override
@@ -339,10 +348,18 @@ public class InstallerFrame extends JFrame implements InstallerView
         JPanel navPanel = new JPanel();
         navPanel.setLayout(new BoxLayout(navPanel, BoxLayout.X_AXIS));
         navPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(8, 8,
-                8, 8), BorderFactory.createTitledBorder(new EtchedLineBorder(), getLangpack()
-                .getString("installer.madewith")
-                + " ", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font(
-                "Dialog", Font.PLAIN, 10))));
+                                                                                              8, 8),
+                                                              BorderFactory.createTitledBorder(new EtchedLineBorder(),
+                                                                                               getLangpack()
+                                                                                                       .getString(
+                                                                                                               "installer.madewith")
+                                                                                                       + " ",
+                                                                                               TitledBorder.DEFAULT_JUSTIFICATION,
+                                                                                               TitledBorder.DEFAULT_POSITION,
+                                                                                               new Font(
+                                                                                                       "Dialog",
+                                                                                                       Font.PLAIN,
+                                                                                                       10))));
 
         // Add help Button to the navigation panel
         this.helpButton = ButtonFactory.createButton(getLangpack().getString("installer.help"), getIcons()
@@ -570,8 +587,9 @@ public class InstallerFrame extends JFrame implements InstallerView
             label.setFont(new Font("Sans Serif", Font.PLAIN, 12));
             Object[] optionValues = {"Continue", "Exit"};
             int selectedOption = JOptionPane.showOptionDialog(null, label, "Warning",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, optionValues,
-                    optionValues[1]);
+                                                              JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
+                                                              null, optionValues,
+                                                              optionValues[1]);
             logger.fine("Selected option: " + selectedOption);
             if (selectedOption == 0)
             {
@@ -827,7 +845,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     public void install(AbstractUIProgressHandler listener)
     {
-        IUnpacker unpacker = panelManager.getUnpacker(listener);
+        // unpacker.setHandler(listener);
         Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
         unpackerthread.start();
     }
@@ -1416,7 +1434,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         {
             headingCounterComponent = null;
             if ("progressbar".equalsIgnoreCase(installdata.guiPrefs.modifier
-                    .get("headingPanelCounter")))
+                                                       .get("headingPanelCounter")))
             {
                 JProgressBar headingProgressBar = new JProgressBar();
                 headingProgressBar.setStringPainted(true);
@@ -1431,7 +1449,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             else
             {
                 if ("text".equalsIgnoreCase(installdata.guiPrefs.modifier
-                        .get("headingPanelCounter")))
+                                                    .get("headingPanelCounter")))
                 {
                     JLabel headingCountPanels = new JLabel(" ");
                     headingCounterComponent = headingCountPanels;
@@ -1450,7 +1468,7 @@ public class InstallerFrame extends JFrame implements InstallerView
                     if (installdata.guiPrefs.modifier.containsKey("headingForegroundColor"))
                     {
                         foreground = Color.decode(installdata.guiPrefs.modifier
-                                .get("headingForegroundColor"));
+                                                          .get("headingForegroundColor"));
                         headingCountPanels.setForeground(foreground);
                     }
                     // end
@@ -1507,10 +1525,10 @@ public class InstallerFrame extends JFrame implements InstallerView
         if (installdata.guiPrefs.modifier.containsKey("headingImageBorderSize"))
         {
             borderSize = Integer.parseInt(installdata.guiPrefs.modifier
-                    .get("headingImageBorderSize"));
+                                                  .get("headingImageBorderSize"));
         }
         imgPanel.setBorder(BorderFactory.createEmptyBorder(borderSize, borderSize, borderSize,
-                borderSize));
+                                                           borderSize));
         // end
 
         if (back != null)
@@ -1560,7 +1578,8 @@ public class InstallerFrame extends JFrame implements InstallerView
         }
         // See if we should switch the header image to the left side
         if (installdata.guiPrefs.modifier.containsKey("headingImageOnLeft")
-                && (installdata.guiPrefs.modifier.get("headingImageOnLeft").equalsIgnoreCase("yes") || installdata.guiPrefs.modifier
+                && (installdata.guiPrefs.modifier.get("headingImageOnLeft").equalsIgnoreCase(
+                "yes") || installdata.guiPrefs.modifier
                 .get("headingImageOnLeft").equalsIgnoreCase("true")))
         {
             imageLeft = true;
@@ -1767,8 +1786,9 @@ public class InstallerFrame extends JFrame implements InstallerView
             label.setFont(new Font("Sans Serif", Font.PLAIN, 12));
             Object[] optionValues = {"Continue", "Exit"};
             int selectedOption = JOptionPane.showOptionDialog(null, label, "Warning",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, optionValues,
-                    optionValues[1]);
+                                                              JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
+                                                              null, optionValues,
+                                                              optionValues[1]);
             logger.fine("Selected option: " + selectedOption);
             if (selectedOption == 0)
             {
@@ -1826,7 +1846,8 @@ public class InstallerFrame extends JFrame implements InstallerView
                 case Info.REBOOT_ACTION_ASK:
                     try
                     {
-                        message = variableSubstitutor.substitute(getLangpack().getString("installer.reboot.ask.message"));
+                        message = variableSubstitutor.substitute(
+                                getLangpack().getString("installer.reboot.ask.message"));
                     }
                     catch (Exception e)
                     {
@@ -1835,7 +1856,7 @@ public class InstallerFrame extends JFrame implements InstallerView
                     try
                     {
                         title = variableSubstitutor.substitute(getLangpack()
-                                .getString("installer.reboot.ask.title"));
+                                                                       .getString("installer.reboot.ask.title"));
                     }
                     catch (Exception e)
                     {
@@ -1851,7 +1872,8 @@ public class InstallerFrame extends JFrame implements InstallerView
                 case Info.REBOOT_ACTION_NOTICE:
                     try
                     {
-                        message = variableSubstitutor.substitute(getLangpack().getString("installer.reboot.notice.message"));
+                        message = variableSubstitutor.substitute(
+                                getLangpack().getString("installer.reboot.notice.message"));
                     }
                     catch (Exception e)
                     {
@@ -1860,7 +1882,7 @@ public class InstallerFrame extends JFrame implements InstallerView
                     try
                     {
                         title = variableSubstitutor.substitute(getLangpack()
-                                .getString("installer.reboot.notice.title"));
+                                                                       .getString("installer.reboot.notice.title"));
                     }
                     catch (Exception e)
                     {
