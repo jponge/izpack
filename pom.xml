@@ -347,10 +347,6 @@
                         <artifactId>android</artifactId>
                     </exclusion>
                     <exclusion>
-                        <groupId>org.pushing-pixels</groupId>
-                        <artifactId>trident</artifactId>
-                    </exclusion>
-                    <exclusion>
                       <artifactId>ant</artifactId>
                       <groupId>ant</groupId>
                     </exclusion>
