@@ -473,6 +473,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                         done = false;
                         strIn = "";
                         System.out.println("Error: No console found");
+                        // Causes program to terminate
+                        throw new Error("No Console Found");
                     }
                 } else {
                     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
