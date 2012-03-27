@@ -1,14 +1,13 @@
 package com.izforge.izpack.installer.container.impl;
 
-import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.util.OsConstraintHelper;
 import com.izforge.izpack.util.file.FileUtils;
 
@@ -22,23 +21,44 @@ import java.util.List;
  * Fill a container with custom data like events
  *
  * @author Anthonin Bonnefoy
+ * @author Tim Anderson
  */
 public class EventFiller
 {
+    /**
+     * The resource manager.
+     */
     private ResourceManager resourceManager;
-    private ClassPathCrawler classPathCrawler;
-    private BindeableContainer bindeableContainer;
-    private AutomatedInstallData installdata;
+
+    /**
+     * The object factory.
+     */
+    private final ObjectFactory factory;
+
+    /**
+     * The installation data.
+     */
+    private AutomatedInstallData installData;
+
+    /**
+     * The uninstallation data.
+     */
     private final UninstallData uninstallData;
 
-    public EventFiller(ResourceManager resourceManager, ClassPathCrawler classPathCrawler,
-                       BindeableContainer bindeableContainer, AutomatedInstallData installdata,
+    /**
+     * Constructs an <tt>EventFiller</tt>.
+     *
+     * @param resourceManager the resource manager
+     * @param factory         the factory for listeners
+     * @param installData     the installation data
+     * @param uninstallData   the uninstallation data
+     */
+    public EventFiller(ResourceManager resourceManager, ObjectFactory factory, AutomatedInstallData installData,
                        UninstallData uninstallData)
     {
         this.resourceManager = resourceManager;
-        this.classPathCrawler = classPathCrawler;
-        this.bindeableContainer = bindeableContainer;
-        this.installdata = installdata;
+        this.factory = factory;
+        this.installData = installData;
         this.uninstallData = uninstallData;
     }
 
@@ -60,7 +80,7 @@ public class EventFiller
     public void loadCustomData() throws InstallerException
     {
         List<CustomData> customData = (List<CustomData>) readObject("customData");
-        installdata.setInstallerListener(new ArrayList<InstallerListener>());
+        installData.setInstallerListener(new ArrayList<InstallerListener>());
         for (CustomData data : customData)
         {
             if (data.osConstraints == null || OsConstraintHelper.oneMatchesCurrentSystem(data.osConstraints))
@@ -92,11 +112,11 @@ public class EventFiller
      */
     private void notifyInstallerListeners() throws InstallerException
     {
-        for (InstallerListener listener : installdata.getInstallerListener())
+        for (InstallerListener listener : installData.getInstallerListener())
         {
             try
             {
-                listener.afterInstallerInitialization(installdata);
+                listener.afterInstallerInitialization(installData);
             }
             catch (InstallerException exception)
             {
@@ -118,10 +138,9 @@ public class EventFiller
     @SuppressWarnings("unchecked")
     private void addInstallerListener(String className)
     {
-        Class aClass = classPathCrawler.findClass(className);
-        bindeableContainer.addComponent(aClass);
-        List<InstallerListener> listeners = installdata.getInstallerListener();
-        listeners.add((InstallerListener) bindeableContainer.getComponent(aClass));
+        List<InstallerListener> listeners = installData.getInstallerListener();
+        InstallerListener listener = factory.create(className, InstallerListener.class);
+        listeners.add(listener);
     }
 
     /**

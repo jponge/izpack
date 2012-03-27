@@ -14,7 +14,6 @@ import com.izforge.izpack.api.data.ScriptParserConstant;
 import com.izforge.izpack.api.data.Value;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraintHelper;
@@ -50,7 +49,6 @@ public abstract class AbstractInstallDataProvider implements Provider
     protected static final String LANG_FILE_NAME = "CustomLangPack.xml";
     protected ResourceManager resourceManager;
     protected VariableSubstitutor variableSubstitutor;
-    protected ClassPathCrawler classPathCrawler;
     protected Housekeeper housekeeper;
 
     /**

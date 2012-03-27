@@ -6,6 +6,7 @@ import com.izforge.izpack.merge.jar.JarMerge;
 
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,11 +17,10 @@ import java.util.Map;
  */
 public class MergeableResolver
 {
-    private Map<OutputStream, List<String>> mergeContent;
+    private Map<OutputStream, List<String>> mergeContent = new HashMap<OutputStream, List<String>>();
 
-    public MergeableResolver(Map<OutputStream, List<String>> mergeContent)
+    public MergeableResolver()
     {
-        this.mergeContent = mergeContent;
     }
 
     public Mergeable getMergeableFromURL(URL url)

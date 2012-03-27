@@ -18,8 +18,17 @@
 
 package com.izforge.izpack.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.core.rules.logic.AndCondition;
+import com.izforge.izpack.core.rules.logic.NotCondition;
+import com.izforge.izpack.core.rules.logic.OrCondition;
+import com.izforge.izpack.core.rules.process.ExistsCondition;
+import com.izforge.izpack.core.rules.process.RefCondition;
+import com.izforge.izpack.core.rules.process.VariableCondition;
+import com.izforge.izpack.test.junit.PicoRunner;
 import org.hamcrest.Matcher;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
@@ -28,11 +37,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.test.junit.PicoRunner;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 
 /**
@@ -59,110 +64,26 @@ public class ConditionTest
     @Before
     public void setUp() throws Exception
     {
-        IXMLElement conditionspec = new XMLElementImpl("conditions");
-        Document ownerDocument = conditionspec.getElement().getOwnerDocument();
-        conditionspec.addChild(createVariableCondition("test.true", "TEST", "true", ownerDocument));
-        conditionspec.addChild(createRefCondition("test.true2", "test.true", ownerDocument));
-//        conditionspec.addChild(createNotCondition("test.not.true", createVariableCondition("test.true", "TEST", "true", ownerDocument), ownerDocument));
-        conditionspec.addChild(createNotCondition("test.not.true", createRefCondition("test.true", ownerDocument), ownerDocument));
+        IXMLElement conditions = new XMLElementImpl("conditions");
+        Document ownerDocument = conditions.getElement().getOwnerDocument();
+        conditions.addChild(createVariableCondition("test.true", "TEST", "true", ownerDocument));
+        conditions.addChild(createRefCondition("test.true2", "test.true", ownerDocument));
+//        conditions.addChild(createNotCondition("test.not.true", createVariableCondition("test.true", "TEST", "true", ownerDocument), ownerDocument));
+        conditions.addChild(
+                createNotCondition("test.not.true", createRefCondition("test.true", ownerDocument), ownerDocument));
 
-        conditionspec.addChild(createVariableExistsCondition("haveInstallPath", "INSTALL_PATH", ownerDocument));
-        conditionspec.addChild(createVariableCondition("isNewVersion", "previous.version", "UNKNOWN", ownerDocument));
-        conditionspec.addChild(createNotCondition("isUpgradeVersion", createRefCondition("isNewVersion", ownerDocument), ownerDocument));
-        conditionspec.addChild(createAndCondition("isNew", "isNewVersion", "haveInstallPath", ownerDocument));
-        conditionspec.addChild(createAndCondition("isUpgrade", "isUpgradeVersion", "haveInstallPath", ownerDocument));
+        conditions.addChild(createVariableExistsCondition("haveInstallPath", "INSTALL_PATH", ownerDocument));
+        conditions.addChild(createVariableCondition("isNewVersion", "previous.version", "UNKNOWN", ownerDocument));
+        conditions.addChild(createNotCondition("isUpgradeVersion", createRefCondition("isNewVersion", ownerDocument),
+                                               ownerDocument));
+        conditions.addChild(createAndCondition("isNew", "isNewVersion", "haveInstallPath", ownerDocument));
+        conditions.addChild(createAndCondition("isUpgrade", "isUpgradeVersion", "haveInstallPath", ownerDocument));
 
-        conditionspec.addChild(createOrCondition("newOrUpgrade", "isNew", "isUpgrade", ownerDocument));
+        conditions.addChild(createOrCondition("newOrUpgrade", "isNew", "isUpgrade", ownerDocument));
 
         idata.setRules(rules);
-        rules.analyzeXml(conditionspec);
+        rules.analyzeXml(conditions);
         rules.resolveConditions();
-    }
-
-    public IXMLElement createNotCondition(String id, IXMLElement condition, Document ownerDocument)
-    {
-        IXMLElement not = new XMLElementImpl("condition", ownerDocument);
-        not.setAttribute("type", "not");
-        not.setAttribute("id", id);
-        not.addChild(condition);
-
-        return not;
-    }
-
-    public IXMLElement createVariableCondition(String id, String variable, String expvalue, Document ownerDocument)
-    {
-        IXMLElement variablecondition = new XMLElementImpl("condition", ownerDocument);
-        variablecondition.setAttribute("type", "variable");
-        variablecondition.setAttribute("id", id);
-        IXMLElement name = new XMLElementImpl("name", ownerDocument);
-        name.setContent(variable);
-        IXMLElement value = new XMLElementImpl("value", ownerDocument);
-        value.setContent(expvalue);
-
-        variablecondition.addChild(name);
-        variablecondition.addChild(value);
-
-        return variablecondition;
-    }
-
-    public IXMLElement createRefCondition(String refid, Document ownerDocument)
-    {
-        return createRefCondition(null, refid, ownerDocument);
-    }
-
-    public IXMLElement createRefCondition(String id, String refid, Document ownerDocument)
-    {
-        IXMLElement refcondition = new XMLElementImpl("condition", ownerDocument);
-        refcondition.setAttribute("type", "ref");
-        refcondition.setAttribute("refid", refid);
-        if (id != null)
-        {
-            // ID on ref conditions is optional per definition
-            refcondition.setAttribute("id", id);
-        }
-
-        return refcondition;
-    }
-
-    public IXMLElement createAndCondition(String id, String refid1, String refid2, Document ownerDocument)
-    {
-        IXMLElement andcondition = new XMLElementImpl("condition", ownerDocument);
-        andcondition.setAttribute("type", "and");
-        andcondition.setAttribute("id", id);
-        IXMLElement ref1 = createRefCondition(refid1, ownerDocument);
-        IXMLElement ref2 = createRefCondition(refid2, ownerDocument);
-
-        andcondition.addChild(ref1);
-        andcondition.addChild(ref2);
-
-        return andcondition;
-    }
-
-    public IXMLElement createOrCondition(String id, String refid1, String refid2, Document ownerDocument)
-    {
-        IXMLElement andcondition = new XMLElementImpl("condition", ownerDocument);
-        andcondition.setAttribute("type", "or");
-        andcondition.setAttribute("id", id);
-        IXMLElement ref1 = createRefCondition(refid1, ownerDocument);
-        IXMLElement ref2 = createRefCondition(refid2, ownerDocument);
-
-        andcondition.addChild(ref1);
-        andcondition.addChild(ref2);
-
-        return andcondition;
-    }
-
-    public IXMLElement createVariableExistsCondition(String id, String variable, Document ownerDocument)
-    {
-        IXMLElement existscondition = new XMLElementImpl("condition", ownerDocument);
-        existscondition.setAttribute("type", "exists");
-        existscondition.setAttribute("id", id);
-        IXMLElement name = new XMLElementImpl("variable", ownerDocument);
-        name.setContent(variable);
-
-        existscondition.addChild(name);
-
-        return existscondition;
     }
 
     @Test
@@ -225,6 +146,145 @@ public class ConditionTest
         assertThat(rules.isConditionTrue("isUpgrade", idata), IS_TRUE);
 
         assertThat(rules.isConditionTrue("newOrUpgrade", idata), IS_TRUE);
+    }
+
+    /**
+     * Creates xml for a {@link NotCondition}.
+     *
+     * @param id            the condition identifier
+     * @param condition     the condition to negate
+     * @param ownerDocument the parent document
+     * @return a new condition element
+     */
+    private IXMLElement createNotCondition(String id, IXMLElement condition, Document ownerDocument)
+    {
+        IXMLElement result = new XMLElementImpl("condition", ownerDocument);
+        result.setAttribute("type", "not");
+        result.setAttribute("id", id);
+        result.addChild(condition);
+        return result;
+    }
+
+    /**
+     * Creates xml for a {@link VariableCondition}.
+     *
+     * @param id            the condition identifier
+     * @param variable      variable
+     * @param expression    the variable expression
+     * @param ownerDocument the parent document
+     * @return a new condition element
+     */
+    private IXMLElement createVariableCondition(String id, String variable, String expression, Document ownerDocument)
+    {
+        IXMLElement result = new XMLElementImpl("condition", ownerDocument);
+        result.setAttribute("type", "variable");
+        result.setAttribute("id", id);
+        IXMLElement name = new XMLElementImpl("name", ownerDocument);
+        name.setContent(variable);
+        IXMLElement value = new XMLElementImpl("value", ownerDocument);
+        value.setContent(expression);
+
+        result.addChild(name);
+        result.addChild(value);
+
+        return result;
+    }
+
+    /**
+     * Creates xml for a {@link RefCondition}.
+     *
+     * @param refid         the reference identifier
+     * @param ownerDocument the parent document
+     * @return a new condition element
+     */
+    private IXMLElement createRefCondition(String refid, Document ownerDocument)
+    {
+        return createRefCondition(null, refid, ownerDocument);
+    }
+
+    /**
+     * Creates xml for a {@link RefCondition}.
+     *
+     * @param id            the condition  identifier. May be <tt>null</tt>
+     * @param refid         the reference identifier
+     * @param ownerDocument the parent document
+     * @return a new condition element
+     */
+    private IXMLElement createRefCondition(String id, String refid, Document ownerDocument)
+    {
+        IXMLElement result = new XMLElementImpl("condition", ownerDocument);
+        result.setAttribute("type", "ref");
+        result.setAttribute("refid", refid);
+        if (id != null)
+        {
+            // ID on ref conditions is optional per definition
+            result.setAttribute("id", id);
+        }
+
+        return result;
+    }
+
+    /**
+     * Creates xml for an {@link AndCondition}.
+     *
+     * @param id            the condition identifier
+     * @param refid1        the left hand condition reference
+     * @param refid2        the right hand condition reference
+     * @param ownerDocument the parent document
+     * @return a new condition element
+     */
+    private IXMLElement createAndCondition(String id, String refid1, String refid2, Document ownerDocument)
+    {
+        IXMLElement result = new XMLElementImpl("condition", ownerDocument);
+        result.setAttribute("type", "and");
+        result.setAttribute("id", id);
+        IXMLElement ref1 = createRefCondition(refid1, ownerDocument);
+        IXMLElement ref2 = createRefCondition(refid2, ownerDocument);
+
+        result.addChild(ref1);
+        result.addChild(ref2);
+
+        return result;
+    }
+
+    /**
+     * Creates xml for an {@link OrCondition}.
+     *
+     * @param id            the condition identifier
+     * @param refid1        the left hand condition reference
+     * @param refid2        the right hand condition reference
+     * @param ownerDocument the parent document
+     * @return a new condition element
+     */
+    private IXMLElement createOrCondition(String id, String refid1, String refid2, Document ownerDocument)
+    {
+        IXMLElement result = new XMLElementImpl("condition", ownerDocument);
+        result.setAttribute("type", "or");
+        result.setAttribute("id", id);
+        IXMLElement ref1 = createRefCondition(refid1, ownerDocument);
+        IXMLElement ref2 = createRefCondition(refid2, ownerDocument);
+        result.addChild(ref1);
+        result.addChild(ref2);
+        return result;
+    }
+
+    /**
+     * Creates xml for an {@link ExistsCondition}.
+     *
+     * @param id            the condition identifier
+     * @param variable      the variable
+     * @param ownerDocument the parent document
+     * @return a new condition element
+     */
+    private IXMLElement createVariableExistsCondition(String id, String variable, Document ownerDocument)
+    {
+        IXMLElement result = new XMLElementImpl("condition", ownerDocument);
+        result.setAttribute("type", "exists");
+        result.setAttribute("id", id);
+        IXMLElement name = new XMLElementImpl("variable", ownerDocument);
+        name.setContent(variable);
+        result.addChild(name);
+        return result;
     }
 
 }

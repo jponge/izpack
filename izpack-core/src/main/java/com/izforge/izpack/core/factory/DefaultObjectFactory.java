@@ -2,7 +2,7 @@ package com.izforge.izpack.core.factory;
 
 
 import com.izforge.izpack.api.container.BindeableContainer;
-import com.izforge.izpack.api.factory.AbstractObjectFactory;
+import com.izforge.izpack.api.exception.IzPackClassNotFoundException;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import org.picocontainer.MutablePicoContainer;
 
@@ -12,12 +12,12 @@ import org.picocontainer.MutablePicoContainer;
  *
  * @author Tim Anderson
  */
-public class DefaultObjectFactory extends AbstractObjectFactory
+public class DefaultObjectFactory implements ObjectFactory
 {
     /**
      * The container.
      */
-    private final MutablePicoContainer container;
+    private final BindeableContainer container;
 
 
     /**
@@ -27,7 +27,7 @@ public class DefaultObjectFactory extends AbstractObjectFactory
      */
     public DefaultObjectFactory(BindeableContainer container)
     {
-        this.container = container.getContainer();
+        this.container = container;
     }
 
     /**
@@ -48,9 +48,24 @@ public class DefaultObjectFactory extends AbstractObjectFactory
         }
         finally
         {
-            container.removeChildContainer(child);
+            container.getContainer().removeChildContainer(child);
         }
         return result;
     }
 
+    /**
+     * Creates a new instance of the specified class name.
+     *
+     * @param className the class name
+     * @param superType the super type
+     * @return a new instance
+     * @throws ClassCastException           if <tt>className</tt> does not implement or extend <tt>superType</tt>
+     * @throws IzPackClassNotFoundException if the class cannot be found
+     */
+    @Override
+    public <T> T create(String className, Class<T> superType)
+    {
+        Class<? extends T> type = container.getClass(className, superType);
+        return create(type);
+    }
 }

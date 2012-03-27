@@ -1,15 +1,5 @@
 package com.izforge.izpack.installer.data;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.jar.JarEntry;
-import java.util.jar.JarOutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.api.rules.RulesEngine;
@@ -20,18 +10,29 @@ import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.file.FileUtils;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Writes uninstall data to an executable jar file.
  */
 public class UninstallDataWriter
 {
-    private static final Logger logger = Logger.getLogger(UninstallDataWriter.class.getName());
-
-    /**
-     * Log file path variable name.
-     */
-    private static final String LOGFILE_PATH = "InstallerFrame.logfilePath";
-
     /**
      * Uninstall data.
      */
@@ -68,6 +69,16 @@ public class UninstallDataWriter
     private RulesEngine rules;
 
     /**
+     * The logger.
+     */
+    private static final Logger logger = Logger.getLogger(UninstallDataWriter.class.getName());
+
+    /**
+     * Log file path variable name.
+     */
+    private static final String LOGFILE_PATH = "InstallerFrame.logfilePath";
+
+    /**
      * Constructs an <tt>UninstallDataWriter</tt>.
      *
      * @param substituter   the variable substituter
@@ -99,11 +110,8 @@ public class UninstallDataWriter
         String condition = installData.getInfo().getUninstallerCondition();
 
         return (installData.getInfo().getUninstallerPath() != null)
-               && (
-                       condition == null
-                       || condition.length() == 0
-                       || rules.isConditionTrue(condition)
-                   );
+                && (condition == null || condition.length() == 0 || rules.isConditionTrue(condition)
+        );
     }
 
     /**
@@ -239,7 +247,8 @@ public class UninstallDataWriter
 
         // We put the langpack
         List<Mergeable> langPack = pathResolver.getMergeableFromPath("resources/langpacks/"
-                + installData.getLocaleISO3() + ".xml", "langpack.xml");
+                                                                             + installData.getLocaleISO3() + ".xml",
+                                                                     "langpack.xml");
         for (Mergeable mergeable : langPack)
         {
             mergeable.merge(jar);

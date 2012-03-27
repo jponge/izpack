@@ -48,7 +48,7 @@ public class InstallerRequirementCheckerTest
         installData = new InstallData(variables);
         installData.setInstallerrequirements(new ArrayList<InstallerRequirement>());
         installData.setLangpack(new LocaleDatabase(new StringInputStream("<langpack/>")));
-        rules = new RulesEngineImpl(installData, null, null);
+        rules = new RulesEngineImpl(installData, null);
 
         Map<String, Condition> conditionsmap = new HashMap<String, Condition>();
         Condition alwaysFalse = new JavaCondition();

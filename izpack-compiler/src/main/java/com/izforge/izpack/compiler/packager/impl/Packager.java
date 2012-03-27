@@ -37,6 +37,7 @@ import java.util.jar.JarFile;
 import java.util.jar.Pack200;
 import java.util.zip.ZipInputStream;
 
+import com.izforge.izpack.compiler.merge.resolve.CompilerPathResolver;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -59,7 +60,6 @@ import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
-import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.IoHelper;
 
@@ -95,9 +95,14 @@ public class Packager extends PackagerBase
      * @throws com.izforge.izpack.api.exception.CompilerException
      *
      */
-    public Packager(Properties properties, CompilerData compilerData, CompilerContainer compilerContainer, PackagerListener listener, JarOutputStream jarOutputStream, PackCompressor packCompressor, OutputStream outputStream, MergeManager mergeManager, PathResolver pathResolver, IzpackProjectInstaller izpackInstallModel, MergeableResolver mergeableResolver, ResourceFinder resourceFinder) throws CompilerException
+    public Packager(Properties properties, CompilerData compilerData, CompilerContainer compilerContainer,
+                    PackagerListener listener, JarOutputStream jarOutputStream, PackCompressor packCompressor,
+                    OutputStream outputStream, MergeManager mergeManager, CompilerPathResolver pathResolver,
+                    IzpackProjectInstaller izpackInstallModel, MergeableResolver mergeableResolver,
+                    ResourceFinder resourceFinder) throws CompilerException
     {
-        super(properties, compilerContainer, listener, mergeManager, pathResolver, izpackInstallModel, mergeableResolver);
+        super(properties, compilerContainer, listener, mergeManager, pathResolver, izpackInstallModel,
+              mergeableResolver);
         this.compilerData = compilerData;
         this.primaryJarStream = jarOutputStream;
         this.resourceFinder = resourceFinder;

@@ -1,6 +1,8 @@
 package com.izforge.izpack.api.factory;
 
 
+import com.izforge.izpack.api.exception.IzPackClassNotFoundException;
+
 /**
  * An object factory that supports dependency injection.
  *
@@ -23,7 +25,8 @@ public interface ObjectFactory
      * @param className the class name
      * @param superType the super type
      * @return a new instance
-     * @throws IllegalArgumentException if <tt>className</tt> does not implement or extend <tt>superType</tt>
+     * @throws ClassCastException           if <tt>className</tt> does not implement or extend <tt>superType</tt>
+     * @throws IzPackClassNotFoundException if the class cannot be found
      */
     <T> T create(String className, Class<T> superType);
 

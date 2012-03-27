@@ -31,7 +31,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 @RunWith(PicoRunner.class)
 @Container(TestPanelContainer.class)
-public class TestPanelDisplay
+public class PanelDisplayTest
 {
 
     private GUIInstallData guiInstallData;
@@ -40,7 +40,8 @@ public class TestPanelDisplay
     private UninstallDataWriter uninstallDataWriter;
     private InstallerController installerController;
 
-    public TestPanelDisplay(GUIInstallData guiInstallData, ResourceManager resourceManager, FrameFixture frameFixture, UninstallDataWriter uninstallDataWriter, InstallerController installerController)
+    public PanelDisplayTest(GUIInstallData guiInstallData, ResourceManager resourceManager, FrameFixture frameFixture,
+                            UninstallDataWriter uninstallDataWriter, InstallerController installerController)
     {
         this.guiInstallData = guiInstallData;
         this.resourceManager = resourceManager;

@@ -1,9 +1,10 @@
-package com.izforge.izpack.merge.resolve;
+package com.izforge.izpack.compiler.merge.resolve;
 
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.merge.ClassResolver;
+import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.util.FileUtil;
 
 import java.io.File;

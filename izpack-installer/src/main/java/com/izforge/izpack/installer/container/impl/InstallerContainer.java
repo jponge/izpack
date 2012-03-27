@@ -8,7 +8,6 @@ import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.ConditionContainer;
-import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
 import com.izforge.izpack.core.factory.DefaultObjectFactory;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
@@ -24,6 +23,8 @@ import com.izforge.izpack.installer.requirement.LockFileChecker;
 import com.izforge.izpack.installer.requirement.RequirementsChecker;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.merge.MergeManagerImpl;
+import com.izforge.izpack.merge.resolve.MergeableResolver;
+import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.DefaultTargetPlatformFactory;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.Librarian;
@@ -76,7 +77,9 @@ public abstract class InstallerContainer extends AbstractContainer
                 .addComponent(Librarian.class)
                 .addComponent(TargetFactory.class)
                 .addComponent(DefaultTargetPlatformFactory.class)
-                .addComponent(DefaultObjectFactory.class);
+                .addComponent(DefaultObjectFactory.class)
+                .addComponent(PathResolver.class)
+                .addComponent(MergeableResolver.class);
     }
 
     /**
@@ -86,19 +89,9 @@ public abstract class InstallerContainer extends AbstractContainer
      */
     protected void resolveComponents(MutablePicoContainer pico)
     {
-        new ResolverContainerFiller().fillContainer(pico);
-
         AutomatedInstallData installData = pico.getComponent(AutomatedInstallData.class);
         String className = installData.getInfo().getUnpackerClassName();
-        Class<IUnpacker> unpackerClass;
-        try
-        {
-            unpackerClass = (Class<IUnpacker>) Class.forName(className);
-        }
-        catch (ClassNotFoundException e)
-        {
-            throw new IzPackException(e);
-        }
+        Class<IUnpacker> unpackerClass = getClass(className, IUnpacker.class);
         pico.addComponent(IUnpacker.class, unpackerClass);
 
         EventFiller eventFiller = pico.getComponent(EventFiller.class);

@@ -2,12 +2,15 @@ package com.izforge.izpack.merge.resolve;
 
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.merge.Mergeable;
-import com.izforge.izpack.merge.panel.PanelMerge;
 
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Try to resolve paths by searching inside the classpath or files with the corresponding name
@@ -16,15 +19,20 @@ import java.util.*;
  */
 public class PathResolver
 {
-    public MergeableResolver mergeableResolver;
-    private ClassPathCrawler classPathCrawler;
-    private Properties panelDependencies;
+    /**
+     * The mergeable resolver.
+     */
+    private final MergeableResolver mergeableResolver;
 
-    public PathResolver(MergeableResolver mergeableResolver, ClassPathCrawler classPathCrawler, Properties panelDependencies) throws IOException
+
+    /**
+     * Constrcuts a <tt>PathResolver</tt>.
+     *
+     * @param mergeableResolver the mergeable resolver
+     */
+    public PathResolver(MergeableResolver mergeableResolver)
     {
         this.mergeableResolver = mergeableResolver;
-        this.classPathCrawler = classPathCrawler;
-        this.panelDependencies = panelDependencies;
     }
 
     /**
@@ -36,38 +44,14 @@ public class PathResolver
      */
     public Set<URL> resolvePath(String sourcePath)
     {
-        HashSet<URL> result = new HashSet<URL>();
-        URL path = ResolveUtils.getFileFromPath(sourcePath);
-        if (path != null)
+        Set<URL> result = findResources(sourcePath);
+        if (result.isEmpty())
         {
-            result.add(path);
+            throw new IzPackException(
+                    "The path '" + sourcePath + "' is not present inside the classpath.\n"
+                            + "The current classpath is :" + ResolveUtils.getCurrentClasspath());
         }
-        try
-        {
-            URLClassLoader contextClassLoader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
-            Enumeration<URL> urlEnumeration = contextClassLoader.findResources(sourcePath);
-            while (urlEnumeration.hasMoreElements())
-            {
-                URL url = urlEnumeration.nextElement();
-                result.add(url);
-            }
-        }
-        catch (IOException e)
-        {
-            throw new IzPackException(e);
-        }
-
-        if (!result.isEmpty())
-        {
-            return result;
-        }
-        // No chance with get resource, use classpath crawler from here
-        Set<URL> urlList = classPathCrawler.searchPackageInClassPath(sourcePath);
-        if (urlList != null)
-        {
-            return urlList;
-        }
-        throw new IzPackException("The path " + sourcePath + " is not present inside the classpath.\n The current classpath is :" + ResolveUtils.getCurrentClasspath());
+        return result;
     }
 
     /**
@@ -121,35 +105,48 @@ public class PathResolver
         return result;
     }
 
-    public PanelMerge getPanelMerge(String className)
+    /**
+     * Find all resources for the specified resource path.
+     *
+     * @param resourcePath the resource path
+     * @return urls matching the resource path
+     */
+    protected Set<URL> findResources(String resourcePath)
     {
-        Class aClass = classPathCrawler.findClass(className);
-        List<Mergeable> mergeableForClass = getMergeablePackage(aClass.getPackage());
-        if (panelDependencies.containsKey(aClass.getSimpleName()))
+        Set<URL> result = new HashSet<URL>();
+        URL path = ResolveUtils.getFileFromPath(resourcePath);
+        if (path != null)
         {
-            String dependPackage = (String) panelDependencies.get(aClass.getSimpleName());
-            mergeableForClass.addAll(getMergeableFromPackageName(dependPackage));
+            result.add(path);
         }
-        return new PanelMerge(aClass, mergeableForClass);
-
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        if (loader instanceof URLClassLoader)
+        {
+            try
+            {
+                Enumeration<URL> iterator = ((URLClassLoader) loader).findResources(resourcePath);
+                while (iterator.hasMoreElements())
+                {
+                    URL url = iterator.nextElement();
+                    result.add(url);
+                }
+            }
+            catch (IOException e)
+            {
+                throw new IzPackException(e);
+            }
+        }
+        return result;
     }
 
     /**
-     * Create a mergeable containing all files in the given package
+     * Returns the mergeable resolver.
      *
-     * @param aPackage package to merge
-     * @return list of mergeable
+     * @return the mergeable resolver
      */
-    public List<Mergeable> getMergeablePackage(Package aPackage)
+    protected MergeableResolver getMergeableResolver()
     {
-        List<Mergeable> mergeables = new ArrayList<Mergeable>();
-        String destination = aPackage.getName().replaceAll("\\.", "/");
-        Set<URL> obtainPackages = classPathCrawler.searchPackageInClassPath(aPackage.getName());
-        for (URL obtainPackage : obtainPackages)
-        {
-            mergeables.add(mergeableResolver.getMergeableFromURLWithDestination(obtainPackage, destination + "/"));
-        }
-        return mergeables;
+        return mergeableResolver;
     }
 
 

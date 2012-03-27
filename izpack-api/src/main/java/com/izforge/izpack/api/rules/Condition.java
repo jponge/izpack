@@ -68,7 +68,7 @@ public abstract class Condition implements Serializable
      * Parse and initialize this condition from parsed values. An exception
      * should be thrown if the condition description has not the expected
      * XML format, something missing or obviously bad values.
-     * @param The root element to parse from
+     * @param xmlcondition the root element to parse from
      * @throws Exception on a parse error
      */
     public abstract void readFromXML(IXMLElement xmlcondition) throws Exception;

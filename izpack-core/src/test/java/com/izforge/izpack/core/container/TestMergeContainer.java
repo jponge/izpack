@@ -2,7 +2,6 @@ package com.izforge.izpack.core.container;
 
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.MergeManagerImpl;
-import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import org.picocontainer.Characteristics;
@@ -22,18 +21,11 @@ public class TestMergeContainer extends AbstractContainer
 
     public void fillContainer(MutablePicoContainer picoContainer)
     {
-        if (picoContainer.getComponent(Properties.class) == null)
-        {
-            picoContainer.addComponent(Properties.class);
-        }
-        picoContainer.getComponent(Properties.class).put("HelloPanelTestWithDependenciesClass", "com.izforge.izpack.panels.depend");
         picoContainer
                 .addComponent(MergeManager.class, MergeManagerImpl.class)
-                .as(Characteristics.USE_NAMES).addComponent(ClassPathCrawler.class)
                 .as(Characteristics.USE_NAMES).addComponent(PathResolver.class)
                 .as(Characteristics.USE_NAMES).addComponent(MergeableResolver.class)
-                .addComponent("mergeContent", HashMap.class, ComponentParameter.ZERO)
-                ;
+                .addComponent("mergeContent", HashMap.class, ComponentParameter.ZERO);
     }
 
 }

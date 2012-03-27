@@ -2,6 +2,7 @@ package com.izforge.izpack.core.container;
 
 import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.container.DependenciesFillerContainer;
+import com.izforge.izpack.api.exception.IzPackClassNotFoundException;
 import com.izforge.izpack.api.exception.IzPackException;
 import org.picocontainer.Characteristics;
 import org.picocontainer.MutablePicoContainer;
@@ -65,4 +66,38 @@ public abstract class AbstractContainer implements BindeableContainer, Dependenc
     {
         return pico;
     }
+
+    /**
+     * Returns a class given its name.
+     *
+     * @param className the class name
+     * @param superType the super type
+     * @return the corresponding class
+     * @throws ClassCastException           if <tt>className</tt> does not implement or extend <tt>superType</tt>
+     * @throws IzPackClassNotFoundException if the class cannot be found
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> Class<T> getClass(String className, Class<T> superType)
+    {
+        Class type;
+        try
+        {
+            // Using the superclass class loader to load the child to avoid multiple copies of the superclass being
+            // loaded in separate class loaders. This is typically an issue during testing where
+            // the same classes may be loaded twice - once by maven, and once by the installer.
+            type = superType.getClassLoader().loadClass(className);
+            if (!superType.isAssignableFrom(type))
+            {
+                throw new ClassCastException("Class '" + type.getName() + "' does not implement "
+                                                     + superType.getName());
+            }
+        }
+        catch (ClassNotFoundException exception)
+        {
+            throw new IzPackClassNotFoundException(className, exception);
+        }
+        return (Class<T>) type;
+    }
+
 }
