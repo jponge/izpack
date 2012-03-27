@@ -24,6 +24,8 @@ package com.izforge.izpack.panels.process;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.handler.AbstractUIProcessHandler;
+import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -87,15 +89,15 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
     /**
      * The constructor.
      *
-     * @param processPanelWorker
-     * @param parent             The parent window.
-     * @param idata              The installation installDataGUI.
+     * @param parent             the parent window
+     * @param installData              the installation data
      */
-    public ProcessPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, ProcessPanelWorker processPanelWorker) throws IOException
+    public ProcessPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+                        RulesEngine rules, VariableSubstitutor substituter) throws IOException
     {
-        super(parent, idata, resourceManager);
+        super(parent, installData, resourceManager);
 
-        this.worker = processPanelWorker;
+        worker = new ProcessPanelWorker(installData, substituter, rules, resourceManager);
         worker.setHandler(this);
         JLabel heading = new JLabel();
         Font font = heading.getFont();

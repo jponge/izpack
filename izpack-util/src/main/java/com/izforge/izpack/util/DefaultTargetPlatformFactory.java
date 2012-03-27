@@ -17,8 +17,8 @@
  */
 package com.izforge.izpack.util;
 
+import com.izforge.izpack.api.exception.IzPackClassNotFoundException;
 import com.izforge.izpack.api.exception.IzPackException;
-import com.izforge.izpack.api.factory.AbstractObjectFactory;
 import com.izforge.izpack.api.factory.ObjectFactory;
 
 import java.io.IOException;
@@ -213,7 +213,7 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
         if (implName == null)
         {
             throw new IllegalStateException("No implementation registered for class=" + type.getName()
-                    + " and platform=" + platform);
+                                                    + " and platform=" + platform);
         }
         Class impl = Class.forName(implName);
         if (!type.isAssignableFrom(impl))
@@ -380,7 +380,7 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
                             if (platform.getName() == Platform.Name.UNKNOWN)
                             {
                                 warning("Ignoring unsupported platform=" + platform + " for key=" + key + " from "
-                                        + url);
+                                                + url);
                             }
                             else if (impls.getImplementation(platform) == null)
                             {
@@ -389,7 +389,7 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
                             else
                             {
                                 warning("Ignoring duplicate implementation=" + impl + " for platform=" + platform
-                                        + " from " + url);
+                                                + " from " + url);
                             }
                         }
                     }
@@ -500,7 +500,7 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
 
     }
 
-    private static class NoDependencyInjectionFactory extends AbstractObjectFactory
+    private static class NoDependencyInjectionFactory implements ObjectFactory
     {
         /**
          * The singleton instance.
@@ -524,6 +524,36 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
             {
                 throw new IzPackException(exception);
             }
+        }
+
+        /**
+         * Creates a new instance of the specified class name.
+         *
+         * @param className the class name
+         * @param superType the super type
+         * @return a new instance
+         * @throws ClassCastException           if <tt>className</tt> does not implement or extend <tt>superType</tt>
+         * @throws IzPackClassNotFoundException if the class cannot be found
+         */
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> T create(String className, Class<T> superType)
+        {
+            Class type;
+            try
+            {
+                type = superType.getClassLoader().loadClass(className);
+                if (!superType.isAssignableFrom(type))
+                {
+                    throw new ClassCastException("Class '" + type.getName() + "' does not implement "
+                                                         + superType.getName());
+                }
+            }
+            catch (ClassNotFoundException exception)
+            {
+                throw new IzPackClassNotFoundException(className, exception);
+            }
+            return create((Class<T>) type);
         }
     }
 }

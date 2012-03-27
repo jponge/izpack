@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<conditions>
+    <condition type="variable" id="variable1">
+        <name>setup.type</name>
+        <value>standard</value>
+    </condition>
+    <condition type="variable" id="variable2">
+        <name>setup.type</name>
+        <value>expert</value>
+    </condition>
+    <condition type="java" id="java1">
+        <java>
+            <class>com.izforge.izpack.util.OsVersion</class>
+            <field>IS_WINDOWS</field>
+        </java>
+        <returnvalue type="boolean">true</returnvalue>
+    </condition>
+    <condition type="and" id="and1">
+        <condition type="ref" refid="variable1"/>
+        <condition type="ref" refid="variable2"/>
+    </condition>
+    <condition type="not" id="not1">
+        <condition type="ref" refid="variable1"/>
+    </condition>
+    <condition type="or" id="or1">
+        <condition type="ref" refid="variable1"/>
+        <condition type="ref" refid="variable2"/>
+    </condition>
+    <condition type="xor" id="xor1">
+        <condition type="ref" refid="variable1"/>
+        <condition type="ref" refid="variable2"/>
+    </condition>
+    <condition type="comparenumerics" id="comparenumerics1">
+        <arg1>1</arg1>
+        <arg2>2</arg2>
+        <operator>lt</operator>
+    </condition>
+    <condition type="compareversions" id="compareversions1">
+        <arg1>1</arg1>
+        <arg2>2</arg2>
+        <operator>lt</operator>
+    </condition>
+    <condition type="empty" id="empty1">
+        <dir>${INSTALL_PATH}/import</dir>
+    </condition>
+    <condition type="exists" id="exists1">
+        <file>${INSTALL_PATH}/plugins/some_plugin.jar</file>
+    </condition>
+    <condition type="packselection" id="packselection1">
+        <packid>myPackId</packid>
+    </condition>
+    <condition type="ref" id="ref1" refid="variable1"/>
+    <condition type="user" id="user1">
+        <requiredusername>foo</requiredusername>
+    </condition>
+
+</conditions>

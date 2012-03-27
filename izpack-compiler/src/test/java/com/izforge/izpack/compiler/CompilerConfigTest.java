@@ -2,15 +2,14 @@ package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.compiler.container.TestCompilerContainer;
+import com.izforge.izpack.compiler.merge.resolve.CompilerPathResolver;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.matcher.MergeMatcher;
 import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.merge.MergeManagerImpl;
-import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
-
 import org.apache.maven.shared.jar.JarAnalyzer;
 import org.apache.maven.shared.jar.classes.JarClasses;
 import org.apache.maven.shared.jar.classes.JarClassesAnalysis;
@@ -20,7 +19,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,11 +37,12 @@ public class CompilerConfigTest
 {
     private JarFile jar;
     private CompilerConfig compilerConfig;
-    private PathResolver pathResolver;
+    private CompilerPathResolver pathResolver;
     private MergeManagerImpl mergeManager;
     private AbstractContainer testContainer;
 
-    public CompilerConfigTest(TestCompilerContainer container, CompilerConfig compilerConfig, PathResolver pathResolver, MergeManagerImpl mergeManager)
+    public CompilerConfigTest(TestCompilerContainer container, CompilerConfig compilerConfig,
+                              CompilerPathResolver pathResolver, MergeManagerImpl mergeManager)
     {
         this.testContainer = container;
         this.compilerConfig = compilerConfig;
@@ -56,7 +55,7 @@ public class CompilerConfigTest
     {
         compilerConfig.executeCompiler();
         jar = testContainer.getComponent(JarFile.class);
-        assertThat((ZipFile)jar, ZipMatcher.isZipContainingFiles(
+        assertThat((ZipFile) jar, ZipMatcher.isZipContainingFiles(
                 "com/izforge/izpack/installer/bootstrap/Installer.class",
                 "com/izforge/izpack/panels/hello/HelloPanel.class",
                 "resources/vars",
@@ -74,7 +73,7 @@ public class CompilerConfigTest
         //assertThat((Mergeable)mergeManager, MergeMatcher.isMergeableContainingFile("com/izforge/izpack/panels/hello/HelloPanelConsoleHelper.class"));
         //assertThat((Mergeable)mergeManager, MergeMatcher.isMergeableContainingFile("com/izforge/izpack/panels/hello/HelloPanel.class"));
         //assertThat((Mergeable)mergeManager, MergeMatcher.isMergeableContainingFile("com/izforge/izpack/panels/checkedhello/CheckedHelloPanel.class"));
-        assertThat((Mergeable)mergeManager, MergeMatcher.isMergeableContainingFiles(
+        assertThat((Mergeable) mergeManager, MergeMatcher.isMergeableContainingFiles(
                 "com/izforge/izpack/panels/hello/HelloPanelConsoleHelper.class",
                 "com/izforge/izpack/panels/hello/HelloPanel.class",
                 "com/izforge/izpack/panels/checkedhello/CheckedHelloPanel.class"));
@@ -90,7 +89,8 @@ public class CompilerConfigTest
         List<String> imports = jarClasses.getImports();
         List<String> listFromZip = ZipMatcher.getFileNameListFromZip(jar);
         ArrayList<String> result = new ArrayList<String>();
-        List<String> ignorePackage = Arrays.asList("java/", "org/w3c/", "org/xml/", "javax/", "text/html", "packs/pack", "com/thoughtworks");
+        List<String> ignorePackage = Arrays.asList("java/", "org/w3c/", "org/xml/", "javax/", "text/html", "packs/pack",
+                                                   "com/thoughtworks");
         for (String anImport : imports)
         {
             if (anImport.matches("([a-z]+\\.)+[a-zA-Z]+"))

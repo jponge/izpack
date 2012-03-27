@@ -408,7 +408,7 @@
                         <exclude>**/Abstract*</exclude>
                         <exclude>**/Test*Container*</exclude>
                         <exclude>**/LanguageDialogTest.java</exclude>
-                        <exclude>**/TestPanelDisplay.java</exclude>
+                        <exclude>**/PanelDisplayTest.java</exclude>
                         <exclude>**/InstallationTest.java</exclude>
                         <exclude>**/UninstallDataWriterTest.java</exclude>
                         <exclude>**/ConditionCheckTest.java</exclude>
@@ -612,7 +612,7 @@
                             </excludes>
                             <includes>
                                 <include>**/LanguageDialogTest.java</include>
-                                <include>**/TestPanelDisplay.java</include>
+                                <include>**/PanelDisplayTest.java</include>
                                 <include>**/InstallationTest.java</include>
                                 <include>**/UninstallDataWriterTest.java</include>
                                 <include>**/ConditionCheckTest.java</include>

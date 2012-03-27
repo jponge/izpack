@@ -77,7 +77,7 @@ public class NotCondition extends ConditionReference
         }
         else
         {
-            condition = rules.instanciateCondition(referencedConditionXMLElement);
+            condition = rules.createCondition(referencedConditionXMLElement);
         }
         if (condition == null)
         {

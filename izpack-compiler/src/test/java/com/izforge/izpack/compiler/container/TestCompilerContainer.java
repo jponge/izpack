@@ -44,7 +44,7 @@ public class TestCompilerContainer extends AbstractContainer
             InstallFile installFile = frameworkMethod.getAnnotation(InstallFile.class);
             if (installFile == null)
             {
-                installFile = (InstallFile) klass.getAnnotation(InstallFile.class);
+                installFile = klass.getAnnotation(InstallFile.class);
             }
             String installFileName = installFile.value();
 

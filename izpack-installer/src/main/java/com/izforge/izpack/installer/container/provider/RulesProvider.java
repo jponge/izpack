@@ -1,12 +1,5 @@
 package com.izforge.izpack.installer.container.provider;
 
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.util.Map;
-import java.util.logging.Logger;
-
-import org.picocontainer.injectors.Provider;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.AutomatedInstallData;
@@ -15,7 +8,12 @@ import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
-import com.izforge.izpack.merge.resolve.ClassPathCrawler;
+import org.picocontainer.injectors.Provider;
+
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Injection provider for rules.
@@ -38,13 +36,12 @@ public class RulesProvider implements Provider
      * @param installData        the installation data
      * @param conditionContainer the condition container
      * @param resourceManager    the resource manager
-     * @param classPathCrawler   the class path crawler
      * @return a new rules engine
      */
-    public RulesEngine provide(AutomatedInstallData installData, ClassPathCrawler classPathCrawler,
-                               ConditionContainer conditionContainer, ResourceManager resourceManager)
+    public RulesEngine provide(AutomatedInstallData installData, ConditionContainer conditionContainer,
+                               ResourceManager resourceManager)
     {
-        RulesEngine result = new RulesEngineImpl(installData, classPathCrawler, conditionContainer);
+        RulesEngine result = new RulesEngineImpl(installData, conditionContainer);
         Map<String, Condition> conditions = readConditions(resourceManager);
         if (conditions != null && !conditions.isEmpty())
         {

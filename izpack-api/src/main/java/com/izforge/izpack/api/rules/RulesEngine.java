@@ -17,8 +17,11 @@ public interface RulesEngine extends Serializable
     Set<String> getKnownConditionIds();
 
     boolean isConditionTrue(String id, AutomatedInstallData installData);
+
     boolean isConditionTrue(Condition cond, AutomatedInstallData installData);
+
     boolean isConditionTrue(String id);
+
     boolean isConditionTrue(Condition cond);
 
     boolean canShowPanel(String panelid, Properties variables);
@@ -37,7 +40,16 @@ public interface RulesEngine extends Serializable
 
     void analyzeXml(IXMLElement conditionsspec);
 
+    @Deprecated
     Condition instanciateCondition(IXMLElement condition);
+
+    /**
+     * Creates a condition given its XML specification.
+     *
+     * @param condition the condition XML specification
+     * @return a new  condition
+     */
+    Condition createCondition(IXMLElement condition);
 
     /**
      * Check whether references condition exist This must be done after all conditions have been

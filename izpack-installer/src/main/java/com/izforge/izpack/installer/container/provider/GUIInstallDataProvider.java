@@ -6,19 +6,13 @@ import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsVersion;
 
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.LookAndFeel;
-import javax.swing.UIDefaults;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.MetalTheme;
-import java.awt.Color;
+import java.awt.*;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Method;
@@ -43,15 +37,18 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
     {
         substanceVariants.put("default", "org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel");
         substanceVariants.put("business", "org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel");
-        substanceVariants.put("business-blue", "org.pushingpixels.substance.api.skin.SubstanceBusinessBlueSteelLookAndFeel");
-        substanceVariants.put("business-black", "org.pushingpixels.substance.api.skin.SubstanceBusinessBlackSteelLookAndFeel");
+        substanceVariants.put("business-blue",
+                              "org.pushingpixels.substance.api.skin.SubstanceBusinessBlueSteelLookAndFeel");
+        substanceVariants.put("business-black",
+                              "org.pushingpixels.substance.api.skin.SubstanceBusinessBlackSteelLookAndFeel");
         substanceVariants.put("creme", "org.pushingpixels.substance.api.skin.SubstanceCremeLookAndFeel");
         substanceVariants.put("creme-coffee", "org.pushingpixels.substance.api.skin.SubstanceCremeCoffeeLookAndFeel");
         substanceVariants.put("sahara", "org.pushingpixels.substance.api.skin.SubstanceSaharaLookAndFeel");
         substanceVariants.put("graphite", "org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel");
         substanceVariants.put("moderate", "org.pushingpixels.substance.api.skin.SubstanceModerateLookAndFeel");
         substanceVariants.put("nebula", "org.pushingpixels.substance.api.skin.SubstanceNebulaLookAndFeel");
-        substanceVariants.put("nebula-brick-wall", "org.pushingpixels.substance.api.skin.SubstanceNebulaBrickWallLookAndFeel");
+        substanceVariants.put("nebula-brick-wall",
+                              "org.pushingpixels.substance.api.skin.SubstanceNebulaBrickWallLookAndFeel");
         substanceVariants.put("autumn", "org.pushingpixels.substance.api.skin.SubstanceAutumnLookAndFeel");
         substanceVariants.put("mist-silver", "org.pushingpixels.substance.api.skin.SubstanceMistSilverLookAndFeel");
         substanceVariants.put("mist-aqua", "org.pushingpixels.substance.api.skin.SubstanceMistAquaLookAndFeel");
@@ -59,9 +56,11 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         substanceVariants.put("dust-coffee", "org.pushingpixels.substance.api.skin.SubstanceDustCoffeeLookAndFeel");
         substanceVariants.put("gemini", "org.pushingpixels.substance.api.skin.SubstanceGeminiLookAndFeel");
         substanceVariants.put("mariner", "org.pushingpixels.substance.api.skin.SubstanceMarinerLookAndFeel");
-        substanceVariants.put("officesilver", "org.pushingpixels.substance.api.skin.SubstanceOfficeSilver2007LookAndFeel");
+        substanceVariants.put("officesilver",
+                              "org.pushingpixels.substance.api.skin.SubstanceOfficeSilver2007LookAndFeel");
         substanceVariants.put("officeblue", "org.pushingpixels.substance.api.skin.SubstanceOfficeBlue2007LookAndFeel");
-        substanceVariants.put("officeblack", "org.pushingpixels.substance.api.skin.SubstanceOfficeBlack2007LookAndFeel");
+        substanceVariants.put("officeblack",
+                              "org.pushingpixels.substance.api.skin.SubstanceOfficeBlack2007LookAndFeel");
 
         looksVariants.put("windows", "com.jgoodies.looks.windows.WindowsLookAndFeel");
         looksVariants.put("plastic", "com.jgoodies.looks.plastic.PlasticLookAndFeel");
@@ -71,12 +70,11 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
 
 
     public GUIInstallData provide(ResourceManager resourceManager, VariableSubstitutor variableSubstitutor,
-                                  Properties variables, ClassPathCrawler classPathCrawler, Housekeeper housekeeper)
+                                  Properties variables, Housekeeper housekeeper)
             throws Exception
     {
         this.resourceManager = resourceManager;
         this.variableSubstitutor = variableSubstitutor;
-        this.classPathCrawler = classPathCrawler;
         this.housekeeper = housekeeper;
         final GUIInstallData guiInstallData = new GUIInstallData(variables);
         // Loads the installation data
@@ -99,10 +97,10 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
     /**
      * Loads the suitable L&F.
      *
-     * @param installdata
+     * @param installData the installation data
      * @throws Exception Description of the Exception
      */
-    protected void loadLookAndFeel(final GUIInstallData installdata) throws Exception
+    protected void loadLookAndFeel(final GUIInstallData installData) throws Exception
     {
         // Do we have any preference for this OS ?
         String syskey = "unix";
@@ -115,33 +113,33 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
             syskey = "mac";
         }
         String lookAndFeelName = null;
-        if (installdata.guiPrefs.lookAndFeelMapping.containsKey(syskey))
+        if (installData.guiPrefs.lookAndFeelMapping.containsKey(syskey))
         {
-            lookAndFeelName = installdata.guiPrefs.lookAndFeelMapping.get(syskey);
+            lookAndFeelName = installData.guiPrefs.lookAndFeelMapping.get(syskey);
         }
 
         // Let's use the system LAF
         // Resolve whether button icons should be used or not.
         boolean useButtonIcons = true;
-        if (installdata.guiPrefs.modifier.containsKey("useButtonIcons")
-                && "no".equalsIgnoreCase(installdata.guiPrefs.modifier
-                .get("useButtonIcons")))
+        if (installData.guiPrefs.modifier.containsKey("useButtonIcons")
+                && "no".equalsIgnoreCase(installData.guiPrefs.modifier
+                                                 .get("useButtonIcons")))
         {
             useButtonIcons = false;
         }
         ButtonFactory.useButtonIcons(useButtonIcons);
         boolean useLabelIcons = true;
-        if (installdata.guiPrefs.modifier.containsKey("useLabelIcons")
-                && "no".equalsIgnoreCase(installdata.guiPrefs.modifier
-                .get("useLabelIcons")))
+        if (installData.guiPrefs.modifier.containsKey("useLabelIcons")
+                && "no".equalsIgnoreCase(installData.guiPrefs.modifier
+                                                 .get("useLabelIcons")))
         {
             useLabelIcons = false;
         }
         LabelFactory.setUseLabelIcons(useLabelIcons);
-        if (installdata.guiPrefs.modifier.containsKey("labelFontSize"))
+        if (installData.guiPrefs.modifier.containsKey("labelFontSize"))
         {  //'labelFontSize' modifier found in 'guiprefs'
             final String valStr =
-                    installdata.guiPrefs.modifier.get("labelFontSize");
+                    installData.guiPrefs.modifier.get("labelFontSize");
             try
             {      //parse value and enter as label-font-size multiplier:
                 LabelFactory.setLabelFontSize(Float.parseFloat(valStr));
@@ -149,7 +147,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
             catch (NumberFormatException ex)
             {      //error parsing value; log message
                 logger.warning("Error parsing guiprefs 'labelFontSize' value (" +
-                        valStr + ')');
+                                       valStr + ')');
             }
         }
 
@@ -183,8 +181,9 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
             // Reset the use button icons state because useHighlightButtons
             // make it always true.
             ButtonFactory.useButtonIcons(useButtonIcons);
-            installdata.buttonsHColor = new Color(255, 255, 255);
-            Class<LookAndFeel> lafClass = (Class<LookAndFeel>) Class.forName("com.incors.plaf.kunststoff.KunststoffLookAndFeel");
+            installData.buttonsHColor = new Color(255, 255, 255);
+            Class<LookAndFeel> lafClass = (Class<LookAndFeel>) Class.forName(
+                    "com.incors.plaf.kunststoff.KunststoffLookAndFeel");
             Class mtheme = Class.forName("javax.swing.plaf.metal.MetalTheme");
             Class[] params = {mtheme};
             Class<MetalTheme> theme = (Class<MetalTheme>) Class.forName("com.izforge.izpack.gui.IzPackKMetalTheme");
@@ -204,7 +203,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         {
             UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
 
-            Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(lookAndFeelName);
+            Map<String, String> params = installData.guiPrefs.lookAndFeelParams.get(lookAndFeelName);
             if (params.containsKey("decorate.frames"))
             {
                 String value = params.get("decorate.frames");
@@ -244,7 +243,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         {
             String variant = looksVariants.get("plasticXP");
 
-            Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(lookAndFeelName);
+            Map<String, String> params = installData.guiPrefs.lookAndFeelParams.get(lookAndFeelName);
             if (params.containsKey("variant"))
             {
                 String param = params.get("variant");
@@ -262,7 +261,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
         if ("substance".equals(lookAndFeelName))
         {
             final String variant;
-            Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(lookAndFeelName);
+            Map<String, String> params = installData.guiPrefs.lookAndFeelParams.get(lookAndFeelName);
             if (params.containsKey("variant"))
             {
                 String param = params.get("variant");

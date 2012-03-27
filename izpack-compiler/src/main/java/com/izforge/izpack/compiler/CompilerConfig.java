@@ -63,6 +63,8 @@ import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.TargetFileSet;
 import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
 import com.izforge.izpack.compiler.listener.CompilerListener;
+import com.izforge.izpack.compiler.merge.resolve.ClassPathCrawler;
+import com.izforge.izpack.compiler.merge.resolve.CompilerPathResolver;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.compiler.resource.ResourceFinder;
 import com.izforge.izpack.core.data.DynamicInstallerRequirementValidatorImpl;
@@ -83,8 +85,6 @@ import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.merge.MergeManager;
-import com.izforge.izpack.merge.resolve.ClassPathCrawler;
-import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraintHelper;
@@ -172,7 +172,7 @@ public class CompilerConfig extends Thread
     private Map<String, List<URL>> packsLangUrlMap = new HashMap<String, List<URL>>();
     private String unpackerClassname = "com.izforge.izpack.installer.unpacker.Unpacker";
     private String packagerClassname = "com.izforge.izpack.compiler.packager.impl.Packager";
-    private PathResolver pathResolver;
+    private CompilerPathResolver pathResolver;
     private VariableSubstitutor variableSubstitutor;
     private XmlCompilerHelper xmlCompilerHelper;
     private PropertyManager propertyManager;
@@ -209,7 +209,7 @@ public class CompilerConfig extends Thread
                           XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager,
                           MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller,
                           AssertionHelper assertionHelper, CompilerContainer compilerContainer,
-                          ClassPathCrawler classPathCrawler, RulesEngine rules, PathResolver pathResolver,
+                          ClassPathCrawler classPathCrawler, RulesEngine rules, CompilerPathResolver pathResolver,
                           ResourceFinder resourceFinder)
     {
         this.assertionHelper = assertionHelper;
@@ -270,7 +270,8 @@ public class CompilerConfig extends Thread
         addCompilerListeners();
 
         // We get the XML data tree
-        IXMLElement data = resourceFinder.getXMLTree();
+        IXMLElement data = resourceFinder.
+                getXMLTree();
         // loads the specified packager
         loadPackagingInformation(data);
 
@@ -698,12 +699,13 @@ public class CompilerConfig extends Thread
 
             if (required && excludeGroup != null)
             {
-                assertionHelper.parseError(packElement, "Pack, which has excludeGroup can not be required.", new Exception(
-                        "Pack, which has excludeGroup can not be required."));
+                assertionHelper.parseError(packElement, "Pack, which has excludeGroup can not be required.",
+                                           new Exception(
+                                                   "Pack, which has excludeGroup can not be required."));
             }
 
             PackInfo pack = new PackInfo(name, id, description, required, loose, excludeGroup,
-                    uninstall);
+                                         uninstall);
             pack.setOsConstraints(OsConstraintHelper.getOsList(packElement)); // TODO:
             pack.setParent(parent);
             pack.setCondition(conditionid);
@@ -891,7 +893,8 @@ public class CompilerConfig extends Thread
                                 String target = new File(fs.getTargetDir(), filePath).getPath();
                                 logger.info("Adding file: " + file + ", as target file=" + target);
                                 pack.addFile(baseDir, file, target, fs.getOsList(), fs
-                                        .getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(), fs.getAdditionals(), fs
+                                        .getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(),
+                                             fs.getAdditionals(), fs
                                         .getCondition());
                             }
                         }
@@ -905,7 +908,8 @@ public class CompilerConfig extends Thread
         }
     }
 
-    private void processSingleFileChildren(File baseDir, IXMLElement packElement, PackInfo pack) throws CompilerException
+    private void processSingleFileChildren(File baseDir, IXMLElement packElement, PackInfo pack)
+            throws CompilerException
     {
         for (IXMLElement singleFileNode : packElement.getChildrenNamed("singlefile"))
         {
@@ -940,7 +944,8 @@ public class CompilerConfig extends Thread
             try
             {
                 logger.info("Adding file: " + file + ", as target file=" + target);
-                pack.addFile(baseDir, file, target, osList, override, overrideRenameTo, blockable, additionals, condition);
+                pack.addFile(baseDir, file, target, osList, override, overrideRenameTo, blockable, additionals,
+                             condition);
             }
             catch (IOException x)
             {
@@ -1019,16 +1024,18 @@ public class CompilerConfig extends Thread
                         {
                             logger.info("Adding content from archive: " + abssrcfile);
                             addArchiveContent(baseDir, abssrcfile, fs.getTargetDir(), fs
-                                    .getOsList(), fs.getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(), pack, fs
-                                    .getAdditionals(), fs.getCondition());
+                                    .getOsList(), fs.getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(), pack,
+                                              fs
+                                                      .getAdditionals(), fs.getCondition());
                         }
                         else
                         {
                             String target = fs.getTargetDir() + "/" + filePath;
                             logger.info("Adding file: " + abssrcfile + ", as target file=" + target);
                             pack.addFile(baseDir, abssrcfile, target, fs.getOsList(),
-                                    fs.getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(), fs.getAdditionals(),
-                                    fs.getCondition());
+                                         fs.getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(),
+                                         fs.getAdditionals(),
+                                         fs.getCondition());
                         }
                     }
                 }
@@ -1143,7 +1150,8 @@ public class CompilerConfig extends Thread
                         File file = new File(dir, filePath);
                         if (file.exists() && file.isFile())
                         {
-                            String targetFile = new File(targetdir, filePath).getPath().replace(File.separatorChar, '/');
+                            String targetFile = new File(targetdir, filePath).getPath().replace(File.separatorChar,
+                                                                                                '/');
                             ParsableFile parsable = new ParsableFile(targetFile, type, encoding, osList);
                             parsable.setCondition(condition);
                             pack.addParsable(parsable);
@@ -1404,12 +1412,12 @@ public class CompilerConfig extends Thread
                 String target = targetdir + "/" + zentry.getName();
                 logger.info("Adding file " + zentry.getName() + " from archive as target file=" + target);
                 pack.addFile(baseDir, temp, target, osList, override,
-                        overrideRenameTo, blockable, additionals, condition);
+                             overrideRenameTo, blockable, additionals, condition);
             }
             catch (IOException e)
             {
                 throw new IOException("Couldn't create temporary file for " + zentry.getName()
-                        + " in archive " + archive + " (" + e.getMessage() + ")");
+                                              + " in archive " + archive + " (" + e.getMessage() + ")");
             }
 
         }
@@ -1422,7 +1430,7 @@ public class CompilerConfig extends Thread
             String target = targetdir + "/" + dirName;
             logger.info("Adding file: " + tmp + ", as target file=" + target);
             pack.addFile(baseDir, tmp, target, osList,
-                    override, overrideRenameTo, blockable, additionals, condition);
+                         override, overrideRenameTo, blockable, additionals, condition);
         }
         fin.close();
     }
@@ -1516,7 +1524,9 @@ public class CompilerConfig extends Thread
                     }
 //                    panel.addHelp(iso3, resourceId);
                     URL originalUrl = resourceFinder.findProjectResource(help
-                            .getAttribute(AutomatedInstallData.SRC_ATTRIBUTE), "Help", help);
+                                                                                 .getAttribute(
+                                                                                         AutomatedInstallData.SRC_ATTRIBUTE),
+                                                                         "Help", help);
                     packager.addResource(resourceId, originalUrl);
                 }
             }
@@ -1881,7 +1891,8 @@ public class CompilerConfig extends Thread
             {
                 // default behavior for uninstaller elevation: elevate if installer has to be elevated too
                 info.setRequirePrivilegedExecutionUninstaller(xmlCompilerHelper.validateYesNoAttribute(privileged,
-                        "uninstaller", YES));
+                                                                                                       "uninstaller",
+                                                                                                       YES));
             }
 
             if (uninstallInfo != null)
@@ -1962,15 +1973,16 @@ public class CompilerConfig extends Thread
                 {
                     if (tempDirAttributeNames.contains(TEMP_DIR_DEFAULT_PROPERTY_NAME))
                     {
-                        throw new CompilerException("Only one temporary directory may be specified without a " + TEMP_DIR_VARIABLE_NAME_ATTRIBUTE
-                                + " attribute. (Line: " + tempdir.getLineNr() + ").");
+                        throw new CompilerException(
+                                "Only one temporary directory may be specified without a " + TEMP_DIR_VARIABLE_NAME_ATTRIBUTE
+                                        + " attribute. (Line: " + tempdir.getLineNr() + ").");
                     }
                     variableName = TEMP_DIR_DEFAULT_PROPERTY_NAME;
                 }
                 if (tempDirAttributeNames.contains(variableName))
                 {
                     throw new CompilerException("Temporary directory variable names must be unique, the name "
-                            + variableName + " is used more than once. (Line: " + tempdir.getLineNr() + ").");
+                                                        + variableName + " is used more than once. (Line: " + tempdir.getLineNr() + ").");
                 }
                 tempDirAttributeNames.add(variableName);
                 info.addTempDir(new TempDir(variableName, prefix, suffix));
@@ -2049,7 +2061,8 @@ public class CompilerConfig extends Thread
             }
             else
             {
-                assertionHelper.parseError("Error in definition of dynamic variable " + varname + ": Unknown entry type " + type);
+                assertionHelper.parseError(
+                        "Error in definition of dynamic variable " + varname + ": Unknown entry type " + type);
             }
         }
         return filetype;
@@ -2108,7 +2121,8 @@ public class CompilerConfig extends Thread
                     }
                     catch (Exception e)
                     {
-                        assertionHelper.parseError("Error in definition of dynamic variable " + name + ": " + e.getMessage());
+                        assertionHelper.parseError(
+                                "Error in definition of dynamic variable " + name + ": " + e.getMessage());
                     }
                 }
                 else
@@ -2133,7 +2147,8 @@ public class CompilerConfig extends Thread
                     }
                     catch (Exception e)
                     {
-                        assertionHelper.parseError("Error in definition of dynamic variable " + name + ": " + e.getMessage());
+                        assertionHelper.parseError(
+                                "Error in definition of dynamic variable " + name + ": " + e.getMessage());
                     }
                 }
                 else
@@ -2152,14 +2167,16 @@ public class CompilerConfig extends Thread
                 if (dynamicVariable.getValue() == null)
                 {
                     dynamicVariable.setValue(new PlainConfigFileValue(value,
-                            getConfigFileType(name, stype), filesection, filekey));
+                                                                      getConfigFileType(name, stype), filesection,
+                                                                      filekey));
                     try
                     {
                         dynamicVariable.validate();
                     }
                     catch (Exception e)
                     {
-                        assertionHelper.parseError("Error in definition of dynamic variable " + name + ": " + e.getMessage());
+                        assertionHelper.parseError(
+                                "Error in definition of dynamic variable " + name + ": " + e.getMessage());
                     }
                 }
                 else
@@ -2179,14 +2196,16 @@ public class CompilerConfig extends Thread
                 if (dynamicVariable.getValue() == null)
                 {
                     dynamicVariable.setValue(new ZipEntryConfigFileValue(value, entryname,
-                            getConfigFileType(name, stype), filesection, filekey));
+                                                                         getConfigFileType(name, stype), filesection,
+                                                                         filekey));
                     try
                     {
                         dynamicVariable.validate();
                     }
                     catch (Exception e)
                     {
-                        assertionHelper.parseError("Error in definition of dynamic variable " + name + ": " + e.getMessage());
+                        assertionHelper.parseError(
+                                "Error in definition of dynamic variable " + name + ": " + e.getMessage());
                     }
                 }
                 else
@@ -2206,14 +2225,16 @@ public class CompilerConfig extends Thread
                 if (dynamicVariable.getValue() == null)
                 {
                     dynamicVariable.setValue(new JarEntryConfigValue(value, entryname,
-                            getConfigFileType(name, stype), filesection, filekey));
+                                                                     getConfigFileType(name, stype), filesection,
+                                                                     filekey));
                     try
                     {
                         dynamicVariable.validate();
                     }
                     catch (Exception e)
                     {
-                        assertionHelper.parseError("Error in definition of dynamic variable " + name + ": " + e.getMessage());
+                        assertionHelper.parseError(
+                                "Error in definition of dynamic variable " + name + ": " + e.getMessage());
                     }
                 }
                 else
@@ -2266,7 +2287,8 @@ public class CompilerConfig extends Thread
                     }
                     else
                     {
-                        assertionHelper.parseError("Bad execution type " + exectype + " given for dynamic variable " + name);
+                        assertionHelper.parseError(
+                                "Bad execution type " + exectype + " given for dynamic variable " + name);
                     }
                     try
                     {
@@ -2274,13 +2296,15 @@ public class CompilerConfig extends Thread
                     }
                     catch (Exception e)
                     {
-                        assertionHelper.parseError("Error in definition of dynamic variable " + name + ": " + e.getMessage());
+                        assertionHelper.parseError(
+                                "Error in definition of dynamic variable " + name + ": " + e.getMessage());
                     }
                 }
                 else
                 {
                     // unexpected combination of variable attributes
-                    assertionHelper.parseError("Ambiguous execution output value definition for dynamic variable " + name);
+                    assertionHelper.parseError(
+                            "Ambiguous execution output value definition for dynamic variable " + name);
                 }
             }
 
@@ -2317,23 +2341,26 @@ public class CompilerConfig extends Thread
                 {
                     dynamicVariable.setRegularExpression(
                             new RegularExpressionFilterImpl(expression,
-                                    selectexpr,
-                                    replaceexpr,
-                                    defaultvalue,
-                                    Boolean.valueOf(scasesensitive != null ? scasesensitive : "true"),
-                                    Boolean.valueOf(sglobal != null ? sglobal : "false")));
+                                                            selectexpr,
+                                                            replaceexpr,
+                                                            defaultvalue,
+                                                            Boolean.valueOf(
+                                                                    scasesensitive != null ? scasesensitive : "true"),
+                                                            Boolean.valueOf(sglobal != null ? sglobal : "false")));
                     try
                     {
                         dynamicVariable.validate();
                     }
                     catch (Exception e)
                     {
-                        assertionHelper.parseError("Error in definition of dynamic variable " + name + ": " + e.getMessage());
+                        assertionHelper.parseError(
+                                "Error in definition of dynamic variable " + name + ": " + e.getMessage());
                     }
                 }
                 else
                 {
-                    assertionHelper.parseError("Ambiguous regular expression filter definition for dynamic variable " + name);
+                    assertionHelper.parseError(
+                            "Ambiguous regular expression filter definition for dynamic variable " + name);
                 }
             }
 
@@ -2405,15 +2432,15 @@ public class CompilerConfig extends Thread
             {
                 try
                 {
-                    Condition condition = rules.instanciateCondition(conditionNode);
+                    Condition condition = rules.createCondition(conditionNode);
                     if (condition != null)
                     {
                         String conditionid = condition.getId();
                         if (conditions.put(conditionid, condition) != null)
                         {
                             assertionHelper.parseWarn(conditionNode,
-                                    "Condition with id '" + conditionid
-                                            + "' has been overwritten");
+                                                      "Condition with id '" + conditionid
+                                                              + "' has been overwritten");
                         }
                     }
                     else
@@ -2424,8 +2451,8 @@ public class CompilerConfig extends Thread
                 catch (Exception e)
                 {
                     throw new CompilerException("Error reading condition at line "
-                            + conditionNode.getLineNr() + ": "
-                            + e.getMessage(), e);
+                                                        + conditionNode.getLineNr() + ": "
+                                                        + e.getMessage(), e);
                 }
             }
             try
@@ -2435,7 +2462,7 @@ public class CompilerConfig extends Thread
             catch (Exception e)
             {
                 throw new CompilerException("Conditions check failed: "
-                        + e.getMessage(), e);
+                                                    + e.getMessage(), e);
             }
         }
         notifyCompilerListener("addConditions", CompilerListener.END, data);
@@ -2612,7 +2639,8 @@ public class CompilerConfig extends Thread
                 // the copied files might be multi-platform.
                 // Print out a warning to inform the user about this fact.
                 //osList.add(new OsModel("windows", null, null, null));
-                assertionHelper.parseWarn(blockableElement, "'blockable' will implicitely apply only on Windows target systems");
+                assertionHelper.parseWarn(blockableElement,
+                                          "'blockable' will implicitely apply only on Windows target systems");
             }
         }
         return blockable;
@@ -2829,7 +2857,7 @@ public class CompilerConfig extends Thread
         catch (Exception e)
         {
             throw new CompilerException("Unable to merge multiple packsLang.xml files: "
-                    + e.getMessage(), e);
+                                                + e.getMessage(), e);
         }
         finally
         {
@@ -2866,7 +2894,7 @@ public class CompilerConfig extends Thread
                 {
                     String stage = xmlCompilerHelper.requireAttribute(action, PanelAction.PANEL_ACTION_STAGE_TAG);
                     String actionName = xmlCompilerHelper.requireAttribute(action,
-                            PanelAction.PANEL_ACTION_CLASSNAME_TAG);
+                                                                           PanelAction.PANEL_ACTION_CLASSNAME_TAG);
                     actionName = compiler.findClass(actionName, null);
 
                     List<IXMLElement> params = action.getChildrenNamed("param");
@@ -2879,7 +2907,7 @@ public class CompilerConfig extends Thread
                         if ((keyElement != null) && (valueElement != null))
                         {
                             logger.fine("Adding configuration property " + keyElement.getContent() + " with value "
-                                    + valueElement.getContent() + " for action " + actionName);
+                                                + valueElement.getContent() + " for action " + actionName);
                             config.addProperty(keyElement.getContent(), valueElement.getContent());
                         }
                     }

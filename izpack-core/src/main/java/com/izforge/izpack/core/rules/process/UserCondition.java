@@ -42,6 +42,11 @@ public class UserCondition extends Condition
 
     private String requiredUsername;
 
+    public UserCondition()
+    {
+        this(null);
+    }
+
     public UserCondition(String requiredUsername)
     {
         this.requiredUsername = requiredUsername;

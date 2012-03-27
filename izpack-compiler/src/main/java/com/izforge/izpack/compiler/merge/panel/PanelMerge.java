@@ -1,4 +1,4 @@
-package com.izforge.izpack.merge.panel;
+package com.izforge.izpack.compiler.merge.panel;
 
 import com.izforge.izpack.api.merge.Mergeable;
 import org.apache.tools.zip.ZipOutputStream;

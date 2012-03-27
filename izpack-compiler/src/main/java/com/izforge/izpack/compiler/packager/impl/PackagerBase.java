@@ -22,24 +22,35 @@
 
 package com.izforge.izpack.compiler.packager.impl;
 
-import com.izforge.izpack.api.data.*;
+import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
+import com.izforge.izpack.api.data.DynamicVariable;
+import com.izforge.izpack.api.data.GUIPrefs;
+import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.data.InstallerRequirement;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.listener.PackagerListener;
+import com.izforge.izpack.compiler.merge.panel.PanelMerge;
+import com.izforge.izpack.compiler.merge.resolve.CompilerPathResolver;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.merge.MergeManager;
-import com.izforge.izpack.merge.panel.PanelMerge;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
-import com.izforge.izpack.merge.resolve.PathResolver;
 
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 
 /**
@@ -59,12 +70,14 @@ public abstract class PackagerBase implements IPackager
     private Properties properties;
 
     protected CompilerContainer compilerContainer;
-    private PathResolver pathResolver;
+    private CompilerPathResolver pathResolver;
     private IzpackProjectInstaller izpackInstallModel;
     private MergeableResolver mergeableResolver;
 
 
-    public PackagerBase(Properties properties, CompilerContainer compilerContainer, PackagerListener listener, MergeManager mergeManager, PathResolver pathResolver, IzpackProjectInstaller izpackInstallModel, MergeableResolver mergeableResolver)
+    public PackagerBase(Properties properties, CompilerContainer compilerContainer, PackagerListener listener,
+                        MergeManager mergeManager, CompilerPathResolver pathResolver,
+                        IzpackProjectInstaller izpackInstallModel, MergeableResolver mergeableResolver)
     {
         this.properties = properties;
         this.compilerContainer = compilerContainer;
@@ -209,7 +222,7 @@ public abstract class PackagerBase implements IPackager
         {
             customDataList.add(ca); // serialized to keep order/variables correct
         }
-        
+
         if (url != null)
         {
             addJarContent(url); // each included once, no matter how many times added

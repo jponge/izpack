@@ -10,7 +10,7 @@ import org.picocontainer.MutablePicoContainer;
 public class ConditionContainer extends AbstractContainer
 {
 
-    public ConditionContainer(MutablePicoContainer parent) throws ClassNotFoundException
+    public ConditionContainer(MutablePicoContainer parent)
     {
         pico = parent.makeChildContainer();
     }

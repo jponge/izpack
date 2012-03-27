@@ -43,10 +43,10 @@ import com.izforge.izpack.api.data.binding.Stage;
 import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.api.exception.MergeException;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
+import com.izforge.izpack.compiler.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.PackInfo;
-import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.util.ClassUtils;
 import com.izforge.izpack.util.FileUtil;
 

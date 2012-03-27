@@ -1,21 +1,20 @@
-package com.izforge.izpack.core.container.filler;
+package com.izforge.izpack.compiler.container;
 
 import com.izforge.izpack.api.container.DependenciesFillerContainer;
-import com.izforge.izpack.merge.resolve.ClassPathCrawler;
+import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.compiler.merge.resolve.ClassPathCrawler;
+import com.izforge.izpack.compiler.merge.resolve.CompilerPathResolver;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
-import com.izforge.izpack.merge.resolve.PathResolver;
 import org.picocontainer.Characteristics;
 import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.parameters.ComponentParameter;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 /**
- * Fill containter with resolver dependencies
+ * Fill container with resolver dependencies.
  *
  * @author Anthonin Bonnefoy
  */
@@ -29,11 +28,10 @@ public class ResolverContainerFiller implements DependenciesFillerContainer
             properties.put(entry.getKey(), entry.getValue());
         }
         picoContainer
-                .addComponent("mergeContent", HashMap.class, ComponentParameter.ZERO)
                 .as(Characteristics.USE_NAMES).addComponent(ClassPathCrawler.class)
-                .as(Characteristics.USE_NAMES).addComponent(PathResolver.class)
+                .as(Characteristics.USE_NAMES).addComponent(CompilerPathResolver.class)
                 .as(Characteristics.USE_NAMES).addComponent(MergeableResolver.class)
-                ;
+        ;
     }
 
     private Properties getPanelDependencies()
@@ -46,7 +44,7 @@ public class ResolverContainerFiller implements DependenciesFillerContainer
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            throw new IzPackException(e);
         }
         return properties;
     }

@@ -15,12 +15,10 @@ import com.izforge.izpack.compiler.packager.impl.Packager;
 import com.izforge.izpack.compiler.resource.ResourceFinder;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.ConditionContainer;
-import com.izforge.izpack.core.container.filler.ResolverContainerFiller;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.MergeManagerImpl;
-import com.izforge.izpack.merge.resolve.ClassPathCrawler;
 import org.picocontainer.Characteristics;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.injectors.ProviderAdapter;
@@ -54,7 +52,7 @@ public class CompilerContainer extends AbstractContainer
                 .as(Characteristics.USE_NAMES).addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
                 .as(Characteristics.USE_NAMES).addComponent(IPackager.class, Packager.class)
                 .addComponent(CompilerHelper.class)
-                .addComponent(RulesEngine.class, RulesEngineImpl.class, new ComponentParameter(ClassPathCrawler.class), new ComponentParameter(ConditionContainer.class))
+                .addComponent(RulesEngine.class, RulesEngineImpl.class, new ComponentParameter(ConditionContainer.class))
                 .addComponent(MergeManager.class, MergeManagerImpl.class)
                 ;
         new ResolverContainerFiller().fillContainer(pico);

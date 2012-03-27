@@ -21,16 +21,6 @@
 
 package com.izforge.izpack.core.rules;
 
-import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.UUID;
-import java.util.logging.Logger;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.XMLException;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
@@ -48,9 +38,25 @@ import com.izforge.izpack.core.rules.logic.AndCondition;
 import com.izforge.izpack.core.rules.logic.NotCondition;
 import com.izforge.izpack.core.rules.logic.OrCondition;
 import com.izforge.izpack.core.rules.logic.XorCondition;
+import com.izforge.izpack.core.rules.process.ComparenumericsCondition;
+import com.izforge.izpack.core.rules.process.CompareversionsCondition;
+import com.izforge.izpack.core.rules.process.EmptyCondition;
+import com.izforge.izpack.core.rules.process.ExistsCondition;
 import com.izforge.izpack.core.rules.process.JavaCondition;
 import com.izforge.izpack.core.rules.process.PackselectionCondition;
-import com.izforge.izpack.merge.resolve.ClassPathCrawler;
+import com.izforge.izpack.core.rules.process.RefCondition;
+import com.izforge.izpack.core.rules.process.UserCondition;
+import com.izforge.izpack.core.rules.process.VariableCondition;
+
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.UUID;
+import java.util.logging.Logger;
 
 
 /**
@@ -60,38 +66,408 @@ import com.izforge.izpack.merge.resolve.ClassPathCrawler;
  */
 public class RulesEngineImpl implements RulesEngine
 {
-    private static final Logger logger = Logger.getLogger(RulesEngineImpl.class.getName());
 
     private static final long serialVersionUID = 3966346766966632860L;
 
-    protected Map<String, String> panelconditions;
+    private final Map<String, String> panelConditions = new HashMap<String, String>();
 
-    protected Map<String, String> packconditions;
+    private final Map<String, String> packConditions = new HashMap<String, String>();
 
-    protected Map<String, String> optionalpackconditions;
+    private final Map<String, String> optionalPackConditions = new HashMap<String, String>();
 
-    protected Map<String, Condition> conditionsmap = new HashMap<String, Condition>();
-    private Set<ConditionReference> refConditions = new HashSet<ConditionReference>();
+    private final Map<String, Condition> conditionsMap = new HashMap<String, Condition>();
 
-    protected AutomatedInstallData installdata;
-    private ClassPathCrawler classPathCrawler;
-    private BindeableContainer container;
+    private final Set<ConditionReference> refConditions = new HashSet<ConditionReference>();
 
-    public RulesEngineImpl(AutomatedInstallData installdata, ClassPathCrawler classPathCrawler, ConditionContainer container)
+    private final AutomatedInstallData installData;
+    private final BindeableContainer container;
+
+    private static final Logger logger = Logger.getLogger(RulesEngineImpl.class.getName());
+
+    /**
+     * The built-in condition types, with their corresponding class names.
+     */
+    private static final Map<String, String> TYPE_CLASS_NAMES = new HashMap<String, String>();
+
+    static
     {
-        this.installdata = installdata;
-        this.classPathCrawler = classPathCrawler;
+        TYPE_CLASS_NAMES.put("and", AndCondition.class.getName());
+        TYPE_CLASS_NAMES.put("not", NotCondition.class.getName());
+        TYPE_CLASS_NAMES.put("or", OrCondition.class.getName());
+        TYPE_CLASS_NAMES.put("xor", XorCondition.class.getName());
+        TYPE_CLASS_NAMES.put("comparenumerics", ComparenumericsCondition.class.getName());
+        TYPE_CLASS_NAMES.put("compareversions", CompareversionsCondition.class.getName());
+        TYPE_CLASS_NAMES.put("empty", EmptyCondition.class.getName());
+        TYPE_CLASS_NAMES.put("exists", ExistsCondition.class.getName());
+        TYPE_CLASS_NAMES.put("java", JavaCondition.class.getName());
+        TYPE_CLASS_NAMES.put("packselection", PackselectionCondition.class.getName());
+        TYPE_CLASS_NAMES.put("ref", RefCondition.class.getName());
+        TYPE_CLASS_NAMES.put("user", UserCondition.class.getName());
+        TYPE_CLASS_NAMES.put("variable", VariableCondition.class.getName());
+    }
+
+
+    public RulesEngineImpl(ConditionContainer container)
+    {
+        this(null, container);
+    }
+
+    public RulesEngineImpl(AutomatedInstallData installData, ConditionContainer container)
+    {
+        this.installData = installData;
         this.container = container;
-        conditionsmap = new HashMap<String, Condition>();
-        this.panelconditions = new HashMap<String, String>();
-        this.packconditions = new HashMap<String, String>();
-        this.optionalpackconditions = new HashMap<String, String>();
         initStandardConditions();
     }
 
-    public RulesEngineImpl(ClassPathCrawler classPathCrawler, ConditionContainer container)
+    @Override
+    public void readConditionMap(Map<String, Condition> rules)
     {
-        this(null, classPathCrawler, container);
+        conditionsMap.putAll(rules);
+        for (String key : rules.keySet())
+        {
+            Condition condition = rules.get(key);
+            condition.setInstalldata(installData);
+        }
+    }
+
+    /**
+     * Returns the current known condition ids.
+     *
+     * @return the known condition ids
+     */
+    @Override
+    public Set<String> getKnownConditionIds()
+    {
+        return conditionsMap.keySet();
+    }
+
+    @Override
+    @Deprecated
+    public Condition instanciateCondition(IXMLElement condition)
+    {
+        return createCondition(condition);
+    }
+
+    /**
+     * Creates a condition given its XML specification.
+     *
+     * @param condition the condition XML specification
+     * @return a new  condition
+     */
+    @Override
+    public Condition createCondition(IXMLElement condition)
+    {
+        String id = condition.getAttribute("id");
+        String type = condition.getAttribute("type");
+        Condition result = null;
+        if (type != null)
+        {
+            String className = getClassName(type);
+            Class<Condition> conditionClass = container.getClass(className, Condition.class);
+            try
+            {
+                if (id == null || id.isEmpty() || "UNKNOWN".equals(id))
+                {
+                    id = className + "-" + UUID.randomUUID().toString();
+                    logger.fine("Random condition id " + id + " generated");
+                }
+                container.addComponent(id, conditionClass);
+                result = (Condition) container.getComponent(id);
+                result.setId(id);
+                result.setInstalldata(installData);
+                result.readFromXML(condition);
+                conditionsMap.put(id, result);
+                if (result instanceof ConditionReference)
+                {
+                    refConditions.add((ConditionReference) result);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new IzPackException(e);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public void resolveConditions() throws Exception
+    {
+        for (ConditionReference refCondition : refConditions)
+        {
+            refCondition.resolveReference();
+        }
+    }
+
+    /**
+     * Read the specification for the conditions.
+     *
+     * @param conditionsSpec the conditions specification
+     */
+    @Override
+    public void analyzeXml(IXMLElement conditionsSpec)
+    {
+        if (conditionsSpec == null)
+        {
+            logger.fine("No conditions specification found");
+            return;
+        }
+        if (conditionsSpec.hasChildren())
+        {
+            // read in the condition specs
+            List<IXMLElement> childs = conditionsSpec.getChildrenNamed("condition");
+
+            for (IXMLElement condition : childs)
+            {
+                Condition cond = createCondition(condition);
+                if (cond != null)
+                {
+                    // this.conditionslist.add(cond);
+                    String condid = cond.getId();
+                    cond.setInstalldata(installData);
+                    if ((condid != null) && !("UNKNOWN".equals(condid)))
+                    {
+                        conditionsMap.put(condid, cond);
+                    }
+                }
+            }
+
+            List<IXMLElement> panelconditionels = conditionsSpec
+                    .getChildrenNamed("panelcondition");
+            for (IXMLElement panelel : panelconditionels)
+            {
+                String panelid = panelel.getAttribute("panelid");
+                String conditionid = panelel.getAttribute("conditionid");
+                this.panelConditions.put(panelid, conditionid);
+            }
+
+            List<IXMLElement> packconditionels = conditionsSpec
+                    .getChildrenNamed("packcondition");
+            for (IXMLElement panelel : packconditionels)
+            {
+                String panelid = panelel.getAttribute("packid");
+                String conditionid = panelel.getAttribute("conditionid");
+                this.packConditions.put(panelid, conditionid);
+                // optional install allowed, if condition is not met?
+                String optional = panelel.getAttribute("optional");
+                if (optional != null)
+                {
+                    boolean optionalinstall = Boolean.valueOf(optional);
+                    if (optionalinstall)
+                    {
+                        // optional installation is allowed
+                        this.optionalPackConditions.put(panelid, conditionid);
+                    }
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Gets the condition for the requested id.
+     * The id may be one of the following:
+     * A condition ID as defined in the install.xml
+     * A simple expression with !,+,|,\
+     * A complex expression with !,&&,||,\\ - must begin with char @
+     *
+     * @param id
+     * @return the condition. May be <tt>null</tt>
+     */
+    @Override
+    public Condition getCondition(String id)
+    {
+        Condition result = conditionsMap.get(id);
+        if (result == null)
+        {
+            if (id.startsWith("@"))
+            {
+                result = parseComplexCondition(id.substring(1));
+            }
+            else
+            {
+                result = getConditionByExpr(new StringBuffer(id));
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean isConditionTrue(String id, AutomatedInstallData installData)
+    {
+        Condition cond = getCondition(id);
+        if (cond != null)
+        {
+            return isConditionTrue(cond, installData);
+        }
+        logger.warning("Condition " + id + " not found");
+        return false;
+    }
+
+    @Override
+    public boolean isConditionTrue(Condition cond, AutomatedInstallData installData)
+    {
+        if (cond != null)
+        {
+            if (installData != null)
+            {
+                cond.setInstalldata(installData);
+            }
+            return isConditionTrue(cond);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isConditionTrue(String id)
+    {
+        Condition cond = getCondition(id);
+        if (cond != null)
+        {
+            return isConditionTrue(cond);
+        }
+        logger.warning("Condition " + id + " not found");
+        return false;
+    }
+
+    @Override
+    public boolean isConditionTrue(Condition cond)
+    {
+        if (cond.getInstallData() == null)
+        {
+            cond.setInstalldata(this.installData);
+        }
+        boolean value = cond.isTrue();
+        logger.fine("Condition " + cond.getId() + ": " + Boolean.toString(value));
+        return value;
+    }
+
+    /**
+     * Can a panel be shown?
+     *
+     * @param panelid   - id of the panel, which should be shown
+     * @param variables - the variables
+     * @return true - there is no condition or condition is met false - there is a condition and the
+     *         condition was not met
+     */
+    @Override
+    public boolean canShowPanel(String panelid, Properties variables)
+    {
+        if (!this.panelConditions.containsKey(panelid))
+        {
+            logger.fine("Panel " + panelid + " unconditionally activated");
+            return true;
+        }
+        Condition condition = getCondition(this.panelConditions.get(panelid));
+        boolean b = condition.isTrue();
+        logger.fine("Panel " + panelid + ": activation depends on condition "
+                            + condition.getId() + " -> " + b);
+        return b;
+    }
+
+    /**
+     * Is the installation of a pack possible?
+     *
+     * @param packid
+     * @param variables
+     * @return true - there is no condition or condition is met false - there is a condition and the
+     *         condition was not met
+     */
+    @Override
+    public boolean canInstallPack(String packid, Properties variables)
+    {
+        if (packid == null)
+        {
+            return true;
+        }
+        if (!this.packConditions.containsKey(packid))
+        {
+            logger.fine("Package " + packid + " unconditionally installable");
+            return true;
+        }
+        Condition condition = getCondition(this.packConditions.get(packid));
+        boolean b = condition.isTrue();
+        logger.fine("Package " + packid + ": installation depends on condition "
+                            + condition.getId() + " -> " + b);
+        return b;
+    }
+
+    /**
+     * Is an optional installation of a pack possible if the condition is not met?
+     *
+     * @param packid
+     * @param variables
+     * @return
+     */
+    @Override
+    public boolean canInstallPackOptional(String packid, Properties variables)
+    {
+        if (!this.optionalPackConditions.containsKey(packid))
+        {
+            logger.fine("Package " + packid + " unconditionally installable");
+            return false;
+        }
+        else
+        {
+            logger.fine("Package " + packid + " optional installation possible");
+            return true;
+        }
+    }
+
+    /**
+     * @param condition
+     */
+    @Override
+    public void addCondition(Condition condition)
+    {
+        if (condition != null)
+        {
+            String id = condition.getId();
+            if (conditionsMap.containsKey(id))
+            {
+                logger.warning("Condition " + id + " already registered");
+            }
+            else
+            {
+                conditionsMap.put(id, condition);
+            }
+        }
+        else
+        {
+            logger.warning("Could not add condition, was null");
+        }
+    }
+
+    @Override
+    public void writeRulesXML(OutputStream out)
+    {
+        XMLWriter xmlOut = new XMLWriter();
+        xmlOut.setOutput(out);
+        XMLElementImpl conditionsel = new XMLElementImpl("conditions");
+        for (Condition condition : conditionsMap.values())
+        {
+            IXMLElement conditionEl = createConditionElement(condition, conditionsel);
+            condition.makeXMLData(conditionEl);
+            conditionsel.addChild(conditionEl);
+        }
+        logger.fine("Writing generated conditions specification");
+        try
+        {
+            xmlOut.write(conditionsel);
+        }
+        catch (XMLException e)
+        {
+            throw new IzPackException(e);
+        }
+    }
+
+    @Override
+    public IXMLElement createConditionElement(Condition condition, IXMLElement root)
+    {
+        XMLElementImpl xml = new XMLElementImpl("condition", root);
+        xml.setAttribute("id", condition.getId());
+        xml.setAttribute("type", condition.getClass().getCanonicalName());
+        return xml;
     }
 
     /**
@@ -101,28 +477,28 @@ public class RulesEngineImpl implements RulesEngine
     {
         logger.fine("Initializing built-in conditions");
         initOsConditions();
-        if ((installdata != null) && (installdata.getAllPacks() != null))
+        if ((installData != null) && (installData.getAllPacks() != null))
         {
             logger.fine("Initializing built-in conditions for packs");
-            for (Pack pack : installdata.getAllPacks())
+            for (Pack pack : installData.getAllPacks())
             {
                 if (pack.id != null)
                 {
                     // automatically add packselection condition
                     PackselectionCondition packselcond = new PackselectionCondition();
-                    packselcond.setInstalldata(installdata);
+                    packselcond.setInstalldata(installData);
                     packselcond.setId("izpack.selected." + pack.id);
                     packselcond.setPackid(pack.id);
-                    conditionsmap.put(packselcond.getId(), packselcond);
+                    conditionsMap.put(packselcond.getId(), packselcond);
 
                     String condition = pack.getCondition();
                     logger.fine("Checking pack condition \"" + condition + "\" for pack \""
-                            + pack.id + "\"");
+                                        + pack.id + "\"");
                     if ((condition != null) && !condition.isEmpty())
                     {
                         logger.fine("Adding pack condition \"" + condition + "\" for pack \""
-                                + pack.id + "\"");
-                        packconditions.put(pack.id, condition);
+                                            + pack.id + "\"");
+                        packConditions.put(pack.id, condition);
                     }
                 }
             }
@@ -147,181 +523,11 @@ public class RulesEngineImpl implements RulesEngine
 
     private void createBuiltinOsCondition(String osVersionField, String conditionId)
     {
-        JavaCondition condition = new JavaCondition("com.izforge.izpack.util.OsVersion", osVersionField, true, "true", "boolean");
-        condition.setInstalldata(installdata);
+        JavaCondition condition = new JavaCondition("com.izforge.izpack.util.OsVersion", osVersionField, true, "true",
+                                                    "boolean");
+        condition.setInstalldata(installData);
         condition.setId(conditionId);
-        conditionsmap.put(condition.getId(), condition);
-    }
-
-    @Override
-    public void readConditionMap(Map<String, Condition> rules)
-    {
-        conditionsmap.putAll(rules);
-        for (String key : rules.keySet())
-        {
-            Condition condition = rules.get(key);
-            condition.setInstalldata(installdata);
-        }
-    }
-
-    /**
-     * Returns the current known condition ids.
-     *
-     * @return
-     */
-    @Override
-    public Set<String> getKnownConditionIds()
-    {
-        return conditionsmap.keySet();
-    }
-
-    @Override
-    public Condition instanciateCondition(IXMLElement condition)
-    {
-        String condid = condition.getAttribute("id");
-        String condtype = condition.getAttribute("type");
-        Condition result = null;
-        if (condtype != null)
-        {
-            String conditionclassname = "";
-            if (condtype.indexOf('.') > -1)
-            {
-                conditionclassname = condtype;
-            }
-            else
-            {
-                String conditiontype = condtype.toLowerCase();
-                conditionclassname = conditiontype.substring(0, 1).toUpperCase()
-                        + conditiontype.substring(1, conditiontype.length());
-                conditionclassname += "Condition";
-            }
-            try
-            {
-                Class<Condition> conditionclass = classPathCrawler.findClass(conditionclassname);
-                if (condid == null || condid.isEmpty() || "UNKNOWN".equals(condid))
-                {
-                    condid = conditionclassname + "-"
-                             + UUID.randomUUID().toString();
-                    logger.fine("Random condition id " + condid + " generated");
-                }
-                container.addComponent(condid, conditionclass);
-                result = (Condition) container.getComponent(condid);
-                result.setId(condid);
-                result.setInstalldata(installdata);
-                result.readFromXML(condition);
-                conditionsmap.put(condid, result);
-                if (result instanceof ConditionReference)
-                {
-                    refConditions.add((ConditionReference)result);
-                }
-            }
-            catch (Exception e)
-            {
-                throw new IzPackException(e);
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public void resolveConditions() throws Exception {
-        for (ConditionReference refCondition : refConditions)
-        {
-            refCondition.resolveReference();
-        }
-    }
-
-    /**
-     * Read the spec for the conditions
-     *
-     * @param conditionsspec
-     */
-    @Override
-    public void analyzeXml(IXMLElement conditionsspec)
-    {
-        if (conditionsspec == null)
-        {
-            logger.fine("No conditions specification found");
-            return;
-        }
-        if (conditionsspec.hasChildren())
-        {
-            // read in the condition specs
-            List<IXMLElement> childs = conditionsspec.getChildrenNamed("condition");
-
-            for (IXMLElement condition : childs)
-            {
-                Condition cond = instanciateCondition(condition);
-                if (cond != null)
-                {
-                    // this.conditionslist.add(cond);
-                    String condid = cond.getId();
-                    cond.setInstalldata(installdata);
-                    if ((condid != null) && !("UNKNOWN".equals(condid)))
-                    {
-                        conditionsmap.put(condid, cond);
-                    }
-                }
-            }
-
-            List<IXMLElement> panelconditionels = conditionsspec
-                    .getChildrenNamed("panelcondition");
-            for (IXMLElement panelel : panelconditionels)
-            {
-                String panelid = panelel.getAttribute("panelid");
-                String conditionid = panelel.getAttribute("conditionid");
-                this.panelconditions.put(panelid, conditionid);
-            }
-
-            List<IXMLElement> packconditionels = conditionsspec
-                    .getChildrenNamed("packcondition");
-            for (IXMLElement panelel : packconditionels)
-            {
-                String panelid = panelel.getAttribute("packid");
-                String conditionid = panelel.getAttribute("conditionid");
-                this.packconditions.put(panelid, conditionid);
-                // optional install allowed, if condition is not met?
-                String optional = panelel.getAttribute("optional");
-                if (optional != null)
-                {
-                    boolean optionalinstall = Boolean.valueOf(optional);
-                    if (optionalinstall)
-                    {
-                        // optional installation is allowed
-                        this.optionalpackconditions.put(panelid, conditionid);
-                    }
-                }
-            }
-        }
-    }
-
-
-    /**
-     * Gets the condition for the requested id.
-     * The id may be one of the following:
-     * A condition ID as defined in the install.xml
-     * A simple expression with !,+,|,\
-     * A complex expression with !,&&,||,\\ - must begin with char @
-     *
-     * @param id
-     * @return
-     */
-    @Override
-    public Condition getCondition(String id)
-    {
-        Condition result = conditionsmap.get(id);
-        if (result == null)
-        {
-            if (id.startsWith("@"))
-            {
-                result = parseComplexCondition(id.substring(1));
-            }
-            else
-            {
-                result = getConditionByExpr(new StringBuffer(id));
-            }
-        }
-        return result;
+        conditionsMap.put(condition.getId(), condition);
     }
 
     /**
@@ -339,7 +545,7 @@ public class RulesEngineImpl implements RulesEngine
      * @param expression
      * @return
      */
-    protected Condition parseComplexCondition(String expression)
+    private Condition parseComplexCondition(String expression)
     {
         Condition result = null;
 
@@ -361,10 +567,10 @@ public class RulesEngineImpl implements RulesEngine
         }
         else
         {
-            result = conditionsmap.get(expression);
+            result = conditionsMap.get(expression);
         }
 
-        result.setInstalldata(installdata);
+        result.setInstalldata(installData);
 
         return result;
     }
@@ -434,7 +640,7 @@ public class RulesEngineImpl implements RulesEngine
         return result;
     }
 
-    protected Condition getConditionByExpr(StringBuffer conditionexpr)
+    private Condition getConditionByExpr(StringBuffer conditionexpr)
     {
         Condition result = null;
         int index = 0;
@@ -445,25 +651,25 @@ public class RulesEngineImpl implements RulesEngine
             {
                 case '+':
                     // and-condition
-                    Condition op1 = conditionsmap.get(conditionexpr.substring(0, index));
+                    Condition op1 = conditionsMap.get(conditionexpr.substring(0, index));
                     conditionexpr.delete(0, index + 1);
                     result = new AndCondition(this);
-                    ((ConditionWithMultipleOperands)result).addOperands(op1, getConditionByExpr(conditionexpr));
+                    ((ConditionWithMultipleOperands) result).addOperands(op1, getConditionByExpr(conditionexpr));
                     break;
                 case '|':
                     // or-condition
-                    op1 = conditionsmap.get(conditionexpr.substring(0, index));
+                    op1 = conditionsMap.get(conditionexpr.substring(0, index));
                     conditionexpr.delete(0, index + 1);
                     result = new OrCondition(this);
-                    ((ConditionWithMultipleOperands)result).addOperands(op1, getConditionByExpr(conditionexpr));
+                    ((ConditionWithMultipleOperands) result).addOperands(op1, getConditionByExpr(conditionexpr));
 
                     break;
                 case '\\':
                     // xor-condition
-                    op1 = conditionsmap.get(conditionexpr.substring(0, index));
+                    op1 = conditionsMap.get(conditionexpr.substring(0, index));
                     conditionexpr.delete(0, index + 1);
                     result = new XorCondition(this);
-                    ((ConditionWithMultipleOperands)result).addOperands(op1, getConditionByExpr(conditionexpr));
+                    ((ConditionWithMultipleOperands) result).addOperands(op1, getConditionByExpr(conditionexpr));
                     break;
                 case '!':
                     // not-condition
@@ -487,191 +693,39 @@ public class RulesEngineImpl implements RulesEngine
         }
         if (conditionexpr.length() > 0)
         {
-            result = conditionsmap.get(conditionexpr.toString());
+            result = conditionsMap.get(conditionexpr.toString());
             if (result != null)
             {
-                result.setInstalldata(installdata);
+                result.setInstalldata(installData);
                 conditionexpr.delete(0, conditionexpr.length());
             }
         }
         return result;
     }
 
-    @Override
-    public boolean isConditionTrue(String id, AutomatedInstallData installData)
-    {
-        Condition cond = getCondition(id);
-        if (cond != null)
-        {
-            return isConditionTrue(cond, installData);
-        }
-        logger.warning("Condition " + id + " not found");
-        return false;
-    }
-
-    @Override
-    public boolean isConditionTrue(Condition cond, AutomatedInstallData installData)
-    {
-        if (cond != null)
-        {
-            if (installData != null)
-            {
-                cond.setInstalldata(installData);
-            }
-            return isConditionTrue(cond);
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isConditionTrue(String id)
-    {
-        Condition cond = getCondition(id);
-        if (cond != null)
-        {
-            return isConditionTrue(cond);
-        }
-        logger.warning("Condition " + id + " not found");
-        return false;
-    }
-
-    @Override
-    public boolean isConditionTrue(Condition cond)
-    {
-        if (cond.getInstallData() == null)
-        {
-            cond.setInstalldata(this.installdata);
-        }
-        boolean value = cond.isTrue();
-        logger.fine("Condition " + cond.getId() + ": " + Boolean.toString(value));
-        return value;
-    }
-
     /**
-     * Can a panel be shown?
+     * Returns the class name implementing a condition type.
      *
-     * @param panelid   - id of the panel, which should be shown
-     * @param variables - the variables
-     * @return true - there is no condition or condition is met false - there is a condition and the
-     *         condition was not met
+     * @param type the condition type
+     * @return the class name
      */
-    @Override
-    public boolean canShowPanel(String panelid, Properties variables)
+    private String getClassName(String type)
     {
-        if (!this.panelconditions.containsKey(panelid))
+        String result;
+        if (type.indexOf('.') != -1)
         {
-            logger.fine("Panel " + panelid + " unconditionally activated");
-            return true;
-        }
-        Condition condition = getCondition(this.panelconditions.get(panelid));
-        boolean b = condition.isTrue();
-        logger.fine("Panel " + panelid + ": activation depends on condition "
-        + condition.getId() + " -> " + b);
-        return b;
-    }
-
-    /**
-     * Is the installation of a pack possible?
-     *
-     * @param packid
-     * @param variables
-     * @return true - there is no condition or condition is met false - there is a condition and the
-     *         condition was not met
-     */
-    @Override
-    public boolean canInstallPack(String packid, Properties variables)
-    {
-        if (packid == null)
-        {
-            return true;
-        }
-        if (!this.packconditions.containsKey(packid))
-        {
-            logger.fine("Package " + packid + " unconditionally installable");
-            return true;
-        }
-        Condition condition = getCondition(this.packconditions.get(packid));
-        boolean b = condition.isTrue();
-        logger.fine("Package " + packid + ": installation depends on condition "
-        + condition.getId() + " -> " + b);
-        return b;
-    }
-
-    /**
-     * Is an optional installation of a pack possible if the condition is not met?
-     *
-     * @param packid
-     * @param variables
-     * @return
-     */
-    @Override
-    public boolean canInstallPackOptional(String packid, Properties variables)
-    {
-        if (!this.optionalpackconditions.containsKey(packid))
-        {
-            logger.fine("Package " + packid + " unconditionally installable");
-            return false;
+            // fully qualified class name
+            result = type;
         }
         else
         {
-            logger.fine("Package " + packid + " optional installation possible");
-            return true;
-        }
-    }
-
-    /**
-     * @param condition
-     */
-    @Override
-    public void addCondition(Condition condition)
-    {
-        if (condition != null)
-        {
-            String id = condition.getId();
-            if (conditionsmap.containsKey(id))
+            result = TYPE_CLASS_NAMES.get(type);
+            if (result == null)
             {
-                logger.warning("Condition " + id + " already registered");
-            }
-            else
-            {
-                conditionsmap.put(id, condition);
+                // probably a bad type...
+                result = type;
             }
         }
-        else
-        {
-            logger.warning("Could not add condition, was null");
-        }
-    }
-
-    @Override
-    public void writeRulesXML(OutputStream out)
-    {
-        XMLWriter xmlOut = new XMLWriter();
-        xmlOut.setOutput(out);
-        XMLElementImpl conditionsel = new XMLElementImpl("conditions");
-        for (Condition condition : conditionsmap.values())
-        {
-            IXMLElement conditionEl = createConditionElement(condition, conditionsel);
-            condition.makeXMLData(conditionEl);
-            conditionsel.addChild(conditionEl);
-        }
-        logger.fine("Writing generated conditions specification");
-        try
-        {
-            xmlOut.write(conditionsel);
-        }
-        catch (XMLException e)
-        {
-            throw new IzPackException(e);
-        }
-    }
-
-    @Override
-    public IXMLElement createConditionElement(Condition condition, IXMLElement root)
-    {
-        XMLElementImpl xml = new XMLElementImpl("condition", root);
-        xml.setAttribute("id", condition.getId());
-        xml.setAttribute("type", condition.getClass().getCanonicalName());
-        return xml;
+        return result;
     }
 }

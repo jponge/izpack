@@ -49,7 +49,7 @@ public class OrCondition extends ConditionWithMultipleOperands
         }
         for (IXMLElement element : xmlcondition.getChildren())
         {
-            nestedConditions.add(rules.instanciateCondition(element));
+            nestedConditions.add(rules.createCondition(element));
         }
     }
 
