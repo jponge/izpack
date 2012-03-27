@@ -46,6 +46,10 @@ import java.util.ArrayList;
  */
 public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConstants
 {
+    /**
+     * PathSelectionPanel Class object
+     */
+    private static Class pathSelectionPanel;
 
     /**
      * holds all the components and layout constraints.
@@ -90,6 +94,21 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
 
     protected static int[] DEFAULT_Y_ALIGNMENT = {CENTER, CENTER, CENTER, CENTER};
 
+    private static final String USER_PATH_SELECTION_PANEL_CLASS = "com.izforge.izpack.panels.userpath.UserPathSelectionPanel";
+    private static final String PATH_SELECTION_PANEL_CLASS = "com.izforge.izpack.panels.path.PathSelectionPanel";
+
+    static
+    {
+        try
+        {
+            pathSelectionPanel = Class.forName(PATH_SELECTION_PANEL_CLASS);
+        }
+        catch (ClassNotFoundException e)
+        {
+            pathSelectionPanel = null;
+            e.printStackTrace();
+        }
+    }
     /**
      * Array with some default constraints.
      */
@@ -232,7 +251,6 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
      */
     private static int getIntermediarId(Class clazz, Component comp)
     {
-
         if (comp != null)
         {
             if (MultiLineLabel.class.isAssignableFrom(clazz)
@@ -240,10 +258,10 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
             {
                 return (FULL_LINE_COMPONENT_CONSTRAINT);
             }
-            // REFACTOR : find how to replace it
-//            if (PathSelectionPanel.class.isAssignableFrom(clazz)
-            if (JCheckBox.class.isAssignableFrom(clazz)
-                    || JRadioButton.class.isAssignableFrom(clazz))
+            if (pathSelectionPanel.isAssignableFrom(clazz)
+                || JCheckBox.class.isAssignableFrom(clazz)
+                || JRadioButton.class.isAssignableFrom(clazz)
+                || USER_PATH_SELECTION_PANEL_CLASS.equals(clazz.getName()))
             {
                 return (FULL_LINE_CONTROL_CONSTRAINT);
             }
@@ -1163,9 +1181,10 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
      */
     private boolean needsReEvaluation(Component comp)
     {
-        if ((comp instanceof MultiLineLabel))
-        // REFACTOR : Same here
-        // || (comp instanceof PathSelectionPanel)) {
+
+        if ((comp instanceof MultiLineLabel)
+            || pathSelectionPanel.isInstance(comp)
+            || USER_PATH_SELECTION_PANEL_CLASS.equals(comp.getClass().getName()))
         {
             return (true);
         }
