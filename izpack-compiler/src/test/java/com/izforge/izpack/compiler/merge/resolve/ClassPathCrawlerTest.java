@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test for classpath crawler
@@ -48,7 +49,8 @@ public class ClassPathCrawlerTest
     public void searchClassInJar() throws Exception
     {
         File jarResource = FileUtil.convertUrlToFile(
-                ClassLoader.getSystemResource("com/izforge/izpack/merge/test/vim-panel-1.0-SNAPSHOT.jar"));
+                ClassLoader.getSystemResource("com/izforge/izpack/compiler/merge/resolve/vim-panel-1.0-SNAPSHOT.jar"));
+        assertTrue(jarResource.exists());
         ClassUtils.loadJarInSystemClassLoader(jarResource);
         Class aClass = classPathCrawler.findClass("VimPanel");
         assertThat(aClass.getName(), Is.is("com.sora.panel.VimPanel"));
@@ -60,6 +62,7 @@ public class ClassPathCrawlerTest
     {
         File jarResource = FileUtil.convertUrlToFile(ClassLoader.getSystemResource(
                 "com/izforge/izpack/compiler/merge/resolve/test space/vim-panel-1.0-SNAPSHOT.jar"));
+        assertTrue(jarResource.exists());
         ClassUtils.loadJarInSystemClassLoader(jarResource);
         Class aClass = classPathCrawler.findClass("VimPanel");
         assertThat(aClass.getName(), Is.is("com.sora.panel.VimPanel"));
