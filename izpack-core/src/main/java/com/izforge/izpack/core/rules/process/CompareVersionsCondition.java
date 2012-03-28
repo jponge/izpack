@@ -29,7 +29,7 @@ import com.izforge.izpack.api.rules.ComparisonOperator;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorBase;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 
-public class CompareversionsCondition extends CompareCondition
+public class CompareVersionsCondition extends CompareCondition
 {
     private static final long serialVersionUID = -5845914969794400006L;
 

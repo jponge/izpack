@@ -30,9 +30,9 @@ import java.util.List;
 
 /**
  * @author Dennis Reil, <izpack@reil-online.de>
- * @version $Id: PackselectionCondition.java,v 1.1 2006/11/03 13:03:26 dennis Exp $
+ * @version $Id: PackSelectionCondition.java,v 1.1 2006/11/03 13:03:26 dennis Exp $
  */
-public class PackselectionCondition extends Condition
+public class PackSelectionCondition extends Condition
 {
     private static final long serialVersionUID = 9193011814966195963L;
     protected String packid;

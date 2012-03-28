@@ -38,12 +38,12 @@ import com.izforge.izpack.core.rules.logic.AndCondition;
 import com.izforge.izpack.core.rules.logic.NotCondition;
 import com.izforge.izpack.core.rules.logic.OrCondition;
 import com.izforge.izpack.core.rules.logic.XorCondition;
-import com.izforge.izpack.core.rules.process.ComparenumericsCondition;
-import com.izforge.izpack.core.rules.process.CompareversionsCondition;
+import com.izforge.izpack.core.rules.process.CompareNumericsCondition;
+import com.izforge.izpack.core.rules.process.CompareVersionsCondition;
 import com.izforge.izpack.core.rules.process.EmptyCondition;
 import com.izforge.izpack.core.rules.process.ExistsCondition;
 import com.izforge.izpack.core.rules.process.JavaCondition;
-import com.izforge.izpack.core.rules.process.PackselectionCondition;
+import com.izforge.izpack.core.rules.process.PackSelectionCondition;
 import com.izforge.izpack.core.rules.process.RefCondition;
 import com.izforge.izpack.core.rules.process.UserCondition;
 import com.izforge.izpack.core.rules.process.VariableCondition;
@@ -95,12 +95,12 @@ public class RulesEngineImpl implements RulesEngine
         TYPE_CLASS_NAMES.put("not", NotCondition.class.getName());
         TYPE_CLASS_NAMES.put("or", OrCondition.class.getName());
         TYPE_CLASS_NAMES.put("xor", XorCondition.class.getName());
-        TYPE_CLASS_NAMES.put("comparenumerics", ComparenumericsCondition.class.getName());
-        TYPE_CLASS_NAMES.put("compareversions", CompareversionsCondition.class.getName());
+        TYPE_CLASS_NAMES.put("comparenumerics", CompareNumericsCondition.class.getName());
+        TYPE_CLASS_NAMES.put("compareversions", CompareVersionsCondition.class.getName());
         TYPE_CLASS_NAMES.put("empty", EmptyCondition.class.getName());
         TYPE_CLASS_NAMES.put("exists", ExistsCondition.class.getName());
         TYPE_CLASS_NAMES.put("java", JavaCondition.class.getName());
-        TYPE_CLASS_NAMES.put("packselection", PackselectionCondition.class.getName());
+        TYPE_CLASS_NAMES.put("packselection", PackSelectionCondition.class.getName());
         TYPE_CLASS_NAMES.put("ref", RefCondition.class.getName());
         TYPE_CLASS_NAMES.put("user", UserCondition.class.getName());
         TYPE_CLASS_NAMES.put("variable", VariableCondition.class.getName());
@@ -485,7 +485,7 @@ public class RulesEngineImpl implements RulesEngine
                 if (pack.id != null)
                 {
                     // automatically add packselection condition
-                    PackselectionCondition packselcond = new PackselectionCondition();
+                    PackSelectionCondition packselcond = new PackSelectionCondition();
                     packselcond.setInstalldata(installData);
                     packselcond.setId("izpack.selected." + pack.id);
                     packselcond.setPackid(pack.id);
