@@ -30,11 +30,11 @@ import com.izforge.izpack.api.rules.ComparisonOperator;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorBase;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 
-public class ComparenumericsCondition extends CompareCondition
+public class CompareNumericsCondition extends CompareCondition
 {
     private static final long serialVersionUID = -5512232923336878003L;
 
-    private static final transient Logger logger = Logger.getLogger(ComparenumericsCondition.class.getName());
+    private static final transient Logger logger = Logger.getLogger(CompareNumericsCondition.class.getName());
 
     @Override
     public boolean isTrue()

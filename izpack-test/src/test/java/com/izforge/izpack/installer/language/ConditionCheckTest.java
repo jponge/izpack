@@ -1,7 +1,9 @@
 package com.izforge.izpack.installer.language;
 
+import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
+import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.compiler.container.TestInstallationContainer;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
@@ -26,9 +28,10 @@ public class ConditionCheckTest
     private ConditionCheck conditionCheck;
     private ResourceManager resourceManager;
 
-    public ConditionCheckTest(ConditionCheck conditionCheck, ResourceManager resourceManager)
+    public ConditionCheckTest(AutomatedInstallData installData, ResourceManager resourceManager,
+                              RulesEngine rules)
     {
-        this.conditionCheck = conditionCheck;
+        this.conditionCheck = new ConditionCheck(installData, resourceManager, rules);
         this.resourceManager = resourceManager;
     }
 
