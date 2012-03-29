@@ -1,5 +1,19 @@
 package com.izforge.izpack.integration;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.jar.JarFile;
+import java.util.zip.ZipFile;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.container.TestInstallationContainer;
@@ -11,19 +25,6 @@ import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
 import com.izforge.izpack.test.listener.TestUninstallerListener;
 import com.izforge.izpack.uninstaller.Destroyer;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.jar.JarFile;
-import java.util.zip.ZipFile;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 
 /**

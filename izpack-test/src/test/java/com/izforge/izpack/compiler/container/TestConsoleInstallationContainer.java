@@ -1,9 +1,10 @@
 package com.izforge.izpack.compiler.container;
 
-import com.izforge.izpack.installer.container.impl.ConsoleInstallerContainer;
-import com.izforge.izpack.installer.container.impl.InstallerContainer;
 import org.junit.runners.model.FrameworkMethod;
 import org.picocontainer.MutablePicoContainer;
+
+import com.izforge.izpack.installer.container.impl.ConsoleInstallerContainer;
+import com.izforge.izpack.installer.container.impl.InstallerContainer;
 
 /**
  * Container for integration testing
@@ -12,7 +13,7 @@ import org.picocontainer.MutablePicoContainer;
  */
 public class TestConsoleInstallationContainer extends AbstractTestInstallationContainer
 {
-    public TestConsoleInstallationContainer(Class klass, FrameworkMethod frameworkMethod)
+    public TestConsoleInstallationContainer(Class<?> klass, FrameworkMethod frameworkMethod)
     {
         super(klass, frameworkMethod);
     }

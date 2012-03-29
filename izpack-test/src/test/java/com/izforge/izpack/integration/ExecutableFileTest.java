@@ -1,5 +1,17 @@
 package com.izforge.izpack.integration;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -12,18 +24,7 @@ import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.RunOn;
 import com.izforge.izpack.test.junit.PicoRunner;
 import com.izforge.izpack.util.FileUtil;
-import org.apache.commons.lang.StringUtils;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import static com.izforge.izpack.util.Platform.Name;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import com.izforge.izpack.util.Platform.Name;
 
 
 /**

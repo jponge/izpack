@@ -1,5 +1,19 @@
 package com.izforge.izpack.integration.packvalidator;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+
+import org.fest.swing.fixture.FrameFixture;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
+
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.compiler.container.TestInstallationContainer;
@@ -17,17 +31,6 @@ import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
 import com.izforge.izpack.test.util.TestHousekeeper;
-import org.fest.swing.fixture.FrameFixture;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
-
-import java.io.File;
-
-import static org.junit.Assert.*;
 
 
 /**

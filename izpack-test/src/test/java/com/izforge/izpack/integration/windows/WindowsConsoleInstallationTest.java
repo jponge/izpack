@@ -1,5 +1,18 @@
 package com.izforge.izpack.integration.windows;
 
+import static com.izforge.izpack.integration.windows.WindowsHelper.registryDeleteUninstallKey;
+import static com.izforge.izpack.integration.windows.WindowsHelper.registryKeyExists;
+import static com.izforge.izpack.util.Platform.Name.WINDOWS;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+
+import org.junit.After;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.compiler.container.TestConsoleInstallationContainer;
@@ -19,18 +32,6 @@ import com.izforge.izpack.test.junit.PicoRunner;
 import com.izforge.izpack.test.util.TestConsole;
 import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.PrivilegedRunner;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import java.io.File;
-
-import static com.izforge.izpack.integration.windows.WindowsHelper.registryDeleteUninstallKey;
-import static com.izforge.izpack.integration.windows.WindowsHelper.registryKeyExists;
-import static com.izforge.izpack.util.Platform.Name.WINDOWS;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 
 /**

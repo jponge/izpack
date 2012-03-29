@@ -80,7 +80,7 @@ public class IzpackInstallationTest {
         HelperTestMethod.clickDefaultLang(dialogFrameFixture, languageDialog);
 
         installerFrameFixture = HelperTestMethod.prepareFrameFixture(installerFrame, installerController);
-        java.util.List panelList = installData.getPanels();
+        List panelList = installData.getPanels();
         // Hello panel
         Thread.sleep(600);
 //        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();

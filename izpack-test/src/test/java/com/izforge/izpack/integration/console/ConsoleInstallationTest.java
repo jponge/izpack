@@ -1,5 +1,17 @@
 package com.izforge.izpack.integration.console;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.Properties;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.compiler.container.TestConsoleInstallationContainer;
 import com.izforge.izpack.installer.bootstrap.Installer;
@@ -10,17 +22,6 @@ import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
 import com.izforge.izpack.test.util.TestConsole;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.Properties;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 
 /**

@@ -1,5 +1,20 @@
 package com.izforge.izpack.integration.windows;
 
+import static com.izforge.izpack.integration.windows.WindowsHelper.checkShortcut;
+import static com.izforge.izpack.integration.windows.WindowsHelper.registryDeleteUninstallKey;
+import static com.izforge.izpack.integration.windows.WindowsHelper.registryKeyExists;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+
+import org.fest.swing.fixture.FrameFixture;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.exception.NativeLibException;
@@ -21,20 +36,6 @@ import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.PrivilegedRunner;
 import com.izforge.izpack.util.os.ShellLink;
-import org.fest.swing.fixture.FrameFixture;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import java.io.File;
-
-import static com.izforge.izpack.integration.windows.WindowsHelper.checkShortcut;
-import static com.izforge.izpack.integration.windows.WindowsHelper.registryDeleteUninstallKey;
-import static com.izforge.izpack.integration.windows.WindowsHelper.registryKeyExists;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 
 /**
