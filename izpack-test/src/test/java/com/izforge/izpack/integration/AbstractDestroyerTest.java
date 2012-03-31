@@ -1,12 +1,11 @@
 package com.izforge.izpack.integration;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
-import com.izforge.izpack.uninstaller.Destroyer;
-import com.izforge.izpack.uninstaller.UninstallerContainer;
-import com.izforge.izpack.util.IoHelper;
+import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.Is;
 import org.junit.Before;
@@ -14,11 +13,13 @@ import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
 
-import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.uninstaller.Destroyer;
+import com.izforge.izpack.uninstaller.UninstallerContainer;
+import com.izforge.izpack.util.IoHelper;
 
 
 /**
@@ -54,7 +55,7 @@ public class AbstractDestroyerTest
     /**
      * Sets up the test case.
      *
-     * @throws Exception           for any error
+     * @throws Exception for any error
      */
     @Before
     public void setUp() throws Exception
@@ -83,8 +84,6 @@ public class AbstractDestroyerTest
         // create the container using the isolated class loader
         Class containerClass = loader.loadClass(UninstallerContainer.class.getName());
         Object container = containerClass.newInstance();
-        Method initBindings = containerClass.getMethod("initBindings");
-        initBindings.invoke(container);
 
         // create the Destroyer
         String installPath = getInstallPath();

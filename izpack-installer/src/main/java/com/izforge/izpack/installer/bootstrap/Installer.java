@@ -223,7 +223,6 @@ public class Installer
     private void launchAutomatedInstaller(String path) throws Exception
     {
         InstallerContainer container = new ConsoleInstallerContainer();
-        container.initBindings();
         AutomatedInstaller automatedInstaller = container.getComponent(AutomatedInstaller.class);
         automatedInstaller.init(path);
         automatedInstaller.doInstall();
@@ -239,7 +238,6 @@ public class Installer
     private void launchConsoleInstaller(int consoleAction, String path, String langCode)
     {
         InstallerContainer container = new ConsoleInstallerContainer();
-        container.initBindings();
         ConsoleInstaller consoleInstaller = container.getComponent(ConsoleInstaller.class);
         consoleInstaller.setLangCode(langCode);
         consoleInstaller.run(consoleAction, path);

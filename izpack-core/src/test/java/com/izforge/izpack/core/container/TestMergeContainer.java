@@ -1,31 +1,41 @@
 package com.izforge.izpack.core.container;
 
+import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.MergeManagerImpl;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.merge.resolve.PathResolver;
-import org.picocontainer.Characteristics;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.parameters.ComponentParameter;
 
-import java.util.HashMap;
-import java.util.Properties;
 
 /**
- * Container for merge tests
+ * Container for merge tests.
  *
  * @author Anthonin Bonnefoy
  */
 public class TestMergeContainer extends AbstractContainer
 {
 
-    public void fillContainer(MutablePicoContainer picoContainer)
+    /**
+     * Constructs a <tt>TestMergeContainer</tt>.
+     *
+     * @throws ContainerException if initialisation fails
+     */
+    public TestMergeContainer()
     {
-        picoContainer
-                .addComponent(MergeManager.class, MergeManagerImpl.class)
-                .as(Characteristics.USE_NAMES).addComponent(PathResolver.class)
-                .as(Characteristics.USE_NAMES).addComponent(MergeableResolver.class)
-                .addComponent("mergeContent", HashMap.class, ComponentParameter.ZERO);
+        initialise();
+    }
+
+    /**
+     * Invoked by {@link #initialise} to fill the container.
+     *
+     * @throws ContainerException if initialisation fails
+     */
+    @Override
+    protected void fillContainer()
+    {
+        addComponent(MergeManager.class, MergeManagerImpl.class);
+        addComponent(PathResolver.class);
+        addComponent(MergeableResolver.class);
     }
 
 }

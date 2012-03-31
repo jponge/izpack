@@ -49,7 +49,9 @@ public class InstallationTest
     private InstallerController installerController;
     private InstallerContainer installerContainer;
 
-    public InstallationTest(ResourceManager resourceManager, LanguageDialog languageDialog, InstallerFrame installerFrame, GUIInstallData installData, InstallerController installerController, InstallerContainer installerContainer)
+    public InstallationTest(ResourceManager resourceManager, LanguageDialog languageDialog,
+                            InstallerFrame installerFrame, GUIInstallData installData,
+                            InstallerController installerController, InstallerContainer installerContainer)
     {
         this.installerController = installerController;
         this.resourceManager = resourceManager;

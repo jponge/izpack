@@ -26,12 +26,48 @@
 
 package com.izforge.izpack.compiler;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
+
+import org.apache.commons.lang.StringUtils;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.IXMLWriter;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
-import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Blockable;
 import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
@@ -90,41 +126,6 @@ import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraintHelper;
 import com.izforge.izpack.util.file.DirectoryScanner;
 import com.izforge.izpack.util.file.FileUtils;
-import org.apache.commons.lang.StringUtils;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.TreeMap;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 /**
  * A parser for the installer xml configuration. This parses a document conforming to the
@@ -181,7 +182,7 @@ public class CompilerConfig extends Thread
     private MergeManager mergeManager;
     private IzpackProjectInstaller izpackProjectInstaller;
     private AssertionHelper assertionHelper;
-    private BindeableContainer compilerContainer;
+    private Container compilerContainer;
     private ClassPathCrawler classPathCrawler;
     private RulesEngine rules;
 
@@ -1007,14 +1008,8 @@ public class CompilerConfig extends Thread
                 }
 
                 LinkedList<String> srcfiles = new LinkedList<String>();
-                for (String filePath : fs.getDirectoryScanner().getIncludedDirectories())
-                {
-                    srcfiles.add(filePath);
-                }
-                for (String filePath : fs.getDirectoryScanner().getIncludedFiles())
-                {
-                    srcfiles.add(filePath);
-                }
+                Collections.addAll(srcfiles, fs.getDirectoryScanner().getIncludedDirectories());
+                Collections.addAll(srcfiles, fs.getDirectoryScanner().getIncludedFiles());
                 for (String filePath : srcfiles)
                 {
                     if (!filePath.isEmpty())

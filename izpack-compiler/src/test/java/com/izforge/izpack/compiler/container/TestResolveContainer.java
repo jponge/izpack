@@ -1,12 +1,14 @@
 package com.izforge.izpack.compiler.container;
 
+import java.util.Properties;
+
+import org.picocontainer.PicoException;
+
+import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.compiler.merge.resolve.ClassPathCrawler;
 import com.izforge.izpack.compiler.merge.resolve.CompilerPathResolver;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
-import org.picocontainer.MutablePicoContainer;
-
-import java.util.Properties;
 
 /**
  * Container for com.izforge.izpack.resolve package tests.
@@ -15,14 +17,32 @@ import java.util.Properties;
  */
 public class TestResolveContainer extends AbstractContainer
 {
-    public void fillContainer(MutablePicoContainer container)
-    {
-        container.addComponent(Properties.class);
-        container.addComponent(CompilerPathResolver.class);
-        container.addComponent(ClassPathCrawler.class);
-        container.addComponent(MergeableResolver.class);
 
-        Properties properties = container.getComponent(Properties.class);
+    /**
+     * Constructs a <tt>TestResolveContainer</tt>.
+     *
+     * @throws ContainerException if initialisation fails
+     */
+    public TestResolveContainer()
+    {
+        initialise();
+    }
+
+    /**
+     * Invoked by {@link #initialise} to fill the container.
+     *
+     * @throws ContainerException if initialisation fails
+     * @throws PicoException      for any PicoContainer error
+     */
+    @Override
+    protected void fillContainer()
+    {
+        addComponent(Properties.class);
+        addComponent(CompilerPathResolver.class);
+        addComponent(ClassPathCrawler.class);
+        addComponent(MergeableResolver.class);
+
+        Properties properties = getComponent(Properties.class);
         properties.put("HelloPanelTestWithDependenciesClass", "com.izforge.izpack.panels.depend");
     }
 

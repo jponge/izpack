@@ -70,7 +70,7 @@
                 <executions>
                     <execution>
                         <!-- copies sources from izpack-dist to test-classes/samples/izpack -->
-                        <!-- for IzpackGenerationTest                                       -->
+                        <!-- for IzpackGenerationTest, IzpackInstallationTest               -->
                         <id>Unpack izpack installer files</id>
                         <phase>process-resources</phase>
                         <goals>

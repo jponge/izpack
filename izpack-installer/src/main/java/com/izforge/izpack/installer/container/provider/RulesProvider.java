@@ -6,7 +6,7 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.core.container.ConditionContainer;
+import com.izforge.izpack.core.rules.ConditionContainer;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import org.picocontainer.injectors.Provider;
 

@@ -1,11 +1,12 @@
 package com.izforge.izpack.compiler.container;
 
-import com.izforge.izpack.core.container.AbstractContainer;
-import com.izforge.izpack.installer.container.impl.InstallerContainer;
-import com.izforge.izpack.test.junit.UnloadJarRule;
 import org.junit.Rule;
 import org.junit.runners.model.FrameworkMethod;
 import org.picocontainer.MutablePicoContainer;
+
+import com.izforge.izpack.core.container.AbstractContainer;
+import com.izforge.izpack.installer.container.impl.InstallerContainer;
+import com.izforge.izpack.test.junit.UnloadJarRule;
 
 /**
  * Abstract implementation of a container for testing purposes.
@@ -27,10 +28,9 @@ public abstract class AbstractTestInstallationContainer extends AbstractContaine
     }
 
     @Override
-    public void fillContainer(MutablePicoContainer picoContainer)
+    protected void fillContainer(MutablePicoContainer picoContainer)
     {
         TestCompilationContainer testInstallationContainer = new TestCompilationContainer(klass, frameworkMethod);
-        testInstallationContainer.initBindings();
         testInstallationContainer.launchCompilation();
 
         fillInstallerContainer(picoContainer);

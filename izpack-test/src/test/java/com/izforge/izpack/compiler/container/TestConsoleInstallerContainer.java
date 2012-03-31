@@ -17,6 +17,15 @@ import org.picocontainer.MutablePicoContainer;
  */
 public class TestConsoleInstallerContainer extends ConsoleInstallerContainer
 {
+
+    public TestConsoleInstallerContainer() {
+    }
+
+    public TestConsoleInstallerContainer(MutablePicoContainer container)
+    {
+        super(container);
+    }
+
     /**
      * Registers components with the container.
      *

@@ -19,15 +19,6 @@
 
 package com.izforge.izpack.uninstaller;
 
-import com.izforge.izpack.api.container.BindeableContainer;
-import com.izforge.izpack.api.event.UninstallerListener;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.data.ExecutableFile;
-import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.unix.ShellScript;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +33,15 @@ import java.util.List;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.izforge.izpack.api.container.Container;
+import com.izforge.izpack.api.event.UninstallerListener;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.data.ExecutableFile;
+import com.izforge.izpack.installer.data.UninstallData;
+import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.unix.ShellScript;
 
 
 /**
@@ -71,7 +71,7 @@ public class Destroyer extends Thread
     /**
      * The container.
      */
-    private final BindeableContainer container;
+    private final Container container;
 
     /**
      * The constructor.
@@ -81,8 +81,7 @@ public class Destroyer extends Thread
      * @param handler      The destroyer listener
      * @param container    the container
      */
-    public Destroyer(String installPath, boolean forceDestroy, AbstractUIProgressHandler handler,
-                     BindeableContainer container)
+    public Destroyer(String installPath, boolean forceDestroy, AbstractUIProgressHandler handler, Container container)
     {
         super("IzPack - Destroyer");
 
@@ -251,7 +250,8 @@ public class Destroyer extends Thread
             try
             {
                 ObjectInputStream in = new ObjectInputStream(
-                        getClass().getClassLoader().getResourceAsStream(UninstallData.ROOTSCRIPT + Integer.toString(idx)));
+                        getClass().getClassLoader().getResourceAsStream(
+                                UninstallData.ROOTSCRIPT + Integer.toString(idx)));
 
                 result.add(in.readUTF());
             }
@@ -286,8 +286,8 @@ public class Destroyer extends Thread
             catch (Exception e)
             {
                 logger.log(Level.WARNING,
-                        "Exeption during su remove: " + e.getMessage(),
-                        e);
+                           "Exeption during su remove: " + e.getMessage(),
+                           e);
             }
         }
     }
@@ -391,7 +391,7 @@ public class Destroyer extends Thread
             catch (Throwable e)
             { // Catch it to prevent for a block of uninstallation.
                 handler.emitError("Skipping custom action because exception caught during "
-                        + listener.getClass().getName(), e.toString());
+                                          + listener.getClass().getName(), e.toString());
             }
         }
     }

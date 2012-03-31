@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.net.MalformedURLException;
 import java.net.URL;
 

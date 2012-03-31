@@ -173,7 +173,6 @@ public class WindowsConsoleInstallationTest extends AbstractConsoleInstallationT
 
         // run the installation again
         ConsoleInstallerContainer container2 = new TestConsoleInstallerContainer();
-        container2.initBindings();
         TestConsoleInstaller installer2 = container2.getComponent(TestConsoleInstaller.class);
         TestConsole console2 = installer2.getConsole();
         console2.addScript("CheckedHelloPanel", "y", "1");
@@ -201,7 +200,6 @@ public class WindowsConsoleInstallationTest extends AbstractConsoleInstallationT
         removeLock();
 
         ConsoleInstallerContainer container2 = new TestConsoleInstallerContainer();
-        container2.initBindings();
         TestConsoleInstaller installer2 = container2.getComponent(TestConsoleInstaller.class);
         TestConsole console2 = installer2.getConsole();
         console2.addScript("CheckedHelloPanel", "n");

@@ -21,14 +21,14 @@
 
 package com.izforge.izpack.uninstaller;
 
-import com.izforge.izpack.api.container.BindeableContainer;
-import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import com.izforge.izpack.api.container.Container;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 
 public class UninstallerConsole
 {
@@ -43,9 +43,9 @@ public class UninstallerConsole
      */
     protected static LocaleDatabase langpack;
 
-    private final BindeableContainer container;
+    private final Container container;
 
-    public UninstallerConsole(BindeableContainer container) throws Exception
+    public UninstallerConsole(Container container) throws Exception
     {
         this.container = container;
         langpack = new LocaleDatabase(UninstallerFrame.class.getResourceAsStream("/langpack.xml"));

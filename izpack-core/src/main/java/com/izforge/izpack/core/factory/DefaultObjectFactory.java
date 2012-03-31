@@ -1,10 +1,9 @@
 package com.izforge.izpack.core.factory;
 
 
-import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.exception.IzPackClassNotFoundException;
 import com.izforge.izpack.api.factory.ObjectFactory;
-import org.picocontainer.MutablePicoContainer;
 
 
 /**
@@ -17,15 +16,15 @@ public class DefaultObjectFactory implements ObjectFactory
     /**
      * The container.
      */
-    private final BindeableContainer container;
+    private final Container container;
 
 
     /**
-     * Constructs a <tt>DefaultObjectFactory</tt>
+     * Constructs a <tt>DefaultObjectFactory</tt>.
      *
      * @param container the container
      */
-    public DefaultObjectFactory(BindeableContainer container)
+    public DefaultObjectFactory(Container container)
     {
         this.container = container;
     }
@@ -40,7 +39,7 @@ public class DefaultObjectFactory implements ObjectFactory
     public <T> T create(Class<T> type)
     {
         T result;
-        MutablePicoContainer child = container.makeChildContainer();
+        Container child = container.createChildContainer();
         try
         {
             child.addComponent(type);
@@ -48,7 +47,8 @@ public class DefaultObjectFactory implements ObjectFactory
         }
         finally
         {
-            container.getContainer().removeChildContainer(child);
+            container.removeChildContainer(child);
+            child.dispose();
         }
         return result;
     }

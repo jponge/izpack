@@ -1,15 +1,21 @@
 package com.izforge.izpack.installer.container.impl;
 
-import com.izforge.izpack.api.container.BindeableContainer;
+import java.util.Properties;
+
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.PicoException;
+import org.picocontainer.injectors.ProviderAdapter;
+
+import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
-import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.factory.DefaultObjectFactory;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
+import com.izforge.izpack.core.rules.ConditionContainer;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.base.InstallDataConfiguratorWithRules;
 import com.izforge.izpack.installer.container.provider.RulesProvider;
@@ -29,10 +35,6 @@ import com.izforge.izpack.util.DefaultTargetPlatformFactory;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.TargetFactory;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.injectors.ProviderAdapter;
-
-import java.util.Properties;
 
 /**
  * Installer container.
@@ -40,46 +42,55 @@ import java.util.Properties;
 public abstract class InstallerContainer extends AbstractContainer
 {
 
-    public void fillContainer(MutablePicoContainer pico)
+    /**
+     * Invoked by {@link #initialise} to fill the container.
+     *
+     * @param container the underlying container
+     * @throws ContainerException if initialisation fails
+     * @throws PicoException      for any PicoContainer error
+     */
+    @Override
+    protected void fillContainer(MutablePicoContainer container)
     {
-        this.pico = pico;
-        registerComponents(pico);
-        resolveComponents(pico);
+        registerComponents(container);
+        resolveComponents(container);
     }
 
     /**
      * Registers components with the container.
      *
      * @param pico the container
+     * @throws ContainerException if registration fails
+     * @throws PicoException      for any PicoContainer error
      */
     protected void registerComponents(MutablePicoContainer pico)
     {
         pico.addAdapter(new ProviderAdapter(new RulesProvider()));
-        pico.addComponent(InstallDataConfiguratorWithRules.class)
-                .addComponent(InstallerRequirementChecker.class)
-                .addComponent(JavaVersionChecker.class)
-                .addComponent(JDKChecker.class)
-                .addComponent(LangPackChecker.class)
-                .addComponent(RequirementsChecker.class)
-                .addComponent(LockFileChecker.class)
-                .addComponent(MergeManagerImpl.class)
-                .addComponent(UninstallData.class)
-                .addComponent(MutablePicoContainer.class, pico)
-                .addComponent(ConditionContainer.class)
-                .addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class)
-                .addComponent(Properties.class)
-                .addComponent(ResourceManager.class)
-                .addComponent(UninstallDataWriter.class)
-                .addComponent(EventFiller.class)
-                .addComponent(BindeableContainer.class, this)
-                .addComponent(RegistryDefaultHandler.class)
-                .addComponent(Housekeeper.class)
-                .addComponent(Librarian.class)
-                .addComponent(TargetFactory.class)
-                .addComponent(DefaultTargetPlatformFactory.class)
-                .addComponent(DefaultObjectFactory.class)
-                .addComponent(PathResolver.class)
-                .addComponent(MergeableResolver.class);
+        addComponent(InstallDataConfiguratorWithRules.class);
+        addComponent(InstallerRequirementChecker.class);
+        addComponent(JavaVersionChecker.class);
+        addComponent(JDKChecker.class);
+        addComponent(LangPackChecker.class);
+        addComponent(RequirementsChecker.class);
+        addComponent(LockFileChecker.class);
+        addComponent(MergeManagerImpl.class);
+        addComponent(UninstallData.class);
+        addComponent(MutablePicoContainer.class, pico);
+        addComponent(ConditionContainer.class);
+        addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class);
+        addComponent(Properties.class);
+        addComponent(ResourceManager.class);
+        addComponent(UninstallDataWriter.class);
+        addComponent(EventFiller.class);
+        addComponent(Container.class, this);
+        addComponent(RegistryDefaultHandler.class);
+        addComponent(Housekeeper.class);
+        addComponent(Librarian.class);
+        addComponent(TargetFactory.class);
+        addComponent(DefaultTargetPlatformFactory.class);
+        addComponent(DefaultObjectFactory.class);
+        addComponent(PathResolver.class);
+        addComponent(MergeableResolver.class);
     }
 
     /**
@@ -101,7 +112,7 @@ public abstract class InstallerContainer extends AbstractContainer
         }
         catch (InstallerException exception)
         {
-            throw new IzPackException(exception);
+            throw new ContainerException(exception);
         }
     }
 

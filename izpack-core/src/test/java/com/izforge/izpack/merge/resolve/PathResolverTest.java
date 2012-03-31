@@ -34,12 +34,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class PathResolverTest
 {
     private PathResolver pathResolver;
-    private MergeableResolver mergeableResolver;
 
-    public PathResolverTest(PathResolver pathResolver, MergeableResolver mergeableResolver)
+    public PathResolverTest(PathResolver pathResolver)
     {
         this.pathResolver = pathResolver;
-        this.mergeableResolver = mergeableResolver;
     }
 
     @Test

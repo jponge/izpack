@@ -2,6 +2,7 @@ package com.izforge.izpack.installer.container.impl;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.gui.GUIPrompt;
 import com.izforge.izpack.gui.log.Log;
@@ -23,6 +24,29 @@ import java.awt.*;
  */
 public class GUIInstallerContainer extends InstallerContainer
 {
+
+    /**
+     * Constructs a <tt>GUIInstallerContainer</tt>.
+     *
+     * @throws ContainerException if initialisation fails
+     */
+    public GUIInstallerContainer()
+    {
+        initialise();
+    }
+
+    /**
+     * Constructs a <tt>GUIInstallerContainer</tt>.
+     * <p/>
+     * This constructor is provided for testing purposes.
+     *
+     * @param container the underlying container
+     * @throws ContainerException if initialisation fails
+     */
+    protected GUIInstallerContainer(MutablePicoContainer container)
+    {
+        initialise(container);
+    }
 
     /**
      * Registers components with the container.
@@ -66,7 +90,7 @@ public class GUIInstallerContainer extends InstallerContainer
 
     private JFrame initFrame()
     {
-        ResourceManager resourceManager = pico.getComponent(ResourceManager.class);
+        ResourceManager resourceManager = getComponent(ResourceManager.class);
         // Dummy Frame
         JFrame frame = new JFrame();
         ImageIcon imageIcon;
@@ -76,7 +100,7 @@ public class GUIInstallerContainer extends InstallerContainer
         Dimension frameSize = frame.getSize();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation((screenSize.width - frameSize.width) / 2,
-                (screenSize.height - frameSize.height) / 2 - 10);
+                          (screenSize.height - frameSize.height) / 2 - 10);
         return frame;
     }
 

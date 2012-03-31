@@ -1,8 +1,10 @@
 package com.izforge.izpack.test;
 
-import com.izforge.izpack.api.container.BindeableContainer;
-
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Annotation to specify used container
@@ -17,5 +19,5 @@ public @interface Container
     /**
      * @return the container class
      */
-    public abstract Class<? extends BindeableContainer> value();
+    public abstract Class<? extends com.izforge.izpack.api.container.Container> value();
 }

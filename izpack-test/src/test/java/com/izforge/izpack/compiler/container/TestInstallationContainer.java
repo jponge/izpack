@@ -18,22 +18,21 @@ public class TestInstallationContainer extends AbstractTestInstallationContainer
     public TestInstallationContainer(Class klass, FrameworkMethod frameworkMethod)
     {
         super(klass, frameworkMethod);
+        initialise();
     }
 
     @Override
     protected InstallerContainer fillInstallerContainer(MutablePicoContainer container)
     {
-        GUIInstallerContainer result = new GUIInstallerContainer() {
+        return new GUIInstallerContainer(container) {
             @Override
             protected void registerComponents(MutablePicoContainer pico)
             {
                 super.registerComponents(pico);
                 super.getContainer().removeComponent(Housekeeper.class);
-                pico.addComponent(TestHousekeeper.class);
+                addComponent(TestHousekeeper.class);
             }
         };
-        result.fillContainer(container);
-        return result;
     }
 
 }

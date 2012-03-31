@@ -19,17 +19,20 @@
 
 package com.izforge.izpack.uninstaller;
 
-import com.izforge.izpack.api.exception.IzPackException;
-import com.izforge.izpack.util.Housekeeper;
-import com.izforge.izpack.util.PrivilegedRunner;
-import com.izforge.izpack.util.SelfModifier;
-
-import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
+import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.PrivilegedRunner;
+import com.izforge.izpack.util.SelfModifier;
 
 /**
  * The uninstaller class.
@@ -166,9 +169,7 @@ public class Uninstaller
 
     private static UninstallerContainer createContainer()
     {
-        UninstallerContainer container = new UninstallerContainer();
-        container.initBindings();
-        return container;
+        return new UninstallerContainer();
     }
 
     /**
@@ -195,8 +196,9 @@ public class Uninstaller
             }
             if (!result)
             {
-                JOptionPane.showMessageDialog(null, "The uninstaller could not launch itself with administrator permissions.\n" +
-                        "The uninstallation will still continue but you may encounter problems due to insufficient permissions.");
+                JOptionPane.showMessageDialog(null,
+                                              "The uninstaller could not launch itself with administrator permissions.\n" +
+                                                      "The uninstallation will still continue but you may encounter problems due to insufficient permissions.");
             }
         }
         else

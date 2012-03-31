@@ -1,8 +1,7 @@
 package com.izforge.izpack.test.junit;
 
-import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.exception.IzPackException;
-import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.RunOn;
 import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.Platforms;
@@ -31,8 +30,8 @@ public class PicoRunner extends BlockJUnit4ClassRunner
     private Class<?> klass;
     private FrameworkMethod method;
     private Object currentTestInstance;
-    private Class<? extends BindeableContainer> containerClass;
-    private BindeableContainer containerInstance;
+    private Class<? extends Container> containerClass;
+    private Container containerInstance;
 
     public PicoRunner(Class<?> klass) throws InitializationError
     {
@@ -110,7 +109,7 @@ public class PicoRunner extends BlockJUnit4ClassRunner
     @Override
     protected Object createTest() throws Exception
     {
-        containerClass = getTestClass().getJavaClass().getAnnotation(Container.class).value();
+        containerClass = getTestClass().getJavaClass().getAnnotation(com.izforge.izpack.test.Container.class).value();
         SwingUtilities.invokeAndWait(new Runnable()
         {
             public void run()
@@ -118,12 +117,12 @@ public class PicoRunner extends BlockJUnit4ClassRunner
                 try
                 {
                     containerInstance = getContainerInstance(containerClass);
-                    containerInstance.initBindings();
                     containerInstance.addComponent(klass);
                     currentTestInstance = containerInstance.getComponent(klass);
                 }
                 catch (Exception e)
                 {
+                    e.printStackTrace();
                     throw new IzPackException(e);
                 }
             }
@@ -131,9 +130,10 @@ public class PicoRunner extends BlockJUnit4ClassRunner
         return currentTestInstance;
     }
 
-    private BindeableContainer getContainerInstance(Class<? extends BindeableContainer> containerClass) throws InvocationTargetException, IllegalAccessException, InstantiationException
+    private Container getContainerInstance(Class<? extends Container> containerClass)
+            throws InvocationTargetException, IllegalAccessException, InstantiationException
     {
-        Constructor<? extends BindeableContainer> constructor = getUniqueConstructor(containerClass);
+        Constructor<? extends Container> constructor = getUniqueConstructor(containerClass);
         if (constructor.getParameterTypes().length == 1)
         {
             return constructor.newInstance(klass);
@@ -145,13 +145,13 @@ public class PicoRunner extends BlockJUnit4ClassRunner
         return constructor.newInstance();
     }
 
-    private Constructor<? extends BindeableContainer> getUniqueConstructor(Class<? extends BindeableContainer> containerClass)
+    private Constructor<? extends Container> getUniqueConstructor(Class<? extends Container> containerClass)
     {
         Constructor<?>[] constructors = containerClass.getConstructors();
         if (constructors.length > 1)
         {
             throw new IllegalArgumentException("There should be only one constructor for " + containerClass);
         }
-        return (Constructor<? extends BindeableContainer>) constructors[0];
+        return (Constructor<? extends Container>) constructors[0];
     }
 }

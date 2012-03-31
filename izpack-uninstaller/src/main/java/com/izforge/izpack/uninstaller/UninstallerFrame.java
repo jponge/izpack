@@ -19,24 +19,6 @@
 
 package com.izforge.izpack.uninstaller;
 
-import com.izforge.izpack.api.container.BindeableContainer;
-import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.IconsDatabase;
-import com.izforge.izpack.util.Housekeeper;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -57,6 +39,25 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
+import com.izforge.izpack.api.container.Container;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.IconsDatabase;
+import com.izforge.izpack.util.Housekeeper;
 
 /**
  * The uninstaller frame class.
@@ -112,7 +113,7 @@ public class UninstallerFrame extends JFrame
     protected String installPath;
 
     private final Housekeeper housekeeper;
-    private final BindeableContainer container;
+    private final Container container;
 
     /**
      * The constructor.
@@ -121,7 +122,7 @@ public class UninstallerFrame extends JFrame
      * @param container   the container
      * @throws Exception Description of the Exception
      */
-    public UninstallerFrame(Housekeeper housekeeper, BindeableContainer container) throws Exception
+    public UninstallerFrame(Housekeeper housekeeper, Container container) throws Exception
     {
         super("IzPack - Uninstaller");
         this.housekeeper = housekeeper;
@@ -202,7 +203,7 @@ public class UninstallerFrame extends JFrame
         contentPane.add(warningLabel);
 
         targetDestroyCheckbox = new JCheckBox(langpack.getString("uninstaller.destroytarget")
-                + installPath, forceOptionState);
+                                                      + installPath, forceOptionState);
         buildConstraints(gbConstraints, 0, 1, 2, 1, 1.0, 0.0);
         layout.addLayoutComponent(targetDestroyCheckbox, gbConstraints);
         if (displayForceOption)
@@ -219,7 +220,7 @@ public class UninstallerFrame extends JFrame
         contentPane.add(progressBar);
 
         destroyButton = ButtonFactory.createButton(langpack.getString("uninstaller.uninstall"),
-                icons.get("delete"), buttonsHColor);
+                                                   icons.get("delete"), buttonsHColor);
         destroyButton.addActionListener(handler);
         buildConstraints(gbConstraints, 0, 3, 1, 1, 0.5, 0.0);
         gbConstraints.fill = GridBagConstraints.NONE;
@@ -247,7 +248,7 @@ public class UninstallerFrame extends JFrame
         Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
         Dimension frameSize = frame.getSize();
         frame.setLocation(center.x - frameSize.width / 2,
-                center.y - frameSize.height / 2 - 10);
+                          center.y - frameSize.height / 2 - 10);
     }
 
     /**
@@ -457,7 +458,7 @@ public class UninstallerFrame extends JFrame
         public boolean emitWarning(String title, String text)
         {
             return (JOptionPane.showConfirmDialog(null, text, title, JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION);
+                                                  JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION);
         }
 
         /**
@@ -519,7 +520,7 @@ public class UninstallerFrame extends JFrame
             }
 
             int user_choice = JOptionPane.showConfirmDialog(null, question, title,
-                    jo_choices, JOptionPane.QUESTION_MESSAGE);
+                                                            jo_choices, JOptionPane.QUESTION_MESSAGE);
 
             if (user_choice == JOptionPane.CANCEL_OPTION)
             {
@@ -565,7 +566,8 @@ public class UninstallerFrame extends JFrame
             {
                 destroyButton.setEnabled(false);
                 Destroyer destroyer = new Destroyer(installPath,
-                        targetDestroyCheckbox.isSelected(), new DestroyerHandler(), container);
+                                                    targetDestroyCheckbox.isSelected(), new DestroyerHandler(),
+                                                    container);
                 destroyer.start();
             }
         }

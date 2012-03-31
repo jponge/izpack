@@ -17,7 +17,7 @@
  */
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.factory.DefaultObjectFactory;
@@ -58,21 +58,23 @@ public class InstallerTargetPlatformFactoryTest
     @Before
     public void setUp() throws Exception
     {
-        BindeableContainer container = new AbstractContainer()
+        Container container = new AbstractContainer()
         {
-            @Override
-            public void fillContainer(MutablePicoContainer picoContainer)
             {
-                picoContainer.addComponent(Properties.class);
-                picoContainer.addComponent(ResourceManager.class);
-                picoContainer.addComponent(InstallData.class);
-                picoContainer.addComponent(TestLibrarian.class);
-                picoContainer.addComponent(Housekeeper.class);
-                picoContainer.addComponent(TargetFactory.class);
-                picoContainer.addComponent(DefaultTargetPlatformFactory.class);
+                initialise();
+            }
+            @Override
+            protected void fillContainer()
+            {
+                addComponent(Properties.class);
+                addComponent(ResourceManager.class);
+                addComponent(InstallData.class);
+                addComponent(TestLibrarian.class);
+                addComponent(Housekeeper.class);
+                addComponent(TargetFactory.class);
+                addComponent(DefaultTargetPlatformFactory.class);
             }
         };
-        container.initBindings();
         factory = new DefaultTargetPlatformFactory(new DefaultObjectFactory(container));
     }
 

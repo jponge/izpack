@@ -1,6 +1,7 @@
 package com.izforge.izpack.installer.container.impl;
 
 
+import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
 import com.izforge.izpack.installer.console.ConsoleInstaller;
 import com.izforge.izpack.installer.console.ConsolePrompt;
@@ -16,6 +17,30 @@ import org.picocontainer.injectors.ProviderAdapter;
  */
 public class ConsoleInstallerContainer extends InstallerContainer
 {
+
+    /**
+     * Constructs a <tt>ConsoleInstallerContainer</tt>.
+     *
+     * @throws ContainerException if initialisation fails
+     */
+    public ConsoleInstallerContainer()
+    {
+        initialise();
+    }
+
+    /**
+     * Constructs a <tt>ConsoleInstallerContainer</tt>.
+     * <p/>
+     * This constructor is provided for testing purposes.
+     *
+     * @param container the underlying container
+     * @throws ContainerException if initialisation fails
+     */
+    protected ConsoleInstallerContainer(MutablePicoContainer container)
+    {
+        initialise(container);
+    }
+
     /**
      * Registers components with the container.
      *

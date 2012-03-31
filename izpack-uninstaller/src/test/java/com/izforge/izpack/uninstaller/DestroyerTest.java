@@ -1,7 +1,14 @@
 package com.izforge.izpack.uninstaller;
 
-import com.izforge.izpack.api.container.BindeableContainer;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
@@ -9,10 +16,8 @@ import org.junit.internal.matchers.IsCollectionContaining;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
 
-import java.io.*;
-import java.util.ArrayList;
-
-import static org.hamcrest.MatcherAssert.assertThat;
+import com.izforge.izpack.api.container.Container;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 
 /**
  * Test destroyer
@@ -29,7 +34,7 @@ public class DestroyerTest
     public void testGetInstallFiles() throws Exception
     {
         Destroyer destroyer = new Destroyer("", false, Mockito.mock(AbstractUIProgressHandler.class),
-                Mockito.mock(BindeableContainer.class));
+                                            Mockito.mock(Container.class));
         ArrayList<File> files = createTestFiles();
         ArrayList<File> filesList = destroyer.readBufferForFileList(
                 new BufferedReader(

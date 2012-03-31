@@ -32,10 +32,10 @@ import com.izforge.izpack.util.OsVersion;
 /**
  * Test for an installation
  */
-
 @RunWith(PicoRunner.class)
 @Container(TestInstallationContainer.class)
-public class IzpackInstallationTest {
+public class IzpackInstallationTest
+{
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
     @Rule
@@ -48,7 +48,9 @@ public class IzpackInstallationTest {
     private GUIInstallData installData;
     private InstallerController installerController;
 
-    public IzpackInstallationTest(LanguageDialog languageDialog, InstallerFrame installerFrame, GUIInstallData installData, InstallerController installerController) {
+    public IzpackInstallationTest(LanguageDialog languageDialog, InstallerFrame installerFrame,
+                                  GUIInstallData installData, InstallerController installerController)
+    {
         this.installerController = installerController;
         this.languageDialog = languageDialog;
         this.installData = installData;
@@ -56,15 +58,20 @@ public class IzpackInstallationTest {
     }
 
     @After
-    public void tearBinding() throws NoSuchFieldException, IllegalAccessException {
-        try {
-            if (dialogFrameFixture != null) {
+    public void tearBinding() throws NoSuchFieldException, IllegalAccessException
+    {
+        try
+        {
+            if (dialogFrameFixture != null)
+            {
                 dialogFrameFixture.cleanUp();
                 dialogFrameFixture = null;
             }
         }
-        finally {
-            if (installerFrameFixture != null) {
+        finally
+        {
+            if (installerFrameFixture != null)
+            {
                 installerFrameFixture.cleanUp();
                 installerFrameFixture = null;
             }
@@ -73,14 +80,14 @@ public class IzpackInstallationTest {
 
     @Test
     @InstallFile("samples/izpack/install.xml")
-    public void testIzpackInstallation() throws Exception {
+    public void testIzpackInstallation() throws Exception
+    {
         File installPath = new File(temporaryFolder.getRoot(), "izpackTest");
 
         installData.setInstallPath(installPath.getAbsolutePath());
         HelperTestMethod.clickDefaultLang(dialogFrameFixture, languageDialog);
 
         installerFrameFixture = HelperTestMethod.prepareFrameFixture(installerFrame, installerController);
-        List panelList = installData.getPanels();
         // Hello panel
         Thread.sleep(600);
 //        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
@@ -112,7 +119,8 @@ public class IzpackInstallationTest {
 
         // Shortcut
         // Deselect shortcut creation
-        if (!OsVersion.IS_MAC) {
+        if (!OsVersion.IS_MAC)
+        {
             Thread.sleep(1000);
             installerFrameFixture.checkBox(GuiId.SHORTCUT_CREATE_CHECK_BOX.id).click();
             installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
@@ -122,15 +130,18 @@ public class IzpackInstallationTest {
 
         // Finish
         installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
-
-
     }
 
-    private void checkIzpackInstallation(File installPath) {
-        File[] files = installPath.listFiles();
+    private void checkIzpackInstallation(File installPath)
+    {
         List<String> paths = new ArrayList<String>();
-        for (File file : files) {
-            paths.add(file.getName());
+        File[] files = installPath.listFiles();
+        if (files != null)
+        {
+            for (File file : files)
+            {
+                paths.add(file.getName());
+            }
         }
         assertThat(paths, IsCollectionContaining.hasItems(
                 Is.is("src"),

@@ -21,11 +21,20 @@
 
 package com.izforge.izpack.core.rules;
 
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.UUID;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.XMLException;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
-import com.izforge.izpack.api.container.BindeableContainer;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.exception.IzPackException;
@@ -33,7 +42,6 @@ import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.ConditionReference;
 import com.izforge.izpack.api.rules.ConditionWithMultipleOperands;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.core.container.ConditionContainer;
 import com.izforge.izpack.core.rules.logic.AndCondition;
 import com.izforge.izpack.core.rules.logic.NotCondition;
 import com.izforge.izpack.core.rules.logic.OrCondition;
@@ -47,16 +55,6 @@ import com.izforge.izpack.core.rules.process.PackSelectionCondition;
 import com.izforge.izpack.core.rules.process.RefCondition;
 import com.izforge.izpack.core.rules.process.UserCondition;
 import com.izforge.izpack.core.rules.process.VariableCondition;
-
-import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.UUID;
-import java.util.logging.Logger;
 
 
 /**
@@ -80,7 +78,7 @@ public class RulesEngineImpl implements RulesEngine
     private final Set<ConditionReference> refConditions = new HashSet<ConditionReference>();
 
     private final AutomatedInstallData installData;
-    private final BindeableContainer container;
+    private final ConditionContainer container;
 
     private static final Logger logger = Logger.getLogger(RulesEngineImpl.class.getName());
 

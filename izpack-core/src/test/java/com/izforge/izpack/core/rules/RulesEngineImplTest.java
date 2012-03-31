@@ -1,12 +1,22 @@
 package com.izforge.izpack.core.rules;
 
 
+import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.core.container.ConditionContainer;
+import com.izforge.izpack.core.container.DefaultContainer;
 import com.izforge.izpack.core.rules.logic.AndCondition;
 import com.izforge.izpack.core.rules.logic.NotCondition;
 import com.izforge.izpack.core.rules.logic.OrCondition;
@@ -21,16 +31,6 @@ import com.izforge.izpack.core.rules.process.RefCondition;
 import com.izforge.izpack.core.rules.process.UserCondition;
 import com.izforge.izpack.core.rules.process.VariableCondition;
 import com.izforge.izpack.installer.data.InstallData;
-import org.junit.Before;
-import org.junit.Test;
-import org.picocontainer.DefaultPicoContainer;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import static junit.framework.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 
 public class RulesEngineImplTest
@@ -395,7 +395,7 @@ public class RulesEngineImplTest
     @Test
     public void testReadConditionTypes()
     {
-        DefaultPicoContainer parent = new DefaultPicoContainer();
+        DefaultContainer parent = new DefaultContainer();
         RulesEngine rules = new RulesEngineImpl(new ConditionContainer(parent));
         parent.addComponent(RulesEngine.class, rules);
         IXMLParser parser = new XMLParser();

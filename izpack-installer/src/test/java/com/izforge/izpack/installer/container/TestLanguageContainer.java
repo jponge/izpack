@@ -1,6 +1,6 @@
 package com.izforge.izpack.installer.container;
 
-import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
@@ -51,7 +51,7 @@ public class TestLanguageContainer extends AbstractContainer
                 .addComponent(Mockito.mock(PathResolver.class))
                 .addComponent(Mockito.mock(PanelManager.class))
                 .addComponent(DialogFixture.class, DialogFixture.class, new ComponentParameter(LanguageDialog.class))
-                .addComponent(BindeableContainer.class, this)
+                .addComponent(Container.class, this)
                 .as(Characteristics.USE_NAMES).addComponent(LanguageDialog.class)
                 .addConfig("frame", initFrame())
                 .addConfig("title", "testPanel");

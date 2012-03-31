@@ -1,8 +1,16 @@
 package com.izforge.izpack.compiler.container;
 
+import java.util.Map;
+import java.util.Properties;
+
+import org.mockito.Mockito;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.PicoException;
+
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
-import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
+import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.Compiler;
@@ -19,11 +27,6 @@ import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.compiler.resource.ResourceFinder;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.merge.MergeManager;
-import org.mockito.Mockito;
-import org.picocontainer.MutablePicoContainer;
-
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * Container for compiler test using mocks
@@ -34,13 +37,26 @@ public class TestCompilerContainerMock extends AbstractContainer
 {
 
     /**
-     * Init component bindings
+     * Constructs a <tt>TestCompilerContainerMock</tt>.
      *
-     * @param pico
+     * @throws ContainerException if initialisation fails
      */
-    public void fillContainer(MutablePicoContainer pico)
+    public TestCompilerContainerMock()
     {
-        pico
+        initialise();
+    }
+
+    /**
+     * Invoked by {@link #initialise} to fill the container.
+     *
+     * @param container the underlying container
+     * @throws ContainerException if initialisation fails
+     * @throws PicoException      for any PicoContainer error
+     */
+    @Override
+    protected void fillContainer(MutablePicoContainer container)
+    {
+        container
                 .addComponent(Mockito.mock(CliAnalyzer.class))
                 .addComponent(Mockito.mock(CmdlinePackagerListener.class))
                 .addComponent(Mockito.mock(Compiler.class))
@@ -57,14 +73,14 @@ public class TestCompilerContainerMock extends AbstractContainer
                 .addComponent(Mockito.mock(AssertionHelper.class))
                 .addComponent("mapStringListDyn", Mockito.mock(Map.class))
                 .addComponent("installFile", "installFile")
-                .addComponent(BindeableContainer.class, this)
+                .addComponent(Container.class, this)
                 .addComponent(CompilerConfig.class)
                 .addComponent(IzpackProjectInstaller.class)
                 .addComponent(XmlCompilerHelper.class)
                 .addComponent(XMLParser.class)
                 .addComponent(Properties.class)
-                ;
-        new ResolverContainerFiller().fillContainer(pico);
+        ;
+        new ResolverContainerFiller().fillContainer(this);
 
     }
 }

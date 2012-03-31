@@ -2,7 +2,7 @@ package com.izforge.izpack.installer.manager;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.api.container.BindeableContainer;
+import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.installer.DataValidator;
@@ -31,7 +31,7 @@ public class PanelManager
     /**
      * The installer container.
      */
-    private BindeableContainer installerContainer;
+    private Container installerContainer;
 
     /**
      * The factory for {@link DataValidator} and {@link PanelAction} instances.
@@ -54,7 +54,7 @@ public class PanelManager
      * @param installerContainer the installer container
      * @param factory            the factory for {@link DataValidator} instances
      */
-    public PanelManager(GUIInstallData installData, BindeableContainer installerContainer, ObjectFactory factory)
+    public PanelManager(GUIInstallData installData, Container installerContainer, ObjectFactory factory)
     {
         this.installData = installData;
         this.installerContainer = installerContainer;

@@ -2,7 +2,6 @@ package com.izforge.izpack.merge;
 
 import com.izforge.izpack.core.container.TestMergeContainer;
 import com.izforge.izpack.matcher.MergeMatcher;
-import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.merge.resolve.ResolveUtils;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.junit.PicoRunner;
@@ -24,12 +23,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class MergeManagerTest
 {
     private MergeManagerImpl mergeManager;
-    private PathResolver pathResolver;
 
-    public MergeManagerTest(MergeManagerImpl mergeManager, PathResolver pathResolver)
+    public MergeManagerTest(MergeManagerImpl mergeManager)
     {
         this.mergeManager = mergeManager;
-        this.pathResolver = pathResolver;
     }
 
     @Test
@@ -52,7 +49,8 @@ public class MergeManagerTest
     public void testAddResourceToMerge() throws Exception
     {
         mergeManager.addResourceToMerge("com/izforge/izpack/merge/");
-        assertThat(mergeManager, MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/merge/MergeManager.class"));
+        assertThat(mergeManager,
+                   MergeMatcher.isMergeableContainingFiles("com/izforge/izpack/merge/MergeManager.class"));
     }
 
     @Test

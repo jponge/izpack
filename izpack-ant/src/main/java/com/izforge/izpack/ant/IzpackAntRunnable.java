@@ -1,14 +1,15 @@
 package com.izforge.izpack.ant;
 
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Properties;
+
+import org.apache.tools.ant.BuildException;
+
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
-import org.apache.tools.ant.BuildException;
-
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Properties;
 
 /**
  * @author Anthonin Bonnefoy
@@ -21,9 +22,12 @@ public class IzpackAntRunnable implements Runnable
     private final Boolean inheritAll;
     private Hashtable projectProps;
 
-    public IzpackAntRunnable(String compression, String kind, String input, String configText, String basedir, String output, boolean mkdirs, int compressionLevel, Properties properties, Boolean inheritAll, Hashtable antProjectProperties, String izPackDir)
+    public IzpackAntRunnable(String compression, String kind, String input, String configText, String basedir,
+                             String output, boolean mkdirs, int compressionLevel, Properties properties,
+                             Boolean inheritAll, Hashtable antProjectProperties, String izPackDir)
     {
-        this.compilerData = new CompilerData(compression, kind, input, configText, basedir, output, mkdirs, compressionLevel);
+        this.compilerData = new CompilerData(compression, kind, input, configText, basedir, output, mkdirs,
+                                             compressionLevel);
         this.input = input;
         this.properties = properties;
         this.inheritAll = inheritAll;
@@ -36,7 +40,6 @@ public class IzpackAntRunnable implements Runnable
     public void run()
     {
         CompilerContainer compilerContainer = new CompilerContainer();
-        compilerContainer.initBindings();
         compilerContainer.addConfig("installFile", input);
         compilerContainer.addComponent(CompilerData.class, compilerData);
 

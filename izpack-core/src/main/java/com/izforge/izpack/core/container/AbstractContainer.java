@@ -1,70 +1,213 @@
 package com.izforge.izpack.core.container;
 
-import com.izforge.izpack.api.container.BindeableContainer;
-import com.izforge.izpack.api.container.DependenciesFillerContainer;
-import com.izforge.izpack.api.exception.IzPackClassNotFoundException;
-import com.izforge.izpack.api.exception.IzPackException;
 import org.picocontainer.Characteristics;
 import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.Parameter;
 import org.picocontainer.PicoBuilder;
+import org.picocontainer.PicoException;
+
+import com.izforge.izpack.api.container.Container;
+import com.izforge.izpack.api.exception.ContainerException;
+import com.izforge.izpack.api.exception.IzPackClassNotFoundException;
+import com.izforge.izpack.api.exception.IzPackException;
+
 
 /**
- * Abstract container for commons methods
+ * Abstract implementation of the {@link Container} interface.
+ *
+ * @author Anthonin Bonnefoy
+ * @author Tim Anderson
  */
-public abstract class AbstractContainer implements BindeableContainer, DependenciesFillerContainer
+public abstract class AbstractContainer implements Container
 {
 
-    protected MutablePicoContainer pico;
+    /**
+     * The underlying container.
+     */
+    private MutablePicoContainer container;
+
 
     /**
-     * Init component bindings
+     * Constructs an <tt>AbstractContainer</tt>.
+     * <p/>
+     * The container must be initialised via {@link #initialise()} before use.
      */
-    public void initBindings() throws IzPackException
+    public AbstractContainer()
     {
-        pico = new PicoBuilder().withConstructorInjection().withCaching().build();
-        fillContainer(pico);
+        this(null);
     }
 
+    /**
+     * Constructs an <tt>AbstractContainer</tt>.
+     * <p/>
+     * If a container is provided, {@link #initialise(MutablePicoContainer)} will be invoked. Subclasses should only
+     * provide a container if they don't require their constructor to complete before <tt>initialise</tt> is called.
+     *
+     * @param container the underlying container. May be <tt>null</tt>
+     * @throws ContainerException if initialisation fails
+     */
+    public AbstractContainer(MutablePicoContainer container)
+    {
+        if (container != null)
+        {
+            initialise(container);
+        }
+    }
+
+    /**
+     * Register a component type.
+     *
+     * @param componentType the component type
+     * @throws ContainerException if registration fails
+     */
+    @Override
     public <T> void addComponent(Class<T> componentType)
     {
-        pico.as(Characteristics.USE_NAMES).addComponent(componentType);
+        try
+        {
+            container.as(Characteristics.USE_NAMES).addComponent(componentType);
+        }
+        catch (PicoException exception)
+        {
+            throw new ContainerException(exception);
+        }
     }
 
-    public void addComponent(Object componentType, Object implementation, Parameter... parameters)
+    /**
+     * Register a component.
+     *
+     * @param componentKey   the component identifier. This must be unique within the container
+     * @param implementation the component implementation
+     * @throws ContainerException if registration fails
+     */
+    @Override
+    public void addComponent(Object componentKey, Object implementation)
     {
-        pico.addComponent(componentType, implementation, parameters);
+        try
+        {
+            container.addComponent(componentKey, implementation);
+        }
+        catch (PicoException exception)
+        {
+            throw new ContainerException(exception);
+        }
     }
 
+    /**
+     * Retrieve a component by its component type.
+     * <p/>
+     * If the component type is registered but an instance does not exist, then it will be created.
+     *
+     * @param componentType the type of the component
+     * @return the corresponding object instance, or <tt>null</tt> if it does not exist
+     * @throws ContainerException if component creation fails
+     */
+    @Override
     public <T> T getComponent(Class<T> componentType)
     {
-        return pico.getComponent(componentType);
+        try
+        {
+            return container.getComponent(componentType);
+        }
+        catch (PicoException exception)
+        {
+            throw new ContainerException(exception);
+        }
     }
 
+    /**
+     * Retrieve a component by its component key or type.
+     * <p/>
+     * If the component type is registered but an instance does not exist, then it will be created.
+     *
+     * @param componentKeyOrType the key or type of the component
+     * @return the corresponding object instance, or <tt>null</tt> if it does not exist
+     * @throws ContainerException if component creation fails
+     */
+    @Override
     public Object getComponent(Object componentKeyOrType)
     {
-        return pico.getComponent(componentKeyOrType);
+        try
+        {
+            return container.getComponent(componentKeyOrType);
+        }
+        catch (PicoException exception)
+        {
+            throw new ContainerException(exception);
+        }
     }
 
-    public void addConfig(String name, Object val)
+    /**
+     * Register a config item.
+     *
+     * @param name  the name of the config item
+     * @param value the value of the config item
+     * @throws ContainerException if registration fails
+     */
+    public void addConfig(String name, Object value)
     {
-        pico.addConfig(name, val);
+        try
+        {
+            container.addConfig(name, value);
+        }
+        catch (IzPackException exception)
+        {
+            throw new ContainerException(exception);
+        }
     }
 
+    /**
+     * Creates a child container.
+     * <p/>
+     * A child container:
+     * <ul>
+     * <li>may have different objects keyed on the same identifiers as its parent.</li>
+     * <li>will query its parent for dependencies if they aren't available</li>
+     * <li>is disposed when its parent is disposed</li>
+     * </ul>
+     *
+     * @return a new container
+     * @throws ContainerException if creation fails
+     */
+    @Override
+    public Container createChildContainer()
+    {
+        try
+        {
+            // TODO - dispose() won't be invoked on the Container, just the MutablePicoContainer.
+            // not an issue for now
+            return new ChildContainer(container);
+        }
+        catch (PicoException exception)
+        {
+            throw new ContainerException(exception);
+        }
+    }
+
+    /**
+     * Removes a child container.
+     *
+     * @param child the container to remove
+     * @return <tt>true</tt> if the container was removed
+     */
+    @Override
+    public boolean removeChildContainer(Container child)
+    {
+        boolean removed = false;
+        if (child instanceof AbstractContainer)
+        {
+            removed = container.removeChildContainer(((AbstractContainer) child).container);
+        }
+        return removed;
+    }
+
+
+    /**
+     * Disposes of the container and all of its child containers.
+     */
+    @Override
     public void dispose()
     {
-        pico.dispose();
-    }
-
-    @Override
-    public MutablePicoContainer makeChildContainer()
-    {
-        return pico.makeChildContainer();
-    }
-
-    public MutablePicoContainer getContainer()
-    {
-        return pico;
+        container.dispose();
     }
 
     /**
@@ -98,6 +241,118 @@ public abstract class AbstractContainer implements BindeableContainer, Dependenc
             throw new IzPackClassNotFoundException(className, exception);
         }
         return (Class<T>) type;
+    }
+
+    /**
+     * Initialises the container.
+     * <p/>
+     * This must only be invoked once.
+     *
+     * @throws ContainerException if initialisation fails, or the container has already been initialised
+     */
+    protected void initialise()
+    {
+        initialise(createContainer());
+    }
+
+    /**
+     * Initialises the container.
+     * <p/>
+     * This must only be invoked once.
+     *
+     * @param container the container
+     * @throws ContainerException if initialisation fails, or the container has already been initialised
+     */
+    protected void initialise(MutablePicoContainer container)
+    {
+        if (this.container != null)
+        {
+            throw new ContainerException("Container already initialised");
+        }
+        this.container = container;
+        try
+        {
+            fillContainer(container);
+        }
+        catch (ContainerException exception)
+        {
+            throw exception;
+        }
+        catch (Exception exception)
+        {
+            throw new ContainerException(exception);
+        }
+    }
+
+    /**
+     * Invoked by {@link #initialise} to fill the container.
+     * <p/>
+     * This exposes the underlying <tt>PicoContainer</tt> to enable subclasses to perform complex initialisation.
+     * <p/>
+     * For convenience, implementations are permitted to throw <tt>PicoException</tt> - these
+     * will be rethrown as {@link ContainerException}.
+     * <p/>
+     * This implementation delegates to {@link #fillContainer()}.
+     *
+     * @param container the underlying container
+     * @throws ContainerException if initialisation fails
+     * @throws PicoException      for any PicoContainer error
+     */
+    protected void fillContainer(MutablePicoContainer container)
+    {
+        fillContainer();
+    }
+
+    /**
+     * Invoked by {@link #initialise} to fill the container.
+     * <p/>
+     * This implementation is a no-op.
+     * <p/>
+     * For convenience, implementations are permitted to throw <tt>PicoException</tt> - these
+     * will be rethrown as {@link ContainerException}.
+     *
+     * @throws ContainerException if initialisation fails
+     * @throws PicoException      for any PicoContainer error
+     */
+    protected void fillContainer()
+    {
+    }
+
+    /**
+     * Returns the underlying container.
+     *
+     * @return the underlying container, or <tt>null</tt> if {@link #initialise} hasn't been invoked
+     */
+    protected MutablePicoContainer getContainer()
+    {
+        return container;
+    }
+
+    /**
+     * Creates a new container.
+     *
+     * @return a new container
+     */
+    protected MutablePicoContainer createContainer()
+    {
+        return new PicoBuilder().withConstructorInjection().withCaching().build();
+    }
+
+    /**
+     * Concrete container used by {@link #createChildContainer()}.
+     */
+    private static class ChildContainer extends AbstractContainer
+    {
+
+        /**
+         * Constructs a ChildContainer.
+         *
+         * @param parent the parent container
+         */
+        public ChildContainer(MutablePicoContainer parent)
+        {
+            super(parent.makeChildContainer());
+        }
     }
 
 }

@@ -1,10 +1,8 @@
 package org.izpack.mojo;
 
-import com.izforge.izpack.api.data.Info;
-import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
-import com.izforge.izpack.compiler.CompilerConfig;
-import com.izforge.izpack.compiler.container.CompilerContainer;
-import com.izforge.izpack.compiler.data.*;
+import java.io.File;
+import java.util.List;
+import java.util.Properties;
 
 import org.apache.maven.model.Developer;
 import org.apache.maven.plugin.AbstractMojo;
@@ -13,8 +11,12 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 
-import java.io.File;
-import java.util.*;
+import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
+import com.izforge.izpack.compiler.CompilerConfig;
+import com.izforge.izpack.compiler.container.CompilerContainer;
+import com.izforge.izpack.compiler.data.CompilerData;
+import com.izforge.izpack.compiler.data.PropertyManager;
 
 /**
  * Mojo for izpack
@@ -162,9 +164,8 @@ public class IzPackNewMojo extends AbstractMojo
     {
         File jarFile = getJarFile();
 
-        CompilerData compilerData = initCompilerData( jarFile );
+        CompilerData compilerData = initCompilerData(jarFile);
         CompilerContainer compilerContainer = new CompilerContainer();
-        compilerContainer.initBindings();
         compilerContainer.addConfig("installFile", installFile);
         compilerContainer.getComponent(IzpackProjectInstaller.class);
         compilerContainer.addComponent(CompilerData.class, compilerData);
@@ -217,15 +218,15 @@ public class IzPackNewMojo extends AbstractMojo
         }
         else
         {
-          if ( classifier == null || classifier.trim().isEmpty())
-          {
-              classifier = "";
-          }
-          else if ( !classifier.startsWith( "-" ) )
-          {
-              classifier = "-" + classifier;
-          }
-          file = new File( outputDirectory, finalName + classifier + ".jar" );
+            if (classifier == null || classifier.trim().isEmpty())
+            {
+                classifier = "";
+            }
+            else if (!classifier.startsWith("-"))
+            {
+                classifier = "-" + classifier;
+            }
+            file = new File(outputDirectory, finalName + classifier + ".jar");
         }
 
         return file;
@@ -273,7 +274,7 @@ public class IzPackNewMojo extends AbstractMojo
             }
         }
         return new CompilerData(comprFormat, kind, installFile, null, baseDir, jarFile.getPath(),
-                mkdirs, comprLevel, info);
+                                mkdirs, comprLevel, info);
     }
 
 }
