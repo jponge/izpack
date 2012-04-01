@@ -1,15 +1,5 @@
 package com.izforge.izpack.installer.data;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.merge.Mergeable;
-import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.data.CustomData;
-import com.izforge.izpack.data.ExecutableFile;
-import com.izforge.izpack.merge.resolve.PathResolver;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.file.FileUtils;
-
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -27,6 +17,16 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.merge.Mergeable;
+import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.data.CustomData;
+import com.izforge.izpack.data.ExecutableFile;
+import com.izforge.izpack.merge.resolve.PathResolver;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.file.FileUtils;
 
 /**
  * Writes uninstall data to an executable jar file.
@@ -237,11 +237,11 @@ public class UninstallDataWriter
 
             if (rules.isConditionTrue("izpack.windowsinstall"))
             {
-                writeResource("com/izforge/izpack/installer/elevate.js");
+                writeResource("com/izforge/izpack/util/windows/elevate.js");
             }
             if (rules.isConditionTrue("izpack.macinstall"))
             {
-                writeResource("com/izforge/izpack/installer/run-with-privileges-on-osx");
+                writeResource("com/izforge/izpack/util/mac/run-with-privileges-on-osx");
             }
         }
 

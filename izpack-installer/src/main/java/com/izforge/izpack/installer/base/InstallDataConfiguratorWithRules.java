@@ -1,13 +1,14 @@
 package com.izforge.izpack.installer.base;
 
+import javax.swing.JOptionPane;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.util.FileUtil;
+import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.PrivilegedRunner;
-
-import javax.swing.*;
 
 /**
  * Configure rules engine and install data after initialization
@@ -17,14 +18,35 @@ import javax.swing.*;
 public class InstallDataConfiguratorWithRules
 {
 
+    /**
+     * The installation data.
+     */
     private AutomatedInstallData installData;
 
+    /**
+     * The rules.
+     */
     private RulesEngine rules;
 
-    public InstallDataConfiguratorWithRules(AutomatedInstallData installData, RulesEngine rules)
+    /**
+     * The current platform.
+     */
+    private Platform platform;
+
+
+    /**
+     * Constructs an <tt>InstallDataConfiguratorWithRules</tt>.
+     *
+     * @param installData the installation data
+     * @param rules       the rules
+     * @param platform    the current platform
+     */
+    public InstallDataConfiguratorWithRules(AutomatedInstallData installData, RulesEngine rules,
+                                            Platform platform)
     {
         this.installData = installData;
         this.rules = rules;
+        this.platform = platform;
     }
 
 
@@ -45,7 +67,7 @@ public class InstallDataConfiguratorWithRules
             {
                 shouldElevate = rules.getCondition(conditionId).isTrue();
             }
-            PrivilegedRunner runner = new PrivilegedRunner(!shouldElevate);
+            PrivilegedRunner runner = new PrivilegedRunner(platform, !shouldElevate);
             if (runner.isPlatformSupported() && runner.isElevationNeeded())
             {
                 try
@@ -63,8 +85,9 @@ public class InstallDataConfiguratorWithRules
                 catch (Exception e)
                 {
                     e.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "The installer could not launch itself with administrator permissions.\n" +
-                            "The installation will still continue but you may encounter problems due to insufficient permissions.");
+                    JOptionPane.showMessageDialog(null,
+                                                  "The installer could not launch itself with administrator permissions.\n" +
+                                                          "The installation will still continue but you may encounter problems due to insufficient permissions.");
                 }
             }
             else if (!runner.isPlatformSupported())

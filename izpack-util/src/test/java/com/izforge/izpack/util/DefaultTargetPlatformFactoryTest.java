@@ -17,14 +17,18 @@
  */
 package com.izforge.izpack.util;
 
-import org.junit.Test;
-
-import java.net.URL;
-
 import static com.izforge.izpack.util.Platform.Arch;
 import static com.izforge.izpack.util.Platform.Name;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
+import java.net.URL;
+
+import org.junit.Test;
+
+import com.izforge.izpack.api.exception.IzPackClassNotFoundException;
+import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.api.factory.ObjectFactory;
 
 /**
  * Tests the {@link DefaultTargetPlatformFactory} class.
@@ -40,11 +44,16 @@ public class DefaultTargetPlatformFactoryTest
     @Test
     public void testParser()
     {
-        DefaultTargetPlatformFactory factory = new DefaultTargetPlatformFactory() {
+        Platforms platforms = new Platforms();
+        Platform platform = platforms.getCurrentPlatform();
+        DefaultTargetPlatformFactory factory = new DefaultTargetPlatformFactory(
+                NoDependencyInjectionFactory.INSTANCE, platform, platforms)
+        {
             @Override
             protected Parser createParser(Platforms platforms, URL url)
             {
-                return new Parser(platforms, url) {
+                return new Parser(platforms, url)
+                {
                     @Override
                     protected void warning(String message)
                     {
@@ -59,9 +68,10 @@ public class DefaultTargetPlatformFactoryTest
         assertEquals(DefaultA.class.getName(), implementations.getDefault());
 
         assertEquals(8, implementations.getPlatforms().size());
-        
-        for (Platform platform: implementations.getPlatforms()) {
-            System.err.println(platform + "=" + implementations.getImplementation(platform));
+
+        for (Platform p : implementations.getPlatforms())
+        {
+            System.err.println(p + "=" + implementations.getImplementation(p));
         }
         assertEquals(WinA.class.getName(), implementations.getImplementation(Platforms.WINDOWS));
         assertEquals(WinX86.class.getName(), implementations.getImplementation(new Platform(Name.WINDOWS, Arch.X86)));
@@ -82,7 +92,10 @@ public class DefaultTargetPlatformFactoryTest
     @Test
     public void testCreate() throws Exception
     {
-        TargetPlatformFactory factory = new DefaultTargetPlatformFactory();
+        Platforms platforms = new Platforms();
+        Platform platform = platforms.getCurrentPlatform();
+        TargetPlatformFactory factory = new DefaultTargetPlatformFactory(
+                NoDependencyInjectionFactory.INSTANCE, platform, platforms);
 
         assertEquals(WinA.class, factory.create(A.class, Platforms.WINDOWS).getClass());
 
@@ -166,6 +179,63 @@ public class DefaultTargetPlatformFactoryTest
 
     public static class DefaultA implements A
     {
+    }
+
+    private static class NoDependencyInjectionFactory implements ObjectFactory
+    {
+        /**
+         * The singleton instance.
+         */
+        public static ObjectFactory INSTANCE = new NoDependencyInjectionFactory();
+
+        /**
+         * Creates a new instance of the specified type.
+         *
+         * @param type the object type
+         * @return a new instance
+         */
+        @Override
+        public <T> T create(Class<T> type)
+        {
+            try
+            {
+                return type.newInstance();
+            }
+            catch (Exception exception)
+            {
+                throw new IzPackException(exception);
+            }
+        }
+
+        /**
+         * Creates a new instance of the specified class name.
+         *
+         * @param className the class name
+         * @param superType the super type
+         * @return a new instance
+         * @throws ClassCastException           if <tt>className</tt> does not implement or extend <tt>superType</tt>
+         * @throws IzPackClassNotFoundException if the class cannot be found
+         */
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> T create(String className, Class<T> superType)
+        {
+            Class type;
+            try
+            {
+                type = superType.getClassLoader().loadClass(className);
+                if (!superType.isAssignableFrom(type))
+                {
+                    throw new ClassCastException("Class '" + type.getName() + "' does not implement "
+                                                         + superType.getName());
+                }
+            }
+            catch (ClassNotFoundException exception)
+            {
+                throw new IzPackClassNotFoundException(className, exception);
+            }
+            return create((Class<T>) type);
+        }
     }
 
 }

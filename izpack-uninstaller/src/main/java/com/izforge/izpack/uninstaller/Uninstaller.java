@@ -31,6 +31,8 @@ import javax.swing.UIManager;
 
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.Platform;
+import com.izforge.izpack.util.Platforms;
 import com.izforge.izpack.util.PrivilegedRunner;
 import com.izforge.izpack.util.SelfModifier;
 
@@ -60,9 +62,11 @@ public class Uninstaller
     public static void main(String[] args)
     {
         // relaunch the uninstaller with elevated permissions if required
-        if (!PrivilegedRunner.isPrivilegedMode() && isElevationRequired())
+        Platform platform = new Platforms().getCurrentPlatform();
+
+        if (!PrivilegedRunner.isPrivilegedMode() && isElevationRequired(platform))
         {
-            if (relaunchWithElevatedRights())
+            if (relaunchWithElevatedRights(platform))
             {
                 System.exit(0);
             }
@@ -175,12 +179,13 @@ public class Uninstaller
     /**
      * Attempts to relaunch the uninstaller with elevated permissions.
      *
+     * @param platform the current platform
      * @return <tt>true</tt> if the relaunch was successful, otherwise <tt>false</tt>
      */
-    private static boolean relaunchWithElevatedRights()
+    private static boolean relaunchWithElevatedRights(Platform platform)
     {
         boolean result = false;
-        PrivilegedRunner runner = new PrivilegedRunner();
+        PrivilegedRunner runner = new PrivilegedRunner(platform);
         if (runner.isPlatformSupported())
         {
             try
@@ -218,16 +223,17 @@ public class Uninstaller
      * <li>the current user doesn't have permission to write to the install path</li>
      * </ul>
      *
+     * @param platform the current platform
      * @return <tt>true</tt> if elevation is needed
      * @throws IzPackException if the installation path cannot be determined
      */
-    private static boolean isElevationRequired()
+    private static boolean isElevationRequired(Platform platform)
     {
         boolean result = false;
         if (Uninstaller.class.getResource(EXEC_ADMIN) != null)
         {
             String path = getInstallPath();
-            PrivilegedRunner runner = new PrivilegedRunner();
+            PrivilegedRunner runner = new PrivilegedRunner(platform);
             result = runner.isElevationNeeded(path);
         }
         return result;

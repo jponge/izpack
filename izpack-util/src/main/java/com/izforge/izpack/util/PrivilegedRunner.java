@@ -21,6 +21,10 @@
 
 package com.izforge.izpack.util;
 
+import static com.izforge.izpack.util.Platform.Name.MAC_OSX;
+import static com.izforge.izpack.util.Platform.Name.UNIX;
+import static com.izforge.izpack.util.Platform.Name.WINDOWS;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,41 +33,54 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class is responsible for allowing the installer to re-launch itself with administrator permissions.
  * The way of achieving this greatly varies among the platforms. The JDK classes are of not help here as there
  * is no way to tell a JVM to run as a different user but to launch a new one.
- * <p>
- * TODO - this class has an implicit dependency on izpack-installer as it requires
- * <em>/com/izforge/izpack/installer/elevate.js</em> and
- * <em>/com/izforge/izpack/installer/run-with-privileges-on-osx</em>
- * </p>
  *
  * @author Julien Ponge
  */
 public class PrivilegedRunner
 {
+
+    /**
+     * The current platform.
+     */
+    private final Platform platform;
+
     /**
      * Determines if elevation should be vetoed.
      */
     private boolean vetoed;
 
     /**
-     * Builds a default privileged runner.
+     * The logger.
      */
-    public PrivilegedRunner()
+    private static final Logger logger = Logger.getLogger(PrivilegedRunner.class.getName());
+
+
+    /**
+     * Builds a default privileged runner.
+     *
+     * @param platform the current platform
+     */
+    public PrivilegedRunner(Platform platform)
     {
-        this(false);
+        this(platform, false);
     }
 
     /**
      * Builds a privileged runner with a vetoing parameter.
      *
-     * @param vetoed should the elevation be vetoed?
+     * @param platform the current platform
+     * @param vetoed   should the elevation be vetoed?
      */
-    public PrivilegedRunner(boolean vetoed)
+    public PrivilegedRunner(Platform platform, boolean vetoed)
     {
+        this.platform = platform;
         this.vetoed = vetoed;
     }
 
@@ -84,7 +101,7 @@ public class PrivilegedRunner
      */
     public boolean isPlatformSupported()
     {
-        return OsVersion.IS_MAC || OsVersion.IS_UNIX || OsVersion.IS_WINDOWS;
+        return platform.isA(UNIX) || platform.isA(WINDOWS);
     }
 
     /**
@@ -108,7 +125,7 @@ public class PrivilegedRunner
         boolean result = false;
         if (!vetoed)
         {
-            if (OsVersion.IS_WINDOWS)
+            if (platform.isA(WINDOWS))
             {
                 if (path == null || path.trim().length() == 0)
                 {
@@ -147,18 +164,24 @@ public class PrivilegedRunner
         return builder.start().waitFor();
     }
 
-    private List<String> getElevator(String javaCommand, String installer) throws IOException, InterruptedException
+    public static boolean isPrivilegedMode()
+    {
+        return "privileged".equals(System.getenv("izpack.mode")) || "privileged".equals(
+                System.getProperty("izpack.mode"));
+    }
+
+    protected List<String> getElevator(String javaCommand, String installer) throws IOException
     {
         List<String> elevator = new ArrayList<String>();
 
-        if (OsVersion.IS_OSX)
+        if (platform.isA(MAC_OSX))
         {
             elevator.add(extractMacElevator().getCanonicalPath());
             elevator.add(javaCommand);
             elevator.add("-jar");
             elevator.add(installer);
         }
-        else if (OsVersion.IS_UNIX)
+        else if (platform.isA(UNIX))
         {
             elevator.add("xterm");
             elevator.add("-title");
@@ -169,7 +192,7 @@ public class PrivilegedRunner
             elevator.add("-jar");
             elevator.add(installer);
         }
-        else if (OsVersion.IS_WINDOWS)
+        else if (platform.isA(WINDOWS))
         {
             elevator.add("wscript");
             elevator.add(extractVistaElevator().getCanonicalPath());
@@ -182,13 +205,13 @@ public class PrivilegedRunner
         return elevator;
     }
 
-    private File extractVistaElevator() throws IOException
+    protected File extractVistaElevator() throws IOException
     {
         String path = System.getProperty("java.io.tmpdir") + File.separator + "Installer.js";
         File elevator = new File(path);
 
         FileOutputStream out = new FileOutputStream(elevator);
-        InputStream in = getClass().getResourceAsStream("/com/izforge/izpack/installer/elevate.js");
+        InputStream in = getClass().getResourceAsStream("/com/izforge/izpack/util/windows/elevate.js");
         copyStream(out, in);
         in.close();
         out.close();
@@ -197,26 +220,24 @@ public class PrivilegedRunner
         return elevator;
     }
 
-    private File extractMacElevator() throws IOException, InterruptedException
+    protected File extractMacElevator() throws IOException
     {
         String path = System.getProperty("java.io.tmpdir") + File.separator + "Installer";
         File elevator = new File(path);
 
         FileOutputStream out = new FileOutputStream(elevator);
-        InputStream in = getClass().getResourceAsStream("/com/izforge/izpack/installer/run-with-privileges-on-osx");
+        InputStream in = getClass().getResourceAsStream("/com/izforge/izpack/util/mac/run-with-privileges-on-osx");
         copyStream(out, in);
         in.close();
         out.close();
 
-        makeExecutable(path);
+        if (!elevator.setExecutable(true))
+        {
+            throw new IOException("Failed to set execute permission on " + path);
+        }
 
         elevator.deleteOnExit();
         return elevator;
-    }
-
-    private void makeExecutable(String path) throws InterruptedException, IOException
-    {
-        new ProcessBuilder("/bin/chmod", "+x", path).start().waitFor();
     }
 
     private void copyStream(OutputStream out, InputStream in) throws IOException
@@ -242,19 +263,14 @@ public class PrivilegedRunner
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            logger.log(Level.INFO, e.getMessage(), e);
         }
         return null;
     }
 
     private String getJavaCommand()
     {
-        return new StringBuilder(System.getProperty("java.home"))
-                .append(File.separator)
-                .append("bin")
-                .append(File.separator)
-                .append(getJavaExecutable())
-                .toString();
+        return System.getProperty("java.home") + File.separator + "bin" + File.separator + getJavaExecutable();
     }
 
     private String getJavaExecutable()
@@ -267,11 +283,6 @@ public class PrivilegedRunner
         {
             return "java";
         }
-    }
-
-    public static boolean isPrivilegedMode()
-    {
-        return "privileged".equals(System.getenv("izpack.mode")) || "privileged".equals(System.getProperty("izpack.mode"));
     }
 
     /**

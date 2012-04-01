@@ -29,19 +29,16 @@
  * http://blogs.msdn.com/cjacks/archive/2007/02/19/mapped-network-drives-with-uac-on-windows-vista.aspx
  */
 
-function getUniversalPath(path)
-{
+function getUniversalPath(path) {
     var file = fso.GetFile(path);
 
     var absPath = file.path;
-    if (absPath.substring(1, 2) != ":")
-    {
+    if (absPath.substring(1, 2) != ":") {
         return absPath;
     }
 
     var shareName = file.Drive.ShareName;
-    if (!shareName)
-    {
+    if (!shareName) {
         return absPath;
     }
 
@@ -53,17 +50,14 @@ var Shell = new ActiveXObject("Shell.Application");
 var Application = WScript.Arguments(0);
 
 var Arguments = "";
-for (var Index = 1; Index < WScript.Arguments.Length; Index += 1)
-{
-    if (Index > 1)
-    {
+for (var Index = 1; Index < WScript.Arguments.Length; Index += 1) {
+    if (Index > 1) {
         Arguments += " ";
     }
 
     var Arg = WScript.Arguments(Index);
 
-    if (Index > 1 && WScript.Arguments(Index - 1) == "-jar")
-    {
+    if (Index > 1 && WScript.Arguments(Index - 1) == "-jar") {
         // If the JAR file is on a mapped network drive, we have to convert it's path to UNC.
         Arg = getUniversalPath(Arg);
     }

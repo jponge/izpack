@@ -31,6 +31,7 @@ import com.izforge.izpack.test.RunOn;
 import com.izforge.izpack.test.junit.PicoRunner;
 import com.izforge.izpack.test.util.TestConsole;
 import com.izforge.izpack.util.FileUtil;
+import com.izforge.izpack.util.Platforms;
 import com.izforge.izpack.util.PrivilegedRunner;
 
 
@@ -111,7 +112,7 @@ public class WindowsConsoleInstallationTest extends AbstractConsoleInstallationT
     public void setUp() throws Exception
     {
         assertFalse("This test must be run as administrator, or with Windows UAC turned off",
-                    new PrivilegedRunner().isElevationNeeded());
+                    new PrivilegedRunner(Platforms.WINDOWS).isElevationNeeded());
         super.setUp();
         String appName = getInstallData().getInfo().getAppName();
         assertNotNull(appName);

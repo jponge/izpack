@@ -13,6 +13,7 @@ import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
+import com.izforge.izpack.core.container.PlatformProvider;
 import com.izforge.izpack.core.factory.DefaultObjectFactory;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.rules.ConditionContainer;
@@ -34,6 +35,7 @@ import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.util.DefaultTargetPlatformFactory;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.Librarian;
+import com.izforge.izpack.util.Platforms;
 import com.izforge.izpack.util.TargetFactory;
 
 /**
@@ -66,6 +68,8 @@ public abstract class InstallerContainer extends AbstractContainer
     protected void registerComponents(MutablePicoContainer pico)
     {
         pico.addAdapter(new ProviderAdapter(new RulesProvider()));
+        pico.addAdapter(new ProviderAdapter(new PlatformProvider()));
+
         addComponent(InstallDataConfiguratorWithRules.class);
         addComponent(InstallerRequirementChecker.class);
         addComponent(JavaVersionChecker.class);
@@ -91,6 +95,7 @@ public abstract class InstallerContainer extends AbstractContainer
         addComponent(DefaultObjectFactory.class);
         addComponent(PathResolver.class);
         addComponent(MergeableResolver.class);
+        addComponent(Platforms.class);
     }
 
     /**

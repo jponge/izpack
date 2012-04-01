@@ -1,11 +1,14 @@
 package com.izforge.izpack.util.os;
 
+import java.io.File;
+
+import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.util.DefaultTargetPlatformFactory;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.Librarian;
+import com.izforge.izpack.util.Platform;
+import com.izforge.izpack.util.Platforms;
 import com.izforge.izpack.util.TargetFactory;
-
-import java.io.File;
 
 public class WinSetupAPIMain
 {
@@ -29,7 +32,24 @@ public class WinSetupAPIMain
 
             try
             {
-                Librarian librarian = new Librarian(new TargetFactory(new DefaultTargetPlatformFactory()), new Housekeeper());
+                ObjectFactory dummy = new ObjectFactory()
+                {
+                    @Override
+                    public <T> T create(Class<T> type)
+                    {
+                        return null;
+                    }
+
+                    @Override
+                    public <T> T create(String className, Class<T> superType)
+                    {
+                        return null;
+                    }
+                };
+                Platforms platforms = new Platforms();
+                Platform platform = platforms.getCurrentPlatform();
+                TargetFactory factory = new TargetFactory(new DefaultTargetPlatformFactory(dummy, platform, platforms));
+                Librarian librarian = new Librarian(factory, new Housekeeper());
                 System.out.println("(Java) Opening new file queue...");
                 WinSetupFileQueue fq = new WinSetupFileQueue(librarian, new WinSetupDefaultCallbackHandler());
 

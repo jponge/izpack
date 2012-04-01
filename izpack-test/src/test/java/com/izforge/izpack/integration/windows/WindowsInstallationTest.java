@@ -34,6 +34,7 @@ import com.izforge.izpack.test.junit.PicoRunner;
 import com.izforge.izpack.test.util.TestHousekeeper;
 import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.Platform;
+import com.izforge.izpack.util.Platforms;
 import com.izforge.izpack.util.PrivilegedRunner;
 import com.izforge.izpack.util.os.ShellLink;
 
@@ -154,7 +155,7 @@ public class WindowsInstallationTest extends AbstractDestroyerTest
     public void testInstallation() throws Exception
     {
         assertFalse("This test must be run as administrator, or with Windows UAC turned off",
-                    new PrivilegedRunner().isElevationNeeded());
+                    new PrivilegedRunner(Platforms.WINDOWS).isElevationNeeded());
 
         installerFrameFixture = HelperTestMethod.prepareFrameFixture(frame, controller);
 

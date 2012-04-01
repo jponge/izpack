@@ -17,10 +17,6 @@
  */
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.api.exception.IzPackClassNotFoundException;
-import com.izforge.izpack.api.exception.IzPackException;
-import com.izforge.izpack.api.factory.ObjectFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -31,6 +27,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.izforge.izpack.api.factory.ObjectFactory;
 
 /**
  * Factory for constructing platform specific implementation implementations of interfaces or classes.
@@ -78,14 +76,19 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
     private final ObjectFactory factory;
 
     /**
+     * The platform factory.
+     */
+    private final Platforms platforms;
+
+    /**
+     * The current platform.
+     */
+    private final Platform platform;
+
+    /**
      * Map of interfaces to their corresponding platform implementations.
      */
     private Map<String, Implementations> implementations = new HashMap<String, Implementations>();
-
-    /**
-     * The platforms.
-     */
-    private Platforms platforms = new Platforms();
 
     /**
      * The logger.
@@ -97,25 +100,20 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
      */
     private static final String RESOURCE_PATH = "com/izforge/izpack/util/TargetPlatformFactory.properties";
 
-    /**
-     * Constructs a <tt>DefaultTargetPlatformFactory</tt>.
-     * <p/>
-     * This constructor only supports the creation of objects whose classes provide a public no-arg constructor
-     */
-    public DefaultTargetPlatformFactory()
-    {
-        this(NoDependencyInjectionFactory.INSTANCE);
-    }
 
     /**
      * Constructs a <tt>DefaultTargetPlatformFactory</tt>, configured from <em>TargetPlatformFactory.properties</em>
      * resources.
      *
-     * @param factory the factory to delegate to
+     * @param factory   the factory to delegate to
+     * @param platform  the current platform
+     * @param platforms the platform factory
      */
-    public DefaultTargetPlatformFactory(ObjectFactory factory)
+    public DefaultTargetPlatformFactory(ObjectFactory factory, Platform platform, Platforms platforms)
     {
         this.factory = factory;
+        this.platform = platform;
+        this.platforms = platforms;
         try
         {
             Enumeration<URL> urls = getClass().getClassLoader().getResources(RESOURCE_PATH);
@@ -148,7 +146,7 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
     @Override
     public <T> T create(Class<T> clazz) throws Exception
     {
-        return create(clazz, platforms.getCurrentPlatform());
+        return create(clazz, platform);
     }
 
     /**
@@ -500,60 +498,4 @@ public class DefaultTargetPlatformFactory implements TargetPlatformFactory
 
     }
 
-    private static class NoDependencyInjectionFactory implements ObjectFactory
-    {
-        /**
-         * The singleton instance.
-         */
-        public static ObjectFactory INSTANCE = new NoDependencyInjectionFactory();
-
-        /**
-         * Creates a new instance of the specified type.
-         *
-         * @param type the object type
-         * @return a new instance
-         */
-        @Override
-        public <T> T create(Class<T> type)
-        {
-            try
-            {
-                return type.newInstance();
-            }
-            catch (Exception exception)
-            {
-                throw new IzPackException(exception);
-            }
-        }
-
-        /**
-         * Creates a new instance of the specified class name.
-         *
-         * @param className the class name
-         * @param superType the super type
-         * @return a new instance
-         * @throws ClassCastException           if <tt>className</tt> does not implement or extend <tt>superType</tt>
-         * @throws IzPackClassNotFoundException if the class cannot be found
-         */
-        @Override
-        @SuppressWarnings("unchecked")
-        public <T> T create(String className, Class<T> superType)
-        {
-            Class type;
-            try
-            {
-                type = superType.getClassLoader().loadClass(className);
-                if (!superType.isAssignableFrom(type))
-                {
-                    throw new ClassCastException("Class '" + type.getName() + "' does not implement "
-                                                         + superType.getName());
-                }
-            }
-            catch (ClassNotFoundException exception)
-            {
-                throw new IzPackClassNotFoundException(className, exception);
-            }
-            return create((Class<T>) type);
-        }
-    }
 }

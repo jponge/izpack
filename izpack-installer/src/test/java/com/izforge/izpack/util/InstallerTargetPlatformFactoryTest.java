@@ -17,9 +17,20 @@
  */
 package com.izforge.izpack.util;
 
+import static org.junit.Assert.assertEquals;
+
+import java.net.URL;
+import java.util.Properties;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.injectors.ProviderAdapter;
+
 import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.core.container.AbstractContainer;
+import com.izforge.izpack.core.container.PlatformProvider;
 import com.izforge.izpack.core.factory.DefaultObjectFactory;
 import com.izforge.izpack.core.os.RegistryHandler;
 import com.izforge.izpack.installer.data.InstallData;
@@ -27,14 +38,6 @@ import com.izforge.izpack.util.os.Shortcut;
 import com.izforge.izpack.util.os.Unix_Shortcut;
 import com.izforge.izpack.util.os.Win_RegistryHandler;
 import com.izforge.izpack.util.os.Win_Shortcut;
-import org.junit.Before;
-import org.junit.Test;
-import org.picocontainer.MutablePicoContainer;
-
-import java.net.URL;
-import java.util.Properties;
-
-import static org.junit.Assert.assertEquals;
 
 
 /**
@@ -63,8 +66,9 @@ public class InstallerTargetPlatformFactoryTest
             {
                 initialise();
             }
+
             @Override
-            protected void fillContainer()
+            protected void fillContainer(MutablePicoContainer container)
             {
                 addComponent(Properties.class);
                 addComponent(ResourceManager.class);
@@ -72,10 +76,14 @@ public class InstallerTargetPlatformFactoryTest
                 addComponent(TestLibrarian.class);
                 addComponent(Housekeeper.class);
                 addComponent(TargetFactory.class);
+                addComponent(DefaultObjectFactory.class);
                 addComponent(DefaultTargetPlatformFactory.class);
+                addComponent(Platforms.class);
+                addComponent(Container.class, this);
+                container.addAdapter(new ProviderAdapter(new PlatformProvider()));
             }
         };
-        factory = new DefaultTargetPlatformFactory(new DefaultObjectFactory(container));
+        factory = container.getComponent(TargetPlatformFactory.class);
     }
 
     /**
@@ -154,8 +162,9 @@ public class InstallerTargetPlatformFactoryTest
     /**
      * Test implementation of {@link Librarian} that can find COIOSHelper.dll.
      */
-    public static class TestLibrarian extends Librarian {
-        
+    public static class TestLibrarian extends Librarian
+    {
+
         /**
          * Constructs a <tt>TestLibrarian</tt>.
          *
@@ -176,13 +185,14 @@ public class InstallerTargetPlatformFactoryTest
         @Override
         protected URL getResourcePath(String name)
         {
-            if (name.startsWith("COIOSHelper")) {
+            if (name.startsWith("COIOSHelper"))
+            {
                 String resource = "/com/izforge/izpack/bin/native/3rdparty/" + name + ".dll";
                 return getClass().getResource(resource);
             }
             return super.getResourcePath(name);
         }
     }
-    
+
 }
 
