@@ -39,6 +39,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -63,22 +64,19 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener
      */
     private JComboBox cbPrinters;
 
-    /**
-     * Install installDataGUI variables.
-     */
-    private GUIInstallData installDataGUI;
 
     /**
      * The constructor.
      *
-     * @param parent The parent.
-     * @param id     The installation installDataGUI.
+     * @param panel           the panel meta-data
+     * @param parent          the parent
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
      */
-    public SelectPrinterPanel(InstallerFrame parent, GUIInstallData id, ResourceManager resourceManager)
+    public SelectPrinterPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
+                              ResourceManager resourceManager)
     {
-        super(parent, id, resourceManager);
-
-        installDataGUI = id;
+        super(panel, parent, installData, resourceManager);
 
         // The 'super' layout
         GridBagLayout superLayout = new GridBagLayout();
@@ -97,7 +95,7 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener
 
         cbPrinters = new JComboBox();
         PrintService[] pServices = PrintServiceLookup.lookupPrintServices(null, null);
-        installDataGUI.setVariable("SELECTED_PRINTER", pServices[0].getName());
+        installData.setVariable("SELECTED_PRINTER", pServices[0].getName());
         for (PrintService pService : pServices)
         {
             cbPrinters.addItem(pService.getName());
@@ -124,7 +122,7 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener
     public void actionPerformed(ActionEvent event)
     {
         String sPrinter = (String) cbPrinters.getSelectedItem();
-        installDataGUI.setVariable("SELECTED_PRINTER", sPrinter);
+        installData.setVariable("SELECTED_PRINTER", sPrinter);
     }
 
     /**

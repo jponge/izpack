@@ -191,11 +191,12 @@ public class DefaultTargetPlatformFactoryTest
         /**
          * Creates a new instance of the specified type.
          *
-         * @param type the object type
+         * @param type       the object type
+         * @param parameters
          * @return a new instance
          */
         @Override
-        public <T> T create(Class<T> type)
+        public <T> T create(Class<T> type, Object... parameters)
         {
             try
             {
@@ -210,15 +211,16 @@ public class DefaultTargetPlatformFactoryTest
         /**
          * Creates a new instance of the specified class name.
          *
-         * @param className the class name
-         * @param superType the super type
+         * @param className  the class name
+         * @param superType  the super type
+         * @param parameters
          * @return a new instance
          * @throws ClassCastException           if <tt>className</tt> does not implement or extend <tt>superType</tt>
          * @throws IzPackClassNotFoundException if the class cannot be found
          */
         @Override
         @SuppressWarnings("unchecked")
-        public <T> T create(String className, Class<T> superType)
+        public <T> T create(String className, Class<T> superType, Object... parameters)
         {
             Class type;
             try

@@ -1,5 +1,10 @@
 package com.izforge.izpack.installer.manager;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.container.Container;
@@ -10,11 +15,6 @@ import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.OsConstraintHelper;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -71,51 +71,53 @@ public class PanelManager
      */
     public void createPanels() throws ClassNotFoundException
     {
+        Map<String, Panel> panels = new HashMap<String, Panel>();
         int curVisPanelNumber = 0;
         lastVis = 0;
         int count = 0;
-        Map<Object, Panel> panels = addComponents();
-        for (Map.Entry<Object, Panel> entry : panels.entrySet())
+        for (Panel panel : installData.getPanelsOrder())
         {
-            Object key = entry.getKey();
-            Panel panel = entry.getValue();
+            if (OsConstraintHelper.oneMatchesCurrentSystem(panel.getOsConstraints()))
+            {
+                String panelId = panel.getPanelid();
+                String key = (panelId != null) ? panelId : panel.getClassName();
+                if (panels.put(key, panel) != null)
+                {
+                    throw new IllegalStateException("Duplicate panel: " + key);
+                }
 
-            executePreConstructionActions(panel);
-            IzPanel izPanel = (IzPanel) installerContainer.getComponent(key);
-            izPanel.setMetadata(panel);
-            String dataValidator = panel.getValidator();
-            if (dataValidator != null)
-            {
-                izPanel.setValidationService(factory.create(dataValidator, DataValidator.class));
-            }
-            izPanel.setHelpUrl(panel.getHelpUrl(installData.getLocaleISO3()));
+                IzPanel izPanel = createPanel(panel);
+                if (panelId != null)
+                {
+                    installerContainer.addComponent(panelId, izPanel);
+                }
+                else
+                {
+                    installerContainer.addComponent(izPanel.getClass(), izPanel);
+                }
+                installData.getPanels().add(izPanel);
 
-            addPreActivationActions(panel, izPanel);
-            addPreValidateActions(panel, izPanel);
-            addPostValidationActions(panel, izPanel);
-
-            installData.getPanels().add(izPanel);
-            if (izPanel.isHidden())
-            {
-                visiblePanelMapping.add(count, -1);
+                if (izPanel.isHidden())
+                {
+                    visiblePanelMapping.add(count, -1);
+                }
+                else
+                {
+                    visiblePanelMapping.add(count, curVisPanelNumber);
+                    curVisPanelNumber++;
+                    lastVis = count;
+                }
+                count++;
+                // We add the XML installDataGUI izPanel root
+                IXMLElement panelRoot = new XMLElementImpl(panel.getClassName(), installData.getXmlData());
+                // if set, we add the id as an attribute to the panelRoot
+                if (panelId != null)
+                {
+                    panelRoot.setAttribute("id", panelId);
+                }
+                installData.getXmlData().addChild(panelRoot);
+                visiblePanelMapping.add(count, lastVis);
             }
-            else
-            {
-                visiblePanelMapping.add(count, curVisPanelNumber);
-                curVisPanelNumber++;
-                lastVis = count;
-            }
-            count++;
-            // We add the XML installDataGUI izPanel root
-            IXMLElement panelRoot = new XMLElementImpl(panel.getClassName(), installData.getXmlData());
-            // if set, we add the id as an attribute to the panelRoot
-            String panelId = panel.getPanelid();
-            if (panelId != null)
-            {
-                panelRoot.setAttribute("id", panelId);
-            }
-            installData.getXmlData().addChild(panelRoot);
-            visiblePanelMapping.add(count, lastVis);
         }
     }
 
@@ -139,40 +141,21 @@ public class PanelManager
         return lastVis;
     }
 
-    /**
-     * Adds the panel classes to the container.
-     *
-     * @return a map of the panels, keyed on their PicoContainer component type
-     * @throws ClassNotFoundException if a panel class cannot be found
-     */
-    private Map<Object, Panel> addComponents() throws ClassNotFoundException
+    private IzPanel createPanel(Panel panel)
     {
-        Map<Object, Panel> panels = new LinkedHashMap<Object, Panel>();
-        for (Panel panel : installData.getPanelsOrder())
+        executePreConstructionActions(panel);
+        IzPanel izPanel = factory.create(panel.getClassName(), IzPanel.class, panel);
+        String dataValidator = panel.getValidator();
+        if (dataValidator != null)
         {
-            if (OsConstraintHelper.oneMatchesCurrentSystem(panel.getOsConstraints()))
-            {
-                Class<IzPanel> panelClass = getPanelClass(panel);
-                String panelId = panel.getPanelid();
-                if (panelId != null)
-                {
-                    if (panels.put(panelId, panel) != null)
-                    {
-                        throw new IllegalStateException("Duplicate panel: " + panelId);
-                    }
-                    installerContainer.addComponent(panelId, panelClass);
-                }
-                else
-                {
-                    if (panels.put(panelClass, panel) != null)
-                    {
-                        throw new IllegalStateException("Duplicate panel: " + panelClass);
-                    }
-                    installerContainer.addComponent(panelClass);
-                }
-            }
+            izPanel.setValidationService(factory.create(dataValidator, DataValidator.class));
         }
-        return panels;
+        izPanel.setHelpUrl(panel.getHelpUrl(installData.getLocaleISO3()));
+
+        addPreActivationActions(panel, izPanel);
+        addPreValidateActions(panel, izPanel);
+        addPostValidationActions(panel, izPanel);
+        return izPanel;
     }
 
     /**
@@ -254,24 +237,5 @@ public class PanelManager
         }
     }
 
-    /**
-     * Returns the implementing class for a panel.
-     *
-     * @param panel the panel
-     * @return the class that implements the panel
-     * @throws ClassNotFoundException if the class cannot be found
-     * @throws IllegalStateException  if the specified class does not extend {@link IzPanel}.
-     */
-    @SuppressWarnings("unchecked")
-    private Class<IzPanel> getPanelClass(Panel panel) throws ClassNotFoundException
-    {
-        Class result = Class.forName(panel.getClassName()); // compiler emits fully qualified class names
-        if (!IzPanel.class.isAssignableFrom(result))
-        {
-            throw new IllegalStateException("Class " + result + " does not extend "
-                                                    + IzPanel.class.getName());
-        }
-        return result;
-    }
 
 }

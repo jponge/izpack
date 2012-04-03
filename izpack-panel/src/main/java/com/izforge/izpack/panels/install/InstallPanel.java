@@ -19,6 +19,14 @@
 
 package com.izforge.izpack.panels.install;
 
+import java.awt.Dimension;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
+
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.gui.IzPanelLayout;
@@ -28,12 +36,6 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
-import javax.swing.SwingUtilities;
-import java.awt.Dimension;
 
 /**
  * The install panel class. Launches the actual installation job.
@@ -88,19 +90,20 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     /**
      * Constructs an <tt>InstallPanel</tt>.
      *
+     * @param panel           the panel meta-data
      * @param parent          the parent window
      * @param installData     the installation data
      * @param resourceManager the resource manager
      * @param unpacker        the unpacker
      * @param log             the log
      */
-    public InstallPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+    public InstallPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
                         IUnpacker unpacker, Log log)
     {
-        super(parent, installData, new IzPanelLayout(log), resourceManager);
+        super(panel, parent, installData, new IzPanelLayout(log), resourceManager);
         unpacker.setHandler(this);
         this.tipLabel = LabelFactory.create(installData.getLangpack().getString("InstallPanel.tip"),
-                parent.getIcons().get(iconName), LEADING);
+                                            parent.getIcons().get(iconName), LEADING);
         add(this.tipLabel, IzPanelLayout.getDefaultConstraint(FULL_LINE_CONTROL_CONSTRAINT));
         packOpLabel = LabelFactory.create(" ", LEADING);
         add(packOpLabel, IzPanelLayout.getDefaultConstraint(FULL_LINE_CONTROL_CONSTRAINT));
@@ -115,7 +118,7 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
         //add(IzPanelLayout.createParagraphGap());
 
         overallOpLabel = LabelFactory.create(installData.getLangpack().getString("InstallPanel.progress"),
-                parent.getIcons().get(iconName), LEADING);
+                                             parent.getIcons().get(iconName), LEADING);
         add(this.overallOpLabel, IzPanelLayout.getDefaultConstraint(FULL_LINE_CONTROL_CONSTRAINT));
 
         overallProgressBar = new JProgressBar();
@@ -128,7 +131,6 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
         overallProgressBar.setValue(0);
         add(this.overallProgressBar, IzPanelLayout.getDefaultConstraint(FULL_LINE_CONTROL_CONSTRAINT));
         getLayoutHelper().completeLayout();
-
     }
 
     /**
@@ -171,7 +173,7 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
         this.packOpLabel.setText(error);
         this.installData.setInstallSuccess(false);
         JOptionPane.showMessageDialog(this, error, installData.getLangpack().getString("installer.error"),
-                JOptionPane.ERROR_MESSAGE);
+                                      JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -256,7 +258,7 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
                 packProgressBar.setString(packName);
                 overallProgressBar.setValue(stepno - 1);
                 overallProgressBar.setString(Integer.toString(stepno) + " / "
-                        + Integer.toString(noOfPacks));
+                                                     + Integer.toString(noOfPacks));
             }
         });
     }

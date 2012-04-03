@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.util.jar.JarFile;
-import java.util.zip.ZipFile;
 
 import org.junit.After;
 import org.junit.Before;
@@ -103,6 +102,11 @@ public class UninstallerListenerTest extends AbstractDestroyerTest
     public void testUninstallerListenerInvocation() throws Exception
     {
         String installPath = getInstallPath();
+        File installDir = new File(installPath);
+        if (!installDir.exists())
+        {
+            assertTrue(installDir.mkdirs());
+        }
 
         // add some files to the installation.
         int files = 3;
@@ -119,7 +123,7 @@ public class UninstallerListenerTest extends AbstractDestroyerTest
         File file = getUninstallerJar(substituter);
         JarFile uninstallJar = new JarFile(file);
 
-        assertThat((ZipFile)uninstallJar, ZipMatcher.isZipContainingFiles(
+        assertThat(uninstallJar, ZipMatcher.isZipContainingFiles(
                 "com/izforge/izpack/api/event/UninstallerListener.class",
                 "com/izforge/izpack/test/listener/TestUninstallerListener.class"));
 

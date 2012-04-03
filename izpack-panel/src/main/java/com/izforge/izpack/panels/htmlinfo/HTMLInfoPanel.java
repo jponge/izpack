@@ -19,7 +19,18 @@
 
 package com.izforge.izpack.panels.htmlinfo;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
+import javax.swing.JEditorPane;
+import javax.swing.JScrollPane;
+import javax.swing.text.Document;
+
 import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
@@ -28,15 +39,6 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.HyperlinkHandler;
-
-import javax.swing.JEditorPane;
-import javax.swing.JScrollPane;
-import javax.swing.text.Document;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 
 /**
  * The HTML info panel.
@@ -66,19 +68,22 @@ public class HTMLInfoPanel extends IzPanel
     /**
      * Constructs an <tt>HTMLInfoPanel</tt>.
      *
+     * @param panel           the panel meta-data
      * @param parent          the parent window
      * @param installData     the installation data
      * @param resourceManager the resource manager
      * @param log             the log
      */
-    public HTMLInfoPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager, Log log)
+    public HTMLInfoPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
+                         ResourceManager resourceManager, Log log)
     {
-        this(parent, installData, "HTMLInfoPanel", true, resourceManager, log);
+        this(panel, parent, installData, "HTMLInfoPanel", true, resourceManager, log);
     }
 
     /**
      * Constructs an <tt>HTMLInfoPanel</tt>.
      *
+     * @param panel             the panel  meta-data
      * @param parent            the parent window
      * @param installData       the installation data
      * @param resPrefixStr      prefix string for content resource name.
@@ -86,11 +91,10 @@ public class HTMLInfoPanel extends IzPanel
      * @param resourceManager   the resource manager
      * @param log               the log
      */
-    public HTMLInfoPanel(InstallerFrame parent, GUIInstallData installData,
-                         String resPrefixStr, boolean showInfoLabelFlag, ResourceManager resourceManager,
-                         Log log)
+    public HTMLInfoPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
+                         String resPrefixStr, boolean showInfoLabelFlag, ResourceManager resourceManager, Log log)
     {
-        super(parent, installData, new IzPanelLayout(log), resourceManager);
+        super(panel, parent, installData, new IzPanelLayout(log), resourceManager);
         //setup given resource prefix and name:
         panelResourcePrefixStr = resPrefixStr;
         panelResourceNameStr = resPrefixStr + ".info";

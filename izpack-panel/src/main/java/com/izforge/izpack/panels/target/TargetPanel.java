@@ -22,6 +22,7 @@
 package com.izforge.izpack.panels.target;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -44,14 +45,16 @@ public class TargetPanel extends PathInputPanel
     /**
      * Constructs a <tt>TargetPanel</tt>.
      *
+     * @param panel           the panel meta-data
      * @param parent          the parent window
      * @param installData     the installation data
      * @param resourceManager the resource manager
      * @param log             the log
      */
-    public TargetPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager, Log log)
+    public TargetPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+                       Log log)
     {
-        super(parent, installData, resourceManager, log);
+        super(panel, parent, installData, resourceManager, log);
     }
 
     /**

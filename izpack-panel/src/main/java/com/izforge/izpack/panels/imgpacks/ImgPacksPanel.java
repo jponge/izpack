@@ -23,7 +23,23 @@
 
 package com.izforge.izpack.panels.imgpacks;
 
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.HashMap;
+import java.util.Iterator;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionEvent;
+
 import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.rules.RulesEngine;
@@ -33,12 +49,6 @@ import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.packs.PacksPanelBase;
 import com.izforge.izpack.panels.treepacks.PackValidator;
 import com.izforge.izpack.util.IoHelper;
-
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * The ImgPacks panel class. Allows the packages selection with a small picture displayed for every
@@ -71,16 +81,17 @@ public class ImgPacksPanel extends PacksPanelBase
     /**
      * Constructs a <tt>ImgPacksPanel</tt>.
      *
+     * @param panel           the panel meta-data
      * @param parent          fhe parent window
      * @param installData     the installation data
      * @param resourceManager the resource manager
      * @param factory         the factory for creating {@link PackValidator} instances
      * @param rules           the rules engine
      */
-    public ImgPacksPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
-                         ObjectFactory factory, RulesEngine rules)
+    public ImgPacksPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
+                         ResourceManager resourceManager, ObjectFactory factory, RulesEngine rules)
     {
-        super(parent, installData, resourceManager, factory, rules);
+        super(panel, parent, installData, resourceManager, factory, rules);
     }
 
     /*
@@ -151,7 +162,7 @@ public class ImgPacksPanel extends PacksPanelBase
             depScroller.setPreferredSize(new Dimension(250, 40));
             LayoutHelper.buildConstraints(gbConstraints, 0, 3, 1, 1, 0.50, 0.50);
             dependencyArea = createTextArea("ImgPacksPanel.dependencyList", depScroller, layout,
-                    gbConstraints);
+                                            gbConstraints);
         }
 
         // Create the description area with a scroller.
@@ -161,7 +172,7 @@ public class ImgPacksPanel extends PacksPanelBase
 
         LayoutHelper.buildConstraints(gbConstraints, 1, 3, 1, 1, 0.50, 0.50);
         descriptionArea = createTextArea("PacksPanel.description", descriptionScroller, layout,
-                gbConstraints);
+                                         gbConstraints);
         // Create the tip label.
         LayoutHelper.buildConstraints(gbConstraints, 0, 4, 2, 1, 0.0, 0.0);
         createLabel("PacksPanel.tip", "tip", layout, gbConstraints);

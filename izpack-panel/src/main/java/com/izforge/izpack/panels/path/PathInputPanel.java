@@ -32,6 +32,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
@@ -79,14 +80,16 @@ public class PathInputPanel extends IzPanel implements ActionListener
     /**
      * Constructs a <tt>PathInputPanel</tt>.
      *
+     * @param panel           the panel meta-data
      * @param parent          the parent window
      * @param installData     the installation data
      * @param resourceManager the resource manager
      * @param log             the log
      */
-    public PathInputPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager, Log log)
+    public PathInputPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
+                          ResourceManager resourceManager, Log log)
     {
-        super(parent, installData, new IzPanelLayout(log), resourceManager);
+        super(panel, parent, installData, new IzPanelLayout(log), resourceManager);
         // Set default values
         emptyTargetMsg = getI18nStringForClass("empty_target", "TargetPanel");
         warnMsg = getI18nStringForClass("warn", "TargetPanel");
@@ -110,7 +113,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
         // Label for input
         // row 1 column 0.
         add(createLabel("info", "TargetPanel", "open",
-                LEFT, true), NEXT_LINE);
+                        LEFT, true), NEXT_LINE);
         // Create path selection components and add they to this panel.
         pathSelectionPanel = new PathSelectionPanel(this, installData, log);
         add(pathSelectionPanel, NEXT_LINE);
@@ -154,16 +157,19 @@ public class PathInputPanel extends IzPanel implements ActionListener
         String chosenPath = pathSelectionPanel.getPath();
         boolean ok = true;
 
-        boolean modifyinstallation = Boolean.valueOf(this.installData.getVariable(AutomatedInstallData.MODIFY_INSTALLATION));
+        boolean modifyinstallation = Boolean.valueOf(
+                this.installData.getVariable(AutomatedInstallData.MODIFY_INSTALLATION));
         if (modifyinstallation)
         {
             // installation directory has to exist in a modification installation
             mustExist = true;
 
-            File installationinformation = new File(pathSelectionPanel.getPath() + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION);
+            File installationinformation = new File(
+                    pathSelectionPanel.getPath() + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION);
             if (!installationinformation.exists())
             {
-                emitError(installData.getLangpack().getString("installer.error"), installData.getLangpack().getString("PathInputPanel.required.forModificationInstallation"));
+                emitError(installData.getLangpack().getString("installer.error"),
+                          installData.getLangpack().getString("PathInputPanel.required.forModificationInstallation"));
 
                 return false;
             }
@@ -225,7 +231,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
             if (path.exists())
             {
                 int res = askQuestion(installData.getLangpack().getString("installer.warning"), warnMsg,
-                        AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_YES);
+                                      AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_YES);
                 ok = res == AbstractUIHandler.ANSWER_YES;
             }
             else
@@ -328,13 +334,15 @@ public class PathInputPanel extends IzPanel implements ActionListener
      * TargetPanel.dir (generic that will be applied if none of above is found)
      * As with all IzPack resources, each of the above ids should be associated with a separate
      * filename, which is set in the install.xml file at compile time.
+     *
      * @param resourceManager
      * @param variableSubstitutor
      * @param installData
      * @return the default installation directory for the current installation
      */
     public static String loadDefaultInstallDir(ResourceManager resourceManager,
-            VariableSubstitutor variableSubstitutor, AutomatedInstallData installData)
+                                               VariableSubstitutor variableSubstitutor,
+                                               AutomatedInstallData installData)
     {
         String defaultInstallDir = getDefaultInstallDir();
         if (defaultInstallDir != null)
@@ -422,7 +430,8 @@ public class PathInputPanel extends IzPanel implements ActionListener
                 defaultInstallDir = line;
 
                 defaultInstallDir = variableSubstitutor.substitute(defaultInstallDir);
-            } else
+            }
+            else
             {
                 defaultInstallDir = installData.getDefaultInstallPath();
                 if (defaultInstallDir == null)

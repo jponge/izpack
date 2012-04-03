@@ -18,22 +18,17 @@
  */
 package com.izforge.izpack.panels.shortcut;
 
-import com.izforge.izpack.api.GuiId;
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.gui.MultiLineLabel;
-import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.Housekeeper;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.StringTool;
-import com.izforge.izpack.util.TargetFactory;
-import com.izforge.izpack.util.os.Shortcut;
-import com.izforge.izpack.util.unix.UnixHelper;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -52,17 +47,24 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.gui.MultiLineLabel;
+import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.data.UninstallData;
+import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.StringTool;
+import com.izforge.izpack.util.TargetFactory;
+import com.izforge.izpack.util.os.Shortcut;
+import com.izforge.izpack.util.unix.UnixHelper;
 
 /**
  * This class implements a panel for the creation of shortcuts. The panel prompts the user to select
@@ -166,6 +168,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /**
      * Constructs a <tt>ShortcutPanel</tt>.
      *
+     * @param panel           the panel
      * @param parent          reference to the application frame
      * @param installData     the installation data
      * @param resourceManager the resources
@@ -173,10 +176,11 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * @param housekeeper     the house keeper
      * @param factory         the factory for platform-specific implementations
      */
-    public ShortcutPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
-                         UninstallData uninstallData, Housekeeper housekeeper, TargetFactory factory)
+    public ShortcutPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
+                         ResourceManager resourceManager, UninstallData uninstallData, Housekeeper housekeeper,
+                         TargetFactory factory)
     {
-        super(parent, installData, "link16x16", resourceManager);
+        super(panel, parent, installData, "link16x16", resourceManager);
         layout = (GridBagLayout) super.getLayout();
         Object con = getLayoutHelper().getDefaultConstraints();
         if (con instanceof GridBagConstraints)
@@ -191,7 +195,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         try
         {
             shortcutPanelLogic = new ShortcutPanelLogic(installData, resourceManager, uninstallData,
-                    variableSubstitutor, housekeeper, factory);
+                                                        variableSubstitutor, housekeeper, factory);
             shortcutLogicInitialized = true;
         }
         catch (Exception exception)
@@ -228,7 +232,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             if (groupList != null)
             {
                 groupList.setListData(shortcutPanelLogic.getProgramGroups(Shortcut.CURRENT_USER)
-                        .toArray());
+                                              .toArray());
             }
             programGroup.setText(shortcutPanelLogic.getSuggestedProgramGroup());
             shortcutPanelLogic.setUserType(Shortcut.CURRENT_USER);
@@ -245,7 +249,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             if (groupList != null)
             {
                 groupList.setListData(shortcutPanelLogic.getProgramGroups(Shortcut.ALL_USERS)
-                        .toArray());
+                                              .toArray());
             }
             programGroup.setText(shortcutPanelLogic.getSuggestedProgramGroup());
             shortcutPanelLogic.setUserType(Shortcut.ALL_USERS);
@@ -350,7 +354,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 logger.fine("All Users Program Folder: '" + allUsersProgramsFolder + "'");
 
                 File forceTest = new File(allUsersProgramsFolder + File.separator
-                        + System.getProperty("user.name") + System.currentTimeMillis());
+                                                  + System.getProperty("user.name") + System.currentTimeMillis());
 
                 try
                 {
@@ -359,7 +363,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 catch (Exception e)
                 {
                     isRootUser = false;
-                    logger.log(Level.WARNING, "Temporary file '" + forceTest + "' could not be created: " + e.getMessage(), e);
+                    logger.log(Level.WARNING,
+                               "Temporary file '" + forceTest + "' could not be created: " + e.getMessage(), e);
 
                 }
 
@@ -394,7 +399,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 if (firstTime)
                 {
                     buildUI(shortcutPanelLogic.getProgramsFolder(rUserFlag ? Shortcut.ALL_USERS
-                            : Shortcut.CURRENT_USER));
+                                                                         : Shortcut.CURRENT_USER));
                 }
 
                 // addSelectionList();
@@ -593,7 +598,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             }
 
             groupList = addList(dirEntries, ListSelectionModel.SINGLE_SELECTION, groupList, col,
-                    line + 4, 1, 1, GridBagConstraints.BOTH);
+                                line + 4, 1, 1, GridBagConstraints.BOTH);
         }
 
         // ----------------------------------------------------

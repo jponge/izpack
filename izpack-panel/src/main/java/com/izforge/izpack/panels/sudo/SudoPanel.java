@@ -31,8 +31,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.data.ExecutableFile;
@@ -65,26 +73,30 @@ public class SudoPanel extends IzPanel implements ActionListener
     /**
      * The constructor.
      *
-     * @param parent The parent window.
-     * @param idata  The installation installDataGUI.
+     * @param panel           the panel meta-data
+     * @param parent          the parent window.
+     * @param installData     the installation data
+     * @param resourceManager the resources
      */
-    public SudoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    public SudoPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager)
     {
-        super(parent, idata, resourceManager);
+        super(panel, parent, installData, resourceManager);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         add(LabelFactory
-                .create(
-                /* installData.getLangpack().getString("SudoPanel.info") */"For installing administrator privileges are necessary",
-                JLabel.TRAILING));
+                    .create(
+                            /* installData.getLangpack().getString("SudoPanel.info") */
+                            "For installing administrator privileges are necessary",
+                            JLabel.TRAILING));
 
         add(Box.createRigidArea(new Dimension(0, 5)));
 
         add(LabelFactory
-                .create(
-                /* installData.getLangpack().getString("SudoPanel.tip") */"Please note that passwords are case-sensitive",
-                parent.getIcons().get("tip"), JLabel.TRAILING));
+                    .create(
+                            /* installData.getLangpack().getString("SudoPanel.tip") */
+                            "Please note that passwords are case-sensitive",
+                            parent.getIcons().get("tip"), JLabel.TRAILING));
 
         add(Box.createRigidArea(new Dimension(0, 5)));
 
@@ -97,7 +109,8 @@ public class SudoPanel extends IzPanel implements ActionListener
                 .add(
                         LabelFactory
                                 .create(
-                                /* installData.getLangpack().getString("SudoPanel.specifyAdminPassword") */"Please specify your password:"),
+                                        /* installData.getLangpack().getString("SudoPanel.specifyAdminPassword") */
+                                        "Please specify your password:"),
                         BorderLayout.NORTH);
         passwordField = new JPasswordField();
         passwordField.addActionListener(this);
@@ -161,7 +174,8 @@ public class SudoPanel extends IzPanel implements ActionListener
 
             ArrayList<ExecutableFile> executableFiles = new ArrayList<ExecutableFile>();
             ExecutableFile executableFile = new ExecutableFile(file.getAbsolutePath(),
-                    ExecutableFile.POSTINSTALL, ExecutableFile.ABORT, oses, false);
+                                                               ExecutableFile.POSTINSTALL, ExecutableFile.ABORT, oses,
+                                                               false);
             executableFiles.add(executableFile);
             FileExecutor fileExecutor = new FileExecutor(executableFiles);
             int retval = fileExecutor.executeFiles(ExecutableFile.POSTINSTALL, this);
@@ -215,7 +229,7 @@ public class SudoPanel extends IzPanel implements ActionListener
         if (!isValid)
         {
             JOptionPane.showInternalMessageDialog(this, "Password", "Password is not valid",
-                    JOptionPane.ERROR_MESSAGE);
+                                                  JOptionPane.ERROR_MESSAGE);
         }
         return isValid;
     }

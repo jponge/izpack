@@ -21,7 +21,15 @@
 
 package com.izforge.izpack.panels.installationtype;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.logging.Logger;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JRadioButton;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
@@ -29,12 +37,6 @@ import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JRadioButton;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.logging.Logger;
 
 
 /**
@@ -54,15 +56,16 @@ public class InstallationTypePanel extends IzPanel implements ActionListener
     /**
      * Constructs an <tt>InstallationTypePanel</tt>.
      *
+     * @param panel           the panel meta-data
      * @param parent          the parent window
-     * @param installData           the installation data
+     * @param installData     the installation data
      * @param resourceManager the resource manager
      * @param log             the log
      */
-    public InstallationTypePanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
-                                 Log log)
+    public InstallationTypePanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
+                                 ResourceManager resourceManager, Log log)
     {
-        super(parent, installData, new IzPanelLayout(log), resourceManager);
+        super(panel, parent, installData, new IzPanelLayout(log), resourceManager);
         buildGUI();
     }
 
@@ -71,19 +74,22 @@ public class InstallationTypePanel extends IzPanel implements ActionListener
         // We put our components
 
         add(LabelFactory.create(installData.getLangpack().getString("InstallationTypePanel.info"),
-                parent.getIcons().get("history"), LEADING), NEXT_LINE);
+                                parent.getIcons().get("history"), LEADING), NEXT_LINE);
 
 
         ButtonGroup group = new ButtonGroup();
 
-        boolean modifyinstallation = Boolean.valueOf(this.installData.getVariable(AutomatedInstallData.MODIFY_INSTALLATION));
+        boolean modifyinstallation = Boolean.valueOf(
+                this.installData.getVariable(AutomatedInstallData.MODIFY_INSTALLATION));
 
-        normalinstall = new JRadioButton(installData.getLangpack().getString("InstallationTypePanel.normal"), !modifyinstallation);
+        normalinstall = new JRadioButton(installData.getLangpack().getString("InstallationTypePanel.normal"),
+                                         !modifyinstallation);
         normalinstall.addActionListener(this);
         group.add(normalinstall);
         add(normalinstall, NEXT_LINE);
 
-        modifyinstall = new JRadioButton(installData.getLangpack().getString("InstallationTypePanel.modify"), modifyinstallation);
+        modifyinstall = new JRadioButton(installData.getLangpack().getString("InstallationTypePanel.modify"),
+                                         modifyinstallation);
         modifyinstall.addActionListener(this);
         group.add(modifyinstall);
         add(modifyinstall, NEXT_LINE);
@@ -98,7 +104,8 @@ public class InstallationTypePanel extends IzPanel implements ActionListener
     @Override
     public void panelActivate()
     {
-        boolean modifyinstallation = Boolean.valueOf(this.installData.getVariable(AutomatedInstallData.MODIFY_INSTALLATION));
+        boolean modifyinstallation = Boolean.valueOf(
+                this.installData.getVariable(AutomatedInstallData.MODIFY_INSTALLATION));
         if (modifyinstallation)
         {
             modifyinstall.setSelected(true);

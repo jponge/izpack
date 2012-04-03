@@ -22,7 +22,23 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -34,6 +50,7 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.rules.RulesEngine;
@@ -248,8 +265,6 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
      */
     private boolean packsDefined = false;
 
-    private InstallerFrame parentFrame;
-
     /**
      * The parsed result from reading the XML specification from the file
      */
@@ -264,28 +279,28 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     /**
      * Holds the references to all radio button groups
      */
-    private java.util.List<ButtonGroup> buttonGroups = new ArrayList<ButtonGroup>();
+    private List<ButtonGroup> buttonGroups = new ArrayList<ButtonGroup>();
 
     /**
      * Holds the references to all password field groups
      */
-    private java.util.List<PasswordGroup> passwordGroups = new ArrayList<PasswordGroup>();
+    private List<PasswordGroup> passwordGroups = new ArrayList<PasswordGroup>();
 
     /**
      * used for temporary storage of references to password groups that have already been read in a
      * given read cycle.
      */
-    private java.util.List<PasswordGroup> passwordGroupsRead = new ArrayList<PasswordGroup>();
+    private List<PasswordGroup> passwordGroupsRead = new ArrayList<PasswordGroup>();
 
     /**
      * Used to track search fields. Contains SearchField references.
      */
-    private java.util.List<UserInputPanel.SearchField> searchFields = new ArrayList<UserInputPanel.SearchField>();
+    private List<UserInputPanel.SearchField> searchFields = new ArrayList<UserInputPanel.SearchField>();
 
     /**
      * Holds all user inputs for use in automated installation
      */
-    private java.util.List<UserInputPanel.TextValuePair> entries = new ArrayList<UserInputPanel.TextValuePair>();
+    private List<TextValuePair> entries = new ArrayList<TextValuePair>();
 
     private LocaleDatabase langpack = null;
 
@@ -295,7 +310,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
     private boolean eventsActivated = false;
 
-    private java.util.List<UIElement> elements = new ArrayList<UIElement>();
+    private List<UIElement> elements = new ArrayList<UIElement>();
 
     private JPanel panel;
     private RulesEngine rules;
@@ -314,18 +329,19 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     /*--------------------------------------------------------------------------*/
 
     /**
-     * Constructs a <code>UserInputPanel</code>.
+     * Constructs an <code>UserInputPanel</code>.
      *
-     * @param rules
-     * @param parent         reference to the application frame
-     * @param installDataGUI shared information about the installation
+     * @param panel           the panel meta-data
+     * @param parent          the parent IzPack installer frame
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
+     * @param rules           the rules engine
      */
-    /*--------------------------------------------------------------------------*/
-    public UserInputPanel(InstallerFrame parent, GUIInstallData installDataGUI, ResourceManager resourceManager, RulesEngine rules)
+    public UserInputPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
+                          ResourceManager resourceManager, RulesEngine rules)
     {
-        super(parent, installDataGUI, resourceManager);
+        super(panel, parent, installData, resourceManager);
         instanceNumber = instanceCount++;
-        this.parentFrame = parent;
         this.rules = rules;
     }
 
@@ -635,7 +651,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         constraints2.position = TwoColumnConstraints.EAST;
 
         FileInputField fileInput = new DirInputField(this, this.installData, true, set, size,
-                validatorConfig, mustExist, create);
+                                                     validatorConfig, mustExist, create);
 
         fileInput.setAllowEmptyInput(allowEmptyValue);
 
@@ -742,8 +758,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 catch (Exception e)
                 {
                     logger.log(Level.WARNING,
-                            "Illegal value for 'visibleRows'",
-                            e);
+                               "Illegal value for 'visibleRows'",
+                               e);
                 }
             }
 
@@ -757,8 +773,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 catch (Exception e)
                 {
                     logger.log(Level.WARNING,
-                            "Illegal value for 'prefX'",
-                            e);
+                               "Illegal value for 'prefX'",
+                               e);
                 }
             }
             String prefY = element.getAttribute("prefY");
@@ -771,8 +787,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 catch (Exception e)
                 {
                     logger.log(Level.WARNING,
-                            "Illegal value for 'prefY'",
-                            e);
+                               "Illegal value for 'prefY'",
+                               e);
                 }
             }
 
@@ -787,9 +803,11 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
 
-        MultipleFileInputField fileInputField = new MultipleFileInputField(parentFrame, this.installData,
-                false, set, size, validatorConfig, filter, filterdesc, createMultipleVariables,
-                visibleRows, preferredX, preferredY, labelText);
+        MultipleFileInputField fileInputField = new MultipleFileInputField(parent, installData,
+                                                                           false, set, size, validatorConfig, filter,
+                                                                           filterdesc, createMultipleVariables,
+                                                                           visibleRows, preferredX, preferredY,
+                                                                           labelText);
         fileInputField.setAllowEmptyInput(allowEmptyValue);
 
         UIElement fileUiElement = new UIElement();
@@ -902,7 +920,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         constraints2.position = TwoColumnConstraints.EAST;
 
         FileInputField fileInputField = new FileInputField(this, this.installData, false, set, size,
-                validatorConfig, filter, filterdesc);
+                                                           validatorConfig, filter, filterdesc);
 
         fileInputField.setAllowEmptyInput(allowEmptyValue);
 
@@ -1084,8 +1102,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         {
             // TODO: translate
             emitError("User input specification could not be found.",
-                    "The specification for the user input panel could not be found. Please contact the packager.");
-            parentFrame.skipPanel();
+                      "The specification for the user input panel could not be found. Please contact the packager.");
+            parent.skipPanel();
         }
         // update UI with current values of associated variables
         updateUIElements();
@@ -1096,12 +1114,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         if (!itemRequiredFor(forPacks) || !itemRequiredForUnselected(forUnselectedPacks)
                 || !itemRequiredForOs(forOs))
         {
-            parentFrame.skipPanel();
+            parent.skipPanel();
             return;
         }
         if (!haveSpec)
         {
-            parentFrame.skipPanel();
+            parent.skipPanel();
             return;
         }
 
@@ -1111,7 +1129,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         validate();
         if (packsDefined)
         {
-            parentFrame.lockPrevButton();
+            parent.lockPrevButton();
         }
     }
 
@@ -1353,7 +1371,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         String instance = Integer.toString(instanceNumber);
 
         String panelid = null;
-        com.izforge.izpack.api.data.Panel p = this.getMetadata();
+        Panel p = this.getMetadata();
         if (p != null)
         {
             panelid = p.getPanelid();
@@ -1440,8 +1458,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             catch (Exception e)
             {
                 logger.log(Level.WARNING,
-                        "Icon " + icon + " not found in icon list: " + e.getMessage(),
-                        e);
+                           "Icon " + icon + " not found in icon list: " + e.getMessage(),
+                           e);
                 label = LabelFactory.create(title);
             }
             Font font = label.getFont();
@@ -1516,10 +1534,10 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         String validator = null;
         String message = null;
         boolean hasParams = false;
-        String paramName = null;
-        String paramValue = null;
+        String paramName;
+        String paramValue;
         HashMap<String, String> validateParamMap = null;
-        List<IXMLElement> validateParams = null;
+        List<IXMLElement> validateParams;
         String processor = null;
         int resultFormat = RuleInputField.DISPLAY_FORMAT;
 
@@ -1626,12 +1644,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         if (hasParams)
         {
             field = new RuleInputField(layout, set, separator, validator, validateParamMap,
-                    processor, resultFormat, getToolkit(), this.installData);
+                                       processor, resultFormat, getToolkit(), this.installData);
         }
         else
         {
             field = new RuleInputField(layout, set, separator, validator, processor, resultFormat,
-                    getToolkit(), this.installData);
+                                       getToolkit(), this.installData);
 
         }
         TwoColumnConstraints constraints = new TwoColumnConstraints();
@@ -1694,7 +1712,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         boolean success = !validating || ruleField.validateContents();
         if (!success)
         {
-            showWarningMessageDialog(parentFrame, message);
+            showWarningMessageDialog(parent, message);
             return (false);
         }
 
@@ -1911,7 +1929,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             {
                 message = "Text entered did not pass validation.";
             }
-            showWarningMessageDialog(parentFrame, message);
+            showWarningMessageDialog(parent, message);
             return (false);
         }
         logger.fine("Field validated");
@@ -2535,9 +2553,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 success = group.validateContents(i);
                 if (!success)
                 {
-                    JOptionPane.showMessageDialog(parentFrame, group.getValidatorMessage(i),
-                            parentFrame.getLangpack().getString("UserInputPanel.error.caption"),
-                            JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(parent, group.getValidatorMessage(i),
+                                                  parent.getLangpack().getString("UserInputPanel.error.caption"),
+                                                  JOptionPane.WARNING_MESSAGE);
                     break;
                 }
             }
@@ -2886,16 +2904,15 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
         if ((filename != null) && (filename.length() > 0))
         {
-            tooltiptext.append(MessageFormat.format(parentFrame.getLangpack()
-                    .getString("UserInputPanel.search.location"),
-                    new Object[]{new String[]{filename}}));
+            tooltiptext.append(MessageFormat.format(parent.getLangpack().getString("UserInputPanel.search.location"),
+                                                    new Object[]{new String[]{filename}}));
         }
 
         boolean showAutodetect = (check_filename != null) && (check_filename.length() > 0);
         if (showAutodetect)
         {
-            tooltiptext.append(MessageFormat.format(parentFrame.getLangpack()
-                    .getString("UserInputPanel.search.location.checkedfile"),
+            tooltiptext.append(MessageFormat.format(
+                    parent.getLangpack().getString("UserInputPanel.search.location.checkedfile"),
                     new Object[]{new String[]{check_filename}}));
         }
 
@@ -2920,17 +2937,16 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         buttonPanel.setLayout(new com.izforge.izpack.gui.FlowLayout(
                 com.izforge.izpack.gui.FlowLayout.LEADING));
 
-        JButton autodetectButton = ButtonFactory.createButton(parentFrame.getLangpack()
-                .getString("UserInputPanel.search.autodetect"), this.installData.buttonsHColor);
+        JButton autodetectButton = ButtonFactory.createButton(
+                parent.getLangpack().getString("UserInputPanel.search.autodetect"), installData.buttonsHColor);
         autodetectButton.setVisible(showAutodetect);
 
-        autodetectButton.setToolTipText(parentFrame.getLangpack()
-                .getString("UserInputPanel.search.autodetect.tooltip"));
+        autodetectButton.setToolTipText(parent.getLangpack().getString("UserInputPanel.search.autodetect.tooltip"));
 
         buttonPanel.add(autodetectButton);
 
-        JButton browseButton = ButtonFactory.createButton(parentFrame.getLangpack()
-                .getString("UserInputPanel.search.browse"), this.installData.buttonsHColor);
+        JButton browseButton = ButtonFactory.createButton(
+                parent.getLangpack().getString("UserInputPanel.search.browse"), installData.buttonsHColor);
 
         buttonPanel.add(browseButton);
 
@@ -2948,8 +2964,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // uiElements.add(new Object[] { null, SEARCH_BUTTON_FIELD, null, eastonlyconstraint,
         // buttonPanel, forPacks, forOs});
 
-        searchFields.add(new UserInputPanel.SearchField(filename, check_filename, parentFrame, combobox,
-                autodetectButton, browseButton, search_type, result_type));
+        searchFields.add(new UserInputPanel.SearchField(filename, check_filename, parent, combobox,
+                                                        autodetectButton, browseButton, search_type, result_type));
     }
 
     /*--------------------------------------------------------------------------*/
@@ -2965,9 +2981,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     /*--------------------------------------------------------------------------*/
     private boolean readSearch(UIElement field)
     {
-        String variable = null;
+        String variable;
         String value = null;
-        JComboBox comboBox = null;
+        JComboBox comboBox;
 
         try
         {
@@ -3773,7 +3789,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         {
             if (path != null)
             { // Make sure, path is not null
-                File file = null;
+                File file;
 
                 if ((this.filename == null) || (this.searchType == TYPE_DIRECTORY))
                 {
@@ -3944,8 +3960,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 if (!autodetect())
                 {
                     showMessageDialog(parent, "UserInputPanel.search.autodetect.failed.message",
-                            "UserInputPanel.search.autodetect.failed.caption",
-                            JOptionPane.WARNING_MESSAGE);
+                                      "UserInputPanel.search.autodetect.failed.caption",
+                                      JOptionPane.WARNING_MESSAGE);
                 }
             }
             else if (event.getSource() == this.browseButton)
@@ -3969,8 +3985,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     if (this.resultType != TYPE_FILE && !this.pathMatches(selectedFile.getAbsolutePath()))
                     {
                         showMessageDialog(parent, "UserInputPanel.search.wrongselection.message",
-                                "UserInputPanel.search.wrongselection.caption",
-                                JOptionPane.WARNING_MESSAGE);
+                                          "UserInputPanel.search.wrongselection.caption",
+                                          JOptionPane.WARNING_MESSAGE);
 
                     }
                 }
@@ -4157,7 +4173,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     private void showWarningMessageDialog(InstallerFrame parentFrame, String message)
     {
         showMessageDialog(parentFrame, message, "UserInputPanel.error.caption",
-                JOptionPane.WARNING_MESSAGE);
+                          JOptionPane.WARNING_MESSAGE);
     }
 
     @Override

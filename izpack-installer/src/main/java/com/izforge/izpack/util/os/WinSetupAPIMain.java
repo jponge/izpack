@@ -35,13 +35,13 @@ public class WinSetupAPIMain
                 ObjectFactory dummy = new ObjectFactory()
                 {
                     @Override
-                    public <T> T create(Class<T> type)
+                    public <T> T create(Class<T> type, Object... parameters)
                     {
                         return null;
                     }
 
                     @Override
-                    public <T> T create(String className, Class<T> superType)
+                    public <T> T create(String className, Class<T> superType, Object... parameters)
                     {
                         return null;
                     }

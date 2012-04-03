@@ -21,7 +21,22 @@
 
 package com.izforge.izpack.panels.process;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.io.IOException;
+
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.handler.AbstractUIProcessHandler;
 import com.izforge.izpack.api.rules.RulesEngine;
@@ -29,10 +44,6 @@ import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
 
 /**
  * The process panel class.
@@ -89,13 +100,17 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
     /**
      * The constructor.
      *
-     * @param parent             the parent window
-     * @param installData              the installation data
+     * @param panel           the panel meta-data
+     * @param parent          the parent window
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
+     * @param rules           the rules
+     * @param substituter     the variable replacer
      */
-    public ProcessPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+    public ProcessPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
                         RulesEngine rules, VariableSubstitutor substituter) throws IOException
     {
-        super(parent, installData, resourceManager);
+        super(panel, parent, installData, resourceManager);
 
         worker = new ProcessPanelWorker(installData, substituter, rules, resourceManager);
         worker.setHandler(this);
@@ -183,7 +198,8 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
 
                 validated = true;
                 ProcessPanel.this.installData.setInstallSuccess(worker.getResult());
-                if (ProcessPanel.this.installData.getPanels().indexOf(ProcessPanel.this) != (ProcessPanel.this.installData.getPanels().size() - 1))
+                if (ProcessPanel.this.installData.getPanels().indexOf(
+                        ProcessPanel.this) != (ProcessPanel.this.installData.getPanels().size() - 1))
                 {
                     if (unlockNext)
                     {
@@ -238,7 +254,7 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
                 ProcessPanel.this.currentJob++;
                 overallProgressBar.setValue(ProcessPanel.this.currentJob);
                 overallProgressBar.setString(String.valueOf(ProcessPanel.this.currentJob) + " / "
-                        + String.valueOf(ProcessPanel.this.noOfJobs));
+                                                     + String.valueOf(ProcessPanel.this.noOfJobs));
             }
         });
     }
@@ -264,7 +280,7 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
         parent.lockNextButton();
 
         this.currentJob = 0;
-        
+
         // only let the process start if the weren't finished before.
         if (!finishedWork)
         {

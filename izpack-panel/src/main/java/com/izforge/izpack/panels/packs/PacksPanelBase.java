@@ -24,20 +24,21 @@
 
 package com.izforge.izpack.panels.packs;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.api.data.Pack;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.factory.ObjectFactory;
-import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.installer.debugger.Debugger;
-import com.izforge.izpack.panels.imgpacks.ImgPacksPanelAutomationHelper;
-import com.izforge.izpack.panels.treepacks.PackValidator;
-import com.izforge.izpack.util.IoHelper;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -57,21 +58,22 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.factory.ObjectFactory;
+import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.debugger.Debugger;
+import com.izforge.izpack.panels.imgpacks.ImgPacksPanelAutomationHelper;
+import com.izforge.izpack.panels.treepacks.PackValidator;
+import com.izforge.izpack.util.IoHelper;
 
 /**
  * The base class for Packs panels. It brings the common member and methods of the different packs
@@ -169,16 +171,17 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     /**
      * Constructs a <tt>PacksPanelBase</tt>.
      *
+     * @param panel           the panel meta-data
      * @param parent          fhe parent window
      * @param installData     the installation data
      * @param resourceManager the resource manager
      * @param factory         the factory for creating {@link PackValidator} instances
      * @param rules           the rules engine
      */
-    public PacksPanelBase(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
-                          ObjectFactory factory, RulesEngine rules)
+    public PacksPanelBase(Panel panel, InstallerFrame parent, GUIInstallData installData,
+                          ResourceManager resourceManager, ObjectFactory factory, RulesEngine rules)
     {
-        super(parent, installData, resourceManager);
+        super(panel, parent, installData, resourceManager);
         this.rules = rules;
         this.factory = factory;
         // Load langpack.
@@ -300,7 +303,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 catch (Exception e)
                 {
                     logger.log(Level.WARNING, "Validator threw exception for pack " + pack.name + ": " + e.getMessage(),
-                            e);
+                               e);
                     return false;
                 }
             }
@@ -484,7 +487,8 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             layout.addLayoutComponent(panel, constraints);
         }
         add(panel);
-        boolean doNotShowRequiredSize = Boolean.parseBoolean(this.installData.guiPrefs.modifier.get("doNotShowRequiredSize"));
+        boolean doNotShowRequiredSize = Boolean.parseBoolean(
+                this.installData.guiPrefs.modifier.get("doNotShowRequiredSize"));
         panel.setVisible(!doNotShowRequiredSize);
         return (label);
     }

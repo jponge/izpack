@@ -22,7 +22,14 @@
 
 package com.izforge.izpack.panels.jdkpath;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
+
 import com.coi.tools.os.win.MSWinConstants;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
@@ -34,12 +41,6 @@ import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.path.PathInputPanel;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.StringTokenizer;
 
 /**
  * Panel which asks for the JDK path.
@@ -80,16 +81,17 @@ public class JDKPathPanel extends PathInputPanel
     /**
      * Constructs a <tt>JDKPathPanel</tt>.
      *
+     * @param panel           the panel meta-data
      * @param parent          the parent window
      * @param installData     the installation data
      * @param resourceManager the resource manager
      * @param handler         the registry handler
      * @param log             the log
      */
-    public JDKPathPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+    public JDKPathPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
                         RegistryDefaultHandler handler, Log log)
     {
-        super(parent, installData, resourceManager, log);
+        super(panel, parent, installData, resourceManager, log);
         this.handler = handler;
         setMustExist(true);
         if (!OsVersion.IS_OSX)
@@ -118,8 +120,10 @@ public class JDKPathPanel extends PathInputPanel
                     retval = true;
                     break;
                 case BAD_REG_PATH:
-                    if (askQuestion(installData.getLangpack().getString("installer.warning"), installData.getLangpack().getString("JDKPathPanel.nonValidPathInReg"),
-                            AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_NO) == AbstractUIHandler.ANSWER_YES)
+                    if (askQuestion(installData.getLangpack().getString("installer.warning"),
+                                    installData.getLangpack().getString("JDKPathPanel.nonValidPathInReg"),
+                                    AbstractUIHandler.CHOICES_YES_NO,
+                                    AbstractUIHandler.ANSWER_NO) == AbstractUIHandler.ANSWER_YES)
                     {
                         this.installData.setVariable(getVariableName(), pathSelectionPanel.getPath());
                         retval = true;
@@ -149,7 +153,8 @@ public class JDKPathPanel extends PathInputPanel
 
                     message.append(installData.getLangpack().getString("JDKPathPanel.badVersion3"));
                     if (askQuestion(installData.getLangpack().getString("installer.warning"), message.toString(),
-                            AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_NO) == AbstractUIHandler.ANSWER_YES)
+                                    AbstractUIHandler.CHOICES_YES_NO,
+                                    AbstractUIHandler.ANSWER_NO) == AbstractUIHandler.ANSWER_YES)
                     {
                         this.installData.setVariable(getVariableName(), pathSelectionPanel.getPath());
                         retval = true;

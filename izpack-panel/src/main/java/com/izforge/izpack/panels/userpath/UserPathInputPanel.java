@@ -21,6 +21,17 @@
 
 package com.izforge.izpack.panels.userpath;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
@@ -31,16 +42,6 @@ import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsVersion;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Base class for panels which asks for paths.
@@ -86,16 +87,17 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
     /**
      * Constructs an <tt>UserPathInputPanel</tt>.
      *
+     * @param panel           the panel meta-data
      * @param parent          the parent window
      * @param installData     the installation data
      * @param targetPanel     the target panel
      * @param resourceManager the resource manager
      * @param log             the log
      */
-    public UserPathInputPanel(InstallerFrame parent, GUIInstallData installData, String targetPanel,
+    public UserPathInputPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, String targetPanel,
                               ResourceManager resourceManager, Log log)
     {
-        super(parent, installData, new IzPanelLayout(log), resourceManager);
+        super(panel, parent, installData, new IzPanelLayout(log), resourceManager);
         _targetPanel = targetPanel;
         _variableName = installData.getLangpack().getString(targetPanel + ".variableName");
         // Set default values
@@ -225,7 +227,7 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
             if (path.exists())
             {
                 int res = askQuestion(_warn, _warnMsg,
-                        AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_YES);
+                                      AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_YES);
                 ok = res == AbstractUIHandler.ANSWER_YES;
             }
             else

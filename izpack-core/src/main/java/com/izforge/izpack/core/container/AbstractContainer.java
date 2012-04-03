@@ -229,7 +229,13 @@ public abstract class AbstractContainer implements Container
             // Using the superclass class loader to load the child to avoid multiple copies of the superclass being
             // loaded in separate class loaders. This is typically an issue during testing where
             // the same classes may be loaded twice - once by maven, and once by the installer.
-            type = superType.getClassLoader().loadClass(className);
+            ClassLoader classLoader = superType.getClassLoader();
+            if (classLoader == null)
+            {
+                // may be null for bootstrap class loader
+                classLoader = getClass().getClassLoader();
+            }
+            type = classLoader.loadClass(className);
             if (!superType.isAssignableFrom(type))
             {
                 throw new ClassCastException("Class '" + type.getName() + "' does not implement "

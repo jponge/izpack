@@ -22,6 +22,7 @@
 package com.izforge.izpack.panels.defaulttarget;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.automation.PanelAutomation;
@@ -30,7 +31,7 @@ import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.path.PathInputPanel;
 
 /**
- * The taget directory selection panel.
+ * The target directory selection panel.
  *
  * @author Julien Ponge
  * @author Jeff Gordon
@@ -44,16 +45,17 @@ public class DefaultTargetPanel extends PathInputPanel
     /**
      * The constructor.
      *
+     * @param panel           the panel meta-data
      * @param parent          the parent window
      * @param installData     the installation data
      * @param resourceManager the resource manager
      * @param helper          the automation helper
      * @param log             the log
      */
-    public DefaultTargetPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
-                              DefaultTargetPanelAutomationHelper helper, Log log)
+    public DefaultTargetPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
+                              ResourceManager resourceManager, DefaultTargetPanelAutomationHelper helper, Log log)
     {
-        super(parent, installData, resourceManager, log);
+        super(panel, parent, installData, resourceManager, log);
         if (getDefaultInstallDir() != null)
         {
             // override the system default that uses app name (which is set in

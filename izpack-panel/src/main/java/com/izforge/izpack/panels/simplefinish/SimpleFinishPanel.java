@@ -19,7 +19,12 @@
 
 package com.izforge.izpack.panels.simplefinish;
 
+import java.io.File;
+
+import javax.swing.JLabel;
+
 import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
@@ -28,9 +33,6 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
-
-import javax.swing.JLabel;
-import java.io.File;
 
 /**
  * The simple finish panel class.
@@ -54,16 +56,17 @@ public class SimpleFinishPanel extends IzPanel
     /**
      * Constructs a <tt>SimpleFinishPanel</tt>.
      *
+     * @param panel               the panel meta-data
      * @param parent              the parent window
      * @param installData         the installation data
      * @param resourceManager     the resource manager
      * @param uninstallDataWriter the uninstallation data writer
      * @param log                 the log
      */
-    public SimpleFinishPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
-                             UninstallDataWriter uninstallDataWriter, Log log)
+    public SimpleFinishPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
+                             ResourceManager resourceManager, UninstallDataWriter uninstallDataWriter, Log log)
     {
-        super(parent, installData, new IzPanelLayout(log), resourceManager);
+        super(panel, parent, installData, new IzPanelLayout(log), resourceManager);
         this.uninstallDataWriter = uninstallDataWriter;
         this.log = log;
     }
@@ -94,7 +97,7 @@ public class SimpleFinishPanel extends IzPanel
             add(LabelFactory.create(parent.getIcons().get("check")));
             add(IzPanelLayout.createVerticalStrut(5));
             JLabel jLabel = LabelFactory.create(installData.getLangpack().getString("FinishPanel.success"),
-                    parent.getIcons().get("preferences"), LEADING);
+                                                parent.getIcons().get("preferences"), LEADING);
             jLabel.setName(GuiId.SIMPLE_FINISH_LABEL.id);
             add(jLabel, NEXT_LINE);
             add(IzPanelLayout.createVerticalStrut(5));
@@ -104,18 +107,19 @@ public class SimpleFinishPanel extends IzPanel
                 String path = translatePath(installData.getInfo().getUninstallerPath());
 
                 JLabel uninstallJLabel = LabelFactory.create(installData.getLangpack()
-                        .getString("FinishPanel.uninst.info"), parent.getIcons()
-                        .get("preferences"), LEADING);
+                                                                     .getString("FinishPanel.uninst.info"),
+                                                             parent.getIcons()
+                                                                     .get("preferences"), LEADING);
                 uninstallJLabel.setName(GuiId.SIMPLE_FINISH_UNINSTALL_LABEL.id);
                 add(uninstallJLabel, NEXT_LINE);
                 add(LabelFactory.create(path, parent.getIcons().get("empty"),
-                        LEADING), NEXT_LINE);
+                                        LEADING), NEXT_LINE);
             }
         }
         else
         {
             add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.fail"),
-                    parent.getIcons().get("stop"), LEADING));
+                                    parent.getIcons().get("stop"), LEADING));
         }
         getLayoutHelper().completeLayout(); // Call, or call not?
         log.informUser();

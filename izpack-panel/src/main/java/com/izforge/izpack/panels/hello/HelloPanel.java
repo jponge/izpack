@@ -21,8 +21,14 @@
 
 package com.izforge.izpack.panels.hello;
 
+import java.awt.LayoutManager2;
+import java.util.ArrayList;
+
+import javax.swing.JLabel;
+
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
@@ -31,10 +37,6 @@ import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
 
 /**
  * The Hello panel class.
@@ -45,34 +47,40 @@ public class HelloPanel extends IzPanel
 {
 
     /**
-     *
+     * Serialization version identifier.
      */
     private static final long serialVersionUID = 3257848774955905587L;
 
     /**
-     * Constructs a <tt>HelloPanel</tt>.
+     * Constructs an <tt>HelloPanel</tt>.
      *
-     * @param parent              the parent window
-     * @param installData         the installation data
-     * @param resourceManager     the resource manager
-     * @param log                 the log
+     * @param panel           the panel meta-data
+     * @param parent          the parent window
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
+     * @param log             the log
      */
-    public HelloPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager, Log log)
+    public HelloPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+                      Log log)
     {
-        this(parent, installData, new IzPanelLayout(log), resourceManager);
+        this(panel, parent, installData, new IzPanelLayout(log), resourceManager);
     }
 
     /**
-     * Creates a new HelloPanel object with the given layout manager. Valid layout manager are the
-     * IzPanelLayout and the GridBagLayout. New panels should be use the IzPanelLaout. If lm is
+     * Constructs an <tt>HelloPanel</tt> with the given layout manager.
+     * <p/>
+     * Valid layout manager are the  {@link IzPanelLayout} and <tt>GridBagLayout</tt>.
+     * New panels should be use IzPanelLayout. If layoutManager is
      * null, no layout manager will be created or initialized.
      *
-     * @param parent The parent IzPack installer frame.
-     * @param idata  The installer internal installDataGUI.
-     * @param layout layout manager to be used with this IzPanel
+     * @param panel       the panel meta-data
+     * @param parent      The parent IzPack installer frame.
+     * @param installData The installer internal installDataGUI.
+     * @param layout      layout manager to be used with this IzPanel
      */
 
-    public HelloPanel(InstallerFrame parent, GUIInstallData idata, LayoutManager2 layout, ResourceManager resourceManager)
+    public HelloPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, LayoutManager2 layout,
+                      ResourceManager resourceManager)
     {
         // Layout handling. This panel was changed from a mixed layout handling
         // with GridBagLayout and BoxLayout to IzPanelLayout. It can be used as an
@@ -80,10 +88,11 @@ public class HelloPanel extends IzPanel
         // which are excrescent for a "normal" panel.
         // Set a IzPanelLayout as layout for this panel.
         // This have to be the first line during layout if IzPanelLayout will be used.
-        super(parent, idata, layout, resourceManager);
+        super(panel, parent, installData, layout, resourceManager);
         // We create and put the labels
-        String welcomeText = installData.getLangpack().getString("HelloPanel.welcome1") + idata.getInfo().getAppName() + " "
-                + idata.getInfo().getAppVersion() + installData.getLangpack().getString("HelloPanel.welcome2");
+        String welcomeText = installData.getLangpack().getString(
+                "HelloPanel.welcome1") + installData.getInfo().getAppName() + " "
+                + installData.getInfo().getAppVersion() + installData.getLangpack().getString("HelloPanel.welcome2");
         JLabel welcomeLabel = LabelFactory.create(welcomeText, parent.getIcons().get("host"), LEADING);
         welcomeLabel.setName(GuiId.HELLO_PANEL_LABEL.id);
         // IzPanelLayout is a constraint orientated layout manager. But if no constraint is
@@ -98,7 +107,7 @@ public class HelloPanel extends IzPanel
         // to create a paragraph gap which is configurable.
         add(IzPanelLayout.createParagraphGap());
 
-        ArrayList<Info.Author> authors = idata.getInfo().getAuthors();
+        ArrayList<Info.Author> authors = installData.getInfo().getAuthors();
 
         if (!authors.isEmpty())
         {
@@ -128,11 +137,11 @@ public class HelloPanel extends IzPanel
             add(IzPanelLayout.createParagraphGap());
         }
 
-        if (idata.getInfo().getAppURL() != null)
+        if (installData.getInfo().getAppURL() != null)
         {
-            String urlText = installData.getLangpack().getString("HelloPanel.url") + idata.getInfo().getAppURL();
+            String urlText = installData.getLangpack().getString("HelloPanel.url") + installData.getInfo().getAppURL();
             JLabel appURLLabel = LabelFactory.create(urlText, parent.getIcons().get("bookmark"),
-                    LEADING);
+                                                     LEADING);
             add(appURLLabel, LayoutConstants.NEXT_LINE);
         }
         // At end of layouting we should call the completeLayout method also they do nothing.

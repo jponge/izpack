@@ -24,6 +24,7 @@ package com.izforge.izpack.panels.summary;
 import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.log.Log;
@@ -55,14 +56,16 @@ public class SummaryPanel extends IzPanel
     /**
      * Constructs a <tt>SummaryPanel</tt>.
      *
-     * @param parent              the parent window
-     * @param installData         the installation data
-     * @param resourceManager     the resource manager
-     * @param log                 the log
+     * @param panel           the panel meta-data
+     * @param parent          the parent window
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
+     * @param log             the log
      */
-    public SummaryPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager, Log log)
+    public SummaryPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+                        Log log)
     {
-        super(parent, installData, new IzPanelLayout(log), resourceManager);
+        super(panel, parent, installData, new IzPanelLayout(log), resourceManager);
         add(createMultiLineLabelLang("SummaryPanel.info"));
         try
         {

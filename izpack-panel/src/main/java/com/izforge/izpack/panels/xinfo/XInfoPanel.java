@@ -30,6 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -63,12 +64,14 @@ public class XInfoPanel extends IzPanel
     /**
      * The constructor.
      *
-     * @param parent The parent window.
-     * @param idata  The installation installDataGUI.
+     * @param panel           the panel meta-data
+     * @param parent          the parent IzPack installer frame
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
      */
-    public XInfoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+    public XInfoPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager)
     {
-        super(parent, idata, resourceManager);
+        super(panel, parent, installData, resourceManager);
 
         // We initialize our layout
         GridBagLayout layout = new GridBagLayout();
@@ -89,7 +92,7 @@ public class XInfoPanel extends IzPanel
         textArea = new JTextArea();
         textArea.setEditable(false);
 
-        String textAreaFont = idata.getVariable("XInfoPanel.font");
+        String textAreaFont = installData.getVariable("XInfoPanel.font");
         if (textAreaFont != null && textAreaFont.length() > 0)
         {
             Font font = Font.decode(textAreaFont);

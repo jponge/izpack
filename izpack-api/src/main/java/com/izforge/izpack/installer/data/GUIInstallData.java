@@ -19,17 +19,16 @@
 
 package com.izforge.izpack.installer.data;
 
-import com.izforge.izpack.api.data.GUIPrefs;
-
-import javax.swing.UIManager;
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.Properties;
 
+import javax.swing.UIManager;
+
+import com.izforge.izpack.api.data.GUIPrefs;
+
 /**
- * Encloses information about the install process. This class is implemented as a singleton which
- * can be easily accessed by different components of the installer. However, this implementation is
- * not thread safe.
+ * Encloses information about the install process.
  *
  * @author Julien Ponge <julien@izforge.com>
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
@@ -43,13 +42,6 @@ public class GUIInstallData extends InstallData implements Serializable
      * The GUI preferences.
      */
     public GUIPrefs guiPrefs;
-
-    /**
-     * Contains at IzPanel constructor call the related Panel object. This is a hack
-     * to allow usage of the meta data stored in the Panel object during construction of
-     * the IzPanel. Do not use this member at an other place.
-     */
-    public com.izforge.izpack.api.data.Panel currentPanel;
 
     /**
      * The buttons highlighting color.

@@ -16,7 +16,16 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTree;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
@@ -24,6 +33,7 @@ import javax.swing.tree.TreePath;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.gui.LabelFactory;
@@ -129,24 +139,28 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     /**
      * The constructor.
      *
-     * @param rules
-     * @param parent The parent window.
-     * @param idata  The installation installDataGUI.
+     * @param panel           the panel meta-data
+     * @param parent          the parent window
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
+     * @param rules           the rules
      */
-    public TreePacksPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager, RulesEngine rules)
+    public TreePacksPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
+                          ResourceManager resourceManager, RulesEngine rules)
     {
-        super(parent, idata, resourceManager);
+        super(panel, parent, installData, resourceManager);
         // Load langpack.
         try
         {
             this.langpack = installData.getLangpack();
             InputStream langPackStream = null;
-            String webdir = idata.getInfo().getWebDirURL();
+            String webdir = installData.getInfo().getWebDirURL();
             if (webdir != null)
             {
                 try
                 {
-                    java.net.URL url = new java.net.URL(webdir + "/langpacks/" + LANG_FILE_NAME + idata.getLocaleISO3());
+                    java.net.URL url = new java.net.URL(
+                            webdir + "/langpacks/" + LANG_FILE_NAME + installData.getLocaleISO3());
                     langPackStream = new WebAccessor(null).openInputStream(url);
                 }
                 catch (Exception e)
@@ -169,7 +183,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         }
 
         // init the map
-        computePacks(idata.getAvailablePacks());
+        computePacks(installData.getAvailablePacks());
 
         this.rules = rules;
     }

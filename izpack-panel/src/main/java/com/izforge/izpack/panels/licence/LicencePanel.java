@@ -21,7 +21,16 @@
 
 package com.izforge.izpack.panels.licence;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
 import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
@@ -30,17 +39,12 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 /**
  * The license panel.
  *
  * @author Julien Ponge
  */
-public class
-        LicencePanel extends IzPanel implements ActionListener
+public class LicencePanel extends IzPanel implements ActionListener
 {
 
     /**
@@ -62,21 +66,23 @@ public class
     /**
      * Constructs a <tt>LicencePanel</tt>.
      *
+     * @param panel           the panel meta-data
      * @param parent          the parent window
      * @param installData     the installation data
      * @param resourceManager the resource manager
      * @param log             the log
      */
-    public LicencePanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager, Log log)
+    public LicencePanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+                        Log log)
     {
-        super(parent, installData, new IzPanelLayout(log), resourceManager);
+        super(panel, parent, installData, new IzPanelLayout(log), resourceManager);
         // We load the licence
         loadLicence();
 
         // We put our components
 
         add(LabelFactory.create(installData.getLangpack().getString("LicencePanel.info"),
-                parent.getIcons().get("history"), LEADING), NEXT_LINE);
+                                parent.getIcons().get("history"), LEADING), NEXT_LINE);
         JTextArea textArea = new JTextArea(licence);
         textArea.setName(GuiId.LICENCE_TEXT_AREA.id);
         textArea.setCaretPosition(0);

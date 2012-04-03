@@ -6,10 +6,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 
@@ -20,16 +18,6 @@ import org.junit.Test;
  */
 public class PrivilegedRunnerTest
 {
-
-    /**
-     * Sets up the test case.
-     *
-     * @throws IOException for any I/O error
-     */
-    @Before
-    public void setUp() throws IOException
-    {
-    }
 
     /**
      * Tests {@link PrivilegedRunner#isPlatformSupported()}.
@@ -44,7 +32,6 @@ public class PrivilegedRunnerTest
 
         assertFalse(new PrivilegedRunner(Platforms.MAC).isPlatformSupported());
         assertTrue(new PrivilegedRunner(Platforms.MAC_OSX).isPlatformSupported());
-
     }
 
     /**

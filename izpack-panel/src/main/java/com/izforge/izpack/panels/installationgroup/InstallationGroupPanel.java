@@ -26,10 +26,25 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -42,6 +57,7 @@ import javax.swing.table.TableModel;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -80,9 +96,19 @@ public class InstallationGroupPanel extends IzPanel
     private GroupData[] rows;
     private int selectedGroup = -1;
 
-    public InstallationGroupPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
+
+    /**
+     * The constructor.
+     *
+     * @param panel           the panel meta-data
+     * @param parent          the parent window
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
+     */
+    public InstallationGroupPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
+                                  ResourceManager resourceManager)
     {
-        super(parent, idata, resourceManager);
+        super(panel, parent, installData, resourceManager);
         buildLayout();
     }
 
@@ -109,7 +135,7 @@ public class InstallationGroupPanel extends IzPanel
         if (installGroups.size() == 0)
         {
             super.askQuestion("Skip InstallGroup selection",
-                    "Skip InstallGroup selection", AbstractUIHandler.CHOICES_YES_NO);
+                              "Skip InstallGroup selection", AbstractUIHandler.CHOICES_YES_NO);
             parent.skipPanel();
             return;
         }
@@ -145,9 +171,9 @@ public class InstallationGroupPanel extends IzPanel
 
                 JRadioButton button = (JRadioButton) value;
                 button.setForeground(isSelected ?
-                        table.getSelectionForeground() : table.getForeground());
+                                             table.getSelectionForeground() : table.getForeground());
                 button.setBackground(isSelected ?
-                        table.getSelectionBackground() : table.getBackground());
+                                             table.getSelectionBackground() : table.getBackground());
 
                 // long millis = System.currentTimeMillis() % 100000;
                 // System.out.printf("%1$5d: row: %2$d; isSelected: %3$5b; buttonSelected: %4$5b; selectedRow: %5$d%n", millis, row, isSelected, button.isSelected(), selectedRow);
@@ -273,7 +299,8 @@ public class InstallationGroupPanel extends IzPanel
         descriptionField.setOpaque(false);
         descriptionField.setText("<b>Install group description text</b>");
         descriptionField.setContentType("text/html");
-        descriptionField.setBorder(new TitledBorder(this.installData.getLangpack().getString("PacksPanel.description")));
+        descriptionField.setBorder(
+                new TitledBorder(this.installData.getLangpack().getString("PacksPanel.description")));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;

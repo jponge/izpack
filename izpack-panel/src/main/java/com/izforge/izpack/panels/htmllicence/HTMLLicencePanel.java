@@ -19,7 +19,20 @@
 
 package com.izforge.izpack.panels.htmllicence;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URL;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JEditorPane;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.text.Document;
+
 import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
@@ -27,14 +40,6 @@ import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
-
-import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-import javax.swing.text.Document;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.net.URL;
 
 /**
  * The IzPack HTML license panel.
@@ -63,21 +68,23 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
     /**
      * Constructs an <tt>HTMLLicencePanel</tt>.
      *
+     * @param panel           the panel
      * @param parent          the parent window
      * @param installData     the installation data
      * @param resourceManager the resource manager
      * @param log             the log
      */
-    public HTMLLicencePanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager, Log log)
+    public HTMLLicencePanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
+                            ResourceManager resourceManager, Log log)
     {
-        super(parent, installData, new IzPanelLayout(log), resourceManager);
+        super(panel, parent, installData, new IzPanelLayout(log), resourceManager);
         // We load the licence
         loadLicence();
 
         // We put our components
 
         add(LabelFactory.create(installData.getLangpack().getString("LicencePanel.info"),
-                parent.getIcons().get("history"), LEADING), NEXT_LINE);
+                                parent.getIcons().get("history"), LEADING), NEXT_LINE);
         try
         {
             textArea = new JEditorPane();

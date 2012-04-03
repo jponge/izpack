@@ -21,16 +21,15 @@
 
 package com.izforge.izpack.panels.compile;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.installer.unpacker.IUnpacker;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -44,15 +43,18 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
+
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.unpacker.IUnpacker;
 
 /**
  * The compile panel class.
@@ -135,6 +137,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
     /**
      * Constructs a <tt>CompilePanel</tt>.
      *
+     * @param panel               the panel meta-data
      * @param parent              the parent window
      * @param variableSubstitutor the variable substituter
      * @param installData         the installation data
@@ -142,10 +145,10 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
      * @param unpacker            the unpacker
      * @throws IOException for any I/O error
      */
-    public CompilePanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+    public CompilePanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
                         VariableSubstitutor variableSubstitutor, IUnpacker unpacker) throws IOException
     {
-        super(parent, installData, resourceManager);
+        super(panel, parent, installData, resourceManager);
         unpacker.setHandler(this);
         this.worker = new CompileWorker(installData, this, variableSubstitutor, resourceManager);
 
@@ -158,13 +161,15 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         JLabel compilerLabel = new JLabel();
         compilerComboBox = new JComboBox();
         this.browseButton = ButtonFactory.createButton(installData.getLangpack()
-                .getString("CompilePanel.browse"), installData.buttonsHColor);
+                                                               .getString("CompilePanel.browse"),
+                                                       installData.buttonsHColor);
         JLabel argumentsLabel = new JLabel();
         this.argumentsComboBox = new JComboBox();
         this.startButton = ButtonFactory.createButton(installData.getLangpack()
-                .getString("CompilePanel.start"), installData.buttonsHColor);
+                                                              .getString("CompilePanel.start"),
+                                                      installData.buttonsHColor);
         this.tipLabel = LabelFactory.create(installData.getLangpack().getString("CompilePanel.tip"),
-                parent.getIcons().get("tip"), SwingConstants.TRAILING);
+                                            parent.getIcons().get("tip"), SwingConstants.TRAILING);
         this.opLabel = new JLabel();
         packProgressBar = new JProgressBar();
         this.overallLabel = new JLabel();
@@ -336,7 +341,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
             this.parent.blockGUI();
             JFileChooser chooser = new JFileChooser();
             chooser.setCurrentDirectory(new File((String) this.compilerComboBox.getSelectedItem())
-                    .getParentFile());
+                                                .getParentFile());
             int result = chooser.showDialog(this.parent, this.installData.getLangpack()
                     .getString("CompilePanel.browse.approve"));
             if (result == JFileChooser.APPROVE_OPTION)
@@ -497,7 +502,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
 
         overallProgressBar.setValue(jobNo);
         overallProgressBar.setString(Integer.toString(jobNo) + " / "
-                + Integer.toString(this.noOfJobs));
+                                             + Integer.toString(this.noOfJobs));
     }
 
     /**
@@ -616,11 +621,13 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
             stdErrText = new JTextArea();
             JPanel buttonsPanel = new JPanel();
             reconfigButton = ButtonFactory.createButton(installData.getLangpack()
-                    .getString("CompilePanel.error.reconfigure"), this.buttonHColor);
+                                                                .getString("CompilePanel.error.reconfigure"),
+                                                        this.buttonHColor);
             ignoreButton = ButtonFactory.createButton(installData.getLangpack()
-                    .getString("CompilePanel.error.ignore"), this.buttonHColor);
+                                                              .getString("CompilePanel.error.ignore"),
+                                                      this.buttonHColor);
             abortButton = ButtonFactory.createButton(installData.getLangpack()
-                    .getString("CompilePanel.error.abort"), this.buttonHColor);
+                                                             .getString("CompilePanel.error.abort"), this.buttonHColor);
 
             addWindowListener(new java.awt.event.WindowAdapter()
             {

@@ -32,7 +32,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.LookAndFeel;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import com.izforge.izpack.api.GuiId;
@@ -47,6 +54,7 @@ import com.izforge.izpack.api.installer.ISummarisable;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.data.PanelAction;
+import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
 import com.izforge.izpack.gui.MultiLineLabel;
@@ -70,7 +78,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 {
     private static final long serialVersionUID = 3256442495255786038L;
 
-    private static final transient Logger logger = Logger.getLogger(IzPanel.class.getName());
 
     /**
      * The helper object which handles layout
@@ -85,12 +92,12 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * The installer internal data (actually a melting-pot class with all-public fields.
      */
-    protected GUIInstallData installData;
+    protected final GUIInstallData installData;
 
     /**
      * The parent IzPack installer frame.
      */
-    protected InstallerFrame parent;
+    protected final InstallerFrame parent;
 
     /**
      * internal headline Label
@@ -121,73 +128,95 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     public final static String DELIMITER = ".";
 
     /**
-     * Information about the panel
+     * The resource manager.
      */
-    public com.izforge.izpack.api.data.Panel metadata;
+    protected final ResourceManager resourceManager;
+    protected final VariableSubstitutor variableSubstitutor;
 
     /**
-     * The resource manager
+     * The panel meta-data.
      */
-    protected ResourceManager resourceManager;
-    protected VariableSubstitutor variableSubstitutor;
+    private Panel metadata;
+
+
     private String helpUrl = null;
 
     /**
-     * The constructor.
-     *
-     * @param parent          The parent IzPack installer frame.
-     * @param installData     The installer internal data.
-     * @param resourceManager
+     * The logger.
      */
-    public IzPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager)
+    private static final Logger logger = Logger.getLogger(IzPanel.class.getName());
+
+    /**
+     * Constructs an <tt>IzPanel</tt>.
+     *
+     * @param panel           the panel meta-data
+     * @param parent          the parent IzPack installer frame
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
+     */
+    public IzPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager)
     {
-        this(parent, installData, (LayoutManager2) null, resourceManager);
+        this(panel, parent, installData, (LayoutManager2) null, resourceManager);
     }
 
     /**
-     * Creates a new IzPanel object with the given layout manager. Valid layout manager are the
-     * IzPanelLayout and the GridBagLayout. New panels should be use the IzPanelLaout. If layoutManager is
+     * Constructs an <tt>IzPanel</tt> with the given layout manager.
+     * <p/>
+     * Valid layout manager are the  {@link IzPanelLayout} and <tt>GridBagLayout</tt>.
+     * New panels should be use IzPanelLayout. If layoutManager is
      * null, no layout manager will be created or initialized.
      *
-     * @param parent          The parent IzPack installer frame.
-     * @param installData     The installer internal data.
+     * @param panel           the panel meta-data
+     * @param parent          the parent IzPack installer frame
+     * @param installData     the installation data
      * @param layoutManager   layout manager to be used with this IzPanel
-     * @param resourceManager
+     * @param resourceManager the resource manager
      */
-    public IzPanel(InstallerFrame parent, GUIInstallData installData, LayoutManager2 layoutManager, ResourceManager resourceManager)
+    public IzPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, LayoutManager2 layoutManager,
+                   ResourceManager resourceManager)
     {
         super();
-        init(parent, installData, resourceManager);
+        this.metadata = panel;
+        this.parent = parent;
+        this.installData = installData;
+        this.resourceManager = resourceManager;
+        variableSubstitutor = new VariableSubstitutorImpl(this.installData.getVariables());
+        initLayoutHelper();
         if (layoutManager != null)
         {
             getLayoutHelper().startLayout(layoutManager);
         }
-        variableSubstitutor = new VariableSubstitutorImpl(this.installData.getVariables());
     }
 
     /**
-     * Creates a new IzPanel object.
+     * Constructs an <tt>IzPanel</tt>.
      *
-     * @param parent      the Parent Frame
-     * @param installData Installers Runtime Data Set
-     * @param iconName    The Headline IconName
+     * @param panel           the panel meta-data
+     * @param parent          the parent IzPack installer frame
+     * @param iconName        the Headline icon name
+     * @param installData     the installation data
+     * @param resourceManager the resource manager
      */
-    public IzPanel(InstallerFrame parent, GUIInstallData installData, String iconName, ResourceManager resourceManager)
+    public IzPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, String iconName,
+                   ResourceManager resourceManager)
     {
-        this(parent, installData, iconName, -1, resourceManager);
+        this(panel, parent, installData, iconName, -1, resourceManager);
     }
 
     /**
-     * The constructor with Icon.
+     * Constructs an <tt>IzPanel</tt>.
      *
-     * @param parent      The parent IzPack installer frame.
-     * @param installData The installer internal data.
-     * @param iconName    A iconname to show as left oriented headline-leading Icon.
-     * @param instance    An instance counter
+     * @param panel           the panel meta-data
+     * @param parent          the parent IzPack installer frame
+     * @param installData     the installation data
+     * @param iconName        the Headline icon name
+     * @param instance        an instance counter
+     * @param resourceManager the resource manager
      */
-    public IzPanel(InstallerFrame parent, GUIInstallData installData, String iconName, int instance, ResourceManager resourceManager)
+    public IzPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, String iconName, int instance,
+                   ResourceManager resourceManager)
     {
-        this(parent, installData, resourceManager);
+        this(panel, parent, installData, resourceManager);
         buildHeadline(iconName, instance);
     }
 
@@ -214,7 +243,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         // TODO:
         // TODO: first Test if a Resource for your protected Instance exists.
         String headline;
-        String headlineSearchBaseKey = getClassName() + DELIMITER + "headline"; // Results for example in
+        String headlineSearchBaseKey = getClass().getSimpleName() + DELIMITER + "headline"; // Results for example in
         // "ShortcutPanel.headline"
         // :
 
@@ -226,7 +255,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             String instanceHeadline = getString(instanceSearchKey);
 
             logger.fine("found headline: " + instanceHeadline + DELIMITER + " for instance # "
-                    + instanceNumber);
+                                + instanceNumber);
             if (!instanceSearchKey.equals(instanceHeadline))
             {
                 headline = instanceHeadline;
@@ -245,8 +274,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         {
             if ((imageIconName != null) && !"".equals(imageIconName))
             {
-                headLineLabel = new JLabel(headline, getImageIcon(imageIconName),
-                        SwingConstants.LEADING);
+                headLineLabel = new JLabel(headline, getImageIcon(imageIconName), SwingConstants.LEADING);
             }
             else
             {
@@ -278,11 +306,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         return result;
     }
 
-    private String getClassName() {
-        String[] splitClassName = getClass().getCanonicalName().split("\\.");
-        return splitClassName[splitClassName.length-1];
-    }
-
     /**
      * Gets a language Resource String from the parent, which holds these global resource.
      *
@@ -311,32 +334,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     protected void initLayoutHelper()
     {
         layoutHelper = new LayoutHelper(this, installData);
-    }
-
-    /**
-     * Internal init method
-     *
-     * @param parent          the parent frame
-     * @param idata           installers runtime dataset
-     * @param resourceManager
-     */
-    protected void init(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager)
-    {
-        this.installData = idata;
-        this.parent = parent;
-        this.resourceManager = resourceManager;
-        // To get the Panel object via installData is a hack because GUIInstallData will
-        // be hold global data, not panel specific data. But the Panel object will
-        // be needed in the constructor of some derived classes. And to expand the
-        // constructor is also not a good way because all derived classes have to
-        // change then the signature. Also the custem IzPanels elswhere. Therefore
-        // this hack...
-        // Problems with this hack will be exist if more than one threads calls the
-        // constructors of derived clases. This is not the case.
-        this.metadata = idata.currentPanel;
-        idata.currentPanel = null;
-        initLayoutHelper();
-
     }
 
     /**
@@ -423,7 +420,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         }
 
         int user_choice = JOptionPane.showConfirmDialog(this, question, title, jo_choices,
-                JOptionPane.QUESTION_MESSAGE);
+                                                        JOptionPane.QUESTION_MESSAGE);
 
         if (user_choice == JOptionPane.CANCEL_OPTION)
         {
@@ -452,7 +449,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     {
         return (JOptionPane.showConfirmDialog(this, message, this.installData.getLangpack()
                 .getString("installer.Message"), JOptionPane.WARNING_MESSAGE,
-                JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION);
+                                              JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION);
     }
 
     /**
@@ -475,7 +472,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     public boolean emitWarning(String title, String message)
     {
         return (JOptionPane.showConfirmDialog(this, message, title, JOptionPane.WARNING_MESSAGE,
-                JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION);
+                                              JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION);
 
     }
 
@@ -564,19 +561,15 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
         int nameStart = curClassName.lastIndexOf('.') + 1;
         curClassName = curClassName.substring(nameStart, curClassName.length());
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append(curClassName).append(".").append(subkey);
         String fullkey = buffer.toString();
-        String panelid = null;
-        if (getMetadata() != null)
-        {
-            panelid = getMetadata().getPanelid();
-        }
+        String panelId = getMetadata().getPanelid();
         String retval = null;
-        if (panelid != null)
+        if (panelId != null)
         {
             buffer.append(".");
-            buffer.append(panelid);
+            buffer.append(panelId);
             retval = installData.getLangpack().getString(buffer.toString());
         }
         if (retval == null || retval.startsWith(fullkey))
@@ -747,8 +740,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public MultiLineLabel createMultiLineLabel(String text, String iconId, int pos)
     {
-        MultiLineLabel multiLineLabel = null;
-        multiLineLabel = new MultiLineLabel(text, 0, 0);
+        MultiLineLabel multiLineLabel = new MultiLineLabel(text, 0, 0);
         multiLineLabel.setFont(getControlTextFont());
         return multiLineLabel;
     }
@@ -852,7 +844,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
                                                        int gridheight)
     {
         return (GridBagConstraints) (layoutHelper.getNewConstraints(gridx, gridy, gridwidth,
-                gridheight));
+                                                                    gridheight));
     }
 
     /**
@@ -1014,19 +1006,13 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     }
 
     /**
-     * @return the metadata
+     * Returns the panel metadata.
+     *
+     * @return the panel metadata
      */
     public Panel getMetadata()
     {
-        return this.metadata;
-    }
-
-    /**
-     * @param p the metadata to set
-     */
-    public void setMetadata(Panel p)
-    {
-        this.metadata = p;
+        return metadata;
     }
 
     public DataValidator getValidationService()
@@ -1049,7 +1035,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      *         rule exists. Otherwise <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
-    private final boolean validatePanel()
+    private boolean validatePanel()
     {
         boolean returnValue = true;
 
@@ -1066,10 +1052,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
                 parent.refreshDynamicVariables();
                 for (DynamicInstallerRequirementValidator validator : dynConds)
                 {
-                    Status status =  validator.validateData(installData);
+                    Status status = validator.validateData(installData);
                     if (status == Status.ERROR)
                     {
-                        logger.fine("Dynamic installer requirement validation (" + validator.getClass().getName() + ") failed");
+                        logger.fine(
+                                "Dynamic installer requirement validation (" + validator.getClass().getName() + ") failed");
                     }
                     returnValue = processValidationState(status);
                 }
@@ -1089,7 +1076,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             {
                 guiComponent.setCursor(newCursor);
                 // validating the data
-                Status status =  this.validationService.validateData(this.installData);
+                Status status = this.validationService.validateData(this.installData);
                 if (status == Status.ERROR)
                 {
                     logger.fine("Data validation (" + validationService.getClass().getName() + ") failed");
@@ -1128,7 +1115,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
                 try
                 {
                     warningMessage = variableSubstitutor.substitute(installData.getLangpack()
-                            .getString(this.validationService.getWarningMessageId()));
+                                                                            .getString(
+                                                                                    this.validationService.getWarningMessageId()));
                 }
                 catch (Exception e)
                 {
@@ -1147,7 +1135,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
                 try
                 {
                     errorMessage = variableSubstitutor.substitute(installData.getLangpack()
-                            .getString(this.validationService.getErrorMessageId()));
+                                                                          .getString(
+                                                                                  this.validationService.getErrorMessageId()));
                 }
                 catch (Exception e)
                 {
@@ -1282,9 +1271,10 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "IzPanel{" +
-                "class=" + getClassName() +
+                "class=" + getClass().getSimpleName() +
                 ", hidden=" + hidden +
                 '}';
     }
