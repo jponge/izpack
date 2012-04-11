@@ -22,6 +22,19 @@
 
 package com.izforge.izpack.installer.unpacker;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.lang.reflect.Constructor;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.jar.Pack200;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.OverrideType;
 import com.izforge.izpack.api.data.Pack;
@@ -43,19 +56,6 @@ import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.OsConstraintHelper;
 import com.izforge.izpack.util.os.FileQueue;
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.lang.reflect.Constructor;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.jar.Pack200;
 
 /**
  * Unpacker class.
@@ -145,7 +145,7 @@ public class Unpacker extends UnpackerBase
 
                 // Custom action listener stuff --- beforePack ----
                 informListeners(customActions, InstallerListener.BEFORE_PACK, packs.get(i),
-                        npacks, handler);
+                                npacks, handler);
                 ObjectInputStream objIn = new ObjectInputStream(getPackAsStream(p.id, p.uninstall));
 
                 // We unpack the files
@@ -211,7 +211,7 @@ public class Unpacker extends UnpackerBase
 
                         // Custom action listener stuff --- beforeFile ----
                         informListeners(customActions, InstallerListener.BEFORE_FILE, pathFile, pf,
-                                null);
+                                        null);
 
                         handler.progress(j, path);
 
@@ -275,15 +275,19 @@ public class Unpacker extends UnpackerBase
                             {
                                 pis = new FileInputStream(resolvedFile);
                                 //may have a different length & last modified than we had at compiletime, therefore we have to build a new PackFile for the copy process...
-                                pf = new PackFile(resolvedFile.getParentFile(), resolvedFile, pf.getTargetPath(), pf.osConstraints(), pf.override(), pf.overrideRenameTo(), pf.blockable(), pf.getAdditionals());
+                                pf = new PackFile(resolvedFile.getParentFile(), resolvedFile, pf.getTargetPath(),
+                                                  pf.osConstraints(), pf.override(), pf.overrideRenameTo(),
+                                                  pf.blockable(), pf.getAdditionals());
                             }
                             else
                             {
                                 //file not found
                                 //issue a warning (logging api pending)
                                 //since this file was loosely bundled, we continue with the installation.
-                                System.out.println("Could not find loosely bundled file: " + pf.getRelativeSourcePath());
-                                if (!handler.emitWarning("File not found", "Could not find loosely bundled file: " + pf.getRelativeSourcePath()))
+                                System.out.println(
+                                        "Could not find loosely bundled file: " + pf.getRelativeSourcePath());
+                                if (!handler.emitWarning("File not found",
+                                                         "Could not find loosely bundled file: " + pf.getRelativeSourcePath()))
                                 {
                                     throw new InstallerException("Installation cancelled");
                                 }
@@ -308,7 +312,7 @@ public class Unpacker extends UnpackerBase
                         if (pf.isPack200Jar())
                         {
                             int key = objIn.readInt();
-                            InputStream pack200Input = resourceManager.getInputStream("/packs/pack200-" + key);
+                            InputStream pack200Input = resourceManager.getInputStream("packs/pack200-" + key);
                             Pack200.Unpacker unpacker = getPack200Unpacker();
                             java.util.jar.JarOutputStream jarOut = new java.util.jar.JarOutputStream(out);
                             unpacker.unpack(pack200Input, jarOut);
@@ -393,7 +397,7 @@ public class Unpacker extends UnpackerBase
 
                 // Custom action listener stuff --- afterPack ----
                 informListeners(customActions, InstallerListener.AFTER_PACK, packs.get(i),
-                        i, handler);
+                                i, handler);
             }
 
             // Commit a file queue if there are potentially blocked files
@@ -511,7 +515,8 @@ public class Unpacker extends UnpackerBase
             // See compiler.Packager#getJarOutputStream for the counterpart
             String baseName = installData.getInfo().getInstallerBase();
             String packURL = webDirURL + "/" + baseName + ".pack" + packid + ".jar";
-            String tempFolder = IoHelper.translatePath(installData.getInfo().getUninstallerPath() + Unpacker.tempSubPath, variableSubstitutor);
+            String tempFolder = IoHelper.translatePath(
+                    installData.getInfo().getUninstallerPath() + Unpacker.tempSubPath, variableSubstitutor);
             String tempfile;
             try
             {
@@ -540,7 +545,8 @@ public class Unpacker extends UnpackerBase
             // temporary
             if (in == null)
             {
-                throw new InstallerException(url.toString() + " not available", new FileNotFoundException(url.toString()));
+                throw new InstallerException(url.toString() + " not available",
+                                             new FileNotFoundException(url.toString()));
             }
         }
         if (in != null && installData.getInfo().getPackDecoderClassName() != null)
@@ -559,8 +565,8 @@ public class Unpacker extends UnpackerBase
             if (!InputStream.class.isInstance(instance))
             {
                 throw new InstallerException("'" + installData.getInfo().getPackDecoderClassName()
-                        + "' must be derived from "
-                        + InputStream.class.toString());
+                                                     + "' must be derived from "
+                                                     + InputStream.class.toString());
             }
             in = (InputStream) instance;
 
