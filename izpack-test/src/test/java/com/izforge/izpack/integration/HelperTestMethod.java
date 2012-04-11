@@ -1,20 +1,22 @@
 package com.izforge.izpack.integration;
 
-import com.izforge.izpack.api.GuiId;
-import com.izforge.izpack.installer.base.InstallerController;
-import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.installer.language.LanguageDialog;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.io.File;
+import java.io.IOException;
+
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
 import org.hamcrest.core.Is;
 
-import java.io.File;
-import java.io.IOException;
-
-import static org.hamcrest.MatcherAssert.assertThat;
+import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.installer.base.InstallerController;
+import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.data.UninstallData;
+import com.izforge.izpack.installer.language.LanguageDialog;
 
 /**
  * Shared methods beetween tests classes
@@ -39,7 +41,6 @@ public class HelperTestMethod
         dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
         // Seems necessary to unlock window
         dialogFrameFixture.cleanUp();
-        dialogFrameFixture = null;
     }
 
     /**
@@ -49,7 +50,8 @@ public class HelperTestMethod
      * @param installerController
      * @throws Exception
      */
-    public static FrameFixture prepareFrameFixture(InstallerFrame installerFrame, InstallerController installerController) throws Exception
+    public static FrameFixture prepareFrameFixture(InstallerFrame installerFrame,
+                                                   InstallerController installerController) throws Exception
     {
         FrameFixture installerFrameFixture = new FrameFixture(installerFrame);
         installerController.buildInstallation();
@@ -69,7 +71,14 @@ public class HelperTestMethod
         return dialogFixture;
     }
 
-    public static void waitAndCheckInstallation(GUIInstallData installData, File installPath) throws InterruptedException
+    public static void waitAndCheckInstallation(AutomatedInstallData installData)
+            throws InterruptedException
+    {
+        waitAndCheckInstallation(installData, new File(installData.getInstallPath()));
+    }
+
+    public static void waitAndCheckInstallation(AutomatedInstallData installData, File installPath)
+            throws InterruptedException
     {
         while (!installData.isCanClose())
         {

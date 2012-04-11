@@ -92,7 +92,7 @@ public class IzpackInstallationTest
         Thread.sleep(600);
 //        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
 
-        // Chack Panel
+        // Check Panel
         Thread.sleep(600);
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
 

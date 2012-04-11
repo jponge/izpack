@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<installation version="1.0">
+
+    <info>
+        <appname>Pack200 Installation</appname>
+        <appversion>1.0</appversion>
+
+        <!-- enable pack200 compression -->
+        <pack200/>
+    </info>
+
+    <guiprefs width="640" height="480" resizable="yes"/>
+
+    <locale>
+        <langpack iso3="eng"/>
+    </locale>
+
+    <panels>
+        <panel classname="HelloPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="SimpleFinishPanel"/>
+    </panels>
+
+    <packs>
+        <pack name="Base" required="yes">
+            <description>The base files</description>
+            <fileset dir="" targetdir="$INSTALL_PATH">
+                <include name="izpack-test-listener.jar"/>
+            </fileset>
+        </pack>
+    </packs>
+
+</installation>

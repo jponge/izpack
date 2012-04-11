@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>izpack</artifactId>
         <groupId>org.codehaus.izpack</groupId>
@@ -101,7 +102,7 @@
                         </configuration>
                     </execution-->
                     <execution>
-                        <id>Copy test listeners</id>
+                        <id>Copy test listeners to samples/event/lib</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
@@ -110,6 +111,18 @@
                             <stripVersion>true</stripVersion>
                             <includeArtifactIds>izpack-test-listener</includeArtifactIds>
                             <outputDirectory>${basedir}/target/test-classes/samples/event/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Copy test listeners to samples/packaging</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <stripVersion>true</stripVersion>
+                            <includeArtifactIds>izpack-test-listener</includeArtifactIds>
+                            <outputDirectory>${basedir}/target/test-classes/samples/packaging</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>

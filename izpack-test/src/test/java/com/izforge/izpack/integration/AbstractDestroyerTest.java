@@ -8,12 +8,10 @@ import java.net.URLClassLoader;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.Is;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
@@ -27,20 +25,8 @@ import com.izforge.izpack.util.IoHelper;
  *
  * @author Tim Anderson
  */
-public class AbstractDestroyerTest
+public class AbstractDestroyerTest extends AbstractInstallationTest
 {
-
-    /**
-     * Temporary folder to perform installations to.
-     */
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    /**
-     * The install data.
-     */
-    private AutomatedInstallData installData;
-
 
     /**
      * Constructs an <tt>AbstractDestroyerTest</tt>
@@ -49,20 +35,7 @@ public class AbstractDestroyerTest
      */
     public AbstractDestroyerTest(AutomatedInstallData installData)
     {
-        this.installData = installData;
-    }
-
-    /**
-     * Sets up the test case.
-     *
-     * @throws Exception for any error
-     */
-    @Before
-    public void setUp() throws Exception
-    {
-        // write to temporary folder so the test doesn't need to be run with elevated permissions
-        File installPath = new File(temporaryFolder.getRoot(), "izpackTest");
-        installData.setInstallPath(installPath.getAbsolutePath());
+        super(installData);
     }
 
     /**
@@ -95,33 +68,13 @@ public class AbstractDestroyerTest
     }
 
     /**
-     * Returns the install path.
-     *
-     * @return the install path
-     */
-    protected String getInstallPath()
-    {
-        return installData.getInstallPath();
-    }
-
-    /**
-     * Returns the install data.
-     *
-     * @return the install data
-     */
-    protected AutomatedInstallData getInstallData()
-    {
-        return installData;
-    }
-
-    /**
      * Returns the uninstaller jar file.
      *
      * @return the uninstaller jar file
      */
     protected File getUninstallerJar()
     {
-        return getUninstallerJar(new VariableSubstitutorImpl(installData.getVariables()));
+        return getUninstallerJar(new VariableSubstitutorImpl(getInstallData().getVariables()));
     }
 
     /**
@@ -132,8 +85,9 @@ public class AbstractDestroyerTest
      */
     protected File getUninstallerJar(VariableSubstitutor substituter)
     {
-        String dir = IoHelper.translatePath(installData.getInfo().getUninstallerPath(), substituter);
-        String path = dir + File.separator + installData.getInfo().getUninstallerName();
+        Info info = getInstallData().getInfo();
+        String dir = IoHelper.translatePath(info.getUninstallerPath(), substituter);
+        String path = dir + File.separator + info.getUninstallerName();
         File jar = new File(path);
         MatcherAssert.assertThat(jar.exists(), Is.is(true));
         return jar;
