@@ -14,7 +14,6 @@ import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.cli.CliAnalyzer;
 import com.izforge.izpack.compiler.container.provider.CompilerDataProvider;
 import com.izforge.izpack.compiler.container.provider.CompressedOutputStreamProvider;
-import com.izforge.izpack.compiler.container.provider.IzpackProjectProvider;
 import com.izforge.izpack.compiler.container.provider.JarOutputStreamProvider;
 import com.izforge.izpack.compiler.container.provider.PackCompressorProvider;
 import com.izforge.izpack.compiler.container.provider.XmlCompilerHelperProvider;
@@ -88,8 +87,7 @@ public class CompilerContainer extends AbstractContainer
         addComponent(MergeManager.class, MergeManagerImpl.class);
 
         new ResolverContainerFiller().fillContainer(this);
-        container.addAdapter(new ProviderAdapter(new IzpackProjectProvider()))
-                .addAdapter(new ProviderAdapter(new XmlCompilerHelperProvider()))
+        container.addAdapter(new ProviderAdapter(new XmlCompilerHelperProvider()))
                 .addAdapter(new ProviderAdapter(new JarOutputStreamProvider()))
                 .addAdapter(new ProviderAdapter(new CompressedOutputStreamProvider()))
                 .addAdapter(new ProviderAdapter(new PackCompressorProvider()));

@@ -22,13 +22,23 @@
 
 package com.izforge.izpack.compiler.packager.impl;
 
+import java.io.FilterOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
 import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.DynamicVariable;
 import com.izforge.izpack.api.data.GUIPrefs;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.InstallerRequirement;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
@@ -40,17 +50,6 @@ import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
-
-import java.io.FilterOutputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
 
 /**
@@ -71,20 +70,18 @@ public abstract class PackagerBase implements IPackager
 
     protected CompilerContainer compilerContainer;
     private CompilerPathResolver pathResolver;
-    private IzpackProjectInstaller izpackInstallModel;
     private MergeableResolver mergeableResolver;
 
 
     public PackagerBase(Properties properties, CompilerContainer compilerContainer, PackagerListener listener,
                         MergeManager mergeManager, CompilerPathResolver pathResolver,
-                        IzpackProjectInstaller izpackInstallModel, MergeableResolver mergeableResolver)
+                        MergeableResolver mergeableResolver)
     {
         this.properties = properties;
         this.compilerContainer = compilerContainer;
         this.listener = listener;
         this.mergeManager = mergeManager;
         this.pathResolver = pathResolver;
-        this.izpackInstallModel = izpackInstallModel;
         this.mergeableResolver = mergeableResolver;
     }
 
@@ -367,7 +364,6 @@ public abstract class PackagerBase implements IPackager
         writeManifest();
         writeSkeletonInstaller();
 
-        writeInstallerObject("izpackInstallModel", izpackInstallModel);
         writeInstallerObject("info", info);
         writeInstallerObject("vars", properties);
         writeInstallerObject("GUIPrefs", guiPrefs);

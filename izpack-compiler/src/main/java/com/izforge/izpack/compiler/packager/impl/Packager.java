@@ -37,7 +37,6 @@ import java.util.jar.JarFile;
 import java.util.jar.Pack200;
 import java.util.zip.ZipInputStream;
 
-import com.izforge.izpack.compiler.merge.resolve.CompilerPathResolver;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -45,12 +44,12 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
-import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.listener.PackagerListener;
+import com.izforge.izpack.compiler.merge.resolve.CompilerPathResolver;
 import com.izforge.izpack.compiler.resource.ResourceFinder;
 import com.izforge.izpack.compiler.stream.ByteCountingOutputStream;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
@@ -98,11 +97,9 @@ public class Packager extends PackagerBase
     public Packager(Properties properties, CompilerData compilerData, CompilerContainer compilerContainer,
                     PackagerListener listener, JarOutputStream jarOutputStream, PackCompressor packCompressor,
                     OutputStream outputStream, MergeManager mergeManager, CompilerPathResolver pathResolver,
-                    IzpackProjectInstaller izpackInstallModel, MergeableResolver mergeableResolver,
-                    ResourceFinder resourceFinder) throws CompilerException
+                    MergeableResolver mergeableResolver, ResourceFinder resourceFinder) throws CompilerException
     {
-        super(properties, compilerContainer, listener, mergeManager, pathResolver, izpackInstallModel,
-              mergeableResolver);
+        super(properties, compilerContainer, listener, mergeManager, pathResolver, mergeableResolver);
         this.compilerData = compilerData;
         this.primaryJarStream = jarOutputStream;
         this.resourceFinder = resourceFinder;
@@ -180,11 +177,11 @@ public class Packager extends PackagerBase
         {
             out.writeObject(object);
         }
-        catch(IOException e)
+        catch (IOException e)
         {
             throw new IOException("Error serializing instance of "
-                 + object.getClass().getSimpleName()
-                 + " as entry \"" + entryName + "\"", e);
+                                          + object.getClass().getSimpleName()
+                                          + " as entry \"" + entryName + "\"", e);
         }
         finally
         {
@@ -206,7 +203,8 @@ public class Packager extends PackagerBase
             URL url = stringURLEntry.getValue();
             InputStream in = url.openStream();
 
-            org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(RESOURCES_PATH + stringURLEntry.getKey());
+            org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(
+                    RESOURCES_PATH + stringURLEntry.getKey());
             long dateTime = FileUtil.getFileDateTime(url);
             if (dateTime != -1)
             {
@@ -254,7 +252,8 @@ public class Packager extends PackagerBase
         if (splashNode != null)
         {
             // Add splash image to installer jar
-            File splashImage = FileUtils.toFile(resourceFinder.findProjectResource(splashNode.getContent(), "Resource", splashNode));
+            File splashImage = FileUtils.toFile(
+                    resourceFinder.findProjectResource(splashNode.getContent(), "Resource", splashNode));
             String destination = String.format("META-INF/%s", splashImage.getName());
             mergeManager.addResourceToMerge(splashImage.getAbsolutePath(), destination);
             lines.add(String.format("SplashScreen-Image: %s", destination));
@@ -312,7 +311,8 @@ public class Packager extends PackagerBase
             sendMsg("Writing Pack " + packNumber + ": " + pack.name, PackagerListener.MSG_VERBOSE);
 
             // Retrieve the correct output stream
-            org.apache.tools.zip.ZipEntry entry = new org.apache.tools.zip.ZipEntry(RESOURCES_PATH + "packs/pack-" + pack.id);
+            org.apache.tools.zip.ZipEntry entry = new org.apache.tools.zip.ZipEntry(
+                    RESOURCES_PATH + "packs/pack-" + pack.id);
             primaryJarStream.putNextEntry(entry);
             primaryJarStream.flush(); // flush before we start counting
 
@@ -329,7 +329,8 @@ public class Packager extends PackagerBase
                 boolean pack200 = false;
                 File file = packInfo.getFile(packFile);
 
-                if (file.getName().toLowerCase().endsWith(".jar") && info.isPack200Compression() && isNotSignedJar(file))
+                if (file.getName().toLowerCase().endsWith(".jar") && info.isPack200Compression() && isNotSignedJar(
+                        file))
                 {
                     packFile.setPack200Jar(true);
                     pack200 = true;

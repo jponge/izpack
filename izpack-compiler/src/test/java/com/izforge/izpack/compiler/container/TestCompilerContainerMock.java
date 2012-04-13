@@ -9,7 +9,6 @@ import org.picocontainer.PicoException;
 
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.container.Container;
-import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
 import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -75,7 +74,6 @@ public class TestCompilerContainerMock extends AbstractContainer
                 .addComponent("installFile", "installFile")
                 .addComponent(Container.class, this)
                 .addComponent(CompilerConfig.class)
-                .addComponent(IzpackProjectInstaller.class)
                 .addComponent(XmlCompilerHelper.class)
                 .addComponent(XMLParser.class)
                 .addComponent(Properties.class)

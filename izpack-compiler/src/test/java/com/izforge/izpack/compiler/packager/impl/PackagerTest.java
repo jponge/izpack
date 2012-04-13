@@ -46,7 +46,7 @@ public class PackagerTest
         when(resourceFinder.getXMLTree()).thenReturn(new XMLElementImpl(rootNode));
 
         final Packager packager = new Packager(null, null, null, null, null, null, null,
-                mergeManager, null, null, null, resourceFinder);
+                                               mergeManager, null, null, resourceFinder);
 
         packager.writeManifest();
 
@@ -68,7 +68,7 @@ public class PackagerTest
         when(resourceFinder.getXMLTree()).thenReturn(new XMLElementImpl(rootNode));
 
         final Packager packager = new Packager(null, null, null, null, null, null, null,
-                mergeManager, null, null, null, resourceFinder);
+                                               mergeManager, null, null, resourceFinder);
 
         packager.writeManifest();
 
@@ -82,7 +82,7 @@ public class PackagerTest
                 new XMLElementImpl(new DOMElement("installation")));
 
         final Packager packager = new Packager(null, null, null, null, null, null, null,
-                mergeManager, null, null, null, resourceFinder);
+                                               mergeManager, null, null, resourceFinder);
 
         packager.writeManifest();
 

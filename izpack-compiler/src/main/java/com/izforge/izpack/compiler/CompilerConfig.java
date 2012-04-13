@@ -67,7 +67,6 @@ import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.IXMLWriter;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
-import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Blockable;
 import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
@@ -80,8 +79,7 @@ import com.izforge.izpack.api.data.LookAndFeels;
 import com.izforge.izpack.api.data.OverrideType;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.PanelActionConfiguration;
-import com.izforge.izpack.api.data.binding.IzpackProjectInstaller;
-import com.izforge.izpack.api.data.binding.Listener;
+import com.izforge.izpack.api.data.binding.Help;
 import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.data.binding.Stage;
 import com.izforge.izpack.api.exception.CompilerException;
@@ -92,7 +90,6 @@ import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
@@ -180,9 +177,7 @@ public class CompilerConfig extends Thread
     private IPackager packager;
     private ResourceFinder resourceFinder;
     private MergeManager mergeManager;
-    private IzpackProjectInstaller izpackProjectInstaller;
     private AssertionHelper assertionHelper;
-    private Container compilerContainer;
     private ClassPathCrawler classPathCrawler;
     private RulesEngine rules;
 
@@ -208,8 +203,7 @@ public class CompilerConfig extends Thread
      */
     public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler,
                           XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager,
-                          MergeManager mergeManager, IzpackProjectInstaller izpackProjectInstaller,
-                          AssertionHelper assertionHelper, CompilerContainer compilerContainer,
+                          MergeManager mergeManager, AssertionHelper assertionHelper,
                           ClassPathCrawler classPathCrawler, RulesEngine rules, CompilerPathResolver pathResolver,
                           ResourceFinder resourceFinder)
     {
@@ -222,8 +216,6 @@ public class CompilerConfig extends Thread
         this.propertyManager = propertyManager;
         this.packager = packager;
         this.mergeManager = mergeManager;
-        this.izpackProjectInstaller = izpackProjectInstaller;
-        this.compilerContainer = compilerContainer;
         this.classPathCrawler = classPathCrawler;
         this.pathResolver = pathResolver;
         this.resourceFinder = resourceFinder;
@@ -268,11 +260,13 @@ public class CompilerConfig extends Thread
         // add izpack built in property
         propertyManager.setProperty("basedir", base.toString());
 
-        addCompilerListeners();
-
         // We get the XML data tree
         IXMLElement data = resourceFinder.
                 getXMLTree();
+
+        // construct compiler listeners to receive all further compiler events
+        addCompilerListeners(data);
+
         // loads the specified packager
         loadPackagingInformation(data);
 
@@ -1502,28 +1496,30 @@ public class CompilerConfig extends Thread
                 }
             }
 //            // adding helps
-            List<IXMLElement> helps = panelElement.getChildrenNamed(AutomatedInstallData.HELP_TAG);
-            if (helps != null) // TODO : remove this condition, getChildrenNamed always return a list
+            List<IXMLElement> helpSpecs = panelElement.getChildrenNamed(AutomatedInstallData.HELP_TAG);
+            if (helpSpecs != null) // TODO : remove this condition, getChildrenNamed always return a list
             {
-                for (IXMLElement help : helps)
+                List<Help> helps = new ArrayList<Help>();
+                for (IXMLElement help : helpSpecs)
                 {
                     String iso3 = help.getAttribute(AutomatedInstallData.ISO3_ATTRIBUTE);
                     String resourceId;
                     if (id == null)
                     {
-                        resourceId = className + "_" + panelCounter + "_help_" + iso3 + ".html";
+                        resourceId = className + "_" + panelCounter + "_help.html_" + iso3;
                     }
                     else
                     {
-                        resourceId = id + "_" + panelCounter + "_help_" + iso3 + ".html";
+                        resourceId = id + "_" + panelCounter + "_help.html_" + iso3;
                     }
-//                    panel.addHelp(iso3, resourceId);
+                    helps.add(new Help(iso3, resourceId));
                     URL originalUrl = resourceFinder.findProjectResource(help
                                                                                  .getAttribute(
                                                                                          AutomatedInstallData.SRC_ATTRIBUTE),
                                                                          "Help", help);
                     packager.addResource(resourceId, originalUrl);
                 }
+                panel.setHelps(helps);
             }
             // add actions
             addPanelActions(panelElement, panel);
@@ -2690,33 +2686,57 @@ public class CompilerConfig extends Thread
     /**
      * Register compiler listeners to be notified during compilation.
      */
-    private void addCompilerListeners()
+    private void addCompilerListeners(IXMLElement data) throws CompilerException
     {
-        compilerListeners.addAll(instantiateCompilerListeners());
-    }
-
-    /**
-     * Load and instanciate compiler listeners defined by the installer file
-     *
-     * @return instance of the defined compiler listener
-     */
-    private List<CompilerListener> instantiateCompilerListeners()
-    {
-        ArrayList<CompilerListener> result = new ArrayList<CompilerListener>();
-        for (Listener listener : izpackProjectInstaller.getListeners())
+        IXMLElement listeners = data.getFirstChildNamed("listeners");
+        if (listeners != null)
         {
-            if (Stage.compiler.equals(listener.getStage()))
+            for (IXMLElement listener : listeners.getChildrenNamed("listener"))
             {
-                listener.getOs();
-                Class<? extends CompilerListener> clazz = classPathCrawler.findClass(listener.getClassname());
-                if (clazz != null)
+                String className = xmlCompilerHelper.requireAttribute(listener, "classname");
+                Stage stage = Stage.valueOf(xmlCompilerHelper.requireAttribute(listener, "stage"));
+                // only process specs for stage="compiler" listeners
+                if (Stage.compiler.equals(stage))
                 {
-                    compilerContainer.addComponent(clazz);
-                    result.add(compilerContainer.getComponent(clazz));
+                    // check <os/> specs to see if we need to instantiate and notify this listener
+                    List<OsModel> osConstraints = OsConstraintHelper.getOsList(listener);
+                    boolean matchesCurrentSystem = false;
+                    if (osConstraints.isEmpty())
+                    {
+                        // assume listener required if no <os/> specs are present in the install file
+                        matchesCurrentSystem = true;
+                    }
+                    else
+                    {
+                        if (OsConstraintHelper.oneMatchesCurrentSystem(osConstraints))
+                        {
+                            matchesCurrentSystem = true;
+                        }
+                    }
+                    // instantiate an instance of the listener only if we're on a system of the specified type
+                    if (matchesCurrentSystem)
+                    {
+                        Class<? extends CompilerListener> clazz = classPathCrawler.findClass(className);
+                        if (clazz != null)
+                        {
+                            try
+                            {
+                                CompilerListener listenerImpl = clazz.newInstance();
+                                compilerListeners.add(listenerImpl);
+                            }
+                            catch (InstantiationException e)
+                            {
+                                throw new CompilerException("Failed to instantiate compiler listener " + className, e);
+                            }
+                            catch (IllegalAccessException e)
+                            {
+                                throw new CompilerException("Failed to instantiate compiler listener " + className, e);
+                            }
+                        }
+                    }
                 }
             }
         }
-        return result;
     }
 
     /**

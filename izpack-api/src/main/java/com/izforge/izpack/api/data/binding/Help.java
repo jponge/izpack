@@ -1,14 +1,20 @@
 package com.izforge.izpack.api.data.binding;
 
+import java.io.Serializable;
+
 /**
  * Help element for panel.
  *
  * @author Anthonin Bonnefoy
  */
-public class Help
+public class Help implements Serializable
 {
     /**
-     * languagae of the help
+     * auto-generated version number
+     */
+    private static final long serialVersionUID = -2560125306490380153L;
+    /**
+     * language of the help
      */
     private String iso3;
     /**
