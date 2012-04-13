@@ -144,9 +144,9 @@ public class IzpackInstallationTest
             }
         }
         assertThat(paths, IsCollectionContaining.hasItems(
-                Is.is("src"),
-                Is.is("lib"),
-                Is.is("bin")
+                Is.is("bin"),
+                Is.is("legal"),
+                Is.is("lib")
         ));
     }
 }
