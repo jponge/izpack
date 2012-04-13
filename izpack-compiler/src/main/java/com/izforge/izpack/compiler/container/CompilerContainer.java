@@ -7,6 +7,7 @@ import org.picocontainer.injectors.ProviderAdapter;
 import org.picocontainer.parameters.ComponentParameter;
 
 import com.izforge.izpack.api.exception.ContainerException;
+import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.Compiler;
@@ -25,6 +26,7 @@ import com.izforge.izpack.compiler.packager.IPackager;
 import com.izforge.izpack.compiler.packager.impl.Packager;
 import com.izforge.izpack.compiler.resource.ResourceFinder;
 import com.izforge.izpack.core.container.AbstractContainer;
+import com.izforge.izpack.core.factory.DefaultObjectFactory;
 import com.izforge.izpack.core.rules.ConditionContainer;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
@@ -85,6 +87,8 @@ public class CompilerContainer extends AbstractContainer
         container.addComponent(RulesEngine.class, RulesEngineImpl.class,
                                new ComponentParameter(ConditionContainer.class));
         addComponent(MergeManager.class, MergeManagerImpl.class);
+        container.addComponent(ObjectFactory.class, DefaultObjectFactory.class,
+                               new ComponentParameter(CompilerContainer.class));
 
         new ResolverContainerFiller().fillContainer(this);
         container.addAdapter(new ProviderAdapter(new XmlCompilerHelperProvider()))

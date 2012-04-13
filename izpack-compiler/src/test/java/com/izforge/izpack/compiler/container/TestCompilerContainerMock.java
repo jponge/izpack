@@ -10,6 +10,7 @@ import org.picocontainer.PicoException;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.exception.ContainerException;
+import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.Compiler;
@@ -70,6 +71,7 @@ public class TestCompilerContainerMock extends AbstractContainer
                 .addComponent(Mockito.mock(IPackager.class))
                 .addComponent(Mockito.mock(CompilerData.class))
                 .addComponent(Mockito.mock(AssertionHelper.class))
+                .addComponent(Mockito.mock(ObjectFactory.class))
                 .addComponent("mapStringListDyn", Mockito.mock(Map.class))
                 .addComponent("installFile", "installFile")
                 .addComponent(Container.class, this)

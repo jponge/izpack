@@ -83,6 +83,7 @@ import com.izforge.izpack.api.data.binding.Help;
 import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.data.binding.Stage;
 import com.izforge.izpack.api.exception.CompilerException;
+import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.installer.DataValidator.Status;
 import com.izforge.izpack.api.merge.Mergeable;
@@ -181,6 +182,11 @@ public class CompilerConfig extends Thread
     private ClassPathCrawler classPathCrawler;
     private RulesEngine rules;
 
+    /**
+     * The factory for {@link CompilerListener} instances.
+     */
+    private final ObjectFactory factory;
+
     private static final String TEMP_DIR_ELEMENT_NAME = "tempdir";
 
     private static final String TEMP_DIR_PREFIX_ATTRIBUTE = "prefix";
@@ -205,7 +211,7 @@ public class CompilerConfig extends Thread
                           XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager,
                           MergeManager mergeManager, AssertionHelper assertionHelper,
                           ClassPathCrawler classPathCrawler, RulesEngine rules, CompilerPathResolver pathResolver,
-                          ResourceFinder resourceFinder)
+                          ResourceFinder resourceFinder, ObjectFactory factory)
     {
         this.assertionHelper = assertionHelper;
         this.rules = rules;
@@ -219,6 +225,7 @@ public class CompilerConfig extends Thread
         this.classPathCrawler = classPathCrawler;
         this.pathResolver = pathResolver;
         this.resourceFinder = resourceFinder;
+        this.factory = factory;
     }
 
     /**
@@ -2717,22 +2724,8 @@ public class CompilerConfig extends Thread
                     if (matchesCurrentSystem)
                     {
                         Class<? extends CompilerListener> clazz = classPathCrawler.findClass(className);
-                        if (clazz != null)
-                        {
-                            try
-                            {
-                                CompilerListener listenerImpl = clazz.newInstance();
-                                compilerListeners.add(listenerImpl);
-                            }
-                            catch (InstantiationException e)
-                            {
-                                throw new CompilerException("Failed to instantiate compiler listener " + className, e);
-                            }
-                            catch (IllegalAccessException e)
-                            {
-                                throw new CompilerException("Failed to instantiate compiler listener " + className, e);
-                            }
-                        }
+                        CompilerListener l = factory.create(className, CompilerListener.class);
+                        compilerListeners.add(l);
                     }
                 }
             }
