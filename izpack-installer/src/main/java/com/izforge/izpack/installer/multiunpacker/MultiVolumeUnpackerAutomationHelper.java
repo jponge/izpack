@@ -14,23 +14,41 @@ import com.izforge.izpack.installer.unpacker.IMultiVolumeUnpackerHelper;
 
 public class MultiVolumeUnpackerAutomationHelper implements IMultiVolumeUnpackerHelper
 {
+    /**
+     * The installation data.
+     */
+    private final AutomatedInstallData installData;
+
+    /**
+     * The progress handler.
+     */
+    private final AbstractUIProgressHandler handler;
+
+    /**
+     * The logger.
+     */
     private static final Logger logger = Logger.getLogger(MultiVolumeUnpackerAutomationHelper.class.getName());
 
-    private AutomatedInstallData idata;
-    private AbstractUIProgressHandler handler;
-
-    public MultiVolumeUnpackerAutomationHelper()
+    /**
+     * Constructs a <tt>MultiVolumeUnpackerAutomationHelper</tt>.
+     *
+     * @param installData the installation data
+     * @param handler     the progress handler
+     */
+    public MultiVolumeUnpackerAutomationHelper(AutomatedInstallData installData, AbstractUIProgressHandler handler)
     {
-
+        this.installData = installData;
+        this.handler = handler;
     }
+
 
     public File enterNextMediaMessage(String volumename, boolean lastcorrupt)
     {
         if (lastcorrupt)
         {
-            System.err.println(" [ " + idata.getLangpack().getString("nextmedia.corruptmedia.title") + " ] ");
-            System.err.println(idata.getLangpack().getString("nextmedia.corruptmedia"));
-            System.err.println(idata.getLangpack().getString("nextmedia.corruptmedia"));
+            System.err.println(" [ " + installData.getLangpack().getString("nextmedia.corruptmedia.title") + " ] ");
+            System.err.println(installData.getLangpack().getString("nextmedia.corruptmedia"));
+            System.err.println(installData.getLangpack().getString("nextmedia.corruptmedia"));
         }
         logger.fine("Enter next media: " + volumename);
 
@@ -38,8 +56,8 @@ public class MultiVolumeUnpackerAutomationHelper implements IMultiVolumeUnpacker
 
         while (!nextvolume.exists() || lastcorrupt)
         {
-            System.out.println(" [ " + idata.getLangpack().getString("nextmedia.title") + " ] ");
-            System.out.println(idata.getLangpack().getString("nextmedia.msg"));
+            System.out.println(" [ " + installData.getLangpack().getString("nextmedia.title") + " ] ");
+            System.out.println(installData.getLangpack().getString("nextmedia.msg"));
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
             String nextmediainput = null;
@@ -76,9 +94,4 @@ public class MultiVolumeUnpackerAutomationHelper implements IMultiVolumeUnpacker
         return enterNextMediaMessage(volumename, false);
     }
 
-    public void init(AutomatedInstallData idata, AbstractUIProgressHandler handler)
-    {
-        this.idata = idata;
-        this.handler = handler;
-    }
 }

@@ -21,6 +21,15 @@
 
 package com.izforge.izpack.event;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
@@ -31,24 +40,15 @@ import com.izforge.izpack.api.exception.WrappedNativeLibException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.api.unpacker.IDiscardInterruptable;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.os.RegistryHandler;
 import com.izforge.izpack.installer.data.UninstallData;
+import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.util.CleanupClient;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.file.FileUtils;
 import com.izforge.izpack.util.helper.SpecHelper;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Installer custom action for handling registry entries on Windows. On Unix nothing will be done.
@@ -95,7 +95,10 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
 
     private List registryModificationLog;
 
-    private IDiscardInterruptable unpacker;
+    /**
+     * The unpacker.
+     */
+    private IUnpacker unpacker;
 
     /**
      * The variable substituter.
@@ -145,7 +148,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
      * @param housekeeper   the housekeeper
      * @param handler       the registry handler reference
      */
-    public RegistryInstallerListener(IDiscardInterruptable unpacker, VariableSubstitutor substituter,
+    public RegistryInstallerListener(IUnpacker unpacker, VariableSubstitutor substituter,
                                      AutomatedInstallData installData, UninstallData uninstallData,
                                      ResourceManager resources, RulesEngine rules, Housekeeper housekeeper,
                                      RegistryDefaultHandler handler)
@@ -227,7 +230,9 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
         // Start logging
         IXMLElement uninstallerPack = null;
         // No interrupt desired after writing registry entries.
-        unpacker.setDiscardInterrupt(true);
+        // TODO - this is a bit strange. There should be a listener method that is invoked after the unpacker has
+        // completed, to avoid this hack
+        unpacker.setDisableInterrupt(true);
         registry.activateLogging();
 
         if (getSpecHelper().getSpec() != null)

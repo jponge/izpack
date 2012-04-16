@@ -21,118 +21,152 @@
 
 package com.izforge.izpack.installer.unpacker;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.Blockable;
-import com.izforge.izpack.api.data.OverrideType;
-import com.izforge.izpack.api.data.Pack;
-import com.izforge.izpack.api.data.PackFile;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.event.InstallerListener;
-import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.api.unpacker.IDiscardInterruptable;
-import com.izforge.izpack.data.ExecutableFile;
-import com.izforge.izpack.data.UpdateCheck;
-import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.Librarian;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.file.DirectoryScanner;
-import com.izforge.izpack.util.file.GlobPatternMapper;
-import com.izforge.izpack.util.file.types.FileSet;
-import com.izforge.izpack.util.os.FileQueue;
-import com.izforge.izpack.util.os.FileQueueMove;
-
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Constructor;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
+import java.util.jar.Pack200;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.OverrideType;
+import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.PackFile;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.event.InstallerListener;
+import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.data.ExecutableFile;
+import com.izforge.izpack.data.ParsableFile;
+import com.izforge.izpack.data.UpdateCheck;
+import com.izforge.izpack.installer.data.UninstallData;
+import com.izforge.izpack.installer.web.WebAccessor;
+import com.izforge.izpack.installer.web.WebRepositoryAccessor;
+import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.Librarian;
+import com.izforge.izpack.util.OsConstraintHelper;
+import com.izforge.izpack.util.file.DirectoryScanner;
+import com.izforge.izpack.util.file.FileUtils;
+import com.izforge.izpack.util.file.GlobPatternMapper;
+import com.izforge.izpack.util.file.types.FileSet;
+import com.izforge.izpack.util.os.FileQueue;
+
 
 /**
  * Abstract base class for all unpacker implementations.
  *
  * @author Dennis Reil, <izpack@reil-online.de>
+ * @author Tim Anderson
  */
-public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
+public abstract class UnpackerBase implements IUnpacker
 {
-    private static final Logger logger = Logger.getLogger(UnpackerBase.class.getName());
 
     /**
      * The installation data.
      */
-    protected AutomatedInstallData installData;
-
-    /**
-     * The installer listener.
-     */
-    protected AbstractUIProgressHandler handler;
+    private final AutomatedInstallData installData;
 
     /**
      * The uninstallation data.
      */
-    protected UninstallData uinstallData;
+    private final UninstallData uninstallData;
 
     /**
-     * The absolute path of the installation. (NOT the canonical!)
+     * The resource manager.
      */
-    protected File absolute_installpath;
+    private final ResourceManager resourceManager;
 
     /**
-     * The absolute path of the source installation jar.
+     * The rules engine.
      */
-    private File absolutInstallSource;
+    private final RulesEngine rules;
 
     /**
-     * The result of the operation.
+     * The variable replacer.
      */
-    protected boolean result = true;
-
-    /**
-     * The instances of the unpacker objects.
-     */
-    protected static HashMap<Object, String> instances = new HashMap<Object, String>();
-
-    /**
-     * Interrupt flag if global interrupt is desired.
-     */
-    protected static boolean interruptDesired = false;
-
-    /**
-     * Do not perform a interrupt call.
-     */
-    protected static boolean discardInterrupt = false;
-
-    /**
-     * The name of the XML file that specifies the panel langpack
-     */
-    protected static final String LANG_FILE_NAME = "packsLang.xml";
-
-    public static final String ALIVE = "alive";
-
-    public static final String INTERRUPT = "doInterrupt";
-
-    public static final String INTERRUPTED = "interruppted";
-
-    protected RulesEngine rules;
-
-    protected ResourceManager resourceManager;
-    protected VariableSubstitutor variableSubstitutor;
+    private final VariableSubstitutor variableSubstitutor;
 
     /**
      * The librarian.
      */
     private final Librarian librarian;
+
+    /**
+     * The housekeeper.
+     */
+    private final Housekeeper housekeeper;
+
+    /**
+     * The installer listener.
+     */
+    private AbstractUIProgressHandler handler;
+
+    /**
+     * The absolute path of the source installation jar.
+     */
+    private File absoluteInstallSource;
+
+    /**
+     * The Pack200 unpacker.
+     */
+    private Pack200.Unpacker unpacker;
+
+    /**
+     * The result of the operation.
+     */
+    private boolean result = true;
+
+    /**
+     * Determines if unpack operations should be cancelled.
+     */
+    private final Cancellable cancellable;
+
+    /**
+     * The unpacking state.
+     */
+    private enum State
+    {
+        READY, UNPACKING, INTERRUPT, INTERRUPTED
+    }
+
+    /**
+     * The current unpacking state.
+     */
+    private State state = State.READY;
+
+    /**
+     * If <tt>true</tt>, prevent interrupts.
+     */
+    private boolean disableInterrupt = false;
+
+    /**
+     * The logger.
+     */
+    private static final Logger logger = Logger.getLogger(UnpackerBase.class.getName());
+
+    /**
+     * Temporary directory.
+     */
+    private static final String tempSubPath = "/IzpackWebTemp";
 
     /**
      * Constructs an <tt>UnpackerBase</tt>.
@@ -143,168 +177,91 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
      * @param variableSubstitutor the variable substituter
      * @param uninstallData       the uninstallation data
      * @param librarian           the librarian
+     * @param housekeeper         the housekeeper
      */
     public UnpackerBase(AutomatedInstallData installData, ResourceManager resourceManager, RulesEngine rules,
-                        VariableSubstitutor variableSubstitutor, UninstallData uninstallData, Librarian librarian)
+                        VariableSubstitutor variableSubstitutor, UninstallData uninstallData, Librarian librarian,
+                        Housekeeper housekeeper)
     {
         this.installData = installData;
         this.resourceManager = resourceManager;
         this.rules = rules;
         this.variableSubstitutor = variableSubstitutor;
-        this.uinstallData = uninstallData;
+        this.uninstallData = uninstallData;
         this.librarian = librarian;
-    }
-
-    public void setRules(RulesEngine rules)
-    {
-        this.rules = rules;
-    }
-
-    /**
-     * Returns a copy of the active unpacker instances.
-     *
-     * @return a copy of active unpacker instances
-     */
-    public static HashMap<Object, String> getRunningInstances()
-    {
-        synchronized (instances)
-        { // Return a shallow copy to prevent a
-            // ConcurrentModificationException.
-            return (HashMap<Object, String>) (instances.clone());
-        }
-    }
-
-    /**
-     * Adds this to the map of all existent instances of Unpacker.
-     */
-    protected void addToInstances()
-    {
-        synchronized (instances)
+        this.housekeeper = housekeeper;
+        cancellable = new Cancellable()
         {
-            instances.put(this, ALIVE);
-        }
-    }
-
-    /**
-     * Removes this from the map of all existent instances of Unpacker.
-     */
-    protected void removeFromInstances()
-    {
-        synchronized (instances)
-        {
-            instances.remove(this);
-        }
-    }
-
-    /**
-     * Initiate interrupt of all alive Unpacker. This method does not interrupt the Unpacker objects
-     * else it sets only the interrupt flag for the Unpacker objects. The dispatching of interrupt
-     * will be performed by the Unpacker objects self.
-     */
-    private static void setInterruptAll()
-    {
-        synchronized (instances)
-        {
-            for (Object key : instances.keySet())
+            @Override
+            public boolean isCancelled()
             {
-                if (instances.get(key).equals(ALIVE))
+                return isInterrupted();
+            }
+        };
+    }
+
+    /**
+     * Sets the progress handler.
+     *
+     * @param handler the progress handler
+     */
+    @Override
+    public void setHandler(AbstractUIProgressHandler handler)
+    {
+        this.handler = handler;
+    }
+
+    /**
+     * Runs the unpacker.
+     */
+    public void run()
+    {
+        unpack();
+    }
+
+    /**
+     * Unpacks the installation files.
+     */
+    public void unpack()
+    {
+        state = State.UNPACKING;
+        try
+        {
+            List<ParsableFile> parsables = new ArrayList<ParsableFile>();
+            List<ExecutableFile> executables = new ArrayList<ExecutableFile>();
+            List<UpdateCheck> updateChecks = new ArrayList<UpdateCheck>();
+
+            preUnpack();
+            FileQueue queue = unpack(parsables, executables, updateChecks);
+            postUnpack(queue, parsables, executables, updateChecks);
+        }
+        catch (Exception exception)
+        {
+            setResult(false);
+            logger.log(Level.SEVERE, exception.getMessage(), exception);
+
+            AbstractUIProgressHandler handler = getHandler();
+            handler.stopAction();
+
+            String message = exception.getMessage();
+            if ("Installation cancelled".equals(message))
+            {
+                handler.emitNotification("Installation cancelled");
+            }
+            else
+            {
+                if (message == null || "".equals(message))
                 {
-                    instances.put(key, INTERRUPT);
+                    message = "Internal error occurred : " + exception.toString();
                 }
+                handler.emitError("An error occurred", message);
             }
-            // Set global flag to allow detection of it in other classes.
-            // Do not set it to thread because an exec will then be stoped.
-            setInterruptDesired(true);
+            housekeeper.shutDown(4);
         }
-    }
-
-    /**
-     * Initiate interrupt of all alive Unpacker and waits until all Unpacker are interrupted or the
-     * wait time has arrived. If the doNotInterrupt flag in InstallerListener is set to true, the
-     * interrupt will be discarded.
-     *
-     * @param waitTime wait time in millisecounds
-     * @return true if the interrupt will be performed, false if the interrupt will be discarded
-     */
-    public static boolean interruptAll(long waitTime)
-    {
-        long t0 = System.currentTimeMillis();
-        if (isDiscardInterrupt())
+        finally
         {
-            return (false);
+            cleanup();
         }
-        setInterruptAll();
-        while (!isInterruptReady())
-        {
-            if (System.currentTimeMillis() - t0 > waitTime)
-            {
-                return (true);
-            }
-            try
-            {
-                Thread.sleep(100);
-            }
-            catch (InterruptedException e)
-            {
-            }
-        }
-        return (true);
-    }
-
-    private static boolean isInterruptReady()
-    {
-        synchronized (instances)
-        {
-            for (Object key : instances.keySet())
-            {
-                if (!instances.get(key).equals(INTERRUPTED))
-                {
-                    return (false);
-                }
-            }
-            return (true);
-        }
-
-    }
-
-    /**
-     * Sets the interrupt flag for this Unpacker to INTERRUPTED if the previos state was INTERRUPT
-     * or INTERRUPTED and returns whether interrupt was initiate or not.
-     *
-     * @return whether interrupt was initiate or not
-     */
-    protected boolean performInterrupted()
-    {
-        synchronized (instances)
-        {
-            Object doIt = instances.get(this);
-            if (doIt != null && (doIt.equals(INTERRUPT) || doIt.equals(INTERRUPTED)))
-            {
-                instances.put(this, INTERRUPTED);
-                this.result = false;
-                return (true);
-            }
-            return (false);
-        }
-    }
-
-    /**
-     * Returns whether interrupt was initiate or not for this Unpacker.
-     *
-     * @return whether interrupt was initiate or not
-     */
-    private boolean shouldInterrupt()
-    {
-        synchronized (instances)
-        {
-            Object doIt = instances.get(this);
-            if (doIt != null && (doIt.equals(INTERRUPT) || doIt.equals(INTERRUPTED)))
-            {
-                return (true);
-            }
-            return (false);
-        }
-
     }
 
     /**
@@ -314,118 +271,723 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
      */
     public boolean getResult()
     {
-        return this.result;
+        return result;
     }
 
+    /**
+     * Interrupts the unpacker, and waits for it to complete.
+     * <p/>
+     * If interrupts have been prevented ({@link #isInterruptDisabled} returns <tt>true</tt>), then this
+     * returns immediately.
+     *
+     * @param timeout the maximum time to wait, in milliseconds
+     * @return <tt>true</tt> if the interrupt will be performed, <tt>false</tt> if the interrupt will be discarded
+     */
+    @Override
+    public boolean interrupt(long timeout)
+    {
+        boolean result;
+        if (isInterruptDisabled())
+        {
+            result = false;
+        }
+        else
+        {
+            synchronized (this)
+            {
+                if (state != State.INTERRUPTED)
+                {
+                    state = State.INTERRUPT;
+                    try
+                    {
+                        wait(timeout);
+                    }
+                    catch (InterruptedException ignore)
+                    {
+                        // do nothing
+                    }
+                }
+                result = state == State.INTERRUPTED;
+            }
+        }
+        return result;
+    }
 
-    // CUSTOM ACTION STUFF -------------- start -----------------
+    /**
+     * Determines if interrupts should be disabled.
+     *
+     * @param disable if <tt>true</tt> disable interrupts, otherwise enable them
+     */
+    @Override
+    public synchronized void setDisableInterrupt(boolean disable)
+    {
+        if (state == State.INTERRUPT || state == State.INTERRUPTED)
+        {
+            throw new IllegalStateException("Cannot disable interrupts. Unpacking has already been interrupted");
+        }
+        disableInterrupt = disable;
+    }
+
+    /**
+     * Determines if interrupts have been disabled or not.
+     *
+     * @return <tt>true</tt> if interrupts have been disabled, otherwise <tt>false</tt>
+     */
+    public synchronized boolean isInterruptDisabled()
+    {
+        return disableInterrupt;
+    }
+
+    /**
+     * Invoked prior to unpacking.
+     * <p/>
+     * This notifies the {@link #getHandler() handler}, and any registered {@link InstallerListener listeners}.
+     *
+     * @throws Exception if the handler or listeners throw an exception
+     */
+    protected void preUnpack() throws Exception
+    {
+        AutomatedInstallData installData = getInstallData();
+        AbstractUIProgressHandler handler = getHandler();
+        int count = installData.getSelectedPacks().size();
+
+        logger.fine("Unpacker starting");
+        handler.startAction("Unpacking", count);
+
+        informListeners(InstallerListener.BEFORE_PACKS, count);
+    }
+
+    /**
+     * Unpacks the selected packs.
+     *
+     * @param parsables    used to collect parsable files in the pack
+     * @param executables  used to collect executable files files in the pack
+     * @param updateChecks used to collect update checks in the pack
+     * @return the file queue, or <tt>null</tt> if no queuing is required
+     * @throws IOException for any I/O error
+     * @throws Exception   for any other error
+     */
+    protected FileQueue unpack(List<ParsableFile> parsables, List<ExecutableFile> executables,
+                               List<UpdateCheck> updateChecks) throws Exception
+    {
+        FileQueue queue = null;
+        List<Pack> packs = getInstallData().getSelectedPacks();
+        int count = packs.size();
+
+        // Unpack the selected packs
+        for (int i = 0; i < count; i++)
+        {
+            Pack pack = packs.get(i);
+            if (shouldUnpack(pack))
+            {
+                informListeners(InstallerListener.BEFORE_PACK, pack, count);
+                queue = unpack(pack, i, queue, parsables, executables, updateChecks);
+                if (isInterrupted())
+                {
+                    break;
+                }
+
+                informListeners(InstallerListener.AFTER_PACK, pack, i);
+            }
+        }
+        return queue;
+    }
+
+    /**
+     * Unpacks a pack.
+     *
+     * @param pack         the pack to unpack
+     * @param packNo       the pack number
+     * @param queue        the file queue. If <tt>null</tt>, and file queueing is required, one will be created
+     * @param parsables    used to collect parsable files in the pack
+     * @param executables  used to collect executable files files in the pack
+     * @param updateChecks used to collect update checks in the pack
+     * @return the file queue. May be <tt>null</tt>
+     * @throws IOException for any I/O error
+     * @throws Exception   for any other error
+     */
+    protected FileQueue unpack(Pack pack, int packNo, FileQueue queue, List<ParsableFile> parsables,
+                               List<ExecutableFile> executables, List<UpdateCheck> updateChecks) throws Exception
+    {
+        InputStream in = null;
+        ObjectInputStream packInputStream = null;
+        try
+        {
+            in = getPackStream(pack.id, pack.uninstall);
+            packInputStream = new ObjectInputStream(in);
+
+            int fileCount = packInputStream.readInt();
+
+            AbstractUIProgressHandler handler = getHandler();
+            String stepName = getStepName(pack);
+            handler.nextStep(stepName, packNo + 1, fileCount);
+
+            for (int i = 0; i < fileCount; ++i)
+            {
+                // read the header
+                PackFile file = (PackFile) packInputStream.readObject();
+                if ((file.hasCondition() && !isConditionTrue(file.getCondition()))
+                        || !OsConstraintHelper.oneMatchesCurrentSystem(file.osConstraints()))
+                {
+                    // condition is not fulfilled, so skip it
+                    if (!file.isBackReference())
+                    {
+                        skip(packInputStream, file.length());
+                    }
+                }
+                else
+                {
+                    // unpack the file
+                    queue = unpack(file, packInputStream, i, pack, queue);
+                }
+            }
+            readParsableFiles(packInputStream, parsables);
+            readExecutableFiles(packInputStream, executables);
+            readUpdateChecks(packInputStream, updateChecks);
+        }
+        finally
+        {
+            FileUtils.close(packInputStream);
+            FileUtils.close(in);
+        }
+        return queue;
+    }
+
+    /**
+     * Unpacks a pack file.
+     *
+     * @param file            the pack file
+     * @param packInputStream the pack file input stream
+     * @param fileNo          the pack file number
+     * @param pack            the pack that the pack file comes from
+     * @param queue           the file queue. If <tt>null</tt>, and file queueing is required, one will be created
+     * @return the file queue. May be <tt>null</tt>
+     * @throws IOException for any I/O error
+     * @throws Exception   for any other error
+     */
+    protected FileQueue unpack(PackFile file, ObjectInputStream packInputStream, int fileNo, Pack pack, FileQueue queue)
+            throws Exception
+    {
+        // translate & build the path
+        String path = IoHelper.translatePath(file.getTargetPath(), getVariableSubstitutor());
+        File target = new File(path);
+        File dir = target;
+        if (!file.isDirectory())
+        {
+            dir = target.getParentFile();
+        }
+
+        createDirectory(dir, file);
+
+        // Add path to the log
+        getUninstallData().addFile(path, pack.uninstall);
+
+        if (file.isDirectory())
+        {
+            return queue;
+        }
+
+        informListeners(InstallerListener.BEFORE_FILE, target, file);
+
+        AbstractUIProgressHandler handler = getHandler();
+        handler.progress(fileNo, path);
+
+        // if this file exists and should not be overwritten, check what to do
+        if (target.exists() && (file.override() != OverrideType.OVERRIDE_TRUE))
+        {
+            if (!isOverwriteFile(file, target))
+            {
+                if (!file.isBackReference() && !pack.loose)
+                {
+                    if (file.isPack200Jar())
+                    {
+                        skip(packInputStream, Integer.SIZE / 8);
+                    }
+                    else
+                    {
+                        skip(packInputStream, file.length());
+                    }
+                }
+                return queue;
+            }
+        }
+
+        handleOverrideRename(file, target);
+        queue = extract(file, target, packInputStream, pack, queue);
+
+        return queue;
+    }
+
+    /**
+     * Extracts a pack file.
+     *
+     * @param file            the pack file
+     * @param target          the file to write to
+     * @param packInputStream the pack file input stream
+     * @param pack            the pack that the pack file comes from
+     * @param queue           the file queue. If <tt>null</tt>, and file queueing is required, one will be created
+     * @return the file queue. May be <tt>null</tt>
+     * @throws IOException for any I/O error
+     * @throws Exception   for any other error
+     */
+    protected FileQueue extract(PackFile file, File target, ObjectInputStream packInputStream, Pack pack,
+                                FileQueue queue)
+            throws Exception
+    {
+        ObjectInputStream packStream = packInputStream;
+        InputStream in = null;
+        try
+        {
+            FileUnpacker unpacker;
+
+            if (!pack.loose && file.isBackReference())
+            {
+                in = getPackStream(file.previousPackId, pack.uninstall);
+                packStream = new ObjectInputStream(in);
+                // must wrap for blockdata use by ObjectStream (otherwise strange result)
+                // skip on underlying stream (for some reason not possible on ObjectStream)
+                skip(in, file.offsetInPreviousPack - 4);
+                // but the stream header is now already read (== 4 bytes)
+            }
+
+            unpacker = createFileUnpacker(file, pack, queue, cancellable);
+            unpacker.unpack(file, packStream, target);
+
+
+            if (isInterrupted())
+            {
+                return queue;
+            }
+
+            if (!unpacker.isQueued())
+            {
+                informListeners(InstallerListener.AFTER_FILE, target, file);
+            }
+        }
+        finally
+        {
+            FileUtils.close(in);
+            if (packStream != packInputStream)
+            {
+                FileUtils.close(packStream);
+            }
+        }
+        return queue;
+    }
+
+    /**
+     * Creates an unpacker to unpack a pack file.
+     *
+     * @param file        the pack file to unpack
+     * @param pack        the parent pack
+     * @param queue       the file queue. May be <tt>null</tt>
+     * @param cancellable determines if the unpacker should be cancelled
+     * @return the unpacker
+     * @throws IOException        for any I/O error
+     * @throws InstallerException for any installer error
+     */
+    protected FileUnpacker createFileUnpacker(PackFile file, Pack pack, FileQueue queue, Cancellable cancellable)
+            throws IOException, InstallerException
+    {
+        FileUnpacker unpacker;
+        if (pack.loose)
+        {
+            unpacker = new LooseFileUnpacker(getAbsoluteInstallSource(), cancellable, handler, queue, librarian);
+        }
+        else if (file.isPack200Jar())
+        {
+            unpacker = new Pack200FileUnpacker(cancellable, handler, resourceManager, getPack200Unpacker(),
+                                               queue, librarian);
+        }
+        else
+        {
+            unpacker = new DefaultFileUnpacker(cancellable, handler, queue, librarian);
+        }
+        return unpacker;
+    }
+
+    /**
+     * Invoked after each pack has been unpacked.
+     *
+     * @param queue        the file queue, or <tt>null</tt> if no file queuing was required during unpacking
+     * @param parsables    used to collect parsable files in the pack
+     * @param executables  used to collect executable files files in the pack
+     * @param updateChecks used to collect update checks in the pack
+     * @throws Exception for any listener error
+     */
+    protected void postUnpack(FileQueue queue, List<ParsableFile> parsables, List<ExecutableFile> executables,
+                              List<UpdateCheck> updateChecks) throws Exception
+    {
+        AutomatedInstallData installData = getInstallData();
+        AbstractUIProgressHandler handler = getHandler();
+
+        // Commit a file queue if there are potentially blocked files
+        // Use one file queue for all packs
+        if (queue != null)
+        {
+            queue.execute();
+            installData.setRebootNecessary(queue.isRebootNecessary());
+        }
+        if (isInterrupted())
+        {
+            return;
+        }
+
+        parseFiles(parsables);
+        if (isInterrupted())
+        {
+            return;
+        }
+
+        if (!executeFiles(executables) || isInterrupted())
+        {
+            return;
+        }
+
+        // update checks should be done _after_ uninstaller was put, so we don't delete it. TODO
+        performUpdateChecks(updateChecks);
+        if (isInterrupted())
+        {
+            return;
+        }
+
+        informListeners(InstallerListener.AFTER_PACKS, installData.getSelectedPacks().size());
+        if (isInterrupted())
+        {
+            return;
+        }
+
+        // write installation information
+        writeInstallationInformation();
+
+        // unpacking complete
+        handler.stopAction();
+    }
+
+    /**
+     * Invoked after unpacking has completed, in order to clean up.
+     */
+    protected void cleanup()
+    {
+        state = State.READY;
+    }
+
+    /**
+     * Returns the installation data.
+     *
+     * @return the installation data
+     */
+    protected AutomatedInstallData getInstallData()
+    {
+        return installData;
+    }
+
+    /**
+     * Returns the uninstallation data.
+     *
+     * @return the uninstallation data
+     */
+    protected UninstallData getUninstallData()
+    {
+        return uninstallData;
+    }
+
+    /**
+     * Returns the resource manager.
+     *
+     * @return the resource manager
+     */
+    protected ResourceManager getResourceManager()
+    {
+        return resourceManager;
+    }
+
+    /**
+     * Returns the variable replacer.
+     *
+     * @return the variable replacer
+     */
+    protected VariableSubstitutor getVariableSubstitutor()
+    {
+        return variableSubstitutor;
+    }
+
+    /**
+     * Returns the handler.
+     *
+     * @return the handler
+     */
+    protected AbstractUIProgressHandler getHandler()
+    {
+        return handler;
+    }
+
+    /**
+     * Returns the librarian.
+     *
+     * @return the librarian
+     */
+    protected Librarian getLibrarian()
+    {
+        return librarian;
+    }
+
+    /**
+     * Determines if a pack should be unpacked.
+     *
+     * @param pack the pack
+     * @return <tt>true</tt> if the pack should be unpacked, <tt>false</tt> if it should be skipped
+     */
+    protected boolean shouldUnpack(Pack pack)
+    {
+        boolean result = true;
+        if (pack.hasCondition())
+        {
+            result = rules.isConditionTrue(pack.getCondition());
+        }
+        return result;
+    }
+
+    /**
+     * Sets the result of the unpacking operation.
+     *
+     * @param result if <tt>true</tt> denotes success
+     */
+    protected void setResult(boolean result)
+    {
+        this.result = result;
+    }
+
+    protected boolean isConditionTrue(String id)
+    {
+        return rules.isConditionTrue(id);
+    }
+
+    /**
+     * Returns the step name for a pack, for reporting purposes.
+     *
+     * @param pack the pack
+     * @return the pack's step name
+     */
+    protected String getStepName(Pack pack)
+    {
+        String result = pack.name;//
+        if (pack.isHidden())
+        {
+            // hide the pack name if pack is hidden
+            result = "";
+        }
+        else if (pack.id != null && !"".equals(pack.id))
+        {
+            // the pack has an id - if there is a language pack entry for it, use it instead
+            String name = getInstallData().getLangpack().getString(pack.id);
+            if (name != null && !"".equals(name))
+            {
+                result = name;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Returns a stream to a pack, location depending on if it's web based.
+     *
+     * @param packId    the pack id
+     * @param uninstall <tt>true</tt> if pack must be uninstalled
+     * @return the stream or null if it could not be found.
+     * @throws Exception Description of the Exception
+     */
+    protected InputStream getPackStream(String packId, boolean uninstall) throws Exception
+    {
+        InputStream in;
+
+        String webDirURL = installData.getInfo().getWebDirURL();
+
+        packId = "-" + packId;
+
+        if (webDirURL == null)
+        {
+            // local
+            in = resourceManager.getInputStream("packs/pack" + packId);
+        }
+        else
+        {
+            // web based
+            // TODO: Look first in same directory as primary jar
+            // This may include prompting for changing of media
+            // TODO: download and cache them all before starting copy process
+
+            // See compiler.Packager#getJarOutputStream for the counterpart
+            String baseName = installData.getInfo().getInstallerBase();
+            String packURL = webDirURL + "/" + baseName + ".pack" + packId + ".jar";
+            String tempFolder = IoHelper.translatePath(
+                    installData.getInfo().getUninstallerPath() + tempSubPath, variableSubstitutor);
+            String tempFile;
+            try
+            {
+                tempFile = WebRepositoryAccessor.getCachedUrl(packURL, tempFolder);
+                uninstallData.addFile(tempFile, uninstall);
+            }
+            catch (Exception e)
+            {
+                if ("Cancelled".equals(e.getMessage()))
+                {
+                    throw new InstallerException("Installation cancelled", e);
+                }
+                else
+                {
+                    throw new InstallerException("Installation failed", e);
+                }
+            }
+            URL url = new URL("jar:" + tempFile + "!/packs/pack" + packId);
+
+            //URL url = new URL("jar:" + packURL + "!/packs/pack" + packid);
+            // JarURLConnection jarConnection = (JarURLConnection)
+            // url.openConnection();
+            // TODO: what happens when using an automated installer?
+            in = new WebAccessor(null).openInputStream(url);
+            // TODO: Fails miserably when pack jars are not found, so this is
+            // temporary
+            if (in == null)
+            {
+                throw new InstallerException(url.toString() + " not available",
+                                             new FileNotFoundException(url.toString()));
+            }
+        }
+        if (in != null && installData.getInfo().getPackDecoderClassName() != null)
+        {
+            Class<Object> decoder = (Class<Object>) Class.forName(installData.getInfo().getPackDecoderClassName());
+            Class[] paramsClasses = new Class[1];
+            paramsClasses[0] = Class.forName("java.io.InputStream");
+            Constructor<Object> constructor = decoder.getDeclaredConstructor(paramsClasses);
+            // Our first used decoder input stream (bzip2) reads byte for byte from
+            // the source. Therefore we put a buffering stream between it and the
+            // source.
+            InputStream buffer = new BufferedInputStream(in);
+            Object[] params = {buffer};
+            Object instance = constructor.newInstance(params);
+            if (!InputStream.class.isInstance(instance))
+            {
+                throw new InstallerException("'" + installData.getInfo().getPackDecoderClassName()
+                                                     + "' must be derived from "
+                                                     + InputStream.class.toString());
+            }
+            in = (InputStream) instance;
+        }
+        return in;
+    }
 
     /**
      * Informs all listeners which would be informed at the given action type.
      *
-     * @param customActions             array of lists with the custom action objects
-     * @param action                    identifier for which callback should be called
-     * @param file                      first parameter for the call
-     * @param packFile                  second parameter for the call
-     * @param abstractUIProgressHandler third parameter for the call
+     * @param action   identifier for which callback should be called
+     * @param file     first parameter for the call
+     * @param packFile second parameter for the call
      */
-    protected void informListeners(List<InstallerListener> customActions, int action, File file,
-                                   PackFile packFile, AbstractUIProgressHandler abstractUIProgressHandler) throws Exception
+    protected void informListeners(int action, File file, PackFile packFile) throws Exception
     {
-        // Iterate the action list.
-        for (InstallerListener installerListener : customActions)
+        for (InstallerListener listener : installData.getInstallerListener())
         {
-            if (shouldInterrupt())
+            if (!shouldInterrupt())
             {
-                return;
-            }
-            switch (action)
-            {
-                case InstallerListener.BEFORE_FILE:
-                    installerListener.beforeFile(file, packFile);
-                    break;
-                case InstallerListener.AFTER_FILE:
-                    installerListener.afterFile(file, packFile);
-                    break;
-                case InstallerListener.BEFORE_DIR:
-                    installerListener.beforeDir(file, packFile);
-                    break;
-                case InstallerListener.AFTER_DIR:
-                    installerListener.afterDir(file, packFile);
-                    break;
+                switch (action)
+                {
+                    case InstallerListener.BEFORE_FILE:
+                        listener.beforeFile(file, packFile);
+                        break;
+                    case InstallerListener.AFTER_FILE:
+                        listener.afterFile(file, packFile);
+                        break;
+                    case InstallerListener.BEFORE_DIR:
+                        listener.beforeDir(file, packFile);
+                        break;
+                    case InstallerListener.AFTER_DIR:
+                        listener.afterDir(file, packFile);
+                        break;
+                }
             }
         }
     }
 
-    protected void informListeners(List<InstallerListener> customActions, int action, Pack pack,
-                                   Integer integer, AbstractUIProgressHandler abstractUIProgressHandler) throws Exception
+    protected void informListeners(int action, Pack pack, int packNo)
+            throws Exception
     {
-        for (InstallerListener customAction : customActions)
+        for (InstallerListener listener : installData.getInstallerListener())
         {
             switch (action)
             {
                 case InstallerListener.BEFORE_PACK:
-                    customAction.beforePack(pack, integer,
-                            abstractUIProgressHandler);
+                    listener.beforePack(pack, packNo, handler);
                     break;
                 case InstallerListener.AFTER_PACK:
-                    customAction.afterPack(pack, integer,
-                            abstractUIProgressHandler);
+                    listener.afterPack(pack, packNo, handler);
                     break;
             }
         }
     }
 
-    protected void informListeners(List<InstallerListener> customActions, int action, AutomatedInstallData pack,
-                                   Integer integer, AbstractUIProgressHandler abstractUIProgressHandler) throws Exception
+    protected void informListeners(int action, int packs) throws Exception
     {
-        for (InstallerListener customAction : customActions)
+        for (InstallerListener listener : installData.getInstallerListener())
         {
             switch (action)
             {
                 case InstallerListener.BEFORE_PACKS:
-                    customAction.beforePacks(pack, integer, abstractUIProgressHandler);
+                    listener.beforePacks(installData, packs, handler);
                     break;
                 case InstallerListener.AFTER_PACKS:
-                    customAction.afterPacks(pack, abstractUIProgressHandler);
+                    listener.afterPacks(installData, handler);
                     break;
             }
         }
     }
 
     /**
-     * Creates the given directory recursive and calls the method "afterDir" of each listener with
-     * the current file object and the pack file object. On error an exception is raised.
+     * Creates a directory including any necessary but nonexistent parent directories, associated with a pack file.
+     * <p/>
+     * If {@link InstallerListener}s are registered, these will be notified for each directory created.
      *
-     * @param dest          the directory which should be created
-     * @param pf            current pack file object
-     * @param customActions all defined custom actions
-     * @return false on error, true else
-     * @throws Exception
+     * @param dir  the directory to create
+     * @param file the pack file
+     * @return <tt>true</tt> if the directories were created, otherwise <tt>false</tt>
+     * @throws Exception for any listener error
      */
-    protected boolean mkDirsWithEnhancement(File dest, PackFile pf, List<InstallerListener> customActions)
-            throws Exception
+    protected boolean createDirectory(File dir, PackFile file) throws Exception
     {
         boolean ok = true;
-        if (!dest.exists())
+        if (!dir.exists())
         {
-            File parent = dest.getParentFile();
-            if (parent != null)
+            if (installData.getInstallerListener().isEmpty())
             {
-                ok = mkDirsWithEnhancement(parent, pf, customActions);
-            }
-            if (ok)
-            {
-                informListeners(customActions, InstallerListener.BEFORE_DIR, dest, pf, null);
-                ok = dest.mkdir();
-                if (!ok)
+                // Create it in one step.
+                if (!dir.mkdirs())
                 {
-                    handler.emitError("Error creating directories", "Could not create directory\n" + dest);
+                    handler.emitError("Error creating directories",
+                                      "Could not create directory\n" + dir.getPath());
                     handler.stopAction();
+                    result = false;
                 }
-                else
+            }
+            else
+            {
+                File parent = dir.getParentFile();
+                if (parent != null)
                 {
-                    informListeners(customActions, InstallerListener.AFTER_DIR, dest, pf, null);
+                    ok = createDirectory(parent, file);
+                }
+                if (ok)
+                {
+                    informListeners(InstallerListener.BEFORE_DIR, dir, file);
+                    ok = dir.mkdir();
+                    if (!ok)
+                    {
+                        handler.emitError("Error creating directories", "Could not create directory\n" + dir);
+                        handler.stopAction();
+                    }
+                    else
+                    {
+                        informListeners(InstallerListener.AFTER_DIR, dir, file);
+                    }
                 }
             }
         }
@@ -436,151 +998,174 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
         return ok;
     }
 
-    // CUSTOM ACTION STUFF -------------- end -----------------
-
     /**
-     * Returns whether an interrupt request should be discarded or not.
+     * Parses {@link ParsableFile} instances collected during unpacking.
      *
-     * @return Returns the discard interrupt flag
+     * @param files the files to parse
+     * @throws Exception if parsing fails
      */
-    public static synchronized boolean isDiscardInterrupt()
+    private void parseFiles(List<ParsableFile> files) throws Exception
     {
-        return discardInterrupt;
-    }
-
-    /**
-     * Sets the discard interrupt flag.
-     *
-     * @param di the discard interrupt flag to set
-     */
-    public synchronized void setDiscardInterrupt(boolean di)
-    {
-        discardInterrupt = di;
-        setInterruptDesired(false);
-    }
-
-    /**
-     * Returns the interrupt desired state.
-     *
-     * @return the interrupt desired state
-     */
-    public static boolean isInterruptDesired()
-    {
-        return interruptDesired;
-    }
-
-    /**
-     * @param interruptDesired The interrupt desired flag to set
-     */
-    private static void setInterruptDesired(boolean interruptDesired)
-    {
-        UnpackerBase.interruptDesired = interruptDesired;
-    }
-
-    public abstract void run();
-
-    protected void performUpdateChecks(ArrayList<UpdateCheck> updatechecks)
-    {
-        if (updatechecks != null && updatechecks.size() > 0)
+        if (!files.isEmpty())
         {
-            FileSet fileset = new FileSet();
-            ArrayList<File> files_to_delete = new ArrayList<File>();
-            ArrayList<File> dirs_to_delete = new ArrayList<File>();
-
-            try
+            ScriptParser parser = new ScriptParser(getVariableSubstitutor());
+            for (ParsableFile file : files)
             {
-                fileset.setDir(new File(installData.getInstallPath()).getAbsoluteFile());
-
-                for (UpdateCheck uc : updatechecks)
+                parser.parse(file);
+                if (isInterrupted())
                 {
-                    if (uc.includesList != null)
-                    {
-                        for (String incl : uc.includesList)
-                        {
-                            fileset.createInclude().setName(variableSubstitutor.substitute(incl));
-                        }
-                    }
-
-                    if (uc.excludesList != null)
-                    {
-                        for (String excl : uc.excludesList)
-                        {
-                            fileset.createExclude().setName(variableSubstitutor.substitute(excl));
-                        }
-                    }
+                    return;
                 }
-                DirectoryScanner ds = fileset.getDirectoryScanner();
-                ds.scan();
-                String[] srcFiles = ds.getIncludedFiles();
-                String[] srcDirs = ds.getIncludedDirectories();
-
-                TreeSet<File> installed_files = new TreeSet<File>();
-
-                for (String fname : this.uinstallData.getInstalledFilesList())
-                {
-                    File f = new File(fname);
-
-                    if (!f.isAbsolute())
-                    {
-                        f = new File(this.absolute_installpath, fname);
-                    }
-
-                    installed_files.add(f);
-                }
-                for (String srcFile : srcFiles)
-                {
-                    File newFile = new File(ds.getBasedir(), srcFile);
-
-                    // skip files we just installed
-                    if (installed_files.contains(newFile))
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        files_to_delete.add(newFile);
-                    }
-                }
-                for (String srcDir : srcDirs)
-                {
-                    File newDir = new File(ds.getBasedir(), srcDir);
-
-                    // skip directories we just installed
-                    if (installed_files.contains(newDir))
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        dirs_to_delete.add(newDir);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                this.handler.emitError("Error while performing update checks", e.getMessage());
-            }
-
-            for (File f : files_to_delete)
-            {
-                f.delete();
-            }
-            for (File d : dirs_to_delete)
-            {
-                // Only empty directories will be deleted
-                d.delete();
             }
         }
     }
 
     /**
-     * Writes information about the installed packs and the variables at
-     * installation time.
+     * Runs {@link ExecutableFile} instances collected during unpacking.
      *
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * @param executables the executables to run
+     * @return <tt>true</tt> if execution was successful, otherwise <tt>false</tt>
      */
-    public void writeInstallationInformation() throws IOException, ClassNotFoundException
+    private boolean executeFiles(List<ExecutableFile> executables)
+    {
+        boolean result = true;
+        if (!executables.isEmpty())
+        {
+            FileExecutor executor = new FileExecutor(executables);
+            if (executor.executeFiles(ExecutableFile.POSTINSTALL, handler) != 0)
+            {
+                result = false;
+                setResult(false);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Determines if the unpacker has been interrupted.
+     *
+     * @return <tt>true</tt> if the unpacker has been interrupted, otherwise <tt>false</tt>
+     */
+    protected synchronized boolean isInterrupted()
+    {
+        boolean result = false;
+        if (state == State.INTERRUPT)
+        {
+            setResult(false);
+            state = State.INTERRUPTED;
+            result = true;
+            notifyAll(); // notify threads waiting in interrupt()
+        }
+        else
+        {
+            if (state == State.INTERRUPTED)
+            {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    protected void performUpdateChecks(List<UpdateCheck> checks)
+    {
+        if (checks != null && !checks.isEmpty())
+        {
+            File absoluteInstallPath = new File(installData.getInstallPath()).getAbsoluteFile();
+            FileSet fileset = new FileSet();
+            List<File> filesToDelete = new ArrayList<File>();
+            List<File> dirsToDelete = new ArrayList<File>();
+
+            try
+            {
+                fileset.setDir(absoluteInstallPath);
+
+                for (UpdateCheck check : checks)
+                {
+                    if (check.includesList != null)
+                    {
+                        for (String include : check.includesList)
+                        {
+                            fileset.createInclude().setName(variableSubstitutor.substitute(include));
+                        }
+                    }
+
+                    if (check.excludesList != null)
+                    {
+                        for (String exclude : check.excludesList)
+                        {
+                            fileset.createExclude().setName(variableSubstitutor.substitute(exclude));
+                        }
+                    }
+                }
+                DirectoryScanner scanner = fileset.getDirectoryScanner();
+                scanner.scan();
+                String[] srcFiles = scanner.getIncludedFiles();
+                String[] srcDirs = scanner.getIncludedDirectories();
+
+                Set<File> installedFiles = new TreeSet<File>();
+
+                for (String name : uninstallData.getInstalledFilesList())
+                {
+                    File file = new File(name);
+
+                    if (!file.isAbsolute())
+                    {
+                        file = new File(absoluteInstallPath, name);
+                    }
+
+                    installedFiles.add(file);
+                }
+                for (String srcFile : srcFiles)
+                {
+                    File newFile = new File(scanner.getBasedir(), srcFile);
+
+                    // skip files we just installed
+                    if (!installedFiles.contains(newFile))
+                    {
+                        filesToDelete.add(newFile);
+                    }
+                }
+                for (String srcDir : srcDirs)
+                {
+                    File newDir = new File(scanner.getBasedir(), srcDir);
+
+                    // skip directories we just installed
+                    if (!installedFiles.contains(newDir))
+                    {
+                        dirsToDelete.add(newDir);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                handler.emitError("Error while performing update checks", e.getMessage());
+            }
+
+            for (File f : filesToDelete)
+            {
+                if (!f.delete())
+                {
+                    logger.warning("Failed to delete: " + f);
+                }
+            }
+            for (File d : dirsToDelete)
+            {
+                // Only empty directories will be deleted
+                if (!d.delete())
+                {
+                    logger.warning("Failed to delete: " + d);
+                }
+            }
+        }
+    }
+
+    /**
+     * Writes information about the installed packs and the variables at installation time.
+     *
+     * @throws IOException            for any I/O error
+     * @throws ClassNotFoundException if deserialization fails
+     */
+    protected void writeInstallationInformation() throws IOException, ClassNotFoundException
     {
         if (!installData.getInfo().isWriteInstallationInformation())
         {
@@ -588,46 +1173,47 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
             return;
         }
         logger.fine("Writing installation information");
-        String installdir = installData.getInstallPath();
+        String installDir = installData.getInstallPath();
 
-        List<Pack> installedpacks = new ArrayList<Pack>(installData.getSelectedPacks());
+        List<Pack> installedPacks = new ArrayList<Pack>(installData.getSelectedPacks());
 
-        File installationinfo = new File(installdir + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION);
-        if (!installationinfo.exists())
+        File installationInfo = new File(installDir + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION);
+        if (!installationInfo.exists())
         {
-            logger.fine("Creating info file" + installationinfo.getAbsolutePath());
+            logger.fine("Creating info file" + installationInfo.getAbsolutePath());
             File dir = new File(installData.getInstallPath());
-            if (!dir.exists()) {
+            if (!dir.exists())
+            {
                 // if no packs have been installed, then the installation directory won't exist
-                if (!dir.mkdirs()) {
+                if (!dir.mkdirs())
+                {
                     throw new IOException("Failed to create directory: " + dir);
                 }
             }
-            if (!installationinfo.createNewFile()) {
-                throw new IOException("Failed to create file: " + installationinfo);
+            if (!installationInfo.createNewFile())
+            {
+                throw new IOException("Failed to create file: " + installationInfo);
             }
         }
         else
         {
             logger.fine("Previous installation information found");
             // read in old information and update
-            FileInputStream fin = new FileInputStream(installationinfo);
+            FileInputStream fin = new FileInputStream(installationInfo);
             ObjectInputStream oin = new ObjectInputStream(fin);
 
             List<Pack> packs = (List<Pack>) oin.readObject();
-            for (Pack pack1 : packs)
+            for (Pack pack : packs)
             {
-                Pack pack = pack1;
-                installedpacks.add(pack);
+                installedPacks.add(pack);
             }
             oin.close();
             fin.close();
-
         }
 
-        FileOutputStream fout = new FileOutputStream(installationinfo);
+        FileOutputStream fout = new FileOutputStream(installationInfo);
         ObjectOutputStream oout = new ObjectOutputStream(fout);
-        oout.writeObject(installedpacks);
+        oout.writeObject(installedPacks);
         /*
         int selectedpackscount = installData.selectedPacks.size();
         for (int i = 0; i < selectedpackscount; i++)
@@ -642,88 +1228,58 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
         fout.close();
     }
 
-    protected File getAbsolutInstallSource() throws Exception
+    protected File getAbsoluteInstallSource() throws IOException, InstallerException
     {
-        if (absolutInstallSource == null)
+        if (absoluteInstallSource == null)
         {
-            URI uri = getClass().getProtectionDomain().getCodeSource().getLocation().toURI();
+            URI uri;
+            try
+            {
+                uri = getClass().getProtectionDomain().getCodeSource().getLocation().toURI();
+            }
+            catch (URISyntaxException exception)
+            {
+                throw new InstallerException(exception);
+            }
             if (!"file".equals(uri.getScheme()))
             {
-                throw new Exception("Unexpected scheme in JAR file URI: " + uri);
+                throw new InstallerException("Unexpected scheme in JAR file URI: " + uri);
             }
-            absolutInstallSource = new File(uri.getSchemeSpecificPart()).getAbsoluteFile();
-            if (absolutInstallSource.getName().endsWith(".jar"))
+            absoluteInstallSource = new File(uri.getSchemeSpecificPart()).getAbsoluteFile();
+            if (absoluteInstallSource.getName().endsWith(".jar"))
             {
-                absolutInstallSource = absolutInstallSource.getParentFile();
+                absoluteInstallSource = absoluteInstallSource.getParentFile();
             }
         }
-        return absolutInstallSource;
+        return absoluteInstallSource;
     }
 
-    protected boolean blockableForCurrentOs(PackFile pf)
+    /**
+     * Skips bytes in a stream.
+     *
+     * @param stream the stream
+     * @param bytes  the no. of bytes to skip
+     * @throws IOException for any I/O error, or if the no. of bytes skipped doesn't match that expected
+     */
+    protected void skip(InputStream stream, long bytes) throws IOException
     {
-        return
-                (pf.blockable() != Blockable.BLOCKABLE_NONE)
-                        && (OsVersion.IS_WINDOWS);
-    }
-
-    @Override
-    public void setHandler(AbstractUIProgressHandler handler)
-    {
-        this.handler = handler;
-    }
-
-    protected void handleMkDirs(PackFile pf, File dest) throws Exception
-    {
-        if (!dest.exists())
+        long skipped = stream.skip(bytes);
+        if (skipped != bytes)
         {
-            // If there are custom actions which would be called at
-            // creating a directory, create it recursively.
-            if (!installData.getInstallerListener().isEmpty())
-            {
-                mkDirsWithEnhancement(dest, pf, installData.getInstallerListener());
-            }
-            else
-            {
-                // Create it in on step.
-                if (!dest.mkdirs())
-                {
-                    handler.emitError("Error creating directories",
-                            "Could not create directory\n" + dest.getPath());
-                    handler.stopAction();
-                    this.result = false;
-                    return;
-                }
-            }
+            throw new IOException("Expected to skip: " + bytes + " in stream but skipped: " + skipped);
         }
-    }
-
-    protected long writeBuffer(PackFile pf, byte[] buffer,
-                               FileOutputStream out, InputStream pis, long bytesCopied)
-            throws IOException
-    {
-        int maxBytes = (int) Math.min(pf.length() - bytesCopied, buffer.length);
-        int bytesInBuffer = pis.read(buffer, 0, maxBytes);
-        if (bytesInBuffer == -1)
-        {
-            throw new IOException("Unexpected end of stream (installer corrupted?)");
-        }
-        out.write(buffer, 0, bytesInBuffer);
-        bytesCopied += bytesInBuffer;
-
-        return bytesCopied;
     }
 
     protected boolean isOverwriteFile(PackFile pf, File file)
     {
-        boolean overwritefile = false;
+        boolean result = false;
 
         // don't overwrite file if the user said so
         if (pf.override() != OverrideType.OVERRIDE_FALSE)
         {
             if (pf.override() == OverrideType.OVERRIDE_TRUE)
             {
-                overwritefile = true;
+                result = true;
             }
             else if (pf.override() == OverrideType.OVERRIDE_UPDATE)
             {
@@ -735,7 +1291,7 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
                 // need the creation time of the existing
                 // file or record with which mtime
                 // it was installed...)
-                overwritefile = (file.lastModified() < pf.lastModified());
+                result = (file.lastModified() < pf.lastModified());
             }
             else
             {
@@ -750,24 +1306,23 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
                     def_choice = AbstractUIHandler.ANSWER_YES;
                 }
 
-                int answer = handler.askQuestion(installData.getLangpack()
-                        .getString("InstallPanel.overwrite.title")
-                        + " - " + file.getName(), installData.getLangpack()
-                        .getString("InstallPanel.overwrite.question")
-                        + file.getAbsolutePath(),
+                int answer = handler.askQuestion(
+                        installData.getLangpack().getString("InstallPanel.overwrite.title")
+                                + " - " + file.getName(),
+                        installData.getLangpack().getString("InstallPanel.overwrite.question")
+                                + file.getAbsolutePath(),
                         AbstractUIHandler.CHOICES_YES_NO, def_choice);
 
-                overwritefile = (answer == AbstractUIHandler.ANSWER_YES);
+                result = (answer == AbstractUIHandler.ANSWER_YES);
             }
-
         }
 
-        return overwritefile;
+        return result;
     }
 
     protected void handleOverrideRename(PackFile pf, File file)
     {
-        if ((file.exists()) && pf.overrideRenameTo() != null)
+        if (file.exists() && pf.overrideRenameTo() != null)
         {
             GlobPatternMapper mapper = new GlobPatternMapper();
             mapper.setFrom("*");
@@ -780,110 +1335,128 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable
                 File newPathFile = new File(file.getParent(), newFileName);
                 if (newPathFile.exists())
                 {
-                    newPathFile.delete();
+                    if (!newPathFile.delete())
+                    {
+                        logger.warning("Failed to delete: " + newPathFile);
+                    }
                 }
                 if (!file.renameTo(newPathFile))
                 {
-                    handler.emitError("Error renaming file", "The file " + file
-                            + " could not be renamed to " + newPathFile);
+                    handler.emitError("Error renaming file",
+                                      "The file " + file + " could not be renamed to " + newPathFile);
                 }
             }
             else
             {
-                handler.emitError("Error renaming file", "File name "
-                        + file.getName()
+                handler.emitError("Error renaming file", "File name " + file.getName()
                         + " cannot be mapped using the expression \""
                         + pf.overrideRenameTo() + "\"");
             }
         }
     }
 
-    protected void handleTimeStamp(PackFile pf, File file, File tmpFile)
+
+    /**
+     * Reads {@link ParsableFile parseable files} from the supplied stream.
+     *
+     * @param stream    the stream to read from
+     * @param parsables used to collect the read objects
+     * @throws IOException            for any I/O error
+     * @throws ClassNotFoundException if the class of a serialised object cannot be found
+     */
+    protected void readParsableFiles(ObjectInputStream stream, List<ParsableFile> parsables)
+            throws IOException, ClassNotFoundException
     {
-        // Set file modification time if specified
-        if (pf.lastModified() >= 0)
+        int count = stream.readInt();
+        for (int i = 0; i < count; ++i)
         {
-            if (blockableForCurrentOs(pf))
+            ParsableFile file = (ParsableFile) stream.readObject();
+            if (!file.hasCondition() || isConditionTrue(file.getCondition()))
             {
-                tmpFile.setLastModified(pf.lastModified());
-            }
-            else
-            {
-                file.setLastModified(pf.lastModified());
+                file.path = IoHelper.translatePath(file.path, variableSubstitutor);
+                parsables.add(file);
             }
         }
     }
 
-    protected FileQueue handleBlockable(PackFile pf, File file, File tmpFile, FileQueue fq,
-                                        List<InstallerListener> customActions)
-            throws Exception
-    {
-        if (blockableForCurrentOs(pf))
-        {
-            if (fq == null)
-            {
-                fq = new FileQueue(librarian);
-            }
-
-            FileQueueMove fqmv = new FileQueueMove(tmpFile, file);
-            if (blockableForCurrentOs(pf))
-            {
-                fqmv.setForceInUse(true);
-            }
-            fqmv.setOverwrite(true);
-            fq.add(fqmv);
-            logger.fine(tmpFile.getAbsolutePath()
-                    + " -> "
-                    + file.getAbsolutePath()
-                    + " added to file queue for being copied after reboot"
-            );
-            // The temporary file must not be deleted
-            // until the file queue will be committed
-            tmpFile.deleteOnExit();
-        }
-        else
-        {
-            // Custom action listener stuff --- afterFile ----
-            informListeners(customActions, InstallerListener.AFTER_FILE, file, pf,
-                    null);
-        }
-
-        return fq;
-    }
-
-    protected void loadExecutables(ObjectInputStream objIn, ArrayList<ExecutableFile> executables)
+    /**
+     * Reads {@link ExecutableFile executable files} from the supplied stream.
+     *
+     * @param stream      the stream to read from
+     * @param executables used to collect the read objects
+     * @throws IOException            for any I/O error
+     * @throws ClassNotFoundException if the class of a serialised object cannot be found
+     */
+    protected void readExecutableFiles(ObjectInputStream stream, List<ExecutableFile> executables)
             throws IOException, ClassNotFoundException
     {
         // Load information about executable files
-        int numExecutables = objIn.readInt();
-        for (int k = 0; k < numExecutables; k++)
+        int count = stream.readInt();
+        for (int i = 0; i < count; ++i)
         {
-            ExecutableFile ef = (ExecutableFile) objIn.readObject();
-            if (ef.hasCondition() && (rules != null))
+            ExecutableFile file = (ExecutableFile) stream.readObject();
+            if (!file.hasCondition() || isConditionTrue(file.getCondition()))
             {
-                if (!rules.isConditionTrue(ef.getCondition()))
+                file.path = IoHelper.translatePath(file.path, variableSubstitutor);
+                if (null != file.argList && !file.argList.isEmpty())
                 {
-                    // skip, condition is false
-                    continue;
+                    for (int j = 0; j < file.argList.size(); j++)
+                    {
+                        String arg = file.argList.get(j);
+                        arg = IoHelper.translatePath(arg, variableSubstitutor);
+                        file.argList.set(j, arg);
+                    }
                 }
-            }
-            ef.path = IoHelper.translatePath(ef.path, variableSubstitutor);
-            if (null != ef.argList && !ef.argList.isEmpty())
-            {
-                String arg = null;
-                for (int j = 0; j < ef.argList.size(); j++)
+                executables.add(file);
+                if (file.executionStage == ExecutableFile.UNINSTALL)
                 {
-                    arg = ef.argList.get(j);
-                    arg = IoHelper.translatePath(arg, variableSubstitutor);
-                    ef.argList.set(j, arg);
+                    uninstallData.addExecutable(file);
                 }
-            }
-            executables.add(ef);
-            if (ef.executionStage == ExecutableFile.UNINSTALL)
-            {
-                uinstallData.addExecutable(ef);
             }
         }
+    }
+
+    /**
+     * Reads {@link UpdateCheck update checks} from the supplied stream.
+     *
+     * @param stream       the stream to read from
+     * @param updateChecks used to collect the read objects
+     * @throws IOException            for any I/O error
+     * @throws ClassNotFoundException if the class of a serialised object cannot be found
+     */
+    protected void readUpdateChecks(ObjectInputStream stream, List<UpdateCheck> updateChecks)
+            throws IOException, ClassNotFoundException
+    {
+        int count = stream.readInt();
+        for (int i = 0; i < count; ++i)
+        {
+            UpdateCheck check = (UpdateCheck) stream.readObject();
+            updateChecks.add(check);
+        }
+    }
+
+    /**
+     * Returns the pack200 unpacker, creating it if required.
+     *
+     * @return the pack200 unpacker
+     */
+    private Pack200.Unpacker getPack200Unpacker()
+    {
+        if (unpacker == null)
+        {
+            unpacker = Pack200.newUnpacker();
+        }
+        return unpacker;
+    }
+
+    /**
+     * Returns whether interrupt was initiate or not for this Unpacker.
+     *
+     * @return whether interrupt was initiate or not
+     */
+    private synchronized boolean shouldInterrupt()
+    {
+        return state == State.INTERRUPT || state == State.INTERRUPTED;
     }
 
 }

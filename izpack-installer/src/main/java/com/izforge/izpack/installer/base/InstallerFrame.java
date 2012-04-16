@@ -22,47 +22,11 @@
 
 package com.izforge.izpack.installer.base;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.adaptator.IXMLWriter;
-import com.izforge.izpack.api.adaptator.impl.XMLWriter;
-import com.izforge.izpack.api.data.Info;
-import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.exception.ResourceNotFoundException;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
-import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.EtchedLineBorder;
-import com.izforge.izpack.gui.IconsDatabase;
-import com.izforge.izpack.gui.log.Log;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.installer.data.UninstallDataWriter;
-import com.izforge.izpack.installer.debugger.Debugger;
-import com.izforge.izpack.installer.manager.PanelManager;
-import com.izforge.izpack.installer.unpacker.IUnpacker;
-import com.izforge.izpack.installer.unpacker.UnpackerBase;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.Housekeeper;
+import static com.izforge.izpack.api.GuiId.BUTTON_HELP;
+import static com.izforge.izpack.api.GuiId.BUTTON_NEXT;
+import static com.izforge.izpack.api.GuiId.BUTTON_PREV;
+import static com.izforge.izpack.api.GuiId.BUTTON_QUIT;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JSeparator;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
-import javax.swing.border.TitledBorder;
-import javax.swing.text.JTextComponent;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -86,10 +50,46 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.izforge.izpack.api.GuiId.BUTTON_HELP;
-import static com.izforge.izpack.api.GuiId.BUTTON_NEXT;
-import static com.izforge.izpack.api.GuiId.BUTTON_PREV;
-import static com.izforge.izpack.api.GuiId.BUTTON_QUIT;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JSeparator;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
+import javax.swing.border.TitledBorder;
+import javax.swing.text.JTextComponent;
+
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLWriter;
+import com.izforge.izpack.api.adaptator.impl.XMLWriter;
+import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.exception.ResourceNotFoundException;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.EtchedLineBorder;
+import com.izforge.izpack.gui.IconsDatabase;
+import com.izforge.izpack.gui.log.Log;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.data.UninstallData;
+import com.izforge.izpack.installer.data.UninstallDataWriter;
+import com.izforge.izpack.installer.debugger.Debugger;
+import com.izforge.izpack.installer.manager.PanelManager;
+import com.izforge.izpack.installer.unpacker.IUnpacker;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.Housekeeper;
 
 /**
  * The IzPack installer frame.
@@ -825,7 +825,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     {
         // We set interrupt to all running Unpacker and wait 40 sec for maximum.
         // If interrupt is discarded (return value false), return immediately:
-        if (!UnpackerBase.interruptAll(40000))
+        if (!unpacker.interrupt(40000))
         {
             return;
         }
@@ -1906,7 +1906,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     private void confirmExit()
     {
-        if (UnpackerBase.isDiscardInterrupt() && interruptCount < MAX_INTERRUPT)
+        if (unpacker.isInterruptDisabled() && interruptCount < MAX_INTERRUPT)
         { // But we should not interrupt.
             interruptCount++;
             return;

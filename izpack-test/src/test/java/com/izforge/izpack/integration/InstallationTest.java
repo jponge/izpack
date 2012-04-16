@@ -187,7 +187,7 @@ public class InstallationTest
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Target Panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
-        Thread.sleep(300);
+        Thread.sleep(1000);
         installerFrameFixture.optionPane().requireWarningMessage();
         installerFrameFixture.optionPane().okButton().click();
         // Packs Panel

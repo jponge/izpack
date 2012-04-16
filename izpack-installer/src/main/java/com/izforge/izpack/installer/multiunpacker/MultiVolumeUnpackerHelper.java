@@ -14,15 +14,32 @@ import com.izforge.izpack.installer.unpacker.IMultiVolumeUnpackerHelper;
 
 public class MultiVolumeUnpackerHelper implements IMultiVolumeUnpackerHelper
 {
-    private static final Logger logger = Logger.getLogger(MultiVolumeUnpackerHelper.class.getName());
 
-    private AutomatedInstallData idata;
+    /**
+     * The installation data.
+     */
+    private AutomatedInstallData installData;
 
+    /**
+     * The progress handler.
+     */
     private AbstractUIProgressHandler handler;
 
-    public MultiVolumeUnpackerHelper()
-    {
+    /**
+     * The logger.
+     */
+    private static final Logger logger = Logger.getLogger(MultiVolumeUnpackerHelper.class.getName());
 
+    /**
+     * Constructs a <tt>MultiVolumeUnpackerHelper</tt>.
+     *
+     * @param installData the installation data
+     * @param handler     the progress handler
+     */
+    public MultiVolumeUnpackerHelper(AutomatedInstallData installData, AbstractUIProgressHandler handler)
+    {
+        this.installData = installData;
+        this.handler = handler;
     }
 
     public File enterNextMediaMessage(String volumename, boolean lastcorrupt)
@@ -34,8 +51,8 @@ public class MultiVolumeUnpackerHelper implements IMultiVolumeUnpackerHelper
             {
                 parent = ((IzPanel) this.handler).getInstallerFrame();
             }
-            JOptionPane.showMessageDialog(parent, idata.getLangpack()
-                    .getString("nextmedia.corruptmedia"), idata.getLangpack()
+            JOptionPane.showMessageDialog(parent, installData.getLangpack()
+                    .getString("nextmedia.corruptmedia"), installData.getLangpack()
                     .getString("nextmedia.corruptmedia.title"), JOptionPane.ERROR_MESSAGE);
         }
         logger.fine("Enter next media: " + volumename);
@@ -45,14 +62,14 @@ public class MultiVolumeUnpackerHelper implements IMultiVolumeUnpackerHelper
 
         while (!nextvolume.exists() || lastcorrupt)
         {
-            if ((this.handler != null) && (this.handler instanceof IzPanel))
+            if (handler instanceof IzPanel)
             {
                 InstallerFrame installframe = ((IzPanel) this.handler).getInstallerFrame();
-                nextMediaDialog = new NextMediaDialog(installframe, idata, volumename);
+                nextMediaDialog = new NextMediaDialog(installframe, installData, volumename);
             }
             else
             {
-                nextMediaDialog = new NextMediaDialog(null, idata, volumename);
+                nextMediaDialog = new NextMediaDialog(null, installData, volumename);
             }
             nextMediaDialog.setVisible(true);
             String nextmediainput = nextMediaDialog.getNextMedia();
@@ -79,9 +96,4 @@ public class MultiVolumeUnpackerHelper implements IMultiVolumeUnpackerHelper
         return enterNextMediaMessage(volumename, false);
     }
 
-    public void init(AutomatedInstallData idata, AbstractUIProgressHandler handler)
-    {
-        this.idata = idata;
-        this.handler = handler;
-    }
 }

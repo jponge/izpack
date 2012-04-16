@@ -21,15 +21,29 @@
 
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import org.apache.tools.zip.ZipOutputStream;
-
-import java.io.*;
-import java.util.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FilterOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
+
+import org.apache.tools.zip.ZipOutputStream;
+
+import com.izforge.izpack.api.substitutor.SubstitutionType;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
 /**
  * <p>
@@ -171,7 +185,8 @@ public class IoHelper
      * @param type file type for the substitutor
      * @throws IOException if an I/O error occurs
      */
-    public static void copyStream(InputStream in, OutputStream out, VariableSubstitutor vs, SubstitutionType type) throws IOException
+    public static void copyStream(InputStream in, OutputStream out, VariableSubstitutor vs, SubstitutionType type)
+            throws IOException
     {
         if (vs == null)
         {
@@ -745,7 +760,7 @@ public class IoHelper
      * we combine manifests and still have their content signed?
      */
     public static void copyZip(ZipInputStream zin, org.apache.tools.zip.ZipOutputStream out,
-                               List<String> files, HashMap<FilterOutputStream, HashSet<String>> alreadyWrittenFiles)
+                               List<String> files, Map<FilterOutputStream, Set<String>> alreadyWrittenFiles)
             throws IOException
     {
         ZipEntry zentry;
@@ -753,7 +768,7 @@ public class IoHelper
         {
             alreadyWrittenFiles.put(out, new HashSet<String>());
         }
-        HashSet<String> currentSet = alreadyWrittenFiles.get(out);
+        Set<String> currentSet = alreadyWrittenFiles.get(out);
         while ((zentry = zin.getNextEntry()) != null)
         {
             String currentName = zentry.getName();
@@ -796,7 +811,8 @@ public class IoHelper
         }
     }
 
-    public static void copyStreamToJar(InputStream zin, ZipOutputStream out, String currentName, long fileTime) throws IOException
+    public static void copyStreamToJar(InputStream zin, ZipOutputStream out, String currentName, long fileTime)
+            throws IOException
     {
         // Create new entry for zip file.
         org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(currentName);
@@ -806,13 +822,15 @@ public class IoHelper
             newEntry.setTime(fileTime); // If found set it into output file.
         }
         out.putNextEntry(newEntry);
-        if(zin!=null){
+        if (zin != null)
+        {
             copyStream(zin, out);
         }
         out.closeEntry();
     }
 
-    public static void copyStreamToJar(InputStream zin, java.util.zip.ZipOutputStream out, String currentName, long fileTime) throws IOException
+    public static void copyStreamToJar(InputStream zin, java.util.zip.ZipOutputStream out, String currentName,
+                                       long fileTime) throws IOException
     {
         // Create new entry for zip file.
         org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(currentName);
@@ -822,7 +840,8 @@ public class IoHelper
             newEntry.setTime(fileTime); // If found set it into output file.
         }
         out.putNextEntry(newEntry);
-        if(zin!=null){
+        if (zin != null)
+        {
             copyStream(zin, out);
         }
         out.closeEntry();

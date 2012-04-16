@@ -23,10 +23,8 @@ package com.izforge.izpack.compiler.packager.impl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -35,18 +33,12 @@ import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.Pack200;
-import java.util.zip.ZipInputStream;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
-import com.izforge.izpack.api.exception.CompilerException;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
-import com.izforge.izpack.compiler.container.CompilerContainer;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.listener.PackagerListener;
 import com.izforge.izpack.compiler.merge.resolve.CompilerPathResolver;
@@ -59,7 +51,6 @@ import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
-import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.IoHelper;
 
 /**
@@ -73,204 +64,47 @@ public class Packager extends PackagerBase
 {
 
     /**
-     * Executable zipped output stream. First to open, last to close.
-     * Attention! This is our own JarOutputStream, not the java standard!
-     */
-    private JarOutputStream primaryJarStream;
-
-    private CompilerData compilerData;
-
-    /**
-     * Decoration of the primary jar stream.
+     * Decoration of the installer jar stream.
      * May be compressed or not depending on the compiler data.
      */
-    private OutputStream outputStream;
-    private MergeManager mergeManager;
-    private ResourceFinder resourceFinder;
+    private final OutputStream outputStream;
+
 
     /**
-     * The constructor.
+     * Constructs a <tt>Packager</tt>.
      *
-     * @throws com.izforge.izpack.api.exception.CompilerException
-     *
+     * @param properties        the properties
+     * @param listener          the packager listener
+     * @param jarOutputStream   the installer jar output stream
+     * @param compressor        the pack compressor
+     * @param outputStream      decoration of the installer jar stream. May be compressed or not depending on the
+     *                          compiler data.
+     * @param mergeManager      the merge manager
+     * @param pathResolver      the path resolver
+     * @param mergeableResolver the mergeable resolver
+     * @param resourceFinder    the resource finder
+     * @param compilerData      the compiler data
      */
-    public Packager(Properties properties, CompilerData compilerData, CompilerContainer compilerContainer,
-                    PackagerListener listener, JarOutputStream jarOutputStream, PackCompressor packCompressor,
-                    OutputStream outputStream, MergeManager mergeManager, CompilerPathResolver pathResolver,
-                    MergeableResolver mergeableResolver, ResourceFinder resourceFinder) throws CompilerException
+    public Packager(Properties properties, PackagerListener listener, JarOutputStream jarOutputStream,
+                    PackCompressor compressor, OutputStream outputStream, MergeManager mergeManager,
+                    CompilerPathResolver pathResolver, MergeableResolver mergeableResolver,
+                    ResourceFinder resourceFinder, CompilerData compilerData)
     {
-        super(properties, compilerContainer, listener, mergeManager, pathResolver, mergeableResolver);
-        this.compilerData = compilerData;
-        this.primaryJarStream = jarOutputStream;
-        this.resourceFinder = resourceFinder;
-        this.compressor = packCompressor;
+        super(properties, listener, jarOutputStream, mergeManager, pathResolver, mergeableResolver,
+              resourceFinder, compressor, compilerData);
         this.outputStream = outputStream;
-        this.mergeManager = mergeManager;
-    }
-
-    /* (non-Javadoc)
-    * @see com.izforge.izpack.compiler.packager.IPackager#createInstaller(java.io.File)
-    */
-
-    @Override
-    public void createInstaller() throws Exception
-    {
-        // preliminary work
-        info.setInstallerBase(compilerData.getOutput().replaceAll(".jar", ""));
-
-        packJarsSeparate = (info.getWebDirURL() != null);
-
-        // primary (possibly only) jar. -1 indicates primary
-
-        sendStart();
-
-        writeInstaller();
-
-        // Finish up. closeAlways is a hack for pack compressions other than
-        // default. Some of it (e.g. BZip2) closes the slave of it also.
-        // But this should not be because the jar stream should be open
-        // for the next pack. Therefore an own JarOutputStream will be used
-        // which close method will be blocked.
-        primaryJarStream.closeAlways();
-
-        sendStop();
-    }
-
-    /***********************************************************************************************
-     * Private methods used when writing out the installer to jar files.
-     **********************************************************************************************/
-
-    /**
-     * Write skeleton installer to primary jar. It is just an included jar, except that we copy the
-     * META-INF as well.
-     */
-    @Override
-    protected void writeSkeletonInstaller() throws IOException
-    {
-        sendMsg("Copying the skeleton installer", PackagerListener.MSG_VERBOSE);
-        mergeManager.addResourceToMerge("com/izforge/izpack/installer/");
-        mergeManager.addResourceToMerge("org/picocontainer/");
-        mergeManager.addResourceToMerge("com/izforge/izpack/img/");
-        mergeManager.addResourceToMerge("com/izforge/izpack/bin/");
-        mergeManager.addResourceToMerge("com/izforge/izpack/api/");
-        mergeManager.addResourceToMerge("com/izforge/izpack/event/");
-        mergeManager.addResourceToMerge("com/izforge/izpack/core/");
-        mergeManager.addResourceToMerge("com/izforge/izpack/data/");
-        mergeManager.addResourceToMerge("com/izforge/izpack/gui/");
-        mergeManager.addResourceToMerge("com/izforge/izpack/merge/");
-        mergeManager.addResourceToMerge("com/izforge/izpack/util/");
-        mergeManager.addResourceToMerge("org/apache/regexp/");
-        mergeManager.addResourceToMerge("com/coi/tools/");
-        mergeManager.addResourceToMerge("org/apache/tools/zip/");
-        mergeManager.merge(primaryJarStream);
     }
 
     /**
-     * Write an arbitrary object to primary jar.
+     * Write packs to the installer jar, or each to a separate jar.
+     *
+     * @throws IOException for any I/O error
      */
     @Override
-    protected void writeInstallerObject(String entryName, Object object) throws IOException
+    protected void writePacks() throws IOException
     {
-        primaryJarStream.putNextEntry(new org.apache.tools.zip.ZipEntry(RESOURCES_PATH + entryName));
-        ObjectOutputStream out = new ObjectOutputStream(primaryJarStream);
-        try
-        {
-            out.writeObject(object);
-        }
-        catch (IOException e)
-        {
-            throw new IOException("Error serializing instance of "
-                                          + object.getClass().getSimpleName()
-                                          + " as entry \"" + entryName + "\"", e);
-        }
-        finally
-        {
-            out.flush();
-            primaryJarStream.closeEntry();
-        }
-    }
-
-    /**
-     * Write the data referenced by URL to primary jar.
-     */
-    @Override
-    protected void writeInstallerResources() throws IOException
-    {
-        sendMsg("Copying " + installerResourceURLMap.size() + " files into installer");
-
-        for (Map.Entry<String, URL> stringURLEntry : installerResourceURLMap.entrySet())
-        {
-            URL url = stringURLEntry.getValue();
-            InputStream in = url.openStream();
-
-            org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(
-                    RESOURCES_PATH + stringURLEntry.getKey());
-            long dateTime = FileUtil.getFileDateTime(url);
-            if (dateTime != -1)
-            {
-                newEntry.setTime(dateTime);
-            }
-            primaryJarStream.putNextEntry(newEntry);
-
-            IoHelper.copyStream(in, primaryJarStream);
-            primaryJarStream.closeEntry();
-            in.close();
-        }
-    }
-
-    /**
-     * Copy included jars to primary jar.
-     */
-    @Override
-    protected void writeIncludedJars() throws IOException
-    {
-        sendMsg("Merging " + includedJarURLs.size() + " jars into installer");
-
-        for (Object[] includedJarURL : includedJarURLs)
-        {
-            InputStream is = ((URL) includedJarURL[0]).openStream();
-            ZipInputStream inJarStream = new ZipInputStream(is);
-            IoHelper.copyZip(inJarStream, primaryJarStream, (List<String>) includedJarURL[1], alreadyWrittenFiles);
-        }
-    }
-
-    /**
-     * Write manifest in the install jar.
-     */
-    @Override
-    public void writeManifest() throws IOException
-    {
-        IXMLElement data = resourceFinder.getXMLTree();
-        IXMLElement guiPrefsElement = data.getFirstChildNamed("guiprefs");
-        // Add splash screen configuration
-        List<String> lines = IOUtils.readLines(getClass().getResourceAsStream("MANIFEST.MF"));
-        IXMLElement splashNode = null;
-        if (guiPrefsElement != null)
-        {
-            splashNode = guiPrefsElement.getFirstChildNamed("splash");
-        }
-        if (splashNode != null)
-        {
-            // Add splash image to installer jar
-            File splashImage = FileUtils.toFile(
-                    resourceFinder.findProjectResource(splashNode.getContent(), "Resource", splashNode));
-            String destination = String.format("META-INF/%s", splashImage.getName());
-            mergeManager.addResourceToMerge(splashImage.getAbsolutePath(), destination);
-            lines.add(String.format("SplashScreen-Image: %s", destination));
-        }
-        lines.add("");
-        File tempManifest = com.izforge.izpack.util.file.FileUtils.createTempFile("MANIFEST", ".MF");
-        FileUtils.writeLines(tempManifest, lines);
-        mergeManager.addResourceToMerge(tempManifest.getAbsolutePath(), "META-INF/MANIFEST.MF");
-    }
-
-    /**
-     * Write Packs to primary jar or each to a separate jar.
-     */
-    @Override
-    protected void writePacks() throws Exception
-    {
-        final int num = packsList.size();
+        List<PackInfo> packs = getPacksList();
+        final int num = packs.size();
         sendMsg("Writing " + num + " Pack" + (num > 1 ? "s" : "") + " into installer");
 
         // Map to remember pack number and bytes offsets of back references
@@ -281,7 +115,8 @@ public class Packager extends PackagerBase
         int pack200Counter = 0;
 
         // Force UTF-8 encoding in order to have proper ZipEntry names.
-        primaryJarStream.setEncoding("utf-8");
+        JarOutputStream installerJar = getInstallerJar();
+        installerJar.setEncoding("utf-8");
 
         // First write the serialized files and file metadata data for each pack
         // while counting bytes.
@@ -289,7 +124,7 @@ public class Packager extends PackagerBase
         int packNumber = 0;
         IXMLElement root = new XMLElementImpl("packs");
 
-        for (PackInfo packInfo : packsList)
+        for (PackInfo packInfo : packs)
         {
             Pack pack = packInfo.getPack();
             pack.nbytes = 0;
@@ -313,9 +148,8 @@ public class Packager extends PackagerBase
             // Retrieve the correct output stream
             org.apache.tools.zip.ZipEntry entry = new org.apache.tools.zip.ZipEntry(
                     RESOURCES_PATH + "packs/pack-" + pack.id);
-            primaryJarStream.putNextEntry(entry);
-            primaryJarStream.flush(); // flush before we start counting
-
+            installerJar.putNextEntry(entry);
+            installerJar.flush(); // flush before we start counting
 
             ByteCountingOutputStream dos = new ByteCountingOutputStream(outputStream);
             ObjectOutputStream objOut = new ObjectOutputStream(dos);
@@ -329,8 +163,8 @@ public class Packager extends PackagerBase
                 boolean pack200 = false;
                 File file = packInfo.getFile(packFile);
 
-                if (file.getName().toLowerCase().endsWith(".jar") && info.isPack200Compression() && isNotSignedJar(
-                        file))
+                if (file.getName().toLowerCase().endsWith(".jar") && getInfo().isPack200Compression()
+                        && isNotSignedJar(file))
                 {
                     packFile.setPack200Jar(true);
                     pack200 = true;
@@ -339,7 +173,7 @@ public class Packager extends PackagerBase
                 // use a back reference if file was in previous pack, and in
                 // same jar
                 Object[] info = storedFiles.get(file);
-                if (info != null && !packJarsSeparate)
+                if (info != null && !packSeparateJars())
                 {
                     packFile.setPreviousPackFileRef((String) info[0], (Long) info[1]);
                     addFile = false;
@@ -407,17 +241,17 @@ public class Packager extends PackagerBase
 
             // Cleanup
             objOut.flush();
-            if (!compressor.useStandardCompression())
+            if (!getCompressor().useStandardCompression())
             {
                 outputStream.close();
             }
 
-            primaryJarStream.closeEntry();
+            installerJar.closeEntry();
 
             // close pack specific jar if required
-            if (packJarsSeparate)
+            if (packSeparateJars())
             {
-                primaryJarStream.closeAlways();
+                installerJar.closeAlways();
             }
 
             IXMLElement child = new XMLElementImpl("pack", root);
@@ -433,27 +267,27 @@ public class Packager extends PackagerBase
         }
 
         // Now that we know sizes, write pack metadata to primary jar.
-        primaryJarStream.putNextEntry(new org.apache.tools.zip.ZipEntry(RESOURCES_PATH + "packs.info"));
-        ObjectOutputStream out = new ObjectOutputStream(primaryJarStream);
-        out.writeInt(packsList.size());
+        installerJar.putNextEntry(new org.apache.tools.zip.ZipEntry(RESOURCES_PATH + "packs.info"));
+        ObjectOutputStream out = new ObjectOutputStream(installerJar);
+        out.writeInt(packs.size());
 
-        for (PackInfo packInfo : packsList)
+        for (PackInfo packInfo : packs)
         {
             out.writeObject(packInfo.getPack());
         }
         out.flush();
-        primaryJarStream.closeEntry();
+        installerJar.closeEntry();
 
         // Pack200 files
         Pack200.Packer packer = createAgressivePack200Packer();
         for (Integer key : pack200Map.keySet())
         {
             File file = pack200Map.get(key);
-            primaryJarStream.putNextEntry(new org.apache.tools.zip.ZipEntry(RESOURCES_PATH + "packs/pack200-" + key));
+            installerJar.putNextEntry(new org.apache.tools.zip.ZipEntry(RESOURCES_PATH + "packs/pack200-" + key));
             JarFile jar = new JarFile(file);
-            packer.pack(jar, primaryJarStream);
+            packer.pack(jar, installerJar);
             jar.close();
-            primaryJarStream.closeEntry();
+            installerJar.closeEntry();
         }
     }
 

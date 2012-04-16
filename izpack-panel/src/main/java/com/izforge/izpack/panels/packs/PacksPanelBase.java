@@ -339,7 +339,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             }
             if ("".equals(desc) || key.equals(desc))
             {
-                desc = pack.description;
+                desc = pack.getDescription();
             }
 
             try

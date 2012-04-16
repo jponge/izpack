@@ -39,16 +39,23 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
         AbstractUIProgressHandler
 {
 
+    /**
+     * The unpacker.
+     */
+    private final IUnpacker unpacker;
+
     private int noOfPacks = 0;
 
     /**
      * Constructs an <tt>InstallPanelAutomationHelper</tt>.
      *
+     * @param unpacker    the unpacker
      * @param housekeeper the house-keeper
      */
-    public InstallPanelAutomationHelper(Housekeeper housekeeper)
+    public InstallPanelAutomationHelper(IUnpacker unpacker, Housekeeper housekeeper)
     {
         super(housekeeper);
+        this.unpacker = unpacker;
     }
 
     /**
@@ -70,27 +77,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
      */
     public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException
     {
-        /*
-        Unpacker unpacker = new Unpacker(installData, this);
-        unpacker.start();
-        */
-        //REFACTOR : Use container to get unpacker
-//        IUnpacker unpacker = UnpackerFactory.getUnpacker(idata.getInfo().getUnpackerClassName(), idata, this);
-        IUnpacker unpacker = null;
-        Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
-        unpacker.setRules(idata.getRules());
-        unpackerthread.start();
-        while (unpackerthread.isAlive())
-        {
-            try
-            {
-                Thread.sleep(100);
-            }
-            catch (InterruptedException e)
-            {
-                // ignore it, we're waiting for the unpacker to finish...
-            }
-        }
+        unpacker.run();
         if (!unpacker.getResult())
         {
             throw new InstallerException("Unpack failed (xml line " + panelRoot.getLineNr() + ")");
@@ -116,7 +103,6 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
     public void stopAction()
     {
         System.out.println("[ Unpacking finished ]");
-        boolean done = true;
     }
 
     /**

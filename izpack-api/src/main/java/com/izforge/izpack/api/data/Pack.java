@@ -19,14 +19,14 @@
 
 package com.izforge.izpack.api.data;
 
-import com.izforge.izpack.api.data.binding.OsModel;
-
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import com.izforge.izpack.api.data.binding.OsModel;
 
 /**
  * Represents a Pack.
@@ -87,7 +87,7 @@ public class Pack implements Serializable
     /**
      * The pack description.
      */
-    public String description;
+    private String description;
 
     /**
      * The target operation system of this pack
@@ -172,6 +172,17 @@ public class Pack implements Serializable
         this.condition = null;
         nbytes = 0;
         color = PackColor.WHITE;
+    }
+
+
+    /**
+     * Returns the pack description.
+     *
+     * @return the pack description. May be <tt>null</tt>
+     */
+    public String getDescription()
+    {
+        return description;
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.izforge.izpack.compiler.packager.impl;
 
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -18,6 +19,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.compiler.resource.ResourceFinder;
 import com.izforge.izpack.merge.MergeManager;
@@ -45,34 +47,35 @@ public class PackagerTest
         rootNode.add(new DOMElement("guiprefs"));
         when(resourceFinder.getXMLTree()).thenReturn(new XMLElementImpl(rootNode));
 
-        final Packager packager = new Packager(null, null, null, null, null, null, null,
-                                               mergeManager, null, null, resourceFinder);
+        final Packager packager = new Packager(null, null, null, null, null, mergeManager, null, null, resourceFinder,
+                                               null);
 
         packager.writeManifest();
 
-        verify(mergeManager).addResourceToMerge(anyString(), anyString());
-
+        verify(mergeManager).addResourceToMerge(anyString(), eq("META-INF/MANIFEST.MF"));
     }
 
     @Test
     public void guiPrefsWithSplash() throws IOException
     {
         PowerMockito.mockStatic(FileUtils.class);
-        final File splashImage = new File("");
+        final File splashImage = new File("image.png");
         when(FileUtils.toFile(null)).thenReturn(splashImage);
 
-        final DOMElement rootNode = new DOMElement("installation");
-        final DOMElement guiPrefsNode = new DOMElement("guiprefs");
-        guiPrefsNode.add(new DOMElement("splash"));
-        rootNode.add(guiPrefsNode);
-        when(resourceFinder.getXMLTree()).thenReturn(new XMLElementImpl(rootNode));
+        IXMLElement rootNode = new XMLElementImpl("installation");
+        IXMLElement guiPrefsNode = new XMLElementImpl("guiprefs", rootNode);
+        IXMLElement splashNode = new XMLElementImpl("splash", rootNode);
+        splashNode.setContent("image.png");
+        guiPrefsNode.addChild(splashNode);
+        rootNode.addChild(guiPrefsNode);
+        when(resourceFinder.getXMLTree()).thenReturn(rootNode);
 
-        final Packager packager = new Packager(null, null, null, null, null, null, null,
-                                               mergeManager, null, null, resourceFinder);
-
+        final Packager packager = new Packager(null, null, null, null, null, mergeManager, null, null, resourceFinder,
+                                               null);
         packager.writeManifest();
 
-        verify(mergeManager, times(2)).addResourceToMerge(anyString(), anyString());
+        verify(mergeManager, times(1)).addResourceToMerge(anyString(), eq("META-INF/image.png"));
+        verify(mergeManager, times(1)).addResourceToMerge(anyString(), eq("META-INF/MANIFEST.MF"));
     }
 
     @Test
@@ -81,8 +84,8 @@ public class PackagerTest
         when(resourceFinder.getXMLTree()).thenReturn(
                 new XMLElementImpl(new DOMElement("installation")));
 
-        final Packager packager = new Packager(null, null, null, null, null, null, null,
-                                               mergeManager, null, null, resourceFinder);
+        final Packager packager = new Packager(null, null, null, null, null, mergeManager, null, null, resourceFinder,
+                                               null);
 
         packager.writeManifest();
 

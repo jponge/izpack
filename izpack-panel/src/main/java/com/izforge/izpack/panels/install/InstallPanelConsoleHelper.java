@@ -21,15 +21,15 @@
 
 package com.izforge.izpack.panels.install;
 
+import java.util.Properties;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.util.Console;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
-
-import java.util.Properties;
+import com.izforge.izpack.util.Console;
 
 /**
  * Install Panel console helper
@@ -66,7 +66,6 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
     @Override
     public boolean runConsole(AutomatedInstallData installData, Console console)
     {
-        unpacker.setRules(installData.getRules());
         unpacker.setHandler(this);
         unpacker.run();
         return unpacker.getResult();

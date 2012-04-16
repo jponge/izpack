@@ -166,11 +166,9 @@ public class SudoPanel extends IzPanel implements ActionListener
             List<OsModel> oses = new ArrayList<OsModel>();
             oses.add(new OsModel("unix", null, null, null, null));
 
-            ArrayList<ParsableFile> plist = new ArrayList<ParsableFile>();
             ParsableFile parsableFile = new ParsableFile(file.getAbsolutePath(), null, null, oses);
-            plist.add(parsableFile);
-            ScriptParser scriptParser = new ScriptParser(plist, variableSubstitutor);
-            scriptParser.parseFiles();
+            ScriptParser scriptParser = new ScriptParser(variableSubstitutor);
+            scriptParser.parse(parsableFile);
 
             ArrayList<ExecutableFile> executableFiles = new ArrayList<ExecutableFile>();
             ExecutableFile executableFile = new ExecutableFile(file.getAbsolutePath(),

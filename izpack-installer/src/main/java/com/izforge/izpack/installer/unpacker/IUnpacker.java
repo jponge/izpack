@@ -22,24 +22,41 @@
 package com.izforge.izpack.installer.unpacker;
 
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.api.rules.RulesEngine;
 
 public interface IUnpacker extends Runnable
 {
+
     /**
      * Return the state of the operation.
      *
      * @return true if the operation was successful, false otherwise.
      */
-    public abstract boolean getResult();
-
-    /**
-     * Called by the InstallerFrame to set a reference to the RulesEngine, which will
-     * be used to check conditions.
-     *
-     * @param rules - an instantiated RulesEngine
-     */
-    public void setRules(RulesEngine rules);
+    public boolean getResult();
 
     void setHandler(AbstractUIProgressHandler handler);
+
+    /**
+     * Interrupts the unpacker, and waits for it to complete.
+     * <p/>
+     * If interrupts have been prevented ({@link #isInterruptDisabled} returns <tt>true</tt>), then this
+     * returns immediately.
+     *
+     * @param wait the maximum time to wait, in milliseconds
+     * @return true if the interrupt will be performed, false if the interrupt will be discarded
+     */
+    boolean interrupt(long wait);
+
+    /**
+     * Determines if interrupts should be disabled.
+     *
+     * @param disable if <tt>true</tt> disable interrupts, otherwise enable them
+     */
+    void setDisableInterrupt(boolean disable);
+
+    /**
+     * Determines if interrupts have been disabled or not.
+     *
+     * @return <tt>true</tt> if interrupts have been disabled, otherwise <tt>false</tt>
+     */
+    boolean isInterruptDisabled();
 }
