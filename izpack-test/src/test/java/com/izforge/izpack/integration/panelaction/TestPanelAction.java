@@ -1,17 +1,19 @@
 package com.izforge.izpack.integration.panelaction;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.Map;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.PanelActionConfiguration;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.integration.datavalidator.TestDataValidator;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 
 /**
@@ -191,6 +193,15 @@ public abstract class TestPanelAction extends TestDataValidator implements Panel
     @Override
     public void initialize(PanelActionConfiguration configuration)
     {
+        if (configuration != null)
+        {
+            String prefix = getPanelId() + "." + stage.toString().toLowerCase() + ".config.";
+            AutomatedInstallData installData = getInstallData();
+            for (Map.Entry<String, String> entry : configuration.getProperties().entrySet())
+            {
+                installData.setVariable(prefix + entry.getKey(), entry.getValue());
+            }
+        }
     }
 
     /**

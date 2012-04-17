@@ -96,6 +96,16 @@ public class TestDataValidator implements DataValidator
     }
 
     /**
+     * Returns the installation data.
+     *
+     * @return the installation data
+     */
+    protected AutomatedInstallData getInstallData()
+    {
+        return installData;
+    }
+
+    /**
      * Returns the panel id of the current panel.
      *
      * @return the panel id

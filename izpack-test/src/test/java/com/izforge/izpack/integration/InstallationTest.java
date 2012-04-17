@@ -113,6 +113,17 @@ public class InstallationTest
     }
 
     @Test
+    @InstallFile("samples/panelconfiguration.xml")
+    public void testPanelConfiguration() throws Exception
+    {
+        installerController.buildInstallation();
+
+        HelloPanel helloPanel = (HelloPanel) installerContainer.getComponent("hellopanel");
+        assertThat(helloPanel.getMetadata().getConfiguration("config1"), Is.is("value1"));
+        assertThat(helloPanel.getMetadata().getConfiguration("config2"), Is.is("value2"));
+    }
+
+    @Test
     @InstallFile("samples/substanceLaf/substanceLaf.xml")
     public void testSubstanceLaf() throws Exception
     {

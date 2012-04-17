@@ -1476,17 +1476,12 @@ public class CompilerConfig extends Thread
             {
                 logger.fine("Found a configuration for panel " + panel.getPanelid());
                 List<IXMLElement> params = configurationElement.getChildrenNamed("param");
-                if (params != null)
+                for (IXMLElement param : params)
                 {
-                    for (IXMLElement param : params)
-                    {
-                        IXMLElement keyElement = param.getFirstChildNamed("key");
-                        IXMLElement valueElement = param.getFirstChildNamed("value");
-                        if ((keyElement != null) && (valueElement != null))
-                        {
-                            panel.addConfiguration(keyElement.getContent(), valueElement.getContent());
-                        }
-                    }
+                    String name = xmlCompilerHelper.requireAttribute(param, "name");
+                    String value = xmlCompilerHelper.requireAttribute(param, "value");
+                    logger.fine("Adding configuration property " + name + " with value " + value);
+                    panel.addConfiguration(name, value);
                 }
             }
 
@@ -2910,14 +2905,11 @@ public class CompilerConfig extends Thread
 
                     for (IXMLElement param : params)
                     {
-                        IXMLElement keyElement = param.getFirstChildNamed("key");
-                        IXMLElement valueElement = param.getFirstChildNamed("value");
-                        if ((keyElement != null) && (valueElement != null))
-                        {
-                            logger.fine("Adding configuration property " + keyElement.getContent() + " with value "
-                                                + valueElement.getContent() + " for action " + actionName);
-                            config.addProperty(keyElement.getContent(), valueElement.getContent());
-                        }
+                        String name = xmlCompilerHelper.requireAttribute(param, "name");
+                        String value = xmlCompilerHelper.requireAttribute(param, "value");
+                        logger.fine("Adding configuration property " + name + " with value "
+                                            + value + " for action " + actionName);
+                        config.addProperty(name, value);
                     }
                     panel.putPanelActionConfiguration(actionName, config);
                     try

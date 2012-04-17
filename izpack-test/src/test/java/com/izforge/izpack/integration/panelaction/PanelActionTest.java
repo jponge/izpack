@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.List;
+import java.util.Set;
 
 import org.fest.swing.core.matcher.JButtonMatcher;
 import org.fest.swing.fixture.DialogFixture;
@@ -21,6 +22,7 @@ import org.junit.runner.RunWith;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.data.binding.ActionStage;
 import com.izforge.izpack.compiler.container.TestInstallationContainer;
 import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.installer.base.InstallerController;
@@ -138,6 +140,8 @@ public class PanelActionTest
 
         frameFixture = HelperTestMethod.prepareFrameFixture(frame, controller);
 
+        checkActionsConfiguration(hello);
+
         checkActionInvocations("HelloPanel", 1, 1, 0, 0, 0);
 
         // HelloPanel
@@ -233,6 +237,50 @@ public class PanelActionTest
         assertNotNull(actions);
         assertEquals(1, actions.size());
         assertEquals(type.getName(), actions.get(0)); // compiler emits fully qualified class names
+    }
+
+    /**
+     * Verifies that the correct action params are registered for each action stage.
+     *
+     * @param panel the panel to check
+     */
+    private void checkActionsConfiguration(Panel panel)
+    {
+        checkActionConfiguration(panel.getPanelid(), ActionStage.PRECONSTRUCT);
+        checkActionConfiguration(panel.getPanelid(), ActionStage.PREACTIVATE);
+        checkActionConfiguration(panel.getPanelid(), ActionStage.PREVALIDATE, "prop1", "value1");
+        checkActionConfiguration(panel.getPanelid(), ActionStage.POSTVALIDATE, "prop2", "value2", "prop3", "value3");
+    }
+
+    /**
+     * Verifies that the specified params are registered for the action on the panel. Can also
+     * verify that no params are registered, by specifying an empty array for {@code properties}.
+     *
+     * @param panelId    the panel to check
+     * @param stage      the action stage to check
+     * @param properties a list of key/value pairs to verify; if not left empty, must contain
+     *                   an even number of strings (i.e. {@code key, value, key, value ...})
+     */
+    private void checkActionConfiguration(String panelId, ActionStage stage, String... properties)
+    {
+        String prefix = panelId + "." + stage.toString().toLowerCase() + ".config.";
+        if (properties.length == 0)
+        {
+            Set<Object> keys = installData.getVariables().keySet();
+            for (Object key : keys)
+            {
+                assertFalse(key.toString().startsWith(prefix));
+            }
+        }
+        else
+        {
+            for (int i = 0; i < properties.length; i++)
+            {
+                String name = prefix + properties[i];
+                String value = properties[++i];
+                assertEquals(value, installData.getVariable(name));
+            }
+        }
     }
 
     /**
