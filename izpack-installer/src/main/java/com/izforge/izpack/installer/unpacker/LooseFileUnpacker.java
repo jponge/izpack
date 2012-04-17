@@ -12,6 +12,7 @@ import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Librarian;
+import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.os.FileQueue;
 
 
@@ -40,12 +41,13 @@ class LooseFileUnpacker extends FileUnpacker
      * @param cancellable determines if unpacking should be cancelled
      * @param handler     the handler
      * @param queue       the file queue. May be <tt>null</tt>
+     * @param platform    the current platform
      * @param librarian   the librarian
      */
     public LooseFileUnpacker(File sourceDir, Cancellable cancellable, AbstractUIProgressHandler handler,
-                             FileQueue queue, Librarian librarian)
+                             FileQueue queue, Platform platform, Librarian librarian)
     {
-        super(cancellable, handler, queue, librarian);
+        super(cancellable, handler, queue, platform, librarian);
         this.sourceDir = sourceDir;
     }
 

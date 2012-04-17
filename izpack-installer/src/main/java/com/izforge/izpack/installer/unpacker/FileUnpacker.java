@@ -1,5 +1,7 @@
 package com.izforge.izpack.installer.unpacker;
 
+import static com.izforge.izpack.util.Platform.Name.WINDOWS;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,7 +15,7 @@ import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Librarian;
-import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.file.FileUtils;
 import com.izforge.izpack.util.os.FileQueue;
 import com.izforge.izpack.util.os.FileQueueMove;
@@ -38,6 +40,11 @@ public abstract class FileUnpacker
      * The handler.
      */
     private final AbstractUIProgressHandler handler;
+
+    /**
+     * The current platform.
+     */
+    private final Platform platform;
 
     /**
      * The librarian.
@@ -76,15 +83,17 @@ public abstract class FileUnpacker
      * @param cancellable determines if unpacking should be cancelled
      * @param handler     the handler
      * @param queue       the file queue. May be <tt>null</tt>
+     * @param platform    the current platform
      * @param librarian   the librarian
      */
     public FileUnpacker(Cancellable cancellable, AbstractUIProgressHandler handler, FileQueue queue,
-                        Librarian librarian)
+                        Platform platform, Librarian librarian)
     {
         this.cancellable = cancellable;
         this.handler = handler;
         this.queue = queue;
         this.librarian = librarian;
+        this.platform = platform;
     }
 
     /**
@@ -281,7 +290,7 @@ public abstract class FileUnpacker
      */
     private boolean isBlockable(PackFile file)
     {
-        return (file.blockable() != Blockable.BLOCKABLE_NONE) && (OsVersion.IS_WINDOWS);
+        return (file.blockable() != Blockable.BLOCKABLE_NONE) && platform.isA(WINDOWS);
     }
 
     /**

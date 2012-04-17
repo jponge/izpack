@@ -24,6 +24,7 @@ import org.mockito.Mockito;
 
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.Platforms;
 
 /**
  * Tests the {@link Pack200FileUnpacker} class.
@@ -74,7 +75,7 @@ public class Pack200FileUnpackerTest extends AbstractFileUnpackerTest
         }
         when(resources.getInputStream("packs/pack200-1")).thenReturn(new ByteArrayInputStream(bytes.toByteArray()));
         return new Pack200FileUnpacker(getCancellable(), getHandler(), resources,
-                                       Pack200.newUnpacker(), null, getLibrarian());
+                                       Pack200.newUnpacker(), null, Platforms.WINDOWS, getLibrarian());
     }
 
     /**

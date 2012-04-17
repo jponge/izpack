@@ -43,6 +43,7 @@ import com.izforge.izpack.installer.unpacker.IMultiVolumeUnpackerHelper;
 import com.izforge.izpack.installer.unpacker.UnpackerBase;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.Librarian;
+import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.file.FileUtils;
 import com.izforge.izpack.util.os.FileQueue;
 
@@ -78,14 +79,16 @@ public class MultiVolumeUnpacker extends UnpackerBase
      * @param rules               the rules engine
      * @param variableSubstitutor the variable substituter
      * @param uninstallData       the uninstallation data
+     * @param platform            the current platform
      * @param librarian           the librarian
      * @param housekeeper         the housekeeper
      */
     public MultiVolumeUnpacker(AutomatedInstallData installData, ResourceManager resourceManager, RulesEngine rules,
                                VariableSubstitutor variableSubstitutor, UninstallData uninstallData,
-                               Librarian librarian, Housekeeper housekeeper)
+                               Platform platform, Librarian librarian, Housekeeper housekeeper)
     {
-        super(installData, resourceManager, rules, variableSubstitutor, uninstallData, librarian, housekeeper);
+        super(installData, resourceManager, rules, variableSubstitutor, uninstallData, platform, librarian,
+              housekeeper);
     }
 
     /**
@@ -172,7 +175,8 @@ public class MultiVolumeUnpacker extends UnpackerBase
         {
             return super.createFileUnpacker(file, pack, queue, cancellable);
         }
-        return new MultiVolumeFileUnpacker(volumes, helper, cancellable, getHandler(), queue, getLibrarian());
+        return new MultiVolumeFileUnpacker(volumes, helper, cancellable, getHandler(), queue, getPlatform(),
+                                           getLibrarian());
     }
 
     /**

@@ -10,10 +10,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.Platforms;
 
 
 /**
- * Tests the {@link com.izforge.izpack.installer.unpacker.DefaultFileUnpacker} class.
+ * Tests the {@link DefaultFileUnpacker} class.
  *
  * @author Tim Anderson
  */
@@ -45,7 +46,7 @@ public class DefaultFileUnpackerTest extends AbstractFileUnpackerTest
      */
     protected FileUnpacker createUnpacker(File sourceDir)
     {
-        return new DefaultFileUnpacker(getCancellable(), getHandler(), null, getLibrarian());
+        return new DefaultFileUnpacker(getCancellable(), getHandler(), null, Platforms.WINDOWS, getLibrarian());
     }
 
 }

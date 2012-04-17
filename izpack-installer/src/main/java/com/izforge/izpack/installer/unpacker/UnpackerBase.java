@@ -64,6 +64,7 @@ import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.OsConstraintHelper;
+import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.file.DirectoryScanner;
 import com.izforge.izpack.util.file.FileUtils;
 import com.izforge.izpack.util.file.GlobPatternMapper;
@@ -104,6 +105,11 @@ public abstract class UnpackerBase implements IUnpacker
      * The variable replacer.
      */
     private final VariableSubstitutor variableSubstitutor;
+
+    /**
+     * The current platform.
+     */
+    private final Platform platform;
 
     /**
      * The librarian.
@@ -176,18 +182,20 @@ public abstract class UnpackerBase implements IUnpacker
      * @param rules               the rules engine
      * @param variableSubstitutor the variable substituter
      * @param uninstallData       the uninstallation data
+     * @param platform            the current platform
      * @param librarian           the librarian
      * @param housekeeper         the housekeeper
      */
     public UnpackerBase(AutomatedInstallData installData, ResourceManager resourceManager, RulesEngine rules,
-                        VariableSubstitutor variableSubstitutor, UninstallData uninstallData, Librarian librarian,
-                        Housekeeper housekeeper)
+                        VariableSubstitutor variableSubstitutor, UninstallData uninstallData, Platform platform,
+                        Librarian librarian, Housekeeper housekeeper)
     {
         this.installData = installData;
         this.resourceManager = resourceManager;
         this.rules = rules;
         this.variableSubstitutor = variableSubstitutor;
         this.uninstallData = uninstallData;
+        this.platform = platform;
         this.librarian = librarian;
         this.housekeeper = housekeeper;
         cancellable = new Cancellable()
@@ -605,16 +613,17 @@ public abstract class UnpackerBase implements IUnpacker
         FileUnpacker unpacker;
         if (pack.loose)
         {
-            unpacker = new LooseFileUnpacker(getAbsoluteInstallSource(), cancellable, handler, queue, librarian);
+            unpacker = new LooseFileUnpacker(getAbsoluteInstallSource(), cancellable, handler, queue, platform,
+                                             librarian);
         }
         else if (file.isPack200Jar())
         {
             unpacker = new Pack200FileUnpacker(cancellable, handler, resourceManager, getPack200Unpacker(),
-                                               queue, librarian);
+                                               queue, platform, librarian);
         }
         else
         {
-            unpacker = new DefaultFileUnpacker(cancellable, handler, queue, librarian);
+            unpacker = new DefaultFileUnpacker(cancellable, handler, queue, platform, librarian);
         }
         return unpacker;
     }
@@ -733,6 +742,16 @@ public abstract class UnpackerBase implements IUnpacker
     protected AbstractUIProgressHandler getHandler()
     {
         return handler;
+    }
+
+    /**
+     * Returns the platform.
+     *
+     * @return the platform
+     */
+    protected Platform getPlatform()
+    {
+        return platform;
     }
 
     /**

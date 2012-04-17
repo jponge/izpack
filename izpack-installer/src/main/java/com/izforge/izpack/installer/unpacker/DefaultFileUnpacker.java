@@ -8,6 +8,7 @@ import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Librarian;
+import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.os.FileQueue;
 
 
@@ -25,12 +26,13 @@ public class DefaultFileUnpacker extends FileUnpacker
      * @param cancellable determines if unpacking should be cancelled
      * @param handler     the handler
      * @param queue       the file queue. May be <tt>null</tt>
+     * @param platform    the current platform
      * @param librarian   the librarian
      */
     public DefaultFileUnpacker(Cancellable cancellable, AbstractUIProgressHandler handler, FileQueue queue,
-                               Librarian librarian)
+                               Platform platform, Librarian librarian)
     {
-        super(cancellable, handler, queue, librarian);
+        super(cancellable, handler, queue, platform, librarian);
     }
 
     /**

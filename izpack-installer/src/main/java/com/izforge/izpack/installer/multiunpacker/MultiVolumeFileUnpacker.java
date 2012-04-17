@@ -17,6 +17,7 @@ import com.izforge.izpack.installer.unpacker.Cancellable;
 import com.izforge.izpack.installer.unpacker.FileUnpacker;
 import com.izforge.izpack.installer.unpacker.IMultiVolumeUnpackerHelper;
 import com.izforge.izpack.util.Librarian;
+import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.os.FileQueue;
 
 
@@ -49,14 +50,15 @@ public class MultiVolumeFileUnpacker extends FileUnpacker
      * @param helper      unpacker helper
      * @param cancellable determines if unpacking should be cancelled
      * @param handler     the handler
+     * @param platform    the current platform
      * @param queue       the file queue. May be <tt>null</tt>
      * @param librarian   the librarian
      */
     public MultiVolumeFileUnpacker(FileSpanningInputStream volumes, IMultiVolumeUnpackerHelper helper,
                                    Cancellable cancellable, AbstractUIProgressHandler handler, FileQueue queue,
-                                   Librarian librarian)
+                                   Platform platform, Librarian librarian)
     {
-        super(cancellable, handler, queue, librarian);
+        super(cancellable, handler, queue, platform, librarian);
         this.volumes = volumes;
         this.helper = helper;
     }

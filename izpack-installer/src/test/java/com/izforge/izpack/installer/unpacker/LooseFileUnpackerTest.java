@@ -3,6 +3,8 @@ package com.izforge.izpack.installer.unpacker;
 
 import java.io.File;
 
+import com.izforge.izpack.util.Platforms;
+
 /**
  * Tests the {@link LooseFileUnpacker} class.
  *
@@ -19,7 +21,8 @@ public class LooseFileUnpackerTest extends AbstractFileUnpackerTest
      */
     protected FileUnpacker createUnpacker(File sourceDir)
     {
-        return new LooseFileUnpacker(sourceDir, getCancellable(), getHandler(), null, getLibrarian());
+        return new LooseFileUnpacker(sourceDir, getCancellable(), getHandler(), null, Platforms.WINDOWS,
+                                     getLibrarian());
     }
 
 }

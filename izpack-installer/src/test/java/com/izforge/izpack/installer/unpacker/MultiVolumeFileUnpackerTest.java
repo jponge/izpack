@@ -23,6 +23,7 @@ import com.izforge.izpack.core.io.FileSpanningInputStream;
 import com.izforge.izpack.core.io.FileSpanningOutputStream;
 import com.izforge.izpack.installer.multiunpacker.MultiVolumeFileUnpacker;
 import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.Platforms;
 import com.izforge.izpack.util.os.FileQueue;
 
 
@@ -83,7 +84,7 @@ public class MultiVolumeFileUnpackerTest extends AbstractFileUnpackerTest
 
         FileSpanningInputStream stream = new FileSpanningInputStream(volume, volumeCount);
         FileUnpacker unpacker = new MultiVolumeFileUnpacker(stream, helper, getCancellable(), getHandler(), null,
-                                                            getLibrarian());
+                                                            Platforms.WINDOWS, getLibrarian());
 
         PackFile file = createPackFile(baseDir, source, target, Blockable.BLOCKABLE_NONE);
         assertFalse(target.exists());
@@ -138,7 +139,8 @@ public class MultiVolumeFileUnpackerTest extends AbstractFileUnpackerTest
     {
         FileSpanningInputStream stream = new FileSpanningInputStream(volume, volumeCount);
         return new MultiVolumeFileUnpacker(stream, Mockito.mock(IMultiVolumeUnpackerHelper.class),
-                                           getCancellable(), getHandler(), null, getLibrarian());
+                                           getCancellable(), getHandler(), null, Platforms.WINDOWS,
+                                           getLibrarian());
     }
 
     /**
