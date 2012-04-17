@@ -109,7 +109,7 @@ public class MultiVolumeFileUnpackerTest extends AbstractFileUnpackerTest
     {
         File source = new File(baseDir, "source.txt");
         PrintWriter stream = new PrintWriter(source);
-        for (int i = 0; i < 10000; ++i)
+        for (int i = 0; i < 20000; ++i)
         {
             stream.println(i);
         }
