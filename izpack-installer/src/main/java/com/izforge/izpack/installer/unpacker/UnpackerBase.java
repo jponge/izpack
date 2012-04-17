@@ -430,10 +430,7 @@ public abstract class UnpackerBase implements IUnpacker
                         || !OsConstraintHelper.oneMatchesCurrentSystem(file.osConstraints()))
                 {
                     // condition is not fulfilled, so skip it
-                    if (!file.isBackReference())
-                    {
-                        skip(packInputStream, file.length());
-                    }
+                    skip(file, pack, packInputStream);
                 }
                 else
                 {
@@ -573,6 +570,22 @@ public abstract class UnpackerBase implements IUnpacker
             }
         }
         return queue;
+    }
+
+    /**
+     * Skips a pack file.
+     *
+     * @param file            the pack file
+     * @param pack            the pack
+     * @param packInputStream the pack stream
+     * @throws IOException if the file cannot be skipped
+     */
+    protected void skip(PackFile file, Pack pack, ObjectInputStream packInputStream) throws IOException
+    {
+        if (!pack.loose && !file.isBackReference())
+        {
+            skip(packInputStream, file.length());
+        }
     }
 
     /**

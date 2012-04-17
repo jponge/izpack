@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.PackFile;
+import com.izforge.izpack.api.data.XPackFile;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.core.io.CorruptVolumeException;
@@ -75,12 +76,11 @@ public class MultiVolumeFileUnpacker extends FileUnpacker
             throws IOException, InstallerException
     {
         // read in the position of this file
-        // long fileposition = objIn.readLong();
-        long position = -1; // TODO pf.getArchivefileposition();
+        long position = ((XPackFile) file).getArchivefileposition();
 
         while (volumes.getFilepointer() < position)
         {
-            // we have to skip some bytes
+            // need to skip to the correct position
             logger.fine("Skipping bytes to get to file " + target.getName()
                                 + " (" + volumes.getFilepointer() + "<" + position
                                 + ") target is: " + (position - volumes.getFilepointer()));
@@ -135,7 +135,7 @@ public class MultiVolumeFileUnpacker extends FileUnpacker
         }
         catch (CorruptVolumeException exception)
         {
-            logger.fine("corrupt media found. magic number is not correct");
+            logger.fine("Corrupt media found. Magic number is not correct");
             File nextMedia = helper.enterNextMediaMessage(exception.getVolumename(), true);
             volumes.setVolumename(nextMedia.getAbsolutePath());
         }

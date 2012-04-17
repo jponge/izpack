@@ -33,6 +33,11 @@ public interface IUnpacker extends Runnable
      */
     public boolean getResult();
 
+    /**
+     * Sets the progress handler.
+     *
+     * @param handler the progress handler
+     */
     void setHandler(AbstractUIProgressHandler handler);
 
     /**

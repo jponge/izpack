@@ -176,6 +176,20 @@ public class MultiVolumeUnpacker extends UnpackerBase
     }
 
     /**
+     * Skips a pack file.
+     *
+     * @param file            the pack file
+     * @param pack            the pack
+     * @param packInputStream the pack stream
+     * @throws IOException if the file cannot be skipped
+     */
+    @Override
+    protected void skip(PackFile file, Pack pack, ObjectInputStream packInputStream) throws IOException
+    {
+        // this operation is a no-op for MultiVolumeUnpacker as the file is not in the pack stream
+    }
+
+    /**
      * Invoked after unpacking has completed, in order to clean up.
      */
     @Override

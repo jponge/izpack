@@ -1,17 +1,16 @@
 package com.izforge.izpack.util.os;
 
-import com.izforge.izpack.util.Librarian;
-
 import java.io.IOException;
-import java.util.Enumeration;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
+
+import com.izforge.izpack.util.Librarian;
 
 
 public class FileQueue
 {
 
-    private Vector<FileQueueOperation> operations = new Vector<FileQueueOperation>();
+    private List<FileQueueOperation> operations = new ArrayList<FileQueueOperation>();
 
     protected WinSetupFileQueue filequeue;
 
@@ -38,7 +37,7 @@ public class FileQueue
      */
     public void add(FileQueueOperation op)
     {
-        operations.addElement(op);
+        operations.add(op);
     }
 
     public void execute() throws Exception
@@ -54,20 +53,17 @@ public class FileQueue
         }
         try
         {
-            Enumeration<FileQueueOperation> ops = operations.elements();
-            while (ops.hasMoreElements())
+            for (FileQueueOperation operation : operations)
             {
-                Object op = ops.nextElement();
-                ((FileQueueOperation) op).addTo(filequeue);
+                operation.addTo(filequeue);
             }
             filequeue.commit();
 
             List<SystemErrorException> exceptions = handler.getExceptions();
             if (exceptions != null)
             {
-                StringBuffer buf = new StringBuffer();
-                buf.append(
-                        "The following system errors occured during committing the file queue:\n");
+                StringBuilder buf = new StringBuilder();
+                buf.append("The following system errors occured during committing the file queue:\n");
                 for (SystemErrorException exception : exceptions)
                 {
                     buf.append('\t');
@@ -90,12 +86,17 @@ public class FileQueue
 
     public boolean isRebootNecessary()
     {
-        if (filequeue != null)
-        {
-            return filequeue.isRebootNecessary();
-        }
+        return filequeue != null && filequeue.isRebootNecessary();
+    }
 
-        return false;
+    /**
+     * Returns the file queue operations.
+     *
+     * @return the file queue operations
+     */
+    public List<FileQueueOperation> getOperations()
+    {
+        return operations;
     }
 
 }
