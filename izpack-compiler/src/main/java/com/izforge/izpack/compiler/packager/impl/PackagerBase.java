@@ -40,7 +40,6 @@ import java.util.zip.ZipInputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.DynamicVariable;
 import com.izforge.izpack.api.data.GUIPrefs;
@@ -54,7 +53,6 @@ import com.izforge.izpack.compiler.listener.PackagerListener;
 import com.izforge.izpack.compiler.merge.panel.PanelMerge;
 import com.izforge.izpack.compiler.merge.resolve.CompilerPathResolver;
 import com.izforge.izpack.compiler.packager.IPackager;
-import com.izforge.izpack.compiler.resource.ResourceFinder;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.PackInfo;
@@ -111,11 +109,6 @@ public abstract class PackagerBase implements IPackager
     private final MergeableResolver mergeableResolver;
 
     /**
-     * The resource finder.
-     */
-    private final ResourceFinder resourceFinder;
-
-    /**
      * The compression format to be used for pack compression.
      */
     private final PackCompressor compressor;
@@ -139,6 +132,11 @@ public abstract class PackagerBase implements IPackager
      * GUI preferences.
      */
     private GUIPrefs guiPrefs;
+
+    /**
+     * Splash screen image.
+     */
+    private File splashScreenImage;
 
     /**
      * The ordered panels.
@@ -201,14 +199,12 @@ public abstract class PackagerBase implements IPackager
      * @param mergeManager      the merge manager
      * @param pathResolver      the path resolver
      * @param mergeableResolver the mergeable resolver
-     * @param resourceFinder    the resource finder
      * @param compressor        the pack compressor
      * @param compilerData      the compiler data
      */
     public PackagerBase(Properties properties, PackagerListener listener, JarOutputStream installerJar,
                         MergeManager mergeManager, CompilerPathResolver pathResolver,
-                        MergeableResolver mergeableResolver, ResourceFinder resourceFinder,
-                        PackCompressor compressor, CompilerData compilerData)
+                        MergeableResolver mergeableResolver, PackCompressor compressor, CompilerData compilerData)
     {
         this.properties = properties;
         this.listener = listener;
@@ -216,7 +212,6 @@ public abstract class PackagerBase implements IPackager
         this.mergeManager = mergeManager;
         this.pathResolver = pathResolver;
         this.mergeableResolver = mergeableResolver;
-        this.resourceFinder = resourceFinder;
         this.compressor = compressor;
         this.compilerData = compilerData;
     }
@@ -335,9 +330,20 @@ public abstract class PackagerBase implements IPackager
         guiPrefs = prefs;
     }
 
-    /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.packager.IPackager#setInfo(com.izforge.izpack.Info)
+    /**
+     * Sets the splash screen image file.
+     *
+     * @param file the splash screen image file. May be <tt>null</tt>
      */
+    @Override
+    public void setSplashScreenImage(File file)
+    {
+        splashScreenImage = file;
+    }
+
+    /* (non-Javadoc)
+    * @see com.izforge.izpack.compiler.packager.IPackager#setInfo(com.izforge.izpack.Info)
+    */
 
     public void setInfo(Info info)
     {
@@ -454,22 +460,12 @@ public abstract class PackagerBase implements IPackager
      */
     protected void writeManifest() throws IOException
     {
-        IXMLElement data = resourceFinder.getXMLTree();
-        IXMLElement guiPrefsElement = data.getFirstChildNamed("guiprefs");
         // Add splash screen configuration
         List<String> lines = IOUtils.readLines(getClass().getResourceAsStream("MANIFEST.MF"));
-        IXMLElement splashNode = null;
-        if (guiPrefsElement != null)
+        if (splashScreenImage != null)
         {
-            splashNode = guiPrefsElement.getFirstChildNamed("splash");
-        }
-        if (splashNode != null)
-        {
-            // Add splash image to installer jar
-            File splashImage = FileUtils.toFile(
-                    resourceFinder.findProjectResource(splashNode.getContent(), "Resource", splashNode));
-            String destination = String.format("META-INF/%s", splashImage.getName());
-            mergeManager.addResourceToMerge(splashImage.getAbsolutePath(), destination);
+            String destination = String.format("META-INF/%s", splashScreenImage.getName());
+            mergeManager.addResourceToMerge(splashScreenImage.getAbsolutePath(), destination);
             lines.add(String.format("SplashScreen-Image: %s", destination));
         }
         lines.add("");

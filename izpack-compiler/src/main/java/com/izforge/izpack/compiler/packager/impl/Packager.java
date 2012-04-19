@@ -42,7 +42,6 @@ import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.listener.PackagerListener;
 import com.izforge.izpack.compiler.merge.resolve.CompilerPathResolver;
-import com.izforge.izpack.compiler.resource.ResourceFinder;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
 import com.izforge.izpack.core.io.ByteCountingOutputStream;
 import com.izforge.izpack.data.ExecutableFile;
@@ -82,16 +81,14 @@ public class Packager extends PackagerBase
      * @param mergeManager      the merge manager
      * @param pathResolver      the path resolver
      * @param mergeableResolver the mergeable resolver
-     * @param resourceFinder    the resource finder
      * @param compilerData      the compiler data
      */
     public Packager(Properties properties, PackagerListener listener, JarOutputStream jarOutputStream,
                     PackCompressor compressor, OutputStream outputStream, MergeManager mergeManager,
-                    CompilerPathResolver pathResolver, MergeableResolver mergeableResolver,
-                    ResourceFinder resourceFinder, CompilerData compilerData)
+                    CompilerPathResolver pathResolver, MergeableResolver mergeableResolver, CompilerData compilerData)
     {
-        super(properties, listener, jarOutputStream, mergeManager, pathResolver, mergeableResolver,
-              resourceFinder, compressor, compilerData);
+        super(properties, listener, jarOutputStream, mergeManager, pathResolver, mergeableResolver, compressor,
+              compilerData);
         this.outputStream = outputStream;
     }
 

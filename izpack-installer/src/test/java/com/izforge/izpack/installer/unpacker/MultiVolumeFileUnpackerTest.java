@@ -46,7 +46,7 @@ public class MultiVolumeFileUnpackerTest extends AbstractFileUnpackerTest
     private int volumeCount;
 
     /**
-     * Verifies that the {@link IMultiVolumeUnpackerHelper#enterNextMediaMessage(String)} method is invoked to prompt
+     * Verifies that the {@link VolumeLocator#getVolume(String, boolean)} method is invoked to prompt
      * for missing media.
      *
      * @throws IOException        for any I/O error

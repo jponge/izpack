@@ -37,7 +37,6 @@ import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.listener.PackagerListener;
 import com.izforge.izpack.compiler.merge.resolve.CompilerPathResolver;
-import com.izforge.izpack.compiler.resource.ResourceFinder;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
 import com.izforge.izpack.core.io.FileSpanningOutputStream;
 import com.izforge.izpack.data.ExecutableFile;
@@ -116,17 +115,16 @@ public class MultiVolumePackager extends PackagerBase
      * @param mergeManager      the merge manager
      * @param pathResolver      the path resolver
      * @param mergeableResolver the mergeable resolver
-     * @param resourceFinder    the resource finder
      * @param compressor        the pack compressor
      * @param compilerData      the compiler data
      */
     public MultiVolumePackager(Properties properties, PackagerListener listener, JarOutputStream installerJar,
                                MergeManager mergeManager, CompilerPathResolver pathResolver,
-                               MergeableResolver mergeableResolver, ResourceFinder resourceFinder,
-                               PackCompressor compressor, CompilerData compilerData)
+                               MergeableResolver mergeableResolver, PackCompressor compressor,
+                               CompilerData compilerData)
     {
-        super(properties, listener, installerJar, mergeManager, pathResolver, mergeableResolver, resourceFinder,
-              compressor, compilerData);
+        super(properties, listener, installerJar, mergeManager, pathResolver, mergeableResolver, compressor,
+              compilerData);
     }
 
     public void addConfigurationInformation(IXMLElement data)
