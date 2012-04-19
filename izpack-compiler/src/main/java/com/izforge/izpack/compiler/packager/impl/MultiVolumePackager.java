@@ -90,7 +90,7 @@ public class MultiVolumePackager extends PackagerBase
     /**
      * The first volume free spaces size, in bytes.
      */
-    private long freeSpace = FileSpanningOutputStream.DEFAULT_ADDITIONAL_FIRST_VOLUME_FREE_SPACE_SIZE;
+    private long freeSpace = 0;
 
     /**
      * The configuration attribute to specify the volume size.
@@ -177,7 +177,7 @@ public class MultiVolumePackager extends PackagerBase
         logger.fine("Extra space on first volume: " + freeSpace);
         FileSpanningOutputStream fout = new FileSpanningOutputStream(
                 primaryFile.getParent() + File.separator + primaryFile.getName() + ".pak", volumeSize);
-        fout.setFirstvolumefreespacesize(freeSpace);
+        fout.setFirstVolumeFreeSpaceSize(freeSpace);
 
         int packNumber = 0;
         for (PackInfo packInfo : packs)
@@ -187,7 +187,7 @@ public class MultiVolumePackager extends PackagerBase
         }
 
         // write metadata for reading in volumes
-        int volumes = fout.getVolumeCount();
+        int volumes = fout.getVolumes();
         logger.fine("Written " + volumes + " volumes");
         String volumeName = primaryFile.getName() + ".pak";
 
@@ -282,28 +282,28 @@ public class MultiVolumePackager extends PackagerBase
 
             if (addFile && !pf.isDirectory())
             {
-                long pos = fout.getFilepointer();
+                long pos = fout.getFilePointer();
 
                 pf.setArchivefileposition(pos);
 
                 // write out the filepointer
-                int volumecountbeforewrite = fout.getVolumeCount();
+                int volumecountbeforewrite = fout.getVolumes();
 
                 FileInputStream inStream = new FileInputStream(file);
                 long bytesWritten = IoHelper.copyStream(inStream, fout);
                 fout.flush();
 
-                long posafterwrite = fout.getFilepointer();
+                long posafterwrite = fout.getFilePointer();
                 logger.fine("File (" + pf.sourcePath + ") " + pos + " <-> " + posafterwrite);
 
-                if (fout.getFilepointer() != (pos + bytesWritten))
+                if (fout.getFilePointer() != (pos + bytesWritten))
                 {
                     logger.fine("file: " + file.getName());
                     logger.fine("(Filepos/BytesWritten/ExpectedNewFilePos/NewFilePointer) ("
                                         + pos + "/" + bytesWritten + "/" + (pos + bytesWritten)
-                                        + "/" + fout.getFilepointer() + ")");
+                                        + "/" + fout.getFilePointer() + ")");
                     logger.fine("Volumecount (before/after) ("
-                                        + volumecountbeforewrite + "/" + fout.getVolumeCount() + ")");
+                                        + volumecountbeforewrite + "/" + fout.getVolumes() + ")");
                     throw new IOException("Error new filepointer is illegal");
                 }
 

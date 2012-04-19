@@ -8,11 +8,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.installer.unpacker.IMultiVolumeUnpackerHelper;
+import com.izforge.izpack.core.io.VolumeLocator;
 
 
-public class MultiVolumeUnpackerAutomationHelper implements IMultiVolumeUnpackerHelper
+public class MultiVolumeUnpackerAutomationHelper implements VolumeLocator
 {
     /**
      * The installation data.
@@ -20,41 +19,43 @@ public class MultiVolumeUnpackerAutomationHelper implements IMultiVolumeUnpacker
     private final AutomatedInstallData installData;
 
     /**
-     * The progress handler.
-     */
-    private final AbstractUIProgressHandler handler;
-
-    /**
      * The logger.
      */
     private static final Logger logger = Logger.getLogger(MultiVolumeUnpackerAutomationHelper.class.getName());
+
 
     /**
      * Constructs a <tt>MultiVolumeUnpackerAutomationHelper</tt>.
      *
      * @param installData the installation data
-     * @param handler     the progress handler
      */
-    public MultiVolumeUnpackerAutomationHelper(AutomatedInstallData installData, AbstractUIProgressHandler handler)
+    public MultiVolumeUnpackerAutomationHelper(AutomatedInstallData installData)
     {
         this.installData = installData;
-        this.handler = handler;
     }
 
-
-    public File enterNextMediaMessage(String volumename, boolean lastcorrupt)
+    /**
+     * Returns the next volume.
+     *
+     * @param path    the expected volume path
+     * @param corrupt if <tt>true</tt> the previous attempt detected a corrupt or invalid volume
+     * @return the next volume
+     * @throws java.io.IOException if the volume cannot be found
+     */
+    @Override
+    public File getVolume(String path, boolean corrupt) throws IOException
     {
-        if (lastcorrupt)
+        if (corrupt)
         {
             System.err.println(" [ " + installData.getLangpack().getString("nextmedia.corruptmedia.title") + " ] ");
             System.err.println(installData.getLangpack().getString("nextmedia.corruptmedia"));
             System.err.println(installData.getLangpack().getString("nextmedia.corruptmedia"));
         }
-        logger.fine("Enter next media: " + volumename);
+        logger.fine("Enter next media: " + path);
 
-        File nextvolume = new File(volumename);
+        File volume = new File(path);
 
-        while (!nextvolume.exists() || lastcorrupt)
+        while (!volume.exists() || corrupt)
         {
             System.out.println(" [ " + installData.getLangpack().getString("nextmedia.title") + " ] ");
             System.out.println(installData.getLangpack().getString("nextmedia.msg"));
@@ -73,25 +74,20 @@ public class MultiVolumeUnpackerAutomationHelper implements IMultiVolumeUnpacker
 
             if (nextmediainput != null)
             {
-                nextvolume = new File(nextmediainput);
+                volume = new File(nextmediainput);
             }
             else
             {
                 logger.fine("Input from NextMediaDialog was null");
-                nextvolume = new File(volumename);
+                volume = new File(path);
             }
             // selection equal to last selected which was corrupt?
-            if (!(volumename.equals(nextvolume.getAbsolutePath()) && lastcorrupt))
+            if (!(path.equals(volume.getAbsolutePath()) && corrupt))
             {
-                lastcorrupt = false;
+                corrupt = false;
             }
         }
-        return nextvolume;
-    }
-
-    public File enterNextMediaMessage(String volumename)
-    {
-        return enterNextMediaMessage(volumename, false);
+        return volume;
     }
 
 }

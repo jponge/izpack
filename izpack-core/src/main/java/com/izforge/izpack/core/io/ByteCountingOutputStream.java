@@ -20,7 +20,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.compiler.stream;
+package com.izforge.izpack.core.io;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -37,7 +37,7 @@ public class ByteCountingOutputStream extends OutputStream
 
     public ByteCountingOutputStream(OutputStream os)
     {
-        this.os = os;
+        setOutputStream(os);
     }
 
     public void write(byte[] b, int off, int len) throws IOException
@@ -55,7 +55,7 @@ public class ByteCountingOutputStream extends OutputStream
     public void write(int b) throws IOException
     {
         os.write(b);
-        count += 4;
+        count++;
     }
 
     public void close() throws IOException
@@ -71,5 +71,11 @@ public class ByteCountingOutputStream extends OutputStream
     public long getByteCount()
     {
         return count;
+    }
+
+    protected void setOutputStream(OutputStream stream)
+    {
+        this.os = stream;
+        count = 0;
     }
 }

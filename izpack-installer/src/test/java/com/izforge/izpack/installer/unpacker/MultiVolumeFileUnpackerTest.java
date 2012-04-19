@@ -12,7 +12,6 @@ import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import com.izforge.izpack.api.data.Blockable;
 import com.izforge.izpack.api.data.OverrideType;
@@ -21,6 +20,7 @@ import com.izforge.izpack.api.data.XPackFile;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.core.io.FileSpanningInputStream;
 import com.izforge.izpack.core.io.FileSpanningOutputStream;
+import com.izforge.izpack.core.io.VolumeLocator;
 import com.izforge.izpack.installer.multiunpacker.MultiVolumeFileUnpacker;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.Platforms;
@@ -65,25 +65,20 @@ public class MultiVolumeFileUnpackerTest extends AbstractFileUnpackerTest
         final File renamed = new File(volume1.getPath() + ".bak");
         assertTrue(volume1.renameTo(renamed));
 
-        IMultiVolumeUnpackerHelper helper = new IMultiVolumeUnpackerHelper()
+        VolumeLocator locator = new VolumeLocator()
         {
             @Override
-            public File enterNextMediaMessage(String volumename, boolean lastcorrupt)
+            public File getVolume(String path, boolean corrupt) throws IOException
             {
                 // rename the file back
                 assertTrue(renamed.renameTo(volume1));
                 return volume1;
             }
-
-            @Override
-            public File enterNextMediaMessage(String volumeName)
-            {
-                return enterNextMediaMessage(volumeName, false);
-            }
         };
 
         FileSpanningInputStream stream = new FileSpanningInputStream(volume, volumeCount);
-        FileUnpacker unpacker = new MultiVolumeFileUnpacker(stream, helper, getCancellable(), getHandler(), null,
+        stream.setLocator(locator);
+        FileUnpacker unpacker = new MultiVolumeFileUnpacker(stream, getCancellable(), getHandler(), null,
                                                             Platforms.WINDOWS, getLibrarian());
 
         PackFile file = createPackFile(baseDir, source, target, Blockable.BLOCKABLE_NONE);
@@ -122,7 +117,8 @@ public class MultiVolumeFileUnpackerTest extends AbstractFileUnpackerTest
         IoHelper.copyStream(in, out);
 
         // verify there is more than one volume
-        volumeCount = out.getVolumeCount();
+        out.flush();
+        volumeCount = out.getVolumes();
         assertTrue(volumeCount > 1);
         in.close();
         out.close();
@@ -138,8 +134,7 @@ public class MultiVolumeFileUnpackerTest extends AbstractFileUnpackerTest
     protected FileUnpacker createUnpacker(File sourceDir) throws IOException
     {
         FileSpanningInputStream stream = new FileSpanningInputStream(volume, volumeCount);
-        return new MultiVolumeFileUnpacker(stream, Mockito.mock(IMultiVolumeUnpackerHelper.class),
-                                           getCancellable(), getHandler(), null, Platforms.WINDOWS,
+        return new MultiVolumeFileUnpacker(stream, getCancellable(), getHandler(), null, Platforms.WINDOWS,
                                            getLibrarian());
     }
 

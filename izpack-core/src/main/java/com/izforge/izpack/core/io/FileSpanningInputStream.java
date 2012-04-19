@@ -22,151 +22,70 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
+import com.izforge.izpack.util.file.FileUtils;
+
+
 /**
- * An inputstream which transparently spans over multiple volumes. The amount of volumes has to be
- * specified
+ * An <tt>InputStream</tt> which transparently spans over multiple volumes.
  *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
+ * @author Tim Anderson
+ * @see FileSpanningOutputStream
  */
 public class FileSpanningInputStream extends InputStream
 {
+    /**
+     * The spanning input stream. This sits between the volume file input stream and {@link #zippedInputStream}.
+     */
+    private final SpanningInputStream spanningInputStream;
+
+    /**
+     * The sip stream.
+     */
+    private GZIPInputStream zippedInputStream;
+
+    /**
+     * The absolute offset into the volumes.
+     */
+    private long filePointer;
+
+
+    /**
+     * The logger.
+     */
     private static final Logger logger = Logger.getLogger(FileSpanningInputStream.class.getName());
 
-    private static final int EOF = -1;
 
-    protected FileInputStream fileinputstream;
-
-    protected String volumename;
-
-    protected int currentvolumeindex;
-
-    protected int volumestotal;
-
-    protected static boolean nextvolumenotfound = false;
-
-    protected long filepointer;
-
-    protected GZIPInputStream zippedinputstream;
-
-    protected byte[] magicnumber;
-
-    public FileSpanningInputStream(File volume, int volumestotal) throws IOException
+    /**
+     * Constructs a <tt>FileSpanningInputStream</tt>.
+     *
+     * @param volume  the first volume to read
+     * @param volumes the no. of volumes
+     * @throws CorruptVolumeException if the volume magic no. cannot be read
+     * @throws IOException            for any other I/O exception
+     */
+    public FileSpanningInputStream(File volume, int volumes) throws IOException
     {
-        fileinputstream = new FileInputStream(volume);
-        zippedinputstream = new GZIPInputStream(fileinputstream);
-        currentvolumeindex = 0;
-        volumename = volume.getAbsolutePath();
-        this.volumestotal = volumestotal;
-        filepointer = 0;
-
-        // read magic number
-        this.magicnumber = new byte[FileSpanningOutputStream.MAGIC_NUMER_LENGTH];
-        zippedinputstream.read(this.magicnumber);
-        // this.read(this.magicnumber);
-        logger.fine("Opening stream to " + volume + " magicnr is " + magicnumber);
-        // reset filepointer
-        filepointer = 0;
-    }
-
-    public FileSpanningInputStream(String volumename, int volumestotal) throws IOException
-    {
-        this(new File(volumename), volumestotal);
+        spanningInputStream = new SpanningInputStream(volume, volumes);
+        zippedInputStream = new GZIPInputStream(spanningInputStream);
     }
 
     /**
-     * checks if the MagicNumber of this stream is valid. The stream has to be opened right before.
+     * Sets the volume locator.
      *
-     * @return wether the magic number is valid or not
-     * @throws IOException
+     * @param locator the locator. May be <tt>null</tt>
      */
-    private boolean isMagicNumberValid() throws IOException
+    public void setLocator(VolumeLocator locator)
     {
-        logger.fine("Trying to read magic number");
-        boolean valid = false;
-        byte[] magicnumberofvolume = new byte[FileSpanningOutputStream.MAGIC_NUMER_LENGTH];
-        long oldfilepointer = this.filepointer;
-        // this.read(magicnumberofvolume);
-        this.zippedinputstream.read(magicnumberofvolume);
-        this.filepointer = oldfilepointer;
-        logger.fine("Magic number is " + magicnumberofvolume);
-        if ((magicnumberofvolume != null) && (this.magicnumber != null))
-        {
-            if (magicnumberofvolume.length != this.magicnumber.length)
-            {
-                // magicnumbers aren't valid
-                valid = false;
-            }
-            else
-            {
-                boolean errorfound = false;
-                // check if magicnumbers are identical
-                for (int i = 0; i < magicnumberofvolume.length; i++)
-                {
-                    byte op1 = magicnumberofvolume[i];
-                    byte op2 = this.magicnumber[i];
-                    if (op1 != op2)
-                    {
-                        errorfound = true;
-                        break;
-                    }
-                }
-                valid = !errorfound;
-            }
-        }
-        return valid;
+        spanningInputStream.setLocator(locator);
     }
 
     /**
-     * creates an inputstream to the next volume
-     *
-     * @return true - an inputstream to the next volume has been created false - the last volume was
-     *         reached
-     * @throws IOException
-     */
-    private boolean createInputStreamToNextVolume() throws IOException
-    {
-        currentvolumeindex++;
-        // have we reached the last volume?
-        if (currentvolumeindex >= volumestotal)
-        {
-            logger.fine("Last volume reached");
-            return false;
-        }
-        // the next volume name
-        String nextvolumename = volumename + "." + currentvolumeindex;
-        logger.fine("Trying to use next volume: " + nextvolumename);
-        File nextvolumefile = new File(nextvolumename);
-        if (!nextvolumefile.exists())
-        {
-            currentvolumeindex--;
-            nextvolumenotfound = true;
-            logger.fine("Volume not found: " + nextvolumefile);
-            throw new VolumeNotFoundException(nextvolumename + "was not found.", nextvolumename);
-        }
-        logger.fine("Next volume found: " + nextvolumefile);
-        // try to open new stream to next volume
-        fileinputstream = new FileInputStream(nextvolumefile);
-        zippedinputstream = new GZIPInputStream(fileinputstream);
-        // check magic number
-        if (!this.isMagicNumberValid())
-        {
-            currentvolumeindex--;
-            nextvolumenotfound = true;
-            final String msg = "Volume "
-                    + nextvolumename
-                    + " has a magic number error. Maybe not the right version?";
-            logger.fine(msg);
-            throw new CorruptVolumeException(msg, nextvolumename);
-        }
-        // everything fine
-        nextvolumenotfound = false;
-        return true;
-    }
-
-    /*
      * (non-Javadoc)
      *
      * @see java.io.InputStream#available()
@@ -174,15 +93,10 @@ public class FileSpanningInputStream extends InputStream
     @Override
     public int available() throws IOException
     {
-        if (nextvolumenotfound)
-        {
-            createInputStreamToNextVolume();
-        }
-        // return fileinputstream.available();
-        return zippedinputstream.available();
+        return zippedInputStream.available();
     }
 
-    /*
+    /**
      * (non-Javadoc)
      *
      * @see java.io.InputStream#close()
@@ -190,188 +104,309 @@ public class FileSpanningInputStream extends InputStream
     @Override
     public void close() throws IOException
     {
-        zippedinputstream.close();
-        fileinputstream.close();
+        zippedInputStream.close();
+        spanningInputStream.close();
     }
 
-    /*
+    /**
      * (non-Javadoc)
      *
      * @see java.io.InputStream#read()
      */
-
     @Override
     public int read() throws IOException
     {
-        if (nextvolumenotfound)
+        int read = zippedInputStream.read();
+        if (read != -1)
         {
-            // the next volume was not found, so try to create a new input stream to next volume
-            createInputStreamToNextVolume();
+            ++filePointer;
         }
-        int nextbyte = zippedinputstream.read();
-        filepointer++;
-        if (nextbyte == EOF)
-        {
-            // if end of file is reached, try to open InputStream to next volume
-            // close the inputstream
-            try
-            {
-                zippedinputstream.close();
-            }
-            catch (Exception e)
-            {
-                // do nothing
-            }
-
-            if (createInputStreamToNextVolume())
-            {
-                // try to read next byte
-                nextbyte = zippedinputstream.read();
-                filepointer++;
-            }
-        }
-        return nextbyte;
+        return read;
     }
 
-    /*
+    /**
      * (non-Javadoc)
      *
      * @see java.io.InputStream#read(byte[], int, int)
      */
-
     @Override
     public int read(byte[] b, int off, int len) throws IOException
     {
-        if (nextvolumenotfound)
+        int read = zippedInputStream.read(b, off, len);
+        int count = read;
+        while (read != -1 && read < len)
         {
-            // the next volume was not found, so try to create a new input stream to next volume
-            createInputStreamToNextVolume();
-        }
-        int bytesread = zippedinputstream.read(b, off, len);
-        filepointer += bytesread;
-        if (bytesread == EOF)
-        {
-            filepointer++; // bytesread was -1;
-            System.out.println("EOF reached.");
-            // close the inputstream
-            try
+            off += read;
+            len -= read;
+            read = zippedInputStream.read(b, off, len);
+            if (read != -1)
             {
-                zippedinputstream.close();
-            }
-            catch (Exception e)
-            {
-                // do nothing
-            }
-            // try to open next volume
-            if (createInputStreamToNextVolume())
-            {
-                // try to read next bytes
-                logger.fine("Next volume opened, continuing read");
-                bytesread = zippedinputstream.read(b, off, len);
-                filepointer += bytesread;
-                // System.out.println("read into buffer: " + bytesread + " Bytes");
+                count += read;
             }
         }
-        // System.out.println("return from read into buffer: " + bytesread + " Bytes");
-        return bytesread;
+        if (count != -1)
+        {
+            filePointer += count;
+        }
+        return count;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.io.InputStream#read(byte[])
-     */
-
-    @Override
-    public int read(byte[] b) throws IOException
-    {
-        return this.read(b, 0, b.length);
-    }
-
-    /*
+    /**
      * (non-Javadoc)
      *
      * @see java.io.InputStream#skip(long)
      */
-
     @Override
     public long skip(long n) throws IOException
     {
-        if (nextvolumenotfound)
+        return zippedInputStream.skip(n);
+    }
+
+    /**
+     * Returns the current position in the file.
+     * This is the absolute offset into the volumes.
+     *
+     * @return the current position in the file
+     */
+    public long getFilePointer()
+    {
+        return filePointer;
+    }
+
+    private static final class SpanningInputStream extends InputStream
+    {
+
+        /**
+         * The current volume stream.
+         */
+        private InputStream stream;
+
+        /**
+         * The base path to each volume.
+         */
+        private String basePath;
+
+        /**
+         * The index of the current volume.
+         */
+        private int index = 0;
+
+        /**
+         * The total no. of volumes.
+         */
+        private final int volumes;
+
+        /**
+         * The first volume magic number. All subsequent volumes must start with this.
+         */
+        private final byte[] magicNumber;
+
+        /**
+         * The volume locator. May be <tt>null</tt>
+         */
+        private VolumeLocator locator;
+
+
+        /**
+         * Constructs a <tt>SpanningInputStream</tt>.
+         *
+         * @param volume  the first volume
+         * @param volumes the number of volumes
+         * @throws IOException for any I/O error
+         */
+        public SpanningInputStream(File volume, int volumes) throws IOException
         {
-            // the next volume was not found, so try to create a new input stream to next volume
-            createInputStreamToNextVolume();
-        }
-        long bytesskipped = 0;
-        byte[] buffer = new byte[4096];
-        try
-        {
-            while (bytesskipped < n)
+            basePath = volume.getAbsolutePath();
+            stream = new FileInputStream(volume);
+            this.volumes = volumes;
+
+            // read magic number
+            magicNumber = new byte[FileSpanningOutputStream.MAGIC_NUMBER_LENGTH];
+            if (stream.read(magicNumber) != FileSpanningOutputStream.MAGIC_NUMBER_LENGTH)
             {
-                int maxBytes = (int) Math.min(n - bytesskipped, buffer.length);
-
-                int bytesInBuffer = this.read(buffer, 0, maxBytes);
-                if (bytesInBuffer == -1)
-                {
-                    throw new IOException("Unexpected end of stream (installer corrupted?)");
-                }
-
-                bytesskipped += bytesInBuffer;
+                FileUtils.close(stream);
+                throw new CorruptVolumeException();
+            }
+            if (logger.isLoggable(Level.FINE))
+            {
+                logger.fine("Opened volume=" + volume + ", magic=" + FileSpanningOutputStream.formatMagic(magicNumber));
             }
         }
-        catch (VolumeNotFoundException vnfe)
-        {
-            vnfe.setAlreadyskippedbytes(bytesskipped);
-            throw vnfe;
-        }
-        return bytesskipped;
-    }
 
-    /**
-     * Returns the name of the volume
-     *
-     * @return the name of the volume
-     */
-    public String getVolumename()
-    {
-        return volumename;
-    }
-
-    /**
-     * Sets the volumename
-     *
-     * @param volumename
-     */
-    public void setVolumename(String volumename)
-    {
-        logger.fine("New volume name: " + volumename);
-        // try to get the volumename from the given volume file
-        // the first volume has no suffix, additional volumes have a .INDEX# suffix
-        String volumesuffix = "." + currentvolumeindex;
-        String nextvolumesuffix = "." + (currentvolumeindex + 1);
-        if (volumename.endsWith(volumesuffix))
+        /**
+         * Sets the volume locator.
+         *
+         * @param locator the locator. May be <tt>null</tt>
+         */
+        public void setLocator(VolumeLocator locator)
         {
-            this.volumename = volumename.substring(0, volumename.lastIndexOf(volumesuffix));
+            this.locator = locator;
         }
-        else if (volumename.endsWith(nextvolumesuffix))
-        {
-            this.volumename = volumename.substring(0, volumename.lastIndexOf(nextvolumesuffix));
-        }
-        else
-        {
-            this.volumename = volumename;
-        }
-        logger.fine("Set volume name to: " + this.volumename);
-    }
 
-    /**
-     * Returns the current position in the file. Notice: this is the global position in all volumes.
-     *
-     * @return the current position in file.
-     */
-    public long getFilepointer()
-    {
-        return filepointer;
-    }
+        /**
+         * Reads up to <code>len</code> bytes of data from the input stream into an array of bytes.
+         * <p/>
+         * An attempt is made to read as many as <code>len</code> bytes, but a smaller number may be read.
+         *
+         * @param b   the buffer into which the data is read.
+         * @param off the start offset in array <code>b</code> at which the data is written.
+         * @param len the maximum number of bytes to read.
+         * @return the total number of bytes read into the buffer, or  <code>-1</code> if there is no more data because
+         *         the end of the stream has been reached.
+         * @throws IOException for any I/O error
+         */
+        @Override
+        public int read(byte[] b, int off, int len) throws IOException
+        {
+            int read = stream.read(b, off, len);
+            int count = read;
+            while (read < len)
+            {
+                if (read != -1)
+                {
+                    off += read;
+                    len -= read;
+                }
+                if (openNextVolume())
+                {
+                    read = stream.read(b, off, len);
+                    if (read != -1)
+                    {
+                        count += read;
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return count;
+        }
 
+        /**
+         * Reads the next byte of data from the input stream.
+         *
+         * @return the next byte of data, or <code>-1</code> if the end of the stream is reached.
+         * @throws java.io.IOException if an I/O error occurs.
+         */
+        @Override
+        public int read() throws IOException
+        {
+            int read = stream.read();
+            if (read == -1 && openNextVolume())
+            {
+                // read from the next volume
+                read = stream.read();
+            }
+            return read;
+        }
+
+        /**
+         * Closes this input stream and releases any system resources associated
+         * with the stream.
+         *
+         * @throws IOException if an I/O error occurs
+         */
+        @Override
+        public void close() throws IOException
+        {
+            stream.close();
+        }
+
+        /**
+         * Opens the next volume.
+         *
+         * @return <tt>true</tt> if the next volume was opened, or <tt>false</tt> if there are no more volumes
+         * @throws CorruptVolumeException  if the magic no. of the next volume does not match that expected
+         * @throws VolumeNotFoundException if the next volume was not found
+         */
+        private boolean openNextVolume() throws IOException
+        {
+            boolean result;
+            if (index + 1 >= volumes)
+            {
+                logger.fine("Last volume reached");
+                result = false;
+            }
+            else
+            {
+                // the next volume name
+                String volumePath = basePath + "." + (index + 1);
+                File volume = new File(volumePath);
+                boolean found = false;
+                while (!found)
+                {
+                    if (volume.exists())
+                    {
+                        try
+                        {
+                            // try to open new stream to next volume
+                            FileUtils.close(stream);
+                            stream = new FileInputStream(volume);
+                            checkMagicNumber();
+                            found = true;
+                        }
+                        catch (CorruptVolumeException exception)
+                        {
+                            if (locator == null)
+                            {
+                                throw exception;
+                            }
+                            else
+                            {
+                                volume = locator.getVolume(volume.getAbsolutePath(), true);
+                            }
+                        }
+                    }
+                    else if (locator != null)
+                    {
+                        volume = locator.getVolume(volume.getAbsolutePath(), false);
+                    }
+                    else
+                    {
+                        throw new VolumeNotFoundException("Volume not found: " + volume.getAbsolutePath(),
+                                                          volume.getAbsolutePath());
+                    }
+                }
+
+                ++index;
+                result = true;
+            }
+            return result;
+        }
+
+        /**
+         * Checks if the magic number if the current volume is valid.
+         *
+         * @throws CorruptVolumeException if the magic number doesn't match that expected
+         * @throws IOException            for any I/O error
+         */
+        private void checkMagicNumber() throws IOException
+        {
+            logger.fine("Trying to read magic number");
+            byte[] volumeMagicNo = new byte[FileSpanningOutputStream.MAGIC_NUMBER_LENGTH];
+            try
+            {
+                if (stream.read(volumeMagicNo) != volumeMagicNo.length)
+                {
+                    logger.fine("Failed to read magic number");
+                    throw new CorruptVolumeException();
+                }
+
+                if (logger.isLoggable(Level.FINE))
+                {
+                    logger.fine("Magic number is " + FileSpanningOutputStream.formatMagic(volumeMagicNo));
+                    if (!Arrays.equals(magicNumber, volumeMagicNo))
+                    {
+                        throw new CorruptVolumeException();
+                    }
+                }
+            }
+            catch (IOException exception)
+            {
+                FileUtils.close(stream);
+            }
+        }
+
+    }
 }

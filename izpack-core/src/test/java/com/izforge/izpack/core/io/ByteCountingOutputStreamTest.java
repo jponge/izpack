@@ -17,17 +17,20 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.compiler.stream;
+package com.izforge.izpack.core.io;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class ByteCountingOutputStreamTest extends TestCase
+import org.junit.Test;
+
+public class ByteCountingOutputStreamTest
 {
 
+    @Test
     public void testWriting() throws IOException
     {
         File temp = File.createTempFile("foo", "bar");
@@ -40,7 +43,7 @@ public class ByteCountingOutputStreamTest extends TestCase
         out.write(1024);
         out.close();
 
-        assertEquals(16, out.getByteCount());
+        assertEquals(temp.length(), out.getByteCount());
     }
 
 }

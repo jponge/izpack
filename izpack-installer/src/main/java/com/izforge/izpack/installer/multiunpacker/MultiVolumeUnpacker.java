@@ -34,12 +34,11 @@ import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.io.FileSpanningInputStream;
-import com.izforge.izpack.core.io.FileSpanningOutputStream;
+import com.izforge.izpack.core.io.VolumeLocator;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.unpacker.Cancellable;
 import com.izforge.izpack.installer.unpacker.FileUnpacker;
-import com.izforge.izpack.installer.unpacker.IMultiVolumeUnpackerHelper;
 import com.izforge.izpack.installer.unpacker.UnpackerBase;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.Librarian;
@@ -57,14 +56,19 @@ import com.izforge.izpack.util.os.FileQueue;
 public class MultiVolumeUnpacker extends UnpackerBase
 {
     /**
-     * The unpacker helper.
+     * The volume locator.
      */
-    private IMultiVolumeUnpackerHelper helper;
+    private VolumeLocator locator;
 
     /**
      * The pack data volumes stream.
      */
     private FileSpanningInputStream volumes;
+
+    /**
+     * Volume meta-data resource name.
+     */
+    private static final String VOLUMES_INFO = "/volumes.info";
 
     /**
      * The logger.
@@ -103,12 +107,12 @@ public class MultiVolumeUnpacker extends UnpackerBase
         if (handler instanceof PanelAutomation)
         {
             logger.fine("running in auto installation mode.");
-            helper = new MultiVolumeUnpackerAutomationHelper(getInstallData(), handler);
+            locator = new MultiVolumeUnpackerAutomationHelper(getInstallData());
         }
         else
         {
             logger.fine("running in normal installation mode.");
-            helper = new MultiVolumeUnpackerHelper(getInstallData(), handler);
+            locator = new MultiVolumeUnpackerHelper(getInstallData(), handler);
         }
     }
 
@@ -129,7 +133,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
         try
         {
             // get volume metadata
-            in = getResourceManager().getInputStream(FileSpanningOutputStream.VOLUMES_INFO);
+            in = getResourceManager().getInputStream(VOLUMES_INFO);
             objectIn = new ObjectInputStream(in);
             int volumeCount = objectIn.readInt();
             String volumeName = objectIn.readUTF();
@@ -145,9 +149,10 @@ public class MultiVolumeUnpacker extends UnpackerBase
             File volume = new File(mediaDirectory + File.separator + volumeName);
             if (!volume.exists())
             {
-                volume = helper.enterNextMediaMessage(volume.getAbsolutePath());
+                volume = locator.getVolume(volume.getAbsolutePath(), false);
             }
             volumes = new FileSpanningInputStream(volume, volumeCount);
+            volumes.setLocator(locator);
         }
         finally
         {
@@ -175,7 +180,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
         {
             return super.createFileUnpacker(file, pack, queue, cancellable);
         }
-        return new MultiVolumeFileUnpacker(volumes, helper, cancellable, getHandler(), queue, getPlatform(),
+        return new MultiVolumeFileUnpacker(volumes, cancellable, getHandler(), queue, getPlatform(),
                                            getLibrarian());
     }
 
