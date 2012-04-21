@@ -21,10 +21,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.apache.tools.zip.ZipEntry;
@@ -77,17 +76,12 @@ public class MultiVolumePackager extends PackagerBase
 {
 
     /**
-     * The configuration options.
-     */
-    private IXMLElement configData = null;
-
-    /**
      * The volume size, in bytes.
      */
     private long volumeSize = FileSpanningOutputStream.DEFAULT_VOLUME_SIZE;
 
     /**
-     * The first volume free spaces size, in bytes.
+     * The first volume free space size, in bytes.
      */
     private long freeSpace = 0;
 
@@ -127,9 +121,37 @@ public class MultiVolumePackager extends PackagerBase
               compilerData);
     }
 
+    /**
+     * Sets the maximum volume size.
+     *
+     * @param size the maximum volume size, in bytes
+     */
+    public void setMaxVolumeSize(long size)
+    {
+        volumeSize = size;
+    }
+
+    /**
+     * Sets the first volume free space size.
+     * <p/>
+     * When specified, this limits the size of the first volume to <em>maxVolumeSize - firstVolumeFreeSpace</em>.
+     * <p/>
+     * This may be used to allocate space for additional files on CD beside the pack files.
+     *
+     * @param size the free space size, in bytes
+     */
+    public void setFirstVolumeFreeSpace(long size)
+    {
+        freeSpace = size;
+    }
+
     public void addConfigurationInformation(IXMLElement data)
     {
-        this.configData = data;
+        if (data != null)
+        {
+            setMaxVolumeSize(Long.valueOf(data.getAttribute(VOLUME_SIZE, Long.toString(volumeSize))));
+            setFirstVolumeFreeSpace(Long.valueOf(data.getAttribute(FIRST_VOLUME_FREE_SPACE, Long.toString(freeSpace))));
+        }
     }
 
     /**
@@ -140,12 +162,6 @@ public class MultiVolumePackager extends PackagerBase
     @Override
     protected void writePacks() throws IOException
     {
-        if (configData != null)
-        {
-            volumeSize = Long.valueOf(configData.getAttribute(VOLUME_SIZE, Long.toString(volumeSize)));
-            freeSpace = Long.valueOf(configData.getAttribute(FIRST_VOLUME_FREE_SPACE, Long.toString(freeSpace)));
-        }
-
         String classname = getClass().getSimpleName();
 
         // propagate the configuration to the variables, for debugging purposes
@@ -166,36 +182,31 @@ public class MultiVolumePackager extends PackagerBase
         sendMsg("Writing " + num + " Pack" + (num > 1 ? "s" : "") + " into installer");
         logger.fine("Writing " + num + " Pack" + (num > 1 ? "s" : "") + " into installer");
         // Map to remember pack number and bytes offsets of back references
-        Map storedFiles = new HashMap();
 
         // First write the serialized files and file metadata data for each pack
         // while counting bytes.
 
         logger.fine("Volume size: " + volumeSize);
         logger.fine("Extra space on first volume: " + freeSpace);
-        FileSpanningOutputStream fout = new FileSpanningOutputStream(
-                primaryFile.getParent() + File.separator + primaryFile.getName() + ".pak", volumeSize);
-        fout.setFirstVolumeFreeSpaceSize(freeSpace);
+        FileSpanningOutputStream volumes = new FileSpanningOutputStream(primaryFile.getAbsolutePath() + ".pak",
+                                                                        volumeSize, freeSpace);
 
-        int packNumber = 0;
         for (PackInfo packInfo : packs)
         {
-            writePack(packInfo, packNumber, fout, storedFiles);
-            packNumber++;
+            writePack(packInfo, volumes);
         }
 
         // write metadata for reading in volumes
-        int volumes = fout.getVolumes();
-        logger.fine("Written " + volumes + " volumes");
+        logger.fine("Written " + volumes.getVolumes() + " volumes");
         String volumeName = primaryFile.getName() + ".pak";
 
-        fout.flush();
-        fout.close();
+        volumes.flush();
+        volumes.close();
 
         JarOutputStream installerJar = getInstallerJar();
         installerJar.putNextEntry(new ZipEntry(RESOURCES_PATH + "volumes.info"));
         ObjectOutputStream out = new ObjectOutputStream(installerJar);
-        out.writeInt(volumes);
+        out.writeInt(volumes.getVolumes());
         out.writeUTF(volumeName);
         out.flush();
         installerJar.closeEntry();
@@ -213,109 +224,112 @@ public class MultiVolumePackager extends PackagerBase
         installerJar.closeEntry();
     }
 
-    private void writePack(PackInfo packInfo, int packNumber, FileSpanningOutputStream fout, Map storedFiles)
-            throws IOException
+    /**
+     * Writes a pack.
+     * <p/>
+     * Pack information is written to the installer jar, while the actual files are written to the volumes.
+     *
+     * @param packInfo the pack information
+     * @param volumes  the volumes
+     * @throws IOException for any I/O error
+     */
+    private void writePack(PackInfo packInfo, FileSpanningOutputStream volumes) throws IOException
     {
         Pack pack = packInfo.getPack();
         pack.nbytes = 0;
 
-        sendMsg("Writing Pack " + packNumber + ": " + pack.name, PackagerListener.MSG_VERBOSE);
-        logger.fine("Writing Pack " + packNumber + ": " + pack.name);
-        ZipEntry entry = new ZipEntry(RESOURCES_PATH + "packs/pack" + packNumber);
-        // write the metadata as uncompressed object stream to installerJar
-        // first write a packs entry
+        sendMsg("Writing Pack: " + pack.id, PackagerListener.MSG_VERBOSE);
+        logger.fine("Writing Pack: " + pack.id);
+        ZipEntry entry = new ZipEntry(RESOURCES_PATH + "packs/pack-" + pack.id);
 
         JarOutputStream installerJar = getInstallerJar();
         installerJar.putNextEntry(entry);
-        ObjectOutputStream objOut = new ObjectOutputStream(installerJar);
+        ObjectOutputStream packStream = new ObjectOutputStream(installerJar);
 
-        // We write the actual pack files
-        objOut.writeInt(packInfo.getPackFiles().size());
-
-        writePackFiles(packInfo, fout, storedFiles, pack, objOut);
+        writePackFiles(packInfo, volumes, pack, packStream);
 
         // Write out information about parsable files
-        objOut.writeInt(packInfo.getParsables().size());
+        packStream.writeInt(packInfo.getParsables().size());
         for (ParsableFile file : packInfo.getParsables())
         {
-            objOut.writeObject(file);
+            packStream.writeObject(file);
         }
 
         // Write out information about executable files
-        objOut.writeInt(packInfo.getExecutables().size());
+        packStream.writeInt(packInfo.getExecutables().size());
         for (ExecutableFile file : packInfo.getExecutables())
         {
-            objOut.writeObject(file);
+            packStream.writeObject(file);
         }
 
         // Write out information about update check files
-        objOut.writeInt(packInfo.getUpdateChecks().size());
+        packStream.writeInt(packInfo.getUpdateChecks().size());
         for (UpdateCheck check : packInfo.getUpdateChecks())
         {
-            objOut.writeObject(check);
+            packStream.writeObject(check);
         }
 
         // Cleanup
-        objOut.flush();
+        packStream.flush();
     }
 
-    private void writePackFiles(PackInfo packInfo, FileSpanningOutputStream fout, Map storedFiles, Pack pack,
-                                ObjectOutputStream objOut) throws IOException
+    /**
+     * Writes the pack files.
+     * <p/>
+     * The file data is written to <tt>volumes</tt>, whilst the meta-data is written to <tt>packStream</tt>.
+     *
+     * @param packInfo   the pack information
+     * @param volumes    the volumes to write to
+     * @param pack       the pack
+     * @param packStream the stream to write the pack meta-data to
+     * @throws IOException
+     */
+    private void writePackFiles(PackInfo packInfo, FileSpanningOutputStream volumes, Pack pack,
+                                ObjectOutputStream packStream) throws IOException
     {
-        for (PackFile packfile : packInfo.getPackFiles())
+        // write the file meta-data
+        Set<PackFile> files = packInfo.getPackFiles();
+        packStream.writeInt(files.size());
+
+        for (PackFile packfile : files)
         {
-            boolean addFile = !pack.loose;
             XPackFile pf = new XPackFile(packfile);
             File file = packInfo.getFile(packfile);
             logger.fine("Next file: " + file.getAbsolutePath());
-            // use a back reference if file was in previous pack, and in
-            // same jar
-            Object[] info = (Object[]) storedFiles.get(file);
-            if (info != null && !packSeparateJars())
+
+            if (!pack.loose && !pf.isDirectory())
             {
-                logger.fine("File already included in other pack");
-                pf.setPreviousPackFileRef((String) info[0], (Long) info[1]);
-                addFile = false;
-            }
+                long beforePosition = volumes.getFilePointer();
+                pf.setArchiveFilePosition(beforePosition);
 
-            if (addFile && !pf.isDirectory())
-            {
-                long pos = fout.getFilePointer();
+                // write the file to the volumes
+                int volumeCount = volumes.getVolumes();
 
-                pf.setArchivefileposition(pos);
+                FileInputStream in = new FileInputStream(file);
+                long bytesWritten = IoHelper.copyStream(in, volumes);
+                long afterPosition = volumes.getFilePointer();
+                logger.fine("File (" + pf.sourcePath + ") " + beforePosition + " <-> " + afterPosition);
 
-                // write out the filepointer
-                int volumecountbeforewrite = fout.getVolumes();
-
-                FileInputStream inStream = new FileInputStream(file);
-                long bytesWritten = IoHelper.copyStream(inStream, fout);
-                fout.flush();
-
-                long posafterwrite = fout.getFilePointer();
-                logger.fine("File (" + pf.sourcePath + ") " + pos + " <-> " + posafterwrite);
-
-                if (fout.getFilePointer() != (pos + bytesWritten))
+                if (volumes.getFilePointer() != (beforePosition + bytesWritten))
                 {
                     logger.fine("file: " + file.getName());
                     logger.fine("(Filepos/BytesWritten/ExpectedNewFilePos/NewFilePointer) ("
-                                        + pos + "/" + bytesWritten + "/" + (pos + bytesWritten)
-                                        + "/" + fout.getFilePointer() + ")");
-                    logger.fine("Volumecount (before/after) ("
-                                        + volumecountbeforewrite + "/" + fout.getVolumes() + ")");
-                    throw new IOException("Error new filepointer is illegal");
+                                        + beforePosition + "/" + bytesWritten + "/" + (beforePosition + bytesWritten)
+                                        + "/" + volumes.getFilePointer() + ")");
+                    logger.fine("Volumes (before/after) (" + volumeCount + "/" + volumes.getVolumes() + ")");
+                    throw new IOException("Error new file pointer is illegal");
                 }
 
                 if (bytesWritten != pf.length())
                 {
                     throw new IOException("File size mismatch when reading " + file);
                 }
-                inStream.close();
-                // keine backreferences mglich
-                // storedFiles.put(file, new long[] { packNumber, pos});
+                in.close();
             }
 
-            objOut.writeObject(pf); // base info
-            objOut.flush(); // make sure it is written
+            // write pack file meta-data
+            packStream.writeObject(pf);
+            packStream.flush(); // make sure it is written
             // even if not written, it counts towards pack size
             pack.nbytes += pf.length();
         }

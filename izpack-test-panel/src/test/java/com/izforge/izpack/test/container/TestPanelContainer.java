@@ -12,9 +12,10 @@ import org.picocontainer.parameters.ComponentParameter;
 
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ContainerException;
-import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
+import com.izforge.izpack.core.container.PlatformProvider;
+import com.izforge.izpack.core.factory.DefaultObjectFactory;
 import com.izforge.izpack.core.rules.ConditionContainer;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.gui.log.Log;
@@ -30,6 +31,7 @@ import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.test.provider.GUIInstallDataMockProvider;
 import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.Platforms;
 
 
 /**
@@ -71,11 +73,12 @@ public class TestPanelContainer extends AbstractContainer
 
         container.addComponent(FrameFixture.class, FrameFixture.class, new ComponentParameter(InstallerFrame.class));
 
-        addComponent(ObjectFactory.class, Mockito.mock(ObjectFactory.class));
+        container.addComponent(new DefaultObjectFactory(this));
         addComponent(IUnpacker.class, Mockito.mock(IUnpacker.class));
         addComponent(Log.class, Mockito.mock(Log.class));
         addComponent(Housekeeper.class, Mockito.mock(Housekeeper.class));
         addComponent(PanelManager.class);
+        addComponent(Platforms.class);
         addComponent("installerContainer", this);
 
         container.addConfig("title", "testPanel");
@@ -84,6 +87,7 @@ public class TestPanelContainer extends AbstractContainer
                 .addAdapter(new ProviderAdapter(new GUIInstallDataMockProvider()))
                 .addAdapter(new ProviderAdapter(new IconsProvider()))
                 .addAdapter(new ProviderAdapter(new RulesProvider()))
+                .addAdapter(new ProviderAdapter(new PlatformProvider()))
                 .as(Characteristics.USE_NAMES).addComponent(InstallerFrame.class);
     }
 

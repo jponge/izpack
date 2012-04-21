@@ -80,19 +80,24 @@ public class FileSpanningOutputStream extends OutputStream
 
     /**
      * /**
-     * Creates a new spanning output stream with the specified volume path and a maximum volume size.
+     * Constructs a <tt>FileSpanningOutputStream</tt> with specified initial volume, a maximum volume size
+     * and a first volume unallocated size.
+     * <p/>
+     * The <tt>unallocatedSize</tt> argument may be used to specify how much space to leave free on the first volume.
+     * This may be used to allocate space for additional files on CD beside the pack files.
      *
-     * @param volumePath    the path to the first volume
-     * @param maxVolumeSize the maximum volume size
+     * @param volumePath      the path to the first volume
+     * @param maxVolumeSize   the maximum volume size
+     * @param unallocatedSize the amount of the space to leave free on the first volume, in bytes
      * @throws IOException for any I/O error
      */
-    public FileSpanningOutputStream(String volumePath, long maxVolumeSize) throws IOException
+    public FileSpanningOutputStream(String volumePath, long maxVolumeSize, long unallocatedSize) throws IOException
     {
-        this(new File(volumePath), maxVolumeSize);
+        this(new File(volumePath), maxVolumeSize, unallocatedSize);
     }
 
     /**
-     * Creates a new spanning output stream with specified initial volume and a maximum volume size.
+     * Constructs a <tt>FileSpanningOutputStream</tt> with specified initial volume and a maximum volume size.
      *
      * @param volume        the first volume
      * @param maxVolumeSize the maximum volume size
@@ -100,7 +105,24 @@ public class FileSpanningOutputStream extends OutputStream
      */
     public FileSpanningOutputStream(File volume, long maxVolumeSize) throws IOException
     {
-        spanningOutputStream = new SpanningOutputStream(volume, maxVolumeSize);
+        this(volume, maxVolumeSize, 0);
+    }
+
+    /**
+     * Constructs a <tt>FileSpanningOutputStream</tt> with specified initial volume, a maximum volume size
+     * and a first volume unallocated size.
+     * <p/>
+     * The <tt>unallocatedSize</tt> argument may be used to specify how much space to leave free on the first volume.
+     * This may be used to allocate space for additional files on CD beside the pack files.
+     *
+     * @param volume          the first volume
+     * @param maxVolumeSize   the maximum volume size
+     * @param unallocatedSize the amount of the space to leave free on the first volume, in bytes
+     * @throws IOException for any I/O error
+     */
+    public FileSpanningOutputStream(File volume, long maxVolumeSize, long unallocatedSize) throws IOException
+    {
+        spanningOutputStream = new SpanningOutputStream(volume, maxVolumeSize, unallocatedSize);
         gzipOutputStream = new GZIPOutputStream(spanningOutputStream);
     }
 
@@ -157,7 +179,7 @@ public class FileSpanningOutputStream extends OutputStream
     @Override
     public void flush() throws IOException
     {
-        gzipOutputStream.finish();
+        gzipOutputStream.flush();
     }
 
     /**
@@ -168,16 +190,6 @@ public class FileSpanningOutputStream extends OutputStream
     public int getVolumes()
     {
         return spanningOutputStream.getVolumes();
-    }
-
-    /**
-     * Sets the size of the space to leave free on the first volume.
-     * <p/>
-     * This may be used to allocate space for additional files on CD beside the pack files.
-     */
-    public void setFirstVolumeFreeSpaceSize(long size)
-    {
-        spanningOutputStream.setFirstVolumeFreeSpaceSize(size);
     }
 
     /**
@@ -237,19 +249,20 @@ public class FileSpanningOutputStream extends OutputStream
         private byte[] magic;
 
         /**
-         * The space to leave on the first volume.
+         * The space to leave free on the first volume.
          */
-        private long firstVolumeFreeSpaceSize = 0;
+        private final long unallocatedSize;
 
 
         /**
          * Constructs a <tt>SpanningOutputStream</tt>.
          *
-         * @param volume        the first volume
-         * @param maxVolumeSize the maximum volume size
+         * @param volume          the first volume
+         * @param maxVolumeSize   the maximum volume size
+         * @param unallocatedSize the space to leave free on the first volume
          * @throws IOException for any I/O error
          */
-        public SpanningOutputStream(File volume, long maxVolumeSize) throws IOException
+        public SpanningOutputStream(File volume, long maxVolumeSize, long unallocatedSize) throws IOException
         {
             super(new FileOutputStream(volume));
             if (maxVolumeSize < MAGIC_NUMBER_LENGTH + 1)
@@ -259,19 +272,10 @@ public class FileSpanningOutputStream extends OutputStream
             }
             basePath = volume.getAbsolutePath();
             this.maxVolumeSize = maxVolumeSize;
+            this.unallocatedSize = unallocatedSize;
             magic = generateMagicNumber();
 
             initVolume();
-        }
-
-        /**
-         * Sets the size of the space to leave free on the first volume.
-         * <p/>
-         * This may be used to allocate space for additional files on CD beside the pack files.
-         */
-        public void setFirstVolumeFreeSpaceSize(long size)
-        {
-            firstVolumeFreeSpaceSize = size;
         }
 
         /**
@@ -372,7 +376,7 @@ public class FileSpanningOutputStream extends OutputStream
             if (index == 0)
             {
                 // this is the first volume so add the free space
-                count += firstVolumeFreeSpaceSize;
+                count += unallocatedSize;
             }
             return maxVolumeSize - count;
         }

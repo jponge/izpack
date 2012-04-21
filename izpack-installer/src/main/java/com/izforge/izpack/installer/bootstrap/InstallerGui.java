@@ -21,14 +21,15 @@
 
 package com.izforge.izpack.installer.bootstrap;
 
+import javax.swing.SwingUtilities;
+
 import com.izforge.izpack.api.container.Container;
+import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.installer.base.InstallerController;
 import com.izforge.izpack.installer.container.impl.GUIInstallerContainer;
 import com.izforge.izpack.installer.container.impl.InstallerContainer;
 import com.izforge.izpack.installer.language.LanguageDialog;
-
-import javax.swing.*;
 
 /**
  * Gui-dedicated installer bootstrap
@@ -36,7 +37,7 @@ import javax.swing.*;
 public class InstallerGui
 {
 
-    public static void run() throws Exception
+    public static void run(final String mediaPath) throws Exception
     {
         SwingUtilities.invokeLater(new Runnable()
         {
@@ -45,6 +46,13 @@ public class InstallerGui
                 try
                 {
                     InstallerContainer applicationComponent = new GUIInstallerContainer();
+                    if (mediaPath != null)
+                    {
+                        AutomatedInstallData installData = applicationComponent.getComponent(
+                                AutomatedInstallData.class);
+                        installData.setMediaPath(mediaPath);
+                    }
+
                     Container installerContainer = applicationComponent.getComponent(Container.class);
 
                     InstallerController controller = installerContainer.getComponent(InstallerController.class);

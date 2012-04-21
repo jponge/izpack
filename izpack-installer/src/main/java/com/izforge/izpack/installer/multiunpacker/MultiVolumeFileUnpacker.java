@@ -67,7 +67,7 @@ public class MultiVolumeFileUnpacker extends FileUnpacker
             throws IOException, InstallerException
     {
         // read in the position of this file
-        long position = ((XPackFile) file).getArchivefileposition();
+        long position = ((XPackFile) file).getArchiveFilePosition();
 
         if (volumes.getFilePointer() < position)
         {

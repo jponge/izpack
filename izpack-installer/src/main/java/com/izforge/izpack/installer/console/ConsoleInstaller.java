@@ -22,6 +22,14 @@
 
 package com.izforge.izpack.installer.console;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.LocaleDatabase;
@@ -39,14 +47,6 @@ import com.izforge.izpack.installer.requirement.RequirementsChecker;
 import com.izforge.izpack.util.Console;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.file.FileUtils;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Runs the console installer.
@@ -107,7 +107,7 @@ public class ConsoleInstaller extends InstallerBase
      */
     private static final Logger logger = Logger.getLogger(ConsoleInstaller.class.getName());
 
-    
+
     /**
      * Constructs a <tt>ConsoleInstaller</tt>
      *
@@ -166,6 +166,16 @@ public class ConsoleInstaller extends InstallerBase
             }
         }
         return success;
+    }
+
+    /**
+     * Sets the media path for multi-volume installations.
+     *
+     * @param path the media path. May be <tt>null</tt>
+     */
+    public void setMediaPath(String path)
+    {
+        installData.setMediaPath(path);
     }
 
     /**
@@ -299,7 +309,8 @@ public class ConsoleInstaller extends InstallerBase
      *
      * @return the console
      */
-    protected Console getConsole() {
+    protected Console getConsole()
+    {
         return console;
     }
 
@@ -375,7 +386,7 @@ public class ConsoleInstaller extends InstallerBase
             Properties properties = new Properties();
             properties.load(in);
             return new PropertyInstallAction(factory, installData, substituter, objectFactory, rules,
-                    uninstallDataWriter, properties);
+                                             uninstallDataWriter, properties);
         }
         finally
         {
@@ -408,11 +419,11 @@ public class ConsoleInstaller extends InstallerBase
                 if (oldValue != null)
                 {
                     console.println("Warning: Property " + key + " overwritten: '"
-                            + oldValue + "' --> '" + newValue + "'");
+                                            + oldValue + "' --> '" + newValue + "'");
                 }
             }
             return new PropertyInstallAction(factory, installData, substituter, objectFactory, rules,
-                    uninstallDataWriter, properties);
+                                             uninstallDataWriter, properties);
         }
         finally
         {

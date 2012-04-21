@@ -55,6 +55,7 @@ import com.izforge.izpack.util.os.FileQueue;
  */
 public class MultiVolumeUnpacker extends UnpackerBase
 {
+
     /**
      * The volume locator.
      */
@@ -68,7 +69,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
     /**
      * Volume meta-data resource name.
      */
-    private static final String VOLUMES_INFO = "/volumes.info";
+    static final String VOLUMES_INFO = "volumes.info";
 
     /**
      * The logger.
@@ -139,14 +140,13 @@ public class MultiVolumeUnpacker extends UnpackerBase
             String volumeName = objectIn.readUTF();
             logger.fine("Reading from " + volumeCount + " volumes with basename " + volumeName + " ");
 
-            String mediaDirectory = MultiVolumeInstaller.getMediadirectory();
-            if ((mediaDirectory == null) || (mediaDirectory.length() == 0))
+            String mediaPath = getInstallData().getMediaPath();
+            if ((mediaPath == null) || (mediaPath.length() == 0))
             {
-                logger.fine("Mediadirectory wasn't set.");
-                mediaDirectory = System.getProperty("java.io.tmpdir"); // try the temporary directory
+                mediaPath = System.getProperty("java.io.tmpdir"); // try the temporary directory
             }
-            logger.fine("Using mediaDirectory = " + mediaDirectory);
-            File volume = new File(mediaDirectory + File.separator + volumeName);
+            logger.fine("Using mediaDirectory = " + mediaPath);
+            File volume = new File(mediaPath, volumeName);
             if (!volume.exists())
             {
                 volume = locator.getVolume(volume.getAbsolutePath(), false);

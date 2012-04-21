@@ -117,11 +117,10 @@ public class MultiVolumeFileUnpackerTest extends AbstractFileUnpackerTest
         IoHelper.copyStream(in, out);
 
         // verify there is more than one volume
-        out.flush();
+        out.close();
         volumeCount = out.getVolumes();
         assertTrue(volumeCount > 1);
         in.close();
-        out.close();
         return source;
     }
 
@@ -154,7 +153,7 @@ public class MultiVolumeFileUnpackerTest extends AbstractFileUnpackerTest
         // XPackFile required for the Archivefileposition attribute.
         XPackFile result = new XPackFile(baseDir, source, target.getName(), null, OverrideType.OVERRIDE_TRUE, null,
                                          blockable);
-        result.setArchivefileposition(0);
+        result.setArchiveFilePosition(0);
         return result;
     }
 }

@@ -77,7 +77,7 @@ public class Installer
     private static void initializeLogging()
     {
         LogManager manager = LogManager.getLogManager();
-        InputStream stream = null;
+        InputStream stream;
         try
         {
             stream = Installer.class.getResourceAsStream(LOGGING_CONFIGURATION);
@@ -115,7 +115,7 @@ public class Installer
     {
         logger.info("Commandline arguments: " + StringTool.stringArrayToSpaceSeparatedString(args));
 
-        // OS X tweakings
+        // OS X tweaks
         if (System.getProperty("mrj.version") != null)
         {
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", "IzPack");
@@ -129,7 +129,9 @@ public class Installer
 
             int type = INSTALLER_GUI;
             int consoleAction = CONSOLE_INSTALL;
-            String path = null, langcode = null;
+            String path = null;
+            String langcode = null;
+            String media = null;
 
             while (args_it.hasNext())
             {
@@ -167,6 +169,10 @@ public class Installer
                     {
                         langcode = args_it.next().trim();
                     }
+                    else if ("-media".equalsIgnoreCase(arg))
+                    {
+                        media = args_it.next().trim();
+                    }
                     else
                     {
                         type = INSTALLER_AUTO;
@@ -180,7 +186,7 @@ public class Installer
                 }
             }
 
-            launchInstall(type, consoleAction, path, langcode);
+            launchInstall(type, consoleAction, path, langcode, media);
 
         }
         catch (Exception e)
@@ -190,7 +196,8 @@ public class Installer
         }
     }
 
-    private void launchInstall(int type, int consoleAction, String path, String langcode) throws Exception
+    private void launchInstall(int type, int consoleAction, String path, String langCode,
+                               String mediaDir) throws Exception
     {
         // if headless, just use the console mode
         if (type == INSTALLER_GUI && GraphicsEnvironment.isHeadless())
@@ -201,15 +208,15 @@ public class Installer
         switch (type)
         {
             case INSTALLER_GUI:
-                InstallerGui.run();
+                InstallerGui.run(mediaDir);
                 break;
 
             case INSTALLER_AUTO:
-                launchAutomatedInstaller(path);
+                launchAutomatedInstaller(path, mediaDir);
                 break;
 
             case INSTALLER_CONSOLE:
-                launchConsoleInstaller(consoleAction, path, langcode);
+                launchConsoleInstaller(consoleAction, path, langCode, mediaDir);
                 break;
         }
     }
@@ -217,14 +224,15 @@ public class Installer
     /**
      * Launches an {@link AutomatedInstaller}.
      *
-     * @param path the input file path
+     * @param path     the input file path
+     * @param mediaDir the multi-volume media directory. May be <tt>null</tt>
      * @throws Exception for any error
      */
-    private void launchAutomatedInstaller(String path) throws Exception
+    private void launchAutomatedInstaller(String path, String mediaDir) throws Exception
     {
         InstallerContainer container = new ConsoleInstallerContainer();
         AutomatedInstaller automatedInstaller = container.getComponent(AutomatedInstaller.class);
-        automatedInstaller.init(path);
+        automatedInstaller.init(path, mediaDir);
         automatedInstaller.doInstall();
     }
 
@@ -234,12 +242,14 @@ public class Installer
      * @param consoleAction the type of the action to perform
      * @param path          the path to use for the action. May be <tt>null</tt>
      * @param langCode      the language code. May be <tt>null</tt>
+     * @param mediaDir      the multi-volume media directory. May be <tt>null</tt>
      */
-    private void launchConsoleInstaller(int consoleAction, String path, String langCode)
+    private void launchConsoleInstaller(int consoleAction, String path, String langCode, String mediaDir)
     {
         InstallerContainer container = new ConsoleInstallerContainer();
         ConsoleInstaller consoleInstaller = container.getComponent(ConsoleInstaller.class);
         consoleInstaller.setLangCode(langCode);
+        consoleInstaller.setMediaPath(mediaDir);
         consoleInstaller.run(consoleAction, path);
     }
 

@@ -19,76 +19,78 @@
 package com.izforge.izpack.api.data;
 
 
-import com.izforge.izpack.api.data.binding.OsModel;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
+
+import com.izforge.izpack.api.data.binding.OsModel;
 
 /**
- * Extends the packfile by the information at which file position an entry is stored
+ * A {@link PackFile} that includes the file position in the installation media.
  *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
 public class XPackFile extends PackFile implements Comparable<XPackFile>
 {
     private static final long serialVersionUID = 5875050264763504283L;
-    protected long archivefileposition;
 
     /**
-     * @param src
-     * @param target
-     * @param osList
-     * @param override
-     * @throws FileNotFoundException
+     * The absolute offset of the file in the archive.
      */
-    public XPackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override, String overrideRenameTo, Blockable blockable)
-    throws IOException
+    private long position;
+
+    /**
+     * Constructs an <tt>XPackFile</tt>.
+     *
+     * @param baseDir  the base directory of the file
+     * @param src      file which this PackFile describes
+     * @param target   the path to install the file to
+     * @param osList   OS constraints
+     * @param override what to do when the file already exists
+     * @throws FileNotFoundException if the specified file does not exist.
+     */
+    public XPackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override,
+                     String overrideRenameTo, Blockable blockable)
+            throws IOException
     {
         super(baseDir, src, target, osList, override, overrideRenameTo, blockable);
-        this.archivefileposition = 0;
+        this.position = 0;
     }
 
     /**
-     * @param src
-     * @param target
-     * @param osList
-     * @param override
-     * @param additionals
+     * Constructs an <tt>XPackFile</tt> from an {@link PackFile}.
+     *
+     * @param file the pack file
      * @throws FileNotFoundException
      */
-    public XPackFile(File baseDir, File src, String target, List<OsModel> osList, OverrideType override, String overrideRenameTo, Blockable blockable, Map additionals)
-    throws IOException
+    public XPackFile(PackFile file) throws FileNotFoundException
     {
-        super(baseDir, src, target, osList, override, overrideRenameTo, blockable, additionals);
-        this.archivefileposition = 0;
+        super(new File(file.sourcePath), file.relativePath, file.getTargetPath(), file.osConstraints(),
+              file.override(), file.overrideRenameTo(), file.blockable(), file.getAdditionals());
+        this.position = 0;
+        this.setCondition(file.getCondition());
     }
 
-    public XPackFile(PackFile packf) throws FileNotFoundException
+    /**
+     * Returns the position of the file in the archive.
+     *
+     * @return the position
+     */
+    public long getArchiveFilePosition()
     {
-        super(new File(packf.sourcePath), packf.relativePath, packf.getTargetPath(), packf.osConstraints(), packf
-                .override(), packf.overrideRenameTo(), packf.blockable(), packf.getAdditionals());
-        this.archivefileposition = 0;
-        this.setCondition(packf.getCondition());
+        return position;
     }
 
-    public long getArchivefileposition()
+    /**
+     * Sets the position of the file in the archive.
+     *
+     * @param position the position
+     */
+    public void setArchiveFilePosition(long position)
     {
-        return archivefileposition;
+        this.position = position;
     }
-
-    public void setArchivefileposition(long archivefileposition)
-    {
-        this.archivefileposition = archivefileposition;
-    }
-
-    public PackFile getPackfile()
-    {
-        return this;
-    }
-
 
     public int compareTo(XPackFile arg0)
     {

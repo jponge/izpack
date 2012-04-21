@@ -21,6 +21,16 @@
 
 package com.izforge.izpack.installer.automation;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
@@ -46,16 +56,6 @@ import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.requirement.RequirementsChecker;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraintHelper;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Runs the install process in text only (no GUI) mode.
@@ -134,23 +134,25 @@ public class AutomatedInstaller extends InstallerBase
     /**
      * Initialize the automated installer.
      *
-     * @param inputFilename Name of the file containing the installation data.
+     * @param inputFilename the name of the file containing the installation data
+     * @param mediaPath     the multi-volume media directory. May be <tt>null</tt>
      * @throws Exception
      */
-    public void init(String inputFilename) throws Exception
+    public void init(String inputFilename, String mediaPath) throws Exception
     {
         File input = new File(inputFilename);
         // Loads the xml data
-        this.installData.setXmlData(getXMLData(input));
+        installData.setXmlData(getXMLData(input));
 
         // Loads the langpack
-        this.installData.setLocaleISO3(this.installData.getXmlData().getAttribute("langpack", "eng"));
-        InputStream in = resourceManager.getLangPack(this.installData.getLocaleISO3());
-        this.installData.setLangpack(new LocaleDatabase(in));
-        this.installData.setVariable(ScriptParserConstant.ISO3_LANG, this.installData.getLocaleISO3());
+        installData.setLocaleISO3(installData.getXmlData().getAttribute("langpack", "eng"));
+        InputStream in = resourceManager.getLangPack(installData.getLocaleISO3());
+        installData.setLangpack(new LocaleDatabase(in));
+        installData.setVariable(ScriptParserConstant.ISO3_LANG, installData.getLocaleISO3());
+        installData.setMediaPath(mediaPath);
 
         // create the resource manager singleton
-        resourceManager.setLocale(this.installData.getLocaleISO3());
+        resourceManager.setLocale(installData.getLocaleISO3());
 //        ResourceManager.create(this.installData);
     }
 
@@ -280,17 +282,18 @@ public class AutomatedInstaller extends InstallerBase
      * @throws com.izforge.izpack.api.exception.InstallerException
      *          if something went wrong while installing.
      */
-    private void installPanel(Panel p, PanelAutomation automationHelper, IXMLElement panelRoot) throws InstallerException
+    private void installPanel(Panel p, PanelAutomation automationHelper, IXMLElement panelRoot)
+            throws InstallerException
     {
         executePreActivateActions(p, null);
 
         logger.fine("automationHelperInstance.runAutomated: "
-                + automationHelper.getClass().getName() + " entered.");
+                            + automationHelper.getClass().getName() + " entered.");
 
         automationHelper.runAutomated(this.installData, panelRoot);
 
         logger.fine("automationHelperInstance.runAutomated: "
-                + automationHelper.getClass().getName() + " successfully done.");
+                            + automationHelper.getClass().getName() + " successfully done.");
 
         executePreValidateActions(p, null);
         validatePanel(p);
@@ -369,11 +372,13 @@ public class AutomatedInstaller extends InstallerBase
             }
             catch (IllegalAccessException e)
             {
-                logger.log(Level.WARNING, "no default constructor for " + automationHelperClassName + ", skipping...", e);
+                logger.log(Level.WARNING, "no default constructor for " + automationHelperClassName + ", skipping...",
+                           e);
             }
             catch (InstantiationException e)
             {
-                logger.log(Level.WARNING, "no default constructor for " + automationHelperClassName + ", skipping...", e);
+                logger.log(Level.WARNING, "no default constructor for " + automationHelperClassName + ", skipping...",
+                           e);
             }
         }
 
@@ -392,7 +397,7 @@ public class AutomatedInstaller extends InstallerBase
         try
         {
             InstallerBase.refreshDynamicVariables(this.installData,
-                    new VariableSubstitutorImpl(this.installData.getVariables()));
+                                                  new VariableSubstitutorImpl(this.installData.getVariables()));
         }
         catch (Exception e)
         {
@@ -411,9 +416,9 @@ public class AutomatedInstaller extends InstallerBase
                     String errorMessage;
                     try
                     {
+                        String message = installData.getLangpack().getString(validator.getErrorMessageId());
                         errorMessage = installData.getLangpack().getString("data.validation.error.title")
-                                + ": " + variableSubstitutor.substitute(installData.getLangpack().getString(validator
-                                .getErrorMessageId()));
+                                + ": " + variableSubstitutor.substitute(message);
                     }
                     catch (Exception e)
                     {
@@ -427,7 +432,8 @@ public class AutomatedInstaller extends InstallerBase
                     }
                     // make installation fail instantly
                     this.result = false;
-                    logger.warning("Dynamic installer requirement validation (" + validator.getClass().getName() + ") failed");
+                    logger.warning(
+                            "Dynamic installer requirement validation (" + validator.getClass().getName() + ") failed");
                     throw new InstallerException(errorMessage);
                 }
             }
@@ -446,7 +452,7 @@ public class AutomatedInstaller extends InstallerBase
                 {
                     errorMessage = installData.getLangpack().getString("data.validation.error.title")
                             + ": " + variableSubstitutor.substitute(installData.getLangpack().getString(validator
-                            .getErrorMessageId()));
+                                                                                                                .getErrorMessageId()));
                 }
                 catch (Exception e)
                 {

@@ -25,6 +25,10 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>izpack-compiler</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>izpack-panel</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>

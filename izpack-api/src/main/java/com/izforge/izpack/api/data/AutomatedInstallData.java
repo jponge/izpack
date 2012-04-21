@@ -19,11 +19,6 @@
 
 package com.izforge.izpack.api.data;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.api.event.InstallerListener;
-import com.izforge.izpack.api.rules.RulesEngine;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +26,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.event.InstallerListener;
+import com.izforge.izpack.api.rules.RulesEngine;
 
 /**
  * Encloses information about the install process. This implementation is not thread safe.
@@ -44,6 +44,12 @@ public abstract class AutomatedInstallData implements Serializable
     // --- Static members -------------------------------------------------
     public static final String MODIFY_INSTALLATION = "modify.izpack.install";
     public static final String INSTALLATION_INFORMATION = ".installationinformation";
+
+    /**
+     * The path for multi-volume installation media.
+     */
+    public static final String MEDIA_PATH = "MEDIA_PATH";
+
 
     // --- Instance members -----------------------------------------------
 
@@ -171,7 +177,11 @@ public abstract class AutomatedInstallData implements Serializable
     public final static String HELP_TAG = "help";
     public final static String ISO3_ATTRIBUTE = "iso3";
     public final static String SRC_ATTRIBUTE = "src";
-    private List<InstallerListener> installerListener;
+
+    /**
+     * The listeners.
+     */
+    private List<InstallerListener> installerListener = new ArrayList<InstallerListener>();
 
     /**
      * Constructs an <tt>AutomatedInstallData</tt>.
@@ -261,6 +271,26 @@ public abstract class AutomatedInstallData implements Serializable
      * @see #setDefaultInstallPath
      */
     public abstract String getDefaultInstallPath();
+
+    /**
+     * Sets the media path for multi-volume installation.
+     *
+     * @param path the media path. May be <tt>null</tt>
+     */
+    public void setMediaPath(String path)
+    {
+        setVariable(MEDIA_PATH, path);
+    }
+
+    /**
+     * Returns the media path for multi-volume installation.
+     *
+     * @return the media path. May be <tt>null</tt>
+     */
+    public String getMediaPath()
+    {
+        return getVariable(MEDIA_PATH);
+    }
 
     /**
      * Returns the value of the named attribute.

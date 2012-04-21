@@ -43,6 +43,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.OverrideType;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
@@ -809,13 +810,17 @@ public abstract class UnpackerBase implements IUnpacker
             // hide the pack name if pack is hidden
             result = "";
         }
-        else if (pack.id != null && !"".equals(pack.id))
+        else if (pack.id != null && pack.id.length() != 0)
         {
             // the pack has an id - if there is a language pack entry for it, use it instead
-            String name = getInstallData().getLangpack().getString(pack.id);
-            if (name != null && !"".equals(name))
+            LocaleDatabase langPack = getInstallData().getLangpack();
+            if (langPack != null)
             {
-                result = name;
+                String name = langPack.getString(pack.id);
+                if (name != null && !"".equals(name))
+                {
+                    result = name;
+                }
             }
         }
         return result;

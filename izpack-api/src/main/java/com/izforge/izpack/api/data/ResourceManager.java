@@ -21,10 +21,6 @@
 
 package com.izforge.izpack.api.data;
 
-import com.izforge.izpack.api.exception.IzPackException;
-import com.izforge.izpack.api.exception.ResourceNotFoundException;
-
-import javax.swing.ImageIcon;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +30,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
+
+import javax.swing.ImageIcon;
+
+import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.api.exception.ResourceNotFoundException;
 
 /**
  * With this ResourceManager you are able to get resources from the jar file.
@@ -61,6 +62,11 @@ public class ResourceManager
     private String locale = "";
 
     /**
+     * The loader to use to load resources.
+     */
+    private final ClassLoader loader;
+
+    /**
      * The base path where to find the resources: resourceBasePathDefaultConstant = "/res/"
      */
     public final String resourceBasePathDefaultConstant = "/resources/";
@@ -84,7 +90,19 @@ public class ResourceManager
      */
     public ResourceManager(Properties properties)
     {
+        this(properties, ClassLoader.getSystemClassLoader());
+    }
+
+    /**
+     * Constructs a <tt>ResourceManager</tt>.
+     *
+     * @param properties the properties
+     * @param loader     the class loader to use to load resources
+     */
+    public ResourceManager(Properties properties, ClassLoader loader)
+    {
         this.locale = "eng";
+        this.loader = loader;
         final String systemPropertyBundleName = properties.getProperty("resource.bundle.system.property");
         if (systemPropertyBundleName != null)
         {
@@ -180,7 +198,7 @@ public class ResourceManager
         InputStream in;
 
         String resourcePath = resource + "_" + this.locale;
-        in = ClassLoader.getSystemResourceAsStream(resourcePath);
+        in = getResourceAsStream(resourcePath);
         if (in != null)
         {
             return resourcePath;
@@ -188,7 +206,7 @@ public class ResourceManager
         else
         {
             // if there's no language dependent resource found
-            in = ClassLoader.getSystemResourceAsStream(resource);
+            in = getResourceAsStream(resource);
             if (in != null)
             {
                 return resource;
@@ -198,10 +216,10 @@ public class ResourceManager
                 if (resource.charAt(0) == '/')
                 {
                     return getAbsoluteLanguageResourceString(resource
-                            .substring(1));
+                                                                     .substring(1));
                 }
                 throw new ResourceNotFoundException("Cannot find named Resource: '" + resource
-                        + "' AND '" + resourcePath + "'");
+                                                            + "' AND '" + resourcePath + "'");
             }
         }
     }
@@ -224,7 +242,7 @@ public class ResourceManager
     public InputStream getInputStream(String resource) throws ResourceNotFoundException
     {
         String resourcepath = this.getLanguageResourceString(resource);
-        return ClassLoader.getSystemResourceAsStream(resourcepath);
+        return getResourceAsStream(resourcepath);
     }
 
     /**
@@ -241,7 +259,7 @@ public class ResourceManager
         {
             return defaultValue;
         }
-        return ClassLoader.getSystemResourceAsStream(resourcepath);
+        return getResourceAsStream(resourcepath);
     }
 
     /**
@@ -253,9 +271,8 @@ public class ResourceManager
      */
     public URL getLocalizedURL(String resource)
     {
-        return ClassLoader.getSystemResource(this.getLanguageResourceString(resource));
+        return getResource(getLanguageResourceString(resource));
     }
-
 
     private URL getURL(String resource)
     {
@@ -386,7 +403,7 @@ public class ResourceManager
     public InputStream getLangPack(String localeISO3)
     {
         return ClassLoader.getSystemResourceAsStream(getResourceBasePath() + "/langpacks/"
-                + localeISO3 + ".xml");
+                                                             + localeISO3 + ".xml");
     }
 
     /**
@@ -421,6 +438,28 @@ public class ResourceManager
             throw new IzPackException("Could not read the langpack", e);
         }
         return available;
+    }
+
+    /**
+     * Returns a resource given its name.
+     *
+     * @param name the resource name
+     * @return the resource, or <tt>null</tt> if it is not found
+     */
+    protected URL getResource(String name)
+    {
+        return loader.getResource(name);
+    }
+
+    /**
+     * Returns an input stream for reading the specified resource.
+     *
+     * @param name the resource name
+     * @return the resource, or <tt>null</tt> if it is not found
+     */
+    protected InputStream getResourceAsStream(String name)
+    {
+        return loader.getResourceAsStream(name);
     }
 
     protected void setBundleName(String bundleName)
