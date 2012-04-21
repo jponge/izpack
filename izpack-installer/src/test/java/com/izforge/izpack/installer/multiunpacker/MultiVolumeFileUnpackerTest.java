@@ -1,4 +1,4 @@
-package com.izforge.izpack.installer.unpacker;
+package com.izforge.izpack.installer.multiunpacker;
 
 
 import static org.junit.Assert.assertFalse;
@@ -21,7 +21,8 @@ import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.core.io.FileSpanningInputStream;
 import com.izforge.izpack.core.io.FileSpanningOutputStream;
 import com.izforge.izpack.core.io.VolumeLocator;
-import com.izforge.izpack.installer.multiunpacker.MultiVolumeFileUnpacker;
+import com.izforge.izpack.installer.unpacker.AbstractFileUnpackerTest;
+import com.izforge.izpack.installer.unpacker.FileUnpacker;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.Platforms;
 import com.izforge.izpack.util.os.FileQueue;
