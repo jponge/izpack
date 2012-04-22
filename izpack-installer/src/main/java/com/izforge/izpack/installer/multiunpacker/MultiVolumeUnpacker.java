@@ -39,6 +39,7 @@ import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.unpacker.Cancellable;
 import com.izforge.izpack.installer.unpacker.FileUnpacker;
+import com.izforge.izpack.installer.unpacker.LooseFileUnpacker;
 import com.izforge.izpack.installer.unpacker.UnpackerBase;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.Librarian;
@@ -176,12 +177,18 @@ public class MultiVolumeUnpacker extends UnpackerBase
     protected FileUnpacker createFileUnpacker(PackFile file, Pack pack, FileQueue queue, Cancellable cancellable)
             throws IOException, InstallerException
     {
-        if (pack.loose || file.isPack200Jar())
+        FileUnpacker unpacker;
+        if (pack.loose)
         {
-            return super.createFileUnpacker(file, pack, queue, cancellable);
+            unpacker = new LooseFileUnpacker(getLoosePackFileDir(file), cancellable, getHandler(), queue,
+                                             getPlatform(), getLibrarian());
         }
-        return new MultiVolumeFileUnpacker(volumes, cancellable, getHandler(), queue, getPlatform(),
-                                           getLibrarian());
+        else
+        {
+            unpacker = new MultiVolumeFileUnpacker(volumes, cancellable, getHandler(), queue, getPlatform(),
+                                                   getLibrarian());
+        }
+        return unpacker;
     }
 
     /**
@@ -206,6 +213,34 @@ public class MultiVolumeUnpacker extends UnpackerBase
     {
         super.cleanup();
         FileUtils.close(volumes);
+    }
+
+    /**
+     * Tries to determine the source directory of a loose pack file.
+     *
+     * @param file the pack file
+     * @return the source directory
+     * @throws IOException        for any I/O error
+     * @throws InstallerException for any installer error
+     */
+    private File getLoosePackFileDir(PackFile file) throws IOException, InstallerException
+    {
+        File result = getAbsoluteInstallSource();
+        File loose = new File(result, file.getRelativeSourcePath());
+        if (!loose.exists())
+        {
+            File volume = volumes.getVolume();
+            File dir = volume.getParentFile();
+            if (dir != null)
+            {
+                loose = new File(dir, file.getRelativeSourcePath());
+                if (loose.exists())
+                {
+                    result = dir;
+                }
+            }
+        }
+        return result;
     }
 
 }

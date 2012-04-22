@@ -159,7 +159,32 @@ public class FileSpanningInputStream extends InputStream
     @Override
     public long skip(long n) throws IOException
     {
-        return zippedInputStream.skip(n);
+        long skipped = zippedInputStream.skip(n);
+        long count = skipped;
+        while (skipped != -1 && skipped < n)
+        {
+            n -= skipped;
+            skipped = zippedInputStream.skip(n);
+            if (skipped != -1)
+            {
+                count += skipped;
+            }
+        }
+        if (count != -1)
+        {
+            filePointer += count;
+        }
+        return count;
+    }
+
+    /**
+     * Returns the volume being read.
+     *
+     * @return the volume being read
+     */
+    public File getVolume()
+    {
+        return spanningInputStream.getVolume();
     }
 
     /**
@@ -206,6 +231,11 @@ public class FileSpanningInputStream extends InputStream
          */
         private VolumeLocator locator;
 
+        /**
+         * The current volume.
+         */
+        private File current;
+
 
         /**
          * Constructs a <tt>SpanningInputStream</tt>.
@@ -218,6 +248,7 @@ public class FileSpanningInputStream extends InputStream
         {
             basePath = volume.getAbsolutePath();
             stream = new FileInputStream(volume);
+            current = volume;
             this.volumes = volumes;
 
             // read magic number
@@ -302,6 +333,16 @@ public class FileSpanningInputStream extends InputStream
         }
 
         /**
+         * Returns the volume being read.
+         *
+         * @return the volume being read
+         */
+        public File getVolume()
+        {
+            return current;
+        }
+
+        /**
          * Closes this input stream and releases any system resources associated
          * with the stream.
          *
@@ -343,6 +384,7 @@ public class FileSpanningInputStream extends InputStream
                             // try to open new stream to next volume
                             FileUtils.close(stream);
                             stream = new FileInputStream(volume);
+                            current = volume;
                             checkMagicNumber();
                             found = true;
                         }

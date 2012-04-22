@@ -68,38 +68,43 @@ public class MultiVolumeUnpackerTest
     public void testUnpack() throws Exception
     {
         File baseDir = temporaryFolder.getRoot();
-        File installerJar = new File(baseDir, "installer.jar");
+        File packageDir = new File(baseDir, "package");
+        File installerJar = new File(packageDir, "installer.jar");
         File installDir = new File(baseDir, "install");
-
-        MultiVolumePackager packager = createPackager(baseDir, installerJar);
+        assertTrue(packageDir.mkdir());
 
         // create some packs
-        PackInfo base = new PackInfo("Base pack", "base", "The base package", true, false, null, true);
         File file1 = createFile(baseDir, "file1.dat", 1024);
         File file2 = createFile(baseDir, "file2.dat", 2048);
         File file3 = createFile(baseDir, "file3.dat", 4096);
-        addFiles(base, baseDir, file1, file2, file3);
+        PackInfo base = createPack("base", baseDir, file1, file2, file3);
 
-        PackInfo pack1 = new PackInfo("Pack 1", "pack1", "The first pack", true, false, null, true);
         File file4 = createFile(baseDir, "file4.dat", 8192);
         File file5 = createFile(baseDir, "file5.dat", 16384);
         File file6 = createFile(baseDir, "file6.dat", 32768);
-        addFiles(pack1, baseDir, file4, file5, file6);
+        PackInfo pack1 = createPack("pack1", baseDir, file4, file5, file6);
 
-        PackInfo pack2 = new PackInfo("Pack 2", "pack2", "The second pack", true, false, null, true);
         File file7 = createFile(baseDir, "file7.dat", 65536);
         File file8 = createFile(baseDir, "file8.dat", 131072);
         File file9 = createFile(baseDir, "file9.dat", 262144);
-        addFiles(pack2, baseDir, file7, file8, file9);
+        PackInfo pack2 = createPack("pack2", baseDir, file7, file8, file9);
 
+        // pack3 is loose - i.e. content should not be stored in the volumes
+        File file10 = createFile(baseDir, "file10.dat", 100);
+        PackInfo pack3 = createPack("pack3", baseDir, file10);
+        pack3.getPack().loose = true;
+
+        MultiVolumePackager packager = createPackager(baseDir, installerJar);
+
+        long firstVolumeSize = 40000;
         long maxVolumeSize = 100000;
-        long freeSpace = 60000;
+        packager.setMaxFirstVolumeSize(firstVolumeSize);
         packager.setMaxVolumeSize(maxVolumeSize);
-        packager.setFirstVolumeFreeSpace(freeSpace);
 
         packager.addPack(base);
         packager.addPack(pack1);
         packager.addPack(pack2);
+        packager.addPack(pack3);
 
         // package the installer
         packager.createInstaller();
@@ -109,35 +114,77 @@ public class MultiVolumeUnpackerTest
 
         // verify the installer volumes have been created
         ResourceManager resources = createResourceManager(installerJar);
-        checkVolumes(baseDir, resources, maxVolumeSize, freeSpace);
+        checkVolumes(packageDir, resources, firstVolumeSize, maxVolumeSize);
+
+        // verify the loose pack files are present
+        assertTrue(new File(packageDir, file10.getName()).exists());
 
         // unpack the installer
-        AutomatedInstallData installData = createInstallData(baseDir, installDir, resources);
+        AutomatedInstallData installData = createInstallData(packageDir, installDir, resources);
+        setSelectedPacks(installData, "base", "pack2", "pack3");  // exclude pack1 from installation
         MultiVolumeUnpacker unpacker = createUnpacker(resources, installData);
         unpacker.unpack();
 
         // verify the expected files exists in the installation directory
-        checkFile(installDir, file1);
-        checkFile(installDir, file2);
-        checkFile(installDir, file3);
-        checkFile(installDir, file4);
-        checkFile(installDir, file5);
-        checkFile(installDir, file6);
-        checkFile(installDir, file7);
-        checkFile(installDir, file8);
-        checkFile(installDir, file9);
+        checkInstalled(installDir, file1);
+        checkInstalled(installDir, file2);
+        checkInstalled(installDir, file3);
+        checkInstalled(installDir, file7);
+        checkInstalled(installDir, file8);
+        checkInstalled(installDir, file9);
+        checkInstalled(installDir, file10); // loose pack file
+
+        // verify the pack1 files are not installed
+        checkNotInstalled(installDir, file4);
+        checkNotInstalled(installDir, file5);
+        checkNotInstalled(installDir, file6);
+    }
+
+    /**
+     * Helper to set the selected packs.
+     *
+     * @param installData the installation data
+     * @param packIds     the identifiers of the packs to select
+     */
+    private void setSelectedPacks(AutomatedInstallData installData, String... packIds)
+    {
+        for (String id : packIds)
+        {
+            for (Pack pack : installData.getAvailablePacks())
+            {
+                if (pack.id.equals(id))
+                {
+                    installData.getSelectedPacks().add(pack);
+                    break;
+                }
+            }
+        }
+        assertEquals(packIds.length, installData.getSelectedPacks().size());
+    }
+
+    /**
+     * Creates a new pack.
+     *
+     * @param id the pack id
+     * @return a new pack
+     */
+    private PackInfo createPack(String id, File baseDir, File... files) throws IOException
+    {
+        PackInfo pack = new PackInfo(id + " pack", id, "The " + id + " package", false, false, null, true);
+        addFiles(pack, baseDir, files);
+        return pack;
     }
 
     /**
      * Verifies that there are multiple volumes of the expected size.
      *
-     * @param baseDir       the directory to find the volumes in
-     * @param resources     the resources used to determine the volume name and count
-     * @param maxVolumeSize the maximum volume size
-     * @param freeSpace     the first volume free space size
+     * @param dir                the directory to find the volumes in
+     * @param resources          the resources used to determine the volume name and count
+     * @param maxFirstVolumeSize the maximum size of the first volume
+     * @param maxVolumeSize      the maximum volume size for subsequent volumes
      * @throws IOException for any I/O error
      */
-    private void checkVolumes(File baseDir, ResourceManager resources, long maxVolumeSize, long freeSpace)
+    private void checkVolumes(File dir, ResourceManager resources, long maxFirstVolumeSize, long maxVolumeSize)
             throws IOException
     {
         // get the volume information
@@ -148,14 +195,14 @@ public class MultiVolumeUnpackerTest
         assertTrue(count >= 1);
 
         // verify the primary volume exists, with the expected size
-        File volume = new File(baseDir, name);
+        File volume = new File(dir, name);
         assertTrue(volume.exists());
-        assertEquals(maxVolumeSize - freeSpace, volume.length());
+        assertEquals(maxFirstVolumeSize, volume.length());
 
         // check the existence and size of the remaining volumes
         for (int i = 1; i < count; ++i)
         {
-            volume = new File(baseDir, name + "." + i);
+            volume = new File(dir, name + "." + i);
             assertTrue(volume.exists());
             if (i < count - 1)
             {
@@ -205,7 +252,6 @@ public class MultiVolumeUnpackerTest
         installData.setInfo(new Info());
         List<Pack> packs = getPacks(resources);
         installData.setAvailablePacks(packs);
-        installData.setSelectedPacks(packs);
         return installData;
     }
 
@@ -316,12 +362,26 @@ public class MultiVolumeUnpackerTest
      * @param expected   the file that should be installed
      * @throws IOException for any I/O error
      */
-    private void checkFile(File installDir, File expected) throws IOException
+    private void checkInstalled(File installDir, File expected) throws IOException
     {
         File file = new File(installDir, expected.getName());
         assertTrue(file.exists());
         assertFalse(file.getAbsolutePath().equals(expected.getAbsolutePath()));
+        assertEquals(expected.length(), file.length());
         assertEquals(FileUtils.checksumCRC32(expected), FileUtils.checksumCRC32(file));
+    }
+
+    /**
+     * Verifies a file has not been installed.
+     *
+     * @param installDir the installation directory
+     * @param source     the file that should not have been installed
+     * @throws IOException for any I/O error
+     */
+    private void checkNotInstalled(File installDir, File source) throws IOException
+    {
+        File file = new File(installDir, source.getName());
+        assertFalse(file.exists());
     }
 
 }
