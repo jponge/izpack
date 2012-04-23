@@ -21,7 +21,7 @@ import com.izforge.izpack.util.os.FileQueue;
  *
  * @author Tim Anderson
  */
-class LooseFileUnpacker extends FileUnpacker
+public class LooseFileUnpacker extends FileUnpacker
 {
 
     /**

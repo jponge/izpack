@@ -98,6 +98,49 @@ public class FileSpanningStreamTest
     }
 
     /**
+     * Tests the {@link FileSpanningInputStream#skip(long)} method.
+     *
+     * @throws IOException for any I/O error
+     */
+    @Test
+    public void testSkip() throws IOException
+    {
+        File volume = new File(temporaryFolder.getRoot(), "volume");
+        FileSpanningOutputStream spanningOutputStream = new FileSpanningOutputStream(volume, 1024);
+
+        // write 100K of random data
+        byte[] written = new byte[100000];
+        new Random().nextBytes(written);
+        spanningOutputStream.write(written);
+        spanningOutputStream.close();
+
+        // open the volumes
+        int volumes = spanningOutputStream.getVolumes();
+        FileSpanningInputStream spanningInputStream = new FileSpanningInputStream(volume, volumes);
+        assertEquals(0, spanningInputStream.getFilePointer());
+
+        // skip half of the data
+        int skip = written.length / 2;
+        assertEquals(skip, spanningInputStream.skip(skip));
+        assertEquals(skip, spanningInputStream.getFilePointer());
+
+        // read the remaining half
+        byte[] read = new byte[written.length - skip];
+        assertEquals(read.length, spanningInputStream.read(read));
+        assertEquals(written.length, spanningInputStream.getFilePointer());
+
+        // verify the read data matches that expected
+        for (int i = 0; i < read.length; ++i)
+        {
+            assertEquals(written[i + skip], read[i]);
+        }
+
+        // check that there is nothing left to read
+        assertEquals(-1, spanningInputStream.read(read));
+        spanningInputStream.close();
+    }
+
+    /**
      * Writes 10GB of random data and verifies it can be read back in.
      *
      * @throws IOException for any I/O exception
