@@ -85,12 +85,18 @@ public class MultiVolumeInstallationTest
         // run the compiler
         compiler.launchCompilation();
 
+        // verify loose packed files have been copied to the target dir
+        assertFileExists(targetDir, file5.getName());
+        assertFileExists(targetDir, file6.getName());
+
+        // verify no other source exists in the target dir
+        assertFileNotExists(targetDir, file1.getName());
+        assertFileNotExists(targetDir, file2.getName());
+        assertFileNotExists(targetDir, file3.getName());
+        assertFileNotExists(targetDir, file4.getName());
+
         // now run the installer
         GUIInstallerContainer installer = new TestGUIInstallerContainer();
-
-        InstallerController controller = installer.getComponent(InstallerController.class);
-        LanguageDialog languageDialog = installer.getComponent(LanguageDialog.class);
-        InstallerFrame installerFrame = installer.getComponent(InstallerFrame.class);
         GUIInstallData installData = installer.getComponent(GUIInstallData.class);
 
         // write to temporary folder so the test doesn't need to be run with elevated permissions
@@ -98,8 +104,48 @@ public class MultiVolumeInstallationTest
         installData.setInstallPath(installPath.getAbsolutePath());
         installData.setMediaPath(targetDir.getPath());
 
+        install(installer, installData, installPath);
+
+        // verify expected files exist
+        assertFileEquals(file1, installPath, file1.getName());
+        assertFileEquals(file2, installPath, file2.getName());
+        assertFileEquals(file5, installPath, file5.getName());
+        assertFileEquals(file6, installPath, file6.getName());
+
+        assertFileExists(installPath, "auto.xml");
+
+        // verify skipped pack1 files not present
+        assertFileNotExists(installPath, file3.getName());
+        assertFileNotExists(installPath, file4.getName());
+
+        // now uninstall it
+        UninstallHelper.uninstall(installData);
+
+        assertFileNotExists(installPath, file1.getName());
+        assertFileNotExists(installPath, file2.getName());
+        assertFileNotExists(installPath, file5.getName());
+        assertFileNotExists(installPath, file6.getName());
+
+        assertFileNotExists(installPath);
+    }
+
+    /**
+     * Performs the installation.
+     *
+     * @param installer   the installer
+     * @param installData the installation data
+     * @param installPath the installation path
+     * @throws Exception for any error
+     */
+    private void install(GUIInstallerContainer installer, GUIInstallData installData, File installPath) throws Exception
+    {
+        InstallerController controller = installer.getComponent(InstallerController.class);
+        LanguageDialog languageDialog = installer.getComponent(LanguageDialog.class);
+        InstallerFrame installerFrame = installer.getComponent(InstallerFrame.class);
+
         // Lang picker
         HelperTestMethod.clickDefaultLang(languageDialog);
+
 
         fixture = HelperTestMethod.prepareFrameFixture(installerFrame, controller);
         Thread.sleep(600);
@@ -138,17 +184,8 @@ public class MultiVolumeInstallationTest
         Thread.sleep(300);
         fixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).approve();
 
-        // verify expected files exist
-        assertFileEquals(file1, installPath, file1.getName());
-        assertFileEquals(file2, installPath, file2.getName());
-        assertFileEquals(file5, installPath, file5.getName());
-        assertFileEquals(file6, installPath, file6.getName());
-
-        assertFileExists(installPath, "auto.xml");
-
-        // verify skipped pack1 files not present
-        assertFileNotExists(installPath, file3.getName());
-        assertFileNotExists(installPath, file4.getName());
+        Thread.sleep(1200);
+        fixture.button(GuiId.BUTTON_QUIT.id).click();
     }
 
 
