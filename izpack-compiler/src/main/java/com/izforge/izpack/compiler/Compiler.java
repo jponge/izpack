@@ -99,14 +99,24 @@ public class Compiler extends Thread
      * Constructs a <tt>Compiler</tt>.
      *
      * @param compilerHelper   the compiler helper
-     * @param packager         the packager
      * @param classPathCrawler the class path crawler
      */
-    public Compiler(CompilerHelper compilerHelper, IPackager packager, ClassPathCrawler classPathCrawler)
+    public Compiler(CompilerHelper compilerHelper, ClassPathCrawler classPathCrawler)
     {
         this.compilerHelper = compilerHelper;
-        this.packager = packager;
         this.classPathCrawler = classPathCrawler;
+    }
+
+    /**
+     * Sets the packager.
+     * <p/>
+     * This must be set before invoking any other methods.
+     *
+     * @param packager the packager
+     */
+    public void setPackager(IPackager packager)
+    {
+        this.packager = packager;
     }
 
     /**
@@ -195,8 +205,8 @@ public class Compiler extends Thread
                         if (pack1.preselected && pack2.preselected)
                         {
                             error("Packs " + pack1.name + " and " + pack2.name +
-                                    " belong to the same excludeGroup " + pack1.excludeGroup +
-                                    " and are both preselected. This is not allowed.");
+                                          " belong to the same excludeGroup " + pack1.excludeGroup +
+                                          " and are both preselected. This is not allowed.");
                         }
                     }
                 }
@@ -397,7 +407,7 @@ public class Compiler extends Thread
         if (!className.equals(existing))
         {
             throw new IllegalArgumentException("Expected fully qualified class name for class: " + existing
-                    + ", but got: " + className);
+                                                       + ", but got: " + className);
         }
     }
 

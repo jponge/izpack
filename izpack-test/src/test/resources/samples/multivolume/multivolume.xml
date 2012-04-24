@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<!-- 
+    A sample installation file.
+    Use it as a base for your own installers :-)
+    
+    To compile it :
+    - go in the bin directory where you installed IzPack
+    - call "compile ../sample/install.xml -b ../sample"
+-->
+
+<installation version="1.0">
+
+    <!-- 
+        The info section.
+        The meaning of the tags should be natural ...
+    -->
+    <info>
+        <appname>Test Multi-volume Installation</appname>
+        <appversion>1.0</appversion>
+    </info>
+
+    <variables>
+        <variable name="scriptFile" value="script.bat"/>
+    </variables>
+    <dynamicvariables>
+        <variable name="myPath" value="$INSTALL_PATH/test"/>
+    </dynamicvariables>
+
+    <guiprefs width="640" height="480" resizable="yes"/>
+
+    <locale>
+        <langpack iso3="eng"/>
+    </locale>
+
+    <resources>
+        <res id="LicencePanel.licence" src="Licence.txt"/>
+        <res id="InfoPanel.info" src="Readme.txt"/>
+    </resources>
+
+    <packaging>
+        <packager class="com.izforge.izpack.compiler.packager.impl.MultiVolumePackager">
+            <options volumesize="100000" firstvolumefreespace="50000"/>
+        </packager>
+        <unpacker class="com.izforge.izpack.installer.multiunpacker.MultiVolumeUnpacker"/>
+    </packaging>
+
+    <panels>
+        <panel classname="HelloPanel"/>
+        <panel classname="InfoPanel"/>
+        <panel classname="LicencePanel"/>
+        <panel classname="TargetPanel"/>
+        <panel classname="PacksPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="FinishPanel"/>
+    </panels>
+
+    <packs>
+        <pack name="Base" required="yes">
+            <description>The base files</description>
+            <file src="file1.dat" targetdir="$INSTALL_PATH"/>
+            <file src="file2.dat" targetdir="$INSTALL_PATH"/>
+            <file src="script.bat" targetdir="$myPath"/>
+            <parsable targetfile="$INSTALL_PATH/test/$scriptFile"/>
+            <!-- The file will be parsed -->
+        </pack>
+        <pack name="pack1" required="no" preselected="no">
+            <description>Pack 1</description>
+            <file src="file3.dat" targetdir="$INSTALL_PATH"/>
+            <file src="file4.dat" targetdir="$INSTALL_PATH"/>
+        </pack>
+        <pack name="pack2" required="yes">
+            <description>Pack 2</description>
+            <file src="file5.dat" targetdir="$INSTALL_PATH"/>
+            <file src="file6.dat" targetdir="$INSTALL_PATH"/>
+        </pack>
+    </packs>
+
+</installation>

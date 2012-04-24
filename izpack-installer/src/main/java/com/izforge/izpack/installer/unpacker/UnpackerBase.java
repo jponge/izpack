@@ -422,7 +422,7 @@ public abstract class UnpackerBase implements IUnpacker
         ObjectInputStream packInputStream = null;
         try
         {
-            in = getPackStream(pack.id, pack.uninstall);
+            in = getPackStream(pack.name, pack.uninstall);
             packInputStream = new ObjectInputStream(in);
 
             int fileCount = packInputStream.readInt();
@@ -829,23 +829,23 @@ public abstract class UnpackerBase implements IUnpacker
     /**
      * Returns a stream to a pack, location depending on if it's web based.
      *
-     * @param packId    the pack id
+     * @param name      the pack name
      * @param uninstall <tt>true</tt> if pack must be uninstalled
      * @return the stream or null if it could not be found.
      * @throws Exception Description of the Exception
      */
-    protected InputStream getPackStream(String packId, boolean uninstall) throws Exception
+    protected InputStream getPackStream(String name, boolean uninstall) throws Exception
     {
         InputStream in;
 
         String webDirURL = installData.getInfo().getWebDirURL();
 
-        packId = "-" + packId;
+        name = "-" + name;
 
         if (webDirURL == null)
         {
             // local
-            in = resourceManager.getInputStream("packs/pack" + packId);
+            in = resourceManager.getInputStream("packs/pack" + name);
         }
         else
         {
@@ -856,7 +856,7 @@ public abstract class UnpackerBase implements IUnpacker
 
             // See compiler.Packager#getJarOutputStream for the counterpart
             String baseName = installData.getInfo().getInstallerBase();
-            String packURL = webDirURL + "/" + baseName + ".pack" + packId + ".jar";
+            String packURL = webDirURL + "/" + baseName + ".pack" + name + ".jar";
             String tempFolder = IoHelper.translatePath(
                     installData.getInfo().getUninstallerPath() + tempSubPath, variableSubstitutor);
             String tempFile;
@@ -876,7 +876,7 @@ public abstract class UnpackerBase implements IUnpacker
                     throw new InstallerException("Installation failed", e);
                 }
             }
-            URL url = new URL("jar:" + tempFile + "!/packs/pack" + packId);
+            URL url = new URL("jar:" + tempFile + "!/packs/pack" + name);
 
             //URL url = new URL("jar:" + packURL + "!/packs/pack" + packid);
             // JarURLConnection jarConnection = (JarURLConnection)

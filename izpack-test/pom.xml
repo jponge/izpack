@@ -31,10 +31,6 @@
         </dependency>
 
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
             <groupId>jakarta-regexp</groupId>
             <artifactId>jakarta-regexp</artifactId>
         </dependency>
@@ -43,6 +39,17 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>izpack-compiler</artifactId>
+            <classifier>tests</classifier>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>izpack-installer</artifactId>
+            <classifier>tests</classifier>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>izpack-uninstaller</artifactId>
+            <version>${project.version}</version>
             <classifier>tests</classifier>
         </dependency>
         <dependency>

@@ -24,7 +24,8 @@ import com.izforge.izpack.test.junit.PicoRunner;
 
 @RunWith(PicoRunner.class)
 @Container(TestCompilationContainer.class)
-public class IzpackGenerationTest {
+public class IzpackGenerationTest
+{
     @Rule
     public TestRule globalTimeout = new Timeout(HelperTestMethod.TIMEOUT);
 
@@ -48,7 +49,7 @@ public class IzpackGenerationTest {
     @InstallFile("samples/izpack/install.xml")
     public void testGeneratedIzpackInstaller() throws Exception
     {
-        assertThat((ZipFile)jar, ZipMatcher.isZipContainingFiles(
+        assertThat((ZipFile) jar, ZipMatcher.isZipContainingFiles(
                 "com/izforge/izpack/panels/hello/HelloPanel.class"
         ));
     }

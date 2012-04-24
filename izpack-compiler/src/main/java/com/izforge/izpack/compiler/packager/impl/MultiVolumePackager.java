@@ -159,7 +159,7 @@ public class MultiVolumePackager extends PackagerBase
     {
         if (data != null)
         {
-            long freeSpace = Long.valueOf(data.getAttribute(FIRST_VOLUME_FREE_SPACE), 0);
+            long freeSpace = Long.valueOf(data.getAttribute(FIRST_VOLUME_FREE_SPACE, "0"));
             long size = Long.valueOf(data.getAttribute(VOLUME_SIZE, Long.toString(maxVolumeSize)));
 
             setMaxFirstVolumeSize(size - freeSpace);
@@ -168,7 +168,9 @@ public class MultiVolumePackager extends PackagerBase
     }
 
     /**
-     * Write packs to the installer jar, or each to a separate jar.
+     * Writes packs to one or more <em>.pak</em> volumes.
+     * <p/>
+     * Pack meta-data is written to the installer jar.
      *
      * @throws IOException for any I/O error
      */
@@ -181,29 +183,54 @@ public class MultiVolumePackager extends PackagerBase
         getVariables().setProperty(classname + "." + FIRST_VOLUME_FREE_SPACE, Long.toString(maxFirstVolumeSize));
         getVariables().setProperty(classname + "." + VOLUME_SIZE, Long.toString(maxVolumeSize));
 
-        // Pack File data may be written to separate jars
-        writePacks(new File(getInfo().getInstallerBase()));
+        List<PackInfo> packs = getPacksList();
+        final int count = packs.size();
+        sendMsg("Writing " + count + " Pack" + (count > 1 ? "s" : "") + " into installer");
+        logger.fine("Writing " + count + " Pack" + (count > 1 ? "s" : "") + " into installer");
+        logger.fine("First volume size: " + maxFirstVolumeSize);
+        logger.fine("Subsequent volume size: " + maxVolumeSize);
+
+        File volume = new File(getInfo().getInstallerBase() + ".pak").getAbsoluteFile();
+        int volumes = writePacks(packs, volume);
+
+        // write metadata for reading in volumes
+        logger.fine("Written " + volumes + " volumes");
+
+        JarOutputStream installerJar = getInstallerJar();
+        installerJar.putNextEntry(new ZipEntry(RESOURCES_PATH + "volumes.info"));
+        ObjectOutputStream out = new ObjectOutputStream(installerJar);
+        out.writeInt(volumes);
+        out.writeUTF(volume.getName());
+        out.flush();
+        installerJar.closeEntry();
+
+        // Now that we know sizes, write pack metadata to primary jar.
+        installerJar.putNextEntry(new ZipEntry(RESOURCES_PATH + "packs.info"));
+        out = new ObjectOutputStream(installerJar);
+        out.writeInt(count);
+
+        for (PackInfo pack : packs)
+        {
+            out.writeObject(pack.getPack());
+        }
+        out.flush();
+        installerJar.closeEntry();
     }
 
     /**
-     * Write Packs to primary jar or each to a separate jar.
+     * Writes packs to one or more <em>.pak</em> volumes.
+     *
+     * @param packs  the packs to write
+     * @param volume the first volume
+     * @return the no. of volumes written
      */
-    private void writePacks(File primaryFile) throws IOException
+    private int writePacks(List<PackInfo> packs, File volume) throws IOException
     {
-        List<PackInfo> packs = getPacksList();
-        final int num = packs.size();
-        sendMsg("Writing " + num + " Pack" + (num > 1 ? "s" : "") + " into installer");
-        logger.fine("Writing " + num + " Pack" + (num > 1 ? "s" : "") + " into installer");
-
-        logger.fine("First volume size: " + maxFirstVolumeSize);
-        logger.fine("Subsequent volume size: " + maxVolumeSize);
-        primaryFile = primaryFile.getAbsoluteFile();
-        FileSpanningOutputStream volumes = new FileSpanningOutputStream(primaryFile.getPath() + ".pak",
-                                                                        maxFirstVolumeSize, maxVolumeSize);
-        File targetDir = primaryFile.getParentFile();
+        FileSpanningOutputStream volumes = new FileSpanningOutputStream(volume, maxFirstVolumeSize, maxVolumeSize);
+        File targetDir = volume.getParentFile();
         if (targetDir == null)
         {
-            throw new IOException("Cannot determine parent directory of " + primaryFile);
+            throw new IOException("Cannot determine parent directory of " + volume);
         }
         for (PackInfo packInfo : packs)
         {
@@ -212,30 +239,7 @@ public class MultiVolumePackager extends PackagerBase
 
         volumes.flush();
         volumes.close();
-
-        // write metadata for reading in volumes
-        logger.fine("Written " + volumes.getVolumes() + " volumes");
-        String volumeName = primaryFile.getName() + ".pak";
-
-        JarOutputStream installerJar = getInstallerJar();
-        installerJar.putNextEntry(new ZipEntry(RESOURCES_PATH + "volumes.info"));
-        ObjectOutputStream out = new ObjectOutputStream(installerJar);
-        out.writeInt(volumes.getVolumes());
-        out.writeUTF(volumeName);
-        out.flush();
-        installerJar.closeEntry();
-
-        // Now that we know sizes, write pack metadata to primary jar.
-        installerJar.putNextEntry(new ZipEntry(RESOURCES_PATH + "packs.info"));
-        out = new ObjectOutputStream(installerJar);
-        out.writeInt(packs.size());
-
-        for (PackInfo pack : packs)
-        {
-            out.writeObject(pack.getPack());
-        }
-        out.flush();
-        installerJar.closeEntry();
+        return volumes.getVolumes();
     }
 
     /**
@@ -253,9 +257,10 @@ public class MultiVolumePackager extends PackagerBase
         Pack pack = packInfo.getPack();
         pack.nbytes = 0;
 
-        sendMsg("Writing Pack: " + pack.id, PackagerListener.MSG_VERBOSE);
-        logger.fine("Writing Pack: " + pack.id);
-        ZipEntry entry = new ZipEntry(RESOURCES_PATH + "packs/pack-" + pack.id);
+        String name = pack.name;
+        sendMsg("Writing Pack: " + name, PackagerListener.MSG_VERBOSE);
+        logger.fine("Writing Pack: " + name);
+        ZipEntry entry = new ZipEntry(RESOURCES_PATH + "packs/pack-" + name);
 
         JarOutputStream installerJar = getInstallerJar();
         installerJar.putNextEntry(entry);

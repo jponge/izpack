@@ -1,24 +1,27 @@
 package com.izforge.izpack.test.junit;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+
+import javax.swing.SwingUtilities;
+
+import org.junit.Rule;
+import org.junit.rules.TestRule;
+import org.junit.runner.Description;
+import org.junit.runner.notification.RunNotifier;
+import org.junit.runners.BlockJUnit4ClassRunner;
+import org.junit.runners.model.FrameworkMethod;
+import org.junit.runners.model.InitializationError;
+import org.junit.runners.model.Statement;
+
 import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.test.RunOn;
 import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.Platforms;
-import org.junit.Rule;
-import org.junit.rules.MethodRule;
-import org.junit.runner.notification.RunNotifier;
-import org.junit.runners.BlockJUnit4ClassRunner;
-import org.junit.runners.model.FrameworkField;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.InitializationError;
-import org.junit.runners.model.Statement;
-import org.junit.runners.model.TestClass;
-
-import javax.swing.*;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 /**
  * Custom runner for getting dependencies injected in test with PicoContainer
@@ -55,7 +58,8 @@ public class PicoRunner extends BlockJUnit4ClassRunner
     protected void runChild(FrameworkMethod method, RunNotifier notifier)
     {
         RunOn runOn = method.getAnnotation(RunOn.class);
-        if (runOn == null) {
+        if (runOn == null)
+        {
             runOn = method.getMethod().getDeclaringClass().getAnnotation(RunOn.class);
         }
         boolean ignore = false;
@@ -89,13 +93,19 @@ public class PicoRunner extends BlockJUnit4ClassRunner
     {
         this.method = method;
         Statement statement = super.methodBlock(method);
-        List<FrameworkField> methodRules = new TestClass(containerClass).getAnnotatedFields(Rule.class);
         try
         {
-            for (FrameworkField methodField : methodRules)
+            for (Field field : containerClass.getFields())
             {
-                MethodRule methodRule = (MethodRule) methodField.get(containerInstance);
-                statement = methodRule.apply(statement, method, currentTestInstance);
+                Annotation annotation = field.getAnnotation(Rule.class);
+                if (annotation != null)
+                {
+                    TestRule rule = (TestRule) field.get(containerInstance);
+                    Description description = Description.createTestDescription(
+                            method.getMethod().getDeclaringClass(), method.getName());
+                    statement = rule.apply(statement, description);
+
+                }
             }
         }
         catch (IllegalAccessException e)
@@ -116,7 +126,7 @@ public class PicoRunner extends BlockJUnit4ClassRunner
             {
                 try
                 {
-                    containerInstance = getContainerInstance(containerClass);
+                    containerInstance = createContainer(containerClass);
                     containerInstance.addComponent(klass);
                     currentTestInstance = containerInstance.getComponent(klass);
                 }
@@ -130,28 +140,30 @@ public class PicoRunner extends BlockJUnit4ClassRunner
         return currentTestInstance;
     }
 
-    private Container getContainerInstance(Class<? extends Container> containerClass)
-            throws InvocationTargetException, IllegalAccessException, InstantiationException
+    private Container createContainer(Class<? extends Container> containerClass)
+            throws InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchMethodException
     {
-        Constructor<? extends Container> constructor = getUniqueConstructor(containerClass);
-        if (constructor.getParameterTypes().length == 1)
+        Constructor<? extends Container> constructor;
+        Container result;
+        try
         {
-            return constructor.newInstance(klass);
+            constructor = containerClass.getConstructor(klass.getClass(), method.getClass());
+            result = constructor.newInstance(klass, method);
         }
-        if (constructor.getParameterTypes().length == 2)
+        catch (NoSuchMethodException exception)
         {
-            return constructor.newInstance(klass, method);
+            try
+            {
+                constructor = containerClass.getConstructor(klass.getClass());
+                result = constructor.newInstance(klass);
+            }
+            catch (NoSuchMethodException nested)
+            {
+                constructor = containerClass.getConstructor();
+                result = constructor.newInstance();
+            }
         }
-        return constructor.newInstance();
+        return result;
     }
 
-    private Constructor<? extends Container> getUniqueConstructor(Class<? extends Container> containerClass)
-    {
-        Constructor<?>[] constructors = containerClass.getConstructors();
-        if (constructors.length > 1)
-        {
-            throw new IllegalArgumentException("There should be only one constructor for " + containerClass);
-        }
-        return (Constructor<? extends Container>) constructors[0];
-    }
 }

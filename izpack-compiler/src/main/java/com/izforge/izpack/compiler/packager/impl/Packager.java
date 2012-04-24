@@ -144,7 +144,7 @@ public class Packager extends PackagerBase
 
             // Retrieve the correct output stream
             org.apache.tools.zip.ZipEntry entry = new org.apache.tools.zip.ZipEntry(
-                    RESOURCES_PATH + "packs/pack-" + pack.id);
+                    RESOURCES_PATH + "packs/pack-" + pack.name);
             installerJar.putNextEntry(entry);
             installerJar.flush(); // flush before we start counting
 

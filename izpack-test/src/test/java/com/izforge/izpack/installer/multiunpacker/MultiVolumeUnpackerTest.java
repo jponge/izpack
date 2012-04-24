@@ -1,11 +1,11 @@
 package com.izforge.izpack.installer.multiunpacker;
 
+import static com.izforge.izpack.test.util.TestHelper.assertFileEquals;
+import static com.izforge.izpack.test.util.TestHelper.assertFileNotExists;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -14,9 +14,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.Random;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -44,6 +42,7 @@ import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
+import com.izforge.izpack.test.util.TestHelper;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.Platforms;
@@ -135,9 +134,9 @@ public class MultiVolumeUnpackerTest
         checkInstalled(installDir, file10); // loose pack file
 
         // verify the pack1 files are not installed
-        checkNotInstalled(installDir, file4);
-        checkNotInstalled(installDir, file5);
-        checkNotInstalled(installDir, file6);
+        assertFileNotExists(installDir, file4.getName());
+        assertFileNotExists(installDir, file5.getName());
+        assertFileNotExists(installDir, file6.getName());
     }
 
     /**
@@ -346,13 +345,7 @@ public class MultiVolumeUnpackerTest
      */
     private File createFile(File baseDir, String name, int size) throws IOException
     {
-        File file = new File(baseDir, name);
-        byte[] data = new byte[size];
-        Random random = new Random();
-        random.nextBytes(data);
-        FileOutputStream stream = new FileOutputStream(file);
-        stream.write(data);
-        return file;
+        return TestHelper.createFile(new File(baseDir, name), size);
     }
 
     /**
@@ -365,23 +358,7 @@ public class MultiVolumeUnpackerTest
     private void checkInstalled(File installDir, File expected) throws IOException
     {
         File file = new File(installDir, expected.getName());
-        assertTrue(file.exists());
-        assertFalse(file.getAbsolutePath().equals(expected.getAbsolutePath()));
-        assertEquals(expected.length(), file.length());
-        assertEquals(FileUtils.checksumCRC32(expected), FileUtils.checksumCRC32(file));
-    }
-
-    /**
-     * Verifies a file has not been installed.
-     *
-     * @param installDir the installation directory
-     * @param source     the file that should not have been installed
-     * @throws IOException for any I/O error
-     */
-    private void checkNotInstalled(File installDir, File source) throws IOException
-    {
-        File file = new File(installDir, source.getName());
-        assertFalse(file.exists());
+        assertFileEquals(expected, file);
     }
 
 }

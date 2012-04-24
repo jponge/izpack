@@ -5,7 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.awt.Image;
 import java.io.File;
 
-import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
@@ -40,7 +39,6 @@ public class InstallationTest
 {
     @Rule
     public TestRule globalTimeout = new Timeout(HelperTestMethod.TIMEOUT);
-    private DialogFixture dialogFrameFixture;
     private FrameFixture installerFrameFixture;
     private ResourceManager resourceManager;
     private LanguageDialog languageDialog;
@@ -64,21 +62,10 @@ public class InstallationTest
     @After
     public void tearBinding() throws NoSuchFieldException, IllegalAccessException
     {
-        try
+        if (installerFrameFixture != null)
         {
-            if (dialogFrameFixture != null)
-            {
-                dialogFrameFixture.cleanUp();
-                dialogFrameFixture = null;
-            }
-        }
-        finally
-        {
-            if (installerFrameFixture != null)
-            {
-                installerFrameFixture.cleanUp();
-                installerFrameFixture = null;
-            }
+            installerFrameFixture.cleanUp();
+            installerFrameFixture = null;
         }
     }
 
@@ -176,7 +163,7 @@ public class InstallationTest
     {
         File installPath = HelperTestMethod.prepareInstallation(installData);
         // Lang picker
-        HelperTestMethod.clickDefaultLang(dialogFrameFixture, languageDialog);
+        HelperTestMethod.clickDefaultLang(languageDialog);
 
         installerFrameFixture = HelperTestMethod.prepareFrameFixture(installerFrame, installerController);
         Thread.sleep(600);

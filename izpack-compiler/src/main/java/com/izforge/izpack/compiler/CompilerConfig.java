@@ -208,10 +208,10 @@ public class CompilerConfig extends Thread
      * @param compilerData Object containing all informations found in command line
      */
     public CompilerConfig(CompilerData compilerData, VariableSubstitutor variableSubstitutor, Compiler compiler,
-                          XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager, IPackager packager,
-                          MergeManager mergeManager, AssertionHelper assertionHelper,
-                          ClassPathCrawler classPathCrawler, RulesEngine rules, CompilerPathResolver pathResolver,
-                          ResourceFinder resourceFinder, ObjectFactory factory)
+                          XmlCompilerHelper xmlCompilerHelper, PropertyManager propertyManager,
+                          MergeManager mergeManager, AssertionHelper assertionHelper, ClassPathCrawler classPathCrawler,
+                          RulesEngine rules, CompilerPathResolver pathResolver, ResourceFinder resourceFinder,
+                          ObjectFactory factory)
     {
         this.assertionHelper = assertionHelper;
         this.rules = rules;
@@ -220,7 +220,6 @@ public class CompilerConfig extends Thread
         this.compiler = compiler;
         this.xmlCompilerHelper = xmlCompilerHelper;
         this.propertyManager = propertyManager;
-        this.packager = packager;
         this.mergeManager = mergeManager;
         this.classPathCrawler = classPathCrawler;
         this.pathResolver = pathResolver;
@@ -268,8 +267,7 @@ public class CompilerConfig extends Thread
         propertyManager.setProperty("basedir", base.toString());
 
         // We get the XML data tree
-        IXMLElement data = resourceFinder.
-                getXMLTree();
+        IXMLElement data = resourceFinder.getXMLTree();
 
         // construct compiler listeners to receive all further compiler events
         addCompilerListeners(data);
@@ -303,6 +301,26 @@ public class CompilerConfig extends Thread
 
         // We ask the packager to create the installer
         compiler.createInstaller();
+    }
+
+    /**
+     * Sets the packager.
+     *
+     * @param packager the packager
+     */
+    protected void setPackager(IPackager packager)
+    {
+        this.packager = packager;
+    }
+
+    /**
+     * Returns the packager.
+     *
+     * @return the packager, or <tt>null</tt> if it hasn't been created
+     */
+    protected IPackager getPackager()
+    {
+        return packager;
     }
 
     private void addInstallerRequirement(IXMLElement data) throws CompilerException
@@ -352,14 +370,16 @@ public class CompilerConfig extends Thread
                 unpackerClassname = xmlCompilerHelper.requireAttribute(unpacker, "class");
             }
         }
+        packager = factory.create(packagerClassname, IPackager.class);
         if (packagerElement != null)
         {
             IXMLElement options = packagerElement.getFirstChildNamed("options");
             if (options != null)
             {
-                packager.addConfigurationInformation(options);
+                getPackager().addConfigurationInformation(options);
             }
         }
+        compiler.setPackager(getPackager());
         propertyManager.addProperty("UNPACKER_CLASS", unpackerClassname);
         notifyCompilerListener("loadPackager", CompilerListener.END, data);
     }

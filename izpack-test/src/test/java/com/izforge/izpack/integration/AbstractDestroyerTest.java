@@ -1,13 +1,13 @@
 package com.izforge.izpack.integration;
 
+import static com.izforge.izpack.test.util.TestHelper.assertFileExists;
+
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.core.Is;
 import org.mockito.Mockito;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
@@ -89,7 +89,7 @@ public class AbstractDestroyerTest extends AbstractInstallationTest
         String dir = IoHelper.translatePath(info.getUninstallerPath(), substituter);
         String path = dir + File.separator + info.getUninstallerName();
         File jar = new File(path);
-        MatcherAssert.assertThat(jar.exists(), Is.is(true));
+        assertFileExists(jar);
         return jar;
     }
 }

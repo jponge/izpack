@@ -22,8 +22,6 @@ import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.listener.CmdlinePackagerListener;
-import com.izforge.izpack.compiler.packager.IPackager;
-import com.izforge.izpack.compiler.packager.impl.Packager;
 import com.izforge.izpack.compiler.resource.ResourceFinder;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.factory.DefaultObjectFactory;
@@ -82,7 +80,6 @@ public class CompilerContainer extends AbstractContainer
         addComponent(AssertionHelper.class);
         addComponent(PropertyManager.class);
         addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class);
-        addComponent(IPackager.class, Packager.class);
         addComponent(CompilerHelper.class);
         container.addComponent(RulesEngine.class, RulesEngineImpl.class,
                                new ComponentParameter(ConditionContainer.class));

@@ -1,7 +1,6 @@
 package com.izforge.izpack.compiler.container;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
@@ -18,65 +17,79 @@ import com.izforge.izpack.util.ClassUtils;
 import com.izforge.izpack.util.FileUtil;
 
 /**
- * Container for compilation test
+ * Container for compilation test.
  * <p/>
- * TODO - replace with TestCompilerContainer from izpack-compiler
+ * TODO - merge with TestCompilerContainer from izpack-compiler
  *
  * @author Anthonin Bonnefoy
+ * @author Tim Anderson
  */
 public class TestCompilationContainer extends CompilerContainer
 {
 
     public static final String APPNAME = "Test Installation";
 
-    private Class<?> testClass;
-    private FrameworkMethod frameworkMethod;
+    /**
+     * The install file path.
+     */
+    private final String installFile;
 
-    public TestCompilationContainer(Class<?> testClass, FrameworkMethod frameworkMethod)
+    /**
+     * The directory to locate files.
+     */
+    private File baseDir;
+
+    /**
+     * The directory to write the compile targets to.
+     */
+    private File targetDir;
+
+
+    /**
+     * Constructs a <tt>TestCompilationContainer</tt>.
+     *
+     * @param installFile the install file path
+     * @param targetDir   the directory to write the compile targets to
+     */
+    public TestCompilationContainer(String installFile, File targetDir)
     {
         super(null);
-        this.testClass = testClass;
-        this.frameworkMethod = frameworkMethod;
+        this.installFile = installFile;
+        this.targetDir = targetDir;
         initialise();
     }
 
-
-    public void fillContainer(MutablePicoContainer pico)
+    /**
+     * Constructs a <tt>TestCompilationContainer</tt> for a specific test.
+     *
+     * @param testClass the test class
+     * @param method    the test method
+     */
+    public TestCompilationContainer(Class<?> testClass, FrameworkMethod method)
     {
-        super.fillContainer(pico);
-        try
-        {
-            deleteLock();
-        }
-        catch (IOException exception)
-        {
-            throw new ContainerException(exception);
-        }
-        InstallFile installFile = frameworkMethod.getAnnotation(InstallFile.class);
+        super(null);
+        InstallFile installFile = method.getAnnotation(InstallFile.class);
         if (installFile == null)
         {
             installFile = testClass.getAnnotation(InstallFile.class);
         }
-        String installFileName = installFile.value();
-
-        URL resource = getClass().getClassLoader().getResource(installFileName);
-        if (resource == null)
-        {
-            throw new IllegalStateException("Cannot find install file: " + installFileName);
-        }
-        File installerFile = FileUtil.convertUrlToFile(resource);
-        File baseDir = installerFile.getParentFile();
-
-        File out = new File(baseDir, "out" + Math.random() + ".jar");
-        out.deleteOnExit();
-        CompilerData data = new CompilerData(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(),
-                                             out.getAbsolutePath(), false);
-        pico.addConfig("installFile", installerFile.getAbsolutePath());
-        pico.addComponent(CompilerData.class, data);
-        pico.addComponent(File.class, out);
-        pico.addAdapter(new JarFileProvider());
+        this.installFile = installFile.value();
+        initialise();
     }
 
+    /**
+     * Returns the directory to locate source files relative to.
+     *
+     * @return the base directory
+     */
+    public File getBaseDir()
+    {
+        return baseDir;
+    }
+
+    /**
+     * Launches compilation.
+     */
     public void launchCompilation()
     {
         try
@@ -92,7 +105,44 @@ public class TestCompilationContainer extends CompilerContainer
         }
     }
 
-    private void deleteLock() throws IOException
+    /**
+     * Fills the container.
+     *
+     * @param container the underlying container
+     * @throws ContainerException if initialisation fails, or the container has already been initialised
+     */
+    @Override
+    protected void fillContainer(MutablePicoContainer container)
+    {
+        super.fillContainer(container);
+        deleteLock();
+        URL resource = getClass().getClassLoader().getResource(installFile);
+        if (resource == null)
+        {
+            throw new IllegalStateException("Cannot find install file: " + installFile);
+        }
+        File file = FileUtil.convertUrlToFile(resource);
+        baseDir = file.getParentFile();
+
+        if (targetDir == null)
+        {
+            targetDir = baseDir;
+        }
+
+        File out = new File(targetDir, "out" + Math.random() + ".jar");
+        out.deleteOnExit();
+        CompilerData data = new CompilerData(file.getAbsolutePath(), baseDir.getAbsolutePath(), out.getAbsolutePath(),
+                                             false);
+        container.addConfig("installFile", file.getAbsolutePath());
+        container.addComponent(CompilerData.class, data);
+        container.addComponent(File.class, out);
+        container.addAdapter(new JarFileProvider());
+    }
+
+    /**
+     * Deletes the lock file.
+     */
+    private void deleteLock()
     {
         File file = new File(System.getProperty("java.io.tmpdir"), "iz-" + APPNAME + ".tmp");
         FileUtils.deleteQuietly(file);

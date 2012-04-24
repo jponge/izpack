@@ -406,6 +406,7 @@
                         <exclude>**/DataValidatorTest.java</exclude>
                         <exclude>**/PackValidatorTest.java</exclude>
                         <exclude>**/PackagingTest.java</exclude>
+                        <exclude>**/MultiVolumeInstallationTest.java</exclude>
                     </excludes>
                     <parallel>both</parallel>
                     <perCoreThreadCount>true</perCoreThreadCount>
@@ -612,6 +613,7 @@
                                 <include>**/DataValidatorTest.java</include>
                                 <include>**/PackValidatorTest.java</include>
                                 <include>**/PackagingTest.java</include>
+                                <include>**/MultiVolumeInstallationTest.java</include>
                             </includes>
                         </configuration>
                     </plugin>

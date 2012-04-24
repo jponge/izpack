@@ -35,12 +35,12 @@ public class HelperTestMethod
         return installPath;
     }
 
-    public static void clickDefaultLang(DialogFixture dialogFrameFixture, LanguageDialog languageDialog)
+    public static void clickDefaultLang(LanguageDialog languageDialog)
     {
-        dialogFrameFixture = prepareDialogFixture(languageDialog);
-        dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
+        DialogFixture fixture = prepareDialogFixture(languageDialog);
+        fixture.button(GuiId.BUTTON_LANG_OK.id).click();
         // Seems necessary to unlock window
-        dialogFrameFixture.cleanUp();
+        fixture.cleanUp();
     }
 
     /**
