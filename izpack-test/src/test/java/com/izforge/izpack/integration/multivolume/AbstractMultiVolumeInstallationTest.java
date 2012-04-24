@@ -1,4 +1,4 @@
-package com.izforge.izpack.integration;
+package com.izforge.izpack.integration.multivolume;
 
 import static com.izforge.izpack.test.util.TestHelper.assertFileEquals;
 import static com.izforge.izpack.test.util.TestHelper.assertFileExists;
@@ -7,56 +7,30 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
-import org.fest.swing.fixture.FrameFixture;
-import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.compiler.container.TestCompilationContainer;
-import com.izforge.izpack.compiler.container.TestGUIInstallerContainer;
-import com.izforge.izpack.compiler.packager.impl.MultiVolumePackager;
-import com.izforge.izpack.installer.base.InstallerController;
-import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.container.impl.GUIInstallerContainer;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.installer.language.LanguageDialog;
-import com.izforge.izpack.installer.multiunpacker.MultiVolumeUnpacker;
+import com.izforge.izpack.installer.container.impl.InstallerContainer;
+import com.izforge.izpack.integration.UninstallHelper;
 import com.izforge.izpack.test.util.TestHelper;
 
 
 /**
- * Tests installation when using the {@link MultiVolumePackager} and {@link MultiVolumeUnpacker}.
+ * Base class for multi-volume installation tests.
  *
  * @author Tim Anderson
  */
-public class MultiVolumeInstallationTest
+public abstract class AbstractMultiVolumeInstallationTest
 {
-
     /**
      * Temporary directory for installing to.
      */
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    /**
-     * The installer frame fixture.
-     */
-    private FrameFixture fixture;
-
-
-    /**
-     * Cleans up after the test.
-     */
-    @After
-    public void tearDown()
-    {
-        if (fixture != null)
-        {
-            fixture.cleanUp();
-        }
-    }
 
     /**
      * Packages an multi-volume installer and installs it.
@@ -96,8 +70,8 @@ public class MultiVolumeInstallationTest
         assertFileNotExists(targetDir, file4.getName());
 
         // now run the installer
-        GUIInstallerContainer installer = new TestGUIInstallerContainer();
-        GUIInstallData installData = installer.getComponent(GUIInstallData.class);
+        InstallerContainer installer = createInstallerContainer();
+        AutomatedInstallData installData = installer.getComponent(AutomatedInstallData.class);
 
         // write to temporary folder so the test doesn't need to be run with elevated permissions
         File installPath = new File(temporaryFolder.getRoot(), "izpackTest");
@@ -112,8 +86,6 @@ public class MultiVolumeInstallationTest
         assertFileEquals(file5, installPath, file5.getName());
         assertFileEquals(file6, installPath, file6.getName());
 
-        assertFileExists(installPath, "auto.xml");
-
         // verify skipped pack1 files not present
         assertFileNotExists(installPath, file3.getName());
         assertFileNotExists(installPath, file4.getName());
@@ -121,72 +93,31 @@ public class MultiVolumeInstallationTest
         // now uninstall it
         UninstallHelper.uninstall(installData);
 
+        // verify the installed files no longer exist
         assertFileNotExists(installPath, file1.getName());
         assertFileNotExists(installPath, file2.getName());
         assertFileNotExists(installPath, file5.getName());
         assertFileNotExists(installPath, file6.getName());
 
+        // in fact, entire installation dir should now be gone
         assertFileNotExists(installPath);
     }
 
     /**
+     * Creates the installer container.
+     *
+     * @return a new installer container
+     */
+    protected abstract InstallerContainer createInstallerContainer();
+
+    /**
      * Performs the installation.
      *
-     * @param installer   the installer
+     * @param container   the installer container
      * @param installData the installation data
-     * @param installPath the installation path
+     * @param installPath the installation directory
      * @throws Exception for any error
      */
-    private void install(GUIInstallerContainer installer, GUIInstallData installData, File installPath) throws Exception
-    {
-        InstallerController controller = installer.getComponent(InstallerController.class);
-        LanguageDialog languageDialog = installer.getComponent(LanguageDialog.class);
-        InstallerFrame installerFrame = installer.getComponent(InstallerFrame.class);
-
-        // Lang picker
-        HelperTestMethod.clickDefaultLang(languageDialog);
-
-
-        fixture = HelperTestMethod.prepareFrameFixture(installerFrame, controller);
-        Thread.sleep(600);
-        // Hello panel
-        fixture.button(GuiId.BUTTON_NEXT.id).click();
-        Thread.sleep(600);
-        // Info Panel
-        fixture.textBox(GuiId.INFO_PANEL_TEXT_AREA.id).requireText("A readme file ...");
-        fixture.button(GuiId.BUTTON_PREV.id).requireVisible();
-        fixture.button(GuiId.BUTTON_NEXT.id).click();
-        fixture.button(GuiId.BUTTON_PREV.id).requireEnabled();
-        Thread.sleep(300);
-        // Licence Panel
-        fixture.textBox(GuiId.LICENCE_TEXT_AREA.id).requireText("(Consider it as a licence file ...)");
-        fixture.radioButton(GuiId.LICENCE_NO_RADIO.id).requireSelected();
-        fixture.button(GuiId.BUTTON_NEXT.id).requireDisabled();
-        fixture.radioButton(GuiId.LICENCE_YES_RADIO.id).click();
-        Thread.sleep(300);
-        fixture.button(GuiId.BUTTON_NEXT.id).click();
-        // Target Panel
-        fixture.button(GuiId.BUTTON_NEXT.id).click();
-        Thread.sleep(1000);
-        fixture.optionPane().requireWarningMessage();
-        fixture.optionPane().okButton().click();
-        // Packs Panel
-        Thread.sleep(1000);
-        fixture.button(GuiId.BUTTON_NEXT.id).click();
-        // Install Panel
-        HelperTestMethod.waitAndCheckInstallation(installData, installPath);
-
-        fixture.button(GuiId.BUTTON_NEXT.id).click();
-        // Finish panel
-        fixture.button(GuiId.FINISH_PANEL_AUTO_BUTTON.id).click();
-        Thread.sleep(800);
-        fixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).fileNameTextBox().enterText("auto.xml");
-        Thread.sleep(300);
-        fixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).approve();
-
-        Thread.sleep(1200);
-        fixture.button(GuiId.BUTTON_QUIT.id).click();
-    }
-
-
+    protected abstract void install(InstallerContainer container, AutomatedInstallData installData, File installPath)
+            throws Exception;
 }

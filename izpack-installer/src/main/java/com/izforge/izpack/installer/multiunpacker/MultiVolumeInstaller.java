@@ -31,7 +31,9 @@ import com.izforge.izpack.util.SelfModifier;
  * Main class, for starting the installer if it was build to support more than one volume.
  *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
+ * @deprecated see {@link Installer}
  */
+@Deprecated
 public class MultiVolumeInstaller
 {
     private static final Logger logger = Logger.getLogger(MultiVolumeInstaller.class.getName());

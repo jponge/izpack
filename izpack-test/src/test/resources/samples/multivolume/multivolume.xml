@@ -1,20 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
 
-<!-- 
-    A sample installation file.
-    Use it as a base for your own installers :-)
-    
-    To compile it :
-    - go in the bin directory where you installed IzPack
-    - call "compile ../sample/install.xml -b ../sample"
--->
-
 <installation version="1.0">
 
-    <!-- 
-        The info section.
-        The meaning of the tags should be natural ...
-    -->
     <info>
         <appname>Test Multi-volume Installation</appname>
         <appversion>1.0</appversion>
@@ -50,7 +37,6 @@
         <panel classname="InfoPanel"/>
         <panel classname="LicencePanel"/>
         <panel classname="TargetPanel"/>
-        <panel classname="PacksPanel"/>
         <panel classname="InstallPanel"/>
         <panel classname="FinishPanel"/>
     </panels>
