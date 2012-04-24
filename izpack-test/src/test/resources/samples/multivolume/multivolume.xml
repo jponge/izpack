@@ -69,7 +69,7 @@
             <file src="file3.dat" targetdir="$INSTALL_PATH"/>
             <file src="file4.dat" targetdir="$INSTALL_PATH"/>
         </pack>
-        <pack name="pack2" required="yes">
+        <pack name="pack2" required="yes" loose="true">
             <description>Pack 2</description>
             <file src="file5.dat" targetdir="$INSTALL_PATH"/>
             <file src="file6.dat" targetdir="$INSTALL_PATH"/>

@@ -100,6 +100,16 @@ public class TestHelper
     }
 
     /**
+     * Verifies that a file doesn't exist.
+     *
+     * @param file the file
+     */
+    public static void assertFileNotExists(File file)
+    {
+        assertFalse(file.exists());
+    }
+
+    /**
      * Verifies that two files have the same content.
      * <p/>
      * The files must have different paths.

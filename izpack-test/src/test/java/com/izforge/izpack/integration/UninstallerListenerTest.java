@@ -14,7 +14,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.container.TestInstallationContainer;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
@@ -45,26 +44,19 @@ public class UninstallerListenerTest extends AbstractDestroyerTest
      */
     private final UninstallData uninstallData;
 
-    /**
-     * Variable substituter.
-     */
-    private final VariableSubstitutor substituter;
-
 
     /**
      * Constructs an <tt>UninstallerListenerTest</tt>.
      *
      * @param uninstallDataWriter the uninstall jar writer
-     * @param substituter         the variable substitutor
      * @param installData         the install data
      * @param uninstallData       the uninstall data
      */
-    public UninstallerListenerTest(UninstallDataWriter uninstallDataWriter, VariableSubstitutor substituter,
-                                   AutomatedInstallData installData, UninstallData uninstallData)
+    public UninstallerListenerTest(UninstallDataWriter uninstallDataWriter, AutomatedInstallData installData,
+                                   UninstallData uninstallData)
     {
         super(installData);
         this.uninstallDataWriter = uninstallDataWriter;
-        this.substituter = substituter;
         this.uninstallData = uninstallData;
     }
 
@@ -120,7 +112,7 @@ public class UninstallerListenerTest extends AbstractDestroyerTest
         // write the uninstaller and verify it contains the listeners
         assertTrue(uninstallDataWriter.write());
 
-        File file = getUninstallerJar(substituter);
+        File file = getUninstallerJar();
         JarFile uninstallJar = new JarFile(file);
 
         assertThat(uninstallJar, ZipMatcher.isZipContainingFiles(

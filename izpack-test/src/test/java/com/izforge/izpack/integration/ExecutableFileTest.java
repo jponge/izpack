@@ -106,7 +106,7 @@ public class ExecutableFileTest extends AbstractDestroyerTest
         checkNotExists("uninstall.log");
 
         // now perform uninstallation and verify the uninstall.bat/uninstall.sh script runs
-        File jar = getUninstallerJar(substituter);
+        File jar = getUninstallerJar();
         runDestroyer(jar);
 
         checkNotExists("postinstall.log");
