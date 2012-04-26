@@ -18,15 +18,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.izforge.izpack.panels;
-
-import java.util.Properties;
 
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.adaptator.IXMLElement;
 
 /**
@@ -41,28 +36,8 @@ public class TargetPanel extends PathInputPanel
      *
      */
     private static final long serialVersionUID = 3256443616359429170L;
-
     private boolean noWhitespaces;
     
-    public static String loadDefaultDirFromVariables(Properties vars)
-    {
-        String os = System.getProperty("os.name").replace(' ', '_').toLowerCase();
-        
-        String path = vars.getProperty("TargetPanel.dir.".concat(os));
-        
-        if (path == null) {
-            path = vars.getProperty("TargetPanel.dir." + (OsVersion.IS_WINDOWS ? "windows" : (OsVersion.IS_OSX ? "macosx" : "unix")));
-            if (path == null) {
-                path = vars.getProperty("TargetPanel.dir");
-            }
-        }
-        if (path != null) {
-            path = new VariableSubstitutor(vars).substitute(path, null);
-        }
-        
-        return path;
-    }
-
     /**
      * The constructor.
      *
@@ -72,16 +47,6 @@ public class TargetPanel extends PathInputPanel
     public TargetPanel(InstallerFrame parent, InstallData idata)
     {
         super(parent, idata);
-        // load the default directory info (if present)
-        loadDefaultDir();
-        String defDir = getDefaultDir();
-        if (defDir != null)
-        {
-            // override the system default that uses app name (which is set in
-            // the Installer class)
-            idata.setInstallPath(defDir);
-        }
-        noWhitespaces = Boolean.valueOf(idata.getVariable("TargetPanel.noWhitespaces"));
     }
 
     /**
@@ -89,27 +54,16 @@ public class TargetPanel extends PathInputPanel
      */
     public void panelActivate()
     {
-        // Resolve the default for chosenPath
-        super.panelActivate();
-        // Set the default or old value to the path selection panel.
-        pathSelectionPanel.setPath(idata.getInstallPath());
-    }
-
-    /**
-     * This method simple delegates to <code>PathInputPanel.loadDefaultInstallDir</code> with the
-     * current parent as installer frame.
-     */
-    public void loadDefaultDir()
+        // load the default directory info (if present)
+        String path = TargetPanelConsoleHelper.loadDefaultInstallDirFromVariables(idata.getVariables());
+        if(path!=null)
     {
-        String path = loadDefaultDirFromVariables(idata.getVariables());
-        
-        if (path != null) {
-            System.out.println("Found default install dir in variables: " + path);
             setDefaultInstallDir(path);
-            return;
+            idata.setInstallPath(getDefaultInstallDir());
+            pathSelectionPanel.setPath(idata.getInstallPath());
         }
         
-        super.loadDefaultInstallDir(parent, idata);
+        super.panelActivate();
     }
 
     /**
@@ -138,28 +92,6 @@ public class TargetPanel extends PathInputPanel
     }
 
     /**
-     * Returns the default install directory. This is equal to
-     * <code>PathInputPanel.getDefaultInstallDir</code>
-     *
-     * @return the default install directory
-     */
-    public String getDefaultDir()
-    {
-        return getDefaultInstallDir();
-    }
-
-    /**
-     * Sets the default install directory to the given String. This is equal to
-     * <code>PathInputPanel.setDefaultInstallDir</code>
-     *
-     * @param defaultDir path to be used for the install directory
-     */
-    public void setDefaultDir(String defaultDir)
-    {
-        setDefaultInstallDir(defaultDir);
-    }
-
-    /**
      * Asks to make the XML panel data.
      *
      * @param panelRoot The tree to put the data in.
@@ -178,5 +110,4 @@ public class TargetPanel extends PathInputPanel
     {
         return (idata.getInstallPath());
     }
-
 }

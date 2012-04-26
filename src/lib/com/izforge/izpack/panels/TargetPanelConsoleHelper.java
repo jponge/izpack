@@ -31,7 +31,9 @@ import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.PanelConsoleHelper;
 import com.izforge.izpack.installer.ScriptParser;
+import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.VariableSubstitutor;
+
 /**
  * The Target panel console helper class.
  * 
@@ -72,8 +74,9 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
                                                                       // default path point to the
                                                                       // current location
         
-        String path = TargetPanel.loadDefaultDirFromVariables(idata.getVariables());
-        if (path != null) {
+        String path = loadDefaultInstallDirFromVariables(idata.getVariables());
+        if (path != null)
+        {
             strDefaultPath = path;
         }
         
@@ -103,9 +106,11 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
 
         idata.setInstallPath(strTargetPath);
         
-        if (strTargetPath != null && strTargetPath.length() > 0) {
+        if (strTargetPath != null && strTargetPath.length() > 0)
+        {
             File selectedDir = new File(strTargetPath);
-            if (selectedDir.exists() && selectedDir.isDirectory() && selectedDir.list().length > 0) {
+            if (selectedDir.exists() && selectedDir.isDirectory() && selectedDir.list().length > 0)
+            {
                 int answer = askNonEmptyDir();
                 if (answer == 2)
                 {
@@ -151,7 +156,10 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
                 {
                     return 2;
                 }
-                else if (strIn.equals("3")) { return 3; }
+                else if (strIn.equals("3"))
+                {
+                    return 3;
+                }
             }
 
         }
@@ -162,4 +170,35 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
         return 2;
     }
     
+    public static String loadDefaultInstallDirFromVariables(Properties vars)
+    {
+
+        String os = System.getProperty("os.name").replace(' ', '_').toLowerCase();
+        String path = vars.getProperty("TargetPanel.dir.".concat(os));
+
+        if (path == null)
+        {
+            path = vars.getProperty("TargetPanel.dir." + (OsVersion.IS_WINDOWS ? "windows" : (OsVersion.IS_OSX ? "macosx" : "unix")));
+            if (path == null)
+            {
+                path = vars.getProperty("TargetPanel.dir");
+            }
+        }
+        if (path != null)
+        {
+            path = new VariableSubstitutor(vars).substitute(path, null);
+        }
+        if (path != null)
+        {
+            try
+            {
+                path = new File(path).getCanonicalPath();
+            }
+            catch (Throwable t)
+            {
+                t.printStackTrace();
+            }
+        }
+        return path;
+    }
 }
