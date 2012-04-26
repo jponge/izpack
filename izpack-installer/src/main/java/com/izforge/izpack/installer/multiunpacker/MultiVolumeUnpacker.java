@@ -22,6 +22,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.security.CodeSource;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
@@ -144,7 +147,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
             String mediaPath = getInstallData().getMediaPath();
             if ((mediaPath == null) || (mediaPath.length() == 0))
             {
-                mediaPath = System.getProperty("java.io.tmpdir"); // try the temporary directory
+                mediaPath = getDefaultMediaPath();
             }
             logger.fine("Using mediaDirectory = " + mediaPath);
             File volume = new File(mediaPath, volumeName);
@@ -239,6 +242,48 @@ public class MultiVolumeUnpacker extends UnpackerBase
                     result = dir;
                 }
             }
+        }
+        return result;
+    }
+
+    /**
+     * Tries to return a sensible default media path for multi-volume installations.
+     * <p/>
+     * This returns:
+     * <ul>
+     * <li>the directory the installer is located in; or </li>
+     * <li>the user directory, if the installer location can't be determined</li>
+     * </ul>
+     *
+     * @return the default media path. May be <tt>null</tt>
+     */
+    private String getDefaultMediaPath()
+    {
+        String result = null;
+        try
+        {
+            CodeSource codeSource = getClass().getProtectionDomain().getCodeSource();
+            if (codeSource != null)
+            {
+                URI uri = codeSource.getLocation().toURI();
+                if ("file".equals(uri.getScheme()))
+                {
+                    File dir = new File(uri.getSchemeSpecificPart()).getAbsoluteFile();
+                    if (dir.getName().endsWith(".jar"))
+                    {
+                        dir = dir.getParentFile();
+                    }
+                    result = dir.getPath();
+                }
+            }
+        }
+        catch (URISyntaxException exception)
+        {
+            // ignore
+        }
+        if (result == null)
+        {
+            result = System.getProperty("user.dir");
         }
         return result;
     }

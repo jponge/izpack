@@ -143,33 +143,33 @@ public class MultiVolumeUnpackerTest
      * Helper to set the selected packs.
      *
      * @param installData the installation data
-     * @param packIds     the identifiers of the packs to select
+     * @param names       the names of the packs to select
      */
-    private void setSelectedPacks(AutomatedInstallData installData, String... packIds)
+    private void setSelectedPacks(AutomatedInstallData installData, String... names)
     {
-        for (String id : packIds)
+        for (String name : names)
         {
             for (Pack pack : installData.getAvailablePacks())
             {
-                if (pack.id.equals(id))
+                if (pack.name.equals(name))
                 {
                     installData.getSelectedPacks().add(pack);
                     break;
                 }
             }
         }
-        assertEquals(packIds.length, installData.getSelectedPacks().size());
+        assertEquals(names.length, installData.getSelectedPacks().size());
     }
 
     /**
      * Creates a new pack.
      *
-     * @param id the pack id
+     * @param name the pack name
      * @return a new pack
      */
-    private PackInfo createPack(String id, File baseDir, File... files) throws IOException
+    private PackInfo createPack(String name, File baseDir, File... files) throws IOException
     {
-        PackInfo pack = new PackInfo(id + " pack", id, "The " + id + " package", false, false, null, true);
+        PackInfo pack = new PackInfo(name, name, "The " + name + " package", false, false, null, true);
         addFiles(pack, baseDir, files);
         return pack;
     }

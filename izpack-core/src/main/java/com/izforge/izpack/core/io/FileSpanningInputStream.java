@@ -132,16 +132,19 @@ public class FileSpanningInputStream extends InputStream
     @Override
     public int read(byte[] b, int off, int len) throws IOException
     {
-        int read = zippedInputStream.read(b, off, len);
-        int count = read;
-        while (read != -1 && read < len)
+        int count = -1;
+        while (len != 0)
         {
-            off += read;
-            len -= read;
-            read = zippedInputStream.read(b, off, len);
-            if (read != -1)
+            int read = zippedInputStream.read(b, off, len);
+            if (read == -1)
             {
-                count += read;
+                break;
+            }
+            else
+            {
+                off += read;
+                len -= read;
+                count = (count == -1) ? read : count + read;
             }
         }
         if (count != -1)
@@ -289,26 +292,22 @@ public class FileSpanningInputStream extends InputStream
         @Override
         public int read(byte[] b, int off, int len) throws IOException
         {
-            int read = stream.read(b, off, len);
-            int count = read;
-            while (read < len)
+            int count = -1;
+            while (len != 0)
             {
-                if (read != -1)
+                int read = stream.read(b, off, len);
+                if (read == -1)
                 {
-                    off += read;
-                    len -= read;
-                }
-                if (openNextVolume())
-                {
-                    read = stream.read(b, off, len);
-                    if (read != -1)
+                    if (!openNextVolume())
                     {
-                        count += read;
+                        break;
                     }
                 }
                 else
                 {
-                    break;
+                    off += read;
+                    len -= read;
+                    count = (count == -1) ? read : count + read;
                 }
             }
             return count;
@@ -447,6 +446,7 @@ public class FileSpanningInputStream extends InputStream
             catch (IOException exception)
             {
                 FileUtils.close(stream);
+                throw exception;
             }
         }
 
