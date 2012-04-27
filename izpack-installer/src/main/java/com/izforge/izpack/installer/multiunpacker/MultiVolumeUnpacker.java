@@ -40,6 +40,7 @@ import com.izforge.izpack.core.io.FileSpanningInputStream;
 import com.izforge.izpack.core.io.VolumeLocator;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.data.UninstallData;
+import com.izforge.izpack.installer.event.InstallerListeners;
 import com.izforge.izpack.installer.unpacker.Cancellable;
 import com.izforge.izpack.installer.unpacker.FileUnpacker;
 import com.izforge.izpack.installer.unpacker.LooseFileUnpacker;
@@ -91,13 +92,15 @@ public class MultiVolumeUnpacker extends UnpackerBase
      * @param platform            the current platform
      * @param librarian           the librarian
      * @param housekeeper         the housekeeper
+     * @param listeners           the listeners
      */
     public MultiVolumeUnpacker(AutomatedInstallData installData, ResourceManager resourceManager, RulesEngine rules,
                                VariableSubstitutor variableSubstitutor, UninstallData uninstallData,
-                               Platform platform, Librarian librarian, Housekeeper housekeeper)
+                               Platform platform, Librarian librarian, Housekeeper housekeeper,
+                               InstallerListeners listeners)
     {
         super(installData, resourceManager, rules, variableSubstitutor, uninstallData, platform, librarian,
-              housekeeper);
+              housekeeper, listeners);
     }
 
     /**

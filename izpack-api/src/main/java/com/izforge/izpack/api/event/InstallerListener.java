@@ -21,12 +21,12 @@
 
 package com.izforge.izpack.api.event;
 
+import java.io.File;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-
-import java.io.File;
 
 /**
  * <p>
@@ -42,20 +42,29 @@ public interface InstallerListener
     // ------------------------------------------------------------------------
     // Constant Definitions
     // ------------------------------------------------------------------------
+
+    @Deprecated
     public static final int BEFORE_FILE = 1;
 
+    @Deprecated
     public static final int AFTER_FILE = 2;
 
+    @Deprecated
     public static final int BEFORE_DIR = 3;
 
+    @Deprecated
     public static final int AFTER_DIR = 4;
 
+    @Deprecated
     public static final int BEFORE_PACK = 5;
 
+    @Deprecated
     public static final int AFTER_PACK = 6;
 
+    @Deprecated
     public static final int BEFORE_PACKS = 7;
 
+    @Deprecated
     public static final int AFTER_PACKS = 8;
 
     /**

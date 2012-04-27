@@ -2,8 +2,6 @@ package com.izforge.izpack.integration;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
-
 import org.fest.swing.fixture.FrameFixture;
 import org.junit.After;
 import org.junit.Test;
@@ -15,6 +13,7 @@ import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.compiler.container.TestInstallationContainer;
 import com.izforge.izpack.installer.base.InstallerController;
 import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.event.InstallerListeners;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;
 import com.izforge.izpack.test.junit.PicoRunner;
@@ -30,6 +29,11 @@ import com.izforge.izpack.test.listener.TestInstallerListener;
 @Container(TestInstallationContainer.class)
 public class InstallerListenerTest extends AbstractInstallationTest
 {
+
+    /**
+     * The listeners,
+     */
+    private final InstallerListeners listeners;
 
     /**
      * The installer frame.
@@ -50,13 +54,16 @@ public class InstallerListenerTest extends AbstractInstallationTest
     /**
      * Constructs an <tt>InstallerListenerTest</tt>.
      *
+     * @param listeners   the installer listeners
      * @param installData the install data
      * @param frame       the installer frame
      * @param controller  the installer controller
      */
-    public InstallerListenerTest(AutomatedInstallData installData, InstallerFrame frame, InstallerController controller)
+    public InstallerListenerTest(InstallerListeners listeners, AutomatedInstallData installData, InstallerFrame frame,
+                                 InstallerController controller)
     {
         super(installData);
+        this.listeners = listeners;
         this.frame = frame;
         this.controller = controller;
     }
@@ -88,7 +95,6 @@ public class InstallerListenerTest extends AbstractInstallationTest
 
         HelperTestMethod.waitAndCheckInstallation(getInstallData());
 
-        List<InstallerListener> listeners = getInstallData().getInstallerListener();
         assertEquals(1, listeners.size());
         TestInstallerListener listener = (TestInstallerListener) listeners.get(0);
         assertEquals(1, listener.getAfterInstallerInitializationCount());

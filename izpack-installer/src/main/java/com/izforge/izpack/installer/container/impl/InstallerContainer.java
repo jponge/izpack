@@ -22,6 +22,7 @@ import com.izforge.izpack.installer.base.InstallDataConfiguratorWithRules;
 import com.izforge.izpack.installer.container.provider.RulesProvider;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
+import com.izforge.izpack.installer.event.InstallerListeners;
 import com.izforge.izpack.installer.requirement.InstallerRequirementChecker;
 import com.izforge.izpack.installer.requirement.JDKChecker;
 import com.izforge.izpack.installer.requirement.JavaVersionChecker;
@@ -85,7 +86,8 @@ public abstract class InstallerContainer extends AbstractContainer
         addComponent(Properties.class);
         addComponent(ResourceManager.class);
         addComponent(UninstallDataWriter.class);
-        addComponent(EventFiller.class);
+        addComponent(InstallerListeners.class);
+        addComponent(CustomDataLoader.class);
         addComponent(Container.class, this);
         addComponent(RegistryDefaultHandler.class);
         addComponent(Housekeeper.class);
@@ -110,10 +112,10 @@ public abstract class InstallerContainer extends AbstractContainer
         Class<IUnpacker> unpackerClass = getClass(className, IUnpacker.class);
         pico.addComponent(IUnpacker.class, unpackerClass);
 
-        EventFiller eventFiller = pico.getComponent(EventFiller.class);
+        CustomDataLoader customDataLoader = pico.getComponent(CustomDataLoader.class);
         try
         {
-            eventFiller.loadCustomData();
+            customDataLoader.loadCustomData();
         }
         catch (InstallerException exception)
         {

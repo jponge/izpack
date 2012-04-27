@@ -545,11 +545,13 @@ public abstract class AutomatedInstallData implements Serializable
         return installerrequirements;
     }
 
+    @Deprecated
     public List<InstallerListener> getInstallerListener()
     {
         return installerListener;
     }
 
+    @Deprecated
     public void setInstallerListener(List<InstallerListener> installerListener)
     {
         this.installerListener = installerListener;

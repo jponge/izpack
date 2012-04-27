@@ -58,6 +58,7 @@ import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.installer.data.UninstallData;
+import com.izforge.izpack.installer.event.InstallerListeners;
 import com.izforge.izpack.installer.web.WebAccessor;
 import com.izforge.izpack.installer.web.WebRepositoryAccessor;
 import com.izforge.izpack.util.FileExecutor;
@@ -123,6 +124,11 @@ public abstract class UnpackerBase implements IUnpacker
     private final Housekeeper housekeeper;
 
     /**
+     * The listeners.
+     */
+    private final InstallerListeners listeners;
+
+    /**
      * The installer listener.
      */
     private AbstractUIProgressHandler handler;
@@ -186,10 +192,11 @@ public abstract class UnpackerBase implements IUnpacker
      * @param platform            the current platform
      * @param librarian           the librarian
      * @param housekeeper         the housekeeper
+     * @param listeners           the listeners
      */
     public UnpackerBase(AutomatedInstallData installData, ResourceManager resourceManager, RulesEngine rules,
                         VariableSubstitutor variableSubstitutor, UninstallData uninstallData, Platform platform,
-                        Librarian librarian, Housekeeper housekeeper)
+                        Librarian librarian, Housekeeper housekeeper, InstallerListeners listeners)
     {
         this.installData = installData;
         this.resourceManager = resourceManager;
@@ -199,6 +206,7 @@ public abstract class UnpackerBase implements IUnpacker
         this.platform = platform;
         this.librarian = librarian;
         this.housekeeper = housekeeper;
+        this.listeners = listeners;
         cancellable = new Cancellable()
         {
             @Override
@@ -363,7 +371,7 @@ public abstract class UnpackerBase implements IUnpacker
         logger.fine("Unpacker starting");
         handler.startAction("Unpacking", count);
 
-        informListeners(InstallerListener.BEFORE_PACKS, count);
+        listeners.beforePacks(installData, count, handler);
     }
 
     /**
@@ -389,14 +397,14 @@ public abstract class UnpackerBase implements IUnpacker
             Pack pack = packs.get(i);
             if (shouldUnpack(pack))
             {
-                informListeners(InstallerListener.BEFORE_PACK, pack, count);
+                listeners.beforePack(pack, i, handler);
                 queue = unpack(pack, i, queue, parsables, executables, updateChecks);
                 if (isInterrupted())
                 {
                     break;
                 }
 
-                informListeners(InstallerListener.AFTER_PACK, pack, i);
+                listeners.afterPack(pack, i, handler);
             }
         }
         return queue;
@@ -493,7 +501,7 @@ public abstract class UnpackerBase implements IUnpacker
             return queue;
         }
 
-        informListeners(InstallerListener.BEFORE_FILE, target, file);
+        listeners.beforeFile(target, file);
 
         AbstractUIProgressHandler handler = getHandler();
         handler.progress(fileNo, path);
@@ -567,7 +575,7 @@ public abstract class UnpackerBase implements IUnpacker
 
             if (!unpacker.isQueued())
             {
-                informListeners(InstallerListener.AFTER_FILE, target, file);
+                listeners.afterFile(target, file);
             }
         }
         finally
@@ -674,7 +682,7 @@ public abstract class UnpackerBase implements IUnpacker
             return;
         }
 
-        informListeners(InstallerListener.AFTER_PACKS, installData.getSelectedPacks().size());
+        listeners.afterPacks(installData, handler);
         if (isInterrupted())
         {
             return;
@@ -915,71 +923,6 @@ public abstract class UnpackerBase implements IUnpacker
     }
 
     /**
-     * Informs all listeners which would be informed at the given action type.
-     *
-     * @param action   identifier for which callback should be called
-     * @param file     first parameter for the call
-     * @param packFile second parameter for the call
-     */
-    protected void informListeners(int action, File file, PackFile packFile) throws Exception
-    {
-        for (InstallerListener listener : installData.getInstallerListener())
-        {
-            if (!shouldInterrupt())
-            {
-                switch (action)
-                {
-                    case InstallerListener.BEFORE_FILE:
-                        listener.beforeFile(file, packFile);
-                        break;
-                    case InstallerListener.AFTER_FILE:
-                        listener.afterFile(file, packFile);
-                        break;
-                    case InstallerListener.BEFORE_DIR:
-                        listener.beforeDir(file, packFile);
-                        break;
-                    case InstallerListener.AFTER_DIR:
-                        listener.afterDir(file, packFile);
-                        break;
-                }
-            }
-        }
-    }
-
-    protected void informListeners(int action, Pack pack, int packNo)
-            throws Exception
-    {
-        for (InstallerListener listener : installData.getInstallerListener())
-        {
-            switch (action)
-            {
-                case InstallerListener.BEFORE_PACK:
-                    listener.beforePack(pack, packNo, handler);
-                    break;
-                case InstallerListener.AFTER_PACK:
-                    listener.afterPack(pack, packNo, handler);
-                    break;
-            }
-        }
-    }
-
-    protected void informListeners(int action, int packs) throws Exception
-    {
-        for (InstallerListener listener : installData.getInstallerListener())
-        {
-            switch (action)
-            {
-                case InstallerListener.BEFORE_PACKS:
-                    listener.beforePacks(installData, packs, handler);
-                    break;
-                case InstallerListener.AFTER_PACKS:
-                    listener.afterPacks(installData, handler);
-                    break;
-            }
-        }
-    }
-
-    /**
      * Creates a directory including any necessary but nonexistent parent directories, associated with a pack file.
      * <p/>
      * If {@link InstallerListener}s are registered, these will be notified for each directory created.
@@ -994,7 +937,7 @@ public abstract class UnpackerBase implements IUnpacker
         boolean ok = true;
         if (!dir.exists())
         {
-            if (installData.getInstallerListener().isEmpty())
+            if (!listeners.isFileListener())
             {
                 // Create it in one step.
                 if (!dir.mkdirs())
@@ -1014,7 +957,7 @@ public abstract class UnpackerBase implements IUnpacker
                 }
                 if (ok)
                 {
-                    informListeners(InstallerListener.BEFORE_DIR, dir, file);
+                    listeners.beforeDir(dir, file);
                     ok = dir.mkdir();
                     if (!ok)
                     {
@@ -1023,7 +966,7 @@ public abstract class UnpackerBase implements IUnpacker
                     }
                     else
                     {
-                        informListeners(InstallerListener.AFTER_DIR, dir, file);
+                        listeners.afterDir(dir, file);
                     }
                 }
             }

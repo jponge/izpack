@@ -40,6 +40,7 @@ import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.data.UninstallData;
+import com.izforge.izpack.installer.event.InstallerListeners;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
 import com.izforge.izpack.test.util.TestHelper;
@@ -226,7 +227,8 @@ public class MultiVolumeUnpackerTest
         UninstallData uninstallData = new UninstallData();
         Librarian librarian = Mockito.mock(Librarian.class);
         MultiVolumeUnpacker unpacker = new MultiVolumeUnpacker(installData, resources, rules, replacer, uninstallData,
-                                                               Platforms.WINDOWS, librarian, housekeeper);
+                                                               Platforms.WINDOWS, librarian, housekeeper,
+                                                               new InstallerListeners());
         unpacker.setHandler(Mockito.mock(AbstractUIProgressHandler.class));
         return unpacker;
     }

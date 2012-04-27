@@ -1,5 +1,10 @@
 package com.izforge.izpack.installer.container.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.util.List;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.event.InstallerListener;
@@ -8,22 +13,17 @@ import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.installer.data.UninstallData;
+import com.izforge.izpack.installer.event.InstallerListeners;
 import com.izforge.izpack.util.OsConstraintHelper;
 import com.izforge.izpack.util.file.FileUtils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Fill a container with custom data like events
+ * Reads the <em>customData</em> resource in order to populate the {@link InstallerListeners} and {@link UninstallData}.
  *
  * @author Anthonin Bonnefoy
  * @author Tim Anderson
  */
-public class EventFiller
+public class CustomDataLoader
 {
     /**
      * The resource manager.
@@ -46,20 +46,28 @@ public class EventFiller
     private final UninstallData uninstallData;
 
     /**
+     * The installer listeners.
+     */
+    private final InstallerListeners listeners;
+
+
+    /**
      * Constructs an <tt>EventFiller</tt>.
      *
      * @param resourceManager the resource manager
      * @param factory         the factory for listeners
      * @param installData     the installation data
      * @param uninstallData   the uninstallation data
+     * @param listeners       the installer listeners
      */
-    public EventFiller(ResourceManager resourceManager, ObjectFactory factory, AutomatedInstallData installData,
-                       UninstallData uninstallData)
+    public CustomDataLoader(ResourceManager resourceManager, ObjectFactory factory, AutomatedInstallData installData,
+                            UninstallData uninstallData, InstallerListeners listeners)
     {
         this.resourceManager = resourceManager;
         this.factory = factory;
         this.installData = installData;
         this.uninstallData = uninstallData;
+        this.listeners = listeners;
     }
 
     /**
@@ -80,7 +88,6 @@ public class EventFiller
     public void loadCustomData() throws InstallerException
     {
         List<CustomData> customData = (List<CustomData>) readObject("customData");
-        installData.setInstallerListener(new ArrayList<InstallerListener>());
         for (CustomData data : customData)
         {
             if (data.osConstraints == null || OsConstraintHelper.oneMatchesCurrentSystem(data.osConstraints))
@@ -112,22 +119,18 @@ public class EventFiller
      */
     private void notifyInstallerListeners() throws InstallerException
     {
-        for (InstallerListener listener : installData.getInstallerListener())
+        try
         {
-            try
-            {
-                listener.afterInstallerInitialization(installData);
-            }
-            catch (InstallerException exception)
-            {
-                throw exception;
-            }
-            catch (Exception exception)
-            {
-                throw new InstallerException(exception);
-            }
+            listeners.afterInstallerInitialization(installData);
         }
-
+        catch (InstallerException exception)
+        {
+            throw exception;
+        }
+        catch (Exception exception)
+        {
+            throw new InstallerException(exception);
+        }
     }
 
     /**
@@ -138,7 +141,6 @@ public class EventFiller
     @SuppressWarnings("unchecked")
     private void addInstallerListener(String className)
     {
-        List<InstallerListener> listeners = installData.getInstallerListener();
         InstallerListener listener = factory.create(className, InstallerListener.class);
         listeners.add(listener);
     }
