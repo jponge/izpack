@@ -21,17 +21,14 @@
 
 package com.izforge.izpack.api.event;
 
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-
 import java.io.File;
 import java.util.List;
 
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+
 /**
- * <p>
  * Implementations of this class are used to handle customizing uninstallation. The defined methods
  * are called from the destroyer at different, well defined points of uninstallation.
- * </p>
- * Implementations must provide a no-argument constructor - dependency injection is not supported.
  *
  * @author Klaus Bartz
  */
@@ -41,56 +38,60 @@ public interface UninstallerListener
     // ------------------------------------------------------------------------
     // Constant Definitions
     // ------------------------------------------------------------------------
+    @Deprecated
     public static final int BEFORE_DELETION = 1;
 
+    @Deprecated
     public static final int AFTER_DELETION = 2;
 
+    @Deprecated
     public static final int BEFORE_DELETE = 3;
 
+    @Deprecated
     public static final int AFTER_DELETE = 4;
 
     /**
-     * This method will be called from the destroyer before the given files will be deleted.
+     * Invoked before files are deleted.
      *
      * @param files   all files which should be deleted
-     * @param handler a handler to the current used UIProgressHandler
-     * @throws Exception
+     * @param handler the UI progress handler
+     * @throws Exception for any error
      */
     void beforeDeletion(List files, AbstractUIProgressHandler handler) throws Exception;
 
     /**
-     * Returns true if this listener would be informed at every delete operation, else false. If it
-     * is true, the listener will be called two times (before and after) of every action. Handle
-     * carefully, else performance problems are possible.
+     * Determines if the listener should be notified of every file deletion.
+     * <p/>
+     * If <tt>true</tt>, the {@link #beforeDelete} and {@link #afterDelete} methods will be invoked for each file.
      *
-     * @return true if this listener would be informed at every delete operation, else false
+     * @return <tt>true</tt> if this listener would be informed at every delete operation, else <tt>false</tt>
      */
     boolean isFileListener();
 
     /**
-     * This method will be called from the destroyer before the given file will be deleted.
+     * Invoked before a file is deleted.
      *
-     * @param file    file which should be deleted
-     * @param handler a handler to the current used UIProgressHandler
-     * @throws Exception
+     * @param file    the file which will be deleted
+     * @param handler the UI progress handler
+     * @throws Exception for any error
      */
     void beforeDelete(File file, AbstractUIProgressHandler handler) throws Exception;
 
     /**
-     * This method will be called from the destroyer after the given file was deleted.
+     * Invoked after a file is deleted.
      *
-     * @param file    file which was just deleted
-     * @param handler a handler to the current used UIProgressHandler
-     * @throws Exception
+     * @param file    the file which was deleted
+     * @param handler the UI progress handler
+     * @throws Exception for any error
      */
     void afterDelete(File file, AbstractUIProgressHandler handler) throws Exception;
 
     /**
-     * This method will be called from the destroyer after the given files are deleted.
+     * Invoked after files are deleted.
      *
-     * @param files   all files which where deleted
-     * @param handler a handler to the current used UIProgressHandler
-     * @throws Exception
+     * @param files   the files which where deleted
+     * @param handler the UI progress handler
+     * @throws Exception for any error
      */
     void afterDeletion(List files, AbstractUIProgressHandler handler) throws Exception;
 

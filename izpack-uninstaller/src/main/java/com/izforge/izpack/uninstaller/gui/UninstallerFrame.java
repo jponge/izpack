@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.uninstaller;
+package com.izforge.izpack.uninstaller.gui;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -35,9 +35,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
@@ -45,18 +42,15 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IconsDatabase;
+import com.izforge.izpack.uninstaller.Destroyer;
+import com.izforge.izpack.uninstaller.resource.InstallLog;
 import com.izforge.izpack.util.Housekeeper;
 
 /**
@@ -80,7 +74,7 @@ public class UninstallerFrame extends JFrame
     /**
      * The language pack.
      */
-    protected static LocaleDatabase langpack;
+    private LocaleDatabase langpack;
 
     /**
      * The target destroy checkbox.
@@ -108,29 +102,38 @@ public class UninstallerFrame extends JFrame
     private Color buttonsHColor = new Color(230, 230, 230);
 
     /**
-     * The installation path.
+     * The installation log.
      */
-    protected String installPath;
+    private final InstallLog log;
 
+    /**
+     * The destroyer.
+     */
+    private final Destroyer destroyer;
+
+    /**
+     * The housekeeper.
+     */
     private final Housekeeper housekeeper;
-    private final Container container;
+
 
     /**
      * The constructor.
      *
+     * @param destroyer   the destroyer
      * @param housekeeper the housekeeper
-     * @param container   the container
-     * @throws Exception Description of the Exception
+     * @param messages    the locale-specific messages
      */
-    public UninstallerFrame(Housekeeper housekeeper, Container container) throws Exception
+    public UninstallerFrame(Destroyer destroyer, InstallLog log, Housekeeper housekeeper, LocaleDatabase messages)
+            throws Exception
     {
         super("IzPack - Uninstaller");
+        this.destroyer = destroyer;
+        this.log = log;
         this.housekeeper = housekeeper;
-        this.container = container;
+        langpack = messages;
 
         // Initializations
-        langpack = new LocaleDatabase(UninstallerFrame.class.getResourceAsStream("/langpack.xml"));
-        getInstallPath();
         icons = new IconsDatabase();
         loadIcons();
         UIManager.put("OptionPane.yesButtonText", langpack.getString("installer.yes"));
@@ -203,7 +206,7 @@ public class UninstallerFrame extends JFrame
         contentPane.add(warningLabel);
 
         targetDestroyCheckbox = new JCheckBox(langpack.getString("uninstaller.destroytarget")
-                                                      + installPath, forceOptionState);
+                                                      + log.getInstallPath(), forceOptionState);
         buildConstraints(gbConstraints, 0, 1, 2, 1, 1.0, 0.0);
         layout.addLayoutComponent(targetDestroyCheckbox, gbConstraints);
         if (displayForceOption)
@@ -271,20 +274,6 @@ public class UninstallerFrame extends JFrame
         gbc.gridheight = gh;
         gbc.weightx = wx;
         gbc.weighty = wy;
-    }
-
-    /**
-     * Gets the installation path from the log file.
-     *
-     * @throws Exception Description of the Exception
-     */
-    private void getInstallPath() throws Exception
-    {
-        InputStream in = UninstallerFrame.class.getResourceAsStream("/install.log");
-        InputStreamReader inReader = new InputStreamReader(in);
-        BufferedReader reader = new BufferedReader(inReader);
-        installPath = reader.readLine();
-        reader.close();
     }
 
     /**
@@ -357,192 +346,6 @@ public class UninstallerFrame extends JFrame
     }
 
     /**
-     * The destroyer handler.
-     * <p/>
-     * This class also implements the InstallListener because the FileExecutor needs it. TODO: get
-     * rid of the InstallListener - implement generic Listener
-     *
-     * @author Julien Ponge
-     * @author Tino Schwarze
-     */
-    private final class DestroyerHandler implements
-            AbstractUIProgressHandler
-    {
-
-        /**
-         * The destroyer starts.
-         *
-         * @param name The name of the overall action. Not used here.
-         * @param max  The maximum value of the progress.
-         */
-        public void startAction(final String name, final int max)
-        {
-            SwingUtilities.invokeLater(new Runnable()
-            {
-                public void run()
-                {
-                    progressBar.setMinimum(0);
-                    progressBar.setMaximum(max);
-                    blockGUI();
-                }
-            });
-        }
-
-        /**
-         * The destroyer stops.
-         */
-        public void stopAction()
-        {
-            SwingUtilities.invokeLater(new Runnable()
-            {
-                public void run()
-                {
-                    progressBar.setString(langpack.getString("InstallPanel.finished"));
-                    targetDestroyCheckbox.setEnabled(false);
-                    destroyButton.setEnabled(false);
-                    releaseGUI();
-                }
-            });
-        }
-
-        /**
-         * The destroyer progresses.
-         *
-         * @param pos     The actual position.
-         * @param message The message.
-         */
-        public void progress(final int pos, final String message)
-        {
-            SwingUtilities.invokeLater(new Runnable()
-            {
-                public void run()
-                {
-                    progressBar.setValue(pos);
-                    progressBar.setString(message);
-                }
-            });
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public void nextStep(String step_name, int step_no, int no_of_substeps)
-        {
-            // not used
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public void setSubStepNo(int no_of_substeps)
-        {
-            // not used
-        }
-
-        /**
-         * Output a notification.
-         * <p/>
-         * Does nothing here.
-         *
-         * @param text
-         */
-        public void emitNotification(String text)
-        {
-        }
-
-        /**
-         * Output a warning.
-         *
-         * @param text
-         */
-        public boolean emitWarning(String title, String text)
-        {
-            return (JOptionPane.showConfirmDialog(null, text, title, JOptionPane.OK_CANCEL_OPTION,
-                                                  JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION);
-        }
-
-        /**
-         * The destroyer encountered an error.
-         *
-         * @param error The error message.
-         */
-        public void emitError(String title, String error)
-        {
-            progressBar.setString(error);
-            JOptionPane.showMessageDialog(null, error, title, JOptionPane.OK_CANCEL_OPTION);
-        }
-
-        /**
-         * The destroyer encountered an error.
-         *
-         * @param error The error message.
-         */
-        public void emitErrorAndBlockNext(String title, String error)
-        {
-            emitError(title, error);
-        }
-
-        /**
-         * Ask the user a question.
-         *
-         * @param title    Message title.
-         * @param question The question.
-         * @param choices  The set of choices to present.
-         * @return The user's choice.
-         * @see com.izforge.izpack.api.handler.AbstractUIHandler#askQuestion(String, String, int)
-         */
-        public int askQuestion(String title, String question, int choices)
-        {
-            return askQuestion(title, question, choices, -1);
-        }
-
-        /**
-         * Ask the user a question.
-         *
-         * @param title          Message title.
-         * @param question       The question.
-         * @param choices        The set of choices to present.
-         * @param default_choice The default choice. (-1 = no default choice)
-         * @return The user's choice.
-         * @see com.izforge.izpack.api.handler.AbstractUIHandler#askQuestion(String, String, int, int)
-         */
-        public int askQuestion(String title, String question, int choices, int default_choice)
-        {
-            int jo_choices = 0;
-
-            if (choices == AbstractUIHandler.CHOICES_YES_NO)
-            {
-                jo_choices = JOptionPane.YES_NO_OPTION;
-            }
-            else if (choices == AbstractUIHandler.CHOICES_YES_NO_CANCEL)
-            {
-                jo_choices = JOptionPane.YES_NO_CANCEL_OPTION;
-            }
-
-            int user_choice = JOptionPane.showConfirmDialog(null, question, title,
-                                                            jo_choices, JOptionPane.QUESTION_MESSAGE);
-
-            if (user_choice == JOptionPane.CANCEL_OPTION)
-            {
-                return AbstractUIHandler.ANSWER_CANCEL;
-            }
-
-            if (user_choice == JOptionPane.YES_OPTION)
-            {
-                return AbstractUIHandler.ANSWER_YES;
-            }
-
-            if (user_choice == JOptionPane.NO_OPTION)
-            {
-                return AbstractUIHandler.ANSWER_NO;
-            }
-
-            return default_choice;
-        }
-
-    }
-
-    /**
      * The actions events handler.
      *
      * @author Julien Ponge
@@ -565,22 +368,11 @@ public class UninstallerFrame extends JFrame
             else if (src == destroyButton)
             {
                 destroyButton.setEnabled(false);
-                Destroyer destroyer = new Destroyer(installPath,
-                                                    targetDestroyCheckbox.isSelected(), new DestroyerHandler(),
-                                                    container);
-                destroyer.start();
+                destroyer.setForceDelete(targetDestroyCheckbox.isSelected());
+                Thread thread = new Thread(destroyer, "IzPack - Destroyer");
+                thread.start();
             }
         }
-    }
-
-    /**
-     * Returns the langpack.
-     *
-     * @return Returns the langpack.
-     */
-    public static LocaleDatabase getLangpack()
-    {
-        return langpack;
     }
 
 }

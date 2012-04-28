@@ -68,103 +68,100 @@ public interface InstallerListener
     public static final int AFTER_PACKS = 8;
 
     /**
-     * This method will be called from the unpacker before the installation of all packs will be
-     * performed.
+     * Invoked when the installer creates the listener instance, immediately after the install data is parsed.
      *
-     * @param idata   object containing the current installation data
-     * @param npacks  number of packs which are defined for this installation
-     * @param handler a handler to the current used UIProgressHandler
-     * @throws Exception
+     * @param data the installation data
+     * @throws Exception for any error
      */
-    void beforePacks(AutomatedInstallData idata, Integer npacks, AbstractUIProgressHandler handler)
+    void afterInstallerInitialization(AutomatedInstallData data) throws Exception;
+
+    /**
+     * Invoked before packs are installed.
+     *
+     * @param data    the installation data
+     * @param packs   the number of packs which are defined for this installation
+     * @param handler the UI progress handler
+     * @throws Exception for any error
+     */
+    void beforePacks(AutomatedInstallData data, Integer packs, AbstractUIProgressHandler handler)
             throws Exception;
 
     /**
-     * This method will be called from the unpacker before the installation of one pack will be
-     * performed.
+     * Invoked before a pack is installed.
      *
-     * @param pack    current pack object
-     * @param i       current pack number
-     * @param handler a handler to the current used UIProgressHandler
-     * @throws Exception
+     * @param pack    the pack
+     * @param i       the pack number
+     * @param handler the UI progress handler
+     * @throws Exception for any error
      */
     void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception;
 
     /**
-     * Returns true if this listener would be informed at every file and directory installation,
-     * else false. If it is true, the listener will be called two times (before and after) for every
-     * action. Handle carefully, else performance problems are possible.
+     * Determines if the listener should be notified of every file and directory installation.
+     * <p/>
+     * If <tt>true</tt>, the {@link #beforeFile} and {@link #afterFile} methods will be invoked for every installed
+     * file, and {@link #beforeDir}, and {@link #afterDir} invoked for each directory creation.
+     * <p/>
+     * Listeners that return <tt>true</tt> should ensure they don't do any long running operations, to avoid
+     * performance issues.
      *
-     * @return true if this listener would be informed at every file and directory installation,
-     *         else false
+     * @return <tt>true</tt> if the listener should be notified, otherwise <tt>false</tt>
      */
     boolean isFileListener();
 
     /**
-     * This method will be called from the unpacker before one directory should be created. If
-     * parent directories should be created also, this method will be called for every directory
-     * beginning with the base.
+     * Invoked before a directory is created.
      *
-     * @param dir current File object of the just directory which should be created
-     * @param pf  corresponding PackFile object
-     * @throws Exception
+     * @param dir      the directory
+     * @param packFile the corresponding pack file
+     * @throws Exception for any error
      */
-    void beforeDir(File dir, PackFile pf) throws Exception;
+    void beforeDir(File dir, PackFile packFile) throws Exception;
 
     /**
-     * This method will be called from the unpacker after one directory was created. If parent
-     * directories should be created, this method will be called for every directory beginning with
-     * the base.
+     * Invoked after a directory is created.
      *
-     * @param dir current File object of the just created directory
-     * @param pf  corresponding PackFile object
-     * @throws Exception
+     * @param dir      the directory
+     * @param packFile the corresponding pack file
+     * @throws Exception for any error
      */
-    void afterDir(File dir, PackFile pf) throws Exception;
+    void afterDir(File dir, PackFile packFile) throws Exception;
 
     /**
-     * This method will be called from the unpacker before one file should be installed.
+     * Invoked before a file is installed.
      *
-     * @param file current File object of the file which should be installed
-     * @param pf   corresponding PackFile object
-     * @throws Exception
+     * @param file     the file
+     * @param packFile the corresponding pack file
+     * @throws Exception if the listener throws an exception
      */
-    void beforeFile(File file, PackFile pf) throws Exception;
+    void beforeFile(File file, PackFile packFile) throws Exception;
 
     /**
-     * This method will be called from the unpacker after one file was installed.
+     * Invoked after a file is installed.
      *
-     * @param file current File object of the just installed file
-     * @param pf   corresponding PackFile object
-     * @throws Exception
+     * @param file     the file
+     * @param packFile the corresponding pack file
+     * @throws Exception for any error
      */
-    void afterFile(File file, PackFile pf) throws Exception;
+    void afterFile(File file, PackFile packFile) throws Exception;
 
     /**
-     * This method will be called from the unpacker after the installation of one pack was
-     * performed.
+     * Invoked after a pack is installed.
      *
-     * @param pack    current pack object
-     * @param i       current pack number
-     * @param handler a handler to the current used UIProgressHandler
+     * @param pack    the pack
+     * @param i       the pack number
+     * @param handler the UI progress handler
+     * @throws Exception for any error
      */
     void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception;
 
     /**
-     * This method will be called from the unpacker after the installation of all packs was
-     * performed.
+     * Invoked after packs are installed.
      *
-     * @param idata   object containing the current installation data
-     * @param handler a handler to the current used UIProgressHandler
-     * @throws Exception
+     * @param data    the installation data
+     * @param handler the UI progress handler
+     * @throws Exception for any error
      */
-    void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler) throws Exception;
+    void afterPacks(AutomatedInstallData data, AbstractUIProgressHandler handler) throws Exception;
 
-    /**
-     * Called when the installer creates the listener instance, immediately
-     * after the install data is parsed.
-     *
-     * @param data
-     */
-    void afterInstallerInitialization(AutomatedInstallData data) throws Exception;
 }

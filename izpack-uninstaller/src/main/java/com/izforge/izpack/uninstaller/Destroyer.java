@@ -19,383 +19,191 @@
 
 package com.izforge.izpack.uninstaller;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.izforge.izpack.api.container.Container;
-import com.izforge.izpack.api.event.UninstallerListener;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.data.ExecutableFile;
-import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.unix.ShellScript;
+import com.izforge.izpack.uninstaller.event.UninstallerListeners;
+import com.izforge.izpack.uninstaller.resource.Executables;
+import com.izforge.izpack.uninstaller.resource.InstallLog;
+import com.izforge.izpack.uninstaller.resource.RootScripts;
 
 
 /**
  * The files destroyer class.
  *
  * @author Julien Ponge
+ * @author Tim Anderson
  */
-public class Destroyer extends Thread
+public class Destroyer implements Runnable
 {
+
+    /**
+     * The progress handler.
+     */
+    private final AbstractUIProgressHandler handler;
+
+    /**
+     * The log of installed files.
+     */
+    private final InstallLog log;
+
+    /**
+     * The uninstaller listeners.
+     */
+    private final UninstallerListeners listeners;
+
+    /**
+     * The executables.
+     */
+    private final Executables executables;
+
+    /**
+     * The root scripts.
+     */
+    private final RootScripts rootScripts;
+
+    /**
+     * True if the destroyer must force recursive deletion.
+     */
+    private boolean forceDelete;
+
+    /**
+     * The logger.
+     */
     private static final Logger logger = Logger.getLogger(Destroyer.class.getName());
-
-    /**
-     * True if the destroyer must force the recursive deletion.
-     */
-    private boolean forceDestroy;
-
-    /**
-     * The installation path.
-     */
-    private String installPath;
-
-    /**
-     * the destroyer listener.
-     */
-    private AbstractUIProgressHandler handler;
-
-    /**
-     * The container.
-     */
-    private final Container container;
 
     /**
      * The constructor.
      *
-     * @param installPath  The installation path.
-     * @param forceDestroy Shall we force the recursive deletion.
-     * @param handler      The destroyer listener
-     * @param container    the container
+     * @param log       the installation log
+     * @param listeners the uninstaller listeners
      */
-    public Destroyer(String installPath, boolean forceDestroy, AbstractUIProgressHandler handler, Container container)
+    public Destroyer(AbstractUIProgressHandler handler, InstallLog log, UninstallerListeners listeners,
+                     Executables executables, RootScripts rootScripts)
     {
-        super("IzPack - Destroyer");
-
-        this.installPath = installPath;
-        this.forceDestroy = forceDestroy;
         this.handler = handler;
-        this.container = container;
+        this.log = log;
+        this.listeners = listeners;
+        this.executables = executables;
+        this.rootScripts = rootScripts;
     }
 
     /**
-     * The run method.
+     * Determines if any remaining files should be removed after the installed files are removed.
+     *
+     * @param force if <tt>true</tt>, remove remaining files
+     */
+    public void setForceDelete(boolean force)
+    {
+        this.forceDelete = force;
+    }
+
+    /**
+     * Runs the destroyer.
      */
     @Override
     public void run()
     {
         try
         {
-            // We get the list of uninstaller listeners
-            List<UninstallerListener>[] listeners = getListenerLists();
-            // We get the list of the files to delete
-            ArrayList<ExecutableFile> executables = getExecutablesList();
-
-            FileExecutor executor = new FileExecutor(executables);
-            executor.executeFiles(ExecutableFile.UNINSTALL, this.handler);
-
-            ArrayList<File> files = getFilesList();
-            int size = files.size();
-
-            // Custem action listener stuff --- beforeDeletion ----
-            informListeners(listeners[0], UninstallerListener.BEFORE_DELETION, files, handler);
-
-            handler.startAction("destroy", size);
-
-            // We destroy the files
-            for (int i = 0; i < size; i++)
+            if (!executables.run())
             {
-                File file = files.get(i);
-                // Custem action listener stuff --- beforeDelete ----
-                informListeners(listeners[1], UninstallerListener.BEFORE_DELETE, file, handler);
-
-                file.delete();
-
-                // Custem action listener stuff --- afterDelete ----
-                informListeners(listeners[1], UninstallerListener.AFTER_DELETE, file, handler);
-
-                handler.progress(i, file.getAbsolutePath());
+                logger.severe("An executable has failed. Destroyer will not be run");
             }
-
-            // Custem action listener stuff --- afterDeletion ----
-            informListeners(listeners[0], UninstallerListener.AFTER_DELETION, files, handler);
-
-            if (OsVersion.IS_UNIX)
+            else
             {
-                ArrayList<String> rootScripts = getRootScripts();
-                for (String rootScript : rootScripts)
-                {
-                    execRootScript(rootScript);
-                }
-
+                destroy();
             }
-            // We make a complementary cleanup
-            handler.progress(size, "[ cleanups ]");
-            cleanup(new File(installPath));
-
-            handler.stopAction();
         }
-        catch (Throwable err)
+        catch (Throwable exception)
         {
             handler.stopAction();
-            err.printStackTrace();
+            logger.log(Level.SEVERE, exception.getMessage(), exception);
 
             StringWriter trace = new StringWriter();
-            err.printStackTrace(new PrintWriter(trace));
+            exception.printStackTrace(new PrintWriter(trace));
 
             handler.emitError("exception caught", trace.toString());
         }
     }
 
     /**
-     * Asks the JVM for the uninstaller deletion.
+     * Deletes installed files, runs any root scripts, and cleans up remaining files if required.
      *
-     * @exception Exception Description of the Exception
+     * @throws Exception for any error
      */
-    // private void askUninstallerRemoval() throws Exception
-    // {
-    // // Initialisations
-    // InputStream in = Destroyer.class.getResourceAsStream("/jarlocation.log");
-    // InputStreamReader inReader = new InputStreamReader(in);
-    // BufferedReader reader = new BufferedReader(inReader);
-    //
-    // // We delete
-    // File jar = new File(reader.readLine());
-    // File path = new File(reader.readLine());
-    // File inst = new File(installPath);
-    // jar.deleteOnExit();
-    // path.deleteOnExit();
-    // inst.deleteOnExit();
-    // }
-
-    /**
-     * Returns an ArrayList of the files to delete.
-     *
-     * @return The files list.
-     * @throws Exception Description of the Exception
-     */
-    public ArrayList<File> getFilesList() throws Exception
+    private void destroy() throws Exception
     {
-        // Initialisations
-        InputStream in = getClass().getClassLoader().getResourceAsStream("install.log");
-        InputStreamReader inReader = new InputStreamReader(in);
-        BufferedReader reader = new BufferedReader(inReader);
-        return readBufferForFileList(reader);
-    }
+        List<File> files = log.getInstalled();
+        int size = files.size();
+        listeners.beforeDeletion(files, handler);
+        handler.startAction("destroy", size);
 
-    public ArrayList<File> readBufferForFileList(BufferedReader reader)
-            throws IOException
-    {
-        TreeSet<File> files = new TreeSet<File>(Collections.reverseOrder());
-        // We skip the first line (the installation path)
-        reader.readLine();
-
-        // We read it
-        String read = reader.readLine();
-        while (read != null)
+        for (int i = 0; i < size; i++)
         {
-            files.add(new File(read));
-            read = reader.readLine();
+            File file = files.get(i);
+            listeners.beforeDelete(file, handler);
+
+            delete(file);
+
+            listeners.afterDelete(file, handler);
+            handler.progress(i, file.getAbsolutePath());
         }
 
-        // We return it
-        return new ArrayList<File>(files);
+        listeners.afterDeletion(files, handler);
+
+        rootScripts.run();
+
+        // We make a complementary cleanup
+        handler.progress(log.getInstalled().size(), "[ cleanups ]");
+
+        File installPath = new File(log.getInstallPath());
+        cleanup(installPath);
+
+        handler.stopAction();
     }
 
     /**
-     * Gets the List of all Executables
+     * Recursively deletes a directory tree.
      *
-     * @return The ArrayList of the Executables
-     * @throws Exception
+     * @param file the file to delete
      */
-    private ArrayList<ExecutableFile> getExecutablesList() throws Exception
-    {
-        ArrayList<ExecutableFile> executables = new ArrayList<ExecutableFile>();
-        ObjectInputStream in = new ObjectInputStream(getClass().getClassLoader().getResourceAsStream("executables"));
-        int num = in.readInt();
-        for (int i = 0; i < num; i++)
-        {
-            ExecutableFile file = (ExecutableFile) in.readObject();
-            executables.add(file);
-        }
-        return executables;
-    }
-
-    /**
-     * Gets the root files.
-     *
-     * @return The files which should remove by root for another user
-     * @throws Exception
-     */
-    private ArrayList<String> getRootScripts() throws Exception
-    {
-        ArrayList<String> result = new ArrayList<String>();
-
-        int idx = 0;
-        while (true)
-        {
-            try
-            {
-                ObjectInputStream in = new ObjectInputStream(
-                        getClass().getClassLoader().getResourceAsStream(
-                                UninstallData.ROOTSCRIPT + Integer.toString(idx)));
-
-                result.add(in.readUTF());
-            }
-            catch (Exception e)
-            {
-                logger.fine("Last RootScript Index=" + idx);
-                break;
-            }
-            idx++;
-        }
-        return result;
-    }
-
-    /**
-     * Removes the given files as root for the given Users
-     *
-     * @param aRootScript The Script to exec as uninstall time by root.
-     */
-    private void execRootScript(String aRootScript)
-    {
-        if (!"".equals(aRootScript))
-        {
-            logger.fine("Will Execute: " + aRootScript);
-
-            try
-            {
-                String result = ShellScript.execAndDelete(new StringBuffer(aRootScript), File.createTempFile(
-                        this.getClass().getName(),
-                        Long.toString(System.currentTimeMillis()) + ".sh").toString());
-                logger.fine("Result: " + result);
-            }
-            catch (Exception e)
-            {
-                logger.log(Level.WARNING,
-                           "Exeption during su remove: " + e.getMessage(),
-                           e);
-            }
-        }
-    }
-
-    /**
-     * Makes some reccursive cleanups.
-     *
-     * @param file The file to wipe.
-     * @throws Exception Description of the Exception
-     */
-    private void cleanup(File file) throws Exception
+    private void cleanup(File file)
     {
         if (file.isDirectory())
         {
             File[] files = file.listFiles();
             if (files != null)
             {
-                int size = files.length;
-                for (int i = 0; i < size; i++)
+                for (File child : files)
                 {
-                    cleanup(files[i]);
+                    cleanup(child);
                 }
             }
-            file.delete();
+            delete(file);
         }
-        else if (forceDestroy)
+        else if (forceDelete)
         {
-            file.delete();
+            delete(file);
         }
-
-    }
-
-    // CUSTOM ACTION STUFF -------------- start -----------------
-
-    /**
-     * Load the defined uninstall listener objects.
-     *
-     * @return a list with the defined uninstall listeners
-     * @throws Exception
-     */
-    private List<UninstallerListener>[] getListenerLists() throws Exception
-    {
-        ArrayList<UninstallerListener>[] uninstaller = new ArrayList[]{new ArrayList<UninstallerListener>(), new ArrayList<UninstallerListener>()};
-        // Load listeners if exist
-        InputStream in;
-        ObjectInputStream objIn;
-        in = Destroyer.class.getResourceAsStream("/uninstallerListeners");
-        if (in != null)
-        {
-            objIn = new ObjectInputStream(in);
-            List<String> listeners = (List) objIn.readObject();
-            objIn.close();
-            for (String listener : listeners)
-            {
-                Class<UninstallerListener> clazz = (Class<UninstallerListener>) Class.forName(listener);
-                container.addComponent(clazz);
-                UninstallerListener uninstallerListener = container.getComponent(clazz);
-                if (uninstallerListener.isFileListener())
-                {
-                    uninstaller[1].add(uninstallerListener);
-                }
-                uninstaller[0].add(uninstallerListener);
-            }
-        }
-        return uninstaller;
     }
 
     /**
-     * Informs all listeners.
+     * Deletes a file.
      *
-     * @param listeners list with the listener objects
-     * @param action    identifier which callback should be called
-     * @param param     parameter for the call
-     * @param handler   the current progress handler
+     * @param file the file to delete
      */
-
-    private void informListeners(List<UninstallerListener> listeners, int action, Object param,
-                                 AbstractUIProgressHandler handler)
+    private void delete(File file)
     {
-        // Iterate the action list.
-        for (UninstallerListener listener : listeners)
+        if (!file.delete())
         {
-            try
-            {
-                switch (action)
-                {
-                    case UninstallerListener.BEFORE_DELETION:
-                        listener.beforeDeletion((List<?>) param, handler);
-                        break;
-                    case UninstallerListener.AFTER_DELETION:
-                        listener.afterDeletion((List<?>) param, handler);
-                        break;
-                    case UninstallerListener.BEFORE_DELETE:
-                        listener.beforeDelete((File) param, handler);
-                        break;
-                    case UninstallerListener.AFTER_DELETE:
-                        listener.afterDelete((File) param, handler);
-                        break;
-                }
-            }
-            catch (Throwable e)
-            { // Catch it to prevent for a block of uninstallation.
-                handler.emitError("Skipping custom action because exception caught during "
-                                          + listener.getClass().getName(), e.toString());
-            }
+            logger.warning("Failed to delete: " + file);
         }
     }
-
-    // CUSTOM ACTION STUFF -------------- end -----------------
 
 }

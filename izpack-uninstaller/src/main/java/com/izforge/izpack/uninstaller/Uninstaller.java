@@ -19,17 +19,21 @@
 
 package com.izforge.izpack.uninstaller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.uninstaller.console.ConsoleUninstallerContainer;
+import com.izforge.izpack.uninstaller.container.UninstallerContainer;
+import com.izforge.izpack.uninstaller.gui.GUIUninstallerContainer;
+import com.izforge.izpack.uninstaller.gui.UninstallerFrame;
+import com.izforge.izpack.uninstaller.resource.DefaultResources;
+import com.izforge.izpack.uninstaller.resource.InstallLog;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.Platforms;
@@ -45,14 +49,15 @@ import com.izforge.izpack.util.SelfModifier;
 public class Uninstaller
 {
     /**
-     * The install.log resource path.
-     */
-    private static final String INSTALL_LOG = "/install.log";
-
-    /**
      * The exec-admin resource path.
      */
     private static final String EXEC_ADMIN = "/exec-admin";
+
+    /**
+     * The logger.
+     */
+    private static final Logger logger = Logger.getLogger(Uninstaller.class.getName());
+
 
     /**
      * The main method (program entry point).
@@ -64,23 +69,31 @@ public class Uninstaller
         // relaunch the uninstaller with elevated permissions if required
         Platform platform = new Platforms().getCurrentPlatform();
 
-        if (!PrivilegedRunner.isPrivilegedMode() && isElevationRequired(platform))
+        try
         {
-            if (relaunchWithElevatedRights(platform))
+            if (!PrivilegedRunner.isPrivilegedMode() && isElevationRequired(platform))
             {
-                System.exit(0);
+                if (relaunchWithElevatedRights(platform))
+                {
+                    System.exit(0);
+                }
             }
         }
+        catch (IOException exception)
+        {
+            logger.log(Level.SEVERE, exception.getMessage(), exception);
+            System.exit(1);
+        }
 
-        boolean cmduninstall = false;
+        boolean console = false;
         for (String arg : args)
         {
             if (arg.equals("-c"))
             {
-                cmduninstall = true;
+                console = true;
             }
         }
-        if (cmduninstall)
+        if (console)
         {
             System.out.println("Command line uninstaller.\n");
         }
@@ -88,9 +101,9 @@ public class Uninstaller
         {
             Class<Uninstaller> clazz = Uninstaller.class;
             Method target;
-            if (cmduninstall)
+            if (console)
             {
-                target = clazz.getMethod("cmduninstall", new Class[]{String[].class});
+                target = clazz.getMethod("consoleUninstall", new Class[]{String[].class});
             }
             else
             {
@@ -108,12 +121,17 @@ public class Uninstaller
         }
     }
 
-    public static void cmduninstall(String[] args)
+    /**
+     * Runs uninstallation via the console.
+     *
+     * @param args the command line arguments
+     */
+    public static void consoleUninstall(String[] args)
     {
-        UninstallerContainer container = createContainer();
+        UninstallerContainer container = new ConsoleUninstallerContainer();
         try
         {
-            UninstallerConsole uninstallerConsole = container.getComponent(UninstallerConsole.class);
+            Destroyer destroyer = container.getComponent(Destroyer.class);
             boolean force = false;
             for (String arg : args)
             {
@@ -123,13 +141,12 @@ public class Uninstaller
                 }
             }
             System.out.println("Force deletion: " + force);
-            uninstallerConsole.runUninstall(force);
+            destroyer.setForceDelete(force);
+            destroyer.run();
         }
         catch (Exception err)
         {
-            System.err.println("- Error -");
-            err.printStackTrace();
-            container.getComponent(Housekeeper.class).shutDown(0);
+            shutdown(container, err);
         }
     }
 
@@ -139,7 +156,7 @@ public class Uninstaller
         {
             public void run()
             {
-                UninstallerContainer container = createContainer();
+                UninstallerContainer container = new GUIUninstallerContainer();
                 try
                 {
                     boolean displayForceOption = true;
@@ -163,17 +180,16 @@ public class Uninstaller
                 }
                 catch (Exception err)
                 {
-                    System.err.println("- Error -");
-                    err.printStackTrace();
-                    container.getComponent(Housekeeper.class).shutDown(0);
+                    shutdown(container, err);
                 }
             }
         });
     }
 
-    private static UninstallerContainer createContainer()
+    private static void shutdown(UninstallerContainer container, Exception error)
     {
-        return new UninstallerContainer();
+        logger.log(Level.SEVERE, error.getMessage(), error);
+        container.getComponent(Housekeeper.class).shutDown(1);
     }
 
     /**
@@ -225,46 +241,18 @@ public class Uninstaller
      *
      * @param platform the current platform
      * @return <tt>true</tt> if elevation is needed
-     * @throws IzPackException if the installation path cannot be determined
+     * @throws IOException if the installation path cannot be determined
      */
-    private static boolean isElevationRequired(Platform platform)
+    private static boolean isElevationRequired(Platform platform) throws IOException
     {
         boolean result = false;
         if (Uninstaller.class.getResource(EXEC_ADMIN) != null)
         {
-            String path = getInstallPath();
+            String path = InstallLog.getInstallPath(new DefaultResources());
             PrivilegedRunner runner = new PrivilegedRunner(platform);
             result = runner.isElevationNeeded(path);
         }
         return result;
-    }
-
-    /**
-     * Gets the installation path from the log file.
-     *
-     * @return the install path
-     * @throws IzPackException if the <em>install.log</em> resource cannot be read
-     */
-    private static String getInstallPath()
-    {
-        String installPath;
-        try
-        {
-            InputStream in = Uninstaller.class.getResourceAsStream(INSTALL_LOG);
-            if (in == null)
-            {
-                throw new IzPackException(INSTALL_LOG + " resource not found");
-            }
-            InputStreamReader inReader = new InputStreamReader(in);
-            BufferedReader reader = new BufferedReader(inReader);
-            installPath = reader.readLine();
-            reader.close();
-        }
-        catch (IOException exception)
-        {
-            throw new IzPackException(exception);
-        }
-        return installPath;
     }
 
 }

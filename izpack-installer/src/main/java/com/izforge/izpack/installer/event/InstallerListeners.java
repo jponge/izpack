@@ -22,7 +22,7 @@ public class InstallerListeners implements InstallerListener
     /**
      * The listeners.
      */
-    private List<InstallerListener> listeners = new ArrayList<InstallerListener>();
+    private final List<InstallerListener> listeners = new ArrayList<InstallerListener>();
 
     /**
      * Determines if any of the listeners should be notified of file and directory events.
@@ -78,18 +78,18 @@ public class InstallerListeners implements InstallerListener
     /**
      * Invoked before packs are installed.
      *
-     * @param installData the installation data
-     * @param packs       number of packs which are defined for this installation
-     * @param handler     the UI progress handler
+     * @param data    the installation data
+     * @param packs   number of packs which are defined for this installation
+     * @param handler the UI progress handler
      * @throws Exception if the listener throws an exception
      */
     @Override
-    public void beforePacks(AutomatedInstallData installData, Integer packs, AbstractUIProgressHandler handler)
+    public void beforePacks(AutomatedInstallData data, Integer packs, AbstractUIProgressHandler handler)
             throws Exception
     {
         for (InstallerListener listener : listeners)
         {
-            listener.beforePacks(installData, packs, handler);
+            listener.beforePacks(data, packs, handler);
         }
     }
 
@@ -123,76 +123,96 @@ public class InstallerListeners implements InstallerListener
 
     /**
      * Invoked before a directory is created.
+     * <p/>
+     * This implementation only invokes those listeners whose {@link #isFileListener()} returns <tt>true</tt>.
      *
-     * @param dir the directory
-     * @param pf  corresponding pack file
+     * @param dir      the directory
+     * @param packFile corresponding pack file
      * @throws Exception if the listener throws an exception
      */
     @Override
-    public void beforeDir(File dir, PackFile pf) throws Exception
+    public void beforeDir(File dir, PackFile packFile) throws Exception
     {
-        for (InstallerListener listener : listeners)
+        if (fileListener)
         {
-            if (listener.isFileListener())
+            for (InstallerListener listener : listeners)
             {
-                listener.beforeDir(dir, pf);
+                if (listener.isFileListener())
+                {
+                    listener.beforeDir(dir, packFile);
+                }
             }
         }
     }
 
     /**
      * Invoked after a directory is created.
+     * <p/>
+     * This implementation only invokes those listeners whose {@link #isFileListener()} returns <tt>true</tt>.
      *
-     * @param dir the directory
-     * @param pf  corresponding pack file
+     * @param dir      the directory
+     * @param packFile corresponding pack file
      * @throws Exception if the listener throws an exception
      */
     @Override
-    public void afterDir(File dir, PackFile pf) throws Exception
+    public void afterDir(File dir, PackFile packFile) throws Exception
     {
-        for (InstallerListener listener : listeners)
+        if (fileListener)
         {
-            if (listener.isFileListener())
+            for (InstallerListener listener : listeners)
             {
-                listener.afterDir(dir, pf);
+                if (listener.isFileListener())
+                {
+                    listener.afterDir(dir, packFile);
+                }
             }
         }
     }
 
     /**
      * Invoked before a file is installed.
+     * <p/>
+     * This implementation only invokes those listeners whose {@link #isFileListener()} returns <tt>true</tt>.
      *
-     * @param file the file
-     * @param pf   corresponding pack file
+     * @param file     the file
+     * @param packFile corresponding pack file
      * @throws Exception if the listener throws an exception
      */
     @Override
-    public void beforeFile(File file, PackFile pf) throws Exception
+    public void beforeFile(File file, PackFile packFile) throws Exception
     {
-        for (InstallerListener listener : listeners)
+        if (fileListener)
         {
-            if (listener.isFileListener())
+            for (InstallerListener listener : listeners)
             {
-                listener.beforeFile(file, pf);
+                if (listener.isFileListener())
+                {
+                    listener.beforeFile(file, packFile);
+                }
             }
         }
     }
 
     /**
      * Invoked after a file is installed.
+     * <p/>
+     * This implementation only invokes those listeners whose {@link #isFileListener()} returns <tt>true</tt>.
      *
-     * @param file the file
-     * @param pf   corresponding pack file
+     * @param file     the file
+     * @param packFile corresponding pack file
      * @throws Exception if the listener throws an exception
      */
     @Override
-    public void afterFile(File file, PackFile pf) throws Exception
+    public void afterFile(File file, PackFile packFile) throws Exception
     {
-        for (InstallerListener listener : listeners)
+        if (fileListener)
         {
-            if (listener.isFileListener())
+            for (InstallerListener listener : listeners)
             {
-                listener.afterFile(file, pf);
+                if (listener.isFileListener())
+                {
+                    listener.afterFile(file, packFile);
+                }
             }
         }
     }
@@ -217,21 +237,21 @@ public class InstallerListeners implements InstallerListener
     /**
      * Invoked after packs are installed.
      *
-     * @param installData the installation data
-     * @param handler     the UI progress handler
+     * @param data    the installation data
+     * @param handler the UI progress handler
      * @throws Exception if a listener throws an exception
      */
     @Override
-    public void afterPacks(AutomatedInstallData installData, AbstractUIProgressHandler handler) throws Exception
+    public void afterPacks(AutomatedInstallData data, AbstractUIProgressHandler handler) throws Exception
     {
         for (InstallerListener listener : listeners)
         {
-            listener.afterPacks(installData, handler);
+            listener.afterPacks(data, handler);
         }
     }
 
     /**
-     * Called when the installer creates the listener instance, immediately after the install data is parsed.
+     * Invoked when the installer creates the listener instance, immediately after the install data is parsed.
      *
      * @param installData the installation data
      * @throws Exception if a listener throws an exception

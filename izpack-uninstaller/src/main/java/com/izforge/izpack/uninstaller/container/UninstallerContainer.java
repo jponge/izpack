@@ -1,4 +1,4 @@
-package com.izforge.izpack.uninstaller;
+package com.izforge.izpack.uninstaller.container;
 
 import java.util.Properties;
 
@@ -9,10 +9,18 @@ import org.picocontainer.injectors.ProviderAdapter;
 import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ContainerException;
+import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.PlatformProvider;
 import com.izforge.izpack.core.factory.DefaultObjectFactory;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
+import com.izforge.izpack.uninstaller.Destroyer;
+import com.izforge.izpack.uninstaller.gui.UninstallerFrame;
+import com.izforge.izpack.uninstaller.resource.DefaultResources;
+import com.izforge.izpack.uninstaller.resource.Executables;
+import com.izforge.izpack.uninstaller.resource.InstallLog;
+import com.izforge.izpack.uninstaller.resource.Resources;
+import com.izforge.izpack.uninstaller.resource.RootScripts;
 import com.izforge.izpack.util.DefaultTargetPlatformFactory;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.Librarian;
@@ -25,18 +33,8 @@ import com.izforge.izpack.util.TargetFactory;
  *
  * @author Tim Anderson
  */
-public class UninstallerContainer extends AbstractContainer
+public abstract class UninstallerContainer extends AbstractContainer
 {
-
-    /**
-     * Constructs an <tt>UninstallerContainer</tt>.
-     *
-     * @throws ContainerException if initialisation fails
-     */
-    public UninstallerContainer()
-    {
-        initialise();
-    }
 
     /**
      * Invoked by {@link #initialise} to fill the container.
@@ -49,6 +47,7 @@ public class UninstallerContainer extends AbstractContainer
     @Override
     protected void fillContainer(MutablePicoContainer container)
     {
+        addComponent(Resources.class, DefaultResources.class);
         addComponent(Housekeeper.class);
         addComponent(Librarian.class);
         addComponent(TargetFactory.class);
@@ -59,8 +58,15 @@ public class UninstallerContainer extends AbstractContainer
         addComponent(Container.class, this);
         addComponent(Properties.class);
         addComponent(ResourceManager.class);
-        addComponent(UninstallerConsole.class);
         addComponent(Platforms.class);
+        addComponent(ObjectFactory.class, DefaultObjectFactory.class);
+        addComponent(InstallLog.class);
+        addComponent(Executables.class);
+        addComponent(RootScripts.class);
+        addComponent(Destroyer.class);
+
         container.addAdapter(new ProviderAdapter(new PlatformProvider()));
+        container.addAdapter(new ProviderAdapter(new UninstallerListenersProvider()));
+        container.addAdapter(new ProviderAdapter(new LocaleDatabaseProvider()));
     }
 }

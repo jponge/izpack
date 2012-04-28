@@ -1,12 +1,12 @@
 package com.izforge.izpack.test.listener;
 
+import java.io.File;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-
-import java.io.File;
 
 /**
  * An {@link InstallerListener} that tracks invocations for testing purposes.
@@ -180,10 +180,10 @@ public class TestInstallerListener implements InstallerListener
     /**
      * Invoked after packs are installed.
      *
-     * @param installData the install data
-     * @param handler     the UI progress handler
+     * @param data    the install data
+     * @param handler the UI progress handler
      */
-    public void afterPacks(AutomatedInstallData installData, AbstractUIProgressHandler handler)
+    public void afterPacks(AutomatedInstallData data, AbstractUIProgressHandler handler)
     {
         ++afterPacksCount;
         log("afterPacks");
@@ -229,10 +229,10 @@ public class TestInstallerListener implements InstallerListener
     /**
      * Invoked before a directory is created.
      *
-     * @param dir the directory
-     * @param pf  corresponding pack file
+     * @param dir      the directory
+     * @param packFile corresponding pack file
      */
-    public void beforeDir(File dir, PackFile pf)
+    public void beforeDir(File dir, PackFile packFile)
     {
         ++beforeDirCount;
         log("beforeDir: dir=" + dir);
@@ -241,10 +241,10 @@ public class TestInstallerListener implements InstallerListener
     /**
      * Invoked after a directory is created.
      *
-     * @param dir the directory
-     * @param pf  corresponding pack file
+     * @param dir      the directory
+     * @param packFile corresponding pack file
      */
-    public void afterDir(File dir, PackFile pf)
+    public void afterDir(File dir, PackFile packFile)
     {
         ++afterDirCount;
         log("afterDir: dir=" + dir);
@@ -253,10 +253,10 @@ public class TestInstallerListener implements InstallerListener
     /**
      * Invoked before a file is installed.
      *
-     * @param file the file
-     * @param pf   corresponding pack file
+     * @param file     the file
+     * @param packFile corresponding pack file
      */
-    public void beforeFile(File file, PackFile pf)
+    public void beforeFile(File file, PackFile packFile)
     {
         ++beforeFileCount;
         log("beforeFile: file=" + file);
@@ -265,10 +265,10 @@ public class TestInstallerListener implements InstallerListener
     /**
      * Invoked after a file is installed.
      *
-     * @param file the file
-     * @param pf   corresponding pack file
+     * @param file     the file
+     * @param packFile corresponding pack file
      */
-    public void afterFile(File file, PackFile pf)
+    public void afterFile(File file, PackFile packFile)
     {
         ++afterFileCount;
         log("afterFile: file=" + file);

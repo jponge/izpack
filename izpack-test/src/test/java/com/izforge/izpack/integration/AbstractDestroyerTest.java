@@ -34,7 +34,7 @@ public class AbstractDestroyerTest extends AbstractInstallationTest
      */
     protected void runDestroyer(File uninstallJar) throws Exception
     {
-        UninstallHelper.uninstall(getInstallPath(), uninstallJar);
+        UninstallHelper.uninstall(uninstallJar);
     }
 
     /**
