@@ -144,8 +144,6 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
 
     private int resultFormat = DEFAULT;
 
-    private GUIInstallData idata = null;
-
     /**
      * Holds an instance of the <code>Validator</code> if one was specified and available
      */
@@ -232,7 +230,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
         this.toolkit = toolkit;
         this.separator = separator;
         this.resultFormat = resultFormat;
-        this.idata = idata;
+        variableSubstitutor = new VariableSubstitutorImpl(idata.getVariables());
 
         com.izforge.izpack.gui.FlowLayout layout = new com.izforge.izpack.gui.FlowLayout();
         layout.setAlignment(com.izforge.izpack.gui.FlowLayout.LEFT);
@@ -285,7 +283,6 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
         // ----------------------------------------------------
         activeField = (RuleTextField) inputFields.elementAt(0);
         activeField.grabFocus();
-        variableSubstitutor = new VariableSubstitutorImpl(this.idata.getVariables());
     }
 
     /**
@@ -298,7 +295,6 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     {
         return (inputFields.size());
     }
-
 
 
     /**
@@ -316,7 +312,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
             throw (new IndexOutOfBoundsException());
         }
 
-        return (((JTextField) inputFields.elementAt(index)).getText());
+        return inputFields.elementAt(index).getText();
     }
 
     @Override
@@ -334,7 +330,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     public String getText()
     {
         Object item;
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         int size = inputFields.size();
 
         // ----------------------------------------------------
@@ -363,7 +359,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
         {
             for (int i = 0; i < inputFields.size(); i++)
             {
-                buffer.append(((JTextField) inputFields.elementAt(i)).getText());
+                buffer.append(inputFields.elementAt(i).getText());
             }
         }
 
@@ -395,7 +391,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
         {
             for (int i = 0; i < size; i++)
             {
-                buffer.append(((JTextField) inputFields.elementAt(i)).getText());
+                buffer.append((inputFields.elementAt(i)).getText());
 
                 if (i < (size - 1))
                 {
@@ -444,7 +440,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
             {
                 spec = new FieldSpec(token);
                 field = new RuleTextField(spec.getColumns(), spec.getEditLength(), spec.getType(),
-                        spec.getUnlimitedEdit(), toolkit);
+                                          spec.getUnlimitedEdit(), toolkit);
 
                 // ------------------------------------------------
                 // if the previous item is also a field, insert a
@@ -534,10 +530,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
         String indexString;
         int index;
         boolean process = false;
-        String[] vals = null;
-        int i = 0;
 
-        vals = new String[tokenizer.countTokens()];
         while (tokenizer.hasMoreTokens())
         {
             token = tokenizer.nextToken();
@@ -561,14 +554,12 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
                         process = true;
                     }
                     val = variableSubstitutor.substitute(val);
-                    vals[i] = val;
-                    i++;
-                    ((JTextField) inputFields.elementAt(index)).setText(val);
+                    inputFields.elementAt(index).setText(val);
                 }
             }
             catch (Throwable exception)
             {
-                exception.printStackTrace();
+                logger.log(Level.WARNING, exception.getMessage(), exception);
             }
         }
 
@@ -591,7 +582,6 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
                         if (val.contains(":"))
                         {
                             className = val.substring(val.indexOf(":") + 1);
-                            val = val.substring(0, val.indexOf(":"));
                         }
 
                         if (!"".equals(className))
@@ -600,11 +590,12 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
                             presult = processor.process(this);
                         }
                         String[] td = new RE("\\*").split(presult);
-                        ((JTextField) inputFields.elementAt(index)).setText(td[index]);
+                        inputFields.elementAt(index).setText(td[index]);
                     }
                 }
                 catch (Throwable exception)
                 {
+                    logger.log(Level.WARNING, exception.getMessage(), exception);
                 }
             }
         }
