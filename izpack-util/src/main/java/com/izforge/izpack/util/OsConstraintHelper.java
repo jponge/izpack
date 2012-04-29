@@ -87,15 +87,15 @@ public class OsConstraintHelper
             osList.add(
                     new OsModel(
                             osElement.getAttribute("arch",
-                                    null),
+                                                   null),
                             osElement.getAttribute("family",
-                                    null),
+                                                   null),
                             osElement.getAttribute("jre",
-                                    null),
+                                                   null),
                             osElement.getAttribute("name",
-                                    null),
+                                                   null),
                             osElement.getAttribute("version",
-                                    null))
+                                                   null))
             );
         }
         // backward compatibility: still support os attribute
@@ -104,8 +104,7 @@ public class OsConstraintHelper
         {
             // add the "os" attribute as a family constraint
             osList.add(
-                    new OsModel(osattr,
-                            null, null, null, null)
+                    new OsModel(null, osattr, null, null, null)
             );
         }
 
