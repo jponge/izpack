@@ -21,6 +21,15 @@
 
 package com.izforge.izpack.installer.web;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
@@ -33,15 +42,6 @@ import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.util.OsConstraintHelper;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * This class enumerates the availabe packs at the web repository. Parses the config files
@@ -230,7 +230,7 @@ public class WebRepositoryAccessor
                 IXMLElement packElement = root.getChildAtIndex(i);
                 PackInfo packInfo = packs.get(i);
                 Pack pack = packInfo.getPack();
-                pack.nbytes = Long.parseLong(packElement.getAttribute("nbytes"));
+                pack.setSize(Long.parseLong(packElement.getAttribute("nbytes")));
             }
         }
         catch (Exception e)

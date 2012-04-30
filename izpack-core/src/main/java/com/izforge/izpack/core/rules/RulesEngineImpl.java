@@ -480,23 +480,23 @@ public class RulesEngineImpl implements RulesEngine
             logger.fine("Initializing built-in conditions for packs");
             for (Pack pack : installData.getAllPacks())
             {
-                if (pack.id != null)
+                if (pack.getLangPackId() != null)              // TODO - see IZPACK-799
                 {
                     // automatically add packselection condition
                     PackSelectionCondition packselcond = new PackSelectionCondition();
                     packselcond.setInstalldata(installData);
-                    packselcond.setId("izpack.selected." + pack.id);
-                    packselcond.setPackid(pack.id);
+                    packselcond.setId("izpack.selected." + pack.getLangPackId());
+                    packselcond.setPackid(pack.getLangPackId());
                     conditionsMap.put(packselcond.getId(), packselcond);
 
                     String condition = pack.getCondition();
                     logger.fine("Checking pack condition \"" + condition + "\" for pack \""
-                                        + pack.id + "\"");
+                                        + pack.getLangPackId() + "\"");
                     if ((condition != null) && !condition.isEmpty())
                     {
                         logger.fine("Adding pack condition \"" + condition + "\" for pack \""
-                                            + pack.id + "\"");
-                        packConditions.put(pack.id, condition);
+                                            + pack.getLangPackId() + "\"");
+                        packConditions.put(pack.getLangPackId(), condition);
                     }
                 }
             }

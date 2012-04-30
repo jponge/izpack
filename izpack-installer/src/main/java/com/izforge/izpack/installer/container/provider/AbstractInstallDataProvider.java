@@ -1,5 +1,21 @@
 package com.izforge.izpack.installer.container.provider;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.picocontainer.injectors.Provider;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.DynamicVariable;
@@ -19,21 +35,6 @@ import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraintHelper;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.TemporaryDirectory;
-import org.picocontainer.injectors.Provider;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Abstract class sharing commons instanciation methods beetween installData
@@ -60,7 +61,8 @@ public abstract class AbstractInstallDataProvider implements Provider
      * @param installdata Where to store the installation data.
      * @throws Exception Description of the Exception
      */
-    protected void loadInstallData(AutomatedInstallData installdata) throws IOException, ClassNotFoundException, InstallerException
+    protected void loadInstallData(AutomatedInstallData installdata)
+            throws IOException, ClassNotFoundException, InstallerException
     {
         // We load the variables
         Properties variables = (Properties) readObject("vars");
@@ -87,7 +89,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         if (info.getInstallationSubPath() != null)
         { // A subpath was defined, use it.
             installPath = IoHelper.translatePath(dir + info.getInstallationSubPath(),
-                    variableSubstitutor);
+                                                 variableSubstitutor);
         }
 
         installdata.setDefaultInstallPath(installPath);
@@ -114,7 +116,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         {
             Pack pack = (Pack) objIn.readObject();
             allPacks.add(pack);
-            if (OsConstraintHelper.oneMatchesCurrentSystem(pack.osConstraints))
+            if (OsConstraintHelper.oneMatchesCurrentSystem(pack.getOsConstraints()))
             {
                 availablePacks.add(pack);
             }
@@ -178,7 +180,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         // get list of preselected packs
         for (Pack availablePack : availablePacks)
         {
-            if (availablePack.preselected)
+            if (availablePack.isPreselected())
             {
                 installdata.getSelectedPacks().add(availablePack);
             }
@@ -362,7 +364,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         catch (Exception e)
         {
             logger.log(Level.WARNING,
-                    "Cannot find optional dynamic variables", e);
+                       "Cannot find optional dynamic variables", e);
         }
     }
 
@@ -377,13 +379,14 @@ public abstract class AbstractInstallDataProvider implements Provider
         {
             InputStream in = resourceManager.getInputStream("dynconditions");
             ObjectInputStream objIn = new ObjectInputStream(in);
-            automatedInstallData.setDynamicinstallerrequirements((List<DynamicInstallerRequirementValidator>) objIn.readObject());
+            automatedInstallData.setDynamicinstallerrequirements(
+                    (List<DynamicInstallerRequirementValidator>) objIn.readObject());
             objIn.close();
         }
         catch (Exception e)
         {
             logger.log(Level.WARNING,
-                    "Cannot find optional dynamic conditions", e);
+                       "Cannot find optional dynamic conditions", e);
         }
     }
 

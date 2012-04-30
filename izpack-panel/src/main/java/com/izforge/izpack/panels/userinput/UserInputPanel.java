@@ -3490,7 +3490,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // ----------------------------------------------------
         for (int i = 0; i < this.installData.getSelectedPacks().size(); i++)
         {
-            selected = this.installData.getSelectedPacks().get(i).name;
+            selected = this.installData.getSelectedPacks().get(i).getName();
 
             for (IXMLElement pack : packs)
             {
@@ -3545,7 +3545,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // ----------------------------------------------------
         for (int i = 0; i < this.installData.getSelectedPacks().size(); i++)
         {
-            selected = this.installData.getSelectedPacks().get(i).name;
+            selected = this.installData.getSelectedPacks().get(i).getName();
 
             for (IXMLElement pack : packs)
             {

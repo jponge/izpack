@@ -132,11 +132,11 @@ public class ImgPacksPanel extends PacksPanelBase
         while (!imgFound && pack_it.hasNext())
         {
             firstImgPack = pack_it.next();
-            imgFound = firstImgPack.packImgId != null;
+            imgFound = firstImgPack.getImageId() != null;
         }
         if (imgFound)
         {
-            imgLabel = new JLabel(images.get(firstImgPack.packImgId));
+            imgLabel = new JLabel(images.get(firstImgPack.getImageId()));
         }
         else
         {
@@ -196,12 +196,12 @@ public class ImgPacksPanel extends PacksPanelBase
         images = new HashMap<String, ImageIcon>(size);
         for (Pack pack : this.installData.getAvailablePacks())
         {
-            if (pack.packImgId != null)
+            if (pack.getImageId() != null)
             {
                 try
                 {
-                    ImageIcon img = resourceManager.getImageIconResource(pack.packImgId);
-                    images.put(pack.packImgId, img);
+                    ImageIcon img = resourceManager.getImageIconResource(pack.getImageId());
+                    images.put(pack.getImageId(), img);
                 }
                 catch (Exception err)
                 {
@@ -254,7 +254,7 @@ public class ImgPacksPanel extends PacksPanelBase
         if (i >= 0)
         {
             Pack pack = this.installData.getAvailablePacks().get(i);
-            imgLabel.setIcon(images.get(pack.packImgId));
+            imgLabel.setIcon(images.get(pack.getImageId()));
         }
     }
 

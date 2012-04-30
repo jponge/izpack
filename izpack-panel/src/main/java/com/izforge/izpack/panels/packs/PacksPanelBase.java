@@ -295,15 +295,15 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 try
                 {
                     PackValidator validatorInst = factory.create(validator, PackValidator.class);
-                    if (!validatorInst.validate(this, installData, pack.id, selected))
+                    if (!validatorInst.validate(this, installData, pack.getLangPackId(), selected))
                     {
                         return false;
                     }
                 }
                 catch (Exception e)
                 {
-                    logger.log(Level.WARNING, "Validator threw exception for pack " + pack.name + ": " + e.getMessage(),
-                               e);
+                    logger.log(Level.WARNING, "Validator threw exception for pack " + pack.getName()
+                            + ": " + e.getMessage(), e);
                     return false;
                 }
             }
@@ -332,8 +332,8 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         {
             Pack pack = this.packsModel.getPackAtRow(selectedRow);
             String desc = "";
-            String key = pack.id + ".description";
-            if (langpack != null && pack.id != null && !"".equals(pack.id))
+            String key = pack.getLangPackId() + ".description";
+            if (langpack != null && pack.getLangPackId() != null && !"".equals(pack.getLangPackId()))
             {
                 desc = langpack.getString(key);
             }
@@ -356,7 +356,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         if ((dependencyArea != null) && (selectedRow != -1))
         {
             Pack pack = this.packsModel.getPackAtRow(selectedRow);
-            List<String> dep = pack.dependencies;
+            List<String> dep = pack.getDependencies();
             String list = "";
             if (dep != null)
             {
@@ -377,15 +377,15 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             String excludeslist = (langpack == null) ? "Excludes: " : langpack
                     .getString("PacksPanel.excludes");
             int numexcludes = 0;
-            if (pack.excludeGroup != null)
+            if (pack.getExcludeGroup() != null)
             {
                 for (int q = 0; q < this.installData.getAvailablePacks().size(); q++)
                 {
                     Pack otherpack = this.installData.getAvailablePacks().get(q);
-                    String exgroup = otherpack.excludeGroup;
+                    String exgroup = otherpack.getExcludeGroup();
                     if (exgroup != null)
                     {
-                        if (q != selectedRow && pack.excludeGroup.equals(exgroup))
+                        if (q != selectedRow && pack.getExcludeGroup().equals(exgroup))
                         {
 
                             excludeslist += getI18NPackName(otherpack) + ", ";
@@ -423,15 +423,15 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     private String getI18NPackName(Pack pack)
     {
         // Internationalization code
-        String packName = pack.name;
-        String key = pack.id;
-        if (langpack != null && pack.id != null && !"".equals(pack.id))
+        String packName = pack.getName();
+        String key = pack.getLangPackId();
+        if (langpack != null && pack.getLangPackId() != null && !"".equals(pack.getLangPackId()))
         {
             packName = langpack.getString(key);
         }
         if ("".equals(packName) || key == null || key.equals(packName))
         {
-            packName = pack.name;
+            packName = pack.getName();
         }
         return (packName);
     }
@@ -588,8 +588,8 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         dependenciesExist = false;
         for (Pack pack : packs)
         {
-            names.put(pack.name, pack);
-            if (pack.dependencies != null || pack.excludeGroup != null)
+            names.put(pack.getName(), pack);
+            if (pack.getDependencies() != null || pack.getExcludeGroup() != null)
             {
                 dependenciesExist = true;
             }
@@ -643,14 +643,14 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             bytes = 0;
             for (Pack p : this.installData.getAvailablePacks())
             {
-                if (p.required)
+                if (p.isRequired())
                 {
-                    bytes += p.nbytes;
+                    bytes += p.getSize();
                     continue;
                 }
                 if (this.installData.getSelectedPacks().contains(p))
                 {
-                    bytes += p.nbytes;
+                    bytes += p.getSize();
                 }
             }
         }

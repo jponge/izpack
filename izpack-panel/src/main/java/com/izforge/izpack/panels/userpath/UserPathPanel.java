@@ -82,8 +82,8 @@ public class UserPathPanel extends UserPathInputPanel
             logger.fine("Checking for pack dependency of " + dependsName);
             for (Pack pack : installData.getSelectedPacks())
             {
-                logger.fine("- Checking if " + pack.name + " equals " + dependsName);
-                if (pack.name.equalsIgnoreCase(dependsName))
+                logger.fine("- Checking if " + pack.getName() + " equals " + dependsName);
+                if (pack.getName().equalsIgnoreCase(dependsName))
                 {
                     found = true;
                     logger.fine("-- Found " + dependsName + ", panel will be shown");

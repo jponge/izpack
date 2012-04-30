@@ -198,14 +198,14 @@ public class Compiler extends Thread
 
                 PackInfo packinfo2 = packs.get(w);
                 Pack pack2 = packinfo2.getPack();
-                if (pack1.excludeGroup != null && pack2.excludeGroup != null)
+                if (pack1.getExcludeGroup() != null && pack2.getExcludeGroup() != null)
                 {
-                    if (pack1.excludeGroup.equals(pack2.excludeGroup))
+                    if (pack1.getExcludeGroup().equals(pack2.getExcludeGroup()))
                     {
-                        if (pack1.preselected && pack2.preselected)
+                        if (pack1.isPreselected() && pack2.isPreselected())
                         {
-                            error("Packs " + pack1.name + " and " + pack2.name +
-                                          " belong to the same excludeGroup " + pack1.excludeGroup +
+                            error("Packs " + pack1.getName() + " and " + pack2.getName() +
+                                          " belong to the same excludeGroup " + pack1.getExcludeGroup() +
                                           " and are both preselected. This is not allowed.");
                         }
                     }
@@ -227,7 +227,7 @@ public class Compiler extends Thread
         Map<String, PackInfo> names = new HashMap<String, PackInfo>();
         for (PackInfo pack : packs)
         {
-            names.put(pack.getPack().name, pack);
+            names.put(pack.getPack().getName(), pack);
         }
         int result = dfs(packs, names);
         // @todo More informative messages to include the source of the error

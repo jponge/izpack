@@ -430,7 +430,7 @@ public abstract class UnpackerBase implements IUnpacker
         ObjectInputStream packInputStream = null;
         try
         {
-            in = getPackStream(pack.name, pack.uninstall);
+            in = getPackStream(pack.getName(), pack.isUninstall());
             packInputStream = new ObjectInputStream(in);
 
             int fileCount = packInputStream.readInt();
@@ -494,7 +494,7 @@ public abstract class UnpackerBase implements IUnpacker
         createDirectory(dir, file);
 
         // Add path to the log
-        getUninstallData().addFile(path, pack.uninstall);
+        getUninstallData().addFile(path, pack.isUninstall());
 
         if (file.isDirectory())
         {
@@ -511,7 +511,7 @@ public abstract class UnpackerBase implements IUnpacker
         {
             if (!isOverwriteFile(file, target))
             {
-                if (!file.isBackReference() && !pack.loose)
+                if (!file.isBackReference() && !pack.isLoose())
                 {
                     if (file.isPack200Jar())
                     {
@@ -554,9 +554,9 @@ public abstract class UnpackerBase implements IUnpacker
         {
             FileUnpacker unpacker;
 
-            if (!pack.loose && file.isBackReference())
+            if (!pack.isLoose() && file.isBackReference())
             {
-                in = getPackStream(file.previousPackId, pack.uninstall);
+                in = getPackStream(file.previousPackId, pack.isUninstall());
                 packStream = new ObjectInputStream(in);
                 // must wrap for blockdata use by ObjectStream (otherwise strange result)
                 // skip on underlying stream (for some reason not possible on ObjectStream)
@@ -599,7 +599,7 @@ public abstract class UnpackerBase implements IUnpacker
      */
     protected void skip(PackFile file, Pack pack, ObjectInputStream packInputStream) throws IOException
     {
-        if (!pack.loose && !file.isBackReference())
+        if (!pack.isLoose() && !file.isBackReference())
         {
             skip(packInputStream, file.length());
         }
@@ -620,7 +620,7 @@ public abstract class UnpackerBase implements IUnpacker
             throws IOException, InstallerException
     {
         FileUnpacker unpacker;
-        if (pack.loose)
+        if (pack.isLoose())
         {
             unpacker = new LooseFileUnpacker(getAbsoluteInstallSource(), cancellable, handler, queue, platform,
                                              librarian);
@@ -812,19 +812,19 @@ public abstract class UnpackerBase implements IUnpacker
      */
     protected String getStepName(Pack pack)
     {
-        String result = pack.name;//
+        String result = pack.getName();
         if (pack.isHidden())
         {
             // hide the pack name if pack is hidden
             result = "";
         }
-        else if (pack.id != null && pack.id.length() != 0)
+        else if (pack.getLangPackId() != null)
         {
             // the pack has an id - if there is a language pack entry for it, use it instead
             LocaleDatabase langPack = getInstallData().getLangpack();
             if (langPack != null)
             {
-                String name = langPack.getString(pack.id);
+                String name = langPack.getString(pack.getLangPackId());
                 if (name != null && !"".equals(name))
                 {
                     result = name;

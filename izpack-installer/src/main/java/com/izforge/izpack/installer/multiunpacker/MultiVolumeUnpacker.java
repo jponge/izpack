@@ -184,7 +184,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
             throws IOException, InstallerException
     {
         FileUnpacker unpacker;
-        if (pack.loose)
+        if (pack.isLoose())
         {
             unpacker = new LooseFileUnpacker(getLoosePackFileDir(file), cancellable, getHandler(), queue,
                                              getPlatform(), getLibrarian());

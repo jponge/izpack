@@ -123,7 +123,7 @@ public class InstallationGroupPanel extends IzPanel
         this.installData.setAvailablePacks(new ArrayList<Pack>());
         for (Pack pack : this.installData.getAllPacks())
         {
-            if (OsConstraintHelper.oneMatchesCurrentSystem(pack.osConstraints))
+            if (OsConstraintHelper.oneMatchesCurrentSystem(pack.getOsConstraints()))
             {
                 this.installData.getAvailablePacks().add(pack);
             }
@@ -331,12 +331,12 @@ public class InstallationGroupPanel extends IzPanel
 
             //reverse dependencies must be reset in case the user is going
             //back and forth between the group selection panel and the packs selection panel
-            pack.revDependencies = null;
+            pack.setDependants(null);
 
-            if (!data.packNames.contains(pack.name))
+            if (!data.packNames.contains(pack.getName()))
             {
                 iter.remove();
-                logger.fine("Removed available pack: " + pack.name);
+                logger.fine("Removed available pack: " + pack.getName());
             }
         }
 
@@ -349,7 +349,7 @@ public class InstallationGroupPanel extends IzPanel
         {
             for (Pack availablePack : this.installData.getAvailablePacks())
             {
-                if (availablePack.preselected)
+                if (availablePack.isPreselected())
                 {
                     this.installData.getSelectedPacks().add(availablePack);
                 }
@@ -359,16 +359,16 @@ public class InstallationGroupPanel extends IzPanel
 
     protected void addDependents(Pack p, HashMap<String, Pack> packsByName, GroupData data)
     {
-        data.packNames.add(p.name);
-        data.size += p.nbytes;
-        logger.fine("Added pack: " + p.name);
-        if (p.dependencies == null || p.dependencies.size() == 0)
+        data.packNames.add(p.getName());
+        data.size += p.getSize();
+        logger.fine("Added pack: " + p.getName());
+        if (p.getDependencies() == null || p.getDependencies().size() == 0)
         {
             return;
         }
 
-        logger.fine(p.name + " dependencies: " + p.dependencies);
-        for (String dependent : p.dependencies)
+        logger.fine(p.getName() + ", dependencies: " + p.getDependencies());
+        for (String dependent : p.getDependencies())
         {
             if (!data.packNames.contains(dependent))
             {
@@ -397,9 +397,9 @@ public class InstallationGroupPanel extends IzPanel
         HashMap<String, GroupData> installGroups = new HashMap<String, GroupData>();
         for (Pack pack : idata.getAvailablePacks())
         {
-            packsByName.put(pack.name, pack);
-            Set<String> groups = pack.installGroups;
-            logger.fine("Pack: " + pack.name + ", installGroups: " + groups);
+            packsByName.put(pack.getName(), pack);
+            Set<String> groups = pack.getInstallGroups();
+            logger.fine("Pack: " + pack.getName() + ", installGroups: " + groups);
             for (String group : groups)
             {
                 GroupData data = installGroups.get(group);
@@ -422,11 +422,11 @@ public class InstallationGroupPanel extends IzPanel
             logger.fine("Adding dependents for: " + data.name);
             for (Pack pack : idata.getAvailablePacks())
             {
-                Set<String> groups = pack.installGroups;
+                Set<String> groups = pack.getInstallGroups();
                 if (groups.size() == 0 || groups.contains(data.name))
                 {
                     // The pack may have already been added while traversing dependencies
-                    if (!data.packNames.contains(pack.name))
+                    if (!data.packNames.contains(pack.getName()))
                     {
                         addDependents(pack, packsByName, data);
                     }

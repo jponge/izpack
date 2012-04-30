@@ -22,6 +22,18 @@
 
 package com.izforge.izpack.event;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
@@ -34,18 +46,6 @@ import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.helper.SpecHelper;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Installer listener for performing ANT actions. The definition what should be done will be made in
@@ -121,7 +121,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         for (Pack pack : idata.getSelectedPacks())
         {
             // Resolve data for current pack.
-            IXMLElement packElement = getSpecHelper().getPackForName(pack.name);
+            IXMLElement packElement = getSpecHelper().getPackForName(pack.getName());
             if (packElement == null)
             {
                 continue;
@@ -153,11 +153,11 @@ public class AntActionInstallerListener extends SimpleInstallerListener
                 }
             }
 
-            actions.put(pack.name, packActions);
+            actions.put(pack.getName(), packActions);
         }
         for (Pack pack : idata.getAvailablePacks())
         {
-            String currentPack = pack.name;
+            String currentPack = pack.getName();
             performAllActions(currentPack, ActionBase.BEFOREPACKS, null);
         }
     }
@@ -166,13 +166,13 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler)
             throws Exception
     {
-        performAllActions(pack.name, ActionBase.BEFOREPACK, handler);
+        performAllActions(pack.getName(), ActionBase.BEFOREPACK, handler);
     }
 
     @Override
     public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
     {
-        performAllActions(pack.name, ActionBase.AFTERPACK, handler);
+        performAllActions(pack.getName(), ActionBase.AFTERPACK, handler);
     }
 
     @Override
@@ -186,7 +186,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         }
         for (Pack pack : idata.getSelectedPacks())
         {
-            String currentPack = pack.name;
+            String currentPack = pack.getName();
             performAllActions(currentPack, ActionBase.AFTERPACKS, handler);
         }
         if (uninstActions.size() > 0)
@@ -200,7 +200,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         int retval = 0;
         for (Pack pack : idata.getSelectedPacks())
         {
-            String currentPack = pack.name;
+            String currentPack = pack.getName();
             ArrayList<AntAction> actList = getActions(currentPack, order);
             if (actList != null)
             {
@@ -306,7 +306,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         {
             act.setOrder(spec.getRequiredAttribute(el, ActionBase.ORDER));
             act.setUninstallOrder(el.getAttribute(ActionBase.UNINSTALL_ORDER,
-                    ActionBase.BEFOREDELETION));
+                                                  ActionBase.BEFOREDELETION));
         }
         catch (Exception e)
         {
@@ -320,11 +320,13 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         buildResource = processBuildfileResource(spec, idata, el);
         if (null == buildFile && null == buildResource)
         {
-            throw new InstallerException("Invalid " + SPEC_FILE_NAME + ": either buildfile or buildresource must be specified");
+            throw new InstallerException(
+                    "Invalid " + SPEC_FILE_NAME + ": either buildfile or buildresource must be specified");
         }
         if (null != buildFile && null != buildResource)
         {
-            throw new InstallerException("Invalid " + SPEC_FILE_NAME + ": cannot specify both buildfile and buildresource");
+            throw new InstallerException(
+                    "Invalid " + SPEC_FILE_NAME + ": cannot specify both buildfile and buildresource");
         }
         if (null != buildFile)
         {
@@ -394,7 +396,8 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         return act;
     }
 
-    private String processBuildfileResource(SpecHelper spec, AutomatedInstallData idata, IXMLElement el) throws InstallerException
+    private String processBuildfileResource(SpecHelper spec, AutomatedInstallData idata, IXMLElement el)
+            throws InstallerException
     {
         String buildResource = null;
 

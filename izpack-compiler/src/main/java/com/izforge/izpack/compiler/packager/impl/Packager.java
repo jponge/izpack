@@ -124,10 +124,10 @@ public class Packager extends PackagerBase
         for (PackInfo packInfo : packs)
         {
             Pack pack = packInfo.getPack();
-            pack.nbytes = 0;
-            if ((pack.id == null) || (pack.id.length() == 0))
+            pack.setSize(0);
+            if ((pack.getLangPackId() == null) || (pack.getLangPackId().length() == 0))
             {
-                pack.id = pack.name;
+                pack.setLangPackId(pack.getName()); // TODO - see IZPACK-799
             }
 
             // create a pack specific jar if required
@@ -140,11 +140,11 @@ public class Packager extends PackagerBase
 //                packStream = IoHelper.getJarOutputStream(name, baseFile.getParentFile());
 //            }
 
-            sendMsg("Writing Pack " + packNumber + ": " + pack.name, PackagerListener.MSG_VERBOSE);
+            sendMsg("Writing Pack " + packNumber + ": " + pack.getName(), PackagerListener.MSG_VERBOSE);
 
             // Retrieve the correct output stream
             org.apache.tools.zip.ZipEntry entry = new org.apache.tools.zip.ZipEntry(
-                    RESOURCES_PATH + "packs/pack-" + pack.name);
+                    RESOURCES_PATH + "packs/pack-" + pack.getName());
             installerJar.putNextEntry(entry);
             installerJar.flush(); // flush before we start counting
 
@@ -156,7 +156,7 @@ public class Packager extends PackagerBase
 
             for (PackFile packFile : packInfo.getPackFiles())
             {
-                boolean addFile = !pack.loose;
+                boolean addFile = !pack.isLoose();
                 boolean pack200 = false;
                 File file = packInfo.getFile(packFile);
 
@@ -207,11 +207,11 @@ public class Packager extends PackagerBase
                         }
                     }
 
-                    storedFiles.put(file, new Object[]{pack.id, pos});
+                    storedFiles.put(file, new Object[]{pack.getLangPackId(), pos}); // TODO - see IZPACK-799
                 }
 
                 // even if not written, it counts towards pack size
-                pack.nbytes += packFile.size();
+                pack.addSize(packFile.size());
             }
 
             // Write out information about parsable files
@@ -252,11 +252,11 @@ public class Packager extends PackagerBase
             }
 
             IXMLElement child = new XMLElementImpl("pack", root);
-            child.setAttribute("nbytes", Long.toString(pack.nbytes));
-            child.setAttribute("name", pack.name);
-            if (pack.id != null)
+            child.setAttribute("nbytes", Long.toString(pack.getSize()));
+            child.setAttribute("name", pack.getName());
+            if (pack.getLangPackId() != null)
             {
-                child.setAttribute("id", pack.id);
+                child.setAttribute("id", pack.getLangPackId());
             }
             root.addChild(child);
 

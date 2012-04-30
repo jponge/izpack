@@ -21,19 +21,6 @@
 
 package com.izforge.izpack.panels.compile;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.adaptator.IXMLParser;
-import com.izforge.izpack.api.adaptator.impl.XMLParser;
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.api.data.Pack;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.data.binding.OsModel;
-import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.OsConstraintHelper;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,6 +39,19 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
+
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLParser;
+import com.izforge.izpack.api.adaptator.impl.XMLParser;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.binding.OsModel;
+import com.izforge.izpack.api.substitutor.SubstitutionType;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.OsConstraintHelper;
 
 /**
  * This class does alle the work for compiling sources.
@@ -229,7 +229,7 @@ public class CompileWorker implements Runnable
                 args.add("nothing to do");
 
                 this.result = new CompileResult(this.idata.getLangpack()
-                        .getString("CompilePanel.worker.nofiles"), args, "", "");
+                                                        .getString("CompilePanel.worker.nofiles"), args, "", "");
             }
             else
             {
@@ -515,7 +515,7 @@ public class CompileWorker implements Runnable
 
                 for (Pack pack : this.idata.getSelectedPacks())
                 {
-                    if (pack.name.equals(name))
+                    if (pack.getName().equals(name))
                     {
                         found = true;
                         break;
@@ -787,8 +787,9 @@ public class CompileWorker implements Runnable
                     if (retval != 0)
                     {
                         CompileResult result = new CompileResult(this.langpack
-                                .getString("CompilePanel.error"), args, output[0],
-                                output[1]);
+                                                                         .getString("CompilePanel.error"), args,
+                                                                 output[0],
+                                                                 output[1]);
                         this.listener.handleCompileError(result);
                         if (!result.isContinue())
                         {
@@ -813,9 +814,11 @@ public class CompileWorker implements Runnable
                             if (!class_file.exists())
                             {
                                 CompileResult result = new CompileResult(this.langpack
-                                        .getString("CompilePanel.error.noclassfile")
-                                        + java_file.getAbsolutePath(), args, output[0],
-                                        output[1]);
+                                                                                 .getString(
+                                                                                         "CompilePanel.error.noclassfile")
+                                                                                 + java_file.getAbsolutePath(), args,
+                                                                         output[0],
+                                                                         output[1]);
                                 this.listener.handleCompileError(result);
                                 if (!result.isContinue())
                                 {
@@ -855,7 +858,8 @@ public class CompileWorker implements Runnable
                 if (retval != 0)
                 {
                     CompileResult result = new CompileResult(this.langpack
-                            .getString("CompilePanel.error"), args, output[0], output[1]);
+                                                                     .getString("CompilePanel.error"), args, output[0],
+                                                             output[1]);
                     this.listener.handleCompileError(result);
                     if (!result.isContinue())
                     {
@@ -880,9 +884,11 @@ public class CompileWorker implements Runnable
                         if (!class_file.exists())
                         {
                             CompileResult result = new CompileResult(this.langpack
-                                    .getString("CompilePanel.error.noclassfile")
-                                    + java_file.getAbsolutePath(), args, output[0],
-                                    output[1]);
+                                                                             .getString(
+                                                                                     "CompilePanel.error.noclassfile")
+                                                                             + java_file.getAbsolutePath(), args,
+                                                                     output[0],
+                                                                     output[1]);
                             this.listener.handleCompileError(result);
                             if (!result.isContinue())
                             {
@@ -964,7 +970,8 @@ public class CompileWorker implements Runnable
                         EclipseStdErrHandler ownStderr = new EclipseStdErrHandler(errStream, this.listener);
                         System.setErr(ownStderr);
 
-                        compileMethod.invoke(null, new Object[]{final_cmdline.toArray(new String[final_cmdline.size()])});
+                        compileMethod.invoke(null,
+                                             new Object[]{final_cmdline.toArray(new String[final_cmdline.size()])});
 
                         // TODO: launch thread which updates the progress
                         output[0] = outStream.toString();
@@ -1080,8 +1087,9 @@ public class CompileWorker implements Runnable
                 if (retval != 0)
                 {
                     CompileResult result = new CompileResult(this.langpack
-                            .getString("CompilePanel.error.compilernotfound"), args, output[0],
-                            output[1]);
+                                                                     .getString("CompilePanel.error.compilernotfound"),
+                                                             args, output[0],
+                                                             output[1]);
                     this.listener.handleCompileError(result);
                     if (!result.isContinue())
                     {
@@ -1127,8 +1135,9 @@ public class CompileWorker implements Runnable
             if (retval != 0)
             {
                 CompileResult result = new CompileResult(this.langpack
-                        .getString("CompilePanel.error.invalidarguments"), args, output[0],
-                        output[1]);
+                                                                 .getString("CompilePanel.error.invalidarguments"),
+                                                         args, output[0],
+                                                         output[1]);
                 this.listener.handleCompileError(result);
                 if (!result.isContinue())
                 {
@@ -1186,8 +1195,8 @@ public class CompileWorker implements Runnable
                 catch (NumberFormatException e)
                 {
                     logger.log(Level.WARNING,
-                            "Could not parse eclipse compiler output: '" + x + "': " + e.getMessage(),
-                            e);
+                               "Could not parse eclipse compiler output: '" + x + "': " + e.getMessage(),
+                               e);
                 }
             }
 

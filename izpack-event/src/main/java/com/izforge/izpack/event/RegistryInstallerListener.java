@@ -246,7 +246,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             for (Pack selectedPack : installData.getSelectedPacks())
             {
                 // Resolve data for current pack.
-                IXMLElement pack = getSpecHelper().getPackForName(selectedPack.name);
+                IXMLElement pack = getSpecHelper().getPackForName(selectedPack.getName());
                 performPack(pack);
 
             }

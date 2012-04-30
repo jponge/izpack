@@ -19,12 +19,16 @@
 
 package com.izforge.izpack.core;
 
+import org.junit.Test;
+
 import com.izforge.izpack.api.data.Pack;
+
 import junit.framework.TestCase;
 
-public class PackTest extends TestCase
+public class PackTest
 {
 
+    @Test
     public void testToByteUnitsString()
     {
         TestCase.assertEquals("5 bytes", Pack.toByteUnitsString(5));

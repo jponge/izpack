@@ -308,15 +308,15 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     private String getI18NPackName(Pack pack)
     {
         // Internationalization code
-        String packName = pack.name;
-        String key = pack.id;
-        if (langpack != null && pack.id != null && !"".equals(pack.id))
+        String packName = pack.getName();
+        String key = pack.getLangPackId();
+        if (langpack != null && pack.getLangPackId() != null && !"".equals(pack.getLangPackId()))
         {
             packName = langpack.getString(key);
         }
         if ("".equals(packName) || key == null || key.equals(packName))
         {
-            packName = pack.name;
+            packName = pack.getName();
         }
         return (packName);
     }
@@ -503,8 +503,8 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         for (Object pack1 : packs)
         {
             Pack pack = (Pack) pack1;
-            names.put(pack.name, pack);
-            if (pack.dependencies != null || pack.excludeGroup != null)
+            names.put(pack.getName(), pack);
+            if (pack.getDependencies() != null || pack.getExcludeGroup() != null)
             {
                 dependenciesExist = true;
             }
@@ -632,20 +632,20 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
 
         for (Pack pack : this.installData.getAvailablePacks())
         {
-            idToPack.put(pack.id, pack);
-            if (pack.parent != null)
+            idToPack.put(pack.getLangPackId(), pack); // TODO - see IZPACK-799
+            if (pack.getParent() != null)
             {
                 List<String> kids = null;
-                if (treeData.containsKey(pack.parent))
+                if (treeData.containsKey(pack.getParent()))
                 {
-                    kids = treeData.get(pack.parent);
+                    kids = treeData.get(pack.getParent());
                 }
                 else
                 {
                     kids = new ArrayList<String>();
                 }
-                kids.add(pack.id);
-                treeData.put(pack.parent, kids);
+                kids.add(pack.getLangPackId());
+                treeData.put(pack.getParent(), kids);
             }
         }
     }
@@ -661,8 +661,8 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         {
             Pack pack = idToPack.get(id);
             String desc = "";
-            String key = pack.id + ".description";
-            if (langpack != null && pack.id != null && !"".equals(pack.id))
+            String key = pack.getLangPackId() + ".description";
+            if (langpack != null && pack.getLangPackId() != null && !"".equals(pack.getLangPackId()))
             {
                 desc = langpack.getString(key);
             }
@@ -692,7 +692,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         if (dependencyArea != null)
         {
             Pack pack = idToPack.get(id);
-            java.util.List<String> dep = pack.dependencies;
+            java.util.List<String> dep = pack.getDependencies();
             String list = "";
             if (dep != null)
             {
@@ -714,15 +714,15 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
                     .getString("PacksPanel.excludes");
             int numexcludes = 0;
             int i = getRowIndex(pack);
-            if (pack.excludeGroup != null)
+            if (pack.getExcludeGroup() != null)
             {
                 for (int q = 0; q < this.installData.getAvailablePacks().size(); q++)
                 {
                     Pack otherpack = this.installData.getAvailablePacks().get(q);
-                    String exgroup = otherpack.excludeGroup;
+                    String exgroup = otherpack.getExcludeGroup();
                     if (exgroup != null)
                     {
-                        if (q != i && pack.excludeGroup.equals(exgroup))
+                        if (q != i && pack.getExcludeGroup().equals(exgroup))
                         {
 
                             excludeslist += getI18NPackName(otherpack) + ", ";
@@ -775,9 +775,9 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             List<TreeNode> rootNodes = new ArrayList<TreeNode>();
             for (Pack pack : this.installData.getAvailablePacks())
             {
-                if (pack.parent == null)
+                if (pack.getParent() == null)
                 {
-                    rootNodes.add(populateTreePacks(pack.id));
+                    rootNodes.add(populateTreePacks(pack.getLangPackId())); // TODO - see IZPACK-799
                 }
             }
             TreeNode treeNode = new CheckBoxNode("Root", "Root", rootNodes.toArray(), true);
@@ -800,7 +800,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
                 CheckBoxNode checkBoxNode = new CheckBoxNode(parent, translated, links.toArray(), true);
                 idToCheckBoxNode.put(checkBoxNode.getId(), checkBoxNode);
                 checkBoxNode.setPack(pack);
-                checkBoxNode.setTotalSize(pack.nbytes);
+                checkBoxNode.setTotalSize(pack.getSize());
                 return checkBoxNode;
             }
             else
@@ -808,7 +808,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
                 CheckBoxNode checkBoxNode = new CheckBoxNode(parent, translated, true);
                 idToCheckBoxNode.put(checkBoxNode.getId(), checkBoxNode);
                 checkBoxNode.setPack(pack);
-                checkBoxNode.setTotalSize(pack.nbytes);
+                checkBoxNode.setTotalSize(pack.getSize());
                 return checkBoxNode;
             }
         }
@@ -875,14 +875,14 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             bytes = 0;
             for (Pack pack : this.installData.getAvailablePacks())
             {
-                if (pack.required)
+                if (pack.isRequired())
                 {
-                    bytes += pack.nbytes;
+                    bytes += pack.getSize();
                     continue;
                 }
                 if (this.installData.getSelectedPacks().contains(pack))
                 {
-                    bytes += pack.nbytes;
+                    bytes += pack.getSize();
                 }
             }
         }
@@ -952,7 +952,7 @@ class CheckTreeController extends MouseAdapter
         while (e.hasMoreElements())
         {
             CheckBoxNode child = e.nextElement();
-            child.setSelected(current.isSelected() || child.getPack().required);
+            child.setSelected(current.isSelected() || child.getPack().isRequired());
             if (!child.isSelected())
             {
                 child.setPartial(false);
@@ -968,7 +968,7 @@ class CheckTreeController extends MouseAdapter
         while (e.hasMoreElements())
         {
             CheckBoxNode checkBoxNode = e.nextElement();
-            if (checkBoxNode.getPack().excludeGroup != null)
+            if (checkBoxNode.getPack().getExcludeGroup() != null)
             {
                 return true;
             }
@@ -993,7 +993,7 @@ class CheckTreeController extends MouseAdapter
         }
 
         // If this pack is required, leave it alone
-        if (current.getPack().required)
+        if (current.getPack().isRequired())
         {
             return;
         }
@@ -1044,7 +1044,7 @@ class CheckTreeController extends MouseAdapter
             // we need this, because the setModel ignored disabled values
             subCbn.setEnabled(true);
             treePacksPanel.setModelValue(subCbn);
-            subCbn.setEnabled(!subCbn.getPack().required);
+            subCbn.setEnabled(!subCbn.getPack().isRequired());
         }
     }
 
@@ -1071,7 +1071,7 @@ class CheckTreeController extends MouseAdapter
             // we need this, because the setModel ignored disabled values
             depCbn.setEnabled(true);
             treePacksPanel.setModelValue(depCbn);
-            depCbn.setEnabled(!depCbn.getPack().required);
+            depCbn.setEnabled(!depCbn.getPack().isRequired());
         }
     }
 
@@ -1170,14 +1170,14 @@ class CheckTreeController extends MouseAdapter
     {
         if (node.isLeaf())
         {
-            return node.getPack().nbytes;
+            return node.getPack().getSize();
         }
         Enumeration<CheckBoxNode> e = node.children();
         Pack nodePack = node.getPack();
         long bytes = 0;
         if (nodePack != null)
         {
-            bytes = nodePack.nbytes;
+            bytes = nodePack.getSize();
         }
         while (e.hasMoreElements())
         {

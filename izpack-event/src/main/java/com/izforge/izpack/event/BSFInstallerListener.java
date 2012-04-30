@@ -21,6 +21,14 @@
 
 package com.izforge.izpack.event;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
@@ -33,14 +41,6 @@ import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 import com.izforge.izpack.util.file.FileUtils;
 import com.izforge.izpack.util.helper.SpecHelper;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Logger;
 
 
 public class BSFInstallerListener extends SimpleInstallerListener
@@ -76,7 +76,8 @@ public class BSFInstallerListener extends SimpleInstallerListener
     }
 
     @Override
-    public void beforePacks(AutomatedInstallData idata, Integer npacks, AbstractUIProgressHandler handler) throws Exception
+    public void beforePacks(AutomatedInstallData idata, Integer npacks, AbstractUIProgressHandler handler)
+            throws Exception
     {
         if (installdata == null)
         {
@@ -93,7 +94,7 @@ public class BSFInstallerListener extends SimpleInstallerListener
 
         for (Pack pack : idata.getSelectedPacks())
         {
-            IXMLElement packElement = getSpecHelper().getPackForName(pack.name);
+            IXMLElement packElement = getSpecHelper().getPackForName(pack.getName());
             if (packElement == null)
             {
                 continue;
@@ -127,13 +128,13 @@ public class BSFInstallerListener extends SimpleInstallerListener
                 }
             }
 
-            actions.put(pack.name, packActions);
+            actions.put(pack.getName(), packActions);
 
         }
 
         for (Pack pack : idata.getAvailablePacks())
         {
-            String currentPack = pack.name;
+            String currentPack = pack.getName();
             performAllActions(currentPack, ActionBase.BEFOREPACKS, null, new Object[]{idata, npacks, handler});
         }
     }
@@ -141,8 +142,8 @@ public class BSFInstallerListener extends SimpleInstallerListener
     @Override
     public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
     {
-        performAllActions(pack.name, ActionBase.AFTERPACK, handler,
-                new Object[]{pack, i, handler});
+        performAllActions(pack.getName(), ActionBase.AFTERPACK, handler,
+                          new Object[]{pack, i, handler});
         currentPack = null;
     }
 
@@ -156,7 +157,7 @@ public class BSFInstallerListener extends SimpleInstallerListener
         }
         for (Object selectedPack : idata.getSelectedPacks())
         {
-            String currentPack = ((Pack) selectedPack).name;
+            String currentPack = ((Pack) selectedPack).getName();
             performAllActions(currentPack, ActionBase.AFTERPACKS, handler, new Object[]{idata, handler});
         }
         if (uninstActions.size() > 0)
@@ -169,8 +170,8 @@ public class BSFInstallerListener extends SimpleInstallerListener
     @Override
     public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
     {
-        currentPack = pack.name;
-        performAllActions(pack.name, ActionBase.BEFOREPACK, handler, new Object[]{pack, i, handler});
+        currentPack = pack.getName();
+        performAllActions(pack.getName(), ActionBase.BEFOREPACK, handler, new Object[]{pack, i, handler});
     }
 
     @Override
@@ -219,7 +220,7 @@ public class BSFInstallerListener extends SimpleInstallerListener
         int retval = 0;
         for (Object selectedPack : idata.getSelectedPacks())
         {
-            String currentPack = ((Pack) selectedPack).name;
+            String currentPack = ((Pack) selectedPack).getName();
             ArrayList<BSFAction> actList = getActions(currentPack);
             if (actList != null)
             {

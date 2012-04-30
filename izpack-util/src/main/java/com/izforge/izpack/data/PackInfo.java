@@ -21,14 +21,22 @@
 
 package com.izforge.izpack.data;
 
-import com.izforge.izpack.api.data.*;
-import com.izforge.izpack.api.data.binding.OsModel;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.izforge.izpack.api.data.Blockable;
+import com.izforge.izpack.api.data.OverrideType;
+import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.PackColor;
+import com.izforge.izpack.api.data.PackFile;
+import com.izforge.izpack.api.data.binding.OsModel;
 
 /**
  * Temporary holding place for Pack information as the Packager is built. The packager is used by
@@ -85,7 +93,8 @@ public class PackInfo implements Serializable
      * @param excludegroup name of the exclude group
      * @param uninstall    pack must be uninstalled
      */
-    public PackInfo(String name, String id, String description, boolean required, boolean loose, String excludegroup, boolean uninstall)
+    public PackInfo(String name, String id, String description, boolean required, boolean loose, String excludegroup,
+                    boolean uninstall)
     {
         boolean ispreselected = (excludegroup == null);
         pack = new Pack(name, id, description, null, null, required, ispreselected, loose, excludegroup, uninstall);
@@ -100,7 +109,7 @@ public class PackInfo implements Serializable
 
     public void setDependencies(List<String> dependencies)
     {
-        pack.dependencies = dependencies;
+        pack.setDependencies(dependencies);
     }
 
     /**
@@ -110,27 +119,27 @@ public class PackInfo implements Serializable
      */
     public void setExcludeGroup(String group)
     {
-        pack.excludeGroup = group;
+        pack.setExcludeGroup(group);
     }
 
     public void setOsConstraints(List<OsModel> osConstraints)
     {
-        pack.osConstraints = osConstraints;
+        pack.setOsConstraints(osConstraints);
     }
 
     public List<OsModel> getOsConstraints(List osConstraints)
     {
-        return pack.osConstraints;
+        return pack.getOsConstraints();
     }
 
     public void setPreselected(boolean preselected)
     {
-        pack.preselected = preselected;
+        pack.setPreselected(preselected);
     }
 
     public boolean isPreselected()
     {
-        return pack.preselected;
+        return pack.isPreselected();
     }
 
     /**
@@ -140,7 +149,7 @@ public class PackInfo implements Serializable
      */
     public String getGroup()
     {
-        return pack.group;
+        return pack.getGroup();
     }
 
     /**
@@ -150,7 +159,7 @@ public class PackInfo implements Serializable
      */
     public void setGroup(String group)
     {
-        pack.group = group;
+        pack.setGroup(group);
     }
 
     /**
@@ -160,7 +169,7 @@ public class PackInfo implements Serializable
      */
     public void addInstallGroup(String group)
     {
-        pack.installGroups.add(group);
+        pack.getInstallGroups().add(group);
     }
 
     /**
@@ -171,7 +180,7 @@ public class PackInfo implements Serializable
      */
     public boolean hasInstallGroup(String group)
     {
-        return pack.installGroups.contains(group);
+        return pack.getInstallGroups().contains(group);
     }
 
     /**
@@ -181,7 +190,7 @@ public class PackInfo implements Serializable
      */
     public Set<String> getInstallGroups()
     {
-        return pack.installGroups;
+        return pack.getInstallGroups();
     }
 
     public Pack getPack()
@@ -212,36 +221,20 @@ public class PackInfo implements Serializable
      * @param osList     the target operation system(s) of this pack.
      * @param override   what to do if the file already exists when installing
      * @param condition
-     * @throws FileNotFoundException if the file specified does not exist. The file is not read
-     *                               until the {@link Packager} is invoked, thus a FileNotFoundEception will occur
-     *                               then, if the file is deleted in between.
+     * @throws FileNotFoundException if the file specified does not exist.
      */
-    /*
-     * public void addFile(File file, String targetfile, List osList, int override) throws
-     * FileNotFoundException { addFile( file,targetfile, osList, override, null); }
-     *
-     *
-     * /** Add a file or directory to be installed.
-     *
-     * @param file the file or basedir to be installed. @param targetfile path file will be
-     * installed to. @param osList the target operation system(s) of this pack. @param override what
-     * to do if the file already exists when installing @param additionals Map which contains
-     * additional data
-     *
-     * @throws FileNotFoundException if the file specified does not exist. The file is not read
-     * until the {@link Packager#createInstaller} is invoked, thus a FileNotFoundEception will occur
-     * then, if the file is deleted in between.
-     */
-    public void addFile(File baseDir, File file, String targetfile, List<OsModel> osList, OverrideType override, String overrideRenameTo, Blockable blockable, Map additionals, String condition)
-    throws IOException
+    public void addFile(File baseDir, File file, String targetfile, List<OsModel> osList, OverrideType override,
+                        String overrideRenameTo, Blockable blockable, Map additionals, String condition)
+            throws IOException
     {
         if (!file.exists())
         {
             throw new FileNotFoundException(file.toString());
         }
 
-        PackFile packFile = new PackFile(baseDir, file, targetfile, osList, override, overrideRenameTo, blockable, additionals);
-        packFile.setLoosePackInfo(pack.loose);
+        PackFile packFile = new PackFile(baseDir, file, targetfile, osList, override, overrideRenameTo, blockable,
+                                         additionals);
+        packFile.setLoosePackInfo(pack.isLoose());
         packFile.setCondition(condition);
         files.put(packFile, file);
     }
@@ -318,36 +311,32 @@ public class PackInfo implements Serializable
      */
     public void addDependency(String dependency)
     {
-        if (pack.dependencies == null)
-        {
-            pack.dependencies = new ArrayList<String>();
-        }
-        pack.dependencies.add(dependency);
+        pack.addDependency(dependency);
     }
 
     public List<String> getDependencies()
     {
-        return pack.dependencies;
+        return pack.getDependencies();
     }
 
     public String getParent()
     {
-        return pack.parent;
+        return pack.getParent();
     }
 
     public void setParent(String p)
     {
-        pack.parent = p;
+        pack.setParent(p);
     }
 
     public String toString()
     {
-        return pack.name;
+        return pack.getName();
     }
 
     public void setPackImgId(String packImgId)
     {
-        pack.packImgId = packImgId;
+        pack.setImageId(packImgId);
     }
 
 

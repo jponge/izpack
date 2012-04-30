@@ -99,7 +99,7 @@ public class InstallationGroupPanelAutomationHelper
                         {
                             Pack pack = idata.getAvailablePacks().get(index);
                             idata.getSelectedPacks().add(pack);
-                            logger.fine("Added pack: " + pack.name);
+                            logger.fine("Added pack: " + pack.getName());
                         }
                     }
                     logger.fine("Set selectedPacks to: " + idata.getSelectedPacks());

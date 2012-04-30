@@ -255,9 +255,9 @@ public class MultiVolumePackager extends PackagerBase
     private void writePack(PackInfo packInfo, FileSpanningOutputStream volumes, File targetDir) throws IOException
     {
         Pack pack = packInfo.getPack();
-        pack.nbytes = 0;
+        pack.setSize(0);
 
-        String name = pack.name;
+        String name = pack.getName();
         sendMsg("Writing Pack: " + name, PackagerListener.MSG_VERBOSE);
         logger.fine("Writing Pack: " + name);
         ZipEntry entry = new ZipEntry(RESOURCES_PATH + "packs/pack-" + name);
@@ -320,7 +320,7 @@ public class MultiVolumePackager extends PackagerBase
 
             if (!pf.isDirectory())
             {
-                if (!pack.loose)
+                if (!pack.isLoose())
                 {
                     writePackFile(file, volumes, pf);
                 }
@@ -335,7 +335,7 @@ public class MultiVolumePackager extends PackagerBase
             packStream.writeObject(pf);
             packStream.flush(); // make sure it is written
             // even if not written, it counts towards pack size
-            pack.nbytes += pf.length();
+            pack.addSize(pf.length());
         }
     }
 

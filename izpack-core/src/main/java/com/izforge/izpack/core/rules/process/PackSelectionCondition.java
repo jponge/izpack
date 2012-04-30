@@ -21,12 +21,12 @@
 
 package com.izforge.izpack.core.rules.process;
 
+import java.util.List;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.rules.Condition;
-
-import java.util.List;
 
 /**
  * @author Dennis Reil, <izpack@reil-online.de>
@@ -62,7 +62,7 @@ public class PackSelectionCondition extends Condition
         {
             for (Pack selectedpack : selectedpacks)
             {
-                if (packid.equals(selectedpack.id))
+                if (packid.equals(selectedpack.getLangPackId())) // TODO - See IZPACK-799
                 {
                     // pack is selected
                     return true;

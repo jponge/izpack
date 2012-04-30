@@ -21,6 +21,17 @@
 
 package com.izforge.izpack.event;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Vector;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.DynamicVariable;
@@ -58,17 +69,6 @@ import com.izforge.izpack.util.file.GlobPatternMapper;
 import com.izforge.izpack.util.file.types.FileSet;
 import com.izforge.izpack.util.file.types.Mapper;
 import com.izforge.izpack.util.helper.SpecHelper;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Vector;
-import java.util.logging.Logger;
 
 
 public class ConfigurationInstallerListener extends SimpleInstallerListener
@@ -124,16 +124,16 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         while (iter != null && iter.hasNext())
         {
             p = iter.next();
-            logger.fine("Entering beforepacks configuration action for pack " + p.name);
+            logger.fine("Entering beforepacks configuration action for pack " + p.getName());
 
             // Resolve data for current pack.
-            IXMLElement pack = getSpecHelper().getPackForName(p.name);
+            IXMLElement pack = getSpecHelper().getPackForName(p.getName());
             if (pack == null)
             {
                 continue;
             }
 
-            logger.fine("Found configuration action descriptor for pack " + p.name);
+            logger.fine("Found configuration action descriptor for pack " + p.getName());
             // Prepare the action cache
             HashMap<Object, ArrayList<ConfigurationAction>> packActions = new HashMap<Object, ArrayList<ConfigurationAction>>();
             packActions.put(ActionBase.BEFOREPACK, new ArrayList<ConfigurationAction>());
@@ -155,7 +155,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                         if (act != null)
                         {
                             logger.fine("Adding " + act.getOrder() + "configuration action with "
-                                    + act.getActionTasks().size() + " tasks");
+                                                + act.getActionTasks().size() + " tasks");
                             (packActions.get(act.getOrder())).add(act);
                         }
                     }
@@ -172,12 +172,12 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                 }
             }
 
-            actions.put(p.name, packActions);
+            actions.put(p.getName(), packActions);
         }
         iter = idata.getAvailablePacks().iterator();
         while (iter.hasNext())
         {
-            String currentPack = iter.next().name;
+            String currentPack = iter.next().getName();
             performAllActions(currentPack, ActionBase.BEFOREPACKS, null);
         }
     }
@@ -186,13 +186,13 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler)
             throws Exception
     {
-        performAllActions(pack.name, ActionBase.BEFOREPACK, handler);
+        performAllActions(pack.getName(), ActionBase.BEFOREPACK, handler);
     }
 
     @Override
     public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
     {
-        performAllActions(pack.name, ActionBase.AFTERPACK, handler);
+        performAllActions(pack.getName(), ActionBase.AFTERPACK, handler);
     }
 
     @Override
@@ -206,7 +206,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         }
         for (Pack pack : idata.getSelectedPacks())
         {
-            String currentPack = pack.name;
+            String currentPack = pack.getName();
             performAllActions(currentPack, ActionBase.AFTERPACKS, handler);
         }
     }
@@ -216,7 +216,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         int retval = 0;
         for (Pack pack : idata.getSelectedPacks())
         {
-            String currentPack = pack.name;
+            String currentPack = pack.getName();
             ArrayList<ConfigurationAction> actList = getActions(currentPack, order);
             if (actList != null)
             {
@@ -386,11 +386,12 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                     readConfigurableSetCommonAttributes(idata, el, (ConfigurableFileCopyTask) task);
                     break;
                 default:
-                    throw new InstallerException("Type '" + configType.getAttribute() + "' currently not allowed for ConfigurableSet");
+                    throw new InstallerException(
+                            "Type '" + configType.getAttribute() + "' currently not allowed for ConfigurableSet");
             }
 
             configtasks.add(new ConfigurationActionTask(task, getAttribute(el, "condition"),
-                    getInstalldata().getRules()));
+                                                        getInstalldata().getRules()));
         }
         return configtasks;
     }
@@ -573,15 +574,22 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                     task = new SingleXmlFileMergeTask();
                     File tofile = FileUtil.getAbsoluteFile(requireAttribute(el, "tofile"), idata.getInstallPath());
                     ((SingleXmlFileMergeTask) task).setToFile(tofile);
-                    ((SingleXmlFileMergeTask) task).setPatchFile(FileUtil.getAbsoluteFile(getAttribute(el, "patchfile"), idata.getInstallPath()));
-                    File originalfile = FileUtil.getAbsoluteFile(getAttribute(el, "originalfile"), idata.getInstallPath());
+                    ((SingleXmlFileMergeTask) task).setPatchFile(
+                            FileUtil.getAbsoluteFile(getAttribute(el, "patchfile"), idata.getInstallPath()));
+                    File originalfile = FileUtil.getAbsoluteFile(getAttribute(el, "originalfile"),
+                                                                 idata.getInstallPath());
                     if (originalfile == null)
+                    {
                         originalfile = tofile;
+                    }
                     ((SingleXmlFileMergeTask) task).setOriginalFile(originalfile);
-                    ((SingleXmlFileMergeTask) task).setConfigFile(FileUtil.getAbsoluteFile(getAttribute(el, "configfile"), idata.getInstallPath()));
+                    ((SingleXmlFileMergeTask) task).setConfigFile(
+                            FileUtil.getAbsoluteFile(getAttribute(el, "configfile"), idata.getInstallPath()));
                     String boolattr = getAttribute(el, "cleanup");
                     if (boolattr != null)
+                    {
                         ((SingleXmlFileMergeTask) task).setCleanup(Boolean.parseBoolean(boolattr));
+                    }
                     List<FileSet> fslist = readFileSets(idata, el);
                     for (FileSet fs : fslist)
                     {
@@ -599,11 +607,12 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
 
                 default:
                     // This should never happen
-                    throw new InstallerException("Type '" + configType.getAttribute() + "' currently not allowed for Configurable");
+                    throw new InstallerException(
+                            "Type '" + configType.getAttribute() + "' currently not allowed for Configurable");
             }
 
             configtasks.add(new ConfigurationActionTask(task, getAttribute(el, "condition"),
-                    getInstalldata().getRules()));
+                                                        getInstalldata().getRules()));
         }
         return configtasks;
     }
@@ -647,7 +656,8 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                 {
                     if (fs.getDir() == null)
                     {
-                        throw new InstallerException("At least one of both attributes, 'dir' or 'file' required in fileset");
+                        throw new InstallerException(
+                                "At least one of both attributes, 'dir' or 'file' required in fileset");
                     }
                 }
 
@@ -724,7 +734,9 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                 {
                     String boolval = getAttribute(f, "casesensitive");
                     if (boolval != null)
+                    {
                         ((GlobPatternMapper) mapper).setCaseSensitive(Boolean.parseBoolean(boolval));
+                    }
                     ((GlobPatternMapper) mapper).setFrom(requireAttribute(f, "from"));
                     ((GlobPatternMapper) mapper).setTo(requireAttribute(f, "to"));
                 }
@@ -873,7 +885,8 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                 if (dynamicVariable.getValue() == null)
                 {
                     dynamicVariable.setValue(new PlainConfigFileValue(value,
-                            getConfigFileType(name, stype), filesection, filekey));
+                                                                      getConfigFileType(name, stype), filesection,
+                                                                      filekey));
                     try
                     {
                         dynamicVariable.validate();
@@ -900,7 +913,8 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                 if (dynamicVariable.getValue() == null)
                 {
                     dynamicVariable.setValue(new ZipEntryConfigFileValue(value, entryname,
-                            getConfigFileType(name, stype), filesection, filekey));
+                                                                         getConfigFileType(name, stype), filesection,
+                                                                         filekey));
                     try
                     {
                         dynamicVariable.validate();
@@ -927,7 +941,8 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                 if (dynamicVariable.getValue() == null)
                 {
                     dynamicVariable.setValue(new JarEntryConfigValue(value, entryname,
-                            getConfigFileType(name, stype), filesection, filekey));
+                                                                     getConfigFileType(name, stype), filesection,
+                                                                     filekey));
                     try
                     {
                         dynamicVariable.validate();
@@ -1037,11 +1052,12 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                 {
                     dynamicVariable.setRegularExpression(
                             new RegularExpressionFilterImpl(expression,
-                                    selectexpr,
-                                    replaceexpr,
-                                    defaultvalue,
-                                    Boolean.valueOf(scasesensitive != null ? scasesensitive : "true"),
-                                    Boolean.valueOf(sglobal != null ? sglobal : "false")));
+                                                            selectexpr,
+                                                            replaceexpr,
+                                                            defaultvalue,
+                                                            Boolean.valueOf(
+                                                                    scasesensitive != null ? scasesensitive : "true"),
+                                                            Boolean.valueOf(sglobal != null ? sglobal : "false")));
                     try
                     {
                         dynamicVariable.validate();
@@ -1099,7 +1115,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                     if ((rules != null) && rules.isConditionTrue(conditionid))
                     {
                         logger.fine("Refresh configuration variable \"" + name
-                                + "\" based on global condition \" " + conditionid + "\"");
+                                            + "\" based on global condition \" " + conditionid + "\"");
                         // condition for this rule is true
                         refresh = true;
                     }
@@ -1107,7 +1123,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
                 else
                 {
                     logger.fine("Refresh configuration variable \"" + name
-                            + "\" based on local condition \" " + conditionid + "\"");
+                                        + "\" based on local condition \" " + conditionid + "\"");
                     // empty condition
                     refresh = true;
                 }

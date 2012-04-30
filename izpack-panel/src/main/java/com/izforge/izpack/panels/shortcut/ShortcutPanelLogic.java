@@ -19,6 +19,16 @@
 
 package com.izforge.izpack.panels.shortcut;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Vector;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
@@ -41,16 +51,6 @@ import com.izforge.izpack.util.StringTool;
 import com.izforge.izpack.util.TargetFactory;
 import com.izforge.izpack.util.os.Shortcut;
 import com.izforge.izpack.util.xml.XMLHelper;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Vector;
-import java.util.logging.Logger;
 
 
 /**
@@ -931,7 +931,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
             // temp =
             data.iconFile = fixSeparatorChar(shortcutSpec.getAttribute(SPEC_ATTRIBUTE_ICON, ""));
             data.iconIndex = Integer.parseInt(shortcutSpec.getAttribute(SPEC_ATTRIBUTE_ICON_INDEX,
-                    "0"));
+                                                                        "0"));
 
             // temp =
             data.workingDirectory = fixSeparatorChar(shortcutSpec.getAttribute(
@@ -1173,7 +1173,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
 
                         // String directoryName = shortcut.getDirectoryCreated ();
                         execFiles.add(new ExecutableFile(fileName, ExecutableFile.UNINSTALL,
-                                ExecutableFile.IGNORE, new ArrayList<OsModel>(), false));
+                                                         ExecutableFile.IGNORE, new ArrayList<OsModel>(), false));
 
                         files.add(fileName);
 
@@ -1209,7 +1209,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
         if (OsVersion.IS_UNIX)
         {
             writeXDGMenuFile(startMenuShortcuts, groupName, programGroupIconFile,
-                    programGroupComment);
+                             programGroupComment);
         }
         shortcut.execPostAction();
 
@@ -1289,7 +1289,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
         try
         {
             input = resourceManager.getInputStream(TargetFactory.getCurrentOSPrefix()
-                    + SPEC_FILE_NAME);
+                                                           + SPEC_FILE_NAME);
         }
         catch (ResourceNotFoundException rnfE)
         {
@@ -1347,7 +1347,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
 
         for (int i = 0; i < this.installData.getSelectedPacks().size(); i++)
         {
-            selected = this.installData.getSelectedPacks().get(i).name;
+            selected = this.installData.getSelectedPacks().get(i).getName();
 
             for (IXMLElement pack : packs)
             {

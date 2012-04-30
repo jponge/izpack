@@ -92,7 +92,7 @@ public class MultiVolumeUnpackerTest
         // pack3 is loose - i.e. content should not be stored in the volumes
         File file10 = createFile(baseDir, "file10.dat", 100);
         PackInfo pack3 = createPack("pack3", baseDir, file10);
-        pack3.getPack().loose = true;
+        pack3.getPack().setLoose(true);
 
         MultiVolumePackager packager = createPackager(baseDir, installerJar);
 
@@ -152,7 +152,7 @@ public class MultiVolumeUnpackerTest
         {
             for (Pack pack : installData.getAvailablePacks())
             {
-                if (pack.name.equals(name))
+                if (pack.getName().equals(name))
                 {
                     installData.getSelectedPacks().add(pack);
                     break;

@@ -57,7 +57,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
             Pack pack = idata.getAvailablePacks().get(i);
             IXMLElement packElement = new XMLElementImpl("pack", panelRoot);
             packElement.setAttribute("index", Integer.toString(i));
-            packElement.setAttribute("name", pack.name);
+            packElement.setAttribute("name", pack.getName());
             Boolean selected = idata.getSelectedPacks().contains(pack);
             packElement.setAttribute("selected", selected.toString());
 
@@ -146,7 +146,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
             final PInfo packInfo = new PInfo(selected, index, name);
             autoinstallPackInfoList.add(packInfo);
             logger.fine("Try to " + (selected ? "add to" : "remove from") + " selection ["
-                    + packInfo.toString() + "]");
+                                + packInfo.toString() + "]");
         }
 
         // Now merge the selected pack from automated install installDataGUI with the selected packs form
@@ -159,15 +159,15 @@ public class PacksPanelAutomationHelper implements PanelAutomation
             for (PInfo packInfo : autoinstallPackInfoList)
             {
                 // Check if we have a pack available that is referenced in autoinstall.xml
-                if ((packInfo.equals(pack.name)) || (packInfo.equals(indexOfAvailablePack)))
+                if ((packInfo.equals(pack.getName())) || (packInfo.equals(indexOfAvailablePack)))
                 {
-                    if (pack.required)
+                    if (pack.isRequired())
                     {
                         // Do not modify required packs
                         if (!packInfo.isSelected())
                         {
                             logger.warning("Pack [" + packInfo.toString()
-                                    + "] must be installed because it is required");
+                                                   + "] must be installed because it is required");
                         }
                     }
                     else
@@ -177,13 +177,13 @@ public class PacksPanelAutomationHelper implements PanelAutomation
                             // Check if the conditions allow to select the pack
                             RulesEngine rules = idata.getRules();
                             if ((idata.getSelectedPacks().indexOf(pack) < 0)
-                                    && (pack.id != null)
-                                    && (rules.canInstallPack(pack.id,
-                                    idata.getVariables())))
+                                    && (pack.getLangPackId() != null)             // TODO - see IZPACK-799
+                                    && (rules.canInstallPack(pack.getLangPackId(),
+                                                             idata.getVariables())))
                             {
                                 idata.getSelectedPacks().add(pack);
                                 logger.fine("Pack [" + packInfo.toString()
-                                        + "] added to selection.");
+                                                    + "] added to selection.");
                             }
                         }
                         else
@@ -191,7 +191,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
                             // Pack can be removed from selection because it is not required
                             idata.getSelectedPacks().remove(pack);
                             logger.fine("Pack [" + packInfo.toString()
-                                    + "] removed from selection.");
+                                                + "] removed from selection.");
 
                         }
                     }

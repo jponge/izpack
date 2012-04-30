@@ -1,22 +1,5 @@
 package com.izforge.izpack.panels.process;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.adaptator.IXMLParser;
-import com.izforge.izpack.api.adaptator.impl.XMLParser;
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.data.binding.OsModel;
-import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.api.handler.AbstractUIProcessHandler;
-import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.api.substitutor.SubstitutionType;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.OsConstraintHelper;
-
-import javax.swing.SwingUtilities;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,6 +17,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.SwingUtilities;
+
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLParser;
+import com.izforge.izpack.api.adaptator.impl.XMLParser;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.binding.OsModel;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.handler.AbstractUIProcessHandler;
+import com.izforge.izpack.api.rules.Condition;
+import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.api.substitutor.SubstitutionType;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.OsConstraintHelper;
 
 /**
  * This class does alle the work for the process panel.
@@ -99,7 +100,7 @@ public class ProcessPanelWorker implements Runnable
         // if (!readSpec())
         // throw new IOException("Error reading processing specification");
         this.variableSubstitutor = new VariableSubstitutorImpl(this.idata
-                .getVariables());
+                                                                       .getVariables());
         this.resources = resources;
     }
 
@@ -149,7 +150,8 @@ public class ProcessPanelWorker implements Runnable
         for (IXMLElement job_el : spec.getChildrenNamed("job"))
         {
             // normally use condition attribute, but also read conditionid to not break older versions.
-            String conditionid = job_el.hasAttribute("condition") ? job_el.getAttribute("condition") : job_el.hasAttribute("conditionid") ? job_el.getAttribute("conditionid") : null;
+            String conditionid = job_el.hasAttribute("condition") ? job_el.getAttribute(
+                    "condition") : job_el.hasAttribute("conditionid") ? job_el.getAttribute("conditionid") : null;
             if ((conditionid != null) && (conditionid.length() > 0))
             {
                 logger.fine("Checking condition for job: " + conditionid);
@@ -246,15 +248,22 @@ public class ProcessPanelWorker implements Runnable
 
         for (IXMLElement onFailElement : spec.getChildrenNamed("onFail"))
         {
-            String conditionid = onFailElement.hasAttribute("condition") ? onFailElement.getAttribute("condition") : onFailElement.hasAttribute("conditionid") ? onFailElement.getAttribute("conditionid") : null;
-            boolean unlockPrev = onFailElement.hasAttribute("previous") ? Boolean.parseBoolean(onFailElement.getAttribute("previous")) : false;
-            boolean unlockNext = onFailElement.hasAttribute("next") ? Boolean.parseBoolean(onFailElement.getAttribute("next")) : false;
+            String conditionid = onFailElement.hasAttribute("condition") ? onFailElement.getAttribute(
+                    "condition") : onFailElement.hasAttribute("conditionid") ? onFailElement.getAttribute(
+                    "conditionid") : null;
+            boolean unlockPrev = onFailElement.hasAttribute("previous") ? Boolean.parseBoolean(
+                    onFailElement.getAttribute("previous")) : false;
+            boolean unlockNext = onFailElement.hasAttribute("next") ? Boolean.parseBoolean(
+                    onFailElement.getAttribute("next")) : false;
             buttonConfigs.get(Boolean.FALSE).add(new ButtonConfig(conditionid, unlockPrev, unlockNext));
         }
         for (IXMLElement onSuccessElement : spec.getChildrenNamed("onSuccess"))
         {
-            String conditionid = onSuccessElement.hasAttribute("condition") ? onSuccessElement.getAttribute("condition") : onSuccessElement.hasAttribute("conditionid") ? onSuccessElement.getAttribute("conditionid") : null;
-            boolean unlockPrev = onSuccessElement.hasAttribute("previous") ? Boolean.parseBoolean(onSuccessElement.getAttribute("previous")) : false;
+            String conditionid = onSuccessElement.hasAttribute("condition") ? onSuccessElement.getAttribute(
+                    "condition") : onSuccessElement.hasAttribute("conditionid") ? onSuccessElement.getAttribute(
+                    "conditionid") : null;
+            boolean unlockPrev = onSuccessElement.hasAttribute("previous") ? Boolean.parseBoolean(
+                    onSuccessElement.getAttribute("previous")) : false;
             buttonConfigs.get(Boolean.TRUE).add(new ButtonConfig(conditionid, unlockPrev, true));
         }
 
@@ -311,7 +320,7 @@ public class ProcessPanelWorker implements Runnable
             try
             {
                 File tempLogFile = File.createTempFile("Install_" + identifier + "_", ".log",
-                        new File(logfiledir));
+                                                       new File(logfiledir));
                 logfile = new PrintWriter(new FileOutputStream(tempLogFile), true);
             }
             catch (IOException e)
@@ -505,8 +514,10 @@ public class ProcessPanelWorker implements Runnable
 
                 Process process = processBuilder.start();
 
-                ProcessPanelWorker.ExecutableFile.OutputMonitor stdoutMon = new ProcessPanelWorker.ExecutableFile.OutputMonitor(this.handler, process.getInputStream(), false);
-                ProcessPanelWorker.ExecutableFile.OutputMonitor stderrMon = new ProcessPanelWorker.ExecutableFile.OutputMonitor(this.handler, process.getErrorStream(), true);
+                ProcessPanelWorker.ExecutableFile.OutputMonitor stdoutMon = new ProcessPanelWorker.ExecutableFile.OutputMonitor(
+                        this.handler, process.getInputStream(), false);
+                ProcessPanelWorker.ExecutableFile.OutputMonitor stderrMon = new ProcessPanelWorker.ExecutableFile.OutputMonitor(
+                        this.handler, process.getErrorStream(), true);
                 Thread stdoutThread = new Thread(stdoutMon);
                 Thread stderrThread = new Thread(stderrMon);
                 stdoutThread.setDaemon(true);
@@ -714,7 +725,7 @@ public class ProcessPanelWorker implements Runnable
             catch (SecurityException e)
             {
                 myHandler.emitError("Post Processing Error",
-                        "Security exception thrown when processing class: " + myClassName);
+                                    "Security exception thrown when processing class: " + myClassName);
             }
             catch (ClassNotFoundException e)
             {
@@ -724,7 +735,7 @@ public class ProcessPanelWorker implements Runnable
             catch (NoSuchMethodException e)
             {
                 myHandler.emitError("Post Processing Error",
-                        "Processing class does not have 'run' method: " + myClassName);
+                                    "Processing class does not have 'run' method: " + myClassName);
             }
             catch (IllegalAccessException e)
             {
@@ -739,20 +750,20 @@ public class ProcessPanelWorker implements Runnable
             catch (Exception e)
             {
                 myHandler.emitError("Post Processing Error",
-                        "Exception when running processing class: " + myClassName + ", "
-                                + e.getMessage());
+                                    "Exception when running processing class: " + myClassName + ", "
+                                            + e.getMessage());
             }
             catch (Error e)
             {
                 myHandler.emitError("Post Processing Error",
-                        "Error when running processing class: " + myClassName + ", "
-                                + e.getMessage());
+                                    "Error when running processing class: " + myClassName + ", "
+                                            + e.getMessage());
             }
             catch (Throwable e)
             {
                 myHandler.emitError("Post Processing Error",
-                        "Error when running processing class: " + myClassName + ", "
-                                + e.getMessage());
+                                    "Error when running processing class: " + myClassName + ", "
+                                            + e.getMessage());
             }
             return result;
         }
@@ -796,7 +807,7 @@ public class ProcessPanelWorker implements Runnable
 
         for (int i = 0; i < idata.getSelectedPacks().size(); i++)
         {
-            selected = idata.getSelectedPacks().get(i).name;
+            selected = idata.getSelectedPacks().get(i).getName();
 
             // System.out.println ("Selected pack is " + selected);
 
@@ -828,8 +839,8 @@ public class ProcessPanelWorker implements Runnable
         public void run()
         {
             if (uiHandler.askQuestion("Process execution failed",
-                    "Continue anyway?", AbstractUIHandler.CHOICES_YES_NO,
-                    AbstractUIHandler.ANSWER_YES) == AbstractUIHandler.ANSWER_NO)
+                                      "Continue anyway?", AbstractUIHandler.CHOICES_YES_NO,
+                                      AbstractUIHandler.ANSWER_YES) == AbstractUIHandler.ANSWER_NO)
             {
                 mustContinue(false);
             }

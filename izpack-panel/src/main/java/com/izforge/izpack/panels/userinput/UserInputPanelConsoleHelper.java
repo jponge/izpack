@@ -21,18 +21,6 @@
 
 package com.izforge.izpack.panels.userinput;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
-import com.izforge.izpack.installer.console.PanelConsole;
-import com.izforge.izpack.installer.console.PanelConsoleHelper;
-import com.izforge.izpack.panels.userinput.processor.Processor;
-import com.izforge.izpack.util.Console;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.helper.SpecHelper;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -44,6 +32,18 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.installer.console.PanelConsole;
+import com.izforge.izpack.installer.console.PanelConsoleHelper;
+import com.izforge.izpack.panels.userinput.processor.Processor;
+import com.izforge.izpack.util.Console;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.helper.SpecHelper;
 
 /**
  * The user input panel console helper class.
@@ -134,7 +134,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
 
     private static Input SPACE_INTPUT_FIELD = new Input(SPACE, null, null, SPACE, "\r", 0);
-    private static Input DIVIDER_INPUT_FIELD = new Input(DIVIDER, null, null, DIVIDER, "------------------------------------------", 0);
+    private static Input DIVIDER_INPUT_FIELD = new Input(DIVIDER, null, null, DIVIDER,
+                                                         "------------------------------------------", 0);
 
     public List<Input> listInputs;
 
@@ -471,7 +472,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 }
             }
             System.out.println(i + "  [" + (input.iSelectedChoice == i ? "x" : " ") + "] "
-                    + (choice.strText != null ? choice.strText : ""));
+                                       + (choice.strText != null ? choice.strText : ""));
         }
 
         try
@@ -566,7 +567,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             }
         }
         System.out.println("  [" + (input.iSelectedChoice == 1 ? "x" : " ") + "] "
-                + (choice.strText != null ? choice.strText : ""));
+                                   + (choice.strText != null ? choice.strText : ""));
         try
         {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -676,7 +677,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     if (token.contains(":"))
                     {
                         listSet.set(new Integer(token.substring(0, token.indexOf(":"))),
-                                token.substring(token.indexOf(":") + 1));
+                                    token.substring(token.indexOf(":") + 1));
                     }
                 }
 
@@ -792,7 +793,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                         if (set != null && !"".equals(set))
                         {
                             VariableSubstitutor variableSubstitutor = new VariableSubstitutorImpl(idata
-                                    .getVariables());
+                                                                                                          .getVariables());
                             set = variableSubstitutor.substitute(set);
                         }
                         if (set.equalsIgnoreCase(TRUE))
@@ -852,7 +853,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 strFieldText = description.getAttribute(TEXT);
             }
             return new Input(strVariableName, strSet, choicesList, CHECK_FIELD, strFieldText,
-                    iSelectedChoice);
+                             iSelectedChoice);
         }
 
 
@@ -961,7 +962,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         // ----------------------------------------------------
         for (int i = 0; i < idata.getSelectedPacks().size(); i++)
         {
-            selected = idata.getSelectedPacks().get(i).name;
+            selected = idata.getSelectedPacks().get(i).getName();
 
             for (IXMLElement pack : packs)
             {
