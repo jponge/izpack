@@ -1,6 +1,7 @@
-package com.izforge.izpack.installer.base;
+package com.izforge.izpack.installer.gui;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.installer.base.InstallDataConfiguratorWithRules;
 import com.izforge.izpack.installer.manager.PanelManager;
 
 /**

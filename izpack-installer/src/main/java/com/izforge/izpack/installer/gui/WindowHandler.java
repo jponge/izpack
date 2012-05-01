@@ -1,4 +1,4 @@
-package com.izforge.izpack.installer.base;
+package com.izforge.izpack.installer.gui;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;

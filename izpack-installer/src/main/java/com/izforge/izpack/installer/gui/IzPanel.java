@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer.base;
+package com.izforge.izpack.installer.gui;
 
 import java.awt.Component;
 import java.awt.Cursor;

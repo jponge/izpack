@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer.base;
+package com.izforge.izpack.installer.gui;
 
 import static java.awt.Desktop.getDesktop;
 

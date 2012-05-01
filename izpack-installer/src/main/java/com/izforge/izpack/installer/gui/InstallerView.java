@@ -1,4 +1,4 @@
-package com.izforge.izpack.installer.base;
+package com.izforge.izpack.installer.gui;
 
 /**
  * Interface for Installer view control
