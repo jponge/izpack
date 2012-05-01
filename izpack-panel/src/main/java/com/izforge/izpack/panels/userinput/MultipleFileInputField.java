@@ -32,11 +32,21 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
 import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.panels.userinput.processorclient.StringInputProcessingClient;
 import com.izforge.izpack.panels.userinput.validator.ValidatorContainer;
 
@@ -72,7 +82,10 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
 
     String labeltext;
 
-    public MultipleFileInputField(InstallerFrame parent, GUIInstallData data, boolean directory, String set, int size, List<ValidatorContainer> validatorConfig, String fileExt, String fileExtDesc, boolean createMultipleVariables, int visibleRows, int preferredXSize, int preferredYSize, String labelText)
+    public MultipleFileInputField(InstallerFrame parent, GUIInstallData data, boolean directory, String set, int size,
+                                  List<ValidatorContainer> validatorConfig, String fileExt, String fileExtDesc,
+                                  boolean createMultipleVariables, int visibleRows, int preferredXSize,
+                                  int preferredYSize, String labelText)
     {
         this.parentFrame = parent;
         this.data = data;
@@ -125,10 +138,12 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
-        browseBtn = ButtonFactory.createButton(data.getLangpack().getString("UserInputPanel.button.browse"), data.buttonsHColor);
+        browseBtn = ButtonFactory.createButton(data.getLangpack().getString("UserInputPanel.button.browse"),
+                                               data.buttonsHColor);
         browseBtn.addActionListener(this);
 
-        deleteBtn = ButtonFactory.createButton(data.getLangpack().getString("UserInputPanel.button.delete"), data.buttonsHColor);
+        deleteBtn = ButtonFactory.createButton(data.getLangpack().getString("UserInputPanel.button.delete"),
+                                               data.buttonsHColor);
         deleteBtn.addActionListener(this);
 
         JScrollPane scroller = new JScrollPane(fileList);
@@ -197,7 +212,7 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
             result = new ArrayList<String>();
 
             Enumeration<?> elements = model.elements();
-            for (; elements.hasMoreElements();)
+            for (; elements.hasMoreElements(); )
             {
                 String element = (String) elements.nextElement();
                 result.add(element);
@@ -208,9 +223,10 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
 
     private void showMessage(String messageType)
     {
-        JOptionPane.showMessageDialog(parentFrame, parentFrame.getLangpack().getString("UserInputPanel." + messageType + ".message"),
-                parentFrame.getLangpack().getString("UserInputPanel." + messageType + ".caption"),
-                JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(parentFrame,
+                                      parentFrame.getLangpack().getString("UserInputPanel." + messageType + ".message"),
+                                      parentFrame.getLangpack().getString("UserInputPanel." + messageType + ".caption"),
+                                      JOptionPane.WARNING_MESSAGE);
     }
 
     private boolean validateFile(String input)
@@ -241,8 +257,8 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
                 if (!success)
                 {
                     JOptionPane.showMessageDialog(parentFrame, processingClient.getValidationMessage(),
-                            parentFrame.getLangpack().getString("UserInputPanel.error.caption"),
-                            JOptionPane.WARNING_MESSAGE);
+                                                  parentFrame.getLangpack().getString("UserInputPanel.error.caption"),
+                                                  JOptionPane.WARNING_MESSAGE);
                 }
                 result = success;
             }

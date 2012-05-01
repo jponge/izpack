@@ -12,8 +12,8 @@ import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.data.PanelAction;
-import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.gui.IzPanel;
 import com.izforge.izpack.util.OsConstraintHelper;
 
 

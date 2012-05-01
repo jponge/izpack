@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.gui.IzPanel;
 
 
 public class ConditionValidator implements DataValidator
@@ -22,11 +22,11 @@ public class ConditionValidator implements DataValidator
         Set<String> conditionIds = rules.getKnownConditionIds();
         for (String conditionId : conditionIds)
         {
-            if (conditionId.toLowerCase().startsWith(this.getClass().getSimpleName().toLowerCase()+"."))
+            if (conditionId.toLowerCase().startsWith(this.getClass().getSimpleName().toLowerCase() + "."))
             {
                 if (!rules.getCondition(conditionId).isTrue())
                 {
-                    logger.fine("Validation failed on condition: " +conditionId);
+                    logger.fine("Validation failed on condition: " + conditionId);
                     lastFailedConditionId = conditionId;
                     return Status.ERROR;
                 }
@@ -38,7 +38,7 @@ public class ConditionValidator implements DataValidator
     @Override
     public String getErrorMessageId()
     {
-        return lastFailedConditionId+".error.message";
+        return lastFailedConditionId + ".error.message";
     }
 
     @Override

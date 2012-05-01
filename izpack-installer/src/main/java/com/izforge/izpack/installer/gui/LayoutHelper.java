@@ -21,17 +21,18 @@
 
 package com.izforge.izpack.installer.gui;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.LayoutManager2;
+
+import javax.swing.JComponent;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.gui.IzPanelConstraints;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LayoutConstants;
 import com.izforge.izpack.installer.data.GUIInstallData;
-
-import javax.swing.JComponent;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.LayoutManager2;
 
 /**
  * This class manages the layout for IzPanels. The layout related methods in IzPanel delegates the
@@ -653,7 +654,7 @@ public class LayoutHelper implements LayoutConstants
         }
         X_STRETCH_TYPE = ABSOLUTE_STRETCH;
         String var = ((String) getModifierValue(null, "RELATIVE_STRETCH", null,
-                "layoutXStretchType", installData));
+                                                "layoutXStretchType", installData));
         if (var != null)
         {
             if ("RELATIVE_STRETCH".equalsIgnoreCase(var) || "RELATIVE".equalsIgnoreCase(var))
@@ -737,8 +738,9 @@ public class LayoutHelper implements LayoutConstants
 
     public double getFullColumnStretch()
     {
-        FULL_COLUMN_STRETCH_DEFAULT = (Double) getModifierValue(FULL_COLUMN_STRETCH_DEFAULT, INITIAL_STRETCH_DEFAULT, DOUBLE_ZERO,
-                "layoutFullColumnStretch", installData);
+        FULL_COLUMN_STRETCH_DEFAULT = (Double) getModifierValue(FULL_COLUMN_STRETCH_DEFAULT, INITIAL_STRETCH_DEFAULT,
+                                                                DOUBLE_ZERO,
+                                                                "layoutFullColumnStretch", installData);
         return (FULL_COLUMN_STRETCH_DEFAULT);
     }
 

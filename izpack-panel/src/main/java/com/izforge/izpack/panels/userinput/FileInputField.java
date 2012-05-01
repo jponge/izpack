@@ -37,9 +37,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.gui.InstallerFrame;
+import com.izforge.izpack.installer.gui.IzPanel;
 import com.izforge.izpack.panels.userinput.processorclient.StringInputProcessingClient;
 import com.izforge.izpack.panels.userinput.validator.ValidatorContainer;
 
@@ -112,7 +112,8 @@ public class FileInputField extends JPanel implements ActionListener
 
         // TODO: use separate key for button text
         browseBtn = ButtonFactory.createButton(installDataGUI.getLangpack()
-                .getString("UserInputPanel.search.browse"), installDataGUI.buttonsHColor);
+                                                       .getString("UserInputPanel.search.browse"),
+                                               installDataGUI.buttonsHColor);
         browseBtn.addActionListener(this);
         this.add(filetxt, fileTextConstraint);
         this.add(browseBtn, fileButtonConstraint);
@@ -183,8 +184,9 @@ public class FileInputField extends JPanel implements ActionListener
     protected void showMessage(String messageType)
     {
         JOptionPane.showMessageDialog(parentFrame, parentFrame.getLangpack().getString("UserInputPanel." + messageType
-                + ".message"), parentFrame.getLangpack().getString("UserInputPanel." + messageType + ".caption"),
-                JOptionPane.WARNING_MESSAGE);
+                                                                                               + ".message"),
+                                      parentFrame.getLangpack().getString("UserInputPanel." + messageType + ".caption"),
+                                      JOptionPane.WARNING_MESSAGE);
     }
 
     public boolean validateField()
@@ -225,8 +227,8 @@ public class FileInputField extends JPanel implements ActionListener
                 {
                     JOptionPane
                             .showMessageDialog(parentFrame, processingClient.getValidationMessage(),
-                                    parentFrame.getLangpack().getString("UserInputPanel.error.caption"),
-                                    JOptionPane.WARNING_MESSAGE);
+                                               parentFrame.getLangpack().getString("UserInputPanel.error.caption"),
+                                               JOptionPane.WARNING_MESSAGE);
                 }
                 result = success;
             }

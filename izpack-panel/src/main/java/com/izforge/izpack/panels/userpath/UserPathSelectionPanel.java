@@ -21,23 +21,24 @@
 
 package com.izforge.izpack.panels.userpath;
 
-import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.IzPanelConstraints;
-import com.izforge.izpack.gui.IzPanelLayout;
-import com.izforge.izpack.gui.LayoutConstants;
-import com.izforge.izpack.gui.log.Log;
-import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.base.LayoutHelper;
-import com.izforge.izpack.installer.data.GUIInstallData;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
+
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.IzPanelConstraints;
+import com.izforge.izpack.gui.IzPanelLayout;
+import com.izforge.izpack.gui.LayoutConstants;
+import com.izforge.izpack.gui.log.Log;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.gui.IzPanel;
+import com.izforge.izpack.installer.gui.LayoutHelper;
 
 /**
  * This is a sub panel which contains a text field and a browse button for path selection. This is
@@ -129,7 +130,8 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
         {
             buttonText = parent.getInstallerFrame().getLangpack().getString(defaultPanelName + ".browse");
         }
-        browseButton = ButtonFactory.createButton(buttonText, parent.getInstallerFrame().getIcons().get("open"), installData.buttonsHColor);
+        browseButton = ButtonFactory.createButton(buttonText, parent.getInstallerFrame().getIcons().get("open"),
+                                                  installData.buttonsHColor);
         browseButton.addActionListener(this);
         add(browseButton);
     }

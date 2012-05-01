@@ -26,9 +26,9 @@ import javax.swing.SwingUtilities;
 import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.exception.IzPackException;
-import com.izforge.izpack.installer.base.InstallerController;
 import com.izforge.izpack.installer.container.impl.GUIInstallerContainer;
 import com.izforge.izpack.installer.container.impl.InstallerContainer;
+import com.izforge.izpack.installer.gui.InstallerController;
 import com.izforge.izpack.installer.language.LanguageDialog;
 
 /**

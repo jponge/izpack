@@ -20,9 +20,9 @@ import org.junit.runner.RunWith;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.compiler.container.TestInstallationContainer;
-import com.izforge.izpack.installer.base.InstallerController;
-import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.gui.InstallerController;
+import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.installer.language.LanguageDialog;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.InstallFile;

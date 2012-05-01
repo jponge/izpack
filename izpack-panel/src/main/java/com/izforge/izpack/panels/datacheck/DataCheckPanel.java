@@ -40,9 +40,9 @@ import javax.swing.JScrollPane;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.gui.InstallerFrame;
+import com.izforge.izpack.installer.gui.IzPanel;
 
 /**
  * DataCheckPanel: Provide a lot of debugging information.  Print a simple header of our
@@ -99,7 +99,7 @@ public class DataCheckPanel extends IzPanel
     /**
      * When the panel is made active, call the printDebugInfo method.
      *
-     * @see com.izforge.izpack.installer.base.IzPanel#panelActivate()
+     * @see com.izforge.izpack.installer.gui.IzPanel#panelActivate()
      */
     public void panelActivate()
     {

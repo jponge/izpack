@@ -14,7 +14,7 @@ import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.gui.IconsDatabase;
-import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.gui.InstallerFrame;
 
 /**
  * Provide icons database
@@ -67,7 +67,7 @@ public class IconsProvider implements Provider
         catch (Throwable exception)
         {
             logger.warning("Resource " + CUSTOM_ICONS_RESOURCEFILE
-                    + " not defined. No custom icons available");
+                                   + " not defined. No custom icons available");
             return;
         }
         logger.fine("Custom icons available");

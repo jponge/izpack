@@ -1,15 +1,12 @@
 package com.izforge.izpack.test.panel;
 
-import com.izforge.izpack.api.GuiId;
-import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.data.binding.Help;
-import com.izforge.izpack.installer.base.InstallerController;
-import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.installer.data.UninstallDataWriter;
-import com.izforge.izpack.test.Container;
-import com.izforge.izpack.test.container.TestPanelContainer;
-import com.izforge.izpack.test.junit.PicoRunner;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
 import org.hamcrest.text.StringContains;
@@ -19,12 +16,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
+import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.binding.Help;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.data.UninstallDataWriter;
+import com.izforge.izpack.installer.gui.InstallerController;
+import com.izforge.izpack.test.Container;
+import com.izforge.izpack.test.container.TestPanelContainer;
+import com.izforge.izpack.test.junit.PicoRunner;
 
 /**
  * Manual test for finish panel
@@ -93,7 +94,7 @@ public class PanelDisplayTest
     {
         Mockito.when(uninstallDataWriter.isUninstallRequired()).thenReturn(true);
         addPanelAndShow("com.izforge.izpack.panels.hello.HelloPanel",
-                "com.izforge.izpack.panels.simplefinish.SimpleFinishPanel");
+                        "com.izforge.izpack.panels.simplefinish.SimpleFinishPanel");
         String welcomLabel = frameFixture.label(GuiId.HELLO_PANEL_LABEL.id).text();
         assertThat(welcomLabel, StringContains.containsString("Welcome to the installation of"));
         frameFixture.button(GuiId.BUTTON_NEXT.id).click();

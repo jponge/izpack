@@ -18,18 +18,32 @@
 
 package com.izforge.izpack.installer.multiunpacker;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.HeadlessException;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.base.InstallerFrame;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
+import com.izforge.izpack.installer.gui.InstallerFrame;
 
 
 /**
@@ -100,10 +114,14 @@ public class NextMediaDialog extends JDialog implements ActionListener
     {
         if (this.icons != null)
         {
-            this.msg = LabelFactory.create(this.langpack.getString(NEXTMEDIA_MSG_ID), this.icons.get("warning"), JLabel.LEFT);
-            this.browsebtn = ButtonFactory.createButton(this.langpack.getString(BROWSEBTN_ID), this.icons.get("open"), new Color(230, 230, 230));
-            this.okbtn = ButtonFactory.createButton(this.langpack.getString(OKBTN_ID), this.icons.get("ok"), new Color(230, 230, 230));
-            this.cancelbtn = ButtonFactory.createButton(this.langpack.getString(CANCELBTN_ID), this.icons.get("cancel"), new Color(230, 230, 230));
+            this.msg = LabelFactory.create(this.langpack.getString(NEXTMEDIA_MSG_ID), this.icons.get("warning"),
+                                           JLabel.LEFT);
+            this.browsebtn = ButtonFactory.createButton(this.langpack.getString(BROWSEBTN_ID), this.icons.get("open"),
+                                                        new Color(230, 230, 230));
+            this.okbtn = ButtonFactory.createButton(this.langpack.getString(OKBTN_ID), this.icons.get("ok"),
+                                                    new Color(230, 230, 230));
+            this.cancelbtn = ButtonFactory.createButton(this.langpack.getString(CANCELBTN_ID), this.icons.get("cancel"),
+                                                        new Color(230, 230, 230));
         }
         else
         {
@@ -150,9 +168,11 @@ public class NextMediaDialog extends JDialog implements ActionListener
             Dimension ownersize = this.owner.getSize();
             Point position = this.owner.getLocationOnScreen();
             Point centerposition = new Point();
-            centerposition.setLocation(position.getX() + 0.5 * ownersize.getWidth(), position.getY() + 0.5 * ownersize.getHeight());
+            centerposition.setLocation(position.getX() + 0.5 * ownersize.getWidth(),
+                                       position.getY() + 0.5 * ownersize.getHeight());
             Point myposition = new Point();
-            myposition.setLocation(centerposition.getX() - 0.5 * mysize.getWidth(), centerposition.getY() - 0.5 * mysize.getHeight());
+            myposition.setLocation(centerposition.getX() - 0.5 * mysize.getWidth(),
+                                   centerposition.getY() - 0.5 * mysize.getHeight());
             this.setLocation(myposition);
         }
     }
@@ -193,7 +213,9 @@ public class NextMediaDialog extends JDialog implements ActionListener
         }
         else if (e.getSource() == this.cancelbtn)
         {
-            int option = JOptionPane.showConfirmDialog(this, this.langpack.getString("installer.quit.message"), this.langpack.getString("installer.quit.title"), JOptionPane.YES_NO_OPTION);
+            int option = JOptionPane.showConfirmDialog(this, this.langpack.getString("installer.quit.message"),
+                                                       this.langpack.getString("installer.quit.title"),
+                                                       JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION)
             {
                 // exit

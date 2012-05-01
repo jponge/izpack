@@ -169,7 +169,8 @@ public class HelpWindow extends JDialog implements HyperlinkListener, ActionList
         {
             if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
             {
-                if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
+                {
                     String url = e.getURL().toString();
                     if (url.startsWith("#"))
                     {

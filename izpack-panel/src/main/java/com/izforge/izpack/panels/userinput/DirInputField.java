@@ -29,8 +29,8 @@ import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 
-import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.gui.IzPanel;
 import com.izforge.izpack.panels.userinput.validator.ValidatorContainer;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsVersion;
@@ -63,7 +63,7 @@ public class DirInputField extends FileInputField
     protected boolean _validate(File dir)
     {
         System.err.println(dir.getAbsolutePath() + " - isDir: " + dir.isDirectory()
-                + " - mustExist: " + mustExist + " - canCreate: " + canCreate);
+                                   + " - mustExist: " + mustExist + " - canCreate: " + canCreate);
         if (dir.isDirectory())
         {
             return true;
@@ -101,8 +101,8 @@ public class DirInputField extends FileInputField
         if (!path.exists())
         {
             if (!parent.emitNotificationFeedback(parent.getI18nStringForClass("createdir",
-                    "TargetPanel")
-                    + "\n" + path.getAbsolutePath()))
+                                                                              "TargetPanel")
+                                                         + "\n" + path.getAbsolutePath()))
             {
                 return false;
             }

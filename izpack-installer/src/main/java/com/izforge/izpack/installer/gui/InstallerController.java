@@ -16,7 +16,9 @@ public class InstallerController
     private PanelManager panelManager;
     private AutomatedInstallData automatedInstallData;
 
-    public InstallerController(PanelManager panelManager, InstallDataConfiguratorWithRules installDataRulesEngineManager, InstallerFrame installerFrame, AutomatedInstallData automatedInstallData)
+    public InstallerController(PanelManager panelManager,
+                               InstallDataConfiguratorWithRules installDataRulesEngineManager,
+                               InstallerFrame installerFrame, AutomatedInstallData automatedInstallData)
     {
 
         this.panelManager = panelManager;
