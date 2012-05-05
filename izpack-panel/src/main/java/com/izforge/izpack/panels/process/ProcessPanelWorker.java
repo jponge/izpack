@@ -25,14 +25,13 @@ import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.handler.AbstractUIProcessHandler;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraintHelper;
 
@@ -71,7 +70,6 @@ public class ProcessPanelWorker implements Runnable
     protected AutomatedInstallData idata;
 
     private Map<Boolean, List<ButtonConfig>> buttonConfigs = new HashMap<Boolean, List<ButtonConfig>>();
-    private VariableSubstitutor variableSubstitutor;
     private RulesEngine rules;
 
     /**
@@ -99,8 +97,6 @@ public class ProcessPanelWorker implements Runnable
         // Patch)
         // if (!readSpec())
         // throw new IOException("Error reading processing specification");
-        this.variableSubstitutor = new VariableSubstitutorImpl(this.idata
-                                                                       .getVariables());
         this.resources = resources;
     }
 
@@ -300,7 +296,7 @@ public class ProcessPanelWorker implements Runnable
         // variable substitution needs selected install path.
         if (logfiledir != null)
         {
-            logfiledir = IoHelper.translatePath(logfiledir, variableSubstitutor);
+            logfiledir = IoHelper.translatePath(logfiledir, idata.getVariables());
 
             String appVersion = idata.getVariable("APP_VER");
 
@@ -336,7 +332,7 @@ public class ProcessPanelWorker implements Runnable
         {
             this.handler.startProcess(processingJob.name);
 
-            this.result = processingJob.run(this.handler, this.vs);
+            this.result = processingJob.run(this.handler, idata.getVariables());
 
             this.handler.finishProcess();
 
@@ -401,10 +397,11 @@ public class ProcessPanelWorker implements Runnable
     {
 
         /**
-         * @param handler The UI handler for user interaction and to send output to.
+         * @param handler   The UI handler for user interaction and to send output to.
+         * @param variables the variables
          * @return true on success, false if processing should stop
          */
-        public boolean run(AbstractUIProcessHandler handler, VariableSubstitutor vs);
+        public boolean run(AbstractUIProcessHandler handler, Variables variables);
     }
 
     private static class ProcessingJob implements ProcessPanelWorker.Processable
@@ -421,11 +418,11 @@ public class ProcessPanelWorker implements Runnable
         }
 
         @Override
-        public boolean run(AbstractUIProcessHandler handler, VariableSubstitutor vs)
+        public boolean run(AbstractUIProcessHandler handler, Variables variables)
         {
             for (ProcessPanelWorker.Processable processable : this.processables)
             {
-                if (!processable.run(handler, vs))
+                if (!processable.run(handler, variables))
                 {
                     return false;
                 }
@@ -457,7 +454,7 @@ public class ProcessPanelWorker implements Runnable
         }
 
         @Override
-        public boolean run(AbstractUIProcessHandler handler, VariableSubstitutor vs)
+        public boolean run(AbstractUIProcessHandler handler, Variables variables)
         {
             this.handler = handler;
 
@@ -465,7 +462,7 @@ public class ProcessPanelWorker implements Runnable
 
             try
             {
-                params.add(vs.substitute(this.filename, SubstitutionType.TYPE_PLAIN));
+                params.add(variables.replace(this.filename));
             }
             catch (Exception e)
             {
@@ -476,7 +473,7 @@ public class ProcessPanelWorker implements Runnable
             {
                 try
                 {
-                    params.add(vs.substitute(argument, SubstitutionType.TYPE_PLAIN));
+                    params.add(variables.replace(argument));
                 }
                 catch (Exception e)
                 {
@@ -487,21 +484,13 @@ public class ProcessPanelWorker implements Runnable
             ProcessBuilder processBuilder = new ProcessBuilder(params);
             if (workingDir != null && !workingDir.equals(""))
             {
-                workingDir = IoHelper.translatePath(workingDir, vs);
+                workingDir = IoHelper.translatePath(workingDir, variables);
                 processBuilder.directory(new File(workingDir));
             }
             Map<String, String> environment = processBuilder.environment();
             for (String envvar : envvariables)
             {
-                String ev;
-                try
-                {
-                    ev = vs.substitute(envvar, SubstitutionType.TYPE_PLAIN);
-                }
-                catch (Exception e)
-                {
-                    ev = envvar;
-                }
+                String ev = variables.replace(envvar);
                 int i = ev.indexOf("=");
                 if (i > 0)
                 {
@@ -682,7 +671,7 @@ public class ProcessPanelWorker implements Runnable
         }
 
         @Override
-        public boolean run(AbstractUIProcessHandler aHandler, VariableSubstitutor varSubstitutor)
+        public boolean run(AbstractUIProcessHandler aHandler, Variables variables)
         {
             boolean result = false;
             myHandler = aHandler;
@@ -692,14 +681,7 @@ public class ProcessPanelWorker implements Runnable
             int i = 0;
             for (String myArgument : myArguments)
             {
-                try
-                {
-                    params[i] = varSubstitutor.substitute(myArgument, SubstitutionType.TYPE_PLAIN);
-                }
-                catch (Exception e)
-                {
-                    params[i] = myArgument;
-                }
+                params[i] = variables.replace(myArgument);
                 i++;
             }
 

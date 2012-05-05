@@ -36,6 +36,7 @@ import com.izforge.izpack.compiler.listener.PackagerListener;
 import com.izforge.izpack.compiler.merge.resolve.CompilerPathResolver;
 import com.izforge.izpack.compiler.packager.impl.MultiVolumePackager;
 import com.izforge.izpack.compiler.stream.JarOutputStream;
+import com.izforge.izpack.core.data.DefaultVariables;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.installer.data.InstallData;
@@ -246,7 +247,7 @@ public class MultiVolumeUnpackerTest
     private AutomatedInstallData createInstallData(File mediaDir, File installDir, ResourceManager resources)
             throws IOException, ClassNotFoundException
     {
-        AutomatedInstallData installData = new InstallData(new Properties());
+        AutomatedInstallData installData = new InstallData(new DefaultVariables());
 
         installData.setInstallPath(installDir.getPath());
         installData.setMediaPath(mediaDir.getPath());
@@ -286,7 +287,7 @@ public class MultiVolumeUnpackerTest
         MergeManager mergeManager = Mockito.mock(MergeManager.class);
         CompilerPathResolver resolver = Mockito.mock(CompilerPathResolver.class);
         MergeableResolver mergeableResolver = Mockito.mock(MergeableResolver.class);
-        PackCompressor compressor = new DefaultPackCompressor(new VariableSubstitutorImpl(properties));
+        PackCompressor compressor = new DefaultPackCompressor();
         CompilerData data = new CompilerData(null, baseDir.getPath(), installerJar.getPath(), true);
         MultiVolumePackager packager = new MultiVolumePackager(properties, packagerListener, jar, mergeManager,
                                                                resolver, mergeableResolver, compressor, data);

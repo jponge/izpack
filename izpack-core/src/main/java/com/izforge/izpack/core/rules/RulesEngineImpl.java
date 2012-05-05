@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -37,6 +36,7 @@ import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.ConditionReference;
@@ -349,7 +349,7 @@ public class RulesEngineImpl implements RulesEngine
      *         condition was not met
      */
     @Override
-    public boolean canShowPanel(String panelid, Properties variables)
+    public boolean canShowPanel(String panelid, Variables variables)
     {
         if (!this.panelConditions.containsKey(panelid))
         {
@@ -372,7 +372,7 @@ public class RulesEngineImpl implements RulesEngine
      *         condition was not met
      */
     @Override
-    public boolean canInstallPack(String packid, Properties variables)
+    public boolean canInstallPack(String packid, Variables variables)
     {
         if (packid == null)
         {
@@ -398,7 +398,7 @@ public class RulesEngineImpl implements RulesEngine
      * @return
      */
     @Override
-    public boolean canInstallPackOptional(String packid, Properties variables)
+    public boolean canInstallPackOptional(String packid, Variables variables)
     {
         if (!this.optionalPackConditions.containsKey(packid))
         {

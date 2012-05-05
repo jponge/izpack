@@ -39,7 +39,6 @@ import com.izforge.izpack.api.data.ScriptParserConstant;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.bootstrap.Installer;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
@@ -78,11 +77,6 @@ public class ConsoleInstaller extends InstallerBase
     private final RequirementsChecker requirements;
 
     /**
-     * The variable substituter.
-     */
-    private VariableSubstitutor substituter;
-
-    /**
      * The factory for <tt>DataValidator</tt> instances.
      */
     private final ObjectFactory objectFactory;
@@ -116,7 +110,6 @@ public class ConsoleInstaller extends InstallerBase
      * @param rules               the rules engine
      * @param resourceManager     the resource manager
      * @param requirements        the installation requirements
-     * @param substituter         the variable substituter
      * @param uninstallDataWriter the uninstallation data writer
      * @param console             the console
      * @param housekeeper         the house-keeper
@@ -124,8 +117,7 @@ public class ConsoleInstaller extends InstallerBase
      */
     public ConsoleInstaller(ObjectFactory factory, AutomatedInstallData installData, RulesEngine rules,
                             ResourceManager resourceManager, RequirementsChecker requirements,
-                            VariableSubstitutor substituter, UninstallDataWriter uninstallDataWriter, Console console,
-                            Housekeeper housekeeper)
+                            UninstallDataWriter uninstallDataWriter, Console console, Housekeeper housekeeper)
     {
         super(resourceManager);
         this.factory = new PanelConsoleFactory(factory);
@@ -142,7 +134,6 @@ public class ConsoleInstaller extends InstallerBase
         installData.setLangpack(new LocaleDatabase(in));
         installData.setVariable(ScriptParserConstant.ISO3_LANG, installData.getLocaleISO3());
         resourceManager.setLocale(installData.getLocaleISO3());
-        this.substituter = substituter;
         this.objectFactory = factory;
         this.uninstallDataWriter = uninstallDataWriter;
         this.console = console;
@@ -356,7 +347,7 @@ public class ConsoleInstaller extends InstallerBase
      */
     private ConsoleAction createInstallAction()
     {
-        return new ConsoleInstallAction(factory, installData, substituter, objectFactory, rules, uninstallDataWriter);
+        return new ConsoleInstallAction(factory, installData, objectFactory, rules, uninstallDataWriter);
     }
 
     /**
@@ -368,7 +359,7 @@ public class ConsoleInstaller extends InstallerBase
      */
     private ConsoleAction createGeneratePropertiesAction(String path) throws IOException
     {
-        return new GeneratePropertiesAction(factory, installData, substituter, objectFactory, rules, path);
+        return new GeneratePropertiesAction(factory, installData, objectFactory, rules, path);
     }
 
     /**
@@ -385,8 +376,8 @@ public class ConsoleInstaller extends InstallerBase
         {
             Properties properties = new Properties();
             properties.load(in);
-            return new PropertyInstallAction(factory, installData, substituter, objectFactory, rules,
-                                             uninstallDataWriter, properties);
+            return new PropertyInstallAction(factory, installData, objectFactory, rules, uninstallDataWriter,
+                                             properties);
         }
         finally
         {
@@ -422,8 +413,8 @@ public class ConsoleInstaller extends InstallerBase
                                             + oldValue + "' --> '" + newValue + "'");
                 }
             }
-            return new PropertyInstallAction(factory, installData, substituter, objectFactory, rules,
-                                             uninstallDataWriter, properties);
+            return new PropertyInstallAction(factory, installData, objectFactory, rules, uninstallDataWriter,
+                                             properties);
         }
         finally
         {

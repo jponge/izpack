@@ -30,9 +30,8 @@ import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorBase;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 
 /**
  * This condition checks if a certain type is empty
@@ -46,13 +45,15 @@ public class EmptyCondition extends Condition
     private ContentType contentType;
     private String content;
 
-    public EmptyCondition() {}
+    public EmptyCondition()
+    {
+    }
 
     @Override
     public boolean isTrue()
     {
         boolean result = false;
-        VariableSubstitutorBase subst = new VariableSubstitutorImpl(this.getInstallData().getVariables());
+        Variables variables = getInstallData().getVariables();
         switch (contentType)
         {
             case STRING:
@@ -60,8 +61,8 @@ public class EmptyCondition extends Condition
                 {
                     return true;
                 }
-                String s = subst.substitute(this.content);
-                if (s != null && s.length()==0)
+                String s = variables.replace(this.content);
+                if (s != null && s.length() == 0)
                 {
                     result = true;
                 }
@@ -71,7 +72,7 @@ public class EmptyCondition extends Condition
                 if (this.content != null)
                 {
                     String value = this.getInstallData().getVariable(this.content);
-                    if (value != null && value.length()==0)
+                    if (value != null && value.length() == 0)
                     {
                         result = true;
                     }
@@ -81,8 +82,8 @@ public class EmptyCondition extends Condition
             case FILE:
                 if (this.content != null)
                 {
-                    File file = new File(subst.substitute(this.content));
-                    if (!file.exists() && file.length()==0)
+                    File file = new File(variables.replace(this.content));
+                    if (!file.exists() && file.length() == 0)
                     {
                         result = true;
                     }
@@ -92,8 +93,8 @@ public class EmptyCondition extends Condition
             case DIR:
                 if (this.content != null)
                 {
-                    File file = new File(subst.substitute(this.content));
-                    if (!file.exists() || file.isDirectory() && file.listFiles().length==0)
+                    File file = new File(variables.replace(this.content));
+                    if (!file.exists() || file.isDirectory() && file.listFiles().length == 0)
                     {
                         result = true;
                     }
@@ -101,7 +102,7 @@ public class EmptyCondition extends Condition
                 break;
 
             default:
-                logger.warning("Illegal content type '"+contentType.getAttribute()+"' of ExistsCondition");
+                logger.warning("Illegal content type '" + contentType.getAttribute() + "' of ExistsCondition");
                 break;
         }
         return result;
@@ -124,7 +125,8 @@ public class EmptyCondition extends Condition
             }
             else
             {
-                throw new Exception("Unknown nested element '"+child.getName()+"' to condition \"" + getId() + "\"");
+                throw new Exception(
+                        "Unknown nested element '" + child.getName() + "' to condition \"" + getId() + "\"");
             }
             if (this.content == null || this.content.length() == 0)
             {

@@ -1,21 +1,19 @@
 package com.izforge.izpack.installer.console;
 
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
-import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.util.Console;
 import com.izforge.izpack.util.OsConstraintHelper;
-
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Console installer action.
@@ -37,11 +35,6 @@ abstract class ConsoleAction
     private final AutomatedInstallData installData;
 
     /**
-     * The variable substituter.
-     */
-    private final VariableSubstitutor substituter;
-
-    /**
      * The factory for {@link DataValidator} instances.
      */
     private final ObjectFactory objectFactory;
@@ -57,16 +50,14 @@ abstract class ConsoleAction
      *
      * @param factory       the factory for PanelConsole instances
      * @param installData   the installation data
-     * @param substituter   the variable substituter
      * @param objectFactory the factory for {@link DataValidator} instances
      * @param rules         the rules engine
      */
-    public ConsoleAction(PanelConsoleFactory factory, AutomatedInstallData installData,
-                         VariableSubstitutor substituter, ObjectFactory objectFactory, RulesEngine rules)
+    public ConsoleAction(PanelConsoleFactory factory, AutomatedInstallData installData, ObjectFactory objectFactory,
+                         RulesEngine rules)
     {
         this.factory = factory;
         this.installData = installData;
-        this.substituter = substituter;
         this.objectFactory = objectFactory;
         this.rules = rules;
     }
@@ -95,8 +86,7 @@ abstract class ConsoleAction
                     }
                 }
 
-                InstallerBase.refreshDynamicVariables(installData,
-                        new VariableSubstitutorImpl(installData.getVariables()));
+                installData.refreshVariables();
             }
         }
         catch (Throwable t)
@@ -208,19 +198,12 @@ abstract class ConsoleAction
      * @param panel   the panel to validate
      * @param console the console
      * @return <tt>true</tt> if the panel is valid, otherwise <tt>false</tt>
+     * @throws IzPackException    if dynamic variables cannot be refreshed
      * @throws InstallerException if the panel cannot be validated
      */
     protected boolean validatePanel(Panel panel, Console console) throws InstallerException
     {
-        try
-        {
-            InstallerBase.refreshDynamicVariables(installData,
-                    new VariableSubstitutorImpl(installData.getVariables()));
-        }
-        catch (Exception e)
-        {
-            throw new InstallerException(e);
-        }
+        installData.refreshVariables();
 
         // Evaluate all global dynamic conditions
         List<DynamicInstallerRequirementValidator> dynConds = installData.getDynamicinstallerrequirements();
@@ -231,17 +214,10 @@ abstract class ConsoleAction
                 DataValidator.Status validationResult = validator.validateData(installData);
                 if (validationResult != DataValidator.Status.OK)
                 {
-                    String errorMessage;
-                    try
-                    {
-                        errorMessage = installData.getLangpack().getString("data.validation.error.title")
-                                + ": " + substituter.substitute(installData.getLangpack().getString(validator
-                                .getErrorMessageId()));
-                    }
-                    catch (Exception e)
-                    {
-                        throw new InstallerException(e);
-                    }
+                    String errorMessage = installData.getLangpack().getString("data.validation.error.title")
+                            + ": " + installData.getVariables().replace(
+                            installData.getLangpack().getString(validator.getErrorMessageId()));
+
                     // if defaultAnswer is true, result is ok
                     if (validationResult == DataValidator.Status.WARNING && validator.getDefaultAnswer())
                     {

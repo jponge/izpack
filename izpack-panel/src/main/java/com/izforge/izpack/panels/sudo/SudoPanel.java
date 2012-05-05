@@ -43,6 +43,7 @@ import javax.swing.JTextField;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.binding.OsModel;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.gui.LabelFactory;
@@ -71,16 +72,24 @@ public class SudoPanel extends IzPanel implements ActionListener
     private boolean isValid = false;
 
     /**
+     * Replaces variables in scripts.
+     */
+    private final VariableSubstitutor replacer;
+
+    /**
      * The constructor.
      *
      * @param panel           the panel meta-data
      * @param parent          the parent window.
      * @param installData     the installation data
      * @param resourceManager the resources
+     * @param replacer        the variable replacer
      */
-    public SudoPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager)
+    public SudoPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+                     VariableSubstitutor replacer)
     {
         super(panel, parent, installData, resourceManager);
+        this.replacer = replacer;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -167,7 +176,7 @@ public class SudoPanel extends IzPanel implements ActionListener
             oses.add(new OsModel("unix", null, null, null, null));
 
             ParsableFile parsableFile = new ParsableFile(file.getAbsolutePath(), null, null, oses);
-            ScriptParser scriptParser = new ScriptParser(variableSubstitutor);
+            ScriptParser scriptParser = new ScriptParser(replacer);
             scriptParser.parse(parsableFile);
 
             ArrayList<ExecutableFile> executableFiles = new ArrayList<ExecutableFile>();

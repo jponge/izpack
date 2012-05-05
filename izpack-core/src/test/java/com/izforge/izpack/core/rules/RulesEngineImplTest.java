@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +16,7 @@ import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.container.DefaultContainer;
+import com.izforge.izpack.core.data.DefaultVariables;
 import com.izforge.izpack.core.rules.logic.AndCondition;
 import com.izforge.izpack.core.rules.logic.NotCondition;
 import com.izforge.izpack.core.rules.logic.OrCondition;
@@ -41,8 +41,9 @@ public class RulesEngineImplTest
     @Before
     public void setUp() throws Exception
     {
-        Properties variables = new Properties();
+        DefaultVariables variables = new DefaultVariables();
         engine = new RulesEngineImpl(new InstallData(variables), null);
+        variables.setRules(engine);
 
         Map<String, Condition> conditions = new HashMap<String, Condition>();
         Condition alwaysFalse = new JavaCondition();

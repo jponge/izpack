@@ -29,8 +29,8 @@ import java.util.logging.Logger;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 
 /**
@@ -61,27 +61,21 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
     // String-String key-value pairs
     // ------------------------------------------------------
     private Map<String, String> entries;
-    private VariableSubstitutor variableSubstitutor;
 
     /**
      * Default constructor, used during automated installation.
-     *
-     * @param variableSubstitutor
      */
-    public UserInputPanelAutomationHelper(VariableSubstitutor variableSubstitutor)
+    public UserInputPanelAutomationHelper()
     {
-        this.variableSubstitutor = variableSubstitutor;
         this.entries = null;
     }
 
     /**
-     * @param entries             String-String key-value pairs representing the state of the Panel
-     * @param variableSubstitutor
+     * @param entries String-String key-value pairs representing the state of the Panel
      */
-    public UserInputPanelAutomationHelper(Map<String, String> entries, VariableSubstitutor variableSubstitutor)
+    public UserInputPanelAutomationHelper(Map<String, String> entries)
     {
         this.entries = entries;
-        this.variableSubstitutor = variableSubstitutor;
     }
 
     /**
@@ -151,20 +145,14 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
         // retieve each entry and substitute the associated
         // variable
         // ----------------------------------------------------
+        Variables variables = idata.getVariables();
         for (IXMLElement dataElement : userEntries)
         {
             variable = dataElement.getAttribute(AUTO_ATTRIBUTE_KEY);
 
             // Substitute variable used in the 'value' field
             value = dataElement.getAttribute(AUTO_ATTRIBUTE_VALUE);
-            try
-            {
-                value = variableSubstitutor.substitute(value);
-            }
-            catch (Exception e)
-            {
-                // ignore
-            }
+            value = variables.replace(value);
 
             logger.fine("Setting variable " + variable + " to " + value);
             idata.setVariable(variable, value);

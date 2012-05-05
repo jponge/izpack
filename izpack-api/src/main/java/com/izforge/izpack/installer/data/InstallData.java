@@ -1,13 +1,13 @@
 package com.izforge.izpack.installer.data;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.util.OsVersion;
 
-import java.util.Properties;
 
 public class InstallData extends AutomatedInstallData
 {
-    public InstallData(Properties variables)
+    public InstallData(Variables variables)
     {
         super(variables);
     }

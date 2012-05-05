@@ -73,16 +73,14 @@ import com.izforge.izpack.api.adaptator.impl.XMLWriter;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.gui.log.Log;
-import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
@@ -222,7 +220,12 @@ public class InstallerFrame extends JFrame implements InstallerView
      * Manager for writing uninstall data
      */
     private UninstallDataWriter uninstallDataWriter;
-    private VariableSubstitutor variableSubstitutor;
+
+    /**
+     * The variables.
+     */
+    private Variables variables;
+
     private UninstallData uninstallData;
 
     /**
@@ -251,7 +254,6 @@ public class InstallerFrame extends JFrame implements InstallerView
      * @param uninstallDataWriter the uninstallation data writer
      * @param resourceManager     the resource manager
      * @param uninstallData       the uninstallation data
-     * @param variableSubstitutor the variable substituter
      * @param unpacker            the unpacker
      * @param housekeeper         the house-keeper
      * @param log                 the log
@@ -260,7 +262,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     public InstallerFrame(String title, GUIInstallData installData, RulesEngine rules, IconsDatabase icons,
                           PanelManager panelManager, UninstallDataWriter uninstallDataWriter,
                           ResourceManager resourceManager, UninstallData uninstallData,
-                          VariableSubstitutor variableSubstitutor, IUnpacker unpacker, Housekeeper housekeeper, Log log)
+                          IUnpacker unpacker, Housekeeper housekeeper, Log log)
             throws Exception
     {
         super(title);
@@ -272,7 +274,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         this.uninstallData = uninstallData;
         this.panelManager = panelManager;
         this.unpacker = unpacker;
-        this.variableSubstitutor = variableSubstitutor;
+        this.variables = installData.getVariables();
         this.housekeeper = housekeeper;
         this.log = log;
 
@@ -573,7 +575,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         // refresh dynamic variables every time, a panel switch is done
         try
         {
-            InstallerBase.refreshDynamicVariables(installdata, variableSubstitutor);
+            installdata.refreshVariables();
         }
         catch (Exception e)
         {
@@ -581,7 +583,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             StringBuilder msg = new StringBuilder();
             msg.append("<html>");
             msg.append("The following error occured during refreshing panel contents:<br>");
-            msg.append("<i>" + e.getMessage() + "</i><br>");
+            msg.append("<i>").append(e.getMessage()).append("</i><br>");
             msg.append("Are you sure you want to continue with this installation?");
             msg.append("</html>");
             JLabel label = new JLabel(msg.toString());
@@ -1771,7 +1773,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     {
         try
         {
-            InstallerBase.refreshDynamicVariables(installdata, new VariableSubstitutorImpl(installdata.getVariables()));
+            ;
         }
         catch (Exception e)
         {
@@ -1845,24 +1847,8 @@ public class InstallerFrame extends JFrame implements InstallerView
                     reboot = true;
                     break;
                 case Info.REBOOT_ACTION_ASK:
-                    try
-                    {
-                        message = variableSubstitutor.substitute(
-                                getLangpack().getString("installer.reboot.ask.message"));
-                    }
-                    catch (Exception e)
-                    {
-                        message = getLangpack().getString("installer.reboot.ask.message");
-                    }
-                    try
-                    {
-                        title = variableSubstitutor.substitute(getLangpack()
-                                                                       .getString("installer.reboot.ask.title"));
-                    }
-                    catch (Exception e)
-                    {
-                        title = getLangpack().getString("installer.reboot.ask.title");
-                    }
+                    message = variables.replace(getLangpack().getString("installer.reboot.ask.message"));
+                    title = variables.replace(getLangpack().getString("installer.reboot.ask.title"));
                     int res = JOptionPane
                             .showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION);
                     if (res == JOptionPane.YES_OPTION)
@@ -1871,24 +1857,8 @@ public class InstallerFrame extends JFrame implements InstallerView
                     }
                     break;
                 case Info.REBOOT_ACTION_NOTICE:
-                    try
-                    {
-                        message = variableSubstitutor.substitute(
-                                getLangpack().getString("installer.reboot.notice.message"));
-                    }
-                    catch (Exception e)
-                    {
-                        message = getLangpack().getString("installer.reboot.notice.message");
-                    }
-                    try
-                    {
-                        title = variableSubstitutor.substitute(getLangpack()
-                                                                       .getString("installer.reboot.notice.title"));
-                    }
-                    catch (Exception e)
-                    {
-                        title = getLangpack().getString("installer.reboot.notice.title");
-                    }
+                    message = variables.replace(getLangpack().getString("installer.reboot.notice.message"));
+                    title = variables.replace(getLangpack().getString("installer.reboot.notice.title"));
                     JOptionPane.showConfirmDialog(this, message, title, JOptionPane.OK_OPTION);
                     break;
             }
@@ -1928,8 +1898,8 @@ public class InstallerFrame extends JFrame implements InstallerView
             title = getLangpack().getString("installer.quit.title");
         }
         // Now replace variables in message or title.
-        message = variableSubstitutor.substitute(message);
-        title = variableSubstitutor.substitute(title);
+        message = variables.replace(message);
+        title = variables.replace(title);
 
         int res = JOptionPane.showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION);
         if (res == JOptionPane.YES_OPTION)

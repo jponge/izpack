@@ -342,14 +342,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 desc = pack.getDescription();
             }
 
-            try
-            {
-                desc = variableSubstitutor.substitute(desc);
-            }
-            catch (Exception e1)
-            {
-                // ignore
-            }
+            desc = installData.getVariables().replace(desc);
             descriptionArea.setText(desc);
         }
         // Operation for the dependency listing

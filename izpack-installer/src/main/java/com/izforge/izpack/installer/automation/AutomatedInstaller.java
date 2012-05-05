@@ -41,14 +41,13 @@ import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.ScriptParserConstant;
+import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.installer.DataValidator.Status;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.console.ConsolePanelAutomationHelper;
@@ -93,7 +92,10 @@ public class AutomatedInstaller extends InstallerBase
      */
     private UninstallDataWriter uninstallDataWriter;
 
-    private VariableSubstitutor variableSubstitutor;
+    /**
+     * The variables.
+     */
+    private Variables variables;
 
     /**
      * The factory for {@link DataValidator} and {@link PanelAction} instances.
@@ -112,13 +114,13 @@ public class AutomatedInstaller extends InstallerBase
      * @param resourceManager     the resource manager
      * @param requirements        the installation requirements checker
      * @param uninstallDataWriter the uninstallation data writer
-     * @param variableSubstitutor the variable substituter
+     * @param variables           the variables
      * @param factory             the factory for {@link DataValidator} and {@link PanelAction} instances
      * @param housekeeper         the house-keeper
      */
     public AutomatedInstaller(AutomatedInstallData installData, ResourceManager resourceManager,
                               RequirementsChecker requirements, UninstallDataWriter uninstallDataWriter,
-                              VariableSubstitutor variableSubstitutor, ObjectFactory factory, Housekeeper housekeeper)
+                              Variables variables, ObjectFactory factory, Housekeeper housekeeper)
     {
         super(resourceManager);
         this.installData = installData;
@@ -126,7 +128,7 @@ public class AutomatedInstaller extends InstallerBase
         this.uninstallDataWriter = uninstallDataWriter;
 
         this.panelInstanceCount = new TreeMap<String, Integer>();
-        this.variableSubstitutor = variableSubstitutor;
+        this.variables = variables;
         this.factory = factory;
         this.housekeeper = housekeeper;
     }
@@ -163,11 +165,8 @@ public class AutomatedInstaller extends InstallerBase
      */
     public void doInstall() throws Exception
     {
-        VariableSubstitutor subst = new VariableSubstitutorImpl(this.installData.getVariables());
-
-        // Get dynamic variables immediately for being able to use them as
-        // variable condition in installerrequirements
-        InstallerBase.refreshDynamicVariables(this.installData, subst);
+        // Get dynamic variables immediately for being able to use them as variable condition in installerrequirements
+        installData.refreshVariables();
 
         // check installer conditions
         if (!requirements.check())
@@ -228,7 +227,7 @@ public class AutomatedInstaller extends InstallerBase
                 // execute the installation logic for the current panel
                 installPanel(p, automationHelper, panelRoot);
 
-                refreshDynamicVariables(this.installData, subst);
+                installData.refreshVariables();
             }
 
             if (uninstallDataWriter.isUninstallRequired())
@@ -394,18 +393,11 @@ public class AutomatedInstaller extends InstallerBase
      */
     private void validatePanel(final Panel p) throws InstallerException
     {
-        try
-        {
-            InstallerBase.refreshDynamicVariables(this.installData,
-                                                  new VariableSubstitutorImpl(this.installData.getVariables()));
-        }
-        catch (Exception e)
-        {
-            throw new InstallerException(e);
-        }
+        installData.refreshVariables();
 
         // Evaluate all global dynamic conditions
         List<DynamicInstallerRequirementValidator> dynConds = installData.getDynamicinstallerrequirements();
+        LocaleDatabase langpack = installData.getLangpack();
         if (dynConds != null)
         {
             for (DynamicInstallerRequirementValidator validator : dynConds)
@@ -413,17 +405,10 @@ public class AutomatedInstaller extends InstallerBase
                 Status validationResult = validator.validateData(installData);
                 if (validationResult != DataValidator.Status.OK)
                 {
-                    String errorMessage;
-                    try
-                    {
-                        String message = installData.getLangpack().getString(validator.getErrorMessageId());
-                        errorMessage = installData.getLangpack().getString("data.validation.error.title")
-                                + ": " + variableSubstitutor.substitute(message);
-                    }
-                    catch (Exception e)
-                    {
-                        throw new InstallerException(e);
-                    }
+                    String message = langpack.getString(validator.getErrorMessageId());
+                    String errorMessage = langpack.getString("data.validation.error.title")
+                            + ": " + this.variables.replace(message);
+
                     // if defaultAnswer is true, result is ok
                     if (validationResult == Status.WARNING && validator.getDefaultAnswer())
                     {
@@ -447,17 +432,8 @@ public class AutomatedInstaller extends InstallerBase
             Status validationResult = validator.validateData(installData);
             if (validationResult != DataValidator.Status.OK)
             {
-                String errorMessage;
-                try
-                {
-                    errorMessage = installData.getLangpack().getString("data.validation.error.title")
-                            + ": " + variableSubstitutor.substitute(installData.getLangpack().getString(validator
-                                                                                                                .getErrorMessageId()));
-                }
-                catch (Exception e)
-                {
-                    throw new InstallerException(e);
-                }
+                String errorMessage = langpack.getString("data.validation.error.title")
+                        + ": " + this.variables.replace(langpack.getString(validator.getErrorMessageId()));
                 // if defaultAnswer is true, result is ok
                 // if defaultAnswer is true, result is ok
                 if (validationResult == Status.WARNING && validator.getDefaultAnswer())

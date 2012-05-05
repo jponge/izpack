@@ -31,6 +31,7 @@ import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.PlatformProvider;
+import com.izforge.izpack.core.data.DefaultVariables;
 import com.izforge.izpack.core.factory.DefaultObjectFactory;
 import com.izforge.izpack.core.os.RegistryHandler;
 import com.izforge.izpack.installer.data.InstallData;
@@ -71,6 +72,7 @@ public class InstallerTargetPlatformFactoryTest
             protected void fillContainer(MutablePicoContainer container)
             {
                 addComponent(Properties.class);
+                addComponent(DefaultVariables.class);
                 addComponent(ResourceManager.class);
                 addComponent(InstallData.class);
                 addComponent(TestLibrarian.class);

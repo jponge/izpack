@@ -127,15 +127,8 @@ public class XInfoPanel extends IzPanel
      */
     private void parseText()
     {
-        try
-        {
-            // Parses the info text
-            info = variableSubstitutor.substitute(info);
-        }
-        catch (Exception err)
-        {
-            err.printStackTrace();
-        }
+        // Parses the info text
+        info = installData.getVariables().replace(info);
     }
 
     /**

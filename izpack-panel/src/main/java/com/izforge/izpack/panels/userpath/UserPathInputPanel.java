@@ -401,13 +401,12 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
                         }
                     }
                     _defaultDir = line;
-                    _defaultDir = variableSubstitutor.substitute(_defaultDir);
+                    _defaultDir = installData.getVariables().replace(_defaultDir);
                 }
             }
             catch (Exception e)
             {
-                //mar: what's the common way to log an exception ?
-                e.printStackTrace();
+                logger.log(Level.WARNING, e.getMessage(), e);
                 _defaultDir = null;
                 // leave unset to take the system default set by Installer class
             }

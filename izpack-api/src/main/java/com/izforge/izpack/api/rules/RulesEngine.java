@@ -1,13 +1,13 @@
 package com.izforge.izpack.api.rules;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.AutomatedInstallData;
-
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
+
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Variables;
 
 /**
  * Interface of rulesEngine
@@ -24,11 +24,11 @@ public interface RulesEngine extends Serializable
 
     boolean isConditionTrue(Condition cond);
 
-    boolean canShowPanel(String panelid, Properties variables);
+    boolean canShowPanel(String panelid, Variables variables);
 
-    boolean canInstallPack(String packid, Properties variables);
+    boolean canInstallPack(String packid, Variables variables);
 
-    boolean canInstallPackOptional(String packid, Properties variables);
+    boolean canInstallPackOptional(String packid, Variables variables);
 
     void addCondition(Condition condition);
 

@@ -97,17 +97,6 @@ public class DefaultVariables implements Variables
     }
 
     /**
-     * Adds a dynamic variable.
-     *
-     * @param variable the variable to add
-     */
-    @Override
-    public synchronized void add(DynamicVariable variable)
-    {
-        dynamicVariables.add(variable);
-    }
-
-    /**
      * Returns the value of the specified variable.
      *
      * @param name the variable name
@@ -265,6 +254,17 @@ public class DefaultVariables implements Variables
             }
         }
         return value;
+    }
+
+    /**
+     * Adds a dynamic variable.
+     *
+     * @param variable the variable to add
+     */
+    @Override
+    public synchronized void add(DynamicVariable variable)
+    {
+        dynamicVariables.add(variable);
     }
 
     /**

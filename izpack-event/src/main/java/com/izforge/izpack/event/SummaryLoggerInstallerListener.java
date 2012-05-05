@@ -21,15 +21,14 @@
 
 package com.izforge.izpack.event;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.helper.SummaryProcessor;
-
-import java.io.File;
-import java.io.FileOutputStream;
 
 /**
  * Installer listener which writes the summary of all panels into the logfile which is defined by
@@ -39,18 +38,15 @@ import java.io.FileOutputStream;
  */
 public class SummaryLoggerInstallerListener extends SimpleInstallerListener
 {
-    private VariableSubstitutor variableSubstitutor;
 
     /**
      * Constructs a <tt>SummaryLoggerInstallerListener</tt>.
      *
-     * @param resources           the resource manager
-     * @param variableSubstitutor the variable substituter
+     * @param resources the resource manager
      */
-    public SummaryLoggerInstallerListener(ResourceManager resources, VariableSubstitutor variableSubstitutor)
+    public SummaryLoggerInstallerListener(ResourceManager resources)
     {
         super(resources, false);
-        this.variableSubstitutor = variableSubstitutor;
     }
 
     /*
@@ -78,7 +74,7 @@ public class SummaryLoggerInstallerListener extends SimpleInstallerListener
         {
             return;
         }
-        path = IoHelper.translatePath(path, variableSubstitutor);
+        path = IoHelper.translatePath(path, idata.getVariables());
         File parent = new File(path).getParentFile();
 
         if (!parent.exists())

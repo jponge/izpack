@@ -5,6 +5,7 @@ import java.util.Properties;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoException;
 import org.picocontainer.injectors.ProviderAdapter;
+import org.picocontainer.parameters.ComponentParameter;
 
 import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.data.AutomatedInstallData;
@@ -14,6 +15,7 @@ import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.PlatformProvider;
+import com.izforge.izpack.core.data.DefaultVariables;
 import com.izforge.izpack.core.factory.DefaultObjectFactory;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.rules.ConditionContainer;
@@ -82,8 +84,8 @@ public abstract class InstallerContainer extends AbstractContainer
         addComponent(UninstallData.class);
         addComponent(MutablePicoContainer.class, pico);
         addComponent(ConditionContainer.class);
-        addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class);
         addComponent(Properties.class);
+        addComponent(DefaultVariables.class);
         addComponent(ResourceManager.class);
         addComponent(UninstallDataWriter.class);
         addComponent(InstallerListeners.class);
@@ -98,6 +100,9 @@ public abstract class InstallerContainer extends AbstractContainer
         addComponent(PathResolver.class);
         addComponent(MergeableResolver.class);
         addComponent(Platforms.class);
+
+        pico.addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class,
+                          new ComponentParameter(DefaultVariables.class));
     }
 
     /**

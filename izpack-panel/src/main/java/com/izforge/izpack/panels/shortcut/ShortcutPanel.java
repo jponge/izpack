@@ -194,8 +194,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         setLayout(super.getLayout());
         try
         {
-            shortcutPanelLogic = new ShortcutPanelLogic(installData, resourceManager, uninstallData,
-                                                        variableSubstitutor, housekeeper, factory);
+            shortcutPanelLogic = new ShortcutPanelLogic(installData, resourceManager, uninstallData, housekeeper,
+                                                        factory);
             shortcutLogicInitialized = true;
         }
         catch (Exception exception)

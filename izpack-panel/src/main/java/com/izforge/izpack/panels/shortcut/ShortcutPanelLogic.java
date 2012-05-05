@@ -40,6 +40,7 @@ import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.panels.IShortcutPanelLogic;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.util.CleanupClient;
@@ -267,8 +268,6 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
 
     private ResourceManager resourceManager;
 
-    private VariableSubstitutor variableSubstitutor;
-
     private UninstallData uninstallData;
 
     private boolean createDesktopShortcuts;
@@ -280,22 +279,20 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
     /**
      * Constructs a <tt>ShortcutPanelLogic</tt>.
      *
-     * @param installData         the installation data
-     * @param resourceManager     the resources
-     * @param uninstallData       the uninstallation data
-     * @param variableSubstitutor the variable substituter
-     * @param housekeeper         the house keeper
-     * @param factory             the factory for platform-specific implementations
+     * @param installData     the installation data
+     * @param resourceManager the resources
+     * @param uninstallData   the uninstallation data
+     * @param housekeeper     the house keeper
+     * @param factory         the factory for platform-specific implementations
      * @throws Exception for any error
      */
     public ShortcutPanelLogic(AutomatedInstallData installData, ResourceManager resourceManager,
-                              UninstallData uninstallData, VariableSubstitutor variableSubstitutor,
-                              Housekeeper housekeeper, TargetFactory factory) throws Exception
+                              UninstallData uninstallData, Housekeeper housekeeper, TargetFactory factory)
+            throws Exception
     {
         this.installData = installData;
         this.resourceManager = resourceManager;
         this.uninstallData = uninstallData;
-        this.variableSubstitutor = variableSubstitutor;
         shortcut = factory.makeObject(Shortcut.class);
         shortcut.initialize(Shortcut.APPLICATIONS, "-");
         housekeeper.registerForCleanup(this);
@@ -380,7 +377,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
      */
     public String getSuggestedProgramGroup()
     {
-        return variableSubstitutor.substitute(suggestedProgramGroup);
+        return installData.getVariables().replace(suggestedProgramGroup);
     }
 
     /**
@@ -1303,7 +1300,8 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
         }
 
         // input.
-        String substitutedSpec = variableSubstitutor.substitute(input, SubstitutionType.TYPE_XML);
+        VariableSubstitutor replacer = new VariableSubstitutorImpl(installData.getVariables());
+        String substitutedSpec = replacer.substitute(input, SubstitutionType.TYPE_XML);
         /*
          * TODO: internal flag mapped if( installData.isDebug() ) { System.out.println( "SUBSTITUDED
          * SHORTCUT SPEC" ); System.out.println(

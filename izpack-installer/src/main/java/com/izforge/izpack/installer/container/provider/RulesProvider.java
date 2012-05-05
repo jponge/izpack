@@ -1,19 +1,21 @@
 package com.izforge.izpack.installer.container.provider;
 
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.util.Map;
+import java.util.logging.Logger;
+
+import org.picocontainer.injectors.Provider;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.core.data.DefaultVariables;
 import com.izforge.izpack.core.rules.ConditionContainer;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
-import org.picocontainer.injectors.Provider;
-
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * Injection provider for rules.
@@ -34,12 +36,13 @@ public class RulesProvider implements Provider
      * Reads the conditions specification file and initializes the rules engine.
      *
      * @param installData        the installation data
+     * @param variables          the variables
      * @param conditionContainer the condition container
      * @param resourceManager    the resource manager
      * @return a new rules engine
      */
-    public RulesEngine provide(AutomatedInstallData installData, ConditionContainer conditionContainer,
-                               ResourceManager resourceManager)
+    public RulesEngine provide(AutomatedInstallData installData, DefaultVariables variables,
+                               ConditionContainer conditionContainer, ResourceManager resourceManager)
     {
         RulesEngine result = new RulesEngineImpl(installData, conditionContainer);
         Map<String, Condition> conditions = readConditions(resourceManager);
@@ -56,6 +59,7 @@ public class RulesProvider implements Provider
             }
         }
         installData.setRules(result);
+        variables.setRules(result);
         return result;
     }
 

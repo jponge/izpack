@@ -22,8 +22,6 @@
 
 package com.izforge.izpack.compiler.compressor;
 
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-
 import java.io.BufferedOutputStream;
 import java.io.OutputStream;
 
@@ -41,9 +39,8 @@ public class RawPackCompressor extends PackCompressorBase
     /**
      *
      */
-    public RawPackCompressor(VariableSubstitutor variableSubstitutor)
+    public RawPackCompressor()
     {
-        super(variableSubstitutor);
         formatNames = THIS_FORMAT_NAMES;
     }
 

@@ -23,9 +23,9 @@ package com.izforge.izpack.core.rules.process;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 
 /**
  * @author Dennis Reil, <izpack@reil-online.de>
@@ -38,6 +38,17 @@ public class VariableCondition extends Condition
     protected String variablename;
 
     protected String value;
+
+    public VariableCondition()
+    {
+        this(null, null);
+    }
+
+    public VariableCondition(String name, String value)
+    {
+        this.variablename = name;
+        this.value = value;
+    }
 
     public String getValue()
     {
@@ -69,7 +80,7 @@ public class VariableCondition extends Condition
         }
         catch (Exception e)
         {
-            throw new Exception("Missing attribute in condition \"" +  getId() + "\"");
+            throw new Exception("Missing attribute in condition \"" + getId() + "\"");
         }
 
     }
@@ -77,17 +88,18 @@ public class VariableCondition extends Condition
     @Override
     public boolean isTrue()
     {
-        if (this.getInstallData() != null)
+        AutomatedInstallData installData = getInstallData();
+        if (installData != null)
         {
-            String val = this.getInstallData().getVariable(variablename);
+            String val = installData.getVariable(variablename);
             if (val == null)
             {
                 return false;
             }
             else
             {
-                VariableSubstitutor subst = new VariableSubstitutorImpl(this.getInstallData().getVariables());
-                return val.equals(subst.substitute(value));
+                Variables variables = installData.getVariables();
+                return val.equals(variables.replace(value));
             }
         }
         else

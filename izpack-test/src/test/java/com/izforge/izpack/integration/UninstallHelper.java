@@ -9,8 +9,6 @@ import java.net.URLClassLoader;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Info;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.uninstaller.Destroyer;
 import com.izforge.izpack.uninstaller.console.ConsoleUninstallerContainer;
 import com.izforge.izpack.util.IoHelper;
@@ -52,8 +50,7 @@ public class UninstallHelper
     public static File getUninstallerJar(AutomatedInstallData installData)
     {
         Info info = installData.getInfo();
-        VariableSubstitutor replacer = new VariableSubstitutorImpl(installData.getVariables());
-        String dir = IoHelper.translatePath(info.getUninstallerPath(), replacer);
+        String dir = IoHelper.translatePath(info.getUninstallerPath(), installData.getVariables());
         String path = dir + File.separator + info.getUninstallerName();
         return new File(path);
     }

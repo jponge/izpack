@@ -134,14 +134,7 @@ public class SimpleFinishPanel extends IzPanel
     private String translatePath(String destination)
     {
         // Parse for variables
-        try
-        {
-            destination = variableSubstitutor.substitute(destination);
-        }
-        catch (Exception e)
-        {
-            // ignore
-        }
+        destination = installData.getVariables().replace(destination);
 
         // Convert the file separator characters
         return destination.replace('/', File.separatorChar);

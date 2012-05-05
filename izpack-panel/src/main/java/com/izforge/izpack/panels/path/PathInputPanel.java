@@ -36,7 +36,6 @@ import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -317,7 +316,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
     public void loadDefaultInstallDir()
     {
         defaultInstallDir = loadDefaultInstallDir(
-                resourceManager, variableSubstitutor, installData);
+                resourceManager, installData);
     }
 
     /**
@@ -336,12 +335,10 @@ public class PathInputPanel extends IzPanel implements ActionListener
      * filename, which is set in the install.xml file at compile time.
      *
      * @param resourceManager
-     * @param variableSubstitutor
      * @param installData
      * @return the default installation directory for the current installation
      */
     public static String loadDefaultInstallDir(ResourceManager resourceManager,
-                                               VariableSubstitutor variableSubstitutor,
                                                AutomatedInstallData installData)
     {
         String defaultInstallDir = getDefaultInstallDir();
@@ -429,7 +426,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
                 }
                 defaultInstallDir = line;
 
-                defaultInstallDir = variableSubstitutor.substitute(defaultInstallDir);
+                defaultInstallDir = installData.getVariables().replace(defaultInstallDir);
             }
             else
             {

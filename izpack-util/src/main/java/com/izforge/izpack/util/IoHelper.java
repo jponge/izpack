@@ -42,6 +42,7 @@ import java.util.zip.ZipInputStream;
 
 import org.apache.tools.zip.ZipOutputStream;
 
+import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
@@ -599,9 +600,24 @@ public class IoHelper
     /**
      * Translates a relative path to a local system path.
      *
+     * @param destination the path to translate
+     * @param variables   used to replaces variables in the path
+     * @return the translated path
+     */
+    public static String translatePath(String destination, Variables variables)
+    {
+        destination = variables.replace(destination);
+        return translatePath(destination);
+    }
+
+    /**
+     * Translates a relative path to a local system path.
+     *
      * @param destination The path to translate.
      * @return The translated path.
+     * @deprecated see {@link #translatePath(String, Variables)}
      */
+    @Deprecated
     public static String translatePath(String destination, VariableSubstitutor vs)
     {
         // Parse for variables
@@ -613,7 +629,17 @@ public class IoHelper
         {
             // ignore
         }
+        return translatePath(destination);
+    }
 
+    /**
+     * Translates a path.
+     *
+     * @param destination the path to translate
+     * @return the translated path
+     */
+    private static String translatePath(String destination)
+    {
         // Convert the file separator characters
 
         // destination = destination.replace('/', File.separatorChar);

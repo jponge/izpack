@@ -22,8 +22,6 @@
 
 package com.izforge.izpack.compiler.compressor;
 
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-
 import java.io.OutputStream;
 
 
@@ -47,9 +45,8 @@ public class DefaultPackCompressor extends PackCompressorBase
     /**
      *
      */
-    public DefaultPackCompressor(VariableSubstitutor variableSubstitutor)
+    public DefaultPackCompressor()
     {
-        super(variableSubstitutor);
         formatNames = THIS_FORMAT_NAMES;
         decoderMapper = THIS_DECODER_MAPPER;
         encoderClassName = THIS_ENCODER_CLASS_NAME;

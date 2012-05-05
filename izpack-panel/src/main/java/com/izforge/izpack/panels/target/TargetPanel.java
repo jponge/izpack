@@ -117,7 +117,7 @@ public class TargetPanel extends PathInputPanel
      */
     public void makeXMLData(IXMLElement panelRoot)
     {
-        new TargetPanelAutomationHelper(variableSubstitutor).makeXMLData(this.installData, panelRoot);
+        new TargetPanelAutomationHelper().makeXMLData(installData, panelRoot);
     }
 
     /*

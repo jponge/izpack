@@ -28,8 +28,7 @@ import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.ScriptParserConstant;
 import com.izforge.izpack.api.data.Value;
-import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraintHelper;
@@ -37,20 +36,21 @@ import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.TemporaryDirectory;
 
 /**
- * Abstract class sharing commons instanciation methods beetween installData
+ * Abstract base class for providers of {@link AutomatedInstallData}.
  */
 public abstract class AbstractInstallDataProvider implements Provider
 {
-    private static final Logger logger = Logger.getLogger(AbstractInstallDataProvider.class.getName());
-
     /**
      * The base name of the XML file that specifies the custom langpack. Searched is for the file
      * with the name expanded by _ISO3.
      */
     protected static final String LANG_FILE_NAME = "CustomLangPack.xml";
-    protected ResourceManager resourceManager;
-    protected VariableSubstitutor variableSubstitutor;
-    protected Housekeeper housekeeper;
+
+    /**
+     * The logger.
+     */
+    private static final Logger logger = Logger.getLogger(AbstractInstallDataProvider.class.getName());
+
 
     /**
      * Loads the installation data. Also sets environment variables to <code>installdata</code>.
@@ -58,55 +58,54 @@ public abstract class AbstractInstallDataProvider implements Provider
      * name _BUT_ with all separators replaced by '_'. Properties with null values are never stored.
      * Example: $SYSTEM_java_version or $SYSTEM_os_name
      *
-     * @param installdata Where to store the installation data.
-     * @throws Exception Description of the Exception
+     * @param installData the installation data to populate
+     * @param resources   the resources
+     * @param housekeeper the housekeeper for cleaning up temporary files
+     * @throws IOException            for any I/O error
+     * @throws ClassNotFoundException if a serialized object's class cannot be found
      */
-    protected void loadInstallData(AutomatedInstallData installdata)
-            throws IOException, ClassNotFoundException, InstallerException
+    @SuppressWarnings("unchecked")
+    protected void loadInstallData(AutomatedInstallData installData, ResourceManager resources, Housekeeper housekeeper)
+            throws IOException, ClassNotFoundException
     {
-        // We load the variables
-        Properties variables = (Properties) readObject("vars");
-
         // We load the Info data
-        Info info = (Info) readObject("info");
+        Info info = (Info) readObject("info", resources);
 
         // We put the Info data as variables
-        installdata.setVariable(ScriptParserConstant.APP_NAME, info.getAppName());
+        installData.setVariable(ScriptParserConstant.APP_NAME, info.getAppName());
         if (info.getAppURL() != null)
         {
-            installdata.setVariable(ScriptParserConstant.APP_URL, info.getAppURL());
+            installData.setVariable(ScriptParserConstant.APP_URL, info.getAppURL());
         }
-        installdata.setVariable(ScriptParserConstant.APP_VER, info.getAppVersion());
+        installData.setVariable(ScriptParserConstant.APP_VER, info.getAppVersion());
         if (info.getUninstallerCondition() != null)
         {
-            installdata.setVariable("UNINSTALLER_CONDITION", info.getUninstallerCondition());
+            installData.setVariable("UNINSTALLER_CONDITION", info.getUninstallerCondition());
         }
 
-        installdata.setInfo(info);
+        installData.setInfo(info);
         // Set the installation path in a default manner
-        String dir = getDir();
+        String dir = getDir(resources);
         String installPath = dir + info.getAppName();
         if (info.getInstallationSubPath() != null)
-        { // A subpath was defined, use it.
-            installPath = IoHelper.translatePath(dir + info.getInstallationSubPath(),
-                                                 variableSubstitutor);
+        { // A sub-path was defined, use it.
+            installPath = IoHelper.translatePath(dir + info.getInstallationSubPath(), installData.getVariables());
         }
 
-        installdata.setDefaultInstallPath(installPath);
+        installData.setDefaultInstallPath(installPath);
         // Pre-set install path from a system property,
         // for instance in unattended installations
         installPath = System.getProperty(AutomatedInstallData.INSTALL_PATH);
         if (installPath != null)
         {
-            installdata.setInstallPath(installPath);
+            installData.setInstallPath(installPath);
         }
 
-
         // We read the panels order data
-        List<Panel> panelsOrder = (List<Panel>) readObject("panelsOrder");
+        List<Panel> panelsOrder = (List<Panel>) readObject("panelsOrder", resources);
 
         // We read the packs data
-        InputStream in = resourceManager.getInputStream("packs.info");
+        InputStream in = resources.getInputStream("packs.info");
         ObjectInputStream objIn = new ObjectInputStream(in);
         int size = objIn.readInt();
         List<Pack> availablePacks = new ArrayList<Pack>();
@@ -123,35 +122,32 @@ public abstract class AbstractInstallDataProvider implements Provider
         }
         objIn.close();
 
-        // We determine the hostname and IPAdress
+        // Determine the hostname and IP address
         String hostname;
         String IPAddress;
 
         try
         {
-            InetAddress addr = InetAddress.getLocalHost();
-
-            // Get IP Address
-            IPAddress = addr.getHostAddress();
-
-            // Get hostname
-            hostname = addr.getHostName();
+            InetAddress localHost = InetAddress.getLocalHost();
+            IPAddress = localHost.getHostAddress();
+            hostname = localHost.getHostName();
         }
-        catch (Exception e)
+        catch (Exception exception)
         {
+            logger.log(Level.WARNING, "Failed to determine hostname and IP address", exception);
             hostname = "";
             IPAddress = "";
         }
 
-        installdata.setVariable("APPLICATIONS_DEFAULT_ROOT", dir);
+        installData.setVariable("APPLICATIONS_DEFAULT_ROOT", dir);
         dir += File.separator;
-        installdata.setVariable(ScriptParserConstant.JAVA_HOME, System.getProperty("java.home"));
-        installdata.setVariable(ScriptParserConstant.CLASS_PATH, System.getProperty("java.class.path"));
-        installdata.setVariable(ScriptParserConstant.USER_HOME, System.getProperty("user.home"));
-        installdata.setVariable(ScriptParserConstant.USER_NAME, System.getProperty("user.name"));
-        installdata.setVariable(ScriptParserConstant.IP_ADDRESS, IPAddress);
-        installdata.setVariable(ScriptParserConstant.HOST_NAME, hostname);
-        installdata.setVariable(ScriptParserConstant.FILE_SEPARATOR, File.separator);
+        installData.setVariable(ScriptParserConstant.JAVA_HOME, System.getProperty("java.home"));
+        installData.setVariable(ScriptParserConstant.CLASS_PATH, System.getProperty("java.class.path"));
+        installData.setVariable(ScriptParserConstant.USER_HOME, System.getProperty("user.home"));
+        installData.setVariable(ScriptParserConstant.USER_NAME, System.getProperty("user.name"));
+        installData.setVariable(ScriptParserConstant.IP_ADDRESS, IPAddress);
+        installData.setVariable(ScriptParserConstant.HOST_NAME, hostname);
+        installData.setVariable(ScriptParserConstant.FILE_SEPARATOR, File.separator);
 
         Set<String> systemProperties = System.getProperties().stringPropertyNames();
         for (String varName : systemProperties)
@@ -160,29 +156,31 @@ public abstract class AbstractInstallDataProvider implements Provider
             if (varValue != null)
             {
                 varName = varName.replace('.', '_');
-                installdata.setVariable("SYSTEM_" + varName, varValue);
+                installData.setVariable("SYSTEM_" + varName, varValue);
             }
         }
 
-        if (null != variables)
+        // We load the variables
+        Properties properties = (Properties) readObject("vars", resources);
+        if (properties != null)
         {
-            Set<String> vars = variables.stringPropertyNames();
+            Set<String> vars = properties.stringPropertyNames();
             for (String varName : vars)
             {
-                installdata.setVariable(varName, variables.getProperty(varName));
+                installData.setVariable(varName, properties.getProperty(varName));
             }
         }
 
-        installdata.setPanelsOrder(panelsOrder);
-        installdata.setAvailablePacks(availablePacks);
-        installdata.setAllPacks(allPacks);
+        installData.setPanelsOrder(panelsOrder);
+        installData.setAvailablePacks(availablePacks);
+        installData.setAllPacks(allPacks);
 
         // get list of preselected packs
         for (Pack availablePack : availablePacks)
         {
             if (availablePack.isPreselected())
             {
-                installdata.getSelectedPacks().add(availablePack);
+                installData.getSelectedPacks().add(availablePack);
             }
         }
 
@@ -192,43 +190,41 @@ public abstract class AbstractInstallDataProvider implements Provider
         {
             for (TempDir tempDir : tempDirs)
             {
-                TemporaryDirectory directory = new TemporaryDirectory(tempDir, installdata, housekeeper);
+                TemporaryDirectory directory = new TemporaryDirectory(tempDir, installData, housekeeper);
                 directory.create();
                 directory.cleanUp();
             }
         }
-
     }
 
     /**
      * Add the contents of a custom langpack (if exist) to the previos loaded comman langpack. If
      * not exist, trace an info and do nothing more.
      *
-     * @param idata install data to be used
+     * @param installData the install data to be used
      */
-    protected void addCustomLangpack(AutomatedInstallData idata)
+    protected void addCustomLangpack(AutomatedInstallData installData, ResourceManager resources)
     {
         // We try to load and add a custom langpack.
         try
         {
-            idata.getLangpack().add(resourceManager.getInputStream(LANG_FILE_NAME));
+            installData.getLangpack().add(resources.getInputStream(LANG_FILE_NAME));
+            logger.fine("Found custom langpack for " + installData.getLocaleISO3());
         }
         catch (Throwable exception)
         {
-            logger.warning("No custom langpack for " + idata.getLocaleISO3() + " available");
-            return;
+            logger.warning("No custom langpack for " + installData.getLocaleISO3() + " available");
         }
-        logger.fine("Found custom langpack for " + idata.getLocaleISO3());
     }
 
 
-    private String getDir()
+    private String getDir(ResourceManager resources)
     {
         // We determine the operating system and the initial installation path
         String dir;
         if (OsVersion.IS_WINDOWS)
         {
-            dir = buildWindowsDefaultPath();
+            dir = buildWindowsDefaultPath(resources);
         }
         else if (OsVersion.IS_OSX)
         {
@@ -255,7 +251,7 @@ public abstract class AbstractInstallDataProvider implements Provider
      *
      * @return The Windows default installation path for applications.
      */
-    private String buildWindowsDefaultPath()
+    private String buildWindowsDefaultPath(ResourceManager resources)
     {
         try
         {
@@ -267,13 +263,13 @@ public abstract class AbstractInstallDataProvider implements Provider
             }
             else
             {
-                return buildWindowsDefaultPathFromProps();
+                return buildWindowsDefaultPathFromProps(resources);
             }
         }
-        catch (Exception x)
+        catch (Exception exception)
         {
-            x.printStackTrace();
-            return buildWindowsDefaultPathFromProps();
+            logger.log(Level.WARNING, exception.getMessage(), exception);
+            return buildWindowsDefaultPathFromProps(resources);
         }
     }
 
@@ -283,15 +279,14 @@ public abstract class AbstractInstallDataProvider implements Provider
      *
      * @return the program files path
      */
-    private String buildWindowsDefaultPathFromProps()
+    private String buildWindowsDefaultPathFromProps(ResourceManager resources)
     {
-        StringBuffer dpath = new StringBuffer("");
+        StringBuilder result = new StringBuilder("");
         try
         {
             // We load the properties
             Properties props = new Properties();
-            props.load(
-                    resourceManager.getInputStream("/com/izforge/izpack/installer/win32-defaultpaths.properties"));
+            props.load(resources.getInputStream("/com/izforge/izpack/installer/win32-defaultpaths.properties"));
 
             // We look for the drive mapping
             String drive = System.getProperty("user.home");
@@ -301,14 +296,14 @@ public abstract class AbstractInstallDataProvider implements Provider
             }
 
             // Now we have it :-)
-            dpath.append(drive);
+            result.append(drive);
 
             // Ensure that we have a trailing backslash (in case drive was
             // something
             // like "C:")
             if (drive.length() == 2)
             {
-                dpath.append("\\");
+                result.append("\\");
             }
 
             String language = Locale.getDefault().getLanguage();
@@ -318,111 +313,125 @@ public abstract class AbstractInstallDataProvider implements Provider
             // Try the most specific combination first
             if (null != props.getProperty(language_country))
             {
-                dpath.append(props.getProperty(language_country));
+                result.append(props.getProperty(language_country));
             }
             else if (null != props.getProperty(language))
             {
-                dpath.append(props.getProperty(language));
+                result.append(props.getProperty(language));
             }
             else
             {
-                dpath.append(props.getProperty(Locale.ENGLISH.getLanguage()));
+                result.append(props.getProperty(Locale.ENGLISH.getLanguage()));
             }
         }
         catch (Exception err)
         {
-            dpath = new StringBuffer("C:\\Program Files");
+            result = new StringBuilder("C:\\Program Files");
         }
 
-        return dpath.toString();
+        return result.toString();
     }
 
     /**
      * Loads Dynamic Variables.
      *
-     * @param automatedInstallData
+     * @param variables   the collection to added variables to
+     * @param installData the installation data
      */
-    protected void loadDynamicVariables(AutomatedInstallData automatedInstallData)
+    @SuppressWarnings("unchecked")
+    protected void loadDynamicVariables(Variables variables, AutomatedInstallData installData,
+                                        ResourceManager resources)
     {
         try
         {
-            InputStream in = resourceManager.getInputStream("dynvariables");
-            ObjectInputStream objIn = new ObjectInputStream(in);
-            Map<String, List<DynamicVariable>> dynamicvariables = (Map<String, List<DynamicVariable>>) objIn.readObject();
-            objIn.close();
-            // Initialize to prepare variable substition on several attributes
-            for (List<DynamicVariable> dynVarList : dynamicvariables.values())
+            Map<String, List<DynamicVariable>> map
+                    = (Map<String, List<DynamicVariable>>) readObject("dynvariables", resources);
+            // Initialize to prepare variable substitution on several attributes
+            for (List<DynamicVariable> dynamicVariables : map.values())
             {
-                for (DynamicVariable dynVar : dynVarList)
+                for (DynamicVariable dynamic : dynamicVariables)
                 {
-                    Value value = dynVar.getValue();
-                    value.setInstallData(automatedInstallData);
+                    Value value = dynamic.getValue();
+                    value.setInstallData(installData);
+                    variables.add(dynamic);
                 }
             }
-            automatedInstallData.setDynamicvariables(dynamicvariables);
         }
         catch (Exception e)
         {
-            logger.log(Level.WARNING,
-                       "Cannot find optional dynamic variables", e);
+            logger.log(Level.WARNING, "Cannot find optional dynamic variables", e);
         }
     }
 
     /**
      * Loads dynamic conditions.
      *
-     * @param automatedInstallData
+     * @param installData the installation data
+     * @param resources   the resources
      */
-    protected void loadDynamicConditions(AutomatedInstallData automatedInstallData)
+    @SuppressWarnings("unchecked")
+    protected void loadDynamicConditions(AutomatedInstallData installData, ResourceManager resources)
     {
         try
         {
-            InputStream in = resourceManager.getInputStream("dynconditions");
+            InputStream in = resources.getInputStream("dynconditions");
             ObjectInputStream objIn = new ObjectInputStream(in);
-            automatedInstallData.setDynamicinstallerrequirements(
+            installData.setDynamicinstallerrequirements(
                     (List<DynamicInstallerRequirementValidator>) objIn.readObject());
             objIn.close();
         }
         catch (Exception e)
         {
-            logger.log(Level.WARNING,
-                       "Cannot find optional dynamic conditions", e);
+            logger.log(Level.WARNING, "Cannot find optional dynamic conditions", e);
         }
     }
 
     /**
-     * Load installer conditions
+     * Load installer conditions.
      *
-     * @param automatedInstallData
-     * @throws Exception
+     * @param installData the installation data
+     * @throws IOException            for any I/O error
+     * @throws ClassNotFoundException if a serialized object's class cannot be found
      */
-    public void loadInstallerRequirements(AutomatedInstallData automatedInstallData) throws Exception
+    @SuppressWarnings("unchecked")
+    protected void loadInstallerRequirements(AutomatedInstallData installData, ResourceManager resources)
+            throws IOException, ClassNotFoundException
     {
-        InputStream in = resourceManager.getInputStream("installerrequirements");
-        ObjectInputStream objIn = new ObjectInputStream(in);
-        automatedInstallData.setInstallerrequirements((List<InstallerRequirement>) objIn.readObject());
-        objIn.close();
+        List<InstallerRequirement> requirements = (List<InstallerRequirement>) readObject("installerrequirements",
+                                                                                          resources);
+        installData.setInstallerrequirements(requirements);
     }
 
     /**
      * Load a default locale in the installData
      *
      * @param automatedInstallData The installData to fill
-     * @throws Exception
+     * @throws IOException for any I/O error
      */
-    protected void loadDefaultLocale(AutomatedInstallData automatedInstallData) throws Exception
+    protected void loadDefaultLocale(AutomatedInstallData automatedInstallData, ResourceManager resources)
+            throws IOException
     {
         // Loads the suitable langpack
-        List<String> availableLangPacks = resourceManager.getAvailableLangPacks();
+        List<String> availableLangPacks = resources.getAvailableLangPacks();
         String selectedPack = availableLangPacks.get(0);
-        InputStream in = resourceManager.getInputStream("langpacks/" + selectedPack + ".xml");
+        InputStream in = resources.getInputStream("langpacks/" + selectedPack + ".xml");
         automatedInstallData.setAndProcessLocal(selectedPack, new LocaleDatabase(in));
-        resourceManager.setLocale(selectedPack);
+        resources.setLocale(selectedPack);
+        in.close();
     }
 
-    public Object readObject(String resourceId) throws IOException, ClassNotFoundException
+    /**
+     * Helper to read an object resource.
+     *
+     * @param resourceId the resource identifier
+     * @param resources  the resources
+     * @return the corresponding object
+     * @throws IOException            for any I/O error
+     * @throws ClassNotFoundException if a serialized object's class cannot be found
+     */
+    protected Object readObject(String resourceId, ResourceManager resources) throws IOException, ClassNotFoundException
     {
-        InputStream inputStream = resourceManager.getInputStream(resourceId);
+        InputStream inputStream = resources.getInputStream(resourceId);
         ObjectInputStream objIn = new ObjectInputStream(inputStream);
         Object model = objIn.readObject();
         objIn.close();

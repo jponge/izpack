@@ -23,7 +23,6 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.container.TestInstallationContainer;
 import com.izforge.izpack.matcher.ZipMatcher;
 import com.izforge.izpack.test.Container;
@@ -58,11 +57,6 @@ public class UninstallDataWriterTest
     private final AutomatedInstallData installData;
 
     /**
-     * Variable substitutor.
-     */
-    private final VariableSubstitutor variableSubstitutor;
-
-    /**
      * The rules engine
      */
     private final RulesEngine rulesEngine;
@@ -71,15 +65,13 @@ public class UninstallDataWriterTest
      * Constructs an <tt>UninstallDataWriterTest</tt>.
      *
      * @param uninstallDataWriter the uninstall jar writer
-     * @param variableSubstitutor the variable substitutor
      * @param installData         the install data
      * @param rulesEngine         the rules engine
      */
-    public UninstallDataWriterTest(UninstallDataWriter uninstallDataWriter, VariableSubstitutor variableSubstitutor,
-                                   AutomatedInstallData installData, RulesEngine rulesEngine)
+    public UninstallDataWriterTest(UninstallDataWriter uninstallDataWriter, AutomatedInstallData installData,
+                                   RulesEngine rulesEngine)
     {
         this.uninstallDataWriter = uninstallDataWriter;
-        this.variableSubstitutor = variableSubstitutor;
         this.installData = installData;
         this.rulesEngine = rulesEngine;
     }
@@ -274,7 +266,7 @@ public class UninstallDataWriterTest
      */
     private ZipFile getUninstallerJar() throws IOException
     {
-        String dir = IoHelper.translatePath(installData.getInfo().getUninstallerPath(), variableSubstitutor);
+        String dir = IoHelper.translatePath(installData.getInfo().getUninstallerPath(), installData.getVariables());
         String path = dir + File.separator + installData.getInfo().getUninstallerName();
         File jar = new File(path);
         assertThat(jar.exists(), is(true));
